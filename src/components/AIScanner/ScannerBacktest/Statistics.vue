@@ -44,7 +44,7 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
+				<!-- <el-table-column
 					show-overflow-tooltip
 					prop="averageReturn"
 					label="AVERAGE RETURN %"
@@ -66,7 +66,7 @@
 							scope.row.averageReturn + '%'
 						}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 						<el-table-column
                 prop="tzScore"
                 label="Z-SCORE"
@@ -81,19 +81,34 @@
                     <span v-else></span>
                 </template>
             </el-table-column>
+						<el-table-column
+							prop="winRate"
+							label="WIN RATE %"
+							show-overflow-tooltip
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.winRate >= 0">{{
+									scope.row.winRate + '%'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.winRate)"></span>
+								<span v-else style="color: #dd3a13">{{
+									scope.row.winRate + '%'
+								}}</span>
+							</template>
+						</el-table-column>
 				<el-table-column
-					prop="winRate"
-					label="WIN RATE %"
+					prop="totalTrades"
+					label="TOTAL TRADES"
 					show-overflow-tooltip
 					align="center"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.winRate >= 0">{{
-							scope.row.winRate + '%'
+						<span v-if="scope.row.totalTrades >= 0">{{
+							scope.row.totalTrades
 						}}</span>
-						<span v-else-if="isNaN(scope.row.winRate)"></span>
 						<span v-else style="color: #dd3a13">{{
-							scope.row.winRate + '%'
+							scope.row.totalTrades
 						}}</span>
 					</template>
 				</el-table-column>
@@ -133,21 +148,6 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
-					prop="totalTrades"
-					label="TOTAL TRADES"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalTrades >= 0">{{
-							scope.row.totalTrades
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalTrades
-						}}</span>
-					</template>
-				</el-table-column>
 				<!-- <el-table-column
 							show-overflow-tooltip
 							prop="maxRisk"
@@ -164,9 +164,7 @@
 								}}</span>
 							</template>
 						</el-table-column> -->
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
-				<el-table-column
+						<el-table-column
 					show-overflow-tooltip
 					prop="totalPositive"
 					label="TOTAL POSITIVE"

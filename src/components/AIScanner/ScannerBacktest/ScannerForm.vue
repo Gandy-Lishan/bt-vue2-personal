@@ -109,7 +109,7 @@
                   <template v-slot:append>(%)</template>
                 </el-input>
               </el-form-item>
-              <span>&nbsp;/&nbsp;</span>
+              <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
               <el-form-item prop="short_ratio" label-width="0px">
                 <el-input v-model="data.short_ratio" placeholder="Enter ratio">
                   <template v-slot:append>(%)</template>
@@ -124,36 +124,7 @@
           >
           <template slot="label">
             <label>
-              6. Stop Loss
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  ></span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <div class="_conditionBox">
-            <el-form-item prop="stop_loss_condition" label-width="0px">
-                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
-                  <template v-slot:append>(%)</template>
-                </el-input>
-            </el-form-item>
-              <span>&nbsp;to&nbsp;</span>
-              <el-form-item prop="stop_loss" label-width="0px">
-              <el-input v-model="data.stop_loss" placeholder="Enter number">
-                <template v-slot:append>(%)</template>
-              </el-input>
-              </el-form-item>
-          </div>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="risk_control_filter"
-          >
-          <template slot="label">
-            <label>
-              7. Take Profit
+              6. Take Profit
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   ></span>
@@ -167,12 +138,41 @@
                 <template v-slot:append>(%)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;to&nbsp;</span>
+            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="take_profit" label-width="0px">
           <el-input v-model="data.take_profit" placeholder="Enter number">
             <template v-slot:append>(%)</template>
           </el-input>
           </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="risk_control_filter"
+          >
+          <template slot="label">
+            <label>
+              7. Stop Loss
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  ></span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <div class="_conditionBox">
+            <el-form-item prop="stop_loss_condition" label-width="0px">
+                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+                  <template v-slot:append>(%)</template>
+                </el-input>
+            </el-form-item>
+              <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+              <el-form-item prop="stop_loss" label-width="0px">
+              <el-input v-model="data.stop_loss" placeholder="Enter number">
+                <template v-slot:append>(%)</template>
+              </el-input>
+              </el-form-item>
           </div>
           </el-form-item>
         </el-col>
@@ -196,7 +196,7 @@
                 <template v-slot:append>(bars)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;to&nbsp;</span>
+            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="time_in_market" label-width="0px">
           <el-input v-model="data.time_in_market" placeholder="Enter bars">
             <template v-slot:append>(bars)</template>
@@ -593,7 +593,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(10)
+    this.setBacktestHistory(1)
     this.generateCPMName()
   },
   methods: {
@@ -626,7 +626,7 @@ export default {
       this.data.end_date = timestampToTime(new Date());
       const endDate = new Date(this.data.end_date);
       const startDate = new Date(endDate);
-      startDate.setDate(endDate.getDate() - val);
+      startDate.setMonth(startDate.getMonth() - val)
       this.data.start_date = timestampToTime(startDate);
     },
     resetForm() {
@@ -637,7 +637,7 @@ export default {
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
       this.generateCPMName()
-      this.setBacktestHistory(10)
+      this.setBacktestHistory(1)
       this.$refs['Form'].clearValidate()
     },
     selected(signals){
@@ -831,12 +831,12 @@ export default {
         stop_loss,
         take_profit,
         time_in_market,
-        long_ratio: (long_ratio * 100).toFixed(2),
-        short_ratio: (short_ratio * 100).toFixed(2),
+        long_ratio: (long_ratio * 100).toFixed(2).toString(),
+        short_ratio: (short_ratio * 100).toFixed(2).toString(),
         stop_loss_condition,
         take_profit_condition,
         time_in_market_condition,
-        commission: (commission * 100).toFixed(2),
+        commission: (commission * 100).toFixed(2).toString(),
         signals: isJson(signals) ? JSON.parse(signals) : signals
       }
       debugger
