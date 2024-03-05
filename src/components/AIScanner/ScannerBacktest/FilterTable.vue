@@ -94,7 +94,7 @@
 						<!-- {{ scope.row.Signal }} -->
 						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
 						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-							<span slot="content" v-html="textContent[scope.row[l.value]]">
+							<span slot="content" v-html="textContent[midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]]">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
 						</el-tooltip>
@@ -215,9 +215,12 @@ export default {
 					'UpTrend Pattern':"When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>it indicates a potential future rise and generates a long signal.",
 					'DownTrend Pattern':"When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>it indicates a potential future decline and generates a short signal.",
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':"stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
+					'Optix #1':"stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
 					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
+					'Optix #2':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #4':"stocks that Optix crossbelow 0.5.",
 					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'Optix #3':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
 					'PriceBreakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a long signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
 					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a long signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a short signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
