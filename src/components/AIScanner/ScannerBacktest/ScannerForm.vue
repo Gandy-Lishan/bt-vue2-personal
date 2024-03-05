@@ -686,8 +686,8 @@ export default {
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
-        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
-        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
+        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(3),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
@@ -727,8 +727,8 @@ export default {
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
-        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
-        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
+        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(3),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
@@ -825,8 +825,8 @@ export default {
       this.rowUrl = url
       const target = this.data
       const [long_ratio, short_ratio] = long_short_ratio.split('/')
-      const [stop_loss, take_profit, time_in_market] = risk_control_filter_number.split('/')
-      const [stop_loss_condition, take_profit_condition, time_in_market_condition] = risk_control_filter_condition.split('/')
+      const [take_profit, stop_loss, time_in_market] = risk_control_filter_number.split('/')
+      const [take_profit_condition, stop_loss_condition, time_in_market_condition] = risk_control_filter_condition.split('/')
       const prepareData = {
         ...data,
         stop_loss,
