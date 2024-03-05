@@ -374,7 +374,7 @@ h1 {
 		}
 		.table {
 			background: yellowgreen;
-			width: 60vw;
+			width: 80vw;
 			margin-bottom: 20px;
 		}
 		.btn-group {
