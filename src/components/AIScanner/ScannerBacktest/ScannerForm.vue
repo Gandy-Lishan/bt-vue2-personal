@@ -373,18 +373,19 @@ export default {
         }
     };
     var validateRatio = (rule, value, callback) => {
-          // 验证是否为 0 到 1 的最大两位小数值
-          const numberValue = parseFloat(value);
-          if (!isNaN(numberValue) && numberValue >= 0 && numberValue <= 100) {
-            const decimalCount = (numberValue.toString().split('.')[1] || '').length;
-            if (decimalCount <= 2) {
-              callback(); // 验证通过
-            } else {
-              callback(new Error('Value between 0 and 100 with max two decimals'));
-            }
-          } else {
-            callback(new Error("Value between 0 and 100 with max two decimals"));
-          }
+      // 验证是否为正整数
+      const integerValue = parseInt(value);
+      const field = rule.field
+      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(this.data.short_ratio);
+      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(this.data.long_ratio);
+
+      if (short_ratio === 0) {
+          callback(new Error("Short percentage must be > 0"));
+      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
+          callback(); // 验证通过
+      } else {
+          callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
+      }
     };
     var validateSignals = (rule, value, callback) => {
       if(Array.isArray(value) && value.length === 0) {
