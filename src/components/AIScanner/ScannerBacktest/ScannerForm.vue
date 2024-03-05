@@ -807,10 +807,10 @@ export default {
       if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
       if(code == 200) {
         this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
-        this.$emit('displayResultsAndFilter', saveRes.data.data)
-        // 这里展示过滤列表
+        // 这里添加过滤列表
         const list = saveRes['TRADE LIST']
-        if(list) this.$emit('displayPreviewList', JSON.parse(list))
+        if(list) saveRes.data.data['TRADE LIST'] = list
+        this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
       if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
