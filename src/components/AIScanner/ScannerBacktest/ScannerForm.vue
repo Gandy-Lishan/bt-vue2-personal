@@ -376,8 +376,8 @@ export default {
       // 验证是否为正整数
       const integerValue = parseInt(value);
       const field = rule.field
-      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(this.data.short_ratio);
-      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(this.data.long_ratio);
+      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
+      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
 
       if (short_ratio === 0 && field == 'short_ratio') {
           callback(new Error("Short percentage must be > 0"));
