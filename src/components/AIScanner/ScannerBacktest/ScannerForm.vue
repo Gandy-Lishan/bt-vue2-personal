@@ -379,8 +379,8 @@ export default {
       const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
       const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
 
-      if (short_ratio === 0 && field == 'short_ratio') {
-          callback(new Error("Short percentage must be > 0"));
+      if (short_ratio === 0 && long_ratio === 0) {
+          callback(new Error("The percentages cannot be both 0"));
       } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
           callback(); // 验证通过
       } else {
