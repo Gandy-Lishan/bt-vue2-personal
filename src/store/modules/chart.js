@@ -282,6 +282,54 @@ const actions = {
 
 		})
 	},
+	/**
+	 * 在切换symbol以及timeframe时重新请求数据并刷新study
+	 * @param {*} param0 
+	 * @param {*} val 
+	 * @returns 
+	 */
+	set_miFormStateRefresh() {
+		return new Promise(resolve => {
+			const newVal = 	{
+				categories : state.miFormCategories,
+				indicator1 : state.miFormCategoriesIndicator1,
+				indicator2 : state.miFormCategoriesIndicator2,
+			}
+			const oldVal = {
+				categories : state.miFormCategories,
+				indicator1 : {name:'',url:''},
+				indicator2 : {name:'',url:''},
+			}
+			// 刷新前清空已有study,只是刷新study以更新timeframe所以不commit更改状态
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+				CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+			}
+			CIQ.updateUserOwnIndicator(newVal,oldVal).then(()=>{
+				resolve()
+			})
+		})
+	},
+	/**
+	 * 在切换symbol以及timeframe时重新请求数据并刷新study
+	 * 切换symbol时更新newVal
+	 * @param {*} param0 
+	 * @param {*} val 
+	 * @returns 
+	 */
+	set_miFormWeightedListRefresh({ commit }, val) {
+		return new Promise(resolve => {
+			const newVal = JSON.parse(JSON.stringify(val?val.data:state.miFormWeightedList));
+			const oldVal = []
+			// 刷新前清空已有study,只是刷新study以更新timeframe所以不commit更改状态
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+				CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+			}
+            CIQ.displayWeightOwnIndicator(oldVal,newVal,val?val.url:null)
+			resolve()
+		})
+	},
 	Try(context, val) {
 		context.commit('setEntryData', val)
 	},

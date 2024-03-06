@@ -647,7 +647,9 @@ let __st_js_generateCsv_ = (_exports) => {
             for(var item in arrData){
                 let maValue = formatSmallNum(arrData[item][resultIndex])
                 let sentiValue = formatSmallNum(arrData[item][sd.type])
-                let result = sentiValue-maValue
+
+                // 任何一个参与计算中间量为null时，结果为null
+                let result = (maValue && sentiValue)?sentiValue-maValue:null
                 finalData[item][index] = result || result==0
                 ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
                 :null;
