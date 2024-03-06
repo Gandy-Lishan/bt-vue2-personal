@@ -307,7 +307,7 @@ export default {
     },
     async handleRowClick(row) {
       row.viewLoading = true
-      const {url} = row
+      const {url, status:preStatus} = row
       const _this = this
       let res, listRes
       try {
@@ -322,14 +322,15 @@ export default {
       }
       const code = res.data?.code
       debugger
-      const status = res.data?.data?.status || row?.status
+      const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
         _this.popUpMsgBox('Backtest details viewed successfully')
         const data = res.data.data
         data['TRADE LIST'] = listRes.data.data
         _this.$emit('displayResultsData', data)
-        if(status === 'Finish' || status === 'finish') await _this.getDataList(null) // 成功后刷新列表
+        // 如果说之前的状态是 running 之后的状态变成了 finish 或者 fail, 那么需要刷新列表
+        if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Fail', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
       }
       if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
       if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
