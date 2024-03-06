@@ -71,7 +71,20 @@
             </el-tooltip>
           </label>
         </template>
-				<el-input v-model="data.time_frame" disabled></el-input>
+				<!-- <el-input v-model="data.time_frame" disabled></el-input> -->
+        <el-select
+					v-model="data.time_frame"
+					placeholder="Please choose the timeframe"
+					@change="changeTimeFrame"
+				>
+					<el-option
+						v-for="item in timeFrameOptions"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value"
+					>
+					</el-option>
+				</el-select>
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
@@ -330,6 +343,7 @@
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
+import {timeframeTransform} from '@/utils'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
 
@@ -425,7 +439,23 @@ export default {
         ]
       },
       rowUrl: null,
-      progressText: 'Loading...'
+      progressText: 'Loading...',
+      // 用户选择的整体timeframe,用来调整maxFreq
+      userSelectedTimeFrame: 'daily', 
+      timeFrameOptions: [
+        {
+          label: 'daily',
+          value: 'daily'
+        },
+        {
+          label: 'weekly',
+          value: 'weekly'
+        },
+        {
+          label: 'monthly',
+          value: 'monthly'
+        }
+      ],
     }
   },
   computed: {
@@ -447,22 +477,27 @@ export default {
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
-          let _data = JSON.parse(JSON.stringify(this.data))
-          _data.indicator_1 = ''
-          _data.indicator_2 = ''
-          _data.indicator_1_url  = ''
-          _data.indicator_2_url = ''
-          await this.$store.dispatch('chart/set_miFormStateChange',_data)
-          await this.$store.dispatch('chart/set_miFormStateChange',this.data)
+          // userownIndicator需要封一个刷新函数用来刷新timeframe（或者symbol）修改后的图表
+          // todo
+
+          await this.$store.dispatch('chart/set_miFormStateRefresh')
+          /* old version */
+          // let _data = JSON.parse(JSON.stringify(this.data))
+          // _data.indicator_1 = ''
+          // _data.indicator_2 = ''
+          // _data.indicator_1_url  = ''
+          // _data.indicator_2_url = ''
+          // await this.$store.dispatch('chart/set_miFormStateChange',_data)
+          // await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
           this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
           this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
         }
         if(this.data.categories.includes('Symbol')){    
-         this.data.indicator_1 = newVal
-         this.data.indicator_1_url = newVal
+          this.data.indicator_1 = newVal
+          this.data.indicator_1_url = newVal
 
-         this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
           this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
         }
         if(this.data.categories.includes('WIC')){  
@@ -470,12 +505,12 @@ export default {
          this.weightData[_index].indicator = newVal
          this.weightData[_index].indicator_url = newVal
 
-         await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:
-      [
-        {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
-      ],url:null})
-         await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
-        }
+        /* old version */
+        //  await this.$store.dispatch('chart/set_miFormWeightedListChange',
+        //  {data:[{weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}],url:null})
+        //  await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
+        await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
+      }
        
       },
       //immediate: true,
@@ -490,6 +525,19 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    async changeTimeFrame(item) {
+      this.userSelectedTimeFrame = item
+      this.data.time_frame = this.findMaxFreq() 
+
+      // userownIndicator需要封一个刷新函数用来刷新timeframe（或者symbol）修改后的图表
+      if(this.data.categories !== 'WIC') {
+        await this.$store.dispatch('chart/set_miFormStateRefresh')
+        this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+        this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+      }else {
+        await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
+      }
+    },
     handleExtremeLineChange(value,field) {
       CIQ.editOwnIndicatorExtremeLines(value,field)
     },
@@ -768,7 +816,9 @@ export default {
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
 
+      // 重置最大周期和用户选择周期
       this.data['time_frame'] = 'daily'
+      this.userSelectedTimeFrame = 'daily'
 
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
         const exitItem = list.find((item) => item.label === this.data[indicatorProp])
@@ -859,15 +909,11 @@ export default {
         }
       }
 
+      this.data.time_frame = this.findMaxFreq() 
+      console.log('当前最大的 timeframe 是', this.data.time_frame)
+
       // 用promise包裹indicator加载流程确保其在stma加载之前执行
       await this.$store.dispatch('chart/set_miFormStateChange',this.data)
-
-      if(type === 'Indicator') {
-        this.data.time_frame = this.findMaxFreq() 
-      }else {
-        this.data.time_frame = 'daily'
-      }
-      console.log('当前最大的 timeframe 是', this.data.time_frame)
 
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
@@ -875,6 +921,7 @@ export default {
     },
     findMaxFreq() {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      let frequencyArray = []
       if(this.data.categories !== 'WIC') {
         const url_1 = this.data.indicator_1_url
         const url_2 = this.data.indicator_2_url
@@ -882,64 +929,46 @@ export default {
           // 这个数据时 Daily
           const updated_1 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
           const updated_2 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
-          const frequencyArray = [updated_1, updated_2].filter(item => item)
+          frequencyArray = [updated_1, updated_2]
           console.log('updated_1 updated_2数组', [updated_1, updated_2])
-          return this.getMaxTimeframe(frequencyArray)
-        }else if(this.data.categories.includes('Symbol')){
-          // 重置成 daily
-          return 'daily'
         }
+        // if(this.data.categories.includes('Symbol'))，默认为空
       }else {
-        let frequencyArray = this.weightData.map(item => {
+        frequencyArray = this.weightData.map(item => {
           const url = item.indicator_url
           if(item.type == 'Indicator') {
             return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
           }
           return null
         })
-        frequencyArray = frequencyArray.filter(item => item)
-        return this.getMaxTimeframe(frequencyArray)
       }
+      frequencyArray = frequencyArray.filter(item => item)
+      // 结合indicator的周期数组和用户选择周期计算最大周期
+      return this.getMaxTimeframe(frequencyArray)
     },
     
+    /* 结合indicator的周期数组和用户选择周期计算最大周期 */
     getMaxTimeframe(timeframes) {
+        let maxTimeframe
+        let timeframeArr = [...timeframes,this.userSelectedTimeFrame]
+
         const validTimeframes = ['daily', 'weekly', 'monthly'];
-        const filteredTimeframes = timeframes.filter(timeframe =>
+        const filteredTimeframes = timeframeArr.filter(timeframe =>
           validTimeframes.includes(timeframe)
         );
         if (filteredTimeframes.length === 0) {
-          return 'daily';
+          maxTimeframe = 'daily';
         } else if (filteredTimeframes.length === 1) {
-          return filteredTimeframes[0];
+          maxTimeframe = filteredTimeframes[0];
+        } else {
+          maxTimeframe = filteredTimeframes.reduce((max, timeframe) => {
+            return validTimeframes.indexOf(timeframe) > validTimeframes.indexOf(max) ? timeframe : max;
+          });
         }
-        const maxTimeframe = filteredTimeframes.reduce((max, timeframe) => {
-          return validTimeframes.indexOf(timeframe) > validTimeframes.indexOf(max) ? timeframe : max;
-        });
 
+        this.$store.commit('form/getFrequency', timeframeTransform(maxTimeframe))
         return maxTimeframe;
       },
-    _findMaxFreq(currentFreq, previousFreq) {
-      let selectedTimeframe = currentFreq
-			let previousTimeframe = previousFreq
-			if (
-				selectedTimeframe !== '' &&
-				selectedTimeframe !== undefined &&
-				selectedTimeframe !== null
-			) {
-				if (selectedTimeframe !== previousTimeframe) {
-					// 根据时间范围的大小进行比较，取周期较大的那个
-					const timeframes = ['daily', 'weekly', 'monthly']
-					const previousIndex = timeframes.indexOf(previousTimeframe)
-					const currentIndex = timeframes.indexOf(selectedTimeframe)
-					const largerIndex = Math.max(previousIndex, currentIndex)
-					selectedTimeframe = timeframes[largerIndex]
-
-					// 更新之前的时间范围为当前选择
-					previousTimeframe = selectedTimeframe
-				}
-			}
-			return previousTimeframe
-    },
     async displayData(data) {
 
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
