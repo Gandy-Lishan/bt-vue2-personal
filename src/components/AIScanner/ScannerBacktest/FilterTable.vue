@@ -173,6 +173,7 @@
 		@current-change="handleCurrentChange"
 		:page-sizes="[10, 30, 50, 100, 200]"
 		:page-size="pageSize"
+		:current-page="currentPage"
 		:total="data.content.length"
 		layout="total, sizes, prev, pager, next, jumper"
 		></el-pagination>
@@ -186,7 +187,6 @@ export default {
 	props: {
 		data: Object,
 		tableCol :Array,
-		currTabPage: String,
 		loading: Boolean,
 	},
 	data() {
@@ -234,7 +234,7 @@ export default {
 					'Optix MA10 < 30 and Optix < 20':'Optix #3'
 				},
 				pageSize: 10, // Default page size
-      			currentPage: 1, // Default current page
+      	currentPage: 1, // Default current page
 
 		}
 	},

@@ -171,8 +171,8 @@ export default {
       statistics.medianReturn = result['MEDIAN RETURN']
       statistics.averageReturn = result['AVERAGE RETURN']
       statistics.tzScore = result['Z-SCORE'] 
-      // statistics.standardDeviation = _data.standardDeviation
-      // statistics.maxRisk = _data.maxRisk
+      statistics.standardDeviation = result['STD.DEV']
+      statistics.maxRisk = result['MAX RISK']
       // statistics.buyHoldGain = _data.buy_and_hold 缺少
       // MDD + STD.DEV 我没加进去的
       statistics.winRate = result['WIN RATE']
@@ -227,6 +227,7 @@ export default {
       debugger
       if(!content) return
 		  this.loading = true
+      this.$refs.filterTable.handleSizeChange(10)
       // 把数据处理成所需格式
        content.forEach(x => {
         x['Close'] = x['Close'].toFixed(2)

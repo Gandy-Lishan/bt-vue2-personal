@@ -84,7 +84,6 @@ export default {
       this.$emit('selected',this.selectedOptions)
     },
     handleTaskItemChange(item) {
-      debugger
       // console.log(item)
       // 这里是取出下标的方法，可以封装写出去
       Array.prototype.getArrayIndex = function (obj) {

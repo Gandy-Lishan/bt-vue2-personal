@@ -17,7 +17,7 @@
             1. Start Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Backtest start date. Data after this date will be used for backtesting</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -41,7 +41,7 @@
             2. End Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Backtest end date. Data before this date will be used for backtesting.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -57,7 +57,21 @@
 			</el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item prop="find_type" label="3. Type">
+        <el-form-item prop="find_type">
+          <template slot="label">
+          <label>
+            3. Type
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The security type to search for. <br/>
+                Selecting 'Stock' will only search for stocks, <br/>
+                selecting 'ETF' will only search for ETFs, <br/>
+                selecting 'Stock/ETF' will search for both. <br/>
+                Please choose one of these options.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
         <el-select
             v-model="data.find_type"
             placeholder="— Select type —"
@@ -81,7 +95,8 @@
             4. Signals
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >The trading signals used. <br/>
+                Select one or more signals here to determine when to buy or sell.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -98,7 +113,9 @@
               5. Long / Short Percentage
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >The long-short position ratio during the backtest period. <br/>
+                  Enter two values here, <br/>
+                  representing the weights of long and short positions respectively.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -109,7 +126,7 @@
                   <template v-slot:append>(%)</template>
                 </el-input>
               </el-form-item>
-              <span>&nbsp;/&nbsp;</span>
+              <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
               <el-form-item prop="short_ratio" label-width="0px">
                 <el-input v-model="data.short_ratio" placeholder="Enter ratio">
                   <template v-slot:append>(%)</template>
@@ -124,39 +141,11 @@
           >
           <template slot="label">
             <label>
-              6. Stop Loss
+              6. Take Profit
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <div class="_conditionBox">
-            <el-form-item prop="stop_loss_condition" label-width="0px">
-                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
-                  <template v-slot:append>(%)</template>
-                </el-input>
-            </el-form-item>
-              <span>&nbsp;to&nbsp;</span>
-              <el-form-item prop="stop_loss" label-width="0px">
-              <el-input v-model="data.stop_loss" placeholder="Enter number">
-                <template v-slot:append>(%)</template>
-              </el-input>
-              </el-form-item>
-          </div>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="risk_control_filter"
-          >
-          <template slot="label">
-            <label>
-              7. Take Profit
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  ></span>
+                  >Set profit target range. 
+                  Enter two values representing <br/>the minimum and maximum profit targets.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -167,7 +156,7 @@
                 <template v-slot:append>(%)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;to&nbsp;</span>
+            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="take_profit" label-width="0px">
           <el-input v-model="data.take_profit" placeholder="Enter number">
             <template v-slot:append>(%)</template>
@@ -182,10 +171,41 @@
           >
           <template slot="label">
             <label>
+              7. Stop Loss
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  >Set stop-loss range. 
+                  Enter two values representing <br/>the minimum and maximum stop-loss points.</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <div class="_conditionBox">
+            <el-form-item prop="stop_loss_condition" label-width="0px">
+                <el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+                  <template v-slot:append>(%)</template>
+                </el-input>
+            </el-form-item>
+              <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+              <el-form-item prop="stop_loss" label-width="0px">
+              <el-input v-model="data.stop_loss" placeholder="Enter number">
+                <template v-slot:append>(%)</template>
+              </el-input>
+              </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="risk_control_filter"
+          >
+          <template slot="label">
+            <label>
               8. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >Set market stay duration range.
+                  Enter two values representing <br/>the minimum and maximum duration the market stays.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -196,7 +216,7 @@
                 <template v-slot:append>(bars)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;to&nbsp;</span>
+            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="time_in_market" label-width="0px">
           <el-input v-model="data.time_in_market" placeholder="Enter bars">
             <template v-slot:append>(bars)</template>
@@ -216,7 +236,7 @@
             9. Name
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -233,7 +253,7 @@
               10. Total Capital
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >The total capital for backtesting.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -250,7 +270,7 @@
             11. Commission
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Trading commission rate.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -265,7 +285,8 @@
             12. Rank Condition
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Ranking criteria. Choose one condition to determine<br/>
+                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -295,7 +316,7 @@
           13. Daily Stock Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              ></span>
+              >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -314,7 +335,11 @@
             14. Capital Allocate
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Funds allocation method. Choosing the Kelly formula<br/>
+                 allows the system to dynamically adjust fund allocation<br/>
+                  based on strategy performance. Selecting maximum <br/>
+                  capital allocation per trade enables you to manually <br/>
+                  specify the maximum capital allocation for each trade.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -342,7 +367,7 @@
 </template>
 
 <script>
-import { isJson, timestampToTime } from '@/utils'
+import { isJson, timestampToTime, trimTrailingZeros } from '@/utils'
 import SelectCheck from "./SelectCheck";
 import { validateCapitalRule, validateCommissionRule, createPositiveScopeIntegerRule, createTPSLScopeValidateRule, createPositiveIntegerRule   } from '@/utils/formValidate'
 import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
@@ -373,18 +398,19 @@ export default {
         }
     };
     var validateRatio = (rule, value, callback) => {
-          // 验证是否为 0 到 1 的最大两位小数值
-          const numberValue = parseFloat(value);
-          if (!isNaN(numberValue) && numberValue >= 0 && numberValue <= 100) {
-            const decimalCount = (numberValue.toString().split('.')[1] || '').length;
-            if (decimalCount <= 2) {
-              callback(); // 验证通过
-            } else {
-              callback(new Error('Value between 0 and 100 with max two decimals'));
-            }
-          } else {
-            callback(new Error("Value between 0 and 100 with max two decimals"));
-          }
+      // 验证是否为正整数
+      const integerValue = parseInt(value);
+      const field = rule.field
+      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
+      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
+
+      if (short_ratio === 0 && long_ratio === 0) {
+          callback(new Error("The percentages cannot be both 0"));
+      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
+          callback(); // 验证通过
+      } else {
+          callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
+      }
     };
     var validateSignals = (rule, value, callback) => {
       if(Array.isArray(value) && value.length === 0) {
@@ -401,10 +427,10 @@ export default {
         long_ratio: 80,
         short_ratio: 20,
         stop_loss_condition: 5,
-        take_profit_condition: 5,
-        time_in_market_condition: 5,
-        stop_loss: 20,
-        take_profit: 30,
+        take_profit_condition: 10,
+        time_in_market_condition: 13,
+        stop_loss: 10,
+        take_profit: 20,
         time_in_market: 21,
         name: '',
         total_capital: 1000000,
@@ -593,7 +619,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(10)
+    this.setBacktestHistory(1)
     this.generateCPMName()
   },
   methods: {
@@ -626,18 +652,18 @@ export default {
       this.data.end_date = timestampToTime(new Date());
       const endDate = new Date(this.data.end_date);
       const startDate = new Date(endDate);
-      startDate.setDate(endDate.getDate() - val);
+      startDate.setMonth(startDate.getMonth() - val)
       this.data.start_date = timestampToTime(startDate);
     },
     resetForm() {
-      // 如果当前在回测状态，不允许重置
+      // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       debugger
-      if((!this.isPolling) || this.previewBtnLoading) return true
+      if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
       this.data.signals = ['All']
       this.generateCPMName()
-      this.setBacktestHistory(10)
+      this.setBacktestHistory(1)
       this.$refs['Form'].clearValidate()
     },
     selected(signals){
@@ -685,8 +711,8 @@ export default {
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
-        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
-        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
+        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(3),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
@@ -726,8 +752,8 @@ export default {
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
-        risk_control_filter_number: `${stop_loss}/${take_profit}/${time_in_market}`,
-        risk_control_filter_condition: `${stop_loss_condition}/${take_profit_condition}/${time_in_market_condition}`,
+        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
+        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(3),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
@@ -824,19 +850,19 @@ export default {
       this.rowUrl = url
       const target = this.data
       const [long_ratio, short_ratio] = long_short_ratio.split('/')
-      const [stop_loss, take_profit, time_in_market] = risk_control_filter_number.split('/')
-      const [stop_loss_condition, take_profit_condition, time_in_market_condition] = risk_control_filter_condition.split('/')
+      const [take_profit, stop_loss, time_in_market] = risk_control_filter_number.split('/')
+      const [take_profit_condition, stop_loss_condition, time_in_market_condition] = risk_control_filter_condition.split('/')
       const prepareData = {
         ...data,
         stop_loss,
         take_profit,
         time_in_market,
-        long_ratio: (long_ratio * 100).toFixed(2),
-        short_ratio: (short_ratio * 100).toFixed(2),
+        long_ratio: trimTrailingZeros((long_ratio * 100).toFixed(2)),
+        short_ratio: trimTrailingZeros((short_ratio * 100).toFixed(2)),
         stop_loss_condition,
         take_profit_condition,
         time_in_market_condition,
-        commission: (commission * 100).toFixed(2),
+        commission: trimTrailingZeros((commission * 100).toFixed(2)),
         signals: isJson(signals) ? JSON.parse(signals) : signals
       }
       debugger
@@ -846,7 +872,6 @@ export default {
             this.$refs['SelectCheck'].handleoptionsAllChange(true)
             target[key] = this.data.signals
           }else if(Array.isArray(data[key])){
-            debugger
             this.$refs['SelectCheck'].handleoptionsAllChange(false)
             const arr = []
             data[key].forEach(ele => {

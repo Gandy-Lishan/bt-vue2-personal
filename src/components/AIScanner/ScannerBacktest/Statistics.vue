@@ -44,7 +44,7 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
+				<!-- <el-table-column
 					show-overflow-tooltip
 					prop="averageReturn"
 					label="AVERAGE RETURN %"
@@ -66,7 +66,7 @@
 							scope.row.averageReturn + '%'
 						}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 						<el-table-column
                 prop="tzScore"
                 label="Z-SCORE"
@@ -81,27 +81,41 @@
                     <span v-else></span>
                 </template>
             </el-table-column>
-				<el-table-column
-					prop="winRate"
-					label="WIN RATE %"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.winRate >= 0">{{
-							scope.row.winRate + '%'
-						}}</span>
-						<span v-else-if="isNaN(scope.row.winRate)"></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.winRate + '%'
-						}}</span>
-					</template>
-				</el-table-column>
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
+						<el-table-column
+								prop="standardDeviation"
+								label="STD. DEV"
+								show-overflow-tooltip
+								align="center"
+						>
+								<template slot-scope="scope">
+										<span v-if="scope.row.standardDeviation >= 0">{{
+												scope.row.standardDeviation
+										}}</span>
+										<span v-else-if="scope.row.standardDeviation < 0" style="color: #dd3a13">{{
+												scope.row.standardDeviation
+										}}</span>
+										<span v-else></span>
+								</template>
+						</el-table-column>
 			</el-table>
 			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 				<el-table-column
+							prop="winRate"
+							label="WIN RATE %"
+							show-overflow-tooltip
+							align="center"
+						>
+							<template slot-scope="scope">
+								<span v-if="scope.row.winRate >= 0">{{
+									scope.row.winRate + '%'
+								}}</span>
+								<span v-else-if="isNaN(scope.row.winRate)"></span>
+								<span v-else style="color: #dd3a13">{{
+									scope.row.winRate + '%'
+								}}</span>
+							</template>
+						</el-table-column>
+						<el-table-column
 					show-overflow-tooltip
 					prop="averageWin"
 					label="AVERAGE WIN %"
@@ -134,21 +148,6 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-					prop="totalTrades"
-					label="TOTAL TRADES"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalTrades >= 0">{{
-							scope.row.totalTrades
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalTrades
-						}}</span>
-					</template>
-				</el-table-column>
-				<!-- <el-table-column
 							show-overflow-tooltip
 							prop="maxRisk"
 							label="MAX RISK%"
@@ -163,10 +162,25 @@
 									scope.row.maxRisk + '%'
 								}}</span>
 							</template>
-						</el-table-column> -->
+				</el-table-column>
 			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
+			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 				<el-table-column
+					prop="totalTrades"
+					label="TOTAL TRADES"
+					show-overflow-tooltip
+					align="center"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.totalTrades >= 0">{{
+							scope.row.totalTrades
+						}}</span>
+						<span v-else style="color: #dd3a13">{{
+							scope.row.totalTrades
+						}}</span>
+					</template>
+				</el-table-column>
+						<el-table-column
 					show-overflow-tooltip
 					prop="totalPositive"
 					label="TOTAL POSITIVE"
@@ -405,7 +419,6 @@ export default {
 				this.queryInfo.page = page
 		},
 		changeTableSort(column){
-			debugger
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字类型排序
