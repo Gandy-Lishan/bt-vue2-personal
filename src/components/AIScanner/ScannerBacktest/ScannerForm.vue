@@ -847,7 +847,6 @@ export default {
             this.$refs['SelectCheck'].handleoptionsAllChange(true)
             target[key] = this.data.signals
           }else if(Array.isArray(data[key])){
-            debugger
             this.$refs['SelectCheck'].handleoptionsAllChange(false)
             const arr = []
             data[key].forEach(ele => {

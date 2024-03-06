@@ -42,9 +42,9 @@
 						<el-form-item label="TOTAL POSITIVE">
 							<span>{{ props.row['total_positive'] }}</span>
 						</el-form-item>
-						<el-form-item label="AVERAGE RETURN %">
+						<!-- <el-form-item label="AVERAGE RETURN %">
 							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="TOTAL NEGATIVE">
 							<span>{{ props.row['total_negative'] }}</span>
 						</el-form-item>
@@ -367,7 +367,7 @@ export default {
 .ScannerBTTable .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    width: 50%;
+    width: 30%;
   /deep/ .el-form-item__label {
     width: 200px;
   }
