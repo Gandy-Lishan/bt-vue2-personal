@@ -290,6 +290,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
+          <div class="processTipsBox">
+            <span v-html="processTips"></span><small v-if="processTips.includes('patiently')"><strong>Won't wait? </strong><button type="button" @click="checkResLater" id="checkResBtn" title=" No need to wait for the backtest to finish. Check the results in 'Scanner Backtest List' later!">Check results later</button></small>
+          </div>
         </el-col>
       </el-row>
     </el-col>
@@ -334,6 +337,7 @@ export default {
         bars_num: 0,
       },
       dropdownList: [],
+      processTips: '',
       frequencyOptions: [
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
@@ -496,6 +500,7 @@ export default {
         ...this.data,
         ...resetData
       }
+      this.processTips = ''
       this.setBacktestHistory(10)
       this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
@@ -648,9 +653,10 @@ export default {
      try {
       saveRes = await this.saveCPM()
      } catch (error) {
+      this.processTips = '';
       this.changeLoadingStatus('backtest',false); return
      }
-     if(!saveRes) {this.changeLoadingStatus('backtest',false); return}
+     if(!saveRes) {this.changeLoadingStatus('backtest',false); this.processTips = ''; return}
      const code = saveRes.data.code
       if(code == 203) this.popUpMsgBox('The backtest pattern is running. You can wait or click the "+"" button to create a new pattern."')
       if(code == 401) this.popUpMsgBox('Calculate error')
@@ -679,6 +685,7 @@ export default {
           this.changeLoadingStatus('preview',false)
         })
       }
+      this.processTips = ''
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getCPMList(null, null, name)
@@ -738,6 +745,7 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
+      this.processTips = `Tips: Saving your pattern matching parameters...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
@@ -769,6 +777,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
+      this.processTips = 'Tips: The pattern backtest is in progress, which may take some time. Please be patient...'
       let url = saveRes.data?.url
       this.rowUrl = url
       let pollingRes = null
@@ -933,5 +942,13 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+.processTipsBox {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 46px 0px 0px 0px;
 }
 </style>

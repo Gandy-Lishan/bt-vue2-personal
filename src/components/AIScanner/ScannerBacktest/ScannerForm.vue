@@ -349,7 +349,7 @@
         </el-col>
         <el-col :span="12">
           <div class="processTipsBox">
-            <span v-html="processTips"></span><small v-if="processTips.includes('patiently')"><strong>Won't wait? </strong><button type="button" @click="checkResLater" id="checkResBtn" title=" No need to wait for the backtest to finish. Check the results in 'Scanner Backtest List' later!">Check results later</button></small>
+            <span v-html="processTips"></span>
           </div>
         </el-col>
       </el-row>
@@ -710,10 +710,10 @@ export default {
       } = this.data
       const saveData = {
         ...this.data,
-        long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
+        long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
-        commission: (commission / 100).toFixed(3),
+        commission: (commission / 100).toFixed(5),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
       const removeProperties = (obj, properties) => {
@@ -751,10 +751,10 @@ export default {
       } = this.data
       const saveData = {
         ...this.data,
-        long_short_ratio: `${(long_ratio / 100).toFixed(2)}/${(short_ratio / 100).toFixed(2)}`,
+        long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
-        commission: (commission / 100).toFixed(3),
+        commission: (commission / 100).toFixed(5),
         signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
       }
       const removeProperties = (obj, properties) => {
