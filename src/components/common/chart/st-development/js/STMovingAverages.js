@@ -1039,7 +1039,7 @@ if (!CIQ.Studies) {
 			sd
 		);
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if (i<40-1 || !quotes[i]) continue;
+			if (i+1< Math.max(period_short, period_long) || !quotes[i]) continue;
 		
 			quotes[i]["Result " + sd.name] = quotes[i]["_MA " + sd.name] / quotes[i]["_MA2 " + sd.name];
 		}
@@ -1432,7 +1432,6 @@ if (!CIQ.Studies) {
 		return dataArr;
 		}
 	function currentWindowPercentageResult(arr) {
-		debugger
 		let count = 0;
 		for (let i = 0; i < arr.length; i++) {
 			if (arr[i] === 1) {
