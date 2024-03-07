@@ -113,7 +113,7 @@
               5. Long / Short Percentage
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  >The long-short position ratio during the backtest period. <br/>
+                  >The long-short position during the backtest period. <br/>
                   Enter two values here, <br/>
                   representing the weights of long and short positions respectively.</span>
                 <i class="iconfont icon-wenhao"></i>
