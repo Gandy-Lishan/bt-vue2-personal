@@ -945,7 +945,166 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = indicator;
 		}
 	};
-	
+	CIQ.Studies.calculateConsecutiveDaysRisingMovingAverage = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		var period = sd.inputs.Period;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			sd.days,
+			field,
+			0,
+			"_MA",
+			stx,
+			sd
+		);
+		
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if (i<period || !quotes[i]) continue;
+			// 如果当前天均线高于前一天
+			if (quotes[i]["_MA " + sd.name] > quotes[i-1]["_MA " + sd.name]) {
+				indicator++
+			}else {
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateConsecutiveDaysDecliningMovingAverage = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		var period = sd.inputs.Period;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			sd.days,
+			field,
+			0,
+			"_MA",
+			stx,
+			sd
+		);
+		
+		let indicator = 0
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if (i<period || !quotes[i]) continue;
+			// 如果当前天均线低于前一天
+			if (quotes[i]["_MA " + sd.name] < quotes[i-1]["_MA " + sd.name]) {
+				indicator++
+			}else {
+				indicator = 0
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateDeviationFromTrendBetweenTwoMovingAverages = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		var period_short = sd.inputs.periodShort;
+		var period_long = sd.inputs.periodLong;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			period_short,
+			field,
+			0,
+			"_MA",
+			stx,
+			sd
+		);
+		CIQ.Studies.MA(
+			sd.inputs["Moving Average Type"],
+			period_long,
+			field,
+			0,
+			"_MA2",
+			stx,
+			sd
+		);
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if (i<40-1 || !quotes[i]) continue;
+		
+			quotes[i]["Result " + sd.name] = quotes[i]["_MA " + sd.name] / quotes[i]["_MA2 " + sd.name];
+		}
+	};
+	CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+
+		if (!field || field == "field") field = "Close";
+
+		let belowNDayStateArr = []
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i == 0){
+				belowNDayStateArr.push(null)
+				continue
+			}
+			if(quotes[i][field] < quotes[i-1][field]) belowNDayStateArr.push(1)
+			else belowNDayStateArr.push(0)
+		}
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i>=period){
+				if (!quotes[i]) continue;
+				const sliceStart = i+1 - period
+				const sliceEnd = i+1
+				quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+			}
+		}
+	};
+	CIQ.Studies.calculatePercentageAboveNDayHigh = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+
+		if (!field || field == "field") field = "Close";
+
+		let belowNDayStateArr = []
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i == 0){
+				belowNDayStateArr.push(null)
+				continue
+			}
+			if(quotes[i][field] > quotes[i-1][field]) belowNDayStateArr.push(1)
+			else belowNDayStateArr.push(0)
+		}
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i>=period){
+				if (!quotes[i]) continue;
+				const sliceStart = i+1 - period
+				const sliceEnd = i+1
+				quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+			}
+		}
+	};
+
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		// 为了覆盖cci optix,用了小写的cci
 		cci: {
@@ -1166,59 +1325,122 @@ if (!CIQ.Studies) {
 				"Result": "auto",
 			},
         },
+		/**
+		 * Since 2024-02-27
+		 */
+		"# of Consecutive Days With a Rising Moving Average": {
+            name: "# of Consecutive Days With a Rising Moving Average",
+			inputs: { Period: 252, },
+            calculateFN: function (stx, sd) {
+				CIQ.Studies.calculateConsecutiveDaysRisingMovingAverage(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"# of Consecutive Days With a Declining Moving Average": {
+            name: "# of Consecutive Days With a Declining Moving Average",
+			inputs: { Period: 252, },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateConsecutiveDaysDecliningMovingAverage(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"Deviation From Trend Between Two Moving Averages": {
+            name: "Deviation From Trend Between Two Moving Averages",
+			inputs: { periodShort:4, periodLong: 40},
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateDeviationFromTrendBetweenTwoMovingAverages(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"Percentage Below N-Day High": {
+            name: "Percentage Below N-Day High",
+			inputs: { Period: 252 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculatePercentageBelowNDayHigh(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"Percentage Above N-Day High": {
+            name: "Percentage Above N-Day High",
+			inputs: { Period: 252 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculatePercentageAboveNDayHigh(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
 	});
 
 
-			function getPeriodParam(dataSeries, paramType, period, add_bar) {
-				const typeDict = {
-				  max: arr => Math.max(...arr),
-				  min: arr => Math.min(...arr),
-				  mean: arr => arr.reduce((a, b) => a + b) / arr.length,
-				  sum: arr => arr.reduce((a, b) => a + b),
-				  maxCount: arr => {
-					let p1 = 0
-					let p2 = 0
-					let maxNum = arr[0]
-					for(var i in arr){
-						if(arr[i]<maxNum){
-							p2++
-						}else{
-							maxNum = arr[i]
-							p1 = p2
-						}
-					}
-					return p2-p1
-				  },
-				  minCount: arr => {
-					let p1 = 0
-					let p2 = 0
-					let minNum = arr[0]
-					for(var i in arr){
-						if(arr[i]>minNum){
-							p2++
-						}else{
-							minNum = arr[i]
-							p1 = p2
-						}
-					}
-					return p2-p1
-				  }
-				};
-			  
-				const dataArr = [];
-
-				// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
-				// 如果当前bar之前的交易日个数小于周期，按剩余天数算
-				for (let i = 0; i < dataSeries.length; i++) {
-					const sliceStart = i - period + add_bar
-					const sliceEnd = i + add_bar
-					const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
-					//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
-					dataArr.push(Number(tmpData.toFixed(3)));
+	function getPeriodParam(dataSeries, paramType, period, add_bar) {
+		const typeDict = {
+			max: arr => Math.max(...arr),
+			min: arr => Math.min(...arr),
+			mean: arr => arr.reduce((a, b) => a + b) / arr.length,
+			sum: arr => arr.reduce((a, b) => a + b),
+			maxCount: arr => {
+			let p1 = 0
+			let p2 = 0
+			let maxNum = arr[0]
+			for(var i in arr){
+				if(arr[i]<maxNum){
+					p2++
+				}else{
+					maxNum = arr[i]
+					p1 = p2
 				}
+			}
+			return p2-p1
+			},
+			minCount: arr => {
+			let p1 = 0
+			let p2 = 0
+			let minNum = arr[0]
+			for(var i in arr){
+				if(arr[i]>minNum){
+					p2++
+				}else{
+					minNum = arr[i]
+					p1 = p2
+				}
+			}
+			return p2-p1
+			}
+		};
+		
+		const dataArr = [];
 
-				return dataArr;
-			  }
+		// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
+		// 如果当前bar之前的交易日个数小于周期，按剩余天数算
+		for (let i = 0; i < dataSeries.length; i++) {
+			const sliceStart = i - period + add_bar
+			const sliceEnd = i + add_bar
+			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
+			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
+			dataArr.push(Number(tmpData.toFixed(3)));
+		}
+
+		return dataArr;
+		}
+	function currentWindowPercentageResult(arr) {
+		debugger
+		let count = 0;
+		for (let i = 0; i < arr.length; i++) {
+			if (arr[i] === 1) {
+				count++;
+			}
+		}
+		return count / arr.length;
+	}
 }
 
 };

@@ -684,6 +684,26 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "# of Consecutive Days Below a Moving Average",
 							"url": "# of Consecutive Days Below a Moving Average"
+						},
+						{
+							"name": "# of Consecutive Days With a Rising Moving Average",
+							"url": "# of Consecutive Days With a Rising Moving Average"
+						},
+						{
+							"name": "# of Consecutive Days With a Declining Moving Average",
+							"url": "# of Consecutive Days With a Declining Moving Average"
+						},
+						{
+							"name": "Deviation From Trend Between Two Moving Averages",
+							"url": "Deviation From Trend Between Two Moving Averages"
+						},
+						{
+							"name": "Percentage Below N-Day High",
+							"url": "Percentage Below N-Day High"
+						},
+						{
+							"name": "Percentage Above N-Day High",
+							"url": "Percentage Above N-Day High"
 						}
 					]
 				},

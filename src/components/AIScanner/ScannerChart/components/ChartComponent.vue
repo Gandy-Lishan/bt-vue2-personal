@@ -107,7 +107,11 @@ export default {
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
-			this.symbolUrl = CIQ.findSentiIndicator(null,this.symbol)?this.symbol:CIQ.findSentiIndicator(this.symbol + ' Optix',null).url
+			this.symbolUrl = CIQ.findSentiIndicator(null,this.symbol) // 先看是不是列表现存的url
+                        ?this.symbol  // 是列表现存的项，用this.symbol做url
+                        :CIQ.findSentiIndicator(this.symbol + ' Optix',null)  // 不是的话再看是不是列表现存的symbol
+                          ?CIQ.findSentiIndicator(this.symbol + ' Optix',null).url  // 是列表现存的symbol，取其url
+                          :this.symbol  // 不是列表现存的项，用this.symbol做url
       
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
