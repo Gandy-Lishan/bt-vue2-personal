@@ -68,7 +68,6 @@
             }
         }
         // indicator加载
-        CIQ.store.commit('form/getFrequency', findTimeFrame(indicatorList)) //考虑到addSeries必须写死timeframe
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
         CIQ.stxx.loadChart({ 
                 symbol: symbolList.length?symbolList[0].indicator_url:CIQ.stxx.chart.symbol, 
@@ -221,7 +220,6 @@
             JSON.stringify(currentItem) === JSON.stringify(previousItem)
           )
         ).filter(item=> item.type=='Indicator');
-      
         return {
           addedItems,
           removedItems
@@ -257,7 +255,7 @@
                     }
                 }
 
-                // 类型切换时设置默认timeframe(主要因为WIC会设置'form/getFrequency')
+                // 类型切换时设置默认timeframe(主要因为WIC,indicator,symbol会设置'form/getFrequency')
                 CIQ.store.commit('form/getFrequency', 'Daily')
 
                 CIQ.hideCover()
@@ -284,24 +282,30 @@
                     // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
                     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
                     if(series) CIQ.stxx.removeSeries(series);
-                    
                     if(newData.indicator1.url != newData.indicator2.url) {
-                        CIQ.stxx.addSeries(newData.indicator2.url, {
-                            display:newData.indicator2.name, 
-                            isComparison: false, 
-                            color: "#368DF0",
-                            permanent: true,
-                            //panel:newData.indicator2.url,
-                            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                            yAxis:{ 
-                                position:"left",
-                                textStyle:"#FFBE00"
-                            },
-                            //shareYAxis: true
+                        CIQ.stxx.loadChart({    // 需要刷新一次，因为可能会修改timeframe
+                            symbol: CIQ.stxx.chart.symbol,
+                            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                            endDate:new Date(),
                         },()=>{
-                            CIQ.hideCover()
-                            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                        });
+                            CIQ.stxx.addSeries(newData.indicator2.url, {
+                                display:newData.indicator2.name, 
+                                isComparison: false, 
+                                color: "#368DF0",
+                                permanent: true,
+                                //panel:newData.indicator2.url,
+                                // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                                yAxis:{ 
+                                    position:"left",
+                                    textStyle:"#FFBE00"
+                                },
+                                //shareYAxis: true
+                            },()=>{
+                                CIQ.hideCover()
+                                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                            });
+                        })
+
                     }else{
                         CIQ.hideCover()
                         CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
@@ -354,6 +358,23 @@
                     addSingleIndicator([newData.indicator1.url,newData.indicator2.url],newData.indicator2.url,null,null,()=>{resolve()});
                 }
             }
+
+            // finally,需要刷新一次，因为可能会修改timeframe
+            if(
+                (oldData.categories == newData.categories) &&
+                (oldData.indicator1.url == newData.indicator1.url) &&
+                (oldData.indicator2.url == newData.indicator2.url)
+            ){
+                CIQ.stxx.loadChart({
+                    symbol: CIQ.stxx.chart.symbol,
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                    endDate:new Date(),
+                },()=>{
+                    CIQ.hideCover()
+                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                })
+                resolve(); 
+            }      
         })
     }
 
@@ -370,6 +391,10 @@
     // 从列表进入后还原new indicator的设定和新的indicator
     // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
+        
+        //考虑到addSeries必须在displaydata前设定好timeframe
+        CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
+
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         const newData = {
@@ -382,6 +407,7 @@
             ma: _newVal.ma
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
+           
         if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
@@ -442,8 +468,6 @@
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
-            // 预留给何总新加的weightlist
-
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
@@ -644,6 +668,7 @@
         }
     }
 
+
     // 预留：layout management
     // CIQ.localStorage.saveLayout = function(){
     //     var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
@@ -659,22 +684,5 @@
     // }
 
     //utils
-
-    //因为addSeries调用的quotefeed函数内无法判断timeframe，需要在外部判断timeframe并设置到store的exitFrequency内
-    const findTimeFrame = function(indicatorList){
-        let orignalFreq= 'Daily'
-        var freqList = []
-        for ( var  i = 0; i < indicatorList.length;i++) {
-            // when both sentiment and tech exist in CIQ.objIndicator, filter tech indicator
-            let sentiIndicatorRes = CIQ.findSentiIndicator(null,indicatorList[i]['indicator_url'])
-            if(sentiIndicatorRes){
-                freqList.push(sentiIndicatorRes.updated)
-                continue
-            }
-        }
-        if(freqList.find(item => item=="Weekly"))  orignalFreq= 'Weekly';   
-        if(freqList.find(item => item=="Monthly"))  orignalFreq= 'Monthly';  
-        return orignalFreq
-    }
  }
  export {__st_js_userownIndicator_}

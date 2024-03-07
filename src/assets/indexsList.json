@@ -80,19 +80,19 @@
         "name": "20-Year Treasuries (TLT)"
     },
     {
-        "symbol": "THIRTY",
+        "symbol": "thirty",
         "name": "30-Year Treasury"
     },
     {
-        "symbol": "TEN",
+        "symbol": "ten",
         "name": "10-Year Treasury"
     },
     {
-        "symbol": "TWO",
+        "symbol": "two",
         "name": "2-Year Treasury"
     },
     {
-        "symbol": "FIVE",
+        "symbol": "five",
         "name": "5-Year Treasury"
     },
     {

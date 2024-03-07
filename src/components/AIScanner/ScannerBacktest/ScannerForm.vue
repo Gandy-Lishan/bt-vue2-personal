@@ -17,7 +17,7 @@
             1. Start Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Backtest start date. Data after this date will be used for backtesting</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -41,7 +41,7 @@
             2. End Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Backtest end date. Data before this date will be used for backtesting.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -57,7 +57,21 @@
 			</el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item prop="find_type" label="3. Type">
+        <el-form-item prop="find_type">
+          <template slot="label">
+          <label>
+            3. Type
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The security type to search for. <br/>
+                Selecting 'Stock' will only search for stocks, <br/>
+                selecting 'ETF' will only search for ETFs, <br/>
+                selecting 'Stock/ETF' will search for both. <br/>
+                Please choose one of these options.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
         <el-select
             v-model="data.find_type"
             placeholder="— Select type —"
@@ -81,7 +95,8 @@
             4. Signals
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >The trading signals used. <br/>
+                Select one or more signals here to determine when to buy or sell.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -98,7 +113,9 @@
               5. Long / Short Percentage
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >The long-short position during the backtest period. <br/>
+                  Enter two values here, <br/>
+                  representing the weights of long and short positions respectively.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -127,7 +144,8 @@
               6. Take Profit
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >Set profit target range. 
+                  Enter two values representing <br/>the minimum and maximum profit targets.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -156,7 +174,8 @@
               7. Stop Loss
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >Set stop-loss range. 
+                  Enter two values representing <br/>the minimum and maximum stop-loss points.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -185,7 +204,8 @@
               8. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >Set market stay duration range.
+                  Enter two values representing <br/>the minimum and maximum duration the market stays.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -216,7 +236,7 @@
             9. Name
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -233,7 +253,7 @@
               10. Total Capital
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
-                  ></span>
+                  >The total capital for backtesting.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
@@ -250,7 +270,7 @@
             11. Commission
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Trading commission rate.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -265,7 +285,8 @@
             12. Rank Condition
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Ranking criteria. Choose one condition to determine<br/>
+                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -295,7 +316,7 @@
           13. Daily Stock Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
-              ></span>
+              >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
             <i class="iconfont icon-wenhao"></i>
           </el-tooltip>
         </label>
@@ -314,7 +335,11 @@
             14. Capital Allocate
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
-                ></span>
+                >Funds allocation method. Choosing the Kelly formula<br/>
+                 allows the system to dynamically adjust fund allocation<br/>
+                  based on strategy performance. Selecting maximum <br/>
+                  capital allocation per trade enables you to manually <br/>
+                  specify the maximum capital allocation for each trade.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -847,7 +872,6 @@ export default {
             this.$refs['SelectCheck'].handleoptionsAllChange(true)
             target[key] = this.data.signals
           }else if(Array.isArray(data[key])){
-            debugger
             this.$refs['SelectCheck'].handleoptionsAllChange(false)
             const arr = []
             data[key].forEach(ele => {

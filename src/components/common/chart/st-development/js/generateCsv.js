@@ -323,7 +323,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                  let signalResult = formatSmallNum(arrData[item][signalResultIndex])
                                  let resultMinus = formatSmallNum(result-signalResult)
                                  
-                                 if(result&&signalResult){
+                                 if(result!=null &&signalResult!=null){
                                      finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)))
                                  }else{
                                      finalData[item][index] =  null
@@ -383,7 +383,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                  let resultK = formatSmallNum(arrData[item][resultIndexK])
                                  let resultD = formatSmallNum(arrData[item][resultIndexD])
                                  let resultMinus = formatSmallNum(resultK-resultD)
-                                 if(resultK&&resultD){
+                                 if(resultK!=null && resultD!=null){
                                      finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)))
                                  }else{
                                      finalData[item][index] =  null
@@ -504,7 +504,7 @@ let __st_js_generateCsv_ = (_exports) => {
                                  let resultRadioValue = formatSmallNum(arrData[item][resultIndexRadioValue])
                                  let resultTechValue = formatSmallNum(arrData[item][resultIndexTechValue])
                                  let resultMinus = formatSmallNum(resultRadioValue-resultTechValue)
-                                 if(resultRadioValue&&resultTechValue){
+                                 if(resultRadioValue!=null &&resultTechValue!=null){
                                      finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)))
                                  }else{
                                      finalData[item][index] =  null
@@ -647,10 +647,16 @@ let __st_js_generateCsv_ = (_exports) => {
             for(var item in arrData){
                 let maValue = formatSmallNum(arrData[item][resultIndex])
                 let sentiValue = formatSmallNum(arrData[item][sd.type])
-                let result = sentiValue-maValue
-                finalData[item][index] = result || result==0
-                ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
-                :null;
+                let resultMinus = formatSmallNum(sentiValue-maValue)
+
+                // 任何一个参与计算中间量为null时，结果为null
+                if(maValue!=null && sentiValue!=null){
+                    finalData[item][index] = resultMinus!=null
+                    ?parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)))
+                    :null;
+                }else{
+                    finalData[item][index] = null
+                }
             }
             labelOption[criteria=='entry'?indexNum:indexNum+5] = '_minus_ma' + s.days
             return finalData
@@ -681,8 +687,12 @@ let __st_js_generateCsv_ = (_exports) => {
                  let result = formatSmallNum(arrData[item][resultIndex])
                  let resultMA = formatSmallNum(arrData[item][resultIndexMA])
                  let resultMinus = formatSmallNum(result - resultMA)
-                 finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)));
-             }
+                 if(result!=null && resultMA!=null){
+                    finalData[item][index] = parseFloat(resultMinus.toFixed(CIQ.countDecimalPlaces(resultMinus)));
+                 }else{
+                    finalData[item][index] = null
+                 }
+            }
              labelOption[criteria=='entry'?indexNum:indexNum+5] = '_ma' + s.days
              return finalData
          }

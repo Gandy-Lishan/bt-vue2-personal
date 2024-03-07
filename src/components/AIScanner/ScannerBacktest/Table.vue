@@ -23,9 +23,6 @@
 						<el-form-item label="AVERAGE WIN %">
 							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : props.row['avg_win'] }}</span>
 						</el-form-item>
-            <el-form-item label="MAX RISK %">
-							<span>{{ props.row['max_draw_down'] ? `${props.row['max_draw_down']}%` : props.row['max_draw_down'] }}</span>
-						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
 							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : props.row['avg_loss'] }}</span>
 						</el-form-item>
@@ -35,21 +32,24 @@
 						<el-form-item label="TOTAL TRADES">
 							<span>{{ props.row['total_trades']}}</span>
 						</el-form-item>
-
-						<!-- <el-form-item label="ANNUAL RETURN % (CAGR)">
-							<span>{{ props.row['annual_return'] }}</span>
-						</el-form-item> -->
 						<el-form-item label="TOTAL POSITIVE">
 							<span>{{ props.row['total_positive'] }}</span>
-						</el-form-item>
-						<el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
 							<span>{{ props.row['total_negative'] }}</span>
 						</el-form-item>
+
+						<!-- <el-form-item label="ANNUAL RETURN % (CAGR)">
+							<span>{{ props.row['annual_return'] }}</span>
+						</el-form-item> -->
+						<!-- <el-form-item label="AVERAGE RETURN %">
+							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
+						</el-form-item> -->
 						<el-form-item label="STD. DEV">
 							<span>{{ props.row['std_dev'] }}</span>
+						</el-form-item>
+            <el-form-item label="MAX RISK %">
+							<span>{{ props.row['max_draw_down'] ? `${props.row['max_draw_down']}%` : props.row['max_draw_down'] }}</span>
 						</el-form-item>
             <el-form-item label="TIME IN MARKET %">
 							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>
@@ -368,9 +368,12 @@ export default {
 .ScannerBTTable .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    width: 50%;
+    width: 30%;
   /deep/ .el-form-item__label {
     width: 200px;
   }
+}
+.demo-table-expand {
+  margin-left: 130px;
 }
 </style>
