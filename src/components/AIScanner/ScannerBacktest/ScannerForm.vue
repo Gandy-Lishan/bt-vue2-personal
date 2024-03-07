@@ -349,7 +349,7 @@
         </el-col>
         <el-col :span="12">
           <div class="processTipsBox">
-            <span v-html="processTips"></span><small v-if="processTips.includes('patiently')"><strong>Won't wait? </strong><button type="button" @click="checkResLater" id="checkResBtn" title=" No need to wait for the backtest to finish. Check the results in 'Scanner Backtest List' later!">Check results later</button></small>
+            <span v-html="processTips"></span>
           </div>
         </el-col>
       </el-row>
