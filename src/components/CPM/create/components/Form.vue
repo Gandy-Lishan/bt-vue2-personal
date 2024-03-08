@@ -290,7 +290,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <div class="processTipsBox" v-if="percentage != 0">
+          <div class="processTipsBox" v-if="percentage">
             <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
             <span v-html="processTips"></span>
           </div>
@@ -339,7 +339,7 @@ export default {
       },
       dropdownList: [],
       percentage: 0,
-      processTips: 'Tips: Saving your pattern matching parameters...',
+      processTips: '',
       frequencyOptions: [
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
@@ -751,7 +751,7 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
-      this.processTips = `Tips: Saving your pattern matching parameters...`
+      this.processTips = `Saving your pattern matching parameters...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
@@ -760,7 +760,7 @@ export default {
         const nameChecked = await this.checkDuplicateNames(name)
         if(nameChecked) {this.popUpMsgBox(`The Correlation Pattern Match Name already exists`); return}
       }
-      this.percentage = 15
+      this.percentage = 8
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
         ...this.data,
@@ -784,12 +784,12 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: The pattern backtest is in progress, which may take some time. Please be patient...'
+      this.processTips = 'The pattern backtest is in progress, which may take some time. Please be patient...'
       let url = saveRes.data?.url
       this.rowUrl = url
       let pollingRes = null
       do {
-        this.percentage += 1
+        if(this.percentage < 99) this.percentage += 1
         pollingRes = await getCPMResults(url)
         const code = pollingRes.data.code
         if (pollingRes.data.data?.status === 'finish' && code == 200) {
@@ -965,12 +965,20 @@ export default {
 .processTipsBox {
     width: 100%;
     height: 100%;
-    margin: 45px 0px 0px 0px;
+    font-size: 11px;
+    line-height: 11px;
+    margin: 42px 0px 0px 0px;
     font-weight: 500;
     color: #606266;
     /deep/ .el-progress-bar__innerText {
       margin: 0px 5px 1px 5px;
       color: #ffffff !important;
+    }
+    /deep/ .el-progress-bar__outer {
+      border-radius: 4px;
+    }
+    /deep/ .el-progress-bar__inner {
+      border-radius: 4px;
     }
 }
 </style>

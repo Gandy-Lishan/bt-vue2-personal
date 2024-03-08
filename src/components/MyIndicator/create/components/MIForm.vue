@@ -490,15 +490,13 @@ export default {
           // await this.$store.dispatch('chart/set_miFormStateChange',_data)
           // await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
-          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+          this.refreshMAState()
         }
         if(this.data.categories.includes('Symbol')){    
           this.data.indicator_1 = newVal
           this.data.indicator_1_url = newVal
 
-          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+          this.refreshMAState()
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
@@ -516,6 +514,28 @@ export default {
       //immediate: true,
       deep: true
     },
+    /**
+     * 判断类型切换时前后状态是否不属于同一大类，不是则刷新周期
+     */
+    'data.categories': {
+        handler (newV, oldV) {
+          if(
+            !(newV.includes('Indicator') && oldV.includes('Indicator')) &&
+            !(newV.includes('Symbol') && oldV.includes('Symbol'))
+          ){
+            // 重置最大周期和用户选择周期
+            this.data['time_frame'] = 'daily'
+            this.userSelectedTimeFrame = 'daily'
+            
+            // 大类切换时也需要重置ma和EP/EO
+            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+            for (const formRef of formsToSave) {
+              // 从WIC到其他选项时组件不存在，需要判断
+              this.$refs[formRef]?.clearForm()
+            }
+          }
+        },
+    }
   },
   async mounted() {
     // 从localStorage获取数据
@@ -525,6 +545,13 @@ export default {
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
+    /**
+     * 刷新MA状态
+     */
+    refreshMAState() {
+      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',true)
+      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',true)
+    },
     async changeTimeFrame(item) {
       this.userSelectedTimeFrame = item
       this.data.time_frame = this.findMaxFreq() 
@@ -532,8 +559,7 @@ export default {
       // userownIndicator需要封一个刷新函数用来刷新timeframe（或者symbol）修改后的图表
       if(this.data.categories !== 'WIC') {
         await this.$store.dispatch('chart/set_miFormStateRefresh')
-        this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-        this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+        this.refreshMAState()
       }else {
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
       }
@@ -816,12 +842,8 @@ export default {
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
 
-      // 重置最大周期和用户选择周期
-      this.data['time_frame'] = 'daily'
-      this.userSelectedTimeFrame = 'daily'
-
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
-        const exitItem = list.find((item) => item.label === this.data[indicatorProp])
+        const exitItem = list.find((item) => item[type=='Indicator'?'label':'url'] === this.data[indicatorProp])
         if (exitItem && exitItem?.type == type) {
         }else{
           this.data[indicatorProp] = ''
@@ -855,13 +877,6 @@ export default {
         this.data['indicator_2'] = ''
         this.data['indicator_2_url'] = ''
       }
-  
-      const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
-      for (const formRef of formsToSave) {
-        // 从WIC到其他选项时组件不存在，需要判断
-        this.$refs[formRef]?.clearForm()
-      }
-
 
       this.dropdownList = this.getList()
 
