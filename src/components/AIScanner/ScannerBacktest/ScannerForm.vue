@@ -66,7 +66,7 @@
                 >The security type to search for. <br/>
                 Selecting 'Stock' will only search for stocks, <br/>
                 selecting 'ETF' will only search for ETFs, <br/>
-                selecting 'Stock/ETF' will search for both. <br/>
+                selecting 'Stock & ETF' will search for both. <br/>
                 Please choose one of these options.</span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
@@ -454,7 +454,7 @@ export default {
       typeOptions: [
         { value: 'stock', label: 'Stock' },
         { value: 'etf', label: 'ETF' },
-        { value: 'stock/etf', label: 'Stock/ETF' },
+        { value: 'stock/etf', label: 'Stock & ETF' },
       ],
       RankCondition: [
         { value: 'Kelly', label: 'Kelly'},
