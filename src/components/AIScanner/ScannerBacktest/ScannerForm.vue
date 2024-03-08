@@ -347,11 +347,13 @@
             <el-input v-model="data.capital_allocate" placeholder="Enter 'Kelly' or a number between 0 and 1"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <div class="processTipsBox">
+        <el-col :span="6">
+          <div class="processTipsBox" v-if="percentage != 0">
+            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
             <span v-html="processTips"></span>
           </div>
         </el-col>
+        <el-col :span="6"></el-col>
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
@@ -445,6 +447,7 @@ export default {
       previewBtnLoading: false,
       isPolling: false,
       processTips: '',
+      percentage: 0,
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -742,6 +745,7 @@ export default {
         const nameChecked = await this.checkDuplicateNames(name)
         if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       }
+      this.percentage = 8
       const {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
@@ -796,6 +800,7 @@ export default {
       this.rowUrl = url
       let pollingRes = null
       do {
+        if(this.percentage < 99) this.percentage += 1
         pollingRes = await getScannerBTResults(url)
         const code = pollingRes.data.code
         if (pollingRes.data.data?.status === 'finish' && code == 200) {
@@ -810,6 +815,7 @@ export default {
     },
     async submitForm() {
       this.btnLoading = true
+     this.percentage = 5
       let saveRes = null
       try {
         saveRes = await this.saveFormData()
@@ -817,9 +823,10 @@ export default {
         this.$emit('clearResults')
         this.btnLoading = false
         this.processTips = ''
+        this.percentage = 0
       }
       debugger
-     if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; return}
+     if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      const _name = typeof name === 'string' && name ? name : ''
@@ -844,6 +851,7 @@ export default {
       this.$emit('refreshBTList')
       this.btnLoading = false
       this.processTips = ''
+      this.percentage = 0
     },
     displayData(data) {
       const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
@@ -930,7 +938,19 @@ export default {
       this.rowUrl = null
       this.btnLoading = false
       this.processTips = ''
+      this.percentage = 0
       this.generateCPMName()
+    },
+    customColorMethod(percentage) {
+      if (percentage < 50) {
+        return '#a0e3ec'
+      } else if (percentage < 70) {
+        return '#58d9ea';
+      } else if(percentage < 90){
+        return '#15cfe7';
+      }else {
+        return '#66ace5';
+      }
     }
   }
 }
@@ -969,10 +989,21 @@ export default {
   .processTipsBox {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 46px 0px 0px 0px;
-  }
+    font-size: 11px;
+    line-height: 11px;
+    margin: 42px 0px 0px 0px;
+    font-weight: 500;
+    color: #606266;
+    /deep/ .el-progress-bar__innerText {
+      margin: 0px 5px 1px 5px;
+      color: #ffffff !important;
+    }
+    /deep/ .el-progress-bar__outer {
+      border-radius: 4px;
+    }
+    /deep/ .el-progress-bar__inner {
+      border-radius: 4px;
+    }
+}
 }
 </style>

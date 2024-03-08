@@ -290,8 +290,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <div class="processTipsBox">
-            <span v-html="processTips"></span><small v-if="processTips.includes('patiently')"><strong>Won't wait? </strong><button type="button" @click="checkResLater" id="checkResBtn" title=" No need to wait for the backtest to finish. Check the results in 'Scanner Backtest List' later!">Check results later</button></small>
+          <div class="processTipsBox" v-if="percentage">
+            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
+            <span v-html="processTips"></span>
           </div>
         </el-col>
       </el-row>
@@ -337,6 +338,7 @@ export default {
         bars_num: 0,
       },
       dropdownList: [],
+      percentage: 0,
       processTips: '',
       frequencyOptions: [
         { value: 'Daily', label: 'Daily' },
@@ -501,6 +503,7 @@ export default {
         ...resetData
       }
       this.processTips = ''
+      this.percentage = 0
       this.setBacktestHistory(10)
       this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
@@ -649,14 +652,16 @@ export default {
     },
     async submitForm() {
      this.changeLoadingStatus('backtest',true)
+     this.percentage = 5
      let saveRes = null
      try {
       saveRes = await this.saveCPM()
      } catch (error) {
       this.processTips = '';
+      this.percentage = 0
       this.changeLoadingStatus('backtest',false); return
      }
-     if(!saveRes) {this.changeLoadingStatus('backtest',false); this.processTips = ''; return}
+     if(!saveRes) {this.changeLoadingStatus('backtest',false); this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
       if(code == 203) this.popUpMsgBox('The backtest pattern is running. You can wait or click the "+"" button to create a new pattern."')
       if(code == 401) this.popUpMsgBox('Calculate error')
@@ -685,6 +690,7 @@ export default {
           this.changeLoadingStatus('preview',false)
         })
       }
+      this.percentage = 0
       this.processTips = ''
     },
     async checkDuplicateNames(name) {
@@ -745,7 +751,7 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
-      this.processTips = `Tips: Saving your pattern matching parameters...`
+      this.processTips = `Saving your pattern matching parameters...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
@@ -754,6 +760,7 @@ export default {
         const nameChecked = await this.checkDuplicateNames(name)
         if(nameChecked) {this.popUpMsgBox(`The Correlation Pattern Match Name already exists`); return}
       }
+      this.percentage = 8
       const exclude_overlap = this.isExcludeOO ? 1 : 0
       const saveData = {
         ...this.data,
@@ -777,11 +784,12 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: The pattern backtest is in progress, which may take some time. Please be patient...'
+      this.processTips = 'The pattern backtest is in progress, which may take some time. Please be patient...'
       let url = saveRes.data?.url
       this.rowUrl = url
       let pollingRes = null
       do {
+        if(this.percentage < 99) this.percentage += 1
         pollingRes = await getCPMResults(url)
         const code = pollingRes.data.code
         if (pollingRes.data.data?.status === 'finish' && code == 200) {
@@ -840,6 +848,17 @@ export default {
         if(type == 'preview') this.previewBtnLoading = false;
         else this.btnLoading = false;
         CIQ.hideCover();
+      }
+    },
+    customColorMethod(percentage) {
+      if (percentage < 50) {
+        return '#a0e3ec'
+      } else if (percentage < 70) {
+        return '#58d9ea';
+      } else if(percentage < 90){
+        return '#15cfe7';
+      }else {
+        return '#66ace5';
       }
     }
   }
@@ -946,9 +965,20 @@ export default {
 .processTipsBox {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 46px 0px 0px 0px;
+    font-size: 11px;
+    line-height: 11px;
+    margin: 42px 0px 0px 0px;
+    font-weight: 500;
+    color: #606266;
+    /deep/ .el-progress-bar__innerText {
+      margin: 0px 5px 1px 5px;
+      color: #ffffff !important;
+    }
+    /deep/ .el-progress-bar__outer {
+      border-radius: 4px;
+    }
+    /deep/ .el-progress-bar__inner {
+      border-radius: 4px;
+    }
 }
 </style>
