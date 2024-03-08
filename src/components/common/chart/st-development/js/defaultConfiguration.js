@@ -702,8 +702,8 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Percentage Below N-Day High"
 						},
 						{
-							"name": "Percentage Above N-Day High",
-							"url": "Percentage Above N-Day High"
+							"name": "Percentage Above N-Day Low",
+							"url": "Percentage Above N-Day Low"
 						}
 					]
 				},

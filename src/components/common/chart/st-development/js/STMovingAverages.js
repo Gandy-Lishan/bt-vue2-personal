@@ -1044,6 +1044,66 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = quotes[i]["_MA " + sd.name] / quotes[i]["_MA2 " + sd.name];
 		}
 	};
+	// CIQ.Studies.calculatePercentageAboveNDayLow = function (stx, sd) {
+	// 	var quotes = sd.chart.dataSet;
+	// 	if (quotes.length < sd.days + 1) {
+	// 		sd.error = true;
+	// 		return;
+	// 	}
+	// 	var field = sd.inputs.Field;
+	// 	var period = sd.inputs.Period;
+
+	// 	if (!field || field == "field") field = "Close";
+
+	// 	let belowNDayStateArr = []
+	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
+	// 		if(i == 0){
+	// 			belowNDayStateArr.push(null)
+	// 			continue
+	// 		}
+	// 		if(quotes[i][field] < quotes[i-1][field]) belowNDayStateArr.push(1)
+	// 		else belowNDayStateArr.push(0)
+	// 	}
+
+	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
+	// 		if(i>=period){
+	// 			if (!quotes[i]) continue;
+	// 			const sliceStart = i+1 - period
+	// 			const sliceEnd = i+1
+	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+	// 		}
+	// 	}
+	// };
+	// CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
+	// 	var quotes = sd.chart.dataSet;
+	// 	if (quotes.length < sd.days + 1) {
+	// 		sd.error = true;
+	// 		return;
+	// 	}
+	// 	var field = sd.inputs.Field;
+	// 	var period = sd.inputs.Period;
+
+	// 	if (!field || field == "field") field = "Close";
+
+	// 	let belowNDayStateArr = []
+	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
+	// 		if(i == 0){
+	// 			belowNDayStateArr.push(null)
+	// 			continue
+	// 		}
+	// 		if(quotes[i][field] > quotes[i-1][field]) belowNDayStateArr.push(1)
+	// 		else belowNDayStateArr.push(0)
+	// 	}
+
+	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
+	// 		if(i>=period){
+	// 			if (!quotes[i]) continue;
+	// 			const sliceStart = i+1 - period
+	// 			const sliceEnd = i+1
+	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+	// 		}
+	// 	}
+	// };
 	CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		if (quotes.length < sd.days + 1) {
@@ -1055,26 +1115,21 @@ if (!CIQ.Studies) {
 
 		if (!field || field == "field") field = "Close";
 
-		let belowNDayStateArr = []
+		let result
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if(i == 0){
-				belowNDayStateArr.push(null)
-				continue
-			}
-			if(quotes[i][field] < quotes[i-1][field]) belowNDayStateArr.push(1)
-			else belowNDayStateArr.push(0)
-		}
-
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if(i>=period){
+			if(i+1>=period){
+				var quote = quotes[i]
 				if (!quotes[i]) continue;
-				const sliceStart = i+1 - period
-				const sliceEnd = i+1
-				quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				/** 防止分母为0或者null */
+				let highestPrice = Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))
+				result = highestPrice?(quote[field]/highestPrice-1)*100:0
 			}
+			quotes[i]["Result " + sd.name] = result;
 		}
 	};
-	CIQ.Studies.calculatePercentageAboveNDayHigh = function (stx, sd) {
+	CIQ.Studies.calculatePercentageAboveNDayLow = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
@@ -1085,23 +1140,18 @@ if (!CIQ.Studies) {
 
 		if (!field || field == "field") field = "Close";
 
-		let belowNDayStateArr = []
+		let result
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if(i == 0){
-				belowNDayStateArr.push(null)
-				continue
-			}
-			if(quotes[i][field] > quotes[i-1][field]) belowNDayStateArr.push(1)
-			else belowNDayStateArr.push(0)
-		}
-
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if(i>=period){
+			if(i+1>=period){
+				var quote = quotes[i]
 				if (!quotes[i]) continue;
-				const sliceStart = i+1 - period
-				const sliceEnd = i+1
-				quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				/** 防止分母为0或者null */
+				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))
+				result = lowestPrice?(quote[field]/lowestPrice-1)*100:0
 			}
+			quotes[i]["Result " + sd.name] = result;
 		}
 	};
 
@@ -1358,25 +1408,15 @@ if (!CIQ.Studies) {
 				"Result": "auto",
 			},
         },
+		"Percentage Above N-Day Low": {
+            name: "Percentage Above N-Day Low",
+			inputs: { Period: 252 },
+            calculateFN: CIQ.Studies.calculatePercentageAboveNDayLow,
+        },
 		"Percentage Below N-Day High": {
             name: "Percentage Below N-Day High",
 			inputs: { Period: 252 },
-            calculateFN: function (stx, sd) {	
-				CIQ.Studies.calculatePercentageBelowNDayHigh(stx, sd);
-			},
-			outputs: {
-				"Result": "auto",
-			},
-        },
-		"Percentage Above N-Day High": {
-            name: "Percentage Above N-Day High",
-			inputs: { Period: 252 },
-            calculateFN: function (stx, sd) {	
-				CIQ.Studies.calculatePercentageAboveNDayHigh(stx, sd);
-			},
-			outputs: {
-				"Result": "auto",
-			},
+            calculateFN: CIQ.Studies.calculatePercentageBelowNDayHigh,
         },
 	});
 
