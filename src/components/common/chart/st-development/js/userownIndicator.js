@@ -42,7 +42,6 @@
     CIQ.displayWeightOwnIndicator = async function(previousState,updatedState,combinedStudy){
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
-        
         //编辑时对内容修改或者preview应该移除生成的indicator
         if(!combinedStudy){
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
@@ -69,8 +68,9 @@
         }
         // indicator加载
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
+        
         CIQ.stxx.loadChart({ 
-                symbol: symbolList.length?symbolList[0].indicator_url:CIQ.stxx.chart.symbol, 
+                symbol: symbolList.length?symbolList[0].indicator_url:process.env.VUE_APP_DEFAULT_SYMBOL, 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
