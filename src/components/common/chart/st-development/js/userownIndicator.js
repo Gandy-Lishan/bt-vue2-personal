@@ -235,7 +235,6 @@
             CIQ.addCover()
             CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
             //编辑时对内容修改或者preview应该移除生成的indicator
-            
             for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                 var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                 if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
@@ -391,7 +390,7 @@
     // 从列表进入后还原new indicator的设定和新的indicator
     // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
-        
+
         //考虑到addSeries必须在displaydata前设定好timeframe
         CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
 
