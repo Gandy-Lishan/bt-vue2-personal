@@ -348,10 +348,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <div class="processTipsBox" v-if="percentage != 0">
-            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
-            <span v-html="processTips"></span>
-          </div>
+          <el-form-item>
+          <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
+          </el-form-item>
         </el-col>
         <el-col :span="6"></el-col>
       </el-row>
@@ -361,7 +360,10 @@
             <el-button type="warning" size="small" @click="previewList" :loading="previewBtnLoading" :disabled="btnLoading || previewBtnLoading">View List</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button type="primary" size="small" @click="submitForm" :loading="btnLoading" :disabled="btnLoading || previewBtnLoading">Run Backtest</el-button>
+            <el-button type="primary" size="small" @click="submitForm" :loading="btnLoading" :disabled="btnLoading || previewBtnLoading" v-show="percentage == 0">Run Backtest</el-button>
+            <div class="processTipsBox" v-show="percentage != 0">
+            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
+            </div>
         </el-col>
         </el-row>
     </el-form>
@@ -943,11 +945,11 @@ export default {
     },
     customColorMethod(percentage) {
       if (percentage < 50) {
-        return '#a0e3ec'
+        return '#66ace5'
       } else if (percentage < 70) {
-        return '#58d9ea';
+        return '#66ace5';
       } else if(percentage < 90){
-        return '#15cfe7';
+        return '#66ace5';
       }else {
         return '#66ace5';
       }
@@ -986,24 +988,35 @@ export default {
     align-items: center;
     justify-content: space-between;
   }
-  .processTipsBox {
-    width: 100%;
+  .processTips {
     height: 100%;
-    font-size: 11px;
-    line-height: 11px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 32px;
     margin: 42px 0px 0px 0px;
     font-weight: 500;
     color: #606266;
-    /deep/ .el-progress-bar__innerText {
-      margin: 0px 5px 1px 5px;
-      color: #ffffff !important;
-    }
-    /deep/ .el-progress-bar__outer {
-      border-radius: 4px;
-    }
-    /deep/ .el-progress-bar__inner {
-      border-radius: 4px;
-    }
+  }
+  .processTipsBox {
+    height: 100%;
+  /deep/ .el-progress-bar__innerText {
+    margin: 0px 5px 1px 5px;
+    color: #ffffff !important;
+  }
+  /deep/ .el-progress-bar__outer {
+    
+    height: 100% !important;
+    border-radius: 4px;
+  }
+  /deep/ .el-progress-bar__inner {
+    border-radius: 4px;
+  }
+  /deep/ .el-progress--text-inside .el-progress-bar {
+    height: 100%;
+  }
+  /deep/ .el-progress {
+    height: 100%;
+  }
 }
 }
 </style>
