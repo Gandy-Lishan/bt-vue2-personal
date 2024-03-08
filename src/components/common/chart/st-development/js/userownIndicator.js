@@ -4,6 +4,7 @@
  */
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
+ import { uniqueObjectArray } from '@/utils/formValidate'
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -54,10 +55,9 @@
         // 提取indicator移除列表和新增列表,
         const { addedItems, removedItems } = findAddedAndRemovedItems(previousState, updatedState);
         
-        const indicatorList = updatedState.filter(item=> item.type=='Indicator')
-        const symbolList = updatedState.filter(item=> item.type=='Symbol')
-
-        
+        // 防止symbol出现 [AA, AA]的情况，第二个为序列显示，但是会报错
+        const indicatorList = uniqueObjectArray(updatedState.filter(item=> item.type=='Indicator'))
+        const symbolList = uniqueObjectArray(updatedState.filter(item=> item.type=='Symbol'))
 
         // indicator移除
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -266,6 +266,12 @@
             if(newData.categories.includes('Symbol')){
                 // 如果左侧发生变动
                 if(oldData.indicator1.url != newData.indicator1.url){
+                    // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
+                    if(newData.indicator1.url == newData.indicator2.url) {
+                        var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+                        if(series) CIQ.stxx.removeSeries(series);
+                    }
+
                     CIQ.objIndicator = []
                     CIQ.stxx.loadChart({
                         symbol: newData.indicator1.url,

@@ -203,6 +203,8 @@ export const validateSlippageRule = createLDVRule(
 )
 
 export const uniqueObjectArray = objectArray => {
+	if(objectArray.length == 0) return objectArray
+	
 	// 辅助对象用于跟踪已经出现过的url值
 	var urlMap = {}
 	var urlKey = ''
@@ -210,6 +212,8 @@ export const uniqueObjectArray = objectArray => {
 		urlKey = 'url'
 	}else if(Object.keys(objectArray[0]).indexOf('symbol') != -1){
 		urlKey = 'symbol'
+	}else if(Object.keys(objectArray[0]).indexOf('indicator_url') != -1){	/**特殊情况，用于检测wic列表独一性，防止同名symbol序列和symbol冲突 */
+		urlKey = 'indicator_url'
 	}else {
 		urlKey = 'stock'
 	}
