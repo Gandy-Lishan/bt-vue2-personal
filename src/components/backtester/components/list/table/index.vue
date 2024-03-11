@@ -431,13 +431,7 @@ export default {
 		copy
 	},
 	async created() {
-		// 获取当前的域名
-		const currentDomain = window.location.hostname;
-		console.log('当前域名', currentDomain)
-		// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-		if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') {
-			this.isButtonVisible = true;
-		}
+
 		await this.getDataList(null)
 	// 监听事件总线中的 refresh-list 事件
   	// RefreshBus.$on(`refresh-list`, (_) => {
@@ -447,15 +441,32 @@ export default {
 		this.loading = false
 	},
 	computed: {
+		userRole() {
+			return this.$store.state.user.role
+		},
 		is_admin() {
-      return this.$store.state.user.is_admin
-    },
+			return this.$store.state.user.is_admin
+		},
 		isSystem() {
 			return this.$store.state.form.role
 		},
 		isOptRuning() {
 			return this.$refs['OPT'].optimizeState
 		}
+	},
+	watch: {
+		userRole: {
+			handler(newVal) {
+			// 获取当前的域名
+			const currentDomain = window.location.hostname;
+			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') && newVal == 'analyst') {
+				this.isButtonVisible = true;
+			}
+		},
+		immediate: true,
+		deep: true
+		},
 	},
 	methods: {
 		async refreshList() {
