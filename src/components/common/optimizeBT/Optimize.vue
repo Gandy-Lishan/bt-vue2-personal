@@ -23,6 +23,7 @@
 			<div class="table">
 				<el-table
 					header-align="center"
+					max-height="550"
 					:data="dataList"
 					v-loading="loading"
 					:element-loading-text="loadTest"
