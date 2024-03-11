@@ -82,7 +82,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     if (filter == 'ALL'){
         var resultsIndexsList = [];
         let indexsList = await loadIndexsList()
-        let wholeWord = null
+        let wholeWord = []
         for (var i = 0; i < indexsList.length; i++) {
             var fields = indexsList[i];
             
@@ -101,10 +101,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }
 
             if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord = {
+                wholeWord.push({
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
-                }
+                })
                 continue
             }
 
@@ -133,10 +133,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }
 
             if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord = {
+                wholeWord.push({
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
-                }
+                })
                 continue
             }
 
@@ -147,13 +147,13 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         }
         resultsStocksList.sort(SortArray)
         let res = resultsIndexsList.concat(resultsStocksList)
-        if(wholeWord)   res.unshift(wholeWord)
+        if(wholeWord.length>0)   res.unshift(...wholeWord)
         cb(res);    
     }
     else if (filter == 'INDEXES'){
 			var results = [];
             let indexsList = await loadIndexsList()
-            let wholeWord = null
+            let wholeWord = []
 			for (var i = 0; i < indexsList.length; i++) {
 				var fields = indexsList[i];
                 
@@ -172,10 +172,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 }
     
                 if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                    wholeWord = {
+                    wholeWord.push({
                         display: [item.symbol, item.name, item.exchDisp],
                         data: item
-                    }
+                    })
                     continue
                 }
 
@@ -185,12 +185,12 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 				});
 			}
             results.sort(SortArray)
-            if(wholeWord)   results.unshift(wholeWord)
+            if(wholeWord.length>0)   results.unshift(...wholeWord)
 			cb(results);    
 	}else if (filter == 'STOCKS') {
         var results = [];
         let stocksList = await loadStocksList()
-        let wholeWord = null
+        let wholeWord = []
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
             var item = {
@@ -207,10 +207,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }
 
             if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord = {
+                wholeWord.push({
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
-                }
+                })
                 continue
             }
             
@@ -220,7 +220,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             });
         }
         results.sort(SortArray)
-        if(wholeWord)   results.unshift(wholeWord)
+        if(wholeWord.length>0)   results.unshift(...wholeWord)
         cb(results);  
     } else if (filter == 'MY FAVORITES'){
         var results = []

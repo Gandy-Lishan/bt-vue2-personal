@@ -224,57 +224,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 
                 CIQ.symbols = []
                 if (filter == "ALL"){
-                    // var results = []
-                    // let list = CIQ.store.state.chart.indicatorsList
-                    // let wholeWord = null
-                    // for(var i=0;i<list.length;i++){
-                    //     var fields = list[i]
-                        
-                    //     var item = {
-                    //         name: fields.chart_name,
-                    //         url: fields.url,
-                    //         updated: fields.updated,
-                    //         category: fields.category
-                    //     };
-
-                    //     if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
-                    //         continue;
-                    //     }
-
-                    //     if (item.updated.indexOf("Quarterly") !==-1){
-                    //         continue;
-                    //     }
-
-                    //     if (item.name.indexOf("Seasonality") !==-1){
-                    //         continue;
-                    //     }
-
-                    //     if (CIQ.symbols.indexOf(item.name) !==-1){
-                    //         continue;
-                    //     }
-  
-                    //     if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                    //         continue;
-                    //     }
-
-                    //     if(item.name.toUpperCase() === value.toUpperCase()){
-                    //         wholeWord = {
-                    //             display: [item.name,item.updated],
-                    //             data: item
-                    //         }
-                    //         continue
-                    //     }
-                        
-                    //     results.push({
-                    //         display:[item.name,item.updated],
-                    //         data:item
-                    //     })
-                    // }
-
-                    // results.sort(SortArray)
-                    // if(wholeWord)   results.unshift(wholeWord)
-                    // closure(results); 
-
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
                     const list = CIQ.store.state.chart.indicatorsList
@@ -284,7 +233,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         updated: item.updated,
                         category: item.category
                     }})
-                    let wholeWord = null
+                    let wholeWord = []
                     try{
                         resu.push(...this.btvFavIndi.data.data.map(item=>{return {
                             name:item.chart_name[0],
@@ -327,10 +276,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 }
         
                                 if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                                    wholeWord = {
+                                    wholeWord.push({
                                         display: [item.name,item.updated],
                                         data: item
-                                    }
+                                    })
                                     return
                                 } 
                                    
@@ -341,7 +290,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             }); 
 
                             // results.sort(SortArray)
-                            if(wholeWord)   results.unshift(wholeWord)
+                            if(wholeWord.length>0)   results.unshift(...wholeWord)
                             closure(results); 
 
                           loader.hide(); 
@@ -396,7 +345,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     if (loader) loader.hide();  
 
                     var results = []
-                    let wholeWord = null
+                    let wholeWord = []
                     for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
                         var fields = CIQ.store.state.chart.indicatorsList[i]
                         
@@ -431,10 +380,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         }
 
                         if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                            wholeWord = {
+                            wholeWord.push({
                                 display: [item.name,item.updated],
                                 data: item
-                            }
+                            })
                             continue
                         }
                         results.push({
@@ -443,7 +392,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         })
                     }
                     results.sort(SortArray)
-                    if(wholeWord)   results.unshift(wholeWord)
+                    if(wholeWord.length>0)   results.unshift(...wholeWord)
                     closure(results); 
                 }             
             }
