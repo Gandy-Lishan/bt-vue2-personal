@@ -1001,7 +1001,7 @@ export default {
     height: 100%;
   /deep/ .el-progress-bar__innerText {
     margin: 0px 5px 1px 5px;
-    color: #ffffff !important;
+    // color: #ffffff !important;
   }
   /deep/ .el-progress-bar__outer {
     
