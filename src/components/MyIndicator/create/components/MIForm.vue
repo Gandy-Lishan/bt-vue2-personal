@@ -444,15 +444,15 @@ export default {
       userSelectedTimeFrame: 'daily', 
       timeFrameOptions: [
         {
-          label: 'daily',
+          label: 'Daily',
           value: 'daily'
         },
         {
-          label: 'weekly',
+          label: 'Weekly',
           value: 'weekly'
         },
         {
-          label: 'monthly',
+          label: 'Monthly',
           value: 'monthly'
         }
       ],
