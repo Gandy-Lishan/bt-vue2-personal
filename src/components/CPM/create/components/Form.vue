@@ -285,19 +285,23 @@
             </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item class="CPM-btn" label=" ">
-            <el-button type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
-          </el-form-item>
+            <el-button v-show="percentage == 0" size="small" class="CPM-btn" type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
+            <div class="processTipsBox" v-show="percentage != 0">
+            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
+            </div>
         </el-col>
         <el-col :span="8">
-          <div class="processTipsBox" v-if="percentage">
-            <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
-            <span v-html="processTips"></span>
-          </div>
         </el-col>
       </el-row>
     </el-col>
   </el-row>
+  <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item>
+          <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
+          </el-form-item>
+        </el-col>
+      </el-row>
   </el-form>
   </div>
 </template>
@@ -751,7 +755,7 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
-      this.processTips = `Saving your pattern matching parameters...`
+      this.processTips = `Tips: Saving your pattern matching parameters...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!validForm) return
@@ -784,7 +788,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'The pattern backtest is in progress, which may take some time. Please be patient...'
+      this.processTips = 'Tips: The pattern backtest is in progress, which may take some time. Please be patient...'
       let url = saveRes.data?.url
       this.rowUrl = url
       let pollingRes = null
@@ -946,39 +950,41 @@ export default {
 /deep/ .el-checkbox__label {
   line-height: 32px;
 }
-/deep/ .el-form-item.CPM-btn.el-form-item--small{
+/deep/ .CPM-btn.el-form-item--small{
   margin-top: 19px;
 }
 .CPM-btn {
+  margin: 42px 0px 0px 0px;
   width: 100%;
 }
-.progressTextBox {
-  display: flex;
-  align-items: center;
-  .progressText {
-    margin: 0;
-    color: #7c8186c7;
-    width: 100%;
+.processTips {
     height: 100%;
-  }
-}
-.processTipsBox {
     width: 100%;
-    height: 100%;
-    font-size: 11px;
-    line-height: 11px;
-    margin: 42px 0px 0px 0px;
+    font-size: 14px;
+    line-height: 14px;
     font-weight: 500;
     color: #606266;
-    /deep/ .el-progress-bar__innerText {
-      margin: 0px 5px 1px 5px;
-      color: #ffffff !important;
-    }
-    /deep/ .el-progress-bar__outer {
-      border-radius: 4px;
-    }
-    /deep/ .el-progress-bar__inner {
-      border-radius: 4px;
-    }
+  }
+.processTipsBox {
+    height: 100%;
+    margin: 42px 0px 0px 0px;
+  /deep/ .el-progress-bar__innerText {
+    margin: 0px 5px 1px 5px;
+  //   color: #ffffff !important;
+  }
+  /deep/ .el-progress-bar__outer {
+    
+    height: 32px !important;
+    border-radius: 4px;
+  }
+  /deep/ .el-progress-bar__inner {
+    border-radius: 4px;
+  }
+  /deep/ .el-progress--text-inside .el-progress-bar {
+    height: 100%;
+  }
+  /deep/ .el-progress {
+    height: 100%;
+  }
 }
 </style>
