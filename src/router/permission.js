@@ -36,7 +36,13 @@ export function setRouterPermission(router) {
 		if (indicator) LocalStorageUtil.set('indicator', indicator)
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-		/* hao@sentimentrader.com */
+	/* normal user */
+	// Cookies.set(
+	// 	'sentimen_session',
+	// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
+	// )
+	
+		// /* hao@sentimentrader.com */
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
