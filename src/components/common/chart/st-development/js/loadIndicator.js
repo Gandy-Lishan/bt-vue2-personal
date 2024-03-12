@@ -263,10 +263,20 @@
          }
      })
  }
- // change a symbol
- CIQ.addSymbol = async function(symbol,callback){
+ /** global symbol loading function, 
+  * including chart initation,lookup component, addSymbol from setup form*/
+ CIQ.addSymbol = async function(symbol,stx,callback){
+    let _stx = stx?stx:CIQ.stxx
+
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        return
+    }
+
      CIQ.addCover()
      CIQ.nprogress.start()
+
      let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
      // remove redundant elements and empty string
  
@@ -298,22 +308,22 @@
  
      //  load saved indicator layouts from stxx.layout
      var savedTechSD = []
-     for(var i in CIQ.stxx.layout.studies){
+     for(var i in _stx.layout.studies){
          savedTechSD.push({
-             type: CIQ.stxx.layout.studies[i].type,
-             inputs: CIQ.stxx.layout.studies[i].inputs,
-             outputs: CIQ.stxx.layout.studies[i].outputs,
-             parameters: CIQ.stxx.layout.studies[i].parameters,
-             panel: CIQ.stxx.layout.studies[i].panel
+             type: _stx.layout.studies[i].type,
+             inputs: _stx.layout.studies[i].inputs,
+             outputs: _stx.layout.studies[i].outputs,
+             parameters: _stx.layout.studies[i].parameters,
+             panel: _stx.layout.studies[i].panel
          })
      }
      CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
    
       // 限制同屏显示个数
-      if(maxNumOfStudy()) return
+      if(maxNumOfStudy(_stx)) return
  
      let count = 0
-     for (var studyInstanceName in CIQ.stxx.layout.studies) {
+     for (var studyInstanceName in _stx.layout.studies) {
          count++
      }
  
@@ -323,7 +333,7 @@
          console.log('after CIQ.getIndicatorMatedata')
      }
  
-     CIQ.stxx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
+     _stx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
          // callback - your code to be executed after the chart is loaded
         if(callback){
             callback()
@@ -332,11 +342,7 @@
             CIQ.nprogress.done()
         }
 
-         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-
-         //CIQ.stxx.layout.rangeSlider = true;
-         //CIQ.stxx.changeOccurred("layout");
-         //CIQ.exportEx()      
+         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)  
      })
  }
 

@@ -609,7 +609,7 @@ export default {
       //     CIQ.hideCover()
       // })
       this.$store.commit('form/getBacktestSymbol', this.data.symbol)
-      CIQ.addSymbol(this.data.symbol,()=>{
+      CIQ.addSymbol(this.data.symbol,null,()=>{
         this.calculateBarDistance()
         CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.hideCover()
