@@ -22,8 +22,6 @@
 					ref="exitChild1"
 					:config="setConfig('exit')"
 					:isRiskControl="isRiskControl"
-					@isOnlyRiskControl="isOnlyRiskControl"
-					@getExitRelation="getExitRelation"
 					@sendExitSignalIndex="sendExitSignalIndex"
 				>
 				</Criteria>
@@ -45,8 +43,6 @@
 					ref="exitChild2"
 					:config="setConfig('exit')"
 					:isRiskControl="isRiskControl"
-					@isOnlyRiskControl="isOnlyRiskControl"
-					@getExitRelation="getExitRelation"
 					@sendExitSignalIndex="sendExitSignalIndex"
 				>
 				</Criteria>

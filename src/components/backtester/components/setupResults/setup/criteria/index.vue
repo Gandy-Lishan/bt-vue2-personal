@@ -978,8 +978,6 @@ export default {
 						console.log(error)
 					}
 				}
-				
-			this.$emit(`get${this.criteriaCapFirstL}Relation`, val)
 			this.$store.commit(`form/clear${this.criteriaCapFirstL}SignalArr`)
 			this.$store.commit('form/saveRelation', {
 				criteria: this.criteria,
@@ -1237,7 +1235,6 @@ export default {
 				? data[criteria].signals_in_market
 				: 1
 			this.isUsePeriodLimit = Boolean(data[criteria].signals_in_market != 100000)
-			// this.$emit('getExitRelation', this.relation)
 			let length = data[criteria].signals.length
 			this.tabIndex = length
 			for (let j = 0; j < length; j++) {
@@ -1340,8 +1337,6 @@ export default {
 					label: 'Only Use Risk Control'
 				}
 			]
-			// this.$emit('isOnlyRiskControl', this.exitItemCheck)
-			// this.$emit('getExitRelation', this.relation)
 		},
 		async userUploadFileContent(data) {
 			let _this = this
