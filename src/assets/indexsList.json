@@ -826,5 +826,9 @@
     {
         "symbol": "SOXX",
         "name": "Semiconductor (SOXX)"
+    },
+    {
+        "symbol": "Ethereum",
+        "name": "Ethereum"
     }
 ]
