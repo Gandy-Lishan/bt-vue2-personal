@@ -49,7 +49,7 @@
                   <el-form-item prop="symbol">
                     <template slot="label">
                       <label>
-                        1. Symbol(1)
+                        {{bdFormLabel['symbol']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Choose a stock/index as backtest symbol. (default: SPX)<br
@@ -92,48 +92,10 @@
                       /> -->
                     </div>
                   </el-form-item>
-                  <el-form-item prop="benchmark" label="Benchmark">
-                    <template slot="label">
-                      <label>
-                        5. Benchmark
-                        <el-tooltip effect="dark" placement="top">
-                          <span slot="content"
-                            >Choose a stock/index with simple entry on the Start date &
-                        exit on the End date as benchmark compared with this
-                        backtest. (default: SPX)<br
-                          /></span>
-                          <i class="iconfont icon-wenhao"></i>
-                        </el-tooltip>
-                      </label>
-                    </template>
-                    <div class="enterSymbolBox">
-                      <el-select
-                        v-model="bd.benchmark"
-                        id="symbolName"
-                        filterable
-                        remote
-                        reserve-keyword
-                        automatic-dropdown
-                        placeholder="enter keywords"
-                        :remote-method="remoteMethod"
-                        @visible-change="remoteMethod"
-                        :value-key="'key'"
-                        :loading="loading"
-                      >
-                        <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
-							    </el-form-item>
                   <el-form-item prop="backtestHistory" label="Backtest Period">
                     <template slot="label">
                       <label>
-                        9. Backtest Period
+                        {{bdFormLabel['backtest_period']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Specify the start and end date of the backtest.<br />Choose
@@ -159,10 +121,10 @@
                       </el-select>
                     </div>
                   </el-form-item>
-                  <el-form-item prop="market_environment" label="Market Environment">
+                  <el-form-item prop="market_environment" label="Market Environment" v-if="bd.strategy === 'Signal'">
                     <template slot="label">
                       <label>
-                        12. Market Environment
+                        {{bdFormLabel['market_environment']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >If you'd like to backtest a specific market environments like a <br /> 'bull
@@ -192,7 +154,7 @@
                   >
                   <template slot="label">
                       <label>
-                        2. Starting Capital
+                        {{bdFormLabel['capital']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input the value of starting capital of the backtest.
@@ -210,7 +172,7 @@
                   <el-form-item prop="frequency">
                     <template slot="label">
                       <label>
-                        6. Timeframe
+                        {{bdFormLabel['frequency']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Choose the timeframe of the backtest. The chart above will
@@ -247,7 +209,7 @@
                     </div>
                   </el-form-item>
                   <div class="dateBox">
-                    <el-form-item label="9. Start Date">
+                    <el-form-item :label="bdFormLabel['start_date']">
                       <el-date-picker
                         v-if="bd.backtest_period == '22'"
                         v-model="bd.start_date"
@@ -261,10 +223,10 @@
                       <el-input v-else disabled v-model="bd.start_date"> </el-input>
                     </el-form-item>
                   </div>
-                  <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope">
+                  <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope" v-if="bd.strategy === 'Signal'">
                     <template slot="label">
                       <label>
-                        13. Index Moving Average Slope
+                        {{bdFormLabel['index_moving_average_slope']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >If you'd like to backtest based on the slope of the 200 Day Moving Average of the Index, <br />select the appropriate slope direction here.</span>
@@ -291,7 +253,7 @@
                   <el-form-item prop="commission">
                     <template slot="label">
                       <label>
-                        3. Commission
+                        {{bdFormLabel['commission']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input the percentage value of trading commission. (default:
@@ -313,7 +275,7 @@
                   <el-form-item prop="trade_price">
                     <template slot="label">
                       <label>
-                        7. Trade Price
+                        {{bdFormLabel['trade_price']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >The price used during the transaction,<br />'Next'
@@ -342,7 +304,7 @@
                     </div>
                   </el-form-item>
                   <div class="dateBox">
-                    <el-form-item prop="endDate" label="10. End Date">
+                    <el-form-item prop="endDate" :label="bdFormLabel['end_date']">
                       <el-date-picker
                         v-if="bd.backtest_period == '22'"
                         v-model="bd.end_date"
@@ -355,10 +317,10 @@
                       <el-input v-else disabled v-model="bd.end_date"> </el-input>
                     </el-form-item>
                   </div>
-                  <el-form-item label="User Tag" prop="use_tag" v-if="is_admin">
+                  <el-form-item prop="use_tag" v-if="is_admin">
                   <template slot="label">
                     <label>
-                      User Tag
+                      {{bdFormLabel['user_tag']}}
                       <el-tooltip effect="dark" placement="top">
                         <span slot="content"
                           >Choose the type of backtest you want to create.<br
@@ -387,7 +349,7 @@
                   <el-form-item prop="slippage">
                     <template slot="label">
                       <label>
-                        4. Slippage
+                        {{bdFormLabel['slippage']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input the value of slippage of trading price. (default:
@@ -407,7 +369,7 @@
                     <el-form-item prop="direction">
                       <template slot="label">
                       <label>
-                        8. Direction
+                        {{bdFormLabel['direction']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Select Long or Short to specify the starting position of
@@ -432,10 +394,10 @@
                       </el-select>
                     </el-form-item>
                   </div>
-                  <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }">
+                  <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }" v-if="bd.strategy === 'Signal'">
                     <!-- <el-form-item prop="exclude_oo"> -->
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
-                      >11. Exclude Overlapping Observations
+                      >{{ bdFormLabel['exclude_oo'] }}
                       <el-tooltip effect="dark" placement="top">
                         <span slot="content"
                           >Select this box if you want to exclude dates that are
@@ -465,14 +427,13 @@
                     <!-- </el-form-item> -->
                   </div>
                   <el-form-item
-									label="Report URL"
 									prop="report_url"
 									size="mini"
 									v-if="bd.user_tag === 'analyst' && is_admin"
 								>
                   <template slot="label">
                     <label>
-                      Report URL
+                      {{bdFormLabel['report_url']}}
                       <el-tooltip effect="dark" placement="top">
                         <span slot="content"
                           >Fill in the analyst's report url here.<br
@@ -486,6 +447,24 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+                <el-col :span="6"></el-col>
+              </el-row>
+              <el-row :gutter="20">
                 <el-col :span="12">
                   <div class="nameBox">
                     <el-form-item
@@ -494,7 +473,7 @@
                     >
                     <template slot="label">
                       <label>
-                        14. Backtest Name
+                        {{bdFormLabel['name']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input a unique name for each backtest.<br
@@ -658,7 +637,7 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="risk-control-container border-set">
+                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Signal'">
                     <div class="riskItem">
                       <el-checkbox
                         v-model="isRiskControl"
@@ -784,6 +763,7 @@ export default {
       bd: {
         name: '',
         symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
+        symbol2: 'AAPL',
         benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Signal',
         capital: 100000.0,
@@ -794,6 +774,7 @@ export default {
         start_date: '',
         end_date: '',
         direction: 'Long',
+        direction2: 'Short',
         frequency: 'Daily',
         risk_control: '//',
         report_url: '',
@@ -807,6 +788,25 @@ export default {
         },
         market_environment: 0,
         index_moving_average_slope: 0
+      },
+      bdFormLabel: {
+        symbol: '1. Symbol',
+        capital: '2. Starting Capital',
+        commission: '3. Commission',
+        slippage: '4. Slippage',
+        benchmark: '5. Benchmark',
+        frequency: '6. Timeframe',
+        trade_price: '7. Trade Price',
+        direction: '8. Direction',
+        backtest_period: '9. Backtest Period',
+        start_date: '10. Start Date',
+        end_date: '11. End Date',
+        exclude_oo: '12. Exclude Overlapping Observation',
+        market_environment: '13. Market Environment',
+        index_moving_average_slope: '14. Index Moving Average Slope',
+        user_tag: 'User Tag',
+        report_url: 'Report Url',
+        name: '15. Backtest Name'
       },
       historyOptions: [
         {
@@ -1294,6 +1294,25 @@ export default {
     },
     changeStrategy(val) {
       this.$emit('changeStrategy', val)
+      // 如果切换成 Dual 删除 exclude overlapping observation, market environment, index moving average slope, 删除 risk control, 不让用
+      // 改变 bdFormLabel
+      const originalProperties = {
+        symbol: '1. Symbol',
+        name: '15. Backtest Name'
+      }
+      const modifyProperties = {
+        symbol: '1. Symbol(1)',
+        name: '12. Backtest Name',
+        symbol2: '13. Symbol(2)',
+        direction2: '14. Direction(2)',
+      }
+      if(val === 'Signal') this.bdFormLabel = {...this.bdFormLabel, ...originalProperties}
+      if(val === 'Dual') {
+        this.bdFormLabel = {...this.bdFormLabel, ...modifyProperties}
+        this.$emit('IsRiskControl', false)
+        this.$store.commit('form/isRiskControl', false)
+        
+      }
     },
     setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -1320,6 +1339,8 @@ export default {
       bd.risk_control = this.isRiskControl ? `${this.isTakeProfit ? this.tp : ''}/${this.isStopLoss ? this.sl : ''}/${this.isTimeInMarket ? this.tim : ''}` : '//'
       if(this.isRiskControl) this.setDesciption()
       if(!bd.direction) bd.direction = 'Long'
+      console.log('basicInfo 数据', bd)
+      // 如果是 Dual 那么需要上传 symbol2 和 direction 2
       this.$store.commit('form/setBd', bd)
     },
     async validateForm() {
