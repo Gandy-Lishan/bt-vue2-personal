@@ -2,43 +2,57 @@
 	<div class="setup">
 		<div>
 			<div class="setupBox">
-			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl"></BasicInfo>
+			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy"></BasicInfo>
 		</div>
 		<div class="set-up-container">
+		<el-tabs v-model="activeName" :class="{'Signal': strategy == 'Signal', 'Dual': strategy == 'Dual', 'set-up-criteria': true}">
+    <el-tab-pane label="Symbol(1)" name="first" class="symbol-pane">
 			<div class="criteria-container">
-				<div class="criteria">
-					<!-- <keep-alive> -->
-						<Criteria
-							ref="entryChild"
-							:config="setConfig('entry')"
-							:isRiskControl="false"
-							@getEntryRelation="getEntryRelation"
-							@sendEntrySignalIndex="sendEntrySignalIndex"
-						>
-						<!-- <keep-alive include="['ChildComponent']"> -->
-							<ChildComponent></ChildComponent>
-						<!-- </keep-alive> -->
-						</Criteria>
-					<!-- </keep-alive> -->
-				</div>
+				<Criteria
+					class="criteria"
+					ref="entryChild1"
+					:config="setConfig('entry')"
+					:isRiskControl="false"
+					@sendEntrySignalIndex="sendEntrySignalIndex"
+				>
+				</Criteria>
 				<div class="divider"></div>
-				<div class="criteria">
-					<!-- <keep-alive> -->
-						<Criteria
-							ref="exitChild"
-							:config="setConfig('exit')"
-							:isRiskControl="isRiskControl"
-							@isOnlyRiskControl="isOnlyRiskControl"
-							@getExitRelation="getExitRelation"
-							@sendExitSignalIndex="sendExitSignalIndex"
-						>
-							<!-- <keep-alive include="['ChildComponent']"> -->
-								<ChildComponent></ChildComponent>
-							<!-- </keep-alive> -->
-						</Criteria>
-					<!-- </keep-alive> -->
-				</div>
+				<Criteria
+					class="criteria"
+					ref="exitChild1"
+					:config="setConfig('exit')"
+					:isRiskControl="isRiskControl"
+					@isOnlyRiskControl="isOnlyRiskControl"
+					@getExitRelation="getExitRelation"
+					@sendExitSignalIndex="sendExitSignalIndex"
+				>
+				</Criteria>
 			</div>
+		</el-tab-pane>
+    <el-tab-pane label="Symbol(2)" name="second" class="symbol-pane">
+			<div class="criteria-container">
+				<Criteria
+					class="criteria"
+					ref="entryChild2"
+					:config="setConfig('entry')"
+					:isRiskControl="false"
+					@sendEntrySignalIndex="sendEntrySignalIndex"
+				>
+				</Criteria>
+				<div class="divider"></div>
+				<Criteria
+					class="criteria"
+					ref="exitChild2"
+					:config="setConfig('exit')"
+					:isRiskControl="isRiskControl"
+					@isOnlyRiskControl="isOnlyRiskControl"
+					@getExitRelation="getExitRelation"
+					@sendExitSignalIndex="sendExitSignalIndex"
+				>
+				</Criteria>
+			</div>
+		</el-tab-pane>
+  </el-tabs>
 		</div>
 		<div class="backtest-btns">
 			<el-tooltip
@@ -98,62 +112,58 @@ export default {
 		return {
 			isRiskControl: true,
 			isDisabled: false,
+			activeName: 'first',
+			strategy: 'Signal'
 		}
 	},
 	beforeRouteEnter(to, from, next) {
 	if (to.path === '/backtester/sr/setup' && from.path.includes('/backtester')) {
     next(async _this => {
-			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
-			_this.$refs['entryChild'].clearForm()
-      _this.$refs['exitChild'].resetForm()
-      if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
-        console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
-        // 说明是路由跳转过来携带参数的
-        const { data } = to.params
-        const backtestEditData = isJson(data) ? JSON.parse(data) : data
-        await _this.displaySetUpForm(backtestEditData)
-      }else {
-        // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
-        console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
-        let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
-        let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
-				let dataToUse = editData || cachedData
-				console.log('editData', editData)
-				console.log('cachedData', cachedData)
-        if (Object.keys(dataToUse).length !== 0) {
-          dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
-					dataToUse.old_uuid = dataToUse.id
-          await _this.displaySetUpForm(dataToUse)
-        }
-      }
-			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
-			CIQ.hideCover()
+				_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
+				_this.$refs['entryChild1'].clearForm()
+				_this.$refs['exitChild1'].resetForm()
+				_this.$refs['entryChild2'].clearForm()
+				_this.$refs['exitChild2'].resetForm()
+				if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+					console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
+					// 说明是路由跳转过来携带参数的
+					const { data } = to.params
+					const backtestEditData = isJson(data) ? JSON.parse(data) : data
+					await _this.displaySetUpForm(backtestEditData)
+				}else {
+					// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
+					console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
+					let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
+					let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
+					let dataToUse = editData || cachedData
+					console.log('editData', editData)
+					console.log('cachedData', cachedData)
+					if (Object.keys(dataToUse).length !== 0) {
+						dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
+						dataToUse.old_uuid = dataToUse.id
+						await _this.displaySetUpForm(dataToUse)
+					}
+				}
+				_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
+				CIQ.hideCover()
     });
   } else {
     next(async _this => {
 			// 如果跳转携带 backtestID 则填充
 			const backtestID = LocalStorageUtil.get('backtestID')
-				if(backtestID) {
-					// const res = await seeParams(backtestID)
-					// res.data.commission = (res.data.commission * 100).toFixed(2)
-					// res.data.user_tag = 'client'
-					// _this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', res.data)
-					// _this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', res.data)
-					// _this.$store.state.form.favoriteBacktestRowData.id = res.data.id
-					// await _this.displaySetUpForm(res.data)
-					// LocalStorageUtil.remove('backtestID')
+			if(backtestID) {
+				const res = await seeParams(backtestID)
+				res.data.commission = (res.data.commission * 100).toFixed(2)
+				_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+				res.data.user_tag = 'client'
 
-					const res = await seeParams(backtestID)
-					_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
-					res.data.user_tag = 'client'
-
-					_this.editBacktest(res.data)
-					await _this.displaySetUpForm(res.data)
-					LocalStorageUtil.remove('backtestID')
-				}else {
-					_this.$store.state.form.rowDataForDisplay = {};
-					_this.$store.state.form.cachedBTBasicInfoData = {}
-				}
+				_this.editBacktest(res.data)
+				await _this.displaySetUpForm(res.data)
+				LocalStorageUtil.remove('backtestID')
+			}else {
+				_this.$store.state.form.rowDataForDisplay = {};
+				_this.$store.state.form.cachedBTBasicInfoData = {}
+			}
 		});
   }
 	},
@@ -216,12 +226,15 @@ export default {
 		IsRiskControl(isRiskControl) {
 			this.isRiskControl = isRiskControl
 		},
+		changeStrategy(val) {
+			this.strategy = val
+		},
 		clearForm() {
       Object.assign(this.$data, this.$options.data())
       this.$store.commit('initialBacktestInfo')
 			this.$refs['basicInfo'].clearForm()
-			this.$refs['entryChild'].clearForm()
-      this.$refs['exitChild'].clearForm()
+			this.$refs['entryChild1'].clearForm()
+      this.$refs['exitChild1'].clearForm()
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -238,8 +251,8 @@ export default {
 			CIQ.addCover()
 			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
 			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
-			const entryErr = await _this.saveCriteriaData('entryChild')
-			const exitErr = await _this.saveCriteriaData('exitChild')
+			const entryErr = await _this.saveCriteriaData('entryChild1')
+			const exitErr = await _this.saveCriteriaData('exitChild1')
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
 			if (!entryErr || !exitErr) {
 				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
@@ -540,10 +553,10 @@ export default {
 			}
 			await this.transformOldName(displayData,'entry')
 
-			// 设置 entryChild 的编辑面板
+			// 设置 entryChild1 的编辑面板
 			let entryPanel = displayData.entry.signals.length;
 			let entryData = { entry: displayData.entry };
-			_this.$refs.entryChild.setEditPanel(entryPanel, entryData);
+			_this.$refs.entryChild1.setEditPanel(entryPanel, entryData);
 
 			// 处理 exit.signals
 			if (Array.isArray(displayData.exit.signals)) {
@@ -555,20 +568,20 @@ export default {
 				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
 					displayData.exit.signals = [{ code: '' }];
 					_this.$nextTick(() => {
-						_this.$refs.exitChild.setRiskEditData(displayData);
+						_this.$refs.exitChild1.setRiskEditData(displayData);
 					});
 				} else {
 					await this.transformOldName(displayData,'exit')
 
 					let exitPanel = displayData.exit.signals.length;
 					let exitData = { exit: displayData.exit };
-					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);
+					_this.$refs.exitChild1.setEditPanel(exitPanel, exitData);
 				}
 			}
 
 			
-			// this.$refs['entryChild'].setEditData()
-			// this.$refs['exitChild'].setEditData()
+			// this.$refs['entryChild1'].setEditData()
+			// this.$refs['exitChild1'].setEditData()
 		},
 	}
 }
@@ -580,17 +593,17 @@ export default {
 	border-radius: 12px;
 	position: relative;
 }
-
 .criteria {
 	// margin-left: 40px;
-	margin-bottom: 10px;
 	flex: 1;
 }
 .criteria-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin: 10px;
+}
+.set-up-criteria {
+	padding: 10px;
 	border-bottom: 2px solid #cacaca;
 }
 .backtest-btns {
@@ -656,7 +669,7 @@ export default {
 	width: 1.5px;
 	background-color: #cacaca;
 	opacity: 0.8;
-	margin: 10px;
+	margin: 0 10px;
 	align-self: stretch;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
@@ -686,5 +699,13 @@ export default {
 	.criteria-title {
 		font-size: 15px;
 	}
+}
+/deep/ .Signal > .el-tabs__header {
+		// opacity: 0;
+		display: none;
+}
+/deep/ .Dual > .el-tabs__header {
+		// opacity: 1;
+		display: block;
 }
 </style>

@@ -12,11 +12,44 @@
 				<div class="setupTop">
 						<div class="setupCenter">
               <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item prop="strategy" inline="true" class="strategyBox">
+                    <template slot="label">
+                      <label>
+                        Backtest Type
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content"
+                            ><br
+                          /></span>
+                          <i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    <div class="selectBox">
+                    <!-- Signal or Dual -->
+                    <el-select
+                      v-model="bd.strategy"
+                      placeholder="— Select Type —"
+                      @change="changeStrategy"
+                    >
+                      <el-option
+                        v-for="item in strategyOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item prop="symbol">
                     <template slot="label">
                       <label>
-                        1. Symbol
+                        1. Symbol(1)
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Choose a stock/index as backtest symbol. (default: SPX)<br
@@ -544,8 +577,83 @@
                   </div>
                 </el-col>
                 <el-col :span="6">
+                  <el-form-item prop="symbol2" v-if="bd.strategy === 'Dual'">
+                    <template slot="label">
+                      <label>
+                        13. Symbol(2)
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content"
+                            >Choose a stock/index as backtest symbol 2. (default: SPX)<br
+                          /></span>
+                          <i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    
+                    <div class="enterSymbolBox">
+                      
+                      <el-select
+                        v-model="bd.symbol2"
+                        id="symbolName"
+                        filterable
+                        remote
+                        reserve-keyword
+                        automatic-dropdown
+                        @change="getSymbol2(bd.symbol2)"
+                        placeholder="enter keywords"
+                        :remote-method="remoteMethod"
+                        @visible-change="remoteMethod"
+                        :value-key="'key'"
+                        :loading="loading"
+                      >
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                      <!-- <searchBar 
+                        id_name="autocomplete-symbol" 
+                        placeholder="enter keywords" 
+                        :index="['stocksList','indexsList']"
+                        @select="handleSentimentSelect"
+                        display="name"
+                      /> -->
+                    </div>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
+                  <div class="direction">
+                    <el-form-item prop="direction2" v-if="bd.strategy === 'Dual'">
+                      <template slot="label">
+                      <label>
+                        14. Direction(2)
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content"
+                            >Select Long or Short to specify the starting position of
+                          the backtest.<br
+                          /></span>
+                          <i class="iconfont icon-wenhao"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                      <el-select
+                        v-model="bd.direction2"
+                        placeholder="— Select Direction —"
+                        @change="getDirection2"
+                      >
+                        <el-option
+                          v-for="item in directionOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </div>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
@@ -762,6 +870,10 @@ export default {
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
         { value: 'Monthly', label: 'Monthly' }
+      ],
+			strategyOptions: [
+        { value: 'Signal', label: 'Signal Symbol Backtest' },
+        { value: 'Dual', label: 'Dual Symbol Backtest' }
       ],
       tradePriceOptions: [
         { value: 0, label: 'Next Open' },
@@ -1000,6 +1112,9 @@ export default {
       this.$store.commit('form/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
+    getSymbol2(val) {
+      // 先空着
+    },
     getBTDate() {
       this.bd.end_date = timestampToTime(new Date())
       if(this.bd.backtest_period == '21') {this.bd.start_date = ''; return}
@@ -1012,6 +1127,9 @@ export default {
       this.$store.commit('form/getDirection', val)
       this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'direction', value: val})
       // Direction passed to entry and exit
+    },
+    getDirection2(val) {
+      // 先空着
     },
     setBacktestHistory(val) {
       this.bd.end_date = timestampToTime(new Date())
@@ -1173,6 +1291,9 @@ export default {
       // getFrequency will no longer call addIndicator and pass a parameter to it
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
+    },
+    changeStrategy(val) {
+      this.$emit('changeStrategy', val)
     },
     setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -1451,7 +1572,7 @@ export default {
 .risk-control-container {
 	display: flex;
 	justify-content: flex-start;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .el-checkbox-group {
@@ -1523,6 +1644,7 @@ export default {
 // }
 .backtest_container{
 	border-bottom: 2px solid #cacaca;
+  border-radius: 12px;
 }
 
 .excludeBox {
@@ -1545,5 +1667,14 @@ export default {
 }
 .el-checkbox__label {
   margin-bottom: 18px;
+}
+.strategyBox {
+  display: flex;
+  /deep/ .el-form-item__label {
+    width: 150px;
+  }
+  /deep/ .el-form-item__content {
+    width: 100%;
+  }
 }
 </style>

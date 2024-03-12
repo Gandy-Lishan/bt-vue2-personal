@@ -1367,7 +1367,7 @@ export default {
 
 <style lang="less" scoped>
 .criteria-title {
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: bold;
 	margin-right: 5px;
 	display: inline-block;
@@ -1474,4 +1474,12 @@ export default {
 	top: 100%;
 	left: 0;
 }
+.el-select-dropdown__item {
+	padding: 0 5px;
+} 
+.el-select-dropdown__item:hover {
+	padding: 0 5px;
+	border-radius: 0px;
+	margin: 0px;
+} 
 </style>
