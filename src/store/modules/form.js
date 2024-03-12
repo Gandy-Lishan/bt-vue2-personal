@@ -23,7 +23,9 @@ const state = {
 	backtestInfo: {
 		//form
 		entry_description: [],
+		entry2_description: [],
 		exit_description: [],
+		exit2_description: [],
 		description: '',
 		direction: 'Long',
 		frequency: 'Daily',
@@ -42,7 +44,36 @@ const state = {
 				}
 			]
 		},
+		entry2: {
+			relation: 0,
+			score: 1,
+			signals_in_market: 1,
+			delay_bars: 0,
+			signals: [
+				{
+					sentimentIndicator: '',
+					technicalIndicator: '',
+					usersOwnIndicator: '',
+					symbolIndicator: ''
+				}
+			]
+		},
 		exit: {
+			relation: 0,
+			score: 1,
+			signals_in_market: 1,
+			delay_bars: 0,
+			signals: [
+				{
+					sentimentIndicator: '',
+					technicalIndicator: '',
+					riskIndicator: '',
+					symbolIndicator: '',
+					usersOwnIndicator: ''
+				}
+			]
+		},
+		exit2: {
 			relation: 0,
 			score: 1,
 			signals_in_market: 1,
@@ -549,6 +580,22 @@ const mutations = {
 		if (obj.criteria === 'exit') {
 			state.backtestInfo[obj.criteria].signals[obj.index] = newExitSignal
 		}
+	},
+	addSignalLength(state, obj) {
+    const newSignal = {
+        [obj.criteria]: {
+            sentimentIndicator: '',
+            technicalIndicator: '',
+            symbolIndicator: '',
+            usersOwnIndicator: ''
+        }
+    };
+
+    if (obj.criteria.startsWith('exit')) {
+        newSignal[obj.criteria].riskIndicator = ''; // 添加 riskIndicator 到 exit 类型
+    }
+
+    state.backtestInfo[obj.criteria].signals[obj.index] = newSignal[obj.criteria];
 	},
 	reduceSignalLength(state, obj) {
 		state.backtestInfo[obj.criteria].signals.splice(obj.index, 1)

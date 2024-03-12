@@ -13,7 +13,6 @@
 					ref="entryChild1"
 					:config="setConfig('entry')"
 					:isRiskControl="false"
-					@sendEntrySignalIndex="sendEntrySignalIndex"
 				>
 				</Criteria>
 				<div class="divider"></div>
@@ -22,7 +21,6 @@
 					ref="exitChild1"
 					:config="setConfig('exit')"
 					:isRiskControl="isRiskControl"
-					@sendExitSignalIndex="sendExitSignalIndex"
 				>
 				</Criteria>
 			</div>
@@ -32,18 +30,16 @@
 				<Criteria
 					class="criteria"
 					ref="entryChild2"
-					:config="setConfig('entry')"
+					:config="setConfig('entry2')"
 					:isRiskControl="false"
-					@sendEntrySignalIndex="sendEntrySignalIndex"
 				>
 				</Criteria>
 				<div class="divider"></div>
 				<Criteria
 					class="criteria"
 					ref="exitChild2"
-					:config="setConfig('exit')"
+					:config="setConfig('exit2')"
 					:isRiskControl="isRiskControl"
-					@sendExitSignalIndex="sendExitSignalIndex"
 				>
 				</Criteria>
 			</div>
@@ -250,6 +246,12 @@ export default {
 			const entryErr = await _this.saveCriteriaData('entryChild1')
 			const exitErr = await _this.saveCriteriaData('exitChild1')
 			console.log('entryErr', entryErr, 'exitErr', exitErr)
+			if(_this.strategy === 'Dual') {
+				const entryErr = await _this.saveCriteriaData('entryChild2')
+				debugger
+				const exitErr = await _this.saveCriteriaData('exitChild2')
+				console.log('entryErr', entryErr, 'exitErr', exitErr)
+			}
 			if (!entryErr || !exitErr) {
 				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
 				_this.popUpMsgBox('Error saving backtest entry and exit criteria...')
@@ -259,6 +261,10 @@ export default {
 			// 处理上传到后端的数据
 			let entrySaveObj = _this.handleSavedData('entry')
 			let exitSaveObj = _this.handleSavedData('exit')
+			if(_this.strategy === 'Dual') {
+				let entrySaveObj = _this.handleSavedData('entry2')
+				let exitSaveObj = _this.handleSavedData('exit2')
+			}
 			console.log('entrySaveObj', entrySaveObj)
 			console.log('exitSaveObj', exitSaveObj)
 			_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...')

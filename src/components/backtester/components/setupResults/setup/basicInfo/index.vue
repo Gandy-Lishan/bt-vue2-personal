@@ -824,7 +824,7 @@ export default {
         start_date: '',
         end_date: '',
         direction: 'Long',
-        direction2: 'Short',
+        direction2: 'Long',
         frequency: 'Daily',
         risk_control: '//',
         report_url: '',
@@ -1391,6 +1391,9 @@ export default {
         this.isExcludeOO = false
         this.bd.market_environment = 0
         this.bd.index_moving_average_slope = 0
+      }else if(this.bd.strategy === 'Signal') {
+        this.bd.symbol2 = 'IWD'
+        this.bd.direction2 = 'Long'
       }
       if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
       if(!this.isExcludeOO) bd.exclude_oo = 0

@@ -87,7 +87,7 @@
 						:name="item.name"
 					>
 						<indicator
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							:panelIndex="index"
 							:editableTabs="editableTabs"
 							:editableTabsValue="editableTabsValue"
@@ -103,7 +103,7 @@
 						<senti
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
 							ref="sentiChild"
@@ -120,7 +120,7 @@
 						<symbol-indi
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
 							ref="symbolChild"
@@ -145,7 +145,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="cciChild"
 							:relation="relation"
 							:score="score"
@@ -168,7 +168,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="macdChild"
 							:relation="relation"
 							:score="score"
@@ -191,7 +191,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="maChild"
 							:relation="relation"
 							:score="score"
@@ -214,7 +214,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="bollBandsLikeChild"
 							:relation="relation"
 							:score="score"
@@ -237,7 +237,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="EFTLikeChild"
 							:relation="relation"
 							:score="score"
@@ -260,7 +260,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="stochasticsLikeChild"
 							:relation="relation"
 							:score="score"
@@ -283,7 +283,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="ADXLikeChild"
 							:relation="relation"
 							:score="score"
@@ -306,7 +306,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="ERILikeChild"
 							:relation="relation"
 							:score="score"
@@ -329,7 +329,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="aligatorLikeChild"
 							:relation="relation"
 							:score="score"
@@ -352,7 +352,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="LRFLikeChild"
 							:relation="relation"
 							:score="score"
@@ -375,7 +375,7 @@
 							"
 							:panelIndex="index"
 							:isRiskControl="relation == 0"
-							:criteria="config['criteria']"
+							:criteria="config['criteriaNum']"
 							ref="trailingStopLikeChild"
 							:relation="relation"
 							:score="score"
@@ -525,6 +525,9 @@ export default {
 		criteria() {
 			/* entry or exit */
 			return this.config['criteria']
+		},
+		criteriaNum() {
+			return this.config['criteriaNum']
 		},
 		isRiskControlState() {
 			return this.$store.state.form.riskControl
@@ -767,25 +770,9 @@ export default {
 		getIndicatorRadio(obj) {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
-		addSignalLength() {
-			if (this.relation == 2 || this.relation == 3) {
-				const filterValArr = this.indicatorValArr.filter(item => item != '')
-				this.$emit(`send${this.criteriaCapFirstL}SignalIndex`, filterValArr.length)
-				for (let i = 0; i < filterValArr.length; i++) {
-					// Apply for space
-					let obj = {}
-					obj.criteria = this.criteria
-					obj.index = i
-					this.$store.commit('form/addSignalLength', obj)
-				}
-			}
-			if (this.relation == 1 || this.relation == 0) {
-				this.$emit(`send${this.criteriaCapFirstL}SignalIndex`, 1)
-			}
-		},
 		saveScoreValue() {
 			let obj = {}
-			obj.criteria = this.criteria
+			obj.criteria = this.criteriaNum
 			if (this.relation == 1 || this.relation == 3 || this.relation == 0) {
 				obj.value = 1
 			}
@@ -796,7 +783,7 @@ export default {
 		},
 		saveSignalsInMarket() {
 			let obj = {}
-			obj.criteria = this.criteria
+			obj.criteria = this.criteriaNum
 			if (this.relation == 1 || this.relation == 2 || this.relation == 0) {
 				obj.value = 1
 			}
@@ -809,7 +796,7 @@ export default {
 		},
 		saveDelayBar() {
 			let obj = {}
-			obj.criteria = this.criteria
+			obj.criteria = this.criteriaNum
 			const isRiskControl = this.relation == 0
 			// Do not select isdelaybar
 			if (!this.isDelayBar) {
@@ -827,7 +814,7 @@ export default {
 		},
 		saveRelation() {
 			let obj = {}
-			obj.criteria = this.criteria
+			obj.criteria = this.criteriaNum
 			obj.value = this.relation
 			// if (this.indicatorRadioArr.length > 1) {
 			// 	obj.value = this.relation
@@ -990,7 +977,7 @@ export default {
 				for (let i = 0; i < filterValArr.length; i++) {
 					// Apply for space
 					let obj = {}
-					obj.criteria = this.criteria
+					obj.criteria = this.criteriaNum
 					obj.index = i
 					this.$store.commit('form/addSignalLength', obj)
 				}
@@ -1028,7 +1015,7 @@ export default {
 			if (_this.relation == 0) {
 				// Save risk description
 				let desObj = {}
-				desObj.criteria = this.criteria
+				desObj.criteria = this.criteriaNum
 				desObj.index = 0
 				//desObj.description = _this.$store.state.form.riskDescription
 				desObj.description = {
