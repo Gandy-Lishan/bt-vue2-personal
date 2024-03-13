@@ -626,7 +626,7 @@ export default {
         let result = CIQ.findSentiIndicator(null,this.sentiUrl)
         if (!result) {
           let obj = {}
-          if (this.criteria == 'entry') {
+          if (this.criteria.startsWith('entry')) {
             obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
           } else {
             obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
@@ -763,7 +763,7 @@ export default {
       if(this.sentiUrl) result = CIQ.findSentiIndicator(null,this.sentiUrl)
       if (!result) {
         let obj = {}
-        if (this.criteria == 'entry') {
+        if (this.criteria.startsWith('entry')) {
           obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
         } else {
           obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]

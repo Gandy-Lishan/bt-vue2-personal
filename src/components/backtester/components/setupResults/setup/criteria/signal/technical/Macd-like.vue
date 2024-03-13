@@ -235,11 +235,11 @@ delay_bars: [String, Number],
 			let commentDes
 			if(index === 0) {
 				
-			if (this.criteria == 'entry') {
+			if (this.criteria.startsWith('entry')) {
 				criteria = 'E:'
 				direction = this.direction + ':'
 			} 
-			if (this.criteria == 'exit') {
+			if (this.criteria.startsWith('exit')) {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {

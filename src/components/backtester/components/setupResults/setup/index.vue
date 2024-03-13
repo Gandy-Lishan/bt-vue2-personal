@@ -433,7 +433,7 @@ export default {
 			let signal = null
 			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
 
-			if (isOnlyUseRiskControl && criteria == 'exit') {
+			if (isOnlyUseRiskControl && criteria.startsWith('exit')) {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
@@ -488,8 +488,8 @@ export default {
 			backtestInfo['exit'] = JSON.stringify(exitSaveObj['exit'])
 			if(shouldAddExtraProperty) {
 				// 新增保存属性
-				backtestInfo['entry2'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry'])
-				backtestInfo['exit2'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit'])
+				backtestInfo['entry2'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry2'])
+				backtestInfo['exit2'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit2'])
 				backtestInfo['entry2_description'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry2_description'])
 				backtestInfo['exit2_description'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit2_description'])
 			}
@@ -540,7 +540,7 @@ export default {
 				'opted'
 			]
 			console.log('backtestInfo', backtestInfo)
-			if(shouldAddExtraProperty) selectedProps.push('entry2', 'exit2')
+			if(shouldAddExtraProperty) selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
