@@ -819,7 +819,7 @@ export const CommonMethodsMixin = {
 			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
 			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
 			*/
-			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const isHandleIndicator = criteria.startsWith('entry') || (criteria.startsWith('exit') && !isOnlyUseRiskControl)
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
 				if (!signal) {
@@ -841,7 +841,7 @@ export const CommonMethodsMixin = {
 			let signal = null
 			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
 
-			if (isOnlyUseRiskControl && criteria == 'exit') {
+			if (isOnlyUseRiskControl && criteria.startsWith('exit')) {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
@@ -1116,6 +1116,7 @@ export const CommonMethodsMixin = {
 			})
 		},
 		handleCallback(backtestParams, backtestInfo) {
+			debugger
 			const _this = this
 			const start_date = backtestInfo.start_date
 			const end_date = backtestInfo.end_date

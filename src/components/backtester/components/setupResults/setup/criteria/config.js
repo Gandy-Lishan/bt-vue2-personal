@@ -1,6 +1,19 @@
 import { capitalizeFirstLetter } from '@/utils'
+const getCriteriaAndNumbers = (criteriaWithNumber) => {
+  // 使用正则表达式匹配数字
+  const match = criteriaWithNumber.match(/\d+/)
+  if (match) {
+      const number = parseInt(match[0])
+      console.log("Found number:", number)
+      const criteria = criteriaWithNumber.replace(/\d+/, '');
+      return [criteria, criteriaWithNumber]
+  } else {
+      return [criteriaWithNumber, criteriaWithNumber]
+  }
+}
 // 传入不同的 criteria 生成不同的配置
-export function generateConfig(criteria) {
+export function generateConfig(criteriaWithNumber) {
+  const [criteria, criteriaNum] = getCriteriaAndNumbers(criteriaWithNumber)
 	const capFirstL = capitalizeFirstLetter(criteria)
 	const criteriaTitleTPRC = `
   ${
@@ -10,6 +23,7 @@ export function generateConfig(criteria) {
 	}
 `
 	const config = {
+    criteriaNum,
 		criteria: criteria,
 		criteriaCapFirstL: capFirstL,
 		criteriaTitle: `${capFirstL} Criteria`,

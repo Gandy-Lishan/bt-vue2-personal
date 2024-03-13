@@ -8886,6 +8886,9 @@ if (!CIQ.Studies) {
 							
 							var indexOfEntry = CIQ.store.state.chart.indicators.formIndicators.entry.indexOf(sd.type)
 							var indexOfExit = CIQ.store.state.chart.indicators.formIndicators.exit.indexOf(sd.type)
+							// lishan chartIQ todo 移除的时候是否需要考虑 entry2 和 exit2 indicator 的移除， 可以通过 strategy（Signal，Dual） 进行判断
+							var indexOfEntry2 = CIQ.store.state.chart.indicators.formIndicators.entry2.indexOf(sd.type)
+							var indexOfExit2 = CIQ.store.state.chart.indicators.formIndicators.exit2.indexOf(sd.type)
 							if(indexOfEntry != -1){
 								if(indexOfExit != -1){
 									CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})

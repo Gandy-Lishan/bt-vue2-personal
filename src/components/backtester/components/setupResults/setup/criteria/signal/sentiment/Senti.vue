@@ -497,11 +497,11 @@ export default {
       let direction = ''
       let commentDes
       if (index === 0) {
-        if (this.criteria == 'entry') {
+        if(this.criteria.startsWith('entry')) {
           criteria = 'E:'
           direction = this.direction + ';'
         }
-        if (this.criteria == 'exit') {
+        if (this.criteria.startsWith('exit')) {
           criteria = 'X:'
           if (this.direction == 'Long') {
             direction = 'Close;'
@@ -626,7 +626,7 @@ export default {
         let result = CIQ.findSentiIndicator(null,this.sentiUrl)
         if (!result) {
           let obj = {}
-          if (this.criteria == 'entry') {
+          if (this.criteria.startsWith('entry')) {
             obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
           } else {
             obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
@@ -763,7 +763,7 @@ export default {
       if(this.sentiUrl) result = CIQ.findSentiIndicator(null,this.sentiUrl)
       if (!result) {
         let obj = {}
-        if (this.criteria == 'entry') {
+        if (this.criteria.startsWith('entry')) {
           obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
         } else {
           obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
