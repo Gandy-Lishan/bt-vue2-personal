@@ -752,7 +752,7 @@ export default {
 				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
 				this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
-				CIQ.addIndicators()
+				CIQ.addIndicators({})
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -912,7 +912,7 @@ export default {
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout(this.criteria)
 
-				CIQ.addIndicators()
+				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length === 1) {
@@ -969,7 +969,7 @@ export default {
 					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 					CIQ.removeExitMALayout()
 
-					CIQ.addIndicators()
+					CIQ.addIndicators({})
 					try {
 							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
 								this.$refs.indiChild[index]?.resetIndicator()

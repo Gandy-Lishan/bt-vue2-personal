@@ -3393,7 +3393,6 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	} catch (err) {
 		console.log(err)
 	}
-	//CIQ.addIndicators();
 
 	if (!this.params.sd.permanent)
 		CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd)
@@ -3413,7 +3412,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	})
 
 	// reload chart when removing a study
-	//CIQ.addIndicators()
+	//CIQ.addIndicators({})
 }
 
 /**
@@ -3820,7 +3819,7 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
 	if (freq != 'Daily') {
-		CIQ.addIndicators()
+		CIQ.addIndicators({})
 	}
 }
 CIQ.UI.Layout.prototype.getChartType = function(node, chartType) {
@@ -4342,7 +4341,7 @@ CIQ.UI.Layout.prototype.setPeriodicity = function(
 	CIQ.store.commit('form/getFrequency', selectedFreq)
 
 	// 在scanner ai里面修改timeframe后会自己调用CIQ.initiateChart
-	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators()
+	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators({})
 
 	// var self = this;
 	// if (self.context.loader) self.context.loader.show();

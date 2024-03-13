@@ -870,7 +870,7 @@ export default {
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     handleSentimentSelect(item) {
       // 限制同屏显示个数
@@ -940,7 +940,7 @@ export default {
       //     return
       //   }
       // }
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     clearSymbolSelect() {
       let freqObj = {}
@@ -996,7 +996,7 @@ export default {
       CIQ.removeMALayout('', this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     handleSymbolSelect(item) {
       this.si.symbolIndicator = item.label
@@ -1062,7 +1062,7 @@ export default {
           return
         }
       }
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     clearTechnicalSelect() {
       const item = CIQ.findBuiltinTechIndicator(this.$refs.techInput.value,null)
@@ -1120,7 +1120,7 @@ export default {
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
      if (arguments[1] != true) {
-        CIQ.addIndicators()
+        CIQ.addIndicators({})
       }
     },
     handleTechnicalSelect(item) {
@@ -1198,7 +1198,7 @@ export default {
       }
 
       if (arguments[1] != true) {
-        CIQ.addIndicators()
+        CIQ.addIndicators({})
       }
     },
     clearUserOwnIndicatorSelect() {
@@ -1254,7 +1254,7 @@ export default {
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout('', this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     handleUsersOwnIndicatorSelect(data) {
       // 限制同屏显示个数
@@ -1356,7 +1356,7 @@ export default {
           return
         }
       }
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     changeIndicatorChecked(val) {
       this.clearFormValidate()

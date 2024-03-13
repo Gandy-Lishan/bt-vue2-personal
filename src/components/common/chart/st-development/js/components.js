@@ -7264,7 +7264,7 @@ class ShowRange extends CIQ.UI.ContextTag {
 		
 		CIQ.store.commit('form/getFrequency', selectedFreq)
 		// 回调函数保证先换周期再调整数据跨度同步执行
-		CIQ.addIndicators(()=>{
+		CIQ.addIndicators({},()=>{
 			var self = this;
 			if (self.context.loader) self.context.loader.show();
 			var params = {
@@ -8917,7 +8917,6 @@ if (!CIQ.Studies) {
 								CIQ.removeMALayout(sd.type, null, null)
 							}
 						}catch(err){console.log(err);}
-						//CIQ.addIndicators();
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
 
 						CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
@@ -8927,7 +8926,7 @@ if (!CIQ.Studies) {
 						self.renderLegend();
 
 						// reload chart when removing a study
-						//CIQ.addIndicators()
+						//CIQ.addIndicators({})
 					}, 0);
 				};
 			}

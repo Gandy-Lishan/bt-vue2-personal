@@ -515,7 +515,7 @@ export default {
 			
 			this.setSetUpLoadingSetting(true, true, 40, 'Uploading backtest data...')
 			const callback = this.handleCallback(backtestParams, backtestInfo)
-			CIQ.outputSignalsResult(backtestInfo.pk, callback)
+			CIQ.addIndicators({type:'outputSignalsResult',pk:backtestInfo.pk},callback)
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
