@@ -558,8 +558,10 @@ export default {
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
+			debugger
 			if(!data.id) return
 			let _this = this
+			const {strategy} = data
 			_this.$refs['basicInfo'].setEditData(data)
 
 			/*
@@ -575,48 +577,59 @@ export default {
 			}
 			console.log('displayData', displayData)
 			let signalCode = new SignalCode();
+			/*********/
+			const parseJsonIfNeeded = (data) => {
+				return isJson(data) ? JSON.parse(data) : data;
+			};
 
-			// 解析 JSON 字符串
-			displayData.entry = isJson(displayData.entry) ? JSON.parse(displayData.entry) : displayData.entry;
-			displayData.exit = isJson(displayData.exit) ? JSON.parse(displayData.exit) : displayData.exit;
+			const processSignals = (signals) => {
+				return Array.isArray(signals) ? signals
+					.filter(item => item.code && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code))
+					.map(value => signalCode.decode(value.code)) : [];
+			};
 
-			// 处理 entry.signals
-			if (Array.isArray(displayData.entry.signals)) {
-				displayData.entry.signals = displayData.entry.signals
-					.filter(item => item.code) // 过滤掉没有 code 属性的元素
-					.map(value => signalCode.decode(value.code));
+			const setEditPanel = (childRef, criteria, childName) => {
+				const panelLength = criteria.signals.length;
+				const childData = { [childName]: criteria };
+				_this.$refs[childRef].setEditPanel(panelLength, childData);
+			};
+
+			const processCriteria = async (childRef, criteria, childName) => {
+				displayData[childName] = parseJsonIfNeeded(criteria);
+				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				await this.transformOldName(displayData, childName);
+				setEditPanel(childRef, displayData[childName], childName);
+			};
+
+			await processCriteria('entryChild1', displayData.entry, 'entry');
+
+			if (strategy === 'Dual') {
+				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
-			await this.transformOldName(displayData,'entry')
 
-			// 设置 entryChild1 的编辑面板
-			let entryPanel = displayData.entry.signals.length;
-			let entryData = { entry: displayData.entry };
-			_this.$refs.entryChild1.setEditPanel(entryPanel, entryData);
-
-			// 处理 exit.signals
-			if (Array.isArray(displayData.exit.signals)) {
-				displayData.exit.signals = displayData.exit.signals
-					.filter(item => item.code && (item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'  && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'))
-					.map(value => signalCode.decode(value.code));
-			const riskValArr = data.risk_control.split('/');
-			_this.isRiskControl = !riskValArr.every(item => item === '');
-				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
-					displayData.exit.signals = [{ code: '' }];
+			const processExit = async (childRef, exitData, childName) => {
+				displayData[childName] = parseJsonIfNeeded(exitData);
+				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
+					displayData[childName]['signals'] = [{ code: '' }];
 					_this.$nextTick(() => {
-						_this.$refs.exitChild1.setRiskEditData(displayData);
+						_this.$refs[childRef].setRiskEditData(displayData);
 					});
 				} else {
-					await this.transformOldName(displayData,'exit')
-
-					let exitPanel = displayData.exit.signals.length;
-					let exitData = { exit: displayData.exit };
-					_this.$refs.exitChild1.setEditPanel(exitPanel, exitData);
+					await this.transformOldName(displayData, childName);
+					setEditPanel(childRef, displayData[childName], childName);
 				}
+			};
+
+			await processExit('exitChild1', displayData.exit, 'exit');
+
+			if (strategy === 'Dual') {
+				await processExit('exitChild2', displayData.exit2, 'exit2');
 			}
 
-			
-			// this.$refs['entryChild1'].setEditData()
-			// this.$refs['exitChild1'].setEditData()
+			const riskValArr = data.risk_control.split('/');
+			_this.isRiskControl = !riskValArr.every(item => item === '');
+
 		},
 	}
 }
