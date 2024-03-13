@@ -509,9 +509,10 @@ export default {
               activatedMAList.splice(MAListIndex, 1)
             }
             this.$store.commit('chart/getMA', activatedMAList)
-            this.$store.commit('chart/getEntryIndicators', {
+            this.$store.commit('chart/getIndicators', {
               index: this.panelIndex,
-              value: sentiIndicatorResult.url
+              value: sentiIndicatorResult.url,
+              criteria: this.criteria
             })
           } else {
             var MAListIndex = activatedMAList.findIndex(
@@ -524,9 +525,10 @@ export default {
               activatedMAList.splice(MAListIndex, 1)
             }
             this.$store.commit('chart/getMA', activatedMAList)
-            this.$store.commit('chart/getExitIndicators', {
+            this.$store.commit('chart/getIndicators', {
               index: this.panelIndex,
-              value: sentiIndicatorResult.url
+              value: sentiIndicatorResult.url,
+              criteria: this.criteria
             })
           }
 
@@ -602,9 +604,10 @@ export default {
               activatedMAList.splice(MAListIndex, 1)
             }
             this.$store.commit('chart/getMA', activatedMAList)
-            this.$store.commit('chart/getEntryIndicators', {
+            this.$store.commit('chart/getIndicators', {
               index: this.panelIndex,
-              value: indicatorUrl
+              value: indicatorUrl,
+              criteria: this.criteria
             })
           } else {
             var MAListIndex = activatedMAList.findIndex(
@@ -617,9 +620,10 @@ export default {
               activatedMAList.splice(MAListIndex, 1)
             }
             this.$store.commit('chart/getMA', activatedMAList)
-            this.$store.commit('chart/getExitIndicators', {
+            this.$store.commit('chart/getIndicators', {
               index: this.panelIndex,
-              value: indicatorUrl
+              value: indicatorUrl,
+              criteria: this.criteria
             })
           }
 
@@ -839,9 +843,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -854,9 +859,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       }
 
@@ -908,9 +914,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.url
+          value: item.url,
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -923,9 +930,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.url
+          value: item.url,
+          criteria: this.criteria
         })
       }
 
@@ -971,9 +979,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -986,9 +995,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       }
 
@@ -1031,9 +1041,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.label
+          value: item.label,
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -1046,9 +1057,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.label
+          value: item.label,
+          criteria: this.criteria
         })
       }
 
@@ -1095,9 +1107,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -1110,9 +1123,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       }
 
@@ -1157,9 +1171,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         CIQ.store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.url
+          value: item.url,
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -1173,9 +1188,10 @@ export default {
         }
 
         CIQ.store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: item.url
+          value: item.url,
+          criteria: this.criteria
         })
       }
       // store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
@@ -1230,9 +1246,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -1245,9 +1262,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: ''
+          value: '',
+          criteria: this.criteria
         })
       }
 
@@ -1325,9 +1343,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getEntryIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: indicatorUrl
+          value: indicatorUrl,
+          criteria: this.criteria
         })
       } else {
         var MAListIndex = activatedMAList.findIndex(
@@ -1340,9 +1359,10 @@ export default {
           activatedMAList.splice(MAListIndex, 1)
         }
         this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getExitIndicators', {
+        this.$store.commit('chart/getIndicators', {
           index: this.panelIndex,
-          value: indicatorUrl
+          value: indicatorUrl,
+          criteria: this.criteria
         })
       }
 

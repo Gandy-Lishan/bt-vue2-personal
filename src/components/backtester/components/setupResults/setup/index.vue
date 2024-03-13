@@ -222,11 +222,11 @@ export default {
 			this.strategy = val
 		},
 		clearForm() {
-      Object.assign(this.$data, this.$options.data())
-      this.$store.commit('initialBacktestInfo')
-			this.$refs['basicInfo'].clearForm()
-			this.$refs['entryChild1'].clearForm()
-      this.$refs['exitChild1'].clearForm()
+			Object.assign(this.$data, this.$options.data())
+			this.$store.commit('initialBacktestInfo');
+			['basicInfo', 'entryChild1', 'exitChild1', 'entryChild2', 'exitChild2'].forEach(refName => {
+				this.$refs[refName].clearForm();
+			});
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -237,46 +237,68 @@ export default {
 			})
 		},
 		async runBacktest() {
+			debugger
 			const _this = this
 			const basicErr = await _this.$refs['basicInfo'].saveData()
 			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, ''); return}
 			CIQ.addCover()
 			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
 			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
-			const entryErr = await _this.saveCriteriaData('entryChild1')
-			const exitErr = await _this.saveCriteriaData('exitChild1')
-			console.log('entryErr', entryErr, 'exitErr', exitErr)
+			const saveAndCheckCriteriaErrors = async (childName) => {
+				const err = await _this.saveCriteriaData(childName);
+				return err;
+			};
+			const checkAndHandleError = (err, errMsg) => {
+				if (!err) {
+					_this.setSetUpLoadingSetting(false, false, 0, errMsg);
+					_this.popUpMsgBox(errMsg);
+					CIQ.hideCover();
+					return true;
+				}
+				return false;
+			};
+			const entryErr = await saveAndCheckCriteriaErrors('entryChild1')
+			const exitErr = await saveAndCheckCriteriaErrors('exitChild1')
+			const errMsg = 'Error saving backtest entry and exit criteria...'
+			if (checkAndHandleError(entryErr, errMsg) || checkAndHandleError(exitErr, errMsg)) return
 			if(_this.strategy === 'Dual') {
-				const entryErr = await _this.saveCriteriaData('entryChild2')
-				debugger
-				const exitErr = await _this.saveCriteriaData('exitChild2')
-				console.log('entryErr', entryErr, 'exitErr', exitErr)
-			}
-			if (!entryErr || !exitErr) {
-				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
-				_this.popUpMsgBox('Error saving backtest entry and exit criteria...')
-				CIQ.hideCover()
-				return
+				const entryErr2 = await saveAndCheckCriteriaErrors('entryChild2')
+				const exitErr2 = await saveAndCheckCriteriaErrors('exitChild2')
+				const errMsg2 = 'Error saving backtest entry2 and exit2 criteria...'
+				if (checkAndHandleError(entryErr2, errMsg2) || checkAndHandleError(exitErr2, errMsg2)) return
 			}
 			// 处理上传到后端的数据
-			let entrySaveObj = _this.handleSavedData('entry')
-			let exitSaveObj = _this.handleSavedData('exit')
-			if(_this.strategy === 'Dual') {
-				let entrySaveObj = _this.handleSavedData('entry2')
-				let exitSaveObj = _this.handleSavedData('exit2')
+			debugger
+			const saveObj = (type) => _this.handleSavedData(type);
+			const entrySaveObj = saveObj('entry');
+			const exitSaveObj = saveObj('exit');
+			let indicatorLayout = _this.saveIndicatorLayoutData();// 只需要调用一次就能存储 formIndicators 以外的数据
+			const setAndSaveIndicator = (entrySaveObj, exitSaveObj, type) => {
+				const exitType = type === 'entry' ? 'exit' : 'exit2'
+				_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...');
+				indicatorLayout.formIndicators = {
+					...indicatorLayout.formIndicators,
+					[type]: entrySaveObj.indicatorLayout.formIndicators[`${type}Signal`],
+					[exitType]: exitSaveObj.indicatorLayout.formIndicators[`${exitType}Signal`]
+				};
+			};
+			setAndSaveIndicator(entrySaveObj, exitSaveObj, 'entry');
+			let additionalSaveObj = null
+			if (_this.strategy === 'Dual') {
+				const entrySaveObj2 = saveObj('entry2');
+				const exitSaveObj2 = saveObj('exit2');
+				setAndSaveIndicator(entrySaveObj2, exitSaveObj2, 'entry2');
+				additionalSaveObj = {
+					entrySaveObj2,
+					exitSaveObj2
+				}
 			}
-			console.log('entrySaveObj', entrySaveObj)
-			console.log('exitSaveObj', exitSaveObj)
-			_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...')
-			let indicatorLayout = _this.saveIndicatorLayoutData()
-			indicatorLayout.formIndicators = {
-				entry: entrySaveObj.indicatorLayout.formIndicators.entrySignal,
-				exit: exitSaveObj.indicatorLayout.formIndicators.exitSignal
-			}
-			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...')
-			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout)
+			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...');
+			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj);
+
 		},
 		async saveCriteriaData(criteriaRef) {
+			debugger
 			const _this = this
 			const tabLength = _this.$refs[criteriaRef].addSignalLength()
 			for (let index = 0; index < tabLength; index++) {
@@ -290,6 +312,7 @@ export default {
 			return _this.$refs[criteriaRef].isSameSignal()
 		},
 		handleSavedData(criteria) {
+			debugger
 			/*
 			saveObj should be like this:
 			{
@@ -338,7 +361,7 @@ export default {
 			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
 			const signal_list = []
 			const b = new SignalCode()
-			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const isHandleIndicator = criteria.startsWith('entry') || (criteria.startsWith('exit') && !isOnlyUseRiskControl)
 			if (isHandleIndicator) {
 				signalList.forEach((item) => {
 					// publicProperties 中的属性列表都应该保留
@@ -455,14 +478,23 @@ export default {
 				this.$store.state.chart.activatedMALayout
 			return indicatorLayout
 		},
-		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
+		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj) {
+			debugger
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
+			const shouldAddExtraProperty = additionalSaveObj !== null && typeof additionalSaveObj === 'object' && Object.keys(additionalSaveObj).length
 			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
 			backtestInfo.description = JSON.stringify(backtestInfo.description)
-			backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
-			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
-			backtestInfo.entry_description = JSON.stringify(entrySaveObj.entry_description)
-			backtestInfo.exit_description = JSON.stringify(exitSaveObj.exit_description)
+			backtestInfo['entry'] = JSON.stringify(entrySaveObj['entry'])
+			backtestInfo['exit'] = JSON.stringify(exitSaveObj['exit'])
+			if(shouldAddExtraProperty) {
+				// 新增保存属性
+				backtestInfo['entry2'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry'])
+				backtestInfo['exit2'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit'])
+				backtestInfo['entry2_description'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry2_description'])
+				backtestInfo['exit2_description'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit2_description'])
+			}
+			backtestInfo['entry_description'] = JSON.stringify(entrySaveObj['entry_description'])
+			backtestInfo['exit_description'] = JSON.stringify(exitSaveObj['exit_description'])
 			backtestInfo.old_uuid = backtestInfo.old_uuid
 			if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
 			// 判断是否有 direction 没有设置默认值
@@ -508,6 +540,7 @@ export default {
 				'opted'
 			]
 			console.log('backtestInfo', backtestInfo)
+			if(shouldAddExtraProperty) selectedProps.push('entry2', 'exit2')
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))

@@ -560,28 +560,6 @@ const mutations = {
 		}
 	},
 	addSignalLength(state, obj) {
-		let newEntrySignal = {
-			sentimentIndicator: '',
-			technicalIndicator: '',
-			symbolIndicator: '',
-			usersOwnIndicator: ''
-		}
-		let newExitSignal = {
-			sentimentIndicator: '',
-			technicalIndicator: '',
-			riskIndicator: '',
-			symbolIndicator: '',
-			usersOwnIndicator: ''
-		}
-
-		if (obj.criteria === 'entry') {
-			state.backtestInfo[obj.criteria].signals[obj.index] = newEntrySignal
-		}
-		if (obj.criteria === 'exit') {
-			state.backtestInfo[obj.criteria].signals[obj.index] = newExitSignal
-		}
-	},
-	addSignalLength(state, obj) {
     const newSignal = {
         [obj.criteria]: {
             sentimentIndicator: '',

@@ -22,7 +22,9 @@ const state = {
 		//chartiq
 		formIndicators: {
 			entry: new Array(5),
-			exit: new Array(5)
+			exit: new Array(5),
+			entry2: new Array(5),
+			exit2: new Array(5),
 		},
 		extraIndicators: [],
 		technicalIndicators: []
@@ -148,10 +150,13 @@ const mutations = {
 		let { index, value } = obj
 		state.indicators.formIndicators.entry[index] = value
 	},
+	getIndicators(state, obj) {
+		let {index, value, criteria} = obj
+		state.indicators.formIndicators[criteria][index] = value
+	},
 	/**
 	 * store a list of entry indicators
 	 */
-
 	getEntryIndicatorsList(state, list) {
 		state.indicators.formIndicators.entry = list
 	},
@@ -209,7 +214,9 @@ const mutations = {
 		;(state.indicators = {
 			formIndicators: {
 				entry: new Array(5),
-				exit: new Array(5)
+				exit: new Array(5),
+				entry2: new Array(5),
+				exit2: new Array(5),
 			},
 			extraIndicators: [],
 			technicalIndicators: [],

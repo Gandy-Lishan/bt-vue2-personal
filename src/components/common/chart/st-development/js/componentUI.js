@@ -3344,6 +3344,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 			this.params.sd.type
 		)
 		//console.log(indexOfEntry,indexOfExit)
+		// lishan chartIQ todo
 		if (indexOfEntry != -1) {
 			if (indexOfExit != -1) {
 				CIQ.store.commit('chart/getExitIndicators', {
@@ -3362,6 +3363,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 					value: ''
 				})
 			}
+			// lishan chartIQ todo
 			CIQ.store.commit('chart/getExitIndicators', {
 				index: indexOfExit,
 				value: ''
