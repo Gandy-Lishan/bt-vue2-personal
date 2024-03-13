@@ -46,15 +46,14 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 
 quoteFeedSimulator.url = config.pairDataUrl;
 
-quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
+quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
         var queryUrl = this.url + 
-        "?symbol=" + symbol + 
+        "?symbol=" + CIQ.symbol + 
         new_str +
         "&start="+start+
         "&end=" + end +
         "&freq=" + freq
 
-    CIQ.symbol = symbol;
     try{
         var favoriteSymbolList = []
         var favoriteIndicatorList = []
@@ -70,7 +69,6 @@ quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         
         CIQ.store.commit('chart/setFavoriteIndicatorList',favoriteIndicatorList)
         CIQ.store.commit('chart/setFavoriteSymbolList',favoriteSymbolList)
-        //console.log("quoteFeedSimulator.sendReq",favoriteSymbolList)
         try{
             var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
             var count=0;
@@ -341,8 +339,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
                 }
             }
-            //console.log('selectedFreq: ',selectedFreq)
-            this.sendReq(symbol,start,end,new_str,selectedFreq,cb)
+            this.sendReq(start,end,new_str,selectedFreq,cb)
 };
 
 quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){

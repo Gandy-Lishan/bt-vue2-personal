@@ -17,133 +17,6 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  
- // load Indicators when edit/view a backtest
- CIQ.addIndicatorsFromBacktest = async function(callback){
-     CIQ.notADefaultCall = true
-     // var loader = document.querySelector(".loaderMain");
-     // if (loader) loader.show();
-     //和his/fav绑在一起，所以不用加
-     //CIQ.addCover()
-     console.log('before loadChart FromBacktest: ')
-     // set indicatorList to local storage, fetch it when change a symbol
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
- 
-         const set = new Set(indicatorsList)
-         indicatorsList = [...set]
-         
-         //  load saved indicator layouts from backtest list
-         var savedTechSD = []
-         savedTechSD = CIQ.store.state.chart.techSD
-         CIQ.store.commit('chart/setSavedTechSD', savedTechSD)   
- 
-         // sort indicatorsList into a "[senti,tech]" style
-         let techList = CIQ.store.state.chart.indicators.technicalIndicators
-         let technicalIndicators = []
-         for(var item in indicatorsList){
-             if(techList.indexOf(indicatorsList[item]) != -1){
-                 technicalIndicators.push(indicatorsList[item])
-                 indicatorsList[item] = ''
-             }    
-         }
-         indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-         await CIQ.getIndicatorMatedata(indicatorsList)
- 
-         if(CIQ.store.state.form.backtestSymbol){
-             CIQ.symbol = CIQ.store.state.form.backtestSymbol
-         }
-         await new Promise((resolve) => {
-            CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-                // callback - your code to be executed after the chart is loaded
-                //CIQ.hideCover()
-                //CIQ.exportEx()
-                //CIQ.stxx.layout.rangeSlider = true;
-                //CIQ.stxx.changeOccurred("layout");
-    
-                callback()
-                resolve()
-            })
-         })
-             
- }
- 
- // load Indicators when run a new backtest
- CIQ.outputSignalsResult = async function(pk,callback){
-     CIQ.notADefaultCall = true
-     // var loader = document.querySelector(".loaderMain");
-     // if (loader) loader.show();
- 
-     //和创回测绑在一起，所以不用加
-     //CIQ.addCover()
-     console.log('before run a backtest and before viewing result: ')
-     // set indicatorList to local storage, fetch it when change a symbol
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
- 
-         const set = new Set(indicatorsList)
-         indicatorsList = [...set]
-         
-         //  load saved indicator layouts from backtest list
-         var savedTechSD = []
-         savedTechSD = CIQ.store.state.chart.techSD
-         CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-         // console.log(CIQ.store.state.chart.savedTechSD)
- 
-         // sort indicatorsList into a "[senti,tech]" style
-         let techList = CIQ.store.state.chart.indicators.technicalIndicators
-         let technicalIndicators = []
-         for(var item in indicatorsList){
-             if(techList.indexOf(indicatorsList[item]) != -1){
-                 technicalIndicators.push(indicatorsList[item])
-                 indicatorsList[item] = ''
-             }    
-         }
-         indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-         await CIQ.getIndicatorMatedata(indicatorsList)
- 
-         if(CIQ.store.state.form.backtestSymbol){
-             CIQ.symbol = CIQ.store.state.form.backtestSymbol
-          }
-         await new Promise((resolve) => {
-            CIQ.stxx.loadChart({ symbol: CIQ.symbol, startDate: new Date(parseInt(process.env.VUE_APP_START_DATE)), endDate: new Date(), indicator: indicatorsList }, async function () {
-              // callback - your code to be executed after the chart is loaded
-              console.log("loadChart加载完毕", CIQ.stxx.layout.studies);
-              CIQ.stxx.resizeChart();
-              CIQ.stxx.draw();
-              var csvContent = CIQ.exportEx();
-              console.log("csvContent created Success");
-              var promise = 200
-              try {
-                var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
-                var data = await uploadS3(S3DataStr)
-                console.log("Upload csv Success", data);
-                promise = 200
-              } catch (error) {
-                console.log("Error", error);
-                promise = 500
-              }
-          
-              await callback(promise);
-          
-              resolve(); // 表示回调执行完成
-            });
-          });
-            
-   
- }
-
  CIQ.uploadCSVJSON = async function(pk,callback) {
     // lishan 仅仅用于上传 csv json 文件
     CIQ.stxx.resizeChart();
@@ -175,39 +48,67 @@
          })
      })
  }
- 
- // the main functionality of it is to update indicator list on chart, maybe it would be better if we call it "updateIndicatorList"
- CIQ.addIndicators = async function(callback){
-     CIQ.notADefaultCall = true
-     CIQ.addCover()
-     CIQ.nprogress.start()
-     // var loaderMain = document.querySelector(".loaderMain");
-     // if (loaderMain) loaderMain.show();
-     console.log('before loadChart... ')
- 
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
+ /**
+  * the main functionality of it is to update indicator list on chart,
+  *  maybe it would be better if we call it "updateIndicatorList"
+  * @param {*} params 
+  * type:
+  *     'updateIndicators':更新indicator列表，用于加载/移除单个indicator,切换Timeframe, 切换Symbol
+  *     'loadFromBacktest':从view/edit进入，根据backtestInfo还原图表
+  * stx:
+  *     chartiq stx实例，有的生命周期CIQ.stxx获取不到，需要手动传入
+  * @param {*} callback 
+  * @returns Promise
+  */
+ CIQ.addIndicators = async function(params,callback){
+        let {
+            stx=CIQ.stxx,
+            type='updateIndicators',
+            pk
+        } = params
+
+        // 限制同屏显示个数
+        if(maxNumOfStudy(stx)) return
+
+        /** 如果type为loadFromBakctest的话，和his/fav绑在一起，所以不用加 */
+        if(type == 'updateIndicators'){
+            CIQ.addCover()
+            CIQ.nprogress.start()
+        }
+
+        let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
+        // remove redundant elements and empty string
+        for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
+            indicatorsList.splice(i,1)
+            i--;
+            }
+        }
            
-         indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
+        /** 如果type为loadFromBakctest的话,不需要加载额外Studies */
+        if(type == 'updateIndicators'){
+            indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
+        }
+         
+        /** 去重 */
          const set = new Set(indicatorsList)
          indicatorsList = [...set]
          
          //  load saved indicator layouts from stxx.layout
          var savedTechSD = []
-         for(var i in CIQ.stxx.layout.studies){
-             savedTechSD.push({
-                 type: CIQ.stxx.layout.studies[i].type,
-                 inputs: CIQ.stxx.layout.studies[i].inputs,
-                 outputs: CIQ.stxx.layout.studies[i].outputs,
-                 parameters: CIQ.stxx.layout.studies[i].parameters,
-                 panel: CIQ.stxx.layout.studies[i].panel
-             })
+         if(type == 'updateIndicators'){
+            for(var i in stx.layout.studies){
+                savedTechSD.push({
+                    type: stx.layout.studies[i].type,
+                    inputs: stx.layout.studies[i].inputs,
+                    outputs: stx.layout.studies[i].outputs,
+                    parameters: stx.layout.studies[i].parameters,
+                    panel: stx.layout.studies[i].panel
+                })
+            }
+         }else{
+            /** 如果type为loadFromBakctest的话,vuex有techSD则存入savedTechSD */
+            savedTechSD = CIQ.store.state.chart.techSD
          }
          CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
  
@@ -224,30 +125,49 @@
          
          // fetch indicator information and add studies to chart
          await CIQ.getIndicatorMatedata(indicatorsList)
+
          if(CIQ.store.state.form.backtestSymbol){
              CIQ.symbol = CIQ.store.state.form.backtestSymbol
           }
- 
-         CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-             // callback - your code to be executed after the chart is loaded
- 
-             //CIQ.stxx.layout.rangeSlider = true;
-             //CIQ.stxx.changeOccurred("layout");
-             
-             // 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
-             //CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-             CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-             
-             if(callback){
-                 callback()
-             }else{ 
-                 CIQ.hideCover()
-                 CIQ.nprogress.done()
+
+        await new Promise((resolve) => {
+            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
+             /** !(_type == 'loadFromBacktest') */
+            if(type == 'updateIndicators'){
+                CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
              }
+             
+            if(type == 'outputSignalsResult'){
+                /** load Indicators when run a new backtest
+                 * outputSignalsResult只保留csv 生成和upload逻辑 */
+                stx.resizeChart();
+                stx.draw();
+                var csvContent = CIQ.exportEx();
+                var promise = 200
+                try {
+                  var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
+                  var data = await uploadS3(S3DataStr)
+                  console.log("Upload csv Success", data);
+                  promise = 200
+                } catch (error) {
+                  console.log("Error", error);
+                  promise = 500
+                }
+                await callback(promise);
+                resolve()
+            }else {
+                if(callback){
+                    callback()  
+                }else{ 
+                    CIQ.hideCover()
+                    CIQ.nprogress.done()
+                }
+                resolve()
+            }   
          })
-         
+        })
  }
- 
+
  // endDate为推荐日当天
  CIQ.initiateChart = function(indicatorsList,endDate,callback){
      var datatime = new Date(endDate)
@@ -263,10 +183,38 @@
          }
      })
  }
- // change a symbol
- CIQ.addSymbol = async function(symbol,callback){
+ /** global symbol loading function, 
+  * including chart initation,lookup component, addSymbol from setup form*/
+ CIQ.addSymbol = async function(symbol,stx,callback){
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        return
+    }
+    /** addIndicators会读取存入的symbol并用于loadChart */
+    CIQ.store.commit('form/getBacktestSymbol',symbol)
+
+    CIQ.addIndicators({stx:stx},callback)
+ }
+ /**
+  * 
+  * @param {*} symbol 
+  * @param {*} stx 
+  * @param {*} callback 
+  * @returns 
+  */
+ CIQ.addSymbol2 = async function(symbol,stx,display){
+    let _stx = stx?stx:CIQ.stxx
+
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        return
+    }
+
      CIQ.addCover()
      CIQ.nprogress.start()
+
      let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
      // remove redundant elements and empty string
  
@@ -298,22 +246,22 @@
  
      //  load saved indicator layouts from stxx.layout
      var savedTechSD = []
-     for(var i in CIQ.stxx.layout.studies){
+     for(var i in _stx.layout.studies){
          savedTechSD.push({
-             type: CIQ.stxx.layout.studies[i].type,
-             inputs: CIQ.stxx.layout.studies[i].inputs,
-             outputs: CIQ.stxx.layout.studies[i].outputs,
-             parameters: CIQ.stxx.layout.studies[i].parameters,
-             panel: CIQ.stxx.layout.studies[i].panel
+             type: _stx.layout.studies[i].type,
+             inputs: _stx.layout.studies[i].inputs,
+             outputs: _stx.layout.studies[i].outputs,
+             parameters: _stx.layout.studies[i].parameters,
+             panel: _stx.layout.studies[i].panel
          })
      }
      CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
    
       // 限制同屏显示个数
-      if(maxNumOfStudy()) return
+      if(maxNumOfStudy(_stx)) return
  
      let count = 0
-     for (var studyInstanceName in CIQ.stxx.layout.studies) {
+     for (var studyInstanceName in _stx.layout.studies) {
          count++
      }
  
@@ -323,7 +271,7 @@
          console.log('after CIQ.getIndicatorMatedata')
      }
  
-     CIQ.stxx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
+     _stx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
          // callback - your code to be executed after the chart is loaded
         if(callback){
             callback()
@@ -332,11 +280,7 @@
             CIQ.nprogress.done()
         }
 
-         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-
-         //CIQ.stxx.layout.rangeSlider = true;
-         //CIQ.stxx.changeOccurred("layout");
-         //CIQ.exportEx()      
+         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)  
      })
  }
 
@@ -346,6 +290,7 @@
      var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
      var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
 
+     if(!CIQ.stxx) return
      for (var studyInstanceName in CIQ.stxx.layout.studies) {
          
          var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
@@ -357,9 +302,7 @@
  
      let resArr = []
      let sentiUrlList = []
- 
- 
- 
+
      return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech

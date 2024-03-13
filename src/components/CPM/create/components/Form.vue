@@ -535,7 +535,7 @@ export default {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
       this.$store.commit('form/getFreqHighPriority', 'Daily')
       this.$store.commit('form/getBacktestSymbol', "SPX")
-      CIQ.addIndicators(()=>{
+      CIQ.addIndicators({},()=>{
         this.calculateBarDistance()
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -544,7 +544,7 @@ export default {
     changeTimeframe(val) {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
       this.$store.commit('form/getFreqHighPriority', val)
-      CIQ.addIndicators(()=>{
+      CIQ.addIndicators({},()=>{
         this.calculateBarDistance()
         CIQ.hideCover()
         CIQ.nprogress.done()
@@ -600,16 +600,8 @@ export default {
     handleSelect(item) {
       this.data.symbol = item.url
 
-      // CIQ.objIndicator = []
-      // CIQ.stxx.loadChart({
-      //     symbol: this.data.symbol,
-      //     startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
-      //     endDate:new Date(),
-      // },()=>{
-      //     CIQ.hideCover()
-      // })
-      this.$store.commit('form/getBacktestSymbol', this.data.symbol)
-      CIQ.addSymbol(this.data.symbol,()=>{
+      // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
+      CIQ.addSymbol(this.data.symbol,null,()=>{
         this.calculateBarDistance()
         CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.hideCover()

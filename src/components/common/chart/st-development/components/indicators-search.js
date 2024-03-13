@@ -909,8 +909,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
              * @since 8.2.0 Removed the `params` parameter. Added the `fn` parameter.
              */
             async selectItem(data, fn) {  
-                // a boolean value to check if an indicator is selected from chartiq
-                CIQ.notADefaultCall = true
 
                 for (var studyInstanceName in CIQ.stxx.layout.studies) {
 					var sd = CIQ.stxx.layout.studies[studyInstanceName]

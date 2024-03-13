@@ -190,13 +190,14 @@ const checkProperties = (obj, properties) => {
 }
 
 // 限制同屏显示个数
-const maxNumOfStudy = () => {
+const maxNumOfStudy = (stx) => {
     var countExistIndicator = 0
-    for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+    let studies = stx?stx.layout.studies:CIQ.stxx.layout.studies
+    for (var studyInstanceName in studies) {
+      if (CIQ.findBuiltinTechIndicator(null,studies[studyInstanceName].type)){
         countExistIndicator--
       }
-      if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+      if (studies[studyInstanceName].type == 'ST MA') {
         countExistIndicator--
       }
       countExistIndicator++

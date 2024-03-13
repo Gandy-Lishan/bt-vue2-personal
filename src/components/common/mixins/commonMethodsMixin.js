@@ -233,9 +233,7 @@ export const CommonMethodsMixin = {
 			for (let i = 0; i < this.favorite_array.length; i++) {
 				const item = this.favorite_array[i]
 				this.reloadData(item.indicator_layout, item.frequency)
-				await CIQ.addIndicatorsFromBacktest(() => {
-					
-				})
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {})
 				await this.loopCalculateNewConditions(item)
 				this.uploadCSVWhileFLS(item)
 			}
@@ -479,16 +477,13 @@ export const CommonMethodsMixin = {
 			)
 			// symbol ohlcv 要做特殊处理
 			const _this = this
-			await CIQ.addIndicatorsFromBacktest(() => {
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
 			await this.loopCalculateNewConditions(backtestInfo)
-			debugger
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
-			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
-			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
 		},
 		async loopCalculateNewConditions(backtestInfo) {
 			let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
@@ -961,7 +956,7 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			} else {
 				this.reloadData(data, freq)
-				await CIQ.addIndicatorsFromBacktest(() => {
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 					this.$store.commit('form/getRunBacktestData', row)
 					this.$router.push({
 						name: 'Results',
@@ -975,7 +970,7 @@ export const CommonMethodsMixin = {
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			const that = this
 			that.reloadData(data, freq)
-			await CIQ.addIndicatorsFromBacktest(function() {
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
 
 				that.$router.push({

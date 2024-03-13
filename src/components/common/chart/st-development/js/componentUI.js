@@ -23,6 +23,8 @@
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
+import {maxNumOfStudy} from '@/utils'
+
 var claims = []
 /**
  * The following is a set of web components used in our sample templates to illustrate how the API can be leveraged to build a full featured UI to control the chart.
@@ -3393,7 +3395,6 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	} catch (err) {
 		console.log(err)
 	}
-	//CIQ.addIndicators();
 
 	if (!this.params.sd.permanent)
 		CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd)
@@ -3413,7 +3414,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	})
 
 	// reload chart when removing a study
-	//CIQ.addIndicators()
+	//CIQ.addIndicators({})
 }
 
 /**
@@ -3820,7 +3821,7 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
 	if (freq != 'Daily') {
-		CIQ.addIndicators()
+		CIQ.addIndicators({})
 	}
 }
 CIQ.UI.Layout.prototype.getChartType = function(node, chartType) {
@@ -4342,7 +4343,7 @@ CIQ.UI.Layout.prototype.setPeriodicity = function(
 	CIQ.store.commit('form/getFrequency', selectedFreq)
 
 	// 在scanner ai里面修改timeframe后会自己调用CIQ.initiateChart
-	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators()
+	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators({})
 
 	// var self = this;
 	// if (self.context.loader) self.context.loader.show();
@@ -6065,39 +6066,129 @@ class Chart {
 	initLookup(uiContext) {
 		const { config, topNode: contextContainer } = uiContext
 		this.initKeystrokeHub(uiContext)
-		uiContext.changeSymbol = function(data, cb) {
-			const { stx, loader, node } = uiContext
-			console.log('before createChartAndUI: ')
-			// to replace the useless loader
-			var loaderMain = document.querySelector('.loaderMain')
-			if (loaderMain) loaderMain.show()
-			if (data.symbol == data.symbol.toLowerCase()) {
-				data.symbol = data.symbol.toUpperCase() // set a pretty display version
-			}
-			const { removeSeries, loadError } = config.onNewSymbolLoad || {}
-			if (removeSeries) {
-				Object.values(stx.chart.series)
-					.filter(removeSeries)
-					.forEach(series => stx.removeSeries(series.id))
-			}
-			//这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载
-			if(window.location.pathname.includes('/cpm/results')){
-				data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
-			}
-			stx.loadChart(data, { masterData: data._masterData }, function(err) {
-				// don't add mask when initiating a chart
-				// CIQ.hideCover()
-				// CIQ.nprogress.done()
-				var loaderMain = document.querySelector('.loaderMain')
-				if (loaderMain) loaderMain.hide()
-				if (err) {
-					if (loadError) loadError(err, uiContext)
-					return
-				}
-				if (cb) cb(stx)
-				if (config.restore)
-					CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
-			})
+		/** origin version */
+		// uiContext.changeSymbol = function(data, cb) {
+		// 	const { stx, loader, node } = uiContext
+		// 	debugger
+		// 	/** to replace the useless loader*/
+		// 	var loaderMain = document.querySelector('.loaderMain')
+		// 	if (loaderMain) loaderMain.show()
+		// 	/** END */
+
+		// 	if (data.symbol == data.symbol.toLowerCase()) {
+		// 		data.symbol = data.symbol.toUpperCase() // set a pretty display version
+		// 	}
+
+		// 	// 移除现存的Series,保留Study
+		// 	const { removeSeries, loadError } = config.onNewSymbolLoad || {}
+		// 	if (removeSeries) {
+		// 		Object.values(stx.chart.series)
+		// 			.filter(removeSeries)
+		// 			.forEach(series => stx.removeSeries(series.id))
+		// 	}
+
+		// 	/** 这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载*/
+		// 	if(window.location.pathname.includes('/cpm/results')){
+		// 		data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
+		// 	}
+		// 	/** END */
+
+		// 	stx.loadChart(data, { masterData: data._masterData }, function(err) {
+		// 		var loaderMain = document.querySelector('.loaderMain')
+		// 		if (loaderMain) loaderMain.hide()
+		// 		if (err) {
+		// 			if (loadError) loadError(err, uiContext)
+		// 			return
+		// 		}
+		// 		if (cb) cb(stx)
+		// 		if (config.restore)
+		// 			CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
+		// 	})
+		// }
+		/** my own implement */
+		// uiContext.changeSymbol = async function(data, cb) {
+		// 	const { stx } = uiContext;
+
+		// 	let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==data.symbol)
+		// 	let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==data.symbol)
+		// 	if(!stockName && !indexName){
+		// 		return
+		// 	}
+			
+		// 	CIQ.addCover()
+		// 	CIQ.nprogress.start()
+
+		// 	let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
+		// 	// remove redundant elements and empty string
+		
+		// 	for(var i=0;i<indicatorsList.length;i++){
+		// 		if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
+		// 		indicatorsList.splice(i,1)
+		// 		i--;
+		// 	  }
+		// 	}
+		// 	indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
+		// 	const set = new Set(indicatorsList)
+		// 	indicatorsList = [...set]
+
+		// 	// set AAPL as default indicator params
+		// 	if(indicatorsList.length==0){
+		// 		//indicatorsList = ['AAPL']
+		// 	}
+
+		// 	// sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
+		// 	let techList = CIQ.store.state.chart.indicators.technicalIndicators
+		// 	let technicalIndicators = []
+		// 	for(var item in indicatorsList){
+		// 		if(techList.indexOf(indicatorsList[item]) != -1){
+		// 			technicalIndicators.push(indicatorsList[item])
+		// 			indicatorsList[item] = ''
+		// 		}    
+		// 	}
+		// 	indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
+
+		// 	//  load saved indicator layouts from stxx.layout
+		// 	var savedTechSD = []
+		// 	for(var i in stx.layout.studies){
+		// 		savedTechSD.push({
+		// 			type: stx.layout.studies[i].type,
+		// 			inputs: stx.layout.studies[i].inputs,
+		// 			outputs: stx.layout.studies[i].outputs,
+		// 			parameters: stx.layout.studies[i].parameters,
+		// 			panel: stx.layout.studies[i].panel
+		// 		})
+		// 	}
+
+		// 	CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
+		  
+		// 	// 限制同屏显示个数
+		// 	if(maxNumOfStudy(stx)) return
+
+		// 	let count = 0
+		// 	for (var studyInstanceName in stx.layout.studies) {
+		// 		count++
+		// 		//CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
+		// 	}
+		// 	CIQ.store.commit('form/getBacktestSymbol',data.symbol)
+		// 	if(count>0){
+		// 		await CIQ.getIndicatorMatedata(indicatorsList)
+		// 		console.log('after CIQ.getIndicatorMatedata')
+		// 	}
+
+		// 	stx.loadChart(	{ symbol: data.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
+		// 		// callback - your code to be executed after the chart is loaded
+		// 		//if (loader) loader.hide();
+		// 		CIQ.Marker.removeByLabel(stx, 'events');
+		// 		CIQ.hideCover()
+		// 		CIQ.nprogress.done()
+
+		// 		CIQ.store.dispatch('states/set_isMarkerShown_flag',false)     
+		// 	})
+		// }
+		/** register global symbol loading function */
+		uiContext.changeSymbol = function(data ,cb) {
+			const { stx } = uiContext;
+			CIQ.addSymbol(data.symbol,stx)
 		}
 		if (config.lookupDriver) {
 			uiContext.setLookupDriver(new config.lookupDriver())

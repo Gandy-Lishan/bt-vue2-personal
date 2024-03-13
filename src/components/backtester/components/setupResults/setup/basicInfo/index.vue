@@ -1161,7 +1161,7 @@ export default {
       this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'trade_price', value: val})
     },
     getSymbol(val) {
-      this.$store.commit('form/getBacktestSymbol', val)
+      // this.$store.commit('form/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
     getSymbol2(val) {
@@ -1207,7 +1207,7 @@ export default {
     },
     changeTimeframe(val) {
       this.$store.commit('form/getFreqHighPriority', val)
-      CIQ.addIndicators()
+      CIQ.addIndicators({})
     },
     changeExcludeOO(val) {
       if (val) this.bd.exclude_oo = 1

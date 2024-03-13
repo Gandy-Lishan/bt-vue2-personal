@@ -640,7 +640,7 @@ export default {
       console.log(this.entryDates)
     },
     getSymbol(val) {
-      this.$store.commit('form/getBacktestSymbol', val)
+      // this.$store.commit('form/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
     getDirection(val) {
