@@ -455,6 +455,7 @@ export default {
         }
       })
     },
+    /** 监听indicators-search,预加载 */
     updateSenti(val) {
       let tabs = this.editableTabs
       var absoluteIndex = ''
@@ -869,6 +870,7 @@ export default {
       // 移除chartiq对应的extraIndicators
       let extraIndicators = []
 			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
+      debugger
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
 			this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
@@ -1194,12 +1196,6 @@ export default {
           criteria: this.criteria
         })
       }
-      // store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-      let techIndicators = []
-      techIndicators.push(...CIQ.store.state.chart.indicators.technicalIndicators)
-      techIndicators.push(item.url)
-      techIndicators = [...new Set(techIndicators)]
-      this.$store.commit('chart/getTechnicalIndicators', techIndicators)
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)

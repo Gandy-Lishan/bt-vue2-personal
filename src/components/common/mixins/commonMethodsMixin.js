@@ -994,10 +994,6 @@ export const CommonMethodsMixin = {
 				data.formIndicators.exit
 			)
 			this.$store.commit('chart/getExtraIndicators', [])
-			this.$store.commit(
-				'chart/getTechnicalIndicators',
-				data.technicalIndicators
-			)
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)

@@ -455,8 +455,6 @@ export default {
 				保存除了 formIndicators 之外的 indicatorLayout 属性
 			*/
 			let indicatorLayout = {}
-			indicatorLayout.technicalIndicators =
-				this.$store.state.chart.indicators.technicalIndicators
 			let savedTechSD = []
 			for (let i in CIQ.stxx.layout.studies) {
 				let output = {}

@@ -151,20 +151,16 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             var orignalFreq = 'daily'
             var selectedFreq = 'daily'
 
-            let techList = CIQ.store.state.chart.indicators.technicalIndicators
             let list = []
             for(var i in CIQ.objIndicator){
-                if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+                if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
                     list.push(CIQ.objIndicator[i])
                 }
             }
 
             if(params.symbolObject.indicator === undefined){
-                // freq is daily when using default indicator
-                // new_str += '&indicator=' +CIQ.objIndicator;
                 new_str += '&indicator='
             }else if(list.length == 0){
-                //new_str += '&indicator=' +'AAPL'
                 new_str += '&indicator='
             }else{
                 try{
@@ -353,10 +349,9 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
     var new_str = ''
     var freq = 'daily'
 
-    let techList = CIQ.store.state.chart.indicators.technicalIndicators
     let list = []
     for(var i in CIQ.objIndicator){
-        if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+        if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
             list.push(CIQ.objIndicator[i])
         }
     }
@@ -439,10 +434,9 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
     var new_str = ''
     var freq = 'daily'
 
-    let techList = CIQ.store.state.chart.indicators.technicalIndicators
     let list = []
     for(var i in CIQ.objIndicator){
-        if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+        if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
             list.push(CIQ.objIndicator[i])
         }
     }

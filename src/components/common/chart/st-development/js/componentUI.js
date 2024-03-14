@@ -6105,90 +6105,32 @@ class Chart {
 		// 			CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
 		// 	})
 		// }
-		/** my own implement */
-		// uiContext.changeSymbol = async function(data, cb) {
-		// 	const { stx } = uiContext;
-
-		// 	let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==data.symbol)
-		// 	let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==data.symbol)
-		// 	if(!stockName && !indexName){
-		// 		return
-		// 	}
-			
-		// 	CIQ.addCover()
-		// 	CIQ.nprogress.start()
-
-		// 	let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-		// 	// remove redundant elements and empty string
-		
-		// 	for(var i=0;i<indicatorsList.length;i++){
-		// 		if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-		// 		indicatorsList.splice(i,1)
-		// 		i--;
-		// 	  }
-		// 	}
-		// 	indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
-		// 	const set = new Set(indicatorsList)
-		// 	indicatorsList = [...set]
-
-		// 	// set AAPL as default indicator params
-		// 	if(indicatorsList.length==0){
-		// 		//indicatorsList = ['AAPL']
-		// 	}
-
-		// 	// sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
-		// 	let techList = CIQ.store.state.chart.indicators.technicalIndicators
-		// 	let technicalIndicators = []
-		// 	for(var item in indicatorsList){
-		// 		if(techList.indexOf(indicatorsList[item]) != -1){
-		// 			technicalIndicators.push(indicatorsList[item])
-		// 			indicatorsList[item] = ''
-		// 		}    
-		// 	}
-		// 	indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-
-		// 	//  load saved indicator layouts from stxx.layout
-		// 	var savedTechSD = []
-		// 	for(var i in stx.layout.studies){
-		// 		savedTechSD.push({
-		// 			type: stx.layout.studies[i].type,
-		// 			inputs: stx.layout.studies[i].inputs,
-		// 			outputs: stx.layout.studies[i].outputs,
-		// 			parameters: stx.layout.studies[i].parameters,
-		// 			panel: stx.layout.studies[i].panel
-		// 		})
-		// 	}
-
-		// 	CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-		  
-		// 	// 限制同屏显示个数
-		// 	if(maxNumOfStudy(stx)) return
-
-		// 	let count = 0
-		// 	for (var studyInstanceName in stx.layout.studies) {
-		// 		count++
-		// 		//CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-		// 	}
-		// 	CIQ.store.commit('form/getBacktestSymbol',data.symbol)
-		// 	if(count>0){
-		// 		await CIQ.getIndicatorMatedata(indicatorsList)
-		// 		console.log('after CIQ.getIndicatorMatedata')
-		// 	}
-
-		// 	stx.loadChart(	{ symbol: data.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
-		// 		// callback - your code to be executed after the chart is loaded
-		// 		//if (loader) loader.hide();
-		// 		CIQ.Marker.removeByLabel(stx, 'events');
-		// 		CIQ.hideCover()
-		// 		CIQ.nprogress.done()
-
-		// 		CIQ.store.dispatch('states/set_isMarkerShown_flag',false)     
-		// 	})
-		// }
-		/** register global symbol loading function */
+		/** register chart symbol loading function */
 		uiContext.changeSymbol = function(data ,cb) {
 			const { stx } = uiContext;
 			CIQ.addSymbol(data.symbol,stx)
+		}
+		/** register chart indicator loading function */
+		uiContext.changeIndicator = function(data ,cb) {
+			const { stx } = uiContext;
+			for (var studyInstanceName in stx.layout.studies) {
+				var sd = stx.layout.studies[studyInstanceName]
+				if (sd.type == data.url || sd.type == data.symbol) {return}
+			}
+
+			CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.name, updated: data.updated})     
+			let extraIndicators = []
+			extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)
+			let indicator = ''
+			if (data.symbol == undefined){
+				indicator = data.url       
+			}else{
+				indicator = data.symbol
+			}
+			extraIndicators.push(indicator)
+			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
+
+			CIQ.addIndicators({stx:stx})
 		}
 		if (config.lookupDriver) {
 			uiContext.setLookupDriver(new config.lookupDriver())

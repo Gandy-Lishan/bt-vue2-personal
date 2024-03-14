@@ -13,11 +13,6 @@ const state = {
 		url: '',
 		name: ''
 	},
-	currentTech: {
-		//chartiq
-		url: '',
-		name: ''
-	},
 	indicators: {
 		//chartiq
 		formIndicators: {
@@ -27,7 +22,6 @@ const state = {
 			exit2: new Array(5),
 		},
 		extraIndicators: [],
-		technicalIndicators: []
 	},
 	extremeValue: [], //chartiq
 	indicatorsList: [], //chartiq 代替了AllSymbolsList
@@ -116,12 +110,6 @@ const mutations = {
 		state.currentSenti = val
 	},
 	/**
-	 * Sets up a mutations to store the current selected technical indicator, it's used to trigger the listener for updating indicator in form
-	 */
-	setCurrentTech(state, val) {
-		state.currentTech = val
-	},
-	/**
 	 * Sets up a mutations to store the extremeValue of an indicator
 	 */
 
@@ -203,9 +191,6 @@ const mutations = {
 	getMALayout(state, val) {
 		state.activatedMALayout = val
 	},
-	getTechnicalIndicators(state, val) {
-		state.indicators.technicalIndicators = val
-	},
 	saveFormatTechnicalList(state, list) {
 		state.formateTechnicalList = list
 	},
@@ -219,7 +204,6 @@ const mutations = {
 				exit2: new Array(5),
 			},
 			extraIndicators: [],
-			technicalIndicators: [],
 		}),
 			(state.activatedMA = [{ period: 21, url: '' }])
 		state.activatedMALayout = [],
