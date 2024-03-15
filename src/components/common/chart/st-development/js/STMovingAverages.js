@@ -1139,7 +1139,7 @@ if (!CIQ.Studies) {
 		var period = sd.inputs.Period;
 
 		if (!field || field == "field") field = "Close";
-
+debugger
 		let result
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if(i+1>=period){
