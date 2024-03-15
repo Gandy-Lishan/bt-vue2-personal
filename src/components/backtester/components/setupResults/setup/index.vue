@@ -601,7 +601,7 @@ export default {
 
 			await processCriteria('entryChild1', displayData.entry, 'entry');
 
-			if (strategy === 'Dual') {
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
 				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
 
@@ -621,7 +621,7 @@ export default {
 
 			await processExit('exitChild1', displayData.exit, 'exit');
 
-			if (strategy === 'Dual') {
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
 				await processExit('exitChild2', displayData.exit2, 'exit2');
 			}
 
