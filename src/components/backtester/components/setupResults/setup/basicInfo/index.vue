@@ -1502,13 +1502,17 @@ export default {
       if(Object.keys(editData).length === 0) return
         let description, riskValArr = [], backtestPeriod, propertiesToDelete = [
           'entry', 
+          'entry2', 
           'exit', 
+          'exit2', 
           'user_id', 
           'status', 
           'results', 
           'uuid',
           'entry_description',
-          'exit_description'
+          'entry2_description',
+          'exit_description',
+          'exit2_description'
         ]
         //this.clearForm() // clear set up form before editting
         propertiesToDelete.forEach(property => {

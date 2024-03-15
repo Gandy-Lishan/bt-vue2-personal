@@ -454,6 +454,10 @@ export const CommonMethodsMixin = {
 				'index_moving_average_slope',
 				'opted'
 			]
+			if(strategy === 'Dual') {
+				selectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2')
+				backtestInfoSelectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2')
+			}
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map(prop => ({ [prop]: backtestInfo[prop] }))
@@ -486,13 +490,30 @@ export const CommonMethodsMixin = {
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 		},
 		async loopCalculateNewConditions(backtestInfo) {
-			let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
-			let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
+			const {strategy} = backtestInfo
+			const processSignals = async (signals, type) => {
+				for (let index = 0; index < signals.length; index++) {
+					await this.calculateNewConditions(signals[index], type, index);
+				}
+			};
+			const decodeAndMapConditionRadio = async (entryType, exitType) => {
+				let { signals: entrySignals } = this.decodeCriteria(backtestInfo, entryType)
+				let { signals: exitSignals } = this.decodeCriteria(backtestInfo, exitType)
+				exitSignals = exitSignals.filter(item => item)
+				conditionRadioMap(entrySignals,exitSignals, entryType, exitType)
+				await processSignals(entrySignals, entryType)
+				await processSignals(entrySignals, exitType)
+			}
+			await decodeAndMapConditionRadio('entry', 'exit')
+			if(strategy === 'Dual') await decodeAndMapConditionRadio('entry2', 'exit2')
+
+			// let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
+			// let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
 			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
-			exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
+			// exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
 			
 			// 写一个函数来map所有情况的condition radio
-			conditionRadioMap(entrySignals,exitSignals)
+			// conditionRadioMap(entrySignals,exitSignals)
 
 			// 把對tech類型的判斷放在calculateNewConditions，防止indicator的panelIndex不一致的bug
 			// if (entrySignals.length !== 0)
@@ -504,12 +525,12 @@ export const CommonMethodsMixin = {
 			// 		['Symbol', 'Sentiment', 'User'].includes(item.analysis)
 			// 	)
 
-			for (let index = 0; index < entrySignals.length; index++) {
-				await this.calculateNewConditions(entrySignals[index], 'entry', index)
-			}
-			for (let index = 0; index < exitSignals.length; index++) {
-				await this.calculateNewConditions(exitSignals[index], 'exit', index)
-			}
+			// for (let index = 0; index < entrySignals.length; index++) {
+			// 	await this.calculateNewConditions(entrySignals[index], 'entry', index)
+			// }
+			// for (let index = 0; index < exitSignals.length; index++) {
+			// 	await this.calculateNewConditions(exitSignals[index], 'exit', index)
+			// }
 		},
 
 		calculateNewConditions(signals, criteria, panelIndex) {
