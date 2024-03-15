@@ -220,6 +220,27 @@ export default {
 		},
 		changeStrategy(val) {
 			this.strategy = val
+
+			if(val == 'Signal') {
+				// 清空symbol2对应的entry2,exit2
+				const commitIndicators = (criteria, list) => {
+					this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+				};
+				commitIndicators('entry2', []);
+				commitIndicators('exit2', []);
+				
+				// 清空symbol2对应的symbol
+				this.$store.commit('form/setComparisonSymbol', {})
+				CIQ.addIndicators({})
+
+				/** 不能简单用隐藏panel来暂时移除symbol2的study,比如相同的senti但是roc对应不同symbol,它们都在同一个panel */
+				// for (var p in CIQ.stxx.panels) {
+				// 	if (CIQ.stxx.panels[p].name == "chart") continue;
+				// 	CIQ.stxx.panels[p].hidden = true;
+				// }
+			}else {
+				this.$refs['basicInfo'].getSymbol2()
+			}
 		},
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())

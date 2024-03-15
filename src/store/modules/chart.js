@@ -138,6 +138,11 @@ const mutations = {
 		let { index, value } = obj
 		state.indicators.formIndicators.entry[index] = value
 	},
+	getExitIndicators(state, obj) {
+		let { index, value } = obj
+		state.indicators.formIndicators.exit[index] = value
+	},
+	// 以上两个准备被替换
 	getIndicators(state, obj) {
 		let {index, value, criteria} = obj
 		state.indicators.formIndicators[criteria][index] = value
@@ -145,20 +150,11 @@ const mutations = {
 	/**
 	 * store a list of entry indicators
 	 */
-	getEntryIndicatorsList(state, list) {
-		state.indicators.formIndicators[state.criteria] = list
-	},
 	getCriteriaIndicatorsList(state, obj) {
 		let {criteria, list} = obj
 		state.indicators.formIndicators[criteria] = list
 	},
-	getExitIndicators(state, obj) {
-		let { index, value } = obj
-		state.indicators.formIndicators.exit[index] = value
-	},
-	getExitIndicatorsList(state, list) {
-		state.indicators.formIndicators.exit = list
-	},
+
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */

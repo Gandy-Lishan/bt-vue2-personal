@@ -890,7 +890,7 @@ export default {
       freqObj.index = this.panelIndex
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
-
+debugger
       this.setFrequencyArray(freqObj)
 
       this.$emit('getFreqArray', freqObj)
