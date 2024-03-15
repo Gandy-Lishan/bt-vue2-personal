@@ -501,7 +501,7 @@ export default {
           if (this.criteria.startsWith('entry')) {
             var MAListIndex = activatedMAList.findIndex(
               (item) =>
-                item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+                item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
                 item.criteria == this.criteria &&
                 item.index == this.panelIndex
             )
@@ -597,7 +597,7 @@ export default {
           if (this.criteria.startsWith('entry')) {
             var MAListIndex = activatedMAList.findIndex(
               (item) =>
-                item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+                item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
                 item.criteria == this.criteria &&
                 item.index == this.panelIndex
             )
@@ -836,7 +836,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -908,7 +908,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -973,7 +973,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -1035,7 +1035,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -1101,7 +1101,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -1165,7 +1165,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (ma) =>
-            ma.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            ma.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             ma.criteria == this.criteria &&
             ma.index == this.panelIndex
         )
@@ -1234,7 +1234,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -1332,7 +1332,7 @@ export default {
       if (this.criteria.startsWith('entry')) {
         var MAListIndex = activatedMAList.findIndex(
           (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.entry[this.panelIndex] &&
+            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
             item.criteria == this.criteria &&
             item.index == this.panelIndex
         )
@@ -1411,7 +1411,7 @@ export default {
         this.$emit('getIndicatorRadio', radioObj)
         this.$store.commit('form/getEntryIndicatorRadio', 'sentiment')
 
-        // console.log('store',this.$store.indicators.formIndicators.entry)
+        // console.log('store',this.$store.indicators.formIndicators[this.criteria])
         let valObj = {}
         valObj.value = this.si.sentimentIndicator
         valObj.index = this.panelIndex

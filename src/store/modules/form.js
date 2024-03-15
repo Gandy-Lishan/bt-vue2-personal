@@ -369,9 +369,6 @@ const mutations = {
 		state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator =
 			obj.value
 	},
-	delete(state, obj) {
-		delete state.backtestInfo[obj.criteria].signals[obj.index][obj.delete]
-	},
 	clearSignal(state, obj) {
 		state.backtestInfo[obj.criteria].signals[obj.index] = {}
 		state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator = ''
@@ -379,27 +376,6 @@ const mutations = {
 		state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator = ''
 		state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator = ''
 		state.backtestInfo.exit.signals[obj.index].riskIndicator = ''
-	},
-	clearEntrySignalArr(state) {
-		state.backtestInfo.entry.signals = [
-			{
-				sentimentIndicator: '',
-				technicalIndicator: '',
-				usersOwnIndicator: '',
-				symbolIndicator: ''
-			}
-		]
-	},
-	clearExitSignalArr(state) {
-		state.backtestInfo.exit.signals = [
-			{
-				sentimentIndicator: '',
-				technicalIndicator: '',
-				riskIndicator: '',
-				usersOwnIndicator: '',
-				symbolIndicator: ''
-			}
-		]
 	},
 	clearBacktest(state) {
 		state.backtestInfo = {
@@ -443,6 +419,7 @@ const mutations = {
 		state.frequencyArray = new Map()
 	},
 	saveCondition(state, obj) {
+		debugger
 		let criteria = obj.criteria
 		let index = obj.index
 		delete obj.criteria
@@ -464,13 +441,13 @@ const mutations = {
 			state.backtestInfo[criteria].signals[index].symbolIndicator
 
 		if (criteria.startsWith('exit')) {
-			init.riskIndicator = state.backtestInfo.exit.signals[index].riskIndicator
+			init.riskIndicator = state.backtestInfo[criteria].signals[index].riskIndicator
 		}
 		if (criteria.startsWith('exit')) {
-			state.backtestInfo.exit.signals[index] = Object.assign({}, init)
+			state.backtestInfo[criteria].signals[index] = Object.assign({}, init)
 		} else if (criteria.startsWith('entry')) {
 			init.riskIndicator = ''
-			state.backtestInfo.entry.signals[index] = Object.assign({}, init)
+			state.backtestInfo[criteria].signals[index] = Object.assign({}, init)
 		}
 		for (let key in obj) {
 			state.backtestInfo[criteria].signals[index][key] = obj[key]

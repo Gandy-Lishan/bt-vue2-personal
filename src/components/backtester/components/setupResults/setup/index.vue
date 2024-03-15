@@ -601,7 +601,7 @@ export default {
 
 			await processCriteria('entryChild1', displayData.entry, 'entry');
 
-			if (strategy === 'Dual') {
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
 				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
 
@@ -621,7 +621,7 @@ export default {
 
 			await processExit('exitChild1', displayData.exit, 'exit');
 
-			if (strategy === 'Dual') {
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
 				await processExit('exitChild2', displayData.exit2, 'exit2');
 			}
 
@@ -684,7 +684,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
@@ -693,7 +692,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
@@ -702,7 +700,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 	.backtest-btns {
 		.el-button {
@@ -720,27 +717,34 @@ export default {
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	.criteria {
-		margin: 0px 10px 10px 10px;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria {
-		margin: 0px 40px 10px 40px;
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
 	.criteria {
-		margin: 0px 40px 10px 40px;
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.criteria {
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
 	}
-	.criteria {
-		margin: 0px 0px 10px 0px;
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 	.criteria-title {
 		font-size: 15px;
