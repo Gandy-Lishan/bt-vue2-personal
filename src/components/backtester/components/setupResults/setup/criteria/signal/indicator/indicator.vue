@@ -1409,7 +1409,6 @@ export default {
 
         radioObj.value = 'sentiment'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('form/getEntryIndicatorRadio', 'sentiment')
 
         // console.log('store',this.$store.indicators.formIndicators[this.criteria])
         let valObj = {}
@@ -1439,7 +1438,6 @@ export default {
         }
         radioObj.value = 'technical'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('form/getEntryIndicatorRadio', 'technical')
 
         let valObj = {}
         valObj.value = this.si.technicalIndicator
@@ -1467,7 +1465,6 @@ export default {
         }
         radioObj.value = 'risk'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('form/getEntryIndicatorRadio', 'risk')
       } else if (this.indicatorRadio === arr[3]) {
         // 切换radio后移除usersOwnEntryFileHash
         if (this.criteria.startsWith('entry')) {
@@ -1486,7 +1483,6 @@ export default {
         }
         radioObj.value = 'symbol'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('form/getEntryIndicatorRadio', 'symbol')
 
         let valObj = {}
         valObj.value = this.si.symbolIndicator
@@ -1515,7 +1511,6 @@ export default {
         }
         radioObj.value = 'user'
         this.$emit('getIndicatorRadio', radioObj)
-        this.$store.commit('form/getEntryIndicatorRadio', 'user')
 
         let valObj = {}
         valObj.value = this.si.userIndicator
