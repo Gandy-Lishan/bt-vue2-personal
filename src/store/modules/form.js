@@ -97,8 +97,6 @@ const state = {
 	favoriteBacktestRowData: { id: 0 }, //form
 	favoriteBacktestData: [], //form
 	strategyId: '', //form
-	entryIndicatorRadio: 'sentiment', //form
-	exitIndicatorRadio: 'Sentiment_Indicators:', //form
 	saveConditionFormdata: {}, //form
 
 	tabIndex: 0, //form
@@ -178,20 +176,8 @@ const mutations = {
 	/**
 	 * these 3 mutations below are used to update status of Moving average in MA.vue
 	 */
-	setMaRadio(state, val) {
-		state.maRadio = val
-	},
 	getStMaPeriod(state, val) {
 		state.stMaPeriod = val
-	},
-	getMaPeriod(state, val) {
-		state.maPeriod = val
-	},
-	getNewPorfolioInputsValues(state, row) {
-		state.newPorfolioInputsValues.inputNameValue = row.name
-		state.newPorfolioInputsValues.inputDescriptionValue = row.description
-		state.newPorfolioInputsValues.inputOriginalAssetValue = row.original_asset
-		state.openedPorfolioBacktests = row.backtests
 	},
 	getFrequency(state, val) {
 		if (val === undefined || val === null || val === '') {
@@ -292,9 +278,6 @@ const mutations = {
 	getDirection(state, val) {
 		state.backtestInfo.direction = val
 	},
-	addSignal(state, val) {
-		state.backtestInfo[val]['signals'].push({})
-	},
 	setEntryData(state, obj) {
 		var index = obj.index
 		state.tabIndex = index
@@ -319,16 +302,6 @@ const mutations = {
 			state.backtestInfo[criteria]['signals'][index] = data
 		}
 	},
-	setFd(state, obj) {
-		let criteria = obj.criteria
-		delete obj.index
-		delete obj.criteria
-		for (let key in obj) {
-			if (obj[key]) {
-				state.backtestInfo[criteria][key] = obj[key]
-			}
-		}
-	},
 	setBd(state, obj) {
 		for (let key in obj) {
 			if (obj) {
@@ -338,15 +311,9 @@ const mutations = {
 	},
 	deleteIndicator(state, val) {
 		try {
-			state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator =
-				''
-			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator =
-				''
-			state.backtestInfo[val.criteria].signals[
-				val.index
-			].usersOwnIndicator = state.backtestInfo[val.criteria].signals[
-				val.index
-			].symbolIndicator = ''
+			state.backtestInfo[val.criteria].signals[val.index].sentimentIndicator = ''
+			state.backtestInfo[val.criteria].signals[val.index].technicalIndicator = ''
+			state.backtestInfo[val.criteria].signals[val.index].usersOwnIndicator = state.backtestInfo[val.criteria].signals[val.index].symbolIndicator = ''
 			state.backtestInfo.exit.signals[val.index].riskIndicator = ''
 		} catch (error) {
 			console.log(error)
@@ -360,9 +327,6 @@ const mutations = {
 		state.backtestInfo[obj.criteria].signals[obj.index].symbolIndicator =
 			obj.value
 	},
-	getRiskValue(state, obj) {
-		state.backtestInfo.exit.signals[obj.index].riskIndicator = obj.value
-	},
 	getSentiValue(state, obj) {
 		state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator =
 			obj.value
@@ -370,55 +334,6 @@ const mutations = {
 	getUserValue(state, obj) {
 		state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator =
 			obj.value
-	},
-	clearSignal(state, obj) {
-		state.backtestInfo[obj.criteria].signals[obj.index] = {}
-		state.backtestInfo[obj.criteria].signals[obj.index].sentimentIndicator = ''
-		state.backtestInfo[obj.criteria].signals[obj.index].symbolIndicator = ''
-		state.backtestInfo[obj.criteria].signals[obj.index].technicalIndicator = ''
-		state.backtestInfo[obj.criteria].signals[obj.index].usersOwnIndicator = ''
-		state.backtestInfo.exit.signals[obj.index].riskIndicator = ''
-	},
-	clearBacktest(state) {
-		state.backtestInfo = {
-			entry_description: [],
-			exit_description: [],
-			description: '',
-			direction: 'Long',
-			frequency: 'Daily',
-			entry: {
-				relation: 0,
-				score: 1,
-				signals_in_market: 1,
-				delay_bars: 0,
-				signals: [
-					{
-						sentimentIndicator: '',
-						technicalIndicator: '',
-						usersOwnIndicator: '',
-						symbolIndicator: ''
-					}
-				]
-			},
-			exit: {
-				relation: 0,
-				score: 1,
-				signals_in_market: 1,
-				delay_bars: 0,
-				signals: [
-					{
-						sentimentIndicator: '',
-						technicalIndicator: '',
-						riskIndicator: '',
-						symbolIndicator: '',
-						usersOwnIndicator: ''
-					}
-				]
-			}
-		}
-		state.usersOwnEntryFileHash = Array(5).fill('')
-		state.usersOwnExitFileHash = Array(5).fill('')
-		state.frequencyArray = new Map()
 	},
 	saveCondition(state, obj) {
 		debugger
@@ -464,13 +379,30 @@ const mutations = {
 	initialBacktestInfo(state) {
 		state.backtestInfo = {
 			entry_description: [],
+			entry2_description: [],
 			exit_description: [],
+			exit2_description: [],
 			description: '',
 			direction: 'Long',
 			frequency: 'Daily',
+			backtest_period: '21',
 			entry: {
-				relation: 0,
 				score: 1,
+				relation: 0,
+				signals_in_market: 1,
+				delay_bars: 0,
+				signals: [
+					{
+						sentimentIndicator: '',
+						technicalIndicator: '',
+						usersOwnIndicator: '',
+						symbolIndicator: ''
+					}
+				]
+			},
+			entry2: {
+				score: 1,
+				relation: 0,
 				signals_in_market: 1,
 				delay_bars: 0,
 				signals: [
@@ -496,44 +428,24 @@ const mutations = {
 						usersOwnIndicator: ''
 					}
 				]
-			}
+			},
+			exit2: {
+				relation: 0,
+				score: 1,
+				signals_in_market: 1,
+				delay_bars: 0,
+				signals: [
+					{
+						sentimentIndicator: '',
+						technicalIndicator: '',
+						riskIndicator: '',
+						symbolIndicator: '',
+						usersOwnIndicator: ''
+					}
+				]
+			},
 		}
-		state.backtestInfo.entry = {
-			score: 1,
-			relation: 0,
-			signals_in_market: 1,
-			delay_bars: 0,
-			signals: [
-				{
-					sentimentIndicator: '',
-					technicalIndicator: '',
-					usersOwnIndicator: '',
-					symbolIndicator: ''
-				}
-			]
-		}
-		state.backtestInfo.exit = {
-			relation: 0,
-			score: 1,
-			signals_in_market: 1,
-			delay_bars: 0,
-			signals: [
-				{
-					sentimentIndicator: '',
-					technicalIndicator: '',
-					riskIndicator: '',
-					symbolIndicator: '',
-					usersOwnIndicator: ''
-				}
-			]
-		}
-		state.backtestInfo.entry_description = []
-		state.backtestInfo.exit_description = []
 		state.frequencyArray = new Map()
-	},
-	clearStoreDesciption(state) {
-		state.backtestInfo.entry_description = []
-		state.backtestInfo.exit_description = []
 	},
 	clearBacktestUuid(state) {
 		if (state.backtestInfo.old_uuid) {
@@ -556,9 +468,6 @@ const mutations = {
 
     state.backtestInfo[obj.criteria].signals[obj.index] = newSignal[obj.criteria];
 	},
-	reduceSignalLength(state, obj) {
-		state.backtestInfo[obj.criteria].signals.splice(obj.index, 1)
-	},
 	saveScoreValue(state, obj) {
 		state.backtestInfo[obj.criteria].score = Number(obj.value)
 	},
@@ -578,34 +487,12 @@ const mutations = {
 	getRunBacktestData(state, row) {
 		state.favoriteBacktestRowData = row
 	},
-	getRunBacktestAllResult(state, list) {
-		state.favoriteBacktestData = list
-	},
-	getStrategyId(state, id) {
-		state.strategyId = id
-	},
-	getEntryIndicatorRadio(state, val) {
-		state.entryIndicatorRadio = val
-	},
-	getExitIndicatorRadio(state, val) {
-		state.exitIndicatorRadio = val
-	},
-	saveCondictionData(state, val) {
-		state.saveConditionFormdata = val
-	},
-	moveSignal(state, val) {
-		state.backtestInfo[val]['signals'].slice(state.tabIndex, 1)
-	},
 	isRiskControl(state, val) {
 		state.riskControl = val
 	},
 	saveUsersOwnFileHash(state, obj) {
 		let {index, val, criteriaCF} = obj
 		state[`usersOwn${criteriaCF}FileHash`][index] = val
-	},
-	saveUserUploadFileContent(state, obj) {
-		console.log('文件上传成功', obj)
-		state.userUploadFileContent[obj.index] = obj.val
 	},
 	STORE_BACKTESTRESULT: (state, val) => {
 		state.backtestResult = val
@@ -628,14 +515,6 @@ const mutations = {
 	setFreqencyLP(state, obj) {
 		const key = obj.key
 		state.frequencyArray.set(key, obj)
-	},
-	GET_END_DATE(state, that) {
-		// 设置 end_date 和 start_date
-		let end_date = timestampToTime(new Date())
-		let backtest_period = state.bd.backtest_period
-		const str = end_date.split('-')
-		str[0] = Number(str[0]) - Number(backtest_period) + ''
-		state.bd.start_date = str.join('-')
 	},
 	RESULT_DATA_FOR_SETUP_DISPLAY(state, obj) {
 		console.log('缓存了 row 数据', obj)
@@ -684,12 +563,6 @@ const mutations = {
 }
 
 const actions = {
-	store_backtestResult({ commit }, val) {
-		return new Promise(resolve => {
-			commit('STORE_BACKTESTRESULT', val)
-			resolve()
-		})
-	},
 	reset_chart_config_state({ commit }) {
 		return new Promise(resolve => {
 			// 清空chartiq图表配置
