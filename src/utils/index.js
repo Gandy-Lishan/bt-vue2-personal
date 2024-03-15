@@ -247,4 +247,13 @@ const getTokenRole = () => {
   return 'None'
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros}
+const getPropertyByString = (obj, propString) => {
+  // 设个假数据先
+  if(propString == 'aapl'){
+      return obj[propString]?.Close
+  }else{
+      return obj.Close
+  }
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString}
