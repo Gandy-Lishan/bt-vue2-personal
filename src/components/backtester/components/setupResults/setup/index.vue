@@ -560,6 +560,7 @@ export default {
 			if(!data.id) return
 			let _this = this
 			const {strategy} = data
+			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
 
 			/*
@@ -602,10 +603,12 @@ export default {
 			await processCriteria('entryChild1', displayData.entry, 'entry');
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
+				debugger
 				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
 
 			const processExit = async (childRef, exitData, childName) => {
+				debugger
 				displayData[childName] = parseJsonIfNeeded(exitData);
 				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
 				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
@@ -620,6 +623,8 @@ export default {
 			};
 
 			await processExit('exitChild1', displayData.exit, 'exit');
+
+			debugger
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
 				await processExit('exitChild2', displayData.exit2, 'exit2');

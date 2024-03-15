@@ -578,7 +578,7 @@ export default {
 		/* 用于自动填充 user custom indicators file */
   	eventBus.$on(`userFileSelect`, this.userFileSelect)
 		 // 在 created 钩子中根据 criteria 计算 relation 的初始值
-		if (this.criteria === 'entry') {
+		if (this.criteriaNum.startsWith('entry')) {
       this.relation = 1;
 		} else {
 			this.relation = 0;
@@ -588,7 +588,7 @@ export default {
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			if (this.criteria === 'entry') {
+			if (this.criteriaNum.startsWith('entry')) {
 				this.relation = 1;
 			} else {
 				this.relation = 0;
@@ -697,7 +697,7 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
-				let criteria = this.criteria
+				let criteria = this.criteriaNum
 				// 移除senti indicator附属ma
 				let techList = this.$store.state.chart.formateTechnicalList
 				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
@@ -1205,7 +1205,7 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-			let criteria = this.criteria
+			let criteria = this.criteriaNum
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 
 			for (let i = 0; i < num - 1; i++) {
@@ -1257,7 +1257,7 @@ export default {
 			})
 		},
 		setEditData(data) {
-			let criteria = this.criteria
+			let criteria = this.criteriaNum
 			let length = data[criteria].signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
