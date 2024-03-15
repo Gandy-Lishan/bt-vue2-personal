@@ -266,14 +266,15 @@ export const CommonMethodsMixin = {
 				start_date: row.start_date.replace(/-/g, '') * 1000000000,
 				end_date: row.end_date.replace(/-/g, '') * 1000000000
 			})
-
+			const {strategy} = row
 			const content = CIQ.exportEx()
-			const csvObj = {
-				id: row.id,
+			let csvObj = {
+				uuid: row.id,
 				csv: content,
 				entry: row.entry,
-				exit: row.exit
-			}
+				exit: row.exit,
+				...(strategy === 'Dual' && row.entry2 && row.exit2 ? { entry2: row.entry2, exit2: row.exit2 } : {})
+			};
 			this.$store.commit('form/setHashTable', csvObj)
 			// 暂时设置成成功
 			this.$store.state.form.last_signal_array.map(item => {
@@ -341,6 +342,7 @@ export const CommonMethodsMixin = {
 			return res.data.data
 		},
 		async rerunThisBacktest(backtestInfo) {
+			const { strategy, entry_description, exit_description, entry2_description, exit2_description } = backtestInfo
 			CIQ.addCover('Fetching backtest information...')
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
@@ -358,14 +360,12 @@ export const CommonMethodsMixin = {
 			backtestInfo.favorites = backtestInfo.hasOwnProperty('favorites')
 				? backtestInfo.favorites
 				: false
-			const entry_description = backtestInfo.entry_description
-			const exit_description = backtestInfo.exit_description
-			backtestInfo.entry_description = Array.isArray(entry_description)
-				? JSON.stringify(entry_description)
-				: entry_description
-			backtestInfo.exit_description = Array.isArray(exit_description)
-				? JSON.stringify(exit_description)
-				: exit_description
+				backtestInfo.entry_description = Array.isArray(entry_description) ? JSON.stringify(entry_description) : entry_description;
+				backtestInfo.exit_description = Array.isArray(exit_description) ? JSON.stringify(exit_description) : exit_description;
+				if(strategy === 'Dual') {
+					backtestInfo.entry2_description = Array.isArray(entry2_description) ? JSON.stringify(entry2_description) : entry2_description;
+					backtestInfo.exit2_description = Array.isArray(exit2_description) ? JSON.stringify(exit2_description) : exit2_description;
+				}
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
 			const backtest_period = backtestInfo.backtest_period
@@ -984,15 +984,17 @@ export const CommonMethodsMixin = {
 		},
 		reloadData(data, freq) {
 			if (isJson(data)) data = JSON.parse(data)
+			const {strategy} = data
 			let frequency = ''
-			this.$store.commit(
-				'chart/getEntryIndicatorsList',
-				data.formIndicators.entry
-			)
-			this.$store.commit(
-				'chart/getExitIndicatorsList',
-				data.formIndicators.exit
-			)
+			const commitIndicators = (criteria, list) => {
+				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+			};
+			commitIndicators('entry', data.formIndicators.entry);
+			commitIndicators('exit', data.formIndicators.exit);
+			if(strategy === 'Dual') {
+					commitIndicators('entry2', data.formIndicators.entry2);
+					commitIndicators('exit2', data.formIndicators.exit2);
+			}
 			this.$store.commit('chart/getExtraIndicators', [])
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息

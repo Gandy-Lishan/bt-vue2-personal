@@ -9,7 +9,9 @@ const state = {
 	conditionRadio: {
 		//form
 		entry: new Array(5).fill(''),
-		exit: new Array(5).fill('')
+		exit: new Array(5).fill(''),
+		entry2: new Array(5).fill(''),
+		exit2: new Array(5).fill(''),
 	},
 	maRadio: '', //form
 	stMaPeriod: '', //form
@@ -618,14 +620,7 @@ const mutations = {
 		state.run_all_backtest_array = val
 	},
 	setHashTable(state, obj) {
-		const value = {
-			uuid: obj.id,
-			csv: obj.csv,
-			entry: obj.entry,
-			exit: obj.exit
-		}
-		state.hashTable.push(value)
-		console.log('setHashTable', state.hashTable)
+		state.hashTable.push(obj)
 	},
 	clearHashTable(state) {
 		state.hashTable = []

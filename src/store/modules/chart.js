@@ -146,7 +146,11 @@ const mutations = {
 	 * store a list of entry indicators
 	 */
 	getEntryIndicatorsList(state, list) {
-		state.indicators.formIndicators.entry = list
+		state.indicators.formIndicators[state.criteria] = list
+	},
+	getCriteriaIndicatorsList(state, obj) {
+		let {criteria, list} = obj
+		state.indicators.formIndicators[criteria] = list
 	},
 	getExitIndicators(state, obj) {
 		let { index, value } = obj
