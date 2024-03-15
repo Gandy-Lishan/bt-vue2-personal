@@ -64,6 +64,8 @@ let __st_js_utils_ = (_exports) => {
     };
 
     CIQ.setPanelHeight = function (indicatorList) {
+        if(!CIQ.chartBox) return
+
         var indicatorHeight = indicatorList.length <= 1
             ? 200
             : indicatorList.length <= 2
