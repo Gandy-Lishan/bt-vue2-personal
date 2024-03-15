@@ -530,13 +530,10 @@ export function findLastSignalApi(data) {
 	const headers = {
 		'Content-Type': 'application/json'
 	}
-	let csv = data.csv
-	// csv = csv.replace(/\n/g, ",");
 	const formData = new FormData()
-	formData.append('uuid', data.uuid)
-	formData.append('csv', csv)
-	formData.append('entry', data.entry)
-	formData.append('exit', data.exit)
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, { headers, withCredentials: true })
