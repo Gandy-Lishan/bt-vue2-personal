@@ -560,6 +560,7 @@ export default {
 			if(!data.id) return
 			let _this = this
 			const {strategy} = data
+			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
 
 			/*
@@ -568,6 +569,12 @@ export default {
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
 			let displayData = _this.$store.getters.rowDataForDisplay
+			/* lishan 在这里修改数据, 检查展示有无问题 */
+			displayData.strategy = 'Dual'
+			displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
+			displayData.exit2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/4/0.5"}],"cond":[{"newCondition":4,"conditionPeriod":"21"}]}
+			displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
+			displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
 			if(!hasEntryOrExit) {
 				const res = await seeParams(data.id)
@@ -602,10 +609,12 @@ export default {
 			await processCriteria('entryChild1', displayData.entry, 'entry');
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
+				debugger
 				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
 
 			const processExit = async (childRef, exitData, childName) => {
+				debugger
 				displayData[childName] = parseJsonIfNeeded(exitData);
 				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
 				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
@@ -620,6 +629,8 @@ export default {
 			};
 
 			await processExit('exitChild1', displayData.exit, 'exit');
+
+			debugger
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
 				await processExit('exitChild2', displayData.exit2, 'exit2');

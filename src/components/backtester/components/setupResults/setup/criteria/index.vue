@@ -439,7 +439,7 @@ import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
-import {searchKeys, isJson} from '@/utils'
+import {searchKeys, isJson, capitalizeFirstLetter} from '@/utils'
 export default {
   name: 'Criteria',
   inheritAttrs: false,
@@ -566,7 +566,7 @@ export default {
 			}
 		},
     isRiskControlState(val) {
-			if(!val && this.criteria == 'exit') {
+			if(!val && this.criteriaNum.startsWith('exit')) {
 				if(this.relation == 0) {
 				this.relation = 1
 				this.changeRelation(this.relation)
@@ -578,7 +578,7 @@ export default {
 		/* 用于自动填充 user custom indicators file */
   	eventBus.$on(`userFileSelect`, this.userFileSelect)
 		 // 在 created 钩子中根据 criteria 计算 relation 的初始值
-		if (this.criteria === 'entry') {
+		if (this.criteriaNum.startsWith('entry')) {
       this.relation = 1;
 		} else {
 			this.relation = 0;
@@ -588,7 +588,7 @@ export default {
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			if (this.criteria === 'entry') {
+			if (this.criteriaNum.startsWith('entry')) {
 				this.relation = 1;
 			} else {
 				this.relation = 0;
@@ -697,7 +697,7 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
-				let criteria = this.criteria
+				let criteria = this.criteriaNum
 				// 移除senti indicator附属ma
 				let techList = this.$store.state.chart.formateTechnicalList
 				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
@@ -871,8 +871,8 @@ export default {
 				const freqObj = {
 					index: 0,
 					value: freqVal,
-					criteria: this.criteria,
-					key: `${this.criteria}_0`,
+					criteria: this.criteriaNum,
+					key: `${this.criteriaNum}_0`,
 					relation: 1
 				}
 				this.setFrequencyArray(freqObj)
@@ -888,16 +888,16 @@ export default {
 				// 移除senti indicator附属ma
 				var activatedMAList = this.$store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter((item)=>
-					item.criteria == this.criteria &&
+					item.criteria == this.criteriaNum &&
 					item.index == 0
 				)
 				this.$store.commit('chart/getMA', activatedMAList)
 
-				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteria]
+				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteriaNum]
 				this.$store.commit(`chart/get${this.criteriaCapFirstL}IndicatorsList`, [indicatorList[0], ...(new Array(4).fill(''))])
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(this.criteria)
+				CIQ.keepTheFirstMALayout(this.criteriaNum)
 
 				CIQ.addIndicators({})
 			}
@@ -936,15 +936,15 @@ export default {
 					const freqObj = {
 						index: 0,
 						value: 'Daily',
-						criteria: this.criteria,
-						key: `${this.criteria}_0`,
+						criteria: this.criteriaNum,
+						key: `${this.criteriaNum}_0`,
 						relation: 0
 					}
 					this.setFrequencyArray(freqObj)
 					
 					//When removing the exit criteria, update the vuex status
 					// 移除senti indicator附属ma
-					const oppositeCriteria = this.criteria == 'entry' ? 'exit' : 'entry'
+					const oppositeCriteria = this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum
 					var activatedMAList = this.$store.state.chart.activatedMA
 					activatedMAList = activatedMAList.filter((item)=>
 						item.criteria == oppositeCriteria
@@ -967,7 +967,7 @@ export default {
 				}
 			this.$store.commit(`form/clear${this.criteriaCapFirstL}SignalArr`)
 			this.$store.commit('form/saveRelation', {
-				criteria: this.criteria,
+				criteria: this.criteriaNum,
 				value: this.relation
 			})
 		},
@@ -988,7 +988,7 @@ export default {
 			}
 		},
 		isSameSignal() {
-			const description = this.$store.state.form.backtestInfo[`${this.criteria}_description`]
+			const description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
 			if (isJson(description)) {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
       }
@@ -1002,7 +1002,7 @@ export default {
 					for (let n = 0; n < sameItem.length; n++) {
 						str += 'Condition' + Number(sameItem[n]) + ' '
 					}
-					this.popUpMsgBox(`The current ${this.criteria} ${str} are the same, please change`)
+					this.popUpMsgBox(`The current ${this.criteriaNum} ${str} are the same, please change`)
 					return false
         	}
 			}
@@ -1038,7 +1038,7 @@ export default {
 						if (!senti) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = senti)
 					}
@@ -1048,7 +1048,7 @@ export default {
 						if(!symbol) {
 						_this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						} 
 						return (checked = symbol)
 					}
@@ -1061,7 +1061,7 @@ export default {
 						if (!cci) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = cci)
 					}
@@ -1074,7 +1074,7 @@ export default {
 						if (!macd) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = macd)
 					}
@@ -1087,7 +1087,7 @@ export default {
 						if (!ma) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = ma)
 					}
@@ -1100,7 +1100,7 @@ export default {
 						if (!eft) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = eft)
 					}
@@ -1113,7 +1113,7 @@ export default {
 						if (!adx) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = adx)
 					}
@@ -1127,7 +1127,7 @@ export default {
 						if (!aligator) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = aligator)
 					}
@@ -1140,7 +1140,7 @@ export default {
 						if (!lrf) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = lrf)
 					}
@@ -1153,7 +1153,7 @@ export default {
 						if (!blb) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = blb)
 					}
@@ -1167,7 +1167,7 @@ export default {
 						if (!smi) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = smi)
 					}
@@ -1180,7 +1180,7 @@ export default {
 						if (!eri) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = eri)
 					}
@@ -1194,7 +1194,7 @@ export default {
 						if (!ts) {
 							this.popUpMsgBox(`Please check that the #
 									${index + 1}
-									${this.criteria} panel field is filled in correctly`)
+									${this.criteriaNum} panel field is filled in correctly`)
 						}
 						return (checked = ts)
 					}
@@ -1205,7 +1205,7 @@ export default {
 			})
 		},
 		setEditPanel(num, data) {
-			let criteria = this.criteria
+			let criteria = this.criteriaNum
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 
 			for (let i = 0; i < num - 1; i++) {
@@ -1257,7 +1257,7 @@ export default {
 			})
 		},
 		setEditData(data) {
-			let criteria = this.criteria
+			let criteria = this.criteriaNum
 			let length = data[criteria].signals.length
 			for (let j = 0; j < length; j++) {
 				this.$refs.indiChild[j].setEditData(data)
@@ -1331,7 +1331,7 @@ export default {
 			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
 			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
 			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
-			const oppositeCriteria = _this.criteria == 'entry' ? 'Exit' : 'Entry'
+			const oppositeCriteria = capitalizeFirstLetter(_this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum)
 			const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][data.index]
 			console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
 			if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)

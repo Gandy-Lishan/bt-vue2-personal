@@ -434,6 +434,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
+      debugger
       this.isROCLike = 5 <= val && val <= 10
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
@@ -489,6 +490,7 @@ export default {
       this.$refs.sentiForm.clearValidate()
     },
     setDesciption(index) {
+      debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
@@ -899,6 +901,7 @@ export default {
     },
     setEditData(newVal) {
       if (JSON.stringify(newVal) != '{}') {
+        debugger
         let obj = newVal[this.criteria].signals[this.panelIndex]
         if(typeof obj == 'string') return
         // test在samebar(relation 2/3)的情况下
