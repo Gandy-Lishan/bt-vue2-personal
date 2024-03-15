@@ -202,21 +202,21 @@ const mutations = {
 			exitPanel1 = state.frequencyArray.get(obj.key).value
 		}
 		state.frequencyArray.set(key, obj)
-		let freqEntryArray = new Array(5).fill('')
-		let freqExitArray = new Array(5).fill('')
+		let freqEntryArray = new Array(10).fill('')
+		let freqExitArray = new Array(10).fill('')
 		for (let obj of state.frequencyArray.values()) {
 			if (obj.criteria.startsWith('entry')) {
-				freqEntryArray[obj.index] = obj.value
+				freqEntryArray.push(obj.value)
 			}
 			if (obj.criteria.startsWith('exit')) {
-				freqExitArray[obj.index] = obj.value
+				freqExitArray.push(obj.value)
 			}
 		}
 		if (relation === 0 && criteria.startsWith('exit')) freqExitArray = []
 		if (relation === 1 && criteria.startsWith('exit'))
-			freqExitArray = [exitPanel1, ...new Array(4).fill('')]
+			freqExitArray = [exitPanel1, ...new Array(9).fill('')]
 		if (relation === 1 && criteria.startsWith('entry'))
-			freqEntryArray = [entryPanel1, ...new Array(4).fill('')]
+			freqEntryArray = [entryPanel1, ...new Array(9).fill('')]
 
 		freqEntryArray = freqEntryArray.filter(
 			item => item !== null && item !== undefined && item !== ''

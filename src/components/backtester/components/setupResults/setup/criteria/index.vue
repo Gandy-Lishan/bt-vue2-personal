@@ -873,7 +873,7 @@ export default {
 					value: freqVal,
 					criteria: this.criteriaNum,
 					key: `${this.criteriaNum}_0`,
-					relation: 1
+					relation: this.relation
 				}
 				this.setFrequencyArray(freqObj)
 				try {
