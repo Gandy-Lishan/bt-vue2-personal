@@ -813,7 +813,7 @@ export default {
       bd: {
         name: '',
         symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
-        symbol2: 'SPX',
+        symbol2: 'AAPL',
         benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Signal',
         capital: 100000.0,
@@ -1165,7 +1165,23 @@ export default {
       CIQ.addSymbol(val)
     },
     getSymbol2(val) {
-      // 先空着
+      // 当getSymbol2在父组件调用时设当前组件的symbol2值
+      if(!val){
+        val = this.bd.symbol2
+      }
+      
+      let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==val)
+      let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==val)
+      if(!stockName && !indexName){
+          return
+      }
+
+      this.$store.commit('form/setComparisonSymbol', {
+        name:stockName?stockName.name:indexName.name,
+        url:stockName?stockName.stock:indexName.symbol,
+      })
+
+      CIQ.addIndicators({})
     },
     getBTDate() {
       this.bd.end_date = timestampToTime(new Date())
@@ -1361,7 +1377,6 @@ export default {
       };
 
       this.bdFormLabel = val === 'Signal' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
-      this.$emit('changeStrategy', val);
       const isRiskControl = val === 'Signal';
       this.$emit('IsRiskControl', isRiskControl);
       this.$store.commit('form/isRiskControl', isRiskControl);

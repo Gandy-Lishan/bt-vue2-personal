@@ -130,10 +130,18 @@ const state = {
 		percentage: 0,
 		progressText: 'Loading...'
 	}, // 控制 results 的 loading 状态
-	backtestZScoreResult: []
+	backtestZScoreResult: [],
+	comparisonSymbol: {},
 }
 
 const mutations = {
+	/**
+	 * set a backtest symbol2 as comparison
+	 */
+	setComparisonSymbol(state, val) {
+		state.comparisonSymbol = val
+	},
+
 	/**
 	 * Sets up a mutations to restore the timeframe of selected backtest
 	 */

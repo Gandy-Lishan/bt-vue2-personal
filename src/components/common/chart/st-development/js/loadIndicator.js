@@ -79,7 +79,13 @@
             CIQ.nprogress.start()
         }
 
-        let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
+        let indicatorsList = [
+            ...CIQ.store.state.chart.indicators.formIndicators.entry,
+            ...CIQ.store.state.chart.indicators.formIndicators.exit,
+            ...CIQ.store.state.chart.indicators.formIndicators.entry2,
+            ...CIQ.store.state.chart.indicators.formIndicators.exit2
+        ]
+
         // remove redundant elements and empty string
         for(var i=0;i<indicatorsList.length;i++){
             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
@@ -151,17 +157,21 @@
                     var series=stx.chart.series[s];
                     stx.removeSeries(series);
                 }
-                stx.addSeries('aapl', {
-                    display:'AAPL', 
-                    isComparison: false, 
-                    color: "#368DF0",
-                    permanent: true,
-                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
-                    yAxis:{ 
-                        position:"left",
-                        textStyle:"#FFBE00"
-                    },
-                });
+                const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+                if(comparisonSymbol.url){
+                    
+                    stx.addSeries(comparisonSymbol.url, {
+                        display:comparisonSymbol.name, 
+                        isComparison: false, 
+                        color: "#368DF0",
+                        permanent: true,
+                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
+                        yAxis:{ 
+                            position:"left",
+                            textStyle:"#FFBE00"
+                        },
+                    });
+                }
 
             // fetch indicator information and add studies to chart
             /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
