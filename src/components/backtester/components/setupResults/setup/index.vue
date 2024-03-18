@@ -26,7 +26,7 @@
 			</div>
 		</el-tab-pane>
     <el-tab-pane label="Symbol(2)" name="second" class="symbol-pane">
-			<div class="criteria-container">
+			<div class="criteria-container" v-show="strategy === 'Dual'">
 				<Criteria
 					class="criteria"
 					ref="entryChild2"
