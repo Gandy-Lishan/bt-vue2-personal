@@ -608,11 +608,11 @@ export default {
 			*/
 			let displayData = _this.$store.getters.rowDataForDisplay
 			/* lishan 在这里修改数据, 检查展示有无问题 */
-			displayData.strategy = 'Dual'
-			displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
-			displayData.exit2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/4/0.5"}],"cond":[{"newCondition":4,"conditionPeriod":"21"}]}
-			displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
-			displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
+			// displayData.strategy = 'Dual'
+			// displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
+			// displayData.exit2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/4/0.5"}],"cond":[{"newCondition":4,"conditionPeriod":"21"}]}
+			// displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
+			// displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
 			if(!hasEntryOrExit) {
 				const res = await seeParams(data.id)
