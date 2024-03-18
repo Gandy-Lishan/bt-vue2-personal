@@ -563,6 +563,19 @@ export default {
 				'index_moving_average_slope',
 				'opted'
 			]
+			if(!shouldAddExtraProperty) {
+				const propertiesToDelete = [
+          'entry2', 
+          'exit2',
+          'direction2',
+          'symbol2',
+          'entry2_description',
+          'exit2_description'
+        ]
+        propertiesToDelete.forEach(property => {
+          delete backtestInfo[property];
+        })
+			}
 			console.log('backtestInfo', backtestInfo)
 			if(shouldAddExtraProperty) selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
 			let backtestParams = Object.assign(
