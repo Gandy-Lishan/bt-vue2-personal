@@ -21,13 +21,27 @@
     // lishan 仅仅用于上传 csv json 文件
     CIQ.stxx.resizeChart();
     CIQ.stxx.draw();
+    
     let csvContent = CIQ.exportEx();
+    let csvContent2
+    // dual symbol
+    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+    if(comparisonSymbol.url){
+        csvContent2 = CIQ.exportEx2(comparisonSymbol.name);
+    }
     console.log("csvContent created Success");
+
     let promise = 200
     try {
       let S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
       let data = await uploadS3(S3DataStr)
       console.log("Upload csv Success", data);
+
+      if(csvContent2){
+        let S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent })
+        let data2 = await uploadS3(S3DataStr2)
+        console.log("Upload csv2 Success", data2);
+      }
       promise = 200
     } catch (error) {
       console.log("Error", error);
@@ -187,12 +201,26 @@
                  * outputSignalsResult只保留csv 生成和upload逻辑 */
                 stx.resizeChart();
                 stx.draw();
-                var csvContent = CIQ.exportEx();
+                var csvContent = CIQ.exportEx()
+                var csvContent2
+                // dual symbol
+                if(comparisonSymbol.url){
+                    csvContent2 = CIQ.exportEx2(comparisonSymbol.name);
+                }
+
+                debugger
                 var promise = 200
                 try {
                   var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
                   var data = await uploadS3(S3DataStr)
                   console.log("Upload csv Success", data);
+
+                  // dual symbol
+                  if(csvContent2){
+                    var S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
+                    var data2 = await uploadS3(S3DataStr2)
+                    console.log("Upload csv2 Success", data2);
+                  }
                   promise = 200
                 } catch (error) {
                   console.log("Error", error);

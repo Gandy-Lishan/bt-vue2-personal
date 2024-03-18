@@ -798,6 +798,7 @@ export default {
         criteria: this.criteria,
         index: this.panelIndex
       })
+      debugger
       // 解决附属ma或者roc漂移问题
       CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 
