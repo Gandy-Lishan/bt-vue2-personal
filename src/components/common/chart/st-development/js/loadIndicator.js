@@ -27,7 +27,7 @@
     // dual symbol
     const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
     if(comparisonSymbol.url){
-        csvContent2 = CIQ.exportEx2(comparisonSymbol.name);
+        csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
     }
     console.log("csvContent created Success");
 
@@ -205,7 +205,7 @@
                 var csvContent2
                 // dual symbol
                 if(comparisonSymbol.url){
-                    csvContent2 = CIQ.exportEx2(comparisonSymbol.name);
+                    csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
                 }
 
                 debugger
