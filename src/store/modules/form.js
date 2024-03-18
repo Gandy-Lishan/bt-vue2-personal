@@ -165,6 +165,7 @@ const mutations = {
 		state.pairDataFreq = ''
 		state.backtestSymbol = process.env.VUE_APP_DEFAULT_SYMBOL
 		state.exitFrequency = ''
+		state.comparisonSymbol = {}
 	},
 	/**
 	 * no bug occurs, however, the logic inside is confusing

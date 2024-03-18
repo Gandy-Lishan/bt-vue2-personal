@@ -583,7 +583,7 @@ export default {
 			)
 			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 			this.setSetUpLoadingSetting(true, true, 30, 'Processing saved backtest information...')
-			this.reloadData(indicatorLayout, backtestInfo.frequency)
+			this.reloadData(indicatorLayout, backtestInfo.frequency, backtestInfo)
 			// 1. Upload data file
 			// 2. Upload parameter file
 			// 3. Judge the file upload status. If an error is reported, run back test will not be performed

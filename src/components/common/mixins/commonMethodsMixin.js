@@ -232,7 +232,7 @@ export const CommonMethodsMixin = {
 		async loopAllFavorites() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
 				const item = this.favorite_array[i]
-				this.reloadData(item.indicator_layout, item.frequency)
+				this.reloadData(item.indicator_layout, item.frequency, item)
 				await CIQ.addIndicators({type:'loadFromBacktest'},() => {})
 				await this.loopCalculateNewConditions(item)
 				this.uploadCSVWhileFLS(item)
@@ -475,7 +475,7 @@ export const CommonMethodsMixin = {
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
-			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
+			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency, backtestInfo)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
 				selectedBacktestInfo
@@ -977,7 +977,7 @@ export const CommonMethodsMixin = {
 				})
 				this.loading = false
 			} else {
-				this.reloadData(data, freq)
+				this.reloadData(data, freq, row)
 				await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 					this.$store.commit('form/getRunBacktestData', row)
 					this.$router.push({
@@ -991,7 +991,7 @@ export const CommonMethodsMixin = {
 		},
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			const that = this
-			that.reloadData(data, freq)
+			that.reloadData(data, freq, row)
 			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
 
@@ -1004,18 +1004,31 @@ export const CommonMethodsMixin = {
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	
 		},
-		reloadData(data, freq) {
+		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)
-			const {strategy} = data
+			let {strategy, symbol2} = row
 			let frequency = ''
 			const commitIndicators = (criteria, list) => {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
+			const commitSymbol2 = (symbol2) => {
+				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.name==symbol2)
+				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.name==symbol2)
+				if(!stockName && !indexName){
+					return
+				}
+		  
+				this.$store.commit('form/setComparisonSymbol', {
+				  name:symbol2,
+				  url:stockName?stockName.stock:indexName.symbol,
+				})
+			}
 			commitIndicators('entry', data.formIndicators.entry);
 			commitIndicators('exit', data.formIndicators.exit);
 			if(strategy === 'Dual') {
 					commitIndicators('entry2', data.formIndicators.entry2);
 					commitIndicators('exit2', data.formIndicators.exit2);
+					commitSymbol2(symbol2)
 			}
 			this.$store.commit('chart/getExtraIndicators', [])
 			this.$store.commit('chart/getMA', data.activatedMA)
