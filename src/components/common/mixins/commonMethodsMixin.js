@@ -268,6 +268,7 @@ export const CommonMethodsMixin = {
 			})
 			const {strategy} = row
 			const content = CIQ.exportEx()
+			/** todo: 这里需要加双股票么 */
 			let csvObj = {
 				uuid: row.id,
 				csv: content,

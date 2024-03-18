@@ -263,7 +263,6 @@ export default {
 			})
 		},
 		async runBacktest() {
-			debugger
 			const _this = this
 			const basicErr = await _this.$refs['basicInfo'].saveData()
 			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, ''); return}
