@@ -223,7 +223,8 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             if(restoreFreq != ''){
                 selectedFreq = restoreFreq
             }
-            CIQ.store.commit('form/setRestoreFreq', '')
+            /** dual symbol, setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
+            // CIQ.store.commit('form/setRestoreFreq', '')
             
             // setFreq firstly called when loading aapl symbol during chart initiation, the value is daily by default
             CIQ.store.commit('form/setFreqency',selectedFreq)
