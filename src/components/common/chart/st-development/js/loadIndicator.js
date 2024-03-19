@@ -172,8 +172,9 @@
         await new Promise((resolve) => {
             stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+                
                 if(comparisonSymbol.url){
-                   console.log(CIQ.store.state.form)
+                   
                     /** dual symbol */
                     stx.addSeries(comparisonSymbol.url, {
                         display:comparisonSymbol.name, 
@@ -187,6 +188,8 @@
                         },
                     });
                 }
+                /** dual symbol,setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
+                CIQ.store.commit('form/setRestoreFreq', '')
 
             // fetch indicator information and add studies to chart
             /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
