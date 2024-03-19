@@ -3128,8 +3128,8 @@ CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
 	div.attributes.stxtap.nodeValue = 'SentimentLook.delSymbolCookie()'
 
 	// filter redundant items
-	if (favoriteSymbolList.indexOf(CIQ.symbol) === -1) {
-		favoriteSymbolList.push(CIQ.symbol)
+	if (favoriteSymbolList.indexOf(CIQ.stxx.chart.symbol) === -1) {
+		favoriteSymbolList.push(CIQ.stxx.chart.symbol)
 		//console.log('addSYmbolCookie,updateFavorite: ',favoriteSymbolList)
 		CIQ.updateFavorite(
 			JSON.stringify(favoriteIndicatorList),
@@ -3159,7 +3159,7 @@ CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function() {
 	}
 
 	for (var item in favoriteSymbolList) {
-		if (favoriteSymbolList[item] == CIQ.symbol) {
+		if (favoriteSymbolList[item] == CIQ.stxx.chart.symbol) {
 			favoriteSymbolList.splice(item, 1)
 		}
 	}

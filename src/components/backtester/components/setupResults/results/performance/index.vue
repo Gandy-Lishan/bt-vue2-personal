@@ -250,7 +250,7 @@ export default {
     loadMarker(markerSet) {
       try {
         //load markers for initial quotefeed
-
+debugger
         let list = this.filterMarkerDate(
           new Date(CIQ.initialDate.start),
           new Date(CIQ.initialDate.end),
