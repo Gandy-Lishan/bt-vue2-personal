@@ -168,7 +168,7 @@ export default {
 				{
 					label: 'Symbol',
 					field: 'symbol',
-					width: '70px'
+					width: '80px'
 				},
 				{
 					label: 'DesExpand',
