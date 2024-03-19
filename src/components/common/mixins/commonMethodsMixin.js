@@ -1012,15 +1012,15 @@ export const CommonMethodsMixin = {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
 			const commitSymbol2 = (symbol2) => {
-				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.name==symbol2)
-				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.name==symbol2)
+				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
+				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
 				if(!stockName && !indexName){
 					return
 				}
 		  
 				this.$store.commit('form/setComparisonSymbol', {
-				  name:symbol2,
-				  url:stockName?stockName.stock:indexName.symbol,
+					name:stockName?stockName.name:indexName.name,
+					url:symbol2,
 				})
 			}
 			commitIndicators('entry', data.formIndicators.entry);
