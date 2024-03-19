@@ -163,17 +163,18 @@
         if(CIQ.store.state.form.backtestSymbol){
             CIQ.symbol = CIQ.store.state.form.backtestSymbol
         }
+        /** dual symbol:
+        * addSeire前移除当前序列,防止出现多个序列 */
+        for(var s in stx.chart.series){
+            var series=stx.chart.series[s];
+            stx.removeSeries(series);
+        }
         await new Promise((resolve) => {
             stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
-                /** dual symbol:
-                * addSeire前移除当前序列,防止出现多个序列 */
-                for(var s in stx.chart.series){
-                    var series=stx.chart.series[s];
-                    stx.removeSeries(series);
-                }
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
                 if(comparisonSymbol.url){
-                    
+                   console.log(CIQ.store.state.form)
+                    /** dual symbol */
                     stx.addSeries(comparisonSymbol.url, {
                         display:comparisonSymbol.name, 
                         isComparison: false, 
@@ -208,7 +209,6 @@
                     csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
                 }
 
-                debugger
                 var promise = 200
                 try {
                   var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })

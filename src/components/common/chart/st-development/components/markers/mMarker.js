@@ -70,11 +70,11 @@ let markerVisibilityType	//marker可见性按钮状态变量
 MarkersSample.prototype.loadDataSet = function(dataSet){
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
     
-	if(!dataSet.Symbol){
+	if(!dataSet[0].Symbol){
 		mDataSet =  dataSet
 	}else {
-		mDataSet =  dataSet.filter(item => item.Symbol == comparisonSymbol.url)
-		mDataSet2 =  dataSet.filter(item => item.Symbol == CIQ.stxx.chart.symbol)
+		mDataSet =  dataSet.filter(item => item.Symbol == CIQ.stxx.chart.symbol)
+		mDataSet2 =  dataSet.filter(item => item.Symbol == comparisonSymbol.url)
 	}	
 	console.log('为markerSet依据Symbol分类',dataSet.Symbol,CIQ.stxx.chart.symbol,comparisonSymbol,mDataSet,mDataSet2)
 },
@@ -304,10 +304,11 @@ MarkersSample.prototype.showmMarker = function () {
 	}
 
 	/** dual symbol */
+	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 
-		var datatime = new Date(mDataSet[data].DT || mDataSet[data].Date)
+		var datatime = new Date(mDataSet2[data].DT || mDataSet2[data].Date)
 		var offset = datatime.getTimezoneOffset() * 60 * 1000
 		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
 		var quote =null
@@ -355,19 +356,21 @@ MarkersSample.prototype.showmMarker = function () {
 		//if(!quote) console.log('error marker position', quote,xPosition,standardDate,high,CIQ.stxx.chart.dataSet.length - 1)
 		
 		// 绘制Marker
-		if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "BUY"){
+		const yAxisBuySell = quote[comparisonSymbol.url]?.Close
+		if(activeLabels.includes("triangle_buy") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
 			new CIQ.Marker({
 				stx: stx,
 				label: "triangle_buy",
 				xPositioner: "date",
-				yPositioner: "below_candle",
+				yPositioner: "value",
+				y:yAxisBuySell,
 				x: standardDate,
 				node: new CIQ.Marker.stPerformance({
 					type: "triangle",
-					headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
+					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'buy-2',
 					story:
-						 'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['Indicator'][0],
+						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
 					displayCategory: false,
 					displayStem: true,	
 					invert: true,
@@ -400,18 +403,20 @@ MarkersSample.prototype.showmMarker = function () {
 					});
 				}
 			}	
-		}else if(activeLabels.includes("triangle_sell") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "SELL"){
+		}else if(activeLabels.includes("triangle_sell") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
 			new CIQ.Marker({
 				stx: stx,
 				label: "triangle_sell",
 				xPositioner: "date",
+				yPositioner: "value",
+				y:yAxisBuySell,
 				x: standardDate,
 				node: new CIQ.Marker.stPerformance({
 					type: "triangle",
-					headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
+					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'sell-2',
 					story:
-						'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['Indicator'][0],
+						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
 					displayCategory: false,
 					displayStem: true,	
 					
