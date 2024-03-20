@@ -53,6 +53,7 @@ const state = {
 	miFormCategoriesIndicator2:{name:'',url:''},
 
 	miFormWeightedList: [],
+	miBenmark: process.env.VUE_APP_DEFAULT_SYMBOL,
 }
 
 const mutations = {
@@ -235,6 +236,9 @@ const mutations = {
 			percentage,
 			progressText
 		}
+	},
+	SEI_MI_BENCHMARK(state, val) {
+		state.miBenmark = val
 	},
 }
 
