@@ -13,6 +13,7 @@
 					ref="entryChild1"
 					:config="setConfig('entry')"
 					:isRiskControl="false"
+					:symbolInfo="symbolInfo"
 				>
 				</Criteria>
 				<div class="divider"></div>
@@ -21,6 +22,7 @@
 					ref="exitChild1"
 					:config="setConfig('exit')"
 					:isRiskControl="isRiskControl"
+					:symbolInfo="symbolInfo"
 				>
 				</Criteria>
 			</div>
@@ -32,6 +34,7 @@
 					ref="entryChild2"
 					:config="setConfig('entry2')"
 					:isRiskControl="false"
+					:symbolInfo="symbolInfo"
 				>
 				</Criteria>
 				<div class="divider"></div>
@@ -40,6 +43,7 @@
 					ref="exitChild2"
 					:config="setConfig('exit2')"
 					:isRiskControl="isRiskControl"
+					:symbolInfo="symbolInfo"
 				>
 				</Criteria>
 			</div>
@@ -105,7 +109,8 @@ export default {
 			isRiskControl: true,
 			isDisabled: false,
 			activeName: 'first',
-			strategy: 'Signal'
+			strategy: 'Signal',
+			symbolInfo: {}
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -121,6 +126,12 @@ export default {
 					// 说明是路由跳转过来携带参数的
 					const { data } = to.params
 					const backtestEditData = isJson(data) ? JSON.parse(data) : data
+					const {strategy, symbol, symbol2} = backtestEditData
+					_this.symbolInfo = {
+							strategy,
+							symbol,
+							symbol2
+					}
 					await _this.displaySetUpForm(backtestEditData)
 				}else {
 					// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
@@ -218,8 +229,9 @@ export default {
 		IsRiskControl(isRiskControl) {
 			this.isRiskControl = isRiskControl
 		},
-		changeStrategy(val) {
+		changeStrategy(val, obj) {
 			this.strategy = val
+      this.symbolInfo = obj
 
 			if(val == 'Signal') {
 				// 清空symbol2对应的entry2,exit2

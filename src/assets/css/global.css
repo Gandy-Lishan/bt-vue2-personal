@@ -672,3 +672,10 @@ button#checkResBtn {
   font-weight: 700;
   background: white;
 }
+
+.performance_tabs.el-tabs.el-tabs--card.el-tabs--top.Dual .el-tabs__header.is-top .el-tabs__nav-wrap.is-top .el-tabs__nav-scroll .el-tabs__nav.is-top div#tab-third {
+  display: none;
+}
+.performance_tabs.el-tabs.el-tabs--card.el-tabs--top.Dual .el-tabs__header.is-top .el-tabs__nav-wrap.is-top .el-tabs__nav-scroll .el-tabs__nav.is-top div#tab-forth {
+  display: none;
+}

@@ -1361,7 +1361,7 @@ export default {
       this.$store.commit('form/getFrequency', val)
     },
     changeStrategy(val) {
-      this.$emit('changeStrategy', val)
+      this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
       /*
       切换 Dual
       删除 exclude overlapping observation, market environment, index moving average slope, risk control

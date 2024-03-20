@@ -4,7 +4,7 @@
         <ResForm
           :backtestEditData="backtestEditData"
         />
-        <Performance ref="performanceChild"></Performance>
+        <Performance ref="performanceChild" :strategy="backtestEditData.strategy"></Performance>
      </div>
       <LoadingOverlay
         :isLoading="resultsLoadingSetting.isResultsLoading"

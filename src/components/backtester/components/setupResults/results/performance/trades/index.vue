@@ -40,6 +40,13 @@
             >
             </el-table-column>
             <el-table-column
+                prop="Symbol"
+                label="Symbol"
+                align="center"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
                 prop="EntryIndicator"
                 label="Entry Indicator"
                 align="center"
@@ -186,6 +193,7 @@ export default {
 	},
 	props: {
         tradesData: Array,
+        strategy: String
 	},
     created(){
     },
