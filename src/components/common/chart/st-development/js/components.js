@@ -1679,7 +1679,13 @@ class Comparison extends CIQ.UI.ModalTag {
 			(!context.stx.chart.symbol ||
 				context.stx.chart.symbol.toLowerCase() !== obj.symbol.toLowerCase())
 		) {
-			stx.addSeries(obj.symbol, params, cb);
+			//stx.addSeries(obj.symbol, params, cb);
+			CIQ.store.commit('form/setComparisonSymbol', {
+			  name:obj.name,
+			  url:obj.symbol,
+			})
+	  
+			CIQ.addIndicators({})
 		} else {
 			this.loading[obj.symbol] = false;
 		}

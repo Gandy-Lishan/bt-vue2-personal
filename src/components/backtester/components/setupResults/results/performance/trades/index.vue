@@ -211,7 +211,6 @@ export default {
 			handler(newValue, _){
                 const mergedData = [];
                 for (let i = 0; i < newValue.length; i += 2) {
-                    debugger
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
                     // 转换日期格式
