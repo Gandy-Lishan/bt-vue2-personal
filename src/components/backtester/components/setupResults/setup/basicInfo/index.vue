@@ -26,7 +26,7 @@
                       </label>
                     </template>
                     <div class="selectBox">
-                    <!-- Signal or Dual -->
+                    <!-- Single or Dual -->
                     <el-select
                       v-model="bd.strategy"
                       placeholder="— Select Type —"
@@ -374,7 +374,7 @@
                   </div>
                 </el-col>
                 <el-col :span="6">
-                  <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }" v-if="bd.strategy === 'Signal'">
+                  <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }" v-if="bd.strategy === 'Single'">
                     <!-- <el-form-item prop="exclude_oo"> -->
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
                       >{{ bdFormLabel['exclude_oo'] }}
@@ -456,7 +456,7 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="6">
-                  <el-form-item prop="market_environment" label="Market Environment" v-if="bd.strategy === 'Signal'">
+                  <el-form-item prop="market_environment" label="Market Environment" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
                         {{bdFormLabel['market_environment']}}
@@ -513,7 +513,7 @@
                   </div>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope" v-if="bd.strategy === 'Signal'">
+                  <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
                         {{bdFormLabel['index_moving_average_slope']}}
@@ -687,7 +687,7 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Signal'">
+                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'">
                     <div class="riskItem">
                       <el-checkbox
                         v-model="isRiskControl"
@@ -815,7 +815,7 @@ export default {
         symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         symbol2: 'AAPL',
         benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
-        strategy: 'Signal',
+        strategy: 'Single',
         capital: 100000.0,
         capital_alloc: 1.0,
         commission: 0.1,
@@ -924,7 +924,7 @@ export default {
         { value: 'Monthly', label: 'Monthly' }
       ],
 			strategyOptions: [
-        { value: 'Signal', label: 'Signal Symbol Backtest' },
+        { value: 'Single', label: 'Single Symbol Backtest' },
         { value: 'Dual', label: 'Dual Symbol Backtest' }
       ],
       tradePriceOptions: [
@@ -1376,8 +1376,8 @@ export default {
         name: '14. Backtest Name'
       };
 
-      this.bdFormLabel = val === 'Signal' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
-      const isRiskControl = val === 'Signal';
+      this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
+      const isRiskControl = val === 'Single';
       this.$emit('IsRiskControl', isRiskControl);
       this.$store.commit('form/isRiskControl', isRiskControl);
     },
@@ -1406,7 +1406,7 @@ export default {
         this.isExcludeOO = false
         this.bd.market_environment = 0
         this.bd.index_moving_average_slope = 0
-      }else if(this.bd.strategy === 'Signal') {
+      }else if(this.bd.strategy === 'Single') {
         this.bd.symbol2 = 'IWD'
         this.bd.direction2 = 'Long'
       }
