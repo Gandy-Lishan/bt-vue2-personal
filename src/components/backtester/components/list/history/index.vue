@@ -20,8 +20,7 @@ export default {
       tableCol: [
       {
           label: 'Type',
-          field: 'type',
-          width: '80px'
+          field: 'strategy'
         },
         {
           label: 'Name',

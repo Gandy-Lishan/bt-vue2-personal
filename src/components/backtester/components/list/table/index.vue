@@ -645,10 +645,10 @@ export default {
 		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
 		 */
       if (column.sortable !== 'custom') return
-      this.currentSort = {
-        prop: prop,
-        order: order,
-      };
+			this.currentSort = {
+					prop: prop,
+					order: order,
+				};
       await this.applySort()
     },
 		async applySort() {
