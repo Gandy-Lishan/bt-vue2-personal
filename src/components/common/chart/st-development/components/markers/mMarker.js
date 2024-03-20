@@ -356,26 +356,26 @@ MarkersSample.prototype.showmMarker = function () {
 		//if(!quote) console.log('error marker position', quote,xPosition,standardDate,high,CIQ.stxx.chart.dataSet.length - 1)
 		
 		// 绘制Marker
-		const yAxisBuySell = quote[comparisonSymbol.url]?.Close
+		//const yAxisBuySell = quote[comparisonSymbol.url]?.Close
 		if(activeLabels.includes("triangle_buy") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
-			new CIQ.Marker({
-				stx: stx,
-				label: "triangle_buy",
-				xPositioner: "date",
-				yPositioner: "value",
-				y:yAxisBuySell,
-				x: standardDate,
-				node: new CIQ.Marker.stPerformance({
-					type: "triangle",
-					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
-					category: 'buy-2',
-					story:
-						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
-					displayCategory: false,
-					displayStem: true,	
-					invert: true,
-				})
-			});
+			// new CIQ.Marker({
+			// 	stx: stx,
+			// 	label: "triangle_buy",
+			// 	xPositioner: "date",
+			// 	yPositioner: "value",
+			// 	y:yAxisBuySell,
+			// 	x: standardDate,
+			// 	node: new CIQ.Marker.stPerformance({
+			// 		type: "triangle",
+			// 		headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
+			// 		category: 'buy-2',
+			// 		story:
+			// 			 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+			// 		displayCategory: false,
+			// 		displayStem: true,	
+			// 		invert: true,
+			// 	})
+			// });
 
 			// 循环所有study
 			if(!quote) continue
@@ -404,24 +404,24 @@ MarkersSample.prototype.showmMarker = function () {
 				}
 			}	
 		}else if(activeLabels.includes("triangle_sell") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
-			new CIQ.Marker({
-				stx: stx,
-				label: "triangle_sell",
-				xPositioner: "date",
-				yPositioner: "value",
-				y:yAxisBuySell,
-				x: standardDate,
-				node: new CIQ.Marker.stPerformance({
-					type: "triangle",
-					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
-					category: 'sell-2',
-					story:
-						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
-					displayCategory: false,
-					displayStem: true,	
+			// new CIQ.Marker({
+			// 	stx: stx,
+			// 	label: "triangle_sell",
+			// 	xPositioner: "date",
+			// 	yPositioner: "value",
+			// 	y:yAxisBuySell,
+			// 	x: standardDate,
+			// 	node: new CIQ.Marker.stPerformance({
+			// 		type: "triangle",
+			// 		headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
+			// 		category: 'sell-2',
+			// 		story:
+			// 			'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+			// 		displayCategory: false,
+			// 		displayStem: true,	
 					
-				})
-			});
+			// 	})
+			// });
 
 			// 循环所有study
 			if(!quote) continue
