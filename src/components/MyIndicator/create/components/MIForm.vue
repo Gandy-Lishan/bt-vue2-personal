@@ -492,15 +492,13 @@ export default {
           // await this.$store.dispatch('chart/set_miFormStateChange',_data)
           // await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
-          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+          this.refreshMAState()
         }
         if(this.data.categories.includes('Symbol')){    
           this.data.indicator_1 = newVal
           this.data.indicator_1_url = newVal
 
-          this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-          this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+          this.refreshMAState()
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
@@ -549,8 +547,8 @@ export default {
      * 刷新MA状态
      */
     refreshMAState() {
-      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',true)
-      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',true)
+      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
     },
     async changeTimeFrame(item) {
       this.userSelectedTimeFrame = item
