@@ -3,7 +3,7 @@
 	<div class="criteria-box">
 		<div class="signal-option-box">
 			<div class="entry-title-box">
-				<p class="criteria-title">{{config['criteriaTitle']}}</p>
+				<p class="criteria-title">{{config['criteriaTitle']}}{{symbolInfo.strategy !== 'Dual'? '': `(${criteriaNum === 'entry' || criteriaNum === 'exit' ? symbolInfo.symbol : symbolInfo.symbol2})`}}</p>
 				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;diaplay: inline">
 					<span slot="content" v-html="config['criteriaTitleTP']">
           </span>
@@ -445,7 +445,8 @@ export default {
   inheritAttrs: false,
   props: {
     config: Object,
-		isRiskControl: Boolean
+		isRiskControl: Boolean,
+		symbolInfo: Object
   },
   components: {
     indicator,

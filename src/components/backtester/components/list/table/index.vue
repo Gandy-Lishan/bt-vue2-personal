@@ -46,6 +46,7 @@
 			style="width: 100%; height: 100%"
 			:row-class-name="tableRowClassName"
 			element-loading-background="rgba(0, 0, 0, 0.8)"
+			class="BTTable"
     >
     <el-table-column type="index" align="center">
         <template scope="scope">
@@ -123,6 +124,27 @@
 				</template>
 		</el-table-column>
     <template v-for="item in tableCol">
+			<el-table-column
+        v-if="item.label == 'Type'"
+        :prop="item.field"
+        :key="item.label"
+				:width="item.width"
+				show-overflow-tooltip
+				:sortable="item.label == 'Type' ? 'custom' : false"
+				:sort-orders="['ascending', 'descending', item.field]"
+				align="center">
+				<template slot="header">
+						Type
+								<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+								<span slot="content" v-html="typeTooltip">
+								</span>
+								<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+				</template>
+				<template slot-scope="scope">
+						{{ scope.row.strategy !== 'Dual' ? 'S' : 'D'}}
+				</template>
+      </el-table-column>
       <el-table-column
         v-if="item.label == 'Name'"
         :label="item.label"
@@ -138,12 +160,13 @@
         :prop="item.field"
         :key="item.label"
 				:width="item.width"
+				class="StrategyCol"
 				show-overflow-tooltip
 				align="center">
 				<template slot-scope="scope">
 					<div class="symbolBox">
-						<span>{{ scope.row.symbol }}</span>
-						<span v-if="scope.row.strategy === 'Dual' && scope.row.symbol2" style=""><br><br><br><br><br><br>{{scope.row.symbol2}}</span>
+						<p>{{ scope.row.symbol }}</p>
+						<p v-if="scope.row.strategy === 'Dual' && scope.row.symbol2" style="">{{scope.row.symbol2}}</p>
 					</div>
 				</template>
       </el-table-column>
@@ -151,16 +174,19 @@
 				v-if="item.label == 'Entry & Exit'"
 				:label="item.label"
 				:key="item.label"
+				class="StrategyCol"
 				align="center">
 				<template slot-scope="scope">
-					{{ scope.row.entry_description[0].commentDes }}<br />
-					<br />
-					{{ scope.row.exit_description[0].commentDes }}<br />
-					<span v-if="scope.row.strategy === 'Dual'">
-					<br/>{{ scope.row.entry2_description[0].commentDes }}<br />
-					<br />
-					{{ scope.row.exit2_description[0].commentDes }}<br />
-					</span>
+					<div class="entryAndExitBox">
+					<div class="entryExit">
+						<p>{{ scope.row.entry_description[0].commentDes }}</p>
+						<p>{{ scope.row.exit_description[0].commentDes }}</p>
+					</div>
+					<div class="entryExit" v-if="scope.row.strategy === 'Dual'">
+						<p>{{ scope.row.entry2_description[0].commentDes }}</p>
+						<p>{{ scope.row.exit2_description[0].commentDes }}</p>
+					</div>
+					</div>
 				</template>
 			</el-table-column>
 			<el-table-column
@@ -479,7 +505,7 @@ export default {
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
 			isButtonVisible: false,
-			dualArray: []
+			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbol Backtest."
 		}
 	},
 	directives: {
@@ -718,5 +744,31 @@ export default {
 .urlBox p:first-child {
 		font-weight: 500;
 		color: #99a9bf;
+}
+.symbolBox {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	p{
+		height: 100%;
+		margin: 0;
+		padding: 100% 0;
+	}
+	p:nth-child(2) {
+		border-top: 1px dashed #99a9bf;
+	}
+}
+.entryAndExitBox {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	p{
+		height: 100%;
+		margin: 0;
+		padding: 5px 0;
+	}
+	.entryExit:nth-child(2) {
+		border-top: 1px dashed #99a9bf;
+	}
 }
 </style>
