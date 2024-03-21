@@ -17,6 +17,13 @@
             </template>
             </el-table-column>
             <el-table-column
+                prop="Symbol"
+                label="Symbol"
+                align="center"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
                 prop="EntryDate"
                 label="Entry Date"
                 align="center"
@@ -37,13 +44,6 @@
                 label="Entry Price"
                 width="80px"
                 align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                prop="Symbol"
-                label="Symbol"
-                align="center"
-                show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column

@@ -366,6 +366,11 @@ export const CommonMethodsMixin = {
 				if(strategy === 'Dual') {
 					backtestInfo.entry2_description = Array.isArray(entry2_description) ? JSON.stringify(entry2_description) : entry2_description;
 					backtestInfo.exit2_description = Array.isArray(exit2_description) ? JSON.stringify(exit2_description) : exit2_description;
+					// 属性传递默认值
+					backtestInfo.risk_control = '//'
+					backtestInfo.exclude_oo = 0
+					backtestInfo.market_environment = 0
+					backtestInfo.index_moving_average_slope = 0
 				}
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
@@ -456,8 +461,8 @@ export const CommonMethodsMixin = {
 				'opted'
 			]
 			if(strategy === 'Dual') {
-				selectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2')
-				backtestInfoSelectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2')
+				selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
+				backtestInfoSelectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2', 'direction2', 'symbol2')
 			}
 			let backtestParams = Object.assign(
 				{},

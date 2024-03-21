@@ -297,7 +297,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="add to favorites"
+									content="add to favorites" 
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
 								>
@@ -423,7 +423,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3"
+										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3 && scope.row.strategy !== 'Dual'"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
@@ -645,10 +645,10 @@ export default {
 		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
 		 */
       if (column.sortable !== 'custom') return
-      this.currentSort = {
-        prop: prop,
-        order: order,
-      };
+			this.currentSort = {
+					prop: prop,
+					order: order,
+				};
       await this.applySort()
     },
 		async applySort() {

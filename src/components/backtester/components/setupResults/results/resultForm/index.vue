@@ -24,7 +24,7 @@
 				<el-col :span="6">
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="backtestEditData.slippage"
+							v-model="temp.slippage"
 							disabled
 						>
 						<template v-slot:append>
@@ -121,6 +121,7 @@
 	</div>
 </template>
 <script>
+import { trimTrailingZeros } from '@/utils'
 export default {
   props: { backtestEditData: Object },
   name: 'ResForm',
@@ -173,9 +174,10 @@ export default {
     backtestEditData: {
       handler(newVal) {
         if (JSON.stringify(newVal) != '{}') {
+
           console.log('result', newVal)
-          const commission = Number(newVal.commission)
-          this.temp.commission = commission.toFixed(2)
+          const commission =Number(newVal.commission)
+          this.temp.commission =  trimTrailingZeros(commission.toFixed(2))
 					try {
 						this.backtestPeriod = this.historyOptions[newVal.backtest_period]
 						if(newVal.backtest_period === null || newVal.backtest_period === undefined) {
@@ -204,6 +206,7 @@ export default {
 						this.backtestPeriod = this.historyOptions[backtest_period]
 					}
 					this.tradePrice = this.tradePriceOptions[newVal.trade_price]
+					this.temp.slippage = trimTrailingZeros(newVal.slippage)
         } else {
           this.temp.commission = ''
           this.temp.slippage = ''

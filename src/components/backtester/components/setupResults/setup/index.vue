@@ -5,7 +5,7 @@
 			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy"></BasicInfo>
 		</div>
 		<div class="set-up-container">
-		<el-tabs v-model="activeName" :class="{'Signal': strategy == 'Signal', 'Dual': strategy == 'Dual', 'set-up-criteria': true}">
+		<el-tabs v-model="activeName" :class="{'Single': strategy == 'Single', 'Dual': strategy == 'Dual', 'set-up-criteria': true}">
     <el-tab-pane label="Symbol(1)" name="first" class="symbol-pane">
 			<div class="criteria-container">
 				<Criteria
@@ -109,7 +109,7 @@ export default {
 			isRiskControl: true,
 			isDisabled: false,
 			activeName: 'first',
-			strategy: 'Signal',
+			strategy: 'Single',
 			symbolInfo: {}
 		}
 	},
@@ -233,7 +233,7 @@ export default {
 			this.strategy = val
       this.symbolInfo = obj
 
-			if(val == 'Signal') {
+			if(val == 'Single') {
 				// 清空symbol2对应的entry2,exit2
 				const commitIndicators = (criteria, list) => {
 					this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
@@ -811,7 +811,7 @@ export default {
 		font-size: 15px;
 	}
 }
-/deep/ .Signal > .el-tabs__header {
+/deep/ .Single > .el-tabs__header {
 		// opacity: 0;
 		display: none;
 }
