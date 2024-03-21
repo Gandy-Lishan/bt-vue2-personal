@@ -63,6 +63,7 @@ export default {
 		async onChartReady() {
 			this.SET_CHART_READY_STATE(true)
 			CIQ.hideCover()
+            CIQ.nprogress.done()
 		},
 	}
 }

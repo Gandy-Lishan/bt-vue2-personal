@@ -6108,7 +6108,7 @@ class Chart {
 		/** register chart symbol loading function */
 		uiContext.changeSymbol = function(data ,cb) {
 			const { stx } = uiContext;
-			CIQ.addSymbol(data.symbol,stx)
+			CIQ.addSymbol(data.symbol,stx,cb)
 		}
 		/** register chart indicator loading function */
 		uiContext.changeIndicator = function(data ,cb) {

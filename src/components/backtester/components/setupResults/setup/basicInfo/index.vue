@@ -1085,7 +1085,8 @@ export default {
       if(!symbol) return
       symbol = symbol.replace(/"/g, '')
       this.bd.symbol = symbol
-      this.getSymbol(symbol)
+      this.$store.commit('form/getBacktestSymbol', symbol)
+     // this.getSymbol(symbol)
       LocalStorageUtil.remove('symbol')
     },
     userRole: {
