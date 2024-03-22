@@ -127,18 +127,22 @@
 			<el-table-column
         v-if="item.label == 'Type'"
         :prop="item.field"
-        :key="item.label"
+        :label="item.label"
 				:width="item.width"
+        :key="item.label"
 				show-overflow-tooltip
-				:sortable="item.label == 'Type' ? 'custom' : false"
-				:sort-orders="['ascending', 'descending', item.field]"
 				align="center">
 				<template slot="header">
-						Type
-								<el-tooltip effect="dark" placement="top" style="diaplay: inline">
-								<span slot="content" v-html="typeTooltip">
-								</span>
-								<i class="iconfont icon-wenhao"></i>
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content" v-html="typeTooltip"></span>
+							<el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
+								<el-submenu index="Strategy">
+									<template slot="title">Type</template>
+									<el-menu-item index="Strategy">All Symbol Backtest</el-menu-item>
+									<el-menu-item index="Single">Single Symbol Backtest(S)</el-menu-item>
+									<el-menu-item index="Dual">Dual Symbol Backtest(D)</el-menu-item>
+								</el-submenu>
+							</el-menu>
 						</el-tooltip>
 				</template>
 				<template slot-scope="scope">
@@ -423,7 +427,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3 && scope.row.strategy !== 'Dual'"
+										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3 && scope.row.strategy === 'Dual'"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
@@ -669,6 +673,22 @@ export default {
 		handleQuery: throttle(function() {
 			this.getDataList()
 		}, 500),
+		async filterHandler(value, row, column) {
+			// value => Signal, Dual
+			debugger
+			let prop
+			if(value === 'Dual') prop = '-strategy'
+			if(value === 'Single') prop = 'strategy'
+			await this.getDataList(prop)
+			return this.dataList
+    },
+		async handleSelect(value) {
+			let prop
+			if(value === 'Strategy') prop = null
+			if(value === 'Dual') prop = '-strategy'
+			if(value === 'Single') prop = 'strategy'
+			await this.getDataList(prop)
+		}
 	}
 }
 </script>
@@ -770,5 +790,14 @@ export default {
 	.entryExit:nth-child(2) {
 		border-top: 1px dashed #99a9bf;
 	}
+}
+.BTTable /deep/ .el-icon-arrow-down {
+	display: block;
+}
+.BTTable /deep/ .el-menu.el-menu--horizontal {
+	border-bottom: none;
+}
+.BTTable /deep/ .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
+	border-bottom: none;
 }
 </style>
