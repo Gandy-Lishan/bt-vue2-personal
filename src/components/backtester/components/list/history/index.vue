@@ -18,9 +18,10 @@ export default {
   data() {
     return {
       tableCol: [
-      {
+        {
           label: 'Type',
-          field: 'strategy'
+          field: 'strategy',
+          width: '80px'
         },
         {
           label: 'Name',

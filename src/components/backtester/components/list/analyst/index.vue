@@ -19,6 +19,11 @@ export default {
     return {
       tableCol: [
         {
+          label: 'Type',
+          field: 'strategy',
+          width: '80px'
+        },
+        {
           label: 'Name',
           field: 'name',
           width: '250px'
