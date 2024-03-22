@@ -5,7 +5,7 @@
 			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy"></BasicInfo>
 		</div>
 		<div class="set-up-container">
-		<el-tabs v-model="activeName" :class="{'Single': strategy == 'Single', 'Dual': strategy == 'Dual', 'set-up-criteria': true}">
+		<el-tabs v-model="activeName" :class="{'Single': strategy == 'Single', 'Dual': strategy == 'Dual', 'set-up-criteria': true}" @tab-click="handleClick">
     <el-tab-pane label="Symbol(1)" name="first" class="symbol-pane">
 			<div class="criteria-container">
 				<Criteria
@@ -222,6 +222,9 @@ export default {
     },
   },
 	methods: {
+		handleClick(tab) {
+			this.activeName = tab.name
+		},
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
@@ -230,6 +233,8 @@ export default {
 			this.isRiskControl = isRiskControl
 		},
 		changeStrategy(val, obj) {
+			this.$nextTick(() => {
+			this.activeName = 'first'
 			this.strategy = val
       this.symbolInfo = obj
 
@@ -258,6 +263,7 @@ export default {
 			}else {
 				this.$refs['basicInfo'].getSymbol2()
 			}
+			})
 		},
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
@@ -811,12 +817,12 @@ export default {
 		font-size: 15px;
 	}
 }
-/deep/ .Single > .el-tabs__header {
-		// opacity: 0;
+.set-up-container /deep/ .Single > .el-tabs__header.is-top {
+		opacity: 0;
 		display: none;
 }
-/deep/ .Dual > .el-tabs__header {
-		// opacity: 1;
+.set-up-container /deep/ .Dual > .el-tabs__header.is-top {
+		opacity: 1;
 		display: block;
 }
 </style>
