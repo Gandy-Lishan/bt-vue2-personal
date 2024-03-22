@@ -274,9 +274,9 @@
 
 						<!-- customized features -->
 						<!-- <cq-chartcontrol-group class="full-screen-show" cq-marker=""></cq-chartcontrol-group> -->
-						<cq-sentiment-lookup></cq-sentiment-lookup>
+						<!-- <cq-sentiment-lookup></cq-sentiment-lookup> -->
 
-						<!-- <cq-comparison-lookup></cq-comparison-lookup> -->
+						<cq-comparison-lookup></cq-comparison-lookup>
 
 						<!-- <cq-comparison-favorite></cq-comparison-favorite> -->
 

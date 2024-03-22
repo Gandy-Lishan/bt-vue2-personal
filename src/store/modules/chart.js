@@ -13,19 +13,15 @@ const state = {
 		url: '',
 		name: ''
 	},
-	currentTech: {
-		//chartiq
-		url: '',
-		name: ''
-	},
 	indicators: {
 		//chartiq
 		formIndicators: {
 			entry: new Array(5),
-			exit: new Array(5)
+			exit: new Array(5),
+			entry2: new Array(5),
+			exit2: new Array(5),
 		},
 		extraIndicators: [],
-		technicalIndicators: []
 	},
 	extremeValue: [], //chartiq
 	indicatorsList: [], //chartiq 代替了AllSymbolsList
@@ -115,12 +111,6 @@ const mutations = {
 		state.currentSenti = val
 	},
 	/**
-	 * Sets up a mutations to store the current selected technical indicator, it's used to trigger the listener for updating indicator in form
-	 */
-	setCurrentTech(state, val) {
-		state.currentTech = val
-	},
-	/**
 	 * Sets up a mutations to store the extremeValue of an indicator
 	 */
 
@@ -149,20 +139,23 @@ const mutations = {
 		let { index, value } = obj
 		state.indicators.formIndicators.entry[index] = value
 	},
-	/**
-	 * store a list of entry indicators
-	 */
-
-	getEntryIndicatorsList(state, list) {
-		state.indicators.formIndicators.entry = list
-	},
 	getExitIndicators(state, obj) {
 		let { index, value } = obj
 		state.indicators.formIndicators.exit[index] = value
 	},
-	getExitIndicatorsList(state, list) {
-		state.indicators.formIndicators.exit = list
+	// 以上两个准备被替换
+	getIndicators(state, obj) {
+		let {index, value, criteria} = obj
+		state.indicators.formIndicators[criteria][index] = value
 	},
+	/**
+	 * store a list of entry indicators
+	 */
+	getCriteriaIndicatorsList(state, obj) {
+		let {criteria, list} = obj
+		state.indicators.formIndicators[criteria] = list
+	},
+
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */
@@ -199,9 +192,6 @@ const mutations = {
 	getMALayout(state, val) {
 		state.activatedMALayout = val
 	},
-	getTechnicalIndicators(state, val) {
-		state.indicators.technicalIndicators = val
-	},
 	saveFormatTechnicalList(state, list) {
 		state.formateTechnicalList = list
 	},
@@ -210,10 +200,11 @@ const mutations = {
 		;(state.indicators = {
 			formIndicators: {
 				entry: new Array(5),
-				exit: new Array(5)
+				exit: new Array(5),
+				entry2: new Array(5),
+				exit2: new Array(5),
 			},
 			extraIndicators: [],
-			technicalIndicators: [],
 		}),
 			(state.activatedMA = [{ period: 21, url: '' }])
 		state.activatedMALayout = [],

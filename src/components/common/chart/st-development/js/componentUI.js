@@ -23,6 +23,8 @@
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
+import {maxNumOfStudy} from '@/utils'
+
 var claims = []
 /**
  * The following is a set of web components used in our sample templates to illustrate how the API can be leveraged to build a full featured UI to control the chart.
@@ -3126,8 +3128,8 @@ CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
 	div.attributes.stxtap.nodeValue = 'SentimentLook.delSymbolCookie()'
 
 	// filter redundant items
-	if (favoriteSymbolList.indexOf(CIQ.symbol) === -1) {
-		favoriteSymbolList.push(CIQ.symbol)
+	if (favoriteSymbolList.indexOf(CIQ.stxx.chart.symbol) === -1) {
+		favoriteSymbolList.push(CIQ.stxx.chart.symbol)
 		//console.log('addSYmbolCookie,updateFavorite: ',favoriteSymbolList)
 		CIQ.updateFavorite(
 			JSON.stringify(favoriteIndicatorList),
@@ -3157,7 +3159,7 @@ CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function() {
 	}
 
 	for (var item in favoriteSymbolList) {
-		if (favoriteSymbolList[item] == CIQ.symbol) {
+		if (favoriteSymbolList[item] == CIQ.stxx.chart.symbol) {
 			favoriteSymbolList.splice(item, 1)
 		}
 	}
@@ -3344,6 +3346,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 			this.params.sd.type
 		)
 		//console.log(indexOfEntry,indexOfExit)
+		// lishan chartIQ todo
 		if (indexOfEntry != -1) {
 			if (indexOfExit != -1) {
 				CIQ.store.commit('chart/getExitIndicators', {
@@ -3362,6 +3365,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 					value: ''
 				})
 			}
+			// lishan chartIQ todo
 			CIQ.store.commit('chart/getExitIndicators', {
 				index: indexOfExit,
 				value: ''
@@ -3391,7 +3395,6 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	} catch (err) {
 		console.log(err)
 	}
-	//CIQ.addIndicators();
 
 	if (!this.params.sd.permanent)
 		CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd)
@@ -3411,7 +3414,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	})
 
 	// reload chart when removing a study
-	//CIQ.addIndicators()
+	//CIQ.addIndicators({})
 }
 
 /**
@@ -3818,7 +3821,7 @@ CIQ.UI.Layout.prototype.reloadChart = function() {
 	document.getElementsByClassName('ciq-period')[0].style.display = 'block'
 
 	if (freq != 'Daily') {
-		CIQ.addIndicators()
+		CIQ.addIndicators({})
 	}
 }
 CIQ.UI.Layout.prototype.getChartType = function(node, chartType) {
@@ -4340,7 +4343,7 @@ CIQ.UI.Layout.prototype.setPeriodicity = function(
 	CIQ.store.commit('form/getFrequency', selectedFreq)
 
 	// 在scanner ai里面修改timeframe后会自己调用CIQ.initiateChart
-	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators()
+	if (!CIQ.store.getters.getScannerAIFlagState) CIQ.addIndicators({})
 
 	// var self = this;
 	// if (self.context.loader) self.context.loader.show();
@@ -6063,39 +6066,71 @@ class Chart {
 	initLookup(uiContext) {
 		const { config, topNode: contextContainer } = uiContext
 		this.initKeystrokeHub(uiContext)
-		uiContext.changeSymbol = function(data, cb) {
-			const { stx, loader, node } = uiContext
-			console.log('before createChartAndUI: ')
-			// to replace the useless loader
-			var loaderMain = document.querySelector('.loaderMain')
-			if (loaderMain) loaderMain.show()
-			if (data.symbol == data.symbol.toLowerCase()) {
-				data.symbol = data.symbol.toUpperCase() // set a pretty display version
+		/** origin version */
+		// uiContext.changeSymbol = function(data, cb) {
+		// 	const { stx, loader, node } = uiContext
+		// 	debugger
+		// 	/** to replace the useless loader*/
+		// 	var loaderMain = document.querySelector('.loaderMain')
+		// 	if (loaderMain) loaderMain.show()
+		// 	/** END */
+
+		// 	if (data.symbol == data.symbol.toLowerCase()) {
+		// 		data.symbol = data.symbol.toUpperCase() // set a pretty display version
+		// 	}
+
+		// 	// 移除现存的Series,保留Study
+		// 	const { removeSeries, loadError } = config.onNewSymbolLoad || {}
+		// 	if (removeSeries) {
+		// 		Object.values(stx.chart.series)
+		// 			.filter(removeSeries)
+		// 			.forEach(series => stx.removeSeries(series.id))
+		// 	}
+
+		// 	/** 这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载*/
+		// 	if(window.location.pathname.includes('/cpm/results')){
+		// 		data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
+		// 	}
+		// 	/** END */
+
+		// 	stx.loadChart(data, { masterData: data._masterData }, function(err) {
+		// 		var loaderMain = document.querySelector('.loaderMain')
+		// 		if (loaderMain) loaderMain.hide()
+		// 		if (err) {
+		// 			if (loadError) loadError(err, uiContext)
+		// 			return
+		// 		}
+		// 		if (cb) cb(stx)
+		// 		if (config.restore)
+		// 			CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
+		// 	})
+		// }
+		/** register chart symbol loading function */
+		uiContext.changeSymbol = function(data ,cb) {
+			const { stx } = uiContext;
+			CIQ.addSymbol(data.symbol,stx,cb)
+		}
+		/** register chart indicator loading function */
+		uiContext.changeIndicator = function(data ,cb) {
+			const { stx } = uiContext;
+			for (var studyInstanceName in stx.layout.studies) {
+				var sd = stx.layout.studies[studyInstanceName]
+				if (sd.type == data.url || sd.type == data.symbol) {return}
 			}
-			const { removeSeries, loadError } = config.onNewSymbolLoad || {}
-			if (removeSeries) {
-				Object.values(stx.chart.series)
-					.filter(removeSeries)
-					.forEach(series => stx.removeSeries(series.id))
+
+			CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.name, updated: data.updated})     
+			let extraIndicators = []
+			extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)
+			let indicator = ''
+			if (data.symbol == undefined){
+				indicator = data.url       
+			}else{
+				indicator = data.symbol
 			}
-			//这里是chartiq初始化后的第一次调用loadChart,如果是CPM则数据全部加载
-			if(window.location.pathname.includes('/cpm/results')){
-				data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
-			}
-			stx.loadChart(data, { masterData: data._masterData }, function(err) {
-				// don't add mask when initiating a chart
-				// CIQ.hideCover()
-				// CIQ.nprogress.done()
-				var loaderMain = document.querySelector('.loaderMain')
-				if (loaderMain) loaderMain.hide()
-				if (err) {
-					if (loadError) loadError(err, uiContext)
-					return
-				}
-				if (cb) cb(stx)
-				if (config.restore)
-					CIQ.ChartEngine.restoreDrawings(stx, stx.chart.symbol, config.chartId)
-			})
+			extraIndicators.push(indicator)
+			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
+
+			CIQ.addIndicators({stx:stx})
 		}
 		if (config.lookupDriver) {
 			uiContext.setLookupDriver(new config.lookupDriver())

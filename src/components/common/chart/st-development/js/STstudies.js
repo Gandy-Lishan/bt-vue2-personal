@@ -136,6 +136,145 @@ if (CIQ.ChartEngine) {
 		if (CIQ.Studies) CIQ.Studies.removeStudySymbols(sd, this);
 		if (this.quoteDriver) this.quoteDriver.updateSubscriptions();
 	};
+
+	/***************************** custom Marker Placement function, for normal Markers ********************************/
+// uses custom yAxis / plotField fields to associate the markers to the right datapoints.
+// CIQ.ChartEngine.prototype.defaultMarkerPlacement = function(params) {
+// 	var panel = params.panel;
+// 	var initialYaxis = params.yAxis ? params.yAxis : params.panel.yAxis;
+// 	var yAxis = initialYaxis;
+// 	var chart = panel.chart;
+// 	var stx = params.stx;
+  
+// 	var initialShowsHighs = stx.chart.highLowBars || (stx.highLowBars && stx.highLowBars[stx.layout.chartType]);
+// 	var showsHighs = initialShowsHighs;
+// 	var plotField = chart.defaultPlotField;
+// 	var initialPlotField = plotField;
+// 	if (!plotField || showsHighs) plotField = "Close";
+  
+// 	var placementMap = {};
+  
+// 	for (var i = 0; i < params.arr.length; i++) {
+// 	  var marker = params.arr[i],
+// 		mparams = marker.params;
+// 	  if (marker.params.box) continue; // do not try to position drawn markers
+// 	  var node = marker.node;
+// 	  // Getting clientWidth and clientHeight is a very expensive operation
+// 	  // so we'll cache the results. Don't use this function if your markers change
+// 	  // shape or size dynamically!
+// 	  if (!marker.clientWidth) marker.clientWidth = node.clientWidth;
+// 	  if (!marker.clientHeight) marker.clientHeight = node.clientHeight;
+// 	  var quote = null;
+  
+// 	  // X axis positioning logic
+  
+// 	  var xPositioner = mparams.xPositioner,
+// 		yPositioner = mparams.yPositioner,
+// 		tick = marker.tick,
+// 		dataSet = chart.dataSet,
+// 		clientWidth = marker.clientWidth;
+// 	  if (xPositioner != "none") {
+// 		if (xPositioner == "bar" && mparams.x) {
+// 		  if (mparams.x < chart.xaxis.length) {
+// 			var xaxis = chart.xaxis[mparams.x];
+// 			if (xaxis) quote = xaxis.data;
+// 		  }
+// 		  node.style.left = Math.round(stx.pixelFromBar(mparams.x, chart) - clientWidth / 2) + 1 + "px";
+// 		} else {
+// 		  // This is a section of code to hide markers if they are off screen, and also to figure out
+// 		  // the position of markers "just in time"
+// 		  // the tick is conditionally pre-set by CIQ.ChartEngine.prototype.setMarkerTick depending on marker.params.xPositioner
+// 		  if (!tick && tick !== 0) { // if tick is not defined then hide, probably in distant past
+// 			if (mparams.future && chart.scroll < chart.maxTicks) { // In future
+// 			  stx.futureTickIfDisplayed(marker); // Just in time check for tick
+// 			  tick = marker.tick; //copy new tick from prior function
+// 			  if (!tick && tick !== 0) {
+// 				node.style.left = "-1000px";
+// 				continue;
+// 			  }
+// 			} else {
+// 			  node.style.left = "-1000px";
+// 			  continue;
+// 			}
+// 		  }
+// 		  if (tick < dataSet.length) quote = dataSet[tick];
+// 		  marker.leftpx = Math.round(stx.pixelFromTick(tick, chart) - chart.left - clientWidth / 2);
+// 		  marker.rightEdge = marker.leftpx + clientWidth;
+// 		  node.style.left = marker.leftpx + "px";
+// 		  if (tick < params.firstTick && marker.rightEdge < chart.left - 50) continue; // off screen, no need to reposition the marker (accounting 50px for any visual effects)
+// 		}
+// 		if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+  
+// 	  } else if (yPositioner.indexOf("candle") > -1) {
+// 		// candle positioning, find the quote
+// 		var left = getComputedStyle(node).left;
+// 		if (left) {
+// 		  var bar = stx.barFromPixel(parseInt(left, 10), chart);
+// 		  if (bar >= 0) {
+// 			quote = chart.xaxis[bar].data;
+// 			if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+// 		  }
+// 		}
+// 	  }
+  
+// 	  /*** if the marker has the custom yAxis / plotField fields use that instead of the defaults ****/
+// 	  yAxis = marker.params.yAxis ? marker.params.yAxis : initialYaxis;
+// 	  plotField = marker.params.plotField ? marker.params.plotField : initialPlotField;
+  
+// 	  /*** activate yAxis for specific plotField if present  ****/
+// 	  if (marker.params.plotField) {
+// 		showsHighs = false;
+// 		if (quote && typeof(quote[plotField]) == "object") {
+// 		  quote = quote[plotField];
+// 		  plotField = 'Close';
+// 		}
+// 	  } else {
+// 		showsHighs = initialShowsHighs;
+// 	  }
+// 	  /***********************************/
+  
+// 	  node.style.top = "auto"; // don't use top positioning with DOM markers
+// 	  // Y axis positioning logic
+// 	  var y = mparams.y,
+// 		clientHeight = node.clientHeight,
+// 		val;
+// 	  if (yPositioner != "none") {
+// 		var placementKey = yPositioner + '-' + node.style.left;
+// 		var height = mparams.chartContainer ? stx.height : panel.yAxis.bottom;
+// 		var bottom = 0,
+// 		  bottomAdjust = 0;
+// 		if (typeof placementMap[placementKey] == "undefined") {
+// 		  placementMap[placementKey] = 0;
+// 		}
+// 		bottomAdjust = placementMap[placementKey];
+// 		placementMap[placementKey] += clientHeight;
+  
+// 		if (yPositioner == "value" && (y || y === 0)) {
+// 		  bottom = Math.round(height - stx.pixelFromPrice(y, panel, yAxis) - clientHeight / 2) + "px";
+// 		} else if ((yPositioner == "below_candle" || yPositioner == "under_candle") && quote) { // under_candle deprecated
+// 		  val = quote[plotField];
+// 		  if (showsHighs) val = stx.getBarBounds(quote)[yAxis.flipped ? "high" : "low"];
+// 		  bottom = Math.round(height - stx.pixelFromPrice(val, panel, yAxis) - clientHeight - bottomAdjust) + "px";
+// 		} else if (yPositioner == "on_candle" && quote) {
+// 		  val = quote[plotField];
+// 		  if (showsHighs) val = (quote.Low + quote.High) / 2;
+// 		  bottom = Math.round(height - stx.pixelFromPrice(val, panel, yAxis) - clientHeight / 2 - bottomAdjust) + "px";
+// 		} else if (yPositioner == "top") {
+// 		  bottom = Math.round(height - clientHeight - bottomAdjust) + "px";
+// 		} else if (yPositioner == "bottom") {
+// 		  bottom = Math.round(bottomAdjust) + "px";
+// 		} else if (quote) {
+// 		  //above_candle
+// 		  val = quote[plotField];
+// 		  if (showsHighs) val = stx.getBarBounds(quote)[yAxis.flipped ? "low" : "high"];
+// 		  bottom = Math.round(height - stx.pixelFromPrice(val, panel, yAxis) + bottomAdjust) + "px";
+// 		}
+// 		if (node.style.bottom != bottom) node.style.bottom = bottom;
+// 	  }
+// 	  CIQ.Marker.positionContentVerticalAndHorizontal(node);
+// 	}
+//   };
+  /***************************************************************************************/
 }
 
 /**

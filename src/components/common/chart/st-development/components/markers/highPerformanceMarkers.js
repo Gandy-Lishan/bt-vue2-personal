@@ -312,7 +312,7 @@ if (!CIQ.Marker) {
 		var expand = n.querySelector(".stx-marker-expand");
 		var header = n.querySelector("h4", template);
 		var text = n.querySelector("p", template);
-		//var stem = n.querySelector(".stx-stem", template);
+		var stem = n.querySelector(".stx-stem", template);
 		// stem.style.float = 'none'
 		// stem.style.marginLeft = '12px'
 		header.innerText = this.params.headline;
@@ -518,7 +518,7 @@ if (!CIQ.Marker) {
 		const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
 		const halfSide = size / 2;
 
-		if(category == 'buy'){
+		if(category == 'buy' || category == 'buy-2'){
 			ctx.moveTo(x, y - height / 3); // 以 (x, y) 为中心点
 			ctx.lineTo(x - halfSide, y + (2 * height) / 3);
 			ctx.lineTo(x + halfSide, y + (2 * height) / 3);
@@ -540,7 +540,7 @@ if (!CIQ.Marker) {
 			const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
 			const halfSide = size / 2;
 
-			if(category == 'buy'){
+			if(category == 'buy' || category == 'buy-2'){
 				y = y + 1.6
 				ctx.moveTo(x, y - height / 2);
 				ctx.lineTo(x - halfSide, y + height / 2);
@@ -721,8 +721,14 @@ if (!CIQ.Marker) {
 		if(nParams.category == 'buy'){
 			stemStyle.borderLeftColor = '#1afa29'
 			stemStyle.marginBottom = '-10px'
-		}else {
+		}else if(nParams.category == 'buy-2') {
+			stemStyle.borderLeftColor = '#fbc05c'
+			stemStyle.marginBottom = '0px'
+		}else if(nParams.category == 'sell'){
 			stemStyle.borderLeftColor = '#d81e06'
+			stemStyle.marginBottom = '0px'
+		}else if(nParams.category == 'sell-2'){
+			stemStyle.borderLeftColor = '#5b9bd1'
 			stemStyle.marginBottom = '0px'
 		}
 
@@ -742,7 +748,8 @@ if (!CIQ.Marker) {
 			height: markerHeight,
 			half: halfSide,
 			offset: stemOffset,
-			inverted: invert
+			inverted: invert,
+			field: mParams.plotField	// <<<<== custom field
 		});
 
 		// This can happen if for some reason the marker is missing a tick.
@@ -949,56 +956,171 @@ if (!CIQ.Marker) {
 	 * - 7.2.0
 	 * - 8.0.0 Added `params.inverted`.
 	 */
+	// CIQ.Marker.stPerformance.prototype.calculateYPosition = function (params) {
+	// 	var marker = params.marker,
+	// 		panel = params.panel,
+	// 		height = params.height,
+	// 		side = params.half,
+	// 		offset = params.offset,
+	// 		inverted = params.inverted;
+	// 	var stx = marker.params.stx,
+	// 		chart = stx.chart;
+
+	// 	// this code finds the actual tick or the one right before to put the marker on.
+	// 	var useHighs = stx.chart.highLowBars;
+	// 	var quote = chart.dataSet[marker.tick];
+	// 	if (!quote) return;
+
+	// 	var price = useHighs ? quote.High : quote.Close;
+	// 	var position = marker.params.yPositioner,
+	// 		y;
+	// 	switch (position) {
+	// 		case "value": // this is actuallly our default case
+	// 			if (marker.params.y || marker.params.y === 0)
+	// 				y = stx.pixelFromPrice(marker.params.y, panel) - height * 0.5 + side;
+	// 			else y = stx.pixelFromPrice(price, panel) - offset;
+	// 			break;
+	// 		case "above_candle":
+	// 			y = stx.pixelFromPrice(price, panel) - offset;
+	// 			break;
+	// 		case "below_candle":
+	// 			y = stx.pixelFromPrice(quote.Low || price, panel);
+	// 			if (inverted && offset) y += offset;
+	// 			else y += side;
+	// 			break;
+	// 		case "on_candle":
+	// 			var h = quote.High || quote.Close,
+	// 				l = quote.Low || quote.Low === 0 || quote.Close;
+	// 			y = stx.pixelFromPrice((h + l) / 2, panel) - height * 0.5 + side;
+	// 			break;
+	// 		case "top":
+	// 			y = stx.pixelFromPrice(panel.yAxis.high, panel);
+	// 			if (inverted && offset) y += offset;
+	// 			else y += side;
+	// 			break;
+	// 		case "bottom":
+	// 			y = stx.pixelFromPrice(panel.yAxis.low, panel) - (offset || side); // if no stem offset use half so the whole marker is above the axis
+	// 			break;
+	// 		default:
+	// 			break;
+	// 	}
+	// 	return y;
+	// };
+
+	/***************************** dynamically set the y axis location for each marker as needed, for dual symbol markers ********************************/
 	CIQ.Marker.stPerformance.prototype.calculateYPosition = function (params) {
 		var marker = params.marker,
+			stx = marker.params.stx,
+			chart = stx.chart,
+			field = params.field,
 			panel = params.panel,
+			yAxis = params.yAxis || stx.getYAxisByField(panel, field) || panel.yAxis,
 			height = params.height,
 			side = params.half,
 			offset = params.offset,
+			stemHeight = params.stemHeight,
 			inverted = params.inverted;
-		var stx = marker.params.stx,
-			chart = stx.chart;
-
+	
 		// this code finds the actual tick or the one right before to put the marker on.
 		var useHighs = stx.chart.highLowBars;
+
 		var quote = chart.dataSet[marker.tick];
 		if (!quote) return;
-
-		var price = useHighs ? quote.High : quote.Close;
+	
 		var position = marker.params.yPositioner,
 			y;
+	
+		var getPixel = stx.pixelFromPrice.bind(stx);
+		if (
+			quote.transform &&
+			field in quote.transform &&
+			yAxis === stx.chart.yAxis &&
+			position !== "value"
+		) {
+			quote = quote.transform;
+			getPixel = stx.pixelFromTransformedValue.bind(stx);
+		}
+		if (quote && field) quote = quote[field];
+		if (typeof quote === "number") {
+			quote = { Close: quote };
+			quote[chart.defaultPlotField] = quote.Close;
+			useHighs = false;
+		}
+		if (!quote) return;
+	
+		var bounds = stx.getBarBounds(quote, !!field);
+		var high = useHighs
+			? bounds[yAxis.flipped ? "low" : "high"]
+			: quote[chart.defaultPlotField];
+		var low = useHighs
+			? bounds[yAxis.flipped ? "high" : "low"]
+			: quote[chart.defaultPlotField];
+	
+		if (isNaN(high)) high = (yAxis.high + yAxis.low) / 2;
+		if (isNaN(low)) low = (yAxis.high + yAxis.low) / 2;
+	
+		var bottomAdjust = 0;
+		if (position != "none") {
+			var isLane = position.indexOf("_lane") > -1;
+			var placementMap = stx.markerHelper.placementMap?stx.markerHelper.placementMap: {};
+			var keyBase = position + "|" + panel.name + "|" + field;
+			if (isLane && placementMap[keyBase] === undefined)
+				placementMap[keyBase] = 2;
+			var placementKey =
+				keyBase + "-" + (isLane ? marker.params.label : marker.tick);
+			if (placementMap[placementKey] === undefined) {
+				placementMap[placementKey] = isLane ? placementMap[keyBase] : 0;
+				if (isLane) placementMap[keyBase] += height + 2;
+			}
+			bottomAdjust = placementMap[placementKey];
+			if (!isLane) placementMap[placementKey] += height + 1;
+		}
+	
 		switch (position) {
-			case "value": // this is actuallly our default case
-				if (marker.params.y || marker.params.y === 0)
-					y = stx.pixelFromPrice(marker.params.y, panel) - height * 0.5 + side;
-				else y = stx.pixelFromPrice(price, panel) - offset;
-				break;
+			case "value": // this is actually our default case
+				if (marker.params.y || marker.params.y === 0) {
+					y = getPixel(marker.params.y, panel, yAxis) - height * 0.5 + side;
+					break;
+				} /* falls through */
 			case "above_candle":
-				y = stx.pixelFromPrice(price, panel) - offset;
+				y =
+					getPixel(high, panel, yAxis) -
+					side -
+					((!inverted && stemHeight) || offset) -
+					bottomAdjust;
 				break;
 			case "below_candle":
-				y = stx.pixelFromPrice(quote.Low || price, panel);
-				if (inverted && offset) y += offset;
-				else y += side;
+				y =
+					getPixel(low, panel, yAxis) +
+					side +
+					((inverted && stemHeight) || offset) +
+					bottomAdjust;
 				break;
 			case "on_candle":
-				var h = quote.High || quote.Close,
-					l = quote.Low || quote.Low === 0 || quote.Close;
-				y = stx.pixelFromPrice((h + l) / 2, panel) - height * 0.5 + side;
+				y = getPixel((high + low) / 2, panel, yAxis) - height * 0.5 + side;
 				break;
 			case "top":
-				y = stx.pixelFromPrice(panel.yAxis.high, panel);
-				if (inverted && offset) y += offset;
-				else y += side;
+			case "top_lane":
+				y =
+					panel.yAxis.top +
+					side +
+					((inverted && stemHeight) || offset) +
+					bottomAdjust;
 				break;
 			case "bottom":
-				y = stx.pixelFromPrice(panel.yAxis.low, panel) - (offset || side); // if no stem offset use half so the whole marker is above the axis
+			case "bottom_lane":
+				y =
+					panel.yAxis.bottom -
+					side -
+					((!inverted && stemHeight) || offset) -
+					bottomAdjust;
 				break;
 			default:
 				break;
 		}
-		return y;
+		return (Math.round(2 * y) || 0) / 2;
 	};
+	/***************************************************************************************/
 
 	/**
 	 * Method to setup the actual DOM node that gets appended to the chart for Performance markers.

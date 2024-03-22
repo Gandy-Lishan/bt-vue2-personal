@@ -168,21 +168,22 @@ export function searchAnalystList(keyword) {
 	})
 }
 export function getHistoryList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/backtest/?ordering=-create_date&page='
+	let url = `/dev/dev/backtest/?ordering=-create_date`
 	// sort -> ,total_return
-	if (sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&page=`
+	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
+	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+		url = `/dev/dev/backtest/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/backtest/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page, { withCredentials: true, retry: null })
+			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})
@@ -530,13 +531,10 @@ export function findLastSignalApi(data) {
 	const headers = {
 		'Content-Type': 'application/json'
 	}
-	let csv = data.csv
-	// csv = csv.replace(/\n/g, ",");
 	const formData = new FormData()
-	formData.append('uuid', data.uuid)
-	formData.append('csv', csv)
-	formData.append('entry', data.entry)
-	formData.append('exit', data.exit)
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, { headers, withCredentials: true })

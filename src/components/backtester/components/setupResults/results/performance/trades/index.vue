@@ -17,6 +17,13 @@
             </template>
             </el-table-column>
             <el-table-column
+                prop="Symbol"
+                label="Symbol"
+                align="center"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
                 prop="EntryDate"
                 label="Entry Date"
                 align="center"
@@ -186,6 +193,7 @@ export default {
 	},
 	props: {
         tradesData: Array,
+        strategy: String
 	},
     created(){
     },
@@ -221,7 +229,8 @@ export default {
                     'ExitReason': exitData.ExitReason || '',
                     'MarketCondition': exitData.MarketCondition || ['N\/A'],
                     'ExitIndicator': exitData.Indicator || '',
-                    'TradeNumber': exitData.trade_number
+                    'TradeNumber': exitData.trade_number,
+                    'Symbol': exitData.Symbol
                     });
                 }
                 this.processedTradesData = mergedData

@@ -46,29 +46,32 @@
 			style="width: 100%; height: 100%"
 			:row-class-name="tableRowClassName"
 			element-loading-background="rgba(0, 0, 0, 0.8)"
+			class="BTTable"
     >
     <el-table-column type="index" align="center">
         <template scope="scope">
           <span>{{ (queryInfo.page - 1) * 10 + scope.$index + 1 }}</span>
         </template>
 		</el-table-column>
-    <template v-for="item in tableCol">
-      <el-table-column
-        v-if="['Name', 'Symbol'].includes(item.label)"
-        :label="item.label"
-        :prop="item.field"
-        :key="item.label"
-				:width="item.width"
-				show-overflow-tooltip
-				align="center">
-      </el-table-column>
-			<el-table-column
-				v-if="item.label == 'DesExpand'"
-				:type="item.type"
-				:key="item.label"
+		<el-table-column
+				type="expand"
 				>
 				<template slot-scope="scope">
 					<div class="expandArea">
+						<div class="descriptionBox" v-if="scope.row.strategy === 'Dual'">
+						<div class="entryBox">
+							<p style="display: inline-block; margin-right: 10px;">Symbol 1</p>
+								<span>
+									{{scope.row.symbol}}
+								</span>
+						</div>
+						<div class="exitBox">
+							<p style="display: inline-block; margin-right: 10px;">Symbol 2</p>
+								<span>
+									{{scope.row.symbol}}
+								</span>
+						</div>
+					</div>
 						<div class="descriptionBox">
 						<div class="entryBox">
 							<p>Entry Description</p>
@@ -91,22 +94,103 @@
 							</template>
 						</div>
 					</div>
+					<div class="descriptionBox" v-if="scope.row.strategy === 'Dual'">
+						<div class="entryBox">
+							<p>Entry Description 2</p>
+							<template
+								v-for="(des, index) in scope.row.entry2_description"
+							>
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+						<div class="exitBox">
+							<p>Exit Description 2</p>
+							<template v-for="(des, index) in scope.row.exit2_description">
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+					</div>
 					<div class="urlBox" v-if="currentPage == 'Analyst'">
 						<p>Analyst Report URL</p>
 						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
 					</div>
 					</div>
 				</template>
-			</el-table-column>
+		</el-table-column>
+    <template v-for="item in tableCol">
+			<el-table-column
+        v-if="item.label == 'Type'"
+        :prop="item.field"
+        :label="item.label"
+				:width="item.width"
+        :key="item.label"
+				show-overflow-tooltip
+				align="center">
+				<template slot="header">
+						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<span slot="content" v-html="typeTooltip"></span>
+							<el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
+								<el-submenu index="Strategy">
+									<template slot="title">Type</template>
+									<el-menu-item index="Strategy">All Symbol Backtest</el-menu-item>
+									<el-menu-item index="Single">Single Symbol Backtest(S)</el-menu-item>
+									<el-menu-item index="Dual">Dual Symbol Backtest(D)</el-menu-item>
+								</el-submenu>
+							</el-menu>
+						</el-tooltip>
+				</template>
+				<template slot-scope="scope">
+						{{ scope.row.strategy !== 'Dual' ? 'S' : 'D'}}
+				</template>
+      </el-table-column>
+      <el-table-column
+        v-if="item.label == 'Name'"
+        :label="item.label"
+        :prop="item.field"
+        :key="item.label"
+				:width="item.width"
+				show-overflow-tooltip
+				align="center">
+      </el-table-column>
+			<el-table-column
+        v-if="item.label == 'Symbol'"
+        :label="item.label"
+        :prop="item.field"
+        :key="item.label"
+				:width="item.width"
+				class="StrategyCol"
+				show-overflow-tooltip
+				align="center">
+				<template slot-scope="scope">
+					<div class="symbolBox">
+						<p>{{ scope.row.symbol }}</p>
+						<p v-if="scope.row.strategy === 'Dual' && scope.row.symbol2" style="">{{scope.row.symbol2}}</p>
+					</div>
+				</template>
+      </el-table-column>
 			<el-table-column
 				v-if="item.label == 'Entry & Exit'"
 				:label="item.label"
 				:key="item.label"
+				class="StrategyCol"
 				align="center">
 				<template slot-scope="scope">
-					{{ scope.row.entry_description[0].commentDes }}<br />
-					<br />
-					{{ scope.row.exit_description[0].commentDes }}<br />
+					<div class="entryAndExitBox">
+					<div class="entryExit">
+						<p>{{ scope.row.entry_description[0].commentDes }}</p>
+						<p>{{ scope.row.exit_description[0].commentDes }}</p>
+					</div>
+					<div class="entryExit" v-if="scope.row.strategy === 'Dual'">
+						<p>{{ scope.row.entry2_description[0].commentDes }}</p>
+						<p>{{ scope.row.exit2_description[0].commentDes }}</p>
+					</div>
+					</div>
 				</template>
 			</el-table-column>
 			<el-table-column
@@ -217,7 +301,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="add to favorites"
+									content="add to favorites" 
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
 								>
@@ -343,7 +427,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
-										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3"
+										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3 && scope.row.strategy === 'Dual'"
 										type="success"
 										icon="el-icon-data-analysis"
 										circle
@@ -424,7 +508,8 @@ export default {
 			searchItem: '',
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
-			isButtonVisible: false
+			isButtonVisible: false,
+			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbol Backtest."
 		}
 	},
 	directives: {
@@ -500,41 +585,39 @@ export default {
 				}
 				if (res.status == 200) {
 					let data = res.data.results
-					data = data.map(item => {
-						if(item.total_return == null || item.total_trader == null){
-							/* 兼容之前的 result: "{\"Total Trades\": 108, \"Total Return (%)\": 92.58}" */
-							if(isJson(item.result)) {
-								const result = JSON.parse(item.result)
-								item.total_return = result['Total Trades']
-								item.total_trader = result['Total Return (%)']
-							}
-						}
-						if(isJson(item.entry_description)) {
-							item.entry_description = JSON.parse(item.entry_description)
-						}else if(typeof item.entry_description === 'string') {
-							const entryObj = {
-								commentDes: item.entry_description,
-								rocCond: {
-									newCondition: 3,
-									conditionPeriod: 5
+					const parseJsonOrString = (value) => {
+						if (typeof value === 'string') {
+								try {
+										return JSON.parse(value);
+								} catch (error) {
+										return [{
+												commentDes: value,
+												rocCond: {
+														newCondition: 3,
+														conditionPeriod: 5
+												}
+										}];
 								}
-							}
-							item.entry_description = [entryObj]
 						}
-						if(isJson(item.exit_description)) {
-							item.exit_description = JSON.parse(item.exit_description)
-						}else if(typeof item.exit_description === 'string'){
-							const exitObj = {
-								commentDes: item.exit_description,
-								rocCond: {
-									newCondition: 3,
-									conditionPeriod: 5
-								}
+						return value;
+					};
+					data = data.map((item, index) => {
+						if (item.total_return == null || item.total_trader == null) {
+							if (isJson(item.result)) {
+									const result = JSON.parse(item.result);
+									item.total_return = result['Total Trades'];
+									item.total_trader = result['Total Return (%)'];
 							}
-							item.exit_description = [exitObj]
 						}
-						return item
-					})
+						item.entry_description = parseJsonOrString(item.entry_description);
+						item.exit_description = parseJsonOrString(item.exit_description);
+						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
+							item.entry2_description = parseJsonOrString(item.entry2_description)
+							item.exit2_description = parseJsonOrString(item.exit2_description)
+						}
+						return item;
+					});
+
 					this.dataList = data
 					console.log('data', data)
 					this.queryInfo.total = res.data.count
@@ -566,10 +649,10 @@ export default {
 		 * @param {object} {column,prop,order} 列数据|排序字段|排序方式
 		 */
       if (column.sortable !== 'custom') return
-      this.currentSort = {
-        prop: prop,
-        order: order,
-      };
+			this.currentSort = {
+					prop: prop,
+					order: order,
+				};
       await this.applySort()
     },
 		async applySort() {
@@ -590,6 +673,22 @@ export default {
 		handleQuery: throttle(function() {
 			this.getDataList()
 		}, 500),
+		async filterHandler(value, row, column) {
+			// value => Signal, Dual
+			debugger
+			let prop
+			if(value === 'Dual') prop = '-strategy'
+			if(value === 'Single') prop = 'strategy'
+			await this.getDataList(prop)
+			return this.dataList
+    },
+		async handleSelect(value) {
+			let prop
+			if(value === 'Strategy') prop = null
+			if(value === 'Dual') prop = '-strategy'
+			if(value === 'Single') prop = 'strategy'
+			await this.getDataList(prop)
+		}
 	}
 }
 </script>
@@ -665,5 +764,40 @@ export default {
 .urlBox p:first-child {
 		font-weight: 500;
 		color: #99a9bf;
+}
+.symbolBox {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	p{
+		height: 100%;
+		margin: 0;
+		padding: 100% 0;
+	}
+	p:nth-child(2) {
+		border-top: 1px dashed #99a9bf;
+	}
+}
+.entryAndExitBox {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	p{
+		height: 100%;
+		margin: 0;
+		padding: 5px 0;
+	}
+	.entryExit:nth-child(2) {
+		border-top: 1px dashed #99a9bf;
+	}
+}
+.BTTable /deep/ .el-icon-arrow-down {
+	display: block;
+}
+.BTTable /deep/ .el-menu.el-menu--horizontal {
+	border-bottom: none;
+}
+.BTTable /deep/ .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
+	border-bottom: none;
 }
 </style>

@@ -232,10 +232,8 @@ export const CommonMethodsMixin = {
 		async loopAllFavorites() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
 				const item = this.favorite_array[i]
-				this.reloadData(item.indicator_layout, item.frequency)
-				await CIQ.addIndicatorsFromBacktest(() => {
-					
-				})
+				this.reloadData(item.indicator_layout, item.frequency, item)
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {})
 				await this.loopCalculateNewConditions(item)
 				this.uploadCSVWhileFLS(item)
 			}
@@ -268,14 +266,16 @@ export const CommonMethodsMixin = {
 				start_date: row.start_date.replace(/-/g, '') * 1000000000,
 				end_date: row.end_date.replace(/-/g, '') * 1000000000
 			})
-
+			const {strategy} = row
 			const content = CIQ.exportEx()
-			const csvObj = {
-				id: row.id,
+			/** todo: 这里需要加双股票么 */
+			let csvObj = {
+				uuid: row.id,
 				csv: content,
 				entry: row.entry,
-				exit: row.exit
-			}
+				exit: row.exit,
+				...(strategy === 'Dual' && row.entry2 && row.exit2 ? { entry2: row.entry2, exit2: row.exit2 } : {})
+			};
 			this.$store.commit('form/setHashTable', csvObj)
 			// 暂时设置成成功
 			this.$store.state.form.last_signal_array.map(item => {
@@ -343,6 +343,7 @@ export const CommonMethodsMixin = {
 			return res.data.data
 		},
 		async rerunThisBacktest(backtestInfo) {
+			const { strategy, entry_description, exit_description, entry2_description, exit2_description } = backtestInfo
 			CIQ.addCover('Fetching backtest information...')
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
@@ -360,14 +361,17 @@ export const CommonMethodsMixin = {
 			backtestInfo.favorites = backtestInfo.hasOwnProperty('favorites')
 				? backtestInfo.favorites
 				: false
-			const entry_description = backtestInfo.entry_description
-			const exit_description = backtestInfo.exit_description
-			backtestInfo.entry_description = Array.isArray(entry_description)
-				? JSON.stringify(entry_description)
-				: entry_description
-			backtestInfo.exit_description = Array.isArray(exit_description)
-				? JSON.stringify(exit_description)
-				: exit_description
+				backtestInfo.entry_description = Array.isArray(entry_description) ? JSON.stringify(entry_description) : entry_description;
+				backtestInfo.exit_description = Array.isArray(exit_description) ? JSON.stringify(exit_description) : exit_description;
+				if(strategy === 'Dual') {
+					backtestInfo.entry2_description = Array.isArray(entry2_description) ? JSON.stringify(entry2_description) : entry2_description;
+					backtestInfo.exit2_description = Array.isArray(exit2_description) ? JSON.stringify(exit2_description) : exit2_description;
+					// 属性传递默认值
+					backtestInfo.risk_control = '//'
+					backtestInfo.exclude_oo = 0
+					backtestInfo.market_environment = 0
+					backtestInfo.index_moving_average_slope = 0
+				}
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
 			const backtest_period = backtestInfo.backtest_period
@@ -456,6 +460,10 @@ export const CommonMethodsMixin = {
 				'index_moving_average_slope',
 				'opted'
 			]
+			if(strategy === 'Dual') {
+				selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
+				backtestInfoSelectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2', 'direction2', 'symbol2')
+			}
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map(prop => ({ [prop]: backtestInfo[prop] }))
@@ -472,32 +480,46 @@ export const CommonMethodsMixin = {
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
-			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
+			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency, backtestInfo)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
 				selectedBacktestInfo
 			)
 			// symbol ohlcv 要做特殊处理
 			const _this = this
-			await CIQ.addIndicatorsFromBacktest(() => {
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
 			await this.loopCalculateNewConditions(backtestInfo)
-			debugger
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
-			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
-			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
 		},
 		async loopCalculateNewConditions(backtestInfo) {
-			let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
-			let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
+			const {strategy} = backtestInfo
+			const processSignals = async (signals, type) => {
+				for (let index = 0; index < signals.length; index++) {
+					await this.calculateNewConditions(signals[index], type, index);
+				}
+			};
+			const decodeAndMapConditionRadio = async (entryType, exitType) => {
+				let { signals: entrySignals } = this.decodeCriteria(backtestInfo, entryType)
+				let { signals: exitSignals } = this.decodeCriteria(backtestInfo, exitType)
+				exitSignals = exitSignals.filter(item => item)
+				conditionRadioMap(entrySignals,exitSignals, entryType, exitType)
+				await processSignals(entrySignals, entryType)
+				await processSignals(entrySignals, exitType)
+			}
+			await decodeAndMapConditionRadio('entry', 'exit')
+			if(strategy === 'Dual') await decodeAndMapConditionRadio('entry2', 'exit2')
+
+			// let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
+			// let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
 			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
-			exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
+			// exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
 			
 			// 写一个函数来map所有情况的condition radio
-			conditionRadioMap(entrySignals,exitSignals)
+			// conditionRadioMap(entrySignals,exitSignals)
 
 			// 把對tech類型的判斷放在calculateNewConditions，防止indicator的panelIndex不一致的bug
 			// if (entrySignals.length !== 0)
@@ -509,12 +531,12 @@ export const CommonMethodsMixin = {
 			// 		['Symbol', 'Sentiment', 'User'].includes(item.analysis)
 			// 	)
 
-			for (let index = 0; index < entrySignals.length; index++) {
-				await this.calculateNewConditions(entrySignals[index], 'entry', index)
-			}
-			for (let index = 0; index < exitSignals.length; index++) {
-				await this.calculateNewConditions(exitSignals[index], 'exit', index)
-			}
+			// for (let index = 0; index < entrySignals.length; index++) {
+			// 	await this.calculateNewConditions(entrySignals[index], 'entry', index)
+			// }
+			// for (let index = 0; index < exitSignals.length; index++) {
+			// 	await this.calculateNewConditions(exitSignals[index], 'exit', index)
+			// }
 		},
 
 		calculateNewConditions(signals, criteria, panelIndex) {
@@ -824,7 +846,7 @@ export const CommonMethodsMixin = {
 			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
 			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
 			*/
-			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const isHandleIndicator = criteria.startsWith('entry') || (criteria.startsWith('exit') && !isOnlyUseRiskControl)
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
 				if (!signal) {
@@ -846,7 +868,7 @@ export const CommonMethodsMixin = {
 			let signal = null
 			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
 
-			if (isOnlyUseRiskControl && criteria == 'exit') {
+			if (isOnlyUseRiskControl && criteria.startsWith('exit')) {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
@@ -960,8 +982,8 @@ export const CommonMethodsMixin = {
 				})
 				this.loading = false
 			} else {
-				this.reloadData(data, freq)
-				await CIQ.addIndicatorsFromBacktest(() => {
+				this.reloadData(data, freq, row)
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 					this.$store.commit('form/getRunBacktestData', row)
 					this.$router.push({
 						name: 'Results',
@@ -974,8 +996,8 @@ export const CommonMethodsMixin = {
 		},
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			const that = this
-			that.reloadData(data, freq)
-			await CIQ.addIndicatorsFromBacktest(function() {
+			that.reloadData(data, freq, row)
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
 
 				that.$router.push({
@@ -987,22 +1009,33 @@ export const CommonMethodsMixin = {
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	
 		},
-		reloadData(data, freq) {
+		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)
+			let {strategy, symbol2} = row
 			let frequency = ''
-			this.$store.commit(
-				'chart/getEntryIndicatorsList',
-				data.formIndicators.entry
-			)
-			this.$store.commit(
-				'chart/getExitIndicatorsList',
-				data.formIndicators.exit
-			)
+			const commitIndicators = (criteria, list) => {
+				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+			};
+			const commitSymbol2 = (symbol2) => {
+				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
+				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
+				if(!stockName && !indexName){
+					return
+				}
+		  
+				this.$store.commit('form/setComparisonSymbol', {
+					name:stockName?stockName.name:indexName.name,
+					url:symbol2,
+				})
+			}
+			commitIndicators('entry', data.formIndicators.entry);
+			commitIndicators('exit', data.formIndicators.exit);
+			if(strategy === 'Dual') {
+					commitIndicators('entry2', data.formIndicators.entry2);
+					commitIndicators('exit2', data.formIndicators.exit2);
+					commitSymbol2(symbol2)
+			}
 			this.$store.commit('chart/getExtraIndicators', [])
-			this.$store.commit(
-				'chart/getTechnicalIndicators',
-				data.technicalIndicators
-			)
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
@@ -1121,6 +1154,7 @@ export const CommonMethodsMixin = {
 			})
 		},
 		handleCallback(backtestParams, backtestInfo) {
+			debugger
 			const _this = this
 			const start_date = backtestInfo.start_date
 			const end_date = backtestInfo.end_date

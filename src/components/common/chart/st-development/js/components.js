@@ -1679,7 +1679,13 @@ class Comparison extends CIQ.UI.ModalTag {
 			(!context.stx.chart.symbol ||
 				context.stx.chart.symbol.toLowerCase() !== obj.symbol.toLowerCase())
 		) {
-			stx.addSeries(obj.symbol, params, cb);
+			//stx.addSeries(obj.symbol, params, cb);
+			CIQ.store.commit('form/setComparisonSymbol', {
+			  name:obj.name,
+			  url:obj.symbol,
+			})
+	  
+			CIQ.addIndicators({})
 		} else {
 			this.loading[obj.symbol] = false;
 		}
@@ -7264,7 +7270,7 @@ class ShowRange extends CIQ.UI.ContextTag {
 		
 		CIQ.store.commit('form/getFrequency', selectedFreq)
 		// 回调函数保证先换周期再调整数据跨度同步执行
-		CIQ.addIndicators(()=>{
+		CIQ.addIndicators({},()=>{
 			var self = this;
 			if (self.context.loader) self.context.loader.show();
 			var params = {
@@ -7722,88 +7728,57 @@ class Studies extends CIQ.UI.ContextTag {
 			}
 		}
 
-		async function stSelectItem(data, fn) {
-			// avoid add indicator redundantly
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (sd.type == data.url) {return}
-			}
+		// function pickStudy(node, studyName) {
+		// 	var stx = self.context.stx;
 
-			CIQ.store.commit("chart/setCurrentTech",{url: data.url, name: data.name})
+		// 	function handleSpecialCase(flag, params, addWhenDone) {
+		// 		if (flag === true) {
+		// 			studyDialog(params, addWhenDone);
+		// 			return true;
+		// 		} else if (typeof flag === "object") {
+		// 			for (var i in flag) {
+		// 				if (i == studyName && flag[i]) {
+		// 					studyDialog(params, addWhenDone);
+		// 					return true;
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+
+		// 	if (
+		// 		handleSpecialCase(
+		// 			self.params.dialogBeforeAddingStudy,
+		// 			{ stx: stx, name: studyName },
+		// 			true
+		// 		)
+		// 	)
+		// 		return;
+		// 	var sd = CIQ.Studies.addStudy(stx, studyName);
+		// 	handleSpecialCase(self.alwaysDisplayDialog, { sd: sd, stx: stx });
+		// }
+		function pickStudy(node, studyName) {
+			var stx = self.context.stx;
+
+			// avoid add indicator redundantly
+			for (var studyInstanceName in stx.layout.studies) {
+				var sd = stx.layout.studies[studyInstanceName]
+				if (sd.type == studyName) {return}
+			}
 			
+			/** extraIndicators也包括chartiq Study列表的Tech Study */
 			let extraIndicators = []
 			extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)
-			let indicator = ''
-			if (data.symbol == undefined){
-				indicator = data.url       
-			}else{
-				indicator = data.symbol
-			}
-			extraIndicators.push(indicator)
+
+			extraIndicators.push(studyName)
 			
 			CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
 
-			if(indicator == 'ma'){
+			if(studyName == 'ma'){
 				// 给study list上选择的ma加上为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
-				CIQ.setMALayout(indicator,null,null,null,null,null)
+				CIQ.setMALayout(studyName,null,null,null,null,null)
 			}
 
-			let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-			// remove redundant elements and empty string
-
-			for(var i=0;i<indicatorsList.length;i++){
-				if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-				indicatorsList.splice(i,1)
-				i--;
-				}
-			}
-			indicatorsList = indicatorsList.concat(extraIndicators)
-			const set = new Set(indicatorsList)
-			indicatorsList = [...set]
-
-			// sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
-			let techList = CIQ.store.state.chart.indicators.technicalIndicators
-			let technicalIndicators = []
-			for(var item in indicatorsList){
-				if(techList.indexOf(indicatorsList[item]) != -1){
-					technicalIndicators.push(indicatorsList[item])
-					indicatorsList[item] = ''
-				}    
-			}
-			indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-
-			//  load saved indicator layouts from stxx.layout
-			var savedTechSD = []
-			for(var i in CIQ.stxx.layout.studies){
-				savedTechSD.push({
-					type: CIQ.stxx.layout.studies[i].type,
-					inputs: CIQ.stxx.layout.studies[i].inputs,
-					outputs: CIQ.stxx.layout.studies[i].outputs,
-					parameters: CIQ.stxx.layout.studies[i].parameters,
-					panel: CIQ.stxx.layout.studies[i].panel
-				})
-			}
-			CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-
-			await CIQ.getIndicatorMatedata(indicatorsList)
-
-			// 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
-			//CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-			CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-		}
-
-		function pickStudy(node, studyName) {
-			var item = {
-				url: studyName,
-			}
-
-			// store tech indicators in Vuex and use it in addIndicator to test if a member in list is belong to tech
-			let techIndicators = []
-			techIndicators.push(...CIQ.store.state.chart.indicators.technicalIndicators)
-			techIndicators.push(item.url)
-			CIQ.store.commit('chart/getTechnicalIndicators', techIndicators)
-
-			stSelectItem(item)
+			CIQ.addIndicators({type:'addBuiltTech',stx:stx})
 		}
 	}
 }
@@ -8098,27 +8073,24 @@ if (!CIQ.Studies) {
 				this.helper.inputs = [];
 			}
 			else if(_obj2){
-				if(CIQ.store.state.chart.indicators.technicalIndicators.indexOf(this.helper.name) != -1){
-					if(this.helper.name == "ma"){
-						var inputs = [];
-						for (var i = 0;i < this.helper.inputs.length; i++){
-							if (this.helper.inputs[i].heading == 'Period' || this.helper.inputs[i].heading == 'Type'){
-								inputs.push(this.helper.inputs[i])
-							}
+				if(this.helper.name == "ma"){
+					var inputs = [];
+					for (var i = 0;i < this.helper.inputs.length; i++){
+						if (this.helper.inputs[i].heading == 'Period' || this.helper.inputs[i].heading == 'Type'){
+							inputs.push(this.helper.inputs[i])
 						}
-						this.helper.inputs = inputs;
 					}
-					if(this.helper.name == "rsi"){
-						var inputs = [];
-						for (var i = 0;i < this.helper.inputs.length; i++){
-							if (this.helper.inputs[i].heading != 'Field'){
-								inputs.push(this.helper.inputs[i])
-							}
-						}
-						this.helper.inputs = inputs;
-					}
+					this.helper.inputs = inputs;
 				}
-				//this.helper.inputs = [];
+				if(this.helper.name == "rsi"){
+					var inputs = [];
+					for (var i = 0;i < this.helper.inputs.length; i++){
+						if (this.helper.inputs[i].heading != 'Field'){
+							inputs.push(this.helper.inputs[i])
+						}
+					}
+					this.helper.inputs = inputs;
+				}
 			}
 			else if(_obj3){
 				var inputs = [];
@@ -8886,6 +8858,9 @@ if (!CIQ.Studies) {
 							
 							var indexOfEntry = CIQ.store.state.chart.indicators.formIndicators.entry.indexOf(sd.type)
 							var indexOfExit = CIQ.store.state.chart.indicators.formIndicators.exit.indexOf(sd.type)
+							// lishan chartIQ todo 移除的时候是否需要考虑 entry2 和 exit2 indicator 的移除， 可以通过 strategy（Single，Dual） 进行判断
+							var indexOfEntry2 = CIQ.store.state.chart.indicators.formIndicators.entry2.indexOf(sd.type)
+							var indexOfExit2 = CIQ.store.state.chart.indicators.formIndicators.exit2.indexOf(sd.type)
 							if(indexOfEntry != -1){
 								if(indexOfExit != -1){
 									CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
@@ -8917,7 +8892,6 @@ if (!CIQ.Studies) {
 								CIQ.removeMALayout(sd.type, null, null)
 							}
 						}catch(err){console.log(err);}
-						//CIQ.addIndicators();
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
 
 						CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
@@ -8927,7 +8901,7 @@ if (!CIQ.Studies) {
 						self.renderLegend();
 
 						// reload chart when removing a study
-						//CIQ.addIndicators()
+						//CIQ.addIndicators({})
 					}, 0);
 				};
 			}

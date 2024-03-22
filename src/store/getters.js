@@ -11,6 +11,7 @@ const getters = {
 	getBacktestZScoreResult: state => state.form.backtestZScoreResult,
 	getBacktestSymbol: state => state.form.backtestSymbol,
 	getCachedScopedRowDataImmutable: state => state.form.cachedScopedRowDataImmutable,
+	getComparisonSymbol: state => state.form.comparisonSymbol,
 	// chart
 	getExtremeValue: state => state.chart.extremeValue,
 	getSpanPeriod: state => state.chart.spanPeriod,

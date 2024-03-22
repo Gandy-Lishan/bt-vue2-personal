@@ -1,7 +1,7 @@
 // Summary & Trades
 <template>
 	<div class="perfprmance-container">
-		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading">
+		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading" :class="{'Dual': strategy === 'Dual'}">
     <div class="hint-btn-box">
       <p class="hint">
         Hint: Markers on the chart point to the buy/sell trade dates on the open
@@ -27,11 +27,13 @@
 			<el-tab-pane label="Trades" name="second">
         <Trades 
           :tradesData="tradesData"
+          :strategy="strategy"
         ></Trades>
 			</el-tab-pane>
 			<el-tab-pane
 				label="Exit with different Time-In-Market frame"
 				name="third"
+        v-show="strategy !== 'Dual'"
 			>
         <TIM
           ref="timChild"
@@ -39,11 +41,13 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
+          v-show="strategy !== 'Dual'"
         ></TIM>
 			</el-tab-pane>
       <el-tab-pane
 				label="Max Gain and Loss"
 				name="forth"
+        v-show="strategy !== 'Dual'"
 			>
         <MaxMin
           ref="maxMinChild"
@@ -51,6 +55,7 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
+          v-show="strategy !== 'Dual'"
         ></MaxMin>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -70,6 +75,9 @@ const XLSX = require('xlsx');
 
 export default {
   name: 'Performance',
+  props: {
+    strategy: String
+  },
   components: {
     Summary,
     Trades,
@@ -250,7 +258,7 @@ export default {
     loadMarker(markerSet) {
       try {
         //load markers for initial quotefeed
-
+debugger
         let list = this.filterMarkerDate(
           new Date(CIQ.initialDate.start),
           new Date(CIQ.initialDate.end),

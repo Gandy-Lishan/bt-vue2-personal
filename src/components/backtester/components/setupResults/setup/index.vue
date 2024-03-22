@@ -2,43 +2,53 @@
 	<div class="setup">
 		<div>
 			<div class="setupBox">
-			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl"></BasicInfo>
+			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy"></BasicInfo>
 		</div>
 		<div class="set-up-container">
+		<el-tabs v-model="activeName" :class="{'Single': strategy == 'Single', 'Dual': strategy == 'Dual', 'set-up-criteria': true}" @tab-click="handleClick">
+    <el-tab-pane label="Symbol(1)" name="first" class="symbol-pane">
 			<div class="criteria-container">
-				<div class="criteria">
-					<!-- <keep-alive> -->
-						<Criteria
-							ref="entryChild"
-							:config="setConfig('entry')"
-							:isRiskControl="false"
-							@getEntryRelation="getEntryRelation"
-							@sendEntrySignalIndex="sendEntrySignalIndex"
-						>
-						<!-- <keep-alive include="['ChildComponent']"> -->
-							<ChildComponent></ChildComponent>
-						<!-- </keep-alive> -->
-						</Criteria>
-					<!-- </keep-alive> -->
-				</div>
+				<Criteria
+					class="criteria"
+					ref="entryChild1"
+					:config="setConfig('entry')"
+					:isRiskControl="false"
+					:symbolInfo="symbolInfo"
+				>
+				</Criteria>
 				<div class="divider"></div>
-				<div class="criteria">
-					<!-- <keep-alive> -->
-						<Criteria
-							ref="exitChild"
-							:config="setConfig('exit')"
-							:isRiskControl="isRiskControl"
-							@isOnlyRiskControl="isOnlyRiskControl"
-							@getExitRelation="getExitRelation"
-							@sendExitSignalIndex="sendExitSignalIndex"
-						>
-							<!-- <keep-alive include="['ChildComponent']"> -->
-								<ChildComponent></ChildComponent>
-							<!-- </keep-alive> -->
-						</Criteria>
-					<!-- </keep-alive> -->
-				</div>
+				<Criteria
+					class="criteria"
+					ref="exitChild1"
+					:config="setConfig('exit')"
+					:isRiskControl="isRiskControl"
+					:symbolInfo="symbolInfo"
+				>
+				</Criteria>
 			</div>
+		</el-tab-pane>
+    <el-tab-pane label="Symbol(2)" name="second" class="symbol-pane">
+			<div class="criteria-container" v-show="strategy === 'Dual'">
+				<Criteria
+					class="criteria"
+					ref="entryChild2"
+					:config="setConfig('entry2')"
+					:isRiskControl="false"
+					:symbolInfo="symbolInfo"
+				>
+				</Criteria>
+				<div class="divider"></div>
+				<Criteria
+					class="criteria"
+					ref="exitChild2"
+					:config="setConfig('exit2')"
+					:isRiskControl="isRiskControl"
+					:symbolInfo="symbolInfo"
+				>
+				</Criteria>
+			</div>
+		</el-tab-pane>
+  </el-tabs>
 		</div>
 		<div class="backtest-btns">
 			<el-tooltip
@@ -98,62 +108,65 @@ export default {
 		return {
 			isRiskControl: true,
 			isDisabled: false,
+			activeName: 'first',
+			strategy: 'Single',
+			symbolInfo: {}
 		}
 	},
 	beforeRouteEnter(to, from, next) {
 	if (to.path === '/backtester/sr/setup' && from.path.includes('/backtester')) {
     next(async _this => {
-			_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
-			_this.$refs['entryChild'].clearForm()
-      _this.$refs['exitChild'].resetForm()
-      if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
-        console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
-        // 说明是路由跳转过来携带参数的
-        const { data } = to.params
-        const backtestEditData = isJson(data) ? JSON.parse(data) : data
-        await _this.displaySetUpForm(backtestEditData)
-      }else {
-        // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
-        console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
-        let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
-        let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
-				let dataToUse = editData || cachedData
-				console.log('editData', editData)
-				console.log('cachedData', cachedData)
-        if (Object.keys(dataToUse).length !== 0) {
-          dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
-					dataToUse.old_uuid = dataToUse.id
-          await _this.displaySetUpForm(dataToUse)
-        }
-      }
-			_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
-			CIQ.hideCover()
+				_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
+				_this.$refs['entryChild1'].clearForm()
+				_this.$refs['exitChild1'].resetForm()
+				_this.$refs['entryChild2'].clearForm()
+				_this.$refs['exitChild2'].resetForm()
+				if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+					console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
+					// 说明是路由跳转过来携带参数的
+					const { data } = to.params
+					const backtestEditData = isJson(data) ? JSON.parse(data) : data
+					const {strategy, symbol, symbol2} = backtestEditData
+					_this.symbolInfo = {
+							strategy,
+							symbol,
+							symbol2
+					}
+					await _this.displaySetUpForm(backtestEditData)
+				}else {
+					// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
+					console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
+					let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
+					let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
+					let dataToUse = editData || cachedData
+					console.log('editData', editData)
+					console.log('cachedData', cachedData)
+					if (Object.keys(dataToUse).length !== 0) {
+						dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
+						dataToUse.old_uuid = dataToUse.id
+						await _this.displaySetUpForm(dataToUse)
+					}
+				}
+				_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
+				CIQ.hideCover()
     });
   } else {
     next(async _this => {
 			// 如果跳转携带 backtestID 则填充
 			const backtestID = LocalStorageUtil.get('backtestID')
-				if(backtestID) {
-					// const res = await seeParams(backtestID)
-					// res.data.commission = (res.data.commission * 100).toFixed(2)
-					// res.data.user_tag = 'client'
-					// _this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', res.data)
-					// _this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', res.data)
-					// _this.$store.state.form.favoriteBacktestRowData.id = res.data.id
-					// await _this.displaySetUpForm(res.data)
-					// LocalStorageUtil.remove('backtestID')
+			if(backtestID) {
+				const res = await seeParams(backtestID)
+				res.data.commission = (res.data.commission * 100).toFixed(2)
+				_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+				res.data.user_tag = 'client'
 
-					const res = await seeParams(backtestID)
-					_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
-					res.data.user_tag = 'client'
-
-					_this.editBacktest(res.data)
-					await _this.displaySetUpForm(res.data)
-					LocalStorageUtil.remove('backtestID')
-				}else {
-					_this.$store.state.form.rowDataForDisplay = {};
-					_this.$store.state.form.cachedBTBasicInfoData = {}
-				}
+				_this.editBacktest(res.data)
+				await _this.displaySetUpForm(res.data)
+				LocalStorageUtil.remove('backtestID')
+			}else {
+				_this.$store.state.form.rowDataForDisplay = {};
+				_this.$store.state.form.cachedBTBasicInfoData = {}
+			}
 		});
   }
 	},
@@ -209,6 +222,9 @@ export default {
     },
   },
 	methods: {
+		handleClick(tab) {
+			this.activeName = tab.name
+		},
 		setConfig(criteria) {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
@@ -216,12 +232,45 @@ export default {
 		IsRiskControl(isRiskControl) {
 			this.isRiskControl = isRiskControl
 		},
+		changeStrategy(val, obj) {
+			this.$nextTick(() => {
+			this.activeName = 'first'
+			this.strategy = val
+      this.symbolInfo = obj
+
+			if(val == 'Single') {
+				// 清空symbol2对应的entry2,exit2
+				const commitIndicators = (criteria, list) => {
+					this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+				};
+				commitIndicators('entry2', []);
+				commitIndicators('exit2', []);
+				
+				// 清空symbol2对应的symbol
+				this.$store.commit('form/setComparisonSymbol', {})
+
+				// todo: 移除symbol2的activatedMA
+				var activatedMAList = CIQ.store.state.chart.activatedMA
+				activatedMAList = activatedMAList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
+				this.$store.commit('chart/getMA', activatedMAList)
+
+				CIQ.addIndicators({})
+				/** 不能简单用隐藏panel来暂时移除symbol2的study,比如相同的senti但是roc对应不同symbol,它们都在同一个panel */
+				// for (var p in CIQ.stxx.panels) {
+				// 	if (CIQ.stxx.panels[p].name == "chart") continue;
+				// 	CIQ.stxx.panels[p].hidden = true;
+				// }
+			}else {
+				this.$refs['basicInfo'].getSymbol2()
+			}
+			})
+		},
 		clearForm() {
-      Object.assign(this.$data, this.$options.data())
-      this.$store.commit('initialBacktestInfo')
-			this.$refs['basicInfo'].clearForm()
-			this.$refs['entryChild'].clearForm()
-      this.$refs['exitChild'].clearForm()
+			Object.assign(this.$data, this.$options.data())
+			this.$store.commit('initialBacktestInfo');
+			['basicInfo', 'entryChild1', 'exitChild1', 'entryChild2', 'exitChild2'].forEach(refName => {
+				this.$refs[refName].clearForm();
+			});
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
@@ -238,30 +287,61 @@ export default {
 			CIQ.addCover()
 			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
 			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
-			const entryErr = await _this.saveCriteriaData('entryChild')
-			const exitErr = await _this.saveCriteriaData('exitChild')
-			console.log('entryErr', entryErr, 'exitErr', exitErr)
-			if (!entryErr || !exitErr) {
-				_this.setSetUpLoadingSetting(false, false, 0, 'Error saving backtest entry and exit criteria...');
-				_this.popUpMsgBox('Error saving backtest entry and exit criteria...')
-				CIQ.hideCover()
-				return
+			const saveAndCheckCriteriaErrors = async (childName) => {
+				const err = await _this.saveCriteriaData(childName);
+				return err;
+			};
+			const checkAndHandleError = (err, errMsg) => {
+				if (!err) {
+					_this.setSetUpLoadingSetting(false, false, 0, errMsg);
+					_this.popUpMsgBox(errMsg);
+					CIQ.hideCover();
+					return true;
+				}
+				return false;
+			};
+			const entryErr = await saveAndCheckCriteriaErrors('entryChild1')
+			const exitErr = await saveAndCheckCriteriaErrors('exitChild1')
+			const errMsg = 'Error saving backtest entry and exit criteria...'
+			if (checkAndHandleError(entryErr, errMsg) || checkAndHandleError(exitErr, errMsg)) return
+			if(_this.strategy === 'Dual') {
+				const entryErr2 = await saveAndCheckCriteriaErrors('entryChild2')
+				const exitErr2 = await saveAndCheckCriteriaErrors('exitChild2')
+				const errMsg2 = 'Error saving backtest entry2 and exit2 criteria...'
+				if (checkAndHandleError(entryErr2, errMsg2) || checkAndHandleError(exitErr2, errMsg2)) return
 			}
 			// 处理上传到后端的数据
-			let entrySaveObj = _this.handleSavedData('entry')
-			let exitSaveObj = _this.handleSavedData('exit')
-			console.log('entrySaveObj', entrySaveObj)
-			console.log('exitSaveObj', exitSaveObj)
-			_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...')
-			let indicatorLayout = _this.saveIndicatorLayoutData()
-			indicatorLayout.formIndicators = {
-				entry: entrySaveObj.indicatorLayout.formIndicators.entrySignal,
-				exit: exitSaveObj.indicatorLayout.formIndicators.exitSignal
+			debugger
+			const saveObj = (type) => _this.handleSavedData(type);
+			const entrySaveObj = saveObj('entry');
+			const exitSaveObj = saveObj('exit');
+			let indicatorLayout = _this.saveIndicatorLayoutData();// 只需要调用一次就能存储 formIndicators 以外的数据
+			const setAndSaveIndicator = (entrySaveObj, exitSaveObj, type) => {
+				const exitType = type === 'entry' ? 'exit' : 'exit2'
+				_this.setSetUpLoadingSetting(true, true, 20, 'Saving backtest indicator...');
+				indicatorLayout.formIndicators = {
+					...indicatorLayout.formIndicators,
+					[type]: entrySaveObj.indicatorLayout.formIndicators[`${type}Signal`],
+					[exitType]: exitSaveObj.indicatorLayout.formIndicators[`${exitType}Signal`]
+				};
+			};
+			setAndSaveIndicator(entrySaveObj, exitSaveObj, 'entry');
+			let additionalSaveObj = null
+			if (_this.strategy === 'Dual') {
+				const entrySaveObj2 = saveObj('entry2');
+				const exitSaveObj2 = saveObj('exit2');
+				setAndSaveIndicator(entrySaveObj2, exitSaveObj2, 'entry2');
+				additionalSaveObj = {
+					entrySaveObj2,
+					exitSaveObj2
+				}
 			}
-			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...')
-			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout)
+			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...');
+			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj);
+
 		},
 		async saveCriteriaData(criteriaRef) {
+			debugger
 			const _this = this
 			const tabLength = _this.$refs[criteriaRef].addSignalLength()
 			for (let index = 0; index < tabLength; index++) {
@@ -275,6 +355,7 @@ export default {
 			return _this.$refs[criteriaRef].isSameSignal()
 		},
 		handleSavedData(criteria) {
+			debugger
 			/*
 			saveObj should be like this:
 			{
@@ -323,7 +404,7 @@ export default {
 			const criteriaCapFirstL = capitalizeFirstLetter(criteria)
 			const signal_list = []
 			const b = new SignalCode()
-			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const isHandleIndicator = criteria.startsWith('entry') || (criteria.startsWith('exit') && !isOnlyUseRiskControl)
 			if (isHandleIndicator) {
 				signalList.forEach((item) => {
 					// publicProperties 中的属性列表都应该保留
@@ -395,7 +476,7 @@ export default {
 			let signal = null
 			if(isHandleIndicator) signal = backtestData[criteria].signals.map(findSignal)
 
-			if (isOnlyUseRiskControl && criteria == 'exit') {
+			if (isOnlyUseRiskControl && criteria.startsWith('exit')) {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
@@ -417,8 +498,6 @@ export default {
 				保存除了 formIndicators 之外的 indicatorLayout 属性
 			*/
 			let indicatorLayout = {}
-			indicatorLayout.technicalIndicators =
-				this.$store.state.chart.indicators.technicalIndicators
 			let savedTechSD = []
 			for (let i in CIQ.stxx.layout.studies) {
 				let output = {}
@@ -440,14 +519,23 @@ export default {
 				this.$store.state.chart.activatedMALayout
 			return indicatorLayout
 		},
-		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout) {
+		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj) {
+			debugger
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
+			const shouldAddExtraProperty = additionalSaveObj !== null && typeof additionalSaveObj === 'object' && Object.keys(additionalSaveObj).length
 			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
 			backtestInfo.description = JSON.stringify(backtestInfo.description)
-			backtestInfo.entry = JSON.stringify(entrySaveObj.entry)
-			backtestInfo.exit = JSON.stringify(exitSaveObj.exit)
-			backtestInfo.entry_description = JSON.stringify(entrySaveObj.entry_description)
-			backtestInfo.exit_description = JSON.stringify(exitSaveObj.exit_description)
+			backtestInfo['entry'] = JSON.stringify(entrySaveObj['entry'])
+			backtestInfo['exit'] = JSON.stringify(exitSaveObj['exit'])
+			if(shouldAddExtraProperty) {
+				// 新增保存属性
+				backtestInfo['entry2'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry2'])
+				backtestInfo['exit2'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit2'])
+				backtestInfo['entry2_description'] = JSON.stringify(additionalSaveObj['entrySaveObj2']['entry2_description'])
+				backtestInfo['exit2_description'] = JSON.stringify(additionalSaveObj['exitSaveObj2']['exit2_description'])
+			}
+			backtestInfo['entry_description'] = JSON.stringify(entrySaveObj['entry_description'])
+			backtestInfo['exit_description'] = JSON.stringify(exitSaveObj['exit_description'])
 			backtestInfo.old_uuid = backtestInfo.old_uuid
 			if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
 			// 判断是否有 direction 没有设置默认值
@@ -492,26 +580,43 @@ export default {
 				'index_moving_average_slope',
 				'opted'
 			]
+			if(!shouldAddExtraProperty) {
+				const propertiesToDelete = [
+          'entry2', 
+          'exit2',
+          'direction2',
+          'symbol2',
+          'entry2_description',
+          'exit2_description'
+        ]
+        propertiesToDelete.forEach(property => {
+          delete backtestInfo[property];
+        })
+			}
 			console.log('backtestInfo', backtestInfo)
+			if(shouldAddExtraProperty) selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
 			)
 			// Before the back test, load the data of the whole period and generate CSV to upload S3, and then update the form when the results come out
 			this.setSetUpLoadingSetting(true, true, 30, 'Processing saved backtest information...')
-			this.reloadData(indicatorLayout, backtestInfo.frequency)
+			this.reloadData(indicatorLayout, backtestInfo.frequency, backtestInfo)
 			// 1. Upload data file
 			// 2. Upload parameter file
 			// 3. Judge the file upload status. If an error is reported, run back test will not be performed
 			
 			this.setSetUpLoadingSetting(true, true, 40, 'Uploading backtest data...')
 			const callback = this.handleCallback(backtestParams, backtestInfo)
-			CIQ.outputSignalsResult(backtestInfo.pk, callback)
+			CIQ.addIndicators({type:'outputSignalsResult',pk:backtestInfo.pk},callback)
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
+			debugger
 			if(!data.id) return
 			let _this = this
+			const {strategy} = data
+			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
 
 			/*
@@ -520,6 +625,12 @@ export default {
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
 			let displayData = _this.$store.getters.rowDataForDisplay
+			/* lishan 在这里修改数据, 检查展示有无问题 */
+			// displayData.strategy = 'Dual'
+			// displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
+			// displayData.exit2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/4/0.5"}],"cond":[{"newCondition":4,"conditionPeriod":"21"}]}
+			// displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
+			// displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
 			if(!hasEntryOrExit) {
 				const res = await seeParams(data.id)
@@ -527,48 +638,63 @@ export default {
 			}
 			console.log('displayData', displayData)
 			let signalCode = new SignalCode();
+			/*********/
+			const parseJsonIfNeeded = (data) => {
+				return isJson(data) ? JSON.parse(data) : data;
+			};
 
-			// 解析 JSON 字符串
-			displayData.entry = isJson(displayData.entry) ? JSON.parse(displayData.entry) : displayData.entry;
-			displayData.exit = isJson(displayData.exit) ? JSON.parse(displayData.exit) : displayData.exit;
+			const processSignals = (signals) => {
+				return Array.isArray(signals) ? signals
+					.filter(item => item.code && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code))
+					.map(value => signalCode.decode(value.code)) : [];
+			};
 
-			// 处理 entry.signals
-			if (Array.isArray(displayData.entry.signals)) {
-				displayData.entry.signals = displayData.entry.signals
-					.filter(item => item.code) // 过滤掉没有 code 属性的元素
-					.map(value => signalCode.decode(value.code));
+			const setEditPanel = (childRef, criteria, childName) => {
+				const panelLength = criteria.signals.length;
+				const childData = { [childName]: criteria };
+				_this.$refs[childRef].setEditPanel(panelLength, childData);
+			};
+
+			const processCriteria = async (childRef, criteria, childName) => {
+				displayData[childName] = parseJsonIfNeeded(criteria);
+				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				await this.transformOldName(displayData, childName);
+				setEditPanel(childRef, displayData[childName], childName);
+			};
+
+			await processCriteria('entryChild1', displayData.entry, 'entry');
+
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
+				debugger
+				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
-			await this.transformOldName(displayData,'entry')
 
-			// 设置 entryChild 的编辑面板
-			let entryPanel = displayData.entry.signals.length;
-			let entryData = { entry: displayData.entry };
-			_this.$refs.entryChild.setEditPanel(entryPanel, entryData);
-
-			// 处理 exit.signals
-			if (Array.isArray(displayData.exit.signals)) {
-				displayData.exit.signals = displayData.exit.signals
-					.filter(item => item.code && (item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'  && item.code !== 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'))
-					.map(value => signalCode.decode(value.code));
-			const riskValArr = data.risk_control.split('/');
-			_this.isRiskControl = !riskValArr.every(item => item === '');
-				if (displayData.exit.signals.length === 0 || displayData.exit.signals.includes(undefined)) {
-					displayData.exit.signals = [{ code: '' }];
+			const processExit = async (childRef, exitData, childName) => {
+				debugger
+				displayData[childName] = parseJsonIfNeeded(exitData);
+				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
+					displayData[childName]['signals'] = [{ code: '' }];
 					_this.$nextTick(() => {
-						_this.$refs.exitChild.setRiskEditData(displayData);
+						_this.$refs[childRef].setRiskEditData(displayData);
 					});
 				} else {
-					await this.transformOldName(displayData,'exit')
-
-					let exitPanel = displayData.exit.signals.length;
-					let exitData = { exit: displayData.exit };
-					_this.$refs.exitChild.setEditPanel(exitPanel, exitData);
+					await this.transformOldName(displayData, childName);
+					setEditPanel(childRef, displayData[childName], childName);
 				}
+			};
+
+			await processExit('exitChild1', displayData.exit, 'exit');
+
+			debugger
+
+			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
+				await processExit('exitChild2', displayData.exit2, 'exit2');
 			}
 
-			
-			// this.$refs['entryChild'].setEditData()
-			// this.$refs['exitChild'].setEditData()
+			const riskValArr = data.risk_control.split('/');
+			_this.isRiskControl = !riskValArr.every(item => item === '');
+
 		},
 	}
 }
@@ -580,17 +706,17 @@ export default {
 	border-radius: 12px;
 	position: relative;
 }
-
 .criteria {
 	// margin-left: 40px;
-	margin-bottom: 10px;
 	flex: 1;
 }
 .criteria-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin: 10px;
+}
+.set-up-criteria {
+	padding: 10px;
 	border-bottom: 2px solid #cacaca;
 }
 .backtest-btns {
@@ -625,7 +751,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
@@ -634,7 +759,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
@@ -643,7 +767,6 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		border-bottom: 1px solid #797979;
 	}
 	.backtest-btns {
 		.el-button {
@@ -656,35 +779,50 @@ export default {
 	width: 1.5px;
 	background-color: #cacaca;
 	opacity: 0.8;
-	margin: 10px;
+	margin: 0 10px;
 	align-self: stretch;
 }
 @media (min-width: 1280px) and (max-width: 1365px) {
 	.criteria {
-		margin: 0px 10px 10px 10px;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria {
-		margin: 0px 40px 10px 40px;
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 768px) and (max-width: 819px) {
 	.criteria {
-		margin: 0px 40px 10px 40px;
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
+	}
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.criteria {
-		border-bottom: 1px solid #797979;
+		padding-bottom: 5px;
 	}
-	.criteria {
-		margin: 0px 0px 10px 0px;
+	.criteria:nth-child(1) {
+		border-bottom: 2px solid #cacaca;
 	}
 	.criteria-title {
 		font-size: 15px;
 	}
+}
+.set-up-container /deep/ .Single > .el-tabs__header.is-top {
+		opacity: 0;
+		display: none;
+}
+.set-up-container /deep/ .Dual > .el-tabs__header.is-top {
+		opacity: 1;
+		display: block;
 }
 </style>

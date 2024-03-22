@@ -4,35 +4,27 @@
 		<el-form :model="backtestEditData" label-position="left" size="mini">
 			<el-row :gutter="20">
 				<el-col :span="6">
-					<el-form-item label="Starting Capital:" prop="startingCapital">
-						<el-input v-model="backtestEditData.capital" disabled></el-input>
-					</el-form-item>
-					<el-form-item label="Timeframe:" prop="frequency">
-						<el-input disabled v-model="backtestEditData.frequency"></el-input>
-					</el-form-item>
-					<el-form-item label="Trade Price:" prop="trade_price">
-						<el-input disabled v-model="tradePrice"></el-input>
+					<el-form-item label="Backtest Type" prop="strategy">
+						<el-input v-model="backtestEditData.strategy" disabled></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :span="6">
 					<el-form-item label="Commission:" prop="commission">
-						<el-input v-model="temp.commission" disabled>
+						<el-input v-model="backtestEditData.commission" disabled>
 							<template v-slot:append>
-								(%)
-							</template>
-						</el-input>
+							(%)
+						</template></el-input>
 					</el-form-item>
-					<el-form-item label="Backtest Period:">
-						<el-input disabled v-model="backtestPeriod"> </el-input>
-					</el-form-item>
-					<el-form-item label="Direction:" prop="direction">
-						<el-input disabled v-model="backtestEditData.direction"></el-input>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Starting Capital:" prop="startingCapital">
+						<el-input v-model="backtestEditData.capital" disabled></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :span="6">
 					<el-form-item label="Slippage:" prop="slippage">
 						<el-input
-							v-model="backtestEditData.slippage"
+							v-model="temp.slippage"
 							disabled
 						>
 						<template v-slot:append>
@@ -40,6 +32,48 @@
 						</template>
 						</el-input>
 					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row :gutter="20">
+				<el-col :span="6">
+					<el-form-item
+						:label="backtestEditData.strategy !== 'Dual' ? 'Symbol:' : 'Symbol(1):'"
+						prop="symbol"
+					>
+						<el-input
+							v-model="backtestEditData.symbol"
+							disabled
+						></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Benchmark:" prop="benchmark">
+						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">	
+					<el-form-item label="Timeframe:" prop="frequency">
+						<el-input disabled v-model="backtestEditData.frequency"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">	
+					<el-form-item label="Trade Price:" prop="trade_price">
+						<el-input disabled v-model="tradePrice"></el-input>
+					</el-form-item>	
+				</el-col>
+			</el-row>
+			<el-row :gutter="20">
+				<el-col :span="6">	
+					<el-form-item :label="backtestEditData.strategy === 'Dual' ? 'Direction(1):' : 'Direction:'">
+						<el-input disabled v-model="backtestEditData.direction"></el-input>
+					</el-form-item>	
+				</el-col>
+				<el-col :span="6">	
+					<el-form-item label="Backtest Period:">
+						<el-input disabled v-model="backtestPeriod"> </el-input>
+					</el-form-item>		
+				</el-col>
+				<el-col :span="6">
 					<el-form-item
 						label="Start date:"
 						v-if="backtestEditData.start_date != '1800-10-01'"
@@ -53,37 +87,41 @@
 					>
 						<el-input disabled> </el-input>
 					</el-form-item>
-					<el-form-item
-						label="Backtest Name:"
-						prop="name"
-						placeholder="Give the backtest a name"
-            size="mini"
-					>
-						<el-input
-							v-model="backtestEditData.name"
-							disabled
-						></el-input>
-					</el-form-item>
 				</el-col>
 				<el-col :span="6">
-					<el-form-item label="Benchmark:" prop="benchmark">
-						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
-					</el-form-item>
 					<el-form-item label="End date:">
 						<el-input disabled v-model="backtestEditData.end_date">
 						</el-input>
 					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row :gutter="20">
+				<el-col :span="6">
 					<div class="exclude_oo">
-					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0">
+					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0 && backtestEditData.strategy !== 'Dual'">
 						<el-input disabled v-model="backtestEditData.exclude_oo"> </el-input>
 					</el-form-item>
 					</div>
+					<el-form-item label="Direction(2):" prop="direction2" v-if="backtestEditData.strategy === 'Dual'">
+						<el-input disabled v-model="backtestEditData.direction2"> </el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Symbol(2):" prop="symbol2" v-if="backtestEditData.strategy === 'Dual'">
+						<el-input disabled v-model="backtestEditData.symbol2"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Name:" prop="name">
+						<el-input disabled v-model="backtestEditData.name"></el-input>
+					</el-form-item>
 				</el-col>
 			</el-row>
 		</el-form>
 	</div>
 </template>
 <script>
+import { trimTrailingZeros } from '@/utils'
 export default {
   props: { backtestEditData: Object },
   name: 'ResForm',
@@ -136,9 +174,10 @@ export default {
     backtestEditData: {
       handler(newVal) {
         if (JSON.stringify(newVal) != '{}') {
+
           console.log('result', newVal)
-          const commission = Number(newVal.commission)
-          this.temp.commission = commission.toFixed(2)
+          const commission =Number(newVal.commission)
+          this.temp.commission =  trimTrailingZeros(commission.toFixed(2))
 					try {
 						this.backtestPeriod = this.historyOptions[newVal.backtest_period]
 						if(newVal.backtest_period === null || newVal.backtest_period === undefined) {
@@ -167,6 +206,7 @@ export default {
 						this.backtestPeriod = this.historyOptions[backtest_period]
 					}
 					this.tradePrice = this.tradePriceOptions[newVal.trade_price]
+					this.temp.slippage = trimTrailingZeros(newVal.slippage)
         } else {
           this.temp.commission = ''
           this.temp.slippage = ''
@@ -239,4 +279,5 @@ export default {
 		width: 30%;
 	}
 }
+
 </style>

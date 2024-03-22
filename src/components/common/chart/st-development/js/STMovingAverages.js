@@ -23,6 +23,7 @@
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
+import { getPropertyByString } from "@/utils"
 
 let __js_st_studies_movingAverages_ = (_exports) => {
 
@@ -1148,8 +1149,8 @@ if (!CIQ.Studies) {
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
 				/** 防止分母为0或者null */
-				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))
-				result = lowestPrice?(quote[field]/lowestPrice-1)*100:0
+				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,field))))
+				result = lowestPrice?(getPropertyByString(quote,field)/lowestPrice-1)*100:0
 			}
 			quotes[i]["Result " + sd.name] = result;
 		}
@@ -1411,6 +1412,7 @@ if (!CIQ.Studies) {
 		"Percentage Above N-Day Low": {
             name: "Percentage Above N-Day Low",
 			inputs: { Period: 252 },
+			// inputs: { Period: 252,Field: "aapl" },
             calculateFN: CIQ.Studies.calculatePercentageAboveNDayLow,
         },
 		"Percentage Below N-Day High": {
