@@ -1374,6 +1374,8 @@ export default {
       };
       const modifyProperties = {
         symbol: '1. Symbol(1)',
+        direction: '8. Direction(1)',
+        symbol: '1. Symbol(1)',
         name: '14. Backtest Name'
       };
 

@@ -64,7 +64,7 @@
 			</el-row>
 			<el-row :gutter="20">
 				<el-col :span="6">	
-					<el-form-item label="Direction:" prop="direction">
+					<el-form-item :label="backtestEditData.strategy === 'Dual' ? 'Direction(1):' : 'Direction:'">
 						<el-input disabled v-model="backtestEditData.direction"></el-input>
 					</el-form-item>	
 				</el-col>
