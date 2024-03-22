@@ -70,7 +70,7 @@ let markerVisibilityType	//marker可见性按钮状态变量
 MarkersSample.prototype.loadDataSet = function(dataSet){
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
     
-	if(!dataSet[0].Symbol){
+	if(!dataSet[0] || !dataSet[0].Symbol){
 		mDataSet =  dataSet
 	}else {
 		mDataSet =  dataSet.filter(item => item.Symbol == CIQ.stxx.chart.symbol)
@@ -305,6 +305,8 @@ MarkersSample.prototype.showmMarker = function () {
 
 	/** dual symbol */
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	//var actualXaxis = stx.getYAxisByField(stx.panels[stx.chart.series[comparisonSymbol.url].parameters.panel], comparisonSymbol.url);
+	
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 
@@ -358,24 +360,33 @@ MarkersSample.prototype.showmMarker = function () {
 		// 绘制Marker
 		//const yAxisBuySell = quote[comparisonSymbol.url]?.Close
 		if(activeLabels.includes("triangle_buy") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
-			// new CIQ.Marker({
-			// 	stx: stx,
-			// 	label: "triangle_buy",
-			// 	xPositioner: "date",
-			// 	yPositioner: "value",
-			// 	y:yAxisBuySell,
-			// 	x: standardDate,
-			// 	node: new CIQ.Marker.stPerformance({
-			// 		type: "triangle",
-			// 		headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
-			// 		category: 'buy-2',
-			// 		story:
-			// 			 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
-			// 		displayCategory: false,
-			// 		displayStem: true,	
-			// 		invert: true,
-			// 	})
-			// });
+			new CIQ.Marker({
+				stx: stx,
+				label: "triangle_buy",
+				xPositioner: "date",
+				yPositioner: "below_candle",
+				//yPositioner: "value",
+				//y:yAxisBuySell,
+				// yAxis: actualXaxis,		// <<<<== custom field
+            	plotField: comparisonSymbol.url,		// <<<<== custom field
+				x: standardDate,
+				node: new CIQ.Marker.stPerformance({
+					type: "triangle",
+					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
+					category: 'buy-2',
+					story:
+						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+					displayCategory: false,
+					displayStem: true,	
+					invert: true,
+				})
+				// new CIQ.Marker.Simple({
+				// 	type: "circle",
+				// 	category: "news",
+				// 	headline: "This is a Marker for a News Item",
+				// 	story: "This is the story of a split",
+				//   })
+			});
 
 			// 循环所有study
 			if(!quote) continue
@@ -404,24 +415,23 @@ MarkersSample.prototype.showmMarker = function () {
 				}
 			}	
 		}else if(activeLabels.includes("triangle_sell") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
-			// new CIQ.Marker({
-			// 	stx: stx,
-			// 	label: "triangle_sell",
-			// 	xPositioner: "date",
-			// 	yPositioner: "value",
-			// 	y:yAxisBuySell,
-			// 	x: standardDate,
-			// 	node: new CIQ.Marker.stPerformance({
-			// 		type: "triangle",
-			// 		headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
-			// 		category: 'sell-2',
-			// 		story:
-			// 			'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
-			// 		displayCategory: false,
-			// 		displayStem: true,	
+			new CIQ.Marker({
+				stx: stx,
+				label: "triangle_sell",
+				xPositioner: "date",
+				plotField: comparisonSymbol.url,		// <<<<== custom field
+				x: standardDate,
+				node: new CIQ.Marker.stPerformance({
+					type: "triangle",
+					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
+					category: 'sell-2',
+					story:
+						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+					displayCategory: false,
+					displayStem: true,	
 					
-			// 	})
-			// });
+				})
+			});
 
 			// 循环所有study
 			if(!quote) continue

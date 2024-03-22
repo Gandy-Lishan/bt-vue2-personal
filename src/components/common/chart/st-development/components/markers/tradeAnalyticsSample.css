@@ -204,7 +204,7 @@ body .ta_markers-ui {
     height: 10px !important;
 	background-color: #1afa29 !important;
 }
-/* dual symbol */
+/************ dual symbol **************/
 .stx-marker.sell-2 .stx-visual {
 	width: 10px !important;
     height: 10px !important;
@@ -215,6 +215,22 @@ body .ta_markers-ui {
     height: 10px !important;
 	background-color: #fbc05c !important;
 }
+.stx-marker.trade-sell-2 .stx-visual{
+	border-radius: 50% !important;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: #5b9bd1 !important;
+	background-position: -20px -20px !important;
+}
+.stx-marker.trade-buy-2 .stx-visual{
+	border-radius: 50% !important ;
+	width: 10px !important;
+	height: 10px !important;
+	background-color: #fbc05c !important;
+	background-position: -20px -20px !important;
+}
+/************************************************************/
+
 .stx-marker .stx-stem {
 	/* 这里统一设定高度，但是其他样式比如颜色和y轴偏移量不能改，在js内修改 */
 	height: 22px;
@@ -233,21 +249,7 @@ body .ta_markers-ui {
 	background-color: rgb(216 30 6) !important;
 	background-position: -20px -20px !important;
 }
-/* dual symbol */
-.stx-marker.trade-buy-2 .stx-visual{
-	border-radius: 50% !important ;
-	width: 10px !important;
-	height: 10px !important;
-	background-color: #fbc05c !important;
-	background-position: -20px -20px !important;
-}
-.stx-marker.trade-sell-2 .stx-visual{
-	border-radius: 50% !important;
-	width: 10px !important;
-	height: 10px !important;
-	background-color: #5b9bd1 !important;
-	background-position: -20px -20px !important;
-}
+
 .stx-marker.highlowline .stx-visual {
 	border-radius: 50% !important;
 	width: 8px !important;
