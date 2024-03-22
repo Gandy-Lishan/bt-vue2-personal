@@ -444,15 +444,15 @@ export default {
       userSelectedTimeFrame: 'daily', 
       timeFrameOptions: [
         {
-          label: 'daily',
+          label: 'Daily',
           value: 'daily'
         },
         {
-          label: 'weekly',
+          label: 'Weekly',
           value: 'weekly'
         },
         {
-          label: 'monthly',
+          label: 'Monthly',
           value: 'monthly'
         }
       ],
@@ -474,6 +474,8 @@ export default {
   watch: {
     handleGetBacktestSymbol: {
       async handler(newVal) {
+        this.$store.commit('chart/SEI_MI_BENCHMARK',newVal)
+
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -503,10 +505,6 @@ export default {
          this.weightData[_index].indicator = newVal
          this.weightData[_index].indicator_url = newVal
 
-        /* old version */
-        //  await this.$store.dispatch('chart/set_miFormWeightedListChange',
-        //  {data:[{weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}],url:null})
-        //  await this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
        
@@ -549,8 +547,8 @@ export default {
      * 刷新MA状态
      */
     refreshMAState() {
-      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',true)
-      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',true)
+      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
     },
     async changeTimeFrame(item) {
       this.userSelectedTimeFrame = item
@@ -644,7 +642,8 @@ export default {
         calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
         extreme_optimism: this.data.extreme_optimism,
         extreme_pessimism: this.data.extreme_pessimism,
-        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
+        combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase(), // combine_type : indicator or symbol,
+        benchmark: CIQ.stxx.chart.symbol
       };
       if(this.data.categories !== 'WIC') {
         saveData = {
@@ -674,7 +673,7 @@ export default {
           ma: '1_1_1',
           extreme_optimism: 0,
           extreme_pessimism: 0,
-          combine_type: 'indicator'
+          combine_type: 'indicator',
         };
       }
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)

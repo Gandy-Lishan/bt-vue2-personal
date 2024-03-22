@@ -826,5 +826,17 @@
     {
         "symbol": "SOXX",
         "name": "Semiconductor (SOXX)"
+    },
+    {
+        "symbol": "Ethereum",
+        "name": "Ethereum"
+    },
+    {
+        "symbol": "RSP",
+        "name": "Invesco S&P 500 Equal Weight(RSP)"
+    },
+    {
+        "symbol": "BIL",
+        "name": "SPDR Bloomberg 1-3 Month T-Bill(BIL)"
     }
 ]

@@ -68,9 +68,11 @@
         }
         // indicator加载
         await addIndicatorStudy(addedItems.map(item=>item.indicator_url))
-        
+
+        const benchmark = CIQ.store.state.chart.miBenmark
         CIQ.stxx.loadChart({ 
-                symbol: symbolList.length?symbolList[0].indicator_url:process.env.VUE_APP_DEFAULT_SYMBOL, 
+            // 优先考虑symbolList第一个，然后是benchmark（edit时）, benchmark不存在就用默认
+                symbol: symbolList.length?symbolList[0].indicator_url:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
                 indicator:[...indicatorList.map(item=>item.indicator_url),combinedStudy] ,
                 // 这边先写死范围，防止其他indicator无法pagination
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
@@ -418,7 +420,7 @@
                 CIQ.objIndicator = []
                 
                 CIQ.stxx.loadChart({
-                    symbol: newData.indicator1.url, 
+                    symbol: newData.indicator1.url, // indicator1和benchmark一致的
                     indicator:[newData.url],
                     startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
                 }, function(){
@@ -458,8 +460,9 @@
             
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+            const benchmark = CIQ.store.state.chart.miBenmark
             CIQ.stxx.loadChart(	{ 
-                symbol: process.env.VUE_APP_DEFAULT_SYMBOL, 
+                symbol: benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
                 indicator:[newData.indicator1.url,newData.indicator2.url,newData.url],
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             }, function(){

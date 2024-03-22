@@ -800,8 +800,7 @@ import {
 import searchBar from "@/components/common/searchBar"
 
 const throttle = require('lodash/throttle')
-const uniqWith = require('lodash/uniqWith')
-const isEqual = require('lodash/isEqual')
+
 export default {
   props: { backtestEditData: Object },
   name: 'BasicInfo',
@@ -1086,7 +1085,7 @@ export default {
       symbol = symbol.replace(/"/g, '')
       this.bd.symbol = symbol
       this.$store.commit('form/getBacktestSymbol', symbol)
-     // this.getSymbol(symbol)
+      // this.getSymbol(symbol)
       LocalStorageUtil.remove('symbol')
     },
     userRole: {
@@ -1297,32 +1296,31 @@ export default {
 
         var symbolListTemp = vm.symbolList.filter((item) => {
           return (
-            item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
         var IndexListTemp = vm.indexList.filter((item) => {
           return (
-            item.value.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-            item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        let options = symbolListTemp.concat(IndexListTemp)
+        let list = symbolListTemp.concat(IndexListTemp)
+        let options = []
+        let wholeWord = []
         // keyword全匹配
-        for (var item of options) {
+        for (var item of list) {
           if (
             item.value.toLowerCase() === query.toLowerCase() ||
-            item.label.toLowerCase() === query.toLowerCase() ||
-            item.name.toLowerCase() === query.toLowerCase()
+            item.label.toLowerCase() === query.toLowerCase()
           ) {
-            options.unshift(item)
-            break
+            wholeWord.push(item)
+            continue
           }
+          options.push(item)
         }
+        options.unshift(...wholeWord)
         // 去重
-        this.options = uniqWith(options, isEqual)
+        this.options = options
         // 解除遮罩
         vm.loading = false
       } else {

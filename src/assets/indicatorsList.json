@@ -14968,5 +14968,155 @@
         "chart_name": "XLV Panic Breadth Composite",
         "url": "breadth_sector_xlv_panic_composite",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "RSP Optix",
+        "url": "etf_rsp",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BIL Optix",
+        "url": "etf_bil",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CAC 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_cac_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CCMP 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_ccmp_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DAX 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_dax_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DIA 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_dia_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_ftse_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HSI 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_hsi_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IBOV 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_ibov_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IWM 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_iwm_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KOSPI 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_kospi_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MEXBOL 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_mexbol_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXEF 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_mxef_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NIFTY 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_nifty_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NKY 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_nky_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QQQ 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_qqq_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SENSEX 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_sensex_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SHCOMP 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_shcomp_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SMI 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_smi_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_spy_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TSX 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_tsx_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlb_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xle_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlf_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xli_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlk_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlp_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLU 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlu_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV Cumulative 10 Day A/D Line",
+        "url": "breadth_sector_xlv_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY Cumulative 10 Day A/D Line",
+        "url": "breadth_sector_xly_ad10",
+        "updated": "Daily"
     }
 ]
