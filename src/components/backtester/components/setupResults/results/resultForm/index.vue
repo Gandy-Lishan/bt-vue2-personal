@@ -174,7 +174,8 @@ export default {
     backtestEditData: {
       handler(newVal) {
         if (JSON.stringify(newVal) != '{}') {
-
+					// 兼容之前就的 strategy
+					if(newVal.strategy === 'Signal') newVal.strategy = 'Single'
           console.log('result', newVal)
           const commission =Number(newVal.commission)
           this.temp.commission =  trimTrailingZeros(commission.toFixed(2))
