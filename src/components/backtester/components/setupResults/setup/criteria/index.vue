@@ -487,38 +487,11 @@ export default {
 			delay_bars: 0,
 			isDelayBar: false,
 			relation: 0,
-			isUsePeriodLimit: false
+			isUsePeriodLimit: false,
+			signalOptions: []
     }
   },
   computed: {
-    signalOptions() {
-      const options =  [
-				{
-					value: 1,
-					label: 'Single-Condition'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Condition'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Condition'
-				}
-			]
-      if (!this.isRiskControl) {
-        return options // 如果 isRiskControl 为 true，则返回原始选项
-      } else {
-        // 如果 isRiskControl 为 false，则返回修改后的选项
-        return [
-          {
-              value: 0,
-              label: 'Only Use Risk Control'
-          },
-          ...options // 保留原始选项中的部分
-        ];
-      }
-    },
 		criteriaCapFirstL() {
 			/* Entry or Exit */
 			return this.config['criteriaCapFirstL']
@@ -529,51 +502,16 @@ export default {
 		},
 		criteriaNum() {
 			return this.config['criteriaNum']
-		},
-		isRiskControlState() {
-			return this.$store.state.form.riskControl
 		}
 	},
 	watch: {
-		isRiskControl(val) {
-				const options =  [
-				{
-					value: 1,
-					label: 'Single-Condition'
-				},
-				{
-					value: 2,
-					label: 'SameBar Multi-Condition'
-				},
-				{
-					value: 3,
-					label: 'TimeOrder Multi-Condition'
-				}
-			]
-			if (!val) {
-			this.signalOptions = options
-			// this.relation = 1
-			// this.changeRelation(this.relation)
-			}else {
-				this.signalOptions = [
-          {
-              value: 0,
-              label: 'Only Use Risk Control'
-          },
-          ...options
-        ];
-				// this.relation = 0
-				// this.changeRelation(this.relation)
-			}
-		},
-    isRiskControlState(val) {
-			if(!val && this.criteriaNum.startsWith('exit')) {
-				if(this.relation == 0) {
-				this.relation = 1
-				this.changeRelation(this.relation)
-				}
-			}
-    },
+		isRiskControl: {
+			handler(val) {
+				this.showRiskControlOptions(val)
+			},
+			deep: true,
+      immediate: true
+		}
 	},
 	created() {
 		/* 用于自动填充 user custom indicators file */
@@ -612,6 +550,21 @@ export default {
 					this.$refs.LRFLikeChild[i].clearForm()
 					this.$refs.trailingStopLikeChild[i].clearForm()
 				}
+			}
+		},
+		showRiskControlOptions(val) {
+			debugger
+			const originalOptions = [
+				{ value: 1, label: 'Single-Condition' },
+				{ value: 2, label: 'SameBar Multi-Condition' },
+				{ value: 3, label: 'TimeOrder Multi-Condition' }
+			];	
+
+			this.signalOptions = val ? [{ value: 0, label: 'Only Use Risk Control' }, ...originalOptions] : originalOptions;
+
+			if (!val && this.criteriaNum.startsWith('exit') && this.relation === 0) {
+				this.relation = 1;
+				this.changeRelation(this.relation);
 			}
 		},
 		resetForm() {
