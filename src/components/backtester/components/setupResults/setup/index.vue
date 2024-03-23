@@ -615,6 +615,7 @@ export default {
 			debugger
 			if(!data.id) return
 			let _this = this
+			if(data.strategy === 'Signal') data.strategy = 'Single'
 			const {strategy} = data
 			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
