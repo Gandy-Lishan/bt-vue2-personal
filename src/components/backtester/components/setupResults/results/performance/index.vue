@@ -496,20 +496,24 @@ debugger
 
           return transformedItem;
         });
-      const dataList = [
+      let dataList = [
         summary,
         mergedData,
         _backtestHistoryList,
         _TIMHistoryList,
         _maxMinData
       ]
-      const sheetNames = [
+      let sheetNames = [
         'Summary',
         'Trades',
         'Exit with default Time Frame',
         'Exit with Customized TIM',
         'Max Gain and Loss'
       ]
+      if(this.strategy === 'Dual') {
+        dataList = [summary,mergedData]
+        sheetNames = ['Summary','Trades']
+      }
       this.exportDataToCSV(dataList, sheetNames)
     },
     exportDataToCSV(dataList, sheetNames) {
