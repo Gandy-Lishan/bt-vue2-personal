@@ -46,7 +46,7 @@
                 align="center"
             >
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="EntryIndicator"
                 label="Entry Indicator"
                 align="center"
@@ -57,7 +57,7 @@
                         <p>{{ item }}</p>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 prop="ExitDate"
                 label="Exit Date"
@@ -142,7 +142,7 @@
                 </div>
             </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="ExitIndicator"
                 label="Exit Indicator"
                 align="center"
@@ -153,7 +153,7 @@
                         <p>{{ item }}</p>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <div slot="empty" style="text-align: left">
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
