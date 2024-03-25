@@ -488,7 +488,11 @@ export default {
 			isDelayBar: false,
 			relation: 0,
 			isUsePeriodLimit: false,
-			signalOptions: []
+			signalOptions: [
+				{ value: 1, label: 'Single-Condition' },
+				{ value: 2, label: 'SameBar Multi-Condition' },
+				{ value: 3, label: 'TimeOrder Multi-Condition' }
+			]
     }
   },
   computed: {
