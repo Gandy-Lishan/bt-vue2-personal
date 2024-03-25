@@ -416,9 +416,9 @@ debugger
         const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
         mergedData.push({
           'Entry Date': formatEntryDate,
+          'Symbol': entryData.Symbol,
           'Entry Action': entryData.Action.toUpperCase(),
           'Entry Price': entryData['Trade Price'],
-          'Entry Indicator': entryData.Indicator || '',
           'Exit Date': formatExitDate,
           'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': exitData['Trade Price'] || '',
@@ -426,7 +426,6 @@ debugger
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
           'Market Condition': exitData['Market Condition'] || 'N\/A',
-          'Exit Indicator': exitData.Indicator || ''
         });
       }
 

@@ -140,7 +140,7 @@
 									<template slot="title">Type</template>
 									<el-menu-item index="Strategy">All Symbol Backtest</el-menu-item>
 									<el-menu-item index="Single">Single Symbol Backtest(S)</el-menu-item>
-									<el-menu-item index="Dual">Dual Symbol Backtest(D)</el-menu-item>
+									<el-menu-item index="Dual">Dual Symbols Backtest(D)</el-menu-item>
 								</el-submenu>
 							</el-menu>
 						</el-tooltip>
@@ -509,7 +509,7 @@ export default {
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
 			isButtonVisible: false,
-			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbol Backtest."
+			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest."
 		}
 	},
 	directives: {
