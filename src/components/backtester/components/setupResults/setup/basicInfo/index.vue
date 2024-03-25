@@ -30,7 +30,7 @@
                     <el-select
                       v-model="bd.strategy"
                       placeholder="— Select Type —"
-                      @change="changeStrategy"
+                      @change="changeStrategy(bd.strategy,true)"
                     >
                       <el-option
                         v-for="item in strategyOptions"
@@ -1007,6 +1007,10 @@ export default {
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
     },
+    ...mapGetters(['getComparisonSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetComparisonSymbol() {
+      return this.getComparisonSymbol
+    },
     ...mapGetters(['getterBacktestInfo']),
     updateFreq() {
       return this.$store.state.form.pairDataFreq
@@ -1042,6 +1046,17 @@ export default {
     }
   },
   watch: {
+    handleGetComparisonSymbol: {
+      handler(newVal) {
+        // 如果strategy为Single且symbol2选择了
+        if(this.bd.strategy == 'Single' && Object.keys(newVal).length>0){
+          this.bd.strategy = 'Dual'
+          this.bd.symbol2 = newVal.url
+          this.changeStrategy('Dual',false)
+        }
+      },
+      deep: true
+    },
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.bd.symbol = newVal
@@ -1355,15 +1370,39 @@ export default {
       this.bd.frequency = val
       this.$store.commit('form/getFrequency', val)
     },
-    changeStrategy(val) {
+    /**
+     * 监听comparision切换事件，如果当前Strategy不为Dual则调用此函数,并不更新图表（已经在chartiq组件实现）
+     * val: strategy type
+     * updateChart: 判断是否更新图表，如果是从comparision search bar点进来则不需要在这里调用addSymbol2更新图表
+     */
+    changeStrategy(val,updateChart) {
       // 切换的成 Dual 时, 有些数据是不存在的, 需要设置默认值
       if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'Long'; this.isRiskControl = false}
       this.$emit('IsRiskControl', this.isRiskControl);
       this.$store.commit('form/isRiskControl', this.isRiskControl);
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
+      
+      /*
+      切换 Dual
+      删除 exclude overlapping observation, market environment, index moving average slope, risk control
+      改变 bdFormLabel
+      */ 
+      const originalProperties = {
+        symbol: '1. Symbol',
+        name: '15. Backtest Name'
+      };
+      const modifyProperties = {
+        symbol: '1. Symbol(1)',
+        direction: '8. Direction(1)',
+        symbol: '1. Symbol(1)',
+        name: '14. Backtest Name'
+      };
+      this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
+
       /**
        * 图表对应处理
        */
+      if(!updateChart) return
       if(val == 'Single') {
 				// 清空symbol2对应的entry2,exit2
 				const commitIndicators = (criteria, list) => {
@@ -1384,23 +1423,6 @@ export default {
 			}else {
         this.getSymbol2(this.bd.symbol2)
 			}
-      
-      /*
-      切换 Dual
-      删除 exclude overlapping observation, market environment, index moving average slope, risk control
-      改变 bdFormLabel
-      */ 
-      const originalProperties = {
-        symbol: '1. Symbol',
-        name: '15. Backtest Name'
-      };
-      const modifyProperties = {
-        symbol: '1. Symbol(1)',
-        direction: '8. Direction(1)',
-        symbol: '1. Symbol(1)',
-        name: '14. Backtest Name'
-      };
-      this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
     },
     setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
