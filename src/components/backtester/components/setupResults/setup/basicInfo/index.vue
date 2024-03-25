@@ -1356,6 +1356,10 @@ export default {
       this.$store.commit('form/getFrequency', val)
     },
     changeStrategy(val) {
+      // 切换的成 Dual 时, 有些数据是不存在的, 需要设置默认值
+      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'Long'; this.isRiskControl = false}
+      this.$emit('IsRiskControl', this.isRiskControl);
+      this.$store.commit('form/isRiskControl', this.isRiskControl);
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
       /**
        * 图表对应处理
@@ -1396,11 +1400,7 @@ export default {
         symbol: '1. Symbol(1)',
         name: '14. Backtest Name'
       };
-
       this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
-      const isRiskControl = val === 'Single';
-      this.$emit('IsRiskControl', isRiskControl);
-      this.$store.commit('form/isRiskControl', isRiskControl);
     },
     setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
