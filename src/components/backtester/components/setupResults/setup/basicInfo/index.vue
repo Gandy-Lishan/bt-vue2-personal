@@ -428,7 +428,7 @@
                         remote
                         reserve-keyword
                         automatic-dropdown
-                        @change="getSymbol2(bd.symbol2)"
+                        @change="getSymbol2"
                         placeholder="enter keywords"
                         :remote-method="remoteMethod"
                         @visible-change="remoteMethod"
@@ -1165,10 +1165,6 @@ export default {
       CIQ.addSymbol(val)
     },
     getSymbol2(val) {
-      // 当getSymbol2在父组件调用时设当前组件的symbol2值
-      if(!val){
-        val = this.bd.symbol2
-      }
       
       let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==val)
       let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==val)
@@ -1361,6 +1357,30 @@ export default {
     },
     changeStrategy(val) {
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
+      /**
+       * 图表对应处理
+       */
+      if(val == 'Single') {
+				// 清空symbol2对应的entry2,exit2
+				const commitIndicators = (criteria, list) => {
+					this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+				};
+				commitIndicators('entry2', []);
+				commitIndicators('exit2', []);
+				
+				// 清空symbol2对应的symbol
+				this.$store.commit('form/setComparisonSymbol', {})
+
+				// todo: 移除symbol2的activatedMA
+				var activatedMAList = CIQ.store.state.chart.activatedMA
+				activatedMAList = activatedMAList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
+				this.$store.commit('chart/getMA', activatedMAList)
+
+				CIQ.addIndicators({})
+			}else {
+        this.getSymbol2(this.bd.symbol2)
+			}
+      
       /*
       切换 Dual
       删除 exclude overlapping observation, market environment, index moving average slope, risk control
