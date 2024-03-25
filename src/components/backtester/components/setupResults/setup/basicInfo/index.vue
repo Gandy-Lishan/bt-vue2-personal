@@ -812,7 +812,7 @@ export default {
       bd: {
         name: '',
         symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
-        symbol2: 'SPX',
+        symbol2: 'SPY',
         benchmark: process.env.VUE_APP_DEFAULT_SYMBOL,
         strategy: 'Single',
         capital: 100000.0,
@@ -1361,7 +1361,7 @@ export default {
     },
     changeStrategy(val) {
       // 切换的成 Dual 时, 有些数据是不存在的, 需要设置默认值
-      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPX'; this.isRiskControl = false}
+      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPY'; this.isRiskControl = false}
       this.$emit('IsRiskControl', this.isRiskControl);
       this.$store.commit('form/isRiskControl', this.isRiskControl);
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
@@ -1408,7 +1408,7 @@ export default {
         this.bd.market_environment = 0
         this.bd.index_moving_average_slope = 0
       }else if(this.bd.strategy === 'Single') {
-        this.bd.symbol2 = 'SPX'
+        this.bd.symbol2 = 'SPY'
         this.bd.direction2 = 'Long'
       }
       if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
