@@ -522,8 +522,8 @@ export default {
             !(newV.includes('Symbol') && oldV.includes('Symbol'))
           ){
             // 重置最大周期和用户选择周期
-            this.data['time_frame'] = 'daily'
-            this.userSelectedTimeFrame = 'daily'
+            // this.data['time_frame'] = 'daily'
+            // this.userSelectedTimeFrame = 'daily'
             
             // 大类切换时也需要重置ma和EP/EO
             const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
@@ -991,6 +991,7 @@ export default {
       this.data.indicator_1_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_1_url;
       this.data.indicator_2_url = data.mul_indicator && data.indicator_weight ? '' : data.indicator_2_url;
       this.data.time_frame = data.timeframe
+      this.userSelectedTimeFrame = data.timeframe
       this.data.name = data.name;
       this.rowUrl = data.url
 
