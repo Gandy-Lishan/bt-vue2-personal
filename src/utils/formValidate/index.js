@@ -139,26 +139,35 @@ export const validateURLRule = (_, value, callback) => {
 }
 
 export const validatePercentageRule = (_, value, callback) => {
-  if (value === '') {
-    return 'Enter a number';
+	if (value === '') {
+	  return 'Enter a number';
+	}
+	const numericValue = parseFloat(value);
+	if (isNaN(numericValue)) {
+	  return 'Enter a valid number';
+	}
+  
+	// uncomment it to allow float value
+  //   if (numericValue < 0) {
+  //     return 'Enter a non-negative value';
+  //   }
+  const pattern = /^\d+$/
+  const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+  if (isPositiveInteger) {
+	  return `Enter positive integers only`;
   }
-  const numericValue = parseFloat(value);
-  if (isNaN(numericValue)) {
-    return 'Enter a valid number';
+	// Uncomment the following block to restrict values to <= 100
+	// if (numericValue > 100) {
+	//   return 'Enter a value <= 100';
+	// }
+  
+	// uncomment it to allow float value
+  //   const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
+  //   if (decimalPlaces > 2) {
+  //     return 'Limit to two decimal places';
+  //   }
+	return '';
   }
-  if (numericValue < 0) {
-    return 'Enter a non-negative value';
-  }
-  // Uncomment the following block to restrict values to <= 100
-  // if (numericValue > 100) {
-  //   return 'Enter a value <= 100';
-  // }
-  const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
-  if (decimalPlaces > 2) {
-    return 'Limit to two decimal places';
-  }
-  return '';
-}
 
 export const validateMarginRule = (value, minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
 	if(value === '') return errorMsgEmpty
