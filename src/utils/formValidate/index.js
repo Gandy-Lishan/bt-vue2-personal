@@ -146,17 +146,26 @@ export const validatePercentageRule = (_, value, callback) => {
   if (isNaN(numericValue)) {
     return 'Enter a valid number';
   }
-  if (numericValue < 0) {
-    return 'Enter a non-negative value';
-  }
+
+  // uncomment it to allow float value
+//   if (numericValue < 0) {
+//     return 'Enter a non-negative value';
+//   }
+const pattern = /^\d+$/
+const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+if (isPositiveInteger) {
+	return `Enter positive integers only`;
+}
   // Uncomment the following block to restrict values to <= 100
   // if (numericValue > 100) {
   //   return 'Enter a value <= 100';
   // }
-  const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
-  if (decimalPlaces > 2) {
-    return 'Limit to two decimal places';
-  }
+
+  // uncomment it to allow float value
+//   const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
+//   if (decimalPlaces > 2) {
+//     return 'Limit to two decimal places';
+//   }
   return '';
 }
 
