@@ -1176,10 +1176,14 @@ export default {
       this.$store.commit('form/SET_CACHED_SCOPED_ROW_IMMUTABLE_PROPS', {key: 'trade_price', value: val})
     },
     getSymbol(val) {
+      const {strategy, symbol, symbol2} = this.bd
+      this.$emit('changeSymbolInfo', {strategy, symbol, symbol2})
       // this.$store.commit('form/getBacktestSymbol', val)
       CIQ.addSymbol(val)
     },
     getSymbol2(val) {
+      const {strategy, symbol, symbol2} = this.bd
+      this.$emit('changeSymbolInfo', {strategy, symbol, symbol2})
       
       let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==val)
       let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==val)
