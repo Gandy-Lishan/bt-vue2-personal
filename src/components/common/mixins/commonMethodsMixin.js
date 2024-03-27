@@ -268,10 +268,17 @@ export const CommonMethodsMixin = {
 			})
 			const {strategy} = row
 			const content = CIQ.exportEx()
+			let content2
+			// dual symbol
+			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			if(comparisonSymbol.url){
+				content2 = CIQ.exportEx2(comparisonSymbol.url);
+			}
 			/** todo: 这里需要加双股票么 */
 			let csvObj = {
 				uuid: row.id,
 				csv: content,
+				csv2: content2,
 				entry: row.entry,
 				exit: row.exit,
 				...(strategy === 'Dual' && row.entry2 && row.exit2 ? { entry2: row.entry2, exit2: row.exit2 } : {})
