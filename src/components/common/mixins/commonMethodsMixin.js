@@ -107,7 +107,6 @@ export const CommonMethodsMixin = {
 						favorites: false,
 						user_tag: 'client'
 					}
-					if(data.strategy === 'Signal') data.strategy = 'Single'
 					delete params.uuid
 					delete params.results
 					delete params.user_id
@@ -357,7 +356,7 @@ export const CommonMethodsMixin = {
 			backtestInfo.old_uuid = backtestInfo.id || backtestInfo.uuid
 			backtestInfo.market_environment = backtestInfo.market_environment || 0
 			backtestInfo.index_moving_average_slope =
-			backtestInfo.index_moving_average_slope || 0
+				backtestInfo.index_moving_average_slope || 0
 			// 判断是否有 direction 没有设置默认值
 			backtestInfo.direction = backtestInfo.direction
 				? backtestInfo.direction
@@ -376,7 +375,6 @@ export const CommonMethodsMixin = {
 					backtestInfo.market_environment = 0
 					backtestInfo.index_moving_average_slope = 0
 				}
-			if(strategy === 'Signal') backtestInfo.strategy = 'Single'
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
 			const backtest_period = backtestInfo.backtest_period
