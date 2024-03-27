@@ -249,12 +249,26 @@
 				:width="item.width"
 			>
 			<template slot-scope="scope">
-					<div class="showDate">
+					<div class="showDate" v-if="scope.row.strategy !== 'Dual'">
 						<el-button size="mini" type="info" plain
 							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
 							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
+						>
+					</div>
+					<div class="showDate" v-else>
+						<el-button size="mini" type="info" plain
+							>E1: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[0] : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>X1: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[0] : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>E2: {{ scope.row.last_entry_signal_date[1] ? scope.row.last_entry_signal_date[1] : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>X2: {{ scope.row.last_exit_signal_date[1] ? scope.row.last_exit_signal_date[1] : '' }}</el-button
 						>
 					</div>
 				</template>
@@ -615,6 +629,13 @@ export default {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
+						if(item.strategy === 'Dual' && item.last_entry_signal_date) {
+							item.last_entry_signal_date = item.last_entry_signal_date.split(' ')
+						}
+						if(item.strategy === 'Dual' && item.last_exit_signal_date) {
+							item.last_exit_signal_date = item.last_exit_signal_date.split(' ')
+						}
+
 						return item;
 					});
 
