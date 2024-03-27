@@ -257,26 +257,18 @@
 							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
 						>
 					</div>
-					<div class="showDate" v-else-if="Array.isArray(last_entry_signal_date) && Array.isArray(last_exit_signal_date)">
-						<el-button size="mini" type="info" plain
-							>E1: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[0] : '' }}</el-button
-						>
-						<el-button size="mini" type="info" plain
-							>X1: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[0] : '' }}</el-button
-						>
-						<el-button size="mini" type="info" plain
-							>E2: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[1] : '' }}</el-button
-						>
-						<el-button size="mini" type="info" plain
-							>X2: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[1] : '' }}</el-button
-						>
-					</div>
 					<div class="showDate" v-else>
 						<el-button size="mini" type="info" plain
-							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
+							>E1: {{ Array.isArray(scope.row.last_entry_signal_date) ? scope.row.last_entry_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
+							>X1: {{ Array.isArray(scope.row.last_exit_signal_date) ? scope.row.last_exit_signal_date[0] : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>E2: {{ Array.isArray(scope.row.last_entry_signal_date) ? scope.row.last_entry_signal_date[1] : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>X2: {{ Array.isArray(scope.row.last_exit_signal_date) ? scope.row.last_exit_signal_date[1] : '' }}</el-button
 						>
 					</div>
 				</template>
