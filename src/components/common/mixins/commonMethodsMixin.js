@@ -267,21 +267,17 @@ export const CommonMethodsMixin = {
 				end_date: row.end_date.replace(/-/g, '') * 1000000000
 			})
 			const {strategy} = row
+			let  content2 = null
 			const content = CIQ.exportEx()
-			let content2
 			// dual symbol
 			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			if(comparisonSymbol.url){
-				content2 = CIQ.exportEx2(comparisonSymbol.url);
-			}
-			/** todo: 这里需要加双股票么 */
+			if(strategy === 'Dual') content2 = CIQ.exportEx2(comparisonSymbol.url)
 			let csvObj = {
 				uuid: row.id,
 				csv: content,
-				csv2: content2,
 				entry: row.entry,
 				exit: row.exit,
-				...(strategy === 'Dual' && row.entry2 && row.exit2 ? { entry2: row.entry2, exit2: row.exit2 } : {})
+				...(strategy === 'Dual' && row.entry2 && row.exit2 && content2 ? { entry2: row.entry2, exit2: row.exit2, csv2: content2 } : {})
 			};
 			this.$store.commit('form/setHashTable', csvObj)
 			// 暂时设置成成功
