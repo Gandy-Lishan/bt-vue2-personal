@@ -664,7 +664,7 @@ export default {
         // 不排序
         prop = null
       }
-      if (order == 'ascending') {
+      if (order == 'ascending' && !prop.includes('strategy') ) {
         // 升序排列
         prop = `-${prop}`
       }
@@ -673,20 +673,12 @@ export default {
 		handleQuery: throttle(function() {
 			this.getDataList()
 		}, 500),
-		async filterHandler(value, row, column) {
-			// value => Signal, Dual
-			debugger
-			let prop
-			if(value === 'Dual') prop = '-strategy'
-			if(value === 'Single') prop = 'strategy'
-			await this.getDataList(prop)
-			return this.dataList
-    },
 		async handleSelect(value) {
-			let prop
-			if(value === 'Strategy') prop = null
-			if(value === 'Dual') prop = '-strategy'
-			if(value === 'Single') prop = 'strategy'
+			let prop, order
+			if(value === 'Strategy') {prop = null; order=null}
+			if(value === 'Dual') {prop = '-strategy'; order='ascending'}
+			if(value === 'Single') {prop = 'strategy'; order='descending'}
+			this.currentSort = {prop, order}
 			await this.getDataList(prop)
 		}
 	}
