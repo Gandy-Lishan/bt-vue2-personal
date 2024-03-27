@@ -560,7 +560,6 @@ export default {
 			}
 		},
 		showRiskControlOptions(val) {
-			debugger
 			const originalOptions = [
 				{ value: 1, label: 'Single-Condition' },
 				{ value: 2, label: 'SameBar Multi-Condition' },

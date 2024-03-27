@@ -69,7 +69,7 @@
   * @param {*} params 
   * type:
   *     'updateIndicators':更新indicator列表，用于加载/移除单个indicator,切换Timeframe, 切换Symbol
-  *     'loadFromBacktest':从view/edit进入，根据backtestInfo还原图表
+  *     'loadFromBacktest':从view/edit/rerun进入，根据backtestInfo还原图表
   *     'addBuiltTech':从chartiq Study列表载入technical indicator,无需发pairdata
   *     'outputSignalsResult': runbacktest 调用，在回调处生成并上传csv数据
   * stx:
@@ -171,11 +171,65 @@
             stx.removeSeries(series);
         }
         await new Promise((resolve) => {
-            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
+            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
+                const commonOperations = async () => {
+                    /* 一系列chart加载完成后的操作 */
+                    /** dual symbol,setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
+                    CIQ.store.commit('form/setRestoreFreq', '')
+    
+                    // fetch indicator information and add studies to chart
+                    /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
+                    await CIQ.getIndicatorMatedata(indicatorsList,stx)
+        
+                    /** !(_type == 'loadFromBacktest') */
+                    if(type == 'updateIndicators'){
+                        CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
+                        }
+                        
+                    if(type == 'outputSignalsResult'){
+                        /** load Indicators when run a new backtest
+                         * outputSignalsResult只保留csv 生成和upload逻辑 */
+                        stx.resizeChart();
+                        stx.draw();
+                        var csvContent = CIQ.exportEx()
+                        var csvContent2
+                        // dual symbol
+                        if(comparisonSymbol.url){
+                            csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
+                        }
+        
+                        var promise = 200
+                        try {
+                            var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
+                            var data = await uploadS3(S3DataStr)
+                            console.log("Upload csv Success", data);
+        
+                            // dual symbol
+                            if(csvContent2){
+                            var S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
+                            var data2 = await uploadS3(S3DataStr2)
+                            console.log("Upload csv2 Success", data2);
+                            }
+                            promise = 200
+                        } catch (error) {
+                            console.log("Error", error);
+                            promise = 500
+                        }
+                        await callback(promise);
+                        resolve()
+                    }else {
+                        if(callback){
+                            callback()  
+                        }else{ 
+                            CIQ.hideCover()
+                            CIQ.nprogress.done()
+                        }
+                        resolve()
+                    } 
+                }; 
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
                 
                 if(comparisonSymbol.url){
-                   
                     /** dual symbol */
                     stx.addSeries(comparisonSymbol.url, {
                         display:comparisonSymbol.name, 
@@ -187,60 +241,10 @@
                             position:"left",
                             textStyle:"#FFBE00"
                         },
-                    });
-                }
-                /** dual symbol,setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
-                CIQ.store.commit('form/setRestoreFreq', '')
+                    },commonOperations);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
+                }else commonOperations();
 
-            // fetch indicator information and add studies to chart
-            /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
-            await CIQ.getIndicatorMatedata(indicatorsList,stx)
 
-            /** !(_type == 'loadFromBacktest') */
-            if(type == 'updateIndicators'){
-                CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-             }
-             
-            if(type == 'outputSignalsResult'){
-                /** load Indicators when run a new backtest
-                 * outputSignalsResult只保留csv 生成和upload逻辑 */
-                stx.resizeChart();
-                stx.draw();
-                var csvContent = CIQ.exportEx()
-                var csvContent2
-                // dual symbol
-                if(comparisonSymbol.url){
-                    csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
-                }
-
-                var promise = 200
-                try {
-                  var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
-                  var data = await uploadS3(S3DataStr)
-                  console.log("Upload csv Success", data);
-
-                  // dual symbol
-                  if(csvContent2){
-                    var S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
-                    var data2 = await uploadS3(S3DataStr2)
-                    console.log("Upload csv2 Success", data2);
-                  }
-                  promise = 200
-                } catch (error) {
-                  console.log("Error", error);
-                  promise = 500
-                }
-                await callback(promise);
-                resolve()
-            }else {
-                if(callback){
-                    callback()  
-                }else{ 
-                    CIQ.hideCover()
-                    CIQ.nprogress.done()
-                }
-                resolve()
-            }   
          })
         })
  }
