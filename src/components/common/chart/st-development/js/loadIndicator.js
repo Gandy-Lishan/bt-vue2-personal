@@ -29,6 +29,7 @@
     if(comparisonSymbol.url){
         csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
     }
+    debugger
     console.log("csvContent created Success");
 
     let promise = 200
@@ -38,7 +39,7 @@
       console.log("Upload csv Success", data);
 
       if(csvContent2){
-        let S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent })
+        let S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
         let data2 = await uploadS3(S3DataStr2)
         console.log("Upload csv2 Success", data2);
       }
