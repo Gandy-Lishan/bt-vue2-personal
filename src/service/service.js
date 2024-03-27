@@ -90,21 +90,23 @@ export function getStocksList() {
 }
 
 export function getSampleList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/strategy/?ordering=name,status,-create_date&page='
-	if (sort) {
-		url = `/dev/dev/strategy/?ordering=${sort}&page=`
+	let url = `/dev/dev/strategy/?ordering=name,status,-create_date`
+	// sort -> ,total_return
+	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
+	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+		url = `/dev/dev/strategy/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/strategy/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/strategy/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -130,21 +132,23 @@ export function searchSampleList(keyword) {
 }
 
 export function getAnalystList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/analyst/?ordering=-create_date,name,status&page='
-	if (sort) {
-		url = `/dev/dev/analyst/?ordering=${sort}&page=`
+	let url = `/dev/dev/analyst/?ordering=-create_date,name,status`
+	// sort -> ,total_return
+	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
+	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+		url = `/dev/dev/analyst/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/analyst/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/analyst/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -223,20 +227,22 @@ export function getBacktestName(name) {
 	})
 }
 export function getFavoriteList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/backtest/?ordering=-create_date&favorites=true&page='
-	if (sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&favorites=true&page=`
+	let url = `/dev/dev/backtest/?ordering=-create_date&favorites=true`
+	// sort -> ,total_return
+	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
+	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+		url = `/dev/dev/backtest/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/backtest/?name=${name}&favorites=true&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&favorites=true&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
