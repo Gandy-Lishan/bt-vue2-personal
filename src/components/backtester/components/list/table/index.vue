@@ -68,7 +68,7 @@
 						<div class="exitBox">
 							<p style="display: inline-block; margin-right: 10px;">Symbol 2</p>
 								<span>
-									{{scope.row.symbol}}
+									{{scope.row.symbol2}}
 								</span>
 						</div>
 					</div>
