@@ -257,7 +257,7 @@
 							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
 						>
 					</div>
-					<div class="showDate" v-else>
+					<div class="showDate" v-else-if="Array.isArray(last_entry_signal_date) && Array.isArray(last_exit_signal_date)">
 						<el-button size="mini" type="info" plain
 							>E1: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[0] : '' }}</el-button
 						>
@@ -265,10 +265,18 @@
 							>X1: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>E2: {{ scope.row.last_entry_signal_date[1] ? scope.row.last_entry_signal_date[1] : '' }}</el-button
+							>E2: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[1] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X2: {{ scope.row.last_exit_signal_date[1] ? scope.row.last_exit_signal_date[1] : '' }}</el-button
+							>X2: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[1] : '' }}</el-button
+						>
+					</div>
+					<div class="showDate" v-else>
+						<el-button size="mini" type="info" plain
+							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
+						>
+						<el-button size="mini" type="info" plain
+							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
 						>
 					</div>
 				</template>
@@ -623,6 +631,7 @@ export default {
 									item.total_trader = result['Total Return (%)'];
 							}
 						}
+						debugger
 						item.entry_description = parseJsonOrString(item.entry_description);
 						item.exit_description = parseJsonOrString(item.exit_description);
 						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
