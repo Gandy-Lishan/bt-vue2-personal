@@ -3,7 +3,7 @@
 	<div class="criteria-box">
 		<div class="signal-option-box">
 			<div class="entry-title-box">
-				<p class="criteria-title">{{config['criteriaTitle']}}{{symbolInfo.strategy !== 'Dual'? '': `(${criteriaNum === 'entry' || criteriaNum === 'exit' ? symbolInfo.symbol : symbolInfo.symbol2})`}}</p>
+				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
 				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;diaplay: inline">
 					<span slot="content" v-html="config['criteriaTitleTP']">
           </span>
@@ -492,7 +492,7 @@ export default {
 				{ value: 1, label: 'Single-Condition' },
 				{ value: 2, label: 'SameBar Multi-Condition' },
 				{ value: 3, label: 'TimeOrder Multi-Condition' }
-			]
+			],
     }
   },
   computed: {
@@ -506,6 +506,9 @@ export default {
 		},
 		criteriaNum() {
 			return this.config['criteriaNum']
+		},
+		title() {
+			return this.symbolInfo.strategy !== 'Dual'? '': `(${this.criteriaNum === 'entry' || this.criteriaNum === 'exit' ? this.symbolInfo.symbol : this.symbolInfo.symbol2})`
 		}
 	},
 	watch: {

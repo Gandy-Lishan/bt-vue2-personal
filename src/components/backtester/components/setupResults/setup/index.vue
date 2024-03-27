@@ -2,7 +2,7 @@
 	<div class="setup">
 		<div>
 			<div class="setupBox">
-			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy"></BasicInfo>
+			<BasicInfo ref="basicInfo" @IsRiskControl="IsRiskControl" @changeStrategy="changeStrategy" @changeSymbolInfo="changeSymbolInfo"></BasicInfo>
 		</div>
 		<div class="set-up-container">
 		<el-tabs v-model="activeName" :class="{'Single': strategy == 'Single', 'Dual': strategy == 'Dual', 'set-up-criteria': true}" @tab-click="handleClick">
@@ -222,6 +222,9 @@ export default {
     },
   },
 	methods: {
+		changeSymbolInfo(obj) {
+			this.symbolInfo = obj
+		},
 		handleClick(tab) {
 			this.activeName = tab.name
 		},
