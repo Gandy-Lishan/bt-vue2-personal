@@ -3,9 +3,27 @@
 	<div class="backtest_container result-container">
 		<el-form :model="backtestEditData" label-position="left" size="mini">
 			<el-row :gutter="20">
+				<el-col :span="12">
+						<el-form-item prop="strategy" inline="true" class="strategyBox" label="Backtest Type">
+							<el-input v-model="backtestEditData.strategy" disabled></el-input>
+						</el-form-item>
+					</el-col>
+			</el-row>
+			<el-row :gutter="20">
 				<el-col :span="6">
-					<el-form-item label="Backtest Type" prop="strategy">
-						<el-input v-model="backtestEditData.strategy" disabled></el-input>
+					<el-form-item
+						:label="backtestEditData.strategy !== 'Dual' ? 'Symbol:' : 'Symbol(1):'"
+						prop="symbol"
+					>
+						<el-input
+							v-model="backtestEditData.symbol"
+							disabled
+						></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="6">
+					<el-form-item label="Starting Capital:" prop="startingCapital">
+						<el-input v-model="backtestEditData.capital" disabled></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :span="6">
@@ -14,11 +32,6 @@
 							<template v-slot:append>
 							(%)
 						</template></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="6">
-					<el-form-item label="Starting Capital:" prop="startingCapital">
-						<el-input v-model="backtestEditData.capital" disabled></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :span="6">
@@ -36,17 +49,6 @@
 			</el-row>
 			<el-row :gutter="20">
 				<el-col :span="6">
-					<el-form-item
-						:label="backtestEditData.strategy !== 'Dual' ? 'Symbol:' : 'Symbol(1):'"
-						prop="symbol"
-					>
-						<el-input
-							v-model="backtestEditData.symbol"
-							disabled
-						></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="6">
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
 					</el-form-item>
@@ -56,24 +58,24 @@
 						<el-input disabled v-model="backtestEditData.frequency"></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :span="6">	
+				<el-col :span="6">
 					<el-form-item label="Trade Price:" prop="trade_price">
 						<el-input disabled v-model="tradePrice"></el-input>
 					</el-form-item>	
 				</el-col>
-			</el-row>
-			<el-row :gutter="20">
 				<el-col :span="6">	
 					<el-form-item :label="backtestEditData.strategy === 'Dual' ? 'Direction(1):' : 'Direction:'">
 						<el-input disabled v-model="backtestEditData.direction"></el-input>
 					</el-form-item>	
 				</el-col>
+			</el-row>
+			<el-row :gutter="20">
 				<el-col :span="6">	
 					<el-form-item label="Backtest Period:">
 						<el-input disabled v-model="backtestPeriod"> </el-input>
 					</el-form-item>		
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="6">	
 					<el-form-item
 						label="Start date:"
 						v-if="backtestEditData.start_date != '1800-10-01'"
@@ -94,24 +96,24 @@
 						</el-input>
 					</el-form-item>
 				</el-col>
-			</el-row>
-			<el-row :gutter="20">
 				<el-col :span="6">
 					<div class="exclude_oo">
 					<el-form-item label="Exclude Overlapping Observations:" prop="exclude_oo" v-if="backtestEditData.exclude_oo != 0 && backtestEditData.strategy !== 'Dual'">
 						<el-input disabled v-model="backtestEditData.exclude_oo"> </el-input>
 					</el-form-item>
-					</div>
-					<el-form-item label="Direction(2):" prop="direction2" v-if="backtestEditData.strategy === 'Dual'">
-						<el-input disabled v-model="backtestEditData.direction2"> </el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="6">
+					</div>		
 					<el-form-item label="Symbol(2):" prop="symbol2" v-if="backtestEditData.strategy === 'Dual'">
 						<el-input disabled v-model="backtestEditData.symbol2"></el-input>
 					</el-form-item>
 				</el-col>
+			</el-row>
+			<el-row :gutter="20">
 				<el-col :span="6">
+					<el-form-item label="Direction(2):" prop="direction2" v-if="backtestEditData.strategy === 'Dual'">
+						<el-input disabled v-model="backtestEditData.direction2"> </el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
 					<el-form-item label="Name:" prop="name">
 						<el-input disabled v-model="backtestEditData.name"></el-input>
 					</el-form-item>
