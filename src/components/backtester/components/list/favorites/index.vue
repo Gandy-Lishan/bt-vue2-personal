@@ -1,13 +1,14 @@
 <template>
 <div>
   <Table
+    ref="BTTable"
     :tableCol="tableCol"
     :currentPage="currentPage"
     :isExpandAll="isExpandAll"
     :loading="isListLoading"
   >
   </Table>
-  <FLGbg></FLGbg>
+  <FLGbg @refreshList="refreshList"></FLGbg>
 </div>
 </template>
 
@@ -75,12 +76,17 @@ export default {
       currentPage: 'Favorites',
     }
   },
-    computed: {
+  computed: {
     isListLoading() {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.form.isListLoading
     },
   },
+  methods: {
+    async refreshList() {
+      await this.$refs.BTTable.getDataList(null)
+    }
+  }
 }
 </script>
 
