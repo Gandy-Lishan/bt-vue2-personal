@@ -8,7 +8,7 @@
     :loading="isListLoading"
   >
   </Table>
-  <FLGbg @refreshList="refreshList"></FLGbg>
+  <FLGbg :isAllFLSRequestsDone="isAllFLSRequestsDone" @refreshList="refreshList"></FLGbg>
 </div>
 </template>
 
@@ -74,6 +74,7 @@ export default {
       ],
       isExpandAll: false,
       currentPage: 'Favorites',
+      isAllFLSRequestsDone: false, // 标识 find last signal 的所有请求有没有全部完成
     }
   },
   computed: {

@@ -412,7 +412,7 @@
                         {{bdFormLabel['symbol2']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >Choose a stock/index as backtest symbol 2. (default: SPX)<br
+                            >Choose a stock/index as backtest symbol 2. (default: SPY)<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
