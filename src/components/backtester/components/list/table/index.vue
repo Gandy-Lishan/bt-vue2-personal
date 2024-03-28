@@ -630,10 +630,10 @@ export default {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
-						if(item.strategy === 'Dual' && item.last_entry_signal_date) {
+						if(item.strategy === 'Dual' && item.last_entry_signal_date && typeof item.last_entry_signal_date === 'string') {
 							item.last_entry_signal_date = item.last_entry_signal_date.split(' ')
 						}
-						if(item.strategy === 'Dual' && item.last_exit_signal_date) {
+						if(item.strategy === 'Dual' && item.last_exit_signal_date && typeof item.last_exit_signal_date === 'string') {
 							item.last_exit_signal_date = item.last_exit_signal_date.split(' ')
 						}
 
