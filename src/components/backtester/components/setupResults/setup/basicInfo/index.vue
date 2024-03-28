@@ -1566,7 +1566,7 @@ export default {
           delete editData[property];
         })
         try {
-          description = JSON.parse(exitData.description)
+          description = JSON.parse(editData.description)
         } catch (error) {
           description = {}
           description.Introduction = ''
