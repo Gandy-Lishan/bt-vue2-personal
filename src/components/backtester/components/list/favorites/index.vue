@@ -1,13 +1,14 @@
 <template>
 <div>
   <Table
+    ref="BTTable"
     :tableCol="tableCol"
     :currentPage="currentPage"
     :isExpandAll="isExpandAll"
     :loading="isListLoading"
   >
   </Table>
-  <FLGbg :isAllFLSRequestsDone="isAllFLSRequestsDone"></FLGbg>
+  <FLGbg @refreshList="refreshList"></FLGbg>
 </div>
 </template>
 
@@ -73,15 +74,19 @@ export default {
       ],
       isExpandAll: false,
       currentPage: 'Favorites',
-      isAllFLSRequestsDone: false, // 标识 find last signal 的所有请求有没有全部完成
     }
   },
-    computed: {
+  computed: {
     isListLoading() {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.form.isListLoading
     },
   },
+  methods: {
+    async refreshList() {
+      await this.$refs.BTTable.getDataList(null)
+    }
+  }
 }
 </script>
 
