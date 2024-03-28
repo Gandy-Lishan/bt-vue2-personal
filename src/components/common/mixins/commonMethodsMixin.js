@@ -26,7 +26,8 @@ import { conditionRadioMap } from './conditionRadioMap'
 export const CommonMethodsMixin = {
 	data() {
 		return {
-			favorite_array: []
+			favorite_array: [],
+			isAllFLSRequestsDone: false, // 标识 find last signal 的所有请求有没有全部完成
 		}
 	},
 	methods: {
@@ -239,6 +240,7 @@ export const CommonMethodsMixin = {
 				this.uploadCSVWhileFLS(item)
 			}
 			await this.findAllFavoritesSignal()
+			this.isAllFLSRequestsDone = true
 			// 循环结束之后请求一次列表
 			await this.getDataList(null)
 			
@@ -299,7 +301,6 @@ export const CommonMethodsMixin = {
 			}
 
 			let res = await Promise.allSettled(Object.values(requestMap)) // 等待所有请求完成
-			this.isAllFLSRequestsDone = true
 
 			// 获取成功的请求及其对应的 uuid
 			const successRes = []
