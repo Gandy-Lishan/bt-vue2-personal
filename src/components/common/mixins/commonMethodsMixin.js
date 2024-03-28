@@ -178,6 +178,7 @@ export const CommonMethodsMixin = {
 		async runOrFindAndLoop(actionType) {
 			this.showFLSMASK()
 			if (actionType === 'signal') {
+				this.isAllFLSRequestsDone = false
 				this.$store.commit('form/clearHashTable')
 				this.favorite_array = await this.getAllFavoriteData(1)
 				this.$store.commit(
@@ -298,6 +299,7 @@ export const CommonMethodsMixin = {
 			}
 
 			let res = await Promise.allSettled(Object.values(requestMap)) // 等待所有请求完成
+			this.isAllFLSRequestsDone = true
 
 			// 获取成功的请求及其对应的 uuid
 			const successRes = []

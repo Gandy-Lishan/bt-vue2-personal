@@ -32,7 +32,8 @@
         getLastSignalArray.length>0 &&
         progressBarVal == 100 &&
         getLastSignalArray.findIndex(x=>x.state==2) == -1 &&
-        getAllSignalArray.findIndex(x=>x.state==3) == -1
+        getAllSignalArray.findIndex(x=>x.state==3) == -1 &&
+        isAllFLSRequestsDone
       ">
         <img src="@/assets/allclear.png"/>
         <span>Find Sucessfully</span> 
@@ -115,6 +116,9 @@ import ProgressBar from 'vue-simple-progress'
 
 export default {
   name: 'FLGbackground',
+  props: {
+    isAllFLSRequestsDone: Boolean
+  },
   components: {
     ProgressBar,
   },
