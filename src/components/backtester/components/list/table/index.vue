@@ -654,17 +654,19 @@ export default {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
-						if(item.strategy !== 'Dual' && typeof item.last_entry_signal_date === 'string' && item.last_entry_signal_date === 'None') {
+						item._last_entry_signal_date = item.last_entry_signal_date
+						item._last_exit_signal_date = item.last_exit_signal_date
+						if(item.strategy !== 'Dual' && typeof item._last_entry_signal_date === 'string' && item._last_entry_signal_date === 'None') {
 							item._last_entry_signal_date = ''
 						}
-						if(item.strategy !== 'Dual' && typeof item.last_exit_signal_date === 'string' && item.last_exit_signal_date === 'None') {
+						if(item.strategy !== 'Dual' && typeof item._last_exit_signal_date === 'string' && item._last_exit_signal_date === 'None') {
 							item._last_exit_signal_date = ''
 						}
-						if(item.strategy === 'Dual' && item.last_entry_signal_date && typeof item.last_entry_signal_date === 'string') {
-							item._last_entry_signal_date = item.last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
+						if(item.strategy === 'Dual' && item._last_entry_signal_date && typeof item._last_entry_signal_date === 'string') {
+							item._last_entry_signal_date = item._last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
-						if(item.strategy === 'Dual' && item.last_exit_signal_date && typeof item.last_exit_signal_date === 'string') {
-							item._last_exit_signal_date = item.last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
+						if(item.strategy === 'Dual' && item._last_exit_signal_date && typeof item._last_exit_signal_date === 'string') {
+							item._last_exit_signal_date = item._last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 
 						return item;
