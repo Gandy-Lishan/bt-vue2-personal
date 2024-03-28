@@ -523,7 +523,8 @@ export default {
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
 			isButtonVisible: false,
-			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest."
+			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
+			strategyType: 'Strategy'
 		}
 	},
 	directives: {
@@ -589,13 +590,13 @@ export default {
 			let res = null
 			try {
 				if(this.currentPage == 'History'){
-					res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Favorites'){
-					res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Sample'){
-					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Analyst'){
-					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}
 				if (res.status == 200) {
 					let data = res.data.results
@@ -686,7 +687,7 @@ export default {
         // 不排序
         prop = null
       }
-      if (order == 'ascending' && !prop.includes('strategy') ) {
+      if (order == 'ascending') {
         // 升序排列
         prop = `-${prop}`
       }
@@ -695,11 +696,12 @@ export default {
 		handleQuery: throttle(function() {
 			this.getDataList()
 		}, 500),
-		async handleSelect(value) {
-			let prop, order
-			if(value === 'Strategy') {prop = null; order=null}
-			if(value === 'Dual') {prop = '-strategy'; order='ascending'}
-			if(value === 'Single') {prop = 'strategy'; order='descending'}
+		async handleSelect(type) {
+			this.strategyType = type
+      let { prop, order } = this.currentSort;
+			// 这里先考虑 order 再考虑 strategy
+			if (order == null || order == prop) prop = null
+      if (order == 'ascending') prop = `-${prop}`
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
 		}
