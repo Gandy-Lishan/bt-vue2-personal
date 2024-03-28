@@ -72,7 +72,7 @@
 								</span>
 						</div>
 					</div>
-						<div class="descriptionBox">
+						<div class="descriptionBox"  v-if="scope.row.strategy !== 'Dual'">
 						<div class="entryBox">
 							<p>Entry Description</p>
 							<template
@@ -94,11 +94,12 @@
 							</template>
 						</div>
 					</div>
-					<div class="descriptionBox" v-if="scope.row.strategy === 'Dual'">
-						<div class="entryBox">
-							<p>Entry Description 2</p>
+					<div  v-else>
+						<div class="descriptionBox">
+							<div class="entryBox">
+							<p>Entry 1 Description</p>
 							<template
-								v-for="(des, index) in scope.row.entry2_description"
+								v-for="(des, index) in scope.row.entry_description"
 							>
 								<p :key="index">
 									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
@@ -107,7 +108,29 @@
 							</template>
 						</div>
 						<div class="exitBox">
-							<p>Exit Description 2</p>
+							<p>Entry 2 Description</p>
+							<template v-for="(des, index) in scope.row.entry2_description">
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+						</div>
+						<div class="descriptionBox">
+						<div class="entryBox">
+							<p>Exit 1 Description</p>
+							<template
+								v-for="(des, index) in scope.row.exit_description"
+							>
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+						<div class="exitBox">
+							<p>Exit 2 Description</p>
 							<template v-for="(des, index) in scope.row.exit2_description">
 								<p :key="index">
 									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
@@ -119,6 +142,7 @@
 					<div class="urlBox" v-if="currentPage == 'Analyst'">
 						<p>Analyst Report URL</p>
 						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
+					</div>
 					</div>
 					</div>
 				</template>
@@ -630,11 +654,17 @@ export default {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
+						if(item.strategy !== 'Dual' && typeof item.last_entry_signal_date === 'string' && item.last_entry_signal_date === 'None') {
+							item.last_entry_signal_date = ''
+						}
+						if(item.strategy !== 'Dual' && typeof item.last_exit_signal_date === 'string' && item.last_exit_signal_date === 'None') {
+							item.last_exit_signal_date = ''
+						}
 						if(item.strategy === 'Dual' && item.last_entry_signal_date && typeof item.last_entry_signal_date === 'string') {
-							item.last_entry_signal_date = item.last_entry_signal_date.split(' ')
+							item.last_entry_signal_date = item.last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 						if(item.strategy === 'Dual' && item.last_exit_signal_date && typeof item.last_exit_signal_date === 'string') {
-							item.last_exit_signal_date = item.last_exit_signal_date.split(' ')
+							item.last_exit_signal_date = item.last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 
 						return item;
