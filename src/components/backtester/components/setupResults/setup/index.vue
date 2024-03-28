@@ -288,7 +288,6 @@ export default {
 				if (checkAndHandleError(entryErr2, errMsg2) || checkAndHandleError(exitErr2, errMsg2)) return
 			}
 			// 处理上传到后端的数据
-			debugger
 			const saveObj = (type) => _this.handleSavedData(type);
 			const entrySaveObj = saveObj('entry');
 			const exitSaveObj = saveObj('exit');
@@ -318,7 +317,6 @@ export default {
 
 		},
 		async saveCriteriaData(criteriaRef) {
-			debugger
 			const _this = this
 			const tabLength = _this.$refs[criteriaRef].addSignalLength()
 			for (let index = 0; index < tabLength; index++) {
@@ -332,7 +330,6 @@ export default {
 			return _this.$refs[criteriaRef].isSameSignal()
 		},
 		handleSavedData(criteria) {
-			debugger
 			/*
 			saveObj should be like this:
 			{
@@ -497,7 +494,6 @@ export default {
 			return indicatorLayout
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj) {
-			debugger
 			const backtestInfo = cloneDeep(this.$store.state.form.backtestInfo)
 			const shouldAddExtraProperty = additionalSaveObj !== null && typeof additionalSaveObj === 'object' && Object.keys(additionalSaveObj).length
 			backtestInfo.indicator_layout = JSON.stringify(indicatorLayout).replaceAll('\u200c', '$r001$')
@@ -589,7 +585,6 @@ export default {
 		},
 		async displaySetUpForm(data) {
 			/* 填充和展示 Set Up 表单的数据 */
-			debugger
 			if(!data.id) return
 			let _this = this
 			if(data.strategy === 'Signal') data.strategy = 'Single'
@@ -643,12 +638,10 @@ export default {
 			await processCriteria('entryChild1', displayData.entry, 'entry');
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'entry2')) {
-				debugger
 				await processCriteria('entryChild2', displayData.entry2, 'entry2');
 			}
 
 			const processExit = async (childRef, exitData, childName) => {
-				debugger
 				displayData[childName] = parseJsonIfNeeded(exitData);
 				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
 				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
@@ -663,8 +656,6 @@ export default {
 			};
 
 			await processExit('exitChild1', displayData.exit, 'exit');
-
-			debugger
 
 			if (strategy === 'Dual' && Object.hasOwnProperty.call(displayData, 'exit2')) {
 				await processExit('exitChild2', displayData.exit2, 'exit2');

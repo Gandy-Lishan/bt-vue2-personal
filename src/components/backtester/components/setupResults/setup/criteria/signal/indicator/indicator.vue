@@ -870,7 +870,6 @@ export default {
       // 移除chartiq对应的extraIndicators
       let extraIndicators = []
 			extraIndicators.push(...this.$store.state.chart.indicators.extraIndicators)
-      debugger
       extraIndicators = extraIndicators.filter(x=>x!=item.url)
 			this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
@@ -890,7 +889,6 @@ export default {
       freqObj.index = this.panelIndex
       freqObj.criteria = this.criteria
       freqObj.key = `${this.criteria}_${this.panelIndex}`
-debugger
       this.setFrequencyArray(freqObj)
 
       this.$emit('getFreqArray', freqObj)

@@ -624,7 +624,6 @@ export default {
 									item.total_trader = result['Total Return (%)'];
 							}
 						}
-						debugger
 						item.entry_description = parseJsonOrString(item.entry_description);
 						item.exit_description = parseJsonOrString(item.exit_description);
 						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
