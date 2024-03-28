@@ -275,24 +275,24 @@
 			<template slot-scope="scope">
 					<div class="showDate" v-if="scope.row.strategy !== 'Dual'">
 						<el-button size="mini" type="info" plain
-							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
+							>E: {{ scope.row._last_entry_signal_date ? scope.row._last_entry_signal_date : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
+							>X: {{ scope.row._last_exit_signal_date ? scope.row._last_exit_signal_date : '' }}</el-button
 						>
 					</div>
 					<div class="showDate" v-else>
 						<el-button size="mini" type="info" plain
-							>E1: {{ Array.isArray(scope.row.last_entry_signal_date) ? scope.row.last_entry_signal_date[0] : '' }}</el-button
+							>E1: {{ Array.isArray(scope.row._last_entry_signal_date) ? scope.row._last_entry_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X1: {{ Array.isArray(scope.row.last_exit_signal_date) ? scope.row.last_exit_signal_date[0] : '' }}</el-button
+							>X1: {{ Array.isArray(scope.row._last_exit_signal_date) ? scope.row._last_exit_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>E2: {{ Array.isArray(scope.row.last_entry_signal_date) ? scope.row.last_entry_signal_date[1] : '' }}</el-button
+							>E2: {{ Array.isArray(scope.row._last_entry_signal_date) ? scope.row._last_entry_signal_date[1] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X2: {{ Array.isArray(scope.row.last_exit_signal_date) ? scope.row.last_exit_signal_date[1] : '' }}</el-button
+							>X2: {{ Array.isArray(scope.row._last_exit_signal_date) ? scope.row._last_exit_signal_date[1] : '' }}</el-button
 						>
 					</div>
 				</template>
@@ -655,16 +655,16 @@ export default {
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
 						if(item.strategy !== 'Dual' && typeof item.last_entry_signal_date === 'string' && item.last_entry_signal_date === 'None') {
-							item.last_entry_signal_date = ''
+							item._last_entry_signal_date = ''
 						}
 						if(item.strategy !== 'Dual' && typeof item.last_exit_signal_date === 'string' && item.last_exit_signal_date === 'None') {
-							item.last_exit_signal_date = ''
+							item._last_exit_signal_date = ''
 						}
 						if(item.strategy === 'Dual' && item.last_entry_signal_date && typeof item.last_entry_signal_date === 'string') {
-							item.last_entry_signal_date = item.last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
+							item._last_entry_signal_date = item.last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 						if(item.strategy === 'Dual' && item.last_exit_signal_date && typeof item.last_exit_signal_date === 'string') {
-							item.last_exit_signal_date = item.last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
+							item._last_exit_signal_date = item.last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 
 						return item;

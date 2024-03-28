@@ -114,6 +114,8 @@ export const CommonMethodsMixin = {
 					delete params.status
 					delete params.backtest_id
 					delete params.old_uuid
+					delete params._last_entry_signal_date
+					delete params._last_exit_signal_date
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
