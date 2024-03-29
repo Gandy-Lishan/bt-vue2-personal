@@ -33,7 +33,6 @@
 			<el-tab-pane
 				label="Exit with different Time-In-Market frame"
 				name="third"
-        v-show="strategy !== 'Dual'"
 			>
         <TIM
           ref="timChild"
@@ -41,13 +40,12 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
-          v-show="strategy !== 'Dual'"
+          v-show="strategy === 'Signal' || strategy === 'Single'"
         ></TIM>
 			</el-tab-pane>
       <el-tab-pane
 				label="Max Gain and Loss"
-				name="forth"
-        v-show="strategy !== 'Dual'"
+				name="forth"          
 			>
         <MaxMin
           ref="maxMinChild"
@@ -55,7 +53,7 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
-          v-show="strategy !== 'Dual'"
+          v-show="strategy === 'Signal' || strategy === 'Single'"
         ></MaxMin>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
