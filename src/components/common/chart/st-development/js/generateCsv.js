@@ -163,13 +163,15 @@ let __st_js_generateCsv_ = (_exports) => {
     let arrData = []
     for(var i in _arrData){
         let item = _arrData[i]
-        let dateNum = item.Date?item.Date:''
-        if(timePeriod){
-            if(dateNum<adjustStartDateToLastYear(timePeriod.start_date) || dateNum>timePeriod.end_date){continue}
-        }
+
         // open 再赋值之前筛除无symbol2的row
         if(!item[symbol]){
             continue
+        }else{
+            let dateNum = item[symbol].Date?item[symbol].Date:''
+            if(timePeriod){
+                if(dateNum<adjustStartDateToLastYear(timePeriod.start_date) || dateNum>timePeriod.end_date){continue}
+            }
         }
         arrData.push(_arrData[i])
     }
@@ -178,9 +180,10 @@ let __st_js_generateCsv_ = (_exports) => {
     // 给数组内容换好位置
     for(var i in arrData){
         let item = arrData[i]
-        let dateNum = item.Date?item.Date:''
-        let date = dateNum.slice(0,4)+ '-' + dateNum.slice(4,6)+ '-' + dateNum.slice(6,8)
         let symbol2Ohlcv = item[symbol]
+        let dateNum = symbol2Ohlcv.Date?symbol2Ohlcv.Date:''
+        let date = dateNum.slice(0,4)+ '-' + dateNum.slice(4,6)+ '-' + dateNum.slice(6,8)
+        
         let obj = {
             Date: date,
             Open: (tradePriceType==1 || tradePriceType==2)? symbol2Ohlcv.Close: symbol2Ohlcv.Open,
