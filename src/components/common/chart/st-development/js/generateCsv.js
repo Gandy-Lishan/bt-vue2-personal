@@ -11,7 +11,8 @@ let __st_js_generateCsv_ = (_exports) => {
      
      let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
      if(study == undefined){ return }
-     let JSONData = study.chart.scrubbed
+     // 因为scrubbed不包含没数据的row
+     let JSONData = study.chart.dataSet
      let timePeriod = CIQ.store.getters.getSpanPeriod
      //先转化json
      let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
@@ -153,7 +154,8 @@ let __st_js_generateCsv_ = (_exports) => {
     
     let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
     if(study == undefined){ return }
-    let JSONData = study.chart.scrubbed
+    // 因为scrubbed不包含没数据的row
+    let JSONData = study.chart.dataSet
     let timePeriod = CIQ.store.getters.getSpanPeriod
     //先转化json
     let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
