@@ -161,6 +161,10 @@ let __st_js_generateCsv_ = (_exports) => {
         if(timePeriod){
             if(dateNum<adjustStartDateToLastYear(timePeriod.start_date) || dateNum>timePeriod.end_date){continue}
         }
+        // open 再赋值之前筛除无symbol2的row
+        if(!item[symbol]){
+            continue
+        }
         arrData.push(_arrData[i])
     }
 
