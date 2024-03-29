@@ -672,10 +672,6 @@
         "name": "GDM Index"
     },
     {
-        "symbol": "HEAVYTRUCK",
-        "name": "Heavy Truck Index"
-    },
-    {
         "symbol": "IVOL",
         "name": "IVOL"
     },
@@ -714,10 +710,6 @@
     {
         "symbol": "RWR",
         "name": "Dow Jones REIT ETF"
-    },
-    {
-        "symbol": "NAPMPMI",
-        "name": "PMI Manufacturing Index"
     },
     {
         "symbol": "BLOK",
