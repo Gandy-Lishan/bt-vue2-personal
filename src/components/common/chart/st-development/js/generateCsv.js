@@ -23,6 +23,10 @@ let __st_js_generateCsv_ = (_exports) => {
          if(timePeriod){
              if(dateNum<adjustStartDateToLastYear(timePeriod.start_date) || dateNum>timePeriod.end_date){continue}
          }
+         // open 再赋值之前筛除无Close的row
+         if(!item.Close){
+             continue
+         }
          arrData.push(_arrData[i])
      }
 
@@ -177,11 +181,11 @@ let __st_js_generateCsv_ = (_exports) => {
         let symbol2Ohlcv = item[symbol]
         let obj = {
             Date: date,
-            Open: (tradePriceType==1 || tradePriceType==2)? symbol2Ohlcv?symbol2Ohlcv.Close:'' : symbol2Ohlcv?symbol2Ohlcv.Open:'',
-            High: symbol2Ohlcv?symbol2Ohlcv.High:'',
-            Low: symbol2Ohlcv?symbol2Ohlcv.Low:'',
+            Open: (tradePriceType==1 || tradePriceType==2)? symbol2Ohlcv.Close: symbol2Ohlcv.Open,
+            High: symbol2Ohlcv.High,
+            Low: symbol2Ohlcv.Low,
             Close: symbol2Ohlcv?symbol2Ohlcv.Close:'',
-            Volume: symbol2Ohlcv?symbol2Ohlcv.Volume:'',
+            Volume: symbol2Ohlcv?symbol2Ohlcv.Volume:1,
             entry_1: '',
             entry_2: '',
             entry_3: '',
