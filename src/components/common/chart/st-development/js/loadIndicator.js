@@ -29,7 +29,6 @@
     if(comparisonSymbol.url){
         csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
     }
-    debugger
     console.log("csvContent created Success");
 
     let promise = 200

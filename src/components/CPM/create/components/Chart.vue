@@ -53,6 +53,9 @@ export default {
 		},
 	},
 	beforeDestroy() {
+		// 防止chartiq还没加载完就切换到其他页面
+		CIQ.hideCover()
+		CIQ.nprogress.done()
 	},
 	methods:{
 		onChartReady(){
