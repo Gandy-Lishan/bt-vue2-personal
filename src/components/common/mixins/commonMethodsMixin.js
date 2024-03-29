@@ -26,7 +26,8 @@ import { conditionRadioMap } from './conditionRadioMap'
 export const CommonMethodsMixin = {
 	data() {
 		return {
-			favorite_array: []
+			favorite_array: [],
+			isAllFLSRequestsDone: false, // 标识 find last signal 的所有请求有没有全部完成
 		}
 	},
 	methods: {
@@ -113,6 +114,8 @@ export const CommonMethodsMixin = {
 					delete params.status
 					delete params.backtest_id
 					delete params.old_uuid
+					delete params._last_entry_signal_date
+					delete params._last_exit_signal_date
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
@@ -178,6 +181,7 @@ export const CommonMethodsMixin = {
 		async runOrFindAndLoop(actionType) {
 			this.showFLSMASK()
 			if (actionType === 'signal') {
+				this.isAllFLSRequestsDone = false
 				this.$store.commit('form/clearHashTable')
 				this.favorite_array = await this.getAllFavoriteData(1)
 				this.$store.commit(
@@ -238,6 +242,7 @@ export const CommonMethodsMixin = {
 				this.uploadCSVWhileFLS(item)
 			}
 			await this.findAllFavoritesSignal()
+			this.isAllFLSRequestsDone = true
 			// 循环结束之后请求一次列表
 			await this.getDataList(null)
 			

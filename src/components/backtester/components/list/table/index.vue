@@ -72,7 +72,7 @@
 								</span>
 						</div>
 					</div>
-						<div class="descriptionBox">
+						<div class="descriptionBox"  v-if="scope.row.strategy !== 'Dual'">
 						<div class="entryBox">
 							<p>Entry Description</p>
 							<template
@@ -94,11 +94,12 @@
 							</template>
 						</div>
 					</div>
-					<div class="descriptionBox" v-if="scope.row.strategy === 'Dual'">
-						<div class="entryBox">
-							<p>Entry Description 2</p>
+					<div  v-else>
+						<div class="descriptionBox">
+							<div class="entryBox">
+							<p>Entry 1 Description</p>
 							<template
-								v-for="(des, index) in scope.row.entry2_description"
+								v-for="(des, index) in scope.row.entry_description"
 							>
 								<p :key="index">
 									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
@@ -107,7 +108,29 @@
 							</template>
 						</div>
 						<div class="exitBox">
-							<p>Exit Description 2</p>
+							<p>Entry 2 Description</p>
+							<template v-for="(des, index) in scope.row.entry2_description">
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+						</div>
+						<div class="descriptionBox">
+						<div class="entryBox">
+							<p>Exit 1 Description</p>
+							<template
+								v-for="(des, index) in scope.row.exit_description"
+							>
+								<p :key="index">
+									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
+									>{{ des.commentDes }}
+								</p>
+							</template>
+						</div>
+						<div class="exitBox">
+							<p>Exit 2 Description</p>
 							<template v-for="(des, index) in scope.row.exit2_description">
 								<p :key="index">
 									<span v-if="index != 0">&emsp;&emsp;{{ index }}.</span
@@ -119,6 +142,7 @@
 					<div class="urlBox" v-if="currentPage == 'Analyst'">
 						<p>Analyst Report URL</p>
 						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
+					</div>
 					</div>
 					</div>
 				</template>
@@ -244,31 +268,29 @@
 				align="center"
 				show-overflow-tooltip
 				:label="item.label"
-				:sortable="item.label == 'Last Signal Date' ? 'custom' : false"
-				:sort-orders="['ascending', 'descending', item.field]"
 				:width="item.width"
 			>
 			<template slot-scope="scope">
 					<div class="showDate" v-if="scope.row.strategy !== 'Dual'">
 						<el-button size="mini" type="info" plain
-							>E: {{ scope.row.last_entry_signal_date ? scope.row.last_entry_signal_date : '' }}</el-button
+							>E: {{ scope.row._last_entry_signal_date ? scope.row._last_entry_signal_date : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X: {{ scope.row.last_exit_signal_date ? scope.row.last_exit_signal_date : '' }}</el-button
+							>X: {{ scope.row._last_exit_signal_date ? scope.row._last_exit_signal_date : '' }}</el-button
 						>
 					</div>
 					<div class="showDate" v-else>
 						<el-button size="mini" type="info" plain
-							>E1: {{ scope.row.last_entry_signal_date[0] ? scope.row.last_entry_signal_date[0] : '' }}</el-button
+							>E1: {{ Array.isArray(scope.row._last_entry_signal_date) ? scope.row._last_entry_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X1: {{ scope.row.last_exit_signal_date[0] ? scope.row.last_exit_signal_date[0] : '' }}</el-button
+							>X1: {{ Array.isArray(scope.row._last_exit_signal_date) ? scope.row._last_exit_signal_date[0] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>E2: {{ scope.row.last_entry_signal_date[1] ? scope.row.last_entry_signal_date[1] : '' }}</el-button
+							>E2: {{ Array.isArray(scope.row._last_entry_signal_date) ? scope.row._last_entry_signal_date[1] : '' }}</el-button
 						>
 						<el-button size="mini" type="info" plain
-							>X2: {{ scope.row.last_exit_signal_date[1] ? scope.row.last_exit_signal_date[1] : '' }}</el-button
+							>X2: {{ Array.isArray(scope.row._last_exit_signal_date) ? scope.row._last_exit_signal_date[1] : '' }}</el-button
 						>
 					</div>
 				</template>
@@ -523,7 +545,8 @@ export default {
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
 			isButtonVisible: false,
-			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest."
+			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
+			strategyType: 'Strategy'
 		}
 	},
 	directives: {
@@ -589,13 +612,13 @@ export default {
 			let res = null
 			try {
 				if(this.currentPage == 'History'){
-					res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getHistoryList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Favorites'){
-					res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getFavoriteList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Sample'){
-					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Analyst'){
-					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem)
+					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}
 				if (res.status == 200) {
 					let data = res.data.results
@@ -629,11 +652,19 @@ export default {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
 						}
-						if(item.strategy === 'Dual' && item.last_entry_signal_date) {
-							item.last_entry_signal_date = item.last_entry_signal_date.split(' ')
+						item._last_entry_signal_date = item.last_entry_signal_date
+						item._last_exit_signal_date = item.last_exit_signal_date
+						if(item.strategy !== 'Dual' && typeof item._last_entry_signal_date === 'string' && item._last_entry_signal_date === 'None') {
+							item._last_entry_signal_date = ''
 						}
-						if(item.strategy === 'Dual' && item.last_exit_signal_date) {
-							item.last_exit_signal_date = item.last_exit_signal_date.split(' ')
+						if(item.strategy !== 'Dual' && typeof item._last_exit_signal_date === 'string' && item._last_exit_signal_date === 'None') {
+							item._last_exit_signal_date = ''
+						}
+						if(item.strategy === 'Dual' && item._last_entry_signal_date && typeof item._last_entry_signal_date === 'string') {
+							item._last_entry_signal_date = item._last_entry_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
+						}
+						if(item.strategy === 'Dual' && item._last_exit_signal_date && typeof item._last_exit_signal_date === 'string') {
+							item._last_exit_signal_date = item._last_exit_signal_date.split(' ').map(item => {if(item === 'None') {return ''}else{return item}})
 						}
 
 						return item;
@@ -685,7 +716,7 @@ export default {
         // 不排序
         prop = null
       }
-      if (order == 'ascending' && !prop.includes('strategy') ) {
+      if (order == 'ascending') {
         // 升序排列
         prop = `-${prop}`
       }
@@ -694,11 +725,12 @@ export default {
 		handleQuery: throttle(function() {
 			this.getDataList()
 		}, 500),
-		async handleSelect(value) {
-			let prop, order
-			if(value === 'Strategy') {prop = null; order=null}
-			if(value === 'Dual') {prop = '-strategy'; order='ascending'}
-			if(value === 'Single') {prop = 'strategy'; order='descending'}
+		async handleSelect(type) {
+			this.strategyType = type
+      let { prop, order } = this.currentSort;
+			// 这里先考虑 order 再考虑 strategy
+			if (order == null || order == prop) prop = null
+      if (order == 'ascending') prop = `-${prop}`
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
 		}

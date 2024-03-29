@@ -969,7 +969,6 @@ export default {
 			return true
 		},
 		async saveData(index) {
-			debugger
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this

@@ -19,8 +19,9 @@
                         Backtest Type
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            ><br
-                          /></span>
+                            >Choose single or dual symbols for backtesting <br/>
+                            according to your needs
+                          </span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -412,7 +413,7 @@
                         {{bdFormLabel['symbol2']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >Choose a stock/index as backtest symbol 2. (default: SPX)<br
+                            >Choose a stock/index as backtest symbol 2. (default: SPY)<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
@@ -1566,7 +1567,7 @@ export default {
           delete editData[property];
         })
         try {
-          description = JSON.parse(exitData.description)
+          description = JSON.parse(editData.description)
         } catch (error) {
           description = {}
           description.Introduction = ''

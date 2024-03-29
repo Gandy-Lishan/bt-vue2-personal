@@ -89,11 +89,11 @@ export function getStocksList() {
 	})
 }
 
-export function getSampleList(page, sort, name) {
+export function getSampleList(page, sort, name, type) {
 	let url = `/dev/dev/strategy/?ordering=name,status,-create_date`
 	// sort -> ,total_return
-	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
-	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+	let strategy = type && type !== 'Strategy' ? type : null;
+	if (sort) {
 		url = `/dev/dev/strategy/?ordering=${sort}`
 	}
 	if (name) {
@@ -131,11 +131,11 @@ export function searchSampleList(keyword) {
 	})
 }
 
-export function getAnalystList(page, sort, name) {
+export function getAnalystList(page, sort, name, type) {
 	let url = `/dev/dev/analyst/?ordering=-create_date,name,status`
 	// sort -> ,total_return
-	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
-	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+	let strategy = type && type !== 'Strategy' ? type : null;
+	if (sort) {
 		url = `/dev/dev/analyst/?ordering=${sort}`
 	}
 	if (name) {
@@ -171,11 +171,11 @@ export function searchAnalystList(keyword) {
 			})
 	})
 }
-export function getHistoryList(page, sort, name) {
+export function getHistoryList(page, sort, name, type) {
 	let url = `/dev/dev/backtest/?ordering=-create_date`
 	// sort -> ,total_return
-	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
-	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+	let strategy = type && type !== 'Strategy' ? type : null;
+	if (sort) {
 		url = `/dev/dev/backtest/?ordering=${sort}`
 	}
 	if (name) {
@@ -226,11 +226,11 @@ export function getBacktestName(name) {
 			})
 	})
 }
-export function getFavoriteList(page, sort, name) {
+export function getFavoriteList(page, sort, name, type) {
 	let url = `/dev/dev/backtest/?ordering=-create_date&favorites=true`
 	// sort -> ,total_return
-	let strategy = sort && sort === '-strategy' ? 'Dual' : sort && sort === 'strategy' ? 'Single' : null;
-	if (sort && sort !== 'strategy' && sort !== '-strategy') {
+	let strategy = type && type !== 'Strategy' ? type : null
+	if (sort) {
 		url = `/dev/dev/backtest/?ordering=${sort}`
 	}
 	if (name) {
