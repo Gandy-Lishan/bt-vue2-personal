@@ -19,8 +19,9 @@
                         Backtest Type
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            ><br
-                          /></span>
+                            >Choose single or dual symbols for backtesting <br/>
+                            according to your needs
+                          </span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
