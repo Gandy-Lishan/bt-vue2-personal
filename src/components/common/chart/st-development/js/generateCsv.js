@@ -185,7 +185,7 @@ let __st_js_generateCsv_ = (_exports) => {
             High: symbol2Ohlcv.High,
             Low: symbol2Ohlcv.Low,
             Close: symbol2Ohlcv?symbol2Ohlcv.Close:'',
-            Volume: symbol2Ohlcv?symbol2Ohlcv.Volume:1,
+            Volume: symbol2Ohlcv.Volume ? symbol2Ohlcv.Volume: 1,
             entry_1: '',
             entry_2: '',
             entry_3: '',
