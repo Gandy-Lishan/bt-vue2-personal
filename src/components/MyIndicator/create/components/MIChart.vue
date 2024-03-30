@@ -59,7 +59,10 @@ export default {
 			this.hideComponents()	
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
-			else CIQ.hideCover()
+			else{
+				CIQ.hideCover()
+				CIQ.nprogress.done()
+			}
 
 			console.log('chart_data',this.chart_data)
 		},
