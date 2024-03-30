@@ -9,7 +9,8 @@
  //import "./STMovingAverages.js"
  import qs from 'querystring'
  import {
-    searchIndicator
+    searchIndicator,
+    getPairData
   } from '@/service/service'
 
  let __st_js_loadIndicator_ = (_exports) => {
@@ -170,7 +171,7 @@
             stx.removeSeries(series);
         }
         await new Promise((resolve) => {
-            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
+            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
                 const commonOperations = async () => {
                     /* 一系列chart加载完成后的操作 */
                     /** dual symbol,setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
@@ -230,8 +231,13 @@
                 
                 if(comparisonSymbol.url){
                     /** dual symbol */
+                    var start = config.timestampToTime(CIQ.initialDate.start)
+                    var end = config.timestampToTime(CIQ.initialDate.end)
+                    const res = await getPairData( start, end, 'daily', comparisonSymbol.url)
+                    let _data = formatData(res.data)
                     stx.addSeries(comparisonSymbol.url, {
                         display:comparisonSymbol.name, 
+                        data:_data,
                         isComparison: false, 
                         color: "#368DF0",
                         permanent: true,
@@ -246,6 +252,51 @@
 
          })
         })
+ }
+
+ const formatData = function(data) {
+    if(data == null){
+        data = []
+    }
+    
+    var newQuotes = [];
+    if('High' in data[0]){
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+            
+            var datatime = new Date(data[i].DT)
+            
+            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            
+            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+            
+            newQuotes[i].Open = data[i].Open;
+            newQuotes[i].High = data[i].High;
+            newQuotes[i].Low = data[i].Low;
+            newQuotes[i].Close = data[i].Close;
+            newQuotes[i].Volume = data[i].Volume;  
+        } 
+    }else{
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+
+            var datatime = new Date(data[i].DT)
+
+            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            
+            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+
+            newQuotes[i].Open = data[i].Close;
+            newQuotes[i].High = data[i].Close;
+            newQuotes[i].Low = data[i].Close;
+            newQuotes[i].Close = data[i].Close;
+            
+            if(data[i].Volume){
+                newQuotes[i].Volume = data[i].Volume
+            }
+        }
+    }
+    return newQuotes
  }
 
  // endDate为推荐日当天
