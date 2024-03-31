@@ -509,6 +509,7 @@ export default {
 			}
 			backtestInfo['entry_description'] = JSON.stringify(entrySaveObj['entry_description'])
 			backtestInfo['exit_description'] = JSON.stringify(exitSaveObj['exit_description'])
+			if(backtestInfo.strategy === 'Signal') backtestInfo.strategy = 'Single'
 			backtestInfo.old_uuid = backtestInfo.old_uuid
 			if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
 			// 判断是否有 direction 没有设置默认值
