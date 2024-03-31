@@ -1448,15 +1448,15 @@ export default {
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
-      if(this.bd.strategy === 'Dual') {
+      if(bd.strategy === 'Dual') {
         // 设置数据默认值
         this.isRiskControl = false
         this.isExcludeOO = false
-        this.bd.market_environment = 0
-        this.bd.index_moving_average_slope = 0
-      }else if(this.bd.strategy === 'Single') {
-        this.bd.symbol2 = 'SPY'
-        this.bd.direction2 = 'Long'
+        bd.market_environment = 0
+        bd.index_moving_average_slope = 0
+      }else if(bd.strategy === 'Single') {
+        bd.symbol2 = 'SPY'
+        bd.direction2 = 'Long'
       }
       if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
       if(!this.isExcludeOO) bd.exclude_oo = 0
@@ -1467,6 +1467,7 @@ export default {
       console.log('basicInfo 数据', bd)
       // 如果是 Dual 那么需要上传 symbol2 和 direction 2
       this.$store.commit('form/setBd', bd)
+      return true
     },
     async validateForm() {
       /* 校验表单字段 */
