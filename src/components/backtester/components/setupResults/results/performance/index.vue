@@ -393,6 +393,7 @@ export default {
       this.tradesData.forEach((item, index) => {
         const obj = {}
         obj['Trade #'] = index + 1
+        obj['Symbol'] = item.Symbol
         obj['Trade Date'] = item.Date
         obj['Action'] = item.TradeStatus
         obj['Indicator'] = item.Indicator.join(';')
@@ -412,8 +413,8 @@ export default {
         const formatEntryDate = entryData['Trade Date'].replaceAll('-','/')
         const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
         mergedData.push({
-          'Entry Date': formatEntryDate,
           'Symbol': entryData.Symbol,
+          'Entry Date': formatEntryDate,
           'Entry Action': entryData.Action.toUpperCase(),
           'Entry Price': entryData['Trade Price'],
           'Exit Date': formatExitDate,
