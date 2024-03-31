@@ -59,6 +59,10 @@ export default {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx?.destroy()
+
+    // 防止chartiq还没加载完就切换到其他页面
+		CIQ.hideCover()
+		CIQ.nprogress.done()
 	},
 	computed: {
 		updateSettingMA() {
