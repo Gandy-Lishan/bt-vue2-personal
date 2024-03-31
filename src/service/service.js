@@ -231,7 +231,7 @@ export function getFavoriteList(page, sort, name, type) {
 	// sort -> ,total_return
 	let strategy = type && type !== 'Strategy' ? type : null
 	if (sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}`
+		url = `/dev/dev/backtest/?ordering=${sort}&favorites=true`
 	}
 	if (name) {
 		url += `&name=${name}`
