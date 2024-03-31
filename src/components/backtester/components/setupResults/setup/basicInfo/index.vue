@@ -1467,7 +1467,6 @@ export default {
       console.log('basicInfo 数据', bd)
       // 如果是 Dual 那么需要上传 symbol2 和 direction 2
       this.$store.commit('form/setBd', bd)
-      return true
     },
     async validateForm() {
       /* 校验表单字段 */
