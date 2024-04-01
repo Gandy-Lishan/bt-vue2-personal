@@ -282,6 +282,15 @@
             <div class="annualReturnImg">
                 <img :src="tableData[0]?.annualReturnsFileURL" alt="" width="100%" />
             </div>
+            <div class="benchmarkReturnImg">
+                <img v-if="tableData[0]?.wfd_file_url" :src="tableData[0]?.wfd_file_url" alt="" width="100%" />
+            </div>
+            <div class="benchmarkReturnImg">
+                <img v-if="tableData[0]?.eoy_file_url" :src="tableData[0]?.eoy_file_url" alt="" width="100%" />
+            </div>
+            <div class="benchmarkReturnImg">
+                <img v-if="tableData[0]?.rb_file_url" :src="tableData[0]?.rb_file_url" alt="" width="100%" />
+            </div>
         </div>
     </div>
 </template>

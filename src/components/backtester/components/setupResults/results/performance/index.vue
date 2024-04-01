@@ -184,6 +184,9 @@ export default {
                 initalData['Annual Returns Image Uploaded']
               data.annualReturnsFileURL = initalData['Annual Returns File URL']
               data.equityCurveFileURL = initalData['Equity Curve File URL'] || null
+              data.wfd_file_url = initalData['Worst Five Drawdown File URL'] || null
+              data.eoy_file_url = initalData['EOY File URL'] || null
+              data.rb_file_url = initalData['Rolling Beta File URL'] || null
               data.returnsheatmapImageUploadedURL =
                 initalData['Returns Heatmap Image Uploaded']
               data.returnsHeatmapFileURL =
