@@ -592,7 +592,11 @@ export default {
 			const {strategy} = data
 			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
-
+			_this.symbolInfo = {
+				strategy: data.strategy,
+				symbol: data.symbol,
+				symbol2: data.symbol2
+			}
 			/*
 				data 中并没有 entry 和 exit
 				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,
