@@ -1399,7 +1399,6 @@ export default {
       const modifyProperties = {
         symbol: '1. Symbol(1)',
         direction: '8. Direction(1)',
-        symbol: '1. Symbol(1)',
         name: '14. Backtest Name'
       };
       this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
@@ -1573,6 +1572,17 @@ export default {
           description.Introduction = ''
           description.Rules = ''
         }
+        
+        const originalProperties = {
+          symbol: '1. Symbol',
+          name: '15. Backtest Name'
+        };
+        const modifyProperties = {
+          symbol: '1. Symbol(1)',
+          direction: '8. Direction(1)',
+          name: '14. Backtest Name'
+        };
+        this.bdFormLabel = editData.strategy === 'Single' || editData.strategy === 'Signal' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
         /* 设置编辑数据 */
         editData.description = description
         editData.slippage = Number(editData.slippage).toFixed(2)
