@@ -268,6 +268,8 @@
 				align="center"
 				show-overflow-tooltip
 				:label="item.label"
+				:sortable="item.label == 'Last Signal Date' ? 'custom' : false"
+				:sort-orders="['ascending', 'descending', item.field]"
 				:width="item.width"
 			>
 			<template slot-scope="scope">
