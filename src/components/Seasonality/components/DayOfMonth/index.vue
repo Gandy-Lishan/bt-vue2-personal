@@ -95,13 +95,31 @@
       </div>
       </el-form-item>
       <el-form-item
-          label="3.Month Selection"
+          label="3.Category"
+          prop="category"
+        >
+        <template slot="label">
+          <label>
+            3.Category
+          </label>
+        </template>
+          <el-select v-model="data.category" placeholder="Please select category">
+          <el-option
+            v-for="item in categoryOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item
+          label="4.Month Selection"
           prop="monthSelection"
           placeholder="Please input the name of your custom indicator"
         >
         <template slot="label">
           <label>
-            3.Month Selection
+            4.Month Selection
           </label>
         </template>
           <el-select v-model="data.monthSelection" placeholder="Please select month" @change="changeMonth">
@@ -131,7 +149,8 @@ export default {
         symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
         start_date: (new Date().getFullYear() - 20).toString(),
         end_date:  new Date().getFullYear().toString(),
-        monthSelection: 0
+        monthSelection: 0,
+        category: 'calendar_day'
       },
       dropdownList: [],
         options: [
@@ -147,6 +166,10 @@ export default {
           {label: 'October', value: 9},
           {label: 'November', value: 10},
           {label: 'December', value: 11}
+        ],
+        categoryOptions: [
+          {label: 'Calendar Day', value: 'calendar_day'},
+          {label: 'Trading Day', value: 'trading_day'}
         ],
         startPickerOptions: {
           disabledDate: this.handleDisabledStartDate
@@ -192,7 +215,8 @@ export default {
           start_date: newVal.start_date,
           end_date: newVal.end_date,
           month: this.options[newVal.monthSelection].label,
-          symbol: newVal.symbol || ''
+          symbol: newVal.symbol || '',
+          category: newVal.category
         }
       },
       deep: true,
