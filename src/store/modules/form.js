@@ -531,6 +531,20 @@ const mutations = {
 	clearHashTable(state) {
 		state.hashTable = []
 	},
+	clearSignalArr(state, obj) {
+		const {criteria} = obj
+		const clearSignal = {
+			sentimentIndicator: '',
+			technicalIndicator: '',
+			symbolIndicator: '',
+			usersOwnIndicator: ''
+		}
+
+	if (criteria.startsWith('exit')) {
+		clearSignal.riskIndicator = ''; // 添加 riskIndicator 到 exit 类型
+	}
+	state.backtestInfo[criteria].signals = [clearSignal]
+	},
 	setFreqencyLP(state, obj) {
 		const key = obj.key
 		state.frequencyArray.set(key, obj)
