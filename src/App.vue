@@ -84,7 +84,7 @@ export default {
 				default:
 					break;
 				}
-				_this.$router.push('/404')
+				//_this.$router.push('/404')
 			}
 		}
 		const email = getCookieData()?.username

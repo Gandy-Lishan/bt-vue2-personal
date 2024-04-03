@@ -147,20 +147,28 @@ if (!CIQ.Studies) {
         }
 		
         var quotes = sd.chart.scrubbed;
-		
         var acc = 0;
         var vals = [];
         var name = sd.name;
-
         for (var p in sd.outputs) {
             name = p + " " + name;
         }
 
-		// 拼接显示名
-		// const desc = ' '+sd.name.match(/\(([^)]+)\)/)[0];
-		// var name = 'MA ' + desc;
+		/**
+		 * 根据criteria动态设定study的Y轴属性
+		 */
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+		}else sd.yAxis = null
+		/**
+		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
+		 * exmaple: aapl_Close
+		 */
+		var field = sd.inputs.Field.split('_')[0];
+		var subField = sd.inputs.Field.split('_')[1];
 
-        var field = sd.inputs.Field;
         if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
         var offset = parseInt(sd.inputs.Offset, 10);
         if (isNaN(offset)) offset = 0;
@@ -170,11 +178,10 @@ if (!CIQ.Studies) {
             start = sd.startFrom;
         // backload the past data into the array
         var offsetBack = offset;
-
         for (i = sd.startFrom - 1; i >= 0; i--) {
             val = quotes[i][field];
            
-            if (val && typeof val == "object") val = val[sd.subField];
+            if (val && typeof val == "object") val = val[subField];
             if (!val && val !== 0) continue;
             if (offsetBack > 0) {
                 offsetBack--;
@@ -217,7 +224,6 @@ if (!CIQ.Studies) {
             }
         }
         sd.appendFutureTicks(stx, futureTicks);
-		//sd.outputMap[name] = "MA";
     };
 
 	CIQ.Studies.calculateMovingAverageHull = function (stx, sd) {
@@ -441,14 +447,12 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
-		var field = sd.inputs.Field;
+		var comparisonSymbolUrl = sd.inputs.Field.split('_')[0];
+		var field = sd.inputs.Field.split('_')[1];
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
-		const desc = sd.name.substring(sd.name.indexOf('(')); // 提取从第一个左括号开始的子字符串
 
-		//const desc = ' '+sd.name.match(/\(([^)]+)\)/)[0];
-		// var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
 		if (!field || field == "field") field = "Close";
 
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
@@ -458,15 +462,25 @@ if (!CIQ.Studies) {
 			case 'ROC':
 				// ROC
 				// 从当前indicator数据出现那天开始计算
-				let indexROC = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexROC = quotes.findIndex(row=> 
+					(comparisonSymbolUrl? comparisonSymbolUrl in row: field in row) &&  
+					getPropertyByString(row,comparisonSymbolUrl,field)!=null
+				)
 				quotes = quotes.slice(indexROC) 
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
+					if(					
+						(comparisonSymbolUrl? comparisonSymbolUrl in row: field in row) &&  
+						getPropertyByString(row,comparisonSymbolUrl,field)!=null
+					){
 						if(i>=period){
 							// 如果分母为0，直接返回0
-							if(quotes[i - period][field] == 0) return 0
+							if(getPropertyByString(quotes[i - period],comparisonSymbolUrl,field) == 0) return 0
 							
-							const change = parseFloat((100 * (row[field] / quotes[i - period][field]- 1)).toFixed(4))
+							const change = parseFloat((100 * (
+								getPropertyByString(row,comparisonSymbolUrl,field) / 
+								getPropertyByString(quotes[i - period],comparisonSymbolUrl,field)- 1
+							)).toFixed(4))
 							//console.log(row[field] , quotes[i - period][field],row,i)
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -631,11 +645,17 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
 
+		/** 判断Study用来计算的数据源 */
+		var comparisonSymbol
+		if(sd.parameters.criteria.endsWith('2')){
+			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		}
+
 		if (!field || field == "field") field = "Close";
 		// 默认study模板
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
-			var RSIValue = quote[field];
+			var RSIValue = getPropertyByString(quote, comparisonSymbol?.url, field);
 			if (RSIValue) {
 				var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
 				quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
@@ -1139,8 +1159,20 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		var period = sd.inputs.Period;
 
-		if (!field || field == "field") field = "Close";
+		/** 判断Study用来计算的数据源 */
+		var comparisonSymbol
+		if(sd.parameters.criteria.endsWith('2')){
+			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		}
+		
+		/**
+		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
+		 * exmaple: aapl_Close
+		 */
+		var field = sd.inputs.Field.split('_')[0];
+		var subField = sd.inputs.Field.split('_')[1];
 
+		if (!field || field == "field") field = "Close";
 		let result
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if(i+1>=period){
@@ -1149,11 +1181,29 @@ if (!CIQ.Studies) {
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
 				/** 防止分母为0或者null */
-				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,field))))
-				result = lowestPrice?(getPropertyByString(quote,field)/lowestPrice-1)*100:0
+				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,comparisonSymbol?.url,field))).filter(i=>!(isNaN(i) || i==null)))
+				result = lowestPrice?(getPropertyByString(quote, comparisonSymbol?.url, field)/lowestPrice-1)*100:0
 			}
 			quotes[i]["Result " + sd.name] = result;
 		}
+	};
+	CIQ.Studies.calculateSTAwesomeOscillator = function (stx, sd) {
+		var quotes = sd.chart.scrubbed;
+		if (quotes.length < 33) {
+			sd.error = true;
+			return;
+		}
+
+		CIQ.Studies.MA("simple", 5, "hl/2", 0, "_MA5", stx, sd);
+		CIQ.Studies.MA("simple", 34, "hl/2", 0, "_MA34", stx, sd);
+
+		for (var i = Math.max(sd.startFrom, 33); i < quotes.length; i++) {
+			if (!quotes[i]) continue;
+			quotes[i][sd.name + "_hist"] =
+				quotes[i]["_MA5 " + sd.name] - quotes[i]["_MA34 " + sd.name];
+		}
+		sd.outputMap = {};
+		sd.outputMap[sd.name + "_hist"] = "";
 	};
 
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
@@ -1411,8 +1461,8 @@ if (!CIQ.Studies) {
         },
 		"Percentage Above N-Day Low": {
             name: "Percentage Above N-Day Low",
-			inputs: { Period: 252 },
-			// inputs: { Period: 252,Field: "aapl" },
+			// inputs: { Period: 252 },
+			inputs: { Period: 252,Field: "field",},
             calculateFN: CIQ.Studies.calculatePercentageAboveNDayLow,
         },
 		"Percentage Below N-Day High": {

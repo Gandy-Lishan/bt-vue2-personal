@@ -561,6 +561,12 @@ export default class AdvancedChartComponent extends Vue {
 		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
 			name: "Relative Strength Index (RSI)",
 		});
+		CIQ.extend(CIQ.Studies.studyLibrary["Awesome"], {
+			calculateFN: CIQ.Studies.calculateSTAwesomeOscillator,
+		});
+		CIQ.extend(CIQ.Studies.studyLibrary["ma"], {
+			calculateFN: CIQ.Studies.calculateSTMovingAverage,
+		});
 	}
 
 	// 工具栏按钮移除和显示marker功能，只影响显示

@@ -3195,7 +3195,7 @@ CIQ.Studies.calculateVolume = function (stx, sd) {
 CIQ.Studies.MA = function (
 	type,
 	periods,
-	field,
+	field,		
 	offset,
 	name,
 	stx,
@@ -3215,7 +3215,7 @@ CIQ.Studies.MA = function (
 	if (type) ma.inputs.Type = type;
 	if (field) ma.inputs.Field = field;
 	if (offset) ma.inputs.Offset = parseInt(offset, 10);
-	CIQ.Studies.calculateMovingAverage(stx, ma);
+	CIQ.Studies.calculateSTMovingAverage(stx, ma);
 };
 
 // Moving average data; add to it if adding moving average functionality
@@ -4697,6 +4697,7 @@ CIQ.Studies.studyScriptLibrary = {};
  */
 CIQ.Studies.studyLibrary = CIQ.Studies.studyLibrary || {};
 CIQ.extend(CIQ.Studies.studyLibrary, {
+	// overwrite没用
 	ma: {
 		name: "Moving Average",
 		overlay: true,
@@ -4704,6 +4705,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 		inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 		outputs: { MA: "#FF0000" }
 	},
+	//
 	"MAGap": {
 		name: "MAGap",
 		overlay: false,
@@ -4738,7 +4740,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 		calculateFN: CIQ.Studies.calculateVolume,
 		inputs: {},
 		outputs: { "Up Volume": "#8cc176", "Down Volume": "#b82c0c" }
-	}
+	},
 });
 
 };

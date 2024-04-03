@@ -247,12 +247,18 @@ const getTokenRole = () => {
   return 'None'
 }
 
-const getPropertyByString = (obj, propString) => {
-  // 设个假数据先
-  if(propString == 'aapl'){
-      return obj[propString]?.Close
+/**
+ * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
+ * @param {*} obj dataSet一行数据
+ * @param {*} symbol symbol2，如果不存在则为symbol1的数据
+ * @param {*} propString field
+ * @returns 
+ */
+const getPropertyByString = (obj, symbol, propString) => {
+  if(symbol){
+      return obj[symbol]?obj[symbol][propString]:null
   }else{
-      return obj.Close
+      return obj[propString]
   }
 }
 

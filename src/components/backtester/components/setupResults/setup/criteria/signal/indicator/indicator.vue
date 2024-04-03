@@ -1003,7 +1003,7 @@ export default {
       }
 
       // 如果是MA，则移除它的信息和位置
-      CIQ.removeMALayout('', this.criteria, this.panelIndex)
+      CIQ.removeMALayout(item.label, this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators({})
@@ -1065,12 +1065,16 @@ export default {
       }
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == item.label) {
+        // 当url相同,且都为同一symbol下时，跳过加载       
+        if (sd.type == item.label && (
+          (sd.parameters.criteria.endsWith('2') && this.criteria.endsWith('2')) ||
+          (!sd.parameters.criteria.endsWith('2') && !this.criteria.endsWith('2'))
+        )) {
           return
         }
       }
@@ -1201,10 +1205,16 @@ export default {
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        // 暂定，去重除'ma'外
-        if (sd.type == item.url && sd.type != 'ma') {
+        // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
+        if (sd.type == item.url && (
+          (sd.parameters.criteria.endsWith('2') && this.criteria.endsWith('2')) ||
+          (!sd.parameters.criteria.endsWith('2') && !this.criteria.endsWith('2'))
+        ) && sd.type != 'ma') {
           return
         }
+        // if (sd.type == item.url && sd.type != 'ma') {
+        //   return
+        // }
       }
 
       if (arguments[1] != true) {

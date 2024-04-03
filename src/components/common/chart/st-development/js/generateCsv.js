@@ -76,8 +76,10 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-             if(!_sd.parameters.criteria && _sd.type == value){
+             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+              && _sd.type == value){
                  _index = 'entry_'+(index+1)
                  indexNum = index
                  sd = _sd
@@ -97,13 +99,16 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-             if(!_sd.parameters.criteria && _sd.type == value){
+             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+              && _sd.type == value){
                  _index = 'exit_'+(index+1)
                  indexNum = index
                  sd = _sd
                  continue;
              }
+             // ma,st ma ,roc
              if(_sd.type == value && _sd.parameters.criteria == 'exit' && _sd.parameters.index == index){
                  _index = 'exit_'+(index+1)
                  indexNum = index
@@ -219,8 +224,10 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-            // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-            if(!_sd.parameters.criteria && _sd.type == value){
+             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+              && _sd.type == value){
                 _index = 'entry_'+(index+1)
                 indexNum = index
                 sd = _sd
@@ -240,8 +247,10 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-            // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-            if(!_sd.parameters.criteria && _sd.type == value){
+             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+              && _sd.type == value){
                 _index = 'exit_'+(index+1)
                 indexNum = index
                 sd = _sd
@@ -316,7 +325,7 @@ let __st_js_generateCsv_ = (_exports) => {
      if(!sd.type) return finalData
      var resultIndex = ''
      var categoryList = CIQ.technicalCategory
-
+     debugger
      // todo, rerun获取conditionRadio
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){

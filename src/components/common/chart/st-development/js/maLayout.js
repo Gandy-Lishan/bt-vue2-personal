@@ -15,21 +15,51 @@ let __st_js_maLayout_ = (_exports) => {
         if (MALayoutListIndex != -1) {
             activatedMALayoutList.splice(MALayoutListIndex, 1)
         }
-        if (url == 'ma'){
-            // keep current MA
-            var objMA = {
-                period: period ? period : 21,
-                type: type ? type : 'simple',
-                field: field ? field : 'Close',
-                criteria: criteria,
-                index: index
+        if (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null)){
+            if(!field){     // 默认值,symbol1为Close, symbol2为 AAPL_Close
+                if(criteria && criteria.endsWith('2')){
+                    /** 判断Study用来计算的数据源 */
+                    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+                    field = comparisonSymbol?.url + '_' + 'Close' 
+                }else{
+                    field = 'Close'
+                }
             }
-            activatedMALayoutList.push(objMA)
+
+            var obj = {}
+            if(url == 'ma'){
+                // keep current MA
+                obj = {
+                    url: url,   // 新加了一个来区分tech类别，考虑兼容问题上，没有url的对象都是ma
+                    period: period ? period : 21,
+                    type: type ? type : 'simple',
+                    field: field,
+                    criteria: criteria,
+                    index: index
+                }
+                activatedMALayoutList.push(obj)
+            }else{
+                // 如果存在dual symbol两个symbol共用同一个tech indicator,则分别保存其信息
+                obj = {
+                    url: url,
+                    field: field,   // 覆写所有technical indicator calculator function, 判断field去决定数据源
+                    criteria: criteria,
+                    index: index
+                }
+                if(!(activatedMALayoutList.find(item=>item.url == obj.url && (
+                    (item.criteria.endsWith('2') && obj.criteria.endsWith('2')) ||
+                    (!item.criteria.endsWith('2') && !obj.criteria.endsWith('2'))
+                  )))) {
+                    activatedMALayoutList.push(obj)
+                  }     
+            }
+           
         }
         CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
     }
     CIQ.removeMALayout = function (url, criteria, index) {
-        if (url == 'ma') {
+        // if (url == 'ma') {}
+        if (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null)){
             // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
             var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 

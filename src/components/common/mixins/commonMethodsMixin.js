@@ -695,6 +695,7 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
+				//const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
 				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合

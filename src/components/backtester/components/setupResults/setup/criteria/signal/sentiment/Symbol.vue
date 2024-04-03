@@ -347,12 +347,17 @@ export default {
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
         let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
-        const fieldName = symbolCond?symbolCond.field:''
+        let fieldName = symbolCond?symbolCond.field:''
+        /** 判断Study用来计算的数据源 */
+        if(this.criteria.endsWith('2')){
+          const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+          fieldName = comparisonSymbol?.url + '_' + fieldName
+        }
 
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
-            CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+            CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike' &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           ) {
