@@ -185,6 +185,21 @@ const routes = [
 			}
 		]
 	},
+	
+	{
+		path: '/strategy',
+		name: 'Strategy',
+		component: resolve =>
+			require(['@/components/Strategy/index.vue'], resolve),
+		children: [
+			{
+				path: '/descriptions',
+				name: 'Descriptions',
+				component: resolve =>
+					require(['@/components/Strategy/Descriptions/index.vue'], resolve)
+			}
+		]
+	},
 	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),

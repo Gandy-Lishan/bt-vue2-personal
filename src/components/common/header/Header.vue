@@ -22,6 +22,10 @@
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
+        <el-menu-item class="home-link" index="9"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+          >Strategy</el-menu-item
+        >
         <el-menu-item class="home-link" index="1"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
@@ -112,6 +116,9 @@ export default {
       }else if(to.path.includes('/cpm') || to.name == 'CPM'){
         this.activeIndex = '8'
       }
+      else if(to.path.includes('/strategy') || to.name == 'Strategy'){
+        this.activeIndex = '9'
+      }
       }
   },
   mounted() {
@@ -129,6 +136,8 @@ export default {
       this.activeIndex = '7'
     }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
       this.activeIndex = '8'
+    }else if(this.$route.name == 'Strategy' || this.$route.name == 'Strategy'){
+      this.activeIndex = '9'
     }
   },
   methods: {
@@ -175,6 +184,11 @@ export default {
       } else if (key == '8') {
         path = this.$router.resolve({
           path: '/cpm'
+        }).href
+        this.$router.push(path)
+      } else if (key == '9') {
+        path = this.$router.resolve({
+          path: '/strategy'
         }).href
         this.$router.push(path)
       }
