@@ -15137,12 +15137,12 @@
     {
         "chart_name": "NIPA",
         "url": "cpbicpat",
-        "updated": "Quarterly"
+        "updated": "Monthly"
     },
     {
         "chart_name": "Unemployment Rate",
         "url": "unrate",
-        "updated": "Monthly"
+        "updated": "Weekly"
     },
     {
         "chart_name": "Conference Board LEI",
