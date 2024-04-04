@@ -164,7 +164,8 @@ if (!CIQ.Studies) {
 		}else sd.yAxis = null
 		/**
 		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
-		 * exmaple: aapl_Close
+		 * exmaple: aapl_Close -> field: aapl, subField: Close
+		 * 			Close -> field:Close, subField: undefined
 		 */
 		var field = sd.inputs.Field.split('_')[0];
 		var subField = sd.inputs.Field.split('_')[1];
@@ -200,7 +201,7 @@ if (!CIQ.Studies) {
         for (i = start; i < quotes.length; i++) {
             var quote = quotes[i];
             val = quote[field];
-            if (val && typeof val == "object") val = val[sd.subField];
+            if (val && typeof val == "object") val = val[subField];
             var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
             var offsetQuote = notOverflowing ? quotes[i + offset] : null;
             if (!val && val !== 0) {
@@ -447,8 +448,8 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
-		var comparisonSymbolUrl = sd.inputs.Field.split('_')[0];
-		var field = sd.inputs.Field.split('_')[1];
+		var field = sd.inputs.Field.split('_')[0];
+		var subField = sd.inputs.Field.split('_')[1];
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -463,23 +464,19 @@ if (!CIQ.Studies) {
 				// ROC
 				// 从当前indicator数据出现那天开始计算
 				let indexROC = quotes.findIndex(row=> 
-					(comparisonSymbolUrl? comparisonSymbolUrl in row: field in row) &&  
-					getPropertyByString(row,comparisonSymbolUrl,field)!=null
+					field in row &&  getPropertyByString(row,field,subField)!=null
 				)
 				quotes = quotes.slice(indexROC) 
 				resArr = quotes.map((row, i) => {
 					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
-					if(					
-						(comparisonSymbolUrl? comparisonSymbolUrl in row: field in row) &&  
-						getPropertyByString(row,comparisonSymbolUrl,field)!=null
-					){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period){
 							// 如果分母为0，直接返回0
-							if(getPropertyByString(quotes[i - period],comparisonSymbolUrl,field) == 0) return 0
+							if(getPropertyByString(quotes[i - period],field,subField) == 0) return 0
 							
 							const change = parseFloat((100 * (
-								getPropertyByString(row,comparisonSymbolUrl,field) / 
-								getPropertyByString(quotes[i - period],comparisonSymbolUrl,field)- 1
+								getPropertyByString(row,field,subField) / 
+								getPropertyByString(quotes[i - period],field,subField)- 1
 							)).toFixed(4))
 							//console.log(row[field] , quotes[i - period][field],row,i)
 							return (change==Infinity || change==-Infinity) ? 0 : change
@@ -1166,8 +1163,17 @@ if (!CIQ.Studies) {
 		}
 		
 		/**
+		 * 根据criteria动态设定study的Y轴属性
+		 */
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+		}else sd.yAxis = null
+		/**
 		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
-		 * exmaple: aapl_Close
+		 * exmaple: aapl_Close -> field: aapl, subField: Close
+		 * 			Close -> field:Close, subField: undefined
 		 */
 		var field = sd.inputs.Field.split('_')[0];
 		var subField = sd.inputs.Field.split('_')[1];
@@ -1181,8 +1187,8 @@ if (!CIQ.Studies) {
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
 				/** 防止分母为0或者null */
-				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,comparisonSymbol?.url,field))).filter(i=>!(isNaN(i) || i==null)))
-				result = lowestPrice?(getPropertyByString(quote, comparisonSymbol?.url, field)/lowestPrice-1)*100:0
+				let lowestPrice = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,field,subField))).filter(i=>!(isNaN(i) || i==null)))
+				result = lowestPrice?(getPropertyByString(quote,field,subField)/lowestPrice-1)*100:0
 			}
 			quotes[i]["Result " + sd.name] = result;
 		}

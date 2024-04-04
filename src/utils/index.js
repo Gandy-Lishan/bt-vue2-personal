@@ -250,16 +250,20 @@ const getTokenRole = () => {
 /**
  * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
  * @param {*} obj dataSet一行数据
- * @param {*} symbol symbol2，如果不存在则为symbol1的数据
- * @param {*} propString field
+ * @param {*} field
+ * @param {*} subField
  * @returns 
  */
-const getPropertyByString = (obj, symbol, propString) => {
-  if(symbol){
-      return obj[symbol]?obj[symbol][propString]:null
-  }else{
-      return obj[propString]
-  }
+const getPropertyByString = (obj, field, subField) => {
+  // if(symbol){
+  //     return obj[symbol]?obj[symbol][propString]:null
+  // }else{
+  //     return obj[propString]
+  // }
+
+  val = obj[field];   
+  if (val && typeof val == "object") val = val[subField];
+  return val
 }
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString}
