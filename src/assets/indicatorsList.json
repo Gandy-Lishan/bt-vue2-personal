@@ -15165,12 +15165,12 @@
         "updated": "Monthly"
     },
     {
-        "chart_name": "SPX/GOLDLNPM Ratio",
+        "chart_name": "SPX / GOLDLNPM Ratio",
         "url": "spx_goldlnpm_ratio",
         "updated": "Daily"
     },
     {
-        "chart_name": "2YR / 10 YR Treasure Spread",
+        "chart_name": "2YR / 10YR Treasure Spread",
         "url": "two_ten_spread",
         "updated": "Daily"
     },
