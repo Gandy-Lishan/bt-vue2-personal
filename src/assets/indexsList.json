@@ -830,5 +830,13 @@
     {
         "symbol": "BIL",
         "name": "SPDR Bloomberg 1-3 Month T-Bill(BIL)"
+    },
+    {
+        "symbol": "SPXT",
+        "name": "S&P 500 Technical Index(SPXT)"
+    },
+    {
+        "symbol": "USGG3M",
+        "name": "3-Month Treasury"
     }
 ]

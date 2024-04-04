@@ -15110,13 +15110,73 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "XLV Cumulative 10 Day A/D Line",
+        "chart_name": "XLV 10-Day Sum Advance/Decline Ratio",
         "url": "breadth_sector_xlv_ad10",
         "updated": "Daily"
     },
     {
-        "chart_name": "XLY Cumulative 10 Day A/D Line",
+        "chart_name": "XLY 10-Day Sum Advance/Decline Ratio",
         "url": "breadth_sector_xly_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PPI Stock Market Model",
+        "url": "ppi_stock_market_model",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "NYSE 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_ad10",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "High Yied AD 50/200 Spread",
+        "url": "breadth_bonds_hy_ad_50_200_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NIPA",
+        "url": "cpbicpat",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Unemployment Rate",
+        "url": "unrate",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Conference Board LEI",
+        "url": "lei totl",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Medium Term Volatility Index",
+        "url": "medium_term_vol_index",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "New Housing Sales (Total)",
+        "url": "nhsltot",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "SPX ROC12/3 Month Treasure Spread",
+        "url": "spx12_3mt_spread",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "SPX/GOLDLNPM Ratio",
+        "url": "spx_goldlnpm_ratio",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "2YR / 10 YR Treasure Spread",
+        "url": "two_ten_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "3-Month Treasury",
+        "url": "usgg3m",
         "updated": "Daily"
     }
 ]
