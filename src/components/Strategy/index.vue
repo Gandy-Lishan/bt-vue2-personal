@@ -28,7 +28,18 @@
     </div>
     <div class="strategy-main">
       <div class="strategy-table">
-        
+        <div class="tableHeader">
+        <div class="btns">
+          <el-button type="primary" size="mini"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
+          <el-button type="primary" size="mini"><i class="el-icon-caret-right" style="margin-right: 10px"></i>View Summary Statistics</el-button>
+          <el-button type="info" size="mini">Portfolio</el-button>
+        </div>
+        <div class="searchBox">
+          <el-input placeholder="Search" v-model="searchItem" size="mini">
+            <i slot="append" class="el-input__icon el-icon-search"></i>
+          </el-input>
+        </div>
+        </div>
       </div>
     </div>
   </div>
