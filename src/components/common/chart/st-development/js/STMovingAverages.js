@@ -154,21 +154,23 @@ if (!CIQ.Studies) {
             name = p + " " + name;
         }
 
-		/**
-		 * 根据criteria动态设定study的Y轴属性
-		 */
+		var field = sd.inputs.Field;
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 判断Study用来计算的数据源 */
+		var comparisonSymbol
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-			sd.yAxis = actualXaxis
+			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			if(CIQ.findBuiltinTechIndicator(null,field)){
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+				field = comparisonSymbol?.url
+			}
 		}else sd.yAxis = null
-		/**
-		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
-		 * exmaple: aapl_Close -> field: aapl, subField: Close
-		 * 			Close -> field:Close, subField: undefined
-		 */
-		var field = sd.inputs.Field.split('_')[0];
-		var subField = sd.inputs.Field.split('_')[1];
+		
 
         if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
         var offset = parseInt(sd.inputs.Offset, 10);
@@ -200,6 +202,7 @@ if (!CIQ.Studies) {
         var futureTicks = [];
         for (i = start; i < quotes.length; i++) {
             var quote = quotes[i];
+
             val = quote[field];
             if (val && typeof val == "object") val = val[subField];
             var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
@@ -448,11 +451,21 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
-		var field = sd.inputs.Field.split('_')[0];
-		var subField = sd.inputs.Field.split('_')[1];
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
+		var field = sd.inputs.Field;
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 判断Study用来计算的数据源 */
+		var comparisonSymbol
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
+			if(CIQ.findSymbolIndicator(null, field)){
+				field = comparisonSymbol?.url
+			}
+		}else sd.yAxis = null
 
 		if (!field || field == "field") field = "Close";
 
@@ -640,19 +653,22 @@ if (!CIQ.Studies) {
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
-		var field = sd.inputs.Field;
 
+		var field = sd.inputs.Field;
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
 		/** 判断Study用来计算的数据源 */
 		var comparisonSymbol
 		if(sd.parameters.criteria.endsWith('2')){
 			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			field = comparisonSymbol?.url
 		}
 
 		if (!field || field == "field") field = "Close";
 		// 默认study模板
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
-			var RSIValue = getPropertyByString(quote, comparisonSymbol?.url, field);
+			var RSIValue = getPropertyByString(quote, field, subField);
 			if (RSIValue) {
 				var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
 				quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
@@ -1155,12 +1171,6 @@ if (!CIQ.Studies) {
 		}
 		var field = sd.inputs.Field;
 		var period = sd.inputs.Period;
-
-		/** 判断Study用来计算的数据源 */
-		var comparisonSymbol
-		if(sd.parameters.criteria.endsWith('2')){
-			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-		}
 		
 		/**
 		 * 根据criteria动态设定study的Y轴属性
@@ -1175,8 +1185,8 @@ if (!CIQ.Studies) {
 		 * exmaple: aapl_Close -> field: aapl, subField: Close
 		 * 			Close -> field:Close, subField: undefined
 		 */
-		var field = sd.inputs.Field.split('_')[0];
-		var subField = sd.inputs.Field.split('_')[1];
+		var field = sd.inputs.Field.split('__')[0];
+		var subField = sd.inputs.Field.split('__')[1];
 
 		if (!field || field == "field") field = "Close";
 		let result

@@ -167,8 +167,8 @@ if (!CIQ.Studies) {
 		 * exmaple: aapl_Close -> field: aapl, subField: Close
 		 * 			Close -> field:Close, subField: undefined
 		 */
-		var field = sd.inputs.Field.split('_')[0];
-		var subField = sd.inputs.Field.split('_')[1];
+		var field = sd.inputs.Field.split('__')[0];
+		var subField = sd.inputs.Field.split('__')[1];
 
         if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
         var offset = parseInt(sd.inputs.Offset, 10);
@@ -448,8 +448,8 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
-		var comparisonSymbolUrl = sd.inputs.Field.split('_')[0];
-		var field = sd.inputs.Field.split('_')[1];
+		var comparisonSymbolUrl = sd.inputs.Field.split('__')[0];
+		var field = sd.inputs.Field.split('__')[1];
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -1179,8 +1179,8 @@ if (!CIQ.Studies) {
 		 * exmaple: aapl_Close -> field: aapl, subField: Close
 		 * 			Close -> field:Close, subField: undefined
 		 */
-		var field = sd.inputs.Field.split('_')[0];
-		var subField = sd.inputs.Field.split('_')[1];
+		var field = sd.inputs.Field.split('__')[0];
+		var subField = sd.inputs.Field.split('__')[1];
 
 		if (!field || field == "field") field = "Close";
 		let result

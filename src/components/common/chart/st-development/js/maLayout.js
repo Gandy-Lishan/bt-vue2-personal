@@ -16,15 +16,6 @@ let __st_js_maLayout_ = (_exports) => {
             activatedMALayoutList.splice(MALayoutListIndex, 1)
         }
         if (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null)){
-            if(!field){     // 默认值,symbol1为Close, symbol2为 AAPL_Close
-                if(criteria && criteria.endsWith('2')){
-                    /** 判断Study用来计算的数据源 */
-                    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-                    field = comparisonSymbol?.url + '_' + 'Close' 
-                }else{
-                    field = 'Close'
-                }
-            }
 
             var obj = {}
             if(url == 'ma'){
@@ -33,7 +24,7 @@ let __st_js_maLayout_ = (_exports) => {
                     url: url,   // 新加了一个来区分tech类别，考虑兼容问题上，没有url的对象都是ma
                     period: period ? period : 21,
                     type: type ? type : 'simple',
-                    field: field,
+                    field: field?field:'Close',
                     criteria: criteria,
                     index: index
                 }
@@ -42,7 +33,9 @@ let __st_js_maLayout_ = (_exports) => {
                 // 如果存在dual symbol两个symbol共用同一个tech indicator,则分别保存其信息
                 obj = {
                     url: url,
-                    field: field,   // 覆写所有technical indicator calculator function, 判断field去决定数据源
+                    /**
+                     * 不用考虑symbolOHLCV而加入field属性，因为我把symbolOhlcv分成了5个不同Study,每个都有其默认Field
+                     */
                     criteria: criteria,
                     index: index
                 }

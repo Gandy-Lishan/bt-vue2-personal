@@ -250,18 +250,18 @@ const getTokenRole = () => {
 /**
  * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
  * @param {*} obj dataSet一行数据
- * @param {*} field
- * @param {*} subField
+ * @param {*} field symbol2 name
+ * @param {*} subField symbol2 name存在时使用的field
  * @returns 
  */
 const getPropertyByString = (obj, field, subField) => {
-  // if(symbol){
-  //     return obj[symbol]?obj[symbol][propString]:null
+  // if(symbol2){
+  //     return obj[symbol2]?obj[symbol2][field]:null
   // }else{
-  //     return obj[propString]
+  //     return obj[field]
   // }
 
-  val = obj[field];   
+  var val = obj[field];   
   if (val && typeof val == "object") val = val[subField];
   return val
 }
