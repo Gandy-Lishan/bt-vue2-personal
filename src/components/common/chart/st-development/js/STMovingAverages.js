@@ -158,9 +158,8 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
-		var comparisonSymbol
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 			if(CIQ.findBuiltinTechIndicator(null,field)){
 				/**根据criteria动态设定study的Y轴属*******/
@@ -458,9 +457,8 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
-		var comparisonSymbol
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
 			if(CIQ.findSymbolIndicator(null, field)){
 				field = comparisonSymbol?.url
@@ -506,17 +504,22 @@ if (!CIQ.Studies) {
 			case 'OPR':
 				// OPR
 				// 从当前indicator数据出现那天开始计算
-				let indexOPR = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexOPR = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
 				quotes = quotes.slice(indexOPR) 
-				const minCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "min", period, 0);
-				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
+				const minCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 0);
+				const maxCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 0);
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
-							const change = parseFloat((100 * (row[field] - minCloseArrOPR[i]) / (maxCloseArrOPR[i] - minCloseArrOPR[i])).toFixed(4))
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
+								(maxCloseArrOPR[i] - minCloseArrOPR[i])
+							).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -532,17 +535,22 @@ if (!CIQ.Studies) {
 			case 'RR':
 				// Range Rank
 				// 计算含当天值的排名，即数值保证在 0 - 100 之间
-				let indexRR = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexRR = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
 				quotes = quotes.slice(indexRR) 
-				const minCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
-				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				const minCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				const maxCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 
-							const change = parseFloat((100 * (row[field] - minCloseArrRR[i]) / (maxCloseArrRR[i] - minCloseArrRR[i])).toFixed(4))
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
+								(maxCloseArrRR[i] - minCloseArrRR[i])
+							).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -558,10 +566,12 @@ if (!CIQ.Studies) {
 			case 'MA':
 				// MA
 				// 从当前indicator数据出现那天开始计算
-				let indexMA = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexMA = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
 				quotes = quotes.slice(indexMA) 
 				const maArr = quotes.map((row, i, arr) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
 							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + b[field], 0) / period
 						}
@@ -571,9 +581,9 @@ if (!CIQ.Studies) {
 					}
 				});
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
-							return parseFloat((row[field] / maArr[i]).toFixed(4))
+							return parseFloat((getPropertyByString(row,field,subField) / maArr[i]).toFixed(4))
 						}
 						return NaN
 					}else{
@@ -586,16 +596,21 @@ if (!CIQ.Studies) {
 				break;
 			case 'DD':
 				// 公式：(Current close - Highest Close) / Highest Close
-				let indexDD = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexDD = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
 				quotes = quotes.slice(indexDD) 
-				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
-							const change = parseFloat((100 * (row[field] - maxCloseArrDD[i]) / maxCloseArrDD[i]).toFixed(4))
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
+								maxCloseArrDD[i]
+							).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -610,16 +625,21 @@ if (!CIQ.Studies) {
 				break;
 			case 'DU':
 				// 公式：(Current close - Highest Close) / Highest Close
-				let indexDU = quotes.findIndex(row=> field in row &&  row[field]!=null)
+				let indexDU = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
 				quotes = quotes.slice(indexDU) 
-				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				const minCloseArrDU = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in quotes[i] &&  quotes[i][field]!=null){
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
-							const change = parseFloat((100 * (row[field] - minCloseArrDU[i]) / minCloseArrDU[i]).toFixed(4))
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
+								minCloseArrDU[i]
+							).toFixed(4))
 							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
@@ -646,10 +666,9 @@ if (!CIQ.Studies) {
 			// quote['supLine'] = showSupLine;
 		}
 
-		sd.outputMap[sd.inputs.display] = "Line";
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
 		// sd.outputMap['supLine'] = "supLine";
-		
-
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		var quotes = sd.chart.dataSet;
@@ -658,9 +677,8 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
-		var comparisonSymbol
 		if(sd.parameters.criteria.endsWith('2')){
-			comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			field = comparisonSymbol?.url
 		}
 
@@ -1169,24 +1187,18 @@ if (!CIQ.Studies) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
 		var period = sd.inputs.Period;
 		
-		/**
-		 * 根据criteria动态设定study的Y轴属性
-		 */
+		var field = sd.inputs.Field;
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 判断Study用来计算的数据源 */
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
 			sd.yAxis = actualXaxis
+			field = comparisonSymbol?.url
 		}else sd.yAxis = null
-		/**
-		 * 覆写所有technical indicator calculator function, 判断field去决定数据源
-		 * exmaple: aapl_Close -> field: aapl, subField: Close
-		 * 			Close -> field:Close, subField: undefined
-		 */
-		var field = sd.inputs.Field.split('__')[0];
-		var subField = sd.inputs.Field.split('__')[1];
 
 		if (!field || field == "field") field = "Close";
 		let result
@@ -1253,7 +1265,7 @@ if (!CIQ.Studies) {
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
 			// outputs: { Line: "auto",supLine:'#9a9a9a' },
-			outputs: { Line: "auto" },
+			outputs: { Result: "auto" },
         },
 		"Symbol Open": {
             name: "Symbol Open Line",

@@ -76,9 +76,9 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
-             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+            if(!(CIQ.findBuiltinTechIndicator(null,value) || CIQ.findSymbolIndicator(value,null))
               && _sd.type == value){
                  _index = 'entry_'+(index+1)
                  indexNum = index
@@ -99,16 +99,16 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
-             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+             if(!(CIQ.findBuiltinTechIndicator(null,value) || CIQ.findSymbolIndicator(value,null))
               && _sd.type == value){
                  _index = 'exit_'+(index+1)
                  indexNum = index
                  sd = _sd
                  continue;
              }
-             // ma,st ma ,roc
+             // tech(including ma,st ma) ,roc, symbolOHLCV
              if(_sd.type == value && _sd.parameters.criteria == 'exit' && _sd.parameters.index == index){
                  _index = 'exit_'+(index+1)
                  indexNum = index
@@ -224,9 +224,9 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
+            // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
-             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+            if(!(CIQ.findBuiltinTechIndicator(null,value) || CIQ.findSymbolIndicator(value,null))
               && _sd.type == value){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -247,9 +247,9 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc (那就是除ma的tech和senti),则不考虑criteria和index
-             // if(!_sd.parameters.criteria && _sd.type == value){
-             if((CIQ.findSentiIndicator(null,_sd.type) || (_sd.type!='ma' && CIQ.findBuiltinTechIndicator(null,_sd.type)))
+            // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+            // if(!_sd.parameters.criteria && _sd.type == value){
+            if(!(CIQ.findBuiltinTechIndicator(null,value) || CIQ.findSymbolIndicator(value,null))
               && _sd.type == value){
                 _index = 'exit_'+(index+1)
                 indexNum = index
@@ -732,6 +732,7 @@ let __st_js_generateCsv_ = (_exports) => {
              s.parameters.index == indexNum
          ){
              let matchedSubstring = '';
+             debugger
              for(var i in Object.keys(arrData[arrData.length-10])){
                  if(Object.keys(arrData[arrData.length-10])[i].indexOf(s.inputs.display) !== -1){
                     matchedSubstring = s.inputs.condition                                            
