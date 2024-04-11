@@ -160,6 +160,12 @@ const routes = [
 			require(['@/components/Seasonality/index.vue'], resolve),
 	},
 	{
+		path: '/portfolio',
+		name: 'Portfolio',
+		component: resolve =>
+			require(['@/components/Portfolio/index.vue'], resolve),
+	},
+	{
 		path: '/cpm',
 		name: 'CPM',
 		component: resolve =>

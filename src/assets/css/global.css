@@ -546,7 +546,8 @@ input[type="time"] {
     .default-table-class .el-table .cell,
     .CPM-trades .el-table .cell,
     .CPM-TIM .el-table .cell,
-    .ScannerBTTable .el-table .cell
+    .ScannerBTTable .el-table .cell,
+    .strategiesTable .el-table .cell
     {
   font-weight: 400;
 	font-size: 14px;
@@ -561,7 +562,8 @@ input[type="time"] {
   .default-table-class .table thead tr th,
   .CPM-trades .table thead tr th,
   .CPM-TIM .table thead tr th,
-  .ScannerBTTable .table thead tr th
+  .ScannerBTTable .table thead tr th,
+  .strategiesTable .table thead tr th
   {
   font-weight: 600 !important;
   color: #333341;
@@ -574,7 +576,8 @@ input[type="time"] {
 .default-table-class .el-table th.el-table__cell>.cell,
 .CPM-trades .el-table th.el-table__cell>.cell,
 .CPM-TIM .el-table th.el-table__cell>.cell,
-.ScannerBTTable .el-table th.el-table__cell>.cell
+.ScannerBTTable .el-table th.el-table__cell>.cell,
+.strategiesTable .el-table th.el-table__cell>.cell
 {
   font-weight: 600 !important;
 }
@@ -588,7 +591,8 @@ input[type="time"] {
   .history-container .el-table .cell .negative-value,
   .default-table-class .el-table .cell .negative-value,
   .CPM-trades .el-table .cell .negative-value,
-  .CPM-TIM .el-table .cell .negative-value
+  .CPM-TIM .el-table .cell .negative-value,
+  .strategiesTable .el-table .cell .negative-value
    {
   color: #dd3a13;
 }
@@ -604,7 +608,8 @@ input[type="time"] {
  .default-table-class .el-table__body, .el-table__footer, .el-table__header,
  .CPM-trades .el-table__body, .el-table__footer, .el-table__header,
  .CPM-TIM .el-table__body, .el-table__footer, .el-table__header,
- .ScannerBTTable .el-table__body, .el-table__footer, .el-table__header
+ .ScannerBTTable .el-table__body, .el-table__footer, .el-table__header,
+ .strategiesTable .el-table__body, .el-table__footer, .el-table__header
  {
   margin: 0 auto;
 }

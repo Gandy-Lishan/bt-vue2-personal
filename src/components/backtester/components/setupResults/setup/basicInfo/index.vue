@@ -1155,11 +1155,11 @@ export default {
       return ''
     },
     validateTIM(value) {
-      this.timValidErrMsg = createPositiveIntegerValidate(value)
+      this.timValidErrMsg = createPositiveIntegerValidate(value, 0)
       return this.timValidErrMsg
     },
     validateExclude(value) {
-      this.excludeOOErrMsg = createPositiveIntegerValidate(value)
+      this.excludeOOErrMsg = createPositiveIntegerValidate(value, 0)
       return this.excludeOOErrMsg
     },
     generateBTName() {
