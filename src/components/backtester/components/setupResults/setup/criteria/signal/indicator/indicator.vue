@@ -1004,6 +1004,7 @@ export default {
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.label, this.criteria, this.panelIndex)
+      CIQ.removeTechLayout(item.label, this.criteria)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators({})
@@ -1064,17 +1065,19 @@ export default {
         })
       }
 
+
+
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
+       const symbol = CIQ.setTechLayout(item.label, this.criteria)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
         // 当url相同,且都为同一symbol下时，跳过加载       
-        if (sd.type == item.label && (
-          (sd.parameters.criteria.endsWith('2') && this.criteria.endsWith('2')) ||
-          (!sd.parameters.criteria.endsWith('2') && !this.criteria.endsWith('2'))
-        )) {
+        if (sd.type == item.label && 
+          (sd.parameters.symbol == symbol)
+        ) {
           return
         }
       }
@@ -1136,6 +1139,7 @@ export default {
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
+      CIQ.removeTechLayout(item.label, this.criteria)
       // lishn 判断需要小龙写
      if (arguments[1] != true) {
         CIQ.addIndicators({})
@@ -1201,15 +1205,15 @@ export default {
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+      const symbol = CIQ.setTechLayout(item.url, this.criteria)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
         // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
-        if (sd.type == item.url && (
-          (sd.parameters.criteria.endsWith('2') && this.criteria.endsWith('2')) ||
-          (!sd.parameters.criteria.endsWith('2') && !this.criteria.endsWith('2'))
-        ) && sd.type != 'ma') {
+        if (sd.type == item.url && 
+          (sd.parameters.symbol == symbol)
+        ) {
           return
         }
         // if (sd.type == item.url && sd.type != 'ma') {
