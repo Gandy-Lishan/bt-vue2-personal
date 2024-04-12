@@ -1,0 +1,372 @@
+<template>
+	<div class="StrategiesContent">
+		<div class="strategiesTable">
+			<el-table
+				ref="Table"
+				class="ScannerBTTable"
+				header-align="center"
+				:data="paginatedData"
+				empty-text="No data"
+				v-loading="loading"
+				@sort-change="onSortChange"
+				size="small"
+				style="width: 100%; height: 100%; margin: 0 auto"
+				stripe
+			>
+				<template v-for="l in tableCol">
+					<el-table-column
+						align="center"
+						:label="l.label"
+						:prop="l.value"
+						:key="l.key"
+						show-overflow-tooltip
+						:width="l.width"
+						v-if="
+							[
+								'model_name',
+								'sharp_ratio',
+								'total_trades'
+							].includes(l.value)
+						"
+						:sortable="
+							[
+								'model_name',
+								'sharp_ratio',
+								'total_trades'
+							].includes(l.value)
+								? 'custom'
+								: false
+						"
+					>
+						<template slot-scope="scope">
+							<span class="tableText" v-if="l.value === 'model_name'">
+								<el-button type="text">{{ scope.row[l.value] }}</el-button>
+							</span>
+							<span class="tableText" v-else>
+								{{ scope.row[l.value] }}
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						align="center"
+						:label="l.label"
+						:prop="l.value"
+						:key="l.key"
+						show-overflow-tooltip
+						:width="l.width"
+						v-if="['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'sharp_ratio', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)"
+            :sortable="
+							['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'sharp_ratio', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)
+								? 'custom'
+								: false
+						"
+					>
+						<template slot-scope="scope">
+							<span class="tableText">
+                <!-- 这里放百分号 -->
+								{{ scope.row[l.value] }}
+							</span>
+						</template>
+					</el-table-column>
+				</template>
+			</el-table>
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:page-sizes="[10, 30, 50, 100, 200]"
+				:page-size="pageSize"
+				:current-page="currentPage"
+				:total="immutableTableData.length"
+				layout="total, sizes, prev, pager, next, jumper"
+			></el-pagination>
+		</div>
+	</div>
+</template>
+
+<script>
+import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
+import { capitalizeFirstLetter, isJson } from "@/utils"
+export default {
+  name: 'SummaryTable',
+  data() {
+    return {
+      loading: false,
+      pageSize: 10, // Default page size
+      currentPage: 1, // Default current page
+      total: 0,
+      searchKey: '',
+      tableCol: [
+        {
+          label: 'Model Name',
+          value: 'model_name',
+          key: 'model_name'
+        },
+        {
+          label: 'Strategy CAGR',
+          value: 'CAGR',
+          key: 'CAGR'
+        },
+        {
+          label: 'Benchmark CAGR',
+          value: 'benchmark_CAGR',
+          key: 'benchmark_CAGR'
+        },
+        {
+          label: 'Max Drawdown',
+          value: 'max_drawdown',
+          key: 'max_drawdown'
+        },
+        {
+          label: 'Net Profit(%)',
+          value: 'net_profit_pct',
+          key: 'net_profit_pct'
+        },
+        {
+          label: 'Sharpe Ratio',
+          value: 'sharp_ratio',
+          key: 'sharp_ratio'
+        },
+        {
+          label: 'Profit/Loss Ratio',
+          value: 'profit_loss_ratio',
+          key: 'profit_loss_ratio'
+        },
+        {
+          label: 'Average Win',
+          value: 'average_win',
+          key: 'average_win'
+        },
+        {
+          label: 'Average Loss',
+          value: 'average_loss',
+          key: 'average_loss'
+        },
+        {
+          label: 'Total Trades',
+          value: 'total_trades',
+          key: 'total_trades'
+        },
+        {
+          label: 'Win Rate(%)',
+          value: 'win_rate_pct',
+          key: 'win_rate_pct'
+        }
+      ],
+      tableData: [],
+      immutableTableData: [],
+      currentSort: {}, // 当前的排序信息
+      dataList: [],
+    }
+  },
+  computed: {
+		paginatedData() {
+      // 计算分页数据
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.immutableTableData.slice(startIndex, endIndex);
+		},
+	},
+  async created() {
+    // await this.getDataList()
+    console.log('列表返回处理数据', this.tableData)
+    const data = [
+      {
+        model_name: 'Short-Term Combined Model',
+        CAGR: '9.6 %',
+        benchmark_CAGR: '8.26 %',
+        max_drawdown: '46.92 %',
+        net_profit_pct: '408.54 %',
+        sharp_ratio: '0.61',
+        profit_loss_ratio: '1.24 %',
+        average_win: '6.32%',
+        average_loss: '-5.24%',
+        total_trades: '58',
+        win_rate_pct: '72.41 %'
+      },
+      {
+        model_name: 'aggregate_model',
+        CAGR: '8.9 %',
+        benchmark_CAGR: '9.24 %',
+        max_drawdown: '46.92 %',
+        net_profit_pct: '408.54 %',
+        sharp_ratio: '0.61',
+        profit_loss_ratio: '1.24 %',
+        average_win: '6.32%',
+        average_loss: '-5.24%',
+        total_trades: '58',
+        win_rate_pct: '72.41 %'
+      },
+      {
+        model_name: 'aggregate_model',
+        CAGR: '8.9 %',
+        benchmark_CAGR: '9.24 %',
+        max_drawdown: '46.92 %',
+        net_profit_pct: '408.54 %',
+        sharp_ratio: '0.61',
+        profit_loss_ratio: '1.24 %',
+        average_win: '6.32%',
+        average_loss: '-5.24%',
+        total_trades: '58',
+        win_rate_pct: '72.41 %'
+      },
+      {
+        model_name: 'aggregate_model',
+        CAGR: '8.9 %',
+        benchmark_CAGR: '9.24 %',
+        max_drawdown: '46.92 %',
+        net_profit_pct: '408.54 %',
+        sharp_ratio: '0.61',
+        profit_loss_ratio: '1.24 %',
+        average_win: '6.32%',
+        average_loss: '-5.24%',
+        total_trades: '58',
+        win_rate_pct: '72.41 %'
+      },
+      {
+        model_name: 'aggregate_model',
+        CAGR: '8.9 %',
+        benchmark_CAGR: '9.24 %',
+        max_drawdown: '46.92 %',
+        net_profit_pct: '408.54 %',
+        sharp_ratio: '0.61',
+        profit_loss_ratio: '1.24 %',
+        average_win: '6.32%',
+        average_loss: '-5.24%',
+        total_trades: '58',
+        win_rate_pct: '72.41 %'
+      }
+    ]
+    for (let val of data) {
+       val.selection = false;
+    }
+    this.tableData = data;
+    this.immutableTableData = this.tableData
+  },
+  methods: {
+    handleSizeChange(size) {
+			this.pageSize = size;
+			this.currentPage = 1; // Reset to the first page when the page size changes
+		},
+    handleCurrentChange(currentPage) {
+			this.currentPage = currentPage;
+		},
+    highlightTag(tag) {
+      this.highlightedTag = tag.value;
+      // 重置分页和排序信息
+      this.currentPage = 1;
+      if (this.highlightedTag !== 'All') {
+        this.immutableTableData = this.tableData.filter(item => item.category === this.highlightedTag);
+      }else {
+        this.immutableTableData = [...this.tableData]
+      }
+    },
+    portfolio() {
+      console.log('paginatedData', this.paginatedData.filter(item => item.selection))
+    },
+    async getDataList(orderby) {
+      this.loading = true
+      let res = null
+      const page = this.currentPage
+			try {
+				res = await getScannerBTList(page, orderby, this.searchKey)
+        console.log('列表响应', res)
+				if (res.status == 200) {
+					let data = res.data.results
+					data = data.map(item => {
+            item.status = capitalizeFirstLetter(item.status)
+            item.period = [item.start_date, item.end_date]
+            item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
+            item.viewLoading = false
+            item.deleteLoading = false
+						return item
+					})
+					this.tableData = data
+					this.total = res.data.count
+				}
+			} catch(error) {
+				console.log('报错了', error)
+        if(error.response.status === 404) {
+          const newPage = page != 1 ? page - 1 : 1
+          this.handleCurrentChange(newPage)
+          return
+        }
+        this.currentPage = 1
+        this.total = 0
+        this.tableData = []
+        
+      } finally {
+        this.loading = false
+      }
+    },
+    onSortChange(column){
+			var sortingOrder = column.order
+			var colName = column.prop
+      console.log('colName', colName)
+      this.currentSort = {
+        prop: colName,
+        order: sortingOrder
+      };
+			// 数字字符串转数字类型排序
+			if(['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.immutableTableData.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _b - _a
+					})
+				}else if(sortingOrder == 'descending'){
+					this.immutableTableData.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _a - _b
+					})
+				}else{
+				}
+			}
+			// 数字类型排序
+			if(['sharp_ratio', 'total_trades'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.immutableTableData.sort((a,b) => {
+						return b[colName] - a[colName]
+					})
+				}else if(sortingOrder == 'descending'){
+					this.immutableTableData.sort((a,b) => {
+						return a[colName] - b[colName]
+					})
+				}else{
+				}
+			}
+			// 日期类型排序
+			if(['date'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.immutableTableData.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.immutableTableData.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+			// 字符串类型排序
+			if(['model_name'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.immutableTableData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.immutableTableData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+				}else{
+				}
+			}
+		},
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import "../index.less";
+</style>

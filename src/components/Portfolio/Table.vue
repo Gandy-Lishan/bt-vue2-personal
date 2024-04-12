@@ -249,7 +249,6 @@
 <script>
 import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
-const debounce = require('lodash/debounce')
 
 export default {
   name: 'ScannerBTTable',
@@ -686,7 +685,7 @@ export default {
       if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
     },
-    handleCellMouseEnter: debounce(function (row, column, cell, event) {
+    handleCellMouseEnter(row, column, cell, event) {
       console.log('handleCellMouseEnter', row, column, cell, event)
       this.detailedInfo = row.detailedInfo;
        // 计算弹框位置
@@ -694,11 +693,11 @@ export default {
       this.mouseY = event.clientY;
       // 显示弹框
       this.isPopupVisible = true;
-    }, 1000),
-    handleCellMouseLeave: debounce(function (row, column, cell, event) {
+    },
+    handleCellMouseLeave(row, column, cell, event) {
       console.log('handleCellMouseEnter', row, column, cell, event)
       this.isPopupVisible = false;
-    }, 0)
+    }
     }
   }
 </script>
