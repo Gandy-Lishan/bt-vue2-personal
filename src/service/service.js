@@ -1113,7 +1113,7 @@ export function getBTV1FavIndicator() {
 export function getStrategyList() {
 	return new Promise((resolve, reject) => {
 		axios
-			.get('/dev/dev/portfolio/get_strategies/', {
+			.get('/dev/portfolio/get_strategies/', {
 				withCredentials: true
 			})
 			.then(res => {
