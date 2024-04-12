@@ -350,6 +350,7 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
@@ -554,19 +555,7 @@ export default class AdvancedChartComponent extends Vue {
 	
 	// 统一复写默认Study(已存在的，不然则在STMovingAverages中配置)配置
 	overrideStudyDef() {
-		CIQ.extend(CIQ.Studies.studyLibrary["MA Dev"], {
-			calculateFN: CIQ.Studies.calculateSTMADev,
-			inputs: { "Points Or Percent": ["Percent","Points"] },
-		});
-		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-			name: "Relative Strength Index (RSI)",
-		});
-		CIQ.extend(CIQ.Studies.studyLibrary["Awesome"], {
-			calculateFN: CIQ.Studies.calculateSTAwesomeOscillator,
-		});
-		CIQ.extend(CIQ.Studies.studyLibrary["ma"], {
-			calculateFN: CIQ.Studies.calculateSTMovingAverage,
-		});
+		extendOverwrite()
 	}
 
 	// 工具栏按钮移除和显示marker功能，只影响显示

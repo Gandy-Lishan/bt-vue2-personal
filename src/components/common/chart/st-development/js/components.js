@@ -7776,6 +7776,7 @@ class Studies extends CIQ.UI.ContextTag {
 			//if(studyName == 'ma'){
 				// 给study list上选择的ma加上为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
 				CIQ.setMALayout(studyName,null,null,null,null,null)
+				CIQ.setTechLayout(studyName, null)
 			//}
 
 			CIQ.addIndicators({type:'addBuiltTech',stx:stx})
@@ -13293,7 +13294,8 @@ import {__st_js_standard_studies_} from "./STstudies"
 import {__st_addons_standard_tooltip_} from "./STTooltip"
 import {__st_js_mask_} from "./STMask"
 import {__st_js_loadIndicator_} from "./loadIndicator"
-import {__js_st_studies_movingAverages_} from "./STMovingAverages"
+import {__js_st_studies_customized_} from "./STCustomizedStudies"
+import {__js_st_studies_overwrite_} from "./STOverwriteStudies"
 import {__st_js_indicatorType_} from "./indicatorType"
 import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
@@ -13392,7 +13394,8 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_addons_standard_tooltip_,
 		__st_js_mask_,
 		__st_js_loadIndicator_,
-		__js_st_studies_movingAverages_,
+		__js_st_studies_customized_,
+		__js_st_studies_overwrite_,
 		__st_js_indicatorType_,
 		__st_js_generateCsv_,
 		__st_js_utils_,

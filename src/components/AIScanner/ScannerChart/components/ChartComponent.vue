@@ -107,7 +107,6 @@ export default {
 	},
 	methods:{
 		onChartReady(){
-			this.overrideStudyDef()
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
@@ -142,22 +141,6 @@ export default {
 				}
 			})
 
-		},
-		overrideStudyDef(){
-			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-        seriesFN: function (stx, sd, quotes) {
-          CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
-
-          var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
-          var yAxis = CIQ.stxx.panels[sd.name].yAxis
-          CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
-        },
-				calculateFN: CIQ.Studies.calculateSTRSI,
-				outputs: { 
-          RSI: "auto",
-          //supLine:'#9a9a9a' 
-        }
-			});
 		},
 		editStudies(bool){
 			CIQ.extend(CIQ.Studies.studyLibrary["ma"], { edit:bool });

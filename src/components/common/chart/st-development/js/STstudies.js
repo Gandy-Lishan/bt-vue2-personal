@@ -3207,6 +3207,7 @@ CIQ.Studies.MA = function (
 		"ma",
 		sd.panel
 	);
+	
 	ma.chart = sd.chart;
 	ma.days = parseInt(periods, 10);
 	ma.startFrom = sd.startFrom;
@@ -3215,6 +3216,8 @@ CIQ.Studies.MA = function (
 	if (type) ma.inputs.Type = type;
 	if (field) ma.inputs.Field = field;
 	if (offset) ma.inputs.Offset = parseInt(offset, 10);
+	ma.parameters = sd.parameters
+	debugger
 	CIQ.Studies.calculateSTMovingAverage(stx, ma);
 };
 
@@ -3481,18 +3484,17 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
  * @param {CIQ.Studies.StudyDescriptor} sd A study descriptor
  * @memberOf CIQ.Studies
  */
-CIQ.Studies.calculateMovingAverage = function (stx, sd) {
+CIQ.Studies.calculateSTMovingAverage = function (stx, sd) {
 	if (!sd.chart.scrubbed) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
 	var typeMap = CIQ.Studies.movingAverage.typeMap;
 	if (type in typeMap) {
-		return CIQ.Studies["calculateMovingAverage" + typeMap[type]](stx, sd);
-	} else if (type == "ratio") {
-		return CIQ.Studies["calculateMovingAverageRatio"](stx, sd);
+		return CIQ.Studies["calculateSTMovingAverage" + typeMap[type]](stx, sd);
 	} else if (type !== "simple") {
 		return;
 	}
+	
 	var quotes = sd.chart.scrubbed;
 	var acc = 0;
 	var vals = [];
@@ -3500,8 +3502,25 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	for (var p in sd.outputs) {
 		name = p + " " + name;
 	}
+
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+	var subField = field
+	/** 判断Study用来计算的数据源 */
+	if(sd?.parameters?.criteria?.endsWith('2')){
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+			field = comparisonSymbol?.url
+		}
+	}else sd.yAxis = null
+	/********************************* */
+
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i,
@@ -3512,7 +3531,8 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	var offsetBack = offset;
 	for (i = sd.startFrom - 1; i >= 0; i--) {
 		val = quotes[i][field];
-		if (val && typeof val == "object") val = val[sd.subField];
+	   
+		if (val && typeof val == "object") val = val[subField];
 		if (!val && val !== 0) continue;
 		if (offsetBack > 0) {
 			offsetBack--;
@@ -3530,8 +3550,9 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	var futureTicks = [];
 	for (i = start; i < quotes.length; i++) {
 		var quote = quotes[i];
+
 		val = quote[field];
-		if (val && typeof val == "object") val = val[sd.subField];
+		if (val && typeof val == "object") val = val[subField];
 		var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
 		var offsetQuote = notOverflowing ? quotes[i + offset] : null;
 		if (!val && val !== 0) {
@@ -3557,181 +3578,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	sd.appendFutureTicks(stx, futureTicks);
 };
 
-CIQ.Studies.calculateMovingAverageRatio = function (stx, sd) {
-	var quotes = sd.chart.scrubbed;
-	var acc = 0;
-	var vals = [];
-	var acc2 = 0;
-	var vals2 = [];
 
-	var inputs = sd.inputs
-	var name = sd.name;
-	if (!sd.ma1Period) sd.ma1Period = parseFloat(inputs["Period1"]);
-	if (!sd.ma2Period) sd.ma2Period = parseFloat(inputs["Period2"]);
-	// for (var p in sd.outputs) {
-	// 	name = p + " " + name;
-	// }
-	var name1 = "MA " + name
-	var name2 = "MA2 " + name
-	var field = sd.inputs.Field;
-	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
-	var offset = parseInt(sd.inputs.Offset, 10);
-	if (isNaN(offset)) offset = 0;
-	var i,
-		val,
-		ft,
-		start = sd.startFrom;
-	// backload the past data into the array
-	var offsetBack = offset;
-	for (i = sd.startFrom - 1; i >= 0; i--) {
-		val = quotes[i][field];
-		if (val && typeof val == "object") val = val[sd.subField];
-		if (!val && val !== 0) continue;
-		if (offsetBack > 0) {
-			offsetBack--;
-			start = i;
-			continue; 
-		}
-		if (vals.length != sd.ma1Period - 1){
-			acc += val;
-			vals.unshift(val);
-		}
-		if (vals2.length != sd.ma2Period - 1){
-			acc2 += val;
-			vals2.unshift(val);
-		}
-	}
-	if (vals.length < sd.ma1Period - 1) {
-		vals = [];
-		start = 0; // not enough records to continue where left off
-	}
-	if (vals2.length < sd.ma2Period - 1) {
-		vals2 = [];
-		start = 0; // not enough records to continue where left off
-	}
-	var futureTicks = [];
-	for (i = start; i < quotes.length; i++) {
-		var quote = quotes[i];
-		val = quote[field];
-		if (val && typeof val == "object") val = val[sd.subField];
-		var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
-		var offsetQuote = notOverflowing ? quotes[i + offset] : null;
-		if (!val && val !== 0) {
-			if (offsetQuote) {
-				offsetQuote[name1] = null;
-				offsetQuote[name2] = null;
-			}
-			else if (i + offset >= quotes.length) {
-				ft = {};
-				ft[name1] = null;
-				ft[name2] = null;
-				futureTicks.push(ft);
-			}
-			continue;
-		}
-		acc += val;
-		acc2 += val;
-		vals.push(val);
-		vals2.push(val);
-		if (vals.length > sd.ma1Period) acc -= vals.shift();
-		if (vals2.length > sd.ma2Period) acc2 -= vals2.shift();
-		var myVal = vals.length == sd.ma1Period ? acc / sd.ma1Period : null;
-		var myVal2 = vals2.length == sd.ma2Period ? acc2 / sd.ma2Period : null;
-		if (offsetQuote) {
-			offsetQuote[name1] = myVal;
-			offsetQuote[name2] = myVal2;
-		}
-		else if (i + offset >= quotes.length) {
-			ft = {};
-			ft[name1] = myVal;
-			ft[name2] = myVal2;
-			futureTicks.push(ft);
-		}
-	}
-	sd.appendFutureTicks(stx, futureTicks);
-};
-
-CIQ.Studies.calculateMovingAverageGap = function (stx, sd) {
-	if (!sd.chart.scrubbed) return;
-
-	var quotes = sd.chart.scrubbed;
-	var acc = 0;
-	var vals = [];
-	var name = sd.name;
-	for (var p in sd.outputs) {
-		name = p + " " + name;
-	}
-
-	 var field = sd.inputs.Field;
-	 if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
-		var offset = parseInt(sd.inputs.Offset, 10);
-		if (isNaN(offset)) offset = 0;
-
-	var i,
-		val,
-		ft,
-		start = sd.startFrom;
-	// backload the past data into the array
-	var offsetBack = offset;
-	for (i = sd.startFrom - 1; i >= 0; i--) {
-		val = quotes[i][field];
-		if (val && typeof val == "object") val = val[sd.subField];
-		if (!val && val !== 0) continue;
-		if (offsetBack > 0) {
-			offsetBack--;
-			start = i;
-			continue;
-		}
-		if (vals.length == sd.days - 1) break;
-		acc += val;
-		vals.unshift(val);
-	}
-	if (vals.length < sd.days - 1) {
-		vals = [];
-		start = 0; // not enough records to continue where left off
-	}
-	var futureTicks = [];
-	for (i = start; i < quotes.length; i++) {
-		var quote = quotes[i];
-		val = quote[field];
-		if (val && typeof val == "object") val = val[sd.subField];
-		var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
-		var offsetQuote = notOverflowing ? quotes[i + offset] : null;
-		if (!val && val !== 0) {
-			if (offsetQuote) offsetQuote[name] = null;
-			else if (i + offset >= quotes.length) {
-				ft = {};
-				ft[name] = null;
-				futureTicks.push(ft);
-			}
-			continue;
-		}
-		acc += val;
-		vals.push(val);
-		if (vals.length > sd.days) acc -= vals.shift();
-		var myVal = vals.length == sd.days ? acc / sd.days : null;
-		if (offsetQuote){
-			offsetQuote[name] = myVal;
-			//offsetQuote['']
-		}
-		else if (i + offset >= quotes.length) {
-			ft = {};
-			ft[name] = myVal;
-			futureTicks.push(ft);
-		}
-
-		if (i > start) {
-			var prevQuote = quotes[i - 1];
-			quote["Gap"] = quote[name] - prevQuote[name];
-		}
-	}
-	for (i = start; i < quotes.length; i++) {
-		var quote = quotes[i];
-		quote[name] = quote["Gap"]
-	}
-	sd.appendFutureTicks(stx, futureTicks);
-	
-};
 /**
  * Calculate function for exponential moving average.
  *
@@ -3748,7 +3595,7 @@ CIQ.Studies.calculateMovingAverageGap = function (stx, sd) {
  * @private
  * @memberof CIQ.Studies
  */
-CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
+CIQ.Studies.calculateSTMovingAverageExponential = function (stx, sd) {
 	var type = sd.inputs.Type;
 	var quotes = sd.chart.scrubbed;
 	var acc = 0;
@@ -3765,6 +3612,21 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+	var subField = field
+	/** 判断Study用来计算的数据源 */
+	if(
+		['Open','High','Low','Close','Volume'].includes(field) && 
+		sd?.parameters?.criteria?.endsWith('2')
+	){
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+			field = comparisonSymbol?.url
+		}
+	}
+	/********************************* */
+	
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i, val;
@@ -3787,7 +3649,7 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	for (i = start; i < quotes.length; i++) {
 		var quote = quotes[i];
 		val = quote[field];
-		if (val && typeof val == "object") val = val[sd.subField];
+		if (val && typeof val == "object") val = val[subField];
 		var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
 		var offsetQuote = notOverflowing ? quotes[i + offset] : null;
 		var myVal;
@@ -4697,21 +4559,12 @@ CIQ.Studies.studyScriptLibrary = {};
  */
 CIQ.Studies.studyLibrary = CIQ.Studies.studyLibrary || {};
 CIQ.extend(CIQ.Studies.studyLibrary, {
-	// overwrite没用
 	ma: {
 		name: "Moving Average",
 		overlay: true,
-		calculateFN: CIQ.Studies.calculateMovingAverage,
+		calculateFN: CIQ.Studies.calculateSTMovingAverage,
 		inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 		outputs: { MA: "#FF0000" }
-	},
-	//
-	"MAGap": {
-		name: "MAGap",
-		overlay: false,
-		calculateFN: CIQ.Studies.calculateMovingAverageGap,
-		inputs: { Period: 20, Field: "field", Type: "ma", Offset: 0 },
-		outputs: { Gap: "#FF0000" }
 	},
 	"STD Dev": {
 		name: "Standard Deviation",
