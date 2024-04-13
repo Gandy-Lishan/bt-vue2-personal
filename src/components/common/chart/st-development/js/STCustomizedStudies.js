@@ -913,7 +913,6 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = result;
 		}
 	};
-	
 
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {

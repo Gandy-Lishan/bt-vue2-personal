@@ -27,7 +27,6 @@ import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
 
 
 let __st_js_standard_studies_ = (_exports) => {
-
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -3485,6 +3484,7 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateSTMovingAverage = function (stx, sd) {
+	debugger
 	if (!sd.chart.scrubbed) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
@@ -4597,5 +4597,6 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 });
 
 };
+// __st_js_standard_studies_(typeof window !== "undefined" ? window : global);
 export {__st_js_standard_studies_}
 

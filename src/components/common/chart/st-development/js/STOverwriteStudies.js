@@ -22,11 +22,10 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-import "chartiq/js/standard/studies.js";
+import "./standardStudies";
 import { getPropertyByString } from "@/utils"
 
 let __js_st_studies_overwrite_ = (_exports) => {
-
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 
@@ -249,6 +248,7 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateSTMADev = function (stx, sd) {
+		debugger
 		var quotes = sd.chart.scrubbed;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
@@ -363,81 +363,8 @@ if (!CIQ.Studies) {
 		sd.outputMap = {};
 		sd.outputMap[sd.name + "_hist"] = "";
 	};
-	CIQ.Studies.calculateSTRSI = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
-		var field = sd.inputs.Field;
-		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
-		if (!field || field == "field") field = "Close";
-
-		function computeRSI(avgGain, avgLoss) {
-			if (avgLoss === 0) return 100;
-			var rs = avgGain / avgLoss;
-			return 100 - 100 / (1 + rs);
-		}
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if (!i) continue;
-			var quote = quotes[i];
-			var quote1 = quotes[i - 1];
-			if (!quote[field] && quote[field] !== 0) continue;
-			if (!quote1[field] && quote1[field] !== 0) continue;
-			var change = quote[field] - quote1[field];
-			var num = Math.min(i, sd.days);
-
-			var avgGain = quote1["_avgG " + sd.name];
-			if (!avgGain) avgGain = 0;
-			avgGain -= avgGain / num;
-
-			var avgLoss = quote1["_avgL " + sd.name];
-			if (!avgLoss) avgLoss = 0;
-			avgLoss -= avgLoss / num;
-
-			if (change > 0) {
-				avgGain += change / num;
-			} else if (change <= 0) {
-				avgLoss -= change / num;
-			} else continue;
-			if (i >= sd.days) {
-				if ((avgGain || avgGain !== 0) && (avgLoss || avgLoss !== 0))
-					quote["RSI " + sd.name] = computeRSI(avgGain, avgLoss);
-			}
-			//intermediates
-			quote["_avgG " + sd.name] = avgGain;
-			quote["_avgL " + sd.name] = avgLoss;
-			//quote['supLine'] = showSupLine
-		}
-		//sd.zoneOutput = "RSI";
-		sd.outputMap["RSI " + sd.name] = "RSI";
-		//sd.outputMap['supLine'] = "supLine";
-	};
-	CIQ.Studies.calculateSTCCI = function (stx, sd) {
-		debugger
-		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
-		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
-
-		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
-			var quote = quotes[i];
-			if (!quote) continue;
-			var md = 0;
-			for (var j = 0; j < sd.days; j++) {
-				md += Math.abs(quotes[i - j]["hlc/3"] - quote["MA " + sd.name]);
-			}
-			md /= sd.days;
-			if (Math.abs(md) < 0.00000001) quote["Result " + sd.name] = 0;
-			else
-				quote["Result " + sd.name] =
-					(quote["hlc/3"] - quote["MA " + sd.name]) / (0.015 * md);
-		}
-	};
 	CIQ.Studies.calculateSTCenterOfGravity = function (stx, sd) {
+		debugger
 		var quotes = sd.chart.scrubbed;
 		if (quotes.length < sd.days) {
 			sd.error = true;
@@ -458,44 +385,10 @@ if (!CIQ.Studies) {
 	};
 	/** 注册overwrite Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
-			// 为了覆盖cci optix,用了小写的cci
-			cci: {
-				name: "Commodity Channel Index",
-				calculateFN: CIQ.Studies.calculateSTCCI,
-				inputs: { Period: 21 },
-				parameters: {
-					init: {
-						studyOverZonesEnabled: true,
-						studyOverBoughtValue: 100,
-						studyOverBoughtColor: "auto",
-						studyOverSoldValue: -100,
-						studyOverSoldColor: "auto"
-					}
-				},
-				attributes: {
-					Period: { min: 2 }
-				}
-			},
-			rsi: {
-				name: "Relative Strength Index (RSI)",
-				seriesFN: function (stx, sd, quotes) {
-				  CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
-		
-				  var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
-				  var yAxis = CIQ.stxx.panels[sd.name].yAxis
-				  CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
-				},
-				calculateFN: CIQ.Studies.calculateSTRSI,
-				outputs: { 
-				  RSI: "auto",
-				  //supLine:'#9a9a9a' 
-				}
-			},
-			"MA Dev": {
-				inputs: { "Points Or Percent": ["Percent","Points"] }
-			},
+
 	});
 }
 
 };
+//__js_st_studies_overwrite_(typeof window !== "undefined" ? window : global);
 export {__js_st_studies_overwrite_}
