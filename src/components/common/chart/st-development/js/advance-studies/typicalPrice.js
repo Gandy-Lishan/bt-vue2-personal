@@ -21,9 +21,9 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
-import "../../../js/standard/studies/medianPrice.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+// import "../../../js/standard/studies.js";
+// import "../../../js/standard/studies/medianPrice.js";
 
 
 let __js_advanced_studies_typicalPrice_ = (_exports) => {
@@ -33,7 +33,6 @@ let __js_advanced_studies_typicalPrice_ = (_exports) => {
 
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
 if (!CIQ.Studies) {
 	console.error(
 		"typicalPrice feature requires first activating studies feature."
@@ -58,4 +57,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_typicalPrice_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_typicalPrice_}

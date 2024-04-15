@@ -1050,6 +1050,11 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getExtraIndicators', [])
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
+			/**
+			 * todo: 兼容dual symbol, 
+			 * 1. activatedMALayout加入cci等ma类的默认配置(遍历formIndicators，填入indicator对应criteri和index)
+			 * 2. activatedTechLayout加入Tech的默认配置（symbol为symbol1）
+			 */
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 
 			// 导入btv1时不调用这个

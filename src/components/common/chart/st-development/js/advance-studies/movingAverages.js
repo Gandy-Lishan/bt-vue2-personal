@@ -106,7 +106,7 @@ if (!CIQ.Studies) {
 		}
 	};
 
-	CIQ.Studies.calculateMovingAverageDoubleExponential = function (stx, sd) {
+	CIQ.Studies.calculateSTMovingAverageDoubleExponential = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
@@ -114,6 +114,17 @@ if (!CIQ.Studies) {
 
 		CIQ.Studies.MA("ema", sd.days, field, 0, "_EMA1", stx, sd);
 		CIQ.Studies.MA("ema", sd.days, "_EMA1 " + sd.name, 0, "_EMA2", stx, sd);
+
+		if(sd?.parameters?.criteria?.endsWith('2')){
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+			}
+		}else sd.yAxis = null
 
 		var offset = parseInt(sd.inputs.Offset, 10);
 		if (isNaN(offset)) offset = 0;
@@ -237,6 +248,7 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMADev = function (stx, sd) {
+		debugger
 		var quotes = sd.chart.scrubbed;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
@@ -245,7 +257,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		var pts = sd.inputs["Points Or Percent"];
-		if (!pts) pts = "Points";
+		if (!pts) pts = "Percent";
 		var maType = sd.inputs["Moving Average Type"];
 		if (!maType) maType = "exponential";
 		CIQ.Studies.MA(maType, sd.days, field, 0, "_MA", stx, sd);
@@ -295,7 +307,7 @@ if (!CIQ.Studies) {
 				Period: 12,
 				Field: "field",
 				"Moving Average Type": "ma",
-				"Points Or Percent": ["Points", "Percent"]
+				"Points Or Percent": ["Percent", "Points"]
 			},
 			outputs: { "Increasing Bar": "#00DD00", "Decreasing Bar": "#FF0000" }
 		},

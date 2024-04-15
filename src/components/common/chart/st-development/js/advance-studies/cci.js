@@ -22,6 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_cci_ = (_exports) => {
@@ -44,18 +45,39 @@ if (!CIQ.Studies) {
 
 		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
 
+	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+	var field = "hlc/3"
+	var subField = field
+	/** 判断Study用来计算的数据源 */
+	if(sd?.parameters?.criteria?.endsWith('2')){	// dual symbol 
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+			field = comparisonSymbol?.url
+
+			// handle calculateTypicalPrice result
+			var val
+			for (var i = 0; i < quotes.length; ++i) {
+				val = quotes[i][field];
+				if (val && typeof val == "object") {
+					val[subField] = (val.High + val.Low + val.Close) / 3;
+				}
+			}
+		}
+	}
+
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
 			var md = 0;
 			for (var j = 0; j < sd.days; j++) {
-				md += Math.abs(quotes[i - j]["hlc/3"] - quote["MA " + sd.name]);
+				md += Math.abs(getPropertyByString(quotes[i - j],field,subField) - quote["MA " + sd.name]);
 			}
 			md /= sd.days;
 			if (Math.abs(md) < 0.00000001) quote["Result " + sd.name] = 0;
 			else
 				quote["Result " + sd.name] =
-					(quote["hlc/3"] - quote["MA " + sd.name]) / (0.015 * md);
+					(getPropertyByString(quote,field,subField) - quote["MA " + sd.name]) / (0.015 * md);
 		}
 	};
 

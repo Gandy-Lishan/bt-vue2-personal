@@ -3,6 +3,8 @@ import {__js_advanced_studies_accumulationDistribution_} from "./advance-studies
 import {__js_advanced_studies_cci_} from "./advance-studies/cci.js"
 import {__js_advanced_studies_rsi_} from "./advance-studies/rsi.js"
 import {__js_advanced_studies_movingAverages_} from "./advance-studies/movingAverages.js"
+import {__js_advanced_studies_centerOfGravity_} from "./advance-studies/centerOfGravity.js"
+import {__js_advanced_studies_typicalPrice_} from "./advance-studies/typicalPrice.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -19,20 +21,14 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_accumulationDistribution_,
 			__js_advanced_studies_cci_,
 			__js_advanced_studies_rsi_,
-			__js_advanced_studies_movingAverages_
+			__js_advanced_studies_movingAverages_,
+			__js_advanced_studies_centerOfGravity_,
+			__js_advanced_studies_typicalPrice_,
 		)
 
 
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
-		"Center of Gravity": {
-			name: "Center of Gravity",
-			calculateFN: CIQ.Studies.calculateSTCenterOfGravity,
-			inputs: { Period: 10, Field: "field" }
-		},
-		"MA Dev": {
-			calculateFN: CIQ.Studies.calculateSTMADev,
-			inputs: { "Points Or Percent": ["Percent","Points"] }
-		},
+
 	});
 }
 

@@ -13293,9 +13293,10 @@ import {__js_webcomponents_loader_} from "../components/loader.js"
 import {__st_addons_standard_tooltip_} from "./STTooltip"
 import {__st_js_mask_} from "./STMask"
 import {__st_js_loadIndicator_} from "./loadIndicator"
-import {__st_js_standard_studies_} from "./standardStudies.js"
-// import {__js_st_studies_customized_} from "./STCustomizedStudies"
-import {__js_st_studies_overwrite_} from "./STOverwriteStudies"
+import {__st_js_standard_studies_} from "./standard-studies/standardStudies"
+import {__js_standard_studies_medianPrice_} from "./standard-studies/standardMedianPrice.js"
+import {__js_st_studies_customized_} from "./STCustomizedStudies"
+// import {__js_st_studies_overwrite_} from "./STOverwriteStudies"
 import {__st_js_indicatorType_} from "./indicatorType"
 import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
@@ -13314,7 +13315,7 @@ export {__js_webcomponents_sentimentLookup_ as sentimentLookup}
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
 
-export {__st_js_standard_studies_ as stStudies};
+// export {__st_js_standard_studies_ as stStudies};
 //export {__st_js_advanced_studies_accumulationDistribution_ as accumulationDistribution}
 // customized features above
 
@@ -13398,8 +13399,9 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_mask_,
 		__st_js_loadIndicator_,
 		__st_js_standard_studies_,
-		// __js_st_studies_customized_,
-		__js_st_studies_overwrite_,
+		__js_standard_studies_medianPrice_,
+		__js_st_studies_customized_,
+		// __js_st_studies_overwrite_,
 		__st_js_indicatorType_,
 		__st_js_generateCsv_,
 		__st_js_utils_,

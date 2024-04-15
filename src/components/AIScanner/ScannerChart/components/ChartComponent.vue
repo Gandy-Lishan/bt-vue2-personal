@@ -1162,7 +1162,7 @@ export default {
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
-						calculateFN: CIQ.Studies.calculateSTMovingAverage,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
 						inputs: {
 							Period: val,
 							Field: sd.inputs.Field,

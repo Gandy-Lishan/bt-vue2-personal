@@ -29,7 +29,7 @@ let __st_js_maLayout_ = (_exports) => {
             activatedTechLayoutList.splice(TechLayoutListIndex, 1)
         }
         
-        if (!['ma','Awesome'].includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
+        if (!CIQ.store.getters.getMaLikeTech.includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
             var obj = {}
             // 如果存在dual symbol两个symbol共用同一个tech indicator,则分别保存其信息
             obj = {
@@ -54,7 +54,7 @@ let __st_js_maLayout_ = (_exports) => {
             symbol = CIQ.store.getters.getComparisonSymbol.url
         }else symbol = CIQ.stxx.chart.symbol?CIQ.stxx.chart.symbol:process.env.VUE_APP_DEFAULT_SYMBOL
         
-        if (!['ma','Awesome'].includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
+        if (!CIQ.store.getters.getMaLikeTech.includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
             // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
             var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
 
@@ -82,12 +82,19 @@ let __st_js_maLayout_ = (_exports) => {
         if (MALayoutListIndex != -1) {
             activatedMALayoutList.splice(MALayoutListIndex, 1)
         }
-        if (['ma','Awesome'].includes(url)){
+        if (CIQ.store.getters.getMaLikeTech.includes(url)){
             // keep current MA
-            var objMA = {
+            var objMA = url == 'ma' 
+            ? {
+                url: url,
                 period: period ? period : 21,
                 type: type ? type : 'simple',
                 field: field ? field : 'Close',
+                criteria: criteria,
+                index: index
+            }
+            : {
+                url: url,
                 criteria: criteria,
                 index: index
             }
@@ -96,7 +103,7 @@ let __st_js_maLayout_ = (_exports) => {
         CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
     }
     CIQ.removeMALayout = function (url, criteria, index) {
-        if (['ma','Awesome'].includes(url)) {
+        if (CIQ.store.getters.getMaLikeTech.includes(url)) {
             // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
             var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 

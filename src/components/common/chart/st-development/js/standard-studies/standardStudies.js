@@ -3215,9 +3215,11 @@ CIQ.Studies.MA = function (
 	if (type) ma.inputs.Type = type;
 	if (field) ma.inputs.Field = field;
 	if (offset) ma.inputs.Offset = parseInt(offset, 10);
+
+	// dual symbol new features
 	ma.parameters = sd.parameters
-	debugger
-	CIQ.Studies.calculateSTMovingAverage(stx, ma);
+
+	CIQ.Studies.calculateMovingAverage(stx, ma);
 };
 
 // Moving average data; add to it if adding moving average functionality
@@ -3483,14 +3485,13 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
  * @param {CIQ.Studies.StudyDescriptor} sd A study descriptor
  * @memberOf CIQ.Studies
  */
-CIQ.Studies.calculateSTMovingAverage = function (stx, sd) {
-	debugger
+CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	if (!sd.chart.scrubbed) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
 	var typeMap = CIQ.Studies.movingAverage.typeMap;
 	if (type in typeMap) {
-		return CIQ.Studies["calculateSTMovingAverage" + typeMap[type]](stx, sd);
+		return CIQ.Studies["calculateMovingAverage" + typeMap[type]](stx, sd);
 	} else if (type !== "simple") {
 		return;
 	}
@@ -3508,7 +3509,8 @@ CIQ.Studies.calculateSTMovingAverage = function (stx, sd) {
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
 	/** 判断Study用来计算的数据源 */
-	if(sd?.parameters?.criteria?.endsWith('2')){
+	
+	if(sd?.parameters?.criteria?.endsWith('2')){	// dual symbol 
 		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
@@ -3517,10 +3519,40 @@ CIQ.Studies.calculateSTMovingAverage = function (stx, sd) {
 			sd.yAxis = actualXaxis
 			/****************** */
 			field = comparisonSymbol?.url
+
+			// handle calculateTypicalPrice result
+			if(['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)){
+				const calculateFunction = function(d,subField) {
+					var result
+					switch(subField){
+						case 'hl/2':
+							result = (d.High + d.Low) / 2;
+							break;
+						case 'hlc/3': 
+							result = (d.High + d.Low + d.Close) / 3;
+							break;
+						case 'hlcc/4':
+							result = (d.High + d.Low + 2 * d.Close) / 2;
+							break;
+						case 'ohlc/4':
+							result = (d.Open + d.High + d.Low + d.Close) / 4;
+							break;
+						default:
+					}
+					return result
+				}
+				var val
+				for (var i = 0; i < quotes.length; ++i) {
+					val = quotes[i][field];
+					if (val && typeof val == "object") {
+						val[subField] = calculateFunction(val,subField);
+					}
+				}
+			}
 		}
 	}else sd.yAxis = null
 	/********************************* */
-
+	debugger
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i,
@@ -4562,7 +4594,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 	ma: {
 		name: "Moving Average",
 		overlay: true,
-		calculateFN: CIQ.Studies.calculateSTMovingAverage,
+		calculateFN: CIQ.Studies.calculateMovingAverage,
 		inputs: { Period: 21, Field: "field", Type: "ma", Offset: 0 },
 		outputs: { MA: "#FF0000" }
 	},

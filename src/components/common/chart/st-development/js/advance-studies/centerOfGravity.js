@@ -21,8 +21,7 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
 
 let __js_advanced_studies_centerOfGravity_ = (_exports) => {
@@ -38,6 +37,7 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.calculateCenterOfGravity = function (stx, sd) {
+		debugger
 		var quotes = sd.chart.scrubbed;
 		if (quotes.length < sd.days) {
 			sd.error = true;
@@ -58,8 +58,8 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
-		COG: {
-			name: "Center Of Gravity",
+		"Center of Gravity": {
+			name: "Center of Gravity",
 			calculateFN: CIQ.Studies.calculateCenterOfGravity,
 			inputs: { Period: 10, Field: "field" }
 		}
@@ -67,4 +67,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_centerOfGravity_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_centerOfGravity_}

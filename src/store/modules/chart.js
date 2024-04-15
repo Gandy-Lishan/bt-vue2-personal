@@ -26,6 +26,7 @@ const state = {
 	extremeValue: [], //chartiq
 	indicatorsList: [], //chartiq 代替了AllSymbolsList
 	builtinList: [], //chartiq 包含完整techList
+	maLikeTech: ['ma','Awesome','cci'],
 	trades: [], //chartiq
 	activatedMA: [{ period: 21, url: '' }], //chartiq
 	activatedMALayout: [], //chartiq
