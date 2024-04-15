@@ -376,7 +376,7 @@ export default {
       console.log('colName', colName)
       this.currentSort = {
         prop: colName,
-        order: sortingOrder
+        order: sortingOrder 
       };
 			// 数字字符串转数字类型排序
 			if(['return'].indexOf(colName) !== -1){
