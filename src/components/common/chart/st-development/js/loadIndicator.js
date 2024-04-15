@@ -297,96 +297,52 @@
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
-                     // dual symbol new feature, 给老版本写死
-                     console.log(CIQ.store.state.chart.activatedMALayout[0])
-                     debugger
-                     if(!CIQ.store.state.chart.activatedMALayout[0].url){
-                        if(indicatorList[i]=='ma'){
-                            for(var j in CIQ.store.state.chart.activatedMALayout){
-                                // 直接加载，信息都更新再studylibrary
-                                var sd = CIQ.Studies.addStudy(stx, 'ma', {
-                                    Type: CIQ.store.state.chart.activatedMALayout[j].type,
-                                    Field: CIQ.store.state.chart.activatedMALayout[j].field,
-                                    Period: CIQ.store.state.chart.activatedMALayout[j].period,
-                                    //display: indicatorList[i],
-                                },{ MA: color[j%7] },{
+                    if(CIQ.store.getters.getMaLikeTech.includes(indicatorList[i])){
+                        for(var j in CIQ.store.state.chart.activatedMALayout){
+                            if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
+                                const inputs = indicatorList[i] == 'ma'
+                                    ? {
+                                        Type: CIQ.store.state.chart.activatedMALayout[j].type,
+                                        Field: CIQ.store.state.chart.activatedMALayout[j].field,
+                                        Period: CIQ.store.state.chart.activatedMALayout[j].period,
+                                    }
+                                    : {
+                                        display: indicatorList[i]
+                                    }
+                                const outputs = indicatorList[i] == 'ma' ? { MA: color[j%7] } : null
+                                var sd = CIQ.Studies.addStudy(stx, indicatorList[i],inputs,outputs,{
                                     criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
                                     index: CIQ.store.state.chart.activatedMALayout[j].index
-                                })     
-                            }
-                        }else{
-                            // if no savedTechSD exit, load normal study         
-                            var count = 0 
-                            for(var j in CIQ.store.state.chart.savedTechSD){
-                                if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
-                                    count++
-                                    var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                    study.panelHeight=indicatorHeight
-                                    CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                    var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
-                                }
-                            }
-                            if(count==0){                                                          
+                                })   
+                            }  
+                        }
+                    }else{
+                        // if no savedTechSD exit, load normal study         
+                        var count = 0 
+                        for(var j in CIQ.store.state.chart.savedTechSD){       /** 现在考虑到可能有多个tech indicator,url === study.type的判断不再适用 */
+                            if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
+                                count++
                                 var study = CIQ.Studies.studyLibrary[indicatorList[i]]
                                 study.panelHeight=indicatorHeight
                                 CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                    display:indicatorList[i]
-                                },null,{
-                                    symbol: CIQ.stxx.chart.symbol?CIQ.stxx.chart.symbol:process.env.VUE_APP_DEFAULT_SYMBOL,
-                                });  
+                                var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
                         }
-                     }else{
-                        if(CIQ.store.getters.getMaLikeTech.includes(indicatorList[i])){
-                            for(var j in CIQ.store.state.chart.activatedMALayout){
-                                if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
-                                    const inputs = indicatorList[i] == 'ma'
-                                        ? {
-                                            Type: CIQ.store.state.chart.activatedMALayout[j].type,
-                                            Field: CIQ.store.state.chart.activatedMALayout[j].field,
-                                            Period: CIQ.store.state.chart.activatedMALayout[j].period,
-                                        }
-                                        : {
-                                            display: indicatorList[i]
-                                        }
-                                    const outputs = indicatorList[i] == 'ma' ? { MA: color[j%7] } : null
-                                    var sd = CIQ.Studies.addStudy(stx, indicatorList[i],inputs,outputs,{
-                                        criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
-                                        index: CIQ.store.state.chart.activatedMALayout[j].index
-                                    })   
-                                }  
-                            }
-                        }else{
-                            // if no savedTechSD exit, load normal study         
-                            var count = 0 
-                            for(var j in CIQ.store.state.chart.savedTechSD){       /** 现在考虑到可能有多个tech indicator,url === study.type的判断不再适用 */
-                                if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
-                                    count++
-                                    var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                    study.panelHeight=indicatorHeight
-                                    CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                    var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
+                        if(count==0){                                                         
+                            var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                            study.panelHeight=indicatorHeight
+                            CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                            for(var j in CIQ.store.state.chart.activatedTechLayout){
+                                if(CIQ.store.state.chart.activatedTechLayout[j].url == indicatorList[i]){
+                                    var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
+                                        display:indicatorList[i]
+                                    },null,{
+                                        symbol: CIQ.store.state.chart.activatedTechLayout[j].symbol,
+                                    });   
                                 }
                             }
-                            if(count==0){                                                         
-                                var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                study.panelHeight=indicatorHeight
-                                CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                for(var j in CIQ.store.state.chart.activatedTechLayout){
-                                   if(CIQ.store.state.chart.activatedTechLayout[j].url == indicatorList[i]){
-                                       var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                           display:indicatorList[i]
-                                       },null,{
-                                           symbol: CIQ.store.state.chart.activatedTechLayout[j].symbol,
-                                       });   
-                                   }
-                               }
-                            }
                         }
-                     }
-                       
-
+                    }
  
                      if(CIQ.findSymbolIndicator(indicatorList[i],null)){
                          if(CIQ.store.getters.getBeforeCalculateNewConditions == false){

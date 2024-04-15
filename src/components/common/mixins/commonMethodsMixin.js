@@ -1053,9 +1053,43 @@ export const CommonMethodsMixin = {
 			/**
 			 * todo: 兼容dual symbol, 
 			 * 1. activatedMALayout加入cci等ma类的默认配置(遍历formIndicators，填入indicator对应criteri和index)
-			 * 2. activatedTechLayout加入Tech的默认配置（symbol为symbol1）
+			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
+			console.log(data)
+			debugger
+			if (!data.activatedMALayout[0].url) {
+				data.activatedTechLayout = []; // 初始化新数组
+				const processIndicators = (indicators, criteria) => {
+					for (var i in indicators) {
+						const url = indicators[i];
+						if (url != 'ma' && (CIQ.findBuiltinTechIndicator(null, url) || CIQ.findSymbolIndicator(url, null))) {
+							if (CIQ.store.getters.getMaLikeTech.includes(url)) {
+								data.activatedMALayout.push({
+									url: url,
+									criteria: criteria,
+									index: i
+								});
+							} else {
+								data.activatedTechLayout.push({
+									url: url,
+									symbol: row.symbol
+								});
+							}
+						}
+					}
+				};
+			
+				processIndicators(data.formIndicators.entry, 'entry');
+				processIndicators(data.formIndicators.exit, 'exit');
+				
+				// 此处需要把旧的ma也加上url属性
+				data.activatedMALayout.forEach(item => {
+					if(!item.url) item.url = 'ma'
+				});
+			}
+			debugger
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
+			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
 			// 导入btv1时不调用这个
 			 this.$store.commit('chart/setTechSD', data.savedTechSD)
