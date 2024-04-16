@@ -3508,10 +3508,17 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
+
 	/** 判断Study用来计算的数据源 */
-	
-	if(sd?.parameters?.criteria?.endsWith('2')){	// dual symbol 
-		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	if(
+		// 防止"_EMA1 "这种的中间值通过判断，'hl/2'等特殊处理
+		(['Open','High','Low','Close','Volume'].includes(subField) ||
+		['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)) &&
+		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
+		(sd?.parameters?.symbol == comparisonSymbol.url || 
+		sd?.parameters?.criteria?.endsWith('2'))
+	){
 		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
 			/**根据criteria动态设定study的Y轴属*******/
@@ -3627,7 +3634,8 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
  * @private
  * @memberof CIQ.Studies
  */
-CIQ.Studies.calculateSTMovingAverageExponential = function (stx, sd) {
+CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
+	debugger
 	var type = sd.inputs.Type;
 	var quotes = sd.chart.scrubbed;
 	var acc = 0;
@@ -3646,17 +3654,56 @@ CIQ.Studies.calculateSTMovingAverageExponential = function (stx, sd) {
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
+
 	/** 判断Study用来计算的数据源 */
+	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	if(
-		['Open','High','Low','Close','Volume'].includes(field) && 
-		sd?.parameters?.criteria?.endsWith('2')
+		// 防止"_EMA1 "这种的中间值通过判断，'hl/2'等特殊处理
+		(['Open','High','Low','Close','Volume'].includes(subField) ||
+		['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)) &&
+		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
+		(sd?.parameters?.symbol == comparisonSymbol.url || 
+		sd?.parameters?.criteria?.endsWith('2'))
 	){
-		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
 			field = comparisonSymbol?.url
+
+			// handle calculateTypicalPrice result
+			if(['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)){
+				const calculateFunction = function(d,subField) {
+					var result
+					switch(subField){
+						case 'hl/2':
+							result = (d.High + d.Low) / 2;
+							break;
+						case 'hlc/3': 
+							result = (d.High + d.Low + d.Close) / 3;
+							break;
+						case 'hlcc/4':
+							result = (d.High + d.Low + 2 * d.Close) / 2;
+							break;
+						case 'ohlc/4':
+							result = (d.Open + d.High + d.Low + d.Close) / 4;
+							break;
+						default:
+					}
+					return result
+				}
+				var val
+				for (var i = 0; i < quotes.length; ++i) {
+					val = quotes[i][field];
+					if (val && typeof val == "object") {
+						val[subField] = calculateFunction(val,subField);
+					}
+				}
+			}
 		}
-	}
+	}else sd.yAxis = null
 	/********************************* */
 	
 	var offset = parseInt(sd.inputs.Offset, 10);

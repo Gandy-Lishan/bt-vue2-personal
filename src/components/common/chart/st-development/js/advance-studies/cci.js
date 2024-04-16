@@ -48,20 +48,20 @@ if (!CIQ.Studies) {
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var field = "hlc/3"
 	var subField = field
-	/** 判断Study用来计算的数据源 */
-	if(sd?.parameters?.criteria?.endsWith('2')){	// dual symbol 
-		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
-		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
-			field = comparisonSymbol?.url
-
-			// handle calculateTypicalPrice result
-			var val
-			for (var i = 0; i < quotes.length; ++i) {
-				val = quotes[i][field];
-				if (val && typeof val == "object") {
-					val[subField] = (val.High + val.Low + val.Close) / 3;
-				}
+		/** 
+		 * 用symbol属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+	const symbol2 = CIQ.store.getters.getComparisonSymbol.url
+	if(sd.parameters.symbol == symbol2){	// dual symbol 
+		field = symbol2
+		// handle calculateTypicalPrice result
+		var val
+		for (var i = 0; i < quotes.length; ++i) {
+			val = quotes[i][field];
+			if (val && typeof val == "object") {
+				val[subField] = (val.High + val.Low + val.Close) / 3;
 			}
 		}
 	}

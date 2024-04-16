@@ -106,23 +106,30 @@ if (!CIQ.Studies) {
 		}
 	};
 
-	CIQ.Studies.calculateSTMovingAverageDoubleExponential = function (stx, sd) {
+	CIQ.Studies.calculateMovingAverageDoubleExponential = function (stx, sd) {
+		debugger
 		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
 
 		CIQ.Studies.MA("ema", sd.days, field, 0, "_EMA1", stx, sd);
 		CIQ.Studies.MA("ema", sd.days, "_EMA1 " + sd.name, 0, "_EMA2", stx, sd);
 
-		if(sd?.parameters?.criteria?.endsWith('2')){
-			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		if(
+			sd?.parameters?.symbol == comparisonSymbol.url || 
+			sd?.parameters?.criteria?.endsWith('2')
+		){
 			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 			if(CIQ.findBuiltinTechIndicator(null,sd.type)){
 				/**根据criteria动态设定study的Y轴属*******/
 				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
 				sd.yAxis = actualXaxis
 				/****************** */
+				field = comparisonSymbol?.url
 			}
 		}else sd.yAxis = null
 
@@ -132,7 +139,7 @@ if (!CIQ.Studies) {
 		var offsetBack = offset;
 		for (i = sd.startFrom - 1; i >= 0; i--) {
 			val = quotes[i][field];
-			if (val && typeof val == "object") val = val[sd.subField];
+			if (val && typeof val == "object") val = val[subField];
 			if (!val && val !== 0) continue;
 			if (offsetBack > 0) {
 				offsetBack--;
