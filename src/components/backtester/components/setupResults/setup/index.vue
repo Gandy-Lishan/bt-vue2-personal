@@ -491,6 +491,8 @@ export default {
 			// 暂定，把MA对应位置和信息存在回测内
 			indicatorLayout.activatedMALayout =
 				this.$store.state.chart.activatedMALayout
+			indicatorLayout.activatedTechLayout =
+				this.$store.state.chart.activatedTechLayout
 			return indicatorLayout
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj) {

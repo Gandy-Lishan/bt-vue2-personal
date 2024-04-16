@@ -243,7 +243,7 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
             ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -273,7 +273,7 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
             ){
                 _index = 'exit_'+(index+1)
                 indexNum = index
@@ -353,7 +353,6 @@ let __st_js_generateCsv_ = (_exports) => {
      if(!sd.type) return finalData
      var resultIndex = ''
      var categoryList = CIQ.technicalCategory
-     debugger
      // todo, rerun获取conditionRadio
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){
@@ -760,7 +759,6 @@ let __st_js_generateCsv_ = (_exports) => {
              s.parameters.index == indexNum
          ){
              let matchedSubstring = '';
-             debugger
              for(var i in Object.keys(arrData[arrData.length-10])){
                  if(Object.keys(arrData[arrData.length-10])[i].indexOf(s.inputs.display) !== -1){
                     matchedSubstring = s.inputs.condition                                            
