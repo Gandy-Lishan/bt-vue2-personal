@@ -509,6 +509,7 @@ export default {
 			}
 			backtestInfo['entry_description'] = JSON.stringify(entrySaveObj['entry_description'])
 			backtestInfo['exit_description'] = JSON.stringify(exitSaveObj['exit_description'])
+			if(backtestInfo.strategy === 'Signal') backtestInfo.strategy = 'Single'
 			backtestInfo.old_uuid = backtestInfo.old_uuid
 			if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
 			// 判断是否有 direction 没有设置默认值
@@ -591,7 +592,12 @@ export default {
 			const {strategy} = data
 			_this.strategy = strategy
 			_this.$refs['basicInfo'].setEditData(data)
-
+			_this.symbolInfo = {
+				strategy: data.strategy,
+				symbol: data.symbol,
+				symbol2: data.symbol2
+			}
+			_this.$store.commit('form/getFreqHighPriority', data.frequency)
 			/*
 				data 中并没有 entry 和 exit
 				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,

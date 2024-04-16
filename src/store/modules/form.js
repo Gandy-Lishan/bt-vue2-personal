@@ -253,12 +253,22 @@ const mutations = {
 					const timeframes = ['Daily', 'Weekly', 'Monthly']
 					const previousIndex = timeframes.indexOf(previousTimeframe)
 					const currentIndex = timeframes.indexOf(selectedTimeframe)
+					// 找到当前的 timeframe, 如果当前的 timeframe 大, 选出的小, 那么就不变
+					const bdTimeframeIndex = timeframes.indexOf(state.backtestInfo.frequency)
 					const largerIndex = Math.max(previousIndex, currentIndex)
-					selectedTimeframe = timeframes[largerIndex]
+					const _largerIndex = Math.max(largerIndex, bdTimeframeIndex)
+					selectedTimeframe = timeframes[_largerIndex]
 
 					// 更新之前的时间范围为当前选择
 					previousTimeframe = selectedTimeframe
 				}
+			}else {
+				const timeframes = ['Daily', 'Weekly', 'Monthly']
+				const previousIndex = timeframes.indexOf(previousTimeframe)
+				const currentIndex = timeframes.indexOf(selectedTimeframe)
+				const bdTimeframeIndex = timeframes.indexOf(state.backtestInfo.frequency)
+				const _largerIndex = Math.max(previousIndex, currentIndex, bdTimeframeIndex)
+				if(_largerIndex !== -1) previousTimeframe = timeframes[_largerIndex]
 			}
 			return previousTimeframe
 		}
@@ -520,6 +530,20 @@ const mutations = {
 	},
 	clearHashTable(state) {
 		state.hashTable = []
+	},
+	clearSignalArr(state, obj) {
+		const {criteria} = obj
+		const clearSignal = {
+			sentimentIndicator: '',
+			technicalIndicator: '',
+			symbolIndicator: '',
+			usersOwnIndicator: ''
+		}
+
+	if (criteria.startsWith('exit')) {
+		clearSignal.riskIndicator = ''; // 添加 riskIndicator 到 exit 类型
+	}
+	state.backtestInfo[criteria].signals = [clearSignal]
 	},
 	setFreqencyLP(state, obj) {
 		const key = obj.key

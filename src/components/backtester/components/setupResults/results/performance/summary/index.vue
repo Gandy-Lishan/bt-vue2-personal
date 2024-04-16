@@ -268,19 +268,28 @@
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
             <div class="benchmarkReturnImg">
-                <img v-if="tableData[0]?.equityCurveFileURL" :src="tableData[0]?.equityCurveFileURL" alt="" width="100%" />
+                <el-image v-if="tableData[0]?.equityCurveFileURL" style="width: 1000px; height: 600px" :src="tableData[0]?.equityCurveFileURL" :fit="['contain']"></el-image>
             </div>
             <div class="benchmarkReturnImg">
-                <img :src="tableData[0]?.returnsFileURL" alt="" width="100%" />
+                <el-image v-if="tableData[0]?.returnsFileURL" style="width: 1000px; height: 600px" :src="tableData[0]?.returnsFileURL" :fit="['contain']"></el-image>
             </div>
             <div class="drawDownReturnImg">
-                <img :src="tableData[0]?.ddFileURL" alt="" width="100%" />
+                <el-image v-if="tableData[0]?.ddFileURL" style="width: 1000px; height: 600px" :src="tableData[0]?.ddFileURL" :fit="['contain']"></el-image>
             </div>
             <div class="monthReturnImg">
-                <img :src="tableData[0]?.returnsHeatmapFileURL" alt="" width="100%" />
+                <el-image v-if="tableData[0]?.returnsHeatmapFileURL" style="width: 1000px; height: 600px" :src="tableData[0]?.returnsHeatmapFileURL" :fit="['contain']"></el-image>
             </div>
             <div class="annualReturnImg">
-                <img :src="tableData[0]?.annualReturnsFileURL" alt="" width="100%" />
+                <el-image v-if="tableData[0]?.annualReturnsFileURL" style="width: 1000px; height: 600px" :src="tableData[0]?.annualReturnsFileURL" :fit="['contain']"></el-image>
+            </div>
+            <div class="benchmarkReturnImg">
+                <el-image v-if="tableData[0]?.wfd_file_url" style="width: 1000px; height: 700px" :src="tableData[0]?.wfd_file_url" :fit="['contain']"></el-image>
+            </div>
+            <div class="benchmarkReturnImg">
+                <el-image v-if="tableData[0]?.eoy_file_url" style="width: 1000px; height: 700px" :src="tableData[0]?.eoy_file_url" :fit="['contain']"></el-image> 
+            </div>
+            <div class="benchmarkReturnImg">
+                <el-image v-if="tableData[0]?.rb_file_url" style="width: 1000px; height: 700px" :src="tableData[0]?.rb_file_url" :fit="['contain']"></el-image> 
             </div>
         </div>
     </div>

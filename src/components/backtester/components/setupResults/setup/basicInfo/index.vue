@@ -1399,7 +1399,6 @@ export default {
       const modifyProperties = {
         symbol: '1. Symbol(1)',
         direction: '8. Direction(1)',
-        symbol: '1. Symbol(1)',
         name: '14. Backtest Name'
       };
       this.bdFormLabel = val === 'Single' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
@@ -1448,15 +1447,15 @@ export default {
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
-      if(this.bd.strategy === 'Dual') {
+      if(bd.strategy === 'Dual') {
         // 设置数据默认值
         this.isRiskControl = false
         this.isExcludeOO = false
-        this.bd.market_environment = 0
-        this.bd.index_moving_average_slope = 0
-      }else if(this.bd.strategy === 'Single') {
-        this.bd.symbol2 = 'SPY'
-        this.bd.direction2 = 'Long'
+        bd.market_environment = 0
+        bd.index_moving_average_slope = 0
+      }else if(bd.strategy === 'Single') {
+        bd.symbol2 = 'SPY'
+        bd.direction2 = 'Long'
       }
       if(bd.backtest_period == '21') bd.start_date = '1800-10-01'
       if(!this.isExcludeOO) bd.exclude_oo = 0
@@ -1573,6 +1572,17 @@ export default {
           description.Introduction = ''
           description.Rules = ''
         }
+        
+        const originalProperties = {
+          symbol: '1. Symbol',
+          name: '15. Backtest Name'
+        };
+        const modifyProperties = {
+          symbol: '1. Symbol(1)',
+          direction: '8. Direction(1)',
+          name: '14. Backtest Name'
+        };
+        this.bdFormLabel = editData.strategy === 'Single' || editData.strategy === 'Signal' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
         /* 设置编辑数据 */
         editData.description = description
         editData.slippage = Number(editData.slippage).toFixed(2)

@@ -106,7 +106,8 @@ export const CommonMethodsMixin = {
 						...data,
 						name: copyName,
 						favorites: false,
-						user_tag: 'client'
+						user_tag: 'client',
+						strategy: data.strategy === 'Signal' ? 'Single' : data.strategy
 					}
 					delete params.uuid
 					delete params.results
@@ -380,6 +381,7 @@ export const CommonMethodsMixin = {
 					backtestInfo.market_environment = 0
 					backtestInfo.index_moving_average_slope = 0
 				}
+				if(strategy === 'Signal') backtestInfo.strategy = 'Single'
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
 			const backtest_period = backtestInfo.backtest_period
