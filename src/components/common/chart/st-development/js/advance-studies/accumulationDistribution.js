@@ -22,6 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 let __js_advanced_studies_accumulationDistribution_ = (_exports) => {
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -35,20 +36,30 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.calculateAccumulationDistribution = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		const symbol2 = CIQ.store.getters.getComparisonSymbol.url
+		if(sd.parameters.symbol == symbol2){	// dual symbol 
+			field = symbol2
+		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if (!i) continue;
 			var quote = quotes[i];
 			if (quote.futureTick) break;
 			var quote1 = quotes[i - 1];
 			var todayAD = 0;
-			if (quote.Close > quote1.Close) {
-				todayAD = quote.Close - Math.min(quote.Low, quote1.Close);
-			} else if (quote.Close < quote1.Close) {
-				todayAD = quote.Close - Math.max(quote.High, quote1.Close);
+			if (getPropertyByString(quote,field,'Close') > getPropertyByString(quote1,field,'Close')) {
+				todayAD = 
+					getPropertyByString(quote,field,'Close') - 
+					Math.min(getPropertyByString(quote,field,'Low'), getPropertyByString(quote1,field,'Close'));
+			} else if (getPropertyByString(quote,field,'Close') < getPropertyByString(quote1,field,'Close')) {
+				todayAD = 
+					getPropertyByString(quote,field,'Close') -
+					Math.max(getPropertyByString(quote,field,'High'), getPropertyByString(quote1,field,'Close'));
 			}
-			if (sd.inputs["Use Volume"]) todayAD *= quote.Volume;
+			if (sd.inputs["Use Volume"]) todayAD *= getPropertyByString(quote,field,'Volume');
 
 			var total = quote1["Result " + sd.name];
 			if (!total) total = 0;

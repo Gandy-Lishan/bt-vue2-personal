@@ -77,12 +77,13 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+             // 如果indicator不是ma (那就是senti,own,users,其他tech'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
+                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getBacktestSymbol)
             ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -107,12 +108,13 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+             // 如果indicator不是ma (那就是senti,own,users,其他tech'),则不考虑criteria和index如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
+                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getBacktestSymbol)
             ){
                  _index = 'exit_'+(index+1)
                  indexNum = index
@@ -243,12 +245,13 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-            // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+            // 如果indicator不是ma (那就是senti,own,users,其他tech'),则不考虑criteria和index
              // if(!_sd.parameters.criteria && _sd.type == value){
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
+                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
+                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url)
             ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -278,7 +281,8 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
+                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
+                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url)
             ){
                 _index = 'exit_'+(index+1)
                 indexNum = index

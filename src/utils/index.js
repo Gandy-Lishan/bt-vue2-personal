@@ -261,6 +261,7 @@ const getPropertyByString = (obj, field, subField) => {
   //     return obj[field]
   // }
 
+  if(!field) field = subField // 当field是流动时，比如accum里原值为quote.Low, 则：getPropertyByString(quote,field,'Low')， filed可能不存在或者为symbol2
   var val = obj[field];   
   if (val && typeof val == "object") val = val[subField];
   return val
