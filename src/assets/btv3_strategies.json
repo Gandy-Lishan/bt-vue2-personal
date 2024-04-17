@@ -1,0 +1,3374 @@
+[
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_STCM.csv"
+    ],
+    "name": "Short-Term Combined Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Short Term Combined model < -10.0",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Short Term Combined model;IDS:EO0.7/EP0.3;SC:SV/2/-10.0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Short Term Combined model > 13.5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Short Term Combined model;IDS:EO0.7/EP0.3;SC:SV/0/13.5"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_ASM.csv"
+    ],
+    "name": "Aggregate Signal Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Aggregate Signal Model > 0.45",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Aggregate Signal Model;IDS:EO0.7/EP0.3;SC:SV/0/0.45"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Aggregate Signal Model < 0.45",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Aggregate Signal Model;IDS:EO0.7/EP0.3;SC:SV/2/0.45"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_STMF.csv"
+    ],
+    "name": "Simple Trading Model With Fundamentals",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Fundamentals Score = 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals Score;IDS:EO1.0/EP0.0;SC:SV/1/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Fundamentals Score = 0",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals Score;IDS:EO1.0/EP0.0;SC:SV/1/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_STMFS.csv",
+      "./data/SPY_STMFS.csv"
+    ],
+    "name": "Simple Trading Model with Fundamentals and Sentiment",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Fundamentals=1;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
+      "relation": 2,
+      "score": 3,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/3"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Others",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_MIM.csv"
+    ],
+    "name": "Macro Index Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Macro Index Model > 0.7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.3;SC:SV/0/0.7"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Macro Index Model < 0.7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.3;SC:SV/2/0.7"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_STTM.csv"
+    ],
+    "name": "Short Term Trading Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Macro Index Model > 0.6;Medium Term Volatility Index < 3.0",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/0/0.6"
+        },
+        {
+          "code": "SI:Medium Term Volatility Index;IDS:EO1.0/EP0.0;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Macro Index Model < 0.6",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/2/0.6"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_MM.csv"
+    ],
+    "name": "Momentum Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "SPX 12 month rate-of-change > the 3 month Treasury yield",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:SPX ROC12/3 Month Treasury Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "SPX 12 month rate-of-change < the 3 month Treasury yield",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:SPX ROC12/3 Month Treasury Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_CBLEIM.csv"
+    ],
+    "name": "Conference Board LEI Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Conference Board LEI’s 6 month MA is going up",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Conference Board LEI’s 6 month MA is going down",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_CBLEIMS.csv"
+    ],
+    "name": "Conference Board LEI Model with Sentiment",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Conference Board LEI’s monthly MA6 is going up;AND neither 'Stock/Bond ratio' was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
+      "relation": 2,
+      "score": 3,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        },
+        {
+          "code": "SI:Stock/Bond ratio;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Other",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        },
+        {
+          "code": "SI:Stock/Bond ratio;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index;IDS:EO0.7/EP0.3;SC:SV/0/3"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_CPTM.csv"
+    ],
+    "name": "Corporate Profits Trading Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "the 6 quarter average of NIPA profits is going up",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:NIPA MA18 ROC3;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "the 6 quarter average of NIPA profits is not going up",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:NIPA MA18 ROC3;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_REITTM.csv"
+    ],
+    "name": "REIT Trading Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "New Home Sales(Total) has not been below its 12 month moving average for 12 consecutive months",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:New Home Sales 12 Month Spread RR12;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "New Home Sales(Total) has been below its 12 month moving average for not 12 consecutive months",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:New Home Sales 12 Month Spread RR12;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_HYGC.csv"
+    ],
+    "name": "High Yield Golden Cross",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "High Yield Bond Cumulative A/D Line's MA50 CrossAbove its' MA200",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "High Yield Bond Cumulative A/D Line's MA50 CrossBelow its' MA200",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_LHS.csv"
+    ],
+    "name": "Last Hour Strategy",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "SPY's 105-day price range rank is above 60%;Last Hour's Close to 30 day moving average ratio crosses above 0.83",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close RR105;IDS:EO0.7/EP0.3;SC:SV/0/60"
+        },
+        {
+          "code": "SI:Last Hour MAR30;IDS:EO0.7/EP0.3;SC:SV/3/1.0083"
+        }
+      ]
+    },
+    "exit": {
+      "description": "SPY's 105-day price range rank is below 80%; the Last Hour's Close to 30 day moving average ratio crosses below -1.21",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close RR105;IDS:EO0.7/EP0.3;SC:SV/2/80"
+        },
+        {
+          "code": "SI:Last Hour MAR30;IDS:EO0.7/EP0.3;SC:SV/4/0.9879"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SPY_STYCM.csv"
+    ],
+    "name": "Yield Curve Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Single",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "10 year – 2 year yield curve is not inverted, AND the 10 year – 2 year yield curve’s 12 month rate of change is <= 0.4",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:10YR / 2YR Treasure Spread ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        },
+        {
+          "code": "SI:10YR / 2YR Treasure Spread ROC12;IDS:EO0.7/EP0.3;SC:SV/2/40"
+        }
+      ]
+    },
+    "exit": {
+      "description": "10 year – 2 year yield curve is inverted, OR the 10 year – 2 year yield curve’s 12 month rate of change is > 0.4",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:10YR / 2YR Treasure Spread ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        },
+        {
+          "code": "SI:10YR / 2YR Treasure Spread ROC12;IDS:EO0.7/EP0.3;SC:SV/0/40"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_DMMF.csv",
+      "./data/SPY_DMMF.csv"
+    ],
+    "name": "Dual Momentum Model With Fundamentals",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Monthly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Fundamentals = 1;the NASDAQ Composite outperformed the S&P 500 over the past 12 months",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SI:NASDAQ ROC12 / S&P 500 ROC12 Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Fundamentals = 0;the NASDAQ Composite outperformed the S&P 500 not over the past 12 months",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SI:NASDAQ ROC12 / S&P 500 ROC12 Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "Fundamentals = 1;the NASDAQ Composite outperformed the S&P 500 not over the past 12 months",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SI:NASDAQ ROC12 / S&P 500 ROC12 Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "Fundamentals = 0;the NASDAQ Composite outperformed the S&P 500 over the past 12 months",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SI:NASDAQ ROC12 / S&P 500 ROC12 Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_MITM.csv",
+      "./data/SPY_MITM.csv"
+    ],
+    "name": "Multi-Index Trading Model",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Weekly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average (weekly CLOSE $) AND the S&P 500’s 10 week moving average is > than its 40 week moving average",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "TI:Deviation From Trend Between Two Moving Averages 10/40;IDS:CCI;SC:CCI/0/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average (weekly CLOSE $) OR the S&P 500’s 10 week moving average is < than its 40 week moving average",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        },
+        {
+          "code": "TI:Deviation From Trend Between Two Moving Averages 10/40;IDS:CCI;SC:CCI/2/1"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_MITMF.csv",
+      "./data/SPY_MITMF.csv"
+    ],
+    "name": "Multi Index Trading Model With Fundamentals",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Weekly",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "Fundamentals = 1;NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Fundamentals = 0;NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SI:COMP / SPX Ratio MAR10;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_DTM.csv",
+      "./data/SPY_DTM.csv"
+    ],
+    "name": "Dual Trend Model",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "NASDAQ Composite is > its 30 day moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "NASDAQ Composite is < its 30 day moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "NASDAQ Composite is <= its 30 day moving average AND the S&P 500’s 50 dma is > its 200 dma",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "TI:Deviation From Trend Between Two Moving Averages 50/200;IDS:CCI;SC:CCI/0/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "NASDAQ Composite is > its 30 day moving average OR the S&P 500’s 50 dma is < its 200 dma",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        },
+        {
+          "code": "TI:Deviation From Trend Between Two Moving Averages 50/200;IDS:CCI;SC:CCI/2/1"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_DTMF.csv",
+      "./data/SPY_DTMF.csv"
+    ],
+    "name": "Dual Trend Model With Fundamentals",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "NASDAQ Composite is > its 30 day moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "NASDAQ Composite is < its 30 day moving average",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "Fundamentals = 1;NASDAQ Composite is <= its 30 day moving average",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "Fundamentals = 0 OR NASDAQ Composite is > its 30 day moving average",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_DTMFS.csv",
+      "./data/SPY_DTMFS.csv"
+    ],
+    "name": "Dual Trend Model with Fundamentals and Sentiment",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "NASDAQ Composite > its MA30;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
+      "relation": 2,
+      "score": 3,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/3"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Others",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "Fundamentals = 1;NASDAQ Composite is <= its 30 day moving average;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
+      "relation": 2,
+      "score": 4,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+        },
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "Others",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+        },
+        {
+          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/3"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ_ABSGM.csv",
+      "./data/SPY_ABSGM.csv"
+    ],
+    "name": "Alternating Between Stocks and Gold Model",
+    "symbol": "SPY",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 1000000,
+    "capital_alloc": 1.0,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
+    "risk_control": "//",
+    "entry": {
+      "description": "S&P:gold ratio is > its 5 year MA AND the S&P 500 > MA200",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        },
+        {
+          "code": "SY: SPX Close MAR200;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit": {
+      "description": "S&P:gold ratio is < its 5 year MA OR the S&P 500 < MA200",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "SY: SPX Close MAR200;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "GOLD",
+    "direction2": "Long",
+    "entry2": {
+      "description": "S&P:gold ratio is < its 5 year MA AND the gold > MA200",
+      "relation": 2,
+      "score": 2,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "SY: GOLD Close MAR200;IDS:EO0.7/EP0.3;SC:SV/0/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "S&P:gold ratio is > its 5 year MA OR the gold < MA200",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        },
+        {
+          "code": "SY: GOLD Close MAR200;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IWF.csv",
+      "./data/IWD.csv"
+    ],
+    "name": "Large Cap vs. Small Cap Relative Ratio Rank System",
+    "symbol": "IWF",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IWF/IWD Ratio RR84 CrossAbove 97",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/97"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IWF/IWD Ratio RR84 < 6",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
+        }
+      ]
+    },
+    "symbol2": "IWD",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IWF/IWD Ratio RR84 < 6",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IWF/IWD Ratio RR84 CrossAbove 97",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/97"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IWP.csv",
+      "./data/IWS.csv"
+    ],
+    "name": "Mid Cap Growth vs. Value Relative Ratio Rank System",
+    "symbol": "IWP",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IWP/IWS Ratio RR126 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IWP/IWS Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IWP/IWS Ratio RR126 < 2",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWP/IWS Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/2"
+        }
+      ]
+    },
+    "symbol2": "IWS",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IWP/IWS Ratio RR126 < 2",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWP/IWS Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/2"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IWP/IWS Ratio RR126 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWP/IWS Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IWP.csv",
+      "./data/IWN.csv"
+    ],
+    "name": "Small Cap Growth vs. Value Relative Ratio Rank System",
+    "symbol": "IWO",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IWO/IWN Ratio RR126 CrossAbove 97",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IWO/IWN Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/97"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IWO/IWN Ratio RR126 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWO/IWN Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "symbol2": "IWN",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IWO/IWN Ratio RR126 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWO/IWN Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IWO/IWN Ratio RR126 CrossAbove 97",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWO/IWN Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/97"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IWB.csv",
+      "./data/IWM.csv"
+    ],
+    "name": "Large Cap vs. Small Cap Relative Ratio Rank System",
+    "symbol": "IWB",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IWB/IWM Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IWB/IWM Ratio RR84 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/7"
+        }
+      ]
+    },
+    "symbol2": "IWM",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IWB/IWM Ratio RR84 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/7"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IWB/IWM Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/RSP.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "S&P 500 Equal-Weight vs. Cap-Weight Relative Ratio Rank System",
+    "symbol": "RSP",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "RSP/SPY Ratio RR84 CrossAbove 93",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/93"
+        }
+      ]
+    },
+    "exit": {
+      "description": "RSP/SPY Ratio RR84 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "RSP/SPY Ratio RR84 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "RSP/SPY Ratio RR84 CrossAbove 93",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/93"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/QQQ.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "NASDAQ 100 vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "QQQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "QQQ/SPY Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    },
+    "exit": {
+      "description": "QQQ/SPY Ratio RR84 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "QQQ/SPY Ratio RR84 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "QQQ/SPY Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/ONEQ.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "NASDAQ Composite vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "ONEQ",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "ONEQ/SPY Ratio RR84 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:ONEQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    },
+    "exit": {
+      "description": "ONEQ/SPY Ratio RR105 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:ONEQ/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "ONEQ/SPY Ratio RR105 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:ONEQ/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "ONEQ/SPY Ratio RR105 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:ONEQ/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLK.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Technology vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLK",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLK/SPY Ratio RR105 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLK/SPY Ratio RR105 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/7"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLK/SPY Ratio RR105 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/7"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLK/SPY Ratio RR105 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLY.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Consumer Discretionary vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLY",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLY/SPY Ratio RR126 CrossAbove 89",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLY/SPY Ratio RR126 < 14",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/14"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLY/SPY Ratio RR126 < 14",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/14"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLY/SPY Ratio RR126 CrossAbove 89",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLC.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Communications vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLC",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLC/SPY Ratio RR126 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLC/SPY Ratio RR126 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLC/SPY Ratio RR126 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLC/SPY Ratio RR126 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLP.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Consumer Staples vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLP",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLP/SPY Ratio RR84 CrossAbove 87",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/87"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLP/SPY Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLP/SPY Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLP/SPY Ratio RR84 CrossAbove 87",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/87"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLI.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Industrials vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLI",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLI/SPY Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLI/SPY Ratio RR105 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLI/SPY Ratio RR105 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLI/SPY Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLV.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Healthcare vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLV",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLV/SPY Ratio RR84 CrossAbove 91",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/91"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLV/SPY Ratio RR84 < 2",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/2"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLV/SPY Ratio RR84 < 2",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/2"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLV/SPY Ratio RR84 CrossAbove 91",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/91"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLB.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Materials vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLB",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLB/SPY Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLB/SPY Ratio RR105 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLB/SPY Ratio RR105 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLB/SPY Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLU.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Utilities vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLU",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLU/SPY Ratio RR105 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLU/SPY Ratio RR105 < 13",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/13"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLU/SPY Ratio RR105 < 13",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/13"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLU/SPY Ratio RR105 CrossAbove 92",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/92"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLRE.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Real Estate vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLRE",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLRE/SPY Ratio RR105 CrossAbove 81",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/81"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLRE/SPY Ratio RR105 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLRE/SPY Ratio RR105 < 3",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLRE/SPY Ratio RR105 CrossAbove 81",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/81"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLE.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Energy vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLE",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLE/SPY Ratio RR84 CrossAbove 85",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/85"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLE/SPY Ratio RR84 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLE/SPY Ratio RR84 < 8",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLE/SPY Ratio RR84 CrossAbove 85",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/85"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/XLF.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Financials vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "XLF",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "XLF/SPY Ratio RR126 CrossAbove 84",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/84"
+        }
+      ]
+    },
+    "exit": {
+      "description": "XLF/SPY Ratio RR126 < 20",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "XLF/SPY Ratio RR126 < 20",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "XLF/SPY Ratio RR126 CrossAbove 84",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/84"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/SHY.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "1-3 Year Treasury vs. Cash Relative Ratio Rank System",
+    "symbol": "SHY",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "SHY/BIL Ratio RR105 CrossAbove 82",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:SHY/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/82"
+        }
+      ]
+    },
+    "exit": {
+      "description": "SHY/BIL Ratio RR105 < 4",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:SHY/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/4"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "SHY/BIL Ratio RR105 < 4",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:SHY/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/4"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "SHY/BIL Ratio RR105 CrossAbove 82",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:SHY/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/82"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IEI.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "3-7 Year Treasury vs. Cash Relative Ratio Rank System",
+    "symbol": "IEI",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IEI/BIL Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IEI/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IEI/BIL Ratio RR84 < 13",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEI/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/13"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IEI/BIL Ratio RR84 < 13",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEI/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/13"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IEI/BIL Ratio RR84 CrossAbove 90",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEI/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/IEF.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "7-10 Year Treasury vs. Cash Relative Ratio Rank System",
+    "symbol": "IEF",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "IEF/BIL Ratio RR84 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:IEF/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    },
+    "exit": {
+      "description": "IEF/BIL Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEF/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "IEF/BIL Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEF/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "IEF/BIL Ratio RR84 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:IEF/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/TLT.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "20+ Year Treasury vs. Cash Relative Ratio Rank System",
+    "symbol": "TLT",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "TLT/BIL Ratio RR84 CrossAbove 95",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/95"
+        }
+      ]
+    },
+    "exit": {
+      "description": "TLT/BIL Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "TLT/BIL Ratio RR84 < 5",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "TLT/BIL Ratio RR84 CrossAbove 95",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/95"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/HYG.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "High Yield Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "HYG",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "HYG/BIL Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    },
+    "exit": {
+      "description": "HYG/BIL Ratio RR105 < 18",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/18"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "HYG/BIL Ratio RR105 < 18",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/18"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "HYG/BIL Ratio RR105 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/LQD.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "Investment Grade Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "LQD",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "LQD/BIL Ratio RR126 CrossAbove 89",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
+        }
+      ]
+    },
+    "exit": {
+      "description": "LQD/BIL Ratio RR126 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "LQD/BIL Ratio RR126 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "LQD/BIL Ratio RR126 CrossAbove 89",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/CWB.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "Convertible Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "CWB",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "CWB/BIL Ratio RR126 CrossAbove 87",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:CWB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/87"
+        }
+      ]
+    },
+    "exit": {
+      "description": "CWB/BIL Ratio RR126 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:CWB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "CWB/BIL Ratio RR126 < 1",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:CWB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "CWB/BIL Ratio RR126 CrossAbove 87",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:CWB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/87"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/TIP.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "Inflation-Protected Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "TIP",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "TIP/BIL Ratio RR84 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:TIP/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    },
+    "exit": {
+      "description": "TIP/BIL Ratio RR84 < 14",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TIP/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/14"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "TIP/BIL Ratio RR84 < 14",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TIP/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/14"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "TIP/BIL Ratio RR84 CrossAbove 80",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:TIP/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/80"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/MUB.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "Municipal Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "MUB",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "MUB/BIL Ratio RR84 CrossAbove 88",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:MUB/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/88"
+        }
+      ]
+    },
+    "exit": {
+      "description": "MUB/BIL Ratio RR84 < 6",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MUB/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "MUB/BIL Ratio RR84 < 6",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MUB/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "MUB/BIL Ratio RR84 CrossAbove 88",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MUB/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/88"
+        }
+      ]
+    }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/MBB.csv",
+      "./data/BIL.csv"
+    ],
+    "name": "Mortgage-Backed Bond vs. Cash Relative Ratio Rank System",
+    "symbol": "MBB",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0.001,
+    "slippage": 0.01,
+    "direction": "Long",
+    "frequency": "Daily",
+    "start_date": "2004-01-12",
+    "end_date": "2024-01-12",
+    "win_rate": 0.0,
+    "trade_price": 2,
+    "market_slope": 0,
+    "exclude_oo": 0,
+    "risk_control": "//",
+    "entry": {
+      "description": "MBB/BIL Ratio RR126 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 5,
+      "signals": [
+        {
+          "code": "SI:MBB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    },
+    "exit": {
+      "description": "MBB/BIL Ratio RR126 < 20",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MBB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
+        }
+      ]
+    },
+    "symbol2": "BIL",
+    "direction2": "Long",
+    "entry2": {
+      "description": "MBB/BIL Ratio RR126 < 20",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MBB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "MBB/BIL Ratio RR126 CrossAbove 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:MBB/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/99"
+        }
+      ]
+    }
+  }
+]

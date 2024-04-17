@@ -89,6 +89,21 @@ export function getStocksList() {
 	})
 }
 
+export function getStrategiesJSON() {
+	const url = '/api/strategiesJSON'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res.data = uniqueObjectArray(res.data)
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getSampleList(page, sort, name, type) {
 	let url = `/dev/dev/strategy/?ordering=name,status,-create_date`
 	// sort -> ,total_return
@@ -1141,7 +1156,7 @@ export function getStrategySummaryList() {
 export function getStrategyDescription(url) {
 	return new Promise((resolve, reject) => {
 		axios
-			.get(`/dev/portfolio/strategy_performance?model_url=${url}/`, {
+			.get(`/dev/portfolio/strategy_performance?model_url=${url}`, {
 				withCredentials: true
 			})
 			.then(res => {
