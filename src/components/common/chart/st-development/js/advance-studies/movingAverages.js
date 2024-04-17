@@ -120,8 +120,8 @@ if (!CIQ.Studies) {
 
 		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 		if(
-			sd?.parameters?.symbol == comparisonSymbol.url || 
-			sd?.parameters?.criteria?.endsWith('2')
+			((sd?.parameters?.symbol && sd?.parameters?.symbol == comparisonSymbol.url) || 
+			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
 		){
 			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 			if(CIQ.findBuiltinTechIndicator(null,sd.type)){
