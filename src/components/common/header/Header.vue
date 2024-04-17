@@ -101,9 +101,7 @@ export default {
     '$route'(to, _) {
       console.log('to', to)
       // 在$route对象变化时执行逻辑
-      if (to.path == '/strategy') {
-        this.activeIndex = '2'
-      } else if (to.path.includes('/backtester') || to.name == 'Backtests') {
+      if (to.path.includes('/backtester') || to.name == 'Backtests') {
         this.activeIndex = '1'
       } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart') {
         this.activeIndex = '3'

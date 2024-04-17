@@ -199,10 +199,16 @@ const routes = [
 			require(['@/components/Strategy/index.vue'], resolve),
 		children: [
 			{
-				path: '/descriptions',
+				path: '',
+				name: 'StrategyList',
+				component: resolve =>
+					require(['@/components/Strategy/Table/index.vue'], resolve)
+			},
+			{
+				path: 'descriptions',
 				name: 'Descriptions',
 				component: resolve =>
-					require(['@/components/Strategy/Descriptions/index.vue'], resolve)
+					require(['@/components/Strategy/Descriptions.vue'], resolve)
 			}
 		]
 	},
