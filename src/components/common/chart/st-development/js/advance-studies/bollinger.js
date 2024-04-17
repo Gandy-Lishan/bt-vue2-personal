@@ -21,8 +21,7 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
 
 let __js_advanced_studies_bollinger_ = (_exports) => {
@@ -38,6 +37,19 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateBollinger = function (stx, sd) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+
+		/** 判断Study用来计算的数据源 */
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		if(
+			sd?.parameters?.symbol == comparisonSymbol.url
+		){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
 
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -59,6 +71,8 @@ if (!CIQ.Studies) {
 			Type: sd.inputs["Moving Average Type"]
 		};
 		sd.std.outputs = { "_STD Dev": null };
+			// dual symbol new features
+			sd.std.parameters = sd.parameters
 		CIQ.Studies.calculateStandardDeviation(stx, sd.std);
 
 		CIQ.Studies.calculateGenericEnvelope(
@@ -134,4 +148,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_bollinger_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_bollinger_}

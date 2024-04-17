@@ -22,6 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_rsi_ = (_exports) => {
@@ -55,6 +56,17 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 
+		 * 用symbol属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+		const symbol2 = CIQ.store.getters.getComparisonSymbol.url
+		if(sd.parameters.symbol == symbol2){	// dual symbol 
+			field = symbol2
+		}
 
 		function computeRSI(avgGain, avgLoss) {
 			if (avgLoss === 0) return 100;
@@ -69,9 +81,11 @@ if (!CIQ.Studies) {
 			if (!i) continue;
 			var quote = quotes[i];
 			var quote1 = quotes[i - 1];
-			if (!quote[field] && quote[field] !== 0) continue;
-			if (!quote1[field] && quote1[field] !== 0) continue;
-			var change = quote[field] - quote1[field];
+			var quoteVal = getPropertyByString(quote,field,subField);
+			var quote1Val = getPropertyByString(quote1,field,subField);
+			if (!quoteVal && quoteVal !== 0) continue;
+			if (!quote1Val && quote1Val !== 0) continue;
+			var change = quoteVal - quote1Val;
 			var num = Math.min(i, sd.days);
 
 			var avgGain = quote1["_avgG " + sd.name];
