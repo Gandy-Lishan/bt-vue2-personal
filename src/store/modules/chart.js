@@ -26,9 +26,15 @@ const state = {
 	extremeValue: [], //chartiq
 	indicatorsList: [], //chartiq 代替了AllSymbolsList
 	builtinList: [], //chartiq 包含完整techList
+	maLikeTech: [
+		'ma',
+		// 'Awesome',
+		// 'cci'
+	],
 	trades: [], //chartiq
 	activatedMA: [{ period: 21, url: '' }], //chartiq
 	activatedMALayout: [], //chartiq
+	activatedTechLayout: [], // dual symbol new feature
 	// indicators look up
 	stocksList: [], //chartiq
 	indexsList: [], //chartiq
@@ -192,6 +198,9 @@ const mutations = {
 	getMALayout(state, val) {
 		state.activatedMALayout = val
 	},
+	getTechLayout(state, val) {
+		state.activatedTechLayout = val
+	},
 	saveFormatTechnicalList(state, list) {
 		state.formateTechnicalList = list
 	},
@@ -208,6 +217,7 @@ const mutations = {
 		}),
 			(state.activatedMA = [{ period: 21, url: '' }])
 		state.activatedMALayout = [],
+		state.activatedTechLayout = [],
 		state.extremeValue = []
 
 		//重置交易结果列表

@@ -306,7 +306,7 @@ const config = {
 				//target: "http://10.131.9.217:8000",
 				target: 'https://devbt2api.sentimentrader.com/',
 				//target: "https://bt2api.sentimentrader.com",
-				// ws:true,
+				ws:true,
 				changeOrigin: true,
 				pathRewrite: {
 					'^/dev': ''

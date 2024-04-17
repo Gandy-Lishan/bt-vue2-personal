@@ -652,11 +652,14 @@ export const CommonMethodsMixin = {
 
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
+			/** 指示Study归属的Symbol */
+			const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
+					display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -697,7 +700,8 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
-				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition;
+				const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
+				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
 				if (seen[keyCombination]) {
@@ -1048,7 +1052,44 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getExtraIndicators', [])
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
+			/**
+			 * todo: 兼容dual symbol, 
+			 * 1. activatedMALayout加入cci等ma类的默认配置(遍历formIndicators，填入indicator对应criteri和index)
+			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
+			 */
+			debugger
+			if (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url) {
+				data.activatedTechLayout = []; // 初始化新数组
+				const processIndicators = (indicators, criteria) => {
+					for (var i in indicators) {
+						const url = indicators[i];
+						if (url != 'ma' && (CIQ.findBuiltinTechIndicator(null, url) || CIQ.findSymbolIndicator(url, null))) {
+							if (CIQ.store.getters.getMaLikeTech.includes(url)) {
+								data.activatedMALayout.push({
+									url: url,
+									criteria: criteria,
+									index: i
+								});
+							} else {
+								data.activatedTechLayout.push({
+									url: url,
+									symbol: row.symbol
+								});
+							}
+						}
+					}
+				};
+			
+				processIndicators(data.formIndicators.entry, 'entry');
+				processIndicators(data.formIndicators.exit, 'exit');
+				
+				// 此处需要把旧的ma也加上url属性
+				data.activatedMALayout.forEach(item => {
+					if(!item.url) item.url = 'ma'
+				});
+			}
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
+			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
 			// 导入btv1时不调用这个
 			 this.$store.commit('chart/setTechSD', data.savedTechSD)

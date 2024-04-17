@@ -321,7 +321,6 @@ export default {
 		},
 		updateMAPeriod(val, limit) {
 			// update MA period
-			
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
@@ -339,7 +338,7 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF0000' }
+						outputs: { MA: '#FF0000' },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
@@ -351,7 +350,6 @@ export default {
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
-
 					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}			
@@ -579,7 +577,7 @@ export default {
 					var replaceStudy = {
 						name: 'Moving Average ',
 						overlay: true,
-						calculateFN: CIQ.Studies.calculateSTMovingAverage,
+						calculateFN: CIQ.Studies.calculateMovingAverage,
 						inputs: {
 							Period: val,
 							Field: 'field',
@@ -646,7 +644,7 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF0000' }
+						outputs: { MA: '#FF0000' },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {

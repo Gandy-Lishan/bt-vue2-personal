@@ -77,18 +77,27 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-             if(!_sd.parameters.criteria && _sd.type == value){
-                 _index = 'entry_'+(index+1)
-                 indexNum = index
-                 sd = _sd
-                 continue;
-             }
-             if(_sd.type == value && _sd.parameters.criteria == 'entry' && _sd.parameters.index == index){
-                 _index = 'entry_'+(index+1)
-                 indexNum = index
-                 sd = _sd
-             }
+             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+            if( 
+                !_sd.parameters.criteria && 
+                _sd.type == value && 
+                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+            ){
+                _index = 'entry_'+(index+1)
+                indexNum = index
+                sd = _sd
+                continue;
+            }
+            if( 
+                _sd.type == value &&
+                _sd.parameters.criteria == 'entry' &&
+                _sd.parameters.index == index
+            ){
+                _index = 'entry_'+(index+1)
+                indexNum = index
+                sd = _sd
+            }
          }
          finalData = generateFinalOutput(arrData,finalData,sd,_index,indexNum,'entry')
      })
@@ -98,18 +107,28 @@ let __st_js_generateCsv_ = (_exports) => {
          var sd = {}
          for(var i in CIQ.stxx.layout.studies){
              var _sd = CIQ.stxx.layout.studies[i]
-             // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-             if(!_sd.parameters.criteria && _sd.type == value){
+             // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+            if( 
+                !_sd.parameters.criteria && 
+                _sd.type == value && 
+                _sd.parameters.symbol != CIQ.store.getters.getComparisonSymbol.url
+            ){
                  _index = 'exit_'+(index+1)
                  indexNum = index
                  sd = _sd
                  continue;
-             }
-             if(_sd.type == value && _sd.parameters.criteria == 'exit' && _sd.parameters.index == index){
-                 _index = 'exit_'+(index+1)
-                 indexNum = index
-                 sd = _sd
-             }
+            }
+            // tech(including ma,st ma) ,roc, symbolOHLCV
+            if( 
+                _sd.type == value &&
+                _sd.parameters.criteria == 'exit' &&
+                _sd.parameters.index == index
+            ){
+                _index = 'exit_'+(index+1)
+                indexNum = index
+                sd = _sd
+            }
          }
          finalData = generateFinalOutput(arrData,finalData,sd,_index,indexNum,'exit')
      })
@@ -224,14 +243,23 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-            // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-            if(!_sd.parameters.criteria && _sd.type == value){
+            // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+             // if(!_sd.parameters.criteria && _sd.type == value){
+            if( 
+                !_sd.parameters.criteria && 
+                _sd.type == value && 
+                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
+            ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
                 sd = _sd
                 continue;
             }
-            if(_sd.type == value && _sd.parameters.criteria == 'entry2' && _sd.parameters.index == index){
+            if(
+                _sd.type == value && 
+                _sd.parameters.criteria == 'entry2' && 
+                _sd.parameters.index == index
+            ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
                 sd = _sd
@@ -245,14 +273,23 @@ let __st_js_generateCsv_ = (_exports) => {
         var sd = {}
         for(var i in CIQ.stxx.layout.studies){
             var _sd = CIQ.stxx.layout.studies[i]
-            // 如果indicator不是ma,st ma ,roc,则不考虑criteria和index
-            if(!_sd.parameters.criteria && _sd.type == value){
+            // 如果indicator不是tech,symbolOHLCV (那就是senti,own,users'),则不考虑criteria和index
+            // if(!_sd.parameters.criteria && _sd.type == value){
+            if( 
+                !_sd.parameters.criteria && 
+                _sd.type == value && 
+                _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url
+            ){
                 _index = 'exit_'+(index+1)
                 indexNum = index
                 sd = _sd
                 continue;
             }
-            if(_sd.type == value && _sd.parameters.criteria == 'exit2' && _sd.parameters.index == index){
+            if(
+                _sd.type == value && 
+                _sd.parameters.criteria == 'exit2' && 
+                _sd.parameters.index == index
+            ){
                 _index = 'exit_'+(index+1)
                 indexNum = index
                 sd = _sd
@@ -321,7 +358,6 @@ let __st_js_generateCsv_ = (_exports) => {
      if(!sd.type) return finalData
      var resultIndex = ''
      var categoryList = CIQ.technicalCategory
-
      // todo, rerun获取conditionRadio
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){
