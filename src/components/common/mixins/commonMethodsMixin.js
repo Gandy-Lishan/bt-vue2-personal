@@ -1034,6 +1034,7 @@ export const CommonMethodsMixin = {
 				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
 				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
 				if(!stockName && !indexName){
+					this.$store.commit('form/setComparisonSymbol', {})
 					return
 				}
 		  
@@ -1048,6 +1049,8 @@ export const CommonMethodsMixin = {
 					commitIndicators('entry2', data.formIndicators.entry2);
 					commitIndicators('exit2', data.formIndicators.exit2);
 					commitSymbol2(symbol2)
+			}else{
+				commitSymbol2()
 			}
 			this.$store.commit('chart/getExtraIndicators', [])
 			this.$store.commit('chart/getMA', data.activatedMA)
@@ -1057,7 +1060,7 @@ export const CommonMethodsMixin = {
 			 * 1. activatedMALayout加入cci等ma类的默认配置(遍历formIndicators，填入indicator对应criteri和index)
 			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
-			debugger
+
 			if (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url) {
 				data.activatedTechLayout = []; // 初始化新数组
 				const processIndicators = (indicators, criteria) => {
