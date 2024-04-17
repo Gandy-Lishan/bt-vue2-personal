@@ -232,7 +232,7 @@
                     /** dual symbol */
                     var start = config.timestampToTime(CIQ.initialDate.start)
                     var end = config.timestampToTime(CIQ.initialDate.end)
-                    const res = await getPairData( start, end, 'daily', comparisonSymbol.url)
+                    const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
                     let _data = formatData(res.data)
                     stx.addSeries(comparisonSymbol.url, {
                         display:comparisonSymbol.name, 
