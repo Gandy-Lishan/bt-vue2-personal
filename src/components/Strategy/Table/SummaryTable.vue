@@ -54,19 +54,21 @@
 						:key="l.key"
 						show-overflow-tooltip
 						:width="l.width"
-						v-if="['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'sharp_ratio', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)"
+						v-if="['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)"
             :sortable="
-							['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'sharp_ratio', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)
+							['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)
 								? 'custom'
 								: false
 						"
 					>
-						<template slot-scope="scope">
-							<span class="tableText">
-                <!-- 这里放百分号 -->
-								{{ scope.row[l.value] }}
-							</span>
-						</template>
+					<template slot-scope="scope">
+						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else>
+							{{ scope.row[l.value] }}
+						</span>
+					</template>
 					</el-table-column>
 				</template>
 			</el-table>
@@ -84,10 +86,13 @@
 </template>
 
 <script>
-import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
+import { getStrategySummaryList } from '@/service/service'
+import { timestampToTime } from "@/utils"
 export default {
   name: 'SummaryTable',
+  props: {
+    urlToNameMap: Object
+  },
   data() {
     return {
       loading: false,
@@ -167,80 +172,7 @@ export default {
 		},
 	},
   async created() {
-    // await this.getDataList()
-    console.log('列表返回处理数据', this.tableData)
-    const data = [
-      {
-        model_name: 'Short-Term Combined Model',
-        CAGR: '9.6 %',
-        benchmark_CAGR: '8.26 %',
-        max_drawdown: '46.92 %',
-        net_profit_pct: '408.54 %',
-        sharp_ratio: '0.61',
-        profit_loss_ratio: '1.24 %',
-        average_win: '6.32%',
-        average_loss: '-5.24%',
-        total_trades: '58',
-        win_rate_pct: '72.41 %'
-      },
-      {
-        model_name: 'aggregate_model',
-        CAGR: '8.9 %',
-        benchmark_CAGR: '9.24 %',
-        max_drawdown: '46.92 %',
-        net_profit_pct: '408.54 %',
-        sharp_ratio: '0.61',
-        profit_loss_ratio: '1.24 %',
-        average_win: '6.32%',
-        average_loss: '-5.24%',
-        total_trades: '58',
-        win_rate_pct: '72.41 %'
-      },
-      {
-        model_name: 'aggregate_model',
-        CAGR: '8.9 %',
-        benchmark_CAGR: '9.24 %',
-        max_drawdown: '46.92 %',
-        net_profit_pct: '408.54 %',
-        sharp_ratio: '0.61',
-        profit_loss_ratio: '1.24 %',
-        average_win: '6.32%',
-        average_loss: '-5.24%',
-        total_trades: '58',
-        win_rate_pct: '72.41 %'
-      },
-      {
-        model_name: 'aggregate_model',
-        CAGR: '8.9 %',
-        benchmark_CAGR: '9.24 %',
-        max_drawdown: '46.92 %',
-        net_profit_pct: '408.54 %',
-        sharp_ratio: '0.61',
-        profit_loss_ratio: '1.24 %',
-        average_win: '6.32%',
-        average_loss: '-5.24%',
-        total_trades: '58',
-        win_rate_pct: '72.41 %'
-      },
-      {
-        model_name: 'aggregate_model',
-        CAGR: '8.9 %',
-        benchmark_CAGR: '9.24 %',
-        max_drawdown: '46.92 %',
-        net_profit_pct: '408.54 %',
-        sharp_ratio: '0.61',
-        profit_loss_ratio: '1.24 %',
-        average_win: '6.32%',
-        average_loss: '-5.24%',
-        total_trades: '58',
-        win_rate_pct: '72.41 %'
-      }
-    ]
-    for (let val of data) {
-       val.selection = false;
-    }
-    this.tableData = data;
-    this.immutableTableData = this.tableData
+    await this.getDataList()
   },
   methods: {
     handleSizeChange(size) {
@@ -263,25 +195,28 @@ export default {
     portfolio() {
       console.log('paginatedData', this.paginatedData.filter(item => item.selection))
     },
-    async getDataList(orderby) {
+    async getDataList() {
       this.loading = true
       let res = null
       const page = this.currentPage
 			try {
-				res = await getScannerBTList(page, orderby, this.searchKey)
-        console.log('列表响应', res)
-				if (res.status == 200) {
-					let data = res.data.results
-					data = data.map(item => {
-            item.status = capitalizeFirstLetter(item.status)
-            item.period = [item.start_date, item.end_date]
-            item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
-            item.viewLoading = false
-            item.deleteLoading = false
-						return item
-					})
+				res = await getStrategySummaryList()
+        const code = res?.data?.code
+				if (code == 200) {
+          const data = res?.data?.data
+          for (const item of data) {
+            item.selection = false;
+            item.date = timestampToTime(item.date)
+              const {model_name, updated} = this.urlToNameMap[item.model]
+              if (model_name !== undefined) {
+                  item['model_name'] = model_name;
+                  item['updated'] = updated
+              }
+          }
 					this.tableData = data
-					this.total = res.data.count
+          this.immutableTableData = data
+          console.log('Summary 列表数据', this.immutableTableData)
+					this.total = data.length
 				}
 			} catch(error) {
 				console.log('报错了', error)
@@ -293,7 +228,7 @@ export default {
         this.currentPage = 1
         this.total = 0
         this.tableData = []
-        
+        this.immutableTableData = data
       } finally {
         this.loading = false
       }
@@ -363,6 +298,20 @@ export default {
 				}
 			}
 		},
+    handleQuery(searchItem){
+      if(searchItem){
+        // 在搜索之前对搜索关键词进行转义
+        const trimmedStr = searchItem.trim()
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+        this.immutableTableData = this.tableData.filter(item => {
+          return regex.test(item.model_name)
+        });
+      }
+    },
+    // 使用反斜杠转义特殊字符
+    escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
   }
 }
 </script>
