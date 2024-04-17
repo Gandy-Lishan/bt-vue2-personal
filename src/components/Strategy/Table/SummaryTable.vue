@@ -40,7 +40,11 @@
 					>
 						<template slot-scope="scope">
 							<span class="tableText" v-if="l.value === 'model_name'">
-								<el-button type="text">{{ scope.row[l.value] }}</el-button>
+								<el-button type="text" @click="
+										() => {
+											viewSignalDescription(scope.row)
+										}
+									">{{ scope.row[l.value] }}</el-button>
 							</span>
 							<span class="tableText" v-else>
 								{{ scope.row[l.value] }}
@@ -312,6 +316,16 @@ export default {
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
+    async viewSignalDescription(row) {
+			const { model: url, model_name } = row
+			this.$router.push({
+				path: '/strategy/descriptions',
+				query: {
+					url,
+          name: model_name
+				}
+			})
+		},
   }
 }
 </script>

@@ -132,7 +132,6 @@
 <script>
 import { getStrategyList, getStrategiesJSON } from '@/service/service'
 import { LocalStorageUtil, timestampToTime } from '@/utils'
-import { CIQ } from '@/components/common/chart/st-development/js'
 
 export default {
 	name: 'StrategiesTable',
