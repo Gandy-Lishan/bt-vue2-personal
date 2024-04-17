@@ -14545,8 +14545,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "2YR / 10YR Treasure Spread",
-        "url": "two_ten_spread",
+        "chart_name": "10YR / 2YR Treasure Spread",
+        "url": "ten_two_spread",
         "updated": "Daily"
     },
     {
@@ -15078,5 +15078,40 @@
         "chart_name": "Armstrong World Industries Inc",
         "url": "AWI",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Stock/Bond Ratio 2 Months MAX",
+        "url": "vol_stock_bond_ratio_max",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NYSE HiLo Logic Index MA10 2 Months MAX",
+        "url": "breadth_hilo_10MA_max",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fundamentals Score",
+        "url": "fundamentals_score",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Consecutive Days NHSLTOT Above 12MA",
+        "url": "consecutive_of_nhsltot_above_12ma",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "SPX/NASDAQ ROC12 Spread",
+        "url": "spx_nasdaq_roc12_spread",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "NASDAQ/SPX Ratio",
+        "url": "comp_spx_ratio",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bear Market Probability Model (Weekly)",
+        "url": "model_bear_market_weekly",
+        "updated": "Weekly"
     }
 ]
