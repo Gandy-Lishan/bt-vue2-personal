@@ -5,6 +5,7 @@ import {__js_advanced_studies_rsi_} from "./advance-studies/rsi.js"
 import {__js_advanced_studies_movingAverages_} from "./advance-studies/movingAverages.js"
 import {__js_advanced_studies_centerOfGravity_} from "./advance-studies/centerOfGravity.js"
 import {__js_advanced_studies_typicalPrice_} from "./advance-studies/typicalPrice.js"
+import {__js_advanced_studies_macd_} from "./advance-studies/macd.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -24,6 +25,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_movingAverages_,
 			__js_advanced_studies_centerOfGravity_,
 			__js_advanced_studies_typicalPrice_,
+			__js_advanced_studies_macd_,
 		)
 
 
