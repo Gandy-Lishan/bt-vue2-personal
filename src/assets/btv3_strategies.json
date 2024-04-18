@@ -1,9 +1,6 @@
 [
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_STCM.csv"
-    ],
     "name": "Short-Term Combined Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -14,13 +11,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   Short Term Combined Model   < -10.0",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   Short Term Combined Model   > 13.5",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "Short Term Combined model < -10.0",
       "relation": 1,
@@ -29,7 +49,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Short Term Combined model;IDS:EO0.7/EP0.3;SC:SV/2/-10.0"
+          "code": "SI:Short Term Combined Model;IDS:EO10/EP-10;SC:SV/2/-10.0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -41,16 +67,53 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Short Term Combined model;IDS:EO0.7/EP0.3;SC:SV/0/13.5"
+          "code": "SI:Short Term Combined Model;IDS:EO10/EP-10;SC:SV/0/13.5"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "st_combined",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$st_combined$r001$ (13,n)",
+            "display": "$r001$st_combined$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": 10,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": -10,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$st_combined$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "st_combined"
+        ],
+        "exit": [
+          "st_combined"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_ASM.csv"
-    ],
     "name": "Aggregate Signal Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -61,13 +124,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   Aggregate Signal Model   > 0.45",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   Aggregate Signal Model   < 0.45",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "Aggregate Signal Model > 0.45",
       "relation": 1,
@@ -76,7 +162,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Aggregate Signal Model;IDS:EO0.7/EP0.3;SC:SV/0/0.45"
+          "code": "SI:Aggregate Signal Model;IDS:EO0.45/EP0.45;SC:SV/0/0.45"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -88,16 +180,53 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Aggregate Signal Model;IDS:EO0.7/EP0.3;SC:SV/2/0.45"
+          "code": "SI:Aggregate Signal Model;IDS:EO0.45/EP0.45;SC:SV/2/0.45"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "aggregate_model",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$aggregate_model$r001$ (13,n)",
+            "display": "$r001$aggregate_model$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": 0.45,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": 0.45,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$aggregate_model$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "aggregate_model"
+        ],
+        "exit": [
+          "aggregate_model"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_STMF.csv"
-    ],
     "name": "Simple Trading Model With Fundamentals",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -107,14 +236,37 @@
     "commission": 0.001,
     "slippage": 0.01,
     "direction": "Long",
-    "frequency": "Daily",
-    "win_rate": 0.0,
+    "frequency": "Monthly",
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   Fundamentals Score   = 1",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   Fundamentals Score   = 0",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "Fundamentals Score = 1",
       "relation": 1,
@@ -123,29 +275,75 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EO1.0/EP0.0;SC:SV/1/1"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": ""
         }
       ]
     },
     "exit": {
-      "description": "Fundamentals Score = 0",
-      "relation": 1,
       "score": 1,
-      "delay_bars": 0,
       "signals_in_market": 1,
+      "relation": 1,
+      "delay_bars": 0,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EO1.0/EP0.0;SC:SV/1/0"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "fundamentals_score",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$fundamentals_score$r001$ (13,n)",
+            "display": "$r001$fundamentals_score$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$fundamentals_score$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "fundamentals_score"
+        ],
+        "exit": [
+          "fundamentals_score"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_STMFS.csv",
-      "./data/SPY_STMFS.csv"
-    ],
     "name": "Simple Trading Model with Fundamentals and Sentiment",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -156,13 +354,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "Fundamentals=1;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
       "relation": 2,
@@ -202,9 +405,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_MIM.csv"
-    ],
     "name": "Macro Index Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -215,13 +415,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   Macro Index Model   > 0.7",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   Macro Index Model   < 0.7",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "Macro Index Model > 0.7",
       "relation": 1,
@@ -230,7 +453,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.3;SC:SV/0/0.7"
+          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.7;SC:SV/0/0.7"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -242,16 +471,58 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.3;SC:SV/2/0.7"
+          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.7;SC:SV/2/0.7"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "macro_index_model",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$macro_index_model$r001$ (13,n)",
+            "display": "$r001$macro_index_model$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": 0.7,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": 0.7,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$macro_index_model$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "macro_index_model"
+        ],
+        "exit": [
+          "macro_index_model"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_STTM.csv"
-    ],
     "name": "Short Term Trading Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -262,13 +533,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "Macro Index Model > 0.6;Medium Term Volatility Index < 3.0",
       "relation": 2,
@@ -299,9 +575,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_MM.csv"
-    ],
     "name": "Momentum Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -312,13 +585,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   SPX ROC12/3 Month Treasure Spread   > 0",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   SPX ROC12/3 Month Treasure Spread   < 0",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "SPX 12 month rate-of-change > the 3 month Treasury yield",
       "relation": 1,
@@ -327,7 +623,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:SPX ROC12/3 Month Treasury Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:SPX ROC12/3 Month Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -339,16 +641,58 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:SPX ROC12/3 Month Treasury Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:SPX ROC12/3 Month Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "spx12_3mt_spread",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$spx12_3mt_spread$r001$ (13,n)",
+            "display": "$r001$spx12_3mt_spread$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$spx12_3mt_spread$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "spx12_3mt_spread"
+        ],
+        "exit": [
+          "spx12_3mt_spread"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_CBLEIM.csv"
-    ],
     "name": "Conference Board LEI Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -359,22 +703,52 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   Conference Board LEI moving average 6 ROC1 > 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   Conference Board LEI moving average 6 ROC1 < 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      }
+    ],
     "entry": {
       "description": "Conference Board LEI’s 6 month MA is going up",
+
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/0/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
         }
       ]
     },
@@ -386,16 +760,152 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/2/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "lei totl",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$lei totl$r001$ (13,n)",
+            "display": "$r001$lei totl$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "6",
+            "Field": "lei totl",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0), 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "6",
+            "Field": "lei totl",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)-2"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2, 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": "6",
+          "url": "lei totl",
+          "criteria": "entry",
+          "index": 0
+        },
+        {
+          "period": "6",
+          "url": "lei totl",
+          "criteria": "exit",
+          "index": 0
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "lei totl"
+        ],
+        "exit": [
+          "lei totl"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_CBLEIMS.csv"
-    ],
     "name": "Conference Board LEI Model with Sentiment",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -406,13 +916,78 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 3;  ",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "Conference Board LEI moving average 6 ROC1 > 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio   < 2.5",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index   < 3",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "Conference Board LEI moving average 6 ROC1 < 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio   > 2.5",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index   > 3",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "Conference Board LEI’s monthly MA6 is going up;AND neither 'Stock/Bond ratio' was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
       "relation": 2,
@@ -421,13 +996,31 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/0/0"
         },
         {
-          "code": "SI:Stock/Bond ratio;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio;IDS:EO2/EP-2;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index;IDS:EO0.7/EP0.3;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index;IDS:EO2/EP0.5;SC:SV/2/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -439,22 +1032,218 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI MA6 ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/2/0"
         },
         {
-          "code": "SI:Stock/Bond ratio;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio;IDS:EO2/EP-2;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index;IDS:EO0.7/EP0.3;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index;IDS:EO2/EP0.5;SC:SV/0/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "lei totl",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$lei totl$r001$ (13,n)",
+            "display": "$r001$lei totl$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "vol_stock_bond_ratio",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$vol_stock_bond_ratio$r001$ (13,n)",
+            "display": "$r001$vol_stock_bond_ratio$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": 2,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": -2,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$vol_stock_bond_ratio$r001$ (13,n)"
+        },
+        {
+          "type": "breadth_hilo",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$breadth_hilo$r001$ (13,n)",
+            "display": "$r001$breadth_hilo$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": 2,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": 0.5,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$breadth_hilo$r001$ (13,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "6",
+            "Field": "lei totl",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0), 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "6",
+            "Field": "lei totl",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)-2"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$lei totl$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2, 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        },
+        {
+          "period": "6",
+          "url": "lei totl",
+          "criteria": "entry",
+          "index": 0
+        },
+        {
+          "period": "6",
+          "url": "lei totl",
+          "criteria": "exit",
+          "index": 0
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "lei totl",
+          "vol_stock_bond_ratio",
+          "breadth_hilo"
+        ],
+        "exit": [
+          "lei totl",
+          "vol_stock_bond_ratio",
+          "breadth_hilo"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_CPTM.csv"
-    ],
     "name": "Corporate Profits Trading Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -465,13 +1254,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   NIPA moving average 18 ROC3 > 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "3"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   NIPA moving average 18 ROC3 < 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "3"
+        }
+      }
+    ],
     "entry": {
       "description": "the 6 quarter average of NIPA profits is going up",
       "relation": 1,
@@ -480,7 +1292,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:NIPA MA18 ROC3;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:NIPA;IDS:EOnull/EPnull;SC:SVMA18/0/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "3"
         }
       ]
     },
@@ -492,16 +1310,156 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:NIPA MA18 ROC3;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:NIPA;IDS:EOnull/EPnull;SC:SVMA18/2/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "3"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "cpbicpat",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$cpbicpat$r001$ (13,n)",
+            "display": "$r001$cpbicpat$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$cpbicpat$r001$ (13,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "18",
+            "Field": "cpbicpat",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (18,cpbicpat,ma,0)"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$cpbicpat$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)",
+            "condition": "ROC",
+            "period": "3",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (18,cpbicpat,ma,0), 3)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0),ROC,3,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0),ROC,3,n)"
+        },
+        {
+          "type": "ST MA",
+          "inputs": {
+            "Period": "18",
+            "Field": "cpbicpat",
+            "Type": "ma",
+            "Offset": 0,
+            "display": "ST MA",
+            "id": "$r001$ST MA$r001$ (18,cpbicpat,ma,0)-2"
+          },
+          "outputs": {
+            "MA": "#bfad94"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$cpbicpat$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2",
+            "condition": "ROC",
+            "period": "3",
+            "overlay": false,
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2, 3)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2,ROC,3,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2,ROC,3,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        },
+        {
+          "period": "18",
+          "url": "cpbicpat",
+          "criteria": "entry",
+          "index": 0
+        },
+        {
+          "period": "18",
+          "url": "cpbicpat",
+          "criteria": "exit",
+          "index": 0
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "cpbicpat"
+        ],
+        "exit": [
+          "cpbicpat"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_REITTM.csv"
-    ],
     "name": "REIT Trading Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -512,13 +1470,35 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   New Housing Sales (Total)  RR12 > 0",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "12"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   New Housing Sales (Total)  RR12 = 0",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "12"
+        }
+      }
+    ],
     "entry": {
       "description": "New Home Sales(Total) has not been below its 12 month moving average for 12 consecutive months",
       "relation": 1,
@@ -527,7 +1507,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:New Home Sales 12 Month Spread RR12;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:New Housing Sales (Total);IDS:EOnull/EPnull;SC:SV/0/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "12"
         }
       ]
     },
@@ -539,16 +1525,102 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:New Home Sales 12 Month Spread RR12;IDS:EO0.7/EP0.3;SC:SV/1/0"
+          "code": "SI:New Housing Sales (Total);IDS:EOnull/EPnull;SC:SV/1/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "12"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "nhsltot",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$nhsltot$r001$ (13,n)",
+            "display": "$r001$nhsltot$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$nhsltot$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "nhsltot",
+            "condition": "RR",
+            "period": "12",
+            "overlay": false,
+            "display": "Range Rank(nhsltot, 12)",
+            "id": "$r001$ST ROCLike$r001$ (nhsltot,RR,12,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (nhsltot,RR,12,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "nhsltot",
+            "condition": "RR",
+            "period": "12",
+            "overlay": false,
+            "display": "Range Rank(nhsltot, 12)",
+            "id": "$r001$ST ROCLike$r001$ (nhsltot,RR,12,n)-2"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (nhsltot,RR,12,n)-2"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "nhsltot"
+        ],
+        "exit": [
+          "nhsltot"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_HYGC.csv"
-    ],
     "name": "High Yield Golden Cross",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -559,13 +1631,36 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread   > 0",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": ""
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread   < 0",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": ""
+        }
+      }
+    ],
     "entry": {
       "description": "High Yield Bond Cumulative A/D Line's MA50 CrossAbove its' MA200",
       "relation": 1,
@@ -574,7 +1669,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 0,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -586,16 +1687,58 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 2,
+          "conditionPeriod": ""
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "breadth_bonds_hy_ad_50_200_spread",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$breadth_bonds_hy_ad_50_200_spread$r001$ (13,n)",
+            "display": "$r001$breadth_bonds_hy_ad_50_200_spread$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$breadth_bonds_hy_ad_50_200_spread$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "breadth_bonds_hy_ad_50_200_spread"
+        ],
+        "exit": [
+          "breadth_bonds_hy_ad_50_200_spread"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_LHS.csv"
-    ],
     "name": "Last Hour Strategy",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -606,13 +1749,64 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Signal; Score: 2;  ",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      },
+      {
+        "commentDes": "Symbol Close RR105 > 60",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      },
+      {
+        "commentDes": "Last Hour moving average MAR30 CrossAbove 1.0083",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Signal; Score: 2;  ",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      },
+      {
+        "commentDes": "Symbol Close RR105 < 80",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      },
+      {
+        "commentDes": "Last Hour moving average MAR30 CrossBelow 0.9879",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
     "entry": {
       "description": "SPY's 105-day price range rank is above 60%;Last Hour's Close to 30 day moving average ratio crosses above 0.83",
       "relation": 2,
@@ -621,10 +1815,24 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close RR105;IDS:EO0.7/EP0.3;SC:SV/0/60"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/60"
         },
         {
-          "code": "SI:Last Hour MAR30;IDS:EO0.7/EP0.3;SC:SV/3/1.0083"
+          "code": "SI:Last Hour;IDS:EOnull/EPnull;SC:SV/3/1.0083"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        },
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
     },
@@ -636,19 +1844,178 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close RR105;IDS:EO0.7/EP0.3;SC:SV/2/80"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/80"
         },
         {
-          "code": "SI:Last Hour MAR30;IDS:EO0.7/EP0.3;SC:SV/4/0.9879"
+          "code": "SI:Last Hour;IDS:EOnull/EPnull;SC:SV/4/0.9879"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        },
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "Symbol Close",
+          "inputs": {
+            "Field": "Close",
+            "overlay": false,
+            "display": "Symbol Close",
+            "id": "$r001$Symbol Close$r001$ (C,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "chartName": "chart",
+            "editMode": true,
+            "panelName": "$r001$Symbol Close$r001$ (C,n)"
+          },
+          "panel": "$r001$Symbol Close$r001$ (C,n)"
+        },
+        {
+          "type": "lasthour",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$lasthour$r001$ (13,n)",
+            "display": "$r001$lasthour$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true,
+            "panelName": "$r001$lasthour$r001$ (13,n)"
+          },
+          "panel": "$r001$lasthour$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(SPY)Range Rank(Close, 105)",
+            "id": "$r001$ST ROCLike$r001$ (C,RR,105,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,RR,105,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(SPY)Range Rank(Close, 105)",
+            "id": "$r001$ST ROCLike$r001$ (C,RR,105,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,RR,105,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "lasthour",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)exit,MA Ratio(lasthour, 30)",
+            "id": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "lasthour",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)entry,MA Ratio(lasthour, 30)",
+            "id": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)-2"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "Symbol Close",
+          "lasthour"
+        ],
+        "exit": [
+          "Symbol Close",
+          "lasthour"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/SPY_STYCM.csv"
-    ],
     "name": "Yield Curve Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -659,13 +2026,63 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "10YR / 2YR Treasure Spread  ROC1 > 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "10YR / 2YR Treasure Spread  ROC12 < 40",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "12"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "10YR / 2YR Treasure Spread  ROC1 < 0",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        }
+      },
+      {
+        "commentDes": "10YR / 2YR Treasure Spread  ROC12 > 40",
+        "rocCond": {
+          "newCondition": 5,
+          "conditionPeriod": "12"
+        }
+      }
+    ],
     "entry": {
       "description": "10 year – 2 year yield curve is not inverted, AND the 10 year – 2 year yield curve’s 12 month rate of change is <= 0.4",
       "relation": 2,
@@ -674,10 +2091,24 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:10YR / 2YR Treasure Spread ROC1;IDS:EO0.7/EP0.3;SC:SV/0/0"
+          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         },
         {
-          "code": "SI:10YR / 2YR Treasure Spread ROC12;IDS:EO0.7/EP0.3;SC:SV/2/40"
+          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/40"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "12"
         }
       ]
     },
@@ -689,20 +2120,159 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:10YR / 2YR Treasure Spread ROC1;IDS:EO0.7/EP0.3;SC:SV/2/0"
+          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         },
         {
-          "code": "SI:10YR / 2YR Treasure Spread ROC12;IDS:EO0.7/EP0.3;SC:SV/0/40"
+          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/40"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "1"
+        },
+        {
+          "newCondition": 5,
+          "conditionPeriod": "12"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "ten_two_spread",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$ten_two_spread$r001$ (13,n)",
+            "display": "$r001$ten_two_spread$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ten_two_spread$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "ten_two_spread",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(ten_two_spread, 1)",
+            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "ten_two_spread",
+            "condition": "ROC",
+            "period": "1",
+            "overlay": false,
+            "display": "Rate Of Change(ten_two_spread, 1)",
+            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)-2"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "ten_two_spread",
+            "condition": "ROC",
+            "period": "12",
+            "overlay": false,
+            "display": "Rate Of Change(ten_two_spread, 12)",
+            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "ten_two_spread",
+            "condition": "ROC",
+            "period": "12",
+            "overlay": false,
+            "display": "Rate Of Change(ten_two_spread, 12)",
+            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"
+          },
+          "outputs": {
+            "Line": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "formIndicators": {
+        "entry": [
+          "ten_two_spread",
+          "ten_two_spread"
+        ],
+        "exit": [
+          "ten_two_spread",
+          "ten_two_spread"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_DMMF.csv",
-      "./data/SPY_DMMF.csv"
-    ],
     "name": "Dual Momentum Model With Fundamentals",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -713,13 +2283,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Monthly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "Fundamentals = 1;the NASDAQ Composite outperformed the S&P 500 over the past 12 months",
       "relation": 2,
@@ -785,10 +2360,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_MITM.csv",
-      "./data/SPY_MITM.csv"
-    ],
     "name": "Multi-Index Trading Model",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -799,13 +2370,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Weekly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
       "relation": 1,
@@ -865,10 +2441,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_MITMF.csv",
-      "./data/SPY_MITMF.csv"
-    ],
     "name": "Multi Index Trading Model With Fundamentals",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -879,13 +2451,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Weekly",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "Fundamentals = 1;NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
       "relation": 2,
@@ -951,10 +2528,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_DTM.csv",
-      "./data/SPY_DTM.csv"
-    ],
     "name": "Dual Trend Model",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -965,13 +2538,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "NASDAQ Composite is > its 30 day moving average",
       "relation": 1,
@@ -1031,10 +2609,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_DTMF.csv",
-      "./data/SPY_DTMF.csv"
-    ],
     "name": "Dual Trend Model With Fundamentals",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -1044,14 +2618,83 @@
     "commission": 0.001,
     "slippage": 0.01,
     "direction": "Long",
-    "frequency": "Daily",
-    "win_rate": 0.0,
+    "frequency": "Weekly",
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Signal   Symbol Close MAR30 > 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
+    "entry2_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Fundamentals Score   = 1",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 < 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Signal   Symbol Close MAR30 < 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
+    "exit2_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Fundamentals Score   = 0",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 > 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      }
+    ],
     "entry": {
       "description": "NASDAQ Composite is > its 30 day moving average",
       "relation": 1,
@@ -1060,7 +2703,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
     },
@@ -1072,7 +2721,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
     },
@@ -1086,10 +2741,24 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
         },
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
     },
@@ -1101,20 +2770,209 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "Symbol Close",
+          "inputs": {
+            "Field": "Close",
+            "overlay": false,
+            "display": "Symbol Close",
+            "id": "$r001$Symbol Close$r001$ (C,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Close$r001$ (C,n)"
+        },
+        {
+          "type": "Symbol Close",
+          "inputs": {
+            "Field": "Close",
+            "overlay": false,
+            "display": "Symbol Close",
+            "id": "$r001$Symbol Close$r001$ (C,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Close$r001$ (C,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(QQQ)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(QQQ)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-3"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry2",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-3"
+        },
+        {
+          "type": "fundamentals_score",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$fundamentals_score$r001$ (13,n)",
+            "display": "$r001$fundamentals_score$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$fundamentals_score$r001$ (13,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-4"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit2",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-4"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "activatedTechLayout": [
+        {
+          "url": "Symbol Close",
+          "isComparison": false
+        },
+        {
+          "url": "Symbol Close",
+          "isComparison": true
+        }
+      ],
+      "formIndicators": {
+        "entry": [
+          "Symbol Close"
+        ],
+        "exit": [
+          "Symbol Close"
+        ],
+        "entry2": [
+          "fundamentals_score",
+          "Symbol Close"
+        ],
+        "exit2": [
+          "fundamentals_score",
+          "Symbol Close"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_DTMFS.csv",
-      "./data/SPY_DTMFS.csv"
-    ],
     "name": "Dual Trend Model with Fundamentals and Sentiment",
     "symbol": "QQQ",
     "benchmark": "SPX",
@@ -1124,14 +2982,153 @@
     "commission": 0.001,
     "slippage": 0.01,
     "direction": "Long",
-    "frequency": "Daily",
-    "win_rate": 0.0,
+    "frequency": "Weekly",
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Signal; Score: 3;  ",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 > 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   > 2.5",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
+      }
+    ],
+    "entry2_description": [
+      {
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 4;  ",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Fundamentals Score   = 1",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 < 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Signal; Score: 1;  ",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 < 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      }
+    ],
+    "exit2_description": [
+      {
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Fundamentals Score   = 0",
+        "rocCond": {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Symbol Close MAR30 > 1",
+        "rocCond": {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        }
+      },
+      {
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   > 3",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
+      }
+    ],
     "entry": {
       "description": "NASDAQ Composite > its MA30;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
       "relation": 2,
@@ -1140,13 +3137,31 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -1158,13 +3173,31 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -1178,16 +3211,38 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/1"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
         },
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/2/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -1199,26 +3254,273 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals;IDS:EO0.7/EP0.3;SC:SV/1/0"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SY:Symbol Close MAR30;IDS:EO0.7/EP0.3;SC:SV/0/1"
+          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index's MA10 2 Months MAX;IDS:EO0.7/EP0.3;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 7,
+          "conditionPeriod": "30"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
       ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "Symbol Close",
+          "inputs": {
+            "Field": "Close",
+            "overlay": false,
+            "display": "Symbol Close",
+            "id": "$r001$Symbol Close$r001$ (C,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "isComparison": false,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Close$r001$ (C,n)"
+        },
+        {
+          "type": "Symbol Close",
+          "inputs": {
+            "Field": "Close",
+            "overlay": false,
+            "display": "Symbol Close",
+            "id": "$r001$Symbol Close$r001$ (C,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "isComparison": true,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Close$r001$ (C,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(QQQ)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(QQQ)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-3"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry2",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-3"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Close",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "(SPY)MA Ratio(Close, 30)",
+            "id": "$r001$ST ROCLike$r001$ (C,MA,30,n)-4"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit2",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (C,MA,30,n)-4"
+        },
+        {
+          "type": "vol_stock_bond_ratio_max",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)",
+            "display": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)"
+        },
+        {
+          "type": "breadth_hilo_10MA_max",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$breadth_hilo_10MA_max$r001$ (13,n)",
+            "display": "$r001$breadth_hilo_10MA_max$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$breadth_hilo_10MA_max$r001$ (13,n)"
+        },
+        {
+          "type": "fundamentals_score",
+          "inputs": {
+            "Period": 13,
+            "Overlay": false,
+            "id": "$r001$fundamentals_score$r001$ (13,n)",
+            "display": "$r001$fundamentals_score$r001$ (13,n)"
+          },
+          "outputs": {},
+          "parameters": {
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$fundamentals_score$r001$ (13,n)"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "activatedTechLayout": [
+        {
+          "url": "Symbol Close",
+          "isComparison": false
+        },
+        {
+          "url": "Symbol Close",
+          "isComparison": true
+        }
+      ],
+      "formIndicators": {
+        "entry": [
+          "Symbol Close",
+          "vol_stock_bond_ratio_max",
+          "breadth_hilo_10MA_max"
+        ],
+        "exit": [
+          "Symbol Close",
+          "vol_stock_bond_ratio_max",
+          "breadth_hilo_10MA_max"
+        ],
+        "entry2": [
+          "fundamentals_score",
+          "Symbol Close",
+          "vol_stock_bond_ratio_max",
+          "breadth_hilo_10MA_max"
+        ],
+        "exit2": [
+          "fundamentals_score",
+          "Symbol Close",
+          "vol_stock_bond_ratio_max",
+          "breadth_hilo_10MA_max"
+        ]
+      }
     }
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/QQQ_ABSGM.csv",
-      "./data/SPY_ABSGM.csv"
-    ],
     "name": "Alternating Between Stocks and Gold Model",
     "symbol": "SPY",
     "benchmark": "SPX",
@@ -1229,13 +3531,18 @@
     "slippage": 0.01,
     "direction": "Long",
     "frequency": "Daily",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "start_date": "2004-01-01",
     "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "S&P:gold ratio is > its 5 year MA AND the S&P 500 > MA200",
       "relation": 2,
@@ -1301,10 +3608,6 @@
   },
   {
     "uuid": "UUID",
-    "dataset": [
-      "./data/IWF.csv",
-      "./data/IWD.csv"
-    ],
     "name": "Large Cap vs. Small Cap Relative Ratio Rank System",
     "symbol": "IWF",
     "benchmark": "SPX",
@@ -1317,11 +3620,17 @@
     "frequency": "Daily",
     "start_date": "2004-01-12",
     "end_date": "2024-01-12",
-    "win_rate": 0.0,
     "trade_price": 2,
     "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "IWF/IWD Ratio RR84 CrossAbove 97",
       "relation": 1,
