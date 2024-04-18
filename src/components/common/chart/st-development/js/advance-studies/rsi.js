@@ -52,7 +52,7 @@ if (!CIQ.Studies) {
 	 */
 	CIQ.Studies.calculateRSI = function (stx, sd) {
 		debugger
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
 		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null
 		if (!field || field == "field") field = "Close";

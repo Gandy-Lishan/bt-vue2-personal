@@ -49,7 +49,7 @@ if (!CIQ.Studies) {
 	 * @memberOf CIQ.Studies
 	 */
 	CIQ.Studies.calculateMACD = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 		var inputs = sd.inputs,
 			name = sd.name;
 		if (!sd.macd1Days) sd.macd1Days = parseFloat(inputs["Fast MA Period"]);

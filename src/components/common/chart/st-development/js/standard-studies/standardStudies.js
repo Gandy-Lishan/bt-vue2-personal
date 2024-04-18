@@ -3415,7 +3415,7 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	if (quotes.length < sd.days + 1) {
 		sd.error = true;
 		return;
@@ -3499,7 +3499,7 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverage = function (stx, sd) {
-	if (!sd.chart.scrubbed) return;
+	if (!sd.chart.dataSet) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
 	var typeMap = CIQ.Studies.movingAverage.typeMap;
@@ -3650,7 +3650,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	debugger
 	var type = sd.inputs.Type;
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	var acc = 0;
 	var ma = 0;
 	var ii = 0;
@@ -3796,7 +3796,7 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
  */
 CIQ.Studies.calculateMovingAverageVIDYA = function (stx, sd) {
 	var type = sd.inputs.Type;
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	var alpha = 2 / (sd.days + 1);
 
 	var vmaPreviousDay = null;
@@ -3885,7 +3885,7 @@ CIQ.Studies.calculateMovingAverageVIDYA = function (stx, sd) {
  * @memberof CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverageTriangular = function (stx, sd) {
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -3944,7 +3944,7 @@ CIQ.Studies.calculateMovingAverageTriangular = function (stx, sd) {
  * @memberof CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverageWeighted = function (stx, sd) {
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 
 	var accAdd = 0;
 	var accSubtract = 0;
@@ -4019,7 +4019,7 @@ CIQ.Studies.calculateMovingAverageWeighted = function (stx, sd) {
 };
 
 CIQ.Studies.calculateStudyATR = function (stx, sd) {
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	var period = sd.days;
 	if (quotes.length < period + 1) {
 		sd.error = true;
@@ -4270,7 +4270,7 @@ CIQ.Studies.calculateGenericEnvelope = function (
 	if (!pointShift) pointShift = 0;
 	if (!centerIndex || centerIndex == "field") centerIndex = "Close";
 	if (!offsetIndex) offsetIndex = centerIndex;
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	var field = sd.inputs.Field;
 	if (!field || field === "field") field = "Close";
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */

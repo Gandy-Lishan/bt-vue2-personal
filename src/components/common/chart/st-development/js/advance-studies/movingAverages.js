@@ -67,7 +67,7 @@ if (!CIQ.Studies) {
 	});
 
 	CIQ.Studies.calculateMovingAverageHull = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -108,7 +108,7 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateMovingAverageDoubleExponential = function (stx, sd) {
 		debugger
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -169,7 +169,7 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMovingAverageTripleExponential = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -256,7 +256,7 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateMADev = function (stx, sd) {
 		debugger
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;

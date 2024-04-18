@@ -37,7 +37,7 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateCCI = function (stx, sd) {
 		debugger
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
