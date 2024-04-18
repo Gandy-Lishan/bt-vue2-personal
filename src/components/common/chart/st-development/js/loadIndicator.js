@@ -388,7 +388,7 @@
                                     var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
                                         display:indicatorList[i]
                                     },null,{
-                                        symbol: CIQ.store.state.chart.activatedTechLayout[j].symbol,
+                                        isComparison: CIQ.store.state.chart.activatedTechLayout[j].isComparison,
                                     });   
                                 }
                             }
