@@ -36,7 +36,7 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.calculateAccumulationDistribution = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
+		var quotes = sd.chart.dataSet;
 debugger
 		var field	// 它是流动的
 		if(sd.parameters.isComparison){
@@ -63,7 +63,7 @@ debugger
 			var total = quote1["Result " + sd.name];
 			if (!total) total = 0;
 			total += todayAD;
-			if (!isNaN(quote.Close)) quote["Result " + sd.name] = total;
+			if (!isNaN(getPropertyByString(quote,field,'Close'))) quote["Result " + sd.name] = total;
 		}
 	};
 

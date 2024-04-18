@@ -3509,7 +3509,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		return;
 	}
 	
-	var quotes = sd.chart.scrubbed;
+	var quotes = sd.chart.dataSet;
 	var acc = 0;
 	var vals = [];
 	var name = sd.name;
