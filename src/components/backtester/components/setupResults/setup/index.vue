@@ -161,7 +161,6 @@ export default {
 						symbol,
 						symbol2
 				}
-				backtestEditData.commission = (backtestEditData.commission * 100).toFixed(2)
 				_this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
 				backtestEditData.user_tag = 'client'
 
