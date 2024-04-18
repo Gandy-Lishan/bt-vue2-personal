@@ -190,7 +190,7 @@ export default {
 			dataList: [],
 			selection: false,
 			isIndeterminate: false,
-			strategiesJSON: null
+			strategiesJSON: []
 		}
 	},
 	computed: {
@@ -415,41 +415,44 @@ export default {
 				this.immutableTableData = this.tableData.filter((item) => {
 					return regex.test(item.model_name)
 				})
-			}
+			}else {
+        this.immutableTableData = this.tableData
+        return this.immutableTableData
+      }
 		},
 		// 使用反斜杠转义特殊字符
 		escapeRegExp(str) {
 			return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 		},
 		async getStrategyJSON() {
-			if (!LocalStorageUtil.get('strategiesJSON')) {
+			// if (!LocalStorageUtil.get('strategiesJSON')) {
 				const res = await getStrategiesJSON()
 				const data = res?.data
-				LocalStorageUtil.set('strategiesJSON', data)
-			}
-			this.strategiesJSON = LocalStorageUtil.get('strategiesJSON')
+        this.strategiesJSON = data
+        console.log('this.strategiesJSON 保存', this.strategiesJSON)
+			// }
+			// this.strategiesJSON = LocalStorageUtil.get('strategiesJSON')
 		},
 		async handleRowClick(row) {
-			this.strategiesJSON = this.strategiesJSON.length
-				? this.strategiesJSON
-				: LocalStorageUtil.get('strategiesJSON')
 			console.log(this.strategiesJSON)
-			const matchStrategy = this.strategiesJSON.find((item) => {
-				// 去除特殊字符并将搜索词转换为小写
-				const sanitizedSearchTerm = row['model_name']
-					.replace(/[^\w\s]/gi, '')
-					.toLowerCase()
-				// 去除特殊字符并将策略名称转换为小写
-				const sanitizedStrategyName = item['name']
-					.replace(/[^\w\s]/gi, '')
-					.toLowerCase()
-				// 使用正则表达式进行模糊匹配
-				console.log('Sanitized search term:', sanitizedSearchTerm)
-				console.log('Sanitized strategy name:', sanitizedStrategyName)
+			// const matchStrategy = this.strategiesJSON.find((item) => {
+			// 	// 去除特殊字符并将搜索词转换为小写
+			// 	const sanitizedSearchTerm = row['model_name']
+			// 		.replace(/[^\w\s]/gi, '')
+			// 		.toLowerCase()
+			// 	// 去除特殊字符并将策略名称转换为小写
+			// 	const sanitizedStrategyName = item['name']
+			// 		.replace(/[^\w\s]/gi, '')
+			// 		.toLowerCase()
+			// 	// 使用正则表达式进行模糊匹配
+			// 	console.log('Sanitized search term:', sanitizedSearchTerm)
+			// 	console.log('Sanitized strategy name:', sanitizedStrategyName)
 
-				const regex = new RegExp(sanitizedStrategyName, 'i')
-				return regex.test(sanitizedSearchTerm)
-			})
+			// 	const regex = new RegExp(sanitizedStrategyName, 'i')
+			// 	return regex.test(sanitizedSearchTerm)
+			// })
+      console.log('this.strategiesJSON', this.strategiesJSON.map(item => item['name']))
+      const matchStrategy = this.strategiesJSON.find((item) => item['name'] == row['model_name'])
 			if (matchStrategy) {
 				// matchStrategy.indicator_layout = {
 				// 	activatedMA: [],
