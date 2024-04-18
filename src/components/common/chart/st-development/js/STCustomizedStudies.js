@@ -443,13 +443,12 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 
-		 * 用symbol属性判断Study用来计算的数据源
+		 * 用isComparison属性判断Study用来计算的数据源
 		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
 		 * ma和roc就是用critria判断Study用来计算的数据源
 		 *  */
-		const symbol2 = CIQ.store.getters.getComparisonSymbol.url
-		if(sd.parameters.symbol == symbol2){
-			field = symbol2
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
 		}
 		
 		// 默认study模板
@@ -958,13 +957,12 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 
-		 * 用symbol属性判断Study用来计算的数据源
+		 * 用isComparison属性判断Study用来计算的数据源
 		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
 		 * ma和roc就是用critria判断Study用来计算的数据源
 		 *  */
-		const symbol2 = CIQ.store.getters.getComparisonSymbol.url
-		if(sd.parameters.symbol == symbol2){
-			field = symbol2
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
 		}
 
 		let result

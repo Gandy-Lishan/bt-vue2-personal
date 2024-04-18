@@ -39,9 +39,8 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 
 		var field	// 它是流动的
-		const symbol2 = CIQ.store.getters.getComparisonSymbol.url
-		if(sd.parameters.symbol == symbol2){	// dual symbol 
-			field = symbol2
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
 		}
 
 		for (var i = sd.startFrom; i < quotes.length; i++) {

@@ -1066,6 +1066,7 @@ export const CommonMethodsMixin = {
 				const processIndicators = (indicators, criteria) => {
 					for (var i in indicators) {
 						const url = indicators[i];
+						// ma已经有不用加了
 						if (url != 'ma' && (CIQ.findBuiltinTechIndicator(null, url) || CIQ.findSymbolIndicator(url, null))) {
 							if (CIQ.store.getters.getMaLikeTech.includes(url)) {
 								data.activatedMALayout.push({
@@ -1076,7 +1077,7 @@ export const CommonMethodsMixin = {
 							} else {
 								data.activatedTechLayout.push({
 									url: url,
-									symbol: row.symbol
+									isComparison: false
 								});
 							}
 						}

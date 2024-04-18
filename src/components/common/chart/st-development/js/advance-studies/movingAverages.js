@@ -118,11 +118,11 @@ if (!CIQ.Studies) {
 		CIQ.Studies.MA("ema", sd.days, field, 0, "_EMA1", stx, sd);
 		CIQ.Studies.MA("ema", sd.days, "_EMA1 " + sd.name, 0, "_EMA2", stx, sd);
 
-		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 		if(
-			((sd?.parameters?.symbol && sd?.parameters?.symbol == comparisonSymbol.url) || 
-			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
+			sd?.parameters?.isComparison ||
+			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
 		){
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 			if(CIQ.findBuiltinTechIndicator(null,sd.type)){
 				/**根据criteria动态设定study的Y轴属*******/

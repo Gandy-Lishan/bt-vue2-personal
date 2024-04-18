@@ -82,8 +82,8 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
-                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getBacktestSymbol)
+                // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+                (!_sd.parameters.hasOwnProperty('isComparison') || !_sd.parameters.isComparison)
             ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -113,8 +113,8 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
-                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getBacktestSymbol)
+                // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+                (!_sd.parameters.hasOwnProperty('isComparison') || !_sd.parameters.isComparison)
             ){
                  _index = 'exit_'+(index+1)
                  indexNum = index
@@ -250,8 +250,8 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
-                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url)
+                // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+                (!_sd.parameters.hasOwnProperty('isComparison') || _sd.parameters.isComparison)
             ){
                 _index = 'entry_'+(index+1)
                 indexNum = index
@@ -281,8 +281,8 @@ let __st_js_generateCsv_ = (_exports) => {
             if( 
                 !_sd.parameters.criteria && 
                 _sd.type == value && 
-                // 如果_sd.parameters.symbol不存在则为senti,own,users, 不需判断_sd.parameters.symbol
-                (!_sd.parameters.symbol || _sd.parameters.symbol == CIQ.store.getters.getComparisonSymbol.url)
+                // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+                (!_sd.parameters.hasOwnProperty('isComparison') || _sd.parameters.isComparison)
             ){
                 _index = 'exit_'+(index+1)
                 indexNum = index

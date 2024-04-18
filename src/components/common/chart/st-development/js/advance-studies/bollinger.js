@@ -40,9 +40,7 @@ if (!CIQ.Studies) {
 
 		/** 判断Study用来计算的数据源 */
 		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-		if(
-			sd?.parameters?.symbol == comparisonSymbol.url
-		){
+		if(sd?.parameters?.isComparison){
 			/**根据criteria动态设定study的Y轴属*******/
 			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
 			sd.yAxis = actualXaxis

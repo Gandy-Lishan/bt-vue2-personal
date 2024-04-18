@@ -1069,14 +1069,14 @@ export default {
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
-       const symbol = CIQ.setTechLayout(item.label, this.criteria)
+       CIQ.setTechLayout(item.label, this.criteria)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
         // 当url相同,且都为同一symbol下时，跳过加载       
         if (sd.type == item.label && 
-          (sd.parameters.symbol == symbol)
+          (sd.parameters.isComparison == this.criteria.endsWith('2'))
         ) {
           return
         }
@@ -1205,14 +1205,14 @@ export default {
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
-      const symbol = CIQ.setTechLayout(item.url, this.criteria)
+      CIQ.setTechLayout(item.url, this.criteria)
 
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
         var sd = CIQ.stxx.layout.studies[studyInstanceName]
         // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
         if (sd.type == item.url && 
-          (sd.parameters.symbol == symbol)
+          (sd.parameters.isComparison == this.criteria.endsWith('2'))
         ) {
           return
         }

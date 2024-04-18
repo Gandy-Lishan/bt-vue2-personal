@@ -14,16 +14,13 @@ let __st_js_maLayout_ = (_exports) => {
      */
     CIQ.setTechLayout = function (url, criteria) {
         /** 根据critial判断study所属Symbol */
-        let symbol
-        if(criteria && criteria.endsWith('2')){
-            symbol = CIQ.store.getters.getComparisonSymbol.url
-        }else symbol = CIQ.stxx.chart.symbol?CIQ.stxx.chart.symbol:process.env.VUE_APP_DEFAULT_SYMBOL
+        let isComparison = (criteria && criteria.endsWith('2')) || false
 
         var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
 
         // remove redundant Tech
         var TechLayoutListIndex = activatedTechLayoutList.findIndex(
-            (item) => item.symbol == symbol && item.url == url
+            (item) => item.isComparison == isComparison && item.url == url
         )
         if (TechLayoutListIndex != -1) {
             activatedTechLayoutList.splice(TechLayoutListIndex, 1)
@@ -34,25 +31,21 @@ let __st_js_maLayout_ = (_exports) => {
             // 如果存在dual symbol两个symbol共用同一个tech indicator,则分别保存其信息
             obj = {
                 url: url,
-                symbol: symbol, // 新加了一个symbol属性，专门用来判断归属symbol的名，而不是用criteria判断
+                isComparison: isComparison, // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                 /**
                  * 不用考虑symbolOHLCV而加入field属性，因为我把symbolOhlcv分成了5个不同Study,每个都有其默认Field
                  */
             }
-            if(!(activatedTechLayoutList.find(item=>item.url == obj.url && item.symbol == obj.symbol))) {
+            if(!(activatedTechLayoutList.find(item=>item.url == obj.url && item.isComparison == obj.isComparison))) {
                 activatedTechLayoutList.push(obj)
             }      
         }
         CIQ.store.commit('chart/getTechLayout', activatedTechLayoutList)
-        return symbol
     }
 
     CIQ.removeTechLayout = function (url, criteria) {
         /** 根据critial判断study所属Symbol */
-        let symbol
-        if(criteria && criteria.endsWith('2')){
-            symbol = CIQ.store.getters.getComparisonSymbol.url
-        }else symbol = CIQ.stxx.chart.symbol?CIQ.stxx.chart.symbol:process.env.VUE_APP_DEFAULT_SYMBOL
+        let isComparison = (criteria && criteria.endsWith('2')) || false
         
         if (!CIQ.store.getters.getMaLikeTech.includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
             // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
@@ -60,7 +53,7 @@ let __st_js_maLayout_ = (_exports) => {
 
             // remove redundant Tech
             var TechLayoutListIndex = activatedTechLayoutList.findIndex(
-                (item) => item.symbol == symbol && item.url == url
+                (item) => item.isComparison == isComparison && item.url == url
             )
             if (TechLayoutListIndex != -1) {
                 activatedTechLayoutList.splice(TechLayoutListIndex, 1)
