@@ -95,7 +95,7 @@ export function getStrategiesJSON() {
 		axios
 			.get(url, { withCredentials: true })
 			.then(res => {
-				res.data = uniqueObjectArray(res.data)
+				res.data = res.data
 				resolve(res)
 			})
 			.catch(err => {
