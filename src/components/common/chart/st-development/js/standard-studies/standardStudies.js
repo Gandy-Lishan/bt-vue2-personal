@@ -3514,7 +3514,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		return;
 	}
 	
-	var quotes
+	var quotes = sd.chart.scrubbed
 	var acc = 0;
 	var vals = [];
 	var name = sd.name;
@@ -3660,7 +3660,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	debugger
 	var type = sd.inputs.Type;
-	var quotes
+	var quotes = sd.chart.scrubbed
 	var acc = 0;
 	var ma = 0;
 	var ii = 0;

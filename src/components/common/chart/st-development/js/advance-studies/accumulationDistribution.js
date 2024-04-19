@@ -36,7 +36,7 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.calculateAccumulationDistribution = function (stx, sd) {
-		var quotes
+		var quotes = sd.chart.scrubbed
 
 		var field	// 它是流动的
 		if(sd.parameters.isComparison){

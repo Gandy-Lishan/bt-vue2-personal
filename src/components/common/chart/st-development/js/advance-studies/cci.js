@@ -37,7 +37,7 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateCCI = function (stx, sd) {
 		debugger
-		var quotes
+		var quotes = sd.chart.scrubbed
 
 		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
 
