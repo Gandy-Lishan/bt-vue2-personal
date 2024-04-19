@@ -12,7 +12,7 @@ let __st_js_maLayout_ = (_exports) => {
      * @param {*} criteria 用来判断symbol
      * @returns symbol
      */
-    CIQ.setTechLayout = function (url, criteria) {
+    CIQ.setTechLayout = function (url, criteria, index) {
         /** 根据critial判断study所属Symbol */
         let isComparison = (criteria && criteria.endsWith('2')) || false
 
@@ -20,7 +20,7 @@ let __st_js_maLayout_ = (_exports) => {
 
         // remove redundant Tech
         var TechLayoutListIndex = activatedTechLayoutList.findIndex(
-            (item) => item.isComparison == isComparison && item.url == url
+            (item) => item.criteria == criteria && item.index == index
         )
         if (TechLayoutListIndex != -1) {
             activatedTechLayoutList.splice(TechLayoutListIndex, 1)
@@ -35,6 +35,12 @@ let __st_js_maLayout_ = (_exports) => {
                 /**
                  * 不用考虑symbolOHLCV而加入field属性，因为我把symbolOhlcv分成了5个不同Study,每个都有其默认Field
                  */
+                /**
+                 * 还是得考虑这两个位置坐标，主要是tech更换时它需要参与判断,但是不会加入到study的parameters里面干扰csv的生成
+                 * （SPY）MACD, (AAPL) MACD => （SPY）RSI, (AAPL) MACD
+                 */
+                criteria: criteria,
+                index: index
             }
             if(!(activatedTechLayoutList.find(item=>item.url == obj.url && item.isComparison == obj.isComparison))) {
                 activatedTechLayoutList.push(obj)
