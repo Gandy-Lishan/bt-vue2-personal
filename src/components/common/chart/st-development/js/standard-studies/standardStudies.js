@@ -3437,6 +3437,11 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
 			/** 判断Study用来计算的数据源 */
 			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
 		}
 
 	var acc1 = 0;
@@ -3509,7 +3514,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		return;
 	}
 	
-	var quotes = sd.chart.dataSet;
+	var quotes
 	var acc = 0;
 	var vals = [];
 	var name = sd.name;
@@ -3539,6 +3544,8 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 			sd.yAxis = actualXaxis
 			/****************** */
 			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 
 			// handle calculateTypicalPrice result
 			if(['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)){
@@ -3570,7 +3577,10 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 				}
 			}
 		}
-	}else sd.yAxis = null
+	}else{
+		sd.yAxis = null
+		quotes = sd.chart.scrubbed
+	}
 	/********************************* */
 	debugger
 	var offset = parseInt(sd.inputs.Offset, 10);
@@ -3650,7 +3660,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	debugger
 	var type = sd.inputs.Type;
-	var quotes = sd.chart.dataSet;
+	var quotes
 	var acc = 0;
 	var ma = 0;
 	var ii = 0;
@@ -3679,12 +3689,14 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
 		if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
 			/** 判断Study用来计算的数据源 */
-			 comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			/**根据criteria动态设定study的Y轴属*******/
 			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
 			sd.yAxis = actualXaxis
 			/****************** */
 			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 
 			// handle calculateTypicalPrice result
 			if(['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)){
@@ -3716,7 +3728,10 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 				}
 			}
 		}
-	}else sd.yAxis = null
+	}else{
+		sd.yAxis = null
+		quotes = sd.chart.scrubbed
+	}
 	/********************************* */
 	
 	var offset = parseInt(sd.inputs.Offset, 10);

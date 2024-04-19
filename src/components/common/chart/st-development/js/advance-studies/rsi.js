@@ -65,6 +65,9 @@ if (!CIQ.Studies) {
 		 *  */
 		if(sd.parameters.isComparison){
 			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
 		}
 
 		function computeRSI(avgGain, avgLoss) {

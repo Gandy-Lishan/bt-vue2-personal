@@ -130,8 +130,13 @@ if (!CIQ.Studies) {
 				sd.yAxis = actualXaxis
 				/****************** */
 				field = comparisonSymbol?.url
+				//filter valid rows
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 			}
-		}else sd.yAxis = null
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		}
 
 		var offset = parseInt(sd.inputs.Offset, 10);
 		if (isNaN(offset)) offset = 0;

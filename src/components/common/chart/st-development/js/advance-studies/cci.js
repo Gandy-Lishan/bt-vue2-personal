@@ -37,11 +37,7 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateCCI = function (stx, sd) {
 		debugger
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
+		var quotes
 
 		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
 
@@ -55,6 +51,8 @@ if (!CIQ.Studies) {
 	 *  */
 	if(sd.parameters.isComparison){
 		field = CIQ.store.getters.getComparisonSymbol.url
+		//filter valid rows
+		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		// handle calculateTypicalPrice result
 		var val
 		for (var i = 0; i < quotes.length; ++i) {
@@ -63,6 +61,12 @@ if (!CIQ.Studies) {
 				val[subField] = (val.High + val.Low + val.Close) / 3;
 			}
 		}
+	}else {
+		quotes = sd.chart.scrubbed
+	}
+	if (quotes.length < sd.days + 1) {
+		sd.error = true;
+		return;
 	}
 
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
