@@ -1077,7 +1077,7 @@ export const CommonMethodsMixin = {
 							} else {
 								data.activatedTechLayout.push({
 									url: url,
-									isComparison: false,
+									//isComparison: false,
 									criteria: criteria,
 									index: i
 								});

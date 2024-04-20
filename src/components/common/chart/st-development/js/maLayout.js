@@ -13,12 +13,12 @@ let __st_js_maLayout_ = (_exports) => {
      * @returns symbol
      */
     CIQ.setTechLayout = function (url, criteria, index) {
-        /** 根据critial判断study所属Symbol */
-        let isComparison = (criteria && criteria.endsWith('2')) || false
+        // /** 根据critial判断study所属Symbol */
+        // let isComparison = (criteria && criteria.endsWith('2')) || false
 
         var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
 
-        // remove redundant Tech
+        // 移除当前位置的indicator信息
         var TechLayoutListIndex = activatedTechLayoutList.findIndex(
             (item) => item.criteria == criteria && item.index == index
         )
@@ -31,7 +31,7 @@ let __st_js_maLayout_ = (_exports) => {
             // 如果存在dual symbol两个symbol共用同一个tech indicator,则分别保存其信息
             obj = {
                 url: url,
-                isComparison: isComparison, // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
+                //isComparison: isComparison, // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                 /**
                  * 不用考虑symbolOHLCV而加入field属性，因为我把symbolOhlcv分成了5个不同Study,每个都有其默认Field
                  */
@@ -42,9 +42,14 @@ let __st_js_maLayout_ = (_exports) => {
                 criteria: criteria,
                 index: index
             }
-            if(!(activatedTechLayoutList.find(item=>item.url == obj.url && item.isComparison == obj.isComparison))) {
+
+            // 如果列表存在同symbol下的同名indicator, 则跳过保存
+            // if(!(activatedTechLayoutList.find(item=>
+            //     item.url == obj.url && 
+            //     ((item.criteria.endsWith("2")&&obj.criteria.endsWith("2")) || (!item.criteria.endsWith("2")&&!obj.criteria.endsWith("2")))
+            //     ))) {
                 activatedTechLayoutList.push(obj)
-            }      
+           // }      
         }
         CIQ.store.commit('chart/getTechLayout', activatedTechLayoutList)
     }
