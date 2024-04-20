@@ -385,20 +385,22 @@
                             CIQ.Studies.studyLibrary[indicatorList[i]] = study
                             let activatedTechLayout = CIQ.store.state.chart.activatedTechLayout
                             activatedTechLayout.forEach(item=>{
-                                item.isComparison = (item.criteria && item.criteria.endsWith('2')) || false
+                                if(item.criteria && item.criteria.endsWith("2")){
+                                    item.symbolType = 'symbol2'
+                                }else item.symbolType = 'symbol1'
                             })
                             var urlMap = {};
                             for(var j in activatedTechLayout){
                                 var url = activatedTechLayout[j].url
-                                var isComparison = activatedTechLayout[j].isComparison
+                                var symbolType = activatedTechLayout[j].symbolType
                                 if(url == indicatorList[i]){
                                         // 检查该 URL 和 stockType 是否已经存在于 urlMap 中
                                         if (!urlMap.hasOwnProperty(url)) {
                                             urlMap[url] = {};
                                         }
 
-                                        if (!urlMap[url].hasOwnProperty(isComparison)) {
-                                            urlMap[url][isComparison] = true; // 添加当前 stockType 到 urlMap[url]
+                                        if (!urlMap[url].hasOwnProperty(symbolType)) {
+                                            urlMap[url][symbolType] = true; // 添加当前 stockType 到 urlMap[url]
                                         } else {
                                             // 如果 URL 和 stockType 已经存在，则过滤掉当前元素
                                             continue;
@@ -407,7 +409,7 @@
                                             display:indicatorList[i]
                                         },null,{
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
-                                            isComparison: isComparison,
+                                            isComparison: symbolType=='symbol2',
                                         });  
                                     // const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria
                                     // var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
