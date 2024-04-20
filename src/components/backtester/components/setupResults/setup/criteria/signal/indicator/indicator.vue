@@ -953,7 +953,7 @@ export default {
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.label, this.criteria, this.panelIndex)
-      CIQ.removeTechLayout(item.label, this.criteria)
+      CIQ.removeTechLayout(item.label, this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators({})
@@ -1052,7 +1052,7 @@ export default {
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
-      CIQ.removeTechLayout(item.label, this.criteria)
+      CIQ.removeTechLayout(item.url, this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
      if (arguments[1] != true) {
         CIQ.addIndicators({})

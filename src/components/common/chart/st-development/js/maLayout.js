@@ -54,17 +54,17 @@ let __st_js_maLayout_ = (_exports) => {
         CIQ.store.commit('chart/getTechLayout', activatedTechLayoutList)
     }
 
-    CIQ.removeTechLayout = function (url, criteria) {
-        /** 根据critial判断study所属Symbol */
-        let isComparison = (criteria && criteria.endsWith('2')) || false
-        
+    CIQ.removeTechLayout = function (url, criteria, index) {
+        // /** 根据critial判断study所属Symbol */
+        // let isComparison = (criteria && criteria.endsWith('2')) || false
+        debugger
         if (!CIQ.store.getters.getMaLikeTech.includes(url) && (CIQ.findBuiltinTechIndicator(null,url) || CIQ.findSymbolIndicator(url,null))){
             // 對undefined的判斷處理只是爲了防止報錯，因爲btv1的遷移可能存在未知的錯誤
             var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
 
             // remove redundant Tech
             var TechLayoutListIndex = activatedTechLayoutList.findIndex(
-                (item) => item.isComparison == isComparison && item.url == url
+                (item) => item.criteria == criteria && item.index == index
             )
             if (TechLayoutListIndex != -1) {
                 activatedTechLayoutList.splice(TechLayoutListIndex, 1)
