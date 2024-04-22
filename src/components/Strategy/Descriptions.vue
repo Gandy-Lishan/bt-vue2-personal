@@ -172,6 +172,7 @@ export default {
 					text = text.replace(/&gt;/g, '>')
 					text = text.replace(/&amp;/g, '&')
 					text = text.replace(/&rsquo;/g, '\'')
+					text = text.replace(/<a\b[^>]*>(.*?)<\/a>/g, '$1');
 					return text
       	}
 				// 日期转换字符串
