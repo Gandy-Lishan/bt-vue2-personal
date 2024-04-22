@@ -133,6 +133,17 @@ let __st_js_maLayout_ = (_exports) => {
 
         CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
 
+        /**
+         * 同时更新techLayout位置
+         */
+        var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
+
+        // 如tech是ma则保留第一个选项卡的ma信息
+        var activatedTechLayoutList = activatedTechLayoutList.filter(
+            (item) => item.criteria != criteria || (item.criteria == criteria && item.index == 0)
+        )
+
+        CIQ.store.commit('chart/getTechLayout', activatedTechLayoutList)
     }
     // 用于changeRelation relation==0
     CIQ.removeExitMALayout = function () {

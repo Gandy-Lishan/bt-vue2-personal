@@ -853,7 +853,6 @@ export default {
 					item.index == 0
 				)
 				this.$store.commit('chart/getMA', activatedMAList)
-
 				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteriaNum]
 				this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum, list: [indicatorList[0], ...(new Array(4).fill(''))]})
 				
