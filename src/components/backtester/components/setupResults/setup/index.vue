@@ -625,8 +625,7 @@ export default {
 		async displaySetUpForm(data) {
 			debugger
 			/* 填充和展示 Set Up 表单的数据 */
-			data.id = data.uuid
-			if(!data.id) return
+			if(!data.id && !data.uuid) return
 			let _this = this
 			if(data.strategy === 'Signal') data.strategy = 'Single'
 			const {strategy} = data
@@ -644,7 +643,7 @@ export default {
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
 			let displayData = _this.$store.getters.rowDataForDisplay
-			if(data.id === 'UUID') displayData = data
+			if(data.uuid === 'UUID') displayData = data
 			/* lishan 在这里修改数据, 检查展示有无问题 */
 			// displayData.strategy = 'Dual'
 			// displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
@@ -652,7 +651,7 @@ export default {
 			// displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
 			// displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
-			if(!hasEntryOrExit && data.id !== 'UUID') {
+			if(!hasEntryOrExit && data.uuid !== 'UUID') {
 				const res = await seeParams(data.id)
 				displayData = res.data
 			}
