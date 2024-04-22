@@ -759,6 +759,9 @@ export const CommonMethodsMixin = {
 				? JSON.parse(_backtestInfo['exit'])
 				: _backtestInfo['exit']
 
+			if(backtestInfo.strategy != 'Single') {
+				return 'We Only Support Single Symbol Backtests.'	
+			}
 			if(
 				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
 				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
