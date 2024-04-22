@@ -31,7 +31,7 @@
           </div>
           <div class="btns">
             <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button>
-            <el-button type="primary" size="mini"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
+            <el-button type="primary" size="mini"><i class="el-icon-download" style="margin-right: 10px" @click="downloadCSV"></i>Download CSV</el-button>
           </div>
         </div>
         <div class="searchBox">
@@ -41,8 +41,8 @@
         </div>
       </div>
       <br>
-      <StrategiesTable v-if="selectedTitle === 'Strategies'" ref="Strategies"></StrategiesTable>
-      <SummaryTable v-if="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap"></SummaryTable>
+      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" @getUrlToNameMap="getUrlToNameMap"></StrategiesTable>
+      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap"></SummaryTable>
     </div>
     </div>
   </div>
@@ -63,18 +63,18 @@ export default {
     StrategiesTable,
     SummaryTable
   },
-  async mounted() {
-    await this.getUrlToNameMap()
-  },
   methods: {
     portfolio() {
       this.$refs['Strategies'].portfolio()
     },
-    async getUrlToNameMap() {
-      this.urlToNameMap = await this.$refs['Strategies'].getDataList()
+    getUrlToNameMap(map) {
+      this.urlToNameMap = map
     },
     handleQuery() {
       this.$refs[this.selectedTitle].handleQuery(this.searchKey)
+    },
+    downloadCSV() {
+
     }
   }
 }
