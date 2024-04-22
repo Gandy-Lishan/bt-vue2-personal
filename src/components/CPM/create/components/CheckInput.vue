@@ -132,9 +132,9 @@ export default {
       }else if(_config.label == "Extreme Pessimism") {
         this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
-        this.errMsg = createPositiveIntegerValidate(value)
+        this.errMsg = createPositiveIntegerValidate(value, 0)
       }else if(_config.field == "ma2") {
-        this.errMsg = createPositiveIntegerValidate(value)
+        this.errMsg = createPositiveIntegerValidate(value, 0)
       }
     },
   }

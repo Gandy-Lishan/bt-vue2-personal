@@ -114,7 +114,7 @@ export default {
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-	if (to.path === '/backtester/sr/setup' && from.path.includes('/backtester')) {
+	if (to.path === '/backtester/sr/setup' && (from.path.includes('/backtester'))) {
     next(async _this => {
 				_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
 				_this.$refs['entryChild1'].clearForm()
@@ -150,7 +150,28 @@ export default {
 				_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
 				CIQ.hideCover()
     });
-  } else {
+  } else if(to.path === '/backtester/sr/setup' && from.path.includes('/strategy')){
+		next(async _this => {
+		if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+				const { data } = to.params
+				const backtestEditData = isJson(data) ? JSON.parse(data) : data
+				const {strategy, symbol, symbol2} = backtestEditData
+				_this.symbolInfo = {
+						strategy,
+						symbol,
+						symbol2
+				}
+				_this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
+				backtestEditData.user_tag = 'client'
+
+				_this.$nextTick(async () => {
+					_this.editBacktest(backtestEditData)
+				  await _this.displaySetUpForm(backtestEditData)
+				})
+		}
+		})
+	}
+	else{
     next(async _this => {
 			// 如果跳转携带 backtestID 则填充
 			const backtestID = LocalStorageUtil.get('backtestID')
@@ -602,13 +623,15 @@ export default {
 			CIQ.addIndicators({type:'outputSignalsResult',pk:backtestInfo.pk},callback)
 		},
 		async displaySetUpForm(data) {
+			debugger
 			/* 填充和展示 Set Up 表单的数据 */
+			data.id = data.uuid
 			if(!data.id) return
 			let _this = this
 			if(data.strategy === 'Signal') data.strategy = 'Single'
 			const {strategy} = data
 			_this.strategy = strategy
-			_this.$refs['basicInfo'].setEditData(data)
+			_this.$refs['basicInfo'].setEditData(JSON.parse(JSON.stringify(data)))
 			_this.symbolInfo = {
 				strategy: data.strategy,
 				symbol: data.symbol,
@@ -621,6 +644,7 @@ export default {
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
 			let displayData = _this.$store.getters.rowDataForDisplay
+			if(data.id === 'UUID') displayData = data
 			/* lishan 在这里修改数据, 检查展示有无问题 */
 			// displayData.strategy = 'Dual'
 			// displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
@@ -628,7 +652,7 @@ export default {
 			// displayData.entry2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   > 0.5","rocCond":{"newCondition":3,"conditionPeriod":"21"}}]
 			// displayData.exit2_description = [{"commentDes":"E: Long; Single Condition   Dumb Money Confidence   < 0.5","rocCond":{"newCondition":4,"conditionPeriod":"21"}}]
 			const hasEntryOrExit = Object.hasOwnProperty.call(displayData, 'entry') && Object.hasOwnProperty.call(displayData, 'exit')
-			if(!hasEntryOrExit) {
+			if(!hasEntryOrExit && data.id !== 'UUID') {
 				const res = await seeParams(data.id)
 				displayData = res.data
 			}

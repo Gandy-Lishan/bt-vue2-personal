@@ -85,7 +85,6 @@ export const createTPSLValidateRule = (minVal) => {
 export const createTPSLScopeValidateRule = (minVal, maxVal) => {
 	return (_, value, callback) => {
 		// 给 Stop Loss 和 Take Profit 用
-		debugger
 		const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
 		const isLessThanMin = Number(value) <= Number(minVal)
 		const isMatched = !pattern.test(value)
@@ -117,12 +116,15 @@ export const createEOEPValidate = (value) => {
 	}
 	return ''
 }
-export const createPositiveIntegerValidate = value => {
+export const createPositiveIntegerValidate = (value, minVal) => {
 	// 给 Time In Market 和 exclude 用
 	const pattern = /^\d+$/
-	const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
-	if (isPositiveInteger) {
+	const isPositiveInteger = isNaN(value) || value <= minVal || !pattern.test(value)
+	if (isPositiveInteger && minVal === 0) {
 		return `Enter positive integers only.`
+	}
+	if (isPositiveInteger && minVal !== 0) {
+		return `Only positive numbers > ${minVal} allowed`
 	}
 	return ''
 }

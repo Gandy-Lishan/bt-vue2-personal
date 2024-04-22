@@ -89,6 +89,21 @@ export function getStocksList() {
 	})
 }
 
+export function getStrategiesJSON() {
+	const url = '/api/strategiesJSON'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res.data = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getSampleList(page, sort, name, type) {
 	let url = `/dev/dev/strategy/?ordering=name,status,-create_date`
 	// sort -> ,total_return
@@ -1109,3 +1124,47 @@ export function getBTV1FavIndicator() {
 			})
 	})
 }
+/* Strategy Page 接口 START*/
+export function getStrategyList() {
+	return new Promise((resolve, reject) => {
+		axios
+			.get('/dev/portfolio/get_strategies/', {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getStrategySummaryList() {
+	return new Promise((resolve, reject) => {
+		axios
+			.get('/dev/portfolio/strategy_statistic/', {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getStrategyDescription(url) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(`/dev/portfolio/strategy_performance?model_url=${url}`, {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* Strategy Page 接口 END*/
