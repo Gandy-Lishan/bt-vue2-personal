@@ -408,16 +408,14 @@ export default {
 			})
 		},
 		handleQuery(searchItem) {
-			if (searchItem) {
-				// 在搜索之前对搜索关键词进行转义
-				const trimmedStr = searchItem.trim()
-				const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i')
-				this.immutableTableData = this.tableData.filter((item) => {
-					return regex.test(item.model_name)
-				})
-			}else {
-        this.immutableTableData = this.tableData
-        return this.immutableTableData
+      if (searchItem) {
+        const trimmedStr = searchItem.trim();
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
+        this.immutableTableData = this.tableData.filter((item) => {
+          return regex.test(item.model_name);
+        });
+      } else {
+        this.immutableTableData = this.tableData;
       }
 		},
 		// 使用反斜杠转义特殊字符
