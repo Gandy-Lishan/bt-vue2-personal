@@ -1212,7 +1212,6 @@ export const CommonMethodsMixin = {
 			})
 		},
 		handleCallback(backtestParams, backtestInfo) {
-			debugger
 			const _this = this
 			const start_date = backtestInfo.start_date
 			const end_date = backtestInfo.end_date

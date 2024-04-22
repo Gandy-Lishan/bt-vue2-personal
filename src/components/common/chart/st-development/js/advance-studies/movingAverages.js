@@ -107,7 +107,6 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMovingAverageDoubleExponential = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.dataSet;
 
 		var field = sd.inputs.Field;
@@ -260,7 +259,6 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMADev = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.dataSet;
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;

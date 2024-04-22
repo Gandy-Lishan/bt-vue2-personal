@@ -6069,7 +6069,6 @@ class Chart {
 		/** origin version */
 		// uiContext.changeSymbol = function(data, cb) {
 		// 	const { stx, loader, node } = uiContext
-		// 	debugger
 		// 	/** to replace the useless loader*/
 		// 	var loaderMain = document.querySelector('.loaderMain')
 		// 	if (loaderMain) loaderMain.show()

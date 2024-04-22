@@ -36,7 +36,6 @@ if (!CIQ.Studies) {
 	console.error("cci feature requires first activating studies feature.");
 } else {
 	CIQ.Studies.calculateCCI = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.scrubbed
 
 		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);

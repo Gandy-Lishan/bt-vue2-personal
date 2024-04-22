@@ -355,7 +355,6 @@ const mutations = {
 			obj.value
 	},
 	saveCondition(state, obj) {
-		debugger
 		let criteria = obj.criteria
 		let index = obj.index
 		delete obj.criteria

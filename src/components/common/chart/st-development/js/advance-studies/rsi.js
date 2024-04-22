@@ -51,7 +51,6 @@ if (!CIQ.Studies) {
 	 * @since 6.3.0 RSI can now be calculated on any field instead of just "Close".
 	 */
 	CIQ.Studies.calculateRSI = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.dataSet;
 		var field = sd.inputs.Field;
 		//var showSupLine = sd.parameters.showSupLine?sd.parameters.showSupLine:null

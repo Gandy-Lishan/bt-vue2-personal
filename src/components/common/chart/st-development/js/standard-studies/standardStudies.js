@@ -3582,7 +3582,6 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		quotes = sd.chart.scrubbed
 	}
 	/********************************* */
-	debugger
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i,
@@ -3658,7 +3657,6 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
  * @memberof CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
-	debugger
 	var type = sd.inputs.Type;
 	var quotes = sd.chart.scrubbed
 	var acc = 0;

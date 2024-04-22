@@ -37,7 +37,6 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.calculateCenterOfGravity = function (stx, sd) {
-		debugger
 		var quotes = sd.chart.scrubbed;
 		if (quotes.length < sd.days) {
 			sd.error = true;
