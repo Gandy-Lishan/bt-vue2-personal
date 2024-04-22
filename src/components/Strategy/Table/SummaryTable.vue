@@ -175,9 +175,9 @@ export default {
       return this.immutableTableData.slice(startIndex, endIndex);
 		},
 	},
-  async created() {
-    await this.getDataList()
-  },
+  // async mounted() {
+  //   await this.getDataList()
+  // },
   methods: {
     handleSizeChange(size) {
 			this.pageSize = size;
@@ -211,10 +211,11 @@ export default {
           for (const item of data) {
             item.selection = false;
             item.date = timestampToTime(item.date)
-              const {model_name, updated} = this.urlToNameMap[item.model]
+              const {model_name, updated, category} = this.urlToNameMap[item.model]
               if (model_name !== undefined) {
                   item['model_name'] = model_name;
                   item['updated'] = updated
+									item['category'] = category
               }
           }
 					this.tableData = data
@@ -327,6 +328,15 @@ export default {
 				}
 			})
 		},
+		highlightedTag(tag) {
+			// 重置分页和排序信息
+			this.currentPage = 1;
+      if (tag !== 'All') {
+        this.immutableTableData = this.tableData.filter(item => item.category === tag);
+      }else {
+        this.immutableTableData = [...this.tableData]
+      }
+		}
   }
 }
 </script>

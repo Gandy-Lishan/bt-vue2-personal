@@ -53,7 +53,6 @@ let __js_standard_studies_medianPrice_ = (_exports) => {
 		 * @memberof CIQ.Studies
 		 */
 		CIQ.Studies.calculateTypicalPrice = function (stx, sd) {
-			debugger
 			var quotes = sd.chart.scrubbed;
 			var period = sd.days;
 			if (quotes.length < period + 1) {

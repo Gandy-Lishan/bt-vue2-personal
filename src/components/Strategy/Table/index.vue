@@ -31,7 +31,7 @@
           </div>
           <div class="btns">
             <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button>
-            <el-button type="primary" size="mini"><i class="el-icon-download" style="margin-right: 10px" @click="downloadCSV"></i>Download CSV</el-button>
+            <el-button type="primary" size="mini" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
           </div>
         </div>
         <div class="searchBox">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <br>
-      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" @getUrlToNameMap="getUrlToNameMap"></StrategiesTable>
+      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
       <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap"></SummaryTable>
     </div>
     </div>
@@ -50,6 +50,8 @@
 <script>
 import StrategiesTable from "./StrategiesTable";
 import SummaryTable from "./SummaryTable";
+const XLSX = require('xlsx');
+
 export default {
   name: 'StrategyList',
   data() {
@@ -67,14 +69,43 @@ export default {
     portfolio() {
       this.$refs['Strategies'].portfolio()
     },
-    getUrlToNameMap(map) {
+    async getUrlToNameMap(map) {
       this.urlToNameMap = map
+      await this.$refs['Summary'].getDataList()
     },
     handleQuery() {
       this.$refs[this.selectedTitle].handleQuery(this.searchKey)
     },
+    highlightedTag(tag) {
+      this.$refs['Summary'].highlightedTag(tag)
+    },
     downloadCSV() {
-
+      debugger
+      // 访问组件示例数据
+      const summaryData = this.$refs['Summary'].immutableTableData
+      if (!summaryData.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+			const processedData = summaryData.map(item => {
+				return {
+					'Model Name': item.model_name,
+					'Strategy CAGR': `${item.CAGR}%`,
+					'Benchmark CAGR': `${item.benchmark_CAGR}%`,
+					'Max Drawdown': `${item.max_drawdown}%`,
+					'Net Profit(%)': `${item.net_profit_pct}%`,
+					'Sharpe Ratio': `${item.sharp_ratio}%`,
+					'Profit/Loss Ratio': `${item.profit_loss_ratio}%`,
+					'Average Win': `${item.average_win}%`,
+					'Average Loss': `${item.average_loss}%`,
+					'Total Trades': item.total_trades,
+					'Win Rate(%)': `${item.win_rate_pct}%`,
+				}
+			})
+			const ws = XLSX.utils.json_to_sheet(processedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Summary Statistics');
+      XLSX.writeFile(wb, 'Summary Statistics.xlsx');
     }
   }
 }

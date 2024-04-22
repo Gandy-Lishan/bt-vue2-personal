@@ -223,7 +223,6 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
-		debugger
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
 			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）

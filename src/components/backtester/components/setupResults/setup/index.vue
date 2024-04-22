@@ -642,8 +642,8 @@ export default {
 				但是 view result 和 edit backtest 按钮拿到的 row 数据中有 entry 和 exit,
 				所以先判断点击按钮时有没有存，没存再发请求
 			*/
-			let displayData = _this.$store.getters.rowDataForDisplay
-			if(data.uuid === 'UUID') displayData = data
+			let displayData = cloneDeep(_this.$store.getters.rowDataForDisplay)
+			if(data.uuid === 'UUID') displayData = cloneDeep(data)
 			/* lishan 在这里修改数据, 检查展示有无问题 */
 			// displayData.strategy = 'Dual'
 			// displayData.entry2 = {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SI:Dumb Money Confidence;IDS:EO/EP;SC:SV/3/0.5"}],"cond":[{"newCondition":3,"conditionPeriod":"21"}]}
@@ -663,9 +663,9 @@ export default {
 			};
 
 			const processSignals = (signals) => {
-				return Array.isArray(signals) ? signals
-					.filter(item => item.code && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code))
-					.map(value => signalCode.decode(value.code)) : [];
+				return Array.isArray(signals) ? [...signals
+					.filter(item => typeof item.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code))
+					.map(value => signalCode.decode(value.code)), ...signals.filter(item => (!('code' in item) && (typeof item === 'object')))] : []
 			};
 
 			const setEditPanel = (childRef, criteria, childName) => {

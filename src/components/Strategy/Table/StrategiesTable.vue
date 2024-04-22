@@ -98,20 +98,26 @@
 					</el-table-column>
 					<el-table-column
 						align="center"
-						:label="l.label"
 						:key="l.key"
 						show-overflow-tooltip
 						:width="l.width"
 						v-if="['btn'].includes(l.value)"
 					>
 						<template slot-scope="scope">
-							<el-button
-								round
-								size="mini"
-								type="primary"
-								icon="el-icon-right"
-								@click="handleRowClick(scope.row)"
-							></el-button>
+							<el-tooltip
+									class="item"
+									effect="dark"
+									content="With Backtest Engine"
+									placement="bottom-start"
+								>
+								<el-button
+									round
+									size="mini"
+									type="primary"
+									icon="el-icon-right"
+									@click="handleRowClick(scope.row)"
+								></el-button>
+							</el-tooltip>
 						</template>
 					</el-table-column>
 				</template>
@@ -140,7 +146,7 @@ export default {
 			tags: [
 				{ type: 'info', label: 'All', value: 'All' },
 				{ type: 'info', label: 'Legacy Index', value: 'Legacy' },
-				{ type: 'info', label: 'Index', value: 'Index' },
+				{ type: 'info', label: 'Index', value: 'INDEX' },
 				{ type: 'info', label: 'Bond', value: 'Bond' },
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' }
@@ -201,7 +207,7 @@ export default {
 			return this.immutableTableData.slice(startIndex, endIndex)
 		}
 	},
-	async created() {
+	async mounted() {
 		if (!this.tableData.length || !this.tableData) await this.getDataList()
 		await this.getStrategyJSON()
 	},
@@ -267,6 +273,7 @@ export default {
 			} else {
 				this.immutableTableData = [...this.tableData]
 			}
+			this.$emit('highlightedTag', this.highlightedTag)
 		},
 		portfolio() {
 			console.log(
@@ -308,7 +315,8 @@ export default {
 			for (const item of this.tableData) {
 				urlToNameMap[item.url] = {
 					model_name: item['model_name'],
-					updated: item['updated']
+					updated: item['updated'],
+					category: item['category']
 				}
 			}
 			this.$emit('getUrlToNameMap', urlToNameMap)
@@ -469,7 +477,7 @@ export default {
           },()=>{})
 			}
 			console.log('matchStrategy', matchStrategy)
-		}
+		},
 	}
 }
 </script>
