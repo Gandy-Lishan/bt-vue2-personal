@@ -4525,7 +4525,7 @@
   },
   {
     "uuid": "UUID",
-    "name": "Large Cap vs. Small Cap Relative Ratio Rank System",
+    "name": "Large Cap Growth vs. Value Relative Ratio Rank System",
     "symbol": "IWF",
     "benchmark": "SPX",
     "strategy": "Dual",
