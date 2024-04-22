@@ -104,6 +104,39 @@
 						v-if="['btn'].includes(l.value)"
 					>
 						<template slot-scope="scope">
+							<el-row>
+								
+							<el-tooltip
+									class="item"
+									effect="dark"
+									content="Add To Favorites" 
+									v-if="!scope.row.favorite"
+									placement="bottom-start"
+								>
+									<el-button
+										v-if="!scope.row.favorite"
+										round
+										icon="el-icon-star-off"
+										@click="addToFavorites(scope.row)"
+										size="mini"
+									></el-button>
+								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="Remove From Favorites"
+									v-if="scope.row.favorite"
+									placement="bottom-start"
+								>
+									<el-button
+										v-if="scope.row.favorite"
+										type="warning"
+										round
+										icon="el-icon-star-on"
+										@click="moveToFavorites(scope.row)"
+										size="mini"
+									></el-button>
+								</el-tooltip>
 							<el-tooltip
 									class="item"
 									effect="dark"
@@ -118,6 +151,7 @@
 									@click="handleRowClick(scope.row)"
 								></el-button>
 							</el-tooltip>
+							</el-row>
 						</template>
 					</el-table-column>
 				</template>
@@ -136,7 +170,7 @@
 </template>
 
 <script>
-import { getStrategyList, getStrategiesJSON } from '@/service/service'
+import { getStrategyList, getStrategiesJSON, addStrategyFavorites, moveStrategyFavorites } from '@/service/service'
 import { LocalStorageUtil, timestampToTime } from '@/utils'
 
 export default {
@@ -149,7 +183,8 @@ export default {
 				{ type: 'info', label: 'Index', value: 'INDEX' },
 				{ type: 'info', label: 'Bond', value: 'Bond' },
 				{ type: 'info', label: 'Factors', value: 'Factors' },
-				{ type: 'info', label: 'Sector', value: 'Sector' }
+				{ type: 'info', label: 'Sector', value: 'Sector' },
+				{ type: 'info', label: 'Favorites', value: 'Favorites' }
 			],
 			highlightedTag: 'All',
 			loading: false,
@@ -263,15 +298,18 @@ export default {
 			return true
 		},
 		highlightTag(tag) {
+			debugger
 			this.highlightedTag = tag.value
 			// 重置分页和排序信息
 			this.currentPage = 1
-			if (this.highlightedTag !== 'All') {
+			if (this.highlightedTag !== 'All' && this.highlightedTag !== 'Favorites') {
 				this.immutableTableData = this.tableData.filter(
 					(item) => item.category === this.highlightedTag
 				)
-			} else {
+			} else if(this.highlightedTag === 'All'){
 				this.immutableTableData = [...this.tableData]
+			}else if(this.highlightedTag === 'Favorites'){
+				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
 			}
 			this.$emit('highlightedTag', this.highlightedTag)
 		},
@@ -316,7 +354,8 @@ export default {
 				urlToNameMap[item.url] = {
 					model_name: item['model_name'],
 					updated: item['updated'],
-					category: item['category']
+					category: item['category'],
+					favorite: item['favorite']
 				}
 			}
 			this.$emit('getUrlToNameMap', urlToNameMap)
@@ -478,6 +517,20 @@ export default {
 			}
 			console.log('matchStrategy', matchStrategy)
 		},
+		async addToFavorites(scope) {
+			const { url } = scope
+			const res = await addStrategyFavorites({url})
+			const code = res?.data?.code
+			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully add strategies favorite')}
+			if(code == 400) {this.popUpMsgBox('Failed to add strategies favorite')}
+		},
+		async moveToFavorites(scope) {
+			const { url } = scope
+			const res = await moveStrategyFavorites(url)
+			const code = res?.data?.code
+			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully move strategies favorite')}
+			if(code == 400) {this.popUpMsgBox('Failed to move strategies favorite')}
+		}
 	}
 }
 </script>
