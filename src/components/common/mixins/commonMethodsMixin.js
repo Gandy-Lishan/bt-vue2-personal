@@ -237,7 +237,13 @@ export const CommonMethodsMixin = {
 		async loopAllFavorites() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
 				const item = this.favorite_array[i]
-				this.reloadData(item.indicator_layout, item.frequency, item)
+				this.$store.commit('form/getBacktestSymbol', item.symbol)
+				// 参考 55 行 in viewBacktestResults
+				let parsedData =
+				typeof item.indicator_layout === 'string'
+					? JSON.parse(item.indicator_layout.replaceAll('$r001$', '\u200c'))
+					: item.indicator_layout
+				this.reloadData(parsedData, item.frequency, item)
 				await CIQ.addIndicators({type:'loadFromBacktest'},() => {})
 				await this.loopCalculateNewConditions(item)
 				this.uploadCSVWhileFLS(item)
