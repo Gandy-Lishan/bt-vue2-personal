@@ -344,21 +344,27 @@
      return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech
-             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)){
+             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)
+             if(indicatorObj){
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
                     if(CIQ.store.getters.getMaLikeTech.includes(indicatorList[i])){
                         for(var j in CIQ.store.state.chart.activatedMALayout){
                             if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
+                                /** 指示Study归属的Symbol */
+                                const symbolLabel = CIQ.store.state.chart.activatedMALayout[j].criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                debugger
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
+                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`,
                                         Type: CIQ.store.state.chart.activatedMALayout[j].type,
                                         Field: CIQ.store.state.chart.activatedMALayout[j].field,
                                         Period: CIQ.store.state.chart.activatedMALayout[j].period,
                                     }
                                     : {
-                                        display: indicatorList[i]
+                                        // 目前来说maLikeTech就一个ma
+                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
                                     }
                                 const outputs = indicatorList[i] == 'ma' ? { MA: color[j%7] } : null
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],inputs,outputs,{
@@ -405,8 +411,9 @@
                                             // 如果 URL 和 stockType 已经存在，则过滤掉当前元素
                                             continue;
                                         }
+                                        const symbolLabel = CIQ.store.state.chart.activatedTechLayout[j].criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
                                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                            display:indicatorList[i]
+                                            display:`(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
                                         },null,{
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                                             isComparison: symbolType=='symbol2',
