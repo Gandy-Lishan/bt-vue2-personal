@@ -1155,11 +1155,11 @@ export default {
       return ''
     },
     validateTIM(value) {
-      this.timValidErrMsg = createPositiveIntegerValidate(value)
+      this.timValidErrMsg = createPositiveIntegerValidate(value, 0)
       return this.timValidErrMsg
     },
     validateExclude(value) {
-      this.excludeOOErrMsg = createPositiveIntegerValidate(value)
+      this.excludeOOErrMsg = createPositiveIntegerValidate(value, 0)
       return this.excludeOOErrMsg
     },
     generateBTName() {
@@ -1518,10 +1518,10 @@ export default {
           }
           nameValid = true
         }
-      /* 重名且编辑 没名字是编辑 没名字是新建 */
+      /* 重名且编辑 没名字是编辑 没名字是新建 没名字且新建(strategy) */
       nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) ||
       (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || 
-      (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid'))
+      (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && !_this.getterBacktestInfo.old_uuid)
       if(!nameValidPass) {
         _this.popUpMsgBox('The backtest name already exists');
         return false}
