@@ -1003,15 +1003,15 @@ export default {
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
 
       // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        // 当url相同,且都为同一symbol下时，跳过加载       
-        if (sd.type == item.label && 
-          (sd.parameters.isComparison == this.criteria.endsWith('2'))
-        ) {
-          return
-        }
-      }
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   // 当url相同,且都为同一symbol下时，跳过加载       
+      //   if (sd.type == item.label && 
+      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
+      //   ) {
+      //     return
+      //   }
+      // }
       CIQ.addIndicators({})
     },
     clearTechnicalSelect() {
@@ -1102,19 +1102,23 @@ export default {
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
 
-      // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
-        if (sd.type == item.url && 
-          (sd.parameters.isComparison == this.criteria.endsWith('2'))
-        ) {
-          return
-        }
-        // if (sd.type == item.url && sd.type != 'ma') {
-        //   return
-        // }
-      }
+      /**
+       * symbol1 entry&exit: (Acc -> MACD)  
+       * symbol2 entry&exit: (Acc -> MACD)  
+       */
+      // // avoid add indicator redundantly
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
+      //   if (sd.type == item.url && 
+      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
+      //   ) {
+      //     return
+      //   }
+      //   // if (sd.type == item.url && sd.type != 'ma') {
+      //   //   return
+      //   // }
+      // }
 
       if (arguments[1] != true) {
         CIQ.addIndicators({})
