@@ -247,13 +247,24 @@ const getTokenRole = () => {
   return 'None'
 }
 
-const getPropertyByString = (obj, propString) => {
-  // 设个假数据先
-  if(propString == 'aapl'){
-      return obj[propString]?.Close
-  }else{
-      return obj.Close
-  }
+/**
+ * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
+ * @param {*} obj dataSet一行数据
+ * @param {*} field symbol2 name
+ * @param {*} subField symbol2 name存在时使用的field
+ * @returns 
+ */
+const getPropertyByString = (obj, field, subField) => {
+  // if(symbol2){
+  //     return obj[symbol2]?obj[symbol2][field]:null
+  // }else{
+  //     return obj[field]
+  // }
+
+  if(!field) field = subField // 当field是流动时，比如accum里原值为quote.Low, 则：getPropertyByString(quote,field,'Low')， filed可能不存在或者为symbol2
+  var val = obj[field];   
+  if (val && typeof val == "object") val = val[subField];
+  return val
 }
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString}

@@ -833,39 +833,22 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: '',
+        criteria: this.criteria
+      })
+
 
       // 移除chartiq对应的extraIndicators
       let extraIndicators = []
@@ -903,39 +886,22 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.url,
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.url,
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: item.url,
+        criteria: this.criteria
+      })
+
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
@@ -968,42 +934,26 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: '',
+        criteria: this.criteria
+      })
+
 
       // 如果是MA，则移除它的信息和位置
-      CIQ.removeMALayout('', this.criteria, this.panelIndex)
+      CIQ.removeMALayout(item.label, this.criteria, this.panelIndex)
+      CIQ.removeTechLayout(item.label, this.criteria, this.panelIndex)
 
       // lishn 判断需要小龙写
       CIQ.addIndicators({})
@@ -1030,50 +980,38 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.label,
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.label,
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: item.label,
+        criteria: this.criteria
+      })
+
+
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
+       CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
 
       // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == item.label) {
-          return
-        }
-      }
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   // 当url相同,且都为同一symbol下时，跳过加载       
+      //   if (sd.type == item.label && 
+      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
+      //   ) {
+      //     return
+      //   }
+      // }
       CIQ.addIndicators({})
     },
     clearTechnicalSelect() {
@@ -1096,42 +1034,25 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: '',
+        criteria: this.criteria
+      })
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout(item.url, this.criteria, this.panelIndex)
+      CIQ.removeTechLayout(item.url, this.criteria, this.panelIndex)
       // lishn 判断需要小龙写
      if (arguments[1] != true) {
         CIQ.addIndicators({})
@@ -1160,52 +1081,44 @@ export default {
 
       // remove a MA tat already exists in current criteria before loadin
       var activatedMAList = CIQ.store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (ma) =>
-            ma.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            ma.criteria == this.criteria &&
-            ma.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        CIQ.store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.url,
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (ma) =>
-            ma.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            ma.criteria == this.criteria &&
-            ma.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-
-        CIQ.store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: item.url,
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (ma) =>
+          ma.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          ma.criteria == this.criteria &&
+          ma.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      CIQ.store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: item.url,
+        criteria: this.criteria
+      })
+
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+      CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
 
-      // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
-        // 暂定，去重除'ma'外
-        if (sd.type == item.url && sd.type != 'ma') {
-          return
-        }
-      }
+      /**
+       * symbol1 entry&exit: (Acc -> MACD)  
+       * symbol2 entry&exit: (Acc -> MACD)  
+       */
+      // // avoid add indicator redundantly
+      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
+      //   if (sd.type == item.url && 
+      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
+      //   ) {
+      //     return
+      //   }
+      //   // if (sd.type == item.url && sd.type != 'ma') {
+      //   //   return
+      //   // }
+      // }
 
       if (arguments[1] != true) {
         CIQ.addIndicators({})
@@ -1229,39 +1142,21 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: '',
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: '',
+        criteria: this.criteria
+      })
 
       // 如果是MA，则移除它的信息和位置
       CIQ.removeMALayout('', this.criteria, this.panelIndex)
@@ -1327,39 +1222,21 @@ export default {
 
       // remove a MA tat already exists in current criteria before loading
       var activatedMAList = this.$store.state.chart.activatedMA
-      if (this.criteria.startsWith('entry')) {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: indicatorUrl,
-          criteria: this.criteria
-        })
-      } else {
-        var MAListIndex = activatedMAList.findIndex(
-          (item) =>
-            item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
-            item.criteria == this.criteria &&
-            item.index == this.panelIndex
-        )
-        if (MAListIndex != -1) {
-          activatedMAList.splice(MAListIndex, 1)
-        }
-        this.$store.commit('chart/getMA', activatedMAList)
-        this.$store.commit('chart/getIndicators', {
-          index: this.panelIndex,
-          value: indicatorUrl,
-          criteria: this.criteria
-        })
+      var MAListIndex = activatedMAList.findIndex(
+        (item) =>
+          item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
+          item.criteria == this.criteria &&
+          item.index == this.panelIndex
+      )
+      if (MAListIndex != -1) {
+        activatedMAList.splice(MAListIndex, 1)
       }
+      this.$store.commit('chart/getMA', activatedMAList)
+      this.$store.commit('chart/getIndicators', {
+        index: this.panelIndex,
+        value: indicatorUrl,
+        criteria: this.criteria
+      })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)

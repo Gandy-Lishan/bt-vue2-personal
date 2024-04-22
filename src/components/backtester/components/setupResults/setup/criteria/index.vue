@@ -701,9 +701,10 @@ export default {
 				// 	this.signals_in_market = this.indicatorRadioArr.length
 				// }
 				//When removing a tab, remove the corresponding indicator from vuex to refresh the status
-				this.$store.commit(`chart/get${this.criteriaCapFirstL}Indicators`, {
+				this.$store.commit(`chart/getIndicators`, {
 					index: absoluteIndex,
-					value: ''
+					value: '',
+					criteria:  this.criteriaNum
 				})
 				
 				// 如果是MA，则移除它的信息和位置
@@ -854,7 +855,7 @@ export default {
 				this.$store.commit('chart/getMA', activatedMAList)
 
 				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteriaNum]
-				this.$store.commit(`chart/get${this.criteriaCapFirstL}IndicatorsList`, [indicatorList[0], ...(new Array(4).fill(''))])
+				this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum, list: [indicatorList[0], ...(new Array(4).fill(''))]})
 				
 				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 				CIQ.keepTheFirstMALayout(this.criteriaNum)
@@ -911,7 +912,7 @@ export default {
 					)
 					this.$store.commit('chart/getMA', activatedMAList)
 
-					this.$store.commit(`chart/get${this.criteriaCapFirstL}IndicatorsList`, [])
+					this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum,list:[]})
 
 					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 					CIQ.removeExitMALayout()
@@ -925,7 +926,7 @@ export default {
 						console.log(error)
 					}
 				}
-			this.$store.commit(`form/clear${this.criteriaCapFirstL}SignalArr`)
+			this.$store.commit(`form/clearSignalArr`, {criteria: this.criteriaNum})
 			this.$store.commit('form/saveRelation', {
 				criteria: this.criteriaNum,
 				value: this.relation

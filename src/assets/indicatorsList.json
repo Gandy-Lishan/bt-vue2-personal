@@ -15113,5 +15113,10 @@
         "chart_name": "Bear Market Probability Model (Weekly)",
         "url": "model_bear_market_weekly",
         "updated": "Weekly"
+    },
+    {
+        "chart_name": "COMP MA30 Spread",
+        "url": "comp_ma30_spread",
+        "updated": "Daily"
     }
 ]
