@@ -1167,4 +1167,25 @@ export function getStrategyDescription(url) {
 			})
 	})
 }
+export function addStrategyFavorites(data) {
+	const url = `/dev/portfolio/favorite_strategy`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	formData.append('model_url', data.url)
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function moveStrategyFavorites(url) {
+	return axios.delete(`/dev/portfolio/favorite_strategy?model_url=${url}`)
+}
 /* Strategy Page 接口 END*/

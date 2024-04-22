@@ -186,16 +186,6 @@ export default {
     handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
 		},
-    highlightTag(tag) {
-      this.highlightedTag = tag.value;
-      // 重置分页和排序信息
-      this.currentPage = 1;
-      if (this.highlightedTag !== 'All') {
-        this.immutableTableData = this.tableData.filter(item => item.category === this.highlightedTag);
-      }else {
-        this.immutableTableData = [...this.tableData]
-      }
-    },
     portfolio() {
       console.log('paginatedData', this.paginatedData.filter(item => item.selection))
     },
@@ -211,11 +201,12 @@ export default {
           for (const item of data) {
             item.selection = false;
             item.date = timestampToTime(item.date)
-              const {model_name, updated, category} = this.urlToNameMap[item.model]
+              const {model_name, updated, category, favorite} = this.urlToNameMap[item.model]
               if (model_name !== undefined) {
                   item['model_name'] = model_name;
                   item['updated'] = updated
 									item['category'] = category
+									item['favorite'] = favorite
               }
           }
 					this.tableData = data
@@ -331,11 +322,15 @@ export default {
 		highlightedTag(tag) {
 			// 重置分页和排序信息
 			this.currentPage = 1;
-      if (tag !== 'All') {
-        this.immutableTableData = this.tableData.filter(item => item.category === tag);
-      }else {
-        this.immutableTableData = [...this.tableData]
-      }
+			if (tag !== 'All' && tag !== 'Favorites') {
+				this.immutableTableData = this.tableData.filter(
+					(item) => item.category === tag
+				)
+			} else if(tag === 'All'){
+				this.immutableTableData = [...this.tableData]
+			}else if(tag === 'Favorites'){
+				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
+			}
 		}
   }
 }

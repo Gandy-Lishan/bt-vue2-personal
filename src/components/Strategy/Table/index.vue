@@ -80,7 +80,6 @@ export default {
       this.$refs['Summary'].highlightedTag(tag)
     },
     downloadCSV() {
-      debugger
       // 访问组件示例数据
       const summaryData = this.$refs['Summary'].immutableTableData
       if (!summaryData.length) {
