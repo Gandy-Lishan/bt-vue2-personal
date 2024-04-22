@@ -8954,7 +8954,7 @@ if (!CIQ.Studies) {
 						newChild.find("cq-label").html(_obj.chart_name)	
 						
 					}else if(_obj2){	
-						newChild.find("cq-label").html(_obj2.value);
+						newChild.find("cq-label").html(sd.inputs.display);
 
 						// hide edit icon if it's a techinical study
 						if(newChild.find(".ciq-edit").length>0){
