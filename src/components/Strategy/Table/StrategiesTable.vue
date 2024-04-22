@@ -311,6 +311,7 @@ export default {
 					updated: item['updated']
 				}
 			}
+			this.$emit('getUrlToNameMap', urlToNameMap)
 			return urlToNameMap
 		},
 		onSortChange(column) {
