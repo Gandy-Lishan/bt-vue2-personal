@@ -913,7 +913,7 @@ export default {
 					this.$store.commit('chart/getMA', activatedMAList)
 
 					this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum,list:[]})
-
+debugger
 					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
 					CIQ.removeExitMALayout()
 

@@ -496,7 +496,11 @@ export const CommonMethodsMixin = {
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
-			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency, backtestInfo)
+			let parsedData =
+			typeof backtestInfo.indicator_layout === 'string'
+				? JSON.parse(backtestInfo.indicator_layout.replaceAll('$r001$', '\u200c'))
+				: backtestInfo.indicator_layout
+			this.reloadData(parsedData, backtestInfo.frequency, backtestInfo)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
 				selectedBacktestInfo
@@ -508,6 +512,7 @@ export const CommonMethodsMixin = {
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
+			debugger
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 		},
