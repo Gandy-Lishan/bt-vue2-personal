@@ -1050,6 +1050,8 @@ export const CommonMethodsMixin = {
 					commitIndicators('exit2', data.formIndicators.exit2);
 					commitSymbol2(symbol2)
 			}else{
+				commitIndicators('entry2', []);
+				commitIndicators('exit2', []);
 				commitSymbol2()
 			}
 			this.$store.commit('chart/getExtraIndicators', [])
@@ -1099,7 +1101,6 @@ export const CommonMethodsMixin = {
 
 			// 导入btv1时不调用这个
 			 this.$store.commit('chart/setTechSD', data.savedTechSD)
-
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
