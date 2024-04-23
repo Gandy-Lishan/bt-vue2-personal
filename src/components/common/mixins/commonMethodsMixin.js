@@ -208,11 +208,16 @@ export const CommonMethodsMixin = {
 					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', [{ state: 3 }])
 					return
 				}
-				for (var i = 0; i < this.favorite_array.length; i++) {
-					// 为每个对象添加属性
-					//this.favorite_array[i].id = this.favorite_array[i].uuid;
-					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
-				}
+				this.favorite_array.forEach(item=>{
+					let parsedIndicatorLayout =
+					typeof item['indicator_layout'] === 'string'
+						? JSON.parse(item['indicator_layout'])
+						: item['indicator_layout']
+					parsedIndicatorLayout.savedTechSD = []
+					item['indicator_layout'] = JSON.stringify(parsedIndicatorLayout)
+				})
+
+
 				// 先截取第一个结果看能不能跑
 				//this.favorite_array = this.favorite_array.slice(0, 10)
 
@@ -1116,7 +1121,7 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
 			// 导入btv1时不调用这个
-			 this.$store.commit('chart/setTechSD', data.savedTechSD)
+			this.$store.commit('chart/setTechSD', data.savedTechSD)
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'
