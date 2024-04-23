@@ -570,16 +570,28 @@ if (!CIQ.Studies) {
 
 	};
 	CIQ.Studies.calculateOpeningGap = function (stx, sd) {
+		// todo: 考虑从这里开始都替换成scrubbed
 		var quotes = sd.chart.dataSet;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.dataSet
+		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
 			var lastBar = quote
 			if(i >= 1) lastBar = quotes[i-1]
 
-			if(lastBar["Close"] == 0) return 0
+			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
 			
-			quote["Result " + sd.name] = parseFloat((100 * (quote["Open"] - lastBar["Close"]) / lastBar["Close"]).toFixed(4));
+			quote["Result " + sd.name] = parseFloat((
+				100 * (getPropertyByString(quote,field,"Open") - getPropertyByString(lastBar,field,"Close")) 
+				/ getPropertyByString(lastBar,field,"Close")
+			).toFixed(4));
 		}
 	};
 	CIQ.Studies.calculateDayofWeek = function (stx, sd) {

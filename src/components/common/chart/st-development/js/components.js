@@ -8874,21 +8874,26 @@ if (!CIQ.Studies) {
 								CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
 							}
 							if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(sd.type) != -1){
-								// if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(this.params.sd.type) != -1){
-								// 	CIQ.store.commit('chart/getExtraIndicators',[])
-								// }
+								// remove item in extraIndicator
 								var extraIndicators = CIQ.store.state.chart.indicators.extraIndicators
 								extraIndicators.splice(extraIndicators.indexOf(sd.type),1)
 								CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
+
+								// remove item in Tech Layout
+								var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout?CIQ.store.state.chart.activatedTechLayout:[]
+								activatedTechLayoutList = activatedTechLayoutList.filter(item => {
+									return !(item.criteria === null || item.index === null) && item.url !== sd.type;
+								})
+								CIQ.store.commit('chart/getTechLayout', activatedTechLayoutList)
 							}else{
 							}
 							
-							// remove MA
+							// remove item in MA
 							var activatedMAList = CIQ.store.state.chart.activatedMA
 							activatedMAList.splice(activatedMAList.findIndex(item=>item.url==sd.type),1)
 							CIQ.store.commit("chart/getMA",activatedMAList)
 
-							// 给study list上选择的ma移除为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
+							// remove item in MA Layout
 							if(sd.parameters.index == null && sd.parameters.criteria == null){
 								CIQ.removeMALayout(sd.type, null, null)
 							}

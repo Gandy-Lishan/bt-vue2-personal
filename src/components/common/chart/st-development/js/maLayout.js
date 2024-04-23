@@ -77,7 +77,6 @@ let __st_js_maLayout_ = (_exports) => {
 
     CIQ.setMALayout = function (url, period, type, field, criteria, index) {
         var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-
         // remove current MA attached to an indicator
         var MALayoutListIndex = activatedMALayoutList.findIndex(
             (item) => item.criteria == criteria && item.index == index
@@ -127,7 +126,7 @@ let __st_js_maLayout_ = (_exports) => {
         var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
         // 如tech是ma则保留第一个选项卡的ma信息
-        var activatedMALayoutList = activatedMALayoutList.filter(
+        activatedMALayoutList = activatedMALayoutList.filter(
             (item) => item.criteria != criteria || (item.criteria == criteria && item.index == 0)
         )
 
@@ -150,7 +149,7 @@ let __st_js_maLayout_ = (_exports) => {
         var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 
         // 如tech是ma则保留第一个选项卡的ma信息
-        var activatedMALayoutList = activatedMALayoutList.filter(
+        activatedMALayoutList = activatedMALayoutList.filter(
             (item) => item.criteria == 'entry'
         )
 
