@@ -474,6 +474,18 @@ if (!CIQ.Studies) {
 		if (!sd.macd2Days) sd.macd2Days = parseFloat(inputs["Slow MA Period"]);
 		if (!sd.signalDays) sd.signalDays = parseFloat(inputs["Signal Period"]);
 		if (!sd.days) sd.days = Math.max(sd.macd1Days, sd.macd2Days, sd.signalDays);
+		
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		*  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
