@@ -1077,7 +1077,9 @@ export const CommonMethodsMixin = {
 			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
 
-			if (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url) {
+			//兼容sample backtest普通Tech没有此属性的情况
+			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
+				if(!data.activatedMALayout) data.activatedMALayout = []
 				data.activatedTechLayout = []; // 初始化新数组
 				const processIndicators = (indicators, criteria) => {
 					for (var i in indicators) {

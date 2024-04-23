@@ -217,21 +217,7 @@ export default {
   //         });
 	// 	}else {next()}
   // },
-  	// beforeDestroy() {
-	// 	// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-	// 	CIQ.objIndicator = []
-	// 	CIQ.store.dispatch('chart/reset_chart_study_state')
-	// 	CIQ.store.dispatch('form/reset_chart_config_state')
 
-	// 	// Destroy the ChartEngine instance when unloading the component.
-	// 	// This will stop internal processes such as quotefeed polling.
-	// 	CIQ.stxx.destroy()
-	// 	CIQ.stxx.draw()
-
-	// 	// 防止chartiq还没加载完就切换到其他页面
-	// 	CIQ.hideCover()
-	// 	CIQ.nprogress.done()
-	// },
 	computed: {
     setUpLoadingSetting() {
       // 从 Vuex store 中获取全局 loading 状态
