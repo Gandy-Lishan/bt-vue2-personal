@@ -440,7 +440,7 @@ if (!CIQ.Studies) {
 		// sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -453,6 +453,9 @@ if (!CIQ.Studies) {
 		 *  */
 		if(sd.parameters.isComparison){
 			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
 		}
 		
 		// 默认study模板
@@ -475,6 +478,15 @@ if (!CIQ.Studies) {
 		if (!sd.signalDays) sd.signalDays = parseFloat(inputs["Signal Period"]);
 		if (!sd.days) sd.days = Math.max(sd.macd1Days, sd.macd2Days, sd.signalDays);
 		
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+
+		var maType = inputs["Moving Average Type"];
+		if (!maType) maType = "exponential";
+
+		CIQ.Studies.MA(maType, sd.macd1Days, field, 0, "_MACD1", stx, sd);
+		CIQ.Studies.MA(maType, sd.macd2Days, field, 0, "_MACD2", stx, sd);
+
 		/** 
 		 * 用isComparison属性判断Study用来计算的数据源
 		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
@@ -490,15 +502,6 @@ if (!CIQ.Studies) {
 			sd.error = true;
 			return;
 		}
-
-		var field = sd.inputs.Field;
-		if (!field || field == "field") field = "Close";
-
-		var maType = inputs["Moving Average Type"];
-		if (!maType) maType = "exponential";
-
-		CIQ.Studies.MA(maType, sd.macd1Days, field, 0, "_MACD1", stx, sd);
-		CIQ.Studies.MA(maType, sd.macd2Days, field, 0, "_MACD2", stx, sd);
 
 		var i,
 			quote,
@@ -548,7 +551,7 @@ if (!CIQ.Studies) {
 	};
 	CIQ.Studies.calculateHighLowLine = function (stx, sd) {
 		
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		var points = sd.parameters.points
 
 		// 默认study模板
@@ -571,13 +574,13 @@ if (!CIQ.Studies) {
 	};
 	CIQ.Studies.calculateOpeningGap = function (stx, sd) {
 		// todo: 考虑从这里开始都替换成scrubbed
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		var field	// 它是流动的
 		if(sd.parameters.isComparison){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
-			quotes = sd.chart.dataSet
+			quotes = sd.chart.scrubbed
 		}
 
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -595,7 +598,7 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateDayofWeek = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
@@ -603,7 +606,7 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateMonthofYear = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
@@ -611,15 +614,23 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysHigh = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
-		var period = sd.inputs.Period;
-
-		if (!field || field == "field") field = "Close";
 
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -628,7 +639,9 @@ if (!CIQ.Studies) {
 				if (!quotes[i]) continue;
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
-				if (quote[field] == Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))) {
+				if (getPropertyByString(quote,field,subField) == Math.max(...(quotes.slice(sliceStart, sliceEnd).map(
+					row => getPropertyByString(row,field,subField)
+				)))) {
 					indicator = 0
 				}else {
 					if(indicator){
@@ -642,15 +655,23 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysLow = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
-		var period = sd.inputs.Period;
-
-		if (!field || field == "field") field = "Close";
 
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -659,7 +680,9 @@ if (!CIQ.Studies) {
 				if (!quotes[i]) continue;
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
-				if (quote[field] == Math.min(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))) {
+				if (getPropertyByString(quote,field,subField) == Math.min(...(quotes.slice(sliceStart, sliceEnd).map(
+					row => getPropertyByString(row,field,subField)
+				)))) {
 					indicator = 0
 				}else {
 					if(indicator){
@@ -673,17 +696,29 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysUp = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
-
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
 
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+		
 		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i]
 			if (i==0 || !quotes[i]) continue;
 			// 如果当前天收盘价高于前一天
-			if (quote[field] > quotes[i-1][field]) {
+			if (getPropertyByString(quote,field,subField) > getPropertyByString(quotes[i-1],field,subField)) {
 				indicator++
 			}else {
 				indicator = 0
@@ -692,17 +727,29 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysDown = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
-
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 
 		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i]
 			if (i==0 || !quotes[i]) continue;
 			// 如果当前天收盘价低于前一天
-			if (quote[field] < quotes[i-1][field]) {
+			if (getPropertyByString(quote,field,subField) < getPropertyByString(quotes[i-1],field,subField)) {
 				indicator++
 			}else {
 				indicator = 0
@@ -711,15 +758,13 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysAboveMA = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
-		var period = sd.inputs.Period;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -729,6 +774,17 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 		
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -736,7 +792,7 @@ if (!CIQ.Studies) {
 			if(i+1>=period){
 				var quote = quotes[i]
 				if (!quotes[i]) continue;
-				if (quote[field] <= quote["_MA " + sd.name]) {
+				if (getPropertyByString(quote,field,subField) <= quote["_MA " + sd.name]) {
 					indicator = 0
 				}else {
 					if(indicator){
@@ -750,15 +806,13 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysBelowMA = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
-		var period = sd.inputs.Period;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -768,6 +822,17 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 		
 		let indicator
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -775,7 +840,7 @@ if (!CIQ.Studies) {
 			if(i+1>=period){
 				var quote = quotes[i]
 				if (!quotes[i]) continue;
-				if (quote[field] >= quote["_MA " + sd.name]) {
+				if (getPropertyByString(quote,field,subField) >= quote["_MA " + sd.name]) {
 					indicator = 0
 				}else {
 					if(indicator){
@@ -789,15 +854,11 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysRisingMovingAverage = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
-		var period = sd.inputs.Period;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
 		if (!field || field == "field") field = "Close";
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -808,6 +869,17 @@ if (!CIQ.Studies) {
 			sd
 		);
 		
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
 		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if (i<period || !quotes[i]) continue;
@@ -821,15 +893,11 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateConsecutiveDaysDecliningMovingAverage = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
-		var period = sd.inputs.Period;
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
 		if (!field || field == "field") field = "Close";
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -839,6 +907,17 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+		
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
 		
 		let indicator = 0
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -853,16 +932,12 @@ if (!CIQ.Studies) {
 		}
 	};
 	CIQ.Studies.calculateDeviationFromTrendBetweenTwoMovingAverages = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-
+		var quotes = sd.chart.scrubbed;
 		var period_short = sd.inputs.periodShort;
 		var period_long = sd.inputs.periodLong;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			period_short,
@@ -881,6 +956,18 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if (i+1< Math.max(period_short, period_long) || !quotes[i]) continue;
 		
@@ -948,15 +1035,23 @@ if (!CIQ.Studies) {
 	// 	}
 	// };
 	CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
-		var period = sd.inputs.Period;
-
-		if (!field || field == "field") field = "Close";
 
 		let result
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -966,31 +1061,29 @@ if (!CIQ.Studies) {
 				const sliceStart = i + 1 - period
 				const sliceEnd = i + 1
 				/** 防止分母为0或者null */
-				let highestPrice = Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => row[field])))
-				result = highestPrice?(quote[field]/highestPrice-1)*100:0
+				let highestPrice = Math.max(...(quotes.slice(sliceStart, sliceEnd).map(row => getPropertyByString(row,field,subField))).filter(i=>!(isNaN(i) || i==null)))
+				result = highestPrice?(getPropertyByString(quote,field,subField)/highestPrice-1)*100:0
 			}
 			quotes[i]["Result " + sd.name] = result;
 		}
 	};
 	CIQ.Studies.calculatePercentageAboveNDayLow = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
-		var period = sd.inputs.Period;
-		
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
 		if (!field || field == "field") field = "Close";
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
-		/** 
-		 * 用isComparison属性判断Study用来计算的数据源
-		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
-		 * ma和roc就是用critria判断Study用来计算的数据源
-		 *  */
+
 		if(sd.parameters.isComparison){
 			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
 		}
 
 		let result

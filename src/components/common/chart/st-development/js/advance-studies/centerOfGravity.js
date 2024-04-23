@@ -22,6 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_centerOfGravity_ = (_exports) => {
@@ -38,17 +39,32 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateCenterOfGravity = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		*  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
-		if (!field || field == "field") field = "Close";
+
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			var num = 0,
 				den = 0;
 			for (var j = 0; j < sd.days; j++) {
-				var val = quotes[i - j][field];
+				var val = getPropertyByString(quotes[i - j],field,subField);
 				num -= (j + 1) * val;
 				den += val;
 			}

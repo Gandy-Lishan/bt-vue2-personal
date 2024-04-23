@@ -56,7 +56,16 @@ if (!CIQ.Studies) {
 		if (!sd.macd2Days) sd.macd2Days = parseFloat(inputs["Slow MA Period"]);
 		if (!sd.signalDays) sd.signalDays = parseFloat(inputs["Signal Period"]);
 		if (!sd.days) sd.days = Math.max(sd.macd1Days, sd.macd2Days, sd.signalDays);
-debugger
+
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+
+		var maType = inputs["Moving Average Type"];
+		if (!maType) maType = "exponential";
+
+		CIQ.Studies.MA(maType, sd.macd1Days, field, 0, "_MACD1", stx, sd);
+		CIQ.Studies.MA(maType, sd.macd2Days, field, 0, "_MACD2", stx, sd);
+
 		/** 
 		 * 用isComparison属性判断Study用来计算的数据源
 		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
@@ -72,15 +81,6 @@ debugger
 			sd.error = true;
 			return;
 		}
-
-		var field = sd.inputs.Field;
-		if (!field || field == "field") field = "Close";
-
-		var maType = inputs["Moving Average Type"];
-		if (!maType) maType = "exponential";
-
-		CIQ.Studies.MA(maType, sd.macd1Days, field, 0, "_MACD1", stx, sd);
-		CIQ.Studies.MA(maType, sd.macd2Days, field, 0, "_MACD2", stx, sd);
 
 		var i,
 			quote,
