@@ -419,13 +419,6 @@
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                                             isComparison: symbolType=='symbol2',
                                         });  
-                                    // const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria
-                                    // var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                    //     display:indicatorList[i]
-                                    // },null,{
-                                    //     // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
-                                    //     isComparison: (criteria && criteria.endsWith('2')) || false,
-                                    // });   
                                 }
                             }
                         }
