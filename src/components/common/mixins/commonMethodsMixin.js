@@ -208,11 +208,16 @@ export const CommonMethodsMixin = {
 					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', [{ state: 3 }])
 					return
 				}
-				for (var i = 0; i < this.favorite_array.length; i++) {
-					// 为每个对象添加属性
-					//this.favorite_array[i].id = this.favorite_array[i].uuid;
-					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
-				}
+				this.favorite_array.forEach(item=>{
+					let parsedIndicatorLayout =
+					typeof item['indicator_layout'] === 'string'
+						? JSON.parse(item['indicator_layout'])
+						: item['indicator_layout']
+					parsedIndicatorLayout.savedTechSD = []
+					item['indicator_layout'] = JSON.stringify(parsedIndicatorLayout)
+				})
+
+
 				// 先截取第一个结果看能不能跑
 				//this.favorite_array = this.favorite_array.slice(0, 10)
 
@@ -496,7 +501,11 @@ export const CommonMethodsMixin = {
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
-			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency, backtestInfo)
+			let parsedData =
+			typeof backtestInfo.indicator_layout === 'string'
+				? JSON.parse(backtestInfo.indicator_layout.replaceAll('$r001$', '\u200c'))
+				: backtestInfo.indicator_layout
+			this.reloadData(parsedData, backtestInfo.frequency, backtestInfo)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
 				selectedBacktestInfo
@@ -508,6 +517,7 @@ export const CommonMethodsMixin = {
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
+			debugger
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 		},
@@ -1072,7 +1082,9 @@ export const CommonMethodsMixin = {
 			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
 
-			if (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url) {
+			//兼容sample backtest普通Tech没有此属性的情况
+			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
+				if(!data.activatedMALayout) data.activatedMALayout = []
 				data.activatedTechLayout = []; // 初始化新数组
 				const processIndicators = (indicators, criteria) => {
 					for (var i in indicators) {
@@ -1109,7 +1121,7 @@ export const CommonMethodsMixin = {
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
 			// 导入btv1时不调用这个
-			 this.$store.commit('chart/setTechSD', data.savedTechSD)
+			this.$store.commit('chart/setTechSD', data.savedTechSD)
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'

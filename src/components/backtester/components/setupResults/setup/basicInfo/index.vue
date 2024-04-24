@@ -1418,10 +1418,19 @@ export default {
 				// 清空symbol2对应的symbol
 				this.$store.commit('form/setComparisonSymbol', {})
 
-				// todo: 移除symbol2的activatedMA
+				// 移除symbol2的activatedMA
 				var activatedMAList = CIQ.store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
 				this.$store.commit('chart/getMA', activatedMAList)
+
+        // 移除symbol2的activatedTechLayout, activatedMALayout
+        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+				activatedMALayoutList = activatedMALayoutList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
+				this.$store.commit('chart/getMALayout', activatedMALayoutList)
+
+        var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout
+				activatedTechLayoutList = activatedTechLayoutList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
+				this.$store.commit('chart/getTechLayout', activatedTechLayoutList)
 
 				CIQ.addIndicators({})
 			}else {
