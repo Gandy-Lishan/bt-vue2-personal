@@ -191,7 +191,7 @@ export default {
 			pageSize: 10, // Default page size
 			currentPage: 1, // Default current page
 			total: 0,
-			searchKey: '',
+			searchItem: '',
 			tableCol: [
 				{
 					label: 'Model Name',
@@ -310,6 +310,14 @@ export default {
 				this.immutableTableData = [...this.tableData]
 			}else if(this.highlightedTag === 'Favorites'){
 				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
+			}
+			// 如果有 searchItem, 进一步处理
+			if(this.searchItem) {
+				const trimmedStr = this.searchItem.trim();
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
+        this.immutableTableData = this.immutableTableData.filter((item) => {
+          return regex.test(item.model_name);
+        });
 			}
 			this.$emit('highlightedTag', this.highlightedTag)
 		},
@@ -457,14 +465,16 @@ export default {
 			})
 		},
 		handleQuery(searchItem) {
+			this.searchItem = searchItem
+			this.highlightTag({ type: 'info', label: 'All', value: 'All' })
       if (searchItem) {
         const trimmedStr = searchItem.trim();
         const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
-        this.immutableTableData = this.tableData.filter((item) => {
+        this.immutableTableData = this.immutableTableData.filter((item) => {
           return regex.test(item.model_name);
         });
       } else {
-        this.immutableTableData = this.tableData;
+        this.immutableTableData = this.immutableTableData;
       }
 		},
 		// 使用反斜杠转义特殊字符
