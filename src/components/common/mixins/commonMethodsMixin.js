@@ -534,7 +534,7 @@ export const CommonMethodsMixin = {
 				exitSignals = exitSignals.filter(item => item)
 				conditionRadioMap(entrySignals,exitSignals, entryType, exitType)
 				await processSignals(entrySignals, entryType)
-				await processSignals(entrySignals, exitType)
+				await processSignals(exitSignals, exitType)
 			}
 			await decodeAndMapConditionRadio('entry', 'exit')
 			if(strategy === 'Dual') await decodeAndMapConditionRadio('entry2', 'exit2')
@@ -669,7 +669,7 @@ export const CommonMethodsMixin = {
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			/** 指示Study归属的Symbol */
-			const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
 
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
