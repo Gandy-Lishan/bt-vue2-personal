@@ -184,14 +184,14 @@ export default {
 				{ type: 'info', label: 'Bond', value: 'Bond' },
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
-				{ type: 'info', label: 'Favorites', value: 'Favorites' }
+				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
 			],
 			highlightedTag: 'All',
 			loading: false,
 			pageSize: 10, // Default page size
 			currentPage: 1, // Default current page
 			total: 0,
-			searchKey: '',
+			searchItem: '',
 			tableCol: [
 				{
 					label: 'Model Name',
@@ -311,6 +311,14 @@ export default {
 			}else if(this.highlightedTag === 'Favorites'){
 				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
 			}
+			// 如果有 searchItem, 进一步处理
+			if(this.searchItem) {
+				const trimmedStr = this.searchItem.trim();
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
+        this.immutableTableData = this.immutableTableData.filter((item) => {
+          return regex.test(item.model_name);
+        });
+			}
 			this.$emit('highlightedTag', this.highlightedTag)
 		},
 		portfolio() {
@@ -348,6 +356,7 @@ export default {
 				this.immutableTableData = this.tableData
 			} finally {
 				this.loading = false
+				LocalStorageUtil.set('strategiesList', this.tableData)
 			}
 			const urlToNameMap = {}
 			for (const item of this.tableData) {
@@ -456,14 +465,16 @@ export default {
 			})
 		},
 		handleQuery(searchItem) {
+			this.searchItem = searchItem
+			this.highlightTag({ type: 'info', label: 'All', value: 'All' })
       if (searchItem) {
         const trimmedStr = searchItem.trim();
         const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
-        this.immutableTableData = this.tableData.filter((item) => {
+        this.immutableTableData = this.immutableTableData.filter((item) => {
           return regex.test(item.model_name);
         });
       } else {
-        this.immutableTableData = this.tableData;
+        this.immutableTableData = this.immutableTableData;
       }
 		},
 		// 使用反斜杠转义特殊字符
