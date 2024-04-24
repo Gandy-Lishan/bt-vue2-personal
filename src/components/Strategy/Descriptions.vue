@@ -193,7 +193,7 @@ export default {
 							<ul>
 								<li>Last updated ${formatDate(end_date)}</li>
 								<li>
-									Backtest timeframe: <b>${timestampToTime(start_date)} to ${timestampToTime(start_date)}</b>. NOTE:
+									Backtest timeframe: <b>${timestampToTime(start_date)} to ${timestampToTime(end_date)}</b>. NOTE:
 									These dates were chosen to provide the same coverage across
 									all signals and ETF's used in those signals and are
 									dependant on ETF start dates.

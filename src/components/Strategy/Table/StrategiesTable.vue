@@ -184,7 +184,7 @@ export default {
 				{ type: 'info', label: 'Bond', value: 'Bond' },
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
-				{ type: 'info', label: 'Favorites', value: 'Favorites' }
+				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
 			],
 			highlightedTag: 'All',
 			loading: false,
@@ -348,6 +348,7 @@ export default {
 				this.immutableTableData = this.tableData
 			} finally {
 				this.loading = false
+				LocalStorageUtil.set('strategiesList', this.tableData)
 			}
 			const urlToNameMap = {}
 			for (const item of this.tableData) {
