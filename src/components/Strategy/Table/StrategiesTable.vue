@@ -201,28 +201,32 @@ export default {
 				{
 					label: 'Current Signal: (e.g., Long, Sell, etc)',
 					value: 'current_state',
-
-					key: 'current_state'
+					key: 'current_state',
+					width: '300px'
 				},
 				{
 					label: 'Last Signal Date: (last change in Signal)',
 					value: 'date',
-					key: 'date'
+					key: 'date',
+					width: '300px'
 				},
 				{
 					label: 'Model Update Frequency',
 					value: 'update_frequency',
-					key: 'update_frequency'
+					key: 'update_frequency',
+					width: '300px'
 				},
 				{
 					label: 'YTD until 04/30/23 Return(%)',
 					value: 'YTD_return',
-					key: 'YTD_return'
+					key: 'YTD_return',
+					width: '200px'
 				},
 				{
 					label: 'To BTV3',
 					value: 'btn',
-					key: 'btn'
+					key: 'btn',
+					width: '150px'
 				}
 			],
 			tableData: [],

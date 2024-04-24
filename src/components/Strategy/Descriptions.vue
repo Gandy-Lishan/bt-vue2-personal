@@ -172,7 +172,57 @@ export default {
 					text = text.replace(/&gt;/g, '>')
 					text = text.replace(/&amp;/g, '&')
 					text = text.replace(/&rsquo;/g, '\'')
-					text = text.replace(/<a\b[^>]*>(.*?)<\/a>/g, '$1');
+					const getUrl = (name) => {
+						let url, url2
+						switch (name) {
+								case 'Dual Trend Model With Fundamentals':
+									url = 'https://users.sentimentrader.com/users/signal_descriptions/dual_trend_model';
+										break;
+								case 'Short-Term Combined Model':
+									url = 'https://users.sentimentrader.com/users/charts/st_combined';
+										break;
+								case 'Simple Trading Model with Fundamentals and Sentiment':
+									url = 'https://sentimentrader.com/blog/applying-sentiment-indicators-to-different-models';
+										break;
+								case 'Dual Trend Model with Fundamentals and Sentiment':
+									url = 'https://users.sentimentrader.com/users/signal_descriptions/dual_trend_model_with_fundamentals'
+									url2 = 'https://www.sentimentrader.com/blog/applying-sentiment-indicators-to-different-models'
+									break;
+								case 'High Yield Golden Cross':
+									url = 'https://users.sentimentrader.com/users/charts/breadth_bonds_hy_adline'
+									url2 = 'https://www.sentimentrader.com/blog/whats-the-message-from-the-junk-bond-market'
+									break;
+								case 'Aggregate Signal Model':
+									url = 'https://users.sentimentrader.com/users/charts/aggregate_model'
+									url2 = 'https://sentimentrader.com/users/signals'
+									break;
+								case 'Last Hour Strategy':
+									url = 'https://www.sentimentrader.com/blog/a-sell-signal-in-the-cumulative-advance-decline-line-for-the-last-hour-of-trading'
+									break;
+								case 'Macro Index Model':
+									url = 'https://users.sentimentrader.com/users/charts/macro_index_model'
+									break;
+								case 'Conference Board LEI Model with Sentiment':
+									url = 'https://www.sentimentrader.com/blog/applying-sentiment-indicators-to-different-models'
+									break;
+								default:
+									url = '#';
+						}
+						return {url, url2}
+						}
+					// 替换 <a> 标签的 href 属性
+					const {url, url2} = getUrl(_this.title)
+					let counter = 0; // 计数器用于区分不同的<a>标签
+					text = text.replace(/<a\b[^>]*href=\"([^"]*)\"[^>]*>(.*?)<\/a>/g, (match, href, content) => {
+						counter++
+						if (counter === 1) {
+								return `<a href="${url}">${content}</a>`
+						} else if (counter === 2) {
+								return `<a href="${url2}">${content}</a>`
+						} else {
+								return match
+						}
+					})
 					return text
       	}
 				// 日期转换字符串
