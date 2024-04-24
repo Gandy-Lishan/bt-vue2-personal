@@ -106,6 +106,7 @@ MarkersSample.prototype.showmMarker = function () {
 	//var markerTypes = ["analysis","dividend"];
 	let { stx } = this;
 	// const startTime = performance.now()
+	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
@@ -183,21 +184,6 @@ MarkersSample.prototype.showmMarker = function () {
 			
 			// 绘制Marker
 			if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "BUY"){
-				// let marker = new CIQ.Marker({
-				// 	stx: stx,
-				// 	label: "circle",
-				// 	xPositioner: "date",
-				// 	yPositioner: "below_candle",
-				// 	x: standardDate,
-				// 	node: new CIQ.Marker.STSimple({
-				// 		type: "circle",
-				// 		headline: mDataSet[data].Type,
-				// 		category: markerTypes[color],
-				// 		story:
-				// 			 'trade entered on ' +  mDataSet[data].DT + '\nat ' + mDataSet[data].Price + '\ndue to ' + mDataSet[data]['Indicator'][0]
-				// 	})
-					
-				// });
 				new CIQ.Marker({
 					stx: stx,
 					label: "triangle_buy",
@@ -219,17 +205,28 @@ MarkersSample.prototype.showmMarker = function () {
 				// 循环所有study
 				if(!quote) continue
 				for(var i in CIQ.stxx.layout.studies){
-					const panel = CIQ.stxx.layout.studies[i]['panel'] 
+					var sd = CIQ.stxx.layout.studies[i]
+					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+					/** dot只会绘制在Study所属的Symbol下 */
+					if(isSymbol2) continue
+
+					const panel = sd['panel'] 
+					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+					const plotField = sd.panel == 'chart' && isSymbol2
+										? comparisonSymbol.url
+										: null
 					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-					for(var type in CIQ.stxx.layout.studies[i]['outputMap']){
+					for(var type in sd['outputMap']){
 						if(Object.keys(quote).indexOf(type)==-1) continue
 						const yAxis = quote[type]
 						// 添加study panel对应的小点
 						new CIQ.Marker({
 							stx: stx,
 							xPositioner: "date",
+							// yPositioner: plotField?"below_candle":"value",
 							yPositioner: "value",
-							y:yAxis,
+							plotField: plotField,	// 以field判断设定y轴
+							y:yAxis,	// 设y轴的定值
 							panelName: panel,
 							x: xPosition,
 							label: "dot_buy",
@@ -243,19 +240,6 @@ MarkersSample.prototype.showmMarker = function () {
 					}
 				}	
 			}else if(activeLabels.includes("triangle_sell") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "SELL"){
-				// let marker = new CIQ.Marker({
-				// 	stx: stx,
-				// 	label: "circle",
-				// 	xPositioner: "date",
-				// 	x: standardDate,
-				// 	node: new CIQ.Marker.STSimple({
-				// 		type: "circle",
-				// 		headline: mDataSet[data].Type,
-				// 		category: markerTypes[color],
-				// 		story:
-				// 			'trade entered on ' +  mDataSet[data].DT + '\nat ' + mDataSet[data].Price + '\ndue to ' + mDataSet[data]['Indicator'][0]
-				// 	})
-				// });
 				new CIQ.Marker({
 					stx: stx,
 					label: "triangle_sell",
@@ -276,17 +260,28 @@ MarkersSample.prototype.showmMarker = function () {
 				// 循环所有study
 				if(!quote) continue
 				for(var i in CIQ.stxx.layout.studies){
-					const panel = CIQ.stxx.layout.studies[i]['panel'] 
+					var sd = CIQ.stxx.layout.studies[i]
+					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+					/** dot只会绘制在Study所属的Symbol下 */
+					if(isSymbol2) continue
+
+					const panel = sd['panel'] 
+					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+					const plotField = sd.panel == 'chart' && isSymbol2
+										? comparisonSymbol.url
+										: null
 					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-					for(var type in CIQ.stxx.layout.studies[i]['outputMap']){
+					for(var type in sd['outputMap']){
 						if(Object.keys(quote).indexOf(type)==-1) continue
 						const yAxis = quote[type]
 						// 添加study panel对应的小点
 						new CIQ.Marker({
 							stx: stx,
 							xPositioner: "date",
+							// yPositioner: plotField?"below_candle":"value",
 							yPositioner: "value",
-							y:yAxis,
+							plotField: plotField,	// 以field判断设定y轴
+							y:yAxis,	// 设y轴的定值
 							panelName: panel,
 							x: xPosition,
 							label: "dot_sell",
@@ -304,9 +299,7 @@ MarkersSample.prototype.showmMarker = function () {
 	}
 
 	/** dual symbol */
-	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	//var actualXaxis = stx.getYAxisByField(stx.panels[stx.chart.series[comparisonSymbol.url].parameters.panel], comparisonSymbol.url);
-	
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 
@@ -391,17 +384,28 @@ MarkersSample.prototype.showmMarker = function () {
 			// 循环所有study
 			if(!quote) continue
 			for(var i in CIQ.stxx.layout.studies){
-				const panel = CIQ.stxx.layout.studies[i]['panel'] 
+				var sd = CIQ.stxx.layout.studies[i]
+				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+				if(!isSymbol2) continue
+
+				const panel = sd['panel'] 
+				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+				const plotField = sd.panel == 'chart' && isSymbol2
+									? comparisonSymbol.url
+									: null
+				if(sd.type == 'ST MA') debugger
 				// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-				for(var type in CIQ.stxx.layout.studies[i]['outputMap']){
+				for(var type in sd['outputMap']){
 					if(Object.keys(quote).indexOf(type)==-1) continue
 					const yAxis = quote[type]
 					// 添加study panel对应的小点
 					new CIQ.Marker({
 						stx: stx,
 						xPositioner: "date",
+						// yPositioner: plotField?"below_candle":"value",
 						yPositioner: "value",
-						y:yAxis,
+						plotField: plotField,	// 以field判断设定y轴
+						y:yAxis,	// 设y轴的定值
 						panelName: panel,
 						x: xPosition,
 						label: "dot_buy",
@@ -436,17 +440,28 @@ MarkersSample.prototype.showmMarker = function () {
 			// 循环所有study
 			if(!quote) continue
 			for(var i in CIQ.stxx.layout.studies){
-				const panel = CIQ.stxx.layout.studies[i]['panel'] 
+				var sd = CIQ.stxx.layout.studies[i]
+				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+				/** dot只会绘制在Study所属的Symbol下 */
+				if(!isSymbol2) continue
+
+				const panel = sd['panel'] 
+				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+				const plotField = sd.panel == 'chart' && isSymbol2
+									? comparisonSymbol.url
+									: null
 				// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-				for(var type in CIQ.stxx.layout.studies[i]['outputMap']){
+				for(var type in sd['outputMap']){
 					if(Object.keys(quote).indexOf(type)==-1) continue
 					const yAxis = quote[type]
 					// 添加study panel对应的小点
 					new CIQ.Marker({
 						stx: stx,
 						xPositioner: "date",
+						// yPositioner: plotField?"below_candle":"value",
 						yPositioner: "value",
-						y:yAxis,
+						plotField: plotField,	// 以field判断设定y轴
+						y:yAxis,	// 设y轴的定值
 						panelName: panel,
 						x: xPosition,
 						label: "dot_sell",
