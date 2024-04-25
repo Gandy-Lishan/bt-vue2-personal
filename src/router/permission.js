@@ -189,13 +189,14 @@ async function initiateIndicatorList() {
 				let newName = item.url + ' Optix'
 				newAllSymbolsList.push({
 					chart_name: newName,
-					url: item.url,
+					url: item.url + '@indicator',
 					updated: item.updated
 				})
 			} else {
 				newAllSymbolsList.push(allSymbolsList[i])
 			}
 		}
+
 		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 		CIQ.indicatorList = newAllSymbolsList
 		store.commit('chart/getIndicatorsList', newAllSymbolsList)

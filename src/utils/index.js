@@ -267,4 +267,11 @@ const getPropertyByString = (obj, field, subField) => {
   return val
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString}
+const recoverSymbolOptixUrl = (url) => {
+  if(url && url.endsWith('@indicator')){
+      var i = url.indexOf('@indicator')
+      return url.slice(0,i)
+  }else return url
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl}
