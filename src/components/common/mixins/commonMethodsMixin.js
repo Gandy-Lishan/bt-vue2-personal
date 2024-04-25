@@ -615,10 +615,16 @@ export const CommonMethodsMixin = {
 			} else if (indicator_url && analysis === 'User') {
 				// 考虑到User自定义的indicator_url是name,所以需要和senti区分开判断
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
-					const url = CIQ.stxx.layout.studies[studyInstanceName].inputs.Field
+					const url = CIQ.stxx.layout.studies[studyInstanceName].type
 					let field
-					if(url && url.indexOf('CREATE') != -1) field = url.split(/CREATE/)[0]
-					if(url && url.indexOf('HASH') != -1) field = url.split(/HASH/)[0]
+					if(url && url.indexOf('CREATE') != -1){
+						field = url.split(/CREATE/)[0]
+						fieldName = url
+					}
+					if(url && url.indexOf('HASH') != -1){
+						field = url.split(/HASH/)[0]
+						fieldName = url
+					}
 					if (
 						field == indicator_url &&
 						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==

@@ -8,6 +8,7 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
+import {recoverSymbolOptixUrl} from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -170,7 +171,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         let sentiIndicatorRes = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
                         if(sentiIndicatorRes){
                             freqList.push(sentiIndicatorRes.updated)
-                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
                             valid++
                             continue
                         }
@@ -184,7 +185,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                                 let timeframeCode = CIQ.objIndicator[i].slice(-1)
                                 freqList.push(timeframeCode=='0'?'Daily':timeframeCode=='1'?'Weekly':'Monthly')
                             }
-                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
                             valid++
                             continue
                         }
@@ -729,5 +730,6 @@ function findEarliestIndicator(data) {
     return earliestDate;
 }
   
+
 
 export default quoteFeedSimulator;

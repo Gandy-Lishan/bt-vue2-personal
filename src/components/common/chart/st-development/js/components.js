@@ -672,7 +672,7 @@ class ChartLegend extends CIQ.UI.ContextTag {
 }
 
 ChartLegend.markup = `
-		<cq-study-legend cq-chart-legend cq-marker-label="Plots" cq-clone-to-panels="Plots" cq-panel-only cq-marker cq-hovershow cq-content-keys="cq-label,cq-comparison-label">
+		<cq-study-legend cq-chart-legend cq-marker-label="Plots" cq-clone-to-panels="Plots" cq-panel-only cq-marker cq-hovershow cq-content-keys="cq-label,cq-comparison-label" style="z-index:0;">
 			<cq-comparison>
 				<cq-comparison-key cq-panel-only cq-all-series>
 					<template cq-comparison-item>
@@ -8943,7 +8943,6 @@ if (!CIQ.Studies) {
 					// filter MA in studylist
 					
 					var series = CIQ.stxx.chart.series[sd.inputs.Field];	// myIndicator里面序列的stma有标题组件
-					debugger
 					if (sd.type == 'ST MA' && !series) continue;
 					if (sd.customLegend) continue;
 					if (customRemovalOnly && !sd.study.customRemoval) continue;

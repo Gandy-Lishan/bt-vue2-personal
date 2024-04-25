@@ -5,7 +5,7 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
- import {maxNumOfStudy} from '@/utils'
+ import {maxNumOfStudy,recoverSymbolOptixUrl} from '@/utils'
  import qs from 'querystring'
  import {
     searchIndicator,
@@ -537,7 +537,7 @@
              }
  
              var queryUrl =  config.indicatorMetadata + 
-             "?indicator=" + indicatorList[i];
+             "?indicator=" + recoverSymbolOptixUrl(indicatorList[i]);
              let _res = new Promise((resolve,reject)=>{ 
                  CIQ.axios.get(
                      queryUrl,
