@@ -200,7 +200,6 @@ export default {
     watch: {
 		tradesData: {
 			handler(newValue, _){
-                debugger
                 const mergedData = [];
                 for (let i = 0; i < newValue.length; i += 2) {
                     const entryData = newValue[i];
