@@ -72,6 +72,7 @@ export default {
 				// 创建新CPM
 				this.$emit('calculateBarDistance')
 				CIQ.hideCover()
+				CIQ.nprogress.done()
 			}
 		},
 		hideComponents() {
