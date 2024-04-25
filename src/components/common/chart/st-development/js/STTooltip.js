@@ -491,6 +491,9 @@ if (!CIQ.Marker) {
              if (showStudies) {
                  for (var study in this.layout.studies) {
                      var sd = this.layout.studies[study];
+                     const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+                     const symbolLabel = isSymbol2?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
                      for (var output in this.layout.studies[study].outputMap) {
@@ -533,7 +536,7 @@ if (!CIQ.Marker) {
                          else if (output && !dupMap[output]) {
                              fields.push({
                                  member: output,
-                                 display: output,
+                                 display: `${output}(${symbolLabel})`,
                                  panel: panel,
                                  yAxis: yAxis
                              });
