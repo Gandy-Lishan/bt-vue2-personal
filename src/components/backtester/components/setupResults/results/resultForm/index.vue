@@ -247,6 +247,9 @@ export default {
 .result-container {
 	padding: 40px 10px 0 10px;
 	margin-bottom: 20px;
+	/deep/ .el-input--mini .el-input__inner {
+		margin-left: 0px;
+	}
 }
 @media (min-width: 1680px) {
 	.comUnitNote {
