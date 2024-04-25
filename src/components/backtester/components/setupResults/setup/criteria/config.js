@@ -29,7 +29,7 @@ export function generateConfig(criteriaWithNumber) {
 		criteriaTitle: `${capFirstL} Criteria`,
 		criteriaTitleTP: `Set the criteria/criterias which trigger the backtest ${criteria}
     criteria.<br />
-    Choose one of the three options for ${criteria} criteria:<br />
+    Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for ${criteria} criteria:<br />
     1. Single Condition: One condition will trigger the backtest
     condition.<br />
     2. SameBar Multi-Condition: More than one conditions (limit to 5)
