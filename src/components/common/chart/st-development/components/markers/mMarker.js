@@ -93,14 +93,14 @@ MarkersSample.prototype.showmMarker = function () {
 	let activeLabels = []
 	if(!markerVisibilityType){
 		activeLabels.push(...["triangle_buy","triangle_sell","dot_buy","dot_sell"])
-		// if(mDataSet2.length>0){
-		// 	activeLabels.push(...["triangle_buy_2","triangle_sell_2","dot_buy_2","dot_sell_2"])
-		// }
+		if(mDataSet2.length>0){
+			activeLabels.push(...["triangle_buy_2","triangle_sell_2","dot_buy_2","dot_sell_2"])
+		}
 	}else{
 		activeLabels.push(...[markerVisibilityType,markerVisibilityType == "triangle_buy"?'dot_buy':'dot_sell'])
-		// if(mDataSet2.length>0){
-		// 	activeLabels.push(...[markerVisibilityType,markerVisibilityType == "triangle_buy_2"?'dot_buy_2':'dot_sell_2'])
-		// }
+		if(mDataSet2.length>0){
+			activeLabels.push(...[markerVisibilityType,markerVisibilityType == "triangle_buy_2"?'dot_buy_2':'dot_sell_2'])
+		}
 	}
 
 	//var markerTypes = ["analysis","dividend"];
@@ -352,10 +352,10 @@ MarkersSample.prototype.showmMarker = function () {
 		
 		// 绘制Marker
 		//const yAxisBuySell = quote[comparisonSymbol.url]?.Close
-		if(activeLabels.includes("triangle_buy") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
+		if(activeLabels.includes("triangle_buy_2") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
 			new CIQ.Marker({
 				stx: stx,
-				label: "triangle_buy",
+				label: "triangle_buy_2",
 				xPositioner: "date",
 				yPositioner: "below_candle",
 				//yPositioner: "value",
@@ -408,7 +408,7 @@ MarkersSample.prototype.showmMarker = function () {
 						y:yAxis,	// 设y轴的定值
 						panelName: panel,
 						x: xPosition,
-						label: "dot_buy",
+						label: "dot_buy_2",
 						node: new CIQ.Marker.stPerformance({
 							type: "circle",
 							category: 'trade-buy-2',
@@ -418,10 +418,10 @@ MarkersSample.prototype.showmMarker = function () {
 					});
 				}
 			}	
-		}else if(activeLabels.includes("triangle_sell") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
+		}else if(activeLabels.includes("triangle_sell_2") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
 			new CIQ.Marker({
 				stx: stx,
-				label: "triangle_sell",
+				label: "triangle_sell_2",
 				xPositioner: "date",
 				plotField: comparisonSymbol.url,		// <<<<== custom field
 				x: standardDate,
@@ -464,7 +464,7 @@ MarkersSample.prototype.showmMarker = function () {
 						y:yAxis,	// 设y轴的定值
 						panelName: panel,
 						x: xPosition,
-						label: "dot_sell",
+						label: "dot_sell_2",
 						node: new CIQ.Marker.stPerformance({
 							type: "circle",
 							category: 'trade-sell-2',
