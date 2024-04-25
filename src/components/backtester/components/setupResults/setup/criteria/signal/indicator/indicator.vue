@@ -1241,7 +1241,7 @@ export default {
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
-       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
+       CIQ.setTechLayout('', this.criteria, this.panelIndex)
        
       // avoid add indicator redundantly
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
