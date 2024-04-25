@@ -36,7 +36,7 @@
 					<h2 id="0-0">Chart section</h2>
 					<hr />
 					<p>
-						In the chart section of BacktestEdge, users can select stock/index
+						In the chart section of BacktestEdge, users can select stock/index/ETF
 						symbol to be backtested and add to favorites; select sentiment
 						indicators and add to favorites; select technical indicators and
 						modify settings; select timeframe among Daily/Weekly/Monthly; select

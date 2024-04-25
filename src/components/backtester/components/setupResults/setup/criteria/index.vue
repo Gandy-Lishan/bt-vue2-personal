@@ -566,7 +566,7 @@ export default {
 				{ value: 3, label: 'TimeOrder Multi-Condition' }
 			];	
 
-			this.signalOptions = val ? [{ value: 0, label: 'Only Use Risk Control' }, ...originalOptions] : originalOptions;
+			this.signalOptions = val ? [...originalOptions, { value: 0, label: 'Only Use Risk Control' }] : originalOptions;
 
 			if (!val && this.criteriaNum.startsWith('exit') && this.relation === 0) {
 				this.relation = 1;

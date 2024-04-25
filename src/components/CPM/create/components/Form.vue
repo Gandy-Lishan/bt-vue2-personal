@@ -243,7 +243,7 @@
                   <el-tooltip effect="dark" placement="top">
                     <span slot="content"
                       >Specify the start and end date of the backtest. <br />
-                      Choose 'All History' to include all data since the inception of the backtesting stock/index. <br />
+                      Choose 'All History' to include all data since the inception of the backtesting stock/index/ETF. <br />
                       Additionally, select 'Custom' to input a custom year.<br
                     /></span>
                     <i class="iconfont icon-wenhao"></i>
