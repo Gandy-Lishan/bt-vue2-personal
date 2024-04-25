@@ -536,6 +536,8 @@ export default {
 			Object.assign(this.$data, this.$options.data())
 			if (this.criteriaNum.startsWith('entry')) {
 				this.relation = 1;
+			} else if(this.criteriaNum.startsWith('exit') && this.symbolInfo.strategy === 'Dual') {
+				this.relation = 1
 			} else {
 				this.relation = 0;
 			}
