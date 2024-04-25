@@ -536,7 +536,7 @@ if (!CIQ.Marker) {
                          else if (output && !dupMap[output]) {
                              fields.push({
                                  member: output,
-                                 display: `(${symbolLabel})${output}`,
+                                 display: `${output}(${symbolLabel})`,
                                  panel: panel,
                                  yAxis: yAxis
                              });
