@@ -53,7 +53,7 @@
                         {{bdFormLabel['symbol']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >Choose a stock/index as backtest symbol. (default: SPX)<br
+                            >Choose a stock/index/ETF as backtest symbol. (default: SPX)<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
@@ -170,7 +170,7 @@
                         5. Benchmark
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >Choose a stock/index with simple entry on the Start date &
+                            >Choose a stock/index/ETF with simple entry on the Start date &
                         exit on the End date as benchmark compared with this
                         backtest. (default: SPX)<br
                           /></span>
@@ -319,7 +319,7 @@
                           <span slot="content"
                             >Specify the start and end date of the backtest.<br />Choose
                         'All History' to include all data since the inception of the
-                        backtesting stock/index.<br
+                        backtesting stock/index/ETF.<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
@@ -413,7 +413,7 @@
                         {{bdFormLabel['symbol2']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >Choose a stock/index as backtest symbol 2. (default: SPY)<br
+                            >Choose a stock/index/ETF as backtest symbol 2. (default: SPY)<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
@@ -520,7 +520,7 @@
                         {{bdFormLabel['index_moving_average_slope']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest based on the slope of the 200 Day Moving Average of the Index, <br />select the appropriate slope direction here.</span>
+                            >If you'd like to backtest based on the slope of the 252 Days Moving Average of the Index, <br />select the appropriate slope direction here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -706,7 +706,7 @@
                             Exit Criteria selection or be solely used in the Exit Criteria
                             "Only Use Risk Control".<br/>
                             Note: When short selling, to prevent unlimited additional margin, <br/>
-                            it is mandatory to ensure that the take-profit ratio is greater than the stop-loss ratio.
+                            it is mandatory to ensure that the take-profit is greater than the stop-loss.
                           </span>
                           <i class="iconfont icon-wenhao"></i> </el-tooltip
                       ></el-checkbox>

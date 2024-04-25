@@ -10,7 +10,7 @@
                 Type
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
-                    Indicator type or stock fundamental data, currently encompassing four indicator categories
+                    Indicator type or symbol fundamental data, currently encompassing four indicator categories
                   </span>
                   <i class="iconfont icon-wenhao"></i>
                 </el-tooltip>

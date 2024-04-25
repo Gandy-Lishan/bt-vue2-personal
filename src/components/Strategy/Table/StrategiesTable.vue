@@ -140,7 +140,7 @@
 							<el-tooltip
 									class="item"
 									effect="dark"
-									content="With Backtest Engine"
+									content="Backtest This Strategy"
 									placement="bottom-start"
 								>
 								<el-button
@@ -345,7 +345,6 @@ export default {
 						obj.date = timestampToTime(obj.date)
 					}
 					this.tableData = data
-					this.immutableTableData = data
 					this.total = data.length
 				}
 			} catch (error) {
@@ -357,10 +356,25 @@ export default {
 				}
 				this.currentPage = 1
 				this.tableData = []
-				this.immutableTableData = this.tableData
 			} finally {
 				this.loading = false
 				LocalStorageUtil.set('strategiesList', this.tableData)
+				if (this.highlightedTag !== 'All' && this.highlightedTag !== 'Favorites') {
+					this.immutableTableData = this.tableData.filter(
+						(item) => item.category === this.highlightedTag
+					)
+				} else if(this.highlightedTag === 'All'){
+					this.immutableTableData = [...this.tableData]
+				}else if(this.highlightedTag === 'Favorites'){
+					this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
+				}
+				if(this.searchItem) {
+					const trimmedStr = this.searchItem.trim();
+					const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
+					this.immutableTableData = this.immutableTableData.filter((item) => {
+						return regex.test(item.model_name);
+					});
+				}
 			}
 			const urlToNameMap = {}
 			for (const item of this.tableData) {
@@ -536,15 +550,15 @@ export default {
 			const { url } = scope
 			const res = await addStrategyFavorites({url})
 			const code = res?.data?.code
-			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully add strategies favorite')}
-			if(code == 400) {this.popUpMsgBox('Failed to add strategies favorite')}
+			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully added to favorites')}
+			if(code == 400) {this.popUpMsgBox('Failed to add favorites')}
 		},
 		async moveToFavorites(scope) {
 			const { url } = scope
 			const res = await moveStrategyFavorites(url)
 			const code = res?.data?.code
-			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully move strategies favorite')}
-			if(code == 400) {this.popUpMsgBox('Failed to move strategies favorite')}
+			if(code == 200) {await this.getDataList();this.popUpMsgBox('Removed from favorites')}
+			if(code == 400) {this.popUpMsgBox('Failed to move favorites')}
 		}
 	}
 }

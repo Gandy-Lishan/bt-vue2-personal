@@ -52,12 +52,12 @@ export function generateConfig(criteriaWithNumber) {
     If the backtest condition needs to have a "OR" relation of 2
     conditions, set two conditions below and choose score 1.<br />
     etc.<br />`,
-		timeLimitTP: `By default, there is no time period restriction. <br/>
+		timeLimitTP: `By default, there is no time period limit. <br/>
     When you select this box, it signifies that you are <br/>
-    requiring these conditions to be sequentially met within the entered period. <br/>
+    requiring these conditions to be sequentially met within the limited period. <br/>
     For instance, if you choose to input "5" for the period, <br/>
     it means that if the selected conditions are met in sequence within 5 bars, <br/>
-    it indicates you can enter/exit.`,
+    it indicates you can trade.`,
 		periodTP: `Choose a value to specify how many bars within which the
     following conditions will occur in time order to trigger the
     backtest condition.<br />
