@@ -92,6 +92,9 @@ export default {
 
 			let menuYAxisPreferences = document.querySelector('[cq-name="menuYAxisPreferences"] :first-child')
 			menuYAxisPreferences.style.display = 'none'
+
+			// hide dual symbol
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		},
 	}
 }

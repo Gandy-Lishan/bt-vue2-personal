@@ -167,6 +167,9 @@ export default {
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
 			footer.style.display = 'none'
+
+			// hide dual symbol
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		},
 		loadDefaultStudy() {
 			 return new Promise(async (resolve)=>{

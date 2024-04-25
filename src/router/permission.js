@@ -183,7 +183,7 @@ async function initiateIndicatorList() {
 		store.commit('chart/getIndexsList', indexsList)
 
 		let newAllSymbolsList = []
-		for (var i = 0; i < allSymbolsList.length; i++) {
+		for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
 			let item = allSymbolsList[i]
 			if (stocksList.find(j => j.stock == item.url)) {
 				let newName = item.url + ' Optix'
