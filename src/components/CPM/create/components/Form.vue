@@ -601,7 +601,7 @@ export default {
       this.data.symbol = item.url
 
       // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
-      CIQ.addSymbol(this.data.symbol,null,()=>{
+      CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
         this.calculateBarDistance()
         CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.hideCover()
