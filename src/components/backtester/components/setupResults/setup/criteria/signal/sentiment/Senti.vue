@@ -791,6 +791,7 @@ export default {
         }
       }
 
+      debugger
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',

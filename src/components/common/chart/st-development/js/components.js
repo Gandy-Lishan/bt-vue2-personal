@@ -8943,6 +8943,7 @@ if (!CIQ.Studies) {
 					// filter MA in studylist
 					
 					var series = CIQ.stxx.chart.series[sd.inputs.Field];	// myIndicator里面序列的stma有标题组件
+					debugger
 					if (sd.type == 'ST MA' && !series) continue;
 					if (sd.customLegend) continue;
 					if (customRemovalOnly && !sd.study.customRemoval) continue;
