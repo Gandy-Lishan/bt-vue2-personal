@@ -1054,13 +1054,17 @@ export default {
           this.bd.strategy = 'Dual'
           this.bd.symbol2 = newVal.url
           this.changeStrategy('Dual',false)
+        }else if(this.bd.strategy = 'Dual') {
+          this.bd.symbol2 = newVal.url
         }
+        this.$emit('changeStrategy', this.bd.strategy, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
       },
       deep: true
     },
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.bd.symbol = newVal
+        this.$emit('changeStrategy', this.bd.strategy, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
       },
       immediate: true,
       deep: true
@@ -1652,6 +1656,12 @@ export default {
           this.bd.start_date = editData.start_date
           this.bd.end_date = editData.end_date
         }
+    },
+    setSubEditData(editSubData) {
+      // 只设置部分内容
+      for(let key in editSubData) {
+        if(['symbol', 'symbol2', 'frequency'].includes(key)) this.bd[key] = editSubData[key]
+      }
     },
     calculateBacktestPeriod() {
       let { start_date, end_date } = this.bd;
