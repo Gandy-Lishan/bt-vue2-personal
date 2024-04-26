@@ -1664,6 +1664,12 @@ class Comparison extends CIQ.UI.ModalTag {
 			forceData: true
 		};
 
+		CIQ.store.commit('form/setComparisonSymbol', {
+			name:obj.name,
+			url:obj.symbol,
+		  })
+		CIQ.addIndicators({})
+		  
 		// don't allow symbol if same as main chart, comparison already exists, or just white space
 		var exists = stx.getSeries({ symbolObject: obj });
 		for (var i = 0; i < exists.length; i++)
@@ -1680,12 +1686,6 @@ class Comparison extends CIQ.UI.ModalTag {
 				context.stx.chart.symbol.toLowerCase() !== obj.symbol.toLowerCase())
 		) {
 			//stx.addSeries(obj.symbol, params, cb);
-			CIQ.store.commit('form/setComparisonSymbol', {
-			  name:obj.name,
-			  url:obj.symbol,
-			})
-	  
-			CIQ.addIndicators({})
 		} else {
 			this.loading[obj.symbol] = false;
 		}
