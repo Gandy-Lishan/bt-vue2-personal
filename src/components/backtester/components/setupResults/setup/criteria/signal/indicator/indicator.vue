@@ -706,7 +706,7 @@ export default {
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
       var list = this.sentimentIndicatorList
-      console.log('sentiment list', list)
+      //console.log('sentiment list', list)
       list.sort(function (a, b) {
         return a.value.localeCompare(b.value)
       })

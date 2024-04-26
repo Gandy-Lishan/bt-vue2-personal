@@ -5,6 +5,7 @@
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import { uniqueObjectArray } from '@/utils/formValidate'
+ import {recoverSymbolOptixUrl} from '@/utils'
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -133,7 +134,7 @@
                 }
     
                 var queryUrl =  config.indicatorMetadata + 
-                "?indicator=" + indicatorList[i];
+                "?indicator=" + recoverSymbolOptixUrl(indicatorList[i]);
                 let _res = new Promise((resolve,reject)=>{ 
                     CIQ.axios.get(
                         queryUrl,
