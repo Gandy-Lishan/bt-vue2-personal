@@ -207,8 +207,9 @@ MarkersSample.prototype.showmMarker = function () {
 				for(var i in CIQ.stxx.layout.studies){
 					var sd = CIQ.stxx.layout.studies[i]
 					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-					/** dot只会绘制在Study所属的Symbol下 */
-					if(isSymbol2) continue
+					const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+					/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
+					if(!isSenti && isSymbol2) continue
 
 					const panel = sd['panel'] 
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
@@ -262,8 +263,9 @@ MarkersSample.prototype.showmMarker = function () {
 				for(var i in CIQ.stxx.layout.studies){
 					var sd = CIQ.stxx.layout.studies[i]
 					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-					/** dot只会绘制在Study所属的Symbol下 */
-					if(isSymbol2) continue
+					const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+					/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
+					if(!isSenti && isSymbol2) continue
 
 					const panel = sd['panel'] 
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
@@ -386,7 +388,9 @@ MarkersSample.prototype.showmMarker = function () {
 			for(var i in CIQ.stxx.layout.studies){
 				var sd = CIQ.stxx.layout.studies[i]
 				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-				if(!isSymbol2) continue
+				const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+				/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
+				if(!isSenti && !isSymbol2) continue
 
 				const panel = sd['panel'] 
 				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
@@ -442,8 +446,9 @@ MarkersSample.prototype.showmMarker = function () {
 			for(var i in CIQ.stxx.layout.studies){
 				var sd = CIQ.stxx.layout.studies[i]
 				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-				/** dot只会绘制在Study所属的Symbol下 */
-				if(!isSymbol2) continue
+				const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+				/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
+				if(!isSenti && !isSymbol2) continue
 
 				const panel = sd['panel'] 
 				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
