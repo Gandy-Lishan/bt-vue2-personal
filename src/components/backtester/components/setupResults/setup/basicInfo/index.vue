@@ -1058,14 +1058,14 @@ export default {
         }else if(this.bd.strategy === 'Dual') {
           this.bd.symbol2 = newVal.url
         }
-        this.$emit('changeStrategy', this.bd.strategy, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
+        this.$emit('changeSymbolInfo', {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
       },
       deep: true
     },
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.bd.symbol = newVal
-        this.$emit('changeStrategy', this.bd.strategy, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
+        this.$emit('changeSymbolInfo', {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
       },
       immediate: true,
       deep: true

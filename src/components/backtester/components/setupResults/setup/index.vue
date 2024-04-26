@@ -263,7 +263,7 @@ export default {
 				this.activeName = 'first'
 				this.strategy = val
 				this.symbolInfo = obj
-				if(obj.strategy === 'Dual') {
+				if(obj.strategy === 'Single') {
 					// 清除第二个
 					['entryChild2', 'exitChild2'].forEach(refName => {
 						this.$refs[refName].clearForm();
