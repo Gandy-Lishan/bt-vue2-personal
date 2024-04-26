@@ -258,6 +258,7 @@ export default {
 			this.isRiskControl = isRiskControl
 		},
 		changeStrategy(val, obj) {
+			this.symbolInfo = obj
 			this.$nextTick(() => {
 				this.activeName = 'first'
 				this.strategy = val
