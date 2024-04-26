@@ -73,8 +73,8 @@ MarkersSample.prototype.loadDataSet = function(dataSet){
 	if(!dataSet[0] || !dataSet[0].Symbol){
 		mDataSet =  dataSet
 	}else {
-		mDataSet =  dataSet.filter(item => item.Symbol == CIQ.stxx.chart.symbol)
-		mDataSet2 =  dataSet.filter(item => item.Symbol == comparisonSymbol.url)
+		mDataSet =  dataSet.filter(item => item.Symbol == CIQ.stxx.chart.symbol && item.SymbolNum == '1')
+		mDataSet2 =  dataSet.filter(item => item.Symbol == comparisonSymbol.url && item.SymbolNum == '2')
 	}	
 	console.log('为markerSet依据Symbol分类',dataSet.Symbol,CIQ.stxx.chart.symbol,comparisonSymbol,mDataSet,mDataSet2)
 },
