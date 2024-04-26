@@ -1657,6 +1657,12 @@ export default {
           this.bd.end_date = editData.end_date
         }
     },
+    setSubEditData(editSubData) {
+      // 只设置部分内容
+      for(let key in editSubData) {
+        if(['symbol', 'symbol2', 'frequency'].includes(key)) this.bd[key] = editSubData[key]
+      }
+    },
     calculateBacktestPeriod() {
       let { start_date, end_date } = this.bd;
       if (!start_date || start_date === '1800-10-01') {
