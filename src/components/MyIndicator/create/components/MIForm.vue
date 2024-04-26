@@ -581,10 +581,18 @@ export default {
           fieldName = this.data.indicator_2_url
         } 
       }
+
+      let criteria
+      if(field == 'ma1'){
+        criteria = this.data.indicator_2_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'entry2' : 'entry1'
+      }else{
+        criteria = this.data.indicator_1_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'exit2' : 'exit1'
+      }
       CIQ.addOwnIndicatorMAStudy(
         value,
         type,
         fieldName,
+        criteria,
         field == 'ma1'?0:1,
         showInput,
         this.data.categories
