@@ -17,6 +17,7 @@ const getters = {
 	getSpanPeriod: state => state.chart.spanPeriod,
 	getMiFormState: state => state.chart.miFormState,
 	getMaLikeTech: state => state.chart.maLikeTech,
+	getMiBenmarkState: state => state.chart.miBenmark,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
