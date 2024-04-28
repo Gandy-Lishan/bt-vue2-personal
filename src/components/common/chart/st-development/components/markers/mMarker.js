@@ -72,6 +72,7 @@ MarkersSample.prototype.loadDataSet = function(dataSet){
     
 	if(!dataSet[0] || !dataSet[0].Symbol){
 		mDataSet =  dataSet
+		mDataSet2 =  []
 	}else {
 		mDataSet =  dataSet.filter(item => item.SymbolNum ? (item.Symbol == CIQ.stxx.chart.symbol && item.SymbolNum == '1') : item.Symbol == CIQ.stxx.chart.symbol)
 		mDataSet2 =  dataSet.filter(item => item.SymbolNum ? (item.Symbol == comparisonSymbol.url && item.SymbolNum == '2') : item.Symbol == comparisonSymbol.url)
