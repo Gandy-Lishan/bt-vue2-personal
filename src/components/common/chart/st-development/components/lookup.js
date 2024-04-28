@@ -508,9 +508,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             }
                             /** 仅在CPM时，换symbol后移除存在的hover marker*/
                             if(window.location.pathname.includes('/cpm/results')){
-                                data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
+                                CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
                             }
-                            CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
                             CIQ.hideCover()
                             CIQ.nprogress.done()
                         });
