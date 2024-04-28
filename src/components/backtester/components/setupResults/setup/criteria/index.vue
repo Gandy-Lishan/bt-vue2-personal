@@ -526,8 +526,14 @@ export default {
 		 // 在 created 钩子中根据 criteria 计算 relation 的初始值
 		if (this.criteriaNum.startsWith('entry')) {
       this.relation = 1;
-		} else {
-			this.relation = 0;
+		} else if(this.criteriaNum.startsWith('exit') && this.symbolInfo.strategy === 'Dual') {
+				this.relation = 1
+		} else if(this.criteriaNum === 'exit' && this.symbolInfo.strategy === 'Single' && this.isRiskControl){
+				this.relation = 0;
+		} else if(this.criteriaNum === 'exit' && this.symbolInfo.strategy === 'Single' && !this.isRiskControl){
+				this.relation = 1;
+		} else if(this.criteriaNum === 'exit2' && this.symbolInfo.strategy === 'Single'){
+				this.relation = 1;
 		}
 	},
 	methods: {
@@ -538,8 +544,12 @@ export default {
 				this.relation = 1;
 			} else if(this.criteriaNum.startsWith('exit') && this.symbolInfo.strategy === 'Dual') {
 				this.relation = 1
-			} else {
+			} else if(this.criteriaNum === 'exit' && this.symbolInfo.strategy === 'Single' && this.isRiskControl){
 				this.relation = 0;
+			} else if(this.criteriaNum === 'exit' && this.symbolInfo.strategy === 'Single' && !this.isRiskControl){
+					this.relation = 1;
+			} else if(this.criteriaNum === 'exit2' && this.symbolInfo.strategy === 'Single'){
+					this.relation = 1;
 			}
 			// Reset data for all subcomponents
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
