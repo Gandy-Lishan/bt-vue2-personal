@@ -500,9 +500,10 @@ export default {
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
-         this.weightData[_index].indicator = newVal
-         this.weightData[_index].indicator_url = newVal
-
+         if(_index != -1){
+          this.weightData[_index].indicator = newVal
+          this.weightData[_index].indicator_url = newVal
+         }
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
        
