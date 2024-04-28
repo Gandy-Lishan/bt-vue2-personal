@@ -501,11 +501,16 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     return function (e) {
                         CIQ.blur(self.input[0]);
                         //self.close();
-                        self.selectItem(data, ()=>{
-                            // 仅在myIndicator时，换symbol后修改benchMark并触发indicator更新事件
+                        self.selectItem(data, ()=>{     /** 新增了手动选择symbol列表的addSymbol的回调 */
+                            /** 仅在myIndicator时，换symbol后修改benchMark并触发indicator更新事件*/
                             if(window.location.pathname.includes('/myindicator/create')){
                                 CIQ.store.commit('chart/SEI_MI_BENCHMARK', data.symbol)
                             }
+                            /** 仅在CPM时，换symbol后移除存在的hover marker*/
+                            if(window.location.pathname.includes('/cpm/results')){
+                                data.startDate = new Date(parseInt(process.env.VUE_APP_START_DATE))
+                            }
+                            CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
                             CIQ.hideCover()
                             CIQ.nprogress.done()
                         });
