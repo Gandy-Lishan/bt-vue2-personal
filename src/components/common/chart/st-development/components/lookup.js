@@ -507,13 +507,13 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             //     CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
                             // }
                             CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
-                            
+                            CIQ.stxx.draw();
                             /** 仅在myIndicator时，换symbol后修改benchMark并触发indicator更新事件*/
                             if(window.location.pathname.includes('/myindicator/create')){
                                 CIQ.store.commit('chart/SEI_MI_BENCHMARK', data.symbol)
                             }
 
-                            
+                            debugger
                             CIQ.hideCover()
                             CIQ.nprogress.done()
                         });
