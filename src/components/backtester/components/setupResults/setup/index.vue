@@ -277,6 +277,9 @@ export default {
 			['basicInfo', 'entryChild1', 'exitChild1', 'entryChild2', 'exitChild2'].forEach(refName => {
 				this.$refs[refName].clearForm();
 			});
+	
+			// clear form时同时刷新changeStrategy
+			this.$refs['basicInfo'].changeStrategy('Single',true)
 		},
 		setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
