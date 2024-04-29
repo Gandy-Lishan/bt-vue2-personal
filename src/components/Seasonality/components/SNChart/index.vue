@@ -252,13 +252,14 @@ export default {
                   'Avg Return (%): ' + this.points[0].y + '<br/>' +
                   'Percent Positive (%) ' + this.points[1].y;
             }
-            if(this.points[0]) {
+            console.log(this.points)
+            if(this.points[0].series.name === 'Avg Return (%)') {
                 return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
-                  'Percent Positive (%): ' + this.points[0].y + '<br/>'
+                  'Avg Return (%): ' + this.points[0].y + '<br/>'
             }
-            if(this.points[1]) {
+            if(this.points[0].series.name === 'Percent Positive (%)') {
                      return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
-                  'PAvg Return (%): ' + this.points[1].y;
+                  'Percent Positive (%): ' + this.points[0].y;
             }
 
           };
