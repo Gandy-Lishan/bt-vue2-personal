@@ -1112,9 +1112,6 @@ export default {
     userRole: {
       handler(role) {
         console.log('用户角色', role)
-        if(!this.is_admin) {
-          document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
-        }
         if(this.is_admin && role == 'analyst') {
           this.userTagOptions = [
             { value: 'client', label: 'Client' },
