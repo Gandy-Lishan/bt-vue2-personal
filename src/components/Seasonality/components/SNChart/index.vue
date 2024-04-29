@@ -254,11 +254,11 @@ export default {
             }
             if(this.points[0]) {
                 return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
-                  'Avg Return (%): ' + this.points[0].y + '<br/>'
+                  'Percent Positive (%): ' + this.points[0].y + '<br/>'
             }
             if(this.points[1]) {
                      return `<b>${DayOrMonthTag}: ` + this.x + '</b><br/>' +
-                  'Percent Positive (%) ' + this.points[1].y;
+                  'PAvg Return (%): ' + this.points[1].y;
             }
 
           };
