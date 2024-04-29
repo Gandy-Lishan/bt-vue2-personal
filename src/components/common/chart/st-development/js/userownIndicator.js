@@ -511,7 +511,7 @@
                 ma1_value,
                 ma1_type,
                 newData.categories.includes('Indicator')?newData.indicator1.url:'field',
-                this.data.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
+                newData.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
                 0,
                 ma1_showInput,
                 newData.categories
@@ -522,7 +522,7 @@
                 ma2_type,
                 // 如果是indicator则field为indicator_url，如果是symbol则main panel
                 newData.categories.includes('Indicator') || newData.indicator1.url!=newData.indicator2.url ?newData.indicator2.url:'field',
-                this.data.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
+                newData.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
                 1,
                 ma2_showInput,
                 newData.categories

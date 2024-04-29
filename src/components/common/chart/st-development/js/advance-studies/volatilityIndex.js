@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_volatilityIndex_ = (_exports) => {
@@ -41,15 +41,29 @@ if (!CIQ.Studies) {
 		sd.days = Number(sd.inputs["Smoothing Period"]);
 		var smoothing = Number(sd.inputs["STD Period"]);
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + smoothing) {
-			sd.error = true;
-			return;
-		}
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
 		function computeRVI(avgGain, avgLoss) {
 			if (avgGain + avgLoss === 0) return 100;
 			return (100 * avgGain) / (avgGain + avgLoss);
+		}
+		if (quotes.length < sd.days + smoothing) {
+			sd.error = true;
+			return;
 		}
 		sd.std = new CIQ.Studies.StudyDescriptor(sd.name, "sdev", sd.panel);
 		sd.std.chart = sd.chart;
@@ -68,10 +82,12 @@ if (!CIQ.Studies) {
 		for (var i = Math.max(sd.startFrom, sd.days); i < quotes.length; i++) {
 			var quote = quotes[i],
 				quote1 = quotes[i - 1];
-			if (!quote[field] && quote[field] !== 0) continue;
-			if (!quote1[field] && quote1[field] !== 0) continue;
+			var quoteVal = getPropertyByString(quote,field,subField);
+			var quote1Val = getPropertyByString(quote1,field,subField);
+			if (!quoteVal && quoteVal !== 0) continue;
+			if (!quote1Val && quote1Val !== 0) continue;
 			if (!quote["_STD " + sd.name] && quote["_STD " + sd.name] !== 0) continue;
-			if (quote[field] > quote1[field]) {
+			if (quoteVal > quote1Val) {
 				avgGain =
 					(avgGain * (sd.days - 1) + quote["_STD " + sd.name]) / sd.days;
 				avgLoss = (avgLoss * (sd.days - 1)) / sd.days;
@@ -170,4 +186,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_volatilityIndex_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_volatilityIndex_}
