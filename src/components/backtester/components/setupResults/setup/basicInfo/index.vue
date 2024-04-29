@@ -13,7 +13,7 @@
 						<div class="setupCenter">
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item prop="strategy" inline="true" class="strategyBox">
+                  <el-form-item prop="strategy" inline="true" class="strategyBox" v-if="is_admin">
                     <template slot="label">
                       <label>
                         Backtest Type
@@ -1112,6 +1112,9 @@ export default {
     userRole: {
       handler(role) {
         console.log('用户角色', role)
+        if(!this.is_admin) {
+          document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
+        }
         if(this.is_admin && role == 'analyst') {
           this.userTagOptions = [
             { value: 'client', label: 'Client' },
