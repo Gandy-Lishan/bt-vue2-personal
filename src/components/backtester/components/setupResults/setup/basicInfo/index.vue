@@ -818,7 +818,7 @@ export default {
         strategy: 'Single',
         capital: 100000.0,
         capital_alloc: 1.0,
-        commission: 0.1,
+        commission: 0.0,
         win_rate: 0.0,
         slippage: 0.0,
         start_date: '',
