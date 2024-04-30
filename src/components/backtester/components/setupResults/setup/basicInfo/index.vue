@@ -688,7 +688,8 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'">
+                  <div class="risk-control-container border-set">
+                  <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
                       <el-checkbox
                         v-model="isRiskControl"
