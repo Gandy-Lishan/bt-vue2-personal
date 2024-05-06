@@ -41,6 +41,30 @@ export const createPositiveIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 			callback(new Error(`Enter positive integers only`))
 		}
 		if((maxVal && (minVal !== undefined || minVal !== null)) && (value > maxVal || value < minVal)) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
+		if((minVal && (maxVal !== undefined || maxVal !== null)) && value < minVal) {callback(new Error(`Only positive integers > ${minVal} allowed`))}
+		if((maxVal && (minVal !== undefined || minVal !== null)) && value > maxVal) {callback(new Error(`Only positive integers < ${maxVal} allowed`))}
+		callback()
+	}
+}
+export const createIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
+	return (_, value, callback) => {
+		if(value === '') {
+			callback(new Error(`Enter ${errorMsgEmpty}`))
+		}
+		const pattern = /^-?\d+$/
+		const isInteger = isNaN(value) || !pattern.test(value)
+		if (isInteger) {
+			callback(new Error(`Enter integers only`))
+		}
+		if((maxVal && (minVal !== undefined && minVal !== null)) && (Number(value) > Number(maxVal) || Number(value) < Number(minVal))) {
+			callback(new Error(`Value should be between ${minVal} and ${maxVal}`))
+		}
+		if((minVal && (maxVal !== undefined && maxVal !== null)) && Number(value) < Number(minVal)) {
+			callback(new Error(`Only positive integers > ${minVal} allowed`))
+		}
+		if((maxVal && (minVal === undefined || minVal === null)) && Number(value) > Number(maxVal)) {
+			callback(new Error(`Only positive integers < ${maxVal} allowed`))
+		}
 		callback()
 	}
 }
@@ -170,6 +194,37 @@ export const validatePercentageRule = (_, value, callback) => {
   //   }
 	return '';
   }
+
+export const _validatePercentageRule = (_, value, callback) => {
+	if (value === '') {
+		return 'Enter a number';
+	}
+	const numericValue = parseFloat(value);
+	if (isNaN(numericValue)) {
+		return 'Enter a valid number';
+	}
+	
+	// uncomment it to allow float value
+	//   if (numericValue < 0) {
+	//     return 'Enter a non-negative value';
+	//   }
+	const pattern = /^\d+$/
+	const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+	if (isPositiveInteger) {
+		return `Enter positive integers only`;
+	}
+	// Uncomment the following block to restrict values to <= 100
+	if (numericValue > 100) {
+	  return 'Enter a value <= 100';
+	}
+	
+	// uncomment it to allow float value
+	//   const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
+	//   if (decimalPlaces > 2) {
+	//     return 'Limit to two decimal places';
+	//   }
+	return '';
+	}
 
 export const validateMarginRule = (value, minVal, maxVal, errorMsgEmpty, errorMsgGreater) => {
 	if(value === '') return errorMsgEmpty
