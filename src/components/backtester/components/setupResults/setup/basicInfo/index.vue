@@ -1387,9 +1387,10 @@ export default {
      */
     changeStrategy(val,updateChart) {
       // 切换的成 Dual 时, 有些数据是不存在的, 需要设置默认值
-      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPY'; this.isRiskControl = false}
-      this.$emit('IsRiskControl', this.isRiskControl);
-      this.$store.commit('form/isRiskControl', this.isRiskControl);
+      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPY'; // this.isRiskControl = false
+      }
+      // this.$emit('IsRiskControl', this.isRiskControl);
+      // this.$store.commit('form/isRiskControl', this.isRiskControl);
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
       
       /*
@@ -1463,7 +1464,7 @@ export default {
       /* 处理数据 */
       if(bd.strategy === 'Dual') {
         // 设置数据默认值
-        this.isRiskControl = false
+        // this.isRiskControl = false
         this.isExcludeOO = false
         bd.market_environment = 0
         bd.index_moving_average_slope = 0
