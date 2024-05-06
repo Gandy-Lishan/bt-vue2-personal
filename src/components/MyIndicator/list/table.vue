@@ -366,7 +366,7 @@ export default {
         const result_url = indicator || symbol_url
         const type = typeAttribute
         const weightData = {
-              // weight: (weight * 100).toFixed(2), // 现在统一用正整数
+              // weight: (weight * 100).toFixed(2),
               weight: weight * 100,
               indicator: result_url,
               indicator_url: url,

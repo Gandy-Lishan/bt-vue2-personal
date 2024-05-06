@@ -85,6 +85,14 @@
 							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
 							<cq-tooltip>SELL</cq-tooltip>
 						</cq-toggle>
+						<cq-toggle class="buy_2" id="buy_2" @click="changeMarkerVisibility('buy_2')" style="visibility:hidden">
+							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#fbc05c'></path></svg></span>
+							<cq-tooltip>BUY</cq-tooltip>
+						</cq-toggle>
+						<cq-toggle class="sell_2" id="sell_2" @click="changeMarkerVisibility('sell_2')" style="visibility:hidden">
+							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#5b9bd1'></path></svg></span>
+							<cq-tooltip>SELL</cq-tooltip>
+						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<div class="favBtnContainer">
 						<button class='test' stxtap='SentimentLook.delSymbolCookie()' style="width: 188px;height: 32px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #5b9bd1;color: white;font-family: Helvetica, sans-serif;cursor:pointer;">
@@ -274,9 +282,9 @@
 
 						<!-- customized features -->
 						<!-- <cq-chartcontrol-group class="full-screen-show" cq-marker=""></cq-chartcontrol-group> -->
-						<cq-sentiment-lookup></cq-sentiment-lookup>
+						<!-- <cq-sentiment-lookup></cq-sentiment-lookup> -->
 
-						<!-- <cq-comparison-lookup></cq-comparison-lookup> -->
+						<cq-comparison-lookup></cq-comparison-lookup>
 
 						<!-- <cq-comparison-favorite></cq-comparison-favorite> -->
 
@@ -350,6 +358,7 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
+import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
@@ -538,6 +547,10 @@ export default class AdvancedChartComponent extends Vue {
 		// Destroy the ChartEngine instance when unloading the component.
 		// This will stop internal processes such as quotefeed polling.
 		CIQ.stxx.destroy()
+
+		// 防止chartiq还没加载完就切换到其他页面
+		CIQ.hideCover()
+		CIQ.nprogress.done()
 	}
 
 	createChartAndUI(config: any) {
@@ -550,13 +563,7 @@ export default class AdvancedChartComponent extends Vue {
 	
 	// 统一复写默认Study(已存在的，不然则在STMovingAverages中配置)配置
 	overrideStudyDef() {
-		CIQ.extend(CIQ.Studies.studyLibrary["MA Dev"], {
-			calculateFN: CIQ.Studies.calculateSTMADev,
-			inputs: { "Points Or Percent": ["Percent","Points"] },
-		});
-		CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-			name: "Relative Strength Index (RSI)",
-		});
+		extendOverwrite()
 	}
 
 	// 工具栏按钮移除和显示marker功能，只影响显示

@@ -101,6 +101,12 @@
         <template slot="label">
           <label>
             3.Category
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Calendar day refers to a natural date on the calendar. <br/>
+                Trading day refers to a day when the stock market<br/> is open for regular trading activities</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
           </label>
         </template>
           <el-select v-model="data.category" placeholder="Please select category">

@@ -124,7 +124,7 @@ export default {
     // vuex存储myindicator_benchmark
     const { data } = this.$route.params
 		const _data = isJson(data) ? JSON.parse(data) : data
-    this.$store.commit('chart/SEI_MI_BENCHMARK',_data.benchmark)
+    this.$store.commit('chart/SEI_MI_BENCHMARK',_data?.benchmark)
   },
   components: {
     MIForm,

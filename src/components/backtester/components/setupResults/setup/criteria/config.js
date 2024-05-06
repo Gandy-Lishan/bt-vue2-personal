@@ -1,6 +1,19 @@
 import { capitalizeFirstLetter } from '@/utils'
+const getCriteriaAndNumbers = (criteriaWithNumber) => {
+  // 使用正则表达式匹配数字
+  const match = criteriaWithNumber.match(/\d+/)
+  if (match) {
+      const number = parseInt(match[0])
+      console.log("Found number:", number)
+      const criteria = criteriaWithNumber.replace(/\d+/, '');
+      return [criteria, criteriaWithNumber]
+  } else {
+      return [criteriaWithNumber, criteriaWithNumber]
+  }
+}
 // 传入不同的 criteria 生成不同的配置
-export function generateConfig(criteria) {
+export function generateConfig(criteriaWithNumber) {
+  const [criteria, criteriaNum] = getCriteriaAndNumbers(criteriaWithNumber)
 	const capFirstL = capitalizeFirstLetter(criteria)
 	const criteriaTitleTPRC = `
   ${
@@ -10,12 +23,13 @@ export function generateConfig(criteria) {
 	}
 `
 	const config = {
+    criteriaNum,
 		criteria: criteria,
 		criteriaCapFirstL: capFirstL,
 		criteriaTitle: `${capFirstL} Criteria`,
 		criteriaTitleTP: `Set the criteria/criterias which trigger the backtest ${criteria}
     criteria.<br />
-    Choose one of the three options for ${criteria} criteria:<br />
+    Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for ${criteria} criteria:<br />
     1. Single Condition: One condition will trigger the backtest
     condition.<br />
     2. SameBar Multi-Condition: More than one conditions (limit to 5)
@@ -38,12 +52,12 @@ export function generateConfig(criteria) {
     If the backtest condition needs to have a "OR" relation of 2
     conditions, set two conditions below and choose score 1.<br />
     etc.<br />`,
-		timeLimitTP: `By default, there is no time period restriction. <br/>
+		timeLimitTP: `By default, there is no time period limit. <br/>
     When you select this box, it signifies that you are <br/>
-    requiring these conditions to be sequentially met within the entered period. <br/>
+    requiring these conditions to be sequentially met within the limited period. <br/>
     For instance, if you choose to input "5" for the period, <br/>
     it means that if the selected conditions are met in sequence within 5 bars, <br/>
-    it indicates you can enter/exit.`,
+    it indicates you can trade.`,
 		periodTP: `Choose a value to specify how many bars within which the
     following conditions will occur in time order to trigger the
     backtest condition.<br />

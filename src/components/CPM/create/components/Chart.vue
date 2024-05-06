@@ -53,6 +53,9 @@ export default {
 		},
 	},
 	beforeDestroy() {
+		// 防止chartiq还没加载完就切换到其他页面
+		CIQ.hideCover()
+		CIQ.nprogress.done()
 	},
 	methods:{
 		onChartReady(){
@@ -69,6 +72,7 @@ export default {
 				// 创建新CPM
 				this.$emit('calculateBarDistance')
 				CIQ.hideCover()
+				CIQ.nprogress.done()
 			}
 		},
 		hideComponents() {
@@ -88,6 +92,9 @@ export default {
 
 			let menuYAxisPreferences = document.querySelector('[cq-name="menuYAxisPreferences"] :first-child')
 			menuYAxisPreferences.style.display = 'none'
+
+			// hide dual symbol
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		},
 	}
 }

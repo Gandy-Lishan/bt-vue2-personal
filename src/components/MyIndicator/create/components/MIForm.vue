@@ -466,16 +466,14 @@ export default {
       // 从 Vuex store 中获取全局 loading 状态
       return this.$store.state.states.isCreateLoading
     },
-    ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
-    handleGetBacktestSymbol() {
-      return this.getBacktestSymbol
+    ...mapGetters(['getMiBenmarkState']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetMiBenmark() {
+      return this.getMiBenmarkState
     },
   },
   watch: {
-    handleGetBacktestSymbol: {
+    handleGetMiBenmark: {
       async handler(newVal) {
-        this.$store.commit('chart/SEI_MI_BENCHMARK',newVal)
-
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -502,9 +500,10 @@ export default {
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
-         this.weightData[_index].indicator = newVal
-         this.weightData[_index].indicator_url = newVal
-
+         if(_index != -1){
+          this.weightData[_index].indicator = newVal
+          this.weightData[_index].indicator_url = newVal
+         }
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
        
@@ -581,10 +580,18 @@ export default {
           fieldName = this.data.indicator_2_url
         } 
       }
+
+      let criteria
+      if(field == 'ma1'){
+        criteria = this.data.indicator_2_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'entry2' : 'entry1'
+      }else{
+        criteria = this.data.indicator_1_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'exit2' : 'exit1'
+      }
       CIQ.addOwnIndicatorMAStudy(
         value,
         type,
         fieldName,
+        criteria,
         field == 'ma1'?0:1,
         showInput,
         this.data.categories
@@ -922,7 +929,6 @@ export default {
           selectSymbol(item)
         }
       }
-
       this.data.time_frame = this.findMaxFreq() 
       console.log('当前最大的 timeframe 是', this.data.time_frame)
 

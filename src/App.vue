@@ -84,7 +84,7 @@ export default {
 				default:
 					break;
 				}
-				_this.$router.push('/404')
+				//_this.$router.push('/404')
 			}
 		}
 		const email = getCookieData()?.username
@@ -164,6 +164,7 @@ a:hover{
 #app {
 	overflow-y: auto;
 	overflow-x: hidden;
+  font-family: "Open Sans",sans-serif;
 }
 
 #nprogress .bar {

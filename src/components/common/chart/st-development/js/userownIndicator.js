@@ -5,6 +5,7 @@
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import { uniqueObjectArray } from '@/utils/formValidate'
+ import {recoverSymbolOptixUrl} from '@/utils'
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -133,7 +134,7 @@
                 }
     
                 var queryUrl =  config.indicatorMetadata + 
-                "?indicator=" + indicatorList[i];
+                "?indicator=" + recoverSymbolOptixUrl(indicatorList[i]);
                 let _res = new Promise((resolve,reject)=>{ 
                     CIQ.axios.get(
                         queryUrl,
@@ -286,6 +287,11 @@
                 }
                 // 如果右侧发生变动
                 if(oldData.indicator2.url != newData.indicator2.url){
+                    CIQ.store.commit('form/setComparisonSymbol', {
+                        name:newData.indicator2.name,
+                        url:newData.indicator2.url,
+                    })
+
                     // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
                     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
                     if(series) CIQ.stxx.removeSeries(series);
@@ -500,12 +506,12 @@
         const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
         const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
         const ma2_showInput = ma2_value != '1'
-
             // ma1
             CIQ.addOwnIndicatorMAStudy(
                 ma1_value,
                 ma1_type,
                 newData.categories.includes('Indicator')?newData.indicator1.url:'field',
+                newData.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
                 0,
                 ma1_showInput,
                 newData.categories
@@ -514,8 +520,9 @@
             CIQ.addOwnIndicatorMAStudy(
                 ma2_value,
                 ma2_type,
-                // 如果是indicator则field为indicator_url，如果是symbol则field为indicator_url或者main panel
+                // 如果是indicator则field为indicator_url，如果是symbol则main panel
                 newData.categories.includes('Indicator') || newData.indicator1.url!=newData.indicator2.url ?newData.indicator2.url:'field',
+                newData.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
                 1,
                 ma2_showInput,
                 newData.categories
@@ -629,37 +636,67 @@
 
     }
 
-    CIQ.addOwnIndicatorMAStudy = function(value,type,field,index,showInput,categories) {
-        // 更新ma前移除当前index的旧ma
-        for (var studyInstanceName in CIQ.stxx.layout?.studies) {
-            let sd = CIQ.stxx.layout.studies[studyInstanceName]
-            if (
-                sd.type == 'ST MA'
-                && sd.parameters.index == index
-            ) {
-              // 直接判断是否为st ma
-              CIQ.Studies.removeStudy(
-                CIQ.stxx,
-                sd
-              )
+    CIQ.addOwnIndicatorMAStudy = function(value,type,field,criteria,index,showInput,categories) {
+        if(categories.includes('Indicator')){
+            // 更新ma前移除当前index的旧ma
+            for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+                let sd = CIQ.stxx.layout.studies[studyInstanceName]
+                if (
+                    ['ma','ST MA'].includes(sd.type)
+                    && sd.parameters.index == index
+                ) {
+                // 直接判断是否为st ma
+                CIQ.Studies.removeStudy(
+                    CIQ.stxx,
+                    sd
+                )
+                }
             }
-          }
 
-        // 如果当前url是symbol序列，则显示在独立panel
-        var series = CIQ.stxx.chart.series[field];
+            // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
+            if(!showInput || !field) return
+            var stma_color = "#bfad94"
+            CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+                    Type: type == 'MA' ? 'simple' : 'exponential',
+                    Period: value,
+                    display: 'ST MA', //无需显示
+                    Field: field
+                }, 
+                { MA: stma_color },
+                { criteria: criteria, index: index },
+            )
+        }else { // symbol
+            // 更新ma前移除当前index的旧ma
+            for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+                let sd = CIQ.stxx.layout.studies[studyInstanceName]
+                if (
+                    ['ma','ST MA'].includes(sd.type)
+                    && sd.parameters.index == index
+                ) {
+                // 直接判断是否为st ma
+                CIQ.Studies.removeStudy(
+                    CIQ.stxx,
+                    sd
+                )
+                }
+            }
 
-        if(!showInput || !field) return
-        var stma_color = "#bfad94"
-        CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-            Type: type == 'MA' ? 'simple' : 'exponential',
-            Period: value,
-            display: 'Moving Average('+series?.display+')',
-            Field: field
-          }, 
-          { MA: stma_color },
-          { index: index },
-          series?field:null // indicator就显示在默认panel上，symbol则独立创建新的panel
-        )
+            // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
+            const symbolLabel = index == 1 ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
+            if(!showInput || !field) return
+            var stma_color = "#bfad94"
+
+            CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
+                    Type: type == 'MA' ? 'simple' : 'exponential',
+                    Period: value,
+                    display: `(${symbolLabel})Moving Average`, //无需显示
+                }, 
+                { MA: stma_color },
+                { criteria: criteria, index: index },
+            ) 
+        }
+
     }
     CIQ.editOwnIndicatorExtremeLines = function(value,field){
         for (var studyInstanceName in CIQ.stxx.layout.studies) {

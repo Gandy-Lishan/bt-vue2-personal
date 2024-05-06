@@ -156,7 +156,9 @@ MarkersSample.prototype.hideMarkers = function () {
 	this.activeLabels = [
 		// 'circle',
 		// 'events',
-		'triangle_buy','triangle_sell','dot_buy','dot_sell'
+		'triangle_buy','triangle_sell','dot_buy','dot_sell',
+		// dual symbol
+		'triangle_buy_2','triangle_sell_2','dot_buy_2','dot_sell_2'
 	]
 	this.activeLabels.forEach(function (label) {
 		CIQ.Marker.removeByLabel(stx, label);
@@ -166,7 +168,15 @@ MarkersSample.prototype.hideMarkers = function () {
 // 仅用于setMarkerVisibility，和hideMarkers区分开
 MarkersSample.prototype.setMarkerInvisibe = function (markerVisibilityType) {
 	var stx = this.stx;
-	const dotVisibilityType = markerVisibilityType=='triangle_buy'?'dot_buy':'dot_sell'
+	//const dotVisibilityType = markerVisibilityType=='triangle_buy'?'dot_buy':'dot_sell'
+	const visibilityTypeMap = {
+		'triangle_buy': 'dot_buy',
+		'triangle_sell': 'dot_sell',
+		'triangle_buy_2': 'dot_buy_2',
+		'triangle_sell_2': 'dot_sell_2',
+	};
+	const dotVisibilityType = visibilityTypeMap[markerVisibilityType] || null;
+
 	CIQ.Marker.removeByLabel(stx, markerVisibilityType);
 	CIQ.Marker.removeByLabel(stx, dotVisibilityType);
 	this.activeLabels = this.activeLabels.filter(item=>(item!=markerVisibilityType) && (item!=dotVisibilityType))
@@ -210,6 +220,16 @@ CIQ.addPrompt = function(){
 	var nodeRed = document.getElementsByClassName('sell')[0]
 	nodeGreen.style.visibility = "visible"
 	nodeRed.style.visibility = "visible"
+
+	// dual symbol
+	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	if(comparisonSymbol.url){
+		var nodeGreen2 = document.getElementsByClassName('buy_2')[0]
+		var nodeRed2 = document.getElementsByClassName('sell_2')[0]
+		nodeGreen2.style.visibility = "visible"
+		nodeRed2.style.visibility = "visible"
+	}
+
 }
 CIQ.removePrompt = function(){
 	for(var node of document.getElementsByClassName('buy')){
@@ -217,6 +237,17 @@ CIQ.removePrompt = function(){
 	}
 	for(var node of document.getElementsByClassName('sell')){
 		node.style.visibility = "hidden"
+	}
+
+	// dual symbol
+	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	if(comparisonSymbol.url){
+		for(var node of document.getElementsByClassName('buy_2')){
+			node.style.visibility = "hidden"
+		}
+		for(var node of document.getElementsByClassName('sell_2')){
+			node.style.visibility = "hidden"
+		}
 	}
 }
 
@@ -327,7 +358,14 @@ CIQ.createOneTimePatternMarker = function(date,content){
 }
 
 CIQ.setMarkerVisibility = function(type){
-	let markerVisibilityType = type=='buy'? "triangle_buy": "triangle_sell"
+	//let markerVisibilityType = type=='buy'? "triangle_buy": "triangle_sell"
+	const visibilityTypeMap = {
+		'buy': 'triangle_buy',
+		'sell': 'triangle_sell',
+		'buy_2': 'triangle_buy_2',
+		'sell_2': 'triangle_sell_2',
+	};
+	let markerVisibilityType = visibilityTypeMap[type] || null;
 
 	if(CIQ.MarkersSample) CIQ.MarkersSample.setMarkerVisibilityType(markerVisibilityType)
 	if(!CIQ.MarkersSample.activeLabels.includes(markerVisibilityType)){

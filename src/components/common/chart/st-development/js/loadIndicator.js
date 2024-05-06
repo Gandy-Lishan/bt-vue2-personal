@@ -5,11 +5,11 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
- import {maxNumOfStudy} from '@/utils'
- //import "./STMovingAverages.js"
+ import {maxNumOfStudy,recoverSymbolOptixUrl} from '@/utils'
  import qs from 'querystring'
  import {
-    searchIndicator
+    searchIndicator,
+    getPairData
   } from '@/service/service'
 
  let __st_js_loadIndicator_ = (_exports) => {
@@ -17,144 +17,31 @@
  
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  
- // load Indicators when edit/view a backtest
- CIQ.addIndicatorsFromBacktest = async function(callback){
-     CIQ.notADefaultCall = true
-     // var loader = document.querySelector(".loaderMain");
-     // if (loader) loader.show();
-     //和his/fav绑在一起，所以不用加
-     //CIQ.addCover()
-     console.log('before loadChart FromBacktest: ')
-     // set indicatorList to local storage, fetch it when change a symbol
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
- 
-         const set = new Set(indicatorsList)
-         indicatorsList = [...set]
-         
-         //  load saved indicator layouts from backtest list
-         var savedTechSD = []
-         savedTechSD = CIQ.store.state.chart.techSD
-         CIQ.store.commit('chart/setSavedTechSD', savedTechSD)   
- 
-         // sort indicatorsList into a "[senti,tech]" style
-         let techList = CIQ.store.state.chart.indicators.technicalIndicators
-         let technicalIndicators = []
-         for(var item in indicatorsList){
-             if(techList.indexOf(indicatorsList[item]) != -1){
-                 technicalIndicators.push(indicatorsList[item])
-                 indicatorsList[item] = ''
-             }    
-         }
-         indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-         await CIQ.getIndicatorMatedata(indicatorsList)
- 
-         if(CIQ.store.state.form.backtestSymbol){
-             CIQ.symbol = CIQ.store.state.form.backtestSymbol
-         }
-         await new Promise((resolve) => {
-            CIQ.stxx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-                // callback - your code to be executed after the chart is loaded
-                //CIQ.hideCover()
-                //CIQ.exportEx()
-                //CIQ.stxx.layout.rangeSlider = true;
-                //CIQ.stxx.changeOccurred("layout");
-    
-                callback()
-                resolve()
-            })
-         })
-             
- }
- 
- // load Indicators when run a new backtest
- CIQ.outputSignalsResult = async function(pk,callback){
-     CIQ.notADefaultCall = true
-     // var loader = document.querySelector(".loaderMain");
-     // if (loader) loader.show();
- 
-     //和创回测绑在一起，所以不用加
-     //CIQ.addCover()
-     console.log('before run a backtest and before viewing result: ')
-     // set indicatorList to local storage, fetch it when change a symbol
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
- 
-         const set = new Set(indicatorsList)
-         indicatorsList = [...set]
-         
-         //  load saved indicator layouts from backtest list
-         var savedTechSD = []
-         savedTechSD = CIQ.store.state.chart.techSD
-         CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-         // console.log(CIQ.store.state.chart.savedTechSD)
- 
-         // sort indicatorsList into a "[senti,tech]" style
-         let techList = CIQ.store.state.chart.indicators.technicalIndicators
-         let technicalIndicators = []
-         for(var item in indicatorsList){
-             if(techList.indexOf(indicatorsList[item]) != -1){
-                 technicalIndicators.push(indicatorsList[item])
-                 indicatorsList[item] = ''
-             }    
-         }
-         indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-         await CIQ.getIndicatorMatedata(indicatorsList)
- 
-         if(CIQ.store.state.form.backtestSymbol){
-             CIQ.symbol = CIQ.store.state.form.backtestSymbol
-          }
-         await new Promise((resolve) => {
-            CIQ.stxx.loadChart({ symbol: CIQ.symbol, startDate: new Date(parseInt(process.env.VUE_APP_START_DATE)), endDate: new Date(), indicator: indicatorsList }, async function () {
-              // callback - your code to be executed after the chart is loaded
-              console.log("loadChart加载完毕", CIQ.stxx.layout.studies);
-              CIQ.stxx.resizeChart();
-              CIQ.stxx.draw();
-              var csvContent = CIQ.exportEx();
-              console.log("csvContent created Success");
-              var promise = 200
-              try {
-                var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
-                var data = await uploadS3(S3DataStr)
-                console.log("Upload csv Success", data);
-                promise = 200
-              } catch (error) {
-                console.log("Error", error);
-                promise = 500
-              }
-          
-              await callback(promise);
-          
-              resolve(); // 表示回调执行完成
-            });
-          });
-            
-   
- }
-
  CIQ.uploadCSVJSON = async function(pk,callback) {
     // lishan 仅仅用于上传 csv json 文件
     CIQ.stxx.resizeChart();
     CIQ.stxx.draw();
+    
     let csvContent = CIQ.exportEx();
+    let csvContent2
+    // dual symbol
+    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+    if(comparisonSymbol.url){
+        csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
+    }
     console.log("csvContent created Success");
+
     let promise = 200
     try {
       let S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
       let data = await uploadS3(S3DataStr)
       console.log("Upload csv Success", data);
+
+      if(csvContent2){
+        let S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
+        let data2 = await uploadS3(S3DataStr2)
+        console.log("Upload csv2 Success", data2);
+      }
       promise = 200
     } catch (error) {
       console.log("Error", error);
@@ -175,79 +62,240 @@
          })
      })
  }
- 
- // the main functionality of it is to update indicator list on chart, maybe it would be better if we call it "updateIndicatorList"
- CIQ.addIndicators = async function(callback){
-     CIQ.notADefaultCall = true
-     CIQ.addCover()
-     CIQ.nprogress.start()
-     // var loaderMain = document.querySelector(".loaderMain");
-     // if (loaderMain) loaderMain.show();
-     console.log('before loadChart... ')
- 
-         let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-           // remove redundant elements and empty string
-           for(var i=0;i<indicatorsList.length;i++){
-             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-               indicatorsList.splice(i,1)
-               i--;
-             }
-           }
-           
-         indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
+ /**
+  * the main functionality of it is to update indicator list on chart,
+  *  maybe it would be better if we call it "updateIndicatorList"
+  * @param {*} params 
+  * type:
+  *     'updateIndicators':更新indicator列表，用于加载/移除单个indicator,切换Timeframe, 切换Symbol
+  *     'loadFromBacktest':从view/edit/rerun进入，根据backtestInfo还原图表
+  *     'addBuiltTech':从chartiq Study列表载入technical indicator,无需发pairdata
+  *     'outputSignalsResult': runbacktest 调用，在回调处生成并上传csv数据
+  * stx:
+  *     chartiq stx实例，有的生命周期CIQ.stxx获取不到，需要手动传入
+  * @param {*} callback 
+  * @returns Promise
+  */
+ CIQ.addIndicators = async function(params,callback){
+        let {
+            stx=CIQ.stxx,
+            type='updateIndicators',
+            pk
+        } = params
+
+        // 限制同屏显示个数
+        if(maxNumOfStudy(stx)) return
+
+        /** 如果type为loadFromBakctest或者outputSignalsResult的话，
+         * 和his/fav绑在一起，所以不用加 */
+        if(type == 'updateIndicators' || type == 'addBuiltTech'){
+            CIQ.addCover()
+            CIQ.nprogress.start()
+        }
+
+        let indicatorsList = [
+            ...CIQ.store.state.chart.indicators.formIndicators.entry,
+            ...CIQ.store.state.chart.indicators.formIndicators.exit,
+            ...CIQ.store.state.chart.indicators.formIndicators.entry2,
+            ...CIQ.store.state.chart.indicators.formIndicators.exit2
+        ]
+
+        // remove redundant elements and empty string
+        for(var i=0;i<indicatorsList.length;i++){
+            if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
+            indicatorsList.splice(i,1)
+            i--;
+            }
+        }
+
+        /** 如果type为loadFromBakctest或者outputSignalsResult的话,
+         * 不需要加载额外Studies */
+        if(type == 'updateIndicators' || type == 'addBuiltTech'){
+            indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
+        }
+         
+        /** 去重 */
          const set = new Set(indicatorsList)
          indicatorsList = [...set]
          
          //  load saved indicator layouts from stxx.layout
          var savedTechSD = []
-         for(var i in CIQ.stxx.layout.studies){
-             savedTechSD.push({
-                 type: CIQ.stxx.layout.studies[i].type,
-                 inputs: CIQ.stxx.layout.studies[i].inputs,
-                 outputs: CIQ.stxx.layout.studies[i].outputs,
-                 parameters: CIQ.stxx.layout.studies[i].parameters,
-                 panel: CIQ.stxx.layout.studies[i].panel
-             })
+         if(type == 'updateIndicators' || type == 'addBuiltTech'){
+            for(var i in stx.layout.studies){
+                /** 跳过非参与回测的indicator */
+                if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(stx.layout.studies[i].type)) continue
+                savedTechSD.push({
+                    type: stx.layout.studies[i].type,
+                    inputs: stx.layout.studies[i].inputs,
+                    outputs: stx.layout.studies[i].outputs,
+                    parameters: stx.layout.studies[i].parameters,
+                    panel: stx.layout.studies[i].panel
+                })
+            }
+         }else{
+            /** 如果type为loadFromBakctest或者outputSignalsResult的话,
+             * vuex有techSD则存入savedTechSD */
+            savedTechSD = CIQ.store.state.chart.techSD
          }
          CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
  
          // sort indicatorsList into a "[senti,tech]" style
-         let techList = CIQ.store.state.chart.indicators.technicalIndicators
          let technicalIndicators = []
          for(var item in indicatorsList){
-             if(techList.indexOf(indicatorsList[item]) != -1){
+             if(CIQ.findBuiltinTechIndicator(null,indicatorsList[item])){
                  technicalIndicators.push(indicatorsList[item])
                  indicatorsList[item] = ''
              }    
          }
          indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
          
-         // fetch indicator information and add studies to chart
-         await CIQ.getIndicatorMatedata(indicatorsList)
-         if(CIQ.store.state.form.backtestSymbol){
-             CIQ.symbol = CIQ.store.state.form.backtestSymbol
-          }
- 
-         CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, function () {
-             // callback - your code to be executed after the chart is loaded
- 
-             //CIQ.stxx.layout.rangeSlider = true;
-             //CIQ.stxx.changeOccurred("layout");
-             
-             // 禁用indicator加载保留Marker功能，防止不同timeframe时marker吸附功能出现问题
-             //CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-             CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-             
-             if(callback){
-                 callback()
-             }else{ 
-                 CIQ.hideCover()
-                 CIQ.nprogress.done()
-             }
+
+
+        /** 不参与请求 */
+        if(type == 'addBuiltTech') {
+            // fetch indicator information and add studies to chart
+            await CIQ.getIndicatorMatedata(indicatorsList,stx)
+            CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
+            CIQ.hideCover()
+            CIQ.nprogress.done()
+            return
+        }
+        if(CIQ.store.state.form.backtestSymbol){
+            CIQ.symbol = CIQ.store.state.form.backtestSymbol
+        }
+        /** dual symbol:
+        * addSeire前移除当前序列,防止出现多个序列 */
+        for(var s in stx.chart.series){
+            var series=stx.chart.series[s];
+            stx.removeSeries(series);
+        }
+        await new Promise((resolve) => {
+            stx.loadChart({ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList}, async function () {
+                const commonOperations = async () => {
+                    /* 一系列chart加载完成后的操作 */
+                    /** dual symbol,setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
+                    CIQ.store.commit('form/setRestoreFreq', '')
+    
+                    // fetch indicator information and add studies to chart
+                    /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
+                    await CIQ.getIndicatorMatedata(indicatorsList,stx)
+        
+                    /** !(_type == 'loadFromBacktest') */
+                    if(type == 'updateIndicators'){
+                        CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
+                        }
+                        
+                    if(type == 'outputSignalsResult'){
+                        /** load Indicators when run a new backtest
+                         * outputSignalsResult只保留csv 生成和upload逻辑 */
+                        stx.resizeChart();
+                        stx.draw();
+                        var csvContent = CIQ.exportEx()
+                        var csvContent2
+                        // dual symbol
+                        if(comparisonSymbol.url){
+                            csvContent2 = CIQ.exportEx2(comparisonSymbol.url);
+                        }
+        
+                        var promise = 200
+                        try {
+                            var S3DataStr = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data.csv', file_data: csvContent })
+                            var data = await uploadS3(S3DataStr)
+                            console.log("Upload csv Success", data);
+        
+                            // dual symbol
+                            if(csvContent2){
+                            var S3DataStr2 = qs.stringify({ file_name: pk + '/' + pk + '_backtest_data2.csv', file_data: csvContent2 })
+                            var data2 = await uploadS3(S3DataStr2)
+                            console.log("Upload csv2 Success", data2);
+                            }
+                            promise = 200
+                        } catch (error) {
+                            console.log("Error", error);
+                            promise = 500
+                        }
+                        await callback(promise);
+                        resolve()
+                    }else {
+                        if(callback){
+                            callback()  
+                        }else{ 
+                            CIQ.hideCover()
+                            CIQ.nprogress.done()
+                        }
+                        resolve()
+                    } 
+                }; 
+                const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+                
+                if(comparisonSymbol.url){
+                    /** dual symbol */
+                    var start = config.timestampToTime(CIQ.initialDate.start)
+                    var end = config.timestampToTime(CIQ.initialDate.end)
+                    const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
+                    let _data = formatData(res.data)
+                    stx.addSeries(comparisonSymbol.url, {
+                        display:comparisonSymbol.name, 
+                        data:_data,
+                        isComparison: false, 
+                        color: "#368DF0",
+                        permanent: true,
+                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
+                        yAxis:{ 
+                            position:"left",
+                            textStyle:"#FFBE00"
+                        },
+                    },commonOperations);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
+                }else commonOperations();
          })
-         
+        })
  }
- 
+
+ const formatData = function(data) {
+    if(data == null){
+        data = []
+    }
+    
+    var newQuotes = [];
+    if('High' in data[0]){
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+            
+            var datatime = new Date(data[i].DT)
+            
+            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            
+            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+            
+            newQuotes[i].Open = data[i].Open;
+            newQuotes[i].High = data[i].High;
+            newQuotes[i].Low = data[i].Low;
+            newQuotes[i].Close = data[i].Close;
+            newQuotes[i].Volume = data[i].Volume;  
+        } 
+    }else{
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+
+            var datatime = new Date(data[i].DT)
+
+            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            
+            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+
+            newQuotes[i].Open = data[i].Close;
+            newQuotes[i].High = data[i].Close;
+            newQuotes[i].Low = data[i].Close;
+            newQuotes[i].Close = data[i].Close;
+            
+            if(data[i].Volume){
+                newQuotes[i].Volume = data[i].Volume
+            }
+        }
+    }
+    return newQuotes
+ }
+
  // endDate为推荐日当天
  CIQ.initiateChart = function(indicatorsList,endDate,callback){
      var datatime = new Date(endDate)
@@ -263,144 +311,118 @@
          }
      })
  }
- // change a symbol
- CIQ.addSymbol = async function(symbol,callback){
-     CIQ.addCover()
-     CIQ.nprogress.start()
-     let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-     // remove redundant elements and empty string
- 
-     for(var i=0;i<indicatorsList.length;i++){
-         if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-         indicatorsList.splice(i,1)
-         i--;
-       }
-     }
-     indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
-     const set = new Set(indicatorsList)
-     indicatorsList = [...set]
- 
-     // set AAPL as default indicator params
-     if(indicatorsList.length==0){
-         //indicatorsList = ['AAPL']
-     }
- 
-     // sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
-     let techList = CIQ.store.state.chart.indicators.technicalIndicators
-     let technicalIndicators = []
-     for(var item in indicatorsList){
-         if(techList.indexOf(indicatorsList[item]) != -1){
-             technicalIndicators.push(indicatorsList[item])
-             indicatorsList[item] = ''
-         }    
-     }
-     indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
- 
-     //  load saved indicator layouts from stxx.layout
-     var savedTechSD = []
-     for(var i in CIQ.stxx.layout.studies){
-         savedTechSD.push({
-             type: CIQ.stxx.layout.studies[i].type,
-             inputs: CIQ.stxx.layout.studies[i].inputs,
-             outputs: CIQ.stxx.layout.studies[i].outputs,
-             parameters: CIQ.stxx.layout.studies[i].parameters,
-             panel: CIQ.stxx.layout.studies[i].panel
-         })
-     }
-     CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-   
-      // 限制同屏显示个数
-      if(maxNumOfStudy()) return
- 
-     let count = 0
-     for (var studyInstanceName in CIQ.stxx.layout.studies) {
-         count++
-     }
- 
-     CIQ.store.commit('form/getBacktestSymbol',symbol)
-     if(count>0){
-         await this.getIndicatorMatedata(indicatorsList)
-         console.log('after CIQ.getIndicatorMatedata')
-     }
- 
-     CIQ.stxx.loadChart(	{ symbol: symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
-         // callback - your code to be executed after the chart is loaded
-        if(callback){
-            callback()
-        }else{ 
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-        }
+ /** global symbol loading function, 
+  * including chart initation,lookup component, addSymbol from setup form*/
+ CIQ.addSymbol = async function(symbol,stx,callback){
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        return
+    }
+    /** addIndicators会读取存入的symbol并用于loadChart */
+    CIQ.store.commit('form/getBacktestSymbol',symbol)
 
-         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-
-         //CIQ.stxx.layout.rangeSlider = true;
-         //CIQ.stxx.changeOccurred("layout");
-         //CIQ.exportEx()      
-     })
+    CIQ.addIndicators({stx:stx},callback)
  }
 
  // fetch indicator information and add studies to chart
  // 封装成了一个promise函数
- CIQ.getIndicatorMatedata = function(indicatorList){
+ CIQ.getIndicatorMatedata = function(indicatorList,stx){
      var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
      var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
 
-     for (var studyInstanceName in CIQ.stxx.layout.studies) {
-         
-         var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-         //if (CIQ.studys.indexOf(sd.type) === -1){
-             CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-        // }
+     if(!stx) return
+     for (var studyInstanceName in stx.layout.studies) {  
+        var sd = stx.layout.studies[studyInstanceName]; 
+        CIQ.Studies.removeStudy(stx, sd); 
      }
      let indicatorHeight = CIQ.setPanelHeight(indicatorList)
  
+
      let resArr = []
      let sentiUrlList = []
- 
- 
- 
      return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech
-             if(CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)){
+             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)
+             if(indicatorObj){
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
-                     // 暂定，遇到ma时会访问store里的此记录并还原显示   
-                     if(indicatorList[i]=='ma'){
-                         for(var j in CIQ.store.state.chart.activatedMALayout){
-                             // 直接加载，信息都更新再studylibrary
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
-                                 Type: CIQ.store.state.chart.activatedMALayout[j].type,
-                                 Field: CIQ.store.state.chart.activatedMALayout[j].field,
-                                 Period: CIQ.store.state.chart.activatedMALayout[j].period,
-                                 //display: indicatorList[i],
-                             },{ MA: color[j%7] },{
-                                 criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
-                                 index: CIQ.store.state.chart.activatedMALayout[j].index
-                             })     
-                         }
-                     }else{
-                         // if no savedTechSD exit, load normal study         
-                         var count = 0 
-                         for(var j in CIQ.store.state.chart.savedTechSD){
-                             if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
-                                 count++
-                                 var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                 study.panelHeight=indicatorHeight
-                                 CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                 var sd = CIQ.Studies.addStudy(CIQ.stxx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
-                             }
-                         }
-                         if(count==0){     
-                             console.log(CIQ.Studies.studyLibrary)                                                       
-                             var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                             study.panelHeight=indicatorHeight
-                             CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, indicatorList[i],{display:indicatorList[i]});  
-                         }
-                     }
+                    if(CIQ.store.getters.getMaLikeTech.includes(indicatorList[i])){
+                        for(var j in CIQ.store.state.chart.activatedMALayout){
+                            if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
+                                /** 指示Study归属的Symbol */
+                                const criteria = CIQ.store.state.chart.activatedMALayout[j].criteria;
+                                const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
+                                const inputs = indicatorList[i] == 'ma'
+                                    ? {
+                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`,
+                                        Type: CIQ.store.state.chart.activatedMALayout[j].type,
+                                        Field: CIQ.store.state.chart.activatedMALayout[j].field,
+                                        Period: CIQ.store.state.chart.activatedMALayout[j].period,
+                                    }
+                                    : {
+                                        // 目前来说maLikeTech就一个ma
+                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                    }
+                                const outputs = indicatorList[i] == 'ma' ? { MA: color[j%7] } : null
+                                var sd = CIQ.Studies.addStudy(stx, indicatorList[i],inputs,outputs,{
+                                    criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
+                                    index: CIQ.store.state.chart.activatedMALayout[j].index
+                                })   
+                            }  
+                        }
+                    }else{
+                        // if no savedTechSD exit, load normal study         
+                        var count = 0 
+                        for(var j in CIQ.store.state.chart.savedTechSD){       /** 现在考虑到可能有多个tech indicator,url === study.type的判断不再适用 */
+                            if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
+                                count++
+                                var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                                study.panelHeight=indicatorHeight
+                                CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                                var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
+                            }
+                        }
+                        if(count==0){                                                         
+                            var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                            study.panelHeight=indicatorHeight
+                            CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                            let activatedTechLayout = CIQ.store.state.chart.activatedTechLayout
+                            activatedTechLayout.forEach(item=>{
+                                if(item.criteria && item.criteria.endsWith("2")){
+                                    item.symbolType = 'symbol2'
+                                }else item.symbolType = 'symbol1'
+                            })
+                            var urlMap = {};
+                            for(var j in activatedTechLayout){
+                                var url = activatedTechLayout[j].url
+                                var symbolType = activatedTechLayout[j].symbolType
+                                if(url == indicatorList[i]){
+                                        // 检查该 URL 和 stockType 是否已经存在于 urlMap 中
+                                        if (!urlMap.hasOwnProperty(url)) {
+                                            urlMap[url] = {};
+                                        }
+
+                                        if (!urlMap[url].hasOwnProperty(symbolType)) {
+                                            urlMap[url][symbolType] = true; // 添加当前 stockType 到 urlMap[url]
+                                        } else {
+                                            // 如果 URL 和 stockType 已经存在，则过滤掉当前元素
+                                            continue;
+                                        }
+                                        const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria;
+                                        const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                        var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
+                                            display:`(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                        },null,{
+                                            // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
+                                            isComparison: symbolType=='symbol2',
+                                        });  
+                                }
+                            }
+                        }
+                    }
  
                      if(CIQ.findSymbolIndicator(indicatorList[i],null)){
                          if(CIQ.store.getters.getBeforeCalculateNewConditions == false){
@@ -414,7 +436,7 @@
                          if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == indicatorList[i])){
                              if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
                                  // 直接加载，信息都更新再studylibrary
-                                 var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+                                 var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                      // Type: CIQ.store.state.chart.activatedMA[i].type,
                                      Period: CIQ.store.state.chart.activatedMA[j].period,
                                      display: 'ST MA',
@@ -423,7 +445,7 @@
                                      index: CIQ.store.state.chart.activatedMA[j].index
                                  })
                              }else{
-                                 sd = CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+                                 sd = CIQ.Studies.addStudy(stx, "ST MA",{
                                      Period: CIQ.store.state.chart.activatedMA[j].period,
                                      display:"ST MA",
                                      Field: CIQ.store.state.chart.activatedMA[j].url
@@ -472,14 +494,14 @@
                  for(var j in CIQ.store.state.chart.savedTechSD){
                      if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                          count++
-                         var sd = CIQ.Studies.addStudy(CIQ.stxx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
+                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                      }
                  }
                  if(count==0){
                     /********************lishan modify start*************************/
                     var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
                     /********************lishan modify end*************************/
-                     var sd = CIQ.Studies.addStudy(CIQ.stxx,indicatorList[i],{display:indicatorName})   
+                     var sd = CIQ.Studies.addStudy(stx,indicatorList[i],{display:indicatorName})   
                  }
  
                  var newExtremeValue = {indicator:indicatorList[i],extremeOptimism:sd.parameters.studyOverBoughtValue,extremePessimism:sd.parameters.studyOverSoldValue}
@@ -491,7 +513,7 @@
                  for(var j in CIQ.store.state.chart.activatedMA){          
                      if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == indicatorList[i])){
                          if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+                             var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                  // Type: CIQ.store.state.chart.activatedMA[i].type,
                                  Period: CIQ.store.state.chart.activatedMA[j].period,
                                  display: 'ST MA',
@@ -500,7 +522,7 @@
                                  index: CIQ.store.state.chart.activatedMA[j].index
                              })
                          }else{    
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+                             var sd = CIQ.Studies.addStudy(stx, "ST MA",{
                                  Period: CIQ.store.state.chart.activatedMA[j].period,
                                  display:"ST MA",
                                  Field: CIQ.store.state.chart.activatedMA[j].url
@@ -515,7 +537,7 @@
              }
  
              var queryUrl =  config.indicatorMetadata + 
-             "?indicator=" + indicatorList[i];
+             "?indicator=" + recoverSymbolOptixUrl(indicatorList[i]);
              let _res = new Promise((resolve,reject)=>{ 
                  CIQ.axios.get(
                      queryUrl,
@@ -563,11 +585,11 @@
                          for(var j in CIQ.store.state.chart.savedTechSD){
                              if(sentiUrlList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                                  count++
-                                 var sd = CIQ.Studies.addStudy(CIQ.stxx, sentiUrlList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
+                                 var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                              }
                          }
                          if(count==0){
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i])    
+                             var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i])    
                          }
          
                          var newExtremeValue = {indicator:sentiUrlList[i],extremeOptimism:sd.parameters.studyOverBoughtValue,extremePessimism:sd.parameters.studyOverSoldValue}
@@ -583,7 +605,7 @@
                  for(var j in CIQ.store.state.chart.activatedMA){          
                      if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == sentiUrlList[i])){
                          if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+                             var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                  // Type: CIQ.store.state.chart.activatedMA[i].type,
                                  Period: CIQ.store.state.chart.activatedMA[j].period,
                                  display: 'ST MA',
@@ -592,7 +614,7 @@
                                  index: CIQ.store.state.chart.activatedMA[j].index
                              })
                          }else{    
-                             var sd = CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+                             var sd = CIQ.Studies.addStudy(stx, "ST MA",{
                                  Period: CIQ.store.state.chart.activatedMA[j].period,
                                  display:"ST MA",
                                  Field: CIQ.store.state.chart.activatedMA[j].url

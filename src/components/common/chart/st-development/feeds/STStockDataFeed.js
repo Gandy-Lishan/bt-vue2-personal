@@ -8,6 +8,7 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
+import {recoverSymbolOptixUrl} from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -46,15 +47,14 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 
 quoteFeedSimulator.url = config.pairDataUrl;
 
-quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
+quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
         var queryUrl = this.url + 
-        "?symbol=" + symbol + 
+        "?symbol=" + CIQ.symbol + 
         new_str +
         "&start="+start+
         "&end=" + end +
         "&freq=" + freq
 
-    CIQ.symbol = symbol;
     try{
         var favoriteSymbolList = []
         var favoriteIndicatorList = []
@@ -70,7 +70,6 @@ quoteFeedSimulator.sendReq = async function(symbol,start,end,new_str,freq,cb){
         
         CIQ.store.commit('chart/setFavoriteIndicatorList',favoriteIndicatorList)
         CIQ.store.commit('chart/setFavoriteSymbolList',favoriteSymbolList)
-        //console.log("quoteFeedSimulator.sendReq",favoriteSymbolList)
         try{
             var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
             var count=0;
@@ -153,20 +152,16 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             var orignalFreq = 'daily'
             var selectedFreq = 'daily'
 
-            let techList = CIQ.store.state.chart.indicators.technicalIndicators
             let list = []
             for(var i in CIQ.objIndicator){
-                if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+                if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
                     list.push(CIQ.objIndicator[i])
                 }
             }
 
             if(params.symbolObject.indicator === undefined){
-                // freq is daily when using default indicator
-                // new_str += '&indicator=' +CIQ.objIndicator;
                 new_str += '&indicator='
             }else if(list.length == 0){
-                //new_str += '&indicator=' +'AAPL'
                 new_str += '&indicator='
             }else{
                 try{
@@ -176,7 +171,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         let sentiIndicatorRes = CIQ.findSentiIndicator(null,CIQ.objIndicator[i])
                         if(sentiIndicatorRes){
                             freqList.push(sentiIndicatorRes.updated)
-                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
                             valid++
                             continue
                         }
@@ -190,7 +185,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                                 let timeframeCode = CIQ.objIndicator[i].slice(-1)
                                 freqList.push(timeframeCode=='0'?'Daily':timeframeCode=='1'?'Weekly':'Monthly')
                             }
-                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+CIQ.objIndicator[i];
+                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
                             valid++
                             continue
                         }
@@ -229,7 +224,8 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             if(restoreFreq != ''){
                 selectedFreq = restoreFreq
             }
-            CIQ.store.commit('form/setRestoreFreq', '')
+            /** dual symbol, setRestoreFreq从pairdata 226行转移到了loadChart回调，保证view时addSeires仍持有未被清空的restoreFreq*/ 
+            // CIQ.store.commit('form/setRestoreFreq', '')
             
             // setFreq firstly called when loading aapl symbol during chart initiation, the value is daily by default
             CIQ.store.commit('form/setFreqency',selectedFreq)
@@ -341,8 +337,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
                 }
             }
-            //console.log('selectedFreq: ',selectedFreq)
-            this.sendReq(symbol,start,end,new_str,selectedFreq,cb)
+            this.sendReq(start,end,new_str,selectedFreq,cb)
 };
 
 quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
@@ -356,10 +351,9 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
     var new_str = ''
     var freq = 'daily'
 
-    let techList = CIQ.store.state.chart.indicators.technicalIndicators
     let list = []
     for(var i in CIQ.objIndicator){
-        if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+        if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
             list.push(CIQ.objIndicator[i])
         }
     }
@@ -442,10 +436,9 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
     var new_str = ''
     var freq = 'daily'
 
-    let techList = CIQ.store.state.chart.indicators.technicalIndicators
     let list = []
     for(var i in CIQ.objIndicator){
-        if(techList.indexOf(CIQ.objIndicator[i]) == -1){
+        if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
             list.push(CIQ.objIndicator[i])
         }
     }
@@ -737,5 +730,6 @@ function findEarliestIndicator(data) {
     return earliestDate;
 }
   
+
 
 export default quoteFeedSimulator;

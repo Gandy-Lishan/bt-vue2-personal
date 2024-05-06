@@ -236,11 +236,11 @@ export default {
       let direction = ''
       let commentDes
       if (index === 0) {
-        if (this.criteria == 'entry') {
+        if (this.criteria.startsWith('entry')) {
           criteria = 'E:'
           direction = this.direction + ';'
         }
-        if (this.criteria == 'exit') {
+        if (this.criteria.startsWith('exit')) {
           criteria = 'X:'
           if (this.direction == 'Long') {
             direction = 'Close;'
@@ -347,12 +347,12 @@ export default {
       // 用symVal因为symUrl当前生命周期不存在
       if (this.symVal) {
         let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
-        const fieldName = symbolCond?symbolCond.field:''
+        const field = symbolCond?symbolCond.field:''
 
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           if (
-            CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
-            CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+            CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
+            CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike' &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           ) {
@@ -388,9 +388,12 @@ export default {
         //   }
         // }
 
+        /** 指示Study归属的Symbol */
+        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `${conditionMap.get(this.sym.newCondition).name}(${fieldName}, ${this.sym.conditionPeriod})`,
-          Field: fieldName,
+          display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
+          Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod
         }, null, {

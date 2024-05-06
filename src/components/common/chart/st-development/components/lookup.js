@@ -1,4 +1,3 @@
-import {maxNumOfStudy} from '@/utils'
 //import store from '../../../../src/store/store.ts'
 let __js_webcomponents_lookup_ = (_exports) => {
 
@@ -502,7 +501,20 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     return function (e) {
                         CIQ.blur(self.input[0]);
                         //self.close();
-                        self.selectItem(data);
+                        self.selectItem(data, ()=>{     /** 新增了手动选择symbol列表的addSymbol的回调 */
+                            /** 仅在CPM时，换symbol后移除存在的hover marker*/
+                            if(window.location.pathname.includes('/cpm/results')){
+                                CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+                            }
+
+                            /** 仅在myIndicator时，换symbol后修改benchMark并触发indicator更新事件*/
+                            if(window.location.pathname.includes('/myindicator/create')){
+                                CIQ.store.commit('chart/SEI_MI_BENCHMARK', data.symbol)
+                            }
+
+                            CIQ.hideCover()
+                            CIQ.nprogress.done()
+                        });
                         self.input[0].value = "";
                     };
                 }
@@ -540,86 +552,11 @@ let __js_webcomponents_lookup_ = (_exports) => {
              * @memberof WebComponents.cq-lookup#
              * @since 8.2.0 Removed the `params` parameter. Added the `fn` parameter.
              */
-            async selectItem(data, fn) {
-                let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==data.symbol)
-                let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==data.symbol)
-                if(!stockName && !indexName){
-                    return
-                }
-                
-                CIQ.addCover()
-                CIQ.nprogress.start()
-                
-                let indicatorsList = [...CIQ.store.state.chart.indicators.formIndicators.entry,...CIQ.store.state.chart.indicators.formIndicators.exit]
-                // remove redundant elements and empty string
-            
-                for(var i=0;i<indicatorsList.length;i++){
-                    if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
-                    indicatorsList.splice(i,1)
-                    i--;
-                  }
-                }
-                indicatorsList = indicatorsList.concat(CIQ.store.state.chart.indicators.extraIndicators)
-                const set = new Set(indicatorsList)
-                indicatorsList = [...set]
-
-                // set AAPL as default indicator params
-                if(indicatorsList.length==0){
-                    //indicatorsList = ['AAPL']
-                }
-
-                // sort indicatorsList into a "[senti,tech]" style (however, tech is selected lastly in this case, so it doesn't matter)
-                let techList = CIQ.store.state.chart.indicators.technicalIndicators
-                let technicalIndicators = []
-                for(var item in indicatorsList){
-                    if(techList.indexOf(indicatorsList[item]) != -1){
-                        technicalIndicators.push(indicatorsList[item])
-                        indicatorsList[item] = ''
-                    }    
-                }
-                indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-
-                //  load saved indicator layouts from stxx.layout
-                var savedTechSD = []
-                for(var i in CIQ.stxx.layout.studies){
-                    savedTechSD.push({
-                        type: CIQ.stxx.layout.studies[i].type,
-                        inputs: CIQ.stxx.layout.studies[i].inputs,
-                        outputs: CIQ.stxx.layout.studies[i].outputs,
-                        parameters: CIQ.stxx.layout.studies[i].parameters,
-                        panel: CIQ.stxx.layout.studies[i].panel
-                    })
-                }
-                CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
-              
-                // 限制同屏显示个数
-                if(maxNumOfStudy()) return
-
-                let count = 0
-                for (var studyInstanceName in CIQ.stxx.layout.studies) {
-                    count++
-                    //CIQ.Studies.removeStudy(CIQ.stxx, CIQ.stxx.layout.studies[studyInstanceName])
-                }
-                CIQ.store.commit('form/getBacktestSymbol',data.symbol)
-                if(count>0){
-                    await CIQ.getIndicatorMatedata(indicatorsList)
-                    console.log('after CIQ.getIndicatorMatedata')
-                }
-
-                CIQ.stxx.loadChart(	{ symbol: data.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(), indicator:indicatorsList},function () {
-                    // callback - your code to be executed after the chart is loaded
-                    //if (loader) loader.hide();
-                    CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
-                    CIQ.hideCover()
-                    CIQ.nprogress.done()
-
-                    CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
-                    
-                    //CIQ.stxx.layout.rangeSlider = true;
-                    //CIQ.stxx.changeOccurred("layout");
-                    //CIQ.exportEx()      
-                })
-            }
+        selectItem(data, fn) {
+			if (this.params.cb) {
+				this.params.cb(data, fn);
+			}
+		}
 
             /**
              * Sets a callback function to be called when the user selects a symbol.

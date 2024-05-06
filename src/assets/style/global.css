@@ -17,6 +17,10 @@
 .el-form-item__label {
   width: 136px;
 }
+
+.exclude_oo .el-form-item label.el-form-item__label {
+	width: auto;
+}
 .el-radio__label {
   font-size: 10px;
 }

@@ -139,7 +139,6 @@ export default {
         });
     },
     displayResultsAndFilter(data) {
-      debugger
       // 至展示 filter 和 result 不重新赋值 form
       const result = data.result
       const list = JSON.parse(data['TRADE LIST'])
