@@ -320,7 +320,7 @@ export default {
 			this.calculateAlloc()
 		},
 		changeTableSort(column){
-      debugger
+      
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字字符串转数字类型排序
@@ -434,7 +434,7 @@ export default {
 		exportTable() {
 			console.log('this.data.content', this.data.content)
 			const data = this.data.content
-			debugger
+			
 			const processedData = data.map(item => {
 				return {
 					'Date': item.Date,

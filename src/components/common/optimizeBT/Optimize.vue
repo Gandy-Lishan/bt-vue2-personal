@@ -227,7 +227,7 @@ export default {
 					
 					const optNum = Number(this.multipleSelection[i].index)+1
 					const copyName = `${_data.name}(opt ${optNum})`
-debugger
+
 					for (const key in _data) {
 						if (_data.hasOwnProperty(key)) {
 							if (

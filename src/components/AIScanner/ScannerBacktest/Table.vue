@@ -311,7 +311,7 @@ export default {
       const _this = this
       let res, listRes
       try {
-        debugger
+        
         res = await getScannerBTResults(url)
         listRes = await getScannerBTResultsList(url)
       } catch (error) {
@@ -321,7 +321,7 @@ export default {
         return
       }
       const code = res.data?.code
-      debugger
+      
       const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {

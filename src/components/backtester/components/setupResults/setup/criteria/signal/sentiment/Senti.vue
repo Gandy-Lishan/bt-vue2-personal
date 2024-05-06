@@ -789,7 +789,6 @@ export default {
           )
         }
       }
-
       const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(this.criteria, this.panelIndex)
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,

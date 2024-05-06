@@ -199,7 +199,7 @@ export default {
       const transformedResult = [];
       const TradeDateArray = [];
       const StartEndDateArray = [];
-      debugger
+      
       for (let i = 0; i < result['End Date'].length; i++) {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
@@ -223,7 +223,7 @@ export default {
         )
       }
       _this.$refs['Statistics'].displayData(statistics, transformedResult)
-      debugger
+      
       _this.tradeDate = TradeDateArray
       _this.rowFrequency = _data.timeframe
       _this.direction = _data.direction || 'Long'
