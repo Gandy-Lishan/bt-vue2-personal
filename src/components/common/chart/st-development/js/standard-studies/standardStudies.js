@@ -4312,6 +4312,10 @@ CIQ.Studies.calculateGenericEnvelope = function (
 			}
 			// field不确定是否被赋值为中间量
 			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
 		}
 
 	for (var i = sd.startFrom; quotes && i < quotes.length; i++) {
