@@ -722,13 +722,13 @@ if (!CIQ.Marker) {
 			stemStyle.borderLeftColor = '#1afa29'
 			stemStyle.marginBottom = '-10px'
 		}else if(nParams.category == 'buy-2') {
-			stemStyle.borderLeftColor = '#fbc05c'
+			stemStyle.borderLeftColor = '#92d2cc'
 			stemStyle.marginBottom = '0px'
 		}else if(nParams.category == 'sell'){
 			stemStyle.borderLeftColor = '#d81e06'
 			stemStyle.marginBottom = '0px'
 		}else if(nParams.category == 'sell-2'){
-			stemStyle.borderLeftColor = '#5b9bd1'
+			stemStyle.borderLeftColor = '#ff5290'
 			stemStyle.marginBottom = '0px'
 		}
 

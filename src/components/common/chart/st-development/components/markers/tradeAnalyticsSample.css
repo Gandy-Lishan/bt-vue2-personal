@@ -208,25 +208,25 @@ body .ta_markers-ui {
 .stx-marker.sell-2 .stx-visual {
 	width: 10px !important;
     height: 10px !important;
-	background-color: #5b9bd1 !important;
+	background-color: #ff5290 !important;
 }
 .stx-marker.buy-2 .stx-visual {
 	width: 10px !important;
     height: 10px !important;
-	background-color: #fbc05c !important;
+	background-color: #92d2cc !important;
 }
 .stx-marker.trade-sell-2 .stx-visual{
 	border-radius: 50% !important;
 	width: 10px !important;
 	height: 10px !important;
-	background-color: #5b9bd1 !important;
+	background-color: #ff5290 !important;
 	background-position: -20px -20px !important;
 }
 .stx-marker.trade-buy-2 .stx-visual{
 	border-radius: 50% !important ;
 	width: 10px !important;
 	height: 10px !important;
-	background-color: #fbc05c !important;
+	background-color: #92d2cc !important;
 	background-position: -20px -20px !important;
 }
 /************************************************************/
