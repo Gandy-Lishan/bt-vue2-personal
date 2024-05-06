@@ -1050,7 +1050,6 @@ export default {
     handleGetComparisonSymbol: {
       handler(newVal) {
         // 如果strategy为Single且symbol2选择了
-        debugger
         if(this.bd.strategy == 'Single' && Object.keys(newVal).length>0){
           this.bd.strategy = 'Dual'
           this.bd.symbol2 = newVal.url

@@ -435,16 +435,6 @@ export default class PerformanceComponent extends Vue {
 	right: 8px;
 	font-weight: 300;
 }
-
-.imgBox {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-}
-.imgBox div {
-	margin: 60px 0px 20px 0px;
-}
 .result-container {
 	padding-bottom: 20px;
 }

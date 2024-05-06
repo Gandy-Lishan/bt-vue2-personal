@@ -3504,7 +3504,7 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverage = function (stx, sd) {
-	debugger
+	
 	if (!sd.chart.dataSet) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
