@@ -249,11 +249,13 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             resu.push(...list)
                             resu.forEach(element => {
-                                var item = {
-                                    name: element.name,
-                                    url: element.url,
-                                    updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
-                                }
+                                try{
+                                    var item = {
+                                        name: element.name,
+                                        url: element.url,
+                                        updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
+                                    }
+                                }catch(err){return}
                            
                                 if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
                                     return;
