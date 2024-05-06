@@ -169,6 +169,13 @@ const mutations = {
 		state.exitFrequency = ''
 		state.comparisonSymbol = {}
 	},
+
+	CLEAR_CHART_CONDIG_STATE: state => {
+		// CLEAR CHART
+		state.pairDataFreq = ''
+		state.backtestSymbol = process.env.VUE_APP_DEFAULT_SYMBOL
+		state.exitFrequency = ''
+	},
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */
@@ -601,6 +608,13 @@ const actions = {
 		return new Promise(resolve => {
 			// 清空chartiq图表配置
 			commit('RESET_CHART_CONDIG_STATE')
+			resolve()
+		})
+	},
+	clear_chart_config_state({ commit }) {
+		return new Promise(resolve => {
+			// 清空chartiq图表配置
+			commit('CLEAR_CHART_CONDIG_STATE')
 			resolve()
 		})
 	},

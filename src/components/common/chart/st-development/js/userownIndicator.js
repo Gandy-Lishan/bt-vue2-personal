@@ -511,7 +511,7 @@
                 ma1_value,
                 ma1_type,
                 newData.categories.includes('Indicator')?newData.indicator1.url:'field',
-                this.data.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
+                newData.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
                 0,
                 ma1_showInput,
                 newData.categories
@@ -522,7 +522,7 @@
                 ma2_type,
                 // 如果是indicator则field为indicator_url，如果是symbol则main panel
                 newData.categories.includes('Indicator') || newData.indicator1.url!=newData.indicator2.url ?newData.indicator2.url:'field',
-                this.data.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
+                newData.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
                 1,
                 ma2_showInput,
                 newData.categories
@@ -554,7 +554,7 @@
         }) 
     }
     const getUserOwnIndicatorMatedata = async function(indicator,extremeLines){
-        var color = "#3582d8"
+        var color = "#000000"
         return new Promise(resolve=>{
                 if(CIQ.isOwnIndicator(indicator)){
                 /********************lishan modify end*************************/
@@ -637,6 +637,8 @@
     }
 
     CIQ.addOwnIndicatorMAStudy = function(value,type,field,criteria,index,showInput,categories) {
+        const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, 0)
+
         if(categories.includes('Indicator')){
             // 更新ma前移除当前index的旧ma
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
@@ -655,14 +657,13 @@
 
             // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
             if(!showInput || !field) return
-            var stma_color = "#bfad94"
             CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
                     Type: type == 'MA' ? 'simple' : 'exponential',
                     Period: value,
                     display: 'ST MA', //无需显示
                     Field: field
                 }, 
-                { MA: stma_color },
+                { MA: ma_color },
                 { criteria: criteria, index: index },
             )
         }else { // symbol
@@ -685,14 +686,13 @@
             const symbolLabel = index == 1 ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
 
             if(!showInput || !field) return
-            var stma_color = "#bfad94"
 
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
                     Type: type == 'MA' ? 'simple' : 'exponential',
                     Period: value,
                     display: `(${symbolLabel})Moving Average`, //无需显示
                 }, 
-                { MA: stma_color },
+                { MA: ma_color },
                 { criteria: criteria, index: index },
             ) 
         }

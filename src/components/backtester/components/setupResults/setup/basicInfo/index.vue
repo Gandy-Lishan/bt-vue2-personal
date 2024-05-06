@@ -13,7 +13,7 @@
 						<div class="setupCenter">
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item prop="strategy" inline="true" class="strategyBox">
+                  <el-form-item prop="strategy" inline="true" class="strategyBox" v-if="is_admin">
                     <template slot="label">
                       <label>
                         Backtest Type
@@ -688,7 +688,8 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'">
+                  <div class="risk-control-container border-set">
+                  <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
                       <el-checkbox
                         v-model="isRiskControl"
@@ -818,7 +819,7 @@ export default {
         strategy: 'Single',
         capital: 100000.0,
         capital_alloc: 1.0,
-        commission: 0.1,
+        commission: 0.0,
         win_rate: 0.0,
         slippage: 0.0,
         start_date: '',

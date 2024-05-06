@@ -227,7 +227,6 @@
                     } 
                 }; 
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-                
                 if(comparisonSymbol.url){
                     /** dual symbol */
                     var start = config.timestampToTime(CIQ.initialDate.start)
@@ -328,8 +327,10 @@
  // fetch indicator information and add studies to chart
  // 封装成了一个promise函数
  CIQ.getIndicatorMatedata = function(indicatorList,stx){
-     var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
-     var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
+     var senti_color = ["#000000"]
+     var tech_color_1 = ["#5B9BD1","#368DF0"]
+     var tech_color_2 = ["#000000","#6b7280"]
+     
 
      if(!stx) return
      for (var studyInstanceName in stx.layout.studies) {  
@@ -366,7 +367,8 @@
                                         // 目前来说maLikeTech就一个ma
                                         display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
                                     }
-                                const outputs = indicatorList[i] == 'ma' ? { MA: color[j%7] } : null
+                                const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, j)
+                                const outputs = indicatorList[i] == 'ma' ? { MA: ma_color } : null
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],inputs,outputs,{
                                     criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
                                     index: CIQ.store.state.chart.activatedMALayout[j].index
@@ -432,26 +434,29 @@
                          }              
                      }
                      
-                     for(var j in CIQ.store.state.chart.activatedMA){                            
-                         if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == indicatorList[i])){
-                             if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
+                     for(var j in CIQ.store.state.chart.activatedMA){       
+                        /** 指示Study归属的Symbol */
+                        const activatedMAObj = CIQ.store.state.chart.activatedMA[j];                     
+                         if((activatedMAObj.url != '')&&(activatedMAObj.url == indicatorList[i])){
+                            const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
+                            if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
                                  // 直接加载，信息都更新再studylibrary
                                  var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                      // Type: CIQ.store.state.chart.activatedMA[i].type,
-                                     Period: CIQ.store.state.chart.activatedMA[j].period,
+                                     Period: activatedMAObj.period,
                                      display: 'ST MA',
-                                 },{ MA: stma_color[j%5] },{
-                                     criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                     index: CIQ.store.state.chart.activatedMA[j].index
+                                 },{ MA: ma_color },{
+                                     criteria: activatedMAObj.criteria,
+                                     index: activatedMAObj.index
                                  })
                              }else{
                                  sd = CIQ.Studies.addStudy(stx, "ST MA",{
-                                     Period: CIQ.store.state.chart.activatedMA[j].period,
+                                     Period: activatedMAObj.period,
                                      display:"ST MA",
-                                     Field: CIQ.store.state.chart.activatedMA[j].url
-                                 },{ MA: stma_color[j%5] },{
-                                     criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                     index: CIQ.store.state.chart.activatedMA[j].index
+                                     Field: activatedMAObj.url
+                                 },{ MA: ma_color },{
+                                     criteria: activatedMAObj.criteria,
+                                     index: activatedMAObj.index
                                  });
                              }    
                          }   
@@ -469,7 +474,7 @@
                  var newStudy = {
                      inputs: { Period: 13, Overlay: false},
                      outputs: 
-                     {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
+                     {indicatorClose:senti_color[i%1],description: '',url:indicatorList[i]},
                      panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
@@ -510,25 +515,28 @@
                  CIQ.store.commit("chart/getExtremeValue", extremeValueList)
                  
                  // load moving average lines that attach to sentiment indicator
-                 for(var j in CIQ.store.state.chart.activatedMA){          
-                     if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == indicatorList[i])){
-                         if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
+                 for(var j in CIQ.store.state.chart.activatedMA){       
+                    /** 指示Study归属的Symbol */
+                    const activatedMAObj = CIQ.store.state.chart.activatedMA[j];     
+                     if((activatedMAObj.url != '')&&(activatedMAObj.url == indicatorList[i])){
+                         const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
+                         if(activatedMAObj.url == 'ma'){
                              var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                  // Type: CIQ.store.state.chart.activatedMA[i].type,
-                                 Period: CIQ.store.state.chart.activatedMA[j].period,
+                                 Period: activatedMAObj.period,
                                  display: 'ST MA',
-                             },{ MA: stma_color[j%5] },{
-                                 criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                 index: CIQ.store.state.chart.activatedMA[j].index
+                             },{ MA: ma_color },{
+                                 criteria: activatedMAObj.criteria,
+                                 index: activatedMAObj.index
                              })
                          }else{    
                              var sd = CIQ.Studies.addStudy(stx, "ST MA",{
-                                 Period: CIQ.store.state.chart.activatedMA[j].period,
+                                 Period: activatedMAObj.period,
                                  display:"ST MA",
-                                 Field: CIQ.store.state.chart.activatedMA[j].url
-                             },{ MA: stma_color[j%5] },{
-                                 criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                 index: CIQ.store.state.chart.activatedMA[j].index
+                                 Field: activatedMAObj.url
+                             },{ MA: ma_color },{
+                                 criteria: activatedMAObj.criteria,
+                                 index: activatedMAObj.index
                              });
                          }    
                      }   
@@ -560,7 +568,7 @@
                      var newStudy = {
                          inputs: { Period: 13, Overlay: false},
                          outputs: 
-                         {indicatorClose:color[i%7],description: newQuotes[i].description,url:sentiUrlList[i]},
+                         {indicatorClose:senti_color[i%1],description: newQuotes[i].description,url:sentiUrlList[i]},
                          panelHeight:indicatorHeight,
                          parameters: { init: {
                              studyOverZonesEnabled: false,
@@ -602,25 +610,28 @@
                      
                  }
                  // load moving average lines that attach to sentiment indicator
-                 for(var j in CIQ.store.state.chart.activatedMA){          
-                     if((CIQ.store.state.chart.activatedMA[j].url != '')&&(CIQ.store.state.chart.activatedMA[j].url == sentiUrlList[i])){
-                         if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
+                 for(var j in CIQ.store.state.chart.activatedMA){  
+                    /** 指示Study归属的Symbol */
+                    const activatedMAObj = CIQ.store.state.chart.activatedMA[j];       
+                     if((activatedMAObj.url != '')&&(activatedMAObj.url == sentiUrlList[i])){
+                         const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
+                         if(activatedMAObj.url == 'ma'){
                              var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
                                  // Type: CIQ.store.state.chart.activatedMA[i].type,
-                                 Period: CIQ.store.state.chart.activatedMA[j].period,
+                                 Period: activatedMAObj.period,
                                  display: 'ST MA',
-                             },{ MA: stma_color[j%5] },{
-                                 criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                 index: CIQ.store.state.chart.activatedMA[j].index
+                             },{ MA: ma_color },{
+                                 criteria: activatedMAObj.criteria,
+                                 index: activatedMAObj.index
                              })
                          }else{    
                              var sd = CIQ.Studies.addStudy(stx, "ST MA",{
-                                 Period: CIQ.store.state.chart.activatedMA[j].period,
+                                 Period: activatedMAObj.period,
                                  display:"ST MA",
-                                 Field: CIQ.store.state.chart.activatedMA[j].url
-                             },{ MA: stma_color[j%5] },{
-                                 criteria: CIQ.store.state.chart.activatedMA[j].criteria,
-                                 index: CIQ.store.state.chart.activatedMA[j].index
+                                 Field: activatedMAObj.url
+                             },{ MA: ma_color },{
+                                 criteria: activatedMAObj.criteria,
+                                 index: activatedMAObj.index
                              });
                          }    
                      }   

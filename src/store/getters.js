@@ -17,6 +17,12 @@ const getters = {
 	getSpanPeriod: state => state.chart.spanPeriod,
 	getMiFormState: state => state.chart.miFormState,
 	getMaLikeTech: state => state.chart.maLikeTech,
+	getMiBenmarkState: state => state.chart.miBenmark,
+	getColorByCriteriaAndIndex: (state) => (criteria, panelIndex) => {	// 返回计算得到的颜色值
+		return criteria && criteria.endsWith('2') ?
+		  state.chart.ma_color_2[panelIndex % state.chart.ma_color_2.length] :
+		  state.chart.ma_color_1[panelIndex % state.chart.ma_color_2.length];
+	  },
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,

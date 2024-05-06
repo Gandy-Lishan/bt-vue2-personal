@@ -72,6 +72,7 @@ MarkersSample.prototype.loadDataSet = function(dataSet){
     
 	if(!dataSet[0] || !dataSet[0].Symbol){
 		mDataSet =  dataSet
+		mDataSet2 =  []
 	}else {
 		mDataSet =  dataSet.filter(item => item.SymbolNum ? (item.Symbol == CIQ.stxx.chart.symbol && item.SymbolNum == '1') : item.Symbol == CIQ.stxx.chart.symbol)
 		mDataSet2 =  dataSet.filter(item => item.SymbolNum ? (item.Symbol == comparisonSymbol.url && item.SymbolNum == '2') : item.Symbol == comparisonSymbol.url)
@@ -107,6 +108,7 @@ MarkersSample.prototype.showmMarker = function () {
 	let { stx } = this;
 	// const startTime = performance.now()
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
@@ -207,37 +209,38 @@ MarkersSample.prototype.showmMarker = function () {
 				for(var i in CIQ.stxx.layout.studies){
 					var sd = CIQ.stxx.layout.studies[i]
 					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-					const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+					const isSenti = !sd.parameters.hasOwnProperty('criteria') && !sd.parameters.hasOwnProperty('isComparison')
 					/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
-					if(!isSenti && isSymbol2) continue
-
-					const panel = sd['panel'] 
-					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
-					const plotField = sd.panel == 'chart' && isSymbol2
-										? comparisonSymbol.url
-										: null
-					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-					for(var type in sd['outputMap']){
-						if(Object.keys(quote).indexOf(type)==-1) continue
-						const yAxis = quote[type]
-						// 添加study panel对应的小点
-						new CIQ.Marker({
-							stx: stx,
-							xPositioner: "date",
-							// yPositioner: plotField?"below_candle":"value",
-							yPositioner: "value",
-							plotField: plotField,	// 以field判断设定y轴
-							y:yAxis,	// 设y轴的定值
-							panelName: panel,
-							x: xPosition,
-							label: "dot_buy",
-							node: new CIQ.Marker.stPerformance({
-								type: "circle",
-								category: 'trade-buy',
-								displayCategory: false,
-								displayStem: false,	
-							})
-						});
+					//if(!isSenti && isSymbol2) continue
+					if(isSenti || !isSymbol2){
+						const panel = sd['panel'] 
+						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+						const plotField = sd.panel == 'chart' && isSymbol2
+											? comparisonSymbol.url
+											: null
+						// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
+						for(var type in sd['outputMap']){
+							if(Object.keys(quote).indexOf(type)==-1) continue
+							const yAxis = quote[type]
+							// 添加study panel对应的小点
+							new CIQ.Marker({
+								stx: stx,
+								xPositioner: "date",
+								// yPositioner: plotField?"below_candle":"value",
+								yPositioner: "value",
+								plotField: plotField,	// 以field判断设定y轴
+								y:yAxis,	// 设y轴的定值
+								panelName: panel,
+								x: xPosition,
+								label: "dot_buy",
+								node: new CIQ.Marker.stPerformance({
+									type: "circle",
+									category: 'trade-buy',
+									displayCategory: false,
+									displayStem: false,	
+								})
+							});
+						}
 					}
 				}	
 			}else if(activeLabels.includes("triangle_sell") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "SELL"){
@@ -263,37 +266,38 @@ MarkersSample.prototype.showmMarker = function () {
 				for(var i in CIQ.stxx.layout.studies){
 					var sd = CIQ.stxx.layout.studies[i]
 					const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-					const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+					const isSenti = !sd.parameters.hasOwnProperty('criteria') && !sd.parameters.hasOwnProperty('isComparison')
 					/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
-					if(!isSenti && isSymbol2) continue
-
-					const panel = sd['panel'] 
-					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
-					const plotField = sd.panel == 'chart' && isSymbol2
-										? comparisonSymbol.url
-										: null
-					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-					for(var type in sd['outputMap']){
-						if(Object.keys(quote).indexOf(type)==-1) continue
-						const yAxis = quote[type]
-						// 添加study panel对应的小点
-						new CIQ.Marker({
-							stx: stx,
-							xPositioner: "date",
-							// yPositioner: plotField?"below_candle":"value",
-							yPositioner: "value",
-							plotField: plotField,	// 以field判断设定y轴
-							y:yAxis,	// 设y轴的定值
-							panelName: panel,
-							x: xPosition,
-							label: "dot_sell",
-							node: new CIQ.Marker.stPerformance({
-								type: "circle",
-								category: 'trade-sell',
-								displayCategory: false,
-								displayStem: false,	
-							})
-						});
+					//if(!isSenti && isSymbol2) continue
+					if(isSenti || !isSymbol2){
+						const panel = sd['panel'] 
+						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+						const plotField = sd.panel == 'chart' && isSymbol2
+											? comparisonSymbol.url
+											: null
+						// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
+						for(var type in sd['outputMap']){
+							if(Object.keys(quote).indexOf(type)==-1) continue
+							const yAxis = quote[type]
+							// 添加study panel对应的小点
+							new CIQ.Marker({
+								stx: stx,
+								xPositioner: "date",
+								// yPositioner: plotField?"below_candle":"value",
+								yPositioner: "value",
+								plotField: plotField,	// 以field判断设定y轴
+								y:yAxis,	// 设y轴的定值
+								panelName: panel,
+								x: xPosition,
+								label: "dot_sell",
+								node: new CIQ.Marker.stPerformance({
+									type: "circle",
+									category: 'trade-sell',
+									displayCategory: false,
+									displayStem: false,	
+								})
+							});
+						}
 					}
 				}	
 			}
@@ -388,38 +392,39 @@ MarkersSample.prototype.showmMarker = function () {
 			for(var i in CIQ.stxx.layout.studies){
 				var sd = CIQ.stxx.layout.studies[i]
 				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-				const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+				const isSenti = !sd.parameters.hasOwnProperty('criteria') && !sd.parameters.hasOwnProperty('isComparison')
 				/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
-				if(!isSenti && !isSymbol2) continue
-
-				const panel = sd['panel'] 
-				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
-				const plotField = sd.panel == 'chart' && isSymbol2
-									? comparisonSymbol.url
-									: null
-				if(sd.type == 'ST MA') debugger
-				// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-				for(var type in sd['outputMap']){
-					if(Object.keys(quote).indexOf(type)==-1) continue
-					const yAxis = quote[type]
-					// 添加study panel对应的小点
-					new CIQ.Marker({
-						stx: stx,
-						xPositioner: "date",
-						// yPositioner: plotField?"below_candle":"value",
-						yPositioner: "value",
-						plotField: plotField,	// 以field判断设定y轴
-						y:yAxis,	// 设y轴的定值
-						panelName: panel,
-						x: xPosition,
-						label: "dot_buy_2",
-						node: new CIQ.Marker.stPerformance({
-							type: "circle",
-							category: 'trade-buy-2',
-							displayCategory: false,
-							displayStem: false,	
-						})
-					});
+				//if(!isSenti && !isSymbol2) continue
+				if(isSenti || isSymbol2){
+					const panel = sd['panel'] 
+					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+					const plotField = sd.panel == 'chart' && isSymbol2
+										? comparisonSymbol.url
+										: null
+					if(sd.type == 'ST MA') debugger
+					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
+					for(var type in sd['outputMap']){
+						if(Object.keys(quote).indexOf(type)==-1) continue
+						const yAxis = quote[type]
+						// 添加study panel对应的小点
+						new CIQ.Marker({
+							stx: stx,
+							xPositioner: "date",
+							// yPositioner: plotField?"below_candle":"value",
+							yPositioner: "value",
+							plotField: plotField,	// 以field判断设定y轴
+							y:yAxis,	// 设y轴的定值
+							panelName: panel,
+							x: xPosition,
+							label: "dot_buy_2",
+							node: new CIQ.Marker.stPerformance({
+								type: "circle",
+								category: 'trade-buy-2',
+								displayCategory: false,
+								displayStem: false,	
+							})
+						});
+					}
 				}
 			}	
 		}else if(activeLabels.includes("triangle_sell_2") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "SELL"){
@@ -446,37 +451,38 @@ MarkersSample.prototype.showmMarker = function () {
 			for(var i in CIQ.stxx.layout.studies){
 				var sd = CIQ.stxx.layout.studies[i]
 				const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-				const isSenti = !sd.parameters.criteria && !sd.parameters.isComparison
+				const isSenti = !sd.parameters.hasOwnProperty('criteria') && !sd.parameters.hasOwnProperty('isComparison')
 				/** dot只会绘制在Study所属的Symbol下, senti或者user在dual symbol下是被共享为一个的，所以可以同时显示两个股票的交易点 */
-				if(!isSenti && !isSymbol2) continue
-
-				const panel = sd['panel'] 
-				/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
-				const plotField = sd.panel == 'chart' && isSymbol2
-									? comparisonSymbol.url
-									: null
-				// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
-				for(var type in sd['outputMap']){
-					if(Object.keys(quote).indexOf(type)==-1) continue
-					const yAxis = quote[type]
-					// 添加study panel对应的小点
-					new CIQ.Marker({
-						stx: stx,
-						xPositioner: "date",
-						// yPositioner: plotField?"below_candle":"value",
-						yPositioner: "value",
-						plotField: plotField,	// 以field判断设定y轴
-						y:yAxis,	// 设y轴的定值
-						panelName: panel,
-						x: xPosition,
-						label: "dot_sell_2",
-						node: new CIQ.Marker.stPerformance({
-							type: "circle",
-							category: 'trade-sell-2',
-							displayCategory: false,
-							displayStem: false,	
-						})
-					});
+				//if(!isSenti && !isSymbol2) continue
+				if(isSenti || isSymbol2){
+					const panel = sd['panel'] 
+					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
+					const plotField = sd.panel == 'chart' && isSymbol2
+										? comparisonSymbol.url
+										: null
+					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
+					for(var type in sd['outputMap']){
+						if(Object.keys(quote).indexOf(type)==-1) continue
+						const yAxis = quote[type]
+						// 添加study panel对应的小点
+						new CIQ.Marker({
+							stx: stx,
+							xPositioner: "date",
+							// yPositioner: plotField?"below_candle":"value",
+							yPositioner: "value",
+							plotField: plotField,	// 以field判断设定y轴
+							y:yAxis,	// 设y轴的定值
+							panelName: panel,
+							x: xPosition,
+							label: "dot_sell_2",
+							node: new CIQ.Marker.stPerformance({
+								type: "circle",
+								category: 'trade-sell-2',
+								displayCategory: false,
+								displayStem: false,	
+							})
+						});
+					}
 				}
 			}	
 		}

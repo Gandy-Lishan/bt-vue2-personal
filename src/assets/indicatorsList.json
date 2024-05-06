@@ -14512,17 +14512,17 @@
     {
         "chart_name": "NIPA",
         "url": "cpbicpat",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "Unemployment Rate",
         "url": "unrate",
-        "updated": "Weekly"
+        "updated": "Daily"
     },
     {
         "chart_name": "Conference Board LEI",
         "url": "lei totl",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "Medium Term Volatility Index",
@@ -14532,12 +14532,12 @@
     {
         "chart_name": "New Housing Sales (Total)",
         "url": "nhsltot",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "SPX ROC12/3 Month Treasure Spread",
         "url": "spx12_3mt_spread",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "SPX / GOLDLNPM Ratio",
@@ -15092,17 +15092,17 @@
     {
         "chart_name": "Fundamentals Score",
         "url": "fundamentals_score",
-        "updated": "Weekly"
+        "updated": "Daily"
     },
     {
         "chart_name": "Consecutive Days NHSLTOT Above 12MA",
         "url": "consecutive_of_nhsltot_above_12ma",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "SPX/NASDAQ ROC12 Spread",
         "url": "spx_nasdaq_roc12_spread",
-        "updated": "Monthly"
+        "updated": "Daily"
     },
     {
         "chart_name": "NASDAQ/SPX Ratio",
@@ -15117,6 +15117,31 @@
     {
         "chart_name": "COMP MA30 Spread",
         "url": "comp_ma30_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Bond Cycle Model",
+        "url": "jk_bond_cycle_model",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Bond Cycle Thermometer",
+        "url": "jk_bond_cycle_thermometer",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "SOFR Hedgers Position",
+        "url": "cot_sofr-3m",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Net # of Studies Past 5 Days",
+        "url": "active_studies",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seneca Foods-A",
+        "url": "SENEA",
         "updated": "Daily"
     }
 ]
