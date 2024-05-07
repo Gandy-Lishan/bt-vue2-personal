@@ -173,22 +173,23 @@
       <!-- 显示详细信息的内容 -->
       
       <div class="plan_box">
-    <table border="2px">
-    <thead>
-      <td class="head" style="width: 100px;">Weight</td>
-      <td class="head" style="width: 200px;">Strategies</td>
-      <td class="head" style="width: 200px;">Signal</td>
-      <td class="head" style="width: 150px;">Date</td>
-    </thead>
-    <tbody>
-      <tr>
-        <td>20%</td>
-        <td>Dual Momentum Model With Fundamentals'</td>
-        <td>Long XLE(Energy Select Sector ETF)</td>
-        <td>2024-04-03</td>
-      </tr>
-    </tbody>
-  </table></div>
+        <table border="2px">
+          <thead>
+            <template v-for="(item, index) in detailTableCol">
+               <td class="head" :style="{'width': item.width}" :key="index">{{ item.label }}</td>
+            </template>
+          </thead>
+          <tbody>
+              <template v-for="(item, index) in detailedInfo">
+                <tr :key="index">
+                  <template v-for="(ele, i) in item">
+                    <td :key="i">{{ ele }}</td>
+                  </template>
+               </tr>  
+              </template>
+          </tbody>
+       </table>
+      </div>
     </div>
     <!-- <el-dialog
   title="提示"
@@ -292,29 +293,33 @@ export default {
           label: 'Weight',
           name: 'weight',
           key: 'weight',
-          width: 100
+          width: '100px'
         },
         {
           label: 'Strategies',
           name: 'strategies',
           key: 'strategies',
+          width: '200px'
         },
         {
           label: 'Signal',
           name: 'signal',
-          key: 'signal'
+          key: 'signal',
+          width: '200px'
         },
         {
           label: 'Date',
           name: 'date',
-          key: 'date'
+          key: 'date',
+          width: '150px'
         }
       ],
       currentSort: {}, // 当前的排序信息
       isPopupVisible: false,
       detailedInfo: [],
       mouseX: 0,
-      mouseY: 0
+      mouseY: 0,
+      strategiesList: []
     }
   },
   async created() {
@@ -487,7 +492,7 @@ export default {
             weight: '20% 5',
             strategies: 'Dual Momentum Model With Fundamentals',
             signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
+            date: '2024-04-03',
           },
           {
             weight: '20%',
@@ -655,7 +660,7 @@ export default {
       const _this = this
       let res, listRes
       try {
-        debugger
+        
         res = await getScannerBTResults(url)
         listRes = await getScannerBTResultsList(url)
       } catch (error) {
@@ -665,7 +670,7 @@ export default {
         return
       }
       const code = res.data?.code
-      debugger
+      
       const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
@@ -686,7 +691,13 @@ export default {
       await this.applySort()
     },
     handleCellMouseEnter(row, column, cell, event) {
-      console.log('handleCellMouseEnter', row, column, cell, event)
+      // 如果是第一， 第二列， 直接返回
+      if(typeof column.id === 'string') {
+      const parts = column.id.split('_');
+      const lastPart = parts[parts.length - 1];
+      const number = parseInt(lastPart);
+      if (number <= 2) return
+      }
       this.detailedInfo = row.detailedInfo;
        // 计算弹框位置
        this.mouseX = event.clientX;
@@ -695,7 +706,6 @@ export default {
       this.isPopupVisible = true;
     },
     handleCellMouseLeave(row, column, cell, event) {
-      console.log('handleCellMouseEnter', row, column, cell, event)
       this.isPopupVisible = false;
     }
     }

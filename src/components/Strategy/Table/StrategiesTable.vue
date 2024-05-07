@@ -302,7 +302,7 @@ export default {
 			return true
 		},
 		highlightTag(tag) {
-			debugger
+			
 			this.highlightedTag = tag.value
 			// 重置分页和排序信息
 			this.currentPage = 1

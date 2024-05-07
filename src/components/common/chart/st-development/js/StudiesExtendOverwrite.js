@@ -8,6 +8,7 @@ import {__js_advanced_studies_typicalPrice_} from "./advance-studies/typicalPric
 import {__js_advanced_studies_macd_} from "./advance-studies/macd.js"
 import {__js_advanced_studies_bollinger_} from "./advance-studies/bollinger.js"
 import {__js_advanced_studies_volatilityIndex_} from "./advance-studies/volatilityIndex.js"
+import {__js_advanced_studies_atr_} from "./advance-studies/atr.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -30,6 +31,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_macd_,
 			__js_advanced_studies_bollinger_,
 			__js_advanced_studies_volatilityIndex_,
+			__js_advanced_studies_atr_,
 		)
 
 

@@ -79,19 +79,19 @@
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
-							<cq-tooltip>BUY</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>BUY(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="sell" id="sell" @click="changeMarkerVisibility('sell')" style="visibility:hidden">
 							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
-							<cq-tooltip>SELL</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="buy_2" id="buy_2" @click="changeMarkerVisibility('buy_2')" style="visibility:hidden">
-							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#fbc05c'></path></svg></span>
-							<cq-tooltip>BUY</cq-tooltip>
+							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#92d2cc'></path></svg></span>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>BUY(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="sell_2" id="sell_2" @click="changeMarkerVisibility('sell_2')" style="visibility:hidden">
-							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#5b9bd1'></path></svg></span>
-							<cq-tooltip>SELL</cq-tooltip>
+							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#ff5290'></path></svg></span>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<div class="favBtnContainer">
@@ -417,6 +417,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			// 默认为折线图
 			CIQ.stxx.setChartType("line");
+			CIQ.stxx.setLineStyle({ width: 3 });
 
 			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
 			//CIQ.stxx.captureMouseWheelEvents = false 

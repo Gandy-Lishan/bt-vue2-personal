@@ -444,6 +444,7 @@ if (!CIQ.Studies) {
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		if (field == 'Ratio') return CIQ.Studies.calculateSymbolRatio(stx, sd);
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 
@@ -466,6 +467,27 @@ if (!CIQ.Studies) {
 				var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
 				quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
 			}
+		}
+		//sd.outputMap["Result " + sd.name] = "Symbol High";
+	};
+	CIQ.Studies.calculateSymbolRatio = function (stx, sd) {
+		var quotes = sd.chart.dataSet;
+
+		var field = "Close"
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		if(!comparisonSymbol.url){
+			console.error('SymbolRatio is only allowed in dual symbol')
+		}
+		var symbol2Field = comparisonSymbol.url
+		
+		// 默认study模板
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			var RatioValue = getPropertyByString(quote, field, subField) / getPropertyByString(quote, symbol2Field, subField);
+			quote["Result " + sd.name] = RatioValue
 		}
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
@@ -1164,6 +1186,12 @@ if (!CIQ.Studies) {
 			inputs: { Field: "Volume",overlay: false},
 			outputs: { "Up Volume": "#8cc176", "Down Volume": "#b82c0c" }
 		},
+		"Symbol Ratio": {
+            name: "Symbol Ratio Line",
+            calculateFN: CIQ.Studies.calculateSymbolOhlcv,
+            inputs: { Field: "Ratio",overlay: false},
+			//outputs: { "Symbol High": "auto" },
+        },
 		"MACDHistGap": {
 			name: "MACDHistGap",
 			calculateFN: CIQ.Studies.calculateSTMACDGap,

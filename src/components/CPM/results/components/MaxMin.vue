@@ -101,7 +101,7 @@ export default {
 			}
 		},
 		async prepareData(_,datatime) {
-			debugger
+			
 				const periodArray = this.getAllDefaultTableLabels()
 				const backtestHistoryList = this.calculateBacktestHistory(
 						this.tradesData,

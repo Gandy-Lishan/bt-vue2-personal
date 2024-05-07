@@ -517,7 +517,7 @@ export const CommonMethodsMixin = {
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
-			debugger
+			
 			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
 		},
