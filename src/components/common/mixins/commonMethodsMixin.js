@@ -26,7 +26,8 @@ import { conditionRadioMap } from './conditionRadioMap'
 export const CommonMethodsMixin = {
 	data() {
 		return {
-			favorite_array: []
+			favorite_array: [],
+			isAllFLSRequestsDone: false, // 标识 find last signal 的所有请求有没有全部完成
 		}
 	},
 	methods: {
@@ -105,7 +106,8 @@ export const CommonMethodsMixin = {
 						...data,
 						name: copyName,
 						favorites: false,
-						user_tag: 'client'
+						user_tag: 'client',
+						strategy: data.strategy === 'Signal' ? 'Single' : data.strategy
 					}
 					delete params.uuid
 					delete params.results
@@ -113,6 +115,8 @@ export const CommonMethodsMixin = {
 					delete params.status
 					delete params.backtest_id
 					delete params.old_uuid
+					delete params._last_entry_signal_date
+					delete params._last_exit_signal_date
 
 					// 发起复制请求
 					await copyBacktest(this.$qs.stringify(params))
@@ -178,6 +182,7 @@ export const CommonMethodsMixin = {
 		async runOrFindAndLoop(actionType) {
 			this.showFLSMASK()
 			if (actionType === 'signal') {
+				this.isAllFLSRequestsDone = false
 				this.$store.commit('form/clearHashTable')
 				this.favorite_array = await this.getAllFavoriteData(1)
 				this.$store.commit(
@@ -203,11 +208,16 @@ export const CommonMethodsMixin = {
 					this.$store.commit('form/SET_RUNALL_BACKTEST_ARRAY', [{ state: 3 }])
 					return
 				}
-				for (var i = 0; i < this.favorite_array.length; i++) {
-					// 为每个对象添加属性
-					//this.favorite_array[i].id = this.favorite_array[i].uuid;
-					//this.favorite_array[i].name = this.favorite_array[i].name + ' (from btv1)test1';
-				}
+				this.favorite_array.forEach(item=>{
+					let parsedIndicatorLayout =
+					typeof item['indicator_layout'] === 'string'
+						? JSON.parse(item['indicator_layout'])
+						: item['indicator_layout']
+					parsedIndicatorLayout.savedTechSD = []
+					item['indicator_layout'] = JSON.stringify(parsedIndicatorLayout)
+				})
+
+
 				// 先截取第一个结果看能不能跑
 				//this.favorite_array = this.favorite_array.slice(0, 10)
 
@@ -232,14 +242,19 @@ export const CommonMethodsMixin = {
 		async loopAllFavorites() {
 			for (let i = 0; i < this.favorite_array.length; i++) {
 				const item = this.favorite_array[i]
-				this.reloadData(item.indicator_layout, item.frequency)
-				await CIQ.addIndicatorsFromBacktest(() => {
-					
-				})
+				this.$store.commit('form/getBacktestSymbol', item.symbol)
+				// 参考 55 行 in viewBacktestResults
+				let parsedData =
+				typeof item.indicator_layout === 'string'
+					? JSON.parse(item.indicator_layout.replaceAll('$r001$', '\u200c'))
+					: item.indicator_layout
+				this.reloadData(parsedData, item.frequency, item)
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {})
 				await this.loopCalculateNewConditions(item)
 				this.uploadCSVWhileFLS(item)
 			}
 			await this.findAllFavoritesSignal()
+			this.isAllFLSRequestsDone = true
 			// 循环结束之后请求一次列表
 			await this.getDataList(null)
 			
@@ -268,14 +283,19 @@ export const CommonMethodsMixin = {
 				start_date: row.start_date.replace(/-/g, '') * 1000000000,
 				end_date: row.end_date.replace(/-/g, '') * 1000000000
 			})
-
+			const {strategy} = row
+			let  content2 = null
 			const content = CIQ.exportEx()
-			const csvObj = {
-				id: row.id,
+			// dual symbol
+			const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			if(strategy === 'Dual') content2 = CIQ.exportEx2(comparisonSymbol.url)
+			let csvObj = {
+				uuid: row.id,
 				csv: content,
 				entry: row.entry,
-				exit: row.exit
-			}
+				exit: row.exit,
+				...(strategy === 'Dual' && row.entry2 && row.exit2 && content2 ? { entry2: row.entry2, exit2: row.exit2, csv2: content2 } : {})
+			};
 			this.$store.commit('form/setHashTable', csvObj)
 			// 暂时设置成成功
 			this.$store.state.form.last_signal_array.map(item => {
@@ -343,6 +363,7 @@ export const CommonMethodsMixin = {
 			return res.data.data
 		},
 		async rerunThisBacktest(backtestInfo) {
+			const { strategy, entry_description, exit_description, entry2_description, exit2_description } = backtestInfo
 			CIQ.addCover('Fetching backtest information...')
 			// 这里只需要执行两个请求，上传 S3 和直接运行当前的 backtest
 			backtestInfo.capital_alloc = parseFloat(backtestInfo.capital_alloc)
@@ -360,14 +381,18 @@ export const CommonMethodsMixin = {
 			backtestInfo.favorites = backtestInfo.hasOwnProperty('favorites')
 				? backtestInfo.favorites
 				: false
-			const entry_description = backtestInfo.entry_description
-			const exit_description = backtestInfo.exit_description
-			backtestInfo.entry_description = Array.isArray(entry_description)
-				? JSON.stringify(entry_description)
-				: entry_description
-			backtestInfo.exit_description = Array.isArray(exit_description)
-				? JSON.stringify(exit_description)
-				: exit_description
+				backtestInfo.entry_description = Array.isArray(entry_description) ? JSON.stringify(entry_description) : entry_description;
+				backtestInfo.exit_description = Array.isArray(exit_description) ? JSON.stringify(exit_description) : exit_description;
+				if(strategy === 'Dual') {
+					backtestInfo.entry2_description = Array.isArray(entry2_description) ? JSON.stringify(entry2_description) : entry2_description;
+					backtestInfo.exit2_description = Array.isArray(exit2_description) ? JSON.stringify(exit2_description) : exit2_description;
+					// 属性传递默认值
+					backtestInfo.risk_control = '//'
+					backtestInfo.exclude_oo = 0
+					backtestInfo.market_environment = 0
+					backtestInfo.index_moving_average_slope = 0
+				}
+				if(strategy === 'Signal') backtestInfo.strategy = 'Single'
 			// end_date 改成最新的，于此同时改变 start_date
 			const end_date = timestampToTime(new Date())
 			const backtest_period = backtestInfo.backtest_period
@@ -456,6 +481,10 @@ export const CommonMethodsMixin = {
 				'index_moving_average_slope',
 				'opted'
 			]
+			if(strategy === 'Dual') {
+				selectedProps.push('entry2', 'exit2', 'direction2', 'symbol2')
+				backtestInfoSelectedProps.push('entry2_description', 'exit2_description', 'entry2', 'exit2', 'direction2', 'symbol2')
+			}
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map(prop => ({ [prop]: backtestInfo[prop] }))
@@ -472,32 +501,51 @@ export const CommonMethodsMixin = {
 			this.$store.commit('form/getBacktestSymbol', backtestInfo.symbol)
 			this.$store.dispatch('states/set_isMarkerShown_flag', false)
 
-			this.reloadData(backtestInfo.indicator_layout, backtestInfo.frequency)
+			let parsedData =
+			typeof backtestInfo.indicator_layout === 'string'
+				? JSON.parse(backtestInfo.indicator_layout.replaceAll('$r001$', '\u200c'))
+				: backtestInfo.indicator_layout
+			this.reloadData(parsedData, backtestInfo.frequency, backtestInfo)
 			const callback = this.handleRunAllCallback(
 				backtestParams,
 				selectedBacktestInfo
 			)
 			// symbol ohlcv 要做特殊处理
 			const _this = this
-			await CIQ.addIndicatorsFromBacktest(() => {
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				// 展示 result 时要用
 				_this.$store.commit('form/getRunBacktestData', backtestInfo)
 				//CIQ.hideCover()
 			})
-			await this.loopCalculateNewConditions(backtestInfo)
 			debugger
+			await this.loopCalculateNewConditions(backtestInfo)
 			await CIQ.uploadCSVJSON(backtestInfo.pk, callback)
-			// await CIQ.outputSignalsResult(backtestInfo.pk, callback)
-			// await this.executeOutputSignalsResult(backtestInfo.pk, callback);
 		},
 		async loopCalculateNewConditions(backtestInfo) {
-			let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
-			let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
+			const {strategy} = backtestInfo
+			const processSignals = async (signals, type) => {
+				for (let index = 0; index < signals.length; index++) {
+					await this.calculateNewConditions(signals[index], type, index);
+				}
+			};
+			const decodeAndMapConditionRadio = async (entryType, exitType) => {
+				let { signals: entrySignals } = this.decodeCriteria(backtestInfo, entryType)
+				let { signals: exitSignals } = this.decodeCriteria(backtestInfo, exitType)
+				exitSignals = exitSignals.filter(item => item)
+				conditionRadioMap(entrySignals,exitSignals, entryType, exitType)
+				await processSignals(entrySignals, entryType)
+				await processSignals(exitSignals, exitType)
+			}
+			await decodeAndMapConditionRadio('entry', 'exit')
+			if(strategy === 'Dual') await decodeAndMapConditionRadio('entry2', 'exit2')
+
+			// let { signals: entrySignals } = this.decodeCriteria(backtestInfo, 'entry')
+			// let { signals: exitSignals } = this.decodeCriteria(backtestInfo, 'exit')
 			// 循环计算出显示在 chartIQ 的数据,只有当 analysis 是 'Symbol' 'Sentiment' 'User' 才计算
-			exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
+			// exitSignals = exitSignals.filter(item => item) // 过滤出 exit 的 only use risk control
 			
 			// 写一个函数来map所有情况的condition radio
-			conditionRadioMap(entrySignals,exitSignals)
+			// conditionRadioMap(entrySignals,exitSignals)
 
 			// 把對tech類型的判斷放在calculateNewConditions，防止indicator的panelIndex不一致的bug
 			// if (entrySignals.length !== 0)
@@ -509,12 +557,12 @@ export const CommonMethodsMixin = {
 			// 		['Symbol', 'Sentiment', 'User'].includes(item.analysis)
 			// 	)
 
-			for (let index = 0; index < entrySignals.length; index++) {
-				await this.calculateNewConditions(entrySignals[index], 'entry', index)
-			}
-			for (let index = 0; index < exitSignals.length; index++) {
-				await this.calculateNewConditions(exitSignals[index], 'exit', index)
-			}
+			// for (let index = 0; index < entrySignals.length; index++) {
+			// 	await this.calculateNewConditions(entrySignals[index], 'entry', index)
+			// }
+			// for (let index = 0; index < exitSignals.length; index++) {
+			// 	await this.calculateNewConditions(exitSignals[index], 'exit', index)
+			// }
 		},
 
 		calculateNewConditions(signals, criteria, panelIndex) {
@@ -567,10 +615,16 @@ export const CommonMethodsMixin = {
 			} else if (indicator_url && analysis === 'User') {
 				// 考虑到User自定义的indicator_url是name,所以需要和senti区分开判断
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
-					const url = CIQ.stxx.layout.studies[studyInstanceName].inputs.Field
+					const url = CIQ.stxx.layout.studies[studyInstanceName].type
 					let field
-					if(url && url.indexOf('CREATE') != -1) field = url.split(/CREATE/)[0]
-					if(url && url.indexOf('HASH') != -1) field = url.split(/HASH/)[0]
+					if(url && url.indexOf('CREATE') != -1){
+						field = url.split(/CREATE/)[0]
+						fieldName = url
+					}
+					if(url && url.indexOf('HASH') != -1){
+						field = url.split(/HASH/)[0]
+						fieldName = url
+					}
 					if (
 						field == indicator_url &&
 						CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
@@ -620,11 +674,14 @@ export const CommonMethodsMixin = {
 
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
+			/** 指示Study归属的Symbol */
+			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
+					display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -665,7 +722,8 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
-				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition;
+				const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
+				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
 				if (seen[keyCombination]) {
@@ -723,6 +781,9 @@ export const CommonMethodsMixin = {
 				? JSON.parse(_backtestInfo['exit'])
 				: _backtestInfo['exit']
 
+			if(backtestInfo.strategy != 'Single') {
+				return 'We Only Support Single Symbol Backtests.'	
+			}
 			if(
 				signalCode.decode(entry_criteria.signals[0].code).analysis != "Sentiment" ||
 				signalCode.decode(exit_criteria.signals[0].code).analysis != "Sentiment"
@@ -824,7 +885,7 @@ export const CommonMethodsMixin = {
 			SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999
 			如果是 isOnlyUseRiskControl 且 criteria 是 exit 则不需要处理编码和解码
 			*/
-			const isHandleIndicator = criteria == 'entry' || (criteria == 'exit' && !isOnlyUseRiskControl)
+			const isHandleIndicator = criteria.startsWith('entry') || (criteria.startsWith('exit') && !isOnlyUseRiskControl)
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
 				if (!signal) {
@@ -846,7 +907,7 @@ export const CommonMethodsMixin = {
 			let signal = null
 			if(isHandleIndicator) signal = backtestData[criteria].signals.map(item => item.code).map(findSignal)
 
-			if (isOnlyUseRiskControl && criteria == 'exit') {
+			if (isOnlyUseRiskControl && criteria.startsWith('exit')) {
 				signal = ['']
 				signal_list.push({
 					code: 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999'
@@ -960,8 +1021,8 @@ export const CommonMethodsMixin = {
 				})
 				this.loading = false
 			} else {
-				this.reloadData(data, freq)
-				await CIQ.addIndicatorsFromBacktest(() => {
+				this.reloadData(data, freq, row)
+				await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 					this.$store.commit('form/getRunBacktestData', row)
 					this.$router.push({
 						name: 'Results',
@@ -974,8 +1035,8 @@ export const CommonMethodsMixin = {
 		},
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
 			const that = this
-			that.reloadData(data, freq)
-			await CIQ.addIndicatorsFromBacktest(function() {
+			that.reloadData(data, freq, row)
+			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
 
 				that.$router.push({
@@ -987,29 +1048,86 @@ export const CommonMethodsMixin = {
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	
 		},
-		reloadData(data, freq) {
+		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)
+			let {strategy, symbol2} = row
 			let frequency = ''
-			this.$store.commit(
-				'chart/getEntryIndicatorsList',
-				data.formIndicators.entry
-			)
-			this.$store.commit(
-				'chart/getExitIndicatorsList',
-				data.formIndicators.exit
-			)
+			const commitIndicators = (criteria, list) => {
+				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
+			};
+			const commitSymbol2 = (symbol2) => {
+				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
+				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
+				if(!stockName && !indexName){
+					this.$store.commit('form/setComparisonSymbol', {})
+					return
+				}
+		  
+				this.$store.commit('form/setComparisonSymbol', {
+					name:stockName?stockName.name:indexName.name,
+					url:symbol2,
+				})
+			}
+			commitIndicators('entry', data.formIndicators.entry);
+			commitIndicators('exit', data.formIndicators.exit);
+			if(strategy === 'Dual') {
+					commitIndicators('entry2', data.formIndicators.entry2);
+					commitIndicators('exit2', data.formIndicators.exit2);
+					commitSymbol2(symbol2)
+			}else{
+				commitIndicators('entry2', []);
+				commitIndicators('exit2', []);
+				commitSymbol2()
+			}
 			this.$store.commit('chart/getExtraIndicators', [])
-			this.$store.commit(
-				'chart/getTechnicalIndicators',
-				data.technicalIndicators
-			)
 			this.$store.commit('chart/getMA', data.activatedMA)
 			// 暂定，读取回测携带的ma位置和信息
+			/**
+			 * todo: 兼容dual symbol, 
+			 * 1. activatedMALayout加入cci等ma类的默认配置(遍历formIndicators，填入indicator对应criteri和index)
+			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
+			 */
+
+			//兼容sample backtest普通Tech没有此属性的情况
+			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
+				if(!data.activatedMALayout) data.activatedMALayout = []
+				data.activatedTechLayout = []; // 初始化新数组
+				const processIndicators = (indicators, criteria) => {
+					for (var i in indicators) {
+						const url = indicators[i];
+						// ma已经有不用加了
+						if (url != 'ma' && (CIQ.findBuiltinTechIndicator(null, url) || CIQ.findSymbolIndicator(url, null))) {
+							if (CIQ.store.getters.getMaLikeTech.includes(url)) {
+								data.activatedMALayout.push({
+									url: url,
+									criteria: criteria,
+									index: i
+								});
+							} else {
+								data.activatedTechLayout.push({
+									url: url,
+									//isComparison: false,
+									criteria: criteria,
+									index: i
+								});
+							}
+						}
+					}
+				};
+			
+				processIndicators(data.formIndicators.entry, 'entry');
+				processIndicators(data.formIndicators.exit, 'exit');
+				
+				// 此处需要把旧的ma也加上url属性
+				data.activatedMALayout.forEach(item => {
+					if(!item.url) item.url = 'ma'
+				});
+			}
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
+			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
 			// 导入btv1时不调用这个
-			 this.$store.commit('chart/setTechSD', data.savedTechSD)
-
+			this.$store.commit('chart/setTechSD', data.savedTechSD)
 			switch (freq) {
 				case 'Daily': {
 					frequency = 'daily'

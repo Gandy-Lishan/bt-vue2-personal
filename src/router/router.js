@@ -160,6 +160,12 @@ const routes = [
 			require(['@/components/Seasonality/index.vue'], resolve),
 	},
 	{
+		path: '/portfolio',
+		name: 'Portfolio',
+		component: resolve =>
+			require(['@/components/Portfolio/index.vue'], resolve),
+	},
+	{
 		path: '/cpm',
 		name: 'CPM',
 		component: resolve =>
@@ -182,6 +188,27 @@ const routes = [
 				name: 'CPMResults',
 				component: resolve =>
 					require(['@/components/CPM/results/index.vue'], resolve)
+			}
+		]
+	},
+	
+	{
+		path: '/strategy',
+		name: 'Strategy',
+		component: resolve =>
+			require(['@/components/Strategy/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'StrategyList',
+				component: resolve =>
+					require(['@/components/Strategy/Table/index.vue'], resolve)
+			},
+			{
+				path: 'descriptions',
+				name: 'Descriptions',
+				component: resolve =>
+					require(['@/components/Strategy/Descriptions.vue'], resolve)
 			}
 		]
 	},

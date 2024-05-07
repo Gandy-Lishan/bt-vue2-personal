@@ -265,7 +265,6 @@ export default {
 			{label:'Expected Return(%)',value:'ExpectedReturn'},
 			{label:'Z-Score',value:'Z_Score'}, // 数据有误，先不显示	
 		]
-		debugger
 		// 测试
 		//AIPickObj['tableCol'].unshift("Select")
 		AIPickObj['content'] = AIPickContent

@@ -42,7 +42,7 @@ export function setRouterPermission(router) {
 	// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
 	// )
 	
-		// /* hao@sentimentrader.com */
+		/* hao@sentimentrader.com */
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
@@ -82,6 +82,11 @@ export function setRouterPermission(router) {
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHhhO%2B65ptY8oR7y7M%2FpJ8xU36m3EyLuOrJr%2FALLnBJf0lgbQWWdLdd0Wv%2BcAjeN13qO%2FIZ4ifRX7V5OiD7gG4OoI4gNYu0rPJnWOFilqpB9nC7n36CeMNI%2BHVEIOu1VTV1kEZvcku30lgyE%2FmtKYbiBqW1e86SlvDZp9IHRs%2B320k6MnLj0JLfe7rVabhbVqNRIG5r5izjjRoQdsgngG7zLu866QkETfhWkAzRSlxtEWQIApWrhzBACdfQuSIockg%2B4CEOpbmRX6uhnR7LMtHm5lR8kRq7TKT%2BudSRmmBytzV2xBVSEvxkDNj4x%2F1cC6Q4bcyuhLXP8MNm9xNCFdp1l%2BWALb1ryZkuhMjQHhZfeWu1d5e5LWBVXPHGUA1TJZ7o%3D'
+		// )
+
+		// Cookies.set(
+		// 	'sentimen-session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcOrAwYSJ4eSBTuZhZqrInKI+C5rORbU/iO3bXPPpsd6sndEt+m/nzXAA8wNg3qTiym8DmTFO9E1dYMIsK/g/dxfId4fRWpIj47FlICxoE7RkeeNCd3UV1JMZlEx/hFtyHUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwABeUfgFvahpjXNn+xUxHH8smHHrUp+gLpfKeBmaxIqC9U1mEqJebqxfuVk5hKzD484S3SOmHNzyYYuYGXx/e00GDaFa0z0UNm3b+NNYl1y1DN4TaiD7WavEay3z0BbTUGNhgskUX8Zgd2tTLScWF/fG6dMUn/AUuoF+dXnjAfKnjcQ7K4NNSqhSnn3DYbpzWB7tQ81fTdf+YSTTVueh/vFiE801WK2HHYPXSXGyyHpTrOSgNBAgEnjmO1n4imKBKbw=='
 		// )
 
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
@@ -183,19 +188,20 @@ async function initiateIndicatorList() {
 		store.commit('chart/getIndexsList', indexsList)
 
 		let newAllSymbolsList = []
-		for (var i = 0; i < allSymbolsList.length; i++) {
+		for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
 			let item = allSymbolsList[i]
 			if (stocksList.find(j => j.stock == item.url)) {
 				let newName = item.url + ' Optix'
 				newAllSymbolsList.push({
 					chart_name: newName,
-					url: item.url,
+					url: item.url + '@indicator',
 					updated: item.updated
 				})
 			} else {
 				newAllSymbolsList.push(allSymbolsList[i])
 			}
 		}
+
 		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
 		CIQ.indicatorList = newAllSymbolsList
 		store.commit('chart/getIndicatorsList', newAllSymbolsList)

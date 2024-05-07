@@ -60,6 +60,12 @@ app.get('/api/indexsList', (req, res) => {
     });
 });
 
+app.get('/api/strategiesJSON', (req, res) => {
+    fs.readFile( dataPath+'btv3_strategies.json', 'utf8', function (err, data) {
+        res.send(data);
+        //res.end( data );
+    });
+});
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
 app.use(express.static(path.join(__dirname, 'dist')))

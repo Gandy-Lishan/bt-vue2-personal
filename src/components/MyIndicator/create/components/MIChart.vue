@@ -50,13 +50,19 @@ export default {
 	},
 	beforeDestroy() {
 		this.$store.dispatch('chart/reset_miFormState')
+		// 防止chartiq还没加载完就切换到其他页面
+		CIQ.hideCover()
+		CIQ.nprogress.done()
 	},
 	methods:{
 		onChartReady(){
 			this.hideComponents()	
 			//还原自定义indicator Layout
 			if(this.chart_data.name) CIQ.displayUserOwnIndicatorLayout(this.chart_data)
-			else CIQ.hideCover()
+			else{
+				CIQ.hideCover()
+				CIQ.nprogress.done()
+			}
 
 			console.log('chart_data',this.chart_data)
 		},
@@ -74,6 +80,9 @@ export default {
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
 			// footer.style.display = 'none'
+			
+			// hide dual symbol
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		}
 	}
 }

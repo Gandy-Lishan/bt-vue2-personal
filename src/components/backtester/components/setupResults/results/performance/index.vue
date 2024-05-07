@@ -1,7 +1,7 @@
 // Summary & Trades
 <template>
 	<div class="perfprmance-container">
-		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading">
+		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading" :class="{'Dual': strategy === 'Dual'}">
     <div class="hint-btn-box">
       <p class="hint">
         Hint: Markers on the chart point to the buy/sell trade dates on the open
@@ -27,6 +27,7 @@
 			<el-tab-pane label="Trades" name="second">
         <Trades 
           :tradesData="tradesData"
+          :strategy="strategy"
         ></Trades>
 			</el-tab-pane>
 			<el-tab-pane
@@ -39,11 +40,12 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
+          v-show="strategy === 'Signal' || strategy === 'Single'"
         ></TIM>
 			</el-tab-pane>
       <el-tab-pane
 				label="Max Gain and Loss"
-				name="forth"
+				name="forth"          
 			>
         <MaxMin
           ref="maxMinChild"
@@ -51,6 +53,7 @@
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
+          v-show="strategy === 'Signal' || strategy === 'Single'"
         ></MaxMin>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
@@ -70,6 +73,9 @@ const XLSX = require('xlsx');
 
 export default {
   name: 'Performance',
+  props: {
+    strategy: String
+  },
   components: {
     Summary,
     Trades,
@@ -178,6 +184,9 @@ export default {
                 initalData['Annual Returns Image Uploaded']
               data.annualReturnsFileURL = initalData['Annual Returns File URL']
               data.equityCurveFileURL = initalData['Equity Curve File URL'] || null
+              data.wfd_file_url = initalData['Worst Five Drawdown File URL'] || null
+              data.eoy_file_url = initalData['EOY File URL'] || null
+              data.rb_file_url = initalData['Rolling Beta File URL'] || null
               data.returnsheatmapImageUploadedURL =
                 initalData['Returns Heatmap Image Uploaded']
               data.returnsHeatmapFileURL =
@@ -213,7 +222,7 @@ export default {
                 } catch (error) {
                   console.log(error)
                 }
-                
+                debugger
                 vm.tradesData = initalData['Trades']
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
@@ -250,7 +259,6 @@ export default {
     loadMarker(markerSet) {
       try {
         //load markers for initial quotefeed
-
         let list = this.filterMarkerDate(
           new Date(CIQ.initialDate.start),
           new Date(CIQ.initialDate.end),
@@ -388,6 +396,7 @@ export default {
       this.tradesData.forEach((item, index) => {
         const obj = {}
         obj['Trade #'] = index + 1
+        obj['Symbol'] = item.Symbol
         obj['Trade Date'] = item.Date
         obj['Action'] = item.TradeStatus
         obj['Indicator'] = item.Indicator.join(';')
@@ -407,10 +416,10 @@ export default {
         const formatEntryDate = entryData['Trade Date'].replaceAll('-','/')
         const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
         mergedData.push({
+          'Symbol': entryData.Symbol,
           'Entry Date': formatEntryDate,
           'Entry Action': entryData.Action.toUpperCase(),
           'Entry Price': entryData['Trade Price'],
-          'Entry Indicator': entryData.Indicator || '',
           'Exit Date': formatExitDate,
           'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': exitData['Trade Price'] || '',
@@ -418,7 +427,6 @@ export default {
           'Total Return': exitData['Total Return %'] || '',
           'Exit Reason': exitData['Exit Reason'] || '',
           'Market Condition': exitData['Market Condition'] || 'N\/A',
-          'Exit Indicator': exitData.Indicator || ''
         });
       }
 
@@ -488,20 +496,24 @@ export default {
 
           return transformedItem;
         });
-      const dataList = [
+      let dataList = [
         summary,
         mergedData,
         _backtestHistoryList,
         _TIMHistoryList,
         _maxMinData
       ]
-      const sheetNames = [
+      let sheetNames = [
         'Summary',
         'Trades',
         'Exit with default Time Frame',
         'Exit with Customized TIM',
         'Max Gain and Loss'
       ]
+      if(this.strategy === 'Dual') {
+        dataList = [summary,mergedData]
+        sheetNames = ['Summary','Trades']
+      }
       this.exportDataToCSV(dataList, sheetNames)
     },
     exportDataToCSV(dataList, sheetNames) {

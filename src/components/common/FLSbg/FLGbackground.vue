@@ -212,6 +212,8 @@ export default {
       this.$router.go(0)
     },
     viewSignal: function() {
+      // 点击按钮的时候刷新列表
+      this.$emit('refreshList')
       // this.$router.push('/backtester/list/favorites')
       const myFLSbg = document.querySelector('#myFLSbg')
       myFLSbg.classList.remove('activated')

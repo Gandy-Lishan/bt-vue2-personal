@@ -190,13 +190,14 @@ const checkProperties = (obj, properties) => {
 }
 
 // 限制同屏显示个数
-const maxNumOfStudy = () => {
+const maxNumOfStudy = (stx) => {
     var countExistIndicator = 0
-    for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      if (CIQ.findBuiltinTechIndicator(null,CIQ.stxx.layout.studies[studyInstanceName].type)){
+    let studies = stx?stx.layout.studies:CIQ.stxx.layout.studies
+    for (var studyInstanceName in studies) {
+      if (CIQ.findBuiltinTechIndicator(null,studies[studyInstanceName].type)){
         countExistIndicator--
       }
-      if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+      if (studies[studyInstanceName].type == 'ST MA') {
         countExistIndicator--
       }
       countExistIndicator++
@@ -246,4 +247,31 @@ const getTokenRole = () => {
   return 'None'
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros}
+/**
+ * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
+ * @param {*} obj dataSet一行数据
+ * @param {*} field symbol2 name
+ * @param {*} subField symbol2 name存在时使用的field
+ * @returns 
+ */
+const getPropertyByString = (obj, field, subField) => {
+  // if(symbol2){
+  //     return obj[symbol2]?obj[symbol2][field]:null
+  // }else{
+  //     return obj[field]
+  // }
+
+  if(!field) field = subField // 当field是流动时，比如accum里原值为quote.Low, 则：getPropertyByString(quote,field,'Low')， filed可能不存在或者为symbol2
+  var val = obj[field];   
+  if (val && typeof val == "object") val = val[subField];
+  return val
+}
+
+const recoverSymbolOptixUrl = (url) => {
+  if(url && url.endsWith('@indicator')){
+      var i = url.indexOf('@indicator')
+      return url.slice(0,i)
+  }else return url
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl}

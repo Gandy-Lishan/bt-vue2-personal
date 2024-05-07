@@ -497,11 +497,11 @@ export default {
       let direction = ''
       let commentDes
       if (index === 0) {
-        if (this.criteria == 'entry') {
+        if(this.criteria.startsWith('entry')) {
           criteria = 'E:'
           direction = this.direction + ';'
         }
-        if (this.criteria == 'exit') {
+        if (this.criteria.startsWith('exit')) {
           criteria = 'X:'
           if (this.direction == 'Long') {
             direction = 'Close;'
@@ -626,7 +626,7 @@ export default {
         let result = CIQ.findSentiIndicator(null,this.sentiUrl)
         if (!result) {
           let obj = {}
-          if (this.criteria == 'entry') {
+          if (this.criteria.startsWith('entry')) {
             obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
           } else {
             obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
@@ -720,8 +720,11 @@ export default {
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
+        /** 指示Study归属的Symbol */
+        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
+          display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
@@ -763,7 +766,7 @@ export default {
       if(this.sentiUrl) result = CIQ.findSentiIndicator(null,this.sentiUrl)
       if (!result) {
         let obj = {}
-        if (this.criteria == 'entry') {
+        if (this.criteria.startsWith('entry')) {
           obj.url = this.$store.state.form.usersOwnEntryFileHash[this.panelIndex]
         } else {
           obj.url = this.$store.state.form.usersOwnExitFileHash[this.panelIndex]
@@ -788,6 +791,7 @@ export default {
         }
       }
 
+      debugger
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',

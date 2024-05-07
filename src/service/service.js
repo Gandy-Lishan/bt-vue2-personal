@@ -89,22 +89,39 @@ export function getStocksList() {
 	})
 }
 
-export function getSampleList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/strategy/?ordering=name,status,-create_date&page='
+export function getStrategiesJSON() {
+	const url = '/api/strategiesJSON'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res.data = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getSampleList(page, sort, name, type) {
+	let url = `/dev/dev/strategy/?ordering=name,status,-create_date`
+	// sort -> ,total_return
+	let strategy = type && type !== 'Strategy' ? type : null;
 	if (sort) {
-		url = `/dev/dev/strategy/?ordering=${sort}&page=`
+		url = `/dev/dev/strategy/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/strategy/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/strategy/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -129,22 +146,24 @@ export function searchSampleList(keyword) {
 	})
 }
 
-export function getAnalystList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/analyst/?ordering=-create_date,name,status&page='
+export function getAnalystList(page, sort, name, type) {
+	let url = `/dev/dev/analyst/?ordering=-create_date,name,status`
+	// sort -> ,total_return
+	let strategy = type && type !== 'Strategy' ? type : null;
 	if (sort) {
-		url = `/dev/dev/analyst/?ordering=${sort}&page=`
+		url = `/dev/dev/analyst/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/analyst/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/analyst/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -167,22 +186,23 @@ export function searchAnalystList(keyword) {
 			})
 	})
 }
-export function getHistoryList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/backtest/?ordering=-create_date&page='
+export function getHistoryList(page, sort, name, type) {
+	let url = `/dev/dev/backtest/?ordering=-create_date`
 	// sort -> ,total_return
+	let strategy = type && type !== 'Strategy' ? type : null;
 	if (sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}`
 	}
 	if (name) {
-		url = `/dev/dev/backtest/?name=${name}&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page, { withCredentials: true, retry: null })
+			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})
@@ -221,21 +241,23 @@ export function getBacktestName(name) {
 			})
 	})
 }
-export function getFavoriteList(page, sort, name) {
-	let url = null
-	url = '/dev/dev/backtest/?ordering=-create_date&favorites=true&page='
+export function getFavoriteList(page, sort, name, type) {
+	let url = `/dev/dev/backtest/?ordering=-create_date&favorites=true`
+	// sort -> ,total_return
+	let strategy = type && type !== 'Strategy' ? type : null
 	if (sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&favorites=true&page=`
+		url = `/dev/dev/backtest/?ordering=${sort}&favorites=true`
 	}
 	if (name) {
-		url = `/dev/dev/backtest/?name=${name}&favorites=true&page=`
+		url += `&name=${name}`
 	}
-	if (name && sort) {
-		url = `/dev/dev/backtest/?ordering=${sort}&name=${name}&favorites=true&page=`
+	if(strategy) {
+		url += `&strategy=${strategy}`
 	}
+	url += `&page=${page}`
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url + page)
+			.get(url)
 			.then(res => {
 				resolve(res)
 			})
@@ -530,13 +552,10 @@ export function findLastSignalApi(data) {
 	const headers = {
 		'Content-Type': 'application/json'
 	}
-	let csv = data.csv
-	// csv = csv.replace(/\n/g, ",");
 	const formData = new FormData()
-	formData.append('uuid', data.uuid)
-	formData.append('csv', csv)
-	formData.append('entry', data.entry)
-	formData.append('exit', data.exit)
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, { headers, withCredentials: true })
@@ -1105,3 +1124,68 @@ export function getBTV1FavIndicator() {
 			})
 	})
 }
+/* Strategy Page 接口 START*/
+export function getStrategyList() {
+	return new Promise((resolve, reject) => {
+		axios
+			.get('/dev/portfolio/get_strategies/', {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getStrategySummaryList() {
+	return new Promise((resolve, reject) => {
+		axios
+			.get('/dev/portfolio/strategy_statistic/', {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getStrategyDescription(url) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(`/dev/portfolio/strategy_performance?model_url=${url}`, {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function addStrategyFavorites(data) {
+	const url = `/dev/portfolio/favorite_strategy`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	formData.append('model_url', data.url)
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function moveStrategyFavorites(url) {
+	return axios.delete(`/dev/portfolio/favorite_strategy?model_url=${url}`)
+}
+/* Strategy Page 接口 END*/

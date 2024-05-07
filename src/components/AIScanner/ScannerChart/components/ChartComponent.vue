@@ -49,16 +49,23 @@ export default {
     CIQ.symbol = this.symbol
 	},
 	beforeDestroy() {
-		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
-		CIQ.objIndicator = []
-		this.$store.dispatch('chart/reset_chart_study_state')
-		this.$store.dispatch('form/reset_chart_config_state')
-		// 还原chartiq默认study definition
+    // 还原chartiq默认study definition
 		this.editStudies(true)
+
+    /** 已经在AdvancedChartComponent里了 */
+		// // 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		// CIQ.objIndicator = []
+		// this.$store.dispatch('chart/reset_chart_study_state')
+		// this.$store.dispatch('form/reset_chart_config_state')
+
 		
-		// Destroy the ChartEngine instance when unloading the component.
-		// This will stop internal processes such as quotefeed polling.
-		CIQ.stxx?.destroy()
+		// // Destroy the ChartEngine instance when unloading the component.
+		// // This will stop internal processes such as quotefeed polling.
+		// CIQ.stxx?.destroy()
+
+    // // 防止chartiq还没加载完就切换到其他页面
+		// CIQ.hideCover()
+		// CIQ.nprogress.done()
 	},
 	computed: {
 		updateSettingMA() {
@@ -103,7 +110,6 @@ export default {
 	},
 	methods:{
 		onChartReady(){
-			this.overrideStudyDef()
 			// 默认让indicator无法编辑
 			this.editStudies(false)
 
@@ -139,22 +145,6 @@ export default {
 			})
 
 		},
-		overrideStudyDef(){
-			CIQ.extend(CIQ.Studies.studyLibrary["rsi"], {
-        seriesFN: function (stx, sd, quotes) {
-          CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
-
-          var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
-          var yAxis = CIQ.stxx.panels[sd.name].yAxis
-          CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
-        },
-				calculateFN: CIQ.Studies.calculateSTRSI,
-				outputs: { 
-          RSI: "auto",
-          //supLine:'#9a9a9a' 
-        }
-			});
-		},
 		editStudies(bool){
 			CIQ.extend(CIQ.Studies.studyLibrary["ma"], { edit:bool });
 			CIQ.extend(CIQ.Studies.studyLibrary["macd"], { edit:bool });
@@ -177,6 +167,9 @@ export default {
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
 			footer.style.display = 'none'
+
+			// hide dual symbol
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		},
 		loadDefaultStudy() {
 			 return new Promise(async (resolve)=>{

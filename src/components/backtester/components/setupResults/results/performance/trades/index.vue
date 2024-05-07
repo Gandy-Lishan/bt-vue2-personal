@@ -17,10 +17,17 @@
             </template>
             </el-table-column>
             <el-table-column
+                prop="Symbol"
+                label="Symbol"
+                align="center"
+                width="80px"
+                show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
                 prop="EntryDate"
                 label="Entry Date"
                 align="center"
-                width="90px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -28,18 +35,16 @@
                 prop="EntryAction"
                 label="Entry Action"
                 align="center"
-                width="100px"
                 show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
                 prop="EntryPrice"
                 label="Entry Price"
-                width="80px"
                 align="center"
             >
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="EntryIndicator"
                 label="Entry Indicator"
                 align="center"
@@ -50,12 +55,11 @@
                         <p>{{ item }}</p>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 prop="ExitDate"
                 label="Exit Date"
                 align="center"
-                width="90px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -63,21 +67,18 @@
                 prop="ExitAction"
                 label="Exit Action"
                 align="center"
-                width="80px"
                 show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
                 prop="ExitPrice"
                 label="Exit Price"
-                width="80px"
                 align="center"
             >
             </el-table-column>
             <el-table-column
                 prop="TradeReturn"
                 label="Trade Return %"
-                width="80px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -94,7 +95,6 @@
             <el-table-column
                 prop="TotalReturn"
                 label="Total Return %"
-                width="80px"
                 align="center"
                 show-overflow-tooltip
             >
@@ -111,14 +111,12 @@
             <el-table-column
                 prop="ExitReason"
                 label="Exit Reason"
-                width="80px"
                 align="center"
             >
             </el-table-column>
             <el-table-column
                 prop="MarketCondition"
                 label="Market Condition"
-                width="100px"
                 align="center"
             >
             <template slot="header">
@@ -135,7 +133,7 @@
                 </div>
             </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="ExitIndicator"
                 label="Exit Indicator"
                 align="center"
@@ -146,7 +144,7 @@
                         <p>{{ item }}</p>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <div slot="empty" style="text-align: left">
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
@@ -186,6 +184,7 @@ export default {
 	},
 	props: {
         tradesData: Array,
+        strategy: String
 	},
     created(){
     },
@@ -221,7 +220,8 @@ export default {
                     'ExitReason': exitData.ExitReason || '',
                     'MarketCondition': exitData.MarketCondition || ['N\/A'],
                     'ExitIndicator': exitData.Indicator || '',
-                    'TradeNumber': exitData.trade_number
+                    'TradeNumber': exitData.trade_number,
+                    'Symbol': exitData.Symbol
                     });
                 }
                 this.processedTradesData = mergedData

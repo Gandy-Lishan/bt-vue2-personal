@@ -1,17 +1,17 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 let conditionRadio
 
-const conditionRadioMap = (entry, exit) => {
+const conditionRadioMap = (entry, exit, entryType, exitType) => {
   for (var i in entry) {
     criteriaConditionRadioMap(entry[i])
     var cr = CIQ.store.state.form.conditionRadio
-    cr['entry'][i] = conditionRadio
+    cr[entryType][i] = conditionRadio
     CIQ.store.commit('form/setConditionRadio', cr)
   }
   for (var i in exit) {
     criteriaConditionRadioMap(exit[i])
     var cr = CIQ.store.state.form.conditionRadio
-    cr['exit'][i] = conditionRadio
+    cr[exitType][i] = conditionRadio
     CIQ.store.commit('form/setConditionRadio', cr)
   }
 }
