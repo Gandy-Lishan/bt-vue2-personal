@@ -417,6 +417,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			// 默认为折线图
 			CIQ.stxx.setChartType("line");
+			CIQ.stxx.setLineStyle({ width: 3 });
 
 			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
 			//CIQ.stxx.captureMouseWheelEvents = false 
