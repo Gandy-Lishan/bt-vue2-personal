@@ -214,12 +214,16 @@ if (!CIQ.Studies) {
 
 	// customized Studies
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		debugger
+		var quotes = sd.chart.scrubbed;
+
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
@@ -342,7 +346,7 @@ if (!CIQ.Studies) {
 				const maArr = quotes.map((row, i, arr) => {
 					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period - 1){
-							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + b[field], 0) / period
+							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + getPropertyByString(b,field,subField), 0) / period
 						}
 						return NaN
 					}else{
@@ -440,13 +444,16 @@ if (!CIQ.Studies) {
 		// sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
-		var quotes = sd.chart.scrubbed;
+		
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
-		if (field == 'Ratio') return CIQ.Studies.calculateSymbolRatio(stx, sd);
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+
 		var subField = field
+		var quotes = sd.chart.scrubbed;
 		/** 
 		 * 用isComparison属性判断Study用来计算的数据源
 		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
@@ -470,27 +477,29 @@ if (!CIQ.Studies) {
 		}
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
-	CIQ.Studies.calculateSymbolRatio = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+	// CIQ.Studies.calculateSymbolRatio = function (stx, sd) {
+	// 	var quotes = sd.chart.dataSet;
 
-		var field = "Close"
-		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
-		var subField = field
+	// 	var field = "Close"
+	// 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+	// 	var subField = field
 
-		const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-		if(!comparisonSymbol.url){
-			console.error('SymbolRatio is only allowed in dual symbol')
-		}
-		var symbol2Field = comparisonSymbol.url
+	// 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	// 	var symbol2Field = comparisonSymbol.url
+	// 	if(!comparisonSymbol.url){
+	// 		symbol2Field = field
+	// 		console.log('SymbolRatio is only allowed in dual symbol')
+	// 	}
 		
-		// 默认study模板
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var quote = quotes[i];
-			var RatioValue = getPropertyByString(quote, field, subField) / getPropertyByString(quote, symbol2Field, subField);
-			quote["Result " + sd.name] = RatioValue
-		}
-		//sd.outputMap["Result " + sd.name] = "Symbol High";
-	};
+	// 	// 默认study模板
+	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
+	// 		var quote = quotes[i];
+	// 		var RatioValue = getPropertyByString(quote, field, subField) / getPropertyByString(quote, symbol2Field, subField);
+	// 		quote["Result " + sd.name] = RatioValue
+	// 	}
+	// 	console.log(CIQ.stxx.chart.dataSet)
+	// 	// sd.outputMap["Result " + sd.name] = "Symbol Ratios";
+	// };
 	CIQ.Studies.calculateSTMACDGap = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var inputs = sd.inputs,
@@ -1189,8 +1198,8 @@ if (!CIQ.Studies) {
 		"Symbol Ratio": {
             name: "Symbol Ratio Line",
             calculateFN: CIQ.Studies.calculateSymbolOhlcv,
-            inputs: { Field: "Ratio",overlay: false},
-			//outputs: { "Symbol High": "auto" },
+            inputs: { Field: "SRatio",overlay: false},
+			// outputs: { "Symbol Ratios": "#8cc176" },
         },
 		"MACDHistGap": {
 			name: "MACDHistGap",
