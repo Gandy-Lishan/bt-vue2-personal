@@ -436,71 +436,10 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			// var _this = this
-			// // 鼠标事件加入防抖节流
-			// CIQ.stxx.addEventListener("scroll", throttle(function(object: Record<string, any> = {}) {
-			// 	// // an event handle for updating trade marker when dragging the chart
-			// 	// if(CIQ.store.getters.getIsMarkerShownFlagState){
-			// 	// 	let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-			// 	// 	if(CIQ.groups.slice(-1)[0]){
-			// 	// 		let m_date =
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-			// 	// 		if(c_date<m_date){
-			// 	// 			let markers = CIQ.groups.pop()
-							
-			// 	// 			console.log("new pagnigation start",markers)
-			// 	// 			CIQ.loadChart(markers, CIQ.addMarker)
-			// 	// 		}
-			// 	// 	}
-			// 	// }
-			// 	_this.resizePatternMatch()
-			// },300));
-
-			// // 方案（layout事件里对y轴拖动检测不到）
-			// // 监听图表的Layout事件（针对zoomin  zoomout用于更新模式匹配Drawing）
-			// CIQ.stxx.addEventListener("layout", function (e) {
-			// 	console.log('监听图表的layout事件（zoomin',e)
-			// 	_this.resizePatternMatch()
-			// });
-
-			// // 方案（setter进不去）
-			// // // 获取原始的 Y 轴属性值
-			// var originalYAxisHigh = CIQ.stxx.chart.yAxis;
-			// // 定义一个 Y 轴属性的 setter 函数
-			
-			// Object.defineProperty(CIQ.stxx.chart.yAxis, 'zoom', {
-			// 	get: function() {
-			// 		return originalYAxisHigh;
-			// 	},
-			// 	set: function(newValue) {
-			// 		// 当 Y 轴属性变化时执行的操作
-			// 		console.log('Y 轴属性发生了变化:', newValue);
-			// 		originalYAxisHigh = newValue;
-			// 		// 可以在这里添加其他需要执行的操作
-
-			// 		_this.resizePatternMatch()
-			// 	}
-			// });
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
-		// a listener for observing tooltip button's action
-		// const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
-		// tooltip.onclick = function(){
-		// 	tooltip.classList.remove("active");	
-		// 	if (stx.layout.headsUp.floating == true){	
-		// 		tooltip.classList.remove("activated");	
-		// 		stx.layout.headsUp.floating = false	
-		// 	}
-		// 	else{
-		// 		tooltip.classList.add("activated");
-		// 		stx.layout.headsUp.floating = true
-		// 	}
-		// }
-
 		stx.layout.headsUp={floating:true};
 		//stx.layout.headsUp = "floating";
 		// var mNode = document.getElementsByClassName("ciq-HU")[0]

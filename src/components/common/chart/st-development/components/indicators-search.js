@@ -320,12 +320,14 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             resu.push(...list)
                             resu.forEach(element => {
-                                var item = {
-                                    symbol: element.url,
-                                    name: element.name,
-                                    updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
-                                    exchDisp: "",
-                                }
+                                try{
+                                    var item = {
+                                        symbol: element.url,
+                                        name: element.name,
+                                        updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
+                                        exchDisp: "",
+                                    }
+                                }catch(err){return}
     
                                 // 匹配关键词
                                 if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1 || item.symbol.toUpperCase().indexOf(value.toUpperCase()) === -1){
@@ -351,12 +353,14 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
                         var fields = CIQ.store.state.chart.indicatorsList[i]
                         
-                        var item = {
-                            name: fields.chart_name,
-                            url: fields.url,
-                            updated: fields.updated,
-                            category: fields.category
-                        };
+                        try{
+                            var item = {
+                                name: fields.chart_name,
+                                url: fields.url,
+                                updated: fields.updated,
+                                category: fields.category
+                            };
+                        }catch(err){return}
 
                         if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
                             continue;
