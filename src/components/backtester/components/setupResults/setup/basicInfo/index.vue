@@ -688,7 +688,8 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'">
+                  <div class="risk-control-container border-set">
+                  <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
                       <el-checkbox
                         v-model="isRiskControl"
@@ -1050,7 +1051,6 @@ export default {
     handleGetComparisonSymbol: {
       handler(newVal) {
         // 如果strategy为Single且symbol2选择了
-        debugger
         if(this.bd.strategy == 'Single' && Object.keys(newVal).length>0){
           this.bd.strategy = 'Dual'
           this.bd.symbol2 = newVal.url
@@ -1387,7 +1387,8 @@ export default {
      */
     changeStrategy(val,updateChart) {
       // 切换的成 Dual 时, 有些数据是不存在的, 需要设置默认值
-      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPY'; this.isRiskControl = false}
+      if(val === 'Dual') {this.bd.direction2 = this.bd.direction2 || 'Long'; this.bd.symbol2 = this.bd.symbol2 || 'SPY';  this.isRiskControl = false
+      }
       this.$emit('IsRiskControl', this.isRiskControl);
       this.$store.commit('form/isRiskControl', this.isRiskControl);
       this.$emit('changeStrategy', val, {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: val})
@@ -1463,7 +1464,7 @@ export default {
       /* 处理数据 */
       if(bd.strategy === 'Dual') {
         // 设置数据默认值
-        this.isRiskControl = false
+        // this.isRiskControl = false
         this.isExcludeOO = false
         bd.market_environment = 0
         bd.index_moving_average_slope = 0

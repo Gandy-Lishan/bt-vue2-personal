@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_atr_ = (_exports) => {
@@ -171,4 +171,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_atr_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_atr_}

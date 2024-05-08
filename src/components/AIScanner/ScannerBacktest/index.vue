@@ -148,7 +148,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      debugger
+      
       this.$refs['ScannerForm'].displayData(data)
       this.activeSecondTab = 'summary'
       const status = data.status
@@ -164,7 +164,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displaySummary(result) {
-      debugger
+      
       const statistics = {}
       statistics.totalReturn = result['TOTAL RETURN']
       statistics.medianReturn = result['MEDIAN RETURN']
@@ -223,7 +223,7 @@ export default {
       })
     },
     displayPreviewList(content) {
-      debugger
+      
       if(!content) return
 		  this.loading = true
       this.$refs.filterTable.handleSizeChange(10)

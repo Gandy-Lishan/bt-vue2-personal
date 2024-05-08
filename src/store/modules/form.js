@@ -140,6 +140,8 @@ const mutations = {
 	 */
 	setComparisonSymbol(state, val) {
 		state.comparisonSymbol = val
+		state.rowDataForDisplay.symbol2 = val.url
+		state.cachedBTBasicInfoData.symbol2 = val.url
 	},
 
 	/**

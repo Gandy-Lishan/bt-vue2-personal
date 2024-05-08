@@ -56,6 +56,9 @@ const state = {
 
 	miFormWeightedList: [],
 	miBenmark: process.env.VUE_APP_DEFAULT_SYMBOL,
+
+	ma_color_1: ["#FF0000"],
+    ma_color_2: ["#f59e0b"],
 }
 
 const mutations = {
