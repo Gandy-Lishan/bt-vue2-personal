@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
-
+import { getPropertyByString } from "@/utils"
 
 
 let __st_js_chartengine_prototype_overwrite_ = (_exports) => {
@@ -31,26 +31,189 @@ let __st_js_chartengine_prototype_overwrite_ = (_exports) => {
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
 
 if (CIQ.ChartEngine) {
+	CIQ.ChartEngine.prototype.calculateSymbolRatio = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		var field = "Close"
+		var subField = field
+		const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		var symbol2Field = comparisonSymbol.url
+		if(!comparisonSymbol.url){
+			symbol2Field = field
+			console.log('SymbolRatio is only allowed in dual symbol')
+		}
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			var RatioValue = getPropertyByString(d, field, subField) / getPropertyByString(d, symbol2Field, subField);
+			d.SRatio = RatioValue;
+			var symbolObj = d[symbol2Field]
+			if (symbolObj && typeof symbolObj == "object") {
+				
+				symbolObj.SRatio = RatioValue;
+			}
+		}
+	};
+	/**
+	 * Calculates the ATR (Average True Range) for the dataSet
+	 * dual symbol version****************
+	 * @private
+	 * @param  {CIQ.ChartEngine.Chart} chart The chart to calculate
+	 * @param  {number} period The number of periods
+	 * @param  {array} data The data to process, if omitted, uses chart.dataSet
+	 * @memberof CIQ.ChartEngine
+	 */
+	CIQ.ChartEngine.prototype.calculateATR = function (chart, period, data) {
+		if (!data) data = chart.dataSet;
+		var state = chart.state.calculations.atr;
+		if (!state) state = chart.state.calculations.atr = {};
+		if (!period) period = 20;
+		var accum = [];
+		if (state.accum) accum = state.accum;
+		var q1;
+		
+		for (var i = 0; i < data.length; i++) {
+			var q = data[i];
+			q1 = i ? data[i - 1] : state.q1;
+			if (!q1) continue;
+
+			var trueRange = Math.max(
+				q.High - q.Low,
+				Math.abs(q.High - q1.Close),
+				Math.abs(q.Low - q1.Close)
+			);
+			if (accum.length < period) {
+				if (accum.push(trueRange) == period) {
+					var total = 0;
+					for (var j = 0; j < accum.length; j++) total += accum[j];
+					q.atr = total / period;
+				}
+			} else {
+				q.atr = (q1.atr * (period - 1) + trueRange) / period;
+			}
+			q.trueRange = trueRange;
+		}
+
+		// const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// if(comparisonSymbolUrl){
+		// 	var filteredData = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
+		// 	for (var i = 0; i < filteredData.length; i++) {
+		// 		var q = filteredData[i][comparisonSymbolUrl];
+		// 		q1 = i ? filteredData[i - 1][comparisonSymbolUrl] : state.q1;
+		// 		if (!q1) continue;
+	
+		// 		var trueRange = Math.max(
+		// 			q.High - q.Low,
+		// 			Math.abs(q.High - q1.Close),
+		// 			Math.abs(q.Low - q1.Close)
+		// 		);
+		// 		if (accum.length < period) {
+		// 			if (accum.push(trueRange) == period) {
+		// 				var total = 0;
+		// 				for (var j = 0; j < accum.length; j++) total += accum[j];
+		// 				q.atr = total / period;
+		// 			}
+		// 		} else {
+		// 			q.atr = (q1.atr * (period - 1) + trueRange) / period;
+		// 		}
+		// 		q.trueRange = trueRange;
+		// 	}
+		// }
+		
+		chart.state.calculations.atr = {
+			accum: accum,
+			q1: q1
+		};
+	};
 	/**
 	 * Calculates the Median Price for the dataSet.
+	 * dual symbol version****************
 	 * @private
 	 * @param {CIQ.ChartEngine.Chart} chart The chart to update.
 	 * @param {array} data The data to process, if omitted, uses chart.dataSet
 	 * @memberof CIQ.ChartEngine
 	 */
 	CIQ.ChartEngine.prototype.calculateMedianPrice = function (chart, data) {
-		//debugger
 		if (!data) data = chart.dataSet;
-
-		// var field	// 它是流动的
-		// if(sd.parameters.isComparison){
-		// 	field = CIQ.store.getters.getComparisonSymbol.url
-		// }
-
 		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["hl/2"] = (d.High + d.Low) / 2;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				
+				symbolObj["hl/2"] = (symbolObj.High + symbolObj.Low) / 2;
+			}
+		}
+	};
+
+	/**
+	 * Calculates the Typical Price for the dataSet.
+	 * dual symbol version****************
+	 * @private
+	 * @param {CIQ.ChartEngine.Chart} chart The chart to update.
+	 * @param {array} data The data to process, if omitted, uses chart.dataSet
+	 * @memberof CIQ.ChartEngine
+	 */
+	CIQ.ChartEngine.prototype.calculateTypicalPrice = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			d["hlc/3"] = (d.High + d.Low + d.Close) / 3;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				
+				symbolObj["hlc/3"] = (symbolObj.High + symbolObj.Low + symbolObj.Close) / 3;
+			}
+		}	
+		// debugger
+	};
+
+	/**
+	 * Calculates the Weighted Close for the dataSet.
+	 * dual symbol version****************
+	 * @private
+	 * @param {CIQ.ChartEngine.Chart} chart The chart to update.
+	 * @param {array} data The data to process, if omitted, uses chart.dataSet
+	 * @memberof CIQ.ChartEngine
+	 */
+	CIQ.ChartEngine.prototype.calculateWeightedClose = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			d["hlcc/4"] = (d.High + d.Low + 2 * d.Close) / 4;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				
+				symbolObj["hlcc/4"] = (symbolObj.High + symbolObj.Low + 2 * symbolObj.Close) / 4;
+			}
+		}	
+	};
+
+	/**
+	 * Calculates the (Open + High + Low + Close) / 4 for the dataSet.
+	 * dual symbol version****************
+	 * @private
+	 * @param {CIQ.ChartEngine.Chart} chart The chart to update.
+	 * @param {array} data The data to process, if omitted, uses chart.dataSet
+	 * @memberof CIQ.ChartEngine
+	 */
+	CIQ.ChartEngine.prototype.calculateOHLC4 = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			d["ohlc/4"] = (d.Open + d.High + d.Low + d.Close) / 4;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				
+				symbolObj["ohlc/4"] = (symbolObj.Open + symbolObj.High + symbolObj.Low + symbolObj.Close) / 4;
+			}
 		}
 	};
 }
