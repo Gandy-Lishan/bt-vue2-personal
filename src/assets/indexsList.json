@@ -838,5 +838,9 @@
     {
         "symbol": "USGG3M",
         "name": "3-Month Treasury"
+    },
+    {
+        "symbol": "DWCPF",
+        "name": "Dow Jones Completion Total Stock Market Index (DWCPF)"
     }
 ]
