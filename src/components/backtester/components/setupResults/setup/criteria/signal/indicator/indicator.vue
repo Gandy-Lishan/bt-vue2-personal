@@ -369,7 +369,7 @@ export default {
         { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
         { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
         { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
-        { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
+        { value: 5, obj: { label: 'Symbol Ratio', field: 'SRatio' } }
       ],
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],

@@ -36,38 +36,40 @@ if (!CIQ.Studies) {
 	console.error("cci feature requires first activating studies feature.");
 } else {
 	CIQ.Studies.calculateCCI = function (stx, sd) {
+		/** 默认情况下中间量会预先计算并储存在dataSet内,但计算函数传值是scrubbed，存在无symbol2的情况，于是我在tech的计算函数内先装载中间量 */
+		CIQ.stxx.calculateTypicalPrice(sd.chart)
+
 		var quotes = sd.chart.scrubbed
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var field = "hlc/3"
+		var subField = field
 
-		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
-
-	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
-	var field = "hlc/3"
-	var subField = field
-	/** 
-	 * 用isComparison属性判断Study用来计算的数据源
-	 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
-	 * ma和roc就是用critria判断Study用来计算的数据源
-	 *  */
-	if(sd.parameters.isComparison){
-		field = CIQ.store.getters.getComparisonSymbol.url
-		//filter valid rows
-		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-		// handle calculateTypicalPrice result
-		var val
-		for (var i = 0; i < quotes.length; ++i) {
-			val = quotes[i][field];
-			if (val && typeof val == "object") {
-				val[subField] = (val.High + val.Low + val.Close) / 3;
-			}
+		CIQ.Studies.MA("simple", sd.days, field, 0, "MA", stx, sd);
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			// handle calculateTypicalPrice result
+			// var val
+			// for (var i = 0; i < quotes.length; ++i) {
+			// 	val = quotes[i][field];
+			// 	if (val && typeof val == "object") {
+			// 		val[subField] = (val.High + val.Low + val.Close) / 3;
+			// 	}
+			// }
+		}else {
+			quotes = sd.chart.scrubbed
 		}
-	}else {
-		quotes = sd.chart.scrubbed
-	}
-	if (quotes.length < sd.days + 1) {
-		sd.error = true;
-		return;
-	}
-
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+	
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
