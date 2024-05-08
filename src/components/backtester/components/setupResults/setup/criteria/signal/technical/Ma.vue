@@ -280,7 +280,7 @@ export default {
 				period: [{ validator: validatePeriod, trigger: 'blur' }],
 				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }],
 				maPeriod: [{ validator: validateMaPeriodRule, trigger: 'blur' }]
-			}
+			},
 		}
 	},
 	computed: {
@@ -328,6 +328,7 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
+					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -338,7 +339,7 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF0000' },
+						outputs: { MA:ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
@@ -373,11 +374,12 @@ export default {
 						CIQ.Studies.removeStudy(CIQ.stxx, sd)
 					}
 				}
+				const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
 					Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 					Period: this.tech.ma_period,
 					display: 'ST MA'
-				},null,{
+				},{ MA: ma_color },{
 					criteria: this.criteria,
 					index: this.panelIndex
 				})
@@ -573,6 +575,7 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
+					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 					// 刷新附属ma
 					var replaceStudy = {
 						name: 'Moving Average ',
@@ -584,7 +587,7 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF000' },
+						outputs: { MA: ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
@@ -634,6 +637,7 @@ export default {
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
+					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 					var replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
@@ -644,7 +648,7 @@ export default {
 							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
-						outputs: { MA: '#FF0000' },
+						outputs: { MA: ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
 					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {

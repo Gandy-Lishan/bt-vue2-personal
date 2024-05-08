@@ -23,6 +23,7 @@
 				@sort-change="onSortChange"
 				size="small"
 				style="width: 100%; height: 100%; margin: 0 auto"
+			:row-class-name="tableRowClassName"
 				stripe
 			>
 				<el-table-column prop="isRight" width="50px">
@@ -202,25 +203,21 @@ export default {
 					label: 'Current Signal: (e.g., Long, Sell, etc)',
 					value: 'current_state',
 					key: 'current_state',
-					width: '300px'
 				},
 				{
 					label: 'Last Signal Date: (last change in Signal)',
 					value: 'date',
 					key: 'date',
-					width: '300px'
 				},
 				{
 					label: 'Model Update Frequency',
 					value: 'update_frequency',
 					key: 'update_frequency',
-					width: '300px'
 				},
 				{
 					label: 'YTD until 04/30/23 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
-					width: '200px'
 				},
 				{
 					label: 'To BTV3',
@@ -302,7 +299,7 @@ export default {
 			return true
 		},
 		highlightTag(tag) {
-			debugger
+			
 			this.highlightedTag = tag.value
 			// 重置分页和排序信息
 			this.currentPage = 1
@@ -559,6 +556,10 @@ export default {
 			const code = res?.data?.code
 			if(code == 200) {await this.getDataList();this.popUpMsgBox('Removed from favorites')}
 			if(code == 400) {this.popUpMsgBox('Failed to move favorites')}
+		},
+		tableRowClassName({row, rowIndex}) {
+				if(row.date === timestampToTime(new Date())) return 'highlighted'
+				return ''
 		}
 	}
 }
@@ -566,4 +567,7 @@ export default {
 
 <style lang="less" scoped>
 @import '../index.less';
+.el-table /deep/ tr.highlighted{
+  background-color: yellow;
+}
 </style>

@@ -74,7 +74,7 @@
       <el-collapse-item name="3" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
-            <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
+            <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Summary</p>
             <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Dual Trend Model</p>
           </div>
           <div class="downLoadCsvBtn">
@@ -177,7 +177,7 @@ export default {
         });
     },
     displayResultsAndFilter(data) {
-      debugger
+      
       // 至展示 filter 和 result 不重新赋值 form
       const result = data.result
       const list = JSON.parse(data['TRADE LIST'])
@@ -187,7 +187,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      debugger
+      
       this.$refs['Form'].displayData(data)
       this.activeSecondTab = 'summary'
       const status = data.status
@@ -203,7 +203,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displaySummary(result) {
-      debugger
+      
       const statistics = {}
       statistics.totalReturn = result['TOTAL RETURN']
       statistics.medianReturn = result['MEDIAN RETURN']
@@ -262,7 +262,7 @@ export default {
       })
     },
     displayPreviewList(content) {
-      debugger
+      
       if(!content) return
 		  this.loading = true
       this.$refs.filterTable.handleSizeChange(10)
@@ -380,7 +380,7 @@ export default {
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
   margin: 50px auto auto auto;
-  width: 1200px;
+  width: 80%;
   padding: 20px;
 }
 /deep/ .el-collapse-item__header {

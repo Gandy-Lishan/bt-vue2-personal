@@ -354,7 +354,7 @@ export default {
         conditionPeriod: [{ validator: validateConditionPeriod, trigger: 'blur' }],
         maValue: [{ validator: validateMaValue, trigger: 'blur' }],
         period: [{ validator: validatePeriod, trigger: 'blur' }],
-      }
+      },
     }
   },
   computed: {
@@ -752,7 +752,6 @@ export default {
       return display
     },
     setPeriod(val) {
-      var stma_color = ["#bfad94","#b07858","#a14516","#6f3516","#402818"]
       let _val = val
       // if (!_val) {
       //   _val = 5
@@ -790,13 +789,12 @@ export default {
           )
         }
       }
-
-      debugger
+      const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(this.criteria, this.panelIndex)
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',
         Field: result.url
-      }, { MA: stma_color[this.panelIndex%5] }, {
+      }, { MA: ma_color }, {
         criteria: this.criteria,
         index: this.panelIndex
       })

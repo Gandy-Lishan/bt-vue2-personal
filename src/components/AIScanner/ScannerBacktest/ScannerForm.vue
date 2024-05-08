@@ -662,7 +662,7 @@ export default {
     },
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
-      debugger
+      
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
       this.$refs['SelectCheck'].handleoptionsAllChange(true)
 			Object.assign(this.$data, this.$options.data())
@@ -699,7 +699,7 @@ export default {
       return await validateForm(formName)
     },
     async previewSCList() {
-      debugger
+      
       if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
@@ -827,7 +827,7 @@ export default {
         this.processTips = ''
         this.percentage = 0
       }
-      debugger
+      
      if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
@@ -875,7 +875,7 @@ export default {
         commission: trimTrailingZeros((commission * 100).toFixed(2)),
         signals: isJson(signals) ? JSON.parse(signals) : signals
       }
-      debugger
+      
       for (const key in target) {
         if(key === 'signals') {
           if(Array.isArray(data[key]) && data[key].length === 1 && data[key][0] === 'All') {
@@ -908,7 +908,7 @@ export default {
         this.$emit('clearResults')
         this.previewBtnLoading = false
       }
-      debugger
+      
       console.log('previewRes', previewRes)
       if(!previewRes) {this.previewBtnLoading = false; this.$emit('clearResults'); return}
      const code = previewRes.data.code

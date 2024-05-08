@@ -59,7 +59,8 @@ let __st_js_indicatorType_ = _exports => {
 			{ label: 'Symbol High', field: 'High' },
 			{ label: 'Symbol Low', field: 'Low' },
 			{ label: 'Symbol Close', field: 'Close' },
-			{ label: 'Symbol Volume', field: 'Volume' }
+			{ label: 'Symbol Volume', field: 'Volume' },
+			{ label: 'Symbol Ratio', field: 'Ratio' }
 		]
 		let signal
 		if (label) {
