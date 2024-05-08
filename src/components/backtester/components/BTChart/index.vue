@@ -62,8 +62,6 @@ export default {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
 		async onChartReady() {
 			this.SET_CHART_READY_STATE(true)
-
-			debugger
 			if(!this.$store.state.user.is_admin) {
 				document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 			}
