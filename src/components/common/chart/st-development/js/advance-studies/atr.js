@@ -36,6 +36,15 @@ if (!CIQ.Studies) {
 	console.error("atr feature requires first activating studies feature.");
 } else {
 	CIQ.Studies.calculateATRBands = function (stx, sd) {
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+
 		CIQ.Studies.calculateStudyATR(stx, sd);
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -49,6 +58,15 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateSTARCBands = function (stx, sd) {
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+
 		CIQ.Studies.calculateStudyATR(stx, sd);
 		CIQ.Studies.MA(
 			"simple",

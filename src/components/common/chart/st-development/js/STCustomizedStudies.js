@@ -290,7 +290,7 @@ if (!CIQ.Studies) {
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrOPR[i]) / 
+								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
 								(maxCloseArrOPR[i] - minCloseArrOPR[i])
 							).toFixed(4))
 							
@@ -322,7 +322,7 @@ if (!CIQ.Studies) {
 							
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrRR[i]) / 
+								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
 								(maxCloseArrRR[i] - minCloseArrRR[i])
 							).toFixed(4))
 							return (change==Infinity || change==-Infinity) ? 0 : change
@@ -382,7 +382,7 @@ if (!CIQ.Studies) {
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(Number(getPropertyByString(row,field,subField).toFixed(3)) - maxCloseArrDD[i]) / 
+								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
 								maxCloseArrDD[i]
 							).toFixed(4))
 							
@@ -412,7 +412,7 @@ if (!CIQ.Studies) {
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrDU[i]) / 
+								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
 								minCloseArrDU[i]
 							).toFixed(4))
 							
@@ -1414,7 +1414,8 @@ if (!CIQ.Studies) {
 			const sliceEnd = i + add_bar
 			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
 			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
-			dataArr.push(Number(tmpData.toFixed(3)));
+			//dataArr.push(Number(tmpData.toFixed(3)));
+			dataArr.push(Number(tmpData));
 		}
 
 		return dataArr;
