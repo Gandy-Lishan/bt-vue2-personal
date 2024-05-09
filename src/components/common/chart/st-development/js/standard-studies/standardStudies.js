@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
-
+import { getPropertyByString } from "@/utils"
 
 
 
@@ -4034,10 +4034,17 @@ CIQ.Studies.calculateMovingAverageWeighted = function (stx, sd) {
 
 CIQ.Studies.calculateStudyATR = function (stx, sd) {
 	/** 默认情况下中间量会预先计算并储存在dataSet内,但计算函数传值是scrubbed，存在无symbol2的情况，于是我在tech的计算函数内先装载中间量 */
-	CIQ.stxx.calculateTypicalPrice(sd.chart)
-	
-	var quotes = sd.chart.dataSet;
+	CIQ.stxx.calculateATR(sd.chart)
+	var quotes = sd.chart.scrubbed;
 	var period = sd.days;
+
+	var field	// 它是流动的
+	if(sd.parameters.isComparison){
+		field = CIQ.store.getters.getComparisonSymbol.url
+		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+	}else{
+		quotes = sd.chart.scrubbed
+	}
 	if (quotes.length < period + 1) {
 		sd.error = true;
 		return;
@@ -4047,7 +4054,9 @@ CIQ.Studies.calculateStudyATR = function (stx, sd) {
 	for (var i = Math.max(sd.startFrom, 1); i < quotes.length; i++) {
 		var prices = quotes[i];
 		var pd = quotes[i - 1];
-		var trueRange = prices.trueRange;
+		var trueRange = getPropertyByString(prices,field,'trueRange');
+		//if(isNaN(trueRange)) console.log("index: ",i,'  true range:',trueRange, prices)
+		
 		if (pd["Sum True Range " + name]) total = pd["Sum True Range " + name];
 		total += trueRange;
 		if (i > period) total -= quotes[i - period]["True Range " + name];

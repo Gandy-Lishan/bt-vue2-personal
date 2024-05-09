@@ -70,12 +70,11 @@ if (CIQ.ChartEngine) {
 		var accum = [];
 		if (state.accum) accum = state.accum;
 		var q1;
-		
-		for (var i = 0; i < data.length; i++) {
-			var q = data[i];
-			q1 = i ? data[i - 1] : state.q1;
+		var filteredData1 = chart.scrubbed
+		for (var i = 0; i < filteredData1.length; i++) {
+			var q = filteredData1[i];
+			q1 = i ? filteredData1[i - 1] : state.q1;
 			if (!q1) continue;
-
 			var trueRange = Math.max(
 				q.High - q.Low,
 				Math.abs(q.High - q1.Close),
@@ -93,35 +92,41 @@ if (CIQ.ChartEngine) {
 			q.trueRange = trueRange;
 		}
 
-		// const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
-		// if(comparisonSymbolUrl){
-		// 	var filteredData = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
-		// 	for (var i = 0; i < filteredData.length; i++) {
-		// 		var q = filteredData[i][comparisonSymbolUrl];
-		// 		q1 = i ? filteredData[i - 1][comparisonSymbolUrl] : state.q1;
-		// 		if (!q1) continue;
-	
-		// 		var trueRange = Math.max(
-		// 			q.High - q.Low,
-		// 			Math.abs(q.High - q1.Close),
-		// 			Math.abs(q.Low - q1.Close)
-		// 		);
-		// 		if (accum.length < period) {
-		// 			if (accum.push(trueRange) == period) {
-		// 				var total = 0;
-		// 				for (var j = 0; j < accum.length; j++) total += accum[j];
-		// 				q.atr = total / period;
-		// 			}
-		// 		} else {
-		// 			q.atr = (q1.atr * (period - 1) + trueRange) / period;
-		// 		}
-		// 		q.trueRange = trueRange;
-		// 	}
-		// }
-		
+		/** dual symbol */
+		var _accum = [];
+		if (state._accum) _accum = state._accum;
+		var _q1;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		if(comparisonSymbolUrl){
+			var filteredData2 = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
+			for (var i = 0; i < filteredData2.length; i++) {
+				var q = filteredData2[i][comparisonSymbolUrl];
+				_q1 = i ? filteredData2[i - 1][comparisonSymbolUrl] : state._q1;
+				if (!_q1) continue;
+				var trueRange = Math.max(
+					q.High - q.Low,
+					Math.abs(q.High - _q1.Close),
+					Math.abs(q.Low - _q1.Close)
+				);
+				if (_accum.length < period) {
+					if (_accum.push(trueRange) == period) {
+						var total = 0;
+						for (var j = 0; j < _accum.length; j++) total += _accum[j];
+						q.atr = total / period;
+					}
+				} else {
+					q.atr = (_q1.atr * (period - 1) + trueRange) / period;
+				}
+				q.trueRange = trueRange;
+			}
+		}
 		chart.state.calculations.atr = {
 			accum: accum,
-			q1: q1
+			_accum: _accum,
+
+			/** dual symbol */
+			q1: q1,
+			_q1: _q1,
 		};
 	};
 	/**
