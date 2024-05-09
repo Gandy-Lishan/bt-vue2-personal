@@ -1410,9 +1410,10 @@ if (!CIQ.Studies) {
 		// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
 		// 如果当前bar之前的交易日个数小于周期，按剩余天数算
 		for (let i = 0; i < dataSeries.length; i++) {
+
 			const sliceStart = i - period + add_bar
 			const sliceEnd = i + add_bar
-			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
+			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd).filter(item=>!isNaN(item)));
 			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
 			//dataArr.push(Number(tmpData.toFixed(3)));
 			dataArr.push(Number(tmpData));
