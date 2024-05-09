@@ -221,7 +221,6 @@ if (!CIQ.Studies) {
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
 		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
-		debugger
 		var quotes = sd.chart.scrubbed;
 
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
@@ -289,8 +288,9 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
+								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrOPR[i]) / 
 								(maxCloseArrOPR[i] - minCloseArrOPR[i])
 							).toFixed(4))
 							
@@ -319,12 +319,12 @@ if (!CIQ.Studies) {
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
-
+							
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
+								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrRR[i]) / 
 								(maxCloseArrRR[i] - minCloseArrRR[i])
 							).toFixed(4))
-							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
 						return NaN
@@ -380,8 +380,9 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
+								(Number(getPropertyByString(row,field,subField).toFixed(3)) - maxCloseArrDD[i]) / 
 								maxCloseArrDD[i]
 							).toFixed(4))
 							
@@ -409,8 +410,9 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
+								(Number(getPropertyByString(row,field,subField).toFixed(3)) - minCloseArrDU[i]) / 
 								minCloseArrDU[i]
 							).toFixed(4))
 							
