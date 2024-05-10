@@ -60,12 +60,13 @@ if (!CIQ.Studies) {
 	 * @memberof CIQ.Studies
 	 */
 	CIQ.Studies.calculateMovingAverageTimeSeries = function (stx, sd) {
-		debugger
 		sd.ma = new CIQ.Studies.StudyDescriptor(sd.name, "ma", sd.panel);
 		sd.ma.chart = sd.chart;
 		sd.ma.days = sd.days;
 		sd.ma.startFrom = sd.startFrom;
 		sd.ma.inputs = sd.inputs;
+			// dual symbol new features
+			sd.ma.parameters = sd.parameters
 		CIQ.Studies.calculateLinearRegressionIndicator(stx, sd.ma);
 
 		var name = sd.name;
@@ -76,6 +77,12 @@ if (!CIQ.Studies) {
 		if (isNaN(offset)) offset = 0;
 
 		var quotes = sd.chart.scrubbed;
+			if(sd.parameters.isComparison){
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(CIQ.store.getters.getComparisonSymbol.url))
+			}else{
+				quotes = sd.chart.scrubbed
+			}
+
 		// find start
 		var offsetBack = offset;
 		for (var i = sd.startFrom - 1; i >= 0; i--) {
@@ -111,6 +118,18 @@ if (!CIQ.Studies) {
 		}
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+			var subField = field
+			if(sd.parameters.isComparison){
+				field = CIQ.store.getters.getComparisonSymbol.url
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+				sd.yAxis = actualXaxis
+				/****************** */
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			}else{
+				sd.yAxis = null
+				quotes = sd.chart.scrubbed
+			}
 
 		var sumWeights = (sd.days * (sd.days + 1)) / 2;
 		var squaredSumWeights = Math.pow(sumWeights, 2);
@@ -130,7 +149,7 @@ if (!CIQ.Studies) {
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var currentQuote = quotes[i][field];
 			if (currentQuote && typeof currentQuote == "object")
-				currentQuote = currentQuote[sd.subField];
+				currentQuote = currentQuote[subField];
 			if (!currentQuote && currentQuote !== 0) continue;
 			sumWeightedCloses += sd.days * currentQuote - sumCloses;
 			sumCloses += currentQuote;
@@ -139,7 +158,7 @@ if (!CIQ.Studies) {
 			else if (i > sd.days - 1) {
 				var daysAgoQuote = quotes[i - sd.days][field];
 				if (daysAgoQuote && typeof daysAgoQuote == "object")
-					daysAgoQuote = daysAgoQuote[sd.subField];
+					daysAgoQuote = daysAgoQuote[subField];
 				if (!daysAgoQuote && daysAgoQuote !== 0) continue;
 				sumCloses -= daysAgoQuote;
 				sumClosesSquared -= Math.pow(daysAgoQuote, 2);

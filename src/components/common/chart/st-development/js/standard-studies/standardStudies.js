@@ -3547,36 +3547,6 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 			field = comparisonSymbol?.url
 			//filter valid rows
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-
-			// handle calculateTypicalPrice result
-			// if(['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)){
-			// 	const calculateFunction = function(d,subField) {
-			// 		var result
-			// 		switch(subField){
-			// 			case 'hl/2':
-			// 				result = (d.High + d.Low) / 2;
-			// 				break;
-			// 			case 'hlc/3': 
-			// 				result = (d.High + d.Low + d.Close) / 3;
-			// 				break;
-			// 			case 'hlcc/4':
-			// 				result = (d.High + d.Low + 2 * d.Close) / 2;
-			// 				break;
-			// 			case 'ohlc/4':
-			// 				result = (d.Open + d.High + d.Low + d.Close) / 4;
-			// 				break;
-			// 			default:
-			// 		}
-			// 		return result
-			// 	}
-			// 	var val
-			// 	for (var i = 0; i < quotes.length; ++i) {
-			// 		val = quotes[i][field];
-			// 		if (val && typeof val == "object") {
-			// 			val[subField] = calculateFunction(val,subField);
-			// 		}
-			// 	}
-			// }
 		}
 	}else{
 		sd.yAxis = null

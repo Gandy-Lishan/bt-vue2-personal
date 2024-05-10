@@ -479,29 +479,6 @@ if (!CIQ.Studies) {
 		}
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
-	// CIQ.Studies.calculateSymbolRatio = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-
-	// 	var field = "Close"
-	// 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
-	// 	var subField = field
-
-	// 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-	// 	var symbol2Field = comparisonSymbol.url
-	// 	if(!comparisonSymbol.url){
-	// 		symbol2Field = field
-	// 		console.log('SymbolRatio is only allowed in dual symbol')
-	// 	}
-		
-	// 	// 默认study模板
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		var quote = quotes[i];
-	// 		var RatioValue = getPropertyByString(quote, field, subField) / getPropertyByString(quote, symbol2Field, subField);
-	// 		quote["Result " + sd.name] = RatioValue
-	// 	}
-	// 	console.log(CIQ.stxx.chart.dataSet)
-	// 	// sd.outputMap["Result " + sd.name] = "Symbol Ratios";
-	// };
 	CIQ.Studies.calculateSTMACDGap = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var inputs = sd.inputs,
@@ -1007,66 +984,6 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = quotes[i]["_MA " + sd.name] / quotes[i]["_MA2 " + sd.name];
 		}
 	};
-	// CIQ.Studies.calculatePercentageAboveNDayLow = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-	// 	if (quotes.length < sd.days + 1) {
-	// 		sd.error = true;
-	// 		return;
-	// 	}
-	// 	var field = sd.inputs.Field;
-	// 	var period = sd.inputs.Period;
-
-	// 	if (!field || field == "field") field = "Close";
-
-	// 	let belowNDayStateArr = []
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i == 0){
-	// 			belowNDayStateArr.push(null)
-	// 			continue
-	// 		}
-	// 		if(quotes[i][field] < quotes[i-1][field]) belowNDayStateArr.push(1)
-	// 		else belowNDayStateArr.push(0)
-	// 	}
-
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i>=period){
-	// 			if (!quotes[i]) continue;
-	// 			const sliceStart = i+1 - period
-	// 			const sliceEnd = i+1
-	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
-	// 		}
-	// 	}
-	// };
-	// CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-	// 	if (quotes.length < sd.days + 1) {
-	// 		sd.error = true;
-	// 		return;
-	// 	}
-	// 	var field = sd.inputs.Field;
-	// 	var period = sd.inputs.Period;
-
-	// 	if (!field || field == "field") field = "Close";
-
-	// 	let belowNDayStateArr = []
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i == 0){
-	// 			belowNDayStateArr.push(null)
-	// 			continue
-	// 		}
-	// 		if(quotes[i][field] > quotes[i-1][field]) belowNDayStateArr.push(1)
-	// 		else belowNDayStateArr.push(0)
-	// 	}
-
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i>=period){
-	// 			if (!quotes[i]) continue;
-	// 			const sliceStart = i+1 - period
-	// 			const sliceEnd = i+1
-	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
-	// 		}
-	// 	}
-	// };
 	CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;

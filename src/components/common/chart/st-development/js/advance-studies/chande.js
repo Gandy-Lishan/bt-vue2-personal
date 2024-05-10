@@ -72,13 +72,19 @@ if (!CIQ.Studies) {
 			name = p + " " + name;
 		}
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // only used when called from VMA
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < sd.days + 1) {
+					sd.error = true;
+					return;
+				}
 
 		var sumMomentum = 0,
 			absSumMomentum = 0;
