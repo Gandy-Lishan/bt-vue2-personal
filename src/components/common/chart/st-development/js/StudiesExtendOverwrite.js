@@ -15,6 +15,7 @@ import {__js_advanced_studies_balanceOfPower_} from "./advance-studies/balanceOf
 import {__js_advanced_studies_chaikin_} from "./advance-studies/chaikin.js"
 import {__js_advanced_studies_chande_} from "./advance-studies/chande.js"
 import {__js_advanced_studies_linearRegression_} from "./advance-studies/linearRegression.js"
+import {__js_advanced_studies_coppock_} from "./advance-studies/coppock.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -44,6 +45,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_chaikin_,
 			__js_advanced_studies_chande_,
 			__js_advanced_studies_linearRegression_,
+			__js_advanced_studies_coppock_,
 		)
 
 

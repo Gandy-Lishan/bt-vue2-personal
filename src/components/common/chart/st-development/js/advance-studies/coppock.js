@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_coppock_ = (_exports) => {
@@ -39,6 +39,14 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 
 		var longDays = parseInt(sd.inputs["Long RoC"], 10);
 		if (!longDays) longDays = 14;
@@ -53,12 +61,13 @@ if (!CIQ.Studies) {
 			return;
 		}
 		for (var i = Math.max(sd.startFrom, longDays); i < quotes.length; i++) {
-			var denom1 = quotes[i - shortDays][field];
-			var denom2 = quotes[i - longDays][field];
+			var denom1 = getPropertyByString(quotes[i - shortDays],field,subField);
+			var denom2 = getPropertyByString(quotes[i - longDays],field,subField);
 			if (denom1 && denom2) {
 				// skip if denominator is 0 --
 				quotes[i]["_Sum " + sd.name] =
-					100 * (quotes[i][field] / denom1 + quotes[i][field] / denom2 - 2);
+					100 * (getPropertyByString(quotes[i],field,subField) / 
+					denom1 + getPropertyByString(quotes[i],field,subField) / denom2 - 2);
 			}
 		}
 
@@ -75,4 +84,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_coppock_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_coppock_}
