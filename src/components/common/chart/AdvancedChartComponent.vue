@@ -79,19 +79,19 @@
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
-							<cq-tooltip>BUY</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>BUY(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="sell" id="sell" @click="changeMarkerVisibility('sell')" style="visibility:hidden">
 							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
-							<cq-tooltip>SELL</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="buy_2" id="buy_2" @click="changeMarkerVisibility('buy_2')" style="visibility:hidden">
-							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#fbc05c'></path></svg></span>
-							<cq-tooltip>BUY</cq-tooltip>
+							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#92d2cc'></path></svg></span>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>BUY(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="sell_2" id="sell_2" @click="changeMarkerVisibility('sell_2')" style="visibility:hidden">
-							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#5b9bd1'></path></svg></span>
-							<cq-tooltip>SELL</cq-tooltip>
+							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#ff5290'></path></svg></span>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<div class="favBtnContainer">
@@ -417,6 +417,7 @@ export default class AdvancedChartComponent extends Vue {
 			
 			// 默认为折线图
 			CIQ.stxx.setChartType("line");
+			CIQ.stxx.setLineStyle({ width: 3 });
 
 			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
 			//CIQ.stxx.captureMouseWheelEvents = false 
@@ -435,71 +436,10 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			// var _this = this
-			// // 鼠标事件加入防抖节流
-			// CIQ.stxx.addEventListener("scroll", throttle(function(object: Record<string, any> = {}) {
-			// 	// // an event handle for updating trade marker when dragging the chart
-			// 	// if(CIQ.store.getters.getIsMarkerShownFlagState){
-			// 	// 	let c_date = jutils.formatDate(object.stx.chart.xaxis[0].DT, 'YYYYMMDD');
-			// 	// 	if(CIQ.groups.slice(-1)[0]){
-			// 	// 		let m_date =
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(0, 4) +
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(5, 7) +
-			// 	// 				CIQ.groups.slice(-1)[0].slice(-1)[0].DT.slice(8, 10)
-			// 	// 		if(c_date<m_date){
-			// 	// 			let markers = CIQ.groups.pop()
-							
-			// 	// 			console.log("new pagnigation start",markers)
-			// 	// 			CIQ.loadChart(markers, CIQ.addMarker)
-			// 	// 		}
-			// 	// 	}
-			// 	// }
-			// 	_this.resizePatternMatch()
-			// },300));
-
-			// // 方案（layout事件里对y轴拖动检测不到）
-			// // 监听图表的Layout事件（针对zoomin  zoomout用于更新模式匹配Drawing）
-			// CIQ.stxx.addEventListener("layout", function (e) {
-			// 	console.log('监听图表的layout事件（zoomin',e)
-			// 	_this.resizePatternMatch()
-			// });
-
-			// // 方案（setter进不去）
-			// // // 获取原始的 Y 轴属性值
-			// var originalYAxisHigh = CIQ.stxx.chart.yAxis;
-			// // 定义一个 Y 轴属性的 setter 函数
-			
-			// Object.defineProperty(CIQ.stxx.chart.yAxis, 'zoom', {
-			// 	get: function() {
-			// 		return originalYAxisHigh;
-			// 	},
-			// 	set: function(newValue) {
-			// 		// 当 Y 轴属性变化时执行的操作
-			// 		console.log('Y 轴属性发生了变化:', newValue);
-			// 		originalYAxisHigh = newValue;
-			// 		// 可以在这里添加其他需要执行的操作
-
-			// 		_this.resizePatternMatch()
-			// 	}
-			// });
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
-		// a listener for observing tooltip button's action
-		// const tooltip = document.getElementsByClassName("ciq-HU")[0] as HTMLButtonElement;
-		// tooltip.onclick = function(){
-		// 	tooltip.classList.remove("active");	
-		// 	if (stx.layout.headsUp.floating == true){	
-		// 		tooltip.classList.remove("activated");	
-		// 		stx.layout.headsUp.floating = false	
-		// 	}
-		// 	else{
-		// 		tooltip.classList.add("activated");
-		// 		stx.layout.headsUp.floating = true
-		// 	}
-		// }
-
 		stx.layout.headsUp={floating:true};
 		//stx.layout.headsUp = "floating";
 		// var mNode = document.getElementsByClassName("ciq-HU")[0]

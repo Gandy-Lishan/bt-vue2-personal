@@ -119,7 +119,7 @@
                 @change="handleSymbolSelect"
               >
                 <el-option
-                  v-for="item in symbolConditions"
+                  v-for="item in filteredSymbolConditions"
                   :key="item.value"
                   :label="item.obj.label"
                   :value="item.obj"
@@ -296,7 +296,7 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter} from '@/utils'
 import moment from 'moment'
-import { mapMutations } from 'vuex'
+import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
 const throttle = require('lodash/throttle')
@@ -368,7 +368,8 @@ export default {
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
         { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
         { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
-        { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } }
+        { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
+        { value: 5, obj: { label: 'Symbol Ratio', field: 'SRatio' } }
       ],
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
@@ -444,7 +445,19 @@ export default {
     },
     isBTChartReady() {
       return this.$store.state.chart.isBTChartReady
-    }
+    },
+
+    ...mapGetters(['getComparisonSymbol']),
+		isComparisonSymbol() {
+      return this.getComparisonSymbol.url?true:false
+    },
+    filteredSymbolConditions() {
+      if (this.isComparisonSymbol) {
+        return this.symbolConditions;
+      } else {
+        return this.symbolConditions.filter(item => item.value !== 5);
+      }
+    },
   },
   watch: {
     // Listen to freq on the indicator Vue is to make the indicators loaded by the form within the timeframe range

@@ -619,7 +619,7 @@ export default {
 			CIQ.addIndicators({type:'outputSignalsResult',pk:backtestInfo.pk},callback)
 		},
 		async displaySetUpForm(data) {
-			debugger
+			
 			/* 填充和展示 Set Up 表单的数据 */
 			if(!data.id && !data.uuid && data.length === 0) return
 			let _this = this

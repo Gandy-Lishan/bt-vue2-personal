@@ -3,110 +3,47 @@
     <el-form
       ref="Form"
       :model="data"
-      size="mini"
-      label-width="150px"
-      label-position="left"
+      label-position="top"
+      size="small"
       :rules="rules">
-      <div class="grid-row">
-          <el-form-item label="1. Name" prop="name">
-            <el-input v-model="data.name" clearable></el-input>
+        <el-row :gutter="20">
+            <el-col :span="6">
+            <el-form-item label="1. Name" prop="name" label-width="70px" label-position="top">
+              <el-input v-model="data.name" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+          <el-form-item
+            label="Start Date"
+            prop="start_date"
+            label-width="120px"
+            label-position="top"
+          >
+          <template slot="label">
+            <label>
+              2. Start Date
+            </label>
+          </template>
+            <el-date-picker
+              v-model="data.start_date"
+              type="date"
+              placeholder="- Select Start Date -"
+              value-format="yyyy-MM-dd"
+              :picker-options="startPickerOptions"
+            >
+            </el-date-picker>
           </el-form-item>
-          <div></div>
-          <el-form-item prop="portfolioChecked" class="portfolio-check" style="margin-left: 0px;">
-            <el-checkbox v-model="portfolioChecked">2. Auto Portfolio</el-checkbox>
-          </el-form-item>
-      </div>
-      <div class="form-main">
-        <div class="grid-row main-row">
-          <div class="left">
+          </el-col>
+          <el-col :span="6">
             <el-form-item
-                label="Start Date"
-                prop="start_date"
+              label="End Date"
+              prop="end_date"
+              label-width="120px"
+              label-position="top"
               >
               <template slot="label">
                 <label>
-                  Start Date
-                  <el-tooltip effect="dark" placement="top">
-                    <span slot="content"
-                      ></span>
-                    <i class="iconfont icon-wenhao"></i>
-                  </el-tooltip>
-                </label>
-              </template>
-                <el-date-picker
-                  v-model="data.start_date"
-                  type="date"
-                  placeholder="- Select Start Date -"
-                  value-format="yyyy-MM-dd"
-                  :picker-options="startPickerOptions"
-                >
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item prop="return">
-              <template slot="label">
-                <label>
-                  <el-checkbox v-model="returnChecked" label="Return">Return</el-checkbox>
-                  <!-- <el-tooltip effect="dark" placement="top">
-                    <span slot="content"
-                      >The long-short position during the backtest period. <br/>
-                      Enter two values here, <br/>
-                      representing the weights of long and short positions respectively.</span>
-                    <i class="iconfont icon-wenhao"></i>
-                  </el-tooltip> -->
-                </label>
-              </template>
-              <div class="_conditionBox">
-                  <el-form-item prop="min_return" label-width="0px">
-                    <el-input v-model="data.min_return" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-                  <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-                  <el-form-item prop="max_return" label-width="0px">
-                    <el-input v-model="data.max_return" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item prop="win_rate">
-              <template slot="label">
-                <label>
-                  <el-checkbox v-model="data.winRateChecked" label="Return">Win Rate</el-checkbox>
-                  <!-- <el-tooltip effect="dark" placement="top">
-                    <span slot="content"
-                      >The long-short position during the backtest period. <br/>
-                      Enter two values here, <br/>
-                      representing the weights of long and short positions respectively.</span>
-                    <i class="iconfont icon-wenhao"></i>
-                  </el-tooltip> -->
-                </label>
-              </template>
-              <div class="_conditionBox">
-                  <el-form-item prop="win_rate" label-width="0px">
-                    <el-input v-model="data.win_rate" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-                  <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-                  <el-form-item prop="win_rate" label-width="0px">
-                    <el-input v-model="data.win_rate" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-              </div>
-            </el-form-item>
-          </div>
-          <div></div>
-          <div class="right">
-            <el-form-item
-                label="End Date"
-                prop="end_date"
-              >
-              <template slot="label">
-                <label>
-                  End Date
-                  <el-tooltip effect="dark" placement="top">
-                    <span slot="content"
-                      ></span>
-                    <i class="iconfont icon-wenhao"></i>
-                  </el-tooltip>
+                  3. End Date
                 </label>
               </template>
                 <el-date-picker
@@ -118,196 +55,298 @@
                 >
                 </el-date-picker>
             </el-form-item>
-            <el-form-item prop="max_drow_down">
-              <template slot="label">
-                <label>
-                  <el-checkbox v-model="data.max_drow_downChecked" label="Return">Max Drow Down</el-checkbox>
-                  <!-- <el-tooltip effect="dark" placement="top">
-                    <span slot="content"
-                      >The long-short position during the backtest period. <br/>
-                      Enter two values here, <br/>
-                      representing the weights of long and short positions respectively.</span>
-                    <i class="iconfont icon-wenhao"></i>
-                  </el-tooltip> -->
-                </label>
-              </template>
-              <div class="_conditionBox">
-                  <el-form-item prop="max_drow_down" label-width="0px">
-                    <el-input v-model="data.max_drow_down" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-                  <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-                  <el-form-item prop="max_drow_down" label-width="0px">
-                    <el-input v-model="data.max_drow_down" placeholder="Input Value">
-                    </el-input>
-                  </el-form-item>
-              </div>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="4. Starting Captial" prop="capital" label-width="70px" label-position="top">
+              <el-input v-model="data.capital" clearable></el-input>
             </el-form-item>
-            <el-form-item label-width="0px">
-              <el-button type="primary" :disabled="!portfolioChecked">Found Portfolio</el-button>
-            </el-form-item>
-          </div>
-        </div>
-      </div>
+          </el-col>
+        </el-row>
     </el-form>
+    <div class="portfolioCheckedBox">
+        <a @click="portfolioChecked = !portfolioChecked" style="cursor: pointer;"
+          >Auto Portfolio<i :class="portfolioChecked ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
+        <div class="des-content" v-show="portfolioChecked">
+        <el-form
+          ref="AutoPortfolioForm"
+          :model="portfolioFormData"
+          label-position="left"
+          size="small"
+          :rules="portfolioRules"
+        >
+            <div class="grid-row main-row">
+              <div class="left">
+                <el-form-item>
+                  <template slot="label">
+                    <label>
+                      <el-checkbox v-model="portfolioFormData.CAGRChecked" label="Return">GAGR</el-checkbox>
+                    </label>
+                  </template>
+                  <div class="_conditionBox">
+                      <el-form-item prop="min_CAGR" label-width="0px">
+                        <el-input v-model="portfolioFormData.min_CAGR" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                      <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+                      <el-form-item prop="max_CAGR" label-width="0px">
+                        <el-input v-model="portfolioFormData.max_CAGR" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                  </div>
+                </el-form-item>
+                <el-row>
+                <el-form-item prop="win_rate">
+                  <template slot="label">
+                    <label>
+                      <el-checkbox v-model="portfolioFormData.winRateChecked" label="Return">Win Rate</el-checkbox>
+                      <!-- <el-tooltip effect="dark" placement="top">
+                        <span slot="content"
+                          >The long-short position during the backtest period. <br/>
+                          Enter two values here, <br/>
+                          representing the weights of long and short positions respectively.</span>
+                        <i class="iconfont icon-wenhao"></i>
+                      </el-tooltip> -->
+                    </label>
+                  </template>
+                  <div class="_conditionBox">
+                      <el-form-item prop="min_win_rate" label-width="0px">
+                        <el-input v-model="portfolioFormData.min_win_rate" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                      <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+                      <el-form-item prop="max_win_rate" label-width="0px">
+                        <el-input v-model="portfolioFormData.max_win_rate" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                  </div>
+                </el-form-item>
+                </el-row>
+              </div>
+              <div></div>
+              <div class="right">
+                <el-form-item>
+                  <template slot="label">
+                    <label>
+                      <el-checkbox v-model="portfolioFormData.YTD_returnChecked">YTD Return</el-checkbox>
+                    </label>
+                  </template>
+                  <div class="_conditionBox">
+                      <el-form-item prop="min_YTD_return" label-width="0px">
+                        <el-input v-model="portfolioFormData.min_YTD_return" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                      <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+                      <el-form-item prop="max_YTD_return" label-width="0px">
+                        <el-input v-model="portfolioFormData.max_YTD_return" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <template slot="label">
+                    <label for="max_drow_down_checkbox">
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drow Down" id="max_drow_down_checkbox"></el-checkbox>
+                    </label>
+                  </template>
+                  <div class="_conditionBox">
+                      <el-form-item prop="min_max_drow_down" label-width="0px">
+                        <el-input v-model="portfolioFormData.min_max_drow_down" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                      <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+                      <el-form-item prop="max_max_drow_down" label-width="0px">
+                        <el-input v-model="portfolioFormData.max_max_drow_down" placeholder="Input Value">
+                          <template v-slot:append>(%)</template>
+                        </el-input>
+                      </el-form-item>
+                  </div>
+                </el-form-item>
+              </div>
+            </div>
+            <div class="bottom-row">
+              <div></div>
+              <el-form-item label-width="0px">
+                <el-button type="primary" :disabled="!portfolioChecked">Found Portfolio</el-button>
+              </el-form-item>
+              <div></div>
+            </div>
+        </el-form>
+        </div>
+    </div>
     <div>
-      <br>
-      <el-table
-      :data="portfolioData"
-      stripe
-      border
-      size="mini"
-      class="portfolioTable"
-      highlight-current-row                                       
-      >
-      <el-table-column label="Index" header-align="center" align="center" width="80px">
-        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
-      </el-table-column>
-      <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
-        <template slot-scope="scope" >
-          <el-autocomplete
-            v-model="scope.row.name"
-            :disabled="scope.$index === 0"
-            size="mini"
-            :fetch-suggestions="querySearch"
-            @select="
-							(item) => {
-								handleRowSelect(item, scope.row)
-							}
-						"
-            >
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-            <!-- 使用 scoped slot 自定义选项 -->
-						<!-- <template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
-									item.label
-								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
-									item.url
-								}}</span>
-								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
-									item.label
-								}}</span>
-								<span v-if="item.type === 'Symbol'" class="type-label"
-									>Symbol</span
-								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
-								>
-							</div>
-						</template> -->
-          </el-autocomplete>
-        </template>
-      </el-table-column>
-      <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="200">
-        <template slot-scope="scope">
-          <!-- 注释掉：无需校验 totalWeight <= 100 -->
-          <!-- <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)"> -->
-          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" label-width="50px" :disabled="scope.$index === 0">
-            <template v-slot:append>(%)</template>
-          </el-input>
-          <div class="weight-error-message">
-            {{ scope.row.weightValidErrMsg }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center" align="center" width="300">
-        <template slot-scope="scope">
-          <!-- <el-form-item label="Starting Capital" v-if="scope.$index === 0">
-              <el-input v-model="scope.row.starting_capital" size="mini"></el-input>
-          </el-form-item> -->
-          <div class="starting-capital" v-if="scope.$index === 0">
-            <span>Starting Capital</span>
-            <el-input v-model="scope.row.starting_capital" size="mini" @input="validateStartingCapital(scope.row.starting_capital)"></el-input>
-            <div class="error-message">{{ validCapitalErrMsg }}</div>
-          </div>
-          <el-button v-if="scope.$index === 1" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
-          <el-button v-else-if="scope.$index > 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Strategies</el-button> 
-        </template>
-      </el-table-column>
-      </el-table>
+    <br>
+    <el-table
+    :data="portfolioData"
+    stripe
+    border
+    size="small"
+    class="portfolioTable"                                      
+    >
+    <el-table-column label="Index" header-align="center" align="center" width="80px">
+      <template slot-scope="scope">
+        <span v-if="scope.$index === 0">1</span>
+        <span v-else>{{ scope.$index + 1 }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="Category" header-align="center" align="center" width="200px">
+      <template slot-scope="scope">
+        <el-input v-model="portfolioFirstLine.category" size="mini" disabled  v-if="scope.$index === 0"></el-input>
+        <el-input v-model="scope.row.category" size="mini" disabled  v-else></el-input>
+      </template>
+    </el-table-column>
+    <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
+      <template slot-scope="scope">
+        <el-autocomplete
+          v-if="scope.$index === 0"
+          disabled
+          v-model="portfolioFirstLine.name"
+          size="mini"
+          :fetch-suggestions="querySearch"
+          @select="
+            (item) => {
+              handleRowSelect(item, scope.row)
+            }
+          "
+          >
+          <i slot="prefix" class="el-input__icon el-icon-search"></i></el-autocomplete>
+        <el-autocomplete
+          v-else
+          v-model="scope.row.name"
+          size="mini"
+          :fetch-suggestions="querySearch"
+          @select="
+            (item) => {
+              handleRowSelect(item, scope.row)
+            }
+          "
+          >
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          <!-- 使用 scoped slot 自定义选项 -->
+          <template slot-scope="{ item }">
+            <div class="custom-option">
+              <span class="item-label">{{
+                item.model_name
+              }}</span>
+              <span class="type-label"
+                >{{ tags[item.category] }}</span
+              >
+            </div>
+          </template>
+        </el-autocomplete>
+      </template>
+    </el-table-column>
+    <el-table-column label="Model" header-align="center" align="center" prop="model" width="200">
+      <template slot-scope="scope">
+        <el-select v-model="portfolioFirstLine.model" disabled placeholder="- Select-" size="mini" v-if="scope.$index === 0">
+          <el-option
+            v-for="item in nonBondOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-select v-model="scope.row.model" placeholder="- Select-" size="mini" v-else>
+          <el-option
+            v-for="item in (scope.row.category !== 'Bond' ? nonBondOptions : bondOptions)"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+    </el-table-column>
+    <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="200">
+      <template slot-scope="scope">
+        <el-input v-model="portfolioFirstLine.weight" size="mini" label-width="50px" disabled v-if="scope.$index === 0">
+          <template v-slot:append>(%)</template>
+        </el-input>
+        <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" label-width="50px" v-else>
+          <template v-slot:append>(%)</template>
+        </el-input>
+        <div class="weight-error-message">
+          {{ scope.row.weightValidErrMsg }}
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="center" align="center" width="200">
+      <template slot-scope="scope">
+        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
+        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Strategies</el-button> 
+      </template>
+    </el-table-column>
+    </el-table>
+    <br>
+    <div class="bottom-row">
+      <div></div>
+      <el-button type="primary" size="small" icon="el-icon-caret-right" @click="submitForm">Run Portfolio</el-button>
+      <div></div>
+    </div>
+    <br>
     </div>
   </div>
 </template>
 
 <script>
-import { isJson, timestampToTime, trimTrailingZeros } from '@/utils'
-import SelectCheck from "./SelectCheck";
-import { validateCapitalRule, validateCommissionRule, createPositiveScopeIntegerRule, createTPSLScopeValidateRule, createPositiveIntegerRule, createPositiveIntegerValidate, validatePercentageRule } from '@/utils/formValidate'
-import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm } from '@/service/service'
+import { isJson, timestampToTime, trimTrailingZeros, LocalStorageUtil } from '@/utils'
+import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
+import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm, getStrategyList } from '@/service/service'
 
 export default {
   name: 'Form',
   props: ['parentContext'],
-  components: {
-    SelectCheck
-  },
   data() {
-    var validateCapitalAllocate = (rule, value, callback) => {
-      if (value === 'Kelly') {
-          callback(); // 验证通过
-        } else {
-          // 验证是否为 0 到 1 的最大两位小数值
-          const numberValue = parseFloat(value);
-          if (!isNaN(numberValue) && numberValue >= 0 && numberValue <= 1) {
-            const decimalCount = (numberValue.toString().split('.')[1] || '').length;
-            if (decimalCount <= 2) {
-              callback(); // 验证通过
-            } else {
-              callback(new Error('Value between 0 and 1 with max two decimals'));
-            }
-          } else {
-            callback(new Error("Value should be 'Kelly' or a number 0-1"));
-          }
-        }
-    };
-    var validateRatio = (rule, value, callback) => {
-      // 验证是否为正整数
-      const integerValue = parseInt(value);
-      const field = rule.field
-      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
-      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
-
-      if (short_ratio === 0 && long_ratio === 0) {
-          callback(new Error("The percentages cannot be both 0"));
-      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
-          callback(); // 验证通过
-      } else {
-          callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
-      }
-    };
-    var validateSignals = (rule, value, callback) => {
-      if(Array.isArray(value) && value.length === 0) {
-        callback(new Error('Please select at least one signal'))
-      }else {
-        callback()
-      }
-    };
     return {
       data: {
         name: 'my portfolio',
-        checked: false,
         start_date: '',
         end_date: '',
-        returnChecked: false,
-        max_drow_downChecked: false,
-        max_drow_down: ''
+        capital: 1000000
+      },
+      portfolioFormData: {
+        CAGRChecked: true,
+        min_CAGR: 5,
+        max_CAGR: 15,
+        winRateChecked: true,
+        min_win_rate: 50,
+        max_win_rate: 70,
+        YTD_returnChecked: true,
+        min_YTD_return: 0,
+        max_YTD_return: 15,
+        max_drow_downChecked: true,
+        min_max_drow_down: 20,
+        max_max_drow_down: 50
       },
       portfolioChecked: false,
-      returnChecked: false,
-      validCapitalErrMsg: '',
+      strategiesList: [],
+      tags: {
+        'Legacy': 'Legacy Index',
+        'INDEX': 'Index',
+        'Bond': 'Bond',
+        'Factors': 'Factors',
+        'Sector': 'Sector'
+      },
+      portfolioFirstLine: {
+        name: 'Cash',
+        url: 'cash',
+        category: '',
+        model: 'CASH',
+        weight: 100
+      },
       portfolioData: [
-        {
-          name: 'Cash',
-          weight: '100',
-          starting_capital: 1000000
-        },
+        {},
         {
           name: 'Dual Trend Model',
-          weight: '',
-          starting_capital: ''
+          url: 'dual_trend_model',
+          category: 'Legacy Index',
+          model: '',
+          weight: ''
         }
       ],
       rowUrl: null,
@@ -334,87 +373,46 @@ export default {
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
       ],
-      options: [
-        {
-          value: 'MA',
-          label: 'MA',
-          check: true
-        },
-        {
-          value: 'MAGap',
-          label: 'MAGap',
-          check: true
-        },
-        {
-          value: 'MACDHist',
-          label: 'MACDHist',
-          check: true
-        },
-        {
-          value: 'MACDHistGap',
-          label: 'MACDHistGap',
-          check: true
-        },
-        {
-          value: 'Hammer followed by a raise',
-          label: 'Hammer followed by a raise',
-          check: true
-        },
-        {
-          value: 'Shooting Star followed by a fall',
-          label: 'Shooting Star followed by a fall',
-          check: true
-        },
-        {
-          value: 'UpTrend Pattern',
-          label: 'UpTrend Pattern',
-          check: true
-        },
-        {
-          value: 'DownTrend Pattern',
-          label: 'DownTrend Pattern',
-          check: true
-        },
-        {
-          value: 'Optix #1',
-          label: 'Optix #1',
-          check: true
-        },
-        {
-          value: 'Optix #2',
-          label: 'Optix #2',
-          check: true
-        },
-        {
-          value: 'Optix #3',
-          label: 'Optix #3',
-          check: true
-        },
-        {
-          value: 'Optix #4',
-          label: 'Optix #4',
-          check: true
-        },
-        {
-          value: 'PriceBreakout',
-          label: 'PriceBreakout',
-          check: true
-        },
-        {
-          value: 'HighPoints',
-          label: 'HighPoints',
-          check: true
-        },
-        {
-          value: 'LowPoints',
-          label: 'LowPoints',
-          check: true
-        },
-        {
-          value: 'RSI',
-          label: 'RSI',
-          check: true
-        }
+      bondOptions: [
+        { value: 'CASH', label: 'CASH'},
+        { value: 'BIL', label: 'BIL'},
+        { value: 'MBB', label: 'MBB'},
+        { value: 'TIP', label: 'TIP'},
+        { value: 'CWB', label: 'CWB'},
+        { value: 'LQD', label: 'LQD'},
+        { value: 'HYG', label: 'HYG'},
+        { value: 'TLT', label: 'TLT'},
+        { value: 'IEF', label: 'IEF'},
+        { value: 'MUB', label: 'MUB'},
+        { value: 'SHY', label: 'SHY'}
+      ],
+      nonBondOptions: [
+        { value: 'CASH', label: 'CASH'},
+        { value: 'RSP', label: 'RSP'},
+        { value: 'SPY', label: 'SPY'},
+        { value: 'IWB', label: 'IWB'},
+        { value: 'IWM', label: 'IWM'},
+        { value: 'IWO', label: 'IWO'},
+        { value: 'IWN', label: 'IWN'},
+        { value: 'IWF', label: 'IWF'},
+        { value: 'IWD', label: 'IWD'},
+        { value: 'IWP', label: 'IWP'},
+        { value: 'IWS', label: 'IWS'},
+        { value: 'ONEQ', label: 'ONEQ'},
+        { value: 'QQQ', label: 'QQQ'},
+        { value: 'GLD', label: 'GLD'},
+        { value: 'RWR', label: 'RWR'},
+        { value: 'XLK', label: 'XLK'},
+        { value: 'XLE', label: 'XLE'},
+        { value: 'XLRE', label: 'XLRE'},
+        { value: 'XLU', label: 'XLU'},
+        { value: 'XLB', label: 'XLB'},
+        { value: 'XLV', label: 'XLV'},
+        { value: 'XLI', label: 'XLI'},
+        { value: 'XLP', label: 'XLP'},
+        { value: 'XLY', label: 'XLY'},
+        { value: 'XLF', label: 'XLF'},
+        { value: 'XLC', label: 'XLC'}
       ],
       rules: {
         name: [
@@ -429,46 +427,43 @@ export default {
         { required: true, message: 'Select end date', trigger: 'blur' },
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
-        time_in_market_condition: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'change' }
+        capital: [
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'change' }
+        ]
+      },
+      portfolioRules: {
+        min_CAGR: [
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
         ],
-        time_in_market: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
+        max_CAGR: [
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
         ],
-        min_return: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.min_return)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_return, null)(rule, value, callback), trigger: 'change' }
+        min_YTD_return: [
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
         ],
-        max_return: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule()(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule()(rule, value, callback), trigger: 'change' }
+        max_YTD_return: [
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
         ],
-        take_profit_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
+        min_win_rate: [
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
-        commission: [
-          { validator: validateCommissionRule, trigger: 'blur' },
-          { validator: validateCommissionRule, trigger: 'change' }
+        max_win_rate: [
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ],
-        total_capital: [
-          { validator: validateCapitalRule, trigger: 'blur'},
-          { validator: validateCapitalRule, trigger: 'change' }
+        min_max_drow_down: [
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
-        daily_limit: [
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'change' }
-        ],
-        capital_allocate: [
-          { required: true, message: 'Enter Rank Condition', trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'change' },
-        ],
-        signals: [
-          { validator: validateSignals, trigger: 'blur' },
-          { validator: validateSignals, trigger: 'change' },
+        max_min_max_drow_down: [
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
     }
@@ -486,7 +481,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `ScannerAI Backtest ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `My Portfolio ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -520,10 +515,6 @@ export default {
       this.setBacktestHistory(1)
       this.$refs['Form'].clearValidate()
     },
-    selected(signals){
-      console.log('触发了', signals)
-      this.data.signals = signals
-    },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getScannerBTList(null, null, name)
         const count = nameLookupRes.data.count
@@ -551,7 +542,7 @@ export default {
       if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
-        this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
+        this.popUpMsgBox('Please review and correct form errors')
         return
       }
       const {
@@ -582,13 +573,40 @@ export default {
       return await perviewScannerForm(saveData)
     },
     async saveFormData() {
-      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
+      
       const validForm = await this.validForm('Form')
       if(!validForm) {
-        this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
+        this.popUpMsgBox('Please review and correct form errors')
         return
       }
-      this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
+      if(this.portfolioChecked) {
+        const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
+        if(!validateAutoPortfolioForm) {
+          // 选择了 auto portfolio，但是表单验证没有通过
+          this.popUpMsgBox('Auto Portfolio needs more info. Correct format, please')
+          return
+        }
+      }
+      // 验证百分比
+      const portfolioData = this.portfolioData.slice(1)
+      let totalWeight = 0
+      let rowWeightValid = true
+      let inAllowedList = true
+      for (const row of portfolioData) {
+        totalWeight += parseFloat(row.weight) || 0
+        row.weightValidErrMsg = _validatePercentageRule(_, row.weight)
+        if(row.weightValidErrMsg) rowWeightValid = false
+        const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.name.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
+        if(!isIn) inAllowedList = false
+      }
+      totalWeight += this.portfolioFirstLine.weight
+      if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
+      if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
+      if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
+      if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
+      if(portfolioData.length<=1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
+      return
+      this.processTips = `Tips: Running portfolio backtest...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -644,7 +662,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Backtesting selected stocks. Please wait patiently...'
+      this.processTips = 'Tips: Running portfolio backtest. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -788,10 +806,10 @@ export default {
       this.percentage = 0
       this.generateCPMName()
     },
-    querySearch(queryString, cb) {
-      this.dropdownList = JSON.parse(localStorage.getItem('sentimentList'))
-      if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
-      var dropdownList = this.dropdownList
+    async querySearch(queryString, cb) {
+      
+      if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
+      var dropdownList = this.strategiesList
       var results = queryString
         ? dropdownList.filter(this.createFilter(queryString))
         : dropdownList
@@ -800,7 +818,7 @@ export default {
     },
     createFilter(queryString) {
       return (dropdownList) => {
-        const labelMatch = dropdownList.label.toLowerCase().includes(queryString.toLowerCase());
+        const labelMatch = dropdownList.model_name.toLowerCase().includes(queryString.toLowerCase());
         const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
         return labelMatch || urlMatch;
       };
@@ -815,25 +833,25 @@ export default {
       this.portfolioData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
       */
      if(this.portfolioData.length == 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
-      this.portfolioData.push({ name: '', weight: '', starting_capital: '', weightValidErrMsg: '' });
+      this.portfolioData.push({ name: '', category: '', model: '', weight: '', weightValidErrMsg: '' });
     },
     deleteRow(index) {
       this.portfolioData.splice(index, 1)
     },
     validateWeightRule(row) {
       console.log(row.weight)
-      row.weightValidErrMsg = validatePercentageRule(_, row.weight)
+      row.weightValidErrMsg = _validatePercentageRule(_, row.weight)
+      // 每次都计算第一个 weight
+      let totalWeight = 0
+      for (const row of this.portfolioData) {
+        totalWeight += parseFloat(row.weight) || 0
+      }
+      const weight = 100 - totalWeight
+      if(weight >= 0) this.portfolioFirstLine.weight = weight
     },
     handleRowSelect(item, row) {
-      
-      console.log('item', item, row)
-      row.name = item.label
-      row.indicator_url = item.url
-      
-      console.log(this.weightData)
-
-      this.data.time_frame = this.findMaxFreq() 
-      console.log('当前最大的 timeframe 是', this.data.time_frame)
+      row.model_name = item.model_name
+      row.category = this.tags[item.category]
     },
     findMaxFreq() {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
@@ -869,10 +887,26 @@ export default {
       this.userSelectedTimeFrame = item
       this.data.time_frame = this.findMaxFreq() 
     },
-    validateStartingCapital(value) {
-      this.validCapitalErrMsg = createPositiveIntegerValidate(value, 1000)
-      return this.validCapitalErrMsg
-    },
+    async getStrategyList() {
+			let res = null
+			try {
+				res = await getStrategyList()
+				const code = res?.data?.code
+				if (code == 200) {
+					const data = res?.data?.data
+					for (let obj of data) {
+						obj.date = timestampToTime(obj.date)
+            obj.value = obj.model_name
+					}
+					this.strategiesList = data
+				}
+			} catch (error) {
+				console.log('报错了', error)
+				this.strategiesList = []
+			}
+      console.log('strategiesList', this.strategiesList)
+      return this.strategiesList
+		},
   }
 }
 </script>
@@ -890,6 +924,7 @@ export default {
   }
   .weight-error-message {
     position: absolute;
+    top: 34px;
     line-height: 1;
     font-size: 10px;
     color: #F56C6C;
@@ -901,22 +936,6 @@ export default {
   }
   .delete-btn:hover {
     background-color: rgb(251, 192, 92);
-  }
-  .starting-capital {
-    display: grid;
-    grid-template-columns: 120px auto;
-    align-items: center;
-    justify-items: center;
-    position: relative;
-    margin: 5px 0;
-    span {
-      font-weight: 500;
-      color: #606266;
-      font-size: 14px;
-    }
-    /deep/ .el-input--mini .el-input__inner {
-      margin-left: 0;
-    }
   }
   /deep/ .el-input.is-disabled .el-input__inner {
     color: #333;
@@ -931,6 +950,10 @@ export default {
     /deep/ .el-input-group--append .el-input__inner, .el-input-group__prepend {
       margin-left: 0px;
     }
+  /deep/ .el-input.el-input--small {
+    width: 100%;
+    .el-input__inner {margin-left: 0px;}
+  }
   /deep/ .el-input.el-input--mini {
     width: 100%;
     .el-input__inner {margin-left: 0px;}
@@ -953,9 +976,12 @@ export default {
     grid-template-columns: 2fr 1fr 2fr;
   }
   .main-row {
-    border: 2px solid #94bde0;
-    padding: 18px 18px 0px 18px;
-    border-radius: 4px;
+    padding: 10px 10px 0px 10px;
+  }
+  .bottom-row {
+    padding: 10px 10px 0px 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
   .portfolioTable {
     border-top: 2px solid #dddddd;
@@ -970,7 +996,7 @@ export default {
     margin-left: 0px !important;
   }
   ._conditionBox {
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    .el-form-item--small.el-form-item, .el-form-item--small.el-form-item {
       margin-bottom: 0px;
       width: 100%;
     }
@@ -1007,6 +1033,54 @@ export default {
   /deep/ .el-progress {
     height: 100%;
   }
+  /deep/ .portfolio-form .el-input--suffix .el-input__inner {
+    margin-left: 0px;
+  }
 }
+
+  
+.portfolioCheckedBox {
+  border: #cacaca solid 1px;
+  padding: 0 5px 0 10px;
+  border-radius: 4px;
+  line-height: 28px;
+  border-radius: 4px;
+  }
+  .portfolioCheckedBox a {
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    padding: 5px 5px 5px 0px
+  }
+  .portfolioCheckedBox a:hover {
+    color: #5b9bd1;
+  }
+  .des-content {
+    margin-top: 10px;
+  }
+
+// .el-form-item.portfolio-check.el-form-item--small {
+//   margin-top: 40px;
+// }
+}
+
+/* 自定义样式 */
+.custom-option {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between;
+    .type-label {
+      font-size: 12px;
+      color: #999999;
+      font-weight: 600;
+      margin-right: 10px;
+      text-align: center;
+    }
+    .item-label {
+      font-weight: 500;
+    }
 }
 </style>

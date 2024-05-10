@@ -222,7 +222,7 @@ export default {
                 } catch (error) {
                   console.log(error)
                 }
-                debugger
+                
                 vm.tradesData = initalData['Trades']
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 

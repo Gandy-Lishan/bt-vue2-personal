@@ -13298,8 +13298,11 @@ import {__js_webcomponents_loader_} from "../components/loader.js"
 import {__st_addons_standard_tooltip_} from "./STTooltip"
 import {__st_js_mask_} from "./STMask"
 import {__st_js_loadIndicator_} from "./loadIndicator"
+
 import {__st_js_standard_studies_} from "./standard-studies/standardStudies"
 import {__js_standard_studies_medianPrice_} from "./standard-studies/standardMedianPrice.js"
+
+import {__st_js_chartengine_prototype_overwrite_} from "./standard-studies/chartEnginePrototypeOverwrite.js"
 import {__js_st_studies_customized_} from "./STCustomizedStudies"
 import {__st_js_indicatorType_} from "./indicatorType"
 import {__st_js_generateCsv_} from "./generateCsv"
@@ -13404,6 +13407,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_loadIndicator_,
 		__st_js_standard_studies_,
 		__js_standard_studies_medianPrice_,
+		__st_js_chartengine_prototype_overwrite_,
 		__js_st_studies_customized_,
 		__st_js_indicatorType_,
 		__st_js_generateCsv_,
