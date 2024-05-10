@@ -154,6 +154,7 @@ if (!CIQ.Studies) {
 			calculateFN: CIQ.Studies.calculateStudyATR,
 			outputs: { ATR: "auto" }
 		},
+		/** 无需处理dual symbol */
 		"ATR Bands": {
 			name: "ATR Bands",
 			overlay: true,

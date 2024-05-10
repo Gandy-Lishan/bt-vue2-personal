@@ -3161,7 +3161,7 @@ CIQ.Studies.smartCreateYAxis = function (
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateVolume = function (stx, sd) {
-	if (sd.type == "vol undr") {
+	if (sd.type == "vol undr" || sd.type == "Symbol Volume") {
 		
 		if (!stx || !stx.chart.dataSet) return;
 		var layout = stx.layout;

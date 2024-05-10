@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_volumeStudies_ = (_exports) => {
@@ -48,20 +48,37 @@ if (!CIQ.Studies) {
 		}
 		var quotes = sd.chart.scrubbed,
 			direction = 0;
+
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			/** 考虑需要读取quote.Volume而field存在的情况，getPropertyByString内field读subField */
+			field = null
+			quotes = sd.chart.scrubbed
+		}
+		
 		var quote, quote1;
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			quote = quotes[i];
-			if (!i || !quote[field]) continue;
-			if (quotes[i - 1][field]) quote1 = quotes[i - 1];
+			if (!i || !getPropertyByString(quote,field,subField)) continue;
+			if (getPropertyByString(quotes[i - 1],field,subField)) quote1 = quotes[i - 1];
 			if (!quote1) continue;
 
-			if (quote[field] - quote1[field] > minTick) direction = 1;
-			else if (quote1[field] - quote[field] > minTick) direction = -1;
+			if (getPropertyByString(quote,field,subField) - getPropertyByString(quotes[i - 1],field,subField) > minTick) direction = 1;
+			else if (getPropertyByString(quotes[i - 1],field,subField) - getPropertyByString(quote,field,subField) > minTick) direction = -1;
 			else if (obv) direction = 0;
 
 			var total = quote1["Result " + sd.name];
 			if (!total) total = 0;
-			total += quote.Volume * direction;
+			total += getPropertyByString(quote,field,'Volume') * direction;
 			quote["Result " + sd.name] = total;
 		}
 	};
@@ -71,17 +88,32 @@ if (!CIQ.Studies) {
 		if (!field || field == "field") field = "Close";
 
 		var quotes = sd.chart.scrubbed;
+			/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+			var subField = field
+			/** 
+			 * 用isComparison属性判断Study用来计算的数据源
+			 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+			 * ma和roc就是用critria判断Study用来计算的数据源
+			 *  */
+			if(sd.parameters.isComparison){
+				field = CIQ.store.getters.getComparisonSymbol.url
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			}else{
+				/** 考虑需要读取quote.Volume而field存在的情况，getPropertyByString内field读subField */
+				field = null
+				quotes = sd.chart.scrubbed
+			}
 		var total = 0;
 		if (sd.startFrom > 1) {
 			total = quotes[sd.startFrom - 1]["Result " + sd.name];
 		}
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			if (!quotes[i][field]) continue;
-			if (!quotes[i - 1][field]) continue;
+			if (!getPropertyByString(quotes[i],field,subField)) continue;
+			if (!getPropertyByString(quotes[i - 1],field,subField)) continue;
 
 			total +=
-				(quotes[i].Volume * (quotes[i][field] - quotes[i - 1][field])) /
-				quotes[i - 1][field];
+				(getPropertyByString(quotes[i],field,'Volume') * (getPropertyByString(quotes[i],field,subField) - getPropertyByString(quotes[i - 1],field,subField))) /
+				getPropertyByString(quotes[i - 1],field,subField);
 			quotes[i]["Result " + sd.name] = total;
 		}
 	};
@@ -90,6 +122,19 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		var quotes = sd.chart.scrubbed;
+				/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+				var subField = field
+				/** 
+				 * 用isComparison属性判断Study用来计算的数据源
+				 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+				 * ma和roc就是用critria判断Study用来计算的数据源
+				 *  */
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -101,13 +146,13 @@ if (!CIQ.Studies) {
 				vol = quotes[i].Volume;
 			if (val && typeof val == "object") {
 				vol = val.Volume;
-				val = val[sd.subField];
+				val = val[subField];
 			}
 			var val1 = quotes[i - 1][field],
 				vol1 = quotes[i - 1].Volume;
 			if (val1 && typeof val1 == "object") {
 				vol1 = val1.Volume;
-				val1 = val1[sd.subField];
+				val1 = val1[subField];
 			}
 			if (!val) continue;
 			if (!val1) continue;
@@ -148,6 +193,7 @@ if (!CIQ.Studies) {
 			inputs: { Period: 255, Field: "field", "Moving Average Type": "ma" },
 			outputs: { Index: "auto", MA: "#FF0000" }
 		},
+		/** 无需处理dual symbol */
 		"Price Vol": {
 			name: "Price Volume Trend",
 			calculateFN: CIQ.Studies.calculatePriceVolumeTrend,
@@ -158,6 +204,7 @@ if (!CIQ.Studies) {
 			calculateFN: CIQ.Studies.calculateOnBalanceVolume,
 			inputs: { "Min Tick Value": 0.5 }
 		},
+		/** 无需处理dual symbol */
 		"Vol ROC": {
 			name: "Volume Rate of Change",
 			calculateFN: function (stx, sd) {
@@ -174,6 +221,7 @@ if (!CIQ.Studies) {
 				init: { isVolume: true }
 			}
 		},
+		/** 无需处理dual symbol */
 		"vol undr": {
 			name: "Volume Underlay",
 			underlay: true,
@@ -202,4 +250,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_volumeStudies_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_volumeStudies_}
