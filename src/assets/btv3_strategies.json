@@ -4460,20 +4460,17 @@
       "Introduction": "",
       "Rules": ""
     },
+    "entry_description": [{"commentDes":"E: Long; SameBar Multi Signal; Score: 2;  ","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Ratio MAR1260 > 1","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Close MAR200 > 1","rocCond":{"newCondition":7,"conditionPeriod":"200"}}],
+    "entry2_description": [{"commentDes":"E: Long; SameBar Multi Signal; Score: 2;  ","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Ratio MAR1260 < 1","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Close MAR200 > 1","rocCond":{"newCondition":7,"conditionPeriod":"200"}}],
+    "exit_description": [{"commentDes":"X: Close; SameBar Multi Signal; Score: 1;  ","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Ratio MAR1260 < 1","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Close MAR200 < 1","rocCond":{"newCondition":7,"conditionPeriod":"200"}}],
+    "exit2_description": [{"commentDes":"X: Close; SameBar Multi Signal; Score: 1;  ","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Ratio MAR1260 < 1","rocCond":{"newCondition":7,"conditionPeriod":"1260"}},{"commentDes":"Symbol Close MAR200 < 1","rocCond":{"newCondition":7,"conditionPeriod":"200"}}],
     "entry": {
       "description": "S&P:gold ratio is > its 5 year MA AND the S&P 500 > MA200",
       "relation": 2,
       "score": 2,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/0/1"
-        },
-        {
-          "code": "SY: SPX Close MAR200;IDS:EO0.7/EP0.3;SC:SV/0/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"},{"code":"SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"}],"cond":[{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"200"}]
     },
     "exit": {
       "description": "S&P:gold ratio is < its 5 year MA OR the S&P 500 < MA200",
@@ -4481,14 +4478,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        },
-        {
-          "code": "SY: SPX Close MAR200;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"},{"code":"SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"200"}]
     },
     "symbol2": "GOLD",
     "direction2": "Long",
@@ -4498,14 +4488,7 @@
       "score": 2,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        },
-        {
-          "code": "SY: GOLD Close MAR200;IDS:EO0.7/EP0.3;SC:SV/0/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"},{"code":"SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"}],"cond":[{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"200"}]
     },
     "exit2": {
       "description": "S&P:gold ratio is > its 5 year MA OR the gold < MA200",
@@ -4513,15 +4496,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI: SPX-GOLD ratio MAR1260;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        },
-        {
-          "code": "SY: GOLD Close MAR200;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"},{"code":"SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"1260"},{"newCondition":7,"conditionPeriod":"200"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(Gold)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"Symbol Close","inputs":{"Field":"Close","overlay":false,"display":"(SPY)Symbol Close","id":"$r001$Symbol Close$r001$ (C,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Close$r001$ (C,n)"},{"type":"Symbol Close","inputs":{"Field":"Close","overlay":false,"display":"(Gold)Symbol Close","id":"$r001$Symbol Close$r001$ (C,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Close$r001$ (C,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"MA","period":"1260","overlay":false,"display":"(SPY)MA Ratio(SRatio, 1260)","id":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"MA","period":"1260","overlay":false,"display":"(SPY)MA Ratio(SRatio, 1260)","id":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"MA","period":"1260","overlay":false,"display":"(Gold)MA Ratio(SRatio, 1260)","id":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"MA","period":"1260","overlay":false,"display":"(Gold)MA Ratio(SRatio, 1260)","id":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-4"},{"type":"ST ROCLike","inputs":{"Field":"Close","condition":"MA","period":"200","overlay":false,"display":"(SPY)MA Ratio(Close, 200)","id":"$r001$ST ROCLike$r001$ (C,MA,200,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (C,MA,200,n)"},{"type":"ST ROCLike","inputs":{"Field":"Close","condition":"MA","period":"200","overlay":false,"display":"(SPY)MA Ratio(Close, 200)","id":"$r001$ST ROCLike$r001$ (C,MA,200,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (C,MA,200,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"Close","condition":"MA","period":"200","overlay":false,"display":"(Gold)MA Ratio(Close, 200)","id":"$r001$ST ROCLike$r001$ (C,MA,200,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (C,MA,200,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"Close","condition":"MA","period":"200","overlay":false,"display":"(Gold)MA Ratio(Close, 200)","id":"$r001$ST ROCLike$r001$ (C,MA,200,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (C,MA,200,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Close","criteria":"entry","index":1,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Close","criteria":"exit","index":1,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Close","criteria":"entry2","index":1,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"},{"url":"Symbol Close","criteria":"exit2","index":1,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio","Symbol Close"],"exit":["Symbol Ratio","Symbol Close"],"entry2":["Symbol Ratio","Symbol Close"],"exit2":["Symbol Ratio","Symbol Close"]}}
   },
   {
     "uuid": "UUID",
@@ -4548,17 +4525,17 @@
       "Introduction": "",
       "Rules": ""
     },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR97 CrossAbove 97","rocCond":{"newCondition":8,"conditionPeriod":"97"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 6","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 6","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 97","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "IWF/IWD Ratio RR84 CrossAbove 97",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/97"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/97"}],"cond":[{"newCondition":8,"conditionPeriod":"97"}]
     },
     "exit": {
       "description": "IWF/IWD Ratio RR84 < 6",
@@ -4566,11 +4543,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/6"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "IWD",
     "direction2": "Long",
@@ -4580,11 +4553,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/6"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/6"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "IWF/IWD Ratio RR84 CrossAbove 97",
@@ -4592,12 +4561,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWF/IWD Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/97"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/97"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(IWF)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(IWD)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"97","overlay":false,"display":"(IWF)Range Rank(SRatio, 97)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,97,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,97,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWF)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWD)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWD)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -4615,13 +4581,18 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "IWP/IWS Ratio RR126 CrossAbove 92",
       "relation": 1,
@@ -4689,13 +4660,18 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
     "entry": {
       "description": "IWO/IWN Ratio RR126 CrossAbove 97",
       "relation": 1,
@@ -4763,24 +4739,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 7","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 7","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "IWB/IWM Ratio RR84 CrossAbove 90",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "IWB/IWM Ratio RR84 < 7",
@@ -4788,11 +4769,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/7"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "IWM",
     "direction2": "Long",
@@ -4802,11 +4779,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/7"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "IWB/IWM Ratio RR84 CrossAbove 90",
@@ -4814,12 +4787,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:IWB/IWM Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(IWB)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(IWM)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWB)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWB)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWM)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(IWM)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -4837,24 +4807,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 93","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 93","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "RSP/SPY Ratio RR84 CrossAbove 93",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/93"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/93"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "RSP/SPY Ratio RR84 < 8",
@@ -4862,11 +4837,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -4876,11 +4847,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "RSP/SPY Ratio RR84 CrossAbove 93",
@@ -4888,12 +4855,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:RSP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/93"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/93"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(RSP)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(RSP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(RSP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -4911,24 +4875,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 1","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 1","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "QQQ/SPY Ratio RR84 CrossAbove 90",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "QQQ/SPY Ratio RR84 < 1",
@@ -4936,11 +4905,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -4950,11 +4915,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "QQQ/SPY Ratio RR84 CrossAbove 90",
@@ -4962,12 +4923,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:QQQ/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(QQQ)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(QQQ)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(QQQ)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5059,24 +5017,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 CrossAbove 99","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 7","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 7","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 99","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "XLK/SPY Ratio RR105 CrossAbove 99",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/99"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/99"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "XLK/SPY Ratio RR105 < 7",
@@ -5084,11 +5047,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/7"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5098,11 +5057,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/7"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit2": {
       "description": "XLK/SPY Ratio RR105 CrossAbove 99",
@@ -5110,12 +5065,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLK/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/99"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/99"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLK)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLK)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLK)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5133,24 +5085,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 CrossAbove 89","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 < 14","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 < 14","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 CrossAbove 89","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
     "entry": {
       "description": "XLY/SPY Ratio RR126 CrossAbove 89",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/89"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit": {
       "description": "XLY/SPY Ratio RR126 < 14",
@@ -5158,11 +5115,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/14"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/14"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5172,11 +5125,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/14"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/14"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit2": {
       "description": "XLY/SPY Ratio RR126 CrossAbove 89",
@@ -5184,12 +5133,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLY/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/89"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5214,17 +5160,17 @@
     "market_slope": 0,
     "exclude_oo": 0,
     "risk_control": "//",
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 < 5","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 < 5","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 CrossAbove 90","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
     "entry": {
       "description": "XLC/SPY Ratio RR126 CrossAbove 90",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit": {
       "description": "XLC/SPY Ratio RR126 < 5",
@@ -5232,11 +5178,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5246,11 +5188,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit2": {
       "description": "XLC/SPY Ratio RR126 CrossAbove 90",
@@ -5258,12 +5196,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLC/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/90"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/90"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLC)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLC)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLC)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5281,24 +5216,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 84","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 87","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "XLP/SPY Ratio RR84 CrossAbove 87",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/87"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/84"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "XLP/SPY Ratio RR84 < 5",
@@ -5306,11 +5246,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5320,11 +5256,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "XLP/SPY Ratio RR84 CrossAbove 87",
@@ -5332,12 +5264,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLP/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/87"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/87"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLP)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5355,24 +5284,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 84","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 87","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "XLI/SPY Ratio RR105 CrossAbove 80",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/84"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "XLI/SPY Ratio RR105 < 3",
@@ -5380,11 +5314,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5394,11 +5324,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "XLI/SPY Ratio RR105 CrossAbove 80",
@@ -5406,12 +5332,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLI/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/87"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLP)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5429,24 +5352,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 91","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 2","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 2","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 91","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "XLV/SPY Ratio RR84 CrossAbove 91",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/91"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/91"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "XLV/SPY Ratio RR84 < 2",
@@ -5454,11 +5382,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/2"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/2"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5468,11 +5392,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/2"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/2"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "XLV/SPY Ratio RR84 CrossAbove 91",
@@ -5480,12 +5400,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLV/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/91"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/91"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLV)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLV)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLV)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5503,24 +5420,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 CrossAbove 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 1","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 1","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 CrossAbove 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "XLB/SPY Ratio RR105 CrossAbove 80",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "XLB/SPY Ratio RR105 < 1",
@@ -5528,11 +5450,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5542,11 +5460,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit2": {
       "description": "XLB/SPY Ratio RR105 CrossAbove 80",
@@ -5554,12 +5468,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLB/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLB)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLB)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLB)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5577,24 +5488,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 CrossAbove 92","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 13","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 13","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 CrossAbove 92","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "XLU/SPY Ratio RR105 CrossAbove 92",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/92"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/92"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "XLU/SPY Ratio RR105 < 13",
@@ -5602,11 +5518,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/13"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/13"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5616,11 +5528,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/13"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/13"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit2": {
       "description": "XLU/SPY Ratio RR105 CrossAbove 92",
@@ -5628,12 +5536,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLU/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/92"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/92"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLU)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLU)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLU)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPY)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5651,24 +5556,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 CrossAbove 81","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 3","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 3","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 3","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "XLRE/SPY Ratio RR105 CrossAbove 81",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/81"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/81"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "XLRE/SPY Ratio RR105 < 3",
@@ -5676,11 +5586,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5690,11 +5596,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/3"
-        }
-      ]
+      "entry2": {"score":1,"signals_in_market":1,"relation":1,"delay_bars":0,"signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]}
     },
     "exit2": {
       "description": "XLRE/SPY Ratio RR105 CrossAbove 81",
@@ -5702,12 +5604,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLRE/SPY Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/81"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/81"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLRE)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPX)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLRE)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(XLRE)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPX)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(SPX)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5725,24 +5624,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 85","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "XLE/SPY Ratio RR84 CrossAbove 85",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/85"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/85"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "XLE/SPY Ratio RR84 < 8",
@@ -5750,11 +5654,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5764,11 +5664,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/8"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "XLE/SPY Ratio RR84 CrossAbove 85",
@@ -5776,12 +5672,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLE/SPY Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/85"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/85"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLE)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLE)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLE)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -5799,24 +5692,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "1988-12-22",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 CrossAbove 84","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 < 20","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 < 20","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 CrossAbove 84","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
     "entry": {
       "description": "XLF/SPY Ratio RR126 CrossAbove 84",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/84"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/84"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit": {
       "description": "XLF/SPY Ratio RR126 < 20",
@@ -5824,11 +5722,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/20"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5838,11 +5732,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/20"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/20"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit2": {
       "description": "XLF/SPY Ratio RR126 CrossAbove 84",
@@ -5850,12 +5740,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:XLF/SPY Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/84"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/84"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLF)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLF)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(XLF)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPY)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -6095,24 +5982,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 CrossAbove 95","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 CrossAbove 93","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "TLT/BIL Ratio RR84 CrossAbove 95",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/95"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/95"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "TLT/BIL Ratio RR84 < 5",
@@ -6120,11 +6012,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "symbol2": "BIL",
     "direction2": "Long",
@@ -6134,11 +6022,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/2/5"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit2": {
       "description": "TLT/BIL Ratio RR84 CrossAbove 95",
@@ -6146,12 +6030,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:TLT/BIL Ratio RR84;IDS:EO0.7/EP0.3;SC:SV/3/95"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/93"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(TLT)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(BIL)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(TLT)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(TLT)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(BIL)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(BIL)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -6169,24 +6050,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 CrossAbove 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 18","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 18","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 CrossAbove 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "HYG/BIL Ratio RR105 CrossAbove 80",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "HYG/BIL Ratio RR105 < 18",
@@ -6194,11 +6080,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/18"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/18"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "BIL",
     "direction2": "Long",
@@ -6208,11 +6090,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/2/18"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/18"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit2": {
       "description": "HYG/BIL Ratio RR105 CrossAbove 80",
@@ -6220,12 +6098,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:HYG/BIL Ratio RR105;IDS:EO0.7/EP0.3;SC:SV/3/80"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(HYG)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(BIL)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(HYG)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(HYG)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(BIL)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"105","overlay":false,"display":"(BIL)Range Rank(SRatio, 105)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
@@ -6243,24 +6118,29 @@
     "slippage": 0,
     "direction": "Long",
     "frequency": "Daily",
-    "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
-    "win_rate": 0.0,
     "trade_price": 2,
-    "market_slope": 0,
     "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "2004-01-01",
+    "end_date": "2024-04-30",
     "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 CrossAbove 89","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 < 1","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR126 < 1","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR126 CrossAbove 89","rocCond":{"newCondition":8,"conditionPeriod":"126"}}],
     "entry": {
       "description": "LQD/BIL Ratio RR126 CrossAbove 89",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 5,
-      "signals": [
-        {
-          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/89"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit": {
       "description": "LQD/BIL Ratio RR126 < 1",
@@ -6268,11 +6148,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "symbol2": "BIL",
     "direction2": "Long",
@@ -6282,11 +6158,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/2/1"
-        }
-      ]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
     },
     "exit2": {
       "description": "LQD/BIL Ratio RR126 CrossAbove 89",
@@ -6294,12 +6166,9 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:LQD/BIL Ratio RR126;IDS:EO0.7/EP0.3;SC:SV/3/89"
-        }
-      ]
-    }
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/3/89"}],"cond":[{"newCondition":8,"conditionPeriod":"126"}]
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(LQD)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPX)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(LQD)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(LQD)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPX)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"126","overlay":false,"display":"(SPX)Range Rank(SRatio, 126)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
   {
     "uuid": "UUID",
