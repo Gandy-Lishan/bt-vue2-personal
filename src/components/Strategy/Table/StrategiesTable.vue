@@ -15,8 +15,6 @@
 		<div class="strategiesTable">
 			<el-table
 				ref="Table"
-				class="ScannerBTTable"
-				header-align="center"
 				:data="paginatedData"
 				empty-text="No data"
 				v-loading="loading"
@@ -53,15 +51,16 @@
 				</el-table-column>
 				<template v-for="l in tableCol">
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
 						show-overflow-tooltip
+						:min-width="l.minWidth"
 						:width="l.width"
 						v-if="
 							[
 								'model_name',
+								'type',
 								'current_state',
 								'date',
 								'update_frequency',
@@ -71,6 +70,7 @@
 						:sortable="
 							[
 								'model_name',
+								'type',
 								'current_state',
 								'date',
 								'update_frequency',
@@ -98,7 +98,6 @@
 						</template>
 					</el-table-column>
 					<el-table-column
-						align="center"
 						:key="l.key"
 						show-overflow-tooltip
 						:width="l.width"
@@ -197,7 +196,14 @@ export default {
 				{
 					label: 'Model Name',
 					value: 'model_name',
-					key: 'model_name'
+					key: 'model_name',
+					minWidth: '150px'
+				},
+				{
+					label: 'Time Frame',
+					value: 'type',
+					key: 'type',
+					width: '150px'
 				},
 				{
 					label: 'Current Signal: (e.g., Long, Sell, etc)',
@@ -454,7 +460,7 @@ export default {
 			}
 			// 字符串类型排序
 			if (
-				['update_frequency', 'current_state', 'model_name'].indexOf(colName) !==
+				['update_frequency', 'current_state', 'model_name', 'type'].indexOf(colName) !==
 				-1
 			) {
 				if (sortingOrder == 'ascending') {
