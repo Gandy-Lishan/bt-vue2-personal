@@ -882,5 +882,13 @@
     {
         "symbol": "MBB",
         "name": "Mortgage-Backed Bond ETF (MBB)"
+    },
+    {
+        "symbol": "IWS",
+        "name": "Russell Mid-Cap Value ETF (IWS)"
+    },
+    {
+        "symbol": "IWN",
+        "name": "Russell 2000 Value ETF (IWN)"
     }
 ]
