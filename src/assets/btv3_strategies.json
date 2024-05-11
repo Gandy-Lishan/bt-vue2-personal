@@ -11708,7 +11708,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/93"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/95"
         }
       ],
       "cond": [
