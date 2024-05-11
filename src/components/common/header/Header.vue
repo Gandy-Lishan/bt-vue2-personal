@@ -22,10 +22,10 @@
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
-        <!-- <el-menu-item class="home-link" index="9"
+        <el-menu-item class="home-link" index="9"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Strategy</el-menu-item
-        > -->
+        >
         <el-menu-item class="home-link" index="1"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
