@@ -4,7 +4,6 @@
 			<el-table
 				ref="Table"
 				class="ScannerBTTable"
-				header-align="center"
 				:data="paginatedData"
 				empty-text="No data"
 				v-loading="loading"
@@ -15,12 +14,12 @@
 			>
 				<template v-for="l in tableCol">
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
 						show-overflow-tooltip
-						:width="l.width"
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						v-if="
 							[
 								'model_name',
@@ -52,7 +51,6 @@
 						</template>
 					</el-table-column>
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
@@ -108,7 +106,9 @@ export default {
         {
           label: 'Model Name',
           value: 'model_name',
-          key: 'model_name'
+          key: 'model_name',
+					minWidth: '250px',
+					maxWidth: '300px'
         },
         {
           label: 'Strategy CAGR',

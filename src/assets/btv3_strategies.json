@@ -11338,7 +11338,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/90"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/99"
         }
       ],
       "cond": [
@@ -11356,7 +11356,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/13"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"
         }
       ],
       "cond": [
@@ -11376,7 +11376,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/13"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"
         }
       ],
       "cond": [
@@ -11394,7 +11394,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/90"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/99"
         }
       ],
       "cond": [
