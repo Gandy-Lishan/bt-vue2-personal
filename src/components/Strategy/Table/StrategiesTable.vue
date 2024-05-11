@@ -402,7 +402,7 @@ export default {
 				order: sortingOrder
 			}
 			// 数字字符串转数字类型排序
-			if (['return'].indexOf(colName) !== -1) {
+			if (['YTD_return'].indexOf(colName) !== -1) {
 				if (sortingOrder == 'ascending') {
 					this.immutableTableData.sort((a, b) => {
 						b[colName] =
