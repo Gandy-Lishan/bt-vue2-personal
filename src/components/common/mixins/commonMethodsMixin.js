@@ -1029,6 +1029,9 @@ export const CommonMethodsMixin = {
 						params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 					})
 					this.loading = false
+
+					CIQ.hideCover()
+					CIQ.nprogress.done()
 				})
 				await this.loopCalculateNewConditions(row)
 			}
@@ -1044,6 +1047,9 @@ export const CommonMethodsMixin = {
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
 				},()=>{})
 				that.loading = true
+
+				CIQ.hideCover()
+				CIQ.nprogress.done()
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	
@@ -1089,6 +1095,7 @@ export const CommonMethodsMixin = {
 			 */
 
 			//兼容sample backtest普通Tech没有此属性的情况
+			debugger
 			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
 				if(!data.activatedMALayout) data.activatedMALayout = []
 				data.activatedTechLayout = []; // 初始化新数组

@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_chande_ = (_exports) => {
@@ -43,16 +43,24 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateChandeForecast = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		CIQ.Studies.MA("time series", sd.days, field, 0, "MA", stx, sd);
+			/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+			var subField = field
+			if(sd.parameters.isComparison){
+				field = CIQ.store.getters.getComparisonSymbol.url
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			}else{
+				quotes = sd.chart.scrubbed
+			}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
-		var field = sd.inputs.Field;
-		if (!field || field == "field") field = "Close";
-		CIQ.Studies.MA("time series", sd.days, field, 0, "MA", stx, sd);
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
 			var val = quotes[i][field];
-			if (val && typeof val == "object") val = val[sd.subField];
+			if (val && typeof val == "object") val = val[subField];
 			quotes[i]["Result " + sd.name] =
 				100 * (1 - quotes[i]["MA " + sd.name] / val);
 		}
@@ -64,13 +72,19 @@ if (!CIQ.Studies) {
 			name = p + " " + name;
 		}
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // only used when called from VMA
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < sd.days + 1) {
+					sd.error = true;
+					return;
+				}
 
 		var sumMomentum = 0,
 			absSumMomentum = 0;
@@ -208,4 +222,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_chande_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_chande_}

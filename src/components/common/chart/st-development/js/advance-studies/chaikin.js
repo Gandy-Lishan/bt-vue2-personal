@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_chaikin_ = (_exports) => {
@@ -37,6 +37,13 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateChaikinMoneyFlow = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
@@ -51,17 +58,21 @@ if (!CIQ.Studies) {
 				sumVolume = startQuote["_sumV " + sd.name];
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			if (quotes[i].High == quotes[i].Low) quotes[i]["_MFV " + sd.name] = 0;
+				var quotesClose = getPropertyByString(quotes[i],field,'Close')
+				var quotesHigh = getPropertyByString(quotes[i],field,'High')
+				var quotesLow = getPropertyByString(quotes[i],field,'Low')
+				var quotesVolume = getPropertyByString(quotes[i],field,'Volume')
+			if (quotesHigh == quotesLow) quotes[i]["_MFV " + sd.name] = 0;
 			else
 				quotes[i]["_MFV " + sd.name] =
-					(quotes[i].Volume *
-						(2 * quotes[i].Close - quotes[i].High - quotes[i].Low)) /
-					(quotes[i].High - quotes[i].Low);
+					(quotesVolume *
+						(2 * quotesClose - quotesHigh - quotesLow)) /
+					(quotesHigh - quotesLow);
 			sumMoneyFlow += quotes[i]["_MFV " + sd.name];
-			sumVolume += quotes[i].Volume;
+			sumVolume += quotesVolume;
 			if (i > sd.days - 1) {
 				sumMoneyFlow -= quotes[i - sd.days]["_MFV " + sd.name];
-				sumVolume -= quotes[i - sd.days].Volume;
+				sumVolume -= getPropertyByString(quotes[i - sd.days],field,'Volume');
 				if (sumVolume)
 					quotes[i]["Result " + sd.name] = sumMoneyFlow / sumVolume;
 			}
@@ -72,6 +83,13 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateChaikinVolatility = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
@@ -79,7 +97,9 @@ if (!CIQ.Studies) {
 		var i;
 		for (i = sd.startFrom; i < quotes.length; i++) {
 			if (quotes[i].futureTick) break;
-			quotes[i]["_High-Low " + sd.name] = quotes[i].High - quotes[i].Low;
+				var quotesHigh = getPropertyByString(quotes[i],field,'High')
+				var quotesLow = getPropertyByString(quotes[i],field,'Low')
+			quotes[i]["_High-Low " + sd.name] = quotesHigh - quotesLow;
 		}
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -117,4 +137,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_chaikin_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_chaikin_}
