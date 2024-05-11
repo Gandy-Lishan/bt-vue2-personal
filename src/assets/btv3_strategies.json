@@ -2883,185 +2883,7 @@
         null
       ]
     },
-    "indicator_layout": {
-      "savedTechSD": [
-        {
-          "type": "Deviation From Trend Between Two Moving Averages",
-          "inputs": {
-            "periodShort": 4,
-            "periodLong": 40,
-            "display": "Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
-        },
-        {
-          "type": "comp_spx_ratio",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$comp_spx_ratio$r001$ (13,n)",
-            "display": "$r001$comp_spx_ratio$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_spx_ratio$r001$ (13,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "10",
-            "Field": "comp_spx_ratio",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_spx_ratio$r001$ (13,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "10",
-            "Field": "comp_spx_ratio",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-2"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_spx_ratio$r001$ (13,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "10",
-            "Field": "comp_spx_ratio",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-3"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "entry2",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_spx_ratio$r001$ (13,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "10",
-            "Field": "comp_spx_ratio",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-4"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "exit2",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_spx_ratio$r001$ (13,n)"
-        }
-      ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        },
-        {
-          "period": "10",
-          "url": "comp_spx_ratio",
-          "criteria": "entry",
-          "index": 0
-        },
-        {
-          "period": "10",
-          "url": "comp_spx_ratio",
-          "criteria": "exit",
-          "index": 0
-        },
-        {
-          "period": "10",
-          "url": "comp_spx_ratio",
-          "criteria": "entry2",
-          "index": 0
-        },
-        {
-          "period": "10",
-          "url": "comp_spx_ratio",
-          "criteria": "exit2",
-          "index": 0
-        }
-      ],
-      "activatedMALayout": [],
-      "activatedTechLayout": [
-        {
-          "url": "Deviation From Trend Between Two Moving Averages",
-          "isComparison": true
-        }
-      ],
-      "formIndicators": {
-        "entry": [
-          "comp_spx_ratio"
-        ],
-        "exit": [
-          "comp_spx_ratio"
-        ],
-        "entry2": [
-          "comp_spx_ratio",
-          "Deviation From Trend Between Two Moving Averages"
-        ],
-        "exit2": [
-          "comp_spx_ratio",
-          "Deviation From Trend Between Two Moving Averages"
-        ]
-      }
-    }
+    "indicator_layout": {"savedTechSD":[{"type":"Deviation From Trend Between Two Moving Averages","inputs":{"periodShort":4,"periodLong":40,"display":"(SPY)Deviation From Trend Between Two Moving Averages","id":"$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"},{"type":"comp_spx_ratio","inputs":{"Period":13,"Overlay":false,"id":"$r001$comp_spx_ratio$r001$ (13,n)","display":"$r001$comp_spx_ratio$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":null,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":null,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true},"panel":"$r001$comp_spx_ratio$r001$ (13,n)"},{"type":"ST MA","inputs":{"Period":"10","Field":"comp_spx_ratio","Type":"ma","Offset":0,"display":"ST MA","id":"$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)"},"outputs":{"MA":"#FF0000"},"parameters":{"criteria":"entry","index":0,"chartName":"chart","editMode":true},"panel":"$r001$comp_spx_ratio$r001$ (13,n)"},{"type":"ST MA","inputs":{"Period":"10","Field":"comp_spx_ratio","Type":"ma","Offset":0,"display":"ST MA","id":"$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-2"},"outputs":{"MA":"#FF0000"},"parameters":{"criteria":"exit","index":0,"chartName":"chart","editMode":true},"panel":"$r001$comp_spx_ratio$r001$ (13,n)"},{"type":"ST MA","inputs":{"Period":"10","Field":"comp_spx_ratio","Type":"ma","Offset":0,"display":"ST MA","id":"$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-3"},"outputs":{"MA":"#f59e0b"},"parameters":{"criteria":"entry2","index":0,"chartName":"chart","editMode":true},"panel":"$r001$comp_spx_ratio$r001$ (13,n)"},{"type":"ST MA","inputs":{"Period":"10","Field":"comp_spx_ratio","Type":"ma","Offset":0,"display":"ST MA","id":"$r001$ST MA$r001$ (10,comp_spx_ratio,ma,0)-4"},"outputs":{"MA":"#f59e0b"},"parameters":{"criteria":"exit2","index":0,"chartName":"chart","editMode":true},"panel":"$r001$comp_spx_ratio$r001$ (13,n)"}],"activatedMA":[{"period":21,"url":""},{"period":"10","url":"comp_spx_ratio","criteria":"entry","index":0},{"period":"10","url":"comp_spx_ratio","criteria":"exit","index":0},{"period":"10","url":"comp_spx_ratio","criteria":"entry2","index":0},{"period":"10","url":"comp_spx_ratio","criteria":"exit2","index":0}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Deviation From Trend Between Two Moving Averages","criteria":"entry2","index":1,"symbolType":"symbol2"},{"url":"Deviation From Trend Between Two Moving Averages","criteria":"exit2","index":1,"symbolType":"symbol2"}],"formIndicators":{"entry":["comp_spx_ratio"],"exit":["comp_spx_ratio"],"entry2":["comp_spx_ratio","Deviation From Trend Between Two Moving Averages"],"exit2":["comp_spx_ratio","Deviation From Trend Between Two Moving Averages"]}}
   },
   {
     "uuid": "UUID",
@@ -3648,85 +3470,7 @@
         null
       ]
     },
-    "indicator_layout": {
-      "savedTechSD": [
-        {
-          "type": "Deviation From Trend Between Two Moving Averages",
-          "inputs": {
-            "periodShort": "50",
-            "periodLong": "200",
-            "display": "Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (50,200)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (50,200)"
-        },
-        {
-          "type": "comp_ma30_spread",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$comp_ma30_spread$r001$ (13,n)",
-            "display": "$r001$comp_ma30_spread$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$comp_ma30_spread$r001$ (13,n)"
-        }
-      ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
-      "activatedMALayout": [],
-      "activatedTechLayout": [
-        {
-          "url": "Symbol Close",
-          "isComparison": false
-        },
-        {
-          "url": "Symbol Close",
-          "isComparison": true
-        },
-        {
-          "url": "Deviation From Trend Between Two Moving Averages",
-          "isComparison": true
-        }
-      ],
-      "formIndicators": {
-        "entry": [
-          "comp_ma30_spread"
-        ],
-        "exit": [
-          "comp_ma30_spread"
-        ],
-        "entry2": [
-          "comp_ma30_spread",
-          "Deviation From Trend Between Two Moving Averages"
-        ],
-        "exit2": [
-          "comp_ma30_spread",
-          "Deviation From Trend Between Two Moving Averages"
-        ]
-      }
-    }
+    "indicator_layout": {"savedTechSD":[{"type":"Deviation From Trend Between Two Moving Averages","inputs":{"periodShort":4,"periodLong":40,"display":"(SPY)Deviation From Trend Between Two Moving Averages","id":"$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"},{"type":"comp_ma30_spread","inputs":{"Period":13,"Overlay":false,"id":"$r001$comp_ma30_spread$r001$ (13,n)","display":"$r001$comp_ma30_spread$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":null,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":null,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true},"panel":"$r001$comp_ma30_spread$r001$ (13,n)"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Deviation From Trend Between Two Moving Averages","criteria":"entry2","index":1,"symbolType":"symbol2"},{"url":"Deviation From Trend Between Two Moving Averages","criteria":"exit2","index":1,"symbolType":"symbol2"}],"formIndicators":{"entry":["comp_ma30_spread"],"exit":["comp_ma30_spread"],"entry2":["comp_ma30_spread","Deviation From Trend Between Two Moving Averages"],"exit2":["comp_ma30_spread","Deviation From Trend Between Two Moving Averages"]}}
   },
   {
     "uuid": "UUID",
@@ -4525,7 +4269,7 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR97 > 97","rocCond":{"newCondition":8,"conditionPeriod":"97"}}],
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 97","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 6","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 6","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 > 97","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
@@ -4535,7 +4279,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/97"}],"cond":[{"newCondition":8,"conditionPeriod":"97"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/97"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "IWF/IWD Ratio RR84 < 6",
@@ -4933,17 +4677,17 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 92","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 > 92","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 8","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 8","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 > 92","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
-      "description": "ONEQ/SPY Ratio RR84 > 92",
+      "description": "ONEQ/SPY Ratio RR105 > 92",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/92"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/92"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "ONEQ/SPY Ratio RR105 < 8",
@@ -4951,7 +4695,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/8"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5200,7 +4944,7 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 84","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 87","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 > 87","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
@@ -5210,7 +4954,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/84"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/87"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
     },
     "exit": {
       "description": "XLP/SPY Ratio RR84 < 5",
@@ -5268,17 +5012,17 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 84","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 > 87","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 > 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 < 3","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR105 < 3","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR105 > 80","rocCond":{"newCondition":8,"conditionPeriod":"105"}}],
     "entry": {
       "description": "XLI/SPY Ratio RR105 > 80",
       "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/84"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit": {
       "description": "XLI/SPY Ratio RR105 < 3",
@@ -5286,7 +5030,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "symbol2": "SPY",
     "direction2": "Long",
@@ -5296,7 +5040,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/5"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "exit2": {
       "description": "XLI/SPY Ratio RR105 > 80",
@@ -5304,7 +5048,7 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/87"}],"cond":[{"newCondition":8,"conditionPeriod":"84"}]
+      "signals":[{"code":"SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/80"}],"cond":[{"newCondition":8,"conditionPeriod":"105"}]
     },
     "indicator_layout": {"savedTechSD":[{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(XLP)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)"},"outputs":{"Result":"auto"},"parameters":{"isComparison":false,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)"},{"type":"Symbol Ratio","inputs":{"Field":"SRatio","overlay":false,"display":"(SPY)Symbol Ratio","id":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},"outputs":{"Result":"auto"},"parameters":{"isComparison":true,"chartName":"chart","editMode":true},"panel":"$r001$Symbol Ratio$r001$ (SRatio,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(XLP)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"},{"type":"ST ROCLike","inputs":{"Field":"SRatio","condition":"RR","period":"84","overlay":false,"display":"(SPY)Range Rank(SRatio, 84)","id":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit2","index":0,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"activatedTechLayout":[{"url":"Symbol Ratio","criteria":"entry","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"exit","index":0,"symbolType":"symbol1"},{"url":"Symbol Ratio","criteria":"entry2","index":0,"symbolType":"symbol2"},{"url":"Symbol Ratio","criteria":"exit2","index":0,"symbolType":"symbol2"}],"formIndicators":{"entry":["Symbol Ratio"],"exit":["Symbol Ratio"],"entry2":["Symbol Ratio"],"exit2":["Symbol Ratio"]}}
   },
@@ -5611,7 +5355,7 @@
     "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 85","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 8","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 85","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "XLE/SPY Ratio RR84 > 85",
       "relation": 1,
@@ -5880,10 +5624,10 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 90","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 13","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 13","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 13","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 99","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 99","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "IEF/BIL Ratio RR84 > 99",
       "relation": 1,
@@ -5951,7 +5695,7 @@
     "entry_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 > 95","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "exit_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry2_description": [{"commentDes":"E: Long; Single Signal   Symbol Ratio RR84 < 5","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
-    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 > 93","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
+    "exit2_description": [{"commentDes":"X: Close; Single Signal   Symbol Ratio RR84 > 95","rocCond":{"newCondition":8,"conditionPeriod":"84"}}],
     "entry": {
       "description": "TLT/BIL Ratio RR84 > 95",
       "relation": 1,
