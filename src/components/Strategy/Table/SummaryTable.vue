@@ -18,7 +18,8 @@
 						:prop="l.value"
 						:key="l.key"
 						show-overflow-tooltip
-						:min-width="l.width"
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						v-if="
 							[
 								'model_name',
@@ -106,7 +107,8 @@ export default {
           label: 'Model Name',
           value: 'model_name',
           key: 'model_name',
-					width: '250px'
+					minWidth: '250px',
+					maxWidth: '300px'
         },
         {
           label: 'Strategy CAGR',

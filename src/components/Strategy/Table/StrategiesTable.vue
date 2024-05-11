@@ -56,6 +56,7 @@
 						:key="l.key"
 						show-overflow-tooltip
 						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						:width="l.width"
 						v-if="
 							[
@@ -197,7 +198,8 @@ export default {
 					label: 'Model Name',
 					value: 'model_name',
 					key: 'model_name',
-					minWidth: '150px'
+					minWidth: '200px',
+					maxWidth: '300px'
 				},
 				{
 					label: 'Time Frame',
@@ -213,7 +215,7 @@ export default {
 				{
 					label: 'Last Signal Date: (last change in Signal)',
 					value: 'date',
-					key: 'date',
+					key: 'date'
 				},
 				{
 					label: 'Model Update Frequency',
@@ -221,7 +223,7 @@ export default {
 					key: 'update_frequency',
 				},
 				{
-					label: 'YTD until 04/30/23 Return(%)',
+					label: 'YTD until 04/30/24 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 				},
