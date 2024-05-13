@@ -4603,7 +4603,7 @@
         }
       ]
     },
-    "symbol2": "GOLD",
+    "symbol2": "GLD",
     "direction2": "Long",
     "entry2": {
       "description": "S&P:gold ratio is < its 5 year MA AND the gold > MA200",
@@ -4642,7 +4642,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
         },
         {
           "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
