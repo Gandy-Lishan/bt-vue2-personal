@@ -46,6 +46,10 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Correlation Pattern Match</el-menu-item
         >
+        <el-menu-item class="home-link" index="10"
+        v-if="isAiTrading"
+          >AI Trading</el-menu-item
+        >
         <!-- <el-menu-item class="seasonality-link home-link" index="8"
         v-if="userRole == 'analyst'"
           >Correlation Pattern Match</el-menu-item
@@ -78,6 +82,7 @@
 </template>
 <script>
 import { getTokenRole } from '@/utils'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
   name: "Header",
@@ -89,7 +94,8 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: '1',
+      isAiTrading: false
     }
   },
   computed: {
@@ -137,6 +143,9 @@ export default {
     }else if(this.$route.name == 'Strategy' || this.$route.name == 'Strategy'){
       this.activeIndex = '9'
     }
+		const email = getCookieData()?.username
+    if(email === 'hao@sentimentrader.com') this.isAiTrading = true
+    if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
   },
   methods: {
     getTokenRole() {
@@ -189,6 +198,8 @@ export default {
           path: '/strategy'
         }).href
         this.$router.push(path)
+      }else if(key == '10') {
+        window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
       }
     },
   }
