@@ -236,7 +236,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -1783,7 +1783,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread   > 0",
+        "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread CrossAbove 0",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": ""
@@ -1792,7 +1792,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread   < 0",
+        "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread CrossBelow 0",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": ""
@@ -1807,7 +1807,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/3/0"
         }
       ],
       "cond": [
@@ -1825,7 +1825,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/4/0"
         }
       ],
       "cond": [
@@ -2891,10 +2891,10 @@
         {
           "type": "Deviation From Trend Between Two Moving Averages",
           "inputs": {
-            "periodShort": 4,
+            "periodShort": 10,
             "periodLong": 40,
             "display": "(SPY)Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (10,40)"
           },
           "outputs": {
             "Result": "auto"
@@ -2904,7 +2904,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (10,40)"
         },
         {
           "type": "comp_spx_ratio",
@@ -3137,7 +3137,7 @@
         }
       },
       {
-        "commentDes": "NASDAQ/SPX Ratio < Moving Average 10",
+        "commentDes": "NASDAQ/SPX Ratio > Moving Average 10",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": "21"
@@ -3183,7 +3183,7 @@
         }
       },
       {
-        "commentDes": "NASDAQ/SPX Ratio > Moving Average 10",
+        "commentDes": "NASDAQ/SPX Ratio < Moving Average 10",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": "21"
@@ -3251,7 +3251,7 @@
     "symbol2": "SPY",
     "direction2": "Long",
     "entry2": {
-      "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
+      "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
       "relation": 2,
       "score": 2,
       "delay_bars": 0,
@@ -3261,7 +3261,7 @@
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
         },
         {
-          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/2/SVMA10"
+          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/0/SVMA10"
         }
       ],
       "cond": [
@@ -3280,7 +3280,7 @@
       ]
     },
     "exit2": {
-      "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
+      "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
       "relation": 2,
       "score": 1,
       "delay_bars": 0,
@@ -3290,7 +3290,7 @@
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/0/SVMA10"
+          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/2/SVMA10"
         }
       ],
       "cond": [
@@ -3750,7 +3750,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
