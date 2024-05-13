@@ -885,7 +885,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -900,7 +900,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Conference Board LEI moving average 6 ROC1 > 0",
+        "commentDes": "E: Long; Single Condition   Conference Board LEI moving average 126 ROC1 > 0",
         "rocCond": {
           "newCondition": 5,
           "conditionPeriod": "1"
@@ -909,7 +909,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Conference Board LEI moving average 6 ROC1 < 0",
+        "commentDes": "X: Close; Single Condition   Conference Board LEI moving average 126 ROC1 < 0",
         "rocCond": {
           "newCondition": 5,
           "conditionPeriod": "1"
@@ -924,7 +924,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/0/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA126/0/0"
         }
       ],
       "cond": [
@@ -942,7 +942,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/2/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA126/2/0"
         }
       ],
       "cond": [
@@ -977,12 +977,12 @@
         {
           "type": "ST MA",
           "inputs": {
-            "Period": "6",
+            "Period": "126",
             "Field": "lei totl",
             "Type": "ma",
             "Offset": 0,
             "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)"
+            "id": "$r001$ST MA$r001$ (126,lei totl,ma,0)"
           },
           "outputs": {
             "MA": "#bfad94"
@@ -998,12 +998,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)",
+            "Field": "MA $r001$ST MA$r001$ (126,lei totl,ma,0)",
             "condition": "ROC",
             "period": "1",
             "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0), 1)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (126,lei totl,ma,0), 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0),ROC,1,n)"
           },
           "outputs": {
             "Line": "auto"
@@ -1015,17 +1015,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0),ROC,1,n)"
         },
         {
           "type": "ST MA",
           "inputs": {
-            "Period": "6",
+            "Period": "126",
             "Field": "lei totl",
             "Type": "ma",
             "Offset": 0,
             "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)-2"
+            "id": "$r001$ST MA$r001$ (126,lei totl,ma,0)-2"
           },
           "outputs": {
             "MA": "#bfad94"
@@ -1041,12 +1041,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2",
+            "Field": "MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2",
             "condition": "ROC",
             "period": "1",
             "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2, 1)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2, 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2,ROC,1,n)"
           },
           "outputs": {
             "Line": "auto"
@@ -1058,18 +1058,18 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2,ROC,1,n)"
         }
       ],
       "activatedMA": [
         {
-          "period": "6",
+          "period": "126",
           "url": "lei totl",
           "criteria": "entry",
           "index": 0
         },
         {
-          "period": "6",
+          "period": "126",
           "url": "lei totl",
           "criteria": "exit",
           "index": 0
