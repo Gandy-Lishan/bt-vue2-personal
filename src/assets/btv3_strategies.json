@@ -353,7 +353,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -382,16 +382,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -412,16 +412,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX  > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -435,42 +435,6 @@
       "signals": [
         {
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
-        },
-        {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
-        }
-      ],
-      "cond": [
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        }
-      ]
-    },
-    "exit": {
-      "description": "Others",
-      "relation": 2,
-      "score": 1,
-      "delay_bars": 0,
-      "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
           "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
@@ -494,6 +458,42 @@
         },
         {
           "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Others",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
@@ -1785,7 +1785,7 @@
       {
         "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread CrossAbove 0",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 3,
           "conditionPeriod": ""
         }
       }
@@ -1794,7 +1794,7 @@
       {
         "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread CrossBelow 0",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 4,
           "conditionPeriod": ""
         }
       }
@@ -1812,7 +1812,7 @@
       ],
       "cond": [
         {
-          "newCondition": 0,
+          "newCondition": 3,
           "conditionPeriod": ""
         }
       ]
@@ -1830,7 +1830,7 @@
       ],
       "cond": [
         {
-          "newCondition": 2,
+          "newCondition": 4,
           "conditionPeriod": ""
         }
       ]
@@ -4003,7 +4003,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -4032,16 +4032,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -4069,16 +4069,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -4099,16 +4099,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -4136,16 +4136,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -4161,10 +4161,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
         }
       ],
       "cond": [
@@ -4173,11 +4173,11 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         },
         null
@@ -4194,10 +4194,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/2/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
         }
       ],
       "cond": [
@@ -4206,11 +4206,11 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         null
@@ -4231,10 +4231,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/2/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
         }
       ],
       "cond": [
@@ -4247,11 +4247,11 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         null
@@ -4270,10 +4270,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/0/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
         }
       ],
       "cond": [
@@ -4286,11 +4286,11 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
