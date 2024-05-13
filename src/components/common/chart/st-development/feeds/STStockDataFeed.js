@@ -154,7 +154,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
             let list = []
             for(var i in CIQ.objIndicator){
-                if(!CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i])){
+                if(!(CIQ.findBuiltinTechIndicator(null,CIQ.objIndicator[i]) || CIQ.findSymbolIndicator(CIQ.objIndicator[i],null))){
                     list.push(CIQ.objIndicator[i])
                 }
             }

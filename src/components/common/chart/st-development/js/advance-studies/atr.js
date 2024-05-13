@@ -36,6 +36,15 @@ if (!CIQ.Studies) {
 	console.error("atr feature requires first activating studies feature.");
 } else {
 	CIQ.Studies.calculateATRBands = function (stx, sd) {
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+
 		CIQ.Studies.calculateStudyATR(stx, sd);
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -49,6 +58,15 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateSTARCBands = function (stx, sd) {
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+
 		CIQ.Studies.calculateStudyATR(stx, sd);
 		CIQ.Studies.MA(
 			"simple",
@@ -72,6 +90,20 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		if (!quotes) return;
 		CIQ.Studies.calculateStudyATR(stx, sd);
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+			sd.yAxis = actualXaxis
+			/****************** */
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		}
+
 		var useHighLow = sd.inputs.HighLow;
 		for (var i = Math.max(sd.startFrom - 1, 1); i < quotes.length - 1; i++) {
 			var prices = quotes[i];
@@ -80,20 +112,26 @@ if (!CIQ.Studies) {
 			if (!prev) prev = prices["Sell Stops " + sd.name];
 			if (!prev) prev = 0;
 			if (!prices || !pd) continue;
-			var base = prices.Close;
+			var base = getPropertyByString(prices,field,'Close');
 			var result = base;
 			var offset = prices["ATR " + sd.name] * sd.inputs.Multiplier;
-			if (prices.Close > prev && pd.Close > prev) {
-				if (useHighLow) base = prices.High;
+			/** dual symbol features */
+			const pricesClose = getPropertyByString(prices,field,'Close');
+			const pricesHigh = getPropertyByString(prices,field,'High');
+			const pricesLow = getPropertyByString(prices,field,'Low');
+			const pdClose = getPropertyByString(prices,field,'Close');
+			/*************** */
+			if (pricesClose > prev && pdClose > prev) {
+				if (useHighLow) base = pricesHigh;
 				result = Math.max(prev, base - offset);
-			} else if (prices.Close <= prev && pd.Close <= prev) {
-				if (useHighLow) base = prices.Low;
+			} else if (pricesClose <= prev && pdClose <= prev) {
+				if (useHighLow) base = pricesLow;
 				result = Math.min(prev, base + offset);
-			} else if (prices.Close > prev) {
-				if (useHighLow) base = prices.High;
+			} else if (pricesClose > prev) {
+				if (useHighLow) base = pricesHigh;
 				result = base - offset;
-			} else if (prices.Close <= prev) {
-				if (useHighLow) base = prices.Low;
+			} else if (pricesClose <= prev) {
+				if (useHighLow) base = pricesLow;
 				result = base + offset;
 			}
 			if (base <= result) {
@@ -116,6 +154,7 @@ if (!CIQ.Studies) {
 			calculateFN: CIQ.Studies.calculateStudyATR,
 			outputs: { ATR: "auto" }
 		},
+		/** 无需处理dual symbol */
 		"ATR Bands": {
 			name: "ATR Bands",
 			overlay: true,

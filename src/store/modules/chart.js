@@ -359,6 +359,7 @@ const actions = {
 			CIQ.setPanelHeight([])
 
 			commit('RESET_CHART_STUDY_STATE')
+			commit('SET_CHART_READY_STATE',false)
 			resolve()
 		})
 	},

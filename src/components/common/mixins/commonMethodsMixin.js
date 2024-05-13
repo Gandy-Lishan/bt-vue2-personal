@@ -1029,6 +1029,9 @@ export const CommonMethodsMixin = {
 						params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 					})
 					this.loading = false
+
+					CIQ.hideCover()
+					CIQ.nprogress.done()
 				})
 				await this.loopCalculateNewConditions(row)
 			}
@@ -1044,6 +1047,9 @@ export const CommonMethodsMixin = {
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
 				},()=>{})
 				that.loading = true
+
+				CIQ.hideCover()
+				CIQ.nprogress.done()
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	

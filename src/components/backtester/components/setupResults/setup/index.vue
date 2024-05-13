@@ -110,86 +110,94 @@ export default {
 			isDisabled: false,
 			activeName: 'first',
 			strategy: 'Single',
-			symbolInfo: {}
+			symbolInfo: {},
+			routerEnterTag: 0,
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-	if (to.path === '/backtester/sr/setup' && (from.path.includes('/backtester'))) {
-    next(async _this => {
-				_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
-				_this.$refs['entryChild1'].clearForm()
-				_this.$refs['exitChild1'].resetForm()
-				_this.$refs['entryChild2'].clearForm()
-				_this.$refs['exitChild2'].resetForm()
-				if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
-					console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
-					// 说明是路由跳转过来携带参数的
-					const { data } = to.params
-					const backtestEditData = isJson(data) ? JSON.parse(data) : data
-					const {strategy, symbol, symbol2} = backtestEditData
-					_this.symbolInfo = {
-							strategy,
-							symbol,
-							symbol2
-					}
-					await _this.displaySetUpForm(backtestEditData)
-				}else {
-					// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
-					console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
-					let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
-					let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
-					let dataToUse = editData || cachedData
-					console.log('editData', editData)
-					console.log('cachedData', cachedData)
-					if (Object.keys(dataToUse).length !== 0) {
-						dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
-						dataToUse.old_uuid = dataToUse.id
-						await _this.displaySetUpForm(dataToUse)
-					}
-				}
-				_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
-				CIQ.hideCover()
-    });
-  } else if(to.path === '/backtester/sr/setup' && from.path.includes('/strategy')){
-		next(async _this => {
-		if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
-				const { data } = to.params
-				const backtestEditData = isJson(data) ? JSON.parse(data) : data
-				const {strategy, symbol, symbol2} = backtestEditData
-				_this.symbolInfo = {
-						strategy,
-						symbol,
-						symbol2
-				}
-				_this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
-				backtestEditData.user_tag = 'client'
+		if (to.path === '/backtester/sr/setup' && (from.path.includes('/backtester'))) {
+			next(async _this => {
+						_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
+						_this.$refs['entryChild1'].clearForm()
+						_this.$refs['exitChild1'].resetForm()
+						_this.$refs['entryChild2'].clearForm()
+						_this.$refs['exitChild2'].resetForm()
+						if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+							console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
+							// 说明是路由跳转过来携带参数的
+							const { data } = to.params
+							const backtestEditData = isJson(data) ? JSON.parse(data) : data
+							const {strategy, symbol, symbol2} = backtestEditData
+							_this.symbolInfo = {
+									strategy,
+									symbol,
+									symbol2
+							}
+							await _this.displaySetUpForm(backtestEditData)
+						}else {
+							// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
+							console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')
+							let editData = _this.$store.state.form.rowDataForDisplay // scope.row 点击过来的缓存
+							let cachedData = _this.$store.state.form.cachedBTBasicInfoData // 回测运行结束的缓存
+							let dataToUse = editData || cachedData
+							console.log('editData', editData)
+							console.log('cachedData', cachedData)
+							if (Object.keys(dataToUse).length !== 0) {
+								dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
+								dataToUse.old_uuid = dataToUse.id
+								await _this.displaySetUpForm(dataToUse)
+							}
+						}
+						_this.setSetUpLoadingSetting(false, false, 0, 'Loading...')
+						CIQ.hideCover()
+			});
+		} 
+		/** 只用来管理进入路由时的状态，加载函数都放置在chartiq onReady的回调 */
+		else if(to.path === '/backtester/sr/setup' && from.path.includes('/strategy')){
+			// next(async _this => {
+			// if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
+			// 		const { data } = to.params
+			// 		const backtestEditData = isJson(data) ? JSON.parse(data) : data
+			// 		const {strategy, symbol, symbol2} = backtestEditData
+			// 		_this.symbolInfo = {
+			// 				strategy,
+			// 				symbol,
+			// 				symbol2
+			// 		}
+			// 		_this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
+			// 		backtestEditData.user_tag = 'client'
 
-				_this.$nextTick(async () => {
-					_this.editBacktest(backtestEditData)
-				  await _this.displaySetUpForm(backtestEditData)
-				})
+			// 		// _this.$nextTick(async () => {
+			// 		// 	_this.editBacktest(backtestEditData)
+			// 		//   await _this.displaySetUpForm(backtestEditData)
+			// 		// })
+			// 		//window.setTimeout(async ()=>{
+			// 			_this.editBacktest(backtestEditData)
+			// 		  await _this.displaySetUpForm(backtestEditData)
+			// 		//},10000)
+			// }
+			// })
+			next(_this => {_this.routerEnterTag = 1})
+		} else{
+			// next(async _this => {
+			// 		// 如果跳转携带 backtestID 则填充
+			// 		const backtestID = LocalStorageUtil.get('backtestID')
+			// 		if(backtestID) {
+			// 			const res = await seeParams(backtestID)
+			// 			res.data.commission = (res.data.commission * 100).toFixed(2)
+			// 			_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+			// 			res.data.user_tag = 'client'
+
+			// 			_this.editBacktest(res.data)
+			// 			await _this.displaySetUpForm(res.data)
+			// 			LocalStorageUtil.remove('backtestID')
+			// 		}else {
+			// 			_this.$store.state.form.rowDataForDisplay = {};
+			// 			_this.$store.state.form.cachedBTBasicInfoData = {}
+			// 		}
+			// 	});
+			next(_this => {_this.routerEnterTag = 2})
 		}
-		})
-	}
-	else{
-    next(async _this => {
-			// 如果跳转携带 backtestID 则填充
-			const backtestID = LocalStorageUtil.get('backtestID')
-			if(backtestID) {
-				const res = await seeParams(backtestID)
-				res.data.commission = (res.data.commission * 100).toFixed(2)
-				_this.$store.state.form.favoriteBacktestRowData.id = res.data.id
-				res.data.user_tag = 'client'
-
-				_this.editBacktest(res.data)
-				await _this.displaySetUpForm(res.data)
-				LocalStorageUtil.remove('backtestID')
-			}else {
-				_this.$store.state.form.rowDataForDisplay = {};
-				_this.$store.state.form.cachedBTBasicInfoData = {}
-			}
-		});
-  }
 	},
 	// beforeRouteLeave(to, from, next) {
 	// 	if(from.name == 'SetUp' || from.path == '/backtester/sr/setup') {
@@ -227,6 +235,9 @@ export default {
       // 从 Vuex store 中获取chart loading 状态
       return this.$store.state.chart.chartLoadingSetting
     },
+	isBTChartReady() {
+      return this.$store.state.chart.isBTChartReady
+    },
   },
 	watch: {
     setUpLoadingSetting: {
@@ -242,6 +253,45 @@ export default {
       },
       deep: true, // 启用深度监听，监视对象属性的变化
     },
+	async isBTChartReady(val) {
+		if(!val) return
+		if(this.routerEnterTag == 1){
+			const params = this.$route.params
+			if(params.usedFor && params.usedFor === 'showBTForm'){
+					const { data } = params
+					
+					const backtestEditData = isJson(data) ? JSON.parse(data.replaceAll('$r001$', '\u200c')) : data
+					const {strategy, symbol, symbol2} = backtestEditData
+					this.symbolInfo = {
+							strategy,
+							symbol,
+							symbol2
+					}
+					this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
+					backtestEditData.user_tag = 'client'
+
+					this.editBacktest(backtestEditData)
+					await this.displaySetUpForm(backtestEditData)
+			}
+		}
+		else if(this.routerEnterTag == 2){
+			// 如果跳转携带 backtestID 则填充
+			const backtestID = LocalStorageUtil.get('backtestID')
+			if(backtestID) {
+				const res = await seeParams(backtestID)
+				res.data.commission = (res.data.commission * 100).toFixed(2)
+				this.$store.state.form.favoriteBacktestRowData.id = res.data.id
+				res.data.user_tag = 'client'
+
+				this.editBacktest(res.data)
+				await this.displaySetUpForm(res.data)
+				LocalStorageUtil.remove('backtestID')
+			}else {
+				this.$store.state.form.rowDataForDisplay = {};
+				this.$store.state.form.cachedBTBasicInfoData = {}
+			}
+		}
+	}
   },
 	methods: {
 		changeSymbolInfo(obj) {
@@ -705,7 +755,8 @@ export default {
 			}
 
 			const riskValArr = data.risk_control.split('/');
-			_this.isRiskControl = !riskValArr.every(item => item === '');
+			debugger
+			_this.isRiskControl = !riskValArr.every(item => item === '');	// riskcontrol tag
 
 		},
 	}

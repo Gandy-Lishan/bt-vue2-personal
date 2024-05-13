@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_swingIndex_ = (_exports) => {
@@ -41,13 +41,20 @@ if (!CIQ.Studies) {
 		var T = sd.inputs["Limit Move Value"];
 		if (T === null || isNaN(T)) T = 99999;
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		var total = 0;
 		if (sd.startFrom > 1) total = quotes[sd.startFrom - 1]["Result " + sd.name];
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			var A = Math.abs(quotes[i].High - quotes[i - 1].Close);
-			var B = Math.abs(quotes[i].Low - quotes[i - 1].Close);
-			var C = Math.abs(quotes[i].High - quotes[i].Low);
-			var D = Math.abs(quotes[i - 1].Close - quotes[i - 1].Open);
+			var A = Math.abs(getPropertyByString(quotes[i],field,'High') - getPropertyByString(quotes[i - 1],field,'Close'));
+			var B = Math.abs(getPropertyByString(quotes[i],field,'Low') - getPropertyByString(quotes[i - 1],field,'Close'));
+			var C = Math.abs(getPropertyByString(quotes[i],field,'High') - getPropertyByString(quotes[i],field,'Low'));
+			var D = Math.abs(getPropertyByString(quotes[i - 1],field,'Close') - getPropertyByString(quotes[i - 1],field,'Open'));
 			var K = Math.max(A, B);
 			var M = Math.max(C, K);
 			var R = M + 0.25 * D;
@@ -56,10 +63,10 @@ if (!CIQ.Studies) {
 
 			var swing =
 				((50 *
-					(quotes[i].Close -
-						quotes[i - 1].Close +
-						0.5 * (quotes[i].Close - quotes[i].Open) +
-						0.25 * (quotes[i - 1].Close - quotes[i - 1].Open))) /
+					(getPropertyByString(quotes[i],field,'Close') -
+					getPropertyByString(quotes[i - 1],field,'Close') +
+						0.5 * (getPropertyByString(quotes[i],field,'Close')- getPropertyByString(quotes[i],field,'Open')) +
+						0.25 * (getPropertyByString(quotes[i - 1],field,'Close') - getPropertyByString(quotes[i - 1],field,'Open')))) /
 					R) *
 				(K / T);
 			if (R === 0 || T === 0) swing = 0;
@@ -85,4 +92,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_swingIndex_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_swingIndex_}

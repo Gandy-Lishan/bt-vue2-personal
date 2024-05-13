@@ -202,8 +202,8 @@ const maxNumOfStudy = (stx) => {
       }
       countExistIndicator++
     }
-    if (countExistIndicator >= 10) {
-      CIQ.description('Maximum 10 signals can be displayed on chart')
+    if (countExistIndicator >= 20) {
+      CIQ.description('Maximum 20 signals can be displayed on chart')
       CIQ.hideCover()
       CIQ.nprogress.done()
       return true

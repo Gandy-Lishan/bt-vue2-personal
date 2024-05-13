@@ -9,6 +9,13 @@ import {__js_advanced_studies_macd_} from "./advance-studies/macd.js"
 import {__js_advanced_studies_bollinger_} from "./advance-studies/bollinger.js"
 import {__js_advanced_studies_volatilityIndex_} from "./advance-studies/volatilityIndex.js"
 import {__js_advanced_studies_atr_} from "./advance-studies/atr.js"
+import {__js_advanced_studies_volumeStudies_} from "./advance-studies/volumeStudies.js"
+import {__js_advanced_studies_swingIndex_} from "./advance-studies/swingIndex.js"
+import {__js_advanced_studies_balanceOfPower_} from "./advance-studies/balanceOfPower.js"
+import {__js_advanced_studies_chaikin_} from "./advance-studies/chaikin.js"
+import {__js_advanced_studies_chande_} from "./advance-studies/chande.js"
+import {__js_advanced_studies_linearRegression_} from "./advance-studies/linearRegression.js"
+import {__js_advanced_studies_coppock_} from "./advance-studies/coppock.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -32,6 +39,13 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_bollinger_,
 			__js_advanced_studies_volatilityIndex_,
 			__js_advanced_studies_atr_,
+			__js_advanced_studies_volumeStudies_,
+			__js_advanced_studies_swingIndex_,
+			__js_advanced_studies_balanceOfPower_,
+			__js_advanced_studies_chaikin_,
+			__js_advanced_studies_chande_,
+			__js_advanced_studies_linearRegression_,
+			__js_advanced_studies_coppock_,
 		)
 
 
