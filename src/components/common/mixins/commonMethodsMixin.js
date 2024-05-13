@@ -1095,7 +1095,6 @@ export const CommonMethodsMixin = {
 			 */
 
 			//兼容sample backtest普通Tech没有此属性的情况
-			debugger
 			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
 				if(!data.activatedMALayout) data.activatedMALayout = []
 				data.activatedTechLayout = []; // 初始化新数组

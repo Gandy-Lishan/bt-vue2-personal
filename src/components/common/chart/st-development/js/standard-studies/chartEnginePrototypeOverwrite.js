@@ -173,7 +173,6 @@ if (CIQ.ChartEngine) {
 				symbolObj["hlc/3"] = (symbolObj.High + symbolObj.Low + symbolObj.Close) / 3;
 			}
 		}	
-		// debugger
 	};
 
 	/**

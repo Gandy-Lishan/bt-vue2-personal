@@ -59,7 +59,7 @@
 				<el-select
 					v-model="relation"
 					placeholder="Please select signal"
-					@change="changeRelation"
+					@change="(val) => {changeRelation(val, true)}"
 					size="mini"
 				>
 					<el-option
@@ -514,6 +514,7 @@ export default {
 	watch: {
 		isRiskControl: {
 			handler(val) {
+				debugger
 				this.showRiskControlOptions(val)
 			},
 			deep: true,
@@ -582,7 +583,7 @@ export default {
 
 			if (!val && this.criteriaNum.startsWith('exit') && this.relation === 0) {
 				this.relation = 1;
-				this.changeRelation(this.relation);
+				this.changeRelation(this.relation,false);
 			}
 		},
 		resetForm() {
@@ -807,7 +808,12 @@ export default {
 				this.signals_in_market = this.editableTabs.length
 			}
 		},
-		changeRelation(val) {
+		/**
+		 * 
+		 * @param {*} val 
+		 * @param {*} toUpdateChart changeRelation可能是下拉栏主动触发来修改single,multi,risk control类型，或者edit后触发，这里判断edit情况下不会像前者一样更新图表
+		 */
+		changeRelation(val, toUpdateChart) {
 			if (val == 1) {
 				// single-condition， 只保留第一个condition
 				this.editableTabsValue = '1'
@@ -857,6 +863,7 @@ export default {
 					console.log(error)
 				}
 
+				if(!toUpdateChart) return
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
 				var activatedMAList = this.$store.state.chart.activatedMA
@@ -913,7 +920,15 @@ export default {
 						relation: 0
 					}
 					this.setFrequencyArray(freqObj)
-					
+					try {
+							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
+								this.$refs.indiChild[index]?.resetIndicator()
+							}
+					} catch (error) {
+						console.log(error)
+					}
+
+					if(!toUpdateChart) return
 					//When removing the exit criteria, update the vuex status
 					// 移除senti indicator附属ma
 					const oppositeCriteria = this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum
@@ -929,13 +944,6 @@ export default {
 					CIQ.removeExitMALayout()
 
 					CIQ.addIndicators({})
-					try {
-							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
-								this.$refs.indiChild[index]?.resetIndicator()
-							}
-					} catch (error) {
-						console.log(error)
-					}
 				}
 			this.$store.commit(`form/clearSignalArr`, {criteria: this.criteriaNum})
 			this.$store.commit('form/saveRelation', {

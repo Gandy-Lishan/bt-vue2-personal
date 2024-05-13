@@ -255,12 +255,12 @@ export default {
     },
 	async isBTChartReady(val) {
 		if(!val) return
-		debugger
 		if(this.routerEnterTag == 1){
 			const params = this.$route.params
 			if(params.usedFor && params.usedFor === 'showBTForm'){
 					const { data } = params
-					const backtestEditData = isJson(data) ? JSON.parse(data) : data
+					
+					const backtestEditData = isJson(data) ? JSON.parse(data.replaceAll('$r001$', '\u200c')) : data
 					const {strategy, symbol, symbol2} = backtestEditData
 					this.symbolInfo = {
 							strategy,
@@ -755,7 +755,8 @@ export default {
 			}
 
 			const riskValArr = data.risk_control.split('/');
-			_this.isRiskControl = !riskValArr.every(item => item === '');
+			debugger
+			_this.isRiskControl = !riskValArr.every(item => item === '');	// riskcontrol tag
 
 		},
 	}
