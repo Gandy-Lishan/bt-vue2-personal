@@ -9798,23 +9798,17 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": {
-        "score": 1,
-        "signals_in_market": 1,
-        "relation": 1,
-        "delay_bars": 0,
-        "signals": [
-          {
-            "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"
-          }
-        ],
-        "cond": [
-          {
-            "newCondition": 8,
-            "conditionPeriod": "105"
-          }
-        ]
-      }
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
     },
     "exit2": {
       "description": "XLRE/SPY Ratio RR105 > 81",
