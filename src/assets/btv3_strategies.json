@@ -1651,7 +1651,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
