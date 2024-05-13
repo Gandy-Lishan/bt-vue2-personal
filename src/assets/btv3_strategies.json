@@ -725,6 +725,8 @@
       "Introduction": "",
       "Rules": ""
     },
+    "entry_description": [{"commentDes":"E: Long; SameBar Multi Condition; Score: 2;  ","rocCond":{"newCondition":0,"conditionPeriod":""}},{"commentDes":"Macro Index Model   > 0.6","rocCond":{"newCondition":0,"conditionPeriod":""}},{"commentDes":"Medium Term Volatility Index   < 3","rocCond":{"newCondition":2,"conditionPeriod":""}}],
+    "exit_description": [{"commentDes":"X: Close; Single Condition   Macro Index Model   < 0.6","rocCond":{"newCondition":2,"conditionPeriod":""}}],
     "entry": {
       "description": "Macro Index Model > 0.6;Medium Term Volatility Index < 3.0",
       "relation": 2,
@@ -751,7 +753,8 @@
           "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/2/0.6"
         }
       ]
-    }
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"macro_index_model","inputs":{"Period":13,"Overlay":false,"id":"$r001$macro_index_model$r001$ (13,n)","display":"$r001$macro_index_model$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":0.7,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":0.7,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true,"panelName":"$r001$macro_index_model$r001$ (13,n)"},"panel":"$r001$macro_index_model$r001$ (13,n)"},{"type":"medium_term_vol_index","inputs":{"Period":13,"Overlay":false,"id":"$r001$medium_term_vol_index$r001$ (13,n)","display":"$r001$medium_term_vol_index$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":null,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":null,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true,"panelName":"$r001$medium_term_vol_index$r001$ (13,n)"},"panel":"$r001$medium_term_vol_index$r001$ (13,n)"}],"activatedMA":[],"activatedMALayout":[],"formIndicators":{"entry":["macro_index_model","medium_term_vol_index"],"exit":["macro_index_model"]}}
   },
   {
     "uuid": "UUID",
