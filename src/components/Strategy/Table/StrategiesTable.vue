@@ -409,11 +409,11 @@ export default {
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _b - _a
 					})
@@ -423,11 +423,11 @@ export default {
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _a - _b
 					})
