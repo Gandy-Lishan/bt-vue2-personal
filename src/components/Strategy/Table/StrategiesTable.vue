@@ -389,6 +389,7 @@ export default {
 					favorite: item['favorite']
 				}
 			}
+			LocalStorageUtil.set('urlToNameMap', urlToNameMap)
 			this.$emit('getUrlToNameMap', urlToNameMap)
 			return urlToNameMap
 		},
