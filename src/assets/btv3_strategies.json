@@ -9522,7 +9522,7 @@
     ],
     "exit2_description": [
       {
-        "commentDes": "E: Long; Single Signal   Symbol Ratio RR105 < 3",
+        "commentDes": "E: Long; Single Signal   Symbol Ratio RR105 > 3",
         "rocCond": {
           "newCondition": 8,
           "conditionPeriod": "105"
@@ -9836,7 +9836,7 @@
     ],
     "exit2_description": [
       {
-        "commentDes": "E: Long; Single Signal   Symbol Ratio RR84 < 85",
+        "commentDes": "E: Long; Single Signal   Symbol Ratio RR84 > 85",
         "rocCond": {
           "newCondition": 8,
           "conditionPeriod": "84"

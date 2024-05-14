@@ -118,7 +118,7 @@ export default {
 					'Benchmark CAGR': `${item.benchmark_CAGR}%`,
 					'Max Drawdown': `${item.max_drawdown}%`,
 					'Net Profit(%)': `${item.net_profit_pct}%`,
-					'Sharpe Ratio': `${item.sharp_ratio}%`,
+					'Sharpe Ratio': `${item.sharp_ratio}`,
 					'Profit/Loss Ratio': `${item.profit_loss_ratio}%`,
 					'Average Win': `${item.average_win}%`,
 					'Average Loss': `${item.average_loss}%`,
