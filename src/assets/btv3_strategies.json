@@ -236,7 +236,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -353,7 +353,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -382,16 +382,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -412,16 +412,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX  > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -435,42 +435,6 @@
       "signals": [
         {
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
-        },
-        {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
-        }
-      ],
-      "cond": [
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        }
-      ]
-    },
-    "exit": {
-      "description": "Others",
-      "relation": 2,
-      "score": 1,
-      "delay_bars": 0,
-      "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
           "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
@@ -494,6 +458,42 @@
         },
         {
           "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      ]
+    },
+    "exit": {
+      "description": "Others",
+      "relation": 2,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+        },
+        {
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+        },
+        {
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
@@ -725,6 +725,8 @@
       "Introduction": "",
       "Rules": ""
     },
+    "entry_description": [{"commentDes":"E: Long; SameBar Multi Condition; Score: 2;  ","rocCond":{"newCondition":0,"conditionPeriod":""}},{"commentDes":"Macro Index Model   > 0.6","rocCond":{"newCondition":0,"conditionPeriod":""}},{"commentDes":"Medium Term Volatility Index   < 3","rocCond":{"newCondition":2,"conditionPeriod":""}}],
+    "exit_description": [{"commentDes":"X: Close; Single Condition   Macro Index Model   < 0.6","rocCond":{"newCondition":2,"conditionPeriod":""}}],
     "entry": {
       "description": "Macro Index Model > 0.6;Medium Term Volatility Index < 3.0",
       "relation": 2,
@@ -751,7 +753,8 @@
           "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/2/0.6"
         }
       ]
-    }
+    },
+    "indicator_layout": {"savedTechSD":[{"type":"macro_index_model","inputs":{"Period":13,"Overlay":false,"id":"$r001$macro_index_model$r001$ (13,n)","display":"$r001$macro_index_model$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":0.7,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":0.7,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true,"panelName":"$r001$macro_index_model$r001$ (13,n)"},"panel":"$r001$macro_index_model$r001$ (13,n)"},{"type":"medium_term_vol_index","inputs":{"Period":13,"Overlay":false,"id":"$r001$medium_term_vol_index$r001$ (13,n)","display":"$r001$medium_term_vol_index$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":null,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":null,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true,"panelName":"$r001$medium_term_vol_index$r001$ (13,n)"},"panel":"$r001$medium_term_vol_index$r001$ (13,n)"}],"activatedMA":[],"activatedMALayout":[],"formIndicators":{"entry":["macro_index_model","medium_term_vol_index"],"exit":["macro_index_model"]}}
   },
   {
     "uuid": "UUID",
@@ -764,7 +767,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -882,7 +885,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -897,7 +900,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Conference Board LEI moving average 6 ROC1 > 0",
+        "commentDes": "E: Long; Single Condition   Conference Board LEI moving average 126 ROC1 > 0",
         "rocCond": {
           "newCondition": 5,
           "conditionPeriod": "1"
@@ -906,7 +909,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Conference Board LEI moving average 6 ROC1 < 0",
+        "commentDes": "X: Close; Single Condition   Conference Board LEI moving average 126 ROC1 < 0",
         "rocCond": {
           "newCondition": 5,
           "conditionPeriod": "1"
@@ -921,7 +924,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/0/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA126/0/0"
         }
       ],
       "cond": [
@@ -939,7 +942,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA6/2/0"
+          "code": "SI:Conference Board LEI;IDS:EOnull/EPnull;SC:SVMA126/2/0"
         }
       ],
       "cond": [
@@ -974,12 +977,12 @@
         {
           "type": "ST MA",
           "inputs": {
-            "Period": "6",
+            "Period": "126",
             "Field": "lei totl",
             "Type": "ma",
             "Offset": 0,
             "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)"
+            "id": "$r001$ST MA$r001$ (126,lei totl,ma,0)"
           },
           "outputs": {
             "MA": "#bfad94"
@@ -995,12 +998,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)",
+            "Field": "MA $r001$ST MA$r001$ (126,lei totl,ma,0)",
             "condition": "ROC",
             "period": "1",
             "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0), 1)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (126,lei totl,ma,0), 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0),ROC,1,n)"
           },
           "outputs": {
             "Line": "auto"
@@ -1012,17 +1015,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0),ROC,1,n)"
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0),ROC,1,n)"
         },
         {
           "type": "ST MA",
           "inputs": {
-            "Period": "6",
+            "Period": "126",
             "Field": "lei totl",
             "Type": "ma",
             "Offset": 0,
             "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (6,lei totl,ma,0)-2"
+            "id": "$r001$ST MA$r001$ (126,lei totl,ma,0)-2"
           },
           "outputs": {
             "MA": "#bfad94"
@@ -1038,12 +1041,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2",
+            "Field": "MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2",
             "condition": "ROC",
             "period": "1",
             "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2, 1)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+            "display": "Rate Of Change(MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2, 1)",
+            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2,ROC,1,n)"
           },
           "outputs": {
             "Line": "auto"
@@ -1055,18 +1058,18 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (6,lei totl,ma,0)-2,ROC,1,n)"
+          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (126,lei totl,ma,0)-2,ROC,1,n)"
         }
       ],
       "activatedMA": [
         {
-          "period": "6",
+          "period": "126",
           "url": "lei totl",
           "criteria": "entry",
           "index": 0
         },
         {
-          "period": "6",
+          "period": "126",
           "url": "lei totl",
           "criteria": "exit",
           "index": 0
@@ -1648,7 +1651,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -1780,18 +1783,18 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread   > 0",
+        "commentDes": "E: Long; Single Condition   High Yield AD 50/200 Spread CrossAbove 0",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 3,
           "conditionPeriod": ""
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread   < 0",
+        "commentDes": "X: Close; Single Condition   High Yield AD 50/200 Spread CrossBelow 0",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 4,
           "conditionPeriod": ""
         }
       }
@@ -1804,12 +1807,12 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/3/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 0,
+          "newCondition": 3,
           "conditionPeriod": ""
         }
       ]
@@ -1822,12 +1825,12 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:High Yield AD 50/200 Spread;IDS:EOnull/EPnull;SC:SV/4/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 2,
+          "newCondition": 4,
           "conditionPeriod": ""
         }
       ]
@@ -2172,239 +2175,11 @@
       "Introduction": "",
       "Rules": ""
     },
-    "entry_description": [
-      {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        }
-      },
-      {
-        "commentDes": "10YR / 2YR Treasure Spread  ROC1 > 0",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        }
-      },
-      {
-        "commentDes": "10YR / 2YR Treasure Spread  ROC12 < 40",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "12"
-        }
-      }
-    ],
-    "exit_description": [
-      {
-        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        }
-      },
-      {
-        "commentDes": "10YR / 2YR Treasure Spread  ROC1 < 0",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        }
-      },
-      {
-        "commentDes": "10YR / 2YR Treasure Spread  ROC12 > 40",
-        "rocCond": {
-          "newCondition": 5,
-          "conditionPeriod": "12"
-        }
-      }
-    ],
-    "entry": {
-      "description": "10 year – 2 year yield curve is not inverted, AND the 10 year – 2 year yield curve’s 12 month rate of change is <= 0.4",
-      "relation": 2,
-      "score": 2,
-      "delay_bars": 0,
-      "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/0"
-        },
-        {
-          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/40"
-        }
-      ],
-      "cond": [
-        {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        },
-        {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        },
-        {
-          "newCondition": 5,
-          "conditionPeriod": "12"
-        }
-      ]
-    },
-    "exit": {
-      "description": "10 year – 2 year yield curve is inverted, OR the 10 year – 2 year yield curve’s 12 month rate of change is > 0.4",
-      "relation": 2,
-      "score": 1,
-      "delay_bars": 0,
-      "signals_in_market": 1,
-      "signals": [
-        {
-          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/0"
-        },
-        {
-          "code": "SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/40"
-        }
-      ],
-      "cond": [
-        {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        },
-        {
-          "newCondition": 5,
-          "conditionPeriod": "1"
-        },
-        {
-          "newCondition": 5,
-          "conditionPeriod": "12"
-        }
-      ]
-    },
-    "indicator_layout": {
-      "savedTechSD": [
-        {
-          "type": "ten_two_spread",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$ten_two_spread$r001$ (13,n)",
-            "display": "$r001$ten_two_spread$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ten_two_spread$r001$ (13,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "ten_two_spread",
-            "condition": "ROC",
-            "period": "1",
-            "overlay": false,
-            "display": "Rate Of Change(ten_two_spread, 1)",
-            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "ten_two_spread",
-            "condition": "ROC",
-            "period": "1",
-            "overlay": false,
-            "display": "Rate Of Change(ten_two_spread, 1)",
-            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)-2"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,1,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "ten_two_spread",
-            "condition": "ROC",
-            "period": "12",
-            "overlay": false,
-            "display": "Rate Of Change(ten_two_spread, 12)",
-            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "ten_two_spread",
-            "condition": "ROC",
-            "period": "12",
-            "overlay": false,
-            "display": "Rate Of Change(ten_two_spread, 12)",
-            "id": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"
-        }
-      ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
-      "activatedMALayout": [],
-      "formIndicators": {
-        "entry": [
-          "ten_two_spread",
-          "ten_two_spread"
-        ],
-        "exit": [
-          "ten_two_spread",
-          "ten_two_spread"
-        ]
-      }
-    }
+    "entry_description": [{"commentDes":"E: Long; SameBar Multi Condition; Score: 2;  ","rocCond":{"newCondition":0,"conditionPeriod":"1"}},{"commentDes":"10YR / 2YR Treasure Spread   > 0","rocCond":{"newCondition":0,"conditionPeriod":"1"}},{"commentDes":"10YR / 2YR Treasure Spread  ROC12 < 40","rocCond":{"newCondition":5,"conditionPeriod":"12"}}],
+    "exit_description": [{"commentDes":"X: Close; SameBar Multi Condition; Score: 1;  ","rocCond":{"newCondition":2,"conditionPeriod":"1"}},{"commentDes":"10YR / 2YR Treasure Spread   < 0","rocCond":{"newCondition":2,"conditionPeriod":"1"}},{"commentDes":"10YR / 2YR Treasure Spread  ROC12 > 40","rocCond":{"newCondition":5,"conditionPeriod":"12"}}],
+    "entry": {"score":2,"signals_in_market":1,"relation":2,"delay_bars":0,"signals":[{"code":"SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/0"},{"code":"SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/40"}],"cond":[{"newCondition":0,"conditionPeriod":"1"},{"newCondition":0,"conditionPeriod":"1"},{"newCondition":5,"conditionPeriod":"12"}]},
+    "exit": {"score":1,"signals_in_market":1,"relation":2,"delay_bars":0,"signals":[{"code":"SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/2/0"},{"code":"SI:10YR / 2YR Treasure Spread;IDS:EOnull/EPnull;SC:SV/0/40"}],"cond":[{"newCondition":2,"conditionPeriod":"1"},{"newCondition":2,"conditionPeriod":"1"},{"newCondition":5,"conditionPeriod":"12"}]},
+    "indicator_layout": {"savedTechSD":[{"type":"ten_two_spread","inputs":{"Period":13,"Overlay":false,"id":"$r001$ten_two_spread$r001$ (13,n)","display":"$r001$ten_two_spread$r001$ (13,n)"},"outputs":{},"parameters":{"studyOverZonesEnabled":false,"studyOverBoughtValue":null,"studyOverBoughtColor":"#FF0000","studyOverSoldValue":null,"studyOverSoldColor":"#00DD00","chartName":"chart","editMode":true,"panelName":"$r001$ten_two_spread$r001$ (13,n)"},"panel":"$r001$ten_two_spread$r001$ (13,n)"},{"type":"ST ROCLike","inputs":{"Field":"ten_two_spread","condition":"ROC","period":"12","overlay":false,"display":"(SPY)Rate Of Change(ten_two_spread, 12)","id":"$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"},"outputs":{"Result":"auto"},"parameters":{"criteria":"entry","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)"},{"type":"ST ROCLike","inputs":{"Field":"ten_two_spread","condition":"ROC","period":"12","overlay":false,"display":"(SPY)Rate Of Change(ten_two_spread, 12)","id":"$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"},"outputs":{"Result":"auto"},"parameters":{"criteria":"exit","index":1,"showSupLine":100,"chartName":"chart","editMode":true},"panel":"$r001$ST ROCLike$r001$ (ten_two_spread,ROC,12,n)-2"}],"activatedMA":[{"period":21,"url":""}],"activatedMALayout":[],"formIndicators":{"entry":["ten_two_spread","ten_two_spread"],"exit":["ten_two_spread","ten_two_spread"]}}
   },
   {
     "uuid": "UUID",
@@ -2417,7 +2192,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Monthly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -2888,10 +2663,10 @@
         {
           "type": "Deviation From Trend Between Two Moving Averages",
           "inputs": {
-            "periodShort": 4,
+            "periodShort": 10,
             "periodLong": 40,
             "display": "(SPY)Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (10,40)"
           },
           "outputs": {
             "Result": "auto"
@@ -2901,7 +2676,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (10,40)"
         },
         {
           "type": "comp_spx_ratio",
@@ -3134,7 +2909,7 @@
         }
       },
       {
-        "commentDes": "NASDAQ/SPX Ratio < Moving Average 10",
+        "commentDes": "NASDAQ/SPX Ratio > Moving Average 10",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": "21"
@@ -3180,7 +2955,7 @@
         }
       },
       {
-        "commentDes": "NASDAQ/SPX Ratio > Moving Average 10",
+        "commentDes": "NASDAQ/SPX Ratio < Moving Average 10",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": "21"
@@ -3248,7 +3023,7 @@
     "symbol2": "SPY",
     "direction2": "Long",
     "entry2": {
-      "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
+      "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
       "relation": 2,
       "score": 2,
       "delay_bars": 0,
@@ -3258,7 +3033,7 @@
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
         },
         {
-          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/2/SVMA10"
+          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/0/SVMA10"
         }
       ],
       "cond": [
@@ -3277,7 +3052,7 @@
       ]
     },
     "exit2": {
-      "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
+      "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
       "relation": 2,
       "score": 1,
       "delay_bars": 0,
@@ -3287,7 +3062,7 @@
           "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/0/SVMA10"
+          "code": "SI:NASDAQ/SPX Ratio;IDS:EOnull/EPnull;SC:SV/2/SVMA10"
         }
       ],
       "cond": [
@@ -3747,7 +3522,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -4000,7 +3775,7 @@
     "commission": 0,
     "slippage": 0,
     "direction": "Long",
-    "frequency": "Weekly",
+    "frequency": "Daily",
     "trade_price": 2,
     "exclude_oo": 0,
     "market_environment": 0,
@@ -4029,16 +3804,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -4066,16 +3841,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -4096,16 +3871,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -4133,16 +3908,16 @@
         }
       },
       {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX > 2.5",
+        "commentDes": "Stock/Bond Ratio 2 Months MAX < 2.5",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX > 3",
+        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX < 3",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -4158,10 +3933,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
         }
       ],
       "cond": [
@@ -4170,14 +3945,13 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
-        },
-        null
+        }
       ]
     },
     "exit": {
@@ -4191,10 +3965,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/2/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
         }
       ],
       "cond": [
@@ -4203,14 +3977,13 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
-        },
-        null
+        }
       ]
     },
     "symbol2": "SPY",
@@ -4228,10 +4001,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/2/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
         }
       ],
       "cond": [
@@ -4244,14 +4017,13 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 0,
           "conditionPeriod": "21"
-        },
-        null
+        }
       ]
     },
     "exit2": {
@@ -4267,10 +4039,10 @@
           "code": "SI:COMP MA30 Spread;IDS:EO/EP;SC:SV/0/0"
         },
         {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
+          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
         },
         {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
         }
       ],
       "cond": [
@@ -4283,11 +4055,11 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -4600,7 +4372,7 @@
         }
       ]
     },
-    "symbol2": "GOLD",
+    "symbol2": "GLD",
     "direction2": "Long",
     "entry2": {
       "description": "S&P:gold ratio is < its 5 year MA AND the gold > MA200",
@@ -4639,7 +4411,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
         },
         {
           "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
@@ -9747,7 +9519,7 @@
     ],
     "exit2_description": [
       {
-        "commentDes": "E: Long; Single Signal   Symbol Ratio RR105 < 3",
+        "commentDes": "E: Long; Single Signal   Symbol Ratio RR105 > 3",
         "rocCond": {
           "newCondition": 8,
           "conditionPeriod": "105"
@@ -9798,23 +9570,17 @@
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
-      "signals": {
-        "score": 1,
-        "signals_in_market": 1,
-        "relation": 1,
-        "delay_bars": 0,
-        "signals": [
-          {
-            "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"
-          }
-        ],
-        "cond": [
-          {
-            "newCondition": 8,
-            "conditionPeriod": "105"
-          }
-        ]
-      }
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/3"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
     },
     "exit2": {
       "description": "XLRE/SPY Ratio RR105 > 81",
@@ -10067,7 +9833,7 @@
     ],
     "exit2_description": [
       {
-        "commentDes": "E: Long; Single Signal   Symbol Ratio RR84 < 85",
+        "commentDes": "E: Long; Single Signal   Symbol Ratio RR84 > 85",
         "rocCond": {
           "newCondition": 8,
           "conditionPeriod": "84"
@@ -11323,7 +11089,7 @@
     ],
     "exit2_description": [
       {
-        "commentDes": "X: Close; Single Signal   Symbol Ratio RR84 < 99",
+        "commentDes": "X: Close; Single Signal   Symbol Ratio RR84 > 99",
         "rocCond": {
           "newCondition": 8,
           "conditionPeriod": "84"

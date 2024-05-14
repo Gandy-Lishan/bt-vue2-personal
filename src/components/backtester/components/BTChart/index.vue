@@ -68,7 +68,7 @@ export default {
 			}
 			CIQ.hideCover()
             CIQ.nprogress.done()
-			debugger
+			//debugger
 		},
 	}
 }

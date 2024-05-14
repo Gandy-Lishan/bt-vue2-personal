@@ -123,7 +123,7 @@
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
             for(var i in stx.layout.studies){
                 /** 跳过非参与回测的indicator */
-                if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(stx.layout.studies[i].type)) continue
+                if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
                 savedTechSD.push({
                     type: stx.layout.studies[i].type,
                     inputs: stx.layout.studies[i].inputs,
@@ -148,8 +148,9 @@
              }    
          }
          indicatorsList = indicatorsList.concat(technicalIndicators).filter(item=>{return item !== ''})
-         
 
+         /** 加载前获取study数量以预先设置chartiq高度 */
+        //  CIQ.store.commit('chart/updateStudiesCount',indicatorsList.length)
 
         /** 不参与请求 */
         if(type == 'addBuiltTech') {
@@ -179,7 +180,6 @@
                     // fetch indicator information and add studies to chart
                     /** 必须放在pairdata后，不然study在数据刷新后还得再计算 */
                     await CIQ.getIndicatorMatedata(indicatorsList,stx)
-        
                     /** !(_type == 'loadFromBacktest') */
                     if(type == 'updateIndicators'){
                         CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
@@ -330,15 +330,12 @@
      var senti_color = ["#000000"]
      var tech_color_1 = ["#5B9BD1","#368DF0"]
      var tech_color_2 = ["#000000","#6b7280"]
-     
-
      if(!stx) return
      for (var studyInstanceName in stx.layout.studies) {  
         var sd = stx.layout.studies[studyInstanceName]; 
         CIQ.Studies.removeStudy(stx, sd); 
      }
      let indicatorHeight = CIQ.setPanelHeight(indicatorList)
- 
 
      let resArr = []
      let sentiUrlList = []
@@ -420,7 +417,7 @@
                                         },null,{
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                                             isComparison: symbolType=='symbol2',
-                                        });  
+                                        });          
                                 }
                             }
                         }
