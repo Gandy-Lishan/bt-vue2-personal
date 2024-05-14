@@ -21,8 +21,7 @@
 				@sort-change="onSortChange"
 				size="small"
 				style="width: 100%; height: 100%; margin: 0 auto"
-			:row-class-name="tableRowClassName"
-				stripe
+				:row-class-name="tableRowClassName"
 			>
 				<el-table-column prop="isRight" width="50px">
 					<template slot="header" slot-scope="scope">
