@@ -86,7 +86,7 @@
                     <span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
                     <span v-else-if="scope.row.TradeReturn > 0">{{ scope.row.TradeReturn }}%</span>
                     <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13">{{ scope.row.TradeReturn }}%</span>
-                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}</span>
+                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -103,7 +103,7 @@
                     <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13"
                         >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
                     >
-                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}</span>
+                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
                 </template>
             </el-table-column>
             <el-table-column
