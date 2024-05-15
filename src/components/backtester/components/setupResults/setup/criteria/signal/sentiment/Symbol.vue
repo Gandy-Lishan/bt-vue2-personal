@@ -210,6 +210,7 @@ export default {
               CIQ.stxx,
               CIQ.stxx.layout.studies[studyInstanceName]
             )
+            //this.$store.dispatch('chart/update_roclike_count','remove')
           }
         }
       }
@@ -372,25 +373,11 @@ export default {
           [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
 
-        // // 判断是否已经存在完全一样条件的ROC
-        // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        //   const sd = CIQ.stxx.layout.studies
-        //   // 如果当前填入的是数据源为indicator，则判断是否存在此同条件ROC
-        //   if ((sd[studyInstanceName].inputs.Field == fieldName && sd[studyInstanceName].type != 'ST MA') &&
-        //     sd[studyInstanceName].inputs.period == this.sym.conditionPeriod &&
-        //     sd[studyInstanceName].inputs.condition == conditionMap.get(this.sym.newCondition).abbr
-        //   ) {
-        //     for (var p in CIQ.stxx.panels) {
-        //       if(CIQ.stxx.panels[p].name == studyInstanceName){
-        //         CIQ.stxx.panels[p].hidden = true;
-        //       }
-        //     }
-        //   }
-        // }
-
-        /** 指示Study归属的Symbol */
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-
+        // this.$store.dispatch('chart/update_roclike_count','add')
+        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
+        // study.panelHeight = CIQ.setPanelHeight()
+        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
+        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
           Field: field,

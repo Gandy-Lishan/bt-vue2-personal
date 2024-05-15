@@ -672,11 +672,13 @@ export const CommonMethodsMixin = {
 				}
 			}
 
+			// this.$store.dispatch('chart/update_roclike_count','add')
+			// var study = CIQ.Studies.studyLibrary['ST ROCLike']
+			// study.panelHeight = CIQ.setPanelHeight()
+			// CIQ.Studies.studyLibrary['ST ROCLike'] = study
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
-			/** 指示Study归属的Symbol */
-			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-
+			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
@@ -730,6 +732,7 @@ export const CommonMethodsMixin = {
 					for (var p in CIQ.stxx.panels) {
 						if(CIQ.stxx.panels[p].name == key){
 							CIQ.stxx.panels[p].hidden = true;
+							//CIQ.store.dispatch('chart/update_roclike_count','remove')
 						}
 					}
 				} else {

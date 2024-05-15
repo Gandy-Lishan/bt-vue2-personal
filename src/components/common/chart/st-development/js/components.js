@@ -8940,8 +8940,6 @@ if (!CIQ.Studies) {
 			if (CIQ.Studies) {
 				for (var id in stx.layout.studies) {
 					var sd = stx.layout.studies[id];
-					// filter MA in studylist
-					
 					var series = CIQ.stxx.chart.series[sd.inputs.Field];	// myIndicator里面序列的stma有标题组件
 					if (sd.type == 'ST MA' && !series) continue;
 					if (sd.customLegend) continue;
@@ -8949,9 +8947,57 @@ if (!CIQ.Studies) {
 					if (panelOnly && sd.panel != panelName) continue;
 					if (overlaysOnly && !sd.overlay && !sd.underlay) continue;
 					var newChild = CIQ.UI.makeFromTemplate(this.template, true);
-					// edited
-					//newChild.find("cq-label").html(sd.inputs.display);
 
+					// /** 为了不影响回测info,只在组件的显示上做名字修改，以前的对study的display修改就还是保留不做修改 */
+					// let sentiIndi = CIQ.findSentiIndicator(null,sd.type)
+					// let techSymbolIndi = CIQ.findBuiltinTechIndicator(null,sd.type) || CIQ.findSymbolIndicator(sd.type,null)
+					// let rocStudy = sd.type == 'ST ROCLike'
+					
+					// if(sentiIndi){	
+					// 	//newChild.find("cq-label").html(sd.inputs.display);	
+					// 	newChild.find("cq-label").html(sentiIndi.chart_name)	
+						
+					// }else if(techSymbolIndi){	
+					// 	const symbolLabel = sd.parameters.isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+					// 	const display = `(${symbolLabel})${techSymbolIndi.value?techSymbolIndi.value:techSymbolIndi.label}`
+					// 	newChild.find("cq-label").html(display);	
+					// }else if(rocStudy){
+					// 	const symbolLabel = sd.parameters.criteria && sd.parameters.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+					// 	var name
+					// 	let sentiField = CIQ.findSentiIndicator(null,sd.inputs.Field)
+					// 	let symbolField = CIQ.findSymbolIndicator(null,sd.inputs.Field)
+					// 	if(symbolField){	// roc with symbol ohlcv
+					// 		name = symbolField.label
+					// 	}else if(sentiField){	// roc with senti
+					// 		name = sentiField.chart_name
+					// 	}else if(!sd.inputs.Field.startsWith('MA ‌ST MA‌') && (CIQ.isUserIndicator(sd.inputs.Field) || CIQ.isOwnIndicator(sd.inputs.Field))){
+					// 		// roc with user or own indicator, exclude name starts with st ma
+					// 		name = sd.inputs.Field.match(/(CREATE|HASH)/) ? sd.inputs.Field.split(/(CREATE|HASH)/)[0] : stmaUrl
+					// 	}else{	// roc with the ma of senti
+					// 		let stmaUrl = CIQ.store.state.chart.activatedMA.find(i=>i.criteria == sd.parameters.criteria && i.index == sd.parameters.index).url
+					// 		let stmaFieldNameSenti = CIQ.findSentiIndicator(null,stmaUrl)?.chart_name
+					// 		let stmaFieldNameUser = stmaUrl.match(/(CREATE|HASH)/) ? stmaUrl.split(/(CREATE|HASH)/)[0] : stmaUrl
+					// 		let stmaPeriod
+					// 		for (var id in stx.layout.studies) {
+					// 			var _sd = stx.layout.studies[id];
+					// 			if (_sd.type == 'ST MA' && _sd.parameters.criteria == sd.parameters.criteria && _sd.parameters.index == sd.parameters.index){
+					// 				stmaPeriod = _sd.inputs.Period
+					// 			}
+					// 		}
+					// 		name = (stmaFieldNameSenti || stmaFieldNameUser) + ' MA' + stmaPeriod
+					// 	}
+					// 	const conditionMap = {
+					// 		'ROC' : 'Rate Of Change',
+					// 		'OPR' : '% of Previous Range',
+					// 		'MA' : 'MA Ratio',
+					// 		'RR' : 'Range Rank',
+					// 		'DD' : 'DrawDown %',
+					// 		'DU' : 'DrawUp %',
+					// 	}
+					// 	const condition = `${conditionMap[sd.inputs.condition]}(${sd.inputs.period}-Day)`
+					// 	const display = `(${symbolLabel})${name} ${condition}`
+					// 	newChild.find("cq-label").html(display);
+	
 					let _obj = CIQ.findSentiIndicator(null,sd.type)
 					let _obj2 = CIQ.findBuiltinTechIndicator(null,sd.type)
 					
