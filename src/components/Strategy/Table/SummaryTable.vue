@@ -4,7 +4,6 @@
 			<el-table
 				ref="Table"
 				class="ScannerBTTable"
-				header-align="center"
 				:data="paginatedData"
 				empty-text="No data"
 				v-loading="loading"
@@ -15,12 +14,12 @@
 			>
 				<template v-for="l in tableCol">
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
 						show-overflow-tooltip
-						:width="l.width"
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						v-if="
 							[
 								'model_name',
@@ -52,7 +51,6 @@
 						</template>
 					</el-table-column>
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
@@ -91,11 +89,12 @@
 
 <script>
 import { getStrategySummaryList } from '@/service/service'
-import { timestampToTime } from "@/utils"
+import { LocalStorageUtil, timestampToTime } from "@/utils"
 export default {
   name: 'SummaryTable',
   props: {
-    urlToNameMap: Object
+    urlToNameMap: Object,
+		tag: String
   },
   data() {
     return {
@@ -108,7 +107,9 @@ export default {
         {
           label: 'Model Name',
           value: 'model_name',
-          key: 'model_name'
+          key: 'model_name',
+					minWidth: '250px',
+					maxWidth: '300px'
         },
         {
           label: 'Strategy CAGR',
@@ -201,7 +202,8 @@ export default {
           for (const item of data) {
             item.selection = false;
             item.date = timestampToTime(item.date)
-              const {model_name, updated, category, favorite} = this.urlToNameMap[item.model]
+						const urlToNameMap = Object.keys(this.urlToNameMap).length > 0 ? this.urlToNameMap : LocalStorageUtil.get('urlToNameMap')
+              const {model_name, updated, category, favorite} = urlToNameMap[item.model]
               if (model_name !== undefined) {
                   item['model_name'] = model_name;
                   item['updated'] = updated
@@ -227,6 +229,7 @@ export default {
         this.immutableTableData = data
       } finally {
         this.loading = false
+				this.highlightedTag(this.tag)
       }
     },
     onSortChange(column){

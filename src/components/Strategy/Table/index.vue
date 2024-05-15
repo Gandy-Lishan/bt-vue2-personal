@@ -30,7 +30,7 @@
             <h4  @click="selectedTitle = 'Summary'" :class="{ 'selected': selectedTitle === 'Summary' }">View Summary Statistics</h4>
           </div>
           <div class="btns">
-            <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button>
+            <!-- <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button> -->
             <el-button type="primary" size="mini" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
           </div>
         </div>
@@ -42,7 +42,7 @@
       </div>
       <br>
       <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
-      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap"></SummaryTable>
+      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap" :tag="tag"></SummaryTable>
     </div>
     </div>
   </div>
@@ -50,6 +50,7 @@
 <script>
 import StrategiesTable from "./StrategiesTable";
 import SummaryTable from "./SummaryTable";
+import { LocalStorageUtil } from "@/utils";
 const XLSX = require('xlsx');
 
 export default {
@@ -58,12 +59,33 @@ export default {
     return {
       selectedTitle: 'Strategies',
       urlToNameMap: [],
-      searchKey: ''
+      searchKey: '',
+      tag: 'All'
     }
   },
   components: {
     StrategiesTable,
     SummaryTable
+  },
+  mounted() {
+    const {selectedTitle, highlightedTag} = LocalStorageUtil.get('strategy_filter_state')
+    this.selectedTitle = selectedTitle || 'Strategies'
+    this.highlightedTag(highlightedTag || 'All')
+    const tags = [
+				{ type: 'info', label: 'All', value: 'All' },
+				{ type: 'info', label: 'Legacy Index', value: 'Legacy' },
+				{ type: 'info', label: 'Index', value: 'INDEX' },
+				{ type: 'info', label: 'Bond', value: 'Bond' },
+				{ type: 'info', label: 'Factors', value: 'Factors' },
+				{ type: 'info', label: 'Sector', value: 'Sector' },
+				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
+			]
+    this.$refs['Strategies'].highlightTag(tags.find(tag => tag.value === highlightedTag) || tags[0])
+  },
+  beforeDestroy () {
+    // 离开此组件前保存筛选条件状态
+    console.log('离开此组件前保存筛选条件状态', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
+    LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
   },
   methods: {
     portfolio() {
@@ -77,6 +99,9 @@ export default {
       this.$refs[this.selectedTitle].handleQuery(this.searchKey)
     },
     highlightedTag(tag) {
+      debugger
+      console.log('tag', tag)
+      this.tag = tag
       this.$refs['Summary'].highlightedTag(tag)
     },
     downloadCSV() {
@@ -93,7 +118,7 @@ export default {
 					'Benchmark CAGR': `${item.benchmark_CAGR}%`,
 					'Max Drawdown': `${item.max_drawdown}%`,
 					'Net Profit(%)': `${item.net_profit_pct}%`,
-					'Sharpe Ratio': `${item.sharp_ratio}%`,
+					'Sharpe Ratio': `${item.sharp_ratio}`,
 					'Profit/Loss Ratio': `${item.profit_loss_ratio}%`,
 					'Average Win': `${item.average_win}%`,
 					'Average Loss': `${item.average_loss}%`,

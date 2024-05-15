@@ -107,8 +107,8 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="['Total Return %', 'Win Rate %'].includes(l.label)"
-          :sortable="['Total Return %', 'Win Rate %'].includes(l.label) ? 'custom' : false"
+          v-if="['Win Rate %'].includes(l.label)"
+          :sortable="['Win Rate %'].includes(l.label) ? 'custom' : false"
 				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
@@ -180,7 +180,7 @@
             </template>
           </thead>
           <tbody>
-              <template v-for="(item, index) in detailedInfo">
+              <template v-for="(item, index) in strategy_combination">
                 <tr :key="index">
                   <template v-for="(ele, i) in item">
                     <td :key="i">{{ ele }}</td>
@@ -203,7 +203,7 @@
   <!-- <el-table
         ref="Table"
         header-align="center"
-        :data="detailedInfo"
+        :data="strategy_combination"
         empty-text="No data"
         size="mini"
 			  style="width: 100%; height: 100%;"
@@ -248,7 +248,7 @@
 </template>
 
 <script>
-import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
+import { delScannerBT, AutoPortfolio, getScannerBTResults, getScannerBTResultsList, getPortfolioList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
@@ -267,299 +267,82 @@ export default {
           key: 'name'
         },
         {
+          label: 'Status',
+          value: 'status',
+          key: 'status'
+        },
+        {
           label: 'Return',
-          value: 'return',
-          key: 'return'
+          value: 'return_range',
+          key: 'return_range'
         },
         {
           label: 'Max Drow Down',
-          value: 'max_drow_down',
-          key: 'max_drow_down'
+          value: 'mdd_range',
+          key: 'mdd_range'
         },
         {
           label: 'Win Rate %',
-          value: 'win_rate',
-          key: 'win_rate'
+          value: 'winrate',
+          key: 'winrate'
         },
         {
-          label: 'Total Return %',
-          value: 'total_return',
-          key: 'total_return'
+          label: 'Float Profit',
+          value: 'float_profit',
+          key: 'float_profit'
+        },
+        {
+          label: 'Market Value',
+          value: 'market_value',
+          key: 'market_value'
+        },
+        {
+          label: 'Final Cash',
+          value: 'final_cash',
+          key: 'final_cash'
+        },
+        {
+          label: 'Auto Portfolio',
+          value: 'auto_portfolio',
+          key: 'auto_portfolio'
+        },
+        {
+          label: 'Cash',
+          value: 'cash',
+          key: 'cash'
         }
       ],
       tableData: [],
       detailTableCol: [
         {
-          label: 'Weight',
-          name: 'weight',
-          key: 'weight',
+          label: 'Strategies',
+          name: 'strategy',
+          key: 'strategy',
+          width: '300px'
+        },
+        {
+          label: 'Model',
+          name: 'model',
+          key: 'model',
           width: '100px'
         },
         {
-          label: 'Strategies',
-          name: 'strategies',
-          key: 'strategies',
-          width: '200px'
-        },
-        {
-          label: 'Signal',
-          name: 'signal',
-          key: 'signal',
-          width: '200px'
-        },
-        {
-          label: 'Date',
-          name: 'date',
-          key: 'date',
-          width: '150px'
+          label: 'Weight',
+          name: 'percent',
+          key: 'percent',
+          width: '100px'
         }
       ],
       currentSort: {}, // 当前的排序信息
       isPopupVisible: false,
-      detailedInfo: [],
+      strategy_combination: [],
       mouseX: 0,
       mouseY: 0,
       strategiesList: []
     }
   },
   async created() {
-    // await this.getDataList()
-    this.tableData = [
-      {
-        name: 'My Portfolio 1',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20% 1',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      },
-      {
-        name: 'My Portfolio 2',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20% 2',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      },
-      {
-        name: 'My Portfolio 3',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20% 3',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      },
-      {
-        name: 'My Portfolio 4',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20% 4',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      },
-      {
-        name: 'My Portfolio 5',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20% 5',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03',
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      },
-      {
-        name: 'My Portfolio 1',
-        return: '9.262%',
-        max_drow_down: '9.262%',
-        win_rate: '5.334%',
-        total_return: '3.80%',
-        detailedInfo: [
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          },
-          {
-            weight: '20%',
-            strategies: 'Dual Momentum Model With Fundamentals',
-            signal: 'Long XLE(Energy Select Sector ETF)',
-            date: '2024-04-03'
-          }
-        ]
-      }
-    ]
+    await this.getDataList()
     console.log('列表返回处理数据', this.tableData)
   },
   computed: {
@@ -578,14 +361,13 @@ export default {
       let res = null
       const page = this.currentPage
 			try {
-				res = await getScannerBTList(page, orderby, this.searchKey)
+				res = await getPortfolioList(page, orderby, this.searchKey)
         console.log('列表响应', res)
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
             item.status = capitalizeFirstLetter(item.status)
-            item.period = [item.start_date, item.end_date]
-            item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
+            item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
             item.viewLoading = false
             item.deleteLoading = false
 						return item
@@ -698,7 +480,13 @@ export default {
       const number = parseInt(lastPart);
       if (number <= 2) return
       }
-      this.detailedInfo = row.detailedInfo;
+      try {
+        this.strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+      } catch (error) {
+        console.log('error', error)
+        return
+      }
+      console.log('strategy_combination', this.strategy_combination)
        // 计算弹框位置
        this.mouseX = event.clientX;
       this.mouseY = event.clientY;

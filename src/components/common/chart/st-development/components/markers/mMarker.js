@@ -401,7 +401,6 @@ MarkersSample.prototype.showmMarker = function () {
 					const plotField = sd.panel == 'chart' && isSymbol2
 										? comparisonSymbol.url
 										: null
-					if(sd.type == 'ST MA') debugger
 					// 如果是一些technical indicator， 输出的线可能有多条，需要根据outputMap遍历绘制mDot
 					for(var type in sd['outputMap']){
 						if(Object.keys(quote).indexOf(type)==-1) continue

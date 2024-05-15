@@ -546,14 +546,20 @@ input[type="time"] {
     .default-table-class .el-table .cell,
     .CPM-trades .el-table .cell,
     .CPM-TIM .el-table .cell,
-    .ScannerBTTable .el-table .cell,
-    .strategiesTable .el-table .cell
+    .ScannerBTTable .el-table .cell
     {
   font-weight: 400;
 	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
   text-align: center;
+}
+
+.strategiesTable .el-table .cell {
+  font-weight: 400;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
 }
 .tim-container .table thead tr th,
  .historyContainer .table thead tr th,

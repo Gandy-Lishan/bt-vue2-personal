@@ -57,16 +57,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="4. Starting Captial" prop="capital" label-width="70px" label-position="top">
-              <el-input v-model="data.capital" clearable></el-input>
+            <el-form-item label="4. Starting Captial" prop="cash" label-width="70px" label-position="top">
+              <el-input v-model="data.cash" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
     </el-form>
     <div class="portfolioCheckedBox">
-        <a @click="portfolioChecked = !portfolioChecked" style="cursor: pointer;"
-          >Auto Portfolio<i :class="portfolioChecked ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
-        <div class="des-content" v-show="portfolioChecked">
+        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"
+          >Auto Portfolio<i :class="auto_portfolio ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
+        <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
           :model="portfolioFormData"
@@ -173,7 +173,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!portfolioChecked">Found Portfolio</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio">Found Portfolio</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -183,7 +183,7 @@
     <div>
     <br>
     <el-table
-    :data="portfolioData"
+    :data="strategy_combination"
     stripe
     border
     size="small"
@@ -206,7 +206,7 @@
         <el-autocomplete
           v-if="scope.$index === 0"
           disabled
-          v-model="portfolioFirstLine.name"
+          v-model="portfolioFirstLine.strategy"
           size="mini"
           :fetch-suggestions="querySearch"
           @select="
@@ -218,7 +218,7 @@
           <i slot="prefix" class="el-input__icon el-icon-search"></i></el-autocomplete>
         <el-autocomplete
           v-else
-          v-model="scope.row.name"
+          v-model="scope.row.strategy"
           size="mini"
           :fetch-suggestions="querySearch"
           @select="
@@ -235,7 +235,7 @@
                 item.model_name
               }}</span>
               <span class="type-label"
-                >{{ tags[item.category] }}</span
+                >({{ tags[item.category] }})</span
               >
             </div>
           </template>
@@ -262,12 +262,12 @@
         </el-select>
       </template>
     </el-table-column>
-    <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="200">
+    <el-table-column label="Weight" header-align="center" align="center" prop="percent" width="200">
       <template slot-scope="scope">
-        <el-input v-model="portfolioFirstLine.weight" size="mini" label-width="50px" disabled v-if="scope.$index === 0">
+        <el-input v-model="portfolioFirstLine.percent" size="mini" label-width="50px" disabled v-if="scope.$index === 0">
           <template v-slot:append>(%)</template>
         </el-input>
-        <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" label-width="50px" v-else>
+        <el-input v-model="scope.row.percent" size="mini" @input="validateWeightRule(scope.row)" label-width="50px" v-else>
           <template v-slot:append>(%)</template>
         </el-input>
         <div class="weight-error-message">
@@ -296,7 +296,7 @@
 <script>
 import { isJson, timestampToTime, trimTrailingZeros, LocalStorageUtil } from '@/utils'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
-import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm, getStrategyList } from '@/service/service'
+import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm, getStrategyList, AutoPortfolio, RunPortfolio } from '@/service/service'
 
 export default {
   name: 'Form',
@@ -307,7 +307,7 @@ export default {
         name: 'my portfolio',
         start_date: '',
         end_date: '',
-        capital: 1000000
+        cash: 1000000
       },
       portfolioFormData: {
         CAGRChecked: true,
@@ -323,7 +323,7 @@ export default {
         min_max_drow_down: 20,
         max_max_drow_down: 50
       },
-      portfolioChecked: false,
+      auto_portfolio: false,
       strategiesList: [],
       tags: {
         'Legacy': 'Legacy Index',
@@ -333,20 +333,20 @@ export default {
         'Sector': 'Sector'
       },
       portfolioFirstLine: {
-        name: 'Cash',
+        strategy: 'Cash',
         url: 'cash',
         category: '',
         model: 'CASH',
-        weight: 100
+        percent: 100
       },
-      portfolioData: [
+      strategy_combination: [
         {},
         {
-          name: 'Dual Trend Model',
+          strategy: 'Dual Trend Model',
           url: 'dual_trend_model',
           category: 'Legacy Index',
           model: '',
-          weight: ''
+          percent: ''
         }
       ],
       rowUrl: null,
@@ -427,7 +427,7 @@ export default {
         { required: true, message: 'Select end date', trigger: 'blur' },
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
-        capital: [
+        cash: [
           { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'blur'},
           { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'change' }
         ]
@@ -579,7 +579,7 @@ export default {
         this.popUpMsgBox('Please review and correct form errors')
         return
       }
-      if(this.portfolioChecked) {
+      if(this.auto_portfolio) {
         const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
         if(!validateAutoPortfolioForm) {
           // 选择了 auto portfolio，但是表单验证没有通过
@@ -588,24 +588,23 @@ export default {
         }
       }
       // 验证百分比
-      const portfolioData = this.portfolioData.slice(1)
+      const strategy_combination = this.strategy_combination.slice(1)
       let totalWeight = 0
       let rowWeightValid = true
       let inAllowedList = true
-      for (const row of portfolioData) {
-        totalWeight += parseFloat(row.weight) || 0
-        row.weightValidErrMsg = _validatePercentageRule(_, row.weight)
+      for (const row of strategy_combination) {
+        totalWeight += parseFloat(row.percent) || 0
+        row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
-        const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.name.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
+        const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
         if(!isIn) inAllowedList = false
       }
-      totalWeight += this.portfolioFirstLine.weight
+      totalWeight += this.portfolioFirstLine.percent
       if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
       if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
-      if(portfolioData.length<=1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      return
+      if(strategy_combination.length<=1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
       this.processTips = `Tips: Running portfolio backtest...`
       const rowUrl = this.rowUrl
       const name = this.data.name
@@ -614,21 +613,19 @@ export default {
         if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       }
       this.percentage = 8
+      // 在这里要判断是否勾选了 auto portfolio
       const {
-        long_ratio, short_ratio, 
-        stop_loss, take_profit, time_in_market,
-        stop_loss_condition, take_profit_condition, time_in_market_condition,
-        commission,
-        signals
-      } = this.data
-      const saveData = {
+        CAGRChecked, min_CAGR, max_CAGR, 
+        winRateChecked, min_win_rate, max_win_rate,
+        YTD_returnChecked, min_YTD_return, max_YTD_return,
+        max_drow_downChecked, min_max_drow_down, max_max_drow_down
+      } = this.portfolioFormData
+      let saveData = {
         ...this.data,
-        long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
-        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
-        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
-        commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1)),
+        auto_portfolio: this.auto_portfolio
       }
+
       const removeProperties = (obj, properties) => {
           properties.forEach(property => {
             if (obj.hasOwnProperty(property)) {
@@ -680,6 +677,29 @@ export default {
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
       } while (true); // Keep polling indefinitely
+    },
+    async findPortfolio() {
+      if(!this.auto_portfolio) return
+      const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
+      if(!validateAutoPortfolioForm) {
+        // 选择了 auto portfolio，但是表单验证没有通过
+        this.popUpMsgBox('Auto Portfolio needs more info. Correct format, please')
+        return
+      }
+      const {
+        CAGRChecked, min_CAGR, max_CAGR, 
+        winRateChecked, min_win_rate, max_win_rate,
+        YTD_returnChecked, min_YTD_return, max_YTD_return,
+        max_drow_downChecked, min_max_drow_down, max_max_drow_down
+      } = this.portfolioFormData
+      const autoData = {
+        return_range: YTD_returnChecked ? `${min_YTD_return}-${max_YTD_return}` : '',
+        mdd_range: max_drow_downChecked ? `${min_max_drow_down}-${max_max_drow_down}` : '',
+        win_rate_range: winRateChecked ? `${min_win_rate}-${max_win_rate}` : '',
+        cagr_range: CAGRChecked ? `${min_CAGR}-${max_CAGR}` : '',
+      }
+      const res = await AutoPortfolio(autoData)
+      console.log('res', res)
     },
     async submitForm() {
       this.btnLoading = true
@@ -826,28 +846,28 @@ export default {
     addRow(row) {
       /*
       lishan 注释掉，因为不需要限制 totalWeight 为 100 了
-      let weight = null
+      let percent = null
       const totalWeight = this.validateTotalPercentage(row)
-      if(totalWeight > 0 && totalWeight < 100) {weight = 100 - totalWeight}
-      else {weight = ''}
-      this.portfolioData.push({ weight, indicator: '', indicator_url: '', weightValidErrMsg: '' });
+      if(totalWeight > 0 && totalWeight < 100) {percent = 100 - totalWeight}
+      else {percent = ''}
+      this.strategy_combination.push({ percent, indicator: '', indicator_url: '', weightValidErrMsg: '' });
       */
-     if(this.portfolioData.length == 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
-      this.portfolioData.push({ name: '', category: '', model: '', weight: '', weightValidErrMsg: '' });
+     if(this.strategy_combination.length == 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
+      this.strategy_combination.push({ strategy: '', category: '', model: '', percent: '', weightValidErrMsg: '' });
     },
     deleteRow(index) {
-      this.portfolioData.splice(index, 1)
+      this.strategy_combination.splice(index, 1)
     },
     validateWeightRule(row) {
-      console.log(row.weight)
-      row.weightValidErrMsg = _validatePercentageRule(_, row.weight)
-      // 每次都计算第一个 weight
+      console.log(row.percent)
+      row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
+      // 每次都计算第一个 percent
       let totalWeight = 0
-      for (const row of this.portfolioData) {
-        totalWeight += parseFloat(row.weight) || 0
+      for (const row of this.strategy_combination) {
+        totalWeight += parseFloat(row.percent) || 0
       }
-      const weight = 100 - totalWeight
-      if(weight >= 0) this.portfolioFirstLine.weight = weight
+      const percent = 100 - totalWeight
+      if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
     handleRowSelect(item, row) {
       row.model_name = item.model_name
@@ -856,7 +876,7 @@ export default {
     findMaxFreq() {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       let frequencyArray = []
-        frequencyArray = this.portfolioData.map(item => {
+        frequencyArray = this.strategy_combination.map(item => {
           const url = item.indicator_url
             return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
         })
@@ -1071,15 +1091,16 @@ export default {
 .custom-option {
   display: flex;
   align-items: center; /* 垂直居中对齐 */
-  justify-content: space-between;
     .type-label {
-      font-size: 12px;
+      font-size: 11px;
       color: #999999;
-      font-weight: 600;
+      font-weight: 500;
       margin-right: 10px;
       text-align: center;
+      margin-left: 5px;
     }
     .item-label {
+      font-size: 11px;
       font-weight: 500;
     }
 }

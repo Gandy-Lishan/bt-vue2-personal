@@ -672,11 +672,13 @@ export const CommonMethodsMixin = {
 				}
 			}
 
+			// this.$store.dispatch('chart/update_roclike_count','add')
+			// var study = CIQ.Studies.studyLibrary['ST ROCLike']
+			// study.panelHeight = CIQ.setPanelHeight()
+			// CIQ.Studies.studyLibrary['ST ROCLike'] = study
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
-			/** 指示Study归属的Symbol */
-			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-
+			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
@@ -730,6 +732,7 @@ export const CommonMethodsMixin = {
 					for (var p in CIQ.stxx.panels) {
 						if(CIQ.stxx.panels[p].name == key){
 							CIQ.stxx.panels[p].hidden = true;
+							//CIQ.store.dispatch('chart/update_roclike_count','remove')
 						}
 					}
 				} else {
@@ -1029,6 +1032,9 @@ export const CommonMethodsMixin = {
 						params: { data: JSON.stringify(row), usedFor: 'showBTResults' }
 					})
 					this.loading = false
+
+					CIQ.hideCover()
+					CIQ.nprogress.done()
 				})
 				await this.loopCalculateNewConditions(row)
 			}
@@ -1044,6 +1050,9 @@ export const CommonMethodsMixin = {
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
 				},()=>{})
 				that.loading = true
+
+				CIQ.hideCover()
+				CIQ.nprogress.done()
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
 			//await that.loopCalculateNewConditions(row)	

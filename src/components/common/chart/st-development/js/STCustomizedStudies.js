@@ -221,7 +221,6 @@ if (!CIQ.Studies) {
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
 		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
-		debugger
 		var quotes = sd.chart.scrubbed;
 
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
@@ -289,6 +288,7 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
 								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
 								(maxCloseArrOPR[i] - minCloseArrOPR[i])
@@ -319,12 +319,12 @@ if (!CIQ.Studies) {
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
-
+							
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
 								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
 								(maxCloseArrRR[i] - minCloseArrRR[i])
 							).toFixed(4))
-							
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
 						return NaN
@@ -380,6 +380,7 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
 								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
 								maxCloseArrDD[i]
@@ -409,6 +410,7 @@ if (!CIQ.Studies) {
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
+							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
 								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
 								minCloseArrDU[i]
@@ -477,29 +479,6 @@ if (!CIQ.Studies) {
 		}
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
-	// CIQ.Studies.calculateSymbolRatio = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-
-	// 	var field = "Close"
-	// 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
-	// 	var subField = field
-
-	// 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-	// 	var symbol2Field = comparisonSymbol.url
-	// 	if(!comparisonSymbol.url){
-	// 		symbol2Field = field
-	// 		console.log('SymbolRatio is only allowed in dual symbol')
-	// 	}
-		
-	// 	// 默认study模板
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		var quote = quotes[i];
-	// 		var RatioValue = getPropertyByString(quote, field, subField) / getPropertyByString(quote, symbol2Field, subField);
-	// 		quote["Result " + sd.name] = RatioValue
-	// 	}
-	// 	console.log(CIQ.stxx.chart.dataSet)
-	// 	// sd.outputMap["Result " + sd.name] = "Symbol Ratios";
-	// };
 	CIQ.Studies.calculateSTMACDGap = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var inputs = sd.inputs,
@@ -1005,66 +984,6 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = quotes[i]["_MA " + sd.name] / quotes[i]["_MA2 " + sd.name];
 		}
 	};
-	// CIQ.Studies.calculatePercentageAboveNDayLow = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-	// 	if (quotes.length < sd.days + 1) {
-	// 		sd.error = true;
-	// 		return;
-	// 	}
-	// 	var field = sd.inputs.Field;
-	// 	var period = sd.inputs.Period;
-
-	// 	if (!field || field == "field") field = "Close";
-
-	// 	let belowNDayStateArr = []
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i == 0){
-	// 			belowNDayStateArr.push(null)
-	// 			continue
-	// 		}
-	// 		if(quotes[i][field] < quotes[i-1][field]) belowNDayStateArr.push(1)
-	// 		else belowNDayStateArr.push(0)
-	// 	}
-
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i>=period){
-	// 			if (!quotes[i]) continue;
-	// 			const sliceStart = i+1 - period
-	// 			const sliceEnd = i+1
-	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
-	// 		}
-	// 	}
-	// };
-	// CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
-	// 	var quotes = sd.chart.dataSet;
-	// 	if (quotes.length < sd.days + 1) {
-	// 		sd.error = true;
-	// 		return;
-	// 	}
-	// 	var field = sd.inputs.Field;
-	// 	var period = sd.inputs.Period;
-
-	// 	if (!field || field == "field") field = "Close";
-
-	// 	let belowNDayStateArr = []
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i == 0){
-	// 			belowNDayStateArr.push(null)
-	// 			continue
-	// 		}
-	// 		if(quotes[i][field] > quotes[i-1][field]) belowNDayStateArr.push(1)
-	// 		else belowNDayStateArr.push(0)
-	// 	}
-
-	// 	for (var i = sd.startFrom; i < quotes.length; i++) {
-	// 		if(i>=period){
-	// 			if (!quotes[i]) continue;
-	// 			const sliceStart = i+1 - period
-	// 			const sliceEnd = i+1
-	// 			quotes[i]["Result " + sd.name] = currentWindowPercentageResult(belowNDayStateArr.slice(sliceStart, sliceEnd))
-	// 		}
-	// 	}
-	// };
 	CIQ.Studies.calculatePercentageBelowNDayHigh = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
@@ -1408,11 +1327,13 @@ if (!CIQ.Studies) {
 		// 处理range rank, drawndown以及新加的ConsecutiveDays的计算时，
 		// 如果当前bar之前的交易日个数小于周期，按剩余天数算
 		for (let i = 0; i < dataSeries.length; i++) {
+
 			const sliceStart = i - period + add_bar
 			const sliceEnd = i + add_bar
-			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd));
+			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd).filter(item=>!isNaN(item)));
 			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
-			dataArr.push(Number(tmpData.toFixed(3)));
+			//dataArr.push(Number(tmpData.toFixed(3)));
+			dataArr.push(Number(tmpData));
 		}
 
 		return dataArr;

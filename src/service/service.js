@@ -1188,4 +1188,60 @@ export function addStrategyFavorites(data) {
 export function moveStrategyFavorites(url) {
 	return axios.delete(`/dev/portfolio/favorite_strategy?model_url=${url}`)
 }
-/* Strategy Page 接口 END*/
+/* Strategy Page 接口 END */
+/* Portfolio Page 接口 STRAT */
+export function getPortfolioList() {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(`/dev/portfolio/get_portfolio_records/`, {
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function RunPortfolio(data) {
+	const url = `/dev/portfolio/run_portfolio`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function AutoPortfolio(data) {
+	const url = `/dev/portfolio/auto_portfolio`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* Portfolio Page 接口 END */

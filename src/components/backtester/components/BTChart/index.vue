@@ -27,6 +27,7 @@ import { LocalStorageUtil } from '@/utils'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
 import { LoadingOverlayChart } from "@/components/common"
+import { seeParams} from '@/service/service'
 
 export default {
   name: 'BTHeader',

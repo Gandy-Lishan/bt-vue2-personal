@@ -21,10 +21,9 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
-
+/** 无需处理dual symbol */
 let __js_advanced_studies_awesomeOscillator_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -110,4 +109,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_awesomeOscillator_(typeof window !== "undefined" ? window : global);
+epxort {__js_advanced_studies_awesomeOscillator_}

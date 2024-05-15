@@ -15,16 +15,13 @@
 		<div class="strategiesTable">
 			<el-table
 				ref="Table"
-				class="ScannerBTTable"
-				header-align="center"
 				:data="paginatedData"
 				empty-text="No data"
 				v-loading="loading"
 				@sort-change="onSortChange"
 				size="small"
 				style="width: 100%; height: 100%; margin: 0 auto"
-			:row-class-name="tableRowClassName"
-				stripe
+				:row-class-name="tableRowClassName"
 			>
 				<el-table-column prop="isRight" width="50px">
 					<template slot="header" slot-scope="scope">
@@ -53,15 +50,17 @@
 				</el-table-column>
 				<template v-for="l in tableCol">
 					<el-table-column
-						align="center"
 						:label="l.label"
 						:prop="l.value"
 						:key="l.key"
 						show-overflow-tooltip
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						:width="l.width"
 						v-if="
 							[
 								'model_name',
+								'type',
 								'current_state',
 								'date',
 								'update_frequency',
@@ -71,6 +70,7 @@
 						:sortable="
 							[
 								'model_name',
+								'type',
 								'current_state',
 								'date',
 								'update_frequency',
@@ -98,7 +98,6 @@
 						</template>
 					</el-table-column>
 					<el-table-column
-						align="center"
 						:key="l.key"
 						show-overflow-tooltip
 						:width="l.width"
@@ -197,7 +196,15 @@ export default {
 				{
 					label: 'Model Name',
 					value: 'model_name',
-					key: 'model_name'
+					key: 'model_name',
+					minWidth: '200px',
+					maxWidth: '300px'
+				},
+				{
+					label: 'Time Frame',
+					value: 'type',
+					key: 'type',
+					width: '150px'
 				},
 				{
 					label: 'Current Signal: (e.g., Long, Sell, etc)',
@@ -207,7 +214,7 @@ export default {
 				{
 					label: 'Last Signal Date: (last change in Signal)',
 					value: 'date',
-					key: 'date',
+					key: 'date'
 				},
 				{
 					label: 'Model Update Frequency',
@@ -215,7 +222,7 @@ export default {
 					key: 'update_frequency',
 				},
 				{
-					label: 'YTD until 04/30/23 Return(%)',
+					label: 'YTD until 04/30/24 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 				},
@@ -382,6 +389,7 @@ export default {
 					favorite: item['favorite']
 				}
 			}
+			LocalStorageUtil.set('urlToNameMap', urlToNameMap)
 			this.$emit('getUrlToNameMap', urlToNameMap)
 			return urlToNameMap
 		},
@@ -394,18 +402,18 @@ export default {
 				order: sortingOrder
 			}
 			// 数字字符串转数字类型排序
-			if (['return'].indexOf(colName) !== -1) {
+			if (['YTD_return'].indexOf(colName) !== -1) {
 				if (sortingOrder == 'ascending') {
 					this.immutableTableData.sort((a, b) => {
 						b[colName] =
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _b - _a
 					})
@@ -415,11 +423,11 @@ export default {
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _a - _b
 					})
@@ -454,7 +462,7 @@ export default {
 			}
 			// 字符串类型排序
 			if (
-				['update_frequency', 'current_state', 'model_name'].indexOf(colName) !==
+				['update_frequency', 'current_state', 'model_name', 'type'].indexOf(colName) !==
 				-1
 			) {
 				if (sortingOrder == 'ascending') {

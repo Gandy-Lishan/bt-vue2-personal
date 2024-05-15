@@ -825,15 +825,15 @@
     },
     {
         "symbol": "RSP",
-        "name": "Invesco S&P 500 Equal Weight(RSP)"
+        "name": "Invesco S&P 500 Equal Weight ETF (RSP)"
     },
     {
         "symbol": "BIL",
-        "name": "SPDR Bloomberg 1-3 Month T-Bill(BIL)"
+        "name": "SPDR Bloomberg 1-3 Month T-Bill ETF (BIL)"
     },
     {
         "symbol": "SPXT",
-        "name": "S&P 500 Technical Index(SPXT)"
+        "name": "S&P 500 Technical Index (SPXT)"
     },
     {
         "symbol": "USGG3M",
@@ -890,5 +890,9 @@
     {
         "symbol": "IWN",
         "name": "Russell 2000 Value ETF (IWN)"
+    },
+    {
+        "symbol": "GOLDLNPM",
+        "name": "GOLDLNPM"
     }
 ]

@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_balanceOfPower_ = (_exports) => {
@@ -39,16 +39,27 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateBalanceOfPower = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
-			quote["_Ratio " + sd.name] = quote.Close - quote.Open;
-			if (quote.High - quote.Low !== 0)
+			var quoteClose = getPropertyByString(quote,field,'Close')
+			var quoteOpen = getPropertyByString(quote,field,'Open')
+			var quoteHigh = getPropertyByString(quote,field,'High')
+			var quoteLow = getPropertyByString(quote,field,'Low')
+			quote["_Ratio " + sd.name] = quoteClose - quoteOpen;
+			if (quoteHigh - quoteLow !== 0)
 				// avoid division by zero
-				quote["_Ratio " + sd.name] /= quote.High - quote.Low;
+				quote["_Ratio " + sd.name] /= quoteHigh - quoteLow;
 		}
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -73,4 +84,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_balanceOfPower_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_balanceOfPower_}
