@@ -48,6 +48,8 @@ const state = {
 		percentage: 0,
 		progressText: 'Loading...'
 	},
+	// rocLikeCount: 0,
+	// studiesCount: 0,
 
 	// 以下管理user's own indicator chartiq 状态
 	miFormCategories: 'Indicator Spread',
@@ -62,6 +64,12 @@ const state = {
 }
 
 const mutations = {
+	// updateStudiesCount(state, val){
+	// 	state.studiesCount = val
+	// },
+	// updateRocLikeCount(state, val){
+	// 	state.rocLikeCount = val
+	// },
 	/**
 	 * 更新user's own indicator Weighted列表状态
 	 */
@@ -247,6 +255,17 @@ const mutations = {
 }
 
 const actions = {
+	// update_roclike_count({ commit }, val) {
+	// 	return new Promise(resolve => {
+	// 		if(val == `add`){
+	// 			commit(`updateRocLikeCount`,state.rocLikeCount+1)
+	// 		}
+	// 		if(val == `remove`){
+	// 			commit(`updateRocLikeCount`,state.rocLikeCount-1)
+	// 		}
+	// 		resolve()
+	// 	})
+	// },
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {
