@@ -467,6 +467,7 @@ export default {
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
+        { value: 'SharpeRatio', label: 'Sharpe Ratio'},
       ],
       options: [
         {
