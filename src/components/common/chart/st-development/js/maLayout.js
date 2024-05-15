@@ -20,7 +20,8 @@ let __st_js_maLayout_ = (_exports) => {
 
         // 移除当前位置的indicator信息
         var TechLayoutListIndex = activatedTechLayoutList.findIndex(
-            (item) => item.criteria == criteria && item.index == index
+            // 防止没法加载多个builtin tech from chart
+            (item) => (criteria != null && index != null) && item.criteria == criteria && item.index == index
         )
         if (TechLayoutListIndex != -1) {
             activatedTechLayoutList.splice(TechLayoutListIndex, 1)

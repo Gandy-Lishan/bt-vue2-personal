@@ -468,6 +468,7 @@ export default {
                 CIQ.stxx,
                 CIQ.stxx.layout.studies[studyInstanceName]
               )
+              //this.$store.dispatch('chart/update_roclike_count','remove')
             }
           }
         }
@@ -719,10 +720,12 @@ export default {
           [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
 
+        // this.$store.dispatch('chart/update_roclike_count','add')
+        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
+        // study.panelHeight = CIQ.setPanelHeight()
+        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
-        /** 指示Study归属的Symbol */
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-
+        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           Field: field,

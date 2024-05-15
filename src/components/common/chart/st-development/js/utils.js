@@ -65,15 +65,18 @@ let __st_js_utils_ = (_exports) => {
 
     CIQ.setPanelHeight = function (indicatorList) {
         if(!CIQ.chartBox) return
-
-        var indicatorHeight = indicatorList.length <= 1
+        // 存在indicatorList则设置其长度，因为它可能需要传入空数组以重置高度
+        //const len = indicatorList?indicatorList.length:CIQ.store.getters.getStudiesCount + CIQ.store.getters.getRocLikeCount
+        const len = indicatorList.length
+        var indicatorHeight = len <= 1
             ? 200
-            : indicatorList.length <= 2
+            : len <= 2
                 ? 100
                 : 80
-        var chartPanelFactor = indicatorList.length == 0 ? 75 / 100 : 55 / 100
-        var height = chartPanelFactor * window.innerHeight + indicatorList.length * (indicatorHeight - 20)
+        var chartPanelFactor = len == 0 ? 75 / 100 : 55 / 100
+        var height = chartPanelFactor * window.innerHeight + len * (indicatorHeight - 20)
         CIQ.chartBox.style.height = height.toString() + 'px'
+        console.log('CIQ.chartBox.style.height',CIQ.chartBox.style.height,CIQ.store.getters.getStudiesCount,CIQ.store.getters.getRocLikeCount)
         return indicatorHeight
     }
 

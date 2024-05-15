@@ -755,7 +755,7 @@ export default {
 			}
 
 			const riskValArr = data.risk_control.split('/');
-			debugger
+			//debugger
 			_this.isRiskControl = !riskValArr.every(item => item === '');	// riskcontrol tag
 
 		},
