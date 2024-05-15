@@ -13,7 +13,7 @@
 						<div class="setupCenter">
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item prop="strategy" inline="true" class="strategyBox" v-if="is_admin">
+                  <el-form-item prop="strategy" inline="true" class="strategyBox">
                     <template slot="label">
                       <label>
                         Backtest Type
