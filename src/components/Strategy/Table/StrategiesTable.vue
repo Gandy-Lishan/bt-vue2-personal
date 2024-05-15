@@ -21,8 +21,7 @@
 				@sort-change="onSortChange"
 				size="small"
 				style="width: 100%; height: 100%; margin: 0 auto"
-			:row-class-name="tableRowClassName"
-				stripe
+				:row-class-name="tableRowClassName"
 			>
 				<el-table-column prop="isRight" width="50px">
 					<template slot="header" slot-scope="scope">
@@ -390,6 +389,7 @@ export default {
 					favorite: item['favorite']
 				}
 			}
+			LocalStorageUtil.set('urlToNameMap', urlToNameMap)
 			this.$emit('getUrlToNameMap', urlToNameMap)
 			return urlToNameMap
 		},
@@ -409,11 +409,11 @@ export default {
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _b - _a
 					})
@@ -423,11 +423,11 @@ export default {
 							typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
 						a[colName] =
 							typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _b = b[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre, cur) => {
-							return Number(pre) + Number(cur)
+						let _a = a[colName].match(/-?\d+(\.\d+)?/g).reduce((pre, cur) => {
+							return parseFloat(pre) + parseFloat(cur)
 						})
 						return _a - _b
 					})

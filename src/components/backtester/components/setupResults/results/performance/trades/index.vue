@@ -84,12 +84,9 @@
             >
                 <template slot-scope="scope">
                     <span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
-                    <span v-else-if="scope.row.TradeReturn >= 0"
-                        >{{ scope.row.TradeReturn }}%</span
-                    >
-                    <span v-else style="color: #dd3a13"
-                        >{{ scope.row.TradeReturn }}%</span
-                    >
+                    <span v-else-if="scope.row.TradeReturn > 0">{{ scope.row.TradeReturn }}%</span>
+                    <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13">{{ scope.row.TradeReturn }}%</span>
+                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -100,12 +97,13 @@
             >
                 <template slot-scope="scope">
                     <span v-if="scope.row.TotalReturn == 'none'">{{ '' }}</span>
-                    <span v-else-if="scope.row.TotalReturn >= 0"
+                    <span v-else-if="scope.row.TotalReturn > 0"
                         >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
                     >
-                    <span v-else style="color: #dd3a13"
+                    <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13"
                         >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
                     >
+                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -225,6 +223,7 @@ export default {
                     });
                 }
                 this.processedTradesData = mergedData
+                console.log('mergedData', mergedData)
                 this.queryInfo.total = mergedData.length
                 this.totalTradesNumber = mergedData.length
 			},

@@ -514,7 +514,6 @@ export default {
 	watch: {
 		isRiskControl: {
 			handler(val) {
-				//debugger
 				this.showRiskControlOptions(val)
 			},
 			deep: true,
@@ -854,8 +853,8 @@ export default {
 					key: `${this.criteriaNum}_0`,
 					relation: this.relation
 				}
-				this.setFrequencyArray(freqObj)
 				try {
+					this.setFrequencyArray(freqObj)
 					for (let index = 1; index < this.indicatorUrlArr.length; index++) {
 					this.$refs.indiChild[index]?.resetIndicator()
 				}
@@ -919,8 +918,8 @@ export default {
 						key: `${this.criteriaNum}_0`,
 						relation: 0
 					}
-					this.setFrequencyArray(freqObj)
 					try {
+							this.setFrequencyArray(freqObj)
 							for (let index = 0; index < this.indicatorUrlArr.length; index++) {
 								this.$refs.indiChild[index]?.resetIndicator()
 							}
