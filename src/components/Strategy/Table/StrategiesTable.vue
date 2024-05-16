@@ -566,7 +566,7 @@ export default {
 			if(code == 400) {this.popUpMsgBox('Failed to move favorites')}
 		},
 		tableRowClassName({row, rowIndex}) {
-				if(row.date === timestampToTime(new Date())) return 'highlighted'
+				if(row.current_day) return 'highlighted'
 				return ''
 		}
 	}
