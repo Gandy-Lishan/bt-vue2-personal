@@ -657,9 +657,9 @@ input[type="time"] {
 .CPM-trades .darken-row {
   background-color: #f9f9f9;
 }
-.el-table tr.highlighted{
+/* .el-table tr.highlighted{
   pointer-events: none;
-}
+} */
 .CPM-summary.el-table th.el-table__cell>.cell {
   text-transform: uppercase;
   color: #333;
