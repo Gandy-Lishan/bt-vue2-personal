@@ -89,11 +89,12 @@
 
 <script>
 import { getStrategySummaryList } from '@/service/service'
-import { timestampToTime } from "@/utils"
+import { LocalStorageUtil, timestampToTime } from "@/utils"
 export default {
   name: 'SummaryTable',
   props: {
-    urlToNameMap: Object
+    urlToNameMap: Object,
+		tag: String
   },
   data() {
     return {
@@ -201,7 +202,8 @@ export default {
           for (const item of data) {
             item.selection = false;
             item.date = timestampToTime(item.date)
-              const {model_name, updated, category, favorite} = this.urlToNameMap[item.model]
+						const urlToNameMap = Object.keys(this.urlToNameMap).length > 0 ? this.urlToNameMap : LocalStorageUtil.get('urlToNameMap')
+              const {model_name, updated, category, favorite} = urlToNameMap[item.model]
               if (model_name !== undefined) {
                   item['model_name'] = model_name;
                   item['updated'] = updated
@@ -227,6 +229,7 @@ export default {
         this.immutableTableData = data
       } finally {
         this.loading = false
+				this.highlightedTag(this.tag)
       }
     },
     onSortChange(column){

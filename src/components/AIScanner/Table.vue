@@ -58,6 +58,9 @@
 						<el-form-item label="STD. DEV">
 							<span>{{ props.row['StdDev'] }}</span>
 						</el-form-item>
+						<el-form-item label="SHARPE RATIO" v-if="props.row['SharpeRatio'] !== null">
+							<span>{{ props.row['SharpeRatio'] }}</span>
+						</el-form-item>
 					</el-form>
 				</template>
 			</el-table-column>
@@ -493,7 +496,7 @@ export default {
 			console.log('this.data.content', this.data.content)
 			const data = this.data.content
 			const processedData = data.map(item => {
-				return {
+				let ele = {
 					'Date': item.Date,
 					'Symbol': item.Symbol,
 					'Close': item.Close,
@@ -516,6 +519,8 @@ export default {
 					'AVERAGE RETURN %': item.AvgReturn,
 					'STD. DEV': item.StdDev
 				}
+				if (item['SharpeRatio'] !== null) ele['SHARPE RATIO'] = item.SharpeRatio
+				return ele
 			})
 			const ws = XLSX.utils.json_to_sheet(processedData);
       const wb = XLSX.utils.book_new();
