@@ -60,6 +60,7 @@
 							@select="handleSentimentSelect"
               @clear="clearSentimentSelect"
 							highlight-first-item
+              :disabled="!isBTChartReady"
 						></el-autocomplete>
             <!-- <searchBar
               :id_name="'autocomplete-' + criteria + '-' + panelIndex"
@@ -95,6 +96,7 @@
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
               @clear="clearTechnicalSelect"
+              :disabled="!isBTChartReady"
 						></el-autocomplete>
             </div>
         </el-form-item>
@@ -151,6 +153,7 @@
                 placeholder="Select Users' Own Indicator File."
                 :fetch-suggestions="indicatorUsersSearch"
                 @select="handleUsersOwnIndicatorSelect"
+              :disabled="!isBTChartReady"
               >
               </el-autocomplete>
             </div>
