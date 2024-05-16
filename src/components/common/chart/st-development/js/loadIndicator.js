@@ -121,17 +121,17 @@
          //  load saved indicator layouts from stxx.layout
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
-            for(var i in stx.layout.studies){
-                /** 跳过非参与回测的indicator */
-                if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-                savedTechSD.push({
-                    type: stx.layout.studies[i].type,
-                    inputs: stx.layout.studies[i].inputs,
-                    outputs: stx.layout.studies[i].outputs,
-                    parameters: stx.layout.studies[i].parameters,
-                    panel: stx.layout.studies[i].panel
-                })
-            }
+            // for(var i in stx.layout.studies){
+            //     /** 跳过非参与回测的indicator */
+            //     if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+            //     savedTechSD.push({
+            //         type: stx.layout.studies[i].type,
+            //         inputs: stx.layout.studies[i].inputs,
+            //         outputs: stx.layout.studies[i].outputs,
+            //         parameters: stx.layout.studies[i].parameters,
+            //         panel: stx.layout.studies[i].panel
+            //     })
+            // }
          }else{
             /** 如果type为loadFromBakctest或者outputSignalsResult的话,
              * vuex有techSD则存入savedTechSD */

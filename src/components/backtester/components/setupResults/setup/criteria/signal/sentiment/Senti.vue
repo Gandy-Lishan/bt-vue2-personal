@@ -760,7 +760,7 @@ export default {
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
 			}else{
-        display = CIQ.findSentiIndicator(null,field)?.chart_name
+        display = CIQ.findSentiIndicator(null,field)?CIQ.findSentiIndicator(null,field).chart_name:''
       }
       return display
     },

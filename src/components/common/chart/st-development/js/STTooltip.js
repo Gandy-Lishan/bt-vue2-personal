@@ -491,19 +491,33 @@ if (!CIQ.Marker) {
              if (showStudies) {
                  for (var study in this.layout.studies) {
                      var sd = this.layout.studies[study];
-                     //const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-                     //const symbolLabel = isSymbol2?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                     const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
+                     const symbolLabel = isSymbol2?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
 
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
-                     if(sd.type == 'ST MA'){
+                     if(sd.type == 'ST MA'){    // stma不需要symbol信息，有独立显示
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                 let name = rocDisplayName(sd.inputs.Field) + ' MA' + sd.inputs.Period
+                                let symbol = sd.inputs.Field == 'field'?`(${symbolLabel})`:''
                                  fields.push({
                                      member: output,
-                                     //display: `${output}(${symbolLabel})`,
-                                     display: name,
+                                     display: `${name}${symbol}`,
+                                    //  display: name,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
+                        }
+                     }
+                     if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                 fields.push({
+                                     member: output,
+                                     display: output,
                                      panel: panel,
                                      yAxis: yAxis
                                  });
@@ -551,7 +565,8 @@ if (!CIQ.Marker) {
                             else if (output && !dupMap[output]) {
                                 fields.push({
                                     member: output,
-                                    display: output,
+                                    //display: output,
+                                    display: `${output}(${symbolLabel})`,
                                     panel: panel,
                                     yAxis: yAxis
                                 });
@@ -815,7 +830,7 @@ if (!CIQ.Marker) {
                 }else if(CIQ.isUserIndicator(field)){
                     display = field.split(/HASH/)[0]
                 }else{
-                    display = CIQ.findSentiIndicator(null,field)?.chart_name
+                    display = CIQ.findSentiIndicator(null,field)?CIQ.findSentiIndicator(null,field).chart_name:''
                 }
                 return display
             }
