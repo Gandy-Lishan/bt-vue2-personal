@@ -8997,24 +8997,8 @@ if (!CIQ.Studies) {
 					// 	const condition = `${conditionMap[sd.inputs.condition]}(${sd.inputs.period}-Day)`
 					// 	const display = `(${symbolLabel})${name} ${condition}`
 					// 	newChild.find("cq-label").html(display);
-	
-					let _obj = CIQ.findSentiIndicator(null,sd.type)
-					let _obj2 = CIQ.findBuiltinTechIndicator(null,sd.type)
-					
-					if(_obj){		
-						newChild.find("cq-label").html(_obj.chart_name)	
-						
-					}else if(_obj2){	
-						newChild.find("cq-label").html(sd.inputs.display);
 
-						// hide edit icon if it's a techinical study
-						if(newChild.find(".ciq-edit").length>0){
-							//newChild.find(".ciq-edit")[0].style.visibility = "hidden";
-						}	
-					}else{
-						//console.log('other studies')
-						newChild.find("cq-label").html(sd.inputs.display);
-					}
+					newChild.find("cq-label").html(sd.inputs.display)	
 					
 
 					var close = newChild.find(".ciq-close");
