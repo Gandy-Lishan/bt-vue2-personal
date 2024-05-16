@@ -377,9 +377,12 @@ export default {
         // var study = CIQ.Studies.studyLibrary['ST ROCLike']
         // study.panelHeight = CIQ.setPanelHeight()
         // CIQ.Studies.studyLibrary['ST ROCLike'] = study
+
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
+        const condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
+          //display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
+          display: `(${symbolLabel})${field} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod
