@@ -342,8 +342,9 @@
      return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech
-             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)
+             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null) 
              if(indicatorObj){
+                    let techSymbolName = indicatorObj.value?indicatorObj.value:indicatorObj.label
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
@@ -355,14 +356,14 @@
                                 const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
-                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`,
+                                        display: `(${symbolLabel})${techSymbolName}`,
                                         Type: CIQ.store.state.chart.activatedMALayout[j].type,
                                         Field: CIQ.store.state.chart.activatedMALayout[j].field,
                                         Period: CIQ.store.state.chart.activatedMALayout[j].period,
                                     }
                                     : {
                                         // 目前来说maLikeTech就一个ma
-                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                        display: `(${symbolLabel})${techSymbolName}`
                                     }
                                 const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, j)
                                 const outputs = indicatorList[i] == 'ma' ? { MA: ma_color } : null
@@ -381,6 +382,7 @@
                                 var study = CIQ.Studies.studyLibrary[indicatorList[i]]
                                 study.panelHeight=indicatorHeight
                                 CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                                CIQ.store.state.chart.savedTechSD[j].inputs.display = techSymbolName //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
                         }
@@ -413,7 +415,7 @@
                                         const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria;
                                         const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
                                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                            display:`(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                            display:`(${symbolLabel})${techSymbolName}`
                                         },null,{
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                                             isComparison: symbolType=='symbol2',
@@ -492,17 +494,17 @@
                  
                  CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
                  var count = 0
-                 
+                /********************lishan modify start*************************/
+                var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                /********************lishan modify end*************************/
                  for(var j in CIQ.store.state.chart.savedTechSD){
                      if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                          count++
+                         CIQ.store.state.chart.savedTechSD[j].inputs.display = indicatorName //savedTechSD更新display，为了兼容display有问题的回测并修改它
                          var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                      }
                  }
                  if(count==0){
-                    /********************lishan modify start*************************/
-                    var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
-                    /********************lishan modify end*************************/
                      var sd = CIQ.Studies.addStudy(stx,indicatorList[i],{display:indicatorName})   
                  }
  
@@ -586,15 +588,16 @@
                          
                          CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
                          var count = 0
-                         
+                         let sentiName = CIQ.findSentiIndicator(null,sentiUrlList[i])?.chart_name
                          for(var j in CIQ.store.state.chart.savedTechSD){
                              if(sentiUrlList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                                  count++
+                                 CIQ.store.state.chart.savedTechSD[j].inputs.display = sentiName //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                  var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                              }
                          }
                          if(count==0){
-                             var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i])    
+                             var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i],{display:sentiName})    
                          }
          
                          var newExtremeValue = {indicator:sentiUrlList[i],extremeOptimism:sd.parameters.studyOverBoughtValue,extremePessimism:sd.parameters.studyOverSoldValue}

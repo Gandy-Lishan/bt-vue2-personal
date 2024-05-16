@@ -250,6 +250,7 @@ if (!CIQ.Studies) {
 					field in row &&  getPropertyByString(row,field,subField)!=null
 				)
 				quotes = quotes.slice(indexROC) 
+				debugger
 				resArr = quotes.map((row, i) => {
 					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
 					if(field in row &&  getPropertyByString(row,field,subField)!=null){

@@ -679,11 +679,16 @@ export const CommonMethodsMixin = {
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
+			const name = indicator_url_with_ma
+                  ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
+                  : this.rocDisplayName(fieldName || indicator_url)
+			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Day)`
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
+					//display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
+					display: `(${symbolLabel})${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -700,12 +705,13 @@ export const CommonMethodsMixin = {
 		},
 		// 处理用户自定义indicator的显示名
 		rocDisplayName(field) {
-			let display = field
+			let display
 			if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
-			}
-			if(CIQ.isUserIndicator(field)){
+			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
+			}else{
+			  display = CIQ.findSentiIndicator(null,field)?.chart_name
 			}
 			return display
 		},
