@@ -349,6 +349,9 @@ export default {
 						obj.date = timestampToTime(obj.date)
 					}
 					this.tableData = data
+					this.tableData.sort((a, b) => {
+						return new Date(b['date']) - new Date(a['date'])
+					})
 					this.total = data.length
 				}
 			} catch (error) {
