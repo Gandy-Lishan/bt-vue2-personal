@@ -45,11 +45,11 @@ if (CIQ.ChartEngine) {
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			var RatioValue = getPropertyByString(d, field, subField) / getPropertyByString(d, symbol2Field, subField);
-			d.SRatio = RatioValue;
+			d.Ratio = RatioValue;
 			var symbolObj = d[symbol2Field]
 			if (symbolObj && typeof symbolObj == "object") {
 				
-				symbolObj.SRatio = RatioValue;
+				symbolObj.Ratio = RatioValue;
 			}
 		}
 	};

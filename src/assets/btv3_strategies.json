@@ -2931,10 +2931,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(QQQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -2944,15 +2944,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -2962,7 +2962,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "Deviation From Trend Between Two Moving Averages",
@@ -2985,12 +2985,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(QQQ)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)"
+            "display": "(QQQ)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -3002,17 +3002,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(QQQ)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-2"
+            "display": "(QQQ)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -3024,17 +3024,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-3"
+            "display": "(SPY)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -3046,17 +3046,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-4"
+            "display": "(SPY)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -3068,7 +3068,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
         }
       ],
       "activatedMA": [
@@ -3372,10 +3372,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(QQQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -3385,15 +3385,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -3403,17 +3403,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(QQQ)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)"
+            "display": "(QQQ)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -3425,17 +3425,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(QQQ)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-2"
+            "display": "(QQQ)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -3447,7 +3447,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
         },
         {
           "type": "fundamentals_score",
@@ -3472,12 +3472,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-3"
+            "display": "(SPY)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -3489,17 +3489,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "10",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-4"
+            "display": "(SPY)MA Ratio(Ratio, 10)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -3511,7 +3511,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,10,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
         }
       ],
       "activatedMA": [
@@ -4752,10 +4752,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -4765,15 +4765,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(Gold)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -4783,7 +4783,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "Symbol Close",
@@ -4824,12 +4824,12 @@
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "1260",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)"
+            "display": "(SPY)MA Ratio(Ratio, 1260)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -4841,17 +4841,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "1260",
             "overlay": false,
-            "display": "(SPY)MA Ratio(SRatio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-2"
+            "display": "(SPY)MA Ratio(Ratio, 1260)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -4863,17 +4863,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "1260",
             "overlay": false,
-            "display": "(Gold)MA Ratio(SRatio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-3"
+            "display": "(Gold)MA Ratio(Ratio, 1260)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -4885,17 +4885,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "MA",
             "period": "1260",
             "overlay": false,
-            "display": "(Gold)MA Ratio(SRatio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-4"
+            "display": "(Gold)MA Ratio(Ratio, 1260)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -4907,7 +4907,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,MA,1260,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-4"
         },
         {
           "type": "ST ROCLike",
@@ -5215,10 +5215,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWF)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5228,15 +5228,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWD)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5246,17 +5246,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "97",
             "overlay": false,
-            "display": "(IWF)Range Rank(SRatio, 97)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,97,n)"
+            "display": "(IWF)Range Rank(Ratio, 97)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,97,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5268,17 +5268,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,97,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,97,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWF)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(IWF)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5290,17 +5290,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWD)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(IWD)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5312,17 +5312,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWD)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(IWD)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -5334,7 +5334,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         }
       ],
       "activatedMA": [
@@ -5529,10 +5529,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5542,15 +5542,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWS)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5560,17 +5560,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWP)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(IWP)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5582,17 +5582,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWP)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(IWP)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5604,17 +5604,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWS)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(IWS)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -5626,17 +5626,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWS)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(IWS)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -5648,7 +5648,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -5843,10 +5843,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5856,15 +5856,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWN)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5874,17 +5874,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWP)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(IWP)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -5896,17 +5896,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWP)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(IWP)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -5918,17 +5918,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWN)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(IWN)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -5940,17 +5940,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(IWN)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(IWN)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -5962,7 +5962,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -6157,10 +6157,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWB)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6170,15 +6170,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IWM)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6188,17 +6188,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWB)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(IWB)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6210,17 +6210,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWB)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(IWB)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6232,17 +6232,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWM)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(IWM)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -6254,17 +6254,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IWM)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(IWM)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -6276,7 +6276,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -6471,10 +6471,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(RSP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6484,15 +6484,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6502,17 +6502,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(RSP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(RSP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6524,17 +6524,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(RSP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(RSP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6546,17 +6546,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -6568,17 +6568,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -6590,7 +6590,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -6785,10 +6785,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(QQQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6798,15 +6798,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6816,17 +6816,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(QQQ)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(QQQ)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -6838,17 +6838,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(QQQ)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(QQQ)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -6860,17 +6860,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -6882,17 +6882,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -6904,7 +6904,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -7099,10 +7099,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(ONEQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7112,15 +7112,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7130,17 +7130,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(ONEQ)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(ONEQ)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7152,17 +7152,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(ONEQ)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(ONEQ)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7174,17 +7174,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7196,17 +7196,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7218,7 +7218,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         }
       ],
       "activatedMA": [
@@ -7413,10 +7413,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLK)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7426,15 +7426,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7444,17 +7444,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLK)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(XLK)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7466,17 +7466,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLK)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(XLK)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7488,17 +7488,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -7510,17 +7510,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -7532,7 +7532,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -7727,10 +7727,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7740,15 +7740,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7758,17 +7758,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(XLY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -7780,17 +7780,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(XLY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -7802,17 +7802,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -7824,17 +7824,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -7846,7 +7846,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -8036,10 +8036,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLC)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8049,15 +8049,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8067,17 +8067,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLC)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(XLC)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8089,17 +8089,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLC)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(XLC)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8111,17 +8111,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -8133,17 +8133,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -8155,7 +8155,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -8350,10 +8350,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8363,15 +8363,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8381,17 +8381,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(XLP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8403,17 +8403,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(XLP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8425,17 +8425,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -8447,17 +8447,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -8469,7 +8469,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -8664,10 +8664,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8677,15 +8677,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8695,17 +8695,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(XLP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8717,17 +8717,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(XLP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -8739,17 +8739,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -8761,17 +8761,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -8783,7 +8783,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -8978,10 +8978,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLV)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -8991,15 +8991,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9009,17 +9009,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLV)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(XLV)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9031,17 +9031,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLV)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(XLV)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9053,17 +9053,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -9075,17 +9075,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -9097,7 +9097,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -9292,10 +9292,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLB)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9305,15 +9305,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9323,17 +9323,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLB)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(XLB)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9345,17 +9345,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLB)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(XLB)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9367,17 +9367,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -9389,17 +9389,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -9411,7 +9411,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -9606,10 +9606,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLU)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9619,15 +9619,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9637,17 +9637,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLU)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(XLU)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9659,17 +9659,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLU)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(XLU)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9681,17 +9681,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -9703,17 +9703,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -9725,7 +9725,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -9920,10 +9920,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLRE)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9933,15 +9933,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPX)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9951,17 +9951,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLRE)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(XLRE)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -9973,17 +9973,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(XLRE)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(XLRE)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -9995,17 +9995,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPX)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(SPX)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -10017,17 +10017,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPX)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(SPX)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -10039,7 +10039,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -10234,10 +10234,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLE)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10247,15 +10247,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10265,17 +10265,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLE)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(XLE)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10287,17 +10287,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(XLE)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(XLE)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10309,17 +10309,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -10331,17 +10331,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -10353,7 +10353,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -10548,10 +10548,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(XLF)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10561,15 +10561,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10579,17 +10579,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLF)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(XLF)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10601,17 +10601,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(XLF)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(XLF)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10623,17 +10623,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -10645,17 +10645,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPY)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(SPY)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -10667,7 +10667,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -10862,10 +10862,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SHY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10875,15 +10875,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10893,17 +10893,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SHY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(SHY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -10915,17 +10915,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SHY)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(SHY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -10937,17 +10937,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -10959,17 +10959,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -10981,7 +10981,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -11176,10 +11176,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IEI)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11189,15 +11189,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11207,17 +11207,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IEI)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(IEI)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11229,17 +11229,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IEI)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(IEI)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11251,17 +11251,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -11273,17 +11273,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -11295,7 +11295,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -11490,10 +11490,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(IEI)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11503,15 +11503,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11521,17 +11521,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IEI)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(IEI)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11543,17 +11543,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(IEI)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(IEI)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11565,17 +11565,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -11587,17 +11587,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -11609,7 +11609,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -11804,10 +11804,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(TLT)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11817,15 +11817,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11835,17 +11835,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(TLT)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(TLT)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -11857,17 +11857,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(TLT)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(TLT)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -11879,17 +11879,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -11901,17 +11901,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -11923,7 +11923,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -12118,10 +12118,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(HYG)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12131,15 +12131,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12149,17 +12149,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(HYG)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+            "display": "(HYG)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12171,17 +12171,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(HYG)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+            "display": "(HYG)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12193,17 +12193,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -12215,17 +12215,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 105)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -12237,7 +12237,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,105,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
         }
       ],
       "activatedMA": [
@@ -12432,10 +12432,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(LQD)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12445,15 +12445,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(SPX)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12463,17 +12463,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(LQD)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(LQD)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12485,17 +12485,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(LQD)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(LQD)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12507,17 +12507,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPX)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(SPX)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -12529,17 +12529,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(SPX)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(SPX)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -12551,7 +12551,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -12746,10 +12746,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(CWB)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12759,15 +12759,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12777,17 +12777,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(CWB)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(CWB)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -12799,17 +12799,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(CWB)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(CWB)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -12821,17 +12821,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -12843,17 +12843,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -12865,7 +12865,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
@@ -13060,10 +13060,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(TIP)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13073,15 +13073,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13091,17 +13091,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(TIP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(TIP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13113,17 +13113,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(TIP)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(TIP)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13135,17 +13135,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -13157,17 +13157,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -13179,7 +13179,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -13374,10 +13374,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(MUB)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13387,15 +13387,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13405,17 +13405,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(MUB)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+            "display": "(MUB)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13427,17 +13427,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(MUB)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+            "display": "(MUB)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13449,17 +13449,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -13471,17 +13471,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "84",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 84)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 84)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -13493,7 +13493,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,84,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,84,n)-4"
         }
       ],
       "activatedMA": [
@@ -13688,10 +13688,10 @@
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(MBB)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13701,15 +13701,15 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
         },
         {
           "type": "Symbol Ratio",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "overlay": false,
             "display": "(BIL)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13719,17 +13719,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$Symbol Ratio$r001$ (SRatio,n)-2"
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(MBB)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+            "display": "(MBB)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
           },
           "outputs": {
             "Result": "auto"
@@ -13741,17 +13741,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(MBB)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+            "display": "(MBB)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
           },
           "outputs": {
             "Result": "auto"
@@ -13763,17 +13763,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-2"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-2"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+            "display": "(BIL)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
           },
           "outputs": {
             "Result": "auto"
@@ -13785,17 +13785,17 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-3"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-3"
         },
         {
           "type": "ST ROCLike",
           "inputs": {
-            "Field": "SRatio",
+            "Field": "Ratio",
             "condition": "RR",
             "period": "126",
             "overlay": false,
-            "display": "(BIL)Range Rank(SRatio, 126)",
-            "id": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+            "display": "(BIL)Range Rank(Ratio, 126)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
           },
           "outputs": {
             "Result": "auto"
@@ -13807,7 +13807,7 @@
             "chartName": "chart",
             "editMode": true
           },
-          "panel": "$r001$ST ROCLike$r001$ (SRatio,RR,126,n)-4"
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,126,n)-4"
         }
       ],
       "activatedMA": [
