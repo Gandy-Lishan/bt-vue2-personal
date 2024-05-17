@@ -220,7 +220,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
-		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		var quotes = sd.chart.scrubbed;
 
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
@@ -452,7 +452,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
-		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 
 		var subField = field
@@ -1118,7 +1118,7 @@ if (!CIQ.Studies) {
 		"Symbol Ratio": {
             name: "Symbol Ratio Line",
             calculateFN: CIQ.Studies.calculateSymbolOhlcv,
-            inputs: { Field: "SRatio",overlay: false},
+            inputs: { Field: "Ratio",overlay: false},
 			// outputs: { "Symbol Ratios": "#8cc176" },
         },
 		"MACDHistGap": {

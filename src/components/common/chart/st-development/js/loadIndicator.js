@@ -382,7 +382,9 @@
                                 var study = CIQ.Studies.studyLibrary[indicatorList[i]]
                                 study.panelHeight=indicatorHeight
                                 CIQ.Studies.studyLibrary[indicatorList[i]] = study
-                                CIQ.store.state.chart.savedTechSD[j].inputs.display = techSymbolName //savedTechSD更新display，为了兼容display有问题的回测并修改它
+                                const isComparison = CIQ.store.state.chart.savedTechSD[j].parameters.isComparison;
+                                const symbolLabel = isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                CIQ.store.state.chart.savedTechSD[j].inputs.display = `(${symbolLabel})${techSymbolName}` //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
                         }
