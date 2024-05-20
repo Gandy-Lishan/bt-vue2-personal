@@ -3453,6 +3453,7 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
 	for (var p in sd.outputs) {
 		name = p + " " + name;
 	}
+	console.log('std',name)
 	var i, val, its;
 	for (i = sd.startFrom - 1, its = 0; i >= 0 && its < sd.days; i--, its++) {
 		val = quotes[i][field];

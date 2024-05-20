@@ -231,7 +231,7 @@ if (CIQ.ChartEngine) {
 			requestedHeight += this.xaxisHeight;
 		}
 	
-		const { canvasHeight } = this.chart;
+		//const { canvasHeight } = this.chart;
 		// const { percent: currentPercent } = panelToModify;
 		// const newPercent = requestedHeight / chartContainerHeight;
 		// const prevRemainingPercent = 1 - currentPercent;
@@ -239,9 +239,9 @@ if (CIQ.ChartEngine) {
 		// const adjustment = prevRemainingPercent / newRemainingPercent;
 		
 		/** 考虑到之前拿不到canvasHeight的尝试 */
-		//const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
-		//const clientHeight = document.querySelector(".chartContainer").clientHeight
-		const newPercent = requestedHeight / canvasHeight;
+		// const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
+		const clientHeight = document.querySelector(".chartContainer").clientHeight
+		const newPercent = requestedHeight / clientHeight;
 		const newRemainingPercent = 1 - newPercent;
 		const newRemainingPercentForEach = newRemainingPercent / (Object.keys(this.panels).length-1);
 
@@ -277,7 +277,7 @@ if (CIQ.ChartEngine) {
 		const chartPanelSize = 550
 		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
 		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
-		//console.log(chartBox.style.height,chartContainer.style.height)
+		//console.log(chartContainer.style.height,studiesLen,studiesHeight)
 		this.setPanelHeight(this.panels.chart, chartPanelSize);
 	})
 	
