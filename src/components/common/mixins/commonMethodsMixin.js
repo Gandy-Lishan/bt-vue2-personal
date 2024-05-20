@@ -700,7 +700,7 @@ export const CommonMethodsMixin = {
 				}
 			)
 			this.hideDuplicateROC()
-
+			if(CIQ.store.state.chart.trades.length == 0) return
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 		// 处理用户自定义indicator的显示名

@@ -56,8 +56,8 @@ export default {
 		},
 	},
 	mounted() {
-		const chartBox = document.getElementsByClassName('chart_box')[0] 
-   		 if (chartBox) chartBox.style.width = ''
+		// const chartBox = document.getElementsByClassName('chart_box')[0] 
+   		//  if (chartBox) chartBox.style.width = ''
 	},
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),

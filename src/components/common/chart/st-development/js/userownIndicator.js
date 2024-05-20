@@ -92,7 +92,8 @@
     const addIndicatorStudy = function(indicatorList){
         var color = ["#5B9BD1","#368DF0","#7257F2","#21CE6B","#24CBB7","#EC4D4E","#F4803D"]
    
-        let indicatorHeight = CIQ.setPanelHeight(indicatorList)
+        //let indicatorHeight = CIQ.setPanelHeight(indicatorList)
+        // let indicatorHeight = 100
     
         let resArr = []
         let sentiUrlList = []
@@ -105,7 +106,7 @@
                         inputs: { Period: 13, Overlay: false},
                         outputs: 
                         {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
-                        panelHeight:indicatorHeight,
+                        // panelHeight:indicatorHeight,
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: 999,
@@ -158,7 +159,7 @@
                             inputs: { Period: 13, Overlay: false},
                             outputs: 
                             {indicatorClose:color[i%7],description: newQuotes[i].description,url:sentiUrlList[i]},
-                            panelHeight:indicatorHeight,
+                            // panelHeight:indicatorHeight,
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
                                 studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,

@@ -121,6 +121,7 @@
          //  load saved indicator layouts from stxx.layout
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
+            /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
             // for(var i in stx.layout.studies){
             //     /** 跳过非参与回测的indicator */
             //     if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
@@ -335,7 +336,7 @@
         var sd = stx.layout.studies[studyInstanceName]; 
         CIQ.Studies.removeStudy(stx, sd); 
      }
-     let indicatorHeight = CIQ.setPanelHeight(indicatorList)
+     //let indicatorHeight = CIQ.setPanelHeight(indicatorList)
 
      let resArr = []
      let sentiUrlList = []
@@ -379,9 +380,9 @@
                         for(var j in CIQ.store.state.chart.savedTechSD){       /** 现在考虑到可能有多个tech indicator,url === study.type的判断不再适用 */
                             if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                                 count++
-                                var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                study.panelHeight=indicatorHeight
-                                CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                                // var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                                // study.panelHeight=indicatorHeight
+                                // CIQ.Studies.studyLibrary[indicatorList[i]] = study
                                 const isComparison = CIQ.store.state.chart.savedTechSD[j].parameters.isComparison;
                                 const symbolLabel = isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
                                 CIQ.store.state.chart.savedTechSD[j].inputs.display = `(${symbolLabel})${techSymbolName}` //savedTechSD更新display，为了兼容display有问题的回测并修改它
@@ -389,9 +390,9 @@
                             }
                         }
                         if(count==0){                                                         
-                            var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                            study.panelHeight=indicatorHeight
-                            CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                            // var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                            // study.panelHeight=indicatorHeight
+                            // CIQ.Studies.studyLibrary[indicatorList[i]] = study
                             let activatedTechLayout = CIQ.store.state.chart.activatedTechLayout
                             activatedTechLayout.forEach(item=>{
                                 if(item.criteria && item.criteria.endsWith("2")){
@@ -476,7 +477,7 @@
                      inputs: { Period: 13, Overlay: false},
                      outputs: 
                      {indicatorClose:senti_color[i%1],description: '',url:indicatorList[i]},
-                     panelHeight:indicatorHeight,
+                    //  panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
                          studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*1000)/1000:999,
@@ -570,7 +571,7 @@
                          inputs: { Period: 13, Overlay: false},
                          outputs: 
                          {indicatorClose:senti_color[i%1],description: newQuotes[i].description,url:sentiUrlList[i]},
-                         panelHeight:indicatorHeight,
+                        //  panelHeight:indicatorHeight,
                          parameters: { init: {
                              studyOverZonesEnabled: false,
                              studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
