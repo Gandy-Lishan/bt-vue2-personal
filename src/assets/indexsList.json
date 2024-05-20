@@ -898,5 +898,9 @@
     {
         "symbol": "TRAN",
         "name": "TRAN"
+    },
+    {
+        "symbol": "VGT",
+        "name": "Information Technology Index ETF (VGT)"
     }
 ]
