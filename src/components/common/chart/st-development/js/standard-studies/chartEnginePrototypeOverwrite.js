@@ -263,11 +263,21 @@ if (CIQ.ChartEngine) {
 		// const studiesPanelsSize = Object.values(this.panels).filter(i=>i.name!='chart').reduce((accumulator, currentValue) => {
 		// 	return accumulator + currentValue.height;
 		// }, 0);
-		const studiesPanelsSize = Object.keys(this.panels).filter(i=>i!='chart').length * 150
+		const studiesLen = Object.keys(this.panels).filter(i=>i!='chart').length
+		const studiesHeight = 			
+			studiesLen <= 0
+			? 0
+			:studiesLen <= 1
+			? 200
+			: studiesLen <= 2
+				? 100
+				// : 80
+				: 100
+		const studiesPanelsSize = studiesLen * studiesHeight
 		const chartPanelSize = 550
 		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
 		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
-		console.log(chartBox.style.height,chartContainer.style.height)
+		//console.log(chartBox.style.height,chartContainer.style.height)
 		this.setPanelHeight(this.panels.chart, chartPanelSize);
 	})
 	
