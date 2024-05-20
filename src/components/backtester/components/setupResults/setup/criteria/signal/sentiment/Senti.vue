@@ -723,11 +723,6 @@ export default {
           [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
 
-        // this.$store.dispatch('chart/update_roclike_count','add')
-        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
-        // study.panelHeight = CIQ.setPanelHeight()
-        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
-
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
         const name = indicator_url_with_ma

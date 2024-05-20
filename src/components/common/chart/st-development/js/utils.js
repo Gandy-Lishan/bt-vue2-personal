@@ -63,22 +63,24 @@ let __st_js_utils_ = (_exports) => {
         return displayableDate;
     };
 
-    CIQ.setPanelHeight = function (indicatorList) {
-        if(!CIQ.chartBox) return
-        // 存在indicatorList则设置其长度，因为它可能需要传入空数组以重置高度
-        //const len = indicatorList?indicatorList.length:CIQ.store.getters.getStudiesCount + CIQ.store.getters.getRocLikeCount
-        const len = indicatorList.length
-        var indicatorHeight = len <= 1
-            ? 200
-            : len <= 2
-                ? 100
-                : 80
-        var chartPanelFactor = len == 0 ? 75 / 100 : 55 / 100
-        var height = chartPanelFactor * window.innerHeight + len * (indicatorHeight - 20)
-        CIQ.chartBox.style.height = height.toString() + 'px'
-        console.log('CIQ.chartBox.style.height',CIQ.chartBox.style.height,CIQ.store.getters.getStudiesCount,CIQ.store.getters.getRocLikeCount)
-        return indicatorHeight
-    }
+    /** 用prototype的setPanelHeight替换了 */
+    // CIQ.setPanelHeight = function (indicatorList) {
+    //     debugger
+    //     if(!CIQ.chartBox) return
+    //     // 存在indicatorList则设置其长度，因为它可能需要传入空数组以重置高度
+    //     //const len = indicatorList?indicatorList.length:CIQ.store.getters.getStudiesCount + CIQ.store.getters.getRocLikeCount
+    //     const len = indicatorList.length
+    //     var indicatorHeight = len <= 1
+    //         ? 200
+    //         : len <= 2
+    //             ? 100
+    //             : 80
+    //     var chartPanelFactor = len == 0 ? 75 / 100 : 55 / 100
+    //     var height = chartPanelFactor * window.innerHeight + len * (indicatorHeight - 20)
+    //     CIQ.chartBox.style.height = height.toString() + 'px'
+    //     console.log('CIQ.chartBox.style.height',CIQ.chartBox.style.height,CIQ.store.getters.getStudiesCount,CIQ.store.getters.getRocLikeCount)
+    //     return indicatorHeight
+    // }
 
     CIQ.countDecimalPlaces = function (number) {
         if (!number && number != 0) return 0

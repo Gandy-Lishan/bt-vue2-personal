@@ -373,11 +373,6 @@ export default {
           [10, { name:'DrawUp %', abbr: 'DU' }]
         ])
 
-        // this.$store.dispatch('chart/update_roclike_count','add')
-        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
-        // study.panelHeight = CIQ.setPanelHeight()
-        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
-
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
         const condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
@@ -395,6 +390,7 @@ export default {
         this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
+        if(CIQ.store.state.chart.trades.length == 0) return
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },
