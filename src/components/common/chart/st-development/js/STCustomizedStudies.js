@@ -428,6 +428,35 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
 				} 
 				break;
+			case 'NC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexNC = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNC) 
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(getPropertyByString(quotes[i - period],field,subField) == 0) return 0
+							
+							const change = parseFloat((
+								getPropertyByString(row,field,subField) - 
+								getPropertyByString(quotes[i - period],field,subField)- 1
+							).toFixed(4))
+							//console.log(row[field] , quotes[i - period][field],row,i)
+							return change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
 			default:
 				console.error('no such condition')
 		}

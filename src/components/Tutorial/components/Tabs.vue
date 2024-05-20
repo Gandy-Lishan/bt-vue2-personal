@@ -153,6 +153,16 @@ export default {
           ], type: 'info'
         },
         {
+          title: 'Net Change', content: [
+            'In backtesting trading, "Net Change" (NC) is a technical indicator used to measure the change of price or indicator.',
+            'NC represents the net change by calculating the difference between the current price or indicator value and a previous price or indicator value. It helps traders and analysts assess the short-term momentum and trend of prices or indicators.',
+            'The steps to calculate NC are as follows:',
+            '1. Obtain the current price or indicator value at the current bar.',
+            '2. Retrieve the price or indicator value from the previous bar.',
+            '3. Calculate the difference: NC = current value - past value.',
+          ], type: 'info'
+        },
+        {
           title: 'SameBar', content: [
             'SameBar (Same Candlestick): In backtesting trading, when multiple signals simultaneously satisfy certain conditions within the same time period (typically referring to the price range represented by a candlestick or bar chart), "SameBar" is used to indicate this situation. This condition is defined by a positive integer value called "score."',
             '1. Multiple signals within the same candlestick: Refers to the possibility of having multiple different trading signals or conditions within a specific time period. These signals may be based on different technical indicators, price dynamics, or other trading strategies.',
