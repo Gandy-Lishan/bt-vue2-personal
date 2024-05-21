@@ -566,7 +566,7 @@ if (!CIQ.Marker) {
                                 fields.push({
                                     member: output,
                                     //display: output,
-                                    display: `${output}(${symbolLabel})`,
+                                    display: `(${symbolLabel})${output}`,
                                     panel: panel,
                                     yAxis: yAxis
                                 });

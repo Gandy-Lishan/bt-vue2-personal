@@ -250,7 +250,7 @@ if (!CIQ.Studies) {
 					field in row &&  getPropertyByString(row,field,subField)!=null
 				)
 				quotes = quotes.slice(indexROC) 
-				debugger
+
 				resArr = quotes.map((row, i) => {
 					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
 					if(field in row &&  getPropertyByString(row,field,subField)!=null){
@@ -262,7 +262,6 @@ if (!CIQ.Studies) {
 								getPropertyByString(row,field,subField) / 
 								getPropertyByString(quotes[i - period],field,subField)- 1
 							)).toFixed(4))
-							//console.log(row[field] , quotes[i - period][field],row,i)
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
 						return NaN
@@ -443,7 +442,7 @@ if (!CIQ.Studies) {
 							
 							const change = parseFloat((
 								getPropertyByString(row,field,subField) - 
-								getPropertyByString(quotes[i - period],field,subField)- 1
+								getPropertyByString(quotes[i - period],field,subField)
 							).toFixed(4))
 							//console.log(row[field] , quotes[i - period][field],row,i)
 							return change
@@ -1087,7 +1086,7 @@ if (!CIQ.Studies) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		/** 判断Study用来计算的数据源 */
-		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+		if(sd.parameters.isComparison){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
@@ -1119,6 +1118,45 @@ if (!CIQ.Studies) {
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			quote["Result " + sd.name] = volatilityArr[i];
+		}
+	};
+
+	CIQ.Studies.calculateSQNMarketRegime = function (stx, sd) {
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		CIQ.stxx.calculateDailyChange(sd.chart);
+		var quotes = sd.chart.scrubbed;
+
+		CIQ.Studies.MA("simple", sd.days, 'change', 0, "_MA", stx, sd);
+
+		sd.std = new CIQ.Studies.StudyDescriptor(sd.name, "STD Dev", sd.panel);
+		sd.std.chart = sd.chart;
+		sd.std.startFrom = sd.startFrom;
+		sd.std.days = sd.days;
+		sd.std.inputs = {
+			Field: 'change',
+			"Standard Deviations": 1,
+			Type: "simple"
+		};
+		sd.std.outputs = { "_STD Dev": null };
+			// dual symbol new features
+			sd.std.parameters = sd.parameters
+		CIQ.Studies.calculateStandardDeviationSample(stx, sd.std);
+
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		} 
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote["Result " + sd.name] = 
+				(quote["_MA " + sd.name] / quote["_STD Dev " + sd.name]) * Math.sqrt(100);
 		}
 	};
 
@@ -1359,6 +1397,16 @@ if (!CIQ.Studies) {
 			inputs: { period: 21 },
             calculateFN: function (stx, sd) {	
 				CIQ.Studies.calculateNDayRealizedVolatility(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"SQN Market Regime": {
+            name: "SQN Market Regime",
+			inputs: { Period: 100 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateSQNMarketRegime(stx, sd);
 			},
 			outputs: {
 				"Result": "auto",

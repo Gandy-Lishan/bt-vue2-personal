@@ -3214,6 +3214,7 @@ CIQ.Studies.MA = function (
 	ma.inputs = {};
 	if (type) ma.inputs.Type = type;
 	if (field) ma.inputs.Field = field;
+	debugger
 	if (offset) ma.inputs.Offset = parseInt(offset, 10);
 
 	// dual symbol new features
@@ -3405,7 +3406,7 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
  * Calculate function for standard deviation.
  *
  * The resulting values will be added to the dataSet using the field name provided by the `sd.outputMap` entry.
- *
+ * !!!!!important, 默认函数是Population模式
  * **Notes:**
  * - If no `outputs` object is defined in the library entry, the study will default to a single output named `Result`, which will then be used in lieu of `sd.outputs` to build the `sd.outputMap`.
  * - The study name may contain the unprintable character `&zwnj;`, see {@link CIQ.Studies.StudyDescriptor} documentation
@@ -3453,7 +3454,6 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
 	for (var p in sd.outputs) {
 		name = p + " " + name;
 	}
-	console.log('std',name)
 	var i, val, its;
 	for (i = sd.startFrom - 1, its = 0; i >= 0 && its < sd.days; i--, its++) {
 		val = quotes[i][field];
@@ -3482,6 +3482,77 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
 			quote[name] =
 				Math.sqrt(
 					(acc1 + sd.days * Math.pow(ma, 2) - 2 * ma * acc2) / sd.days
+				) * mult;
+	}
+};
+/** Sample模式，和前者的区别是最后结果计算sqrt前除以period-1而不是period */
+CIQ.Studies.calculateStandardDeviationSample = function (stx, sd) {
+	var quotes = sd.chart.dataSet;
+	if (quotes.length < sd.days + 1) {
+		sd.error = true;
+		return;
+	}
+	var field = sd.inputs.Field;
+	if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+	var type = sd.inputs["Moving Average Type"];
+	if (!type) type = sd.inputs.Type;
+	CIQ.Studies.MA(type, sd.days, field, sd.inputs.Offset, "_MA", stx, sd);
+
+		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
+		if(
+			sd?.parameters?.isComparison ||
+			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
+		){
+			/** 判断Study用来计算的数据源 */
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		}
+
+	var acc1 = 0;
+	var acc2 = 0;
+	var ma = 0;
+	var mult = Number(sd.inputs["Standard Deviations"]);
+	if (mult < 0) mult = 2;
+	var name = sd.name;
+	for (var p in sd.outputs) {
+		name = p + " " + name;
+	}
+	var i, val, its;
+	for (i = sd.startFrom - 1, its = 0; i >= 0 && its < sd.days; i--, its++) {
+		val = quotes[i][field];
+		if (val && typeof val == "object") val = val[subField];
+		if (isNaN(val)) val = 0;
+		acc1 += Math.pow(val, 2);
+		acc2 += val;
+	}
+	for (i = sd.startFrom; i < quotes.length; i++) {
+		var quote = quotes[i];
+		val = quote[field];
+		if (val && typeof val == "object") val = val[subField];
+		if (!val && val !== 0) val = 0;
+		acc1 += Math.pow(val, 2);
+		acc2 += val;
+		if (i < sd.days - 1) continue;
+		if (i >= sd.days) {
+			var val2 = quotes[i - sd.days][field];
+			if (val2 && typeof val2 == "object") val2 = val2[subField];
+			if (isNaN(val2)) val2 = 0;
+			acc1 -= Math.pow(val2, 2);
+			acc2 -= val2;
+		}
+		ma = quote["_MA " + sd.name];
+		if (ma || ma === 0)
+			quote[name] =
+				Math.sqrt(
+					(acc1 + sd.days * Math.pow(ma, 2) - 2 * ma * acc2) / (sd.days - 1)
 				) * mult;
 	}
 };
@@ -3532,7 +3603,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	if(
 		// 防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
 		(['Open','High','Low','Close','Volume'].includes(subField) ||
-		['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)) &&
+		['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)) &&
 		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
 		(sd?.parameters?.isComparison ||
 		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
