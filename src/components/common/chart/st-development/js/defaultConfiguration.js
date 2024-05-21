@@ -709,6 +709,10 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"name": "N-Day Realized Volatility",
 							"url": "N-Day Realized Volatility"
 						},
+						{
+							"name": "SQN Market Regime",
+							"url": "SQN Market Regime"
+						},
 					]
 				},
 				{
