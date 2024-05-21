@@ -22,10 +22,10 @@
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
-        <!-- <el-menu-item class="home-link" index="9"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+        <el-menu-item class="home-link" index="9"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
           >Strategy</el-menu-item
-        > -->
+        >
         <el-menu-item class="home-link" index="1"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
@@ -95,7 +95,8 @@ export default {
   data() {
     return {
       activeIndex: '1',
-      isAiTrading: false
+      isAiTrading: false,
+      isButtonVisible: false
     }
   },
   computed: {
@@ -123,6 +124,9 @@ export default {
       else if(to.path.includes('/strategy') || to.name == 'Strategy'){
         this.activeIndex = '9'
       }
+      const currentDomain = window.location.hostname;
+    // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+    if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
       }
   },
   mounted() {
@@ -140,7 +144,7 @@ export default {
       this.activeIndex = '7'
     }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
       this.activeIndex = '8'
-    }else if(this.$route.name == 'Strategy' || this.$route.name == 'Strategy'){
+    }else if(this.$route.name == 'Strategy'){
       this.activeIndex = '9'
     }
     const email = getCookieData()?.username
