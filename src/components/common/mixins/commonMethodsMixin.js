@@ -764,7 +764,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 10
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 11
 					}
 				return null
 			})	
