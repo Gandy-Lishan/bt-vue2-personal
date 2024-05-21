@@ -428,16 +428,41 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
 				} 
 				break;
+			case 'NC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexNC = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNC) 
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(getPropertyByString(quotes[i - period],field,subField) == 0) return 0
+							
+							const change = parseFloat((
+								getPropertyByString(row,field,subField) - 
+								getPropertyByString(quotes[i - period],field,subField)- 1
+							).toFixed(4))
+							//console.log(row[field] , quotes[i - period][field],row,i)
+							return change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
 			default:
 				console.error('no such condition')
 		}
 		
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
-			if(resArr[i]==-Infinity){
-				//console.log('-Infinity',quote)
-			}
-			
 			quote[sd.inputs.display] = resArr[i];
 			// quote['supLine'] = showSupLine;
 		}
@@ -1052,6 +1077,51 @@ if (!CIQ.Studies) {
 		}
 	};
 
+	CIQ.Studies.calculateNDayRealizedVolatility = function (stx, sd) {
+		var period = sd.inputs.period;
+
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		var quotes = sd.chart.scrubbed;
+
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		} 
+
+				let logArr = quotes.map((row, i) => {
+					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=1){
+							// 如果分母为0，直接返回0
+							if(getPropertyByString(quotes[i - 1],field,subField) == 0) return 0
+
+							return Math.log((
+								getPropertyByString(row,field,subField) / 
+								getPropertyByString(quotes[i - 1],field,subField)
+							))
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(logArr.length>1 && logArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				const volatilityArr = getPeriodParam(logArr, "volatility", period, 1);
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote["Result " + sd.name] = volatilityArr[i];
+		}
+	};
+
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"MAGap": {
@@ -1284,6 +1354,16 @@ if (!CIQ.Studies) {
 			inputs: { Period: 252 },
             calculateFN: CIQ.Studies.calculatePercentageBelowNDayHigh,
         },
+		"N-Day Realized Volatility": {
+            name: "N-Day Realized Volatility",
+			inputs: { period: 21 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateNDayRealizedVolatility(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
 	});
 
 
@@ -1320,6 +1400,21 @@ if (!CIQ.Studies) {
 				}
 			}
 			return p2-p1
+			},
+			volatility: arr => {
+				// 计算平均值
+				const mean = arr.reduce((sum, num) => sum + num, 0) / arr.length;
+			
+				// 计算方差
+				const squaredDifferences = arr.map(num => Math.pow(num - mean, 2));
+				const variance = squaredDifferences.reduce((sum, squaredDiff) => sum + squaredDiff, 0) / (arr.length-1);
+			
+				// 计算标准差
+				const standardDeviation = Math.sqrt(variance);
+				
+				const volatilityValue = standardDeviation * 100 * Math.sqrt(252)
+
+				return volatilityValue;
 			}
 		};
 		
@@ -1332,7 +1427,7 @@ if (!CIQ.Studies) {
 			const sliceStart = i - period + add_bar
 			const sliceEnd = i + add_bar
 			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd).filter(item=>!isNaN(item)));
-			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
+			
 			//dataArr.push(Number(tmpData.toFixed(3)));
 			dataArr.push(Number(tmpData));
 		}

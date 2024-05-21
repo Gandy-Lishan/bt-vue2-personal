@@ -56,8 +56,8 @@ export default class AdvancedWrapper extends Vue {
 		// refresh pag
 
 		// 设置chartBox为单例以统一管理高度
-		CIQ.chartBox = document.getElementsByClassName("chart_box")[0] as HTMLElement;
-		CIQ.setPanelHeight([])
+		// CIQ.chartBox = document.getElementsByClassName("chart_box")[0] as HTMLElement;
+		// CIQ.setPanelHeight([])
 
 		this.loadShortLong(config)
 	}

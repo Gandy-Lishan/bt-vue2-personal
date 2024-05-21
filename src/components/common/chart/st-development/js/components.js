@@ -8900,7 +8900,7 @@ if (!CIQ.Studies) {
 						}catch(err){console.log(err);}
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
 
-						CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
+    					// CIQ.stxx.draw();
 						
 						if (self.node[0].hasAttribute("cq-marker"))
 							self.context.stx.modalEnd();

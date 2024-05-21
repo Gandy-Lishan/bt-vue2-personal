@@ -139,7 +139,8 @@ export default {
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
         { value: 9, label: 'DrawDown %' },
-        { value: 10, label: 'DrawUp %' }
+        { value: 10, label: 'DrawUp %' },
+        { value: 11, label: 'Net Change' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -193,7 +194,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 10
+      this.isROCLike = 5 <= val && val <= 11
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -314,6 +315,9 @@ export default {
           case "DrawUp %":
             _newCondition = 'DU'
             break;
+          case "Net Change":
+            _newCondition = 'NC'
+            break;
           default:
             break;
         }
@@ -370,13 +374,9 @@ export default {
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
           [9, { name: 'DrawDown %', abbr: 'DD' }],
-          [10, { name:'DrawUp %', abbr: 'DU' }]
+          [10, { name:'DrawUp %', abbr: 'DU' }],
+          [11, { name:'Net Change', abbr: 'NC' }],
         ])
-
-        // this.$store.dispatch('chart/update_roclike_count','add')
-        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
-        // study.panelHeight = CIQ.setPanelHeight()
-        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
 
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
         const condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
@@ -395,6 +395,7 @@ export default {
         this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
+        if(CIQ.store.state.chart.trades.length == 0) return
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },

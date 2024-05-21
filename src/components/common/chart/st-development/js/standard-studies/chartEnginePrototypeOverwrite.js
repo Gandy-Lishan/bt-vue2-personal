@@ -220,6 +220,67 @@ if (CIQ.ChartEngine) {
 			}
 		}
 	};
+	CIQ.ChartEngine.prototype.setPanelHeight = function (
+		panelToModify,
+		requestedHeight
+	) {
+		if (!requestedHeight) return;
+	
+		// adjust requested height to accommodate the x-axis if panel is at bottom
+		if (Object.values(this.panels).slice(-1)[0] === panelToModify) {
+			requestedHeight += this.xaxisHeight;
+		}
+	
+		//const { canvasHeight } = this.chart;
+		// const { percent: currentPercent } = panelToModify;
+		// const newPercent = requestedHeight / chartContainerHeight;
+		// const prevRemainingPercent = 1 - currentPercent;
+		// const newRemainingPercent = 1 - newPercent;
+		// const adjustment = prevRemainingPercent / newRemainingPercent;
+		
+		/** 考虑到之前拿不到canvasHeight的尝试 */
+		// const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
+		const clientHeight = document.querySelector(".chartContainer").clientHeight
+		const newPercent = requestedHeight / clientHeight;
+		const newRemainingPercent = 1 - newPercent;
+		const newRemainingPercentForEach = newRemainingPercent / (Object.keys(this.panels).length-1);
+
+		Object.values(this.panels).forEach((panel) => {
+			//panel.percent /= adjustment;
+			panel.percent = newRemainingPercentForEach;
+		});
+
+		panelToModify.percent = newPercent;
+		// console.log(newPercent,'+++',Object.values(this.panels).map(i=>i.percent))
+		this.adjustPanelPositions();
+		this.savePanels();
+	};
+	CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
+		let chartBox = document.querySelector(".chart_box");
+		let chartContainer = document.querySelector(".chartContainer");
+		if(!chartBox) return
+		// iterate through panels and get heights of panels beside main chart
+		// const studiesPanelsSize = Object.values(this.panels).filter(i=>i.name!='chart').reduce((accumulator, currentValue) => {
+		// 	return accumulator + currentValue.height;
+		// }, 0);
+		const studiesLen = Object.keys(this.panels).filter(i=>i!='chart').length
+		const studiesHeight = 			
+			studiesLen <= 0
+			? 0
+			:studiesLen <= 1
+			? 200
+			: studiesLen <= 2
+				? 100
+				// : 80
+				: 100
+		const studiesPanelsSize = studiesLen * studiesHeight
+		const chartPanelSize = 550
+		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
+		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
+		//console.log(chartContainer.style.height,studiesLen,studiesHeight)
+		this.setPanelHeight(this.panels.chart, chartPanelSize);
+	})
+	
 }
 
 };

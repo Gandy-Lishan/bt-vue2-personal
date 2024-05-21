@@ -894,5 +894,13 @@
     {
         "symbol": "GOLDLNPM",
         "name": "GOLDLNPM"
+    },
+    {
+        "symbol": "TRAN",
+        "name": "Dow Jones Transportation Index (TRAN)"
+    },
+    {
+        "symbol": "VGT",
+        "name": "Information Technology Index ETF (VGT)"
     }
 ]

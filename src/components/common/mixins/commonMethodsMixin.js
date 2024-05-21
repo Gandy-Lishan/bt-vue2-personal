@@ -582,7 +582,8 @@ export const CommonMethodsMixin = {
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
 				[8, { name: 'Range Rank', abbr: 'RR' }],
 				[9, { name: 'DrawDown %', abbr: 'DD' }],
-				[10, { name:'DrawUp %', abbr: 'DU' }]
+				[10, { name:'DrawUp %', abbr: 'DU' }],
+				[11, { name:'Net Change', abbr: 'NC' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
@@ -700,7 +701,7 @@ export const CommonMethodsMixin = {
 				}
 			)
 			this.hideDuplicateROC()
-
+			if(CIQ.store.state.chart.trades.length == 0) return
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 		// 处理用户自定义indicator的显示名
