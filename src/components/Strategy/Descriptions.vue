@@ -24,9 +24,12 @@
 						<div class="portlet light">
 							<div col="col-md-12">
 								<div v-html="convertedHTML"></div>
+								<strong>
+								Use BcktestEdge 2.0 to see more details of this strategy,
 								<el-tooltip effect="dark" content="Click this button to backtest the strategy" placement="top-start">
-								<el-button type="text" @click="_backtestStrategy" style="color: #5b9bd1;">Backtest This Strategy</el-button>
+								<el-button type="text" @click="_backtestStrategy" style="color: #5b9bd1; font-size: 16px"><strong>click here.</strong></el-button>
 								</el-tooltip>
+								</strong>
 								<div v-html="performanceHTML"></div>
 								<div v-html="annualReturnHTML"></div>
 
