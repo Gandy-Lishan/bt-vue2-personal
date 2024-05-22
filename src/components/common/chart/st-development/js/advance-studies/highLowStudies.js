@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_highLowStudies_ = (_exports) => {
@@ -39,6 +39,22 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateMaxHighMinLow = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			if(sd.type == "Donchian Channel"){
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+				sd.yAxis = actualXaxis
+			}
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			if(sd.type == "Donchian Channel"){
+				sd.yAxis = null
+			}
+			quotes = sd.chart.scrubbed
+		}
+	
 		var highPeriod = sd.days,
 			lowPeriod = sd.days;
 		if (sd.inputs["High Period"]) highPeriod = sd.inputs["High Period"];
@@ -54,29 +70,29 @@ if (!CIQ.Studies) {
 		if (sd.startFrom > 1) {
 			for (j = 1; j < highPeriod; j++) {
 				if (sd.startFrom - j >= 0)
-					high = Math.max(high, quotes[sd.startFrom - j].High);
+					high = Math.max(high, getPropertyByString(quotes[sd.startFrom - j],field,'High'));
 			}
 			for (j = 1; j < lowPeriod; j++) {
 				if (sd.startFrom - j >= 0)
-					low = Math.min(low, quotes[sd.startFrom - j].Low);
+					low = Math.min(low, getPropertyByString(quotes[sd.startFrom - j],field,'Low'));
 			}
 		}
 		for (var i = Math.max(0, sd.startFrom - 1); i < quotes.length; i++) {
-			high = Math.max(high, quotes[i].High);
-			low = Math.min(low, quotes[i].Low);
+			high = Math.max(high, getPropertyByString(quotes[i],field,'High'));
+			low = Math.min(low, getPropertyByString(quotes[i],field,'Low'));
 			if (i >= highPeriod) {
-				if (quotes[i - highPeriod].High == high) {
-					high = quotes[i].High;
+				if (getPropertyByString(quotes[i - highPeriod],field,'High') == high) {
+					high = getPropertyByString(quotes[i],field,'High');
 					for (j = 1; j < highPeriod; j++) {
-						high = Math.max(high, quotes[i - j].High);
+						high = Math.max(high, getPropertyByString(quotes[i - j],field,'High'));
 					}
 				}
 			}
 			if (i >= lowPeriod) {
-				if (quotes[i - lowPeriod].Low == low) {
-					low = quotes[i].Low;
+				if (getPropertyByString(quotes[i - lowPeriod],field,'Low') == low) {
+					low = getPropertyByString(quotes[i],field,'Low');
 					for (j = 1; j < lowPeriod; j++) {
-						low = Math.min(low, quotes[i - j].Low);
+						low = Math.min(low, getPropertyByString(quotes[i - j],field,'Low'));
 					}
 				}
 			}
@@ -94,7 +110,7 @@ if (!CIQ.Studies) {
 				quotes[i]["_MHML " + sd.name] = result;
 				continue;
 			} else if (sd.type == "Williams %R") {
-				result = (-100 * (high - quotes[i].Close)) / (high - low);
+				result = (-100 * (high - getPropertyByString(quotes[i],field,'Close'))) / (high - low);
 				quotes[i]["Result " + sd.name] = result;
 				continue;
 			}
@@ -115,21 +131,33 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateVerticalHorizontalFilter = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
+
 		sd.mhml = new CIQ.Studies.StudyDescriptor(sd.name, sd.type, sd.panel);
 		sd.mhml.chart = sd.chart;
 		sd.mhml.days = sd.days;
 		sd.mhml.startFrom = sd.startFrom;
 		sd.mhml.inputs = {};
 		sd.mhml.outputs = { _MHML: null };
+			sd.mhml.parameters = sd.parameters
 		CIQ.Studies.calculateMaxHighMinLow(stx, sd.mhml);
 		var sumChanges = 0;
 		var changes = [];
 		for (var i = Math.max(1, sd.startFrom - sd.days); i < quotes.length; i++) {
-			var change = Math.abs(quotes[i].Close - quotes[i - 1].Close);
+			var change = Math.abs(
+				getPropertyByString(quotes[i],field,'Close') - 
+				getPropertyByString(quotes[i - 1],field,'Close')
+			);
 			changes.push(change);
 			sumChanges += change;
 			if (changes.length == sd.days) {
@@ -195,8 +223,17 @@ if (!CIQ.Studies) {
 			name: "High Minus Low",
 			calculateFN: function (stx, sd) {
 				var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 				for (var i = sd.startFrom; i < quotes.length; i++) {
-					quotes[i]["Result " + sd.name] = quotes[i].High - quotes[i].Low;
+					quotes[i]["Result " + sd.name] = 
+						getPropertyByString(quotes[i],field,'High') - 
+						getPropertyByString(quotes[i],field,'Low')
 				}
 			},
 			inputs: {}
