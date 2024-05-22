@@ -19,6 +19,9 @@ import {__js_advanced_studies_coppock_} from "./advance-studies/coppock.js"
 import {__js_advanced_studies_detrended_} from "./advance-studies/detrended.js"
 import {__js_advanced_studies_disparity_} from "./advance-studies/disparity.js"
 import {__js_advanced_studies_highLowStudies_} from "./advance-studies/highLowStudies.js"
+import {__js_advanced_studies_easeOfMovement_} from "./advance-studies/easeOfMovement.js"
+import {__js_advanced_studies_elder_} from "./advance-studies/elder.js"
+import {__js_advanced_studies_fractalChaos_} from "./advance-studies/fractalChaos.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -51,6 +54,9 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_coppock_,
 			__js_advanced_studies_detrended_,
 			__js_advanced_studies_disparity_,
+			__js_advanced_studies_easeOfMovement_,
+			__js_advanced_studies_elder_,
+			__js_advanced_studies_fractalChaos_,
 		)
 
 

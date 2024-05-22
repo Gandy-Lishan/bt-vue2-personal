@@ -59,8 +59,8 @@ if (!CIQ.Studies) {
 		sd.std.inputs = { Field: field, "Standard Deviations": 1, Type: "ma" };
 		sd.std.outputs = { _STD: null };
 
-		// dual symbol new features
-		sd.std.parameters = sd.parameters
+			// dual symbol new features
+			sd.std.parameters = sd.parameters
 
 		CIQ.Studies.calculateStandardDeviation(stx, sd.std);
 
