@@ -255,6 +255,19 @@ if (CIQ.ChartEngine) {
 		this.adjustPanelPositions();
 		this.savePanels();
 	};
+	CIQ.ChartEngine.prototype.calculateDailyChange = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			d["change"] = d.Close / d.iqPrevClose - 1;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				symbolObj["change"] = symbolObj.Close / symbolObj.iqPrevClose - 1;
+			}
+		}	
+	};
 	CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
 		let chartBox = document.querySelector(".chart_box");
 		let chartContainer = document.querySelector(".chartContainer");
