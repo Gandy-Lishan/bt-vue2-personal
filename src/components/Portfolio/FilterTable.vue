@@ -133,8 +133,8 @@ export default {
 				debugger
 				if(!newValue) return
 				if(newValue.profit_loss_ratio == -1) newValue.profit_loss_ratio = 'Low risk'
-				for (const item of Array.from(this.keyMatchMap.keys())) {
-					if(item !== 'profit_loss_ratio') newValue[item] = newValue[item].toFixed(2)
+				for (const key in newValue) {
+					if(key !== 'profit_loss_ratio' && Array.from(this.keyMatchMap.keys()).includes(key)) newValue[key] = newValue[key].toFixed(2)
 				}
 			  this.signalDes = [newValue]
 			},

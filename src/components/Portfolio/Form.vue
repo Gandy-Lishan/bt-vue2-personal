@@ -291,7 +291,9 @@
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
       </el-col>
-      <el-col :span="8"></el-col>
+      <el-col :span="8">
+        <div class="processTips" v-show="percentage != 0"><span v-html="processTips"></span></div>
+      </el-col>
     </el-row>
     <br>
     </div>
@@ -652,14 +654,12 @@ export default {
         strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; item.model = 'CASH'; return item})),
         auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
-      debugger
       let saveRes
-      if(rowUrl) {saveRes = await UpdatePortfolio(rowUrl,msaveData)}
+      if(rowUrl) {saveRes = await UpdatePortfolio(rowUrl,saveData)}
       else{saveRes = await RunPortfolio(saveData)}
       // 这里要发请求拿到预推荐列表
       // 刷新Backtest列表
       // this.$emit('refreshBTList')
-      debugger
       console.log('saveRes', saveRes)
       const code = saveRes.data?.code
       const failedConditions = [203, 403, 404, 406]
@@ -725,27 +725,26 @@ export default {
         saveRes = await this.saveFormData()
         debugger
       } catch (error) {
-        // this.$emit('clearResults')
+        this.$emit('clearResults')
         this.btnLoading = false
         this.processTips = ''
         this.percentage = 0
       }
-     if(!saveRes) {//this.$emit('clearResults');
+     if(!saveRes) { this.$emit('clearResults');
       this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      debugger
-     const _name = typeof name === 'string' && name ? name : ''
-     if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
+     if(code == 203) this.popUpMsgBox(`The portfolio is running. You can wait or click the "+" button to create a new portfolio`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
+      if(code == 407) this.popUpMsgBox('Empty portfolio. Please run again')
       if(code == 200) {
-        this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
+        this.popUpMsgBox(`The portfolio is completed successfully`)
         // 这里添加过滤列表
         // const list = saveRes['TRADE LIST']
         // if(list) saveRes.data.data['TRADE LIST'] = list
@@ -772,6 +771,11 @@ export default {
         const category = (this.strategiesList.find(ele => ele.model_name === item.strategy) || {})?.category || ''
         return {...item, model_name: item.model_name, url: item.model_name, category: this.tags[category], _category: category}
       })]
+      let totalWeight = 0
+      for (const row of this.strategy_combination.slice(1)) {
+        totalWeight += parseFloat(row.percent) || 0
+      }
+      this.portfolioFirstLine.percent = 100 - totalWeight
       this.data = {name, start_date, end_date, cash}
     },
     checkResLater() {
@@ -1118,5 +1122,14 @@ export default {
     height: 100%;
   }
 }
+.processTips {
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+    line-height: 32px;
+    margin: 0px;
+    font-weight: 500;
+    color: #606266;
+  }
 }
 </style>
