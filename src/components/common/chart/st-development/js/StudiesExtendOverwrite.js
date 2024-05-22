@@ -16,6 +16,9 @@ import {__js_advanced_studies_chaikin_} from "./advance-studies/chaikin.js"
 import {__js_advanced_studies_chande_} from "./advance-studies/chande.js"
 import {__js_advanced_studies_linearRegression_} from "./advance-studies/linearRegression.js"
 import {__js_advanced_studies_coppock_} from "./advance-studies/coppock.js"
+import {__js_advanced_studies_detrended_} from "./advance-studies/detrended.js"
+import {__js_advanced_studies_disparity_} from "./advance-studies/disparity.js"
+import {__js_advanced_studies_highLowStudies_} from "./advance-studies/highLowStudies.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -46,6 +49,8 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_chande_,
 			__js_advanced_studies_linearRegression_,
 			__js_advanced_studies_coppock_,
+			__js_advanced_studies_detrended_,
+			__js_advanced_studies_disparity_,
 		)
 
 

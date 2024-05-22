@@ -683,6 +683,7 @@ export const CommonMethodsMixin = {
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
+			debugger
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Day)`
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
@@ -707,12 +708,15 @@ export const CommonMethodsMixin = {
 		// 处理用户自定义indicator的显示名
 		rocDisplayName(field) {
 			let display
+			let senti = CIQ.findSentiIndicator(null,field)
 			if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
-			}else{
-				display = CIQ.findSentiIndicator(null,field)?CIQ.findSentiIndicator(null,field).chart_name:''
+			}else if(senti){
+				display = senti.chart_name
+			}else {
+				display = field
 			}
 			return display
 		},

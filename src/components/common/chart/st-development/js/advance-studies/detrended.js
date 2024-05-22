@@ -21,8 +21,7 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
 
 let __js_advanced_studies_detrended_ = (_exports) => {
@@ -37,12 +36,11 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateDetrendedPrice = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
+
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		var subField = field
+	
 		var offset = Math.floor(sd.days / 2 + 1);
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -54,6 +52,23 @@ if (!CIQ.Studies) {
 			sd
 		);
 
+		/** 
+		 * 用isComparison属性判断Study用来计算的数据源
+		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
+		 * ma和roc就是用critria判断Study用来计算的数据源
+		 *  */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else {
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
 		for (
 			var i = Math.max(sd.days - offset - 1, sd.startFrom - offset);
 			i < quotes.length - offset;
@@ -61,7 +76,7 @@ if (!CIQ.Studies) {
 		) {
 			if (i < 0) continue;
 			var val = quotes[i][field];
-			if (val && typeof val == "object") val = val[sd.subField];
+			if (val && typeof val == "object") val = val[subField];
 			var maVal = quotes[i]["MA " + sd.name];
 			if ((val || val === 0) && (maVal || maVal === 0))
 				quotes[i]["Result " + sd.name] = val - maVal;
@@ -78,4 +93,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_detrended_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_detrended_}

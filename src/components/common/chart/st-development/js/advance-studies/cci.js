@@ -54,14 +54,6 @@ if (!CIQ.Studies) {
 			field = CIQ.store.getters.getComparisonSymbol.url
 			//filter valid rows
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-			// handle calculateTypicalPrice result
-			// var val
-			// for (var i = 0; i < quotes.length; ++i) {
-			// 	val = quotes[i][field];
-			// 	if (val && typeof val == "object") {
-			// 		val[subField] = (val.High + val.Low + val.Close) / 3;
-			// 	}
-			// }
 		}else {
 			quotes = sd.chart.scrubbed
 		}
