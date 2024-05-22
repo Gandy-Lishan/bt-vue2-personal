@@ -754,15 +754,18 @@ export default {
     },
     // 处理用户自定义indicator的显示名
     rocDisplayName(field) {
-      let display
+			let display
+			let senti = CIQ.findSentiIndicator(null,field)
 			if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
-			}else{
-        display = CIQ.findSentiIndicator(null,field)?CIQ.findSentiIndicator(null,field).chart_name:''
-      }
-      return display
+			}else if(senti){
+				display = senti.chart_name
+			}else {
+				display = field
+			}
+			return display
     },
     setPeriod(val) {
       let _val = val

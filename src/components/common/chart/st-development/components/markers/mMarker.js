@@ -108,7 +108,6 @@ MarkersSample.prototype.showmMarker = function () {
 	let { stx } = this;
 	// const startTime = performance.now()
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-	
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
@@ -214,6 +213,7 @@ MarkersSample.prototype.showmMarker = function () {
 					//if(!isSenti && isSymbol2) continue
 					if(isSenti || !isSymbol2){
 						const panel = sd['panel'] 
+						if(stx.panels[panel].hidden) continue
 						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 						const plotField = sd.panel == 'chart' && isSymbol2
 											? comparisonSymbol.url
@@ -271,6 +271,7 @@ MarkersSample.prototype.showmMarker = function () {
 					//if(!isSenti && isSymbol2) continue
 					if(isSenti || !isSymbol2){
 						const panel = sd['panel'] 
+						if(stx.panels[panel].hidden) continue
 						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 						const plotField = sd.panel == 'chart' && isSymbol2
 											? comparisonSymbol.url
@@ -397,6 +398,7 @@ MarkersSample.prototype.showmMarker = function () {
 				//if(!isSenti && !isSymbol2) continue
 				if(isSenti || isSymbol2){
 					const panel = sd['panel'] 
+					if(stx.panels[panel].hidden) continue
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 					const plotField = sd.panel == 'chart' && isSymbol2
 										? comparisonSymbol.url
@@ -455,6 +457,7 @@ MarkersSample.prototype.showmMarker = function () {
 				//if(!isSenti && !isSymbol2) continue
 				if(isSenti || isSymbol2){
 					const panel = sd['panel'] 
+					if(stx.panels[panel].hidden) continue
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 					const plotField = sd.panel == 'chart' && isSymbol2
 										? comparisonSymbol.url
