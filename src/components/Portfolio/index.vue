@@ -241,6 +241,7 @@ export default {
     clearResults() {
         this.activeSecondTab = 'summary'
         this.$refs['Statistics'].displayData({})
+        this.tradesData = []
         this.strategy_details = []
     },
     resetForm() {

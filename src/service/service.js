@@ -1190,12 +1190,23 @@ export function moveStrategyFavorites(url) {
 }
 /* Strategy Page 接口 END */
 /* Portfolio Page 接口 STRAT */
-export function getPortfolioList() {
+export function getPortfolioList(page, sort, name) {
+	let url = null
+	url = '/dev/portfolio/get_portfolio_records/?ordering=-create_date'
+	// sort -> ,total_return
+	if (sort) {
+		url = `/dev/portfolio/get_portfolio_records/?ordering=${sort}`
+	}
+	if (name) {
+		url = `/dev/portfolio/get_portfolio_records/?name=${name}`
+	}
+	if (name && sort) {
+		url = `/dev/portfolio/get_portfolio_records/?ordering=${sort}&name=${name}`
+	}
+	if(page) {url = `${url}&page=${page}`}
 	return new Promise((resolve, reject) => {
 		axios
-			.get(`/dev/portfolio/get_portfolio_records/?ordering=-create_date`, {
-				withCredentials: true
-			})
+			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})

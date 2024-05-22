@@ -340,9 +340,9 @@
 </template>
 
 <script>
-import { isJson, timestampToTime, trimTrailingZeros, LocalStorageUtil, capitalizeFirstLetter } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
-import { RunPortfolio, AutoPortfolio, getScannerBTList, UpdatePortfolio, perviewScannerForm, getStrategyList, getRunPortfolioResults, } from '@/service/service'
+import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 
 export default {
   name: 'Form',
@@ -578,12 +578,13 @@ export default {
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading)) return true
+			Object.assign(this.$data, this.$options.data())
       this.generateCPMName()
-      this.rowUrl = null
+      this.setBacktestHistory(1)
       this.$refs['Form'].clearValidate()
     },
     async checkDuplicateNames(name) {
-        const nameLookupRes = await getScannerBTList(null, null, name)
+        const nameLookupRes = await getPortfolioList(null, null, name)
         const count = nameLookupRes.data.count
         const nameList = nameLookupRes.data.results
         // 有重名
