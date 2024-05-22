@@ -1005,7 +1005,6 @@ export default {
     // color: #ffffff !important;
   }
   /deep/ .el-progress-bar__outer {
-    
     height: 100% !important;
     border-radius: 4px;
   }

@@ -67,7 +67,7 @@
 				<template slot-scope="scope">
           <el-button-group>
             <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -248,7 +248,7 @@
 </template>
 
 <script>
-import { delScannerBT, AutoPortfolio, getScannerBTResults, getScannerBTResultsList, getPortfolioList } from '@/service/service'
+import { delPortfolio, AutoPortfolio, getRunPortfolioResults, getScannerBTResultsList, getPortfolioList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
@@ -424,11 +424,12 @@ export default {
         }
       })
     },
-    async deleteSCBT(row) {
+    async deleteRow(row) {
       const { url } = row
       const _this = this
       row.deleteLoading = true
-			const res = await delScannerBT(url)
+			const res = await delPortfolio(url)
+      debugger
       const code = res.data.code
       if(code == 204) _this.popUpMsgBox('Successfully deleted')
       if(code == 403) _this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
@@ -440,11 +441,10 @@ export default {
       row.viewLoading = true
       const {url, status:preStatus} = row
       const _this = this
-      let res, listRes
+      let res
       try {
         
-        res = await getScannerBTResults(url)
-        listRes = await getScannerBTResultsList(url)
+        res = await getRunPortfolioResults(url)
       } catch (error) {
         console.error('error', error)
         _this.popUpMsgBox('Details Not Found')
@@ -456,15 +456,15 @@ export default {
       const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
-        _this.popUpMsgBox('Backtest details viewed successfully')
+        _this.popUpMsgBox('Portfolio details viewed successfully')
         const data = res.data.data
-        data['TRADE LIST'] = listRes.data.data
+        data.row = row
         _this.$emit('displayResultsData', data)
         // 如果说之前的状态是 running 之后的状态变成了 finish 或者 fail, 那么需要刷新列表
         if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Fail', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
       }
-      if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
-      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
+      if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Portfolio failed. Adjust filters and rerun')
+      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Portfolio in progress. Details and editing are unavailable');return}
       if(code != 200) {_this.$emit('displayResultsData', row)}
       row.viewLoading = false
     },

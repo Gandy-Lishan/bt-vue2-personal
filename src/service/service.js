@@ -1193,7 +1193,7 @@ export function moveStrategyFavorites(url) {
 export function getPortfolioList() {
 	return new Promise((resolve, reject) => {
 		axios
-			.get(`/dev/portfolio/get_portfolio_records/`, {
+			.get(`/dev/portfolio/get_portfolio_records/?ordering=-create_date`, {
 				withCredentials: true
 			})
 			.then(res => {
@@ -1236,6 +1236,55 @@ export function AutoPortfolio(data) {
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function UpdatePortfolio(id, data) {
+	const url = `/dev/portfolio/update_portfolio?url=${id}`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getRunPortfolioResults(url) {
+	const path = `/dev/portfolio/run_portfolio?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function delPortfolio(url) {
+	const path = `/dev/portfolio/delete_portfolio/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.delete(path)
 			.then(res => {
 				resolve(res)
 			})

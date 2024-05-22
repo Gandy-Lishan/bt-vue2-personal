@@ -263,6 +263,9 @@ input[type="time"] {
 .el-dialog__wrapper .el-dialog {
   width: 60% !important;
 }
+.portfolioDialogTable.el-dialog__wrapper .el-dialog {
+  width: 500px !important;
+}
 .senti-container .el-form-item .el-form-item__content .el-form-item__error {
   width: 180px;
   z-index: 999;
@@ -708,6 +711,10 @@ button#checkResBtn {
 		padding-right: 15px;
 		padding-left: 15px;
 	}
+  .col-md-12.portfolio {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
 	h1, h2, h3, h4, h5, h6 {
 		font-weight: 300;
 	}
@@ -852,6 +859,9 @@ button#checkResBtn {
 				clear: both;
 			}
 	}
+  .portfolio-container {
+    width: 95%;
+  }
 	.page-content {
 		padding: 15px 0 15px;
 		direction: ltr;
@@ -947,6 +957,7 @@ button#checkResBtn {
     display: block;
   }
   ul.nav.nav-tabs.nav-justified {
+    box-sizing: border-box;
     padding-left: 0;
     margin-bottom: 0px;
     border: 1px solid #ddd;

@@ -5,243 +5,111 @@
 		<div>
 			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
 				<el-table-column
-					prop="totalReturn"
+					prop="total_assets"
 					show-overflow-tooltip
-					label="TOTAL RETURN %"
+					label="TOTAL ASSETS"
 					align="center"
 					algin="center"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.totalReturn >= 0">{{
-							scope.row.totalReturn + '%'
+						<span v-if="scope.row.total_assets >= 0">{{
+							scope.row.total_assets
 						}}</span>
-						<span v-else-if="isNaN(scope.row.totalReturn)"></span>
+						<span v-else-if="isNaN(scope.row.total_assets)"></span>
 						<span v-else style="color: #dd3a13">{{
-							scope.row.totalReturn + '%'
+							scope.row.total_assets
 						}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column
 					show-overflow-tooltip
-					prop="medianReturn"
-					label="MEDIAN RETURN %"
+					prop="float_profit"
+					label="FLOAT PROFIT"
 					align="center"
 				>
 					<template slot-scope="scope">
-						<span v-if="scope.row.medianReturn >= 0">{{
-							scope.row.medianReturn + '%'
+						<span v-if="scope.row.float_profit >= 0">{{
+							scope.row.float_profit + '%'
 						}}</span>
 						<span
 							v-else-if="
-								isNaN(scope.row.medianReturn) ||
-								!scope.row.medianReturn ||
-								scope.row.medianReturn == 'null' ||
-								scope.row.medianReturn == '0'
+								isNaN(scope.row.float_profit) ||
+								!scope.row.float_profit ||
+								scope.row.float_profit == 'null' ||
+								scope.row.float_profit == '0'
 							"
 						></span>
 						<span v-else style="color: #dd3a13">{{
-							scope.row.medianReturn + '%'
+							scope.row.float_profit + '%'
 						}}</span>
 					</template>
 				</el-table-column>
-				<!-- <el-table-column
-					show-overflow-tooltip
-					prop="averageReturn"
-					label="AVERAGE RETURN %"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.averageReturn >= 0">{{
-							scope.row.averageReturn + '%'
-						}}</span>
-						<span
-							v-else-if="
-								isNaN(scope.row.averageReturn) ||
-								!scope.row.averageReturn ||
-								scope.row.averageReturn == 'null' ||
-								scope.row.averageReturn == '0'
-							"
-						></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.averageReturn + '%'
-						}}</span>
-					</template>
-				</el-table-column> -->
-						<el-table-column
-                prop="tzScore"
-                label="Z-SCORE"
-                align="center"
-                show-overflow-tooltip
-            >
-                <template slot-scope="scope">
-                    <span v-if="scope.row.tzScore >= 0">{{
-                        scope.row.tzScore
-                    }}</span>
-                    <span v-else-if="scope.row.tzScore < 0" style="color: #dd3a13">{{ scope.row.tzScore }}</span>
-                    <span v-else></span>
-                </template>
-            </el-table-column>
-						<el-table-column
-								prop="standardDeviation"
-								label="STD. DEV"
-								show-overflow-tooltip
-								align="center"
-						>
-								<template slot-scope="scope">
-										<span v-if="scope.row.standardDeviation >= 0">{{
-												scope.row.standardDeviation
-										}}</span>
-										<span v-else-if="scope.row.standardDeviation < 0" style="color: #dd3a13">{{
-												scope.row.standardDeviation
-										}}</span>
-										<span v-else></span>
-								</template>
-						</el-table-column>
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 				<el-table-column
-							prop="winRate"
-							label="WIN RATE %"
-							show-overflow-tooltip
-							align="center"
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.winRate >= 0">{{
-									scope.row.winRate + '%'
+						prop="cash"
+						label="CASH"
+						align="center"
+						show-overflow-tooltip
+				>
+						<template slot-scope="scope">
+								<span v-if="scope.row.cash >= 0">{{
+										scope.row.cash
 								}}</span>
-								<span v-else-if="isNaN(scope.row.winRate)"></span>
-								<span v-else style="color: #dd3a13">{{
-									scope.row.winRate + '%'
+								<span v-else-if="scope.row.cash < 0" style="color: #dd3a13">{{ scope.row.cash }}</span>
+								<span v-else></span>
+						</template>
+				</el-table-column>
+				<el-table-column
+						prop="market_value"
+						label="MARKET VALUE"
+						show-overflow-tooltip
+						align="center"
+				>
+						<template slot-scope="scope">
+								<span v-if="scope.row.market_value >= 0">{{
+										scope.row.market_value
 								}}</span>
-							</template>
-						</el-table-column>
-						<el-table-column
-					show-overflow-tooltip
-					prop="averageWin"
-					label="AVERAGE WIN %"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.averageWin >= 0">{{
-							scope.row.averageWin + '%'
-						}}</span>
-						<span v-else-if="isNaN(scope.row.averageWin)"></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.averageWin + '%'
-						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					show-overflow-tooltip
-					prop="averageLoss"
-					label="AVERAGE LOSS %"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.averageLoss >= 0">{{
-							scope.row.averageLoss + '%'
-						}}</span>
-						<span v-else-if="isNaN(scope.row.averageLoss)"></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.averageLoss + '%'
-						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-							show-overflow-tooltip
-							prop="maxRisk"
-							label="MAX RISK%"
-							align="center"
-						>
-							<template slot-scope="scope">
-								<span v-if="scope.row.maxRisk >= 0">{{
-									scope.row.maxRisk + '%'
+								<span v-else-if="scope.row.market_value < 0" style="color: #dd3a13">{{
+										scope.row.market_value
 								}}</span>
-								<span v-else-if="isNaN(scope.row.maxRisk) || !scope.row.maxRisk || scope.row.maxRisk=='null' || scope.row.maxRisk=='0'"></span>
-								<span v-else style="color: #dd3a13">{{
-									scope.row.maxRisk + '%'
+								<span v-else></span>
+						</template>
+				</el-table-column>
+				<el-table-column
+						prop="winrate"
+						label="WIN RATE"
+						show-overflow-tooltip
+						align="center"
+				>
+						<template slot-scope="scope">
+								<span v-if="scope.row.winrate >= 0">{{
+										scope.row.winrate + '%'
 								}}</span>
-							</template>
-				</el-table-column>
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
-				<el-table-column
-					prop="totalTrades"
-					label="TOTAL TRADES"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalTrades >= 0">{{
-							scope.row.totalTrades
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalTrades
-						}}</span>
-					</template>
-				</el-table-column>
-						<el-table-column
-					show-overflow-tooltip
-					prop="totalPositive"
-					label="TOTAL POSITIVE"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalPositive >= 0">{{
-							scope.row.totalPositive
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalPositive
-						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="totalNegative"
-					show-overflow-tooltip
-					label="TOTAL NEGATIVE"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalNegative >= 0">{{
-							scope.row.totalNegative
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalNegative
-						}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="timeInMarket"
-					show-overflow-tooltip
-					label="TIME IN MARKET %"
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.timeInMarket >= 0">{{
-							scope.row.timeInMarket + '%'
-						}}</span>
-						<span v-else-if="isNaN(scope.row.timeInMarket)"></span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.timeInMarket + '%'
-						}}</span>
-					</template>
+								<span v-else-if="scope.row.winrate < 0" style="color: #dd3a13">{{
+										scope.row.winrate + '%'
+								}}</span>
+								<span v-else></span>
+						</template>
 				</el-table-column>
 			</el-table>
 		</div>
 		<div class="CPM-trades">
 			<el-table
-					:data="paginatedData"
-					class="trades-table ScannerBTTable"
-					size="small"
-					@sort-change="changeTableSort"
-					stripe
+				:data="paginatedData"
+				class="trades-table ScannerBTTable"
+				size="small"
+				@sort-change="changeTableSort"
+				stripe
+				style="width: 100%; height: 100%;"
         >
+		<el-table-column label="#" align="center" width="50px">
+      <template slot-scope="scope">
+        <span>{{ scope.$index + 1 }}</span>
+      </template>
+    </el-table-column>
 			<template v-for="(l, index) in tableCol">
 				<el-table-column
-					v-if="['#', 'Symbol', 'Signal', 'Direction', 
-					'Entry Date', 'Entry Action', 'Entry Price',
-					'Exit Date', 'Exit Action', 'Exit Price',
-					'Exit Reason'
+					v-if="['Symbol', 'Entry Price', 'Current Price', 
+					'Shares', 'Profit', 'Market Value', 'Strategy'
 					].includes(l.label)"
 					show-overflow-tooltip
 					:prop="l.value"
@@ -251,7 +119,7 @@
 					:key="index"
 					:sortable="
 						[
-							'Symbol', 'Signal', 'Entry Date', 'Exit Date', 'Exit Reason'
+							'Symbol', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value', 'Strategy'
 						].includes(l.label)
 							? 'custom'
 							: false
@@ -259,7 +127,7 @@
 					>
           </el-table-column>
 					<el-table-column
-					v-if="l.label == 'Float Profit %'"
+					v-if="l.label == 'Total Position(%)'"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
@@ -267,15 +135,15 @@
 					align="center"
 					:key="index"
 					:sortable="
-					l.label === 'Float Profit %' ? 'custom' : false
+					l.label === 'Total Position(%)' ? 'custom' : false
 					"
 					>
 					<template slot-scope="scope">
-							<span v-if="scope.row.FloatProfit >= 0"
-									>{{ scope.row.FloatProfit }}%</span
+							<span v-if="scope.row[l.value] >= 0"
+									>{{ scope.row[l.value] }}%</span
 							>
-							<span v-else-if="scope.row.FloatProfit < 0" style="color: #dd3a13"
-									>{{ scope.row.FloatProfit }}%</span
+							<span v-else-if="scope.row[l.value] < 0" style="color: #dd3a13"
+									>{{ scope.row[l.value] }}%</span
 							>
 							<span v-else>{{ '' }}</span>
 						</template>
@@ -319,72 +187,46 @@ export default {
 			processedTradesData: [],
 			tableCol: [
         {
-          label: '#',
-          value: 'TradeNumber',
-          key: 'TradeNumber',
-					width: '50px'
-        },
-        {
           label: 'Symbol',
           value: 'Symbol',
           key: 'Symbol',
 					width: '100px'
         },
-        {
-          label: 'Signal',
-          value: 'Signal',
-          key: 'Signal'
-        },
-        {
-          label: 'Direction',
-          value: 'Direction',
-          key: 'Direction',
-					width: '100px'
-        },
-        {
-          label: 'Entry Date',
-          value: 'EntryDate',
-          key: 'EntryDate',
-					width: '120px'
-        },
-        {
-          label: 'Entry Action',
-          value: 'EntryAction',
-          key: 'EntryAction',
-					width: '120px'
-        },
 				{
           label: 'Entry Price',
-          value: 'EntryPrice',
-          key: 'EntryPrice'
+          value: 'Entry Price',
+          key: 'Entry Price'
         },
 				{
-          label: 'Exit Date',
-          value: 'ExitDate',
-          key: 'ExitDate',
-					width: '120px'
+          label: 'Current Price',
+          value: 'Current Price',
+          key: 'Current Price'
         },
 				{
-          label: 'Exit Action',
-          value: 'ExitAction',
-          key: 'ExitAction',
-					width: '120px'
+          label: 'Shares',
+          value: 'Shares',
+          key: 'Shares'
         },
 				{
-          label: 'Exit Price',
-          value: 'ExitPrice',
-          key: 'ExitPrice'
+          label: 'Profit',
+          value: 'Profit',
+          key: 'Profit'
         },
 				{
-          label: 'Float Profit %',
-          value: 'FloatProfit',
-          key: 'FloatProfit'
+          label: 'Market Value',
+          value: 'Market Value',
+          key: 'Market Value'
         },
 				{
-          label: 'Exit Reason',
-          value: 'ExitReason',
-          key: 'ExitReason'
-        }
+					label: 'Total Position(%)',
+					value: 'Total position(%)',
+					key: 'Total position(%)'
+				},
+				{
+					label: 'Strategy',
+					value: 'Strategy',
+					key: 'Strategy'
+				}
       ],
 		}
 	},

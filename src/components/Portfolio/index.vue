@@ -75,7 +75,9 @@
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Summary</p>
-            <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Dual Trend Model</p>
+            <template v-for="(item, index) in strategy_details">
+            <p @click.stop="() => {changeSecondTab(`${item.model}_${index}`)}" :class="{ secondActive: activeSecondTab == `${item.model}_${index}` || '' }" :key="index">{{ item.model }}</p>
+            </template>
           </div>
           <div class="downLoadCsvBtn">
               <el-button
@@ -90,14 +92,17 @@
           </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
+        <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
         <div class="content">
-            <FilterTable v-show="activeSecondTab == 'filter'" ref="filterTable"
-            :data="filterTableData" 
+          <template v-for="(ele, index) in strategy_details">
+            <FilterTable v-show="activeSecondTab == `${ele.model}_${index}`"
+            :data="ele" 
             :label="filterTableData.label" 
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
+            :key="index"
             ></FilterTable>
-            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
+          </template>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -112,6 +117,7 @@ import Form from "./Form";
 // import MaxMin from "../results/components/MaxMin";
 import ScannerBTTable from "./Table";
 import FilterTable from "./FilterTable";
+import { isJson } from '@/utils';
 const XLSX = require('xlsx');
 
 export default {
@@ -120,7 +126,7 @@ export default {
     return {
       activeNames: ['1', '2', '3'],
       activeTab: 'statistics',
-      activeSecondTab: 'filter',
+      activeSecondTab: 'summary',
       tradeDate: {},
       tradePrice: 'Close',
       chart_data: {},
@@ -148,7 +154,8 @@ export default {
           {label:'Expected Return(%)',value:'ExpectedReturn'},
           // {label:'Z-Score',value:'Z_Score'},
         ]
-      }
+      },
+      strategy_details: []
     }
   },
   components: {
@@ -163,6 +170,9 @@ export default {
     },
     changeSecondTab(val) {
       this.activeSecondTab = val
+      this.$nextTick(() => {
+      this.activeSecondTab = val    
+      })
     },
     scrollToTarget(refName, height=-80) {
       this.$nextTick(() => {
@@ -179,84 +189,29 @@ export default {
     displayResultsAndFilter(data) {
       
       // 至展示 filter 和 result 不重新赋值 form
-      const result = data.result
-      const list = JSON.parse(data['TRADE LIST'])
-      this.displayPreviewList(list)
       this.activeSecondTab = 'summary'
-      this.displaySummary(result)
+      this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      
+      const {row: {status}} = data
       this.$refs['Form'].displayData(data)
+      debugger
       this.activeSecondTab = 'summary'
-      const status = data.status
       if(status !== 'finish' && status !== 'Finish') {
         this.scrollToTarget('formTarget', -200)
         this.clearResults()
         return
       }
-      const result = data.result
-      const list = JSON.parse(data['TRADE LIST'])
-      this.displaySummary(result)
-      this.displayPreviewList(list)
+      this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
-    displaySummary(result) {
-      
-      const statistics = {}
-      statistics.totalReturn = result['TOTAL RETURN']
-      statistics.medianReturn = result['MEDIAN RETURN']
-      statistics.averageReturn = result['AVERAGE RETURN']
-      statistics.tzScore = result['Z-SCORE'] 
-      statistics.standardDeviation = result['STD.DEV']
-      statistics.maxRisk = result['MAX RISK']
-      // statistics.buyHoldGain = _data.buy_and_hold 缺少
-      // MDD + STD.DEV 我没加进去的
-      statistics.winRate = result['WIN RATE']
-      statistics.averageWin = result['AVERAGE WIN']
-      statistics.averageLoss = result['AVERAGE LOSS']
-      statistics.totalTrades = result['TOTAL TRADES']
-      statistics.totalPositive = result['TOTAL POSITIVE']
-      statistics.totalNegative = result['TOTAL NEGATIVE']
-      statistics.timeInMarket = result['TIME IN MARKET']
-      const transformedResult = []
-      const _result = result.result
-      const ID = _result['ID']
-      const indexMap = {}
-      ID.forEach((id, index) => {
-        if (!(id in indexMap)) {
-          indexMap[id] = []
-        }
-        indexMap[id].push(index)
-      })
-      const _ID = Object.values(indexMap) //输出: [[0, 2], [1, 3]] 这里没有考虑传入数据总数的奇偶问题
-
-      for (let i = 0; i < _ID.length; i++) {
-        const dataSource = 1
-        const oppositeDataSource = 0
-        const data = {
-          Symbol: _result['Symbol'][_ID[i][dataSource]],
-          Signal: _result['Signal'][_ID[i][dataSource]],
-          Direction: _result['Direction'][_ID[i][dataSource]],
-          EntryDate: _result['Start Date'][_ID[i][oppositeDataSource]],
-          EntryAction: _result['Action'][_ID[i][oppositeDataSource]],
-          EntryPrice: _result['Close'][_ID[i][oppositeDataSource]],
-          ExitDate: _result['Start Date'][_ID[i][dataSource]],
-          ExitAction: _result['Action'][_ID[i][dataSource]],
-          ExitPrice: _result['Close'][_ID[i][dataSource]],
-          FloatProfit: _result['FloatProfit'][_ID[i][dataSource]],
-          ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
-          TradeNumber: i + 1
-        }
-        transformedResult.push(data)
-      }
-      transformedResult.sort(function(a, b) {
-          var dateA = new Date(a.EntryDate)
-          var dateB = new Date(b.EntryDate)
-          return dateA - dateB
-      })
-      this.tradesData = transformedResult
+    displaySummary(data) {
+      debugger
+      const {portfolio_details:statistics, strategy_details} = data
+      const _result = isJson(data.portfolio_details.portfolio_details) ? JSON.parse(data.portfolio_details.portfolio_details) : data.portfolio_details.portfolio_details
+      this.strategy_details = isJson(strategy_details) ? JSON.parse(strategy_details) : strategy_details
+      this.tradesData = _result
       this.$nextTick(() => {
         this.$refs['Statistics'].displayData(statistics)
       })
@@ -284,10 +239,9 @@ export default {
 		    this.loading = false
     },
     clearResults() {
-        this.activeSecondTab = 'filter'
-        this.displayPreviewList([])
+        this.activeSecondTab = 'summary'
         this.$refs['Statistics'].displayData({})
-        this.tradesData = []
+        this.strategy_details = []
     },
     resetForm() {
       this.$nextTick(() => {
