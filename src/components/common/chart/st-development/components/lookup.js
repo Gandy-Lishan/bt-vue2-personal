@@ -216,9 +216,17 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 var filters = this.querySelector("cq-lookup-filters");
                 if (filters) {
                     var allFilters = filters.querySelectorAll("cq-filter");
-                    var lookupInput = this.querySelector("cq-lookup-input");
-                    
+
+                    var lookupInput = document.querySelector("cq-lookup-input");
                     CIQ.UI.stxtap(lookupInput, function () {
+                        allFilters.forEach(function (f) { 
+                            if(f.classList.contains("true")){    
+                                self.acceptText(self.input.val(), f.innerHTML);
+                            }
+                        });
+                    });
+                    var comparisonInput = document.querySelector(".cq-comparison-new")
+                    CIQ.UI.stxtap(comparisonInput, function () {
                         allFilters.forEach(function (f) { 
                             if(f.classList.contains("true")){    
                                 self.acceptText(self.input.val(), f.innerHTML);
@@ -227,8 +235,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     });
 
                     allFilters.forEach(function (filter) {
-                        // a dumb function to solve the display bug    
-                    
                         CIQ.UI.stxtap(filter, function () {
                             allFilters.forEach(function (f) {
                                 f.classList.remove("true");

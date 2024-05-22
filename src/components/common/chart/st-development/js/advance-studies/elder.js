@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_elder_ = (_exports) => {
@@ -52,6 +52,8 @@ if (!CIQ.Studies) {
 			"Signal Period": 9
 		};
 		sd.macd.outputs = { _MACD: null, _Signal: null };
+			/** dual symbol features */
+			sd.macd.parameters = sd.parameters
 		CIQ.Studies.calculateMACD(stx, sd.macd);
 
 		var color;
@@ -77,6 +79,13 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateElderRay = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
@@ -85,9 +94,9 @@ if (!CIQ.Studies) {
 
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			quotes[i][sd.name + "_hist1"] =
-				quotes[i].High - quotes[i]["_EMA " + sd.name];
+				getPropertyByString(quotes[i],field,'High') - quotes[i]["_EMA " + sd.name];
 			quotes[i][sd.name + "_hist2"] =
-				quotes[i].Low - quotes[i]["_EMA " + sd.name];
+				getPropertyByString(quotes[i],field,'Low') - quotes[i]["_EMA " + sd.name];
 		}
 		sd.outputMap = {};
 		sd.outputMap[sd.name + "_hist1"] = "";
@@ -96,13 +105,21 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.calculateElderForce = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
 		}
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
 			quotes[i]["_EF1 " + sd.name] =
-				quotes[i].Volume * (quotes[i].Close - quotes[i - 1].Close);
+				getPropertyByString(quotes[i],field,'Volume') * 
+				(getPropertyByString(quotes[i],field,'Close') - getPropertyByString(quotes[i - 1],field,'Close'));
 		}
 		CIQ.Studies.MA(
 			"exponential",
@@ -240,4 +257,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_elder_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_elder_}
