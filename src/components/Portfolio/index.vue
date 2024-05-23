@@ -83,10 +83,7 @@
 </template>
 <script>
 import Statistics from "./Statistics";
-// import TIM from "./components/tim";
-// import CorrInfo from "./components/corrInfo";
 import Form from "./Form";
-// import MaxMin from "../results/components/MaxMin";
 import ScannerBTTable from "./Table";
 import FilterTable from "./FilterTable";
 import { isJson } from '@/utils';
@@ -133,7 +130,6 @@ export default {
 		console.log('TO', to, 'FROM', from)
   if (from.path.includes('/strategy')) {
     next(async _this => {
-      debugger
       if (to.params.usedFor && to.params.usedFor === 'SetPortfolio') {
         const data = isJson(to?.params?.data) ? JSON.parse(to?.params?.data) : []
         if(!data || !data.length) return
@@ -192,19 +188,17 @@ export default {
     displayResultsData(data) {
       const {row: {status}, portfolio_details:statistics, strategy_details} = data
       this.$refs['Form'].displayData(data)
-      debugger
       this.activeSecondTab = 'summary'
       if(status !== 'finish' && status !== 'Finish') {
         this.scrollToTarget('formTarget', -200)
         this.clearResults()
         return
       }
-      if(!statistics || !strategy_details) {this.scrollToTarget('formTarget', -200); this.clearResults(); return}
+      if(!statistics || !strategy_details) {this.popUpMessage('Portfolio is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
       this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
     displaySummary(data) {
-      debugger
       const {portfolio_details:statistics, strategy_details} = data
       const _result = isJson(data.portfolio_details.portfolio_details) ? JSON.parse(data.portfolio_details.portfolio_details) : data.portfolio_details.portfolio_details
       this.strategy_details = isJson(strategy_details) ? JSON.parse(strategy_details) : strategy_details

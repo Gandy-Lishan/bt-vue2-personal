@@ -349,7 +349,6 @@ export default {
       const _this = this
       row.deleteLoading = true
 			const res = await delPortfolio(url)
-      debugger
       const code = res.data.code
       if(code == 204) _this.popUpMsgBox('Successfully deleted')
       if(code == 403) _this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")

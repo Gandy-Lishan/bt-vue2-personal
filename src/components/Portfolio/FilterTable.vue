@@ -130,7 +130,6 @@ export default {
 	watch: {
 		data: {
 			handler(newValue, oldValue){
-				debugger
 				if(!newValue) return
 				if(newValue.profit_loss_ratio == -1) newValue.profit_loss_ratio = 'Low risk'
 				for (const key in newValue) {

@@ -312,7 +312,6 @@ export default {
 			}
 		},
     handleDownloadCsv() {
-			debugger
 			const summary = []
       this.summaryData.forEach((item, index) => {
         const obj = {}

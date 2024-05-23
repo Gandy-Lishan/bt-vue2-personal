@@ -621,7 +621,7 @@ export default {
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
       if(strategy_combination.length<1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      this.processTips = `Tips: Running portfolio backtest...`
+      this.processTips = `Tips: Saving portfolio...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -639,15 +639,14 @@ export default {
       else{saveRes = await RunPortfolio(saveData)}
       // 这里要发请求拿到预推荐列表
       // 刷新Backtest列表
-      // this.$emit('refreshBTList')
-      console.log('saveRes', saveRes)
+      this.$emit('refreshBTList')
       const code = saveRes.data?.code
       const failedConditions = [203, 403, 404, 406]
       if(failedConditions.includes(Number(code))) {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Running portfolio backtest. Please wait patiently...'
+      this.processTips = 'Tips: Running portfolio. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -686,7 +685,6 @@ export default {
       }
       const res = await AutoPortfolio(autoData)
       console.log('res', res)
-      debugger
       const code = res.data.code
       if(code == 200) {
         const data = res.data.data.map(element => (JSON.parse(element))).map(item => ({selection: false,array: item}))
@@ -703,7 +701,6 @@ export default {
       let saveRes = null
       try {
         saveRes = await this.saveFormData()
-        debugger
       } catch (error) {
         this.$emit('clearResults')
         this.btnLoading = false
@@ -713,8 +710,6 @@ export default {
      if(!saveRes) { this.$emit('clearResults');
       this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
-     const name = saveRes.data?.data?.name
-     debugger
      if(code == 203) this.popUpMsgBox(`The portfolio is running. You can wait or click the "+" button to create a new portfolio`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
@@ -725,10 +720,6 @@ export default {
       if(code == 407) this.popUpMsgBox('Empty portfolio. Please run again')
       if(code == 200) {
         this.popUpMsgBox(`The portfolio is completed successfully`)
-        // 这里添加过滤列表
-        // const list = saveRes['TRADE LIST']
-        // if(list) saveRes.data.data['TRADE LIST'] = list
-        debugger
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
@@ -740,7 +731,6 @@ export default {
       this.percentage = 0
     },
     async displayData(data) {
-      debugger
       const row = isJson(data.row) ? JSON.parse(data.row) : data.row
       if(!row) return
       const {url, name, start_date, end_date, cash, strategy_combination} = row
@@ -897,7 +887,6 @@ export default {
       this.dialogTableVisible = false
     },
     setPortfolio({strategy_combination, percent}) {
-      debugger
       this.strategy_combination = strategy_combination
       this.portfolioFirstLine.percent = percent
     }
