@@ -287,7 +287,7 @@ if (CIQ.ChartEngine) {
 				// : 80
 				: 100
 		const studiesPanelsSize = studiesLen * studiesHeight
-		const chartPanelSize = 550
+		const chartPanelSize = 680
 		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
 		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
 		//console.log(chartContainer.style.height,studiesLen,studiesHeight)
