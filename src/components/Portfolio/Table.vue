@@ -40,22 +40,6 @@
 						<el-form-item label="TOTAL NEGATIVE">
 							<span>{{ props.row['total_negative'] }}</span>
 						</el-form-item>
-
-						<!-- <el-form-item label="ANNUAL RETURN % (CAGR)">
-							<span>{{ props.row['annual_return'] }}</span>
-						</el-form-item> -->
-						<!-- <el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
-						</el-form-item> -->
-						<el-form-item label="STD. DEV">
-							<span>{{ props.row['std_dev'] }}</span>
-						</el-form-item>
-            <el-form-item label="MAX RISK %">
-							<span>{{ props.row['max_draw_down'] ? `${props.row['max_draw_down']}%` : props.row['max_draw_down'] }}</span>
-						</el-form-item>
-            <el-form-item label="TIME IN MARKET %">
-							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>
-						</el-form-item>
 					</el-form>
 				</template>
 		</el-table-column>
@@ -92,13 +76,18 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="['Return', 'Max Drow Down'].includes(l.label)"
-          :sortable="['Return', 'Max Drow Down'].includes(l.label) ? 'custom' : false"
+          v-if="['Return', 'Max Risk %', 'STD. DEV'].includes(l.label)"
+          :sortable="['Return', 'Max Risk %', 'STD. DEV'].includes(l.label) ? 'custom' : false"
 				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
 						<span class="tableText">
+              <span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else>
 							{{ scope.row[l.value] }}
+						</span>
 						</span>
 					</template>
 				</el-table-column>
@@ -171,7 +160,6 @@
 		></el-pagination>
     <div v-if="isPopupVisible" :style="popupStyle" class="popup">
       <!-- 显示详细信息的内容 -->
-      
       <div class="plan_box">
         <table border="2px">
           <thead>
@@ -182,8 +170,8 @@
           <tbody>
               <template v-for="(item, index) in strategy_combination">
                 <tr :key="index">
-                  <template v-for="(ele, i) in item">
-                    <td :key="i">{{ ele }}</td>
+                  <template v-for="(value, key) in item">
+                    <td :key="key" v-if="['strategy', 'model', 'percent'].includes(key)">{{ value }}</td>
                   </template>
                </tr>  
               </template>
@@ -191,65 +179,12 @@
        </table>
       </div>
     </div>
-    <!-- <el-dialog
-  title="提示"
-  :visible.sync="isPopupVisible"
-  width="400px"
-  :modal="false"
-  :style="popupStyle"
-  custom-class="popup"
-  > -->
-    <!-- </div> -->
-  <!-- <el-table
-        ref="Table"
-        header-align="center"
-        :data="strategy_combination"
-        empty-text="No data"
-        size="mini"
-			  style="width: 100%; height: 100%;"
-      >
-			<template v-for="(l) in detailTableCol">
-				<el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-				  show-overflow-tooltip
-          :width="l.width"
-          v-if="['strategies', 'signal', 'date'].includes(l.value)"
-				>
-					<template slot-scope="scope">
-						<span class="tableText" v-if="l.value === 'strategies'">
-              <el-button type="text">{{ scope.row[l.value] }}</el-button>
-						</span>
-            <span class="tableText" v-else>
-              {{ scope.row[l.value] }}
-						</span>
-					</template>
-          </el-table-column>
-          <el-table-column
-          align="center"
-					:label="l.label"
-					:key="l.key"
-				  show-overflow-tooltip
-          :width="l.width"
-          v-if="['weight'].includes(l.value)"
-				>
-					<template slot-scope="scope">
-            <el-input v-model="scope.row[l.value]" size="mini" disabled>
-              <template v-slot:append>(%)</template>
-            </el-input>
-					</template>
-          </el-table-column>
-			</template>
-		  </el-table> -->
-<!-- </el-dialog> -->
   </div>
 </template>
 
 <script>
-import { delPortfolio, AutoPortfolio, getRunPortfolioResults, getScannerBTResultsList, getPortfolioList } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
+import { delPortfolio, getRunPortfolioResults, getPortfolioList } from '@/service/service'
+import { capitalizeFirstLetter, isJson, trimTrailingZeros } from "@/utils"
 
 export default {
   name: 'ScannerBTTable',
@@ -273,13 +208,8 @@ export default {
         },
         {
           label: 'Return',
-          value: 'return_range',
-          key: 'return_range'
-        },
-        {
-          label: 'Max Drow Down',
-          value: 'mdd_range',
-          key: 'mdd_range'
+          value: 'return',
+          key: 'return'
         },
         {
           label: 'Win Rate %',
@@ -287,29 +217,14 @@ export default {
           key: 'winrate'
         },
         {
-          label: 'Float Profit',
-          value: 'float_profit',
-          key: 'float_profit'
+          label: 'STD. DEV',
+          value: 'std_dev',
+          key: 'std_dev'
         },
         {
-          label: 'Market Value',
-          value: 'market_value',
-          key: 'market_value'
-        },
-        {
-          label: 'Final Cash',
-          value: 'final_cash',
-          key: 'final_cash'
-        },
-        {
-          label: 'Auto Portfolio',
-          value: 'auto_portfolio',
-          key: 'auto_portfolio'
-        },
-        {
-          label: 'Cash',
-          value: 'cash',
-          key: 'cash'
+          label: 'Max Risk %',
+          value: 'max_risk',
+          key: 'max_risk'
         }
       ],
       tableData: [],
@@ -366,8 +281,13 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
+            const handleKey = ['winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
+            item.return = trimTrailingZeros((item.float_profit/item.cash*100).toFixed(2))
+            handleKey.forEach(key => {
+              item[key] = trimTrailingZeros(item[key].toFixed(2))
+            })
             item.viewLoading = false
             item.deleteLoading = false
 						return item

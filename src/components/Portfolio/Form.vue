@@ -710,7 +710,7 @@ export default {
       debugger
       const code = res.data.code
       if(code == 200) {
-        const data = res.data.map(element => (JSON.parse(element))).map(item => ({selection: false,array: item}))
+        const data = res.data.data.map(element => (JSON.parse(element))).map(item => ({selection: false,array: item}))
         // 这个时候应该弹出弹窗让用户选择 strategy
         console.log('data', data)
         this.dialogTableVisible = true
