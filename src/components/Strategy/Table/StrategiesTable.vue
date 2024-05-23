@@ -239,7 +239,8 @@ export default {
 			dataList: [],
 			selection: false,
 			isIndeterminate: false,
-			strategiesJSON: []
+			strategiesJSON: [],
+			portfolioList: []
 		}
 	},
 	computed: {
@@ -271,12 +272,15 @@ export default {
 				this.paginatedData[i][selectionvalue] = this[selectionvalue]
 				this[isIndeterminatevalue] = false
 			}
+			console.log('this.paginatedData.filter((item) => item.selection)', this.paginatedData.filter((item) => item.selection))
 		},
 		handleListSelectedFn(selectionvalue, isIndeterminatevalue, scope) {
 			// 点击table列表内的选择框
 			// table列表内选择框状态改变
 			this.paginatedData[scope.$index][selectionvalue] =
 				!this.paginatedData[scope.$index][selectionvalue]
+			this.portfolioList = [...this.portfolioList.filter((item) => item.selection), ...this.paginatedData.filter((item) => item.selection)].filter((item, index, self) =>
+      index === self.findIndex((t) => t.model_name === item.model_name))
 			// 判断是否在全选状态下
 			let statusSelectio = this.allSelectionFn(selectionvalue)
 			if (statusSelectio) {
@@ -330,10 +334,25 @@ export default {
 			this.$emit('highlightedTag', this.highlightedTag)
 		},
 		portfolio() {
-			console.log(
-				'paginatedData',
-				this.paginatedData.filter((item) => item.selection)
-			)
+			// 处理跳转的数据
+			const tags = {
+        'Legacy': 'Legacy Index',
+        'INDEX': 'Index',
+        'Bond': 'Bond',
+        'Factors': 'Factors',
+        'Sector': 'Sector'
+      }
+			const _portfolioList = this.portfolioList.map(item => {
+				return { strategy: item.model_name, url: item.url, _category: item.category, category: tags[item.category], model_name: item.model_name }
+			})
+			if(!_portfolioList.length) {
+				this.popUpMsgBox('Please select at least 1 strategies')
+				return
+			}
+			this.$router.push({
+				name: 'Portfolio',
+				params: { data: JSON.stringify(_portfolioList), usedFor: 'SetPortfolio' }
+			},()=>{})
 		},
 		async getDataList() {
 			this.loading = true
