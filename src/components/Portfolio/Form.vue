@@ -242,26 +242,6 @@
         </el-autocomplete>
       </template>
     </el-table-column>
-    <!-- <el-table-column label="Model" header-align="center" align="center" prop="model" width="200">
-      <template slot-scope="scope">
-        <el-select v-model="portfolioFirstLine.model" disabled placeholder="- Select-" size="mini" v-if="scope.$index === 0">
-          <el-option
-            v-for="item in nonBondOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-select v-model="scope.row.model" placeholder="- Select-" size="mini" v-else>
-          <el-option
-            v-for="item in (scope.row.category !== 'Bond' ? nonBondOptions : bondOptions)"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </template>
-    </el-table-column> -->
     <el-table-column label="Weight" header-align="center" align="center" prop="percent" width="200">
       <template slot-scope="scope">
         <el-input v-model="portfolioFirstLine.percent" size="mini" label-width="50px" disabled v-if="scope.$index === 0">
@@ -630,7 +610,6 @@ export default {
         totalWeight += parseFloat(row.percent) || 0
         row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
-        debugger
         if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
         console.log('this.strategiesList', this.strategiesList)
         const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
@@ -652,7 +631,7 @@ export default {
       this.percentage = 8
       let saveData = {
         ...this.data,
-        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; item.model = 'CASH'; return item})),
+        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
         auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
       let saveRes
@@ -916,6 +895,11 @@ export default {
       this.portfolioFirstLine.percent = 100 - totalWeight
       this.checkStrategyLoading = false
       this.dialogTableVisible = false
+    },
+    setPortfolio({strategy_combination, percent}) {
+      debugger
+      this.strategy_combination = strategy_combination
+      this.portfolioFirstLine.percent = percent
     }
   }
 }

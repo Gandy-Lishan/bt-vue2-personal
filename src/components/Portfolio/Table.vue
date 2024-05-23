@@ -385,7 +385,7 @@ export default {
       }
       if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Portfolio failed. Adjust filters and rerun')
       if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Portfolio in progress. Details and editing are unavailable');return}
-      if(code != 200) {_this.$emit('displayResultsData', row)}
+      if(code != 200) {_this.$emit('displayResultsData', {row})}
       row.viewLoading = false
     },
     async handleQuery() {

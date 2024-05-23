@@ -29,7 +29,7 @@
 				>
 					<template slot-scope="scope">
 						<span v-if="scope.row.float_profit >= 0">{{
-							scope.row.float_profit + '%'
+							scope.row.float_profit
 						}}</span>
 						<span
 							v-else-if="
@@ -40,7 +40,7 @@
 							"
 						></span>
 						<span v-else style="color: #dd3a13">{{
-							scope.row.float_profit + '%'
+							scope.row.float_profit
 						}}</span>
 					</template>
 				</el-table-column>
@@ -91,6 +91,16 @@
 						</template>
 				</el-table-column>
 			</el-table>
+		</div>
+		<div class="downLoadCsvBtn">
+			<span>HOLDING DETAILS</span>
+			<el-button
+				@click.stop="() => {handleDownloadCsv()}"
+				style="display: inline-block"
+				type="primary"
+				size="mini"
+				icon="el-icon-download"
+				>Download CSV</el-button>
 		</div>
 		<div class="CPM-trades">
 			<el-table
@@ -170,6 +180,8 @@
 	</div>
 </template>
 <script>
+const XLSX = require('xlsx');
+
 export default {
 	name: 'Statistics',
 	props: {
@@ -299,46 +311,97 @@ export default {
 				}
 			}
 		},
-		handleDownloadCsv() {
-      const {summaryData, tradesData} = this
-      const summary = []
-      summaryData.forEach((item, index) => {
+    handleDownloadCsv() {
+			debugger
+			const summary = []
+      this.summaryData.forEach((item, index) => {
         const obj = {}
-        obj['TOTAL RETURN %'] = `${item.totalReturn}%`
-        obj['MEDIAN RETURN %'] = `${item.medianReturn}%`
-        obj['AVERAGE RETURN %'] = `${item.averageReturn}%`
-        obj['Z-SCORE'] = item.tzScore
-        obj['WIN RATE %'] = `${item.winRate}%`
-        obj['AVERAGE WIN %'] = `${item.averageWin}%`
-        obj['AVERAGE LOSS %'] =  `${item.averageLoss}%`
-        obj['TOTAL TRADES'] =  `${item.totalTrades}`
-        obj['TOTAL POSITIVE'] = `${item.totalPositive}`
-        obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
-        obj['TIME IN MARKET %'] = `${item.timeInMarket}%`
+        obj['TOTAL ASSETS'] = item.total_assets
+        obj['FLOAT PROFIT'] = item.float_profit
+        obj['CASH'] = item.cash
+        obj['MARKET VALUE'] = item.market_value
+				obj['WIN RATE %'] = `${item.winrate}%`
         summary.push(obj)
       })
-      const trade = []
-      tradesData.forEach((item, index) => {
-        const obj = {}
-        obj['#'] = item.TradeNumber
+			const trade = []
+			this.tradesData.forEach((item, index) => {
+				const obj = {}
+        obj['#'] = index + 1
         obj['Symbol'] = item.Symbol
-        obj['Signal'] = item.Signal
-        obj['Direction'] = item.Direction
-        obj['Entry Date'] = item.EntryDate
-        obj['Entry Action'] = item.EntryAction
-        obj['Entry Price'] = item.EntryPrice
-        obj['Exit Date'] = item.ExitDate
-        obj['Exit Action'] = item.ExitAction
-        obj['Exit Price'] = item.ExitPrice
-        obj['Float Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
-        obj['Exit Reason'] = item.ExitReason
+        obj['Entry Price'] = item['Entry Price']
+        obj['Current Price'] = item['Current Price']
+        obj['Shares'] = item['Shares']
+        obj['Profit'] = item['Profit']
+        obj['Market Value'] = item['Market Value']
+        obj['Total Position(%)'] = `${item['Total position(%)']}%`
+        obj['Strategy'] = item.Strategy.join(', ')
         trade.push(obj)
-      })
-			return {
+			})
+      if (
+        !(
+          summary.length &&
+          trade.length
+        )
+      ) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const dataList = [ 
 				summary,
-				trade
-			}
-		}
+        trade
+      ]
+      const sheetNames = [
+        'Summary',
+        'HOLDING DETAILS'
+      ]
+      this.exportDataToCSV(dataList, sheetNames)
+    },
+    exportDataToCSV(dataList, sheetNames) {
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new()
+
+      for (let i = 0; i < dataList.length; i++) {
+        // Convert the data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
+
+        // Add the worksheet to the workbook with the given name
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
+      }
+
+      // Convert the workbook to a binary string
+      const workbookBinaryString = XLSX.write(workbook, {
+        type: 'binary',
+        bookType: 'xlsx'
+      })
+      // Create a Blob from the binary string
+      const blob = new Blob([this.s2ab(workbookBinaryString)], {
+        type: 'application/octet-stream'
+      })
+
+      // Create a download URL for the Blob
+      const url = URL.createObjectURL(blob)
+
+      // Create a link element for downloading the CSV file
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.setAttribute('href', url)
+      link.setAttribute('download', 'Results.xlsx')
+      link.innerHTML = 'Download XLSX'
+      // Append the link element to the document body
+      document.body.appendChild(link)
+
+      // Trigger the download
+      link.click()
+    },
+    // Utility function to convert a string to an ArrayBuffer
+    s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    },
 	}
 }
 </script>
@@ -355,12 +418,21 @@ export default {
 	margin: 5px 0;
 }
 .CPM-trades {
-	margin-top: 40px;
 	border-top: 2px solid #dddddd;
 }
 .statistics-title {
 	align-items: center;
 	justify-content: flex-end;
 	display: flex;
+}
+.downLoadCsvBtn {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 20px 0px;
+	span {
+		font-size: 18px;
+		font-weight: 600;
+	}
 }
 </style>

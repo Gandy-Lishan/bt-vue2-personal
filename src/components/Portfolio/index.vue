@@ -1,22 +1,6 @@
 <template>
   <div class="CPMResults-container">
     <div class="portfolio-header">
-      <!-- <h2 class="portfolio-title">Portfolio<i class="header-icon el-icon-info"></i></h2>
-        <div class="portfolio-des">
-        <p>
-          This page provides a highlight of our Strategies. These strategies are based on multiple trading models,
-          each with its own pros/cons. Some models have larger returns, while others have smaller drawdowns. Some models 
-          perform better in trending markets, while others perform better in choppy markets. These models were created to account 
-          for individual preferences, risk tolerance, etc. Ulti, the model that you want to use is up to you.
-        </p>
-        <p>
-          In the table below, a 'yellow' highlight on the row signifies a change in signal.
-        </p>
-        <p>
-          You can now subscribe to receive email notifications when a Strategy updates. Visit the <a href="https://users.sentimentrader.com/users/preferences/">
-          preferences page</a> to subscribe to our Strategies emails.
-        </p>
-        </div> -->
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
@@ -79,17 +63,6 @@
             <p @click.stop="() => {changeSecondTab(`${item.model}_${index}`)}" :class="{ secondActive: activeSecondTab == `${item.model}_${index}` || '' }" :key="index">{{ item.model }}</p>
             </template>
           </div>
-          <div class="downLoadCsvBtn">
-              <el-button
-                @click.stop="() => {handleDownloadCsv()}"
-                style="display: inline-block"
-                type="primary"
-                plain
-                size="mini"
-                icon="el-icon-download"
-                >Export Data</el-button
-              >
-          </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
         <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
@@ -108,7 +81,6 @@
     </el-collapse>
   </div>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
 import Statistics from "./Statistics";
 // import TIM from "./components/tim";
@@ -118,7 +90,6 @@ import Form from "./Form";
 import ScannerBTTable from "./Table";
 import FilterTable from "./FilterTable";
 import { isJson } from '@/utils';
-const XLSX = require('xlsx');
 
 export default {
   name: 'Portfolio',
@@ -158,6 +129,31 @@ export default {
       strategy_details: []
     }
   },
+  beforeRouteEnter(to, from, next) {
+		console.log('TO', to, 'FROM', from)
+  if (from.path.includes('/strategy')) {
+    next(async _this => {
+      debugger
+      if (to.params.usedFor && to.params.usedFor === 'SetPortfolio') {
+        const data = isJson(to?.params?.data) ? JSON.parse(to?.params?.data) : []
+        if(!data || !data.length) return
+        const _percent = Math.floor(100 / data.length) || 0
+        const selectedStrategy = data.map(item => {return {...item, percent: _percent}})
+        const strategy_combination = [{}, ...selectedStrategy]
+        let totalWeight = 0
+        for (const row of selectedStrategy) {
+          totalWeight += parseFloat(row.percent) || 0
+        }
+        const percent = 100 - totalWeight
+        _this.$nextTick(() => {
+         _this.$refs['Form'].setPortfolio({strategy_combination, percent})
+        })
+      }
+    })
+    } else {
+      next()
+    }
+  },
   components: {
     Form,
     ScannerBTTable,
@@ -194,7 +190,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      const {row: {status}} = data
+      const {row: {status}, portfolio_details:statistics, strategy_details} = data
       this.$refs['Form'].displayData(data)
       debugger
       this.activeSecondTab = 'summary'
@@ -203,6 +199,7 @@ export default {
         this.clearResults()
         return
       }
+      if(!statistics || !strategy_details) {this.scrollToTarget('formTarget', -200); this.clearResults(); return}
       this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
@@ -253,77 +250,6 @@ export default {
     },
     async refreshBTList() {
       await this.$refs['ScannerBTTable'].getDataList()
-    },
-    handleDownloadCsv() {
-      const {summary, trade} = this.$refs.Statistics.handleDownloadCsv()
-      const filterList = this.$refs.filterTable.exportTable()
-      if (
-        !(
-          summary.length &&
-          trade.length &
-          filterList.length
-        )
-      ) {
-        this.popUpMsgBox('No data available for download')
-        return
-      }
-      const dataList = [ 
-        filterList,
-        summary,
-        trade
-      ]
-      const sheetNames = [
-        'Preview Filter List',
-        'Summary',
-        'Trades'
-      ]
-      this.exportDataToCSV(dataList, sheetNames)
-    },
-    exportDataToCSV(dataList, sheetNames) {
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new()
-
-      for (let i = 0; i < dataList.length; i++) {
-        // Convert the data to a worksheet
-        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
-
-        // Add the worksheet to the workbook with the given name
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
-      }
-
-      // Convert the workbook to a binary string
-      const workbookBinaryString = XLSX.write(workbook, {
-        type: 'binary',
-        bookType: 'xlsx'
-      })
-      // Create a Blob from the binary string
-      const blob = new Blob([this.s2ab(workbookBinaryString)], {
-        type: 'application/octet-stream'
-      })
-
-      // Create a download URL for the Blob
-      const url = URL.createObjectURL(blob)
-
-      // Create a link element for downloading the CSV file
-      const link = document.createElement('a')
-      link.style.display = 'none'
-      link.setAttribute('href', url)
-      link.setAttribute('download', 'Results.xlsx')
-      link.innerHTML = 'Download XLSX'
-      // Append the link element to the document body
-      document.body.appendChild(link)
-
-      // Trigger the download
-      link.click()
-    },
-    // Utility function to convert a string to an ArrayBuffer
-    s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xff;
-      }
-      return buf;
     },
   }
 }
@@ -384,13 +310,6 @@ export default {
 /deep/ .el-collapse {
   border-top: unset;
   border-bottom: unset;
-}
-
-.downLoadCsvBtn {
-	position: absolute;
-	right: 90px;
-  margin-left: 10px;
-	color: #333333;
 }
 .page-title {
   padding: 0 0 0 20px;
