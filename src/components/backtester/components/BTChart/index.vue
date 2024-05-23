@@ -84,7 +84,7 @@ header {
 		width: 100%;
 	}
 	p {
-		margin: 50px 2rem 0rem 0rem;
+		margin: 10px 2rem 0rem 0rem;
 		font-style: italic;
 		color: #6c6c6c;
 	}

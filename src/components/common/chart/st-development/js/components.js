@@ -3797,8 +3797,15 @@ class Heading extends CIQ.UI.ContextTag {
 				el.classList[visibilityAction]("item-hidden");
 			});
 		};
-		input.addEventListener("input", updateListVisibility);
-		input.addEventListener("keyup", updateListVisibility);
+		input.addEventListener("input", (event) => {
+			updateListVisibility(event);
+		});
+		input.addEventListener("keyup", (event) => {
+			if (['-','=','+'].includes(event.key)) {
+				event.target.value += event.key;
+				updateListVisibility(event);
+			}
+		});
 
 		const minItemCount = this.getAttribute("cq-filter-min") || 15;
 
