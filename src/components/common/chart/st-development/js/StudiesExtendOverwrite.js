@@ -22,6 +22,7 @@ import {__js_advanced_studies_highLowStudies_} from "./advance-studies/highLowSt
 import {__js_advanced_studies_easeOfMovement_} from "./advance-studies/easeOfMovement.js"
 import {__js_advanced_studies_elder_} from "./advance-studies/elder.js"
 import {__js_advanced_studies_fractalChaos_} from "./advance-studies/fractalChaos.js"
+import {__js_advanced_studies_intradayMomentum_} from "./advance-studies/intradayMomentum.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -57,6 +58,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_easeOfMovement_,
 			__js_advanced_studies_elder_,
 			__js_advanced_studies_fractalChaos_,
+			__js_advanced_studies_intradayMomentum_,
 		)
 
 
