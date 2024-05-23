@@ -512,7 +512,20 @@ if (!CIQ.Marker) {
                              }
                         }
                      }
-                     if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                     else if(CIQ.findSymbolIndicator(sd.type,null)){
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                 fields.push({
+                                     member: output,
+                                     display: `(${symbolLabel})${sd.type}`,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
+                        }
+                     }
+                     else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                  fields.push({

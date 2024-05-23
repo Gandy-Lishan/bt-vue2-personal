@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_williamsMFI_ = (_exports) => {
@@ -39,6 +39,14 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateMFI = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
 		var hist,
 			high = 0;
 		var factor = sd.inputs["Scale Factor"];
@@ -48,9 +56,12 @@ if (!CIQ.Studies) {
 		var i;
 		for (i = sd.startFrom; i < quotes.length; i++) {
 			if (!quotes[i]) continue;
-			if (quotes[i].Volume) {
+			const quotesHigh = getPropertyByString(quotes[i],field,'High')
+			const quotesVolume = getPropertyByString(quotes[i],field,'Volume')
+			const quotesLow = getPropertyByString(quotes[i],field,'Low')
+			if (quotesVolume) {
 				quotes[i][sd.name + "_hist"] = hist =
-					(scale * (quotes[i].High - quotes[i].Low)) / quotes[i].Volume;
+					(scale * (quotesHigh - quotesLow)) / quotesVolume;
 				quotes[i]["_high " + sd.name] = high = Math.max(high, hist);
 			}
 		}
@@ -77,6 +88,15 @@ if (!CIQ.Studies) {
 		context.fillStyle = "#CCCCCC";
 		stx.startClip(sd.panel);
 		if (!sd.highlight && stx.highlightedDraggable) context.globalAlpha *= 0.3;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			//quotes = quotes.filter(item => item.hasOwnProperty(field))
+		}else{
+			//quotes = quotes
+		}
+
 		for (var i = 0; i < quotes.length; i++) {
 			var quote = quotes[i],
 				quote_1 = quotes[i - 1];
@@ -85,11 +105,11 @@ if (!CIQ.Studies) {
 			if (!quote) continue;
 			if (!quote_1);
 			else if (quote_1[sd.name + "_hist"] < quote[sd.name + "_hist"]) {
-				if (quote_1.Volume < quote.Volume) context.fillStyle = green;
-				else if (quote_1.Volume > quote.Volume) context.fillStyle = fake;
+				if (getPropertyByString(quote_1,field,'Volume') < getPropertyByString(quote,field,'Volume')) context.fillStyle = green;
+				else if (getPropertyByString(quote_1,field,'Volume') > getPropertyByString(quote,field,'Volume')) context.fillStyle = fake;
 			} else if (quote_1[sd.name + "_hist"] > quote[sd.name + "_hist"]) {
-				if (quote_1.Volume < quote.Volume) context.fillStyle = squat;
-				else if (quote_1.Volume > quote.Volume) context.fillStyle = fade;
+				if (getPropertyByString(quote_1,field,'Volume') < getPropertyByString(quote,field,'Volume')) context.fillStyle = squat;
+				else if (getPropertyByString(quote_1,field,'Volume') > getPropertyByString(quote,field,'Volume')) context.fillStyle = fade;
 			}
 			if (quote.candleWidth)
 				myWidth = Math.floor(Math.max(1, quote.candleWidth - 2));
@@ -124,4 +144,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_williamsMFI_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_williamsMFI_}

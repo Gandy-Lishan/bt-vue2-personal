@@ -3388,7 +3388,7 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 			var O = quote.Open,
 				C = quote.Close;
 			//if((!O && O!==0) || (!C && C!==0) || O===C) return stx.defaultColor;
-
+debugger
 			return {
 				fill_color:
 					O > C ? seriesParam0.fill_color_down : seriesParam0.fill_color_up,
@@ -3600,6 +3600,10 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
 
+	/** 	
+	 * important note:
+	 * spx+atx组合情况下，datasets是并集，scrubbed只包含symbol1存在的bar,所以symbol1用scrubbed,symbol2用datasets.filter(item => item.hasOwnProperty(field))
+ 	*/
 	if(
 		// 防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
 		(['Open','High','Low','Close','Volume'].includes(subField) ||
