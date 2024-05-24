@@ -83,6 +83,9 @@
 					<template slot-scope="scope">
 						<span class="tableText">
               <span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value].toFixed(2) }}%
+						</span>
+            <span class="tableText" v-else-if="scope.row[l.value] == 0">
 							{{ scope.row[l.value] }}%
 						</span>
             <span class="tableText" v-else>
@@ -102,22 +105,14 @@
 				>
 					<template slot-scope="scope">
 						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value].toFixed(2) }}% 
+						</span>
+            <span class="tableText" v-else-if="scope.row[l.value] == 0">
 							{{ scope.row[l.value] }}%
 						</span>
             <span class="tableText" v-else>
 							{{ scope.row[l.value] }}
 						</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Period'].includes(l.label)"
-				>
-					<template slot-scope="scope">
-            <span class="showDate">{{scope.row[l.value][0]}} to {{scope.row[l.value][1]}}</span>
 					</template>
 				</el-table-column>
         <el-table-column
@@ -131,22 +126,6 @@
             <span v-if="scope.row[l.value] == 'Finish'">{{scope.row[l.value]}}</span>
             <span v-if="scope.row[l.value] == 'Running'">{{scope.row[l.value]}}</span>
             <span v-if="scope.row[l.value] == 'Fail'">{{scope.row[l.value]}}</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Bars Number'].includes(l.label)"
-				>
-        <template slot-scope="scope">
-						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}(Bars)
-						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
-						</span>
 					</template>
 				</el-table-column>
 			</template>
@@ -184,7 +163,7 @@
 
 <script>
 import { delPortfolio, getRunPortfolioResults, getPortfolioList } from '@/service/service'
-import { capitalizeFirstLetter, isJson, trimTrailingZeros } from "@/utils"
+import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
   name: 'ScannerBTTable',
@@ -281,13 +260,13 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
-            const handleKey = ['winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
+            // const handleKey = ['winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
-            item.return = trimTrailingZeros((item.float_profit/item.cash*100).toFixed(2))
-            handleKey.forEach(key => {
-              item[key] = trimTrailingZeros(item[key].toFixed(2))
-            })
+            item.return = ((item.float_profit/item.cash)*100)
+            // handleKey.forEach(key => {
+            //   item[key] = (item[key].toFixed(2))
+            // })
             item.viewLoading = false
             item.deleteLoading = false
 						return item
