@@ -53,7 +53,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=13">
 					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
 							@input="calculateNewConditions"
@@ -339,6 +339,8 @@ export default {
         { value: 9, label: 'DrawDown %' },
         { value: 10, label: 'DrawUp %' },
         { value: 11, label: 'Net Change' },
+        { value: 12, label: 'All-time High' },
+        { value: 13, label: 'All-time Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -435,7 +437,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 11
+      this.isROCLike = 5 <= val && val <= 13
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -587,6 +589,12 @@ export default {
           case "Net Change":
             _newCondition = 'NC'
             break;
+          case "All-time High":
+            _newCondition = 'ATH'
+            break;
+          case "All-time Low":
+            _newCondition = 'ATL'
+            break;
           default:
             break;
         }
@@ -594,8 +602,16 @@ export default {
         const _period = this.senti.period
         const _conditionPeriod = this.senti.conditionPeriod
         const _maValue = this.senti.maValue
-        const _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
-        const _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+        
+        let _description1,_description2
+        if([12,13].includes(this.senti.condition)){
+          _description1 = `${sentiVal} ${ma} ${_newCondition}${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+        }else{
+          _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+        }
+
         if(this.conditionRadio === 'Indicator Value') {this.description = _description1}
         else if(this.conditionRadio === 'Indicator Moving Average'){this.description = _description2}
       }
@@ -726,6 +742,8 @@ export default {
           [9, { name:'DrawDown %', abbr: 'DD' }],
           [10, { name:'DrawUp %', abbr: 'DU' }],
           [11, { name:'Net Change', abbr: 'NC' }],
+          [12, { name:'All-time High', abbr: 'ATH' }],
+          [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
@@ -733,7 +751,12 @@ export default {
         const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(indicator_url)
-        const condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
+        let condition
+        if([12,13].includes(this.senti.conditionPeriod)){
+          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
+        }else{
+          condition = `${conditionMap.get(this.senti.newCondition).name}`
+        }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           display: `(${symbolLabel})${name} ${condition}`,

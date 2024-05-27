@@ -96,7 +96,9 @@ export default {
       editBacktestID: null,
       rowFrequency: 'Daily',
       IndexesInfo: [],
-      initalData: {}
+      initalData: {},
+      showLastSignalMarker1: '',
+      showLastSignalMarker2: ''
     }
   },
   // async created() {
@@ -150,6 +152,17 @@ export default {
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
+
+              /** used for display last signal marker, if last signal and end date exist in report, then if they're the same , display marker */ 
+              this.showLastSignalMarker1 = initalData['Symbol Last Signal'] ? 
+                                            initalData['Symbol Last Signal'] == initalData['BT End Date'] ? 
+                                            initalData['BT End Date'] : ''
+                                          : ''
+              this.showLastSignalMarker2 = initalData['Symbol2 Last Signal'] ? 
+                                            initalData['Symbol2 Last Signal'] == initalData['BT End Date'] ? 
+                                            initalData['BT End Date'] : ''
+                                          : ''
+
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -279,7 +292,7 @@ export default {
         let markers = CIQ.groups.pop()
 
         // if the last groups has no enough number of items, merge it with the last one
-        //console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+        // console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
         let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD')
         if (CIQ.groups.slice(-1)[0]) {
           let m_date =
@@ -294,7 +307,11 @@ export default {
         
         // 如果marker已经加载了，则无需重复加载，主要是防止重构后反复查看result tab导致的重复加载
         if(!CIQ.store.getters.getIsMarkerShownFlagState) CIQ.loadChart(markers, CIQ.addMarker)
-        
+
+        debugger
+        const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+        if(this.showLastSignalMarker1) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,null)
+        if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,comparisonSymbolUrl)
         this.$store.dispatch('states/set_isMarkerShown_flag',true)
       } catch (error) {
         console.error(error)

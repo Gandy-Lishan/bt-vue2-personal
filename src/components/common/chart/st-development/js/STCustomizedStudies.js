@@ -452,14 +452,61 @@ if (!CIQ.Studies) {
 						return NaN
 					}
 				});
-				if(resArr.length>1 && resArr.every(element => !element)){
-					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
-				}
-				break;
+			case 'ATH':
+				// 从当前indicator数据出现那天开始计算
+				let indexATH = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATH) 
+				let indicatorATH = 0
+				let maxSoFar = -Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) >= maxSoFar) {
+							maxSoFar = getPropertyByString(row,field,subField);
+							indicatorATH = 1;
+						} else {
+							indicatorATH = 0;
+						}
+						return indicatorATH;
+					} else {
+						return NaN;
+					}
+				});
+			if(resArr.length>1 && resArr.every(element => !element)){
+				//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+			}
+			break;
+			case 'ATL':
+				// 从当前indicator数据出现那天开始计算
+				let indexATL = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATL) 
+				let indicatorATL = 0
+				let minSoFar = Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) <= minSoFar) {
+							minSoFar = getPropertyByString(row,field,subField);
+							indicatorATL = 1;
+						} else {
+							indicatorATL = 0;
+						}
+						return indicatorATL;
+					} else {
+						return NaN;
+					}
+				});
+			if(resArr.length>1 && resArr.every(element => !element)){
+				//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+			}
+			break;
 			default:
 				console.error('no such condition')
 		}
-		
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			quote[sd.inputs.display] = resArr[i];
@@ -730,7 +777,7 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = indicator;
 		}
 	};
-	CIQ.Studies.calculateConsecutiveDaysUp = function (stx, sd) {
+	CIQ.Studies.calculateConsecutiveDaysU = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -741,7 +788,7 @@ if (!CIQ.Studies) {
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
-			quotes = sd.chart.scrubbed
+			quotes = sd.chart.scrubbedp
 		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;

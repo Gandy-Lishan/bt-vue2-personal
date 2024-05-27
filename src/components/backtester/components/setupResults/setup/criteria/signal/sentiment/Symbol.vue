@@ -23,7 +23,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=13">
 					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="calculateNewConditions"
@@ -108,7 +108,7 @@ export default {
         // Convert ".X" to "0.X" format
         if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
-          this.senti.value = value
+          this.sym.value = value
         }
         const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
         if (!pattern.test(value) && value != 0) {
@@ -141,6 +141,8 @@ export default {
         { value: 9, label: 'DrawDown %' },
         { value: 10, label: 'DrawUp %' },
         { value: 11, label: 'Net Change' },
+        { value: 12, label: 'All-time High' },
+        { value: 13, label: 'All-time Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -194,7 +196,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 11
+      this.isROCLike = 5 <= val && val <= 13
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -318,12 +320,23 @@ export default {
           case "Net Change":
             _newCondition = 'NC'
             break;
+          case "All-time High":
+            _newCondition = 'ATH'
+            break;
+          case "All-time Low":
+            _newCondition = 'ATL'
+            break;
           default:
             break;
         }
         const _value = this.sym.value
         const _conditionPeriod = this.sym.conditionPeriod
-        const _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        let _description1
+        if([12,13].includes(this.sym.condition)){
+          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        }else{
+          _description1 = `${symVal} ${_newCondition} ${_condition} ${_value}`
+        }
         this.description = _description1
       }
       let desObj = {}
@@ -376,10 +389,17 @@ export default {
           [9, { name: 'DrawDown %', abbr: 'DD' }],
           [10, { name:'DrawUp %', abbr: 'DU' }],
           [11, { name:'Net Change', abbr: 'NC' }],
+          [12, { name:'All-time High', abbr: 'ATH' }],
+          [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
-        const condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+        let condition
+        if([12,13].includes(this.sym.conditionPeriod)){
+          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+        }else{
+          condition = `${conditionMap.get(this.sym.newCondition).name}`
+        }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
           display: `(${symbolLabel})${field} ${condition}`,
