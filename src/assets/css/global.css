@@ -557,6 +557,10 @@ input[type="time"] {
   font-family: "Open Sans",sans-serif;
   text-align: center;
 }
+.otherIndexContainer .el-table .cell {
+  font-weight: 600;
+  color: #333341;
+}
 
 .strategiesTable .el-table .cell {
   font-weight: 400;
@@ -576,6 +580,12 @@ input[type="time"] {
   {
   font-weight: 600 !important;
   color: #333341;
+	font-size: 14px;
+}
+.otherIndexContainer .table thead tr th
+{
+font-weight: 700 !important;
+color: #333341;
 }
 .tim-container .el-table th.el-table__cell>.cell, 
 .summaryContainer .el-table th.el-table__cell>.cell, 
@@ -785,6 +795,9 @@ button#checkResBtn {
     border-color: #ccc;
     margin: 0 auto;
   }
+  .indexTable {
+    width: 100%;
+  }
   tbody {
     display: table-row-group;
     vertical-align: middle;
@@ -802,6 +815,21 @@ button#checkResBtn {
     border: 0;
     border-top: 1px solid #eee;
     border-bottom: 0;
+  }
+  .indexTable td.tg-0lax.g500 {
+    background-color: #9fd3ad;
+  }
+  .indexTable td.tg-0lax.g400 {
+    background-color:  #b6e0c1;
+  }
+  .indexTable td.tg-0lax.g300 {
+    background-color: #d9efde;
+  }
+  .indexTable td.tg-0lax.g200 {
+    background-color: #f4fbf6;
+  }
+  .indexTable td.tg-0lax.g100 {
+    background-color: #ffffff;
   }
   .tg .tg-0lax {
     text-align: left;
@@ -831,6 +859,10 @@ button#checkResBtn {
     border-color: #ccc;
     color: #333;
     background-color: #fff;
+  }
+  .indexTable td, .indexTable th {
+    font-weight: 600;
+    font-family: Arial, sans-serif;
   }
 	.container {
 			width: 1200px;

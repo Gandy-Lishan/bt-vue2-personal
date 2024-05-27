@@ -57,6 +57,9 @@
         ></MaxMin>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
+			<el-tab-pane label="Other indexes" name="five" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Indexes Info')">
+        <IndexesInfo ref="IndexesInfo" :IndexesInfo="IndexesInfo" :rowFrequency="rowFrequency"></IndexesInfo>
+      </el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -69,6 +72,7 @@ import Summary from './summary'
 import Trades from './trades'
 import TIM from './tim'
 import MaxMin from './MaxMin'
+import IndexesInfo from "./IndexesInfo"
 const XLSX = require('xlsx');
 
 export default {
@@ -80,7 +84,8 @@ export default {
     Summary,
     Trades,
     TIM,
-    MaxMin
+    MaxMin,
+    IndexesInfo
   },
   data() {
     return {
@@ -89,7 +94,9 @@ export default {
       tradesData: [], 
       tradePrice: 'Close',
       editBacktestID: null,
-      rowFrequency: 'Daily'
+      rowFrequency: 'Daily',
+      IndexesInfo: [],
+      initalData: {}
     }
   },
   // async created() {
@@ -139,7 +146,7 @@ export default {
 
               // -------------------------------------  start ----------------
               // this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
-
+              debugger
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
@@ -227,11 +234,13 @@ export default {
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
                 // TIM 数据准备
+                vm.initalData = initalData
                 this.$nextTick(() => {
                   // 这里访问prepareData，确保子组件内的tradesData已经更新
                   const datatime = new Date(initalData['basic']['start_date'])
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
+                  this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || [])
                 });
               }
               // ------------------------------ end -----------------------------------
@@ -338,6 +347,7 @@ export default {
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
+      let {medianReturn, consistency} = this.$refs.IndexesInfo.exportData()
       if (
         !(
           this.tableData.length &&
@@ -513,6 +523,18 @@ export default {
       if(this.strategy === 'Dual') {
         dataList = [summary,mergedData]
         sheetNames = ['Summary','Trades']
+      }
+      if(Object.prototype.hasOwnProperty.call(this.initalData, 'Indexes Info')) {
+        sheetNames = [...sheetNames, 'Other Indexes(Median % Return)', 'Other Indexes(Consistency)']
+        consistency = JSON.parse(JSON.stringify(consistency)).map(obj => {
+          for (const key in obj) {
+            if (Object.hasOwnProperty.call(obj, key) && key !== 'Consistency') {
+              obj[key] = `${obj[key]}%`
+            }
+          }
+          return obj
+        })
+        dataList = [...dataList, medianReturn, consistency]
       }
       this.exportDataToCSV(dataList, sheetNames)
     },

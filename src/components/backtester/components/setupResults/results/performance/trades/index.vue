@@ -199,7 +199,6 @@ export default {
                 for (let i = 0; i < newValue.length; i += 2) {
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
-                    debugger
                     // 转换日期格式
                     const formatEntryDate = entryData['Date'].replaceAll('-','/')
                     const formatExitDate = exitData['Date'] ? exitData['Date'].replaceAll('-','/') : '';
