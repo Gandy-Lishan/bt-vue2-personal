@@ -584,6 +584,8 @@ export const CommonMethodsMixin = {
 				[9, { name: 'DrawDown %', abbr: 'DD' }],
 				[10, { name:'DrawUp %', abbr: 'DU' }],
 				[11, { name:'Net Change', abbr: 'NC' }],
+				[12, { name:'All-time High', abbr: 'ATH' }],
+				[13, { name:'All-time Low', abbr: 'ATL' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''

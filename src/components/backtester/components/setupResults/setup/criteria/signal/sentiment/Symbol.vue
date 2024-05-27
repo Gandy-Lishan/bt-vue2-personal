@@ -141,6 +141,8 @@ export default {
         { value: 9, label: 'DrawDown %' },
         { value: 10, label: 'DrawUp %' },
         { value: 11, label: 'Net Change' },
+        { value: 12, label: 'All-time High' },
+        { value: 13, label: 'All-time Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -194,7 +196,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 11
+      this.isROCLike = 5 <= val && val <= 13
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -318,6 +320,12 @@ export default {
           case "Net Change":
             _newCondition = 'NC'
             break;
+          case "All-time High":
+            _newCondition = 'ATH'
+            break;
+          case "All-time Low":
+            _newCondition = 'ATL'
+            break;
           default:
             break;
         }
@@ -376,6 +384,8 @@ export default {
           [9, { name: 'DrawDown %', abbr: 'DD' }],
           [10, { name:'DrawUp %', abbr: 'DU' }],
           [11, { name:'Net Change', abbr: 'NC' }],
+          [12, { name:'All-time High', abbr: 'ATH' }],
+          [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
