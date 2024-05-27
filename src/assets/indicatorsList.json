@@ -725,31 +725,6 @@
         "updated": "Monthly"
     },
     {
-        "chart_name": "Eurodollar Price Seasonality",
-        "url": "seasonality_eurodollar",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "2-Year Treasury Seasonality",
-        "url": "seasonality_two",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "5-Year Treasury Seasonality",
-        "url": "seasonality_five",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "10-Year Treasury Seasonality",
-        "url": "seasonality_ten",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "30-Year Treasury Seasonality",
-        "url": "seasonality_thirty",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "TLT Optix",
         "url": "etf_tlt",
         "updated": "Daily"
@@ -795,11 +770,6 @@
         "updated": "Weekly"
     },
     {
-        "chart_name": "Aussie Dollar Seasonality",
-        "url": "seasonality_aussie",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "British Pound Hedgers Position",
         "url": "cot_pound",
         "updated": "Weekly"
@@ -808,11 +778,6 @@
         "chart_name": "British Pound Optix",
         "url": "po_pound",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "British Pound Seasonality",
-        "url": "seasonality_pound",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Canadian Dollar Hedgers Position",
@@ -825,11 +790,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Canadian Dollar Seasonality",
-        "url": "seasonality_canada",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Euro Hedgers Position",
         "url": "cot_euro",
         "updated": "Weekly"
@@ -840,19 +800,9 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Euro Seasonality",
-        "url": "seasonality_euro",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Mexican Peso Hedgers Position",
         "url": "cot_peso",
         "updated": "Weekly"
-    },
-    {
-        "chart_name": "Mexican Peso Seasonality",
-        "url": "seasonality_peso",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Swiss Franc Hedgers Position",
@@ -863,11 +813,6 @@
         "chart_name": "Swiss Franc Optix",
         "url": "po_franc",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Swiss Franc Seasonality",
-        "url": "seasonality_franc",
-        "updated": "Monthly"
     },
     {
         "chart_name": "US Dollar Hedgers Position",
@@ -890,11 +835,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "US Dollar Seasonality",
-        "url": "seasonality_dollar",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Japanese Yen Hedgers Position",
         "url": "cot_yen",
         "updated": "Weekly"
@@ -903,11 +843,6 @@
         "chart_name": "Japanese Yen Optix",
         "url": "po_yen",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Japanese Yen Seasonality",
-        "url": "seasonality_yen",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Crude Oil Hedgers Position",
@@ -930,11 +865,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Crude Oil Seasonality",
-        "url": "seasonality_crude",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Heating Oil Hedgers Position",
         "url": "cot_heating",
         "updated": "Weekly"
@@ -943,11 +873,6 @@
         "chart_name": "Heating Oil Optix",
         "url": "po_heating",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Heating Oil Seasonality",
-        "url": "seasonality_heating",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Natural Gas Hedgers Position",
@@ -960,11 +885,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Natural Gas Seasonality",
-        "url": "seasonality_natural",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Unleaded Gas Hedgers Position",
         "url": "cot_unleaded",
         "updated": "Weekly"
@@ -973,11 +893,6 @@
         "chart_name": "Unleaded Gas Optix",
         "url": "po_unleaded",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Unleaded Gas Seasonality",
-        "url": "seasonality_unleaded",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Copper Hedgers Position",
@@ -990,11 +905,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Copper Seasonality",
-        "url": "seasonality_copper",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Gold Hedgers Position",
         "url": "cot_gold",
         "updated": "Weekly"
@@ -1003,11 +913,6 @@
         "chart_name": "Gold Optix",
         "url": "po_gold",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Gold Seasonality",
-        "url": "seasonality_gold",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Rydex Precious Metals Assets",
@@ -1035,11 +940,6 @@
         "updated": "Weekly"
     },
     {
-        "chart_name": "Palladium Seasonality",
-        "url": "seasonality_palladium",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Platinum Hedgers Position",
         "url": "cot_platinum",
         "updated": "Weekly"
@@ -1048,11 +948,6 @@
         "chart_name": "Platinum Optix",
         "url": "po_platinum",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Platinum Seasonality",
-        "url": "seasonality_platinum",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Silver Hedgers Position",
@@ -1070,11 +965,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Silver Seasonality",
-        "url": "seasonality_silver",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Corn Hedgers Position",
         "url": "cot_corn",
         "updated": "Weekly"
@@ -1085,19 +975,9 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Corn Seasonality",
-        "url": "seasonality_corn",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Oats Hedgers Position",
         "url": "cot_oats",
         "updated": "Weekly"
-    },
-    {
-        "chart_name": "Oats Seasonality",
-        "url": "seasonality_oats",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Soybeans Hedgers Position",
@@ -1110,11 +990,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Soybeans Seasonality",
-        "url": "seasonality_soybeans",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Wheat Hedgers Position",
         "url": "cot_wheat",
         "updated": "Weekly"
@@ -1123,11 +998,6 @@
         "chart_name": "Wheat Optix",
         "url": "po_wheat",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Wheat Seasonality",
-        "url": "seasonality_wheat",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Cocoa Hedgers Position",
@@ -1140,11 +1010,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cocoa Seasonality",
-        "url": "seasonality_cocoa",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Coffee Hedgers Position",
         "url": "cot_coffee",
         "updated": "Weekly"
@@ -1153,11 +1018,6 @@
         "chart_name": "Coffee Optix",
         "url": "po_coffee",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Coffee Seasonality",
-        "url": "seasonality_coffee",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Cotton Hedgers Position",
@@ -1170,19 +1030,9 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cotton Seasonality",
-        "url": "seasonality_cotton",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Lumber Optix",
         "url": "po_lumber",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Lumber Seasonality",
-        "url": "seasonality_lumber",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Orange Juice Hedgers Position",
@@ -1195,11 +1045,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Orange Juice Seasonality",
-        "url": "seasonality_oj",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Sugar Hedgers Position",
         "url": "cot_sugar",
         "updated": "Weekly"
@@ -1208,11 +1053,6 @@
         "chart_name": "Sugar Optix",
         "url": "po_sugar",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Sugar Seasonality",
-        "url": "seasonality_sugar",
-        "updated": "Monthly"
     },
     {
         "chart_name": "Cattle Hedgers Position",
@@ -1225,11 +1065,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cattle Seasonality",
-        "url": "seasonality_cattle",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "Hogs Hedgers Position",
         "url": "cot_hogs",
         "updated": "Weekly"
@@ -1238,11 +1073,6 @@
         "chart_name": "Hogs Optix",
         "url": "po_hogs",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "Hogs Seasonality",
-        "url": "seasonality_hogs",
-        "updated": "Monthly"
     },
     {
         "chart_name": "UNG Optix",
@@ -6578,261 +6408,6 @@
         "chart_name": "XLK New Low %",
         "url": "breadth_sector_xlk_nl",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "NASDAQ  Seasonality",
-        "url": "seasonality_comp",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "Dow Jones Industrial Average Seasonality",
-        "url": "seasonality_djia",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EEM Seasonality",
-        "url": "seasonality_eem",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWA Seasonality",
-        "url": "seasonality_ewa",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWC Seasonality",
-        "url": "seasonality_ewc",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "S&P 500 Index Seasonality",
-        "url": "seasonality_spx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "NDX Seasonality",
-        "url": "seasonality_ndx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "DIA Seasonality",
-        "url": "seasonality_dia",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWG Seasonality",
-        "url": "seasonality_ewg",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWI Seasonality",
-        "url": "seasonality_ewi",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWJ Seasonality",
-        "url": "seasonality_ewj",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWP Seasonality",
-        "url": "seasonality_ewp",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWQ Seasonality",
-        "url": "seasonality_ewq",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWU Seasonality",
-        "url": "seasonality_ewu",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWW Seasonality",
-        "url": "seasonality_eww",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWZ Seasonality",
-        "url": "seasonality_ewz",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "FXI Seasonality",
-        "url": "seasonality_fxi",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "GDX Seasonality",
-        "url": "seasonality_gdx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "GDXJ Seasonality",
-        "url": "seasonality_gdxj",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "GLD Seasonality",
-        "url": "seasonality_gld",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "HUI Seasonality",
-        "url": "seasonality_hui",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "HYG Seasonality",
-        "url": "seasonality_hyg",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IBB Seasonality",
-        "url": "seasonality_ibb",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IWM Seasonality",
-        "url": "seasonality_iwm",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IYR Seasonality",
-        "url": "seasonality_iyr",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "JNK Seasonality",
-        "url": "seasonality_jnk",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "LQD Seasonality",
-        "url": "seasonality_lqd",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "NYSE Composite Seasonality",
-        "url": "seasonality_nya",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "PIN Seasonality",
-        "url": "seasonality_pin",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "QQQ Seasonality",
-        "url": "seasonality_qqq",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "RSX Seasonality",
-        "url": "seasonality_rsx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "RUT Seasonality",
-        "url": "seasonality_rut",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "SLV Seasonality",
-        "url": "seasonality_slv",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "SMH Seasonality",
-        "url": "seasonality_smh",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "SPY Seasonality",
-        "url": "seasonality_spy",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "TLT Seasonality",
-        "url": "seasonality_tlt",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "VNQ Seasonality",
-        "url": "seasonality_vnq",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "VXX Seasonality",
-        "url": "seasonality_vxx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XHB Seasonality",
-        "url": "seasonality_xhb",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLB Seasonality",
-        "url": "seasonality_xlb",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLE Seasonality",
-        "url": "seasonality_xle",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLF Seasonality",
-        "url": "seasonality_xlf",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLI Seasonality",
-        "url": "seasonality_xli",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLK Seasonality",
-        "url": "seasonality_xlk",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLP Seasonality",
-        "url": "seasonality_xlp",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLU Seasonality",
-        "url": "seasonality_xlu",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLV Seasonality",
-        "url": "seasonality_xlv",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLY Seasonality",
-        "url": "seasonality_xly",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XME Seasonality",
-        "url": "seasonality_xme",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XOP Seasonality",
-        "url": "seasonality_xop",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XRT Seasonality",
-        "url": "seasonality_xrt",
-        "updated": "Monthly"
     },
     {
         "chart_name": "McClellan Oscillator",
@@ -12610,11 +12185,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CRB Index Seasonality",
-        "url": "seasonality_crb",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "AMKOR Technology Inc.",
         "url": "AMKR",
         "updated": "Daily"
@@ -13580,16 +13150,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "BITCOIN Seasonality",
-        "url": "seasonality_bitcoin",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "BCOMSP Seasonality",
-        "url": "seasonality_bcomsp",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "MercadoLibre Inc",
         "url": "MELI",
         "updated": "Daily"
@@ -13667,11 +13227,6 @@
     {
         "chart_name": "JK Employment",
         "url": "jk_employment",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "VIX Seasonality",
-        "url": "seasonality_vix",
         "updated": "Monthly"
     },
     {
@@ -13855,11 +13410,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "SOXX Seasonality",
-        "url": "seasonality_soxx",
-        "updated": "Monthly"
-    },
-    {
         "chart_name": "SOXX  Outstanding Shares",
         "url": "etf_soxx_shares",
         "updated": "Daily"
@@ -13883,326 +13433,6 @@
         "chart_name": "Sentiment Cycle Discouragement",
         "url": "sentiment_cycle_discouragement",
         "updated": "Daily"
-    },
-    {
-        "chart_name": "AMJ Seasonality",
-        "url": "seasonality_amj",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "AMLP Seasonality",
-        "url": "seasonality_amlp",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "ARGT Seasonality",
-        "url": "seasonality_argt",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "BLOK Seasonality",
-        "url": "seasonality_blok",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "BND Seasonality",
-        "url": "seasonality_bnd",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "COPX Seasonality",
-        "url": "seasonality_copx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "ECH Seasonality",
-        "url": "seasonality_ech",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EDEN Seasonality",
-        "url": "seasonality_eden",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EFA Seasonality",
-        "url": "seasonality_efa",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EFNL Seasonality",
-        "url": "seasonality_efnl",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EGPT Seasonality",
-        "url": "seasonality_egpt",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EIDO Seasonality",
-        "url": "seasonality_eido",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EIRL Seasonality",
-        "url": "seasonality_eirl",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EIS Seasonality",
-        "url": "seasonality_eis",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EMQQ Seasonality",
-        "url": "seasonality_emqq",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "ENZL Seasonality",
-        "url": "seasonality_enzl",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EPHE Seasonality",
-        "url": "seasonality_ephe",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EPOL Seasonality",
-        "url": "seasonality_epol",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EPU Seasonality",
-        "url": "seasonality_epu",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWD Seasonality",
-        "url": "seasonality_ewd",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWH Seasonality",
-        "url": "seasonality_ewh",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWK Seasonality",
-        "url": "seasonality_ewk",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWL Seasonality",
-        "url": "seasonality_ewl",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWM Seasonality",
-        "url": "seasonality_ewm",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWN Seasonality",
-        "url": "seasonality_ewn",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWO Seasonality",
-        "url": "seasonality_ewo",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWS Seasonality",
-        "url": "seasonality_ews",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWT Seasonality",
-        "url": "seasonality_ewt",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EWY Seasonality",
-        "url": "seasonality_ewy",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "EZA Seasonality",
-        "url": "seasonality_eza",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "GREK Seasonality",
-        "url": "seasonality_grek",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "GXG Seasonality",
-        "url": "seasonality_gxg",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IBUY Seasonality",
-        "url": "seasonality_ibuy",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "ICLN Seasonality",
-        "url": "seasonality_icln",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IDX Seasonality",
-        "url": "seasonality_idx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "INDA Seasonality",
-        "url": "seasonality_inda",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "ITB Seasonality",
-        "url": "seasonality_itb",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "IYT Seasonality",
-        "url": "seasonality_iyt",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "KBE Seasonality",
-        "url": "seasonality_kbe",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "KRBN Seasonality",
-        "url": "seasonality_krbn",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "KRE Seasonality",
-        "url": "seasonality_kre",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "KSA Seasonality",
-        "url": "seasonality_ksa",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "KWEB Seasonality",
-        "url": "seasonality_kweb",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "LIT Seasonality",
-        "url": "seasonality_lit",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "MJ Seasonality",
-        "url": "seasonality_mj",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "NGE Seasonality",
-        "url": "seasonality_nge",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "NORW Seasonality",
-        "url": "seasonality_norw",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "OIH Seasonality",
-        "url": "seasonality_oih",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "PAK Seasonality",
-        "url": "seasonality_pak",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "PGAL Seasonality",
-        "url": "seasonality_pgal",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "PUTW Seasonality",
-        "url": "seasonality_putw",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "QAT Seasonality",
-        "url": "seasonality_qat",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "REMX Seasonality",
-        "url": "seasonality_remx",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "TAN Seasonality",
-        "url": "seasonality_tan",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "THD Seasonality",
-        "url": "seasonality_thd",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "TUR Seasonality",
-        "url": "seasonality_tur",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "UAE Seasonality",
-        "url": "seasonality_uae",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "UNG Seasonality",
-        "url": "seasonality_ung",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "USO Seasonality",
-        "url": "seasonality_uso",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "VNM Seasonality",
-        "url": "seasonality_vnm",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "WCLD Seasonality",
-        "url": "seasonality_wcld",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XBI Seasonality",
-        "url": "seasonality_xbi",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLC Seasonality",
-        "url": "seasonality_xlc",
-        "updated": "Monthly"
-    },
-    {
-        "chart_name": "XLRE Seasonality",
-        "url": "seasonality_xlre",
-        "updated": "Monthly"
     },
     {
         "chart_name": "DIA Panic Breadth Composite",
@@ -15142,6 +14372,16 @@
     {
         "chart_name": "Seneca Foods-A",
         "url": "SENEA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX MA50/200 Spread",
+        "url": "spx_ma_50_200_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QQQ 3-month ROC",
+        "url": "qqq_roc_63",
         "updated": "Daily"
     }
 ]
