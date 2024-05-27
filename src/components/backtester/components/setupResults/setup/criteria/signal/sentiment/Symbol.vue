@@ -23,7 +23,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=13">
 					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="calculateNewConditions"
@@ -108,7 +108,7 @@ export default {
         // Convert ".X" to "0.X" format
         if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
-          this.senti.value = value
+          this.sym.value = value
         }
         const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
         if (!pattern.test(value) && value != 0) {
@@ -331,7 +331,12 @@ export default {
         }
         const _value = this.sym.value
         const _conditionPeriod = this.sym.conditionPeriod
-        const _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        let _description1
+        if([12,13].includes(this.sym.condition)){
+          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        }else{
+          _description1 = `${symVal} ${_newCondition} ${_condition} ${_value}`
+        }
         this.description = _description1
       }
       let desObj = {}
@@ -389,7 +394,12 @@ export default {
         ])
 
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
-        const condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+        let condition
+        if([12,13].includes(this.sym.conditionPeriod)){
+          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+        }else{
+          condition = `${conditionMap.get(this.sym.newCondition).name}`
+        }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
           display: `(${symbolLabel})${field} ${condition}`,
