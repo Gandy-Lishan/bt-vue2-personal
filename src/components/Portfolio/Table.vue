@@ -23,22 +23,22 @@
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<el-form-item label="AVERAGE WIN %">
-							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : props.row['avg_win'] }}</span>
+							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
-							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : props.row['avg_loss'] }}</span>
+							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="MEDIAN RETURN %">
-							<span>{{ props.row['median_return'] ? `${props.row['median_return']}%` : props.row['median_return'] }}</span>
+							<span>{{ props.row['median_return'] ? `${props.row['median_return']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL TRADES">
-							<span>{{ props.row['total_trades']}}</span>
+							<span>{{ props.row['total_trades'] ? props.row['total_trades'] : '' }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL POSITIVE">
-							<span>{{ props.row['total_positive'] }}</span>
+							<span>{{ props.row['total_positive'] ?  props.row['total_positive'] : ''}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{ props.row['total_negative'] }}</span>
+							<span>{{ props.row['total_negative'] ? props.row['total_negative'] : ''}}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -277,9 +277,9 @@ export default {
               let handleNum = parseFloat(num)
               let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > 2
               if (isToFixed) {
-                return handleNum.toFixed(2)
+                return isNaN(handleNum.toFixed(2)) ? NaN : handleNum.toFixed(2)
               } else {
-                return handleNum
+                return isNaN(handleNum) ? NaN : handleNum
               }
             }
           }
