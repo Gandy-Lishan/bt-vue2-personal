@@ -88,7 +88,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle" v-if="!['WIC','SOHLCV'].includes(data.categories)">
+		<div class="MI-form-middle" v-if="!['WIC','Symbol OHLCV'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
@@ -225,8 +225,8 @@
 			</div>
 		</div>
 
-		<el-divider v-if="!['WIC','SOHLCV'].includes(data.categories)"></el-divider>
-		<div class="MI-form-bottom" v-if="!['WIC','SOHLCV'].includes(data.categories)">
+		<el-divider v-if="!['WIC','Symbol OHLCV'].includes(data.categories)"></el-divider>
+		<div class="MI-form-bottom" v-if="!['WIC','Symbol OHLCV'].includes(data.categories)">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -316,7 +316,7 @@
       </el-table>
     </div>
     <div class="SOHLCV-container"
-      v-if="data.categories == 'SOHLCV'">
+      v-if="data.categories == 'Symbol OHLCV'">
       <div class="SLeft">
 				<el-form-item v-model="OHLCVData.symbol">
 					<el-autocomplete
@@ -446,7 +446,7 @@ export default {
         },
         {
           label: 'Symbol OHLCV',
-          value: 'SOHLCV'
+          value: 'Symbol OHLCV'
         }
       ],
       MA1CheckInputConfig: {
@@ -590,7 +590,7 @@ export default {
          }
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
-        if(this.data.categories.includes('SOHLCV')){
+        if(this.data.categories.includes('Symbol OHLCV')){
           this.OHLCVData.symbol = newVal
           
           this.refreshMAState()
@@ -919,7 +919,7 @@ export default {
     getList() {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
-      const isSymbol = data.categories.includes('Symbol') || data.categories == 'SOHLCV'
+      const isSymbol = data.categories.includes('Symbol') || data.categories == 'Symbol OHLCV'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
 
       if (neitherOfThem) {
