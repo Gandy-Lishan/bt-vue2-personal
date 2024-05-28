@@ -83,10 +83,13 @@
 					<template slot-scope="scope">
 						<span class="tableText">
               <span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value].toFixed(2) }}%
+							{{ scope.row[l.value] }}%
 						</span>
             <span class="tableText" v-else-if="scope.row[l.value] == 0">
 							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else-if="isNaN(scope.row[l.value])">
+							{{ '' }}
 						</span>
             <span class="tableText" v-else>
 							{{ scope.row[l.value] }}
@@ -105,13 +108,16 @@
 				>
 					<template slot-scope="scope">
 						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value].toFixed(2) }}% 
+							{{ scope.row[l.value] }}% 
 						</span>
             <span class="tableText" v-else-if="scope.row[l.value] == 0">
 							{{ scope.row[l.value] }}%
 						</span>
+            <span class="tableText" v-else-if="isNaN(scope.row[l.value])">
+							{{ '' }}
+						</span>
             <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
+            {{ scope.row[l.value] }}
 						</span>
 					</template>
 				</el-table-column>
@@ -150,7 +156,7 @@
               <template v-for="(item, index) in strategy_combination">
                 <tr :key="index">
                   <template v-for="(value, key) in item">
-                    <td :key="key" v-if="['strategy', 'model', 'percent'].includes(key)">{{ value }}</td>
+                    <td :key="key" v-if="['strategy', 'model', 'percent'].includes(key)">{{ key !== 'percent' ? value : `${value}%` }}</td>
                   </template>
                </tr>  
               </template>
@@ -260,13 +266,26 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
-            // const handleKey = ['winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
+            const handleKey = ['return', 'winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
             item.return = ((item.float_profit/item.cash)*100)
-            // handleKey.forEach(key => {
-            //   item[key] = (item[key].toFixed(2))
-            // })
+            const unifyNumber = (num) => {
+            if (num === '') {
+              return 0
+            } else {
+              let handleNum = parseFloat(num)
+              let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > 2
+              if (isToFixed) {
+                return handleNum.toFixed(2)
+              } else {
+                return handleNum
+              }
+            }
+          }
+            handleKey.forEach(key => {
+              item[key] = unifyNumber(item[key])
+            })
             item.viewLoading = false
             item.deleteLoading = false
 						return item
@@ -378,8 +397,21 @@ export default {
       const number = parseInt(lastPart);
       if (number <= 2) return
       }
+      const sortObjectProperties = (data, order) => {
+          return data.map(obj => {
+            const sortedObj = {};
+            order.forEach(key => {
+                if (obj.hasOwnProperty(key)) {
+                    sortedObj[key] = obj[key]
+                }
+            })
+            return sortedObj
+          })
+      }
       try {
-        this.strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        const order = ['strategy', 'model', 'percent']
+        const _strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        this.strategy_combination = sortObjectProperties(_strategy_combination, order)
       } catch (error) {
         console.log('error', error)
         return
