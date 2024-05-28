@@ -6,7 +6,7 @@
 		<tbody>
 			<tr>
 			<template v-for="(l, i) in ['Median % Return', ...defaultTableLabels]">
-				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]"></th>
+				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Median % Return' ? '300px' : ''"></th>
 			</template>
 			</tr>
 			<template v-for="(item, index) in medianReturn">
@@ -24,14 +24,14 @@
 		<tbody>
 			<tr>
 			<template v-for="(l, i) in ['Consistency', ...defaultTableLabels]">
-				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]"></th>
+				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Consistency' ? '300px' : ''"></th>
 			</template>
 			</tr>
 			<template v-for="(item, index) in consistency">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
 						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ val }}%</td>
-						<td class="tg-0lax" :key="i" v-else>{{ val }}%</td>
+						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
 		</template>

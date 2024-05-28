@@ -862,7 +862,26 @@ button#checkResBtn {
   }
   .indexTable td, .indexTable th {
     font-weight: 600;
+    font-size: 16px;
     font-family: Arial, sans-serif;
+  }
+  .indexTable tr th.tg-0lax {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+  .indexTable tr th.tg-0lax:first-child {
+    text-align: left;
+  }
+  .indexTable tr td.tg-0lax {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+  }
+  .indexTable tr td.tg-0lax:first-child {
+    text-align: left;
+    vertical-align: middle;
   }
 	.container {
 			width: 1200px;

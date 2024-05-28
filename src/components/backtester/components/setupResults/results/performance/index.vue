@@ -1,11 +1,9 @@
 // Summary & Trades
 <template>
 	<div class="perfprmance-container">
-		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading" :class="{'Dual': strategy === 'Dual'}">
     <div class="hint-btn-box">
       <p class="hint">
-        Hint: Markers on the chart point to the buy/sell trade dates on the open
-        <b>ONE</b> bar after entry/exit criteria met.
+        <i>Hint: Click the button to download all panel data.</i>
       </p>
       <div class="downLoadCsvBtn">
         <el-button
@@ -13,12 +11,13 @@
           style="display: inline-block"
           type="primary"
           plain
-          size="mini"
+          size="small"
           icon="el-icon-download"
           >Export Data</el-button
         >
       </div>
     </div>
+		<el-tabs class="performance_tabs" v-model="activePerTag" type="card" v-loading="loading" :class="{'Dual': strategy === 'Dual'}">
       <el-tab-pane label="Summary" name="first">
         <Summary 
           :tableData="tableData" 
@@ -610,7 +609,7 @@ export default {
 }
 .hint {
 	/* position: absolute; */
-	font-size: 0.8rem;
+	font-size: 1rem;
 	color: black !important;
 	/* right: 243px; */
 	font-weight: 300;
@@ -658,8 +657,10 @@ export default {
   padding-bottom: 1rem;
 }
 .hint-btn-box{
+  width: 1200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin: 0 auto;
 }
 </style>
