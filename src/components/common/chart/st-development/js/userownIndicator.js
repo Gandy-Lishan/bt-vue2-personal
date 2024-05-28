@@ -486,6 +486,13 @@
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
+        if(newData.categories == "Symbol OHLCV"){
+            // WIC 列表加载
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+            CIQ.store.dispatch('chart/set_miFormSOHLCVChange',{data:newData.indicator1.url,url:newData.url})
+        }
+
         // WIC也需要初始化miFormState,主要是用到设定category
         CIQ.store.commit('chart/miFormStateChange',{
             categories: newData.categories,
@@ -714,6 +721,28 @@
         }
     }
 
+    CIQ.changeUserOwnIndicatorSymbol = function(symbol, combinedStudy){
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //编辑时对内容修改或者preview应该移除生成的indicator
+        debugger
+        if(!combinedStudy){
+            for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+                var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+                if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            }
+        }
+
+        const benchmark = CIQ.store.state.chart.miBenmark
+        CIQ.stxx.loadChart({
+            symbol: symbol?symbol:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+            indicator:[combinedStudy],
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+        }, function(){
+            CIQ.hideCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+        })
+    }
 
     // 预留：layout management
     // CIQ.localStorage.saveLayout = function(){

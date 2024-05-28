@@ -88,7 +88,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle" v-if="data.categories != 'WIC'">
+		<div class="MI-form-middle" v-if="!['WIC','SOHLCV'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
@@ -225,8 +225,8 @@
 			</div>
 		</div>
 
-		<el-divider v-if="data.categories != 'WIC'"></el-divider>
-		<div class="MI-form-bottom" v-if="data.categories != 'WIC'">
+		<el-divider v-if="!['WIC','SOHLCV'].includes(data.categories)"></el-divider>
+		<div class="MI-form-bottom" v-if="!['WIC','SOHLCV'].includes(data.categories)">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -315,6 +315,67 @@
       </el-table-column>
       </el-table>
     </div>
+    <div class="SOHLCV-container"
+      v-if="data.categories == 'SOHLCV'">
+      <div class="SLeft">
+				<el-form-item v-model="OHLCVData.symbol">
+					<el-autocomplete
+						class="inline-input"
+						v-model="OHLCVData.symbol"
+						:fetch-suggestions="querySearch"
+						placeholder="Please select symbol from the dropdown menu"
+						@select="
+							(item) => {
+								changeSymbol(item)
+							}
+						"
+					>
+						<i slot="prefix" class="el-input__icon el-icon-search"></i>
+						<!-- 使用 scoped slot 自定义选项 -->
+						<template slot-scope="{ item }">
+							<div class="custom-option">
+								<span class="item-label">{{
+									item.url
+								}}</span>
+								<!-- 在选项后面添加标识 -->
+								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
+									item.label
+								}}</span>
+								<span v-if="item.type === 'Symbol'" class="type-label"
+									>Symbol</span
+								>
+							</div>
+						</template>
+					</el-autocomplete>
+				</el-form-item>
+      </div>
+      <div class="SRight">
+        <el-form-item prop="symbolIndicator">
+            <div class="selectBox">
+              <el-select
+                v-model="OHLCVData.condition"
+                placeholder="Select Symbol Open/High/Low/Close/Volume"
+                @change="handleSymbolSelect"
+              >
+                <el-option
+                  v-for="item in symbolConditions"
+                  :key="item.value"
+                  :label="item.obj.label"
+                  :value="item.obj"
+                >
+                </el-option>
+              </el-select>
+            </div>
+        </el-form-item>
+				<!-- <CheckInput
+					:config="MAOHLCVCheckInputConfig"
+          :isDisabled="OHLCVData.condition==''"
+					ref="maohlcvForm"
+          @manageMAStudies="manageMAStudies"
+					@saveData="saveSubData"
+				></CheckInput> -->
+      </div>
+    </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
       <el-form-item>
@@ -382,6 +443,10 @@ export default {
         {
           label: 'Weighted Indicator Combination',
           value: 'WIC'
+        },
+        {
+          label: 'Symbol OHLCV',
+          value: 'SOHLCV'
         }
       ],
       MA1CheckInputConfig: {
@@ -456,6 +521,24 @@ export default {
           value: 'monthly'
         }
       ],
+      /** symbol ohlcv */
+      OHLCVData: {symbol:'SPX', condition:''},
+      MAOHLCVCheckInputConfig: {
+        label: 'Moving Average',
+        placeholder: 'Please input the moving average value',
+        checked: false,
+        field: 'maohlcv',
+        value: '',
+        type: 'SelectInput'
+      },
+      symbolConditions: [
+        { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
+        { value: 1, obj: { label: 'Symbol High', field: 'High' } },
+        { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
+        { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
+        { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
+        { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
+      ],
     }
   },
   computed: {
@@ -474,6 +557,7 @@ export default {
   watch: {
     handleGetMiBenmark: {
       async handler(newVal) {
+        debugger
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -506,6 +590,11 @@ export default {
          }
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
+        if(this.data.categories.includes('SOHLCV')){
+          this.OHLCVData.symbol = newVal
+          
+          this.refreshMAState()
+        }
        
       },
       //immediate: true,
@@ -539,7 +628,7 @@ export default {
     this.sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
     this.symbolList = JSON.parse(localStorage.getItem('symbolList'))
     this.dropdownList = this.getList()
-    console.log('this.dropdownList', this.dropdownList)
+    console.log('this.dropdownList', this.dropdownList,this.data.categories)
   },
   methods: {
     /**
@@ -830,7 +919,7 @@ export default {
     getList() {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
-      const isSymbol = data.categories.includes('Symbol')
+      const isSymbol = data.categories.includes('Symbol') || data.categories == 'SOHLCV'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
 
       if (neitherOfThem) {
@@ -1140,6 +1229,17 @@ export default {
       // 更新weightList并刷新chartiq状态
       this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
     },
+
+    /**
+     * symbol ohlcv
+     */
+    async changeSymbol(item) {
+      this.OHLCVData.symbol = item.url
+      console.log('当前最大的 timeframe 是', this.data.time_frame,this.userSelectedTimeFrame)
+
+      // 用promise包裹indicator加载流程确保其在stma加载之前执行
+      await this.$store.dispatch('chart/set_miFormSOHLCVChange',{data:this.OHLCVData.symbol,url:null})
+    },
   }
 }
 </script>
@@ -1289,5 +1389,11 @@ h4 {
     margin-top: 5px;
     color: #6f7174;
   }
+}
+
+/** symbol ohlcv */
+.SOHLCV-container{
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
 }
 </style>
