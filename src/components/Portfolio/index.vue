@@ -267,11 +267,14 @@ export default {
   font-weight: 300;
   color: #666;
   position: relative;
+  flex-wrap: wrap;
+  height: auto;
 }
 
 .portfolio-header {
   /deep/ .el-collapse-item__header {
     background-color: #fff;
+    height: 48px;
   }
 }
 .title {
@@ -281,6 +284,7 @@ export default {
   font-size: 18px;
   font-weight: 300;
   color: #666;
+  flex-wrap: wrap;
 }
 .title p {
   padding: 0 5px;
@@ -306,7 +310,8 @@ export default {
   border-bottom: unset;
 }
 .page-title {
-  padding: 0 0 0 20px;
+  margin: 0;
+  padding: 0 5px 0 5px;
 }
 .portfolio-des {
   padding: 0 20px;

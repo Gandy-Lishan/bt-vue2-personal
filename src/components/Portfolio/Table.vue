@@ -156,7 +156,7 @@
               <template v-for="(item, index) in strategy_combination">
                 <tr :key="index">
                   <template v-for="(value, key) in item">
-                    <td :key="key" v-if="['strategy', 'model', 'percent'].includes(key)">{{ key !== 'percent' ? value : `${value}%` }}</td>
+                    <td :key="key" v-if="['strategy', '#', 'percent'].includes(key)">{{ key !== 'percent' ? value : `${value}%` }}</td>
                   </template>
                </tr>  
               </template>
@@ -214,18 +214,24 @@ export default {
       ],
       tableData: [],
       detailTableCol: [
+      {
+          label: '#',
+          name: '#',
+          key: '#',
+          width: '50px'
+        },
         {
           label: 'Strategies',
           name: 'strategy',
           key: 'strategy',
           width: '300px'
         },
-        {
-          label: 'Model',
-          name: 'model',
-          key: 'model',
-          width: '100px'
-        },
+        // {
+        //   label: 'Model',
+        //   name: 'model',
+        //   key: 'model',
+        //   width: '100px'
+        // },
         {
           label: 'Weight',
           name: 'percent',
@@ -409,8 +415,15 @@ export default {
           })
       }
       try {
-        const order = ['strategy', 'model', 'percent']
-        const _strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        const order = ['#', 'strategy', 'percent']
+        let _strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        _strategy_combination = _strategy_combination.map((item, index) => {
+          delete item.model
+          return {
+            ...item,
+            '#': index + 1
+          }
+        })
         this.strategy_combination = sortObjectProperties(_strategy_combination, order)
       } catch (error) {
         console.log('error', error)
