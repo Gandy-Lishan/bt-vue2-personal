@@ -283,7 +283,7 @@ export default {
   color: #666;
 }
 .title p {
-  padding: 0 20px;
+  padding: 0 5px;
   margin: 0;
 }
 .title p:hover {
