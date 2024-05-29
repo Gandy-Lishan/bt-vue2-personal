@@ -56,7 +56,7 @@
         ></MaxMin>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="Detailed Statistics" name="third">Detailed Statistics</el-tab-pane> -->
-			<el-tab-pane label="Other indexes" name="five" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Indexes Info')">
+			<el-tab-pane label="Major Sectors" name="five" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Indexes Info')">
         <IndexesInfo ref="IndexesInfo" :IndexesInfo="IndexesInfo" :rowFrequency="rowFrequency"></IndexesInfo>
       </el-tab-pane>
 		</el-tabs>
@@ -541,9 +541,10 @@ export default {
         sheetNames = ['Summary','Trades']
       }
       if(Object.prototype.hasOwnProperty.call(this.initalData, 'Indexes Info')) {
-        sheetNames = [...sheetNames, 'Other Indexes(Median % Return)', 'Other Indexes(Consistency)']
+        sheetNames = [...sheetNames, 'Major Sectors(Median % Return)', 'Major Sectors(Consistency)']
         consistency = JSON.parse(JSON.stringify(consistency)).map(obj => {
           for (const key in obj) {
+            
             if (Object.hasOwnProperty.call(obj, key) && key !== 'Consistency') {
               obj[key] = `${obj[key]}%`
             }

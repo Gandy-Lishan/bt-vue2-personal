@@ -831,6 +831,21 @@ button#checkResBtn {
   .indexTable td.tg-0lax.g100 {
     background-color: #ffffff;
   }
+  .indexTable td.tg-0lax.r100 {
+    background-color: hsl(5, 74%, 84%);
+  }
+  .indexTable td.tg-0lax.r200 {
+    background-color:  hsl(5, 72%, 88%);
+  }
+  .indexTable td.tg-0lax.r300 {
+    background-color: hsl(5, 70%, 92%);
+  }
+  .indexTable td.tg-0lax.r400 {
+    background-color: hsl(5, 68%, 96%);
+  }
+  .indexTable td.tg-0lax.r500 {
+    background-color: #ffffff;
+  }
   .tg .tg-0lax {
     text-align: left;
     vertical-align: top;

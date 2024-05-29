@@ -157,35 +157,56 @@ export default {
 				consistencyArray = [...consistencyArray, ...IndexesInfo[key]['Consistency']]
 			}
 		}
-		const sortAndDivideArray = (arr) => {
-				arr.sort((a, b) => a - b)
-				let result = [[], [], [], [], []]
-				let chunkSize = Math.ceil(arr.length / 4)
-				for (let i = 0; i < arr.length; i++) {
-						let chunkIndex = Math.floor(i / chunkSize)
-						result[chunkIndex].push(arr[i])
-				}
-				return result
-		}
-		this.medianReturnMinMax = sortAndDivideArray(medianReturnArray)
-		this.consistencyMinMax = sortAndDivideArray(consistencyArray)
+		const splitSortAndDivideArray = (arr) => {
+			let positiveNumbers = arr.filter(num => num >= 0)
+			let negativeNumbers = arr.filter(num => num < 0)
+			positiveNumbers.sort((a, b) => a - b)
+			negativeNumbers.sort((a, b) => a - b)
+			const divideIntoFiveChunks = (array) => {
+					let result = [[], [], [], [], []]
+					let chunkSize = Math.ceil(array.length / 5)
+					for (let i = 0; i < array.length; i++) {
+							let chunkIndex = Math.floor(i / chunkSize)
+							result[chunkIndex].push(array[i])
+					}
+					return result
+			}
+
+    // 分别将正数和负数分成五份
+    let positiveChunks = divideIntoFiveChunks(positiveNumbers);
+    let negativeChunks = divideIntoFiveChunks(negativeNumbers);
+
+    return {
+        positive: positiveChunks,
+        negative: negativeChunks
+    };
+}
+		this.medianReturnMinMax = splitSortAndDivideArray(medianReturnArray)
+		this.consistencyMinMax = splitSortAndDivideArray(consistencyArray)
     },
 		getColor(value) {
-			debugger
-			let minMax = this.medianReturnMinMax
-			if(!Array.isArray(minMax) || value === undefined)  return ''
-			let colors = ['g100', 'g200', 'g300', 'g400', 'g500']; // 颜色数组
-			for (let index = 0; index < minMax.length; index++) {
-				if(minMax[index].indexOf(value) !== -1) return colors[index]
+			let {positive, negative} = this.medianReturnMinMax
+			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
+			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
+			for (let index = 0; index < positive.length; index++) {
+				if(positive[index].indexOf(value) !== -1) return gColors[index]
+			}
+			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
+			for (let index = 0; index < negative.length; index++) {
+				if(negative[index].indexOf(value) !== -1) return rColors[index]
 			}
 			return ''
 		},
 		getConsistencyColor(value) {
-			let minMax = this.consistencyMinMax
-			if(!Array.isArray(minMax) || value === undefined)  return ''
-			let colors = ['g100', 'g200', 'g300', 'g400', 'g500']; // 颜色数组
-			for (let index = 0; index < minMax.length; index++) {
-				if(minMax[index].indexOf(value) !== -1) return colors[index]
+			let {positive, negative} = this.consistencyMinMax
+			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
+			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
+			for (let index = 0; index < positive.length; index++) {
+				if(positive[index].indexOf(value) !== -1) return gColors[index]
+			}
+			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
+			for (let index = 0; index < negative.length; index++) {
+				if(negative[index].indexOf(value) !== -1) return rColors[index]
 			}
 			return ''
 		},
