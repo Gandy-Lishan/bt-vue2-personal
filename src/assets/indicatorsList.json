@@ -14383,5 +14383,15 @@
         "chart_name": "QQQ 3-month ROC",
         "url": "qqq_roc_63",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Macro Index Model (Daily)",
+        "url": "macro_index_model_daily",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX MA 10W 40W Spread",
+        "url": "spx_ma_10w_40w_spread",
+        "updated": "Daily"
     }
 ]
