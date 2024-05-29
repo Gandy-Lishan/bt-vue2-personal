@@ -363,7 +363,14 @@ export default {
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
-      let {medianReturn, consistency} = this.$refs.IndexesInfo.exportData()
+      let medianReturn, consistency
+      try {
+        const {_medianReturn, _consistency} = this.$refs.IndexesInfo.exportData()
+        medianReturn = _medianReturn
+        consistency = _consistency
+      } catch (error) {
+        console.log(error)
+      }
       if (
         !(
           this.tableData.length &&

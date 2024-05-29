@@ -226,8 +226,8 @@ export default {
 		},
 		exportData() {
 			return {
-				medianReturn: this.medianReturn,
-				consistency: this.consistency
+				_medianReturn: this.medianReturn,
+				_consistency: this.consistency
 			}
 		}
 	}
