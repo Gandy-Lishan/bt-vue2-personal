@@ -597,6 +597,9 @@ export const CommonMethodsMixin = {
 				indicator_url = signal?signal.url:indicator
 			}
 
+
+      let stmaPeriod
+
 			if (indicator_url && analysis === 'Sentiment') {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
@@ -611,6 +614,8 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
+              stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
+
 							break
 						}
 					}
@@ -639,6 +644,8 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
+              stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
+
 							break
 						}
 					}
