@@ -3599,7 +3599,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
-
+	debugger
 	/** 	
 	 * important note:
 	 * spx+atx组合情况下，datasets是并集，scrubbed只包含symbol1存在的bar,所以symbol1用scrubbed,symbol2用datasets.filter(item => item.hasOwnProperty(field))

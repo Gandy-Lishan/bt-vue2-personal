@@ -312,6 +312,27 @@ export default {
           btnLoading: false,
         };
       }
+      if (item.combine_type === 'ohlcv') {
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getSOHLCVIncludedData(item, symbolList);
+        return {
+          ...item,
+          indicator_2_url:'', // indicator2爲空
+          categories: 'OHLCV',
+          included,
+          included_url,
+          key: item.url,
+          former,
+          latter,
+          former_url,
+          latter_url,
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type,
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
+        };
+      }
     });
       let data = await Promise.all(promise);
       data = data.filter(
@@ -337,10 +358,33 @@ export default {
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
-
+debugger
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
         included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
+        former,
+        latter,
+        former_url,
+        latter_url,
+        type: typeAttribute
+      }
+    },
+    getSOHLCVIncludedData(item, symbolList) {
+      const url_1 = item.indicator_1_url
+      const typeAttribute = item.combine_type || 'ohlcv'
+      const symbol_1 = (typeAttribute == 'ohlcv') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
+      const symbol_1_url = (typeAttribute == 'ohlcv') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.url
+      const former = symbol_1;
+      const latter = '';
+      const former_url = symbol_1_url;
+      const latter_url = '';
+      const maList = item.ma.split('_');
+      const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      const ma2 = '';
+
+      return {
+        included: [`${former}${ma1}`],
+        included_url: [`${former_url}${ma1}`],
         former,
         latter,
         former_url,

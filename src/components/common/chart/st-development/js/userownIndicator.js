@@ -5,7 +5,7 @@
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import { uniqueObjectArray } from '@/utils/formValidate'
- import {recoverSymbolOptixUrl} from '@/utils'
+ import {recoverSymbolOptixUrl,capitalizeFirstLetter} from '@/utils'
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -271,10 +271,10 @@
                 // 如果左侧发生变动
                 if(oldData.indicator1.url != newData.indicator1.url){
                     // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
-                    if(newData.indicator1.url == newData.indicator2.url) {
-                        var series = CIQ.stxx.chart.series[oldData.indicator2.url];
-                        if(series) CIQ.stxx.removeSeries(series);
-                    }
+                    // if(newData.indicator1.url == newData.indicator2.url) {
+                    //     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+                    //     if(series) CIQ.stxx.removeSeries(series);
+                    // }
 
                     CIQ.objIndicator = []
                     CIQ.stxx.loadChart({
@@ -293,38 +293,30 @@
                         url:newData.indicator2.url,
                     })
 
-                    // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
+                    // 刷新当前symbol序列
                     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
                     if(series) CIQ.stxx.removeSeries(series);
-                    if(newData.indicator1.url != newData.indicator2.url) {
                         CIQ.stxx.loadChart({    // 需要刷新一次，因为可能会修改timeframe
                             symbol: CIQ.stxx.chart.symbol,
                             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
                             endDate:new Date(),
                         },()=>{
-                            CIQ.stxx.addSeries(newData.indicator2.url, {
-                                display:newData.indicator2.name, 
-                                isComparison: false, 
-                                color: "#368DF0",
-                                permanent: true,
-                                //panel:newData.indicator2.url,
-                                // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                                yAxis:{ 
-                                    position:"left",
-                                    textStyle:"#FFBE00"
-                                },
-                                //shareYAxis: true
-                            },()=>{
-                                CIQ.hideCover()
-                                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                            });
+                            CIQ.hideCover()
+                            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                         })
-
-                    }else{
-                        CIQ.hideCover()
-                        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                    }
-
+                        CIQ.stxx.addSeries(newData.indicator2.url, {
+                            display:newData.indicator2.name, 
+                            isComparison: false, 
+                            color: "#368DF0",
+                            permanent: true,
+                            //panel:newData.indicator2.url,
+                            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                            yAxis:{ 
+                                position:"left",
+                                textStyle:"#FFBE00"
+                            },
+                            //shareYAxis: true
+                        },()=>{});
                 }
                 resolve()
             }
@@ -405,7 +397,7 @@
     // 从列表进入后还原new indicator的设定和新的indicator
     // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
-
+debugger
         //考虑到addSeries必须在displaydata前设定好timeframe
         CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
 
@@ -418,13 +410,18 @@
             url : _newVal.name+'CREATE'+_newVal.url,
             mul_indicator : _newVal.mul_indicator,
             weight_list: _newVal.weightData,
-            ma: _newVal.ma
+            ma: _newVal.ma,
+            calculate: _newVal.calculate, //symbol ohlcv field(Open,High...)
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
            
         if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
+                CIQ.store.commit('form/setComparisonSymbol', {
+                    name:newData.indicator2.name,
+                    url:newData.indicator2.url,
+                })
                 
                 CIQ.stxx.loadChart({
                     symbol: newData.indicator1.url, // indicator1和benchmark一致的
@@ -434,25 +431,39 @@
                     CIQ.hideCover()
                     CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                 })
-  
+                CIQ.stxx.addSeries(newData.indicator2.url, {
+                    display:newData.indicator2.name, 
+                    isComparison: false, 
+                    color: "#368DF0",
+                    permanent: true,
+                    //panel:newData.indicator2.url,
+                    // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                    yAxis:{ 
+                        position:"left",
+                        textStyle:"#FFBE00"
+                    },
+                    //shareYAxis: true
+                },()=>{
+                    displayOwnIndicatorMAStudies(newData)
+                });
                 // 如果展示时右框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
-                if(newData.indicator1.url != newData.indicator2.url) {
-                    //indicator2,即comparison symbol
-                    CIQ.stxx.addSeries(newData.indicator2.url, {
-                        display:newData.indicator2.name, 
-                        isComparison: false, 
-                        color: "#368DF0",
-                        permanent: true,
-                        //panel:newData.indicator2.url,
-                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                        yAxis:{ 
-                            position:"left",
-                            textStyle:"#FFBE00"
-                        },
-                        //shareYAxis: true
-                    });
-                }
-                displayOwnIndicatorMAStudies(newData)
+                // if(newData.indicator1.url != newData.indicator2.url) {
+                //     //indicator2,即comparison symbol
+                //     CIQ.stxx.addSeries(newData.indicator2.url, {
+                //         display:newData.indicator2.name, 
+                //         isComparison: false, 
+                //         color: "#368DF0",
+                //         permanent: true,
+                //         //panel:newData.indicator2.url,
+                //         // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                //         yAxis:{ 
+                //             position:"left",
+                //             textStyle:"#FFBE00"
+                //         },
+                //         //shareYAxis: true
+                //     });
+                // }
+                // displayOwnIndicatorMAStudies(newData)
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
         }
         
@@ -486,6 +497,24 @@
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
+        if(newData.categories == "OHLCV"){
+            // WIC 列表加载
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+
+
+            const benchmark = CIQ.store.state.chart.miBenmark
+            CIQ.stxx.loadChart({
+                symbol: newData.indicator1.url?newData.indicator1.url:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                indicator:[newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
+                displayOwnIndicatorMAStudies(newData)
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            })
+        }
+
         // WIC也需要初始化miFormState,主要是用到设定category
         CIQ.store.commit('chart/miFormStateChange',{
             categories: newData.categories,
@@ -498,36 +527,62 @@
 
     // 展示还原study附属的ma
     const displayOwnIndicatorMAStudies = function(newData){
-        let ma_parse_list = newData.ma.split('_')
-        const ma1_index = ma_parse_list[0].indexOf('e')
-        const ma1_type = ma1_index == -1 ? 'MA' : 'EMA'
-        const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
-        const ma1_showInput = ma1_value != '1'
-        const ma2_index = ma_parse_list[1].indexOf('e')
-        const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
-        const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
-        const ma2_showInput = ma2_value != '1'
-            // ma1
+        if(newData.categories == 'OHLCV'){
+            const ma_type = newData.ma.includes('e') ? 'EMA' : 'MA'
+            const ma_value = newData.ma.includes('e') ? newData.ma.split('e')[0] : newData.ma
+            const ma_showInput = ma_value != '1'
+
             CIQ.addOwnIndicatorMAStudy(
-                ma1_value,
-                ma1_type,
-                newData.categories.includes('Indicator')?newData.indicator1.url:'field',
-                newData.indicator2.url && newData.indicator1.url!=newData.indicator2.url ? 'entry2' : 'entry1', // 如果相同symbol,则series不存在，用symbol1数据源
+                ma_value,
+                ma_type,
+                capitalizeFirstLetter(newData.calculate),
+                'entry1',
                 0,
-                ma1_showInput,
+                ma_showInput,
                 newData.categories
-            )
-            // ma2
-            CIQ.addOwnIndicatorMAStudy(
-                ma2_value,
-                ma2_type,
-                // 如果是indicator则field为indicator_url，如果是symbol则main panel
-                newData.categories.includes('Indicator') || newData.indicator1.url!=newData.indicator2.url ?newData.indicator2.url:'field',
-                newData.indicator1.url && newData.indicator1.url!=newData.indicator2.url ? 'exit2' : 'exit1', // 如果相同symbol,则series不存在，用symbol1数据源
-                1,
-                ma2_showInput,
-                newData.categories
-            )
+            )  
+        }else {
+            let ma_parse_list = newData.ma.split('_')
+            const ma1_index = ma_parse_list[0].indexOf('e')
+            const ma1_type = ma1_index == -1 ? 'MA' : 'EMA'
+            const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
+            const ma1_showInput = ma1_value != '1'
+            const ma2_index = ma_parse_list[1].indexOf('e')
+            const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
+            const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
+            const ma2_showInput = ma2_value != '1'
+    
+            let fieldName1 = 'field',fieldName2 = 'field'
+            if(newData.categories.includes('Symbol')){ // symbol
+            }else{        
+                fieldName1 = newData.indicator_1_url
+                fieldName2 = newData.indicator_2_url
+            }
+        
+                // ma1
+                CIQ.addOwnIndicatorMAStudy(
+                    ma1_value,
+                    ma1_type,
+                    fieldName1,
+                    'entry1',
+                    0,
+                    ma1_showInput,
+                    newData.categories
+                )
+                // ma2
+                CIQ.addOwnIndicatorMAStudy(
+                    ma2_value,
+                    ma2_type,
+                    // 如果是indicator则field为indicator_url，如果是symbol则main panel
+                    fieldName2,
+                    // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
+                    newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
+                    1,
+                    ma2_showInput,
+                    newData.categories
+                )
+        }
+
     }
 
     // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
@@ -639,7 +694,6 @@
 
     CIQ.addOwnIndicatorMAStudy = function(value,type,field,criteria,index,showInput,categories) {
         const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, 0)
-
         if(categories.includes('Indicator')){
             // 更新ma前移除当前index的旧ma
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
@@ -684,12 +738,13 @@
             }
 
             // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-            const symbolLabel = index == 1 ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+            const symbolLabel = criteria.endsWith(2) ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
 
             if(!showInput || !field) return
 
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
                     Type: type == 'MA' ? 'simple' : 'exponential',
+                    Field: field,
                     Period: value,
                     display: `(${symbolLabel})Moving Average`, //无需显示
                 }, 
@@ -714,6 +769,25 @@
         }
     }
 
+    CIQ.changeUserOwnIndicatorSymbol = function(data){
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //编辑时对内容修改或者preview应该移除生成的indicator
+
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
+
+        const benchmark = CIQ.store.state.chart.miBenmark
+        CIQ.stxx.loadChart({
+            symbol: data.symbol?data.symbol:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+        }, function(){
+            CIQ.hideCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+        })
+    }
 
     // 预留：layout management
     // CIQ.localStorage.saveLayout = function(){

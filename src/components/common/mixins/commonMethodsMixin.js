@@ -590,16 +590,13 @@ export const CommonMethodsMixin = {
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
+			let stmaPeriod
 
 			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
 				// 是senti则为senti url, 反之为User的name
 				indicator_url = signal?signal.url:indicator
 			}
-
-
-      let stmaPeriod
-
 			if (indicator_url && analysis === 'Sentiment') {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
@@ -614,8 +611,7 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
-              stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
-
+							stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
 							break
 						}
 					}
@@ -644,8 +640,7 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
-              stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
-
+							stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
 							break
 						}
 					}
@@ -692,7 +687,6 @@ export const CommonMethodsMixin = {
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
-			debugger
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Day)`
 			CIQ.Studies.addStudy(
 				CIQ.stxx,

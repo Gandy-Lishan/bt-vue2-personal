@@ -289,6 +289,12 @@ const actions = {
 			resolve()
 		})
 	},
+	set_miFormSOHLCVChange({ commit }, val ) {
+		return new Promise(resolve => {
+            CIQ.changeUserOwnIndicatorSymbol(val.data)
+			resolve()
+		})
+	},
 	set_miFormStateChange({ commit }, val) {
 		return new Promise(resolve => {
 			const newVal = 	{
