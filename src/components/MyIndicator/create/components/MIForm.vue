@@ -593,7 +593,8 @@ export default {
         if(this.data.categories.includes('OHLCV')){
           this.OHLCVData.symbol = newVal
           
-          this.refreshMAState()
+          const checkInputRef = 'maohlcvForm'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
         }
        
       },
