@@ -99,7 +99,6 @@
 					</el-table-column>
 					<el-table-column
 						:key="l.key"
-						show-overflow-tooltip
 						:width="l.width"
 						v-if="['btn'].includes(l.value)"
 					>
