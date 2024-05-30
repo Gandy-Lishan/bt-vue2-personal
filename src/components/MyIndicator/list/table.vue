@@ -317,7 +317,7 @@ export default {
         return {
           ...item,
           indicator_2_url:'', // indicator2爲空
-          categories: 'Symbol OHLCV',
+          categories: 'OHLCV',
           included,
           included_url,
           key: item.url,
@@ -383,8 +383,8 @@ debugger
       const ma2 = '';
 
       return {
-        included: [`${former}${ma1}`, `${latter}${ma2}`],
-        included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
+        included: [`${former}${ma1}`],
+        included_url: [`${former_url}${ma1}`],
         former,
         latter,
         former_url,

@@ -497,22 +497,21 @@ debugger
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
-        if(newData.categories == "Symbol OHLCV"){
+        if(newData.categories == "OHLCV"){
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
 
-            const ma_type = newData.ma.includes('e') ? 'EMA' : 'MA'
-            const ma_value = newData.ma.includes('e') ? newData.ma.split('e')[0] : newData.ma
-            const ma_showInput = ma_value != '1'
-            CIQ.store.dispatch('chart/set_miFormSOHLCVChange',{
-                data:{
-                    symbol:newData.indicator1.url,
-                    field: capitalizeFirstLetter(newData.calculate),
-                    ma_value:ma_value,
-                    ma_type:ma_type,
-                    ma_showInput:ma_showInput,
-                },url:newData.url
+
+            const benchmark = CIQ.store.state.chart.miBenmark
+            CIQ.stxx.loadChart({
+                symbol: newData.indicator1.url?newData.indicator1.url:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                indicator:[newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
+                displayOwnIndicatorMAStudies(newData)
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             })
         }
 
@@ -528,45 +527,62 @@ debugger
 
     // 展示还原study附属的ma
     const displayOwnIndicatorMAStudies = function(newData){
-        let ma_parse_list = newData.ma.split('_')
-        const ma1_index = ma_parse_list[0].indexOf('e')
-        const ma1_type = ma1_index == -1 ? 'MA' : 'EMA'
-        const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
-        const ma1_showInput = ma1_value != '1'
-        const ma2_index = ma_parse_list[1].indexOf('e')
-        const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
-        const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
-        const ma2_showInput = ma2_value != '1'
+        if(newData.categories == 'OHLCV'){
+            const ma_type = newData.ma.includes('e') ? 'EMA' : 'MA'
+            const ma_value = newData.ma.includes('e') ? newData.ma.split('e')[0] : newData.ma
+            const ma_showInput = ma_value != '1'
 
-        let fieldName1 = 'field',fieldName2 = 'field'
-        if(newData.categories.includes('Symbol')){ // symbol
-        }else{        
-            fieldName1 = newData.indicator_1_url
-            fieldName2 = newData.indicator_2_url
-        }
-    
-            // ma1
             CIQ.addOwnIndicatorMAStudy(
-                ma1_value,
-                ma1_type,
-                fieldName1,
+                ma_value,
+                ma_type,
+                capitalizeFirstLetter(newData.calculate),
                 'entry1',
                 0,
-                ma1_showInput,
+                ma_showInput,
                 newData.categories
-            )
-            // ma2
-            CIQ.addOwnIndicatorMAStudy(
-                ma2_value,
-                ma2_type,
-                // 如果是indicator则field为indicator_url，如果是symbol则main panel
-                fieldName2,
-                // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
-                newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
-                1,
-                ma2_showInput,
-                newData.categories
-            )
+            )  
+        }else {
+            let ma_parse_list = newData.ma.split('_')
+            const ma1_index = ma_parse_list[0].indexOf('e')
+            const ma1_type = ma1_index == -1 ? 'MA' : 'EMA'
+            const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
+            const ma1_showInput = ma1_value != '1'
+            const ma2_index = ma_parse_list[1].indexOf('e')
+            const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
+            const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
+            const ma2_showInput = ma2_value != '1'
+    
+            let fieldName1 = 'field',fieldName2 = 'field'
+            if(newData.categories.includes('Symbol')){ // symbol
+            }else{        
+                fieldName1 = newData.indicator_1_url
+                fieldName2 = newData.indicator_2_url
+            }
+        
+                // ma1
+                CIQ.addOwnIndicatorMAStudy(
+                    ma1_value,
+                    ma1_type,
+                    fieldName1,
+                    'entry1',
+                    0,
+                    ma1_showInput,
+                    newData.categories
+                )
+                // ma2
+                CIQ.addOwnIndicatorMAStudy(
+                    ma2_value,
+                    ma2_type,
+                    // 如果是indicator则field为indicator_url，如果是symbol则main panel
+                    fieldName2,
+                    // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
+                    newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
+                    1,
+                    ma2_showInput,
+                    newData.categories
+                )
+        }
+
     }
 
     // 第一个参数是默认值为SPX的symbol，own indicator quotefeed请求时为默认symbol，own symbol quotefeed请求时为表单第一个symbol
@@ -678,7 +694,6 @@ debugger
 
     CIQ.addOwnIndicatorMAStudy = function(value,type,field,criteria,index,showInput,categories) {
         const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, 0)
-debugger
         if(categories.includes('Indicator')){
             // 更新ma前移除当前index的旧ma
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
@@ -754,32 +769,21 @@ debugger
         }
     }
 
-    CIQ.changeUserOwnIndicatorSymbol = function(data, combinedStudy){
+    CIQ.changeUserOwnIndicatorSymbol = function(data){
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         //编辑时对内容修改或者preview应该移除生成的indicator
-        if(!combinedStudy){
-            for (var studyInstanceName in CIQ.stxx.layout.studies) { 
-                var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-                if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-            }
+
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
         }
 
         const benchmark = CIQ.store.state.chart.miBenmark
         CIQ.stxx.loadChart({
             symbol: data.symbol?data.symbol:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
-            indicator:[combinedStudy],
             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
         }, function(){
-            // CIQ.addOwnIndicatorMAStudy(
-            //     data.ma_value,
-            //     data.ma_type,
-            //     data.field,
-            //     'entry1',
-            //     0,
-            //     data.ma_showInput,
-            //     'Symbol OHLCV'
-            // )
             CIQ.hideCover()
             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
         })
