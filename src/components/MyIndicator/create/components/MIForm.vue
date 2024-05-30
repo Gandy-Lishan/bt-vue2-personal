@@ -367,13 +367,13 @@
               </el-select>
             </div>
         </el-form-item>
-				<!-- <CheckInput
+				<CheckInput
 					:config="MAOHLCVCheckInputConfig"
           :isDisabled="OHLCVData.condition==''"
 					ref="maohlcvForm"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
-				></CheckInput> -->
+				></CheckInput>
       </div>
     </div>
 		<el-divider></el-divider>
@@ -527,17 +527,16 @@ export default {
         label: 'Moving Average',
         placeholder: 'Please input the moving average value',
         checked: false,
-        field: 'maohlcv',
+        field: 'ma1',
         value: '',
         type: 'SelectInput'
       },
       symbolConditions: [
-        { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
-        { value: 1, obj: { label: 'Symbol High', field: 'High' } },
-        { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
-        { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
-        { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
-        { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
+        { value: 0, obj: { label: 'Symbol Open', field: 'open' } },
+        { value: 1, obj: { label: 'Symbol High', field: 'high' } },
+        { value: 2, obj: { label: 'Symbol Low', field: 'low' } },
+        { value: 3, obj: { label: 'Symbol Close', field: 'close' } },
+        { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
       ],
     }
   },
@@ -654,28 +653,24 @@ export default {
       CIQ.editOwnIndicatorExtremeLines(value,field)
     },
     manageMAStudies(value,type,field,showInput) {
+      debugger
       let fieldName = 'field'
-      if(!this.data.categories.includes('Symbol')){
+      let criteria
+      if(this.data.categories.includes('Symbol')){ // symbol
+        criteria = field == 'ma1' ? 'entry1' : 'entry2'
+
+      }else if(this.data.categories == 'Symbol OHLCV'){
+        fieldName = CIQ.findSymbolIndicator(this.OHLCVData.condition,null)?.field
+      }else{    
         if(field == 'ma1'){
           fieldName = this.data.indicator_1_url
         }else if(field == 'ma2'){
           fieldName = this.data.indicator_2_url
         }
-      }else{
-        if(field == 'ma1'){
-          // 如果symbol则input1 的field为main panel的默认值
-        }else if(field == 'ma2' && this.data.indicator_1_url != this.data.indicator_2_url){
-          // 如果左右indicator不同则field为indicator_url反之为main panel的默认值
-          fieldName = this.data.indicator_2_url
-        } 
+        // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
+        criteria = 'entry1'
       }
 
-      let criteria
-      if(field == 'ma1'){
-        criteria = this.data.indicator_2_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'entry2' : 'entry1'
-      }else{
-        criteria = this.data.indicator_1_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'exit2' : 'exit1'
-      }
       CIQ.addOwnIndicatorMAStudy(
         value,
         type,
@@ -780,7 +775,10 @@ export default {
       const validForm = this.validForm()
       if(!validForm) return
       let saveData = null;
-      if(this.data.categories !== 'WIC') {
+      if(this.data.categories == 'WIC') {
+      }else if(this.data.categories == 'Symbol OHLCV') {
+        this.$refs['maohlcvForm'].saveData();
+      }else{
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
@@ -800,11 +798,7 @@ export default {
         extreme_pessimism: this.data.extreme_pessimism,
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
-      if(this.data.categories !== 'WIC') {
-        saveData = {
-          ...commonData
-        }
-      } else {
+      if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
         const indicator_weight = percentageStrings.join('_');
@@ -830,6 +824,21 @@ export default {
           extreme_pessimism: 0,
           combine_type: 'indicator'
         };
+      }else if(this.data.categories == 'Symbol OHLCV') {
+        saveData = {
+          ...commonData,
+          calculate: this.symbolConditions.find(i=>i.obj.label == this.OHLCVData.condition)?.obj.field,
+          indicator_1: this.OHLCVData.symbol,
+          indicator_2: 'model_smart_money',
+          ma: this.data.ma1,
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          combine_type: 'ohlcv'
+        };
+      } else {
+        saveData = {
+          ...commonData
+        }
       }
       return await saveMyIndicators(saveData);
     },
@@ -892,12 +901,19 @@ export default {
           this.data.name+'CREATE'+url,
           CIQ.stxx.chart.symbol
         )
+      }else if(this.data.categories == 'Symbol OHLCV'){
+        CIQ.previewUserOwnIndicator(
+          [this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          this.OHLCVData.symbol
+        )
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 
     },
     saveSubData(field, value) {
       console.log(field, value)
+      debugger
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
@@ -1091,10 +1107,28 @@ export default {
       this.rowUrl = data.url
 
       this.dropdownList = this.getList()
-      //如果类型时weight_combination
+      //如果类型是weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
-      } else {  //其他类型
+      }else if(data.categories == 'Symbol OHLCV'){
+        this.OHLCVData.symbol = data.indicator_1_url
+        this.OHLCVData.condition = this.symbolConditions.find(item=>item.obj.field == data.calculate)?.obj.label
+        const configMap = [
+          { key: 'ma', index: 0 },
+        ];
+
+        configMap.forEach(item => {
+          const value = data[item.key];
+          item.config = {
+            value: value,
+            checked: value != '1',
+          };
+        });
+
+        //覆盖checkbox初始化配置
+        this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
+        debugger
+      }else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
           { key: 'ma', index: 1 },
@@ -1151,19 +1185,7 @@ export default {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
-      if(categories !== 'WIC') {
-        // 只需要校验 indicator_1 和 indicator_2
-        const indicator_1_url = this.data.indicator_1_url
-        const indicator_2_url = this.data.indicator_2_url
-
-        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
-        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
-
-        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
-          this.popUpMsgBox('Please choose an indicator from the dropdown.')
-          return false
-        }
-      }else {
+      if(categories == 'WIC') {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
         const data = this.weightData
         let totalWeight = 0
@@ -1181,6 +1203,30 @@ export default {
         if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
         if(data.length<=1) {this.popUpMsgBox('Please select at least 2 indicators.'); return false}
+
+      }if(categories == 'Symbol OHLCV') {
+        const symbol = this.OHLCVData.symbol
+        const condition = this.OHLCVData.condition
+        if(!symbol) {
+          this.popUpMsgBox('Please choose an symbol name from the dropdown.')
+          return false
+        }
+        if(!condition) {
+          this.popUpMsgBox('Please choose an symbol condition from the dropdown.')
+          return false
+        }
+      }else {
+        // 只需要校验 indicator_1 和 indicator_2
+        const indicator_1_url = this.data.indicator_1_url
+        const indicator_2_url = this.data.indicator_2_url
+
+        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
+
+        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
+          this.popUpMsgBox('Please choose an indicator from the dropdown.')
+          return false
+        }
       }
       return true
     },
@@ -1240,6 +1286,9 @@ export default {
       // 用promise包裹indicator加载流程确保其在stma加载之前执行
       await this.$store.dispatch('chart/set_miFormSOHLCVChange',{data:this.OHLCVData.symbol,url:null})
     },
+    handleSymbolSelect(item) {
+      this.OHLCVData.condition = item.label
+    }
   }
 }
 </script>

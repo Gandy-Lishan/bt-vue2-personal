@@ -108,6 +108,7 @@ MarkersSample.prototype.showmMarker = function () {
 	let { stx } = this;
 	// const startTime = performance.now()
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+	debugger
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			

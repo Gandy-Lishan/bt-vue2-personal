@@ -316,6 +316,7 @@ export default {
         const {included, included_url, former, latter, former_url, latter_url, type} = this.getSOHLCVIncludedData(item, symbolList);
         return {
           ...item,
+          indicator_2_url:'', // indicator2爲空
           categories: 'Symbol OHLCV',
           included,
           included_url,
@@ -357,7 +358,7 @@ export default {
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
-
+debugger
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
         included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
