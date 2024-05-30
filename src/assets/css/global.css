@@ -551,8 +551,8 @@ input[type="time"] {
     .CPM-TIM .el-table .cell,
     .ScannerBTTable .el-table .cell
     {
-  font-weight: 400;
-	font-size: 14px;
+  font-weight: 600;
+	font-size: 16px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
   text-align: center;
@@ -578,9 +578,9 @@ input[type="time"] {
   .ScannerBTTable .table thead tr th,
   .strategiesTable .table thead tr th
   {
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   color: #333341;
-	font-size: 14px;
+	font-size: 18px;
 }
 .otherIndexContainer .table thead tr th
 {
@@ -598,7 +598,8 @@ color: #333341;
 .ScannerBTTable .el-table th.el-table__cell>.cell,
 .strategiesTable .el-table th.el-table__cell>.cell
 {
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+	font-size: 18px;
 }
 
 .history-container .el-table th.redHeader>.cell {
@@ -676,12 +677,12 @@ color: #333341;
 .CPM-summary.el-table th.el-table__cell>.cell {
   text-transform: uppercase;
   color: #333;
-  font-size: 16px !important;
-  font-weight: 400;
+  font-size: 18px !important;
+  font-weight: 700;
 }
 .CPM-summary.el-table--enable-row-transition .el-table__body td.el-table__cell {
   font-size: 20px !important;
-  font-weight: 350;
+  font-weight: 600;
 }
 
 .CPM-ZScore.el-table--border .el-table__cell:first-child .cell {

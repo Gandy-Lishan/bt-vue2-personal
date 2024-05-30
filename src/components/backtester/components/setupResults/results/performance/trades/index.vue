@@ -20,7 +20,7 @@
                 prop="Symbol"
                 label="Symbol"
                 align="center"
-                width="80px"
+                width="100px"
                 show-overflow-tooltip
             >
             </el-table-column>
@@ -112,6 +112,7 @@
                 prop="MarketCondition"
                 label="Market Condition"
                 align="center"
+                width="120px"
             >
             <template slot="header">
                 Market Condition
