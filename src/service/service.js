@@ -1190,12 +1190,23 @@ export function moveStrategyFavorites(url) {
 }
 /* Strategy Page 接口 END */
 /* Portfolio Page 接口 STRAT */
-export function getPortfolioList() {
+export function getPortfolioList(page, sort, name) {
+	let url = null
+	url = '/dev/portfolio/get_portfolio_records/?ordering=-create_date'
+	// sort -> ,total_return
+	if (sort) {
+		url = `/dev/portfolio/get_portfolio_records/?ordering=${sort}`
+	}
+	if (name) {
+		url = `/dev/portfolio/get_portfolio_records/?name=${name}`
+	}
+	if (name && sort) {
+		url = `/dev/portfolio/get_portfolio_records/?ordering=${sort}&name=${name}`
+	}
+	if(page) {url = `${url}&page=${page}`}
 	return new Promise((resolve, reject) => {
 		axios
-			.get(`/dev/portfolio/get_portfolio_records/`, {
-				withCredentials: true
-			})
+			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
 				resolve(res)
 			})
@@ -1236,6 +1247,55 @@ export function AutoPortfolio(data) {
 	return new Promise((resolve, reject) => {
 		axios
 			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function UpdatePortfolio(id, data) {
+	const url = `/dev/portfolio/update_portfolio?url=${id}`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getRunPortfolioResults(url) {
+	const path = `/dev/portfolio/run_portfolio?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function delPortfolio(url) {
+	const path = `/dev/portfolio/delete_portfolio/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.delete(path)
 			.then(res => {
 				resolve(res)
 			})

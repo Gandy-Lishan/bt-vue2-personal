@@ -159,7 +159,7 @@ export default {
 }
   /deep/ .el-statistic .head .title {
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
     color: #aab5bc;
     font-weight: 600;
     text-transform: uppercase;

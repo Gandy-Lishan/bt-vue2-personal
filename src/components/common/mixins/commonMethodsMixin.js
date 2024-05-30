@@ -597,7 +597,6 @@ export const CommonMethodsMixin = {
 				// 是senti则为senti url, 反之为User的name
 				indicator_url = signal?signal.url:indicator
 			}
-			
 			if (indicator_url && analysis === 'Sentiment') {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					if (

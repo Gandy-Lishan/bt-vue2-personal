@@ -22,10 +22,10 @@
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
-        <!-- <el-menu-item class="home-link" index="9"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+        <el-menu-item class="home-link" index="9"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
           >Strategy</el-menu-item
-        > -->
+        >
         <el-menu-item class="home-link" index="1"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
@@ -49,6 +49,10 @@
         <el-menu-item class="home-link" index="10"
         v-if="isAiTrading"
           >AI Trading</el-menu-item
+        >
+        <el-menu-item class="home-link" index="11"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
+          >Portfolio</el-menu-item
         >
         <!-- <el-menu-item class="seasonality-link home-link" index="8"
         v-if="userRole == 'analyst'"
@@ -95,7 +99,8 @@ export default {
   data() {
     return {
       activeIndex: '1',
-      isAiTrading: false
+      isAiTrading: false,
+      isButtonVisible: false
     }
   },
   computed: {
@@ -122,7 +127,12 @@ export default {
       }
       else if(to.path.includes('/strategy') || to.name == 'Strategy'){
         this.activeIndex = '9'
+      }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
+        this.activeIndex = '11'
       }
+      const currentDomain = window.location.hostname;
+    // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+    if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
       }
   },
   mounted() {
@@ -140,8 +150,10 @@ export default {
       this.activeIndex = '7'
     }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
       this.activeIndex = '8'
-    }else if(this.$route.name == 'Strategy' || this.$route.name == 'Strategy'){
+    }else if(this.$route.name == 'Strategy'){
       this.activeIndex = '9'
+    }else if(this.$route.name == 'Portfolio'){
+      this.activeIndex = '11'
     }
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
@@ -200,6 +212,11 @@ export default {
         this.$router.push(path)
       }else if(key == '10') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
+      }else if(key == '11') {
+        path = this.$router.resolve({
+          path: '/portfolio'
+        }).href
+        this.$router.push(path)
       }
     },
   }
