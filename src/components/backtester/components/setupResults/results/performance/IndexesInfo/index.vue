@@ -6,7 +6,7 @@
 		<tbody>
 			<tr>
 			<template v-for="(l, i) in ['Median % Return', ...defaultTableLabels]">
-				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Median % Return' ? '300px' : ''"></th>
+				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Median % Return' ? '230px' : '100px'"></th>
 			</template>
 			</tr>
 			<template v-for="(item, index) in medianReturn">
@@ -24,7 +24,7 @@
 		<tbody>
 			<tr>
 			<template v-for="(l, i) in ['Consistency', ...defaultTableLabels]">
-				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Consistency' ? '300px' : ''"></th>
+				<th class="tg-0lax" :key="i" v-html="headerKeyMap[l]" :width="l === 'Consistency' ? '230px' : '100px'"></th>
 			</template>
 			</tr>
 			<template v-for="(item, index) in consistency">
@@ -235,4 +235,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.page-content-wrapper {
+	width: 900px;
+	margin: 0 auto;
+}
+.otherIndexContainer {
+}
 </style>
