@@ -14393,5 +14393,50 @@
         "chart_name": "SPX MA 10W 40W Spread",
         "url": "spx_ma_10w_40w_spread",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Corporate Profits Trading Model",
+        "url": "corporate_profits_trading_model_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Short Term Trading Model",
+        "url": "short_term_trading_model_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "COMP SPX Ratio MA 10W Spread",
+        "url": "comp_spx_ratio_ma10w_spread",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Multi Index Model With Fundamentals",
+        "url": "multi_index_model_with_fundamentals_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dual Trend Model With Fundamentals",
+        "url": "dual_trend_model_with_fundamentals_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dual Momentum Model With Fundamentals",
+        "url": "dual_momentum_model_with_fundamentals_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Simple Model With Fundamentals Sentiment",
+        "url": "simple_model_with_fundamentals_sentiment_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alternate Stocks Gold Model",
+        "url": "alternate_stocks_gold_model_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Simple Model With Fundamentals",
+        "url": "simple_model_with_fundamentals_indicator",
+        "updated": "Daily"
     }
 ]
