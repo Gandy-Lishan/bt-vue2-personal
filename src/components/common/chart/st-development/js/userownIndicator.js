@@ -498,6 +498,7 @@ debugger
         }
 
         if(newData.categories == "OHLCV"){
+            CIQ.stxx.setChartType("candle"); 
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
