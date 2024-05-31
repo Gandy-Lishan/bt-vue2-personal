@@ -1007,6 +1007,7 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
       }
 
       if (isSymbol) {
@@ -1018,6 +1019,7 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
       }
 
       if(isWIC) {
@@ -1027,6 +1029,7 @@ export default {
         this.data['indicator_2_url'] = ''
 
         this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
       }
 
       if(isOHLCV) {
@@ -1039,6 +1042,7 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
+        CIQ.stxx.setChartType("candle"); 
       }
 
       this.dropdownList = this.getList()
