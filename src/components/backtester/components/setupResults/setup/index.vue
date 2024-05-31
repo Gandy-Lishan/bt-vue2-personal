@@ -282,6 +282,8 @@ export default {
 				res.data.commission = (res.data.commission * 100).toFixed(2)
 				this.$store.state.form.favoriteBacktestRowData.id = res.data.id
 				res.data.user_tag = 'client'
+				res.data.uuid = null
+				res.data.id = null
 
 				this.editBacktest(res.data)
 				await this.displaySetUpForm(res.data)

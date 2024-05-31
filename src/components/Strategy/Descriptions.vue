@@ -4,6 +4,8 @@
 			<div class="page-head">
 				<div class="container">
 					<!-- BEGIN PAGE TITLE -->
+					
+				<p class="backText" style="margin: 40px 0px 0px 20px; cursor: pointer;" @click="backToList"><i class="el-icon-arrow-left" style="margin-right: 10px;"></i>Back to Strategy List</p>
 					<div class="page-title">
 						<h1 v-text="title"></h1>
 					</div>
@@ -22,6 +24,12 @@
 						<div class="portlet light">
 							<div col="col-md-12">
 								<div v-html="convertedHTML"></div>
+								<strong>
+								Use BcktestEdge 2.0 to see more details of this strategy,
+								<el-tooltip effect="dark" content="Click this button to backtest the strategy" placement="top-start">
+								<el-button type="text" @click="_backtestStrategy" style="color: #5b9bd1; font-size: 16px"><strong>click here.</strong></el-button>
+								</el-tooltip>
+								</strong>
 								<div v-html="performanceHTML"></div>
 								<div v-html="annualReturnHTML"></div>
 
@@ -117,7 +125,7 @@
 </template>
 
 <script>
-import { getStrategyDescription } from '@/service/service'
+import { getStrategyDescription, getStrategiesJSON } from '@/service/service'
 import { timestampToTime } from '@/utils'
 
 export default {
@@ -145,7 +153,8 @@ export default {
 					['win_rate_pct', `Win<br />Rate (%)`],
 					['trades_per_year', `Trades<br />Per Year`]
 				]),
-				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile']
+				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
+				backtestStrategy: null
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -225,6 +234,9 @@ export default {
 					})
 					return text
       	}
+				let _res = await getStrategiesJSON()
+				let strategies = _res?.data
+				_this.backtestStrategy = strategies.find((item) => item.name === _this.title) ? strategies.find((item) => item.name === _this.title) : null
 				// 日期转换字符串
 				const formatDate = (dateString) => {
 					const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -298,6 +310,19 @@ export default {
       next()
     }
   },
+	methods: {
+		backToList() {
+			this.$router.push({path: '/strategy'})
+		},
+		_backtestStrategy() {
+			debugger
+			if(!this.backtestStrategy) return
+			this.$router.push({
+				name: 'SetUp',
+				params: { data: JSON.stringify(this.backtestStrategy), usedFor: 'showBTForm' }
+			},()=>{})
+		}
+ 	}
 }
 </script>
 

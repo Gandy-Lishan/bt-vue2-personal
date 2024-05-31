@@ -23,38 +23,22 @@
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<el-form-item label="AVERAGE WIN %">
-							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : props.row['avg_win'] }}</span>
+							<span>{{ props.row['avg_win'] ? `${props.row['avg_win']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="AVERAGE LOSS %">
-							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : props.row['avg_loss'] }}</span>
+							<span>{{ props.row['avg_loss'] ? `${props.row['avg_loss']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="MEDIAN RETURN %">
-							<span>{{ props.row['median_return'] ? `${props.row['median_return']}%` : props.row['median_return'] }}</span>
+							<span>{{ props.row['median_return'] ? `${props.row['median_return']}%` : '' }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL TRADES">
-							<span>{{ props.row['total_trades']}}</span>
+							<span>{{ props.row['total_trades'] ? props.row['total_trades'] : '' }}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL POSITIVE">
-							<span>{{ props.row['total_positive'] }}</span>
+							<span>{{ props.row['total_positive'] ?  props.row['total_positive'] : ''}}</span>
 						</el-form-item>
 						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{ props.row['total_negative'] }}</span>
-						</el-form-item>
-
-						<!-- <el-form-item label="ANNUAL RETURN % (CAGR)">
-							<span>{{ props.row['annual_return'] }}</span>
-						</el-form-item> -->
-						<!-- <el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['avg_return'] ? `${props.row['avg_return']}%` : props.row['avg_return'] }}</span>
-						</el-form-item> -->
-						<el-form-item label="STD. DEV">
-							<span>{{ props.row['std_dev'] }}</span>
-						</el-form-item>
-            <el-form-item label="MAX RISK %">
-							<span>{{ props.row['max_draw_down'] ? `${props.row['max_draw_down']}%` : props.row['max_draw_down'] }}</span>
-						</el-form-item>
-            <el-form-item label="TIME IN MARKET %">
-							<span>{{ props.row['time_in_market'] ? `${props.row['time_in_market']}%` : props.row['time_in_market'] }}</span>
+							<span>{{ props.row['total_negative'] ? props.row['total_negative'] : ''}}</span>
 						</el-form-item>
 					</el-form>
 				</template>
@@ -67,7 +51,7 @@
 				<template slot-scope="scope">
           <el-button-group>
             <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -92,13 +76,24 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-          v-if="['Return', 'Max Drow Down'].includes(l.label)"
-          :sortable="['Return', 'Max Drow Down'].includes(l.label) ? 'custom' : false"
+          v-if="['Return', 'Max Risk %', 'STD. DEV'].includes(l.label)"
+          :sortable="['Return', 'Max Risk %', 'STD. DEV'].includes(l.label) ? 'custom' : false"
 				  :sort-orders="['ascending', 'descending', l.value]"
 				>
 					<template slot-scope="scope">
 						<span class="tableText">
+              <span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else-if="scope.row[l.value] == 0">
+							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else-if="isNaN(scope.row[l.value])">
+							{{ '' }}
+						</span>
+            <span class="tableText" v-else>
 							{{ scope.row[l.value] }}
+						</span>
 						</span>
 					</template>
 				</el-table-column>
@@ -113,22 +108,17 @@
 				>
 					<template slot-scope="scope">
 						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}% 
+						</span>
+            <span class="tableText" v-else-if="scope.row[l.value] == 0">
 							{{ scope.row[l.value] }}%
 						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
+            <span class="tableText" v-else-if="isNaN(scope.row[l.value])">
+							{{ '' }}
 						</span>
-					</template>
-				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Period'].includes(l.label)"
-				>
-					<template slot-scope="scope">
-            <span class="showDate">{{scope.row[l.value][0]}} to {{scope.row[l.value][1]}}</span>
+            <span class="tableText" v-else>
+            {{ scope.row[l.value] }}
+						</span>
 					</template>
 				</el-table-column>
         <el-table-column
@@ -144,22 +134,6 @@
             <span v-if="scope.row[l.value] == 'Fail'">{{scope.row[l.value]}}</span>
 					</template>
 				</el-table-column>
-        <el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          v-if="['Bars Number'].includes(l.label)"
-				>
-        <template slot-scope="scope">
-						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}(Bars)
-						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
-						</span>
-					</template>
-				</el-table-column>
 			</template>
 		</el-table>
 		<el-pagination
@@ -171,7 +145,6 @@
 		></el-pagination>
     <div v-if="isPopupVisible" :style="popupStyle" class="popup">
       <!-- 显示详细信息的内容 -->
-      
       <div class="plan_box">
         <table border="2px">
           <thead>
@@ -182,8 +155,8 @@
           <tbody>
               <template v-for="(item, index) in strategy_combination">
                 <tr :key="index">
-                  <template v-for="(ele, i) in item">
-                    <td :key="i">{{ ele }}</td>
+                  <template v-for="(value, key) in item">
+                    <td :key="key" v-if="['strategy', '#', 'percent'].includes(key)">{{ key !== 'percent' ? value : `${value}%` }}</td>
                   </template>
                </tr>  
               </template>
@@ -191,64 +164,11 @@
        </table>
       </div>
     </div>
-    <!-- <el-dialog
-  title="提示"
-  :visible.sync="isPopupVisible"
-  width="400px"
-  :modal="false"
-  :style="popupStyle"
-  custom-class="popup"
-  > -->
-    <!-- </div> -->
-  <!-- <el-table
-        ref="Table"
-        header-align="center"
-        :data="strategy_combination"
-        empty-text="No data"
-        size="mini"
-			  style="width: 100%; height: 100%;"
-      >
-			<template v-for="(l) in detailTableCol">
-				<el-table-column
-          align="center"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-				  show-overflow-tooltip
-          :width="l.width"
-          v-if="['strategies', 'signal', 'date'].includes(l.value)"
-				>
-					<template slot-scope="scope">
-						<span class="tableText" v-if="l.value === 'strategies'">
-              <el-button type="text">{{ scope.row[l.value] }}</el-button>
-						</span>
-            <span class="tableText" v-else>
-              {{ scope.row[l.value] }}
-						</span>
-					</template>
-          </el-table-column>
-          <el-table-column
-          align="center"
-					:label="l.label"
-					:key="l.key"
-				  show-overflow-tooltip
-          :width="l.width"
-          v-if="['weight'].includes(l.value)"
-				>
-					<template slot-scope="scope">
-            <el-input v-model="scope.row[l.value]" size="mini" disabled>
-              <template v-slot:append>(%)</template>
-            </el-input>
-					</template>
-          </el-table-column>
-			</template>
-		  </el-table> -->
-<!-- </el-dialog> -->
   </div>
 </template>
 
 <script>
-import { delScannerBT, AutoPortfolio, getScannerBTResults, getScannerBTResultsList, getPortfolioList } from '@/service/service'
+import { delPortfolio, getRunPortfolioResults, getPortfolioList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
 
 export default {
@@ -273,13 +193,8 @@ export default {
         },
         {
           label: 'Return',
-          value: 'return_range',
-          key: 'return_range'
-        },
-        {
-          label: 'Max Drow Down',
-          value: 'mdd_range',
-          key: 'mdd_range'
+          value: 'return',
+          key: 'return'
         },
         {
           label: 'Win Rate %',
@@ -287,45 +202,36 @@ export default {
           key: 'winrate'
         },
         {
-          label: 'Float Profit',
-          value: 'float_profit',
-          key: 'float_profit'
+          label: 'STD. DEV',
+          value: 'std_dev',
+          key: 'std_dev'
         },
         {
-          label: 'Market Value',
-          value: 'market_value',
-          key: 'market_value'
-        },
-        {
-          label: 'Final Cash',
-          value: 'final_cash',
-          key: 'final_cash'
-        },
-        {
-          label: 'Auto Portfolio',
-          value: 'auto_portfolio',
-          key: 'auto_portfolio'
-        },
-        {
-          label: 'Cash',
-          value: 'cash',
-          key: 'cash'
+          label: 'Max Risk %',
+          value: 'max_risk',
+          key: 'max_risk'
         }
       ],
       tableData: [],
       detailTableCol: [
+      {
+          label: '#',
+          name: '#',
+          key: '#',
+          width: '50px'
+        },
         {
           label: 'Strategies',
           name: 'strategy',
           key: 'strategy',
           width: '300px'
         },
-        {
-          label: 'Model',
-          name: 'model',
-          key: 'model',
-          width: '100px'
-        },
+        // {
+        //   label: 'Model',
+        //   name: 'model',
+        //   key: 'model',
+        //   width: '100px'
+        // },
         {
           label: 'Weight',
           name: 'percent',
@@ -366,8 +272,26 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
+            const handleKey = ['return', 'winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
+            item.return = ((item.float_profit/item.cash)*100)
+            const unifyNumber = (num) => {
+            if (num === '') {
+              return 0
+            } else {
+              let handleNum = parseFloat(num)
+              let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > 2
+              if (isToFixed) {
+                return isNaN(handleNum.toFixed(2)) ? NaN : handleNum.toFixed(2)
+              } else {
+                return isNaN(handleNum) ? NaN : handleNum
+              }
+            }
+          }
+            handleKey.forEach(key => {
+              item[key] = unifyNumber(item[key])
+            })
             item.viewLoading = false
             item.deleteLoading = false
 						return item
@@ -424,11 +348,11 @@ export default {
         }
       })
     },
-    async deleteSCBT(row) {
+    async deleteRow(row) {
       const { url } = row
       const _this = this
       row.deleteLoading = true
-			const res = await delScannerBT(url)
+			const res = await delPortfolio(url)
       const code = res.data.code
       if(code == 204) _this.popUpMsgBox('Successfully deleted')
       if(code == 403) _this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
@@ -440,11 +364,10 @@ export default {
       row.viewLoading = true
       const {url, status:preStatus} = row
       const _this = this
-      let res, listRes
+      let res
       try {
         
-        res = await getScannerBTResults(url)
-        listRes = await getScannerBTResultsList(url)
+        res = await getRunPortfolioResults(url)
       } catch (error) {
         console.error('error', error)
         _this.popUpMsgBox('Details Not Found')
@@ -456,16 +379,16 @@ export default {
       const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
-        _this.popUpMsgBox('Backtest details viewed successfully')
+        _this.popUpMsgBox('Portfolio details viewed successfully')
         const data = res.data.data
-        data['TRADE LIST'] = listRes.data.data
+        data.row = row
         _this.$emit('displayResultsData', data)
         // 如果说之前的状态是 running 之后的状态变成了 finish 或者 fail, 那么需要刷新列表
         if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Fail', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
       }
-      if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
-      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
-      if(code != 200) {_this.$emit('displayResultsData', row)}
+      if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Portfolio failed. Adjust filters and rerun')
+      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Portfolio in progress. Details and editing are unavailable');return}
+      if(code != 200) {_this.$emit('displayResultsData', {row})}
       row.viewLoading = false
     },
     async handleQuery() {
@@ -480,8 +403,28 @@ export default {
       const number = parseInt(lastPart);
       if (number <= 2) return
       }
+      const sortObjectProperties = (data, order) => {
+          return data.map(obj => {
+            const sortedObj = {};
+            order.forEach(key => {
+                if (obj.hasOwnProperty(key)) {
+                    sortedObj[key] = obj[key]
+                }
+            })
+            return sortedObj
+          })
+      }
       try {
-        this.strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        const order = ['#', 'strategy', 'percent']
+        let _strategy_combination = typeof row.strategy_combination === 'string' ? eval(row.strategy_combination) : row.strategy_combination
+        _strategy_combination = _strategy_combination.map((item, index) => {
+          delete item.model
+          return {
+            ...item,
+            '#': index + 1
+          }
+        })
+        this.strategy_combination = sortObjectProperties(_strategy_combination, order)
       } catch (error) {
         console.log('error', error)
         return

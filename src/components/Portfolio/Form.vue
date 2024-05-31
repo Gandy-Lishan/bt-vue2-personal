@@ -173,7 +173,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio">Found Portfolio</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Found Portfolio</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -242,26 +242,6 @@
         </el-autocomplete>
       </template>
     </el-table-column>
-    <el-table-column label="Model" header-align="center" align="center" prop="model" width="200">
-      <template slot-scope="scope">
-        <el-select v-model="portfolioFirstLine.model" disabled placeholder="- Select-" size="mini" v-if="scope.$index === 0">
-          <el-option
-            v-for="item in nonBondOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-select v-model="scope.row.model" placeholder="- Select-" size="mini" v-else>
-          <el-option
-            v-for="item in (scope.row.category !== 'Bond' ? nonBondOptions : bondOptions)"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </template>
-    </el-table-column>
     <el-table-column label="Weight" header-align="center" align="center" prop="percent" width="200">
       <template slot-scope="scope">
         <el-input v-model="portfolioFirstLine.percent" size="mini" label-width="50px" disabled v-if="scope.$index === 0">
@@ -278,25 +258,71 @@
     <el-table-column header-align="center" align="center" width="200">
       <template slot-scope="scope">
         <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
-        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Strategies</el-button> 
+        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategies</el-button> 
       </template>
     </el-table-column>
     </el-table>
     <br>
-    <div class="bottom-row">
-      <div></div>
-      <el-button type="primary" size="small" icon="el-icon-caret-right" @click="submitForm">Run Portfolio</el-button>
-      <div></div>
-    </div>
+    <el-row :gutter="10" type="flex" justify="center">
+      <el-col :span="8"></el-col>
+      <el-col :span="8">
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Portfolio</el-button>
+        <div class="processTipsBox" v-show="percentage != 0">
+          <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="processTips" v-show="percentage != 0"><span v-html="processTips"></span></div>
+      </el-col>
+    </el-row>
     <br>
     </div>
+    <el-dialog title="Title" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+      <el-table
+        :data="autoPortfolioData"
+        stripe
+        border
+        size="mini"
+        class="portfolioTable"                 
+        >
+        <el-table-column prop="isRight" width="50px">
+					<template slot-scope="scope">
+						<div>
+							<el-checkbox
+								v-model="scope.row.selection"
+								@click.prevent.stop.native="
+									handleListSelectedFn('selection', 'isIndeterminate', scope)
+								"
+							>
+							</el-checkbox>
+						</div>
+					</template>
+				</el-table-column>
+      <el-table-column label="#" width="100px">
+        <template slot-scope="scope">
+          <p style="margin: 0">{{ `Strategy #${scope.$index + 1}` }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column label="Model">
+        <template slot-scope="scope">
+          <template v-for="(item, index) in scope.row.array">
+              <p :key="index" style="margin: 0">{{ `${index + 1}. ${item.model_name}` }}</p>
+          </template>
+        </template>
+      </el-table-column>
+    </el-table>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
+      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm selection</el-button>
+   </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { isJson, timestampToTime, trimTrailingZeros, LocalStorageUtil } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
-import { saveScannerForm, editScannerForm, getScannerBTList, getScannerBTResults, perviewScannerForm, getStrategyList, AutoPortfolio, RunPortfolio } from '@/service/service'
+import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 
 export default {
   name: 'Form',
@@ -346,15 +372,39 @@ export default {
           url: 'dual_trend_model',
           category: 'Legacy Index',
           model: '',
-          percent: ''
+          percent: '',
+          model_name: 'Dual Trend Model'
         }
       ],
+      detailTableCol: [
+        {
+          label: '# Strategy',
+          name: 'strategy',
+          key: 'strategy',
+          width: '100px'
+        },
+        {
+          label: 'Model',
+          name: 'model',
+          key: 'model',
+          width: '200px'
+        },
+        {
+          label: 'Weight',
+          name: 'percent',
+          key: 'percent',
+          width: '100px'
+        }
+      ],
+      dialogTableVisible: false,
       rowUrl: null,
       btnLoading: false,
-      previewBtnLoading: false,
       isPolling: false,
       processTips: '',
       percentage: 0,
+      disabled: true,
+      findPortfolioLoading: false,
+      checkStrategyLoading: false,
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -507,16 +557,14 @@ export default {
     },
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
-      if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
-      this.$refs['SelectCheck'].handleoptionsAllChange(true)
-			// Object.assign(this.$data, this.$options.data())
-      this.data.signals = ['All']
+      if((!this.isPolling && this.btnLoading)) return true
+			Object.assign(this.$data, this.$options.data())
       this.generateCPMName()
       this.setBacktestHistory(1)
       this.$refs['Form'].clearValidate()
     },
     async checkDuplicateNames(name) {
-        const nameLookupRes = await getScannerBTList(null, null, name)
+        const nameLookupRes = await getPortfolioList(null, null, name)
         const count = nameLookupRes.data.count
         const nameList = nameLookupRes.data.results
         // 有重名
@@ -537,40 +585,6 @@ export default {
         });
       };
       return await validateForm(formName)
-    },
-    async previewSCList() {
-      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
-      const validForm = await this.validForm('Form')
-      if(!validForm) {
-        this.popUpMsgBox('Please review and correct form errors')
-        return
-      }
-      const {
-        long_ratio, short_ratio, 
-        stop_loss, take_profit, time_in_market,
-        stop_loss_condition, take_profit_condition, time_in_market_condition,
-        commission,
-        signals
-      } = this.data
-      const saveData = {
-        ...this.data,
-        long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
-        risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
-        risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
-        commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
-      }
-      const removeProperties = (obj, properties) => {
-          properties.forEach(property => {
-            if (obj.hasOwnProperty(property)) {
-              delete obj[property]
-            }
-          })
-      }
-      // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
-      removeProperties(saveData, propertiesToRemove)
-      return await perviewScannerForm(saveData)
     },
     async saveFormData() {
       
@@ -596,6 +610,8 @@ export default {
         totalWeight += parseFloat(row.percent) || 0
         row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
+        if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
+        console.log('this.strategiesList', this.strategiesList)
         const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
         if(!isIn) inAllowedList = false
       }
@@ -604,8 +620,8 @@ export default {
       if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
-      if(strategy_combination.length<=1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      this.processTips = `Tips: Running portfolio backtest...`
+      if(strategy_combination.length<1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
+      this.processTips = `Tips: Saving portfolio...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -613,44 +629,15 @@ export default {
         if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       }
       this.percentage = 8
-      // 在这里要判断是否勾选了 auto portfolio
-      const {
-        CAGRChecked, min_CAGR, max_CAGR, 
-        winRateChecked, min_win_rate, max_win_rate,
-        YTD_returnChecked, min_YTD_return, max_YTD_return,
-        max_drow_downChecked, min_max_drow_down, max_max_drow_down
-      } = this.portfolioFormData
       let saveData = {
         ...this.data,
-        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1)),
-        auto_portfolio: this.auto_portfolio
+        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
+        auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
-
-      const removeProperties = (obj, properties) => {
-          properties.forEach(property => {
-            if (obj.hasOwnProperty(property)) {
-              delete obj[property]
-            }
-          })
-      }
-      // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
-      removeProperties(saveData, propertiesToRemove)
-      let saveRes, previewRes
-      if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
-      else{saveRes = await saveScannerForm(saveData)}
+      let saveRes
+      if(rowUrl) {saveRes = await UpdatePortfolio(rowUrl,saveData)}
+      else{saveRes = await RunPortfolio(saveData)}
       // 这里要发请求拿到预推荐列表
-      try {
-        this.isPolling = true
-        previewRes = await perviewScannerForm(saveData)
-      } catch (error) {
-        // 预览失败, 设置状态码为 408
-        previewRes = {
-          data: {
-            code: 408
-          }
-        }
-      }
       // 刷新Backtest列表
       this.$emit('refreshBTList')
       const code = saveRes.data?.code
@@ -659,20 +646,16 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Running portfolio backtest. Please wait patiently...'
+      this.processTips = 'Tips: Running portfolio. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
       let pollingRes = null
       do {
         if(this.percentage < 99) this.percentage += 1
-        pollingRes = await getScannerBTResults(url)
+        pollingRes = await getRunPortfolioResults(url)
         const code = pollingRes.data.code
-        if (pollingRes.data.data?.status === 'finish' && code == 200) {
-          const previewCode = previewRes.data?.code
-          if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
-          return pollingRes
-        }
+        if (code === 200)  return pollingRes
         if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
@@ -680,9 +663,11 @@ export default {
     },
     async findPortfolio() {
       if(!this.auto_portfolio) return
+      this.findPortfolioLoading = true
       const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
       if(!validateAutoPortfolioForm) {
         // 选择了 auto portfolio，但是表单验证没有通过
+        this.findPortfolioLoading = false
         this.popUpMsgBox('Auto Portfolio needs more info. Correct format, please')
         return
       }
@@ -700,9 +685,18 @@ export default {
       }
       const res = await AutoPortfolio(autoData)
       console.log('res', res)
+      const code = res.data.code
+      if(code == 200) {
+        const data = res.data.data.map(element => (JSON.parse(element))).map(item => ({selection: false,array: item}))
+        // 这个时候应该弹出弹窗让用户选择 strategy
+        console.log('data', data)
+        this.dialogTableVisible = true
+        this.autoPortfolioData = data
+      }
+      this.findPortfolioLoading = false
     },
     async submitForm() {
-      this.btnLoading = true
+     this.btnLoading = true
      this.percentage = 5
       let saveRes = null
       try {
@@ -713,110 +707,46 @@ export default {
         this.processTips = ''
         this.percentage = 0
       }
-     if(!saveRes) {this.$emit('clearResults'); this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
+     if(!saveRes) { this.$emit('clearResults');
+      this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
-     const name = saveRes.data?.data?.name
-     const _name = typeof name === 'string' && name ? name : ''
-     if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
+     if(code == 203) this.popUpMsgBox(`The portfolio is running. You can wait or click the "+" button to create a new portfolio`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
+      if(code == 407) this.popUpMsgBox('Empty portfolio. Please run again')
       if(code == 200) {
-        this.popUpMsgBox(`The "${_name}" backtest is completed successfully`)
-        // 这里添加过滤列表
-        const list = saveRes['TRADE LIST']
-        if(list) saveRes.data.data['TRADE LIST'] = list
+        this.popUpMsgBox(`The portfolio is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
-      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
+      if([400, 401, 404, 403, 406, 407].includes(code)) //this.$emit('clearResults')
       // 运行成或者失败后刷新列表
       this.$emit('refreshBTList')
       this.btnLoading = false
       this.processTips = ''
       this.percentage = 0
     },
-    displayData(data) {
-      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
+    async displayData(data) {
+      const row = isJson(data.row) ? JSON.parse(data.row) : data.row
+      if(!row) return
+      const {url, name, start_date, end_date, cash, strategy_combination} = row
       this.rowUrl = url
-      const target = this.data
-      const [long_ratio, short_ratio] = long_short_ratio.split('/')
-      const [take_profit, stop_loss, time_in_market] = risk_control_filter_number.split('/')
-      const [take_profit_condition, stop_loss_condition, time_in_market_condition] = risk_control_filter_condition.split('/')
-      const prepareData = {
-        ...data,
-        stop_loss,
-        take_profit,
-        time_in_market,
-        long_ratio: trimTrailingZeros((long_ratio * 100).toFixed(2)),
-        short_ratio: trimTrailingZeros((short_ratio * 100).toFixed(2)),
-        stop_loss_condition,
-        take_profit_condition,
-        time_in_market_condition,
-        commission: trimTrailingZeros((commission * 100).toFixed(2)),
-        signals: isJson(signals) ? JSON.parse(signals) : signals
+      this.auto_portfolio = false
+      if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
+      this.strategy_combination = [{}, ...strategy_combination.map(item => {
+        const category = (this.strategiesList.find(ele => ele.model_name === item.strategy) || {})?.category || ''
+        return {...item, model_name: item.model_name, url: item.model_name, category: this.tags[category], _category: category}
+      })]
+      let totalWeight = 0
+      for (const row of this.strategy_combination.slice(1)) {
+        totalWeight += parseFloat(row.percent) || 0
       }
-      for (const key in target) {
-        if(key === 'signals') {
-          if(Array.isArray(data[key]) && data[key].length === 1 && data[key][0] === 'All') {
-            this.$refs['SelectCheck'].handleoptionsAllChange(true)
-            target[key] = this.data.signals
-          }else if(Array.isArray(data[key])){
-            this.$refs['SelectCheck'].handleoptionsAllChange(false)
-            const arr = []
-            data[key].forEach(ele => {
-              const item = {
-                label: ele,
-                value: ele,
-                check: true
-              }
-              this.$refs['SelectCheck'].handleTaskItemChange(item)
-              arr.push(ele)
-            })
-            target[key] = arr
-          }
-        }else {target[key] = prepareData[key]}
-      }
-      this.data = target
-    },
-    async previewList() {
-      let previewRes = null
-      this.previewBtnLoading = true
-      try {
-        previewRes = await this.previewSCList()
-      } catch (error) {
-        this.$emit('clearResults')
-        this.previewBtnLoading = false
-      }
-      console.log('previewRes', previewRes)
-      if(!previewRes) {this.previewBtnLoading = false; this.$emit('clearResults'); return}
-     const code = previewRes.data.code
-      if(code == 400) this.popUpMsgBox('Scanner Backtest List preview failed')
-      if(code == 401) this.popUpMsgBox('Calculate error')
-      if(code == 404 || code == 403) this.popUpMsgBox('Preview failed, Please try again')
-      if(code == 406) {
-        const name =  this.data.name
-        this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
-      }
-      if(code == 407) this.popUpMsgBox('Empty preview list. Please adjust "Filter Criteria" and run again')
-      if(code == 200 && previewRes.status == 200) {
-        this.popUpMsgBox('Preview successful')
-        const previewData = JSON.parse(previewRes.data.data)
-        console.log('previewData', previewData)
-        this.$emit('changeSecondTab', 'filter')
-        this.$emit('displayPreviewList', previewData)
-        this.$emit('scrollToTarget', 'scrollTarget')
-        // 只清空 results 数据
-        this.parentContext.tradesData = []
-        this.parentContext.$refs['Statistics'].displayData({})
-      }
-      // 只要是错误状态码都要清空 filterList 和 result 数据
-      if([400, 401, 404, 403, 406, 407].includes(code)) this.$emit('clearResults')
-      this.previewBtnLoading = false
+      this.portfolioFirstLine.percent = 100 - totalWeight
+      this.data = {name, start_date, end_date, cash}
     },
     checkResLater() {
       //清空 rowUrl
@@ -843,46 +773,44 @@ export default {
         return labelMatch || urlMatch;
       };
     },
+    validateTotalPercentage(row) {
+      let weight = 0
+      for (const row of [this.portfolioFirstLine,...this.strategy_combination.slice(1)]) {
+        weight += parseFloat(row.weight) || 0
+      }
+      if(weight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'}
+      return weight
+    },
     addRow(row) {
-      /*
-      lishan 注释掉，因为不需要限制 totalWeight 为 100 了
       let percent = null
       const totalWeight = this.validateTotalPercentage(row)
-      if(totalWeight > 0 && totalWeight < 100) {percent = 100 - totalWeight}
-      else {percent = ''}
-      this.strategy_combination.push({ percent, indicator: '', indicator_url: '', weightValidErrMsg: '' });
-      */
-     if(this.strategy_combination.length == 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
-      this.strategy_combination.push({ strategy: '', category: '', model: '', percent: '', weightValidErrMsg: '' });
+      if(totalWeight > 0 && totalWeight < 100) {percent = 100 - totalWeight} else {percent = ''}
+      if(this.strategy_combination.slice(1).length === 5) {this.popUpMsgBox(`Up to 5 rows can be added`); return}
+      this.strategy_combination.push({ strategy: '', category: '', model: '', percent, weightValidErrMsg: '' });
     },
-    deleteRow(index) {
-      this.strategy_combination.splice(index, 1)
+    deleteRow(scope) {
+      this.strategy_combination.splice(scope.$index, 1)
+      const totalWeight = this.validateTotalPercentage(scope.row)
+      const percent = 100 - totalWeight
+      if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
     validateWeightRule(row) {
       console.log(row.percent)
       row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
       // 每次都计算第一个 percent
       let totalWeight = 0
-      for (const row of this.strategy_combination) {
+      for (const row of this.strategy_combination.slice(1)) {
         totalWeight += parseFloat(row.percent) || 0
       }
+      if(totalWeight <= 0) return
+      if(totalWeight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'; return}
       const percent = 100 - totalWeight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
     handleRowSelect(item, row) {
       row.model_name = item.model_name
       row.category = this.tags[item.category]
-    },
-    findMaxFreq() {
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-      let frequencyArray = []
-        frequencyArray = this.strategy_combination.map(item => {
-          const url = item.indicator_url
-            return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
-        })
-      frequencyArray = frequencyArray.filter(item => item)
-      // 结合indicator的周期数组和用户选择周期计算最大周期
-      return this.getMaxTimeframe(frequencyArray)
+      row._category = item.category
     },
     getMaxTimeframe(timeframes) {
         let maxTimeframe
@@ -903,10 +831,6 @@ export default {
         }
         return maxTimeframe;
      },
-     changeTimeFrame(item) {
-      this.userSelectedTimeFrame = item
-      this.data.time_frame = this.findMaxFreq() 
-    },
     async getStrategyList() {
 			let res = null
 			try {
@@ -927,6 +851,45 @@ export default {
       console.log('strategiesList', this.strategiesList)
       return this.strategiesList
 		},
+    handleListSelectedFn(selectionvalue, isIndeterminatevalue, scope) {
+    // 点击table列表内的选择框
+    // 先将所有的选项状态设置为 false
+    for (let i = 0; i < this.autoPortfolioData.length; i++) {
+        this.autoPortfolioData[i][selectionvalue] = false
+    }
+    // 设置当前选中的选项状态为 true
+    this.autoPortfolioData[scope.$index][selectionvalue] =
+      !this.autoPortfolioData[scope.$index][selectionvalue]
+      console.log('this.autoPortfolioData', this.autoPortfolioData)
+      this.disabled = !this.autoPortfolioData.some(ele => ele.selection)
+		},
+    async confirmStrategy() {
+      this.checkStrategyLoading = true
+      const selected = this.autoPortfolioData.some(ele => ele.selection)
+      // 判断有没有选择
+      if(!selected) {
+        this.checkStrategyLoading = false
+        this.popUpMsgBox('Please select a strategy')
+        return
+      }
+      if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
+      const selectedStrategy = this.autoPortfolioData.filter((item) => item.selection)[0]?.array.map(item => {
+        return {strategy: item.model_name, url: item.model, model: item.symbol_not_long, percent: item.percent, category: this.tags[(this.strategiesList.find(ele => ele.url === item.model) || {})?.category || ''], _category: item.category }
+      })
+      console.log(selectedStrategy)
+      this.strategy_combination = [{}, ...selectedStrategy]
+      let totalWeight = 0
+      for (const row of this.strategy_combination.slice(1)) {
+        totalWeight += parseFloat(row.percent) || 0
+      }
+      this.portfolioFirstLine.percent = 100 - totalWeight
+      this.checkStrategyLoading = false
+      this.dialogTableVisible = false
+    },
+    setPortfolio({strategy_combination, percent}) {
+      this.strategy_combination = strategy_combination
+      this.portfolioFirstLine.percent = percent
+    }
   }
 }
 </script>
@@ -1009,6 +972,9 @@ export default {
   .el-button--primary, .el-button--warning {
     width: 100%;
   }
+  .dialog-footer .el-button--primary {
+    width: auto;
+  }
   /deep/ .el-input--suffix .el-input__inner {
     padding-right: 0px;
   }
@@ -1081,27 +1047,63 @@ export default {
   .des-content {
     margin-top: 10px;
   }
-
-// .el-form-item.portfolio-check.el-form-item--small {
-//   margin-top: 40px;
-// }
+  /deep/ .el-dialog__body {
+    padding: 0px 20px;
+  }
+  /* 自定义样式 */
+  .custom-option {
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+      .type-label {
+        font-size: 11px;
+        color: #999999;
+        font-weight: 500;
+        margin-right: 10px;
+        text-align: center;
+        margin-left: 5px;
+      }
+      .item-label {
+        font-size: 11px;
+        font-weight: 500;
+      }
+  }
+  .processTips {
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+    line-height: 32px;
+    margin: 42px 0px 0px 0px;
+    font-weight: 500;
+    color: #606266;
+  }
+  .processTipsBox {
+    height: 32px;
+  /deep/ .el-progress-bar__innerText {
+    margin: 0px 5px 1px 5px;
+    // color: #ffffff !important;
+  }
+  /deep/ .el-progress-bar__outer {
+    height: 32px !important;
+    border-radius: 4px;
+  }
+  /deep/ .el-progress-bar__inner {
+    border-radius: 4px;
+  }
+  /deep/ .el-progress--text-inside .el-progress-bar {
+    height: 100%;
+  }
+  /deep/ .el-progress {
+    height: 100%;
+  }
 }
-
-/* 自定义样式 */
-.custom-option {
-  display: flex;
-  align-items: center; /* 垂直居中对齐 */
-    .type-label {
-      font-size: 11px;
-      color: #999999;
-      font-weight: 500;
-      margin-right: 10px;
-      text-align: center;
-      margin-left: 5px;
-    }
-    .item-label {
-      font-size: 11px;
-      font-weight: 500;
-    }
+.processTips {
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+    line-height: 32px;
+    margin: 0px;
+    font-weight: 500;
+    color: #606266;
+  }
 }
 </style>
