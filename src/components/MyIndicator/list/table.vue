@@ -221,7 +221,7 @@ export default {
         },
         {
           label: 'Symbol OHLCV',
-          value: 'symbol ohlcv'
+          value: 'ohlcv'
         }
       ],
       categoriesFilter: 'categories',
