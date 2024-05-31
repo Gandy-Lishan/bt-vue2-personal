@@ -56,10 +56,8 @@
 					</el-option>
 				</el-select>
 			</el-form-item>
-      
       <el-form-item
 				label="3.Timeframe"
-        v-if="data.categories !== 'OHLCV'"
 			>
         <template slot="label">
           <label>
@@ -647,8 +645,7 @@ export default {
       if(this.data.categories == 'WIC') {
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
       }else if(this.data.categories == 'OHLCV'){
-        const checkInputRef = 'maohlcvForm'
-        this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+        this.changeSymbol(this.OHLCVData.symbol)
       }else {
         await this.$store.dispatch('chart/set_miFormStateRefresh')
         this.refreshMAState()
@@ -1335,9 +1332,9 @@ export default {
      * symbol ohlcv
      */
     async changeSymbol(item) {
-      this.OHLCVData.symbol = item.url
-      console.log('当前最大的 timeframe 是', this.data.time_frame,this.userSelectedTimeFrame)
-
+      if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
+      else this.OHLCVData.symbol = item // from changeTimeFrame
+ 
       // 用promise包裹indicator加载流程确保其在stma加载之前执行
       await this.$store.dispatch('chart/set_miFormSOHLCVChange',{
         data:{
