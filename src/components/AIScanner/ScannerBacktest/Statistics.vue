@@ -24,7 +24,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="medianReturn"
-					label="MEDIAN RETURN %"
+					label="MEDIAN TRADE RETURN %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -118,7 +118,7 @@
 						<el-table-column
 					show-overflow-tooltip
 					prop="averageWin"
-					label="AVERAGE WIN %"
+					label="AVERAGE TRADE WIN %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -134,7 +134,7 @@
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageLoss"
-					label="AVERAGE LOSS %"
+					label="AVERAGE TRADE LOSS %"
 					align="center"
 				>
 					<template slot-scope="scope">
@@ -239,7 +239,7 @@
 			<template v-for="(l, index) in tableCol">
 				<el-table-column
 					v-if="['#', 'Symbol', 'Signal', 'Direction', 
-					'Entry Date', 'Entry Action', 'Entry Price',
+					'Entry Date', 'Entry Action', 'Entry Price', 'Shares',
 					'Exit Date', 'Exit Action', 'Exit Price',
 					'Exit Reason'
 					].includes(l.label)"
@@ -259,7 +259,7 @@
 					>
           </el-table-column>
 					<el-table-column
-					v-if="l.label == 'Float Profit %'"
+					v-if="l.label == 'Floating Profit %'"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
@@ -267,7 +267,7 @@
 					align="center"
 					:key="index"
 					:sortable="
-					l.label === 'Float Profit %' ? 'custom' : false
+					l.label === 'Floating Profit %' ? 'custom' : false
 					"
 					>
 					<template slot-scope="scope">
@@ -327,8 +327,7 @@ export default {
         {
           label: 'Symbol',
           value: 'Symbol',
-          key: 'Symbol',
-					width: '100px'
+          key: 'Symbol'
         },
         {
           label: 'Signal',
@@ -344,39 +343,44 @@ export default {
         {
           label: 'Entry Date',
           value: 'EntryDate',
-          key: 'EntryDate',
-					width: '120px'
+          key: 'EntryDate'
         },
         {
           label: 'Entry Action',
           value: 'EntryAction',
           key: 'EntryAction',
-					width: '120px'
+					width: '100px'
         },
 				{
           label: 'Entry Price',
           value: 'EntryPrice',
-          key: 'EntryPrice'
+          key: 'EntryPrice',
+					width: '100px'
         },
 				{
           label: 'Exit Date',
           value: 'ExitDate',
-          key: 'ExitDate',
-					width: '120px'
+          key: 'ExitDate'
         },
 				{
           label: 'Exit Action',
           value: 'ExitAction',
           key: 'ExitAction',
-					width: '120px'
+					width: '100px'
         },
 				{
           label: 'Exit Price',
           value: 'ExitPrice',
-          key: 'ExitPrice'
+          key: 'ExitPrice',
+					width: '90px'
         },
 				{
-          label: 'Float Profit %',
+					label: 'Shares',
+					value: 'Shares',
+					key: 'Shares'
+				},
+				{
+          label: 'Floating Profit %',
           value: 'FloatProfit',
           key: 'FloatProfit'
         },
@@ -463,12 +467,12 @@ export default {
       summaryData.forEach((item, index) => {
         const obj = {}
         obj['TOTAL RETURN %'] = `${item.totalReturn}%`
-        obj['MEDIAN RETURN %'] = `${item.medianReturn}%`
+        obj['MEDIAN TRADE RETURN %'] = `${item.medianReturn}%`
         obj['AVERAGE RETURN %'] = `${item.averageReturn}%`
         obj['Z-SCORE'] = item.tzScore
         obj['WIN RATE %'] = `${item.winRate}%`
-        obj['AVERAGE WIN %'] = `${item.averageWin}%`
-        obj['AVERAGE LOSS %'] =  `${item.averageLoss}%`
+        obj['AVERAGE TRADE WIN %'] = `${item.averageWin}%`
+        obj['AVERAGE TRADE LOSS %'] =  `${item.averageLoss}%`
         obj['TOTAL TRADES'] =  `${item.totalTrades}`
         obj['TOTAL POSITIVE'] = `${item.totalPositive}`
         obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
@@ -488,7 +492,8 @@ export default {
         obj['Exit Date'] = item.ExitDate
         obj['Exit Action'] = item.ExitAction
         obj['Exit Price'] = item.ExitPrice
-        obj['Float Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
+				obj['Shares'] = item.Shares
+        obj['Floating Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
         obj['Exit Reason'] = item.ExitReason
         trade.push(obj)
       })

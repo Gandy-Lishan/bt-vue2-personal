@@ -208,7 +208,8 @@ export default {
           ExitPrice: _result['Close'][_ID[i][dataSource]],
           FloatProfit: _result['FloatProfit'][_ID[i][dataSource]],
           ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
-          TradeNumber: i + 1
+          TradeNumber: i + 1,
+          Shares: _result['Shares'][_ID[i][dataSource]],
         }
         transformedResult.push(data)
       }
