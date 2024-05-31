@@ -551,12 +551,12 @@ debugger
             const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
             const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
             const ma2_showInput = ma2_value != '1'
-    
+    debugger
             let fieldName1 = 'field',fieldName2 = 'field'
             if(newData.categories.includes('Symbol')){ // symbol
             }else{        
-                fieldName1 = newData.indicator_1_url
-                fieldName2 = newData.indicator_2_url
+                fieldName1 = newData.indicator1.url
+                fieldName2 = newData.indicator2.url
             }
         
                 // ma1
