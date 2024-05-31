@@ -423,7 +423,13 @@ export default class PerformanceComponent extends Vue {
 			return 'darken-row';
 			}
 			return '';
+	},
+	exportData() {
+		return {
+			tableData: this.tableData,
+			historyData: this.historyData
 		}
+	}
 }
 </script>
 
