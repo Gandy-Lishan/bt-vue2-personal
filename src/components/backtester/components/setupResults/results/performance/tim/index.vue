@@ -22,7 +22,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index" align="center">
+									<el-table-column :label="l" :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '110px' : '140px'">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -1559,5 +1559,9 @@ export default {
     position: absolute;
     top: 100px;
 		right: 5px;
+}
+.history-container {
+	width: 1090px;
+	margin: 0 auto;
 }
 </style>

@@ -111,7 +111,7 @@
 						<el-input disabled v-model="backtestEditData.direction2"> </el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="12">
 					<el-form-item label="Name:" prop="name">
 						<el-input disabled v-model="backtestEditData.name"></el-input>
 					</el-form-item>
