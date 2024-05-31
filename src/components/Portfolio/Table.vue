@@ -224,7 +224,7 @@ export default {
           label: 'Strategies',
           name: 'strategy',
           key: 'strategy',
-          width: '300px'
+          width: '400px'
         },
         // {
         //   label: 'Model',
@@ -236,7 +236,7 @@ export default {
           label: 'Weight',
           name: 'percent',
           key: 'percent',
-          width: '100px'
+          width: '80px'
         }
       ],
       currentSort: {}, // 当前的排序信息
