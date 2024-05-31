@@ -279,7 +279,7 @@ export default {
 			const backtestID = LocalStorageUtil.get('backtestID')
 			if(backtestID) {
 				const res = await seeParams(backtestID)
-				res.data.commission = (res.data.commission * 100).toFixed(2)
+				// res.data.commission = (res.data.commission * 100).toFixed(2)
 				this.$store.state.form.favoriteBacktestRowData.id = res.data.id
 				res.data.user_tag = 'client'
 				res.data.uuid = null
