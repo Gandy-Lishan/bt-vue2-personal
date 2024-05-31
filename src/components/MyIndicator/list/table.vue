@@ -218,6 +218,10 @@ export default {
         {
           label: 'Weighed Indicators Combination',
           value: 'weight_combination'
+        },
+        {
+          label: 'Symbol OHLCV',
+          value: 'ohlcv'
         }
       ],
       categoriesFilter: 'categories',
