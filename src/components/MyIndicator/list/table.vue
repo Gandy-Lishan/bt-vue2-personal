@@ -218,6 +218,10 @@ export default {
         {
           label: 'Weighed Indicators Combination',
           value: 'weight_combination'
+        },
+        {
+          label: 'Symbol OHLCV',
+          value: 'symbol ohlcv'
         }
       ],
       categoriesFilter: 'categories',
@@ -317,7 +321,7 @@ export default {
         return {
           ...item,
           indicator_2_url:'', // indicator2爲空
-          categories: 'OHLCV',
+          categories: 'Symbol OHLCV',
           included,
           included_url,
           key: item.url,
@@ -464,8 +468,10 @@ debugger
       this.$router.push('/myindicator/create')
     },
     handleRowClick(row) {
-      console.log(row)
+      // 考慮到ohlcb不能改為symbol ohlcv在miform内，不然會和 symbol這個字段判斷衝突
+      if(row.categories == 'Symbol OHLCV') row.categories = 'OHLCV'
       const data = JSON.stringify(row)
+      debugger
       this.$router.push({
         name: 'MIcreate',
         params: {
