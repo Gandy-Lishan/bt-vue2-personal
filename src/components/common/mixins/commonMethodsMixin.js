@@ -567,7 +567,7 @@ export const CommonMethodsMixin = {
 
 		calculateNewConditions(signals, criteria, panelIndex) {
 			if( !['Symbol', 'Sentiment', 'User'].includes(signals.analysis) ) return
-
+debugger
 			const isROCLike = signals.isROCLike
 			const indicator = signals.indicator
 			const newCondition = signals.newCondition
@@ -771,7 +771,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 11
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 13
 					}
 				return null
 			})	

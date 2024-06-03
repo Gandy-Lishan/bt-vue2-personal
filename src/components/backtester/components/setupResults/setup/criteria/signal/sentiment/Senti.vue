@@ -604,8 +604,8 @@ export default {
         const _maValue = this.senti.maValue
         
         let _description1,_description2
-        if([12,13].includes(this.senti.condition)){
-          _description1 = `${sentiVal} ${ma} ${_newCondition}${_condition} ${_value}`
+        if([12,13].includes(this.senti.newCondition)){
+          _description1 = `${sentiVal} ${ma} ${_newCondition} ${_condition} ${_value}`
           _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
         }else{
           _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
