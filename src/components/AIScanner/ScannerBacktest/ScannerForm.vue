@@ -313,7 +313,7 @@
         >
         <template slot="label">
         <label>
-          13. Daily Stock Nums
+          13. MAX Daily Symbol Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
@@ -327,7 +327,7 @@
         </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item
+          <!-- <el-form-item
           prop="capital_allocate"
           >
           <template slot="label">
@@ -345,14 +345,66 @@
           </label>
           </template>
             <el-input v-model="data.capital_allocate" placeholder="Enter 'Kelly' or a number between 0 and 1"></el-input>
+            
+        <el-select v-model="data.capital_allocate" @change="handleQuery">
+          <el-option
+            v-for="capitalAll in capitalAllocates"
+            :key="capitalAll.value"
+            :label="capitalAll.label"
+            :value="capitalAll.value"
+          ></el-option>
+        </el-select>
+					<el-input 
+						placeholder="" 
+						v-model="searchItem" 
+						class="search"
+						@input="handleQuery"
+						clearable
+						@clear="handleQuery"
+					>
+						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+					</el-input>
+					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
+          </el-form-item> -->
+          <el-form-item
+          >
+          <template slot="label">
+            <label>
+            14. Capital Allocate
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Funds allocation method. Choosing the Kelly formula<br/>
+                 allows the system to dynamically adjust fund allocation<br/>
+                  based on strategy performance. Selecting maximum <br/>
+                  capital allocation per trade enables you to manually <br/>
+                  specify the maximum capital allocation for each trade.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item label-width="0px">
+            <el-select v-model="data.capital_allocate">
+              <el-option
+                v-for="capitalAll in capitalAllocates"
+                :key="capitalAll.value"
+                :label="capitalAll.label"
+                :value="capitalAll.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <el-form-item label-width="0px" v-if="data.capital_allocate === 'manual_input'" prop="capital_allocate_num">
+            <el-input v-show="data.capital_allocate === 'manual_input'" v-model="data.capital_allocate_num" placeholder="Enter Percentage"><template v-slot:append v-if="data.capital_allocate === 'manual_input'">(%)</template></el-input>
+          </el-form-item>
+          </div>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item>
-          <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
+          <div class="processTips" v-if="percentage != 0"><i class="el-icon-loading"></i><span v-html="processTips"></span></div>
           </el-form-item>
         </el-col>
-        <el-col :span="6"></el-col>
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
@@ -383,24 +435,6 @@ export default {
     SelectCheck
   },
   data() {
-    var validateCapitalAllocate = (rule, value, callback) => {
-      if (value === 'Kelly') {
-          callback(); // 验证通过
-        } else {
-          // 验证是否为 0 到 1 的最大两位小数值
-          const numberValue = parseFloat(value);
-          if (!isNaN(numberValue) && numberValue >= 0 && numberValue <= 1) {
-            const decimalCount = (numberValue.toString().split('.')[1] || '').length;
-            if (decimalCount <= 2) {
-              callback(); // 验证通过
-            } else {
-              callback(new Error('Value between 0 and 1 with max two decimals'));
-            }
-          } else {
-            callback(new Error("Value should be 'Kelly' or a number 0-1"));
-          }
-        }
-    };
     var validateRatio = (rule, value, callback) => {
       // 验证是否为正整数
       const integerValue = parseInt(value);
@@ -439,9 +473,10 @@ export default {
         name: '',
         total_capital: 1000000,
         commission: 0,
-        rank_condition: 'Kelly',
+        rank_condition: 'WinRate',
         daily_limit: 3,
         capital_allocate: 'Kelly',
+        capital_allocate_num: '',
         signals: ['All']
       },
       rowUrl: null,
@@ -462,12 +497,16 @@ export default {
         { value: 'stock/etf', label: 'Stock & ETF' },
       ],
       RankCondition: [
-        { value: 'Kelly', label: 'Kelly'},
+        // { value: 'Kelly', label: 'Kelly'},
         { value: 'WinRate', label: 'Win Rate(%)'},
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
         { value: 'SharpeRatio', label: 'Sharpe Ratio'},
+      ],
+      capitalAllocates: [
+        { value: 'Kelly', label: 'Auto Allocation'},
+        { value: 'manual_input', label: 'Manual Input'}
       ],
       options: [
         {
@@ -604,18 +643,17 @@ export default {
           { validator: validateCommissionRule, trigger: 'blur' },
           { validator: validateCommissionRule, trigger: 'change' }
         ],
+        capital_allocate_num: [
+          { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, 100)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, 100)(rule, value, callback), trigger: 'change' }
+        ],
         total_capital: [
           { validator: validateCapitalRule, trigger: 'blur'},
           { validator: validateCapitalRule, trigger: 'change' }
         ],
         daily_limit: [
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'change' }
-        ],
-        capital_allocate: [
-          { required: true, message: 'Enter Rank Condition', trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'change' },
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'change' }
         ],
         signals: [
           { validator: validateSignals, trigger: 'blur' },
@@ -712,7 +750,9 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals
+        signals,
+        capital_allocate,
+        capital_allocate_num
       } = this.data
       const saveData = {
         ...this.data,
@@ -720,7 +760,8 @@ export default {
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+        signals: JSON.stringify(signals.length !== 16 ? signals : ['All']),
+        capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
           properties.forEach(property => {
@@ -730,7 +771,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
       removeProperties(saveData, propertiesToRemove)
       return await perviewScannerForm(saveData)
     },
@@ -754,7 +795,9 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals
+        signals,
+        capital_allocate,
+        capital_allocate_num
       } = this.data
       const saveData = {
         ...this.data,
@@ -762,7 +805,8 @@ export default {
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+        signals: JSON.stringify(signals.length !== 16 ? signals : ['All']),
+        capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
           properties.forEach(property => {
@@ -772,7 +816,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
       removeProperties(saveData, propertiesToRemove)
       let saveRes, previewRes
       if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
@@ -857,7 +901,7 @@ export default {
       this.percentage = 0
     },
     displayData(data) {
-      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
+      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals, capital_allocate} = data
       this.rowUrl = url
       const target = this.data
       const [long_ratio, short_ratio] = long_short_ratio.split('/')
@@ -874,8 +918,10 @@ export default {
         take_profit_condition,
         time_in_market_condition,
         commission: trimTrailingZeros((commission * 100).toFixed(2)),
-        signals: isJson(signals) ? JSON.parse(signals) : signals
+        signals: isJson(signals) ? JSON.parse(signals) : signals,
+        capital_allocate: capital_allocate !== 'Kelly' ? 'manual_input' : 'Kelly'
       }
+      if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       
       for (const key in target) {
         if(key === 'signals') {
@@ -899,6 +945,11 @@ export default {
         }else {target[key] = prepareData[key]}
       }
       this.data = target
+    },
+    async rerunSCBacktest(data) {
+      data.end_date = timestampToTime(new Date())
+      this.displayData(data)
+      await this.submitForm()
     },
     async previewList() {
       let previewRes = null

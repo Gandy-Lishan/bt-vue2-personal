@@ -57,14 +57,15 @@
 					</el-form>
 				</template>
 			</el-table-column>
-    <el-table-column align="center" width="50px">
+    <el-table-column align="center" width="80px">
       <template #header>
         <!-- 将表头内容替换成 -->
         <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="() => {currentPage = 1;getDataList(null)}"></el-button>
       </template>
 				<template slot-scope="scope">
           <el-button-group>
-            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button>
+            <el-button type="text" icon="el-icon-caret-right" @click="runSCBacktest(scope.row)" title="Run Backtest" :loading="scope.row.viewLoading"></el-button>
+            <!-- <el-button type="text" icon="el-icon-view" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
             <el-button type="text" icon="el-icon-close" @click="deleteSCBT(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
@@ -171,8 +172,8 @@
 </template>
 
 <script>
-import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
+import { delScannerBT, getScannerBTList, getScannerBTResults, getScannerBTResultsList, runBacktest } from '@/service/service'
+import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 
 export default {
   name: 'ScannerBTTable',
@@ -335,6 +336,14 @@ export default {
       if(status === 'Fail' || status === 'fail') _this.popUpMsgBox('Backtest failed. Adjust filters and rerun')
       if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Backtest in progress. Details and editing are unavailable');return}
       if(code != 200) {_this.$emit('displayResultsData', row)}
+      row.viewLoading = false
+    },
+    async runSCBacktest(row) {
+      debugger
+      // 如果结束时间是当天就直接调用 handleRowClick 方法
+      if(row.end_date === timestampToTime(new Date())) {await this.handleRowClick(row); return}
+      row.viewLoading = true
+      this.$emit('rerunSCBacktest', row)
       row.viewLoading = false
     },
     async handleQuery() {

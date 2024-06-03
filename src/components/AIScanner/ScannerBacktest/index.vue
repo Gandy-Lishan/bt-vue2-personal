@@ -8,7 +8,7 @@
           </div>
         </template>
         <div class="content">
-            <ScannerBTTable ref="ScannerBTTable" @displayResultsData="displayResultsData"></ScannerBTTable>
+            <ScannerBTTable ref="ScannerBTTable" @displayResultsData="displayResultsData" @rerunSCBacktest="rerunSCBacktest"></ScannerBTTable>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
@@ -148,7 +148,6 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      
       this.$refs['ScannerForm'].displayData(data)
       this.activeSecondTab = 'summary'
       const status = data.status
@@ -162,6 +161,11 @@ export default {
       this.displaySummary(result)
       this.displayPreviewList(list)
       this.scrollToTarget('scrollTarget')
+    },
+    async rerunSCBacktest(data) {
+      this.scrollToTarget('formTarget', -200)
+      this.popUpMsgBox("Running scanner backtest, please be patient")
+      await this.$refs['ScannerForm'].rerunSCBacktest(data)
     },
     displaySummary(result) {
       

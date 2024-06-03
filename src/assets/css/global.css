@@ -655,6 +655,10 @@ color: #333341;
 .ScannerBTTable .el-table--small td.el-table__cell .cell .el-button--text i.el-icon-close{
   color: #dd3a13;
 }
+.ScannerBTTable .el-table--small td.el-table__cell .cell .el-button--text i.el-icon-view{
+  font-size: 18px;
+  color: #E6A23C;
+}
 .ScannerBTTable .el-table--small th.el-table__cell .cell .el-button {
   padding: 0;
 }
