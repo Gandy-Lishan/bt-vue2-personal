@@ -17,7 +17,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -130,7 +130,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -243,7 +243,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -251,7 +251,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Fundamentals Score   = 1",
+        "commentDes": "E: Long; Single Condition   Simple Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": ""
@@ -260,7 +260,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Fundamentals Score   = 0",
+        "commentDes": "X: Close; Single Condition   Simple Model With Fundamentals   = 0",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": ""
@@ -275,7 +275,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
+          "code": "SI:Simple Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
@@ -292,7 +292,7 @@
       "delay_bars": 0,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:Simple Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
         }
       ],
       "cond": [
@@ -305,12 +305,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "fundamentals_score",
+          "type": "simple_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$fundamentals_score$r001$ (13,n)",
-            "display": "$r001$fundamentals_score$r001$ (13,n)"
+            "display": "Simple Model With Fundamentals",
+            "id": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -320,9 +320,10 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$fundamentals_score$r001$ (13,n)"
+          "panel": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
         }
       ],
       "activatedMA": [
@@ -332,12 +333,13 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "fundamentals_score"
+          "simple_model_with_fundamentals_indicator"
         ],
         "exit": [
-          "fundamentals_score"
+          "simple_model_with_fundamentals_indicator"
         ]
       }
     }
@@ -360,7 +362,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -368,132 +370,54 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 3;  ",
+        "commentDes": "E: Long; Single Condition   Simple Model With Fundamentals Sentiment   = 1",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   < 2.5",
-        "rocCond": {
-          "newCondition": 2,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX   < 3",
-        "rocCond": {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "commentDes": "X: Close; Single Condition   Simple Model With Fundamentals Sentiment   = 0",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 0",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Stock/Bond Ratio 2 Months MAX   > 2.5",
-        "rocCond": {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "NYSE HiLo Logic Index MA10 2 Months MAX  > 3",
-        "rocCond": {
-          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
     ],
     "entry": {
       "description": "Fundamentals=1;AND neither Stock/Bond ratio was >2.5 sometime over the past 2 months, nor NYSE HiLo Logic Index's 10 dma was >3 sometime over the past 2 months",
-      "relation": 2,
-      "score": 3,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/2.5"
-        },
-        {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/2/3"
+          "code": "SI:Simple Model With Fundamentals Sentiment;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 2,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
     },
     "exit": {
       "description": "Others",
-      "relation": 2,
+      "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
-        },
-        {
-          "code": "SI:Stock/Bond Ratio 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/2.5"
-        },
-        {
-          "code": "SI:NYSE HiLo Logic Index MA10 2 Months MAX;IDS:EOnull/EPnull;SC:SV/0/3"
+          "code": "SI:Simple Model With Fundamentals Sentiment;IDS:EOnull/EPnull;SC:SV/1/0"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
@@ -501,12 +425,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "fundamentals_score",
+          "type": "simple_model_with_fundamentals_sentiment_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$fundamentals_score$r001$ (13,n)",
-            "display": "$r001$fundamentals_score$r001$ (13,n)"
+            "display": "Simple Model With Fundamentals Sentiment",
+            "id": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -516,69 +440,21 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$fundamentals_score$r001$ (13,n)"
-        },
-        {
-          "type": "vol_stock_bond_ratio_max",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)",
-            "display": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$vol_stock_bond_ratio_max$r001$ (13,n)"
-        },
-        {
-          "type": "breadth_hilo_10MA_max",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$breadth_hilo_10MA_max$r001$ (13,n)",
-            "display": "$r001$breadth_hilo_10MA_max$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$breadth_hilo_10MA_max$r001$ (13,n)"
+          "panel": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
         }
       ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
+      "activatedMA": [],
       "activatedMALayout": [],
       "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "fundamentals_score",
-          "vol_stock_bond_ratio_max",
-          "breadth_hilo_10MA_max"
+          "simple_model_with_fundamentals_sentiment_indicator"
         ],
         "exit": [
-          "fundamentals_score",
-          "vol_stock_bond_ratio_max",
-          "breadth_hilo_10MA_max"
+          "simple_model_with_fundamentals_sentiment_indicator"
         ]
       }
     }
@@ -601,7 +477,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -719,7 +595,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -727,48 +603,37 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Short Term Trading Model   = 1",
         "rocCond": {
-          "newCondition": 0,
-          "conditionPeriod": ""
-        }
-      },
-      {
-        "commentDes": "Macro Index Model   > 0.6",
-        "rocCond": {
-          "newCondition": 0,
-          "conditionPeriod": ""
-        }
-      },
-      {
-        "commentDes": "Medium Term Volatility Index   < 3",
-        "rocCond": {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": ""
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Macro Index Model   < 0.6",
+        "commentDes": "X: Close; Single Condition   Short Term Trading Model   = 0",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": ""
         }
       }
     ],
     "entry": {
       "description": "Macro Index Model > 0.6;Medium Term Volatility Index < 3.0",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/0/0.6"
-        },
+          "code": "SI:Short Term Trading Model;IDS:EOnull/EPnull;SC:SV/1/1"
+        }
+      ],
+      "cond": [
         {
-          "code": "SI:Medium Term Volatility Index;IDS:EO1.0/EP0.0;SC:SV/2/3"
+          "newCondition": 1,
+          "conditionPeriod": ""
         }
       ]
     },
@@ -780,40 +645,25 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO1.0/EP0.0;SC:SV/2/0.6"
+          "code": "SI:Short Term Trading Model;IDS:EOnull/EPnull;SC:SV/1/0"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 1,
+          "conditionPeriod": ""
         }
       ]
     },
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "macro_index_model",
+          "type": "short_term_trading_model_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$macro_index_model$r001$ (13,n)",
-            "display": "$r001$macro_index_model$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": 0.7,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": 0.7,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true,
-            "panelName": "$r001$macro_index_model$r001$ (13,n)"
-          },
-          "panel": "$r001$macro_index_model$r001$ (13,n)"
-        },
-        {
-          "type": "medium_term_vol_index",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$medium_term_vol_index$r001$ (13,n)",
-            "display": "$r001$medium_term_vol_index$r001$ (13,n)"
+            "display": "Short Term Trading Model",
+            "id": "$r001$short_term_trading_model_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -824,20 +674,20 @@
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
             "editMode": true,
-            "panelName": "$r001$medium_term_vol_index$r001$ (13,n)"
+            "panelName": "$r001$short_term_trading_model_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$medium_term_vol_index$r001$ (13,n)"
+          "panel": "$r001$short_term_trading_model_indicator$r001$ (13,n)"
         }
       ],
       "activatedMA": [],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "macro_index_model",
-          "medium_term_vol_index"
+          "short_term_trading_model_indicator"
         ],
         "exit": [
-          "macro_index_model"
+          "short_term_trading_model_indicator"
         ]
       }
     }
@@ -860,7 +710,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -978,7 +828,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1190,7 +1040,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1528,7 +1378,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1536,18 +1386,18 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   NIPA moving average 18 ROC3 > 0",
+        "commentDes": "E: Long; Single Condition   Corporate Profits Trading Model   > 0",
         "rocCond": {
-          "newCondition": 5,
+          "newCondition": 0,
           "conditionPeriod": "3"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   NIPA moving average 18 ROC3 < 0",
+        "commentDes": "X: Close; Single Condition   Corporate Profits Trading Model   < 0",
         "rocCond": {
-          "newCondition": 5,
+          "newCondition": 2,
           "conditionPeriod": "3"
         }
       }
@@ -1560,12 +1410,12 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:NIPA;IDS:EOnull/EPnull;SC:SVMA18/0/0"
+          "code": "SI:Corporate Profits Trading Model;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 5,
+          "newCondition": 0,
           "conditionPeriod": "3"
         }
       ]
@@ -1578,12 +1428,12 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:NIPA;IDS:EOnull/EPnull;SC:SVMA18/2/0"
+          "code": "SI:Corporate Profits Trading Model;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 5,
+          "newCondition": 2,
           "conditionPeriod": "3"
         }
       ]
@@ -1591,12 +1441,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "cpbicpat",
+          "type": "corporate_profits_trading_model_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$cpbicpat$r001$ (13,n)",
-            "display": "$r001$cpbicpat$r001$ (13,n)"
+            "display": "Corporate Profits Trading Model",
+            "id": "$r001$corporate_profits_trading_model_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -1606,122 +1456,26 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$corporate_profits_trading_model_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$cpbicpat$r001$ (13,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "18",
-            "Field": "cpbicpat",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (18,cpbicpat,ma,0)"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$cpbicpat$r001$ (13,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)",
-            "condition": "ROC",
-            "period": "3",
-            "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (18,cpbicpat,ma,0), 3)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0),ROC,3,n)"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0),ROC,3,n)"
-        },
-        {
-          "type": "ST MA",
-          "inputs": {
-            "Period": "18",
-            "Field": "cpbicpat",
-            "Type": "ma",
-            "Offset": 0,
-            "display": "ST MA",
-            "id": "$r001$ST MA$r001$ (18,cpbicpat,ma,0)-2"
-          },
-          "outputs": {
-            "MA": "#bfad94"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$cpbicpat$r001$ (13,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2",
-            "condition": "ROC",
-            "period": "3",
-            "overlay": false,
-            "display": "Rate Of Change(MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2, 3)",
-            "id": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2,ROC,3,n)"
-          },
-          "outputs": {
-            "Line": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (MA $r001$ST MA$r001$ (18,cpbicpat,ma,0)-2,ROC,3,n)"
+          "panel": "$r001$corporate_profits_trading_model_indicator$r001$ (13,n)"
         }
       ],
       "activatedMA": [
         {
           "period": 21,
           "url": ""
-        },
-        {
-          "period": "18",
-          "url": "cpbicpat",
-          "criteria": "entry",
-          "index": 0
-        },
-        {
-          "period": "18",
-          "url": "cpbicpat",
-          "criteria": "exit",
-          "index": 0
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "cpbicpat"
+          "corporate_profits_trading_model_indicator"
         ],
         "exit": [
-          "cpbicpat"
+          "corporate_profits_trading_model_indicator"
         ]
       }
     }
@@ -1743,7 +1497,7 @@
     "market_environment": 0,
     "index_moving_average_slope": 0,
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1861,7 +1615,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1979,7 +1733,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2255,7 +2009,7 @@
     "market_environment": 0,
     "index_moving_average_slope": 0,
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2468,7 +2222,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2476,46 +2230,18 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Dual Momentum Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "SPX/NASDAQ ROC12 Spread   < 0",
-        "rocCond": {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Dual Momentum Model With Fundamentals   = 2",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "SPX/NASDAQ ROC12 Spread   > 0",
-        "rocCond": {
-          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
@@ -2529,16 +2255,16 @@
         }
       },
       {
-        "commentDes": "Fundamentals Score   = 0",
+        "commentDes": "Dual Momentum Model With Fundamentals   = 0",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "SPX/NASDAQ ROC12 Spread   > 0",
+        "commentDes": "Dual Momentum Model With Fundamentals   = 2",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
@@ -2552,45 +2278,34 @@
         }
       },
       {
-        "commentDes": "Fundamentals Score   = 0",
+        "commentDes": "Dual Momentum Model With Fundamentals   = 0",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "SPX/NASDAQ ROC12 Spread   < 0",
+        "commentDes": "Dual Momentum Model With Fundamentals   = 1",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
     ],
     "entry": {
       "description": "Fundamentals = 1;the NASDAQ Composite outperformed the S&P 500 over the past 12 months",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:SPX/NASDAQ ROC12 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -2603,10 +2318,10 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SI:SPX/NASDAQ ROC12 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
@@ -2619,7 +2334,7 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -2628,29 +2343,18 @@
     "direction2": "Long",
     "entry2": {
       "description": "Fundamentals = 1;the NASDAQ Composite outperformed the S&P 500 not over the past 12 months",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:SPX/NASDAQ ROC12 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
@@ -2663,10 +2367,10 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SI:SPX/NASDAQ ROC12 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:Dual Momentum Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
@@ -2679,7 +2383,7 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -2687,12 +2391,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "fundamentals_score",
+          "type": "dual_momentum_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$fundamentals_score$r001$ (13,n)",
-            "display": "$r001$fundamentals_score$r001$ (13,n)"
+            "display": "Dual Momentum Model With Fundamentals",
+            "id": "$r001$dual_momentum_model_with_fundamentals_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -2702,55 +2406,29 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$dual_momentum_model_with_fundamentals_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$fundamentals_score$r001$ (13,n)"
-        },
-        {
-          "type": "spx_nasdaq_roc12_spread",
-          "inputs": {
-            "Period": 13,
-            "Overlay": false,
-            "id": "$r001$spx_nasdaq_roc12_spread$r001$ (13,n)",
-            "display": "$r001$spx_nasdaq_roc12_spread$r001$ (13,n)"
-          },
-          "outputs": {},
-          "parameters": {
-            "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": null,
-            "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": null,
-            "studyOverSoldColor": "#00DD00",
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$spx_nasdaq_roc12_spread$r001$ (13,n)"
+          "panel": "$r001$dual_momentum_model_with_fundamentals_indicator$r001$ (13,n)"
         }
       ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
+      "activatedMA": [],
       "activatedMALayout": [],
       "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "fundamentals_score",
-          "spx_nasdaq_roc12_spread"
+          "dual_momentum_model_with_fundamentals_indicator"
         ],
         "exit": [
-          "fundamentals_score",
-          "spx_nasdaq_roc12_spread"
+          "dual_momentum_model_with_fundamentals_indicator",
+          "dual_momentum_model_with_fundamentals_indicator"
         ],
         "entry2": [
-          "fundamentals_score",
-          "spx_nasdaq_roc12_spread"
+          "dual_momentum_model_with_fundamentals_indicator"
         ],
         "exit2": [
-          "fundamentals_score",
-          "spx_nasdaq_roc12_spread"
+          "dual_momentum_model_with_fundamentals_indicator",
+          "dual_momentum_model_with_fundamentals_indicator"
         ]
       }
     }
@@ -2773,7 +2451,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2781,60 +2459,59 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Signal   Symbol Ratio MAR10 > 1",
+        "commentDes": "E: Long; Single Condition   COMP SPX Ratio MA 10W Spread   > 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Signal; Score: 2;  ",
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Ratio MAR10 < 1",
+        "commentDes": "COMP SPX Ratio MA 10W Spread   < 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Deviation From Trend Between Two Moving Averages  > 1",
-        "rocCond": null
+        "commentDes": "SPX MA 10W 40W Spread   > 0",
+        "rocCond": {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Signal   Symbol Ratio MAR10 < 1",
+        "commentDes": "X: Close; Single Condition   COMP SPX Ratio MA 10W Spread   < 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       }
     ],
     "exit2_description": [
       {
-        "commentDes": "X: Close; SameBar Multi Signal; Score: 1;  ",
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Ratio MAR10 > 1",
+        "commentDes": "COMP SPX Ratio MA 10W Spread   > 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
-      },
-      {
-        "commentDes": "Deviation From Trend Between Two Moving Averages  < 1",
-        "rocCond": null
       }
     ],
     "entry": {
@@ -2845,13 +2522,13 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 0,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -2862,13 +2539,13 @@
       "delay_bars": 0,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -2882,22 +2559,25 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         },
         {
-          "code": "TI:Deviation From Trend Between Two Moving Averages;IDS:CCI;SC:CCI/0/1"
+          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 2,
+          "conditionPeriod": "21"
         },
-        null
+        {
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
       ]
     },
     "exit2": {
@@ -2908,167 +2588,63 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
-        },
-        {
-          "code": "TI:Deviation From Trend Between Two Moving Averages;IDS:CCI;SC:CCI/2/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "newCondition": 0,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "10"
-        },
-        null
+          "newCondition": 0,
+          "conditionPeriod": "21"
+        }
       ]
     },
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "Symbol Ratio",
+          "type": "comp_spx_ratio_ma10w_spread",
           "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(QQQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
+            "Period": 13,
+            "Overlay": false,
+            "display": "COMP SPX Ratio MA 10W Spread",
+            "id": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
           },
-          "outputs": {
-            "Result": "auto"
-          },
+          "outputs": {},
           "parameters": {
-            "isComparison": false,
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
           },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
+          "panel": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
         },
         {
-          "type": "Symbol Ratio",
+          "type": "spx_ma_10w_40w_spread",
           "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
+            "Period": 13,
+            "Overlay": false,
+            "display": "SPX MA 10W 40W Spread",
+            "id": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
           },
-          "outputs": {
-            "Result": "auto"
-          },
+          "outputs": {},
           "parameters": {
-            "isComparison": true,
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
           },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
-        },
-        {
-          "type": "Deviation From Trend Between Two Moving Averages",
-          "inputs": {
-            "periodShort": 4,
-            "periodLong": 40,
-            "display": "(SPY)Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(QQQ)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(QQQ)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry2",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit2",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
+          "panel": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
         }
       ],
       "activatedMA": [
@@ -3080,36 +2656,6 @@
       "activatedMALayout": [],
       "activatedTechLayout": [
         {
-          "url": "Deviation From Trend Between Two Moving Averages",
-          "criteria": "entry2",
-          "index": 1,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Deviation From Trend Between Two Moving Averages",
-          "criteria": "exit2",
-          "index": 1,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry",
-          "index": 0,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit",
-          "index": 0,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry2",
-          "index": 0,
-          "symbolType": "symbol2"
-        },
-        {
           "url": "Symbol Ratio",
           "criteria": "exit2",
           "index": 0,
@@ -3118,18 +2664,17 @@
       ],
       "formIndicators": {
         "entry": [
-          "Symbol Ratio"
+          "comp_spx_ratio_ma10w_spread"
         ],
         "exit": [
-          "Symbol Ratio"
+          "comp_spx_ratio_ma10w_spread"
         ],
         "entry2": [
-          "Symbol Ratio",
-          "Deviation From Trend Between Two Moving Averages"
+          "comp_spx_ratio_ma10w_spread",
+          "spx_ma_10w_40w_spread"
         ],
         "exit2": [
-          "Symbol Ratio",
-          "Deviation From Trend Between Two Moving Averages"
+          "comp_spx_ratio_ma10w_spread"
         ]
       }
     }
@@ -3152,7 +2697,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3160,47 +2705,19 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Multi Index Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR10 > 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Multi Index Model With Fundamentals   = 2",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR10 < 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
         }
       }
     ],
@@ -3209,21 +2726,14 @@
         "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
+          "conditionPeriod": "1"
         }
       },
       {
-        "commentDes": "Fundamentals Score   = 0",
+        "commentDes": "Multi Index Model With Fundamentals   = 2",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR10 < 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "conditionPeriod": "1"
         }
       }
     ],
@@ -3236,45 +2746,27 @@
         }
       },
       {
-        "commentDes": "Fundamentals Score   = 0",
+        "commentDes": "Multi Index Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
         }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR10 > 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "10"
-        }
       }
     ],
     "entry": {
-      "score": 2,
+      "score": 1,
       "signals_in_market": 1,
-      "relation": 2,
+      "relation": 1,
       "delay_bars": 0,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:Multi Index Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
           "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "10"
         }
       ]
     },
@@ -3286,24 +2778,17 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
-        },
-        {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:Multi Index Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
+          "conditionPeriod": "1"
         },
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "10"
+          "conditionPeriod": "1"
         }
       ]
     },
@@ -3311,30 +2796,19 @@
     "direction2": "Long",
     "entry2": {
       "description": "Fundamentals = 1;the NASDAQ Composite vs. S&P 500 ratio is > its 10 week moving average",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:Multi Index Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
           "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "10"
         }
       ]
     },
@@ -3346,10 +2820,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
-        },
-        {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:Multi Index Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
@@ -3360,102 +2831,18 @@
         {
           "newCondition": 1,
           "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "10"
         }
       ]
     },
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "Symbol Ratio",
-          "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(QQQ)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": false,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
-        },
-        {
-          "type": "Symbol Ratio",
-          "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(QQQ)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(QQQ)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-2"
-        },
-        {
-          "type": "fundamentals_score",
+          "type": "multi_index_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$fundamentals_score$r001$ (13,n)",
-            "display": "$r001$fundamentals_score$r001$ (13,n)"
+            "display": "Multi Index Model With Fundamentals",
+            "id": "$r001$multi_index_model_with_fundamentals_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -3465,104 +2852,27 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$multi_index_model_with_fundamentals_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$fundamentals_score$r001$ (13,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit2",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-3"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "10",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 10)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry2",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,10,n)-4"
+          "panel": "$r001$multi_index_model_with_fundamentals_indicator$r001$ (13,n)"
         }
       ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
+      "activatedMA": [],
       "activatedMALayout": [],
-      "activatedTechLayout": [
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry",
-          "index": 1,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit",
-          "index": 1,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry2",
-          "index": 1,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit2",
-          "index": 1,
-          "symbolType": "symbol2"
-        }
-      ],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "fundamentals_score",
-          "Symbol Ratio"
+          "multi_index_model_with_fundamentals_indicator"
         ],
         "exit": [
-          "fundamentals_score",
-          "Symbol Ratio"
+          "multi_index_model_with_fundamentals_indicator"
         ],
         "entry2": [
-          "fundamentals_score",
-          "Symbol Ratio"
+          "multi_index_model_with_fundamentals_indicator"
         ],
         "exit2": [
-          "fundamentals_score",
-          "Symbol Ratio"
+          "multi_index_model_with_fundamentals_indicator"
         ]
       }
     }
@@ -3585,7 +2895,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3837,7 +3147,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3845,41 +3155,34 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   COMP MA30 Spread   > 0",
+        "commentDes": "E: Long; Single Condition   Dual Trend Model With Fundamentals   = 1",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Dual Trend Model With Fundamentals   = 2",
         "rocCond": {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Fundamentals Score   = 1",
-        "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "COMP MA30 Spread   < 0",
-        "rocCond": {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   COMP MA30 Spread   < 0",
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "Dual Trend Model With Fundamentals   = 2",
+        "rocCond": {
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
@@ -3893,16 +3196,16 @@
         }
       },
       {
-        "commentDes": "Fundamentals Score   = 0",
+        "commentDes": "Dual Trend Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "COMP MA30 Spread   > 0",
+        "commentDes": "Dual Trend Model With Fundamentals   = 0",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
@@ -3915,30 +3218,34 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
     },
     "exit": {
       "description": "NASDAQ Composite is < its 30 day moving average",
-      "relation": 1,
+      "relation": 2,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
-          "newCondition": 2,
+          "newCondition": 1,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -3947,29 +3254,18 @@
     "direction2": "Long",
     "entry2": {
       "description": "Fundamentals = 1;NASDAQ Composite is <= its 30 day moving average",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
-        },
-        {
-          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
           "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -3982,10 +3278,10 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         },
         {
-          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
         }
       ],
       "cond": [
@@ -3998,7 +3294,7 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -4006,12 +3302,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "comp_ma30_spread",
+          "type": "dual_trend_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$comp_ma30_spread$r001$ (13,n)",
-            "display": "$r001$comp_ma30_spread$r001$ (13,n)"
+            "display": "Dual Trend Model With Fundamentals",
+            "id": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -4021,17 +3317,18 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$comp_ma30_spread$r001$ (13,n)"
+          "panel": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
         },
         {
-          "type": "fundamentals_score",
+          "type": "dual_trend_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$fundamentals_score$r001$ (13,n)",
-            "display": "$r001$fundamentals_score$r001$ (13,n)"
+            "display": "Dual Trend Model With Fundamentals",
+            "id": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
           },
           "outputs": {},
           "parameters": {
@@ -4041,33 +3338,28 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
           },
-          "panel": "$r001$fundamentals_score$r001$ (13,n)"
+          "panel": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
         }
       ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
+      "activatedMA": [],
       "activatedMALayout": [],
       "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "comp_ma30_spread"
+          "dual_trend_model_with_fundamentals_indicator"
         ],
         "exit": [
-          "comp_ma30_spread"
+          "dual_trend_model_with_fundamentals_indicator"
         ],
         "entry2": [
-          "fundamentals_score",
-          "comp_ma30_spread"
+          "dual_trend_model_with_fundamentals_indicator"
         ],
         "exit2": [
-          "fundamentals_score",
-          "comp_ma30_spread"
+          "dual_trend_model_with_fundamentals_indicator",
+          "dual_trend_model_with_fundamentals_indicator"
         ]
       }
     }
@@ -4090,7 +3382,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -4531,7 +3823,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -4539,122 +3831,83 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Signal; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Alternate Stocks Gold Model   = 1",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR1260 > 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        }
-      },
-      {
-        "commentDes": "Symbol Close MAR200 > 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; SameBar Multi Signal; Score: 2;  ",
+        "commentDes": "E: Long; Single Condition   Alternate Stocks Gold Model   = 2",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        }
-      },
-      {
-        "commentDes": "Symbol Ratio MAR1260 < 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        }
-      },
-      {
-        "commentDes": "Symbol Close MAR200 > 1",
-        "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; SameBar Multi Signal; Score: 1;  ",
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Ratio MAR1260 < 1",
+        "commentDes": "Alternate Stocks Gold Model   = 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Close MAR200 < 1",
+        "commentDes": "Alternate Stocks Gold Model   = 2",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       }
     ],
     "exit2_description": [
       {
-        "commentDes": "X: Close; SameBar Multi Signal; Score: 1;  ",
+        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Ratio MAR1260 < 1",
+        "commentDes": "Alternate Stocks Gold Model   = 0",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Symbol Close MAR200 < 1",
+        "commentDes": "Alternate Stocks Gold Model   = 1",
         "rocCond": {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       }
     ],
     "entry": {
       "description": "S&P:gold ratio is > its 5 year MA AND the S&P 500 > MA200",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
-        },
-        {
-          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -4666,24 +3919,24 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -4691,30 +3944,19 @@
     "direction2": "Long",
     "entry2": {
       "description": "S&P:gold ratio is < its 5 year MA AND the gold > MA200",
-      "relation": 2,
-      "score": 2,
+      "relation": 1,
+      "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/1"
-        },
-        {
-          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/2"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
-        },
-        {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       ]
     },
@@ -4726,351 +3968,68 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/0"
         },
         {
-          "code": "SY:Symbol Close;IDS:EO0/EP0;SC:SV/2/1"
+          "code": "SI:Alternate Stocks Gold Model;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "1260"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         },
         {
-          "newCondition": 7,
-          "conditionPeriod": "200"
+          "newCondition": 1,
+          "conditionPeriod": "21"
         }
       ]
     },
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "Symbol Ratio",
+          "type": "alternate_stocks_gold_model_indicator",
           "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(SPY)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
+            "Period": 13,
+            "Overlay": false,
+            "display": "Alternate Stocks Gold Model",
+            "id": "$r001$alternate_stocks_gold_model_indicator$r001$ (13,n)"
           },
-          "outputs": {
-            "Result": "auto"
-          },
+          "outputs": {},
           "parameters": {
-            "isComparison": false,
+            "studyOverZonesEnabled": false,
+            "studyOverBoughtValue": null,
+            "studyOverBoughtColor": "#FF0000",
+            "studyOverSoldValue": null,
+            "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$alternate_stocks_gold_model_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
-        },
-        {
-          "type": "Symbol Ratio",
-          "inputs": {
-            "Field": "Ratio",
-            "overlay": false,
-            "display": "(Gold)Symbol Ratio",
-            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
-        },
-        {
-          "type": "Symbol Close",
-          "inputs": {
-            "Field": "Close",
-            "overlay": false,
-            "display": "(SPY)Symbol Close",
-            "id": "$r001$Symbol Close$r001$ (C,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": false,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Symbol Close$r001$ (C,n)"
-        },
-        {
-          "type": "Symbol Close",
-          "inputs": {
-            "Field": "Close",
-            "overlay": false,
-            "display": "(Gold)Symbol Close",
-            "id": "$r001$Symbol Close$r001$ (C,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "isComparison": true,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$Symbol Close$r001$ (C,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "1260",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "1260",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Ratio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "1260",
-            "overlay": false,
-            "display": "(Gold)MA Ratio(Ratio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-3"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry2",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-3"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Ratio",
-            "condition": "MA",
-            "period": "1260",
-            "overlay": false,
-            "display": "(Gold)MA Ratio(Ratio, 1260)",
-            "id": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-4"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit2",
-            "index": 0,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (Ratio,MA,1260,n)-4"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Close",
-            "condition": "MA",
-            "period": "200",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Close, 200)",
-            "id": "$r001$ST ROCLike$r001$ (C,MA,200,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (C,MA,200,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Close",
-            "condition": "MA",
-            "period": "200",
-            "overlay": false,
-            "display": "(SPY)MA Ratio(Close, 200)",
-            "id": "$r001$ST ROCLike$r001$ (C,MA,200,n)-2"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (C,MA,200,n)-2"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Close",
-            "condition": "MA",
-            "period": "200",
-            "overlay": false,
-            "display": "(Gold)MA Ratio(Close, 200)",
-            "id": "$r001$ST ROCLike$r001$ (C,MA,200,n)-3"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "entry2",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (C,MA,200,n)-3"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "Close",
-            "condition": "MA",
-            "period": "200",
-            "overlay": false,
-            "display": "(Gold)MA Ratio(Close, 200)",
-            "id": "$r001$ST ROCLike$r001$ (C,MA,200,n)-4"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit2",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (C,MA,200,n)-4"
+          "panel": "$r001$alternate_stocks_gold_model_indicator$r001$ (13,n)"
         }
       ],
-      "activatedMA": [
-        {
-          "period": 21,
-          "url": ""
-        }
-      ],
+      "activatedMA": [],
       "activatedMALayout": [],
-      "activatedTechLayout": [
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry",
-          "index": 0,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Close",
-          "criteria": "entry",
-          "index": 1,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit",
-          "index": 0,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Close",
-          "criteria": "exit",
-          "index": 1,
-          "symbolType": "symbol1"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "entry2",
-          "index": 0,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Symbol Close",
-          "criteria": "entry2",
-          "index": 1,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit2",
-          "index": 0,
-          "symbolType": "symbol2"
-        },
-        {
-          "url": "Symbol Close",
-          "criteria": "exit2",
-          "index": 1,
-          "symbolType": "symbol2"
-        }
-      ],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "Symbol Ratio",
-          "Symbol Close"
+          "alternate_stocks_gold_model_indicator"
         ],
         "exit": [
-          "Symbol Ratio",
-          "Symbol Close"
+          "alternate_stocks_gold_model_indicator",
+          "alternate_stocks_gold_model_indicator"
         ],
         "entry2": [
-          "Symbol Ratio",
-          "Symbol Close"
+          "alternate_stocks_gold_model_indicator"
         ],
         "exit2": [
-          "Symbol Ratio",
-          "Symbol Close"
+          "alternate_stocks_gold_model_indicator",
+          "alternate_stocks_gold_model_indicator"
         ]
       }
     }
@@ -5088,7 +4047,7 @@
     "direction": "Long",
     "frequency": "Daily",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "trade_price": 0,
     "market_slope": 0,
     "exclude_oo": 0,
@@ -5408,7 +4367,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -5722,7 +4681,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6036,7 +4995,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6350,7 +5309,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6664,7 +5623,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6978,7 +5937,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7292,7 +6251,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7606,7 +6565,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7915,7 +6874,7 @@
     "direction": "Long",
     "frequency": "Daily",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "win_rate": 0.0,
     "trade_price": 0,
     "market_slope": 0,
@@ -8229,7 +7188,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -8543,7 +7502,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -8857,7 +7816,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9171,7 +8130,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9485,7 +8444,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9799,7 +8758,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10113,7 +9072,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10427,7 +9386,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10741,7 +9700,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11055,7 +10014,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11369,7 +10328,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11683,7 +10642,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11997,7 +10956,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -12311,7 +11270,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -12625,7 +11584,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -12939,7 +11898,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -13253,7 +12212,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -13567,7 +12526,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-04-30",
+    "end_date": "2024-05-31",
     "risk_control": "//",
     "description": {
       "Introduction": "",
