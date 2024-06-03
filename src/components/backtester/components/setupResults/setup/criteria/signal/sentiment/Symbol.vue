@@ -332,10 +332,10 @@ export default {
         const _value = this.sym.value
         const _conditionPeriod = this.sym.conditionPeriod
         let _description1
-        if([12,13].includes(this.sym.condition)){
-          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        if([12,13].includes(this.sym.newCondition)){
+          _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
         }else{
-          _description1 = `${symVal} ${_newCondition} ${_condition} ${_value}`
+          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         }
         this.description = _description1
       }
