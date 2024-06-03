@@ -485,7 +485,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Macro Index Model   > 0.7",
+        "commentDes": "E: Long; Single Condition   Macro Index Model (Daily)   > 0.7",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": ""
@@ -494,7 +494,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Macro Index Model   < 0.7",
+        "commentDes": "X: Close; Single Condition   Macro Index Model (Daily)   < 0.7",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": ""
@@ -509,7 +509,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.7;SC:SV/0/0.7"
+          "code": "SI:Macro Index Model (Daily);IDS:EOnull/EPnull;SC:SV/0/0.7"
         }
       ],
       "cond": [
@@ -527,7 +527,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Macro Index Model;IDS:EO0.7/EP0.7;SC:SV/2/0.7"
+          "code": "SI:Macro Index Model (Daily);IDS:EOnull/EPnull;SC:SV/2/0.7"
         }
       ],
       "cond": [
@@ -540,24 +540,25 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "macro_index_model",
+          "type": "macro_index_model_daily",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$macro_index_model$r001$ (13,n)",
-            "display": "$r001$macro_index_model$r001$ (13,n)"
+            "display": "Macro Index Model (Daily)",
+            "id": "$r001$macro_index_model_daily$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
             "studyOverZonesEnabled": false,
-            "studyOverBoughtValue": 0.7,
+            "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
-            "studyOverSoldValue": 0.7,
+            "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$macro_index_model_daily$r001$ (13,n)"
           },
-          "panel": "$r001$macro_index_model$r001$ (13,n)"
+          "panel": "$r001$macro_index_model_daily$r001$ (13,n)"
         }
       ],
       "activatedMA": [
@@ -567,12 +568,13 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "macro_index_model"
+          "macro_index_model_daily"
         ],
         "exit": [
-          "macro_index_model"
+          "macro_index_model_daily"
         ]
       }
     }
