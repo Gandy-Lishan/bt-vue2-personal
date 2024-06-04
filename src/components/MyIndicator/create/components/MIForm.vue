@@ -403,7 +403,7 @@
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
-import {timeframeTransform} from '@/utils'
+import {timeframeTransform, createStateFilter} from '@/utils'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
 
@@ -954,18 +954,12 @@ export default {
     querySearch(queryString, cb) {
       if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
-      var results = queryString
-        ? dropdownList.filter(this.createFilter(queryString))
-        : dropdownList
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (dropdownList) => {
-        const labelMatch = dropdownList.label.toLowerCase().includes(queryString.toLowerCase());
-        const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
-        return labelMatch || urlMatch;
-      };
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     getList() {
       const data = this.data

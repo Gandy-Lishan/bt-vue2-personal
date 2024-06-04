@@ -777,7 +777,7 @@ if (!CIQ.Studies) {
 			quotes[i]["Result " + sd.name] = indicator;
 		}
 	};
-	CIQ.Studies.calculateConsecutiveDaysU = function (stx, sd) {
+	CIQ.Studies.calculateConsecutiveDaysUp = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -788,7 +788,7 @@ if (!CIQ.Studies) {
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
-			quotes = sd.chart.scrubbedp
+			quotes = sd.chart.scrubbed
 		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;

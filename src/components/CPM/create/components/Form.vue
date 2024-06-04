@@ -310,7 +310,7 @@
 import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
-import { timestampToTime, isJson } from '@/utils'
+import { timestampToTime, isJson , createStateFilter } from '@/utils'
 import { mapGetters } from "vuex"
 
 export default {
@@ -579,24 +579,14 @@ export default {
       if(!this.dropdownList || this.dropdownList.length == 0) {
         this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
       }
-      var results = queryString
-        ? this.dropdownList.filter(this.createFilter(queryString))
-        : this.dropdownList
-      // 调用 callback 返回建议列表的数据
-      cb(results)
+      var results = this.dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
-    createFilter(queryString) {
-      return (dropdownList) => {
-        const labelMatch =
-          dropdownList.label
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) === 0
-        const urlMatch =
-          dropdownList.url.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        return labelMatch || urlMatch
-      }
-    },
+
     handleSelect(item) {
       this.data.symbol = item.url
 
