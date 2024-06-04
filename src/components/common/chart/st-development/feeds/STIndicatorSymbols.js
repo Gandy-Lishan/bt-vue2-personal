@@ -7,6 +7,8 @@ import {config}  from "./STDataFeedAccessUrl.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
 import axios from "axios"
 import { result } from "lodash";
+import { createStateFilter } from '@/utils'
+
 CIQ.activateImports(quoteFeed, symbolLookupBase); // so we can use CIQ.inheritsFrom
 /**
  * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
@@ -82,39 +84,20 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     if (filter == 'ALL'){
         var resultsIndexsList = [];
         let indexsList = await loadIndexsList()
-        let wholeWord = []
+        let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < indexsList.length; i++) {
-            var fields = indexsList[i];
-            
+            var fields = indexsList[i]; 
             var item = {
                 symbol: fields.symbol,
                 name: fields.name,
                 exchDisp: ""
             };
-
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
-                    display: [item.symbol, item.name, item.exchDisp],
-                    data: item
-                })
-                continue
-            }
-
+            concatList.push(item)
             resultsIndexsList.push({
                 display: [item.symbol, item.name, item.exchDisp],
                 data: item
             });
         }
-        resultsIndexsList.sort(SortArray)
-
         var resultsStocksList = [];
         let stocksList = await loadStocksList()
         for (var i = 0; i < stocksList.length; i++) {
@@ -124,73 +107,72 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
-                    display: [item.symbol, item.name, item.exchDisp],
-                    data: item
-                })
-                continue
-            }
-
+            concatList.push(item)
             resultsStocksList.push({
                 display: [item.symbol, item.name, item.exchDisp],
                 data: item
             });
         }
-        resultsStocksList.sort(SortArray)
-        let res = resultsIndexsList.concat(resultsStocksList)
-        if(wholeWord.length>0)   res.unshift(...wholeWord)
-        cb(res);    
+
+        let res
+        if(text.trim()){
+            res = concatList.map(item => ({
+                ...item,
+                priority: createStateFilter(text)(item),
+              }))
+              .filter(item => item.priority > 0)
+            cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                return {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+            }))
+        }else{
+            resultsIndexsList.sort(SortArray)
+            resultsStocksList.sort(SortArray)
+            res = resultsIndexsList.concat(resultsStocksList)
+            cb(res);    
+        }   
     }
     else if (filter == 'INDEXES'){
 			var results = [];
             let indexsList = await loadIndexsList()
-            let wholeWord = []
+            let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
 			for (var i = 0; i < indexsList.length; i++) {
 				var fields = indexsList[i];
-                
                 var item = {
                     symbol: fields.symbol,
                     name: fields.name,
                     exchDisp: ""
                 };
-
-                if (
-                    item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                    item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-                )
-                {
-                    continue
-                }
-    
-                if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                    wholeWord.push({
+                concatList.push(item)
+			}
+            let res
+            if(text.trim()){
+                res = concatList.map(item => ({
+                    ...item,
+                    priority: createStateFilter(text)(item),
+                  }))
+                  .filter(item => item.priority > 0)
+                cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                    return {
                         display: [item.symbol, item.name, item.exchDisp],
                         data: item
-                    })
-                    continue
-                }
-
-				results.push({
-					display: [item.symbol, item.name, item.exchDisp],
-					data: item
-				});
-			}
-            results.sort(SortArray)
-            if(wholeWord.length>0)   results.unshift(...wholeWord)
-			cb(results);    
+                    }
+                }))
+            }else{
+                res = concatList.map(item=>{
+                    return {
+                        display: [item.symbol, item.name, item.exchDisp],
+                        data: item
+                    }
+                })
+                cb(res.sort(SortArray))
+            }      
 	}else if (filter == 'STOCKS') {
         var results = [];
         let stocksList = await loadStocksList()
-        let wholeWord = []
+        let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
             var item = {
@@ -198,30 +180,30 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
+            concatList.push(item)
+        }
+        let res
+        if(text.trim()){
+            res = concatList.map(item => ({
+                ...item,
+                priority: createStateFilter(text)(item),
+              }))
+              .filter(item => item.priority > 0)
+            cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                return {
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
-                })
-                continue
-            }
-            
-            results.push({
-                display: [item.symbol, item.name, item.exchDisp],
-                data: item
-            });
-        }
-        results.sort(SortArray)
-        if(wholeWord.length>0)   results.unshift(...wholeWord)
-        cb(results);  
+                }
+            }))
+        }else{
+            res = concatList.map(item=>{
+                return {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+            })
+            cb(res.sort(SortArray))
+        } 
     } else if (filter == 'MY FAVORITES'){
         var results = []
         var resu = CIQ.store.state.chart.favoriteSymbolList
