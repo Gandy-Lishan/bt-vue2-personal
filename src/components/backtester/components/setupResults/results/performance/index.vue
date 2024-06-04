@@ -111,6 +111,11 @@ export default {
       let vm = this
       let initalData = {}
       let data = {}
+      if (row.analystID) {
+        vm.$store.state.form.favoriteBacktestRowData.id = row.analystID
+        row.id = row.analystID
+        delete row.analystID
+      }
       vm.editBacktestID = row.id
       // 娓呯┖performance琛ㄥ崟
       vm.clearPerformanceData()
