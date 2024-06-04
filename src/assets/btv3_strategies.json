@@ -3069,10 +3069,10 @@
         {
           "type": "Deviation From Trend Between Two Moving Averages",
           "inputs": {
-            "periodShort": 4,
-            "periodLong": 40,
+            "periodShort": "50",
+            "periodLong": "200",
             "display": "(SPY)Deviation From Trend Between Two Moving Averages",
-            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+            "id": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (50,200)"
           },
           "outputs": {
             "Result": "auto"
@@ -3080,9 +3080,10 @@
           "parameters": {
             "isComparison": true,
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (50,200)"
           },
-          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (4,40)"
+          "panel": "$r001$Deviation From Trend Between Two Moving Averages$r001$ (50,200)"
         },
         {
           "type": "comp_ma30_spread",
@@ -3090,7 +3091,7 @@
             "Period": 13,
             "Overlay": false,
             "id": "$r001$comp_ma30_spread$r001$ (13,n)",
-            "display": "$r001$comp_ma30_spread$r001$ (13,n)"
+            "display": "COMP MA30 Spread"
           },
           "outputs": {},
           "parameters": {
@@ -3100,7 +3101,8 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$comp_ma30_spread$r001$ (13,n)"
           },
           "panel": "$r001$comp_ma30_spread$r001$ (13,n)"
         }
@@ -3116,14 +3118,12 @@
         {
           "url": "Deviation From Trend Between Two Moving Averages",
           "criteria": "entry2",
-          "index": 1,
-          "symbolType": "symbol2"
+          "index": 1
         },
         {
           "url": "Deviation From Trend Between Two Moving Averages",
           "criteria": "exit2",
-          "index": 1,
-          "symbolType": "symbol2"
+          "index": 1
         }
       ],
       "formIndicators": {
