@@ -2514,6 +2514,13 @@
           "newCondition": 0,
           "conditionPeriod": "21"
         }
+      },
+      {
+        "commentDes": "SPX MA 10W 40W Spread   < 0",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
       }
     ],
     "entry": {
@@ -2591,6 +2598,9 @@
       "signals": [
         {
           "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+        },
+        {
+          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
@@ -2600,6 +2610,10 @@
         },
         {
           "newCondition": 0,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -2622,8 +2636,7 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true,
-            "panelName": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
+            "editMode": true
           },
           "panel": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
         },
@@ -2643,8 +2656,7 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true,
-            "panelName": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
+            "editMode": true
           },
           "panel": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
         }
@@ -2676,7 +2688,8 @@
           "spx_ma_10w_40w_spread"
         ],
         "exit2": [
-          "comp_spx_ratio_ma10w_spread"
+          "comp_spx_ratio_ma10w_spread",
+          "spx_ma_10w_40w_spread"
         ]
       }
     }
@@ -3157,34 +3170,41 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Dual Trend Model With Fundamentals   = 1",
+        "commentDes": "E: Long; Single Condition   COMP SPX Ratio MA 10W Spread   > 0",
         "rocCond": {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
     ],
     "entry2_description": [
       {
-        "commentDes": "E: Long; Single Condition   Dual Trend Model With Fundamentals   = 2",
+        "commentDes": "E: Long; SameBar Multi Condition; Score: 2;  ",
         "rocCond": {
-          "newCondition": 1,
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "COMP SPX Ratio MA 10W Spread   < 0",
+        "rocCond": {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        }
+      },
+      {
+        "commentDes": "SPX MA 10W 40W Spread   > 0",
+        "rocCond": {
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
+        "commentDes": "X: Close; Single Condition   COMP SPX Ratio MA 10W Spread   < 0",
         "rocCond": {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        }
-      },
-      {
-        "commentDes": "Dual Trend Model With Fundamentals   = 2",
-        "rocCond": {
-          "newCondition": 1,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -3193,21 +3213,21 @@
       {
         "commentDes": "X: Close; SameBar Multi Condition; Score: 1;  ",
         "rocCond": {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Dual Trend Model With Fundamentals   = 1",
+        "commentDes": "COMP SPX Ratio MA 10W Spread   > 0",
         "rocCond": {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "Dual Trend Model With Fundamentals   = 0",
+        "commentDes": "SPX MA 10W 40W Spread   < 0",
         "rocCond": {
-          "newCondition": 1,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       }
@@ -3220,34 +3240,30 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
     },
     "exit": {
       "description": "NASDAQ Composite is < its 30 day moving average",
-      "relation": 2,
+      "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 1,
-          "conditionPeriod": "21"
-        },
-        {
-          "newCondition": 1,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -3256,18 +3272,29 @@
     "direction2": "Long",
     "entry2": {
       "description": "Fundamentals = 1;NASDAQ Composite is <= its 30 day moving average",
-      "relation": 1,
+      "relation": 2,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/2"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+        },
+        {
+          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 1,
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 2,
+          "conditionPeriod": "21"
+        },
+        {
+          "newCondition": 0,
           "conditionPeriod": "21"
         }
       ]
@@ -3280,23 +3307,23 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
+          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         },
         {
-          "code": "SI:Dual Trend Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
         {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 1,
+          "newCondition": 0,
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 1,
+          "newCondition": 2,
           "conditionPeriod": "21"
         }
       ]
@@ -3304,12 +3331,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "dual_trend_model_with_fundamentals_indicator",
+          "type": "comp_spx_ratio_ma10w_spread",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "display": "Dual Trend Model With Fundamentals",
-            "id": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
+            "display": "COMP SPX Ratio MA 10W Spread",
+            "id": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -3319,18 +3346,17 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true,
-            "panelName": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
+            "editMode": true
           },
-          "panel": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)"
+          "panel": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
         },
         {
-          "type": "dual_trend_model_with_fundamentals_indicator",
+          "type": "spx_ma_10w_40w_spread",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "display": "Dual Trend Model With Fundamentals",
-            "id": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
+            "display": "SPX MA 10W 40W Spread",
+            "id": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -3340,28 +3366,40 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true,
-            "panelName": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
+            "editMode": true
           },
-          "panel": "$r001$dual_trend_model_with_fundamentals_indicator$r001$ (13,n)-2"
+          "panel": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
         }
       ],
-      "activatedMA": [],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
       "activatedMALayout": [],
-      "activatedTechLayout": [],
+      "activatedTechLayout": [
+        {
+          "url": "Symbol Ratio",
+          "criteria": "exit2",
+          "index": 0,
+          "symbolType": "symbol2"
+        }
+      ],
       "formIndicators": {
         "entry": [
-          "dual_trend_model_with_fundamentals_indicator"
+          "comp_spx_ratio_ma10w_spread"
         ],
         "exit": [
-          "dual_trend_model_with_fundamentals_indicator"
+          "comp_spx_ratio_ma10w_spread"
         ],
         "entry2": [
-          "dual_trend_model_with_fundamentals_indicator"
+          "comp_spx_ratio_ma10w_spread",
+          "spx_ma_10w_40w_spread"
         ],
         "exit2": [
-          "dual_trend_model_with_fundamentals_indicator",
-          "dual_trend_model_with_fundamentals_indicator"
+          "comp_spx_ratio_ma10w_spread",
+          "spx_ma_10w_40w_spread"
         ]
       }
     }
