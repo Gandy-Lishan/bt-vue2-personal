@@ -320,7 +320,7 @@
 </template>
 
 <script>
-import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter, createStateFilter } from '@/utils'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 
@@ -760,18 +760,13 @@ export default {
       
       if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
       var dropdownList = this.strategiesList
-      var results = queryString
-        ? dropdownList.filter(this.createFilter(queryString))
-        : dropdownList
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (dropdownList) => {
-        const labelMatch = dropdownList.model_name.toLowerCase().includes(queryString.toLowerCase());
-        const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
-        return labelMatch || urlMatch;
-      };
+
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     validateTotalPercentage(row) {
       let weight = 0

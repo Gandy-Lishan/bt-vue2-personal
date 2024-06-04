@@ -274,4 +274,28 @@ const recoverSymbolOptixUrl = (url) => {
   }else return url
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl}
+const createStateFilter = (queryString) => {
+  return (state) => {
+    const query = queryString.toLowerCase();
+    const resultValue = state.value || state.name || state.label || state.model_name;
+    const resultUrl = state.url || state.symbol
+    const value = resultValue.toLowerCase()
+    const url = resultUrl.toLowerCase();
+
+    // 完全匹配
+    if (value === query || url === query) {
+      return 3; // 最高优先级
+    }
+    // 前缀匹配
+    if (value.startsWith(query) || url.startsWith(query)) {
+      return 2; // 次高优先级
+    }
+    // 中间匹配
+    if (value.includes(query) || url.includes(query)) {
+      return 1; // 最低优先级
+    }
+    return 0; // 不匹配
+  };
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl, createStateFilter}

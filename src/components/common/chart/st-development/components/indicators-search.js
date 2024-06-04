@@ -10,7 +10,7 @@ import {
     getAllMyIndicatorsList,
 } from '@/service/service.js'
 
-import {maxNumOfStudy,timeframeTransform} from '@/utils'
+import {maxNumOfStudy,timeframeTransform,createStateFilter} from '@/utils'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
@@ -233,8 +233,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         updated: item.updated,
                         category: item.category
                     }})
-                    let wholeWord = []
-                    try{
+
                         resu.push(...this.btvFavIndi.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
@@ -245,65 +244,54 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
     
                             var results = []
-                            const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+                            const milist = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
 
-                            resu.push(...list)
-                            resu.forEach(element => {
+                            resu.push(...milist)
+                            resu.map(element => {
+                                let item
                                 try{
-                                    var item = {
+                                    item = {
                                         name: element.name,
                                         url: element.url,
                                         updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
                                     }
-                                }catch(err){return}
+                                }catch(err){return null}
                            
                                 if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
-                                    return;
+                                    return null;
                                 }
         
                                 if (item.updated.indexOf("Quarterly") !==-1){
-                                    return;
+                                    return null;
                                 }
         
                                 if (item.name.indexOf("Seasonality") !==-1){
-                                    return;
+                                    return null;
                                 }
         
                                 if (CIQ.symbols.indexOf(item.name) !==-1){
-                                    return;
+                                    return null;
                                 }
           
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                                    return;
-                                }
-        
-                                if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                                    wholeWord.push({
-                                        display: [item.name,item.updated],
-                                        data: item
-                                    })
-                                    return
-                                } 
-                                   
                                 results.push({
-                                    display:[item.name,item.updated],
-                                    data:item
-                                })    
-                            }); 
+                                    display: [item.name, item.updated],
+                                    data: item,
+                                    priority: createStateFilter(value)(item),
+                                });
 
-                            // results.sort(SortArray)
-                            if(wholeWord.length>0)   results.unshift(...wholeWord)
-                            closure(results); 
+                                return null;
+                            }).filter(Boolean); // 过滤掉null值
+
+                            closure(results.sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
-                    }catch{}
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
                     //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
                     const data = await CIQ.getFavorite()
-                   // try{
+
                         resu = JSON.parse(data.favorite_indicator)
 
                         resu.push(...this.btvFavIndi.data.data.map(item=>{return {
@@ -319,37 +307,34 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
 
                             resu.push(...list)
-                            resu.forEach(element => {
+                            resu.map(element => {
+                                let item
                                 try{
-                                    var item = {
-                                        symbol: element.url,
+                                    item = {
+                                        url: element.url,
                                         name: element.name,
                                         updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
                                         exchDisp: "",
                                     }
-                                }catch(err){return}
+                                }catch(err){return null}
     
-                                // 匹配关键词
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1 || item.symbol.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                                    results.push({
-                                        display: [item.name, item.updated],
-                                        data: item
-                                    });
-                                }         
-                            }); 
+                                results.push({
+                                    display: [item.name, item.updated],
+                                    data: item,
+                                    priority: createStateFilter(value)(item),
+                                });  
+                                
+                                return null
+                            }).filter(Boolean); // 过滤掉null值
 
-                            // fav动态加载，排序的话体验不好
-                           // results.sort(SortArray)
-                            closure(results);
+                           closure(results.sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
-                    //}catch{}
                 }else if (filter == "MOST POPULAR"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  
 
                     var results = []
-                    let wholeWord = []
                     for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
                         var fields = CIQ.store.state.chart.indicatorsList[i]
                         
@@ -381,25 +366,15 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         if (CIQ.symbols.indexOf(item.name) !==-1){
                             continue;
                         }
-                        if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                            continue;
-                        }
 
-                        if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                            wholeWord.push({
-                                display: [item.name,item.updated],
-                                data: item
-                            })
-                            continue
-                        }
                         results.push({
-                            display:[item.name,item.updated],
-                            data:item
-                        })
+                            display: [item.name, item.updated],
+                            data: item,
+                            priority: createStateFilter(value)(item),
+                        });
                     }
-                    results.sort(SortArray)
-                    if(wholeWord.length>0)   results.unshift(...wholeWord)
-                    closure(results); 
+
+                    closure(results.sort((a, b) => b.priority - a.priority));
                 }             
             }
             attachDriver(driver) {

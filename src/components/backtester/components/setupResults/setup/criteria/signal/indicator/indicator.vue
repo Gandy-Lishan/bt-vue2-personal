@@ -297,7 +297,7 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter, createStateFilter} from '@/utils'
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
@@ -722,26 +722,14 @@ export default {
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
       var list = this.sentimentIndicatorList
-      //console.log('sentiment list', list)
-      list.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      var results = queryString
-        ? list.filter(
-          this.createStateSentimentFilter(queryString)
-        )
-        : list
-      cb(results)
-    },
-    createStateSentimentFilter(queryString) {
-      return (state) => {
-        if (state.value.indexOf('Seasonality') !== -1) {
-          return false
-        }
-        return (
-          state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+      list = list.filter(i => !i.value.includes('Seasonality'))
+
+      var results = list.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
@@ -749,28 +737,21 @@ export default {
         await getAllMyIndicatorsList(1, (data) => {
           this.createdIndicatorOptions = data
           const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
+          var results = list.map(item => ({
+              ...item,
+              priority: createStateFilter(queryString)(item),
+            }))
+            .filter(item => item.priority > 0)
+          cb(results.sort((a, b) => b.priority - a.priority))
         })
       }else{
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
-      }
-    },
-    createStateUsersFilter(queryString) {
-      return (state) => {
-        return (
-          state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
-        )
+        var results = list.map(item => ({
+            ...item,
+            priority: createStateFilter(queryString)(item),
+          }))
+          .filter(item => item.priority > 0)
+        cb(results.sort((a, b) => b.priority - a.priority))
       }
     },
     changeIndicatorType(type) {
@@ -779,46 +760,23 @@ export default {
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
       var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
-      // if (this.criteria === 'entry') {
-      //   let valueArr = ['ATR Trailing Stops', 'Parabolic SAR']
-      //   technicaltIndicatorList = technicaltIndicatorList.filter(
-      //     (item) => valueArr.indexOf(item.value) === -1
-      //   )
-      // }
-      var results = queryString
-        ? technicaltIndicatorList.filter(
-          this.createTechnicalFilter(queryString)
-        )
-        : technicaltIndicatorList
 
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createTechnicalFilter(queryString) {
-      return (technicaltIndicatorList) => {
-        return (
-          technicaltIndicatorList.value
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+      var results = technicaltIndicatorList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     indicatorRiskSearch(queryString, cb) {
       var riskIndicatorList = this.loadRiskList()
-      var results = queryString
-        ? riskIndicatorList.filter(this.createRiskFilter(queryString))
-        : riskIndicatorList
-      // Call callback to return the data of the suggestion list
-      cb(results)
-    },
-    createRiskFilter(queryString) {
-      return (riskIndicatorList) => {
-        return (
-          riskIndicatorList.value
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+
+      var results = riskIndicatorList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     resetIndicator() {
       this.si.sentimentIndicator = ''

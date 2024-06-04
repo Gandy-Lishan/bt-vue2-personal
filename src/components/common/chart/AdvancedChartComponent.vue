@@ -436,6 +436,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
+			this.createResizeBtn()
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -538,6 +539,30 @@ export default class AdvancedChartComponent extends Vue {
 			myDrawing.adjust()
 		}
 		CIQ.stxx.draw();
+	}
+
+	createResizeBtn() {
+		let main_chart_panel = CIQ.stxx.panels.chart.holder
+		console.log(CIQ.stxx.panels.chart)
+		var newdiv1=document.createElement("div");
+			newdiv1.className = 'resize-btn-grow'
+			main_chart_panel.appendChild(newdiv1)
+				var btn_grow_1=document.createElement("span");
+				btn_grow_1.onclick = function() { 
+					CIQ.store.dispatch('states/set_chart_panel_height', 'grow')
+					CIQ.stxx.resizeChart()
+				};
+				newdiv1.appendChild(btn_grow_1)
+
+		var newdiv2=document.createElement("div");
+			newdiv2.className = 'resize-btn-shrink'
+			main_chart_panel.appendChild(newdiv2)
+				var btn_grow_2=document.createElement("span");
+				btn_grow_2.onclick = function() { 
+					CIQ.store.dispatch('states/set_chart_panel_height', 'shrink')
+					CIQ.stxx.resizeChart()
+				};
+				newdiv2.appendChild(btn_grow_2)
 	}
 }
 

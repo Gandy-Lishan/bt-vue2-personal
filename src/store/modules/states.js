@@ -12,10 +12,14 @@ const state = {
 	beforeCalculateNewConditions: false,
 	cacheReRunData: {},
 	isCreateLoading: false,
-	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null
+	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
+	chartPanelHeight: 680,
 }
 
 const mutations = {
+	SET_CHART_PANEL_HEIGHT(state,val) {
+		state.chartPanelHeight = val
+	},
     SET_SCANNERAI_FILTER_STATE(state,obj) {
 		state.scannerai_filter = obj
 	},
@@ -53,6 +57,16 @@ const mutations = {
 }
 
 const actions = {
+	set_chart_panel_height({commit}, type){
+		return new Promise(resolve=>{
+			if(type == 'grow'){
+				commit('SET_CHART_PANEL_HEIGHT',state.chartPanelHeight + 80)
+			}else if(type == 'shrink'){
+				commit('SET_CHART_PANEL_HEIGHT',state.chartPanelHeight - 80)
+			}
+			resolve();
+		})
+	},
     set_scannerai_filter_state({commit}, obj){
 		return new Promise(resolve=>{
 			commit('SET_SCANNERAI_FILTER_STATE',obj)
