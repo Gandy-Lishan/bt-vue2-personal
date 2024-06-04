@@ -139,10 +139,10 @@
 							</template>
 						</div>
 					</div>
+					</div>
 					<div class="urlBox" v-if="currentPage == 'Analyst'">
 						<p>Analyst Report URL</p>
 						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
-					</div>
 					</div>
 					</div>
 				</template>
