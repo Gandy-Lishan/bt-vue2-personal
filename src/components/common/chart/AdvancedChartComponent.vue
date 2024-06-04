@@ -436,7 +436,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			this.createResizeBtn()
+			//this.createResizeBtn()
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -543,7 +543,6 @@ export default class AdvancedChartComponent extends Vue {
 
 	createResizeBtn() {
 		let main_chart_panel = CIQ.stxx.panels.chart.holder
-		console.log(CIQ.stxx.panels.chart)
 		var newdiv1=document.createElement("div");
 			newdiv1.className = 'resize-btn-grow'
 			main_chart_panel.appendChild(newdiv1)

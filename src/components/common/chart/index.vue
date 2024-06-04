@@ -93,8 +93,8 @@ export default class AdvancedWrapper extends Vue {
 	width: 100%;
 	border: 1px solid black;
 	border-radius: 5px;
-	// resize: auto;
-    // overflow: hidden;
+	resize: auto;
+    overflow: hidden;
 }
 @media (min-width: 375px) and (max-width: 767px) {
 	.chart-wrapper {
