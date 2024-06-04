@@ -450,6 +450,16 @@ export default {
           callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
       }
     };
+    var validatePercentage = (rule, value, callback) => {
+      // 验证是否为正整数
+      if(this.data.capital_allocate === 'Kelly') callback()
+      const integerValue = parseInt(value);
+      if (!isNaN(integerValue) && integerValue >= 0 && integerValue <= 100 && Number.isInteger(integerValue)) {
+          callback(); // 验证通过
+      } else {
+          callback(new Error("Only positive integers between 0 and 100 allowed"));
+      }
+    };
     var validateSignals = (rule, value, callback) => {
       if(Array.isArray(value) && value.length === 0) {
         callback(new Error('Please select at least one signal'))
@@ -644,8 +654,8 @@ export default {
           { validator: validateCommissionRule, trigger: 'change' }
         ],
         capital_allocate_num: [
-          { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, 100)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, 100)(rule, value, callback), trigger: 'change' }
+          { validator: validatePercentage, trigger: 'blur' },
+          { validator: validatePercentage, trigger: 'change' }
         ],
         total_capital: [
           { validator: validateCapitalRule, trigger: 'blur'},

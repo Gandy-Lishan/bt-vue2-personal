@@ -163,6 +163,7 @@ export default {
       this.scrollToTarget('scrollTarget')
     },
     async rerunSCBacktest(data) {
+      this.clearResults()
       this.scrollToTarget('formTarget', -200)
       this.popUpMsgBox("Running scanner backtest, please be patient")
       await this.$refs['ScannerForm'].rerunSCBacktest(data)
