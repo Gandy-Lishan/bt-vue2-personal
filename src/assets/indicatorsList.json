@@ -14438,5 +14438,15 @@
         "chart_name": "Simple Model With Fundamentals",
         "url": "simple_model_with_fundamentals_indicator",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Yield Curve Model",
+        "url": "yield_curve_model_indicator",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Conference Board LEI Model",
+        "url": "conf_board_lei_model_indicator",
+        "updated": "Daily"
     }
 ]
