@@ -543,27 +543,57 @@ export default class AdvancedChartComponent extends Vue {
 	}
 
 	createResizeBtn() {
-		let main_chart_panel = CIQ.stxx.panels.chart.holder
-		var newdiv1=document.createElement("div");
-			newdiv1.className = 'resize-btn-grow'
-			main_chart_panel.appendChild(newdiv1)
-				var btn_grow_1=document.createElement("span");
-				btn_grow_1.onclick = function() { 
-					printConsole('resize btn')
-					CIQ.store.dispatch('states/set_chart_panel_height', 'grow')
-					CIQ.stxx.resizeChart()
-				};
-				newdiv1.appendChild(btn_grow_1)
+		// let main_chart_panel = CIQ.stxx.panels.chart.holder
+		// var newdiv1=document.createElement("div");
+		// 	newdiv1.className = 'resize-btn-grow'
+		// 	main_chart_panel.appendChild(newdiv1)
+		// 		var btn_grow_1=document.createElement("span");
+		// 		btn_grow_1.onclick = function() { 
+		// 			printConsole('resize btn')
+		// 			CIQ.store.dispatch('states/set_chart_panel_height', 'grow')
+		// 			CIQ.stxx.resizeChart()
+		// 		};
+		// 		newdiv1.appendChild(btn_grow_1)
 
-		var newdiv2=document.createElement("div");
-			newdiv2.className = 'resize-btn-shrink'
-			main_chart_panel.appendChild(newdiv2)
-				var btn_grow_2=document.createElement("span");
-				btn_grow_2.onclick = function() { 
-					CIQ.store.dispatch('states/set_chart_panel_height', 'shrink')
-					CIQ.stxx.resizeChart()
-				};
-				newdiv2.appendChild(btn_grow_2)
+		// var newdiv2=document.createElement("div");
+		// 	newdiv2.className = 'resize-btn-shrink'
+		// 	main_chart_panel.appendChild(newdiv2)
+		// 		var btn_grow_2=document.createElement("span");
+		// 		btn_grow_2.onclick = function() { 
+		// 			CIQ.store.dispatch('states/set_chart_panel_height', 'shrink')
+		// 			CIQ.stxx.resizeChart()
+		// 		};
+		// 		newdiv2.appendChild(btn_grow_2)
+
+
+				const ele = document.querySelector('.chart-wrapper');
+				let isResizing = false;
+
+				// 監聽 mousedown 事件
+				ele.addEventListener('mousedown', (e) => {
+					isResizing = true;
+					//console.log('mousedown',isResizing)
+				});
+
+				// 監聽 mouseup 事件
+				ele.addEventListener('mouseup', (e) => {
+					setTimeout(() => {
+						isResizing = false;
+						CIQ.isResizing = false	
+					}, 500); // 0.5秒後設置isResizing為false
+				});
+
+				const resizeObserver = new ResizeObserver(entries => {
+				for (let entry of entries) {
+					if (entry.target && isResizing) {
+						CIQ.isResizing = true
+					}
+				}
+				});
+
+
+		// 開始觀察目標元素
+		resizeObserver.observe(ele);
 	}
 }
 

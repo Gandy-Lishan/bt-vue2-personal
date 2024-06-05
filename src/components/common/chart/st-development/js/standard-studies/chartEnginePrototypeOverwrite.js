@@ -234,30 +234,53 @@ if (CIQ.ChartEngine) {
 			}
 		}	
 	};
+	// CIQ.ChartEngine.prototype.setPanelHeight = function (
+	// 	panelToModify,
+	// 	requestedHeight
+	// ) {
+	// 	if (!requestedHeight) return;
+	
+	// 	// adjust requested height to accommodate the x-axis if panel is at bottom
+	// 	if (Object.values(this.panels).slice(-1)[0] === panelToModify) {
+	// 		requestedHeight += this.xaxisHeight;
+	// 	}
+	
+	// 	//const { canvasHeight } = this.chart;
+	// 	// const { percent: currentPercent } = panelToModify;
+	// 	// const newPercent = requestedHeight / chartContainerHeight;
+	// 	// const prevRemainingPercent = 1 - currentPercent;
+	// 	// const newRemainingPercent = 1 - newPercent;
+	// 	// const adjustment = prevRemainingPercent / newRemainingPercent;
+		
+	// 	/** 考虑到之前拿不到canvasHeight的尝试 */
+	// 	// const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
+	// 	const clientHeight = document.querySelector(".chartContainer").clientHeight
+	// 	const newPercent = requestedHeight / clientHeight;
+	// 	const newRemainingPercent = 1 - newPercent;
+	// 	const newRemainingPercentForEach = newRemainingPercent / (Object.keys(this.panels).length-1);
+
+	// 	Object.values(this.panels).forEach((panel) => {
+	// 		//panel.percent /= adjustment;
+	// 		panel.percent = newRemainingPercentForEach;
+	// 	});
+
+	// 	panelToModify.percent = newPercent;
+	// 	// console.log(newPercent,'+++',Object.values(this.panels).map(i=>i.percent))
+	// 	this.adjustPanelPositions();
+	// 	this.savePanels();
+	// };
+
 	CIQ.ChartEngine.prototype.setPanelHeight = function (
 		panelToModify,
 		requestedHeight
 	) {
 		if (!requestedHeight) return;
 	
-		// adjust requested height to accommodate the x-axis if panel is at bottom
-		if (Object.values(this.panels).slice(-1)[0] === panelToModify) {
-			requestedHeight += this.xaxisHeight;
-		}
-	
-		//const { canvasHeight } = this.chart;
-		// const { percent: currentPercent } = panelToModify;
-		// const newPercent = requestedHeight / chartContainerHeight;
-		// const prevRemainingPercent = 1 - currentPercent;
-		// const newRemainingPercent = 1 - newPercent;
-		// const adjustment = prevRemainingPercent / newRemainingPercent;
-		
-		/** 考虑到之前拿不到canvasHeight的尝试 */
-		// const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
 		const clientHeight = document.querySelector(".chartContainer").clientHeight
-		const newPercent = requestedHeight / clientHeight;
-		const newRemainingPercent = 1 - newPercent;
-		const newRemainingPercentForEach = newRemainingPercent / (Object.keys(this.panels).length-1);
+		const indicatorHeight  = clientHeight / (5 + Object.keys(this.panels).length-1);
+		const mainChartHeight  = indicatorHeight * 4;
+		const newRemainingPercentForEach = indicatorHeight / clientHeight;
+    	const newPercent = mainChartHeight / clientHeight;
 
 		Object.values(this.panels).forEach((panel) => {
 			//panel.percent /= adjustment;
@@ -270,13 +293,10 @@ if (CIQ.ChartEngine) {
 		this.savePanels();
 	};
 	CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
-		let chartBox = document.querySelector(".chart_box");
+		let chartWrapper = document.querySelector(".chart-wrapper");
 		let chartContainer = document.querySelector(".chartContainer");
-		if(!chartBox) return
-		// iterate through panels and get heights of panels beside main chart
-		// const studiesPanelsSize = Object.values(this.panels).filter(i=>i.name!='chart').reduce((accumulator, currentValue) => {
-		// 	return accumulator + currentValue.height;
-		// }, 0);
+		if(!chartWrapper) return
+
 		const studiesLen = Object.keys(this.panels).filter(i=>i!='chart').length
 		const studiesHeight = 			
 			studiesLen <= 0
@@ -288,16 +308,32 @@ if (CIQ.ChartEngine) {
 				// : 80
 				: 100
 		const studiesPanelsSize = studiesLen * studiesHeight
-		//const chartPanelSize = 680
-		const chartPanelSize = CIQ.store.getters.getChartPanelHeight?CIQ.store.getters.getChartPanelHeight:680
+		let chartPanelSize = 680
+		//const chartPanelSize = CIQ.store.getters.getChartPanelHeight?CIQ.store.getters.getChartPanelHeight:680
 
-		printConsole(`resizeChart ${chartPanelSize}`)
-		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
-		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
-
+		// 正常添加指標時總高度按照680 + number of indicator * n來算， resize時按照resize結果賦值
+		if(!CIQ.isResizing){
+			chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+			chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+			//console.log(chartWrapper.style.height,chartContainer.style.height,studiesPanelsSize,CIQ.isResizing)
+		}else{
+			chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+			//console.log(chartWrapper.style.height,chartContainer.style.height,studiesPanelsSize,CIQ.isResizing)
+		}
+		
+		
 		this.setPanelHeight(this.panels.chart, chartPanelSize);
 	})
 	
+	// CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
+	// 	if(){
+	// 		chartContainer.style.height =  chartContainer.style.height + newIndicator(200px)
+	// 	}else{
+	// 		是拖拽，chartContainer height已有
+	// 	} 
+
+	// 	this.setPanelHeight();	// 只負責根據chartContainer height分配高度
+	// })
 }
 
 };
