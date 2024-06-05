@@ -531,7 +531,7 @@ export default class AdvancedChartComponent extends Vue {
 
 	resizePatternMatch() {
 		const yAxis = CIQ.stxx.chart.yAxis	
-		console.log(yAxis)
+		//console.log(yAxis)
 		const offset = (yAxis.high-yAxis.low)/4			// 依据Y轴长度设定的偏移量，以保证模式匹配阴影覆盖整个高度
 		for(var i=0;i<CIQ.stxx.drawingObjects.length;i++){
 			var myDrawing=CIQ.stxx.drawingObjects[i];
