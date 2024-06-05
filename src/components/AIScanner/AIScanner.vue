@@ -53,6 +53,7 @@
 						</el-select>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
+					<el-button v-show="is_admin" @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>AI Scanner Backtest</el-button>
 					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
@@ -147,6 +148,11 @@ export default {
 			isPLSChecked:this.isPLSChecked,
 			date:this.date,
 		})
+	},
+	computed: {
+		is_admin() {
+			return this.$store.state.user.is_admin
+		}
 	},
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
@@ -280,6 +286,9 @@ export default {
 	},
 	exportTable() {
 		this.$refs.tableChild.exportTable()
+	},
+	toScannerBacktest() {
+		this.$router.push({path: '/scannerai/backtest'})
 	}
   }
 };

@@ -1112,17 +1112,28 @@ export default {
     userRole: {
       handler(role) {
         console.log('用户角色', role)
-        if(this.is_admin && role == 'analyst') {
-          this.userTagOptions = [
-            { value: 'client', label: 'Client' },
-            { value: 'analyst', label: 'Analyst' }
-          ]
-        }else if(this.is_admin && role == 'system') {
-          this.userTagOptions = [
-            { value: 'client', label: 'Client' },
-            { value: 'system', label: 'System' }
-          ]
-        }
+        if (this.is_admin) {
+          switch (role) {
+            case 'analyst':
+                this.userTagOptions = [
+                    { value: 'client', label: 'Client' },
+                    { value: 'analyst', label: 'Analyst' }
+                ]
+                break;
+            case 'system':
+                this.userTagOptions = [
+                    { value: 'client', label: 'Client' },
+                    { value: 'system', label: 'System' }
+                ]
+                break;
+            case 'client':
+                this.userTagOptions = [
+                    { value: 'client', label: 'Client' }
+                ]
+                break;
+          }
+      }
+
       },
       immediate: true,
       deep: true

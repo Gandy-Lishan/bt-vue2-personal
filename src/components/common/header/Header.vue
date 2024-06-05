@@ -23,7 +23,7 @@
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="9"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
+        v-show="is_admin"
           >Strategy</el-menu-item
         >
         <el-menu-item class="home-link" index="1"
@@ -72,14 +72,14 @@
             @click="changeSvg"
           ></div>
         </el-menu-item> -->
-        <el-submenu index="5">
+        <!-- <el-submenu index="5">
           <template slot="title"
             ><i class="el-icon-s-tools tools"></i
-          ></template>
+          ></template> -->
           <!-- <el-menu-item index="5-1">User: {{$store.state.app.role}}</el-menu-item> -->
           <!-- <el-menu-item index="5-1">Theme</el-menu-item> -->
           <!-- <el-menu-item index="5-2">Language</el-menu-item> -->
-        </el-submenu>
+        <!-- </el-submenu> -->
       </el-menu>
     </div>
 	</div>
@@ -106,21 +106,24 @@ export default {
   computed: {
     userRole() {
       return this.$store.state.user.role
+    },
+    is_admin() {
+      return this.$store.state.user.is_admin
     }
   },
   watch: {
     '$route'(to, _) {
       console.log('to', to)
       // 在$route对象变化时执行逻辑
-      if (to.path.includes('/backtester') || to.name == 'Backtests') {
+      if (to.path.includes('/backtester') || to.name == 'Backtester') {
         this.activeIndex = '1'
-      } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart') {
+      } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart' || to.name == 'scannerai_backtest') {
         this.activeIndex = '3'
       }else if(to.path.includes('/doc')){
         this.activeIndex = '4'
-      }else if(to.path.includes('/myindicator') || to.name ==  'MIList'){
+      }else if(to.path.includes('/myindicator') || to.name ==  'MIList' || to.name == 'MIcreate'){
         this.activeIndex = '6'
-      }else if(to.path.includes('/seasonality') || to.name == 'seasonality'){
+      }else if(to.path.includes('/seasonality') || to.name == 'Seasonality'){
         this.activeIndex = '7'
       }else if(to.path.includes('/cpm') || to.name == 'CPM'){
         this.activeIndex = '8'
@@ -136,17 +139,15 @@ export default {
       }
   },
   mounted() {
-    if (this.$route.name == 'strategy') {
-      this.activeIndex = '2'
-    } else if (this.$route.name == 'backtester' || this.$route.name == 'Backtests') {
+    if (this.$route.name == 'backtester' || this.$route.name == 'Backtester') {
       this.activeIndex = '1'
-    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
+    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart' || this.$route.name == 'scannerai_backtest') {
       this.activeIndex = '3'
     } else if (this.$route.path.includes('/doc')) {
       this.activeIndex = '4'
-    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'){
+    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'  || this.$route.name == 'MIcreate'){
       this.activeIndex = '6'
-    } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
+    } else if(this.$route.name == 'Seasonality'){
       this.activeIndex = '7'
     }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
       this.activeIndex = '8'

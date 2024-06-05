@@ -464,7 +464,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
+										v-if="['History', 'Favorites'].includes(currentPage) && is_admin"
 										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3"
 										type="success"
 										icon="el-icon-data-analysis"
@@ -546,7 +546,7 @@ export default {
 			searchItem: '',
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
-			isButtonVisible: false,
+			// isButtonVisible: false,
 			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
 			strategyType: 'Strategy'
 		}
@@ -587,9 +587,9 @@ export default {
 			// if ((currentDomain == 'btv2.sentimentrader.com' || currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') && newVal == 'analyst') {
 			// 	this.isButtonVisible = true;
 			// }
-			if (newVal == 'analyst') {
-				this.isButtonVisible = true;
-			}
+			// if (newVal == 'analyst') {
+			// 	this.isButtonVisible = true;
+			// }
 		},
 		immediate: true,
 		deep: true

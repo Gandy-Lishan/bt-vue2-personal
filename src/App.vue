@@ -87,20 +87,23 @@ export default {
 				//_this.$router.push('/404')
 			}
 		}
-		const email = getCookieData()?.username
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com']
-		// const allowedUserList = ['hao@sentimentrader.com']
-		const userID = Cookies.get('devbt2Userid')
-		if (allowedUserList.includes(email) || userID == 'analyst') {
-			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'analyst', 'userID': email || userID })
-			localStorage.setItem('role', 'analyst')
-		}else if(userID == 'system'){
-			this.$store.commit('user/SETUSERROLE', { 'is_admin': true, 'role': 'system', 'userID': userID })
-			localStorage.setItem('role', 'system')
-		}else {
-			this.$store.commit('user/SETUSERROLE', { 'is_admin': false, 'role': 'client', 'userID': email })
-			localStorage.setItem('role', 'client')
+		const email = getCookieData()?.username;
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jaclyn.wu@monicfinancial.com'];
+		const userID = Cookies.get('devbt2Userid');
+		let role = 'client';
+		let isAdmin = false;
+
+		if (allowedUserList.includes(email) || userID === 'analyst') {
+				role = email === 'jaclyn.wu@monicfinancial.com' ? 'client' : 'analyst';
+				isAdmin = true;
+		} else if (userID === 'system') {
+				role = 'system';
+				isAdmin = true;
 		}
+		this.$store.commit('user/SETUSERROLE', { 'is_admin': isAdmin, 'role': role, 'userID': email || userID });
+		localStorage.setItem('role', role);
+		localStorage.setItem('is_admin', isAdmin);
+
 		// // 判断用户是否是首次进入
 		// if (!localStorage.getItem("visited")) {
 		// // 如果"visited"键不存在
