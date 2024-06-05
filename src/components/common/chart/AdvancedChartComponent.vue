@@ -373,10 +373,12 @@ export default class AdvancedChartComponent extends Vue {
 
 	stx: CIQ.ChartEngine | undefined
 	isCollapse: boolean | undefined
+	resizeObserver: any | undefined
 	
 	constructor() {
 		super()
 		this.isCollapse = false 
+		this.resizeObserver = null
 	}
 	mounted() {
 		const config = this.config || getCustomConfig()
@@ -437,7 +439,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			this.createResizeBtn()
+			this.createResizeListener()
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -493,6 +495,9 @@ export default class AdvancedChartComponent extends Vue {
 		// 防止chartiq还没加载完就切换到其他页面
 		CIQ.hideCover()
 		CIQ.nprogress.done()
+
+		// 取消监听所有目标元素
+		this.resizeObserver.disconnect();
 	}
 
 	createChartAndUI(config: any) {
@@ -542,7 +547,7 @@ export default class AdvancedChartComponent extends Vue {
 		CIQ.stxx.draw();
 	}
 
-	createResizeBtn() {
+	createResizeListener() {
 		// let main_chart_panel = CIQ.stxx.panels.chart.holder
 		// var newdiv1=document.createElement("div");
 		// 	newdiv1.className = 'resize-btn-grow'
@@ -583,7 +588,7 @@ export default class AdvancedChartComponent extends Vue {
 					}, 500); // 0.5秒後設置isResizing為false
 				});
 
-				const resizeObserver = new ResizeObserver(entries => {
+				this.resizeObserver = new ResizeObserver(entries => {
 				for (let entry of entries) {
 					if (entry.target && isResizing) {
 						CIQ.isResizing = true
@@ -593,7 +598,7 @@ export default class AdvancedChartComponent extends Vue {
 
 
 		// 開始觀察目標元素
-		resizeObserver.observe(ele);
+		this.resizeObserver.observe(ele);
 	}
 }
 

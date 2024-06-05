@@ -282,7 +282,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 return null;
                             }).filter(Boolean); // 过滤掉null值
 
-                            closure(results.sort((a, b) => b.priority - a.priority));
+                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
                 }else if (filter == "MY FAVORITES"){  
@@ -327,7 +327,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 return null
                             }).filter(Boolean); // 过滤掉null值
 
-                           closure(results.sort((a, b) => b.priority - a.priority));
+                           closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
                 }else if (filter == "MOST POPULAR"){
@@ -374,7 +374,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
                     }
 
-                    closure(results.sort((a, b) => b.priority - a.priority));
+                    closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
                 }             
             }
             attachDriver(driver) {
@@ -404,16 +404,18 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
-            async updateFavIndicatorAndMyIndicator(){
+            async updateFavIndicatorAndMyIndicator(val,field){
                 var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
 
                     var filters = this.querySelector("cq-indicators-lookup-filters");
                     if (filters) var overlay = filters.querySelector(".overlay");
                     overlay.style.display = 'block'
-                this.btvFavIndi = await getBTV1FavIndicator()
-                this.myIndicator = await getAllMyIndicatorsList(1,()=>{})
-
+                    this.btvFavIndi = await getBTV1FavIndicator()
+                    this.myIndicator = await getAllMyIndicatorsList(1,()=>{
+                        this.acceptText(val, field);
+                    })
+                    
                 overlay.style.display = 'none'
             }
             initialize() {
@@ -470,7 +472,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             if(f.classList.contains("true")){
                                 
                                 // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
-                                await self.updateFavIndicatorAndMyIndicator()
+                                await self.updateFavIndicatorAndMyIndicator(self.input.val(), f.innerHTML)
                                 self.acceptText(self.input.val(), f.innerHTML);
                             }
                         });

@@ -696,7 +696,7 @@ stx-hu-tooltip-field-value {
   min-height: 0;
 }
 
-.resize-btn-grow {
+/* .resize-btn-grow {
   color: #FFF;
 	overflow: hidden;
 	position: absolute;
@@ -766,7 +766,7 @@ stx-hu-tooltip-field-value {
     -webkit-transition: opacity .25s, -webkit-transform .2s;
     opacity: .6;
   }
-}
+} */
 .chartContainer {
   transition-property: height;
   transition-duration: 0.5s;
