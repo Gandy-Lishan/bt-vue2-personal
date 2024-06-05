@@ -23,6 +23,7 @@
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
 import { getPropertyByString } from "@/utils"
+import {printConsole} from '@/utils'
 
 
 let __st_js_chartengine_prototype_overwrite_ = (_exports) => {
@@ -220,6 +221,19 @@ if (CIQ.ChartEngine) {
 			}
 		}
 	};
+	CIQ.ChartEngine.prototype.calculateDailyChange = function (chart, data) {
+		if (!data) data = chart.dataSet;
+		var d;
+		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		for (var i = 0; i < data.length; ++i) {
+			d = data[i];
+			d["change"] = d.Close / d.iqPrevClose - 1;
+			var symbolObj = d[comparisonSymbolUrl]
+			if (symbolObj && typeof symbolObj == "object") {
+				symbolObj["change"] = symbolObj.Close / symbolObj.iqPrevClose - 1;
+			}
+		}	
+	};
 	CIQ.ChartEngine.prototype.setPanelHeight = function (
 		panelToModify,
 		requestedHeight
@@ -255,19 +269,6 @@ if (CIQ.ChartEngine) {
 		this.adjustPanelPositions();
 		this.savePanels();
 	};
-	CIQ.ChartEngine.prototype.calculateDailyChange = function (chart, data) {
-		if (!data) data = chart.dataSet;
-		var d;
-		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
-		for (var i = 0; i < data.length; ++i) {
-			d = data[i];
-			d["change"] = d.Close / d.iqPrevClose - 1;
-			var symbolObj = d[comparisonSymbolUrl]
-			if (symbolObj && typeof symbolObj == "object") {
-				symbolObj["change"] = symbolObj.Close / symbolObj.iqPrevClose - 1;
-			}
-		}	
-	};
 	CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
 		let chartBox = document.querySelector(".chart_box");
 		let chartContainer = document.querySelector(".chartContainer");
@@ -287,9 +288,10 @@ if (CIQ.ChartEngine) {
 				// : 80
 				: 100
 		const studiesPanelsSize = studiesLen * studiesHeight
-		const chartPanelSize = 680
-		//const chartPanelSize = CIQ.store.getters.getChartPanelHeight?CIQ.store.getters.getChartPanelHeight:680
-		console.log(chartPanelSize)
+		//const chartPanelSize = 680
+		const chartPanelSize = CIQ.store.getters.getChartPanelHeight?CIQ.store.getters.getChartPanelHeight:680
+
+		printConsole(`resizeChart ${chartPanelSize}`)
 		chartBox.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";
 		chartContainer.style.height = (chartPanelSize + studiesPanelsSize) + "px";
 

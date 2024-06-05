@@ -298,4 +298,11 @@ const createStateFilter = (queryString) => {
   };
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl, createStateFilter}
+const printConsole = (content) => {
+  let print = console
+  if(print && print.log){
+    return print.log(content)
+  }
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl, createStateFilter, printConsole}

@@ -35,6 +35,7 @@ const getters = {
 	getIsMarkerShownFlagState: state => state.states.isMarkerShown_flag,
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
+	getChartPanelHeight: state => state.states.chartPanelHeight,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

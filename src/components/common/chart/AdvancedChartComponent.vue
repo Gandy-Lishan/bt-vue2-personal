@@ -359,6 +359,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
+import {printConsole} from '@/utils'
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
@@ -436,7 +437,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
-			//this.createResizeBtn()
+			this.createResizeBtn()
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -548,6 +549,7 @@ export default class AdvancedChartComponent extends Vue {
 			main_chart_panel.appendChild(newdiv1)
 				var btn_grow_1=document.createElement("span");
 				btn_grow_1.onclick = function() { 
+					printConsole('resize btn')
 					CIQ.store.dispatch('states/set_chart_panel_height', 'grow')
 					CIQ.stxx.resizeChart()
 				};
