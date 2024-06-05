@@ -359,7 +359,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
-import {printConsole} from '@/utils'
+// import {printConsole} from '@/utils'
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 

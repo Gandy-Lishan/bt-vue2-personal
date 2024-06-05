@@ -23,8 +23,6 @@
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
 import { getPropertyByString } from "@/utils"
-import {printConsole} from '@/utils'
-
 
 let __st_js_chartengine_prototype_overwrite_ = (_exports) => {
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -315,10 +313,11 @@ if (CIQ.ChartEngine) {
 		if(!CIQ.isResizing){
 			chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
 			chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
-			//console.log(chartWrapper.style.height,chartContainer.style.height,studiesPanelsSize,CIQ.isResizing)
 		}else{
+			if(!chartWrapper.clientHeight) {
+				chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+			}
 			chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
-			//console.log(chartWrapper.style.height,chartContainer.style.height,studiesPanelsSize,CIQ.isResizing)
 		}
 		
 		
