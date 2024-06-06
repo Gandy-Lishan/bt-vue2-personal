@@ -340,6 +340,7 @@ export default {
     },
     async runSCBacktest(row) {
       debugger
+      row.viewLoading = true
       // 如果结束时间是当天就直接调用 handleRowClick 方法
       if(row.end_date === timestampToTime(new Date())) {await this.handleRowClick(row); return}
       row.viewLoading = true
