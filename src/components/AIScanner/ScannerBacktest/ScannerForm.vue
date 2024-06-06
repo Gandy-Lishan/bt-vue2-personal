@@ -815,7 +815,7 @@ export default {
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All']),
+        signals: JSON.stringify(signals.length >= 16 ? ['All'] : signals),
         capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
