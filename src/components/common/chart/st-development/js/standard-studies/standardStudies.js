@@ -3214,7 +3214,7 @@ CIQ.Studies.MA = function (
 	ma.inputs = {};
 	if (type) ma.inputs.Type = type;
 	if (field) ma.inputs.Field = field;
-	debugger
+	
 	if (offset) ma.inputs.Offset = parseInt(offset, 10);
 
 	// dual symbol new features
@@ -3416,7 +3416,7 @@ debugger
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
-	var quotes = sd.chart.dataSet;
+	var quotes = sd.chart.scrubbed;
 	if (quotes.length < sd.days + 1) {
 		sd.error = true;
 		return;
@@ -3487,7 +3487,7 @@ CIQ.Studies.calculateStandardDeviation = function (stx, sd) {
 };
 /** Sample模式，和前者的区别是最后结果计算sqrt前除以period-1而不是period */
 CIQ.Studies.calculateStandardDeviationSample = function (stx, sd) {
-	var quotes = sd.chart.dataSet;
+	var quotes = sd.chart.scrubbed;
 	if (quotes.length < sd.days + 1) {
 		sd.error = true;
 		return;
@@ -3599,31 +3599,34 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
-	debugger
 	/** 	
 	 * important note:
 	 * spx+atx组合情况下，datasets是并集，scrubbed只包含symbol1存在的bar,所以symbol1用scrubbed,symbol2用datasets.filter(item => item.hasOwnProperty(field))
  	*/
 	if(
-		// 防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
-		(['Open','High','Low','Close','Volume'].includes(subField) ||
-		['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)) &&
-		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
-		(sd?.parameters?.isComparison ||
-		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
+		sd?.parameters?.isComparison ||
+		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
 	){
-		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
-		if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
-			/** 判断Study用来计算的数据源 */
-			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			/**根据criteria动态设定study的Y轴属*******/
-			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-			sd.yAxis = actualXaxis
-			/****************** */
-			field = comparisonSymbol?.url
-			//filter valid rows
-			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		if(
+			/**
+			 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
+				以導致中間值等值被賦值給field
+			 */
+			['Open','High','Low','Close','Volume'].includes(subField) ||
+			['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)
+		){
+			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
+				field = comparisonSymbol?.url
+			}
 		}
+		/**根据criteria动态设定study的Y轴属*******/
+		var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+		sd.yAxis = actualXaxis
+		/****************** */
+		//filter valid rows
+		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
 	}else{
 		sd.yAxis = null
 		quotes = sd.chart.scrubbed
@@ -3724,25 +3727,29 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	var subField = field
 
 	if(
-		// 防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
-		(['Open','High','Low','Close','Volume'].includes(subField) ||
-		['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)) &&
-		// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
-		(sd?.parameters?.isComparison ||
-		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
+		sd?.parameters?.isComparison ||
+		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
 	){
-		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
-		if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
-			/** 判断Study用来计算的数据源 */
-			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			/**根据criteria动态设定study的Y轴属*******/
-			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-			sd.yAxis = actualXaxis
-			/****************** */
-			field = comparisonSymbol?.url
-			//filter valid rows
-			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		if(
+			/**
+			 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
+				以導致中間值等值被賦值給field
+			 */
+			['Open','High','Low','Close','Volume'].includes(subField) ||
+			['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)
+		){
+			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
+				field = comparisonSymbol?.url
+			}
 		}
+		/**根据criteria动态设定study的Y轴属*******/
+		var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+		sd.yAxis = actualXaxis
+		/****************** */
+		//filter valid rows
+		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
 	}else{
 		sd.yAxis = null
 		quotes = sd.chart.scrubbed
@@ -3924,6 +3931,27 @@ CIQ.Studies.calculateMovingAverageTriangular = function (stx, sd) {
 	if (sd.days % 2 === 0) days++;
 	CIQ.Studies.MA("simple", days, "TRI1 " + sd.name, 0, "TRI2", stx, sd);
 
+	if(
+		sd?.parameters?.isComparison ||
+		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
+	){
+		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+		if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+			field = comparisonSymbol?.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}
+	}else{
+		sd.yAxis = null
+		quotes = sd.chart.scrubbed
+	}
+	debugger
+	
 	var name = sd.name;
 	for (var p in sd.outputs) {
 		name = p + " " + name;
@@ -3992,25 +4020,29 @@ CIQ.Studies.calculateMovingAverageWeighted = function (stx, sd) {
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 		var subField = field
 		if(
-			// 防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
-			(['Open','High','Low','Close','Volume'].includes(subField) ||
-			['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(subField)) &&
-			// CIQ.studies.MA函数内，ma study对象的paramters加入目标study的paramter以便在计算函数内判断主从symbol
-			(sd?.parameters?.isComparison ||
-			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')))
+			sd?.parameters?.isComparison ||
+			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
 		){
-			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
-			if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
-				/** 判断Study用来计算的数据源 */
-				var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-				/**根据criteria动态设定study的Y轴属*******/
-				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-				sd.yAxis = actualXaxis
-				/****************** */
-				field = comparisonSymbol?.url
-				//filter valid rows
-				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			if(
+				/**
+				 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
+					以導致中間值等值被賦值給field
+				 */
+				['Open','High','Low','Close','Volume'].includes(subField) ||
+				['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)
+			){
+				// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+				if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
+					field = comparisonSymbol?.url
+				}
 			}
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
 		}else{
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
@@ -4343,7 +4375,7 @@ CIQ.Studies.calculateGenericEnvelope = function (
 	if (!pointShift) pointShift = 0;
 	if (!centerIndex || centerIndex == "field") centerIndex = "Close";
 	if (!offsetIndex) offsetIndex = centerIndex;
-	var quotes = sd.chart.dataSet;
+	var quotes = sd.chart.scrubbed;
 	var field = sd.inputs.Field;
 	if (!field || field === "field") field = "Close";
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
@@ -4356,7 +4388,10 @@ CIQ.Studies.calculateGenericEnvelope = function (
 		){
 			/** 判断Study用来计算的数据源 */
 			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			// 防止"_EMA1 "这种的中间值通过判断，'hl/2'等特殊处理
+			/**
+			 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
+				以導致中間值等值被賦值給field
+			 */
 			if(
 				['Open','High','Low','Close','Volume'].includes(centerIndex) ||
 				['hl/2','hlc/3','hlcc/4','ohlc/4'].includes(centerIndex)

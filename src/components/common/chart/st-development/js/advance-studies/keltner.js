@@ -21,8 +21,7 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
 
 let __js_advanced_studies_keltner_ = (_exports) => {
@@ -36,6 +35,15 @@ if (!CIQ.Studies) {
 	console.error("keltner feature requires first activating studies feature.");
 } else {
 	CIQ.Studies.calculateKeltner = function (stx, sd) {
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+		
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -80,4 +88,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_keltner_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_keltner_}

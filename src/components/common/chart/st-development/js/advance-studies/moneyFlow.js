@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_moneyFlow_ = (_exports) => {
@@ -37,6 +37,15 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateMoneyFlowIndex = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -51,11 +60,12 @@ if (!CIQ.Studies) {
 			cumPosMF = startQuote[cumMFLbl][0];
 			cumNegMF = startQuote[cumMFLbl][1];
 		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var typPrice = quotes[i]["hlc/3"];
+			var typPrice = getPropertyByString(quotes[i],field,'hlc/3');
 			if (i > 0 && !quotes[i].futureTick) {
-				var lastTypPrice = quotes[i - 1]["hlc/3"];
-				var rawMoneyFlow = typPrice * quotes[i].Volume;
+				var lastTypPrice = getPropertyByString(quotes[i - 1],field,'hlc/3');
+				var rawMoneyFlow = typPrice * getPropertyByString(quotes[i],field,'Volume');
 				if (typPrice > lastTypPrice) {
 					cumPosMF += rawMoneyFlow;
 				} else if (typPrice < lastTypPrice) {
@@ -69,7 +79,7 @@ if (!CIQ.Studies) {
 					if (old > 0) cumPosMF -= old;
 					else cumNegMF += old;
 					if (cumNegMF === 0) quotes[i][resultLbl] = 100;
-					else if (quotes[i].Volume)
+					else if (getPropertyByString(quotes[i],field,'Volume'))
 						quotes[i][resultLbl] = 100 - 100 / (1 + cumPosMF / cumNegMF);
 				}
 				quotes[i][rawMFLbl] = rawMoneyFlow;
@@ -98,4 +108,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_moneyFlow_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_moneyFlow_}
