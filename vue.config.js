@@ -19,7 +19,7 @@ function resolve(dir) {
 }
 
 console.log('非生产环境，准备创建版本文件...',process.env.NODE_ENV);
-if (process.env.VUE_APP_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
 	//这里我设置的是只在非生产环境自动检测更新（生成version）；
 	  const { writeFile, existsSync } = require('fs')
 	  // 动态生成版本号
