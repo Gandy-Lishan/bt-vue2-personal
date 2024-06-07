@@ -259,7 +259,7 @@
 					>
           </el-table-column>
 					<el-table-column
-					v-if="l.label == 'Floating Profit %'"
+					v-if="l.label == 'Trade Return %'"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
@@ -267,7 +267,7 @@
 					align="center"
 					:key="index"
 					:sortable="
-					l.label === 'Floating Profit %' ? 'custom' : false
+					l.label === 'Trade Return %' ? 'custom' : false
 					"
 					>
 					<template slot-scope="scope">
@@ -380,7 +380,7 @@ export default {
 					key: 'Shares'
 				},
 				{
-          label: 'Floating Profit %',
+          label: 'Trade Return %',
           value: 'FloatProfit',
           key: 'FloatProfit'
         },
@@ -493,7 +493,7 @@ export default {
         obj['Exit Action'] = item.ExitAction
         obj['Exit Price'] = item.ExitPrice
 				obj['Shares'] = item.Shares
-        obj['Floating Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
+        obj['Trade Return %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
         obj['Exit Reason'] = item.ExitReason
         trade.push(obj)
       })
