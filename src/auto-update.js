@@ -19,7 +19,7 @@ const getVersion = async () => {
  
 // 检查更新
 const checkUpdate = async () => {
-  if(needPrint) printConsole('***************checkUpdate**************')
+  if(needPrint) printConsole('***************🚀checkUpdate**************')
   const currentVersion = sessionStorage.getItem("version")
   version = (await getVersion()).version
   // 本地没有 version，表示刚进入系统，直接塞值
