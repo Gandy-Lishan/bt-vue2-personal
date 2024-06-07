@@ -298,10 +298,10 @@ const createStateFilter = (queryString) => {
   };
 }
 
-const printConsole = (content) => {
+const printConsole = (...content) => {
   let print = console
   if(print && print.log){
-    return print.log(content)
+    return print.log(...content)
   }
 }
 
