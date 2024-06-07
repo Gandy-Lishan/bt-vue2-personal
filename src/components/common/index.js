@@ -5,7 +5,8 @@ import BTChart from "./chart/index"
 import FloatBtns from "./floatBtns" 
 import Tabs from "./tabs" 
 import LoadingOverlay from "./progress/LoadingOverlay" 
-import LoadingOverlayChart from "./progress/LoadingOverlayChart" 
+import LoadingOverlayChart from "./progress/LoadingOverlayChart"
+import CnNotify from "./cnNotify/CnNotify.vue"
 
 export {
   Header,
@@ -15,5 +16,6 @@ export {
   FloatBtns,
   Tabs,
   LoadingOverlay,
-  LoadingOverlayChart
+  LoadingOverlayChart,
+  CnNotify,
 }
