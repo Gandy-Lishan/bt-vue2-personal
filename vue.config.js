@@ -18,6 +18,29 @@ function resolve(dir) {
 	return path.join(__dirname, dir)
 }
 
+console.log('非生产环境，准备创建版本文件...',process.env.NODE_ENV);
+if (process.env.VUE_APP_ENV !== "production") {
+	//这里我设置的是只在非生产环境自动检测更新（生成version）；
+	  const { writeFile, existsSync } = require('fs')
+	  // 动态生成版本号
+	  const createVersion = () => {
+		//检测目录是否存在
+		if (existsSync('./public')) {
+		  writeFile(`./public/version.json`, `{"version":"${Date.now()}"}`, (err) => {
+			if (err) {
+			  console.log('写入version.json失败')
+			  console.log(err)
+			} else {
+			  console.log('写入version.json成功')
+			}
+		  })
+		} else {
+		  setTimeout(createVersion, 1000)
+		}
+	  }
+	  setTimeout(createVersion, 10000)
+}
+
 const config = {
 	publicPath: '/',
 	//去除生产环境的productionSourceMap减少了很大体积

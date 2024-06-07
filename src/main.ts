@@ -44,6 +44,9 @@ import '@algolia/autocomplete-theme-classic';
 import '@/assets/css/searchBar.css';
 import GlobalMixins from "@/components/common/mixins/globalMixins";
 
+// 引入自动更新提醒
+import autoUpdate from './auto-update'
+
 Vue.use(VueCookies)
 
 Vue.prototype.$qs = qs
@@ -65,6 +68,9 @@ Vue.component('template-placeholder', {
 // 保存整站vuex本地储存初始状态
 window.SITE_CONFIG = {}
 window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
+
+// 非生产环境使用
+process.env.NODE_ENV !== 'production' && autoUpdate.start()
 
 const app = new Vue({
 	store,
