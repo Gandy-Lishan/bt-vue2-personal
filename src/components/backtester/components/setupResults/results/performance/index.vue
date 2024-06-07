@@ -370,9 +370,11 @@ export default {
       const {maxMinData} = this.$refs.maxMinChild.exportData()
       let medianReturn, consistency
       try {
+        if(this.$refs.IndexesInfo) {
         const {_medianReturn, _consistency} = this.$refs.IndexesInfo.exportData()
         medianReturn = _medianReturn
         consistency = _consistency
+        }
       } catch (error) {
         console.log(error)
       }
