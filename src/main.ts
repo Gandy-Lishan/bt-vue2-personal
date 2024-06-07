@@ -46,7 +46,6 @@ import GlobalMixins from "@/components/common/mixins/globalMixins";
 
 // 引入自动更新提醒
 import autoUpdate from './auto-update'
-import {printConsole} from '@/utils'
 
 Vue.use(VueCookies)
 
@@ -70,9 +69,7 @@ Vue.component('template-placeholder', {
 window.SITE_CONFIG = {}
 window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
 
-// 非生产环境使用
-printConsole("🚀 env:", process.env.NODE_ENV)
-process.env.NODE_ENV !== 'production' && autoUpdate.start()
+autoUpdate.start()
 
 const app = new Vue({
 	store,
