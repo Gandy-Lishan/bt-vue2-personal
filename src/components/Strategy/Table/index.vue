@@ -30,7 +30,7 @@
             <h4  @click="selectedTitle = 'Summary'" :class="{ 'selected': selectedTitle === 'Summary' }">View Summary Statistics</h4>
           </div>
           <div class="btns">
-            <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button>
+            <!-- <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button> -->
             <el-button type="primary" size="mini" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
           </div>
         </div>
