@@ -235,6 +235,7 @@
                     const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
                     let _data = formatData(res.data)
                     stx.addSeries(comparisonSymbol.url, {
+                        highlightable: false,
                         display:comparisonSymbol.name, 
                         data:_data,
                         isComparison: false, 

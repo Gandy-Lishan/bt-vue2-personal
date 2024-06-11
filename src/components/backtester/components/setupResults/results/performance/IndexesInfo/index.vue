@@ -81,7 +81,6 @@ export default {
 	},
   methods: {
     prepareData(IndexesInfo) {
-      debugger
 			const frequency = this.rowFrequency
 			switch (frequency) {
 				case 'Daily':

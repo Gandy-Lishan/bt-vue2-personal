@@ -312,7 +312,6 @@ export default {
         // 如果marker已经加载了，则无需重复加载，主要是防止重构后反复查看result tab导致的重复加载
         if(!CIQ.store.getters.getIsMarkerShownFlagState) CIQ.loadChart(markers, CIQ.addMarker)
 
-        debugger
         const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
         if(this.showLastSignalMarker1) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,null)
         if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,comparisonSymbolUrl)

@@ -315,7 +315,6 @@ if (!CIQ.Marker) {
 		header.innerText = this.params.headline;
 		text.innerText = this.params.story;
 		this.hasText = !!params.headline || !!params.story;
-
 		this.deferAttach = true;
 
 		this.node = n.firstChild;
@@ -1210,7 +1209,8 @@ if (!CIQ.Marker) {
 			stx = marker.params.stx;
 
 		CIQ.Marker.stPerformance.reconstituteExpanded(stx);
-		CIQ.Marker.stPerformance.consolidateExpanded(stx);
+		/** important!! 禁用marker expand 融合機制*/
+		//CIQ.Marker.stPerformance.consolidateExpanded(stx);
 		this.quickCache(marker);
 
 		if (expand.clickClosure) return;

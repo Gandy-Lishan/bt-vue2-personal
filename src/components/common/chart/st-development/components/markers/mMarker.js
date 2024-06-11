@@ -108,7 +108,6 @@ MarkersSample.prototype.showmMarker = function () {
 	let { stx } = this;
 	// const startTime = performance.now()
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-	debugger
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
@@ -308,9 +307,9 @@ MarkersSample.prototype.showmMarker = function () {
 
 	/** dual symbol */
 	//var actualXaxis = stx.getYAxisByField(stx.panels[stx.chart.series[comparisonSymbol.url].parameters.panel], comparisonSymbol.url);
+	debugger
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
-
 		var datatime = new Date(mDataSet2[data].DT || mDataSet2[data].Date)
 		var offset = datatime.getTimezoneOffset() * 60 * 1000
 		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
