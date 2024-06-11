@@ -407,13 +407,7 @@ computed: {
 }
 .chart_box {
 	margin: 50px 50px;
-	resize: vertical;
-	overflow: hidden;
-	border: 1px solid black;
 	border-radius: 5px;
-
-	//预设高度
-	height: 510px;
 }
 .form-box {
 	margin: 0 50px 50px 50px;

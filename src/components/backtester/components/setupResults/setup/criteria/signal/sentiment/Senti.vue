@@ -759,7 +759,7 @@ export default {
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
-          display: `(${symbolLabel})${name} ${condition}`,
+          display: `${name} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
