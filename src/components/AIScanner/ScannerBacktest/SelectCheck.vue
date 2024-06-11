@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       optionsData: [],
-      optionsAll: true,
+      optionsAll: false,
       selectedOptions: []
     }
   },
@@ -176,7 +176,7 @@ export default {
     width: 100%;
   }
   .el-select-dropdown__wrap {
-    max-height: 350px;
+    max-height: 250px;
   }
 }
 </style>

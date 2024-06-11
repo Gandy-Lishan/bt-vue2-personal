@@ -444,7 +444,13 @@ export default {
 
       if (short_ratio === 0 && long_ratio === 0) {
           callback(new Error("The percentages cannot be both 0"));
-      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
+      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(short_ratio) && Number.isInteger(long_ratio)) {
+        this.$refs['Form'].fields.map(i => {
+            const _field = field === 'short_ratio' ? 'long_ratio' : 'short_ratio'
+            if (i.prop === _field) {
+                i.clearValidate()
+            }
+        })
           callback(); // 验证通过
       } else {
           callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
@@ -471,23 +477,23 @@ export default {
       data: {
         start_date: '',
         end_date: '',
-        find_type: 'stock/etf',
+        find_type: 'etf',
         long_ratio: 80,
         short_ratio: 20,
-        stop_loss_condition: 5,
-        take_profit_condition: 10,
-        time_in_market_condition: 13,
-        stop_loss: 10,
+        stop_loss_condition: 3,
+        take_profit_condition: 3,
+        time_in_market_condition: 5,
+        stop_loss: 15,
         take_profit: 20,
-        time_in_market: 21,
+        time_in_market: 34,
         name: '',
         total_capital: 1000000,
         commission: 0,
         rank_condition: 'WinRate',
         daily_limit: 3,
-        capital_allocate: 'Kelly',
-        capital_allocate_num: '',
-        signals: ['All']
+        capital_allocate: 'manual_input',
+        capital_allocate_num: 50,
+        signals: ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
       },
       rowUrl: null,
       btnLoading: false,
@@ -522,7 +528,7 @@ export default {
         {
           value: 'MA',
           label: 'MA',
-          check: true
+          check: false
         },
         {
           value: 'MAGap',
@@ -547,17 +553,17 @@ export default {
         {
           value: 'Shooting Star followed by a fall',
           label: 'Shooting Star followed by a fall',
-          check: true
+          check: false
         },
         {
           value: 'UpTrend Pattern',
           label: 'UpTrend Pattern',
-          check: true
+          check: false
         },
         {
           value: 'DownTrend Pattern',
           label: 'DownTrend Pattern',
-          check: true
+          check: false
         },
         {
           value: 'Optix #1',
@@ -592,7 +598,7 @@ export default {
         {
           value: 'LowPoints',
           label: 'LowPoints',
-          check: true
+          check: false
         },
         {
           value: 'RSI',
@@ -673,7 +679,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(3)
     this.generateCPMName()
   },
   methods: {
@@ -713,11 +719,11 @@ export default {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
-      this.$refs['SelectCheck'].handleoptionsAllChange(true)
+      this.$refs['SelectCheck'].handleoptionsAllChange(false)
 			Object.assign(this.$data, this.$options.data())
-      this.data.signals = ['All']
+      // this.data.signals = ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
       this.generateCPMName()
-      this.setBacktestHistory(1)
+      this.setBacktestHistory(3)
       this.$refs['Form'].clearValidate()
     },
     selected(signals){
