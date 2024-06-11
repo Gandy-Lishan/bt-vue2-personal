@@ -307,7 +307,6 @@ if (CIQ.ChartEngine) {
 				: 100
 		const studiesPanelsSize = studiesLen * studiesHeight
 		let chartPanelSize = 680
-		//const chartPanelSize = CIQ.store.getters.getChartPanelHeight?CIQ.store.getters.getChartPanelHeight:680
 
 		// 正常添加指標時總高度按照680 + number of indicator * n來算， resize時按照resize結果賦值
 		if(!CIQ.isResizing){
