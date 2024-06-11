@@ -2518,7 +2518,7 @@
     },
     "exit": {
       "description": "Fundamentals = 0;NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
-      "relation": 2,
+      "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
@@ -2560,7 +2560,7 @@
     },
     "exit2": {
       "description": "Fundamentals = 0 OR the NASDAQ Composite vs. S&P 500 ratio is < its 10 week moving average",
-      "relation": 2,
+      "relation": 1,
       "score": 1,
       "delay_bars": 0,
       "signals_in_market": 1,
