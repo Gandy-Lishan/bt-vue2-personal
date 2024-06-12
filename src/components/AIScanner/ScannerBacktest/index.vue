@@ -1,5 +1,8 @@
 <template>
   <div class="CPMResults-container">
+    <div class="back">
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
+		</div>
     <el-collapse v-model="activeNames" :accordion="false" class="CPMResults-content">
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
@@ -350,6 +353,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.back {
+	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
+	a {
+		color: #525456;
+		font-weight: bold;
+		&:hover {
+			color: #5b9bd1;
+		}
+	}
+}
 .CPMResults-container {
   display: grid;
   grid-template-rows: 1fr auto;
