@@ -97,6 +97,22 @@
 										<span v-else></span>
 								</template>
 						</el-table-column>
+						<el-table-column
+					show-overflow-tooltip
+					prop="BUYandHOLD"
+					label="BUY & HOLD %(SPX)"
+					align="center"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.BUYandHOLD >= 0">{{
+							scope.row.BUYandHOLD + '%'
+						}}</span>
+						<span v-else-if="isNaN(scope.row.BUYandHOLD)"></span>
+						<span v-else style="color: #dd3a13">{{
+							scope.row.BUYandHOLD + '%'
+						}}</span>
+					</template>
+				</el-table-column>
 			</el-table>
 			<el-table class="CPM-summary" header-align="center" :data="summaryData" size="small">
 				<el-table-column
@@ -280,6 +296,7 @@ export default {
         obj['TOTAL POSITIVE'] = `${item.totalPositive}`
         obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
         obj['TIME IN MARKET %'] = `${item.timeInMarket}%`
+								obj['BUY & HOLD %(SPX)'] = `${item.BUYandHOLD}%`
         summary.push(obj)
       })
 			return summary

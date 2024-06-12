@@ -192,6 +192,7 @@ export default {
       statistics.timeInMarket = result['TIME IN MARKET']
       statistics.DDFileURL = result['DD File URL']
       statistics.ReturnsFileURL = result['Returns File URL']
+      statistics.BUYandHOLD = result['BUY and HOLD']
       const transformedResult = []
       const _result = result.result
       const ID = _result['ID']
