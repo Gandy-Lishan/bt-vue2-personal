@@ -752,10 +752,10 @@ export default {
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(indicator_url)
         let condition
-        if([12,13].includes(this.senti.conditionPeriod)){
-          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
-        }else{
+        if([12,13].includes(this.senti.newCondition)){
           condition = `${conditionMap.get(this.senti.newCondition).name}`
+        }else{
+          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,

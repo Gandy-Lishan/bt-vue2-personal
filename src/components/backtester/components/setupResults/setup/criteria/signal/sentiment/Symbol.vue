@@ -395,10 +395,10 @@ export default {
 
         const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
         let condition
-        if([12,13].includes(this.sym.conditionPeriod)){
-          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
-        }else{
+        if([12,13].includes(this.sym.newCondition)){
           condition = `${conditionMap.get(this.sym.newCondition).name}`
+        }else{
+          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           //display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
