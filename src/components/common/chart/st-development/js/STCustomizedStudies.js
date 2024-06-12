@@ -238,7 +238,7 @@ if (!CIQ.Studies) {
 			quotes = sd.chart.scrubbed
 		} 
 
-
+debugger
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式
 		let resArr = []
@@ -452,6 +452,7 @@ if (!CIQ.Studies) {
 						return NaN
 					}
 				});
+				break;
 			case 'ATH':
 				// 从当前indicator数据出现那天开始计算
 				let indexATH = quotes.findIndex(row=> 
@@ -474,10 +475,10 @@ if (!CIQ.Studies) {
 						return NaN;
 					}
 				});
-			if(resArr.length>1 && resArr.every(element => !element)){
-				//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
-			}
-			break;
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
 			case 'ATL':
 				// 从当前indicator数据出现那天开始计算
 				let indexATL = quotes.findIndex(row=> 
@@ -500,10 +501,10 @@ if (!CIQ.Studies) {
 						return NaN;
 					}
 				});
-			if(resArr.length>1 && resArr.every(element => !element)){
-				//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
-			}
-			break;
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
 			default:
 				console.error('no such condition')
 		}
