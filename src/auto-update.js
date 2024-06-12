@@ -60,7 +60,7 @@ const autoUpdate = async () => {
           window.dispatchEvent(
             new CustomEvent("onmessageUpdate", {
               detail: {
-                msg: "A new version of the website is available. Please refresh the page and get the latest updates.",
+                msg: "A new update of the website is available. Please refresh the page and get the latest updates.",
                 version: version
               },
             })
