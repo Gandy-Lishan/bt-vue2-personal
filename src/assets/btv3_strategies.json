@@ -251,7 +251,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   Simple Model With Fundamentals Sentiment   = 1",
+        "commentDes": "E: Long; Single Condition   Simple Model With Fundamentals   = 1",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
@@ -260,7 +260,7 @@
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   Simple Model With Fundamentals Sentiment   = 0",
+        "commentDes": "X: Close; Single Condition   Simple Model With Fundamentals   = 0",
         "rocCond": {
           "newCondition": 1,
           "conditionPeriod": "21"
@@ -268,14 +268,13 @@
       }
     ],
     "entry": {
-      "description": "Fundamentals Score = 1",
-      "relation": 1,
       "score": 1,
-      "delay_bars": 0,
       "signals_in_market": 1,
+      "relation": 1,
+      "delay_bars": 0,
       "signals": [
         {
-          "code": "SI:Simple Model With Fundamentals Sentiment;IDS:EOnull/EPnull;SC:SV/1/1"
+          "code": "SI:Simple Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
@@ -292,7 +291,7 @@
       "delay_bars": 0,
       "signals": [
         {
-          "code": "SI:Simple Model With Fundamentals Sentiment;IDS:EOnull/EPnull;SC:SV/1/0"
+          "code": "SI:Simple Model With Fundamentals;IDS:EOnull/EPnull;SC:SV/1/0"
         }
       ],
       "cond": [
@@ -305,12 +304,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "simple_model_with_fundamentals_sentiment_indicator",
+          "type": "simple_model_with_fundamentals_indicator",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "display": "Simple Model With Fundamentals Sentiment",
-            "id": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
+            "display": "Simple Model With Fundamentals",
+            "id": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -321,9 +320,9 @@
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
             "editMode": true,
-            "panelName": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
+            "panelName": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
           },
-          "panel": "$r001$simple_model_with_fundamentals_sentiment_indicator$r001$ (13,n)"
+          "panel": "$r001$simple_model_with_fundamentals_indicator$r001$ (13,n)"
         }
       ],
       "activatedMA": [],
@@ -331,10 +330,10 @@
       "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "simple_model_with_fundamentals_sentiment_indicator"
+          "simple_model_with_fundamentals_indicator"
         ],
         "exit": [
-          "simple_model_with_fundamentals_sentiment_indicator"
+          "simple_model_with_fundamentals_indicator"
         ]
       }
     }
@@ -1588,7 +1587,7 @@
         }
       },
       {
-        "commentDes": "Last Hour moving average MAR30 CrossAbove 1.0083",
+        "commentDes": "Last Hour  MAR30 CrossAbove 1.0083",
         "rocCond": {
           "newCondition": 7,
           "conditionPeriod": "30"
@@ -1611,7 +1610,7 @@
         }
       },
       {
-        "commentDes": "Last Hour moving average MAR30 CrossBelow 0.9879",
+        "commentDes": "Last Hour  MAR30 CrossBelow 0.9879",
         "rocCond": {
           "newCondition": 7,
           "conditionPeriod": "30"
@@ -1683,7 +1682,7 @@
           "inputs": {
             "Field": "Close",
             "overlay": false,
-            "display": "Symbol Close",
+            "display": "(SPY)Symbol Close",
             "id": "$r001$Symbol Close$r001$ (C,n)"
           },
           "outputs": {
@@ -1702,7 +1701,7 @@
             "Period": 13,
             "Overlay": false,
             "id": "$r001$lasthour$r001$ (13,n)",
-            "display": "$r001$lasthour$r001$ (13,n)"
+            "display": "Last Hour"
           },
           "outputs": {},
           "parameters": {
@@ -1724,7 +1723,7 @@
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(Close, 105)",
+            "display": "(SPY)Symbol Close Range Rank(105-Day)",
             "id": "$r001$ST ROCLike$r001$ (C,RR,105,n)"
           },
           "outputs": {
@@ -1742,11 +1741,33 @@
         {
           "type": "ST ROCLike",
           "inputs": {
+            "Field": "lasthour",
+            "condition": "MA",
+            "period": "30",
+            "overlay": false,
+            "display": "Last Hour MA Ratio(30-Day)",
+            "id": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 1,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
             "Field": "Close",
             "condition": "RR",
             "period": "105",
             "overlay": false,
-            "display": "(SPY)Range Rank(Close, 105)",
+            "display": "(SPY)Symbol Close Range Rank(105-Day)",
             "id": "$r001$ST ROCLike$r001$ (C,RR,105,n)-2"
           },
           "outputs": {
@@ -1768,36 +1789,14 @@
             "condition": "MA",
             "period": "30",
             "overlay": false,
-            "display": "(SPY)exit,MA Ratio(lasthour, 30)",
-            "id": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
-          },
-          "outputs": {
-            "Result": "auto"
-          },
-          "parameters": {
-            "criteria": "exit",
-            "index": 1,
-            "showSupLine": 100,
-            "chartName": "chart",
-            "editMode": true
-          },
-          "panel": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)"
-        },
-        {
-          "type": "ST ROCLike",
-          "inputs": {
-            "Field": "lasthour",
-            "condition": "MA",
-            "period": "30",
-            "overlay": false,
-            "display": "(SPY)entry,MA Ratio(lasthour, 30)",
+            "display": "Last Hour MA Ratio(30-Day)",
             "id": "$r001$ST ROCLike$r001$ (lasthour,MA,30,n)-2"
           },
           "outputs": {
             "Result": "auto"
           },
           "parameters": {
-            "criteria": "entry",
+            "criteria": "exit",
             "index": 1,
             "showSupLine": 100,
             "chartName": "chart",
@@ -2901,7 +2900,7 @@
     },
     "entry_description": [
       {
-        "commentDes": "E: Long; Single Condition   COMP SPX Ratio MA 10W Spread   > 0",
+        "commentDes": "E: Long; Single Condition   COMP MA30 Spread   > 0",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": "21"
@@ -2917,23 +2916,23 @@
         }
       },
       {
-        "commentDes": "COMP SPX Ratio MA 10W Spread   < 0",
+        "commentDes": "COMP MA30 Spread   < 0",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "SPX MA 10W 40W Spread   > 0",
+        "commentDes": "Fundamentals Score   = 1",
         "rocCond": {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
     ],
     "exit_description": [
       {
-        "commentDes": "X: Close; Single Condition   COMP SPX Ratio MA 10W Spread   < 0",
+        "commentDes": "X: Close; Single Condition   COMP MA30 Spread   < 0",
         "rocCond": {
           "newCondition": 2,
           "conditionPeriod": "21"
@@ -2949,16 +2948,16 @@
         }
       },
       {
-        "commentDes": "COMP SPX Ratio MA 10W Spread   > 0",
+        "commentDes": "COMP MA30 Spread   > 0",
         "rocCond": {
           "newCondition": 0,
           "conditionPeriod": "21"
         }
       },
       {
-        "commentDes": "SPX MA 10W 40W Spread   < 0",
+        "commentDes": "Fundamentals Score   = 0",
         "rocCond": {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       }
@@ -2971,7 +2970,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         }
       ],
       "cond": [
@@ -2989,7 +2988,7 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         }
       ],
       "cond": [
@@ -3004,15 +3003,15 @@
     "entry2": {
       "description": "Fundamentals = 1;NASDAQ Composite is <= its 30 day moving average",
       "relation": 2,
-      "score": 1,
+      "score": 2,
       "delay_bars": 0,
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/2/0"
         },
         {
-          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/1"
         }
       ],
       "cond": [
@@ -3025,7 +3024,7 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 0,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -3038,10 +3037,10 @@
       "signals_in_market": 1,
       "signals": [
         {
-          "code": "SI:COMP SPX Ratio MA 10W Spread;IDS:EOnull/EPnull;SC:SV/0/0"
+          "code": "SI:COMP MA30 Spread;IDS:EOnull/EPnull;SC:SV/0/0"
         },
         {
-          "code": "SI:SPX MA 10W 40W Spread;IDS:EOnull/EPnull;SC:SV/2/0"
+          "code": "SI:Fundamentals Score;IDS:EOnull/EPnull;SC:SV/1/0"
         }
       ],
       "cond": [
@@ -3054,7 +3053,7 @@
           "conditionPeriod": "21"
         },
         {
-          "newCondition": 2,
+          "newCondition": 1,
           "conditionPeriod": "21"
         }
       ]
@@ -3062,12 +3061,12 @@
     "indicator_layout": {
       "savedTechSD": [
         {
-          "type": "comp_spx_ratio_ma10w_spread",
+          "type": "comp_ma30_spread",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "display": "COMP SPX Ratio MA 10W Spread",
-            "id": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
+            "display": "COMP MA30 Spread",
+            "id": "$r001$comp_ma30_spread$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -3077,17 +3076,18 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$comp_ma30_spread$r001$ (13,n)"
           },
-          "panel": "$r001$comp_spx_ratio_ma10w_spread$r001$ (13,n)"
+          "panel": "$r001$comp_ma30_spread$r001$ (13,n)"
         },
         {
-          "type": "spx_ma_10w_40w_spread",
+          "type": "fundamentals_score",
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "display": "SPX MA 10W 40W Spread",
-            "id": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
+            "display": "Fundamentals Score",
+            "id": "$r001$fundamentals_score$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -3097,9 +3097,10 @@
             "studyOverSoldValue": null,
             "studyOverSoldColor": "#00DD00",
             "chartName": "chart",
-            "editMode": true
+            "editMode": true,
+            "panelName": "$r001$fundamentals_score$r001$ (13,n)"
           },
-          "panel": "$r001$spx_ma_10w_40w_spread$r001$ (13,n)"
+          "panel": "$r001$fundamentals_score$r001$ (13,n)"
         }
       ],
       "activatedMA": [
@@ -3109,28 +3110,21 @@
         }
       ],
       "activatedMALayout": [],
-      "activatedTechLayout": [
-        {
-          "url": "Symbol Ratio",
-          "criteria": "exit2",
-          "index": 0,
-          "symbolType": "symbol2"
-        }
-      ],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
-          "comp_spx_ratio_ma10w_spread"
+          "comp_ma30_spread"
         ],
         "exit": [
-          "comp_spx_ratio_ma10w_spread"
+          "comp_ma30_spread"
         ],
         "entry2": [
-          "comp_spx_ratio_ma10w_spread",
-          "spx_ma_10w_40w_spread"
+          "comp_ma30_spread",
+          "fundamentals_score"
         ],
         "exit2": [
-          "comp_spx_ratio_ma10w_spread",
-          "spx_ma_10w_40w_spread"
+          "comp_ma30_spread",
+          "fundamentals_score"
         ]
       }
     }
