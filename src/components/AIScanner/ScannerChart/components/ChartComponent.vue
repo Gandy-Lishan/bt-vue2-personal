@@ -178,7 +178,7 @@ export default {
 					
 				switch(this.other['_Signal']){
 					case "Symbol Close > its\' MA200 and Optix MA5 < 35":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+						await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 							Period: 5,
 							display:"ST MA",
@@ -192,7 +192,7 @@ export default {
 						
 						break;
 					case "Symbol Close > its\' MA200 and Optix < 30":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 							Period: 200,
 							Field: "Close"
@@ -201,7 +201,7 @@ export default {
 						
 						break;
 					case "Optix MA10 < 30 and Optix < 20":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 							Period: 10,
 							display:"ST MA",
@@ -211,7 +211,7 @@ export default {
 						
 						break;
 					case "Optix #4":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix CrossBelow 0.5")
 						
 						break;
