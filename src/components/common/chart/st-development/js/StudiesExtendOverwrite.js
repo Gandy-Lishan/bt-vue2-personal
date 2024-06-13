@@ -27,6 +27,7 @@ import {__js_advanced_studies_williamsMFI_} from "./advance-studies/williamsMFI.
 import {__js_advanced_studies_massIndex_} from "./advance-studies/massIndex.js"
 import {__js_advanced_studies_moneyFlow_} from "./advance-studies/moneyFlow.js"
 import {__js_advanced_studies_keltner_} from "./advance-studies/keltner.js"
+import {__js_advanced_studies_priceVolumeOscillator_} from "./advance-studies/priceVolumeOscillator.js"
 
 
 let extendOverwrite = () => {
@@ -68,6 +69,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_massIndex_,
 			__js_advanced_studies_moneyFlow_,
 			__js_advanced_studies_keltner_,
+			__js_advanced_studies_priceVolumeOscillator_,
 		)
 
 
