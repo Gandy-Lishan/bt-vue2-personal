@@ -509,6 +509,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         //self.close();
                         self.selectItem(data, ()=>{     /** 新增了手动选择symbol列表的addSymbol的回调 */
                             /** 仅在CPM时，换symbol后移除存在的hover marker*/
+                            // important !! 在這兒而不是hideMarkers是因爲不知道爲什麽CPM裏面CIQ.MarkerSample的showMarkers不存在
                             if(window.location.pathname.includes('/cpm/results')){
                                 CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
                             }
