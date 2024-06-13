@@ -3,7 +3,6 @@
             <el-upload
                 class="upload-demo"
                 :action="uploadUrl"
-                :on-preview="_handlePreview"
                 :on-progress="handleUploadProgress"
                 :on-remove="handleRemove"
                 :on-success="handleUploadSuccess"
@@ -28,25 +27,6 @@
                     >
                 </div>
             </el-upload>
-
-            <el-dialog :title="previewFileName" :visible.sync="previewVisible">
-							<el-table
-								:data="previewData"
-								style="margin-top: 20px; max-height: 400px; overflow-y: auto"
-							>
-								<el-table-column label="Date" prop="Date"></el-table-column>
-								<el-table-column label="Close" prop="Close"></el-table-column>
-							</el-table>
-							<el-pagination
-								small
-								@current-change="handleCurrentChange"
-								:current-page="previewPage.page"
-								:page-size="100"
-								layout="total, prev, pager, next"
-								:total="previewPage.total"
-							>
-							</el-pagination>
-      </el-dialog>
       <el-dialog
         :title="previewFileName"
         :visible.sync="dialogFormVisible"
@@ -141,7 +121,7 @@
             var validateIndicatorName = (rule, value, callback) => {
                 const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
                 let _value = value.replace(/\s*/g, "")
-                if (!_value && this.indicatorRadio == "Users' Own Indicator") {
+                if (!_value) {
                     callback(new Error('Name cannot be empty.'))
                 } else if (!reg.test(_value)) {
                     //callback(new Error('It must start with a letter and can only contain letters, numbers, spaces, and underscores.'))
@@ -156,14 +136,7 @@
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }, // 请求头部
-                previewVisible: false, // 是否显示预览表格
-                previewData: [], // 预览表格的数据
                 previewFileName: '',
-                previewFileID: '',
-                previewPage: {
-                    page: 1,
-                    total: 0
-                },
                 cancelToken: null, // 用于保存取消上传请求的取消令牌
                 uploadUrl: '/dev/dev/uploadcsvfile/',
                 uploadHeaders: {},
@@ -196,139 +169,84 @@
                     { Date: '2018-01-16', Close: '50.63' }
                 ],
                 exampleDataVisible: false,
-                typeOptions: [
-                    { value: 'Sentiment Indicator', label: 'Sentiment Indicator' },
-                    { value: 'Technical Indicator', label: 'Technical Indicator' },
-                    { value: 'Symbol OHLCV', label: 'Symbol OHLCV' },
-                    { value: "Users' Own Indicator", label: "Users' Own Indicator" }
-                ],
-                createdIndicatorOptions: []
+                createdIndicatorOptions: [],
+                userIndicator: ''
             }
         },
         methods: {
-            uploadFile(file) {
-        console.log('文件上传', file)
-        const self = this
-        let suffix = ''
-        // 创建 FormData 对象，将文件添加到 FormData 中
+        uploadFile(file) {
+            console.log('文件上传', file)
+            const self = this
+            let suffix = ''
+            // 创建 FormData 对象，将文件添加到 FormData 中
 
-        const formData = new FormData()
-        try {
-            suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
-        } catch (error) {
-            return
-        }
-        const name = file.name.replace(`.${suffix}`, '')
-        const fileName = name.replace(/\s*/g, "")
-        formData.append('name', fileName)
-        formData.append('hash', file.hash)
-        formData.append('suffix', suffix)
-        formData.append('file', file)
+            const formData = new FormData()
+            try {
+                suffix = /\.([a-zA-Z0-9]+)$/.exec(file.name)[1]
+            } catch (error) {
+                return
+            }
+            const name = file.name.replace(`.${suffix}`, '')
+            const fileName = name.replace(/\s*/g, "")
+            formData.append('name', fileName)
+            formData.append('hash', file.hash)
+            formData.append('suffix', suffix)
+            formData.append('file', file)
 
-        // 创建 CancelToken 实例
-        const cancelToken = axios.CancelToken.source()
-
-        // 保存取消令牌，以便在需要终止上传时使用
-        // 保存取消令牌，以便在需要终止上传时使用
-        self.cancelToken = cancelToken
-        // 发送上传请求
-        axios
-            .post(self.uploadUrl, formData, {
-            headers: {
-                ...self.uploadHeaders,
-                ...{
-                cancelToken: cancelToken.token
+            // 创建 CancelToken 实例
+            const cancelToken = axios.CancelToken.source()
+            // 保存取消令牌，以便在需要终止上传时使用
+            self.cancelToken = cancelToken
+            // 发送上传请求
+            axios
+                .post(self.uploadUrl, formData, {
+                headers: {
+                    ...self.uploadHeaders,
+                    ...{
+                    cancelToken: cancelToken.token
+                    }
+                },
+                onUploadProgress: (event) => {
                 }
-            },
-            onUploadProgress: (event) => {
-                // 文件上传进度的处理逻辑
-                // self.handleUploadProgress(event, file.uid, self.fileList);
-                // const progress = Math.round((event.loaded * 100) / event.total)
-                // const curLi =
-                // 	self.$refs.upload.$el.querySelector('.el-progress-bar__inner') ||
-                // 	null
-                // console.log(
-                // 	curLi,
-                // 	self.$refs.upload.$el.querySelector('.el-progress__text')
-                // )
-                // self.$refs.upload.$el.querySelector(
-                // 	'.el-progress-bar__inner'
-                // ).style.width = progress + '%'
-                // this.$refs.upload.$el.querySelector('.el-progress__text').innerHTML = this.progress + '%';
+                })
+                .then((response) => {
+                CIQ.hideCover()
+                CIQ.nprogress.done()
+
+                // 文件上传完成后的处理逻辑
+                console.log('文件上传成功', response)
+                const { status, error } = response.data
+                // 还原文件对象的 raw 属性
+                if (status == 200 || status == 201) {
+                    self.$notify.success({
+                        title: 'Tips',
+                        message: 'File uploaded successfully. You can click on the file to preview it.',
+                        duration: 0
+                    })
+                } else {
+                    return Promise.reject(error)
+                }
                 // ...
-            }
-            })
-            .then((response) => {
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-
-            // 文件上传完成后的处理逻辑
-            console.log('文件上传成功', response)
-            const { status, error } = response.data
-            // self.$store.commit('form/saveUserCustomIndicator', response.data.fileID)
-            // 还原文件对象的 raw 属性
-            if (status == 200 || status == 201) {
-                self.$notify.success({
-                title: 'Tips',
-                message: 'File uploaded successfully. You can click on the file to preview it.',
-                duration: 0
+                })
+                .catch((error) => {
+                CIQ.hideCover()
+                CIQ.nprogress.done()
+                // 文件上传出错的处理逻辑
+                console.log('文件上传失败', error)
+                // 清空文件列表
+                self.$refs.upload.clearFiles()
+                self.fileList = []
+                self.$notify.warning({
+                    title: 'Tips',
+                    message: 'File upload failed.',
+                    duration: 0
                 });
-                self.previewFileID = response.data.file_id
-                const obj = {}
-                obj.index = this.panelIndex
-                obj.val = response.data.file_id
-                obj.criteriaCF = capitalizeFirstLetter(this.criteria)
-                if (self.criteria.startsWith('entry')) {
-                self.$store.commit(`form/saveUsersOwnFileHash`, obj)
-                }
-                if (self.criteria.startsWith('exit')) {
-                self.$store.commit(`form/saveUsersOwnFileHash`, obj)
-                }
-                let fileObj = {}
-                fileObj.index = self.panelIndex
-                fileObj.val = {
-                data: response.data,
-                criteria: self.criteria,
-                index: self.panelIndex
-                }
-                self.$emit('userUploadFileContent', fileObj)
-                // self.handleUsersOwnIndicatorSelect(response.data)
-                // let valObj = {}
-                // valObj.value = this.si.userIndicator
-                // valObj.index = this.panelIndex
-                // self.$emit('getIndicatorVal', valObj)
-            } else {
-                return Promise.reject(error)
-            }
-            // ...
-            })
-            .catch((error) => {
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            // 文件上传出错的处理逻辑
-            console.log('文件上传失败', error)
-            // 清空文件列表
-            self.$refs.upload.clearFiles()
-            self.fileList = []
-            self.$notify.warning({
-                title: 'Tips',
-                message: 'File upload failed.',
-                duration: 0
-            });
 
-            // ...
-            })
+                // ...
+                })
         },
         handleUploadSuccess(response, file, fileList) {
-        // 上传成功回调
         console.log('上传成功回调：', response)
-        // 更新文件列表中对应文件的状态为成功
-        // this.fileList.forEach((item) => {
-        // 	if (item.uid === file.uid) {
-        // 		item.progress = 100 // 进度设置为 100
-        // 		item.status = 'success' // 状态设置为成功
-        // 	}
-        // })
         },
         handleUploadError(error, file, fileList) {
             // 上传失败回调
@@ -360,79 +278,6 @@
             } catch (error) {
                 console.log('删除失败', error)
             }
-        },
-        handlePreview(file) {
-        CIQ.addCover('Parsing the file....')
-        CIQ.nprogress.start()
-        const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
-        Papa.parse(fileContent, {
-            header: true,
-            skipEmptyLines: true,
-            complete: (result) => {
-            // 获取解析后的数据
-            const data = result.data
-            // 更新预览表格的数据
-            this.previewData = data
-            this.previewFileName = file.name
-            // 显示预览表格
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            this.previewVisible = true
-            },
-            error: (error) => {
-            // 解析错误时的处理逻辑
-            console.error('解析错误:', error)
-            this.$notify.warning({
-                title: 'Tips',
-                message: 'File parsing error, unable to preview.',
-                duration: 0
-            });
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            }
-        })
-        },
-        async _handlePreview(file) {
-        // CIQ.addCover('Parsing the file....')
-        // CIQ.nprogress.start()
-        // const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
-        // Papa.parse(fileContent, {
-        //   header: true,
-        //   skipEmptyLines: true,
-        //   complete: (result) => {
-        //     // 获取解析后的数据
-        //     const data = result.data
-        //     // 更新预览表格的数据
-        //     this.previewData = data
-        //     this.previewFileName = file.name
-        //     // 显示预览表格
-        //     CIQ.hideCover()
-        //     CIQ.nprogress.done()
-        //     this.previewVisible = true
-        //   },
-        //   error: (error) => {
-        //     // 解析错误时的处理逻辑
-        //     console.error('解析错误:', error)
-        //     this.popUpMsgBox('File parsing error, unable to preview.')
-        //     CIQ.hideCover()
-        //     CIQ.nprogress.done()
-        //   }
-        // })
-
-        CIQ.addCover('Parsing the file....')
-        CIQ.nprogress.start()
-        const str = this.previewFileID
-        const page = this.previewPage.page
-        const startIndex = str.indexOf('HASH')
-        const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
-        if (startIndex !== -1) {
-            const beforeHash = str.substring(0, startIndex)
-            const afterHash = str.substring(endIndex)
-            await this.getPreviewList(beforeHash, afterHash, page)
-            CIQ.hideCover()
-            CIQ.nprogress.done()
-            this.previewVisible = true
-        }
         },
         handleExceed(files, fileList) {
         this.$notify.warning({
@@ -502,6 +347,7 @@
             try {
             await this.validateCSV(file)
             await this.handleParseResult(this.csvContent, file)
+            debugger
             } catch (error) {
                 console.log(error)
             throw Error()
@@ -927,29 +773,12 @@
         return data;
         },
         async autoFillUserIndicator(data) {
-        this.indicatorRadio = "Users' Own Indicator"
         let userIndicator = data.file_name
-        this.si.userIndicator = userIndicator
+        this.userIndicator = userIndicator
 
         const response = await csvFileRead(userIndicator, data.hash)
 
         // 还原文件对象的 raw 属性
-        const index = this.panelIndex
-        const obj = {}
-        obj.index = index
-        obj.val = response.data.data.file_id
-        obj.criteriaCF = capitalizeFirstLetter(this.criteria)
-        this.$emit('getIndicatorUrl', {
-            index: index,
-            url: response.data.data.file_id
-        })
-        console.log('还原文件对象的 raw 属性', obj)
-        if (this.criteria.startsWith('entry')) {
-            this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-        }
-        if (this.criteria.startsWith('exit')) {
-            this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-        }
         const res = response.data.data.csv_content
         let fileData = []
         try {
@@ -976,33 +805,6 @@
             console.log('error', error)
         }
 
-        },
-        async handleCurrentChange(newpage) {
-        this.previewPage.page = newpage
-        const str = this.previewFileID
-        const startIndex = str.indexOf('HASH')
-        const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
-        if (startIndex !== -1) {
-            const beforeHash = str.substring(0, startIndex)
-            const afterHash = str.substring(endIndex)
-            await this.getPreviewList(beforeHash, afterHash, newpage)
-        }
-        },
-        async getPreviewList(name, hash, page) {
-        const response = await csvFilePagingRead(name, hash, page)
-        const res = response.data
-        if (res.status == 200) {
-            const csv_content = res.data.csv_content
-            this.previewData = csv_content.map((item) => ({
-            Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            }),
-            Close: item.indicator_Close
-            }))
-            this.previewPage.total = res.data.total_rows
-        }
         }
         }
     }
