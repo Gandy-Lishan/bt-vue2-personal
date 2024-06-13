@@ -69,8 +69,7 @@ Vue.component('template-placeholder', {
 window.SITE_CONFIG = {}
 window.SITE_CONFIG['storeState'] = JSON.parse(JSON.stringify(store.state))
 
-// 非生产环境使用
-process.env.NODE_ENV !== 'production' && autoUpdate.start()
+autoUpdate.start()
 
 const app = new Vue({
 	store,

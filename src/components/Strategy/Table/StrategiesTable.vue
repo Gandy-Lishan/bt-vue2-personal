@@ -23,7 +23,7 @@
 				style="width: 100%; height: 100%; margin: 0 auto"
 				:row-class-name="tableRowClassName"
 			>
-				<el-table-column prop="isRight" width="50px">
+				<!-- <el-table-column prop="isRight" width="50px">
 					<template slot="header" slot-scope="scope">
 						<div>
 							<el-checkbox
@@ -47,7 +47,7 @@
 							</el-checkbox>
 						</div>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				<template v-for="l in tableCol">
 					<el-table-column
 						:label="l.label"

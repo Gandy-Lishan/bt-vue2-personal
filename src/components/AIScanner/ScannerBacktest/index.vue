@@ -1,5 +1,8 @@
 <template>
   <div class="CPMResults-container">
+    <div class="back">
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to AI Stock Scanner List</span></router-link>
+		</div>
     <el-collapse v-model="activeNames" :accordion="false" class="CPMResults-content">
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
@@ -38,6 +41,7 @@
           <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Preview Filter List</p>
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Backtest Summary</p>
+            <p @click.stop="() => {changeSecondTab('trades')}" :class="{ secondActive: activeSecondTab == 'trades' || '' }">Backtest Trades</p>
           </div>
           <div class="downLoadCsvBtn">
               <el-button
@@ -59,7 +63,8 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             ></FilterTable>
-            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
+            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics"></Statistics>
+            <Trades v-show="activeSecondTab == 'trades'" ref="Trades" :tradesData="tradesData"></Trades>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -74,6 +79,7 @@ import ScannerForm from "./ScannerForm";
 // import MaxMin from "../results/components/MaxMin";
 import ScannerBTTable from "./Table";
 import FilterTable from "./FilterTable";
+import Trades from "./Trades";
 const XLSX = require('xlsx');
 
 export default {
@@ -117,7 +123,8 @@ export default {
     ScannerForm,
     ScannerBTTable,
     FilterTable,
-    Statistics
+    Statistics,
+    Trades
   },
   methods: {
     changeTab(val) {
@@ -186,6 +193,9 @@ export default {
       statistics.totalPositive = result['TOTAL POSITIVE']
       statistics.totalNegative = result['TOTAL NEGATIVE']
       statistics.timeInMarket = result['TIME IN MARKET']
+      statistics.DDFileURL = result['DD File URL']
+      statistics.ReturnsFileURL = result['Returns File URL']
+      statistics.BUYandHOLD = result['BUY and HOLD']
       const transformedResult = []
       const _result = result.result
       const ID = _result['ID']
@@ -267,7 +277,8 @@ export default {
       await this.$refs['ScannerBTTable'].getDataList()
     },
     handleDownloadCsv() {
-      const {summary, trade} = this.$refs.Statistics.handleDownloadCsv()
+      const summary = this.$refs.Statistics.handleDownloadCsv()
+      const trade = this.$refs.Trades.handleDownloadCsv()
       const filterList = this.$refs.filterTable.exportTable()
       if (
         !(
@@ -342,6 +353,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.back {
+	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
+	a {
+		color: #525456;
+		font-weight: bold;
+		&:hover {
+			color: #5b9bd1;
+		}
+	}
+}
 .CPMResults-container {
   display: grid;
   grid-template-rows: 1fr auto;
