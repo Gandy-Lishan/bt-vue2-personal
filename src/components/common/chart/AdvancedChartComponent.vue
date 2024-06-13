@@ -23,6 +23,7 @@
 				<div class="icon-toggles ciq-toggles">
 					<cq-menu class="ciq-search">
 						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+						<div class='symbol-up'></div>
 					</cq-menu>
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
@@ -359,7 +360,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
-// import {printConsole} from '@/utils'
+import UploaderVue from './st-development/components/Uploader.vue'
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
@@ -440,6 +441,17 @@ export default class AdvancedChartComponent extends Vue {
 
 			this.initializeToggle(uiContext.stx)
 			this.createResizeListener()
+
+			// this.symbolMutationObserver()
+
+			var uploader = document.querySelector('.symbol-up')
+			if(uploader){
+				const UploaderVueComponent = Vue.extend(UploaderVue);
+					new UploaderVueComponent({
+						store: this.$store,
+						router: this.$router, // 如果你有 router 也可以传递
+					}).$mount(uploader);
+			}
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -548,57 +560,127 @@ export default class AdvancedChartComponent extends Vue {
 	}
 
 	createResizeListener() {
-		// let main_chart_panel = CIQ.stxx.panels.chart.holder
-		// var newdiv1=document.createElement("div");
-		// 	newdiv1.className = 'resize-btn-grow'
-		// 	main_chart_panel.appendChild(newdiv1)
-		// 		var btn_grow_1=document.createElement("span");
-		// 		btn_grow_1.onclick = function() { 
-		// 			printConsole('resize btn')
-		// 			CIQ.store.dispatch('states/set_chart_panel_height', 'grow')
-		// 			CIQ.stxx.resizeChart()
-		// 		};
-		// 		newdiv1.appendChild(btn_grow_1)
+		const ele = document.querySelector('.chart-wrapper');
+		let isResizing = false;
 
-		// var newdiv2=document.createElement("div");
-		// 	newdiv2.className = 'resize-btn-shrink'
-		// 	main_chart_panel.appendChild(newdiv2)
-		// 		var btn_grow_2=document.createElement("span");
-		// 		btn_grow_2.onclick = function() { 
-		// 			CIQ.store.dispatch('states/set_chart_panel_height', 'shrink')
-		// 			CIQ.stxx.resizeChart()
-		// 		};
-		// 		newdiv2.appendChild(btn_grow_2)
+		// 監聽 mousedown 事件
+		ele.addEventListener('mousedown', (e) => {
+			isResizing = true;
+			//console.log('mousedown',isResizing)
+		});
 
+		// 監聽 mouseup 事件
+		ele.addEventListener('mouseup', (e) => {
+			setTimeout(() => {
+				isResizing = false;
+				CIQ.isResizing = false	
+			}, 500); // 0.5秒後設置isResizing為false
+		});
 
-				const ele = document.querySelector('.chart-wrapper');
-				let isResizing = false;
-
-				// 監聽 mousedown 事件
-				ele.addEventListener('mousedown', (e) => {
-					isResizing = true;
-					//console.log('mousedown',isResizing)
-				});
-
-				// 監聽 mouseup 事件
-				ele.addEventListener('mouseup', (e) => {
-					setTimeout(() => {
-						isResizing = false;
-						CIQ.isResizing = false	
-					}, 500); // 0.5秒後設置isResizing為false
-				});
-
-				this.resizeObserver = new ResizeObserver(entries => {
-				for (let entry of entries) {
-					if (entry.target && isResizing) {
-						CIQ.isResizing = true
-					}
-				}
-				});
-
+		this.resizeObserver = new ResizeObserver(entries => {
+		for (let entry of entries) {
+			if (entry.target && isResizing) {
+				CIQ.isResizing = true
+			}
+		}
+		});
 
 		// 開始觀察目標元素
 		this.resizeObserver.observe(ele);
+	}
+	initializeSymbolUploader(node) {
+		const uploader = document.querySelector('.symbol-uploader')
+		if(uploader) return
+			if (node) {
+				// 創建一個新的 cq-filter 元素
+				const uploader = document.createElement('div');
+				// 在 cq-lookup-filters 後面插入新的 cq-filter 元素
+				node.insertAdjacentElement('afterend', uploader);
+
+						// Dynamically create and insert the component
+					//const myComponentVNode = this.$createElement(UploaderVue);
+					// // Create a new Vue instance to render the VNode
+					// new Vue({
+					// 	render: h => h(UploaderVue),
+					// }).$mount(uploader);
+					const UploaderVueComponent = Vue.extend(UploaderVue);
+					new UploaderVueComponent({
+						store: this.$store,
+						router: this.$router, // 如果你有 router 也可以传递
+					}).$mount(uploader);
+
+			}
+		}
+	symbolMutationObserver(){
+		// 选择需要观察变动的目标节点
+		const targetNode = document.body;
+
+		// 配置观察选项
+		const config = { childList: true, subtree: true };
+		var _this = this
+		// 创建一个回调函数来执行当变动发生时
+		// const callback = function(mutationsList, observer) {
+		// 	for(let mutation of mutationsList) {
+		// 		if (mutation.type === 'childList') {
+		// 			// 检查是否有 class 为 'symbol-upload' 的元素
+		// 			let ciqSearchElement = document.querySelector('.ciq-search');
+		// 			let node2 = document.querySelector('.cq-comparison-new');
+		// 			console.log('symbol-upload element has been rendered',ciqSearchElement);
+		// 			if (ciqSearchElement) {
+		// 				const classObserver = new MutationObserver(function(classMutations) {
+		// 				for(let classMutation of classMutations) {
+		// 						if (classMutation.attributeName === 'class') {
+		// 							if (ciqSearchElement.classList.contains('stxMenuActive')) {
+		// 								_this.initializeSymbolUploader(ciqSearchElement)
+		// 								console.log('ciq-search has activated class');
+		// 							} else {
+		// 								console.log('ciq-search does not have activated class');
+		// 							}
+		// 						}
+		// 					}
+		// 				});
+
+		// 				// 設置 class 變化的觀察選項
+		// 				classObserver.observe(ciqSearchElement, { attributes: true });
+
+		// 				// 一旦找到了 'ciq-search' 元素，就可以停止觀察
+		// 				observer.disconnect();
+		// 			}
+		// 		}
+		// 	}
+		// };
+
+		const callback = function(mutationsList, observer) {
+			for(let mutation of mutationsList) {
+				if (mutation.type === 'childList') {
+					// 检查是否有 class 为 'symbol-upload' 的元素
+					let cqLookupFiltersElement = document.querySelector('cq-lookup-filters');
+					console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
+					if (cqLookupFiltersElement) {	
+						_this.initializeSymbolUploader(cqLookupFiltersElement)
+						// 一旦找到了 'ciq-search' 元素，就可以停止觀察
+						observer.disconnect();
+						break;
+					}
+
+					// let cqLookupFiltersElements = document.getElementsByTagName('cq-lookup-filters')
+					// console.log('symbol-upload element has been rendered',cqLookupFiltersElements);
+					// if(cqLookupFiltersElements.length != 0){
+					// 	for(var el = 0;el<cqLookupFiltersElements.length;el++){ 
+					// 		_this.initializeSymbolUploader(cqLookupFiltersElements[el])
+					// 	}
+					// 	// 一旦找到了 'ciq-search' 元素，就可以停止觀察
+					// 	observer.disconnect();
+					// }
+				}
+			}
+		};
+
+		// 创建一个观察者实例并传入回调函数
+		const observer = new MutationObserver(callback);
+
+		// 以上述配置开始观察目标节点
+		observer.observe(targetNode, config);
 	}
 }
 
