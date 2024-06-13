@@ -1,7 +1,8 @@
 /*
  * @Description: 自动更新
  */
- 
+import {printConsole} from '@/utils'
+
 let currentVersion // 当前版本
 let version // 新版本
 // const timeData = 60 * 1000 // 检查间隔时间
@@ -18,18 +19,18 @@ const getVersion = async () => {
  
 // 检查更新
 const checkUpdate = async () => {
-  if(needPrint) console.log('***************checkUpdate**************')
+  if(needPrint) printConsole('***************🚀checkUpdate**************')
   const currentVersion = sessionStorage.getItem("version")
   version = (await getVersion()).version
   // 本地没有 version，表示刚进入系统，直接塞值
   if (!currentVersion) return sessionStorage.setItem("version", version)
  
-//   if(needPrint) console.log("🚀 ~ file: auto-update.js:19 ~ version:", version)
-//   if(needPrint) console.log("🚀 ~ file: auto-update.js:21 ~ currentVersion:", currentVersion)
-  if(needPrint) console.log("🚀 ~ file: auto-update.js:23 ~ Number(version) !== Number(currentVersion):", Number(version) !== Number(currentVersion))
+  if(needPrint) printConsole("🚀 ~ file: auto-update.js:19 ~ version:", version)
+  if(needPrint) printConsole("🚀 ~ file: auto-update.js:21 ~ currentVersion:", currentVersion)
+  if(needPrint) printConsole("🚀 ~ file: auto-update.js:23 ~ Number(version) !== Number(currentVersion):", Number(version) !== Number(currentVersion))
   let needRefresh = false
   if (Number(version) !== Number(currentVersion)) {
-    if(needPrint) console.log('%c 发现新版本', 'color: red')
+    if(needPrint) printConsole('%c 发现新版本', 'color: red')
     needRefresh = true
   }
   return needRefresh
@@ -41,7 +42,7 @@ const autoUpdate = async () => {
     // 页面隐藏了就不检查更新
     if (!hidden) {
       const willUpdate = await checkUpdate()
-      if(needPrint) console.log("🚀 ~ file: auto-update.js:71 ~ setTimeoutId=setTimeout ~ willUpdate, version:", willUpdate, version)
+      if(needPrint) printConsole("🚀 ~ file: auto-update.js:71 ~ setTimeoutId=setTimeout ~ willUpdate, version:", willUpdate, version)
  
       if (willUpdate && needTip) {
         // 延时更新，防止部署未完成用户就刷新空白
@@ -70,7 +71,7 @@ const autoUpdate = async () => {
         needTip = false // 关闭更新提示，防止重复提醒
       }
     }
-    if(needPrint) console.log("🚀 ~ file: auto-update.js:90 ~ autoUpdate ~ needTip: ", needTip)
+    if(needPrint) printConsole("🚀 ~ file: auto-update.js:90 ~ autoUpdate ~ needTip: ", needTip)
     if (needTip) {
       if(needPrint) console.warn('needTip autoUpdate');
       autoUpdate()
@@ -93,7 +94,7 @@ const start = async () => {
   // 监听页面是否隐藏
   document.addEventListener('visibilitychange', () => {
     hidden = document.hidden
-    if(needPrint) console.log("🚀 ~ file: auto-update.js:64 ~ document.addEventListener ~ hidden, needTip:", hidden, needTip)
+    if(needPrint) printConsole("🚀 ~ file: auto-update.js:64 ~ document.addEventListener ~ hidden, needTip:", hidden, needTip)
     // 页面隐藏了就不检查更新。或者已经有一个提示框了，防止重复提示。
     if (!hidden && needTip) {
       autoUpdate()

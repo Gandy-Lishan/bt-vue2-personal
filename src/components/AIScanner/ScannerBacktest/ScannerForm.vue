@@ -7,6 +7,86 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
+        <el-col :span="6">
+          <el-form-item
+          prop="name"
+          >
+          <template slot="label">
+          <label>
+            1. Name
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-input v-model="data.name" placeholder="Enter a name"></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="total_capital"
+          >
+          <template slot="label">
+            <label>
+              2. Total Capital
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  >The total capital for backtesting.</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input v-model="data.total_capital"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="commission"
+          >
+          <template slot="label">
+          <label>
+            3. Commission
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Trading commission rate.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-input v-model="data.commission"><template v-slot:append>(%)</template></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col :span="6">
+        <el-form-item prop="rank_condition">
+          <template slot="label">
+          <label>
+            4. Rank Condition
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Ranking criteria. Choose one condition to determine<br/>
+                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+        <el-select
+            v-model="data.rank_condition"
+            placeholder="— Select type —"
+          >
+            <el-option
+              v-for="item in RankCondition"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
       <el-col :span="6">
         <el-form-item
           label="3. Start Date"
@@ -14,7 +94,7 @@
         >
         <template slot="label">
           <label>
-            1. Start Date
+            5. Start Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest start date. Data after this date will be used for backtesting</span>
@@ -38,7 +118,7 @@
 			  >
         <template slot="label">
           <label>
-            2. End Date
+            6. End Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest end date. Data before this date will be used for backtesting.</span>
@@ -60,7 +140,7 @@
         <el-form-item prop="find_type">
           <template slot="label">
           <label>
-            3. Type
+            7. Type
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The security type to search for. <br/>
@@ -92,7 +172,7 @@
           >
           <template slot="label">
           <label>
-            4. Signals
+            8. Signals
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The trading signals used. <br/>
@@ -110,7 +190,7 @@
          <el-form-item prop="long_short_ratio">
           <template slot="label">
             <label>
-              5. Long / Short Percentage
+              9. Long / Short Percentage
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >The long-short position during the backtest period. <br/>
@@ -141,7 +221,7 @@
           >
           <template slot="label">
             <label>
-              6. Take Profit
+              10. Take Profit
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set profit target range. 
@@ -171,7 +251,7 @@
           >
           <template slot="label">
             <label>
-              7. Stop Loss
+              11. Stop Loss
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set stop-loss range. 
@@ -201,7 +281,7 @@
           >
           <template slot="label">
             <label>
-              8. Time In Market
+              12. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set market stay duration range.
@@ -224,86 +304,6 @@
           </el-form-item>
           </div>
           </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item
-          prop="name"
-          >
-          <template slot="label">
-          <label>
-            9. Name
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-          <el-input v-model="data.name" placeholder="Enter a name"></el-input>
-        </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="total_capital"
-          >
-          <template slot="label">
-            <label>
-              10. Total Capital
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  >The total capital for backtesting.</span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <el-input v-model="data.total_capital"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="commission"
-          >
-          <template slot="label">
-          <label>
-            11. Commission
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Trading commission rate.</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-          <el-input v-model="data.commission"><template v-slot:append>(%)</template></el-input>
-        </el-form-item>
-        </el-col>
-        <el-col :span="6">
-        <el-form-item prop="rank_condition">
-          <template slot="label">
-          <label>
-            12. Rank Condition
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Ranking criteria. Choose one condition to determine<br/>
-                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <el-select
-            v-model="data.rank_condition"
-            placeholder="— Select type —"
-          >
-            <el-option
-              v-for="item in RankCondition"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -444,7 +444,13 @@ export default {
 
       if (short_ratio === 0 && long_ratio === 0) {
           callback(new Error("The percentages cannot be both 0"));
-      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
+      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(short_ratio) && Number.isInteger(long_ratio)) {
+        this.$refs['Form'].fields.map(i => {
+            const _field = field === 'short_ratio' ? 'long_ratio' : 'short_ratio'
+            if (i.prop === _field) {
+                i.clearValidate()
+            }
+        })
           callback(); // 验证通过
       } else {
           callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
@@ -471,23 +477,23 @@ export default {
       data: {
         start_date: '',
         end_date: '',
-        find_type: 'stock/etf',
+        find_type: 'etf',
         long_ratio: 80,
         short_ratio: 20,
-        stop_loss_condition: 5,
-        take_profit_condition: 10,
-        time_in_market_condition: 13,
-        stop_loss: 10,
+        stop_loss_condition: 3,
+        take_profit_condition: 3,
+        time_in_market_condition: 5,
+        stop_loss: 15,
         take_profit: 20,
-        time_in_market: 21,
+        time_in_market: 34,
         name: '',
         total_capital: 1000000,
         commission: 0,
         rank_condition: 'WinRate',
         daily_limit: 3,
-        capital_allocate: 'Kelly',
-        capital_allocate_num: '',
-        signals: ['All']
+        capital_allocate: 'manual_input',
+        capital_allocate_num: 50,
+        signals: ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
       },
       rowUrl: null,
       btnLoading: false,
@@ -522,7 +528,7 @@ export default {
         {
           value: 'MA',
           label: 'MA',
-          check: true
+          check: false
         },
         {
           value: 'MAGap',
@@ -547,17 +553,17 @@ export default {
         {
           value: 'Shooting Star followed by a fall',
           label: 'Shooting Star followed by a fall',
-          check: true
+          check: false
         },
         {
           value: 'UpTrend Pattern',
           label: 'UpTrend Pattern',
-          check: true
+          check: false
         },
         {
           value: 'DownTrend Pattern',
           label: 'DownTrend Pattern',
-          check: true
+          check: false
         },
         {
           value: 'Optix #1',
@@ -592,7 +598,7 @@ export default {
         {
           value: 'LowPoints',
           label: 'LowPoints',
-          check: true
+          check: false
         },
         {
           value: 'RSI',
@@ -673,7 +679,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(3)
     this.generateCPMName()
   },
   methods: {
@@ -713,11 +719,11 @@ export default {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
-      this.$refs['SelectCheck'].handleoptionsAllChange(true)
+      this.$refs['SelectCheck'].handleoptionsAllChange(false)
 			Object.assign(this.$data, this.$options.data())
-      this.data.signals = ['All']
+      // this.data.signals = ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
       this.generateCPMName()
-      this.setBacktestHistory(1)
+      this.setBacktestHistory(3)
       this.$refs['Form'].clearValidate()
     },
     selected(signals){

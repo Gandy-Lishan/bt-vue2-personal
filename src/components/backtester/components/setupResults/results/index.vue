@@ -53,6 +53,11 @@ export default {
         // 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
         console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存')
         const editData = _this.$store.state.form.cachedScopedRowDataImmutable
+        if(editData?.uuid === 'UUID') {
+          _this.setResultsLoadingSetting(false, false, 0, 'Loading data...')
+          CIQ.hideCover()
+          return
+        }
         if (Object.keys(editData).length !== 0) {
           _this.backtestEditData = isJson(editData) ? JSON.parse(editData) : editData
           await _this.$refs.performanceChild.getResultData(editData,()=>{
