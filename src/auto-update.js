@@ -9,7 +9,7 @@ const timeData = 20 * 1000 // 检查间隔时间
 let hidden = false // 页面是否隐藏
 let setTimeoutId
 let needTip = true // 默认开启提示
-let needPrint = true
+let needPrint = false
  
 // 获取版本号
 const getVersion = async () => {
