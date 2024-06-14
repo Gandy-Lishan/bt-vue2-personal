@@ -154,7 +154,7 @@ export default {
 				let msg = res.detail.msg,
 				version = res.detail.version
 				this.$notify({
-					title: "New Update of Website Detectived",
+					title: "New Update of Website Detected",
 					duration: 0,
 					position: "bottom-right",
 					dangerouslyUseHTMLString: true,
