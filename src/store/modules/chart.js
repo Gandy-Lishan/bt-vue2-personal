@@ -1,4 +1,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import {
+    getAllMyIndicatorsList,
+} from '@/service/service.js'
 
 const state = {
 	curDate: '', //ai
@@ -52,24 +55,26 @@ const state = {
 	// studiesCount: 0,
 
 	// 以下管理user's own indicator chartiq 状态
+	/*********** START */
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
 
 	miFormWeightedList: [],
 	miBenmark: process.env.VUE_APP_DEFAULT_SYMBOL,
+	/******* END */
 
 	ma_color_1: ["#FF0000"],
     ma_color_2: ["#f59e0b"],
+
+	//用戶自定義symbolList, 緩存在vuex
+	mySymbolList: [],
 }
 
 const mutations = {
-	// updateStudiesCount(state, val){
-	// 	state.studiesCount = val
-	// },
-	// updateRocLikeCount(state, val){
-	// 	state.rocLikeCount = val
-	// },
+	SET_MYSYMBOLLIST(state,list){
+		state.mySymbolList = list
+	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
 	 */
@@ -255,17 +260,13 @@ const mutations = {
 }
 
 const actions = {
-	// update_roclike_count({ commit }, val) {
-	// 	return new Promise(resolve => {
-	// 		if(val == `add`){
-	// 			commit(`updateRocLikeCount`,state.rocLikeCount+1)
-	// 		}
-	// 		if(val == `remove`){
-	// 			commit(`updateRocLikeCount`,state.rocLikeCount-1)
-	// 		}
-	// 		resolve()
-	// 	})
-	// },
+	set_mysymbolist({ commit }, cb) {
+		return new Promise(async resolve => {
+			let res = await getAllMyIndicatorsList(1,cb)
+			commit('SET_MYSYMBOLLIST', res)
+			resolve()
+		})
+	},
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {

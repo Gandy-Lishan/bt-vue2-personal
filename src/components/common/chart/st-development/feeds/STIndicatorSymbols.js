@@ -81,9 +81,9 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 	maxResults,
 	cb
 ) {
+    var loader = document.querySelector(".loaderLookup");
+    if (loader) loader.show();  
     if (filter == 'ALL'){
-        var loader = document.querySelector(".loaderSearch");
-        if (loader) loader.show();  
         var resultsIndexsList = [];
         let indexsList = await loadIndexsList()
         let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
@@ -134,8 +134,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             resultsStocksList.sort(SortArray)
             res = resultsIndexsList.concat(resultsStocksList)
             cb(res);    
-        }  
-        loader.hide();  
+        } 
     }
     else if (filter == 'INDEXES'){
 			var results = [];
@@ -277,9 +276,10 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             results.sort(SortArray)    
             cb(results);
     } else if (filter == 'CUSTOM SYMBOL') {
+        const mySymbolList = CIQ.store.getters.getMySymbollist
+        debugger
         cb([])
-    }
-   
-
+    } 
+    loader.hide();  
 };
 export { CIQ };

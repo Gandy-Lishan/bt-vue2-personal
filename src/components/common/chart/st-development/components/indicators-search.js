@@ -404,6 +404,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
+            /**
+             * 
+             * @param {*} val   在點擊組件時加載favIndi和myIndi, 切換過濾器或者搜索都訪問存好的數組 
+             * @param {*} field 
+             */
             async updateFavIndicatorAndMyIndicator(val,field){
                 var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
