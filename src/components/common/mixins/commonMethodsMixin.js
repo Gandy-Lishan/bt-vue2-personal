@@ -1110,6 +1110,8 @@ export const CommonMethodsMixin = {
 			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
 
+			//兼容錯誤歷史版本上indicatorlayout沒有activatedTechLayout的情況
+			if(!data.activatedTechLayout) data.activatedTechLayout = []; // 初始化新数组
 			//兼容sample backtest普通Tech没有此属性的情况
 			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
 				if(!data.activatedMALayout) data.activatedMALayout = []
