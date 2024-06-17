@@ -195,14 +195,13 @@ let __js_webcomponents_lookup_ = (_exports) => {
             async updateMySymbol(val,field){
                 var loader = document.querySelector(".loaderLookup");
                     if (loader) loader.show();  
-
                     var filters = this.querySelector("cq-lookup-filters");
                     if (filters) var overlay = filters.querySelector(".overlay");
                     overlay.style.display = 'block'
                     // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
                     //     this.acceptText(val, field);
                     // })
-                    CIQ.store.dispatch('chart/set_mysymbolist',()=>{
+                    await CIQ.store.dispatch('chart/set_mysymbolist',()=>{
                         this.acceptText(val, field);
                     })
                     
