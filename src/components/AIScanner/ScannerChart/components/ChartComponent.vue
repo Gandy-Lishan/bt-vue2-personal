@@ -175,7 +175,7 @@ export default {
 			 return new Promise(async (resolve)=>{
 				// 默认显示signal indicator 和 tech indicator,如果没有就不显示
 				//if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
-					
+        const ma_color = this.$store.getters.getColorByCriteriaAndIndex(0, 0)
 				switch(this.other['_Signal']){
 					case "Symbol Close > its\' MA200 and Optix MA5 < 35":
 						await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
@@ -183,7 +183,7 @@ export default {
 							Period: 5,
 							display:"ST MA",
 							Field: this.symbolUrl
-						});
+						},{ MA: ma_color });
 						CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 							Period: 200,
 							Field: "Close"
@@ -206,7 +206,7 @@ export default {
 							Period: 10,
 							display:"ST MA",
 							Field: this.symbolUrl
-						});
+						},{ MA: ma_color });
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
 						
 						break;

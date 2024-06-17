@@ -192,7 +192,7 @@
 						</el-upload>
         </el-form-item>
       </div>
-      
+      <!-- <Uploader/> -->
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -302,6 +302,7 @@ import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
+import Uploader from "@/components/common/chart/st-development/components/Uploader"
 const throttle = require('lodash/throttle')
 
 export default {
@@ -314,6 +315,7 @@ export default {
   },
   components: {
     searchBar,
+    Uploader
   },
   data() {
     var validateSenti = (rule, value, callback) => {

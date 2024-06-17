@@ -470,7 +470,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         allFilters.forEach(async function (f) {
                             // 判断点击事件触发前是否激活了indicators-search
                             if(f.classList.contains("true")){
-                                
+                                console.log('updateFavIndicatorAndMyIndicator')
                                 // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
                                 await self.updateFavIndicatorAndMyIndicator(self.input.val(), f.innerHTML)
                                 self.acceptText(self.input.val(), f.innerHTML);

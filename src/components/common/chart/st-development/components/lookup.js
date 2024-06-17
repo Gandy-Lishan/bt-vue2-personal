@@ -1,4 +1,6 @@
-//import store from '../../../../src/store/store.ts'
+import {
+    getAllMyIndicatorsList,
+} from '@/service/service.js'
 let __js_webcomponents_lookup_ = (_exports) => {
 
     /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -188,6 +190,19 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 input.value = "";
             }
     
+            async updateMySymbol(val,field){
+                var loader = document.querySelector(".loaderLookup");
+                    if (loader) loader.show();  
+
+                    var filters = this.querySelector("cq-lookup-filters");
+                    if (filters) var overlay = filters.querySelector(".overlay");
+                    overlay.style.display = 'block'
+                    this.myIndicator = await getAllMyIndicatorsList(1,()=>{
+                        this.acceptText(val, field);
+                    })
+                    
+                overlay.style.display = 'none'
+            }
             initialize() {
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -208,25 +223,32 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     input.addEventListener("paste", function (e) {
                         var input = e.target;
                         setTimeout(function () {
-                            self.acceptText(input.value, self.currentFilter);
-                            
+                            self.acceptText(input.value, self.currentFilter);  
                         }, 0);
                     });
                 });
                 var filters = this.querySelector("cq-lookup-filters");
+
                 if (filters) {
                     var allFilters = filters.querySelectorAll("cq-filter");
 
-                    var lookupInput = document.querySelector("cq-lookup-input");
+                    const ciqSearchNode = document.querySelector(".ciq-nav")
+                    var lookupInput = ciqSearchNode.querySelector("cq-lookup-input");
+                    console.log('lookupInput initate',lookupInput)
                     CIQ.UI.stxtap(lookupInput, function () {
-                        allFilters.forEach(function (f) { 
+                        if(document.querySelector('.ciq-search').active) return;
+                        console.log('!!!!!!!!!!stxtap',lookupInput)
+                        allFilters.forEach(async function (f) { 
                             if(f.classList.contains("true")){    
+                                // 激活look bar前更新列表，之后的切换和搜索读vuex
+                                //await self.updateMySymbol(self.input.val(), f.innerHTML)
                                 self.acceptText(self.input.val(), f.innerHTML);
                             }
                         });
                     });
                     var comparisonInput = document.querySelector(".cq-comparison-new")
                     CIQ.UI.stxtap(comparisonInput, function () {
+                        console.log('!!!!!!!!!!stxtap comparisonInput')
                         allFilters.forEach(function (f) { 
                             if(f.classList.contains("true")){    
                                 self.acceptText(self.input.val(), f.innerHTML);
@@ -639,7 +661,10 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 <cq-filter>STOCKS</cq-filter>
                 <cq-filter>INDEXES</cq-filter>
                 <cq-filter>MY FAVORITES</cq-filter>
+                <cq-filter>CUSTOM SYMBOL</cq-filter>
+                <div class="overlay"></div>
                 </cq-lookup-filters>
+                <cq-uploader cq-no-close></cq-uploader>
                 <cq-scroll></cq-scroll>
                 <cq-loader class="loaderLookup"></cq-loader>
             </cq-lookup-results>  

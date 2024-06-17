@@ -23,6 +23,8 @@
 				<div class="icon-toggles ciq-toggles">
 					<cq-menu class="ciq-search">
 						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+					</cq-menu>
+					<cq-menu>
 						<div class='symbol-up'></div>
 					</cq-menu>
 					<cq-menu class="ciq-indicators-search">
@@ -442,16 +444,16 @@ export default class AdvancedChartComponent extends Vue {
 			this.initializeToggle(uiContext.stx)
 			this.createResizeListener()
 
-			// this.symbolMutationObserver()
+			this.symbolMutationObserver()
 
-			var uploader = document.querySelector('.symbol-up')
-			if(uploader){
-				const UploaderVueComponent = Vue.extend(UploaderVue);
-					new UploaderVueComponent({
-						store: this.$store,
-						router: this.$router, // 如果你有 router 也可以传递
-					}).$mount(uploader);
-			}
+			// var uploader = document.querySelector('.symbol-up')
+			// if(uploader){
+			// 	const UploaderVueComponent = Vue.extend(UploaderVue);
+			// 		new UploaderVueComponent({
+			// 			store: this.$store,
+			// 			router: this.$router, // 如果你有 router 也可以传递
+			// 		}).$mount(uploader);
+			// }
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -592,23 +594,14 @@ export default class AdvancedChartComponent extends Vue {
 		const uploader = document.querySelector('.symbol-uploader')
 		if(uploader) return
 			if (node) {
-				// 創建一個新的 cq-filter 元素
-				const uploader = document.createElement('div');
-				// 在 cq-lookup-filters 後面插入新的 cq-filter 元素
-				node.insertAdjacentElement('afterend', uploader);
-
-						// Dynamically create and insert the component
-					//const myComponentVNode = this.$createElement(UploaderVue);
-					// // Create a new Vue instance to render the VNode
-					// new Vue({
-					// 	render: h => h(UploaderVue),
-					// }).$mount(uploader);
 					const UploaderVueComponent = Vue.extend(UploaderVue);
-					new UploaderVueComponent({
+					const instance = new UploaderVueComponent({
 						store: this.$store,
 						router: this.$router, // 如果你有 router 也可以传递
-					}).$mount(uploader);
-
+					}).$mount();
+					
+					// 将 Vue 组件的根元素插入到 node 内部，而不是替换 node 本身
+					node.appendChild(instance.$el);
 			}
 		}
 	symbolMutationObserver(){
@@ -618,43 +611,11 @@ export default class AdvancedChartComponent extends Vue {
 		// 配置观察选项
 		const config = { childList: true, subtree: true };
 		var _this = this
-		// 创建一个回调函数来执行当变动发生时
-		// const callback = function(mutationsList, observer) {
-		// 	for(let mutation of mutationsList) {
-		// 		if (mutation.type === 'childList') {
-		// 			// 检查是否有 class 为 'symbol-upload' 的元素
-		// 			let ciqSearchElement = document.querySelector('.ciq-search');
-		// 			let node2 = document.querySelector('.cq-comparison-new');
-		// 			console.log('symbol-upload element has been rendered',ciqSearchElement);
-		// 			if (ciqSearchElement) {
-		// 				const classObserver = new MutationObserver(function(classMutations) {
-		// 				for(let classMutation of classMutations) {
-		// 						if (classMutation.attributeName === 'class') {
-		// 							if (ciqSearchElement.classList.contains('stxMenuActive')) {
-		// 								_this.initializeSymbolUploader(ciqSearchElement)
-		// 								console.log('ciq-search has activated class');
-		// 							} else {
-		// 								console.log('ciq-search does not have activated class');
-		// 							}
-		// 						}
-		// 					}
-		// 				});
-
-		// 				// 設置 class 變化的觀察選項
-		// 				classObserver.observe(ciqSearchElement, { attributes: true });
-
-		// 				// 一旦找到了 'ciq-search' 元素，就可以停止觀察
-		// 				observer.disconnect();
-		// 			}
-		// 		}
-		// 	}
-		// };
-
 		const callback = function(mutationsList, observer) {
 			for(let mutation of mutationsList) {
 				if (mutation.type === 'childList') {
 					// 检查是否有 class 为 'symbol-upload' 的元素
-					let cqLookupFiltersElement = document.querySelector('cq-lookup-filters');
+					let cqLookupFiltersElement = document.querySelector('cq-uploader');
 					console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
 					if (cqLookupFiltersElement) {	
 						_this.initializeSymbolUploader(cqLookupFiltersElement)
@@ -662,16 +623,6 @@ export default class AdvancedChartComponent extends Vue {
 						observer.disconnect();
 						break;
 					}
-
-					// let cqLookupFiltersElements = document.getElementsByTagName('cq-lookup-filters')
-					// console.log('symbol-upload element has been rendered',cqLookupFiltersElements);
-					// if(cqLookupFiltersElements.length != 0){
-					// 	for(var el = 0;el<cqLookupFiltersElements.length;el++){ 
-					// 		_this.initializeSymbolUploader(cqLookupFiltersElements[el])
-					// 	}
-					// 	// 一旦找到了 'ciq-search' 元素，就可以停止觀察
-					// 	observer.disconnect();
-					// }
 				}
 			}
 		};
