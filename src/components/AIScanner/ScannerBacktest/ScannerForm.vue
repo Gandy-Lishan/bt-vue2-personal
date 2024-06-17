@@ -723,7 +723,7 @@ debugger
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
         this.$refs['SelectCheck'].handleoptionsAllChange(true)
-        Object.assign(this.$data, this.$options.data())
+        this.$refs['Form'].resetFields()
         this.generateCPMName()
         this.setBacktestHistory(6)
         this.$refs['Form'].clearValidate()
