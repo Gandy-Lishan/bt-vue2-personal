@@ -91,13 +91,13 @@ export default {
 			}
 		}
 		const email = getCookieData()?.username;
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jaclyn.wu@monicfinancial.com', 'eve@sentimentrader.com', 'jinjing@elixiroftechnology.com'];
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jaclyn.wu@monicfinancial.com', 'eve@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'shhenryw@gmail.com'];
 		const userID = Cookies.get('devbt2Userid');
 		let role = 'client';
 		let isAdmin = false;
 
 		if (allowedUserList.includes(email) || userID === 'analyst') {
-				role = email === 'jaclyn.wu@monicfinancial.com' || email === 'eve@sentimentrader.com' || email === 'jinjing@elixiroftechnology.com' ? 'client' : 'analyst';
+				role = email === 'jaclyn.wu@monicfinancial.com' || email === 'eve@sentimentrader.com' || email === 'jinjing@elixiroftechnology.com' || email === 'shhenryw@gmail.com' ? 'client' : 'analyst';
 				isAdmin = true;
 		} else if (userID === 'system') {
 				role = 'system';
