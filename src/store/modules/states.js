@@ -13,12 +13,12 @@ const state = {
 	cacheReRunData: {},
 	isCreateLoading: false,
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
-	chartPanelHeight: 680,
+	symbolUploadDomActive: false,
 }
 
 const mutations = {
-	SET_CHART_PANEL_HEIGHT(state,val) {
-		state.chartPanelHeight = val
+	DETECT_SYMBOL_UPLOAD_DOM(state,val) {
+		state.symbolUploadDomActive = val
 	},
     SET_SCANNERAI_FILTER_STATE(state,obj) {
 		state.scannerai_filter = obj
@@ -57,13 +57,10 @@ const mutations = {
 }
 
 const actions = {
-	set_chart_panel_height({commit}, type){
+	detect_symbol_upload_dom({commit}){
 		return new Promise(resolve=>{
-			if(type == 'grow'){
-				commit('SET_CHART_PANEL_HEIGHT',state.chartPanelHeight + 80)
-			}else if(type == 'shrink'){
-				commit('SET_CHART_PANEL_HEIGHT',state.chartPanelHeight - 80)
-			}
+			let node = document.querySelector('.symbol-upload')
+			commit('DETECT_SYMBOL_UPLOAD_DOM',Boolean(node))
 			resolve();
 		})
 	},
