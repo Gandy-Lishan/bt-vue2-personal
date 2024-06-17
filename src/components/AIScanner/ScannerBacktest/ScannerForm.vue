@@ -372,12 +372,16 @@
             <label>
             14. Capital Allocate
             <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Funds allocation method. Choosing the Kelly formula<br/>
-                 allows the system to dynamically adjust fund allocation<br/>
-                  based on strategy performance. Selecting maximum <br/>
-                  capital allocation per trade enables you to manually <br/>
-                  specify the maximum capital allocation for each trade.</span>
+              <span slot="content">
+                Manual Input: This refers to entering a<br/> 
+                trade using a percentage of the cash <br/>
+                remaining in the account.<br/>
+                Auto Allocation: This involves <br/>
+                calculating the proportion of capital to <br/>
+                be used for entering trades on a given day, <br/>
+                based on the information of selected stocks for that day, <br/>
+                using the Kelly Criterion (Kelly Formula).
+              </span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
