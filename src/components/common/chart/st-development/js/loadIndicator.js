@@ -315,11 +315,11 @@
  /** global symbol loading function, 
   * including chart initation,lookup component, addSymbol from setup form*/
  CIQ.addSymbol = async function(symbol,stx,callback){
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    if(!stockName && !indexName){
-        return
-    }
+    // let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    // let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    // if(!stockName && !indexName){
+    //     return
+    // }
     /** addIndicators会读取存入的symbol并用于loadChart */
     CIQ.store.commit('form/getBacktestSymbol',symbol)
 

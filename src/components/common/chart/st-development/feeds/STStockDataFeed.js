@@ -48,8 +48,14 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 quoteFeedSimulator.url = config.pairDataUrl;
 
 quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
+    let symbol = CIQ.symbol
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
         var queryUrl = this.url + 
-        "?symbol=" + CIQ.symbol + 
+        "?symbol=" + symbol + 
         new_str +
         "&start="+start+
         "&end=" + end +
@@ -74,7 +80,7 @@ quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
             var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
             var count=0;
             for(var item in favoriteSymbolList){
-                if(favoriteSymbolList[item] == CIQ.symbol){
+                if(favoriteSymbolList[item] == symbol){
                     // del
                     div.style.cssText = "width: 188px;height: 35px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #409EFF;color: white;font-family: Helvetica, sans-serif;cursor:pointer"
                     div.innerHTML = "<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#FFFFFF'></path></svg><span>Remove from favorites</span></div>";
@@ -642,85 +648,84 @@ quoteFeedSimulator.formatChartData = async function(response){
             } 
         }
     }catch(err){}
-    // 可以封装成promise
-    //return new Promise(async(resolve)=>{
-        if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
-            /********************lishan modify start*************************/
-            for (const j in CIQ.objIndicator) {
-                const indicator = CIQ.objIndicator[j];
-            
-                // 进行 symbol 和 senti 判断，如果需要的话
-                // if (indicator.includes('symbol')) {
-                //     // 进行相应操作
-                // }
-                // if (indicator.includes('senti')) {
-                //     // 进行相应操作
-                // }
-            
-                if (CIQ.isUserIndicator(indicator)) {
-                    const [name, hash] = indicator.split(/HASH/);
-                    const res = await config.csvFileRead(name, hash);
-                    const datafeed = res.data.data.csv_content;
-            
-                    const sortedRows = datafeed.sort(
-                        (a, b) => new Date(a.DT) - new Date(b.DT)
-                    );
-            
-                    for (const i in sortedRows) {
-                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
-                        if (index == -1) {
-                            continue;
-                        }
-                        if (objIndicatorFirstDate[indicator] == null) {
-                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
-                        }
-                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+
+    if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
+        /********************lishan modify start*************************/
+        for (const j in CIQ.objIndicator) {
+            const indicator = CIQ.objIndicator[j];
+        
+            // 进行 symbol 和 senti 判断，如果需要的话
+            // if (indicator.includes('symbol')) {
+            //     // 进行相应操作
+            // }
+            // if (indicator.includes('senti')) {
+            //     // 进行相应操作
+            // }
+        
+            if (CIQ.isUserIndicator(indicator)) {
+                const [name, hash] = indicator.split(/HASH/);
+                const res = await config.csvFileRead(name, hash);
+                const datafeed = res.data.data.csv_content;
+        
+                const sortedRows = datafeed.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+        
+                for (const i in sortedRows) {
+                    const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                    if (index == -1) {
+                        continue;
                     }
-                }
-                if (CIQ.isOwnIndicator(indicator)) {
-                    const [_, url] = indicator.split(/CREATE/);
-                    let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
-                    if(!datafeed){
-                        
-                        const res = await config.getMyIndicatorData(url);
-                        if(res.data.code == 404) {
-                            _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
-                            setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); // 2000毫秒 = 3秒
-                        }
-                        datafeed = res.data.data;
-                        // 暂存
-                        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
-                    }               
-            
-                    let sortedRows = datafeed.sort(
-                        (a, b) => new Date(a.DT) - new Date(b.DT)
-                    );
-                    const appendStr = data[data.length-1].DT.indexOf('000Z') == -1 ? '.000' : '.000Z'
-                    sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + appendStr }));
-                    
-                    for (const i in sortedRows) {
-                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
-                        if (index == -1) {
-                            continue;
-                        }
-                        if (objIndicatorFirstDate[indicator] == null) {
-                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
-                        }
-                    
-                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+                    if (objIndicatorFirstDate[indicator] == null) {
+                        objIndicatorFirstDate[indicator] = newQuotes[index].DT;
                     }
-                    
+                    newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                 }
             }
-            /********************lishan modify end*************************/
-            // 停用数据截断，因为technical indicator不能被截断
-            // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
-            // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
+            if (CIQ.isOwnIndicator(indicator)) {
+                const [_, url] = indicator.split(/CREATE/);
+                let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
+                if(!datafeed){
+                    
+                    const res = await config.getMyIndicatorData(url);
+                    if(res.data.code == 404) {
+                        _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
+                        setTimeout(() => {
+                            window.location.reload();
+                            }, 2000); // 2000毫秒 = 3秒
+                    }
+                    datafeed = res.data.data;
+                    // 暂存
+                    localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
+                }               
+        
+                let sortedRows = datafeed.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+                const appendStr = data[data.length-1].DT.indexOf('000Z') == -1 ? '.000' : '.000Z'
+                sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + appendStr }));
+                
+                for (const i in sortedRows) {
+                    const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                    if (index == -1) {
+                        continue;
+                    }
+                    if (objIndicatorFirstDate[indicator] == null) {
+                        objIndicatorFirstDate[indicator] = newQuotes[index].DT;
+                    }
+                
+                    newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+                }
+                
+            }
         }
-    //})
+        /********************lishan modify end*************************/
+        // 停用数据截断，因为technical indicator不能被截断
+        // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
+        // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
+    }
 
+    debugger
     return newQuotes
 }
 
