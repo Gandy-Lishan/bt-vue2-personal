@@ -1358,4 +1358,18 @@ export function symbolCsvFileDelete(fileID) {
 			})
 	})
 }
+export function getSymbolCsv(fileID) {
+	const url = `/dev/user_upload/symbolcsvread/?url=${fileID}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /** MySymbol 接口END */

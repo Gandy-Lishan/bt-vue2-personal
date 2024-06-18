@@ -69,9 +69,13 @@ const state = {
 
 	//用戶自定義symbolList, 緩存在vuex
 	mySymbolList: [],
+	mySymbolQuotefeedCache: [],
 }
 
 const mutations = {
+	SET_MYSYMBOL_QUOTEFEED_CACHE(state,list){
+		state.mySymbolQuotefeedCache = list
+	},
 	SET_MYSYMBOLLIST(state,list){
 		state.mySymbolList = list
 	},
@@ -260,6 +264,27 @@ const mutations = {
 }
 
 const actions = {
+	get_mySymbolCSV({ commit }, url) {
+		return new Promise(async (resolve,reject) => {
+			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url)
+			if(!quote){
+				try{
+					const res = await getSymbolCsv(url)
+					debugger
+					const csvContent = res.data.csv_content
+					
+					commit('SET_MYSYMBOL_QUOTEFEED_CACHE', [...state.mySymbolQuotefeedCache, {
+						url: url,
+						quotes: csvContent
+					}])
+					resolve(csvContent)
+				}catch(err){
+					reject(err)
+				}
+			}
+			resolve(quote.quotes)
+		})
+	},
 	set_mysymbolist({ commit }, cb) {
 		return new Promise(async resolve => {
 			let res = await getAllMySymbolsList(1,cb)
