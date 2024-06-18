@@ -1795,16 +1795,12 @@ export default {
       try {
         await csvFileDelete(fileID)
         console.log('删除成功')
-        const index = this.fileList.indexOf(file)
-        if (index !== -1) {
-          this.fileList.splice(index, 1)
-        }
-        this.$refs.upload.clearFiles();
-        this.fileList = []
-
         this.clearUserOwnIndicatorSelect()
       } catch (error) {
         console.log('删除失败', error)
+      } finally {
+        this.$refs.upload.clearFiles();
+        this.fileList = []
       }
     },
     handlePreview(file) {

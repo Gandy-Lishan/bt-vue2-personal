@@ -1,3 +1,6 @@
+import {
+	symbolCsvFileDelete,
+} from '@/service/service'
 let __js_webcomponents_lookup_ = (_exports) => {
 
     /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -153,6 +156,22 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 function closure(results) {
                     self.params.driver.exchanges = restoredExchanges;
                     self.results(results);
+
+                    var stClose = self.getElementsByClassName("st-close")
+                    if(filter == 'CUSTOM SYMBOL'){
+                        for(var el = 0;el<stClose.length;el++){     
+                            const _result = results
+                            const _el = el
+                            CIQ.UI.stxtap(stClose[el],async ()=>{
+                                try {
+                                    await symbolCsvFileDelete(_result[_el].data.symbol)
+                                    console.log('删除成功')
+                                } catch (error) {
+                                    console.log('删除失败', error)
+                                }
+                            });       
+                        }               
+                    }
                 }
                 var exchanges = this.getAttribute("cq-exchanges");
                 if (exchanges) this.params.driver.exchanges = exchanges.split(",");
@@ -551,6 +570,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         self.input[0].value = "";
                     };
                 }
+
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
                 for (var i = 0; i < arr.length; i++) {
@@ -560,6 +580,10 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     for (var j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
+                    if(this.currentFilter == 'CUSTOM SYMBOL'){
+                        nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
+                    }
+
                     var node = document.createElement("cq-item");
                     node.innerHTML = nodeText;
                     this.resultList.append(node);

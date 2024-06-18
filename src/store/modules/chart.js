@@ -1,6 +1,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-    getAllMyIndicatorsList,
+    getAllMySymbolsList,
 } from '@/service/service.js'
 
 const state = {
@@ -262,7 +262,7 @@ const mutations = {
 const actions = {
 	set_mysymbolist({ commit }, cb) {
 		return new Promise(async resolve => {
-			let res = await getAllMyIndicatorsList(1,cb)
+			let res = await getAllMySymbolsList(1,cb)
 			commit('SET_MYSYMBOLLIST', res)
 			resolve()
 		})

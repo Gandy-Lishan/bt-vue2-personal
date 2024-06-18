@@ -184,7 +184,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     var results = results
                     self.results(results);
                     
-                    var stClose = document.getElementsByClassName("st-close")
+                    var stClose = self.getElementsByClassName("st-close")
                     if(filter == 'MY FAVORITES'){
                         for(var el = 0;el<stClose.length;el++){     
                             var removeFavorite = function(data){

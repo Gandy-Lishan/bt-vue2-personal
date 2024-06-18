@@ -276,9 +276,22 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             results.sort(SortArray)    
             cb(results);
     } else if (filter == 'CUSTOM SYMBOL') {
+        var results = []
         const mySymbolList = CIQ.store.getters.getMySymbollist
-        debugger
-        cb([])
+        mySymbolList.forEach(element => {
+            var item = {
+                symbol: element.url,
+                name: element.name,
+                exchDisp: ""
+            }
+            
+
+            results.push({
+                display: [item.name, item.name, item.exchDisp],
+                data: item
+            });
+        }); 
+        cb(results)
     } 
     loader.hide();  
 };

@@ -89,27 +89,27 @@
 				style="margin-top: 20px; max-height: 400px; overflow-y: auto"
 			>
 				<el-table-column label="Date" prop="Date"></el-table-column>
+				<el-table-column label="Open" prop="Open"></el-table-column>
+				<el-table-column label="High" prop="High"></el-table-column>
+				<el-table-column label="Low" prop="Low"></el-table-column>
 				<el-table-column label="Close" prop="Close"></el-table-column>
+				<el-table-column label="Volume" prop="Volume"></el-table-column>
 			</el-table>
 		</el-dialog>
 	</div>
 </template>
     
     <script>
-import SparkMD5 from 'spark-md5'
+// import SparkMD5 from 'spark-md5'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-	csvFileDelete,
-	csvFileRead,
+	symbolCsvFileDelete,
 	getPairData,
-	csvFilePagingRead
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
 import {
 	compareArrays,
-	formatStandardTime,
-	capitalizeFirstLetter
 } from '@/utils'
 import moment from 'moment'
 
@@ -149,7 +149,7 @@ export default {
 				dialogValid: false
 			},
 			rawMap: {}, // 文件对象的 raw 属性备份
-			file_hash: '',
+			// file_hash: '',
 			nonBusinessTitle: 'Non-trading day schedule in CSV',
 			nonBusinessDay: [],
 			nonBusinessDialogVisible: false,
@@ -230,7 +230,8 @@ export default {
 			const name = file.name.replace(`.${suffix}`, '')
 			const fileName = name.replace(/\s*/g, '')
 			formData.append('name', fileName)
-			formData.append('hash', file.hash)
+			formData.append('type', 'symbol')
+			// formData.append('hash', file.hash)
 			formData.append('suffix', suffix)
 			formData.append('file', file)
 
@@ -255,9 +256,11 @@ export default {
 
 					// 文件上传完成后的处理逻辑
 					console.log('文件上传成功', response)
-					const { status, error } = response.data
+					const { code, data, error } = response.data
 					// 还原文件对象的 raw 属性
-					if (status == 200 || status == 201) {
+					if (code == 200 || code == 201) {
+						// 文件上傳成功後把對應file in list加上url屬性用於delete時作爲參數傳入
+						file.url = JSON.parse(data).url
 						self.$notify.success({
 							title: 'Tips',
 							message:
@@ -301,27 +304,21 @@ export default {
 			console.log('处理删除', file)
 			// 备份文件对象的 raw 属性
 			this.rawMap[file.uid] = this.rawMap[file.uid] || file.raw
-			// 发送请求删除服务器上的文件
-			const hash = this.file_hash || file.hash
-			const fileID = file.name.replace('.csv', '') + 'HASH' + hash
-			if (!hash) {
+			
+			if(!file.url) {	
+				// 如果是校驗失敗則直接移除文件並清空fileList
 				this.$refs.upload.clearFiles()
-				this.fileList = []
-				return
+			 	this.fileList = []
+			 	return
 			}
 			try {
-				await csvFileDelete(fileID)
+				await symbolCsvFileDelete(file.url)
 				console.log('删除成功')
-				const index = this.fileList.indexOf(file)
-				if (index !== -1) {
-					this.fileList.splice(index, 1)
-				}
-				this.$refs.upload.clearFiles()
-				this.fileList = []
-
-				//this.clearUserOwnIndicatorSelect()
 			} catch (error) {
 				console.log('删除失败', error)
+			} finally {
+				this.$refs.upload.clearFiles()
+				this.fileList = []
 			}
 		},
 		handleExceed(files, fileList) {
@@ -395,7 +392,6 @@ export default {
 				try {
 					await this.validateCSV(file)
 					await this.handleParseResult(this.csvContent, file)
-					debugger
 				} catch (error) {
 					console.log(error)
 					throw Error()
@@ -455,7 +451,7 @@ export default {
 						const blob = file.slice(0, file.size, file.type)
 						const newFile = new File([blob], newFileName, { type: file.type })
 						newFile.uid = file.uid
-						newFile.hash = this.file_hash
+						// newFile.hash = this.file_hash
 						this.fileList.splice(-1, 1, newFile)
 						this.dialogValid = true
 						this.dialogFormVisible = false
@@ -484,9 +480,9 @@ export default {
 				const reader = new FileReader()
 				reader.onload = (e) => {
 					const content = e.target.result
-					const hash = SparkMD5.hashBinary(reader.result)
-					file.hash = hash
-					self.file_hash = hash
+					// const hash = SparkMD5.hashBinary(reader.result)
+					// file.hash = hash
+					// self.file_hash = hash
 					const rows = content.trim().split('\n')
 					const headers = rows[0].trim().split(',')
 					const lines = content.split('\n')
@@ -729,8 +725,6 @@ export default {
 			// 计算时间间隔
 			const startDate = dateData[0]
 			const endDate = dateData[dateData.length - 1]
-			console.log('🚀', this.$store)
-			debugger
 			const frequency =
 				this.$store.state.form.backtestInfo.frequency.toLowerCase()
 			if (frequency !== 'daily') {
@@ -830,7 +824,7 @@ export default {
 			})
 			filteredFile.raw = rawValue
 			filteredFile.uid = file.uid
-			filteredFile.hash = file.hash
+			// filteredFile.hash = file.hash
 			console.log('file', file)
 			console.log('filteredFile', filteredFile)
 			this.form.indicatorName = filteredFile.name.replace('.csv', '')
@@ -858,39 +852,6 @@ export default {
 
 			return data
 		},
-		async autoFillUserIndicator(data) {
-			let userIndicator = data.file_name
-			this.userIndicator = userIndicator
-
-			const response = await csvFileRead(userIndicator, data.hash)
-
-			// 还原文件对象的 raw 属性
-			const res = response.data.data.csv_content
-			let fileData = []
-			try {
-				fileData = res.map((item) => ({
-					Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: '2-digit',
-						day: '2-digit'
-					}),
-					Close: item.indicator_Close
-				}))
-
-				const csvData =
-					'Date,Close\n' +
-					fileData.map((item) => `${item.Date},${item.Close}`).join('\n')
-				const base64Data = btoa(csvData) // 编码为 Base64
-				const rawValue = `data:text/csv;base64,${base64Data}`
-				const file = new File([csvData], `${userIndicator}.csv`, {
-					type: 'text/csv'
-				})
-				file.raw = rawValue
-				this.fileList.splice(-1, 1, file)
-			} catch (error) {
-				console.log('error', error)
-			}
-		}
 	}
 }
 </script>
