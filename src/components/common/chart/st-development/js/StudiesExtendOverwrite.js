@@ -29,6 +29,7 @@ import {__js_advanced_studies_moneyFlow_} from "./advance-studies/moneyFlow.js"
 import {__js_advanced_studies_keltner_} from "./advance-studies/keltner.js"
 import {__js_advanced_studies_priceVolumeOscillator_} from "./advance-studies/priceVolumeOscillator.js"
 import {__js_advanced_studies_primeNumber_} from "./advance-studies/primeNumber.js"
+import {__js_advanced_studies_pring_} from "./advance-studies/pring.js"
 
 
 let extendOverwrite = () => {
@@ -71,7 +72,8 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_moneyFlow_,
 			__js_advanced_studies_keltner_,
 			__js_advanced_studies_priceVolumeOscillator_,
-			__js_advanced_studies_primeNumber_
+			__js_advanced_studies_primeNumber_,
+			__js_advanced_studies_pring_,
 		)
 
 
