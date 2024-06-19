@@ -5,9 +5,7 @@
 import {config}  from "./STDataFeedAccessUrl.js";
 // import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
-import axios from "axios"
-import { result } from "lodash";
-import { createStateFilter } from '@/utils'
+import { createStateFilter,encodeBase64 } from '@/utils'
 
 CIQ.activateImports(quoteFeed, symbolLookupBase); // so we can use CIQ.inheritsFrom
 /**
@@ -279,8 +277,9 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         var results = []
         const mySymbolList = CIQ.store.getters.getMySymbollist
         mySymbolList.forEach(element => {
+            // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
             var item = {
-                symbol: element.url,
+                symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                 name: element.name,
                 exchDisp: ""
             }

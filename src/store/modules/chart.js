@@ -1,7 +1,8 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-    getAllMySymbolsList,
+    getAllMySymbolsList,getSymbolCsv
 } from '@/service/service.js'
+import {Toast} from '@/utils'
 
 const state = {
 	curDate: '', //ai
@@ -264,27 +265,41 @@ const mutations = {
 }
 
 const actions = {
-	get_mySymbolCSV({ commit }, url) {
+	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
+	get_mysymbolCSV({ commit }, url) {
 		return new Promise(async (resolve,reject) => {
 			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url)
+			debugger
 			if(!quote){
 				try{
 					const res = await getSymbolCsv(url)
-					debugger
-					const csvContent = res.data.csv_content
-					
-					commit('SET_MYSYMBOL_QUOTEFEED_CACHE', [...state.mySymbolQuotefeedCache, {
-						url: url,
-						quotes: csvContent
-					}])
-					resolve(csvContent)
+					if (res.data.status === 200 || res.data.status === 201) {
+						const csvContent = res.data.data.csv_content
+						commit('SET_MYSYMBOL_QUOTEFEED_CACHE', [...state.mySymbolQuotefeedCache, {
+							url: url,
+							quotes: csvContent
+						}])
+						resolve(csvContent)
+					}else if (res.data.status === 401) {
+						Toast('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds',2000)
+						setTimeout(() => {
+							window.location.reload();
+						}, 2000); // 2000毫秒 = 3秒
+						reject(new Error('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds'));
+					} else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.data.status}`));
+					}
 				}catch(err){
 					reject(err)
 				}
+			}else{
+				resolve(quote.quotes)
 			}
-			resolve(quote.quotes)
 		})
 	},
+	// 獲取mysymbol列表包括url和name etc.
 	set_mysymbolist({ commit }, cb) {
 		return new Promise(async resolve => {
 			let res = await getAllMySymbolsList(1,cb)

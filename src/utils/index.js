@@ -111,7 +111,7 @@ const Toast = (msg,duration) => {
   duration=isNaN(duration)?3000:duration  
   var m = document.createElement('div')  
   m.innerHTML = msg  
-  m.style.cssText="font-size: 1rem;color: rgb(255, 255, 255);background-color: rgba(0, 0, 0, 0.6);padding: 10px 15px;margin: 0 0 0 -60px;border-radius: 4px;position: fixed;    top: 50%;left: 50%;width: 130px;text-align: center;"
+  m.style.cssText="font-size: 1rem;color: rgb(255, 255, 255);background-color: rgba(0, 0, 0, 0.6);padding: 10px 15px;margin: 0 0 0 -60px;border-radius: 4px;position: fixed;    top: 50%;left: 50%;width: 130px;text-align: center;z-index: 999;"
   document.body.appendChild(m)  
   setTimeout(function() {  
       var d = 0.5
@@ -305,4 +305,12 @@ const printConsole = (...content) => {
   }
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl, createStateFilter, printConsole}
+const encodeBase64 = (str) => {
+  return btoa(encodeURIComponent(str));
+}
+
+const decodeBase64 = (str) => {
+  return decodeURIComponent(atob(str));
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl, createStateFilter, printConsole,encodeBase64,decodeBase64}

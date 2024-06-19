@@ -8,7 +8,7 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
-import {recoverSymbolOptixUrl} from '@/utils'
+import {recoverSymbolOptixUrl,decodeBase64} from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -31,7 +31,18 @@ function getCachedData(url) {
 quoteFeedSimulator.sendAjax = async function (url, cb) {
     let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.stxx.chart.symbol)
     let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.stxx.chart.symbol)
-    CIQ.stxx.chart.symbolDisplay = stockName?stockName?.name:indexName?.name
+    //CIQ.stxx.chart.symbolDisplay = stockName?stockName?.name:indexName?.name
+    if (stockName) {
+        CIQ.stxx.chart.symbolDisplay = stockName?.name;
+    } else if (indexName) {
+        CIQ.stxx.chart.symbolDisplay = indexName?.name;
+    } else {
+        // 第三种情况：既不是 stockName 也不是 indexName，可能是custom symbol
+        try {
+            CIQ.stxx.chart.symbolDisplay = decodeBase64(CIQ.stxx.chart.symbol.split('||')[0]);
+        } catch (error) {}  
+    }
+
     try{
         const res = await getCachedData(url)
         if(res.status==200){
@@ -557,96 +568,148 @@ quoteFeedSimulator.formatChartData = async function(response){
     }
 
     try{
-        if('High' in data[0]){
-            
-            for (var i = 0; i < data.length; i++) {
-                newQuotes[i] = {};
-                
-                var datatime = new Date(data[i].DT)
-                
-                var offset = datatime.getTimezoneOffset() * 60 * 1000
-                
-                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
-                
-                newQuotes[i].Open = data[i].Open;
-                newQuotes[i].High = data[i].High;
-                newQuotes[i].Low = data[i].Low;
-                newQuotes[i].Close = data[i].Close;
-                newQuotes[i].Volume = data[i].Volume;
-                
-                // 默认加载 ‘aapl’，它没有indicator，跳过
-                if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
-                for(var j in CIQ.objIndicator){
-                    var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+        let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.symbol)
+        let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.symbol)
+        if(!stockName && !indexName){
+            // 可能是custom symbol
+                const url = decodeBase64(CIQ.symbol.split('||')[1])
+                let res
+                try {
+                    res = await CIQ.store.dispatch('chart/get_mysymbolCSV',url)
+                } catch (err) {console.error(err)}
+                let sortedRows = res.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+                console.time('Execution Time');
+                // 将 data 数组转化为以日期为键的字典
+                const dataDict = {};
+                data.forEach(item => {
+                    dataDict[item.DT] = item;
+                });
+                for (const i in sortedRows) {
+                    newQuotes[i] = {};
+                    newQuotes[i].DT = sortedRows[i].DT
+                    newQuotes[i].Open = Number(sortedRows[i].Open);
+                    newQuotes[i].High = Number(sortedRows[i].High);
+                    newQuotes[i].Low = Number(sortedRows[i].Low);
+                    newQuotes[i].Close = Number(sortedRows[i].Close);
+                    newQuotes[i].Volume = Number(sortedRows[i].Volume);
 
-                    newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
-                    // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
-                    if(data[i][str] != null){
-                        if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
-                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
-                    }else{
-                        if(i==0){
-                            newQuotes[i][CIQ.objIndicator[j]] = null;
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+                        //let matchedItem = data.find(item=>item.DT == sortedRows[i].DT)
+                        let matchedItem = dataDict[sortedRows[i].DT]
+                        newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(matchedItem){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
                         }else{
-                            //console.log('indicator值出现空值',data[i])
-                            newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                //console.log('indicator值出现空值',data[i])
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
                         }
-                    }
+                    } 
                 }
-            } 
-            
-            var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
-            for(var i = 0;i < node.children.length;i++){
-                node.children[i].style.display = "inherit"
-            }
+                console.timeEnd('Execution Time');
         }else{
-            for (var i = 0; i < data.length; i++) {
-                newQuotes[i] = {};
-
-                var datatime = new Date(data[i].DT)
-
-                var offset = datatime.getTimezoneOffset() * 60 * 1000
-                
-                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
-    
-                newQuotes[i].Open = data[i].Close;
-                newQuotes[i].High = data[i].Close;
-                newQuotes[i].Low = data[i].Close;
-                newQuotes[i].Close = data[i].Close;
-                
-                if(data[i].Volume){
-                    newQuotes[i].Volume = data[i].Volume
-                }
-
-                // 默认加载 ‘aapl’，它没有indicator，跳过
-                if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
-                for(var j in CIQ.objIndicator){
-                    var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+            if('High' in data[0]){
+            
+                for (var i = 0; i < data.length; i++) {
+                    newQuotes[i] = {};
                     
-                    // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
-                    if(data[i][str] != null){
-                        if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
-                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];      
-                    }else{
-                        if(i==0){
-                            newQuotes[i][CIQ.objIndicator[j]] = null;
+                    var datatime = new Date(data[i].DT)
+                    
+                    var offset = datatime.getTimezoneOffset() * 60 * 1000
+                    
+                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+                    
+                    newQuotes[i].Open = data[i].Open;
+                    newQuotes[i].High = data[i].High;
+                    newQuotes[i].Low = data[i].Low;
+                    newQuotes[i].Close = data[i].Close;
+                    newQuotes[i].Volume = data[i].Volume;
+                    
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+    
+                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(data[i][str] != null){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
                         }else{
-                            newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                //console.log('indicator值出现空值',data[i])
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
+                        }
+                    }
+                } 
+                
+                var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
+                for(var i = 0;i < node.children.length;i++){
+                    node.children[i].style.display = "inherit"
+                }
+            }else{
+                for (var i = 0; i < data.length; i++) {
+                    newQuotes[i] = {};
+    
+                    var datatime = new Date(data[i].DT)
+    
+                    var offset = datatime.getTimezoneOffset() * 60 * 1000
+                    
+                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+        
+                    newQuotes[i].Open = data[i].Close;
+                    newQuotes[i].High = data[i].Close;
+                    newQuotes[i].Low = data[i].Close;
+                    newQuotes[i].Close = data[i].Close;
+                    
+                    if(data[i].Volume){
+                        newQuotes[i].Volume = data[i].Volume
+                    }
+    
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+                        
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(data[i][str] != null){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];      
+                        }else{
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
                         }
                     }
                 }
-            }
-            CIQ.stxx.setChartType("line"); 
-            var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
-            for(var i = 0;i < node.children.length;i++){
-                node.children[i].style.display = "inherit"
-            }
-            for(var i = 0;i < node.children.length;i++){
-                if(node.children[i].firstChild.nodeValue != "Line"){
-                    node.children[i].style.display = "none"
+                CIQ.stxx.setChartType("line"); 
+                var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
+                for(var i = 0;i < node.children.length;i++){
+                    node.children[i].style.display = "inherit"
                 }
-            } 
+                for(var i = 0;i < node.children.length;i++){
+                    if(node.children[i].firstChild.nodeValue != "Line"){
+                        node.children[i].style.display = "none"
+                    }
+                } 
+            }
         }
+
     }catch(err){}
 
     if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
@@ -724,8 +787,8 @@ quoteFeedSimulator.formatChartData = async function(response){
         // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
         // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
     }
-
-    debugger
+    
+    
     return newQuotes
 }
 

@@ -1,6 +1,7 @@
 import {
 	symbolCsvFileDelete,
 } from '@/service/service'
+import {decodeBase64} from '@/utils'
 let __js_webcomponents_lookup_ = (_exports) => {
 
     /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -164,7 +165,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             const _el = el
                             CIQ.UI.stxtap(stClose[el],async ()=>{
                                 try {
-                                    await symbolCsvFileDelete(_result[_el].data.symbol)
+                                    let url = decodeBase64(_result[_el].data.symbol.split('||')[1])
+                                    await symbolCsvFileDelete(url)
                                     console.log('删除成功')
                                 } catch (error) {
                                     console.log('删除失败', error)
