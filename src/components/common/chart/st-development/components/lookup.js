@@ -590,7 +590,15 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);
-                    CIQ.UI.stxtap(node, node.selectFC);
+                    //CIQ.UI.stxtap(node, node.selectFC);
+                    CIQ.UI.stxtap(node, function(event) {
+                        // 检查事件目标是否为 st-close 元素
+                        if (!event.target.classList.contains('st-close')) {
+                            node.selectFC(event);
+                        }
+                    });
+
+
                 }
                 var scrollable = this.resultList;
                 if (scrollable[0]) scrollable[0].top();

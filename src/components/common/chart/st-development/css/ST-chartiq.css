@@ -784,3 +784,6 @@ stx-hu-tooltip-field-value {
   transition-property: height;
   transition-duration: 0.5s;
 }
+.st-close {
+  pointer-events: all; /* 确保 .st-close 接受点击事件 */
+}
