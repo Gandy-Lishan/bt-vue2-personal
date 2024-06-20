@@ -424,6 +424,12 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
         }
         default:
     }
+
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
     var queryUrl = this.url + 
        "?symbol=" + symbol + 
         new_str +
@@ -509,6 +515,12 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
         }
         default:
     }   
+
+    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
+    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
+    if(!stockName && !indexName){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
     var queryUrl = this.url + 
        "?symbol=" + symbol + 
         new_str +
@@ -575,12 +587,12 @@ quoteFeedSimulator.formatChartData = async function(response){
                 const url = decodeBase64(CIQ.symbol.split('||')[1])
                 let res
                 try {
-                    res = await CIQ.store.dispatch('chart/get_mysymbolCSV',url)
+                    res = await CIQ.store.dispatch('chart/get_mysymbolCSV',{url:url,timeframe:CIQ.store.state.form.pairDataFreq})
                 } catch (err) {console.error(err)}
                 let sortedRows = res.sort(
                     (a, b) => new Date(a.DT) - new Date(b.DT)
                 );
-                console.time('Execution Time');
+                //console.time('🚗Execution Time');
                 // 将 data 数组转化为以日期为键的字典
                 const dataDict = {};
                 data.forEach(item => {
@@ -616,7 +628,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                     } 
                 }
-                console.timeEnd('Execution Time');
+                //console.timeEnd('🚗Execution Time');
         }else{
             if('High' in data[0]){
             

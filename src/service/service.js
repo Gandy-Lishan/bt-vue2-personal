@@ -1358,8 +1358,8 @@ export function symbolCsvFileDelete(fileID) {
 			})
 	})
 }
-export function getSymbolCsv(fileID) {
-	const url = `/dev/user_upload/symbolcsvread/?url=${fileID}`
+export function getSymbolCsv(fileID,timeframe) {
+	const url = `/dev/user_upload/symbolcsvread/?url=${fileID}&timeframe=${timeframe}`
 
 	return new Promise((resolve, reject) => {
 		axios

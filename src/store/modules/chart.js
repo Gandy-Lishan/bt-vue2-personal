@@ -266,17 +266,19 @@ const mutations = {
 
 const actions = {
 	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
-	get_mysymbolCSV({ commit }, url) {
+	get_mysymbolCSV({ commit }, obj) {
 		return new Promise(async (resolve,reject) => {
-			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url)
+			const {url,timeframe} = obj
+			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url && item.timeframe==timeframe)
 			debugger
 			if(!quote){
 				try{
-					const res = await getSymbolCsv(url)
+					const res = await getSymbolCsv(url,timeframe)
 					if (res.data.status === 200 || res.data.status === 201) {
 						const csvContent = res.data.data.csv_content
 						commit('SET_MYSYMBOL_QUOTEFEED_CACHE', [...state.mySymbolQuotefeedCache, {
 							url: url,
+							timeframe: timeframe,
 							quotes: csvContent
 						}])
 						resolve(csvContent)
