@@ -727,6 +727,10 @@ export default {
         this.$refs['Form'].resetFields()
         console.log(this.data)
         this.data = {
+          ...this.data,
+          ...{
+          start_date: '',
+          end_date: '',
           find_type: 'stock/etf',
           long_ratio: 100,
           short_ratio: 0,
@@ -743,6 +747,7 @@ export default {
           capital_allocate: 'manual_input',
           capital_allocate_num: 60,
           signals: ['All']
+        }
         }
         this.rowUrl = null
         this.btnLoading = false
