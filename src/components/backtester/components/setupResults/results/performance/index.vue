@@ -152,7 +152,6 @@ export default {
 
               // -------------------------------------  start ----------------
               // this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
-              debugger
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []

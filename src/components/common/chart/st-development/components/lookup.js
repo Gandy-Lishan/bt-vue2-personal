@@ -222,7 +222,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
                     //     this.acceptText(val, field);
                     // })
-                    await CIQ.store.dispatch('chart/set_mysymbolist',()=>{
+                    await CIQ.store.dispatch('chart/set_mysymbolist',(data)=>{
+                        CIQ.store.commit('chart/SET_MYSYMBOLLIST',data)
                         this.acceptText(val, field);
                     })
                     
@@ -590,13 +591,13 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);
-                    //CIQ.UI.stxtap(node, node.selectFC);
-                    CIQ.UI.stxtap(node, function(event) {
-                        // 检查事件目标是否为 st-close 元素
-                        if (!event.target.classList.contains('st-close')) {
-                            node.selectFC(event);
-                        }
-                    });
+                    CIQ.UI.stxtap(node, node.selectFC);
+                    // CIQ.UI.stxtap(node, function(event) {
+                    //     // 检查事件目标是否为 st-close 元素
+                    //     if (!event.target.classList.contains('st-close')) {
+                    //         node.selectFC(event);
+                    //     }
+                    // });
 
 
                 }

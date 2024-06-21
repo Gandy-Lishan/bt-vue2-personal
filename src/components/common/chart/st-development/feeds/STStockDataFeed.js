@@ -8,7 +8,7 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
-import {recoverSymbolOptixUrl,decodeBase64} from '@/utils'
+import {recoverSymbolOptixUrl,decodeBase64,getSymbolInfo} from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -29,19 +29,8 @@ function getCachedData(url) {
 }
 
 quoteFeedSimulator.sendAjax = async function (url, cb) {
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.stxx.chart.symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.stxx.chart.symbol)
-    //CIQ.stxx.chart.symbolDisplay = stockName?stockName?.name:indexName?.name
-    if (stockName) {
-        CIQ.stxx.chart.symbolDisplay = stockName?.name;
-    } else if (indexName) {
-        CIQ.stxx.chart.symbolDisplay = indexName?.name;
-    } else {
-        // 第三种情况：既不是 stockName 也不是 indexName，可能是custom symbol
-        try {
-            CIQ.stxx.chart.symbolDisplay = decodeBase64(CIQ.stxx.chart.symbol.split('||')[0]);
-        } catch (error) {}  
-    }
+    const {name} = getSymbolInfo(CIQ.stxx.chart.symbol)
+    CIQ.stxx.chart.symbolDisplay = name
 
     try{
         const res = await getCachedData(url)
@@ -60,9 +49,8 @@ quoteFeedSimulator.url = config.pairDataUrl;
 
 quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
     let symbol = CIQ.symbol
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    if(!stockName && !indexName){
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
         symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
         var queryUrl = this.url + 
@@ -425,9 +413,8 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
         default:
     }
 
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    if(!stockName && !indexName){
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
         symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
     var queryUrl = this.url + 
@@ -516,9 +503,8 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
         default:
     }   
 
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    if(!stockName && !indexName){
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
         symbol = process.env.VUE_APP_DEFAULT_SYMBOL
     }
     var queryUrl = this.url + 
@@ -580,9 +566,8 @@ quoteFeedSimulator.formatChartData = async function(response){
     }
 
     try{
-        let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.symbol)
-        let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.symbol)
-        if(!stockName && !indexName){
+        const {type} = getSymbolInfo(CIQ.symbol)
+        if(type == 'custom'){
             // 可能是custom symbol
                 const url = decodeBase64(CIQ.symbol.split('||')[1])
                 let res

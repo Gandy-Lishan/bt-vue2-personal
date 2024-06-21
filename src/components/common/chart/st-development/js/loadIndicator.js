@@ -5,7 +5,7 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
- import {maxNumOfStudy,recoverSymbolOptixUrl} from '@/utils'
+ import {maxNumOfStudy,recoverSymbolOptixUrl,getSymbolInfo} from '@/utils'
  import qs from 'querystring'
  import {
     searchIndicator,
@@ -315,11 +315,6 @@
  /** global symbol loading function, 
   * including chart initation,lookup component, addSymbol from setup form*/
  CIQ.addSymbol = async function(symbol,stx,callback){
-    // let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    // let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    // if(!stockName && !indexName){
-    //     return
-    // }
     /** addIndicators会读取存入的symbol并用于loadChart */
     CIQ.store.commit('form/getBacktestSymbol',symbol)
 
@@ -355,7 +350,11 @@
                             if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
                                 /** 指示Study归属的Symbol */
                                 const criteria = CIQ.store.state.chart.activatedMALayout[j].criteria;
-                                const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
+                                let symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
+                                const {name,type} = getSymbolInfo(symbolLabel)
+                                if(type == 'custom'){
+                                    symbolLabel = name
+                                }
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
                                         display: `(${symbolLabel})${techSymbolName}`,
@@ -385,7 +384,11 @@
                                 // study.panelHeight=indicatorHeight
                                 // CIQ.Studies.studyLibrary[indicatorList[i]] = study
                                 const isComparison = CIQ.store.state.chart.savedTechSD[j].parameters.isComparison;
-                                const symbolLabel = isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                let symbolLabel = isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                const {name,type} = getSymbolInfo(symbolLabel)
+                                if(type == 'custom'){
+                                    symbolLabel = name
+                                }
                                 CIQ.store.state.chart.savedTechSD[j].inputs.display = `(${symbolLabel})${techSymbolName}` //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
@@ -417,7 +420,11 @@
                                             continue;
                                         }
                                         const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria;
-                                        const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                        let symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                        const {name,type} = getSymbolInfo(symbolLabel)
+                                        if(type == 'custom'){
+                                            symbolLabel = name
+                                        }
                                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
                                             display:`(${symbolLabel})${techSymbolName}`
                                         },null,{

@@ -3388,7 +3388,6 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 			var O = quote.Open,
 				C = quote.Close;
 			//if((!O && O!==0) || (!C && C!==0) || O===C) return stx.defaultColor;
-debugger
 			return {
 				fill_color:
 					O > C ? seriesParam0.fill_color_down : seriesParam0.fill_color_up,
@@ -3950,7 +3949,6 @@ CIQ.Studies.calculateMovingAverageTriangular = function (stx, sd) {
 		sd.yAxis = null
 		quotes = sd.chart.scrubbed
 	}
-	debugger
 	
 	var name = sd.name;
 	for (var p in sd.outputs) {

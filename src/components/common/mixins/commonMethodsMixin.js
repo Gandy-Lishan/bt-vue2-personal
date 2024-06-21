@@ -1,5 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson, getSymbolInfo } from '@/utils'
 import {
 	getBacktestName,
 	seeParams,
@@ -682,7 +682,11 @@ export const CommonMethodsMixin = {
 			// CIQ.Studies.studyLibrary['ST ROCLike'] = study
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
-			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
+			let symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
+			const {name:_name,type} = getSymbolInfo(symbolLabel)
+			if(type == 'custom'){
+				symbolLabel = _name
+			}
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
@@ -691,7 +695,6 @@ export const CommonMethodsMixin = {
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					//display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
 					display: `(${symbolLabel})${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
@@ -1078,17 +1081,26 @@ export const CommonMethodsMixin = {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
 			const commitSymbol2 = (symbol2) => {
-				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
-				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
-				if(!stockName && !indexName){
+				// let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
+				// let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
+				// if(!stockName && !indexName){
+				// 	this.$store.commit('form/setComparisonSymbol', {})
+				// 	return
+				// }
+				// this.$store.commit('form/setComparisonSymbol', {
+				// 	name:stockName?stockName.name:indexName.name,
+				// 	url:symbol2,
+				// })
+
+				const {name,url,type} = getSymbolInfo(symbol2)
+    			if(type == 'other'){
 					this.$store.commit('form/setComparisonSymbol', {})
-					return
+				}else{
+					this.$store.commit('form/setComparisonSymbol', {
+						name:name,
+						url:url,
+					})
 				}
-		  
-				this.$store.commit('form/setComparisonSymbol', {
-					name:stockName?stockName.name:indexName.name,
-					url:symbol2,
-				})
 			}
 			commitIndicators('entry', data.formIndicators.entry);
 			commitIndicators('exit', data.formIndicators.exit);

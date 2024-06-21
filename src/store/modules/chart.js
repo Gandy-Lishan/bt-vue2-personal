@@ -270,7 +270,6 @@ const actions = {
 		return new Promise(async (resolve,reject) => {
 			const {url,timeframe} = obj
 			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url && item.timeframe==timeframe)
-			debugger
 			if(!quote){
 				try{
 					const res = await getSymbolCsv(url,timeframe)
