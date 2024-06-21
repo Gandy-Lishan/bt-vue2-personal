@@ -281,11 +281,9 @@ export default {
       const trade = this.$refs.Trades.handleDownloadCsv()
       const filterList = this.$refs.filterTable.exportTable()
       if (
-        !(
-          summary.length &&
-          trade.length &
-          filterList.length
-        )
+          !summary.length &&
+          !trade.length &
+          !filterList.length
       ) {
         this.popUpMsgBox('No data available for download')
         return
