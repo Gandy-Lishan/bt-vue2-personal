@@ -239,7 +239,7 @@ export default {
         obj['Exit Action'] = item.ExitAction
         obj['Exit Price'] = item.ExitPrice
 				obj['Shares'] = item.Shares
-        obj['Floating Profit %'] = item.FloatProfit ? `${item.FloatProfit}%` : ''
+        obj['Floating Profit %'] = isNaN(item.FloatProfit) ? '' : `${item.FloatProfit}%`
         obj['Exit Reason'] = item.ExitReason
         trade.push(obj)
       })

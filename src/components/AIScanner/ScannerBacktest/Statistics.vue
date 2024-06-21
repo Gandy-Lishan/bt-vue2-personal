@@ -166,7 +166,7 @@
 				<el-table-column
 							show-overflow-tooltip
 							prop="maxRisk"
-							label="MAX RISK%"
+							label="MAX RISK %"
 							align="center"
 						>
 							<template slot-scope="scope">
@@ -287,16 +287,17 @@ export default {
         const obj = {}
         obj['TOTAL RETURN %'] = `${item.totalReturn}%`
         obj['MEDIAN TRADE RETURN %'] = `${item.medianReturn}%`
-        obj['AVERAGE RETURN %'] = `${item.averageReturn}%`
         obj['Z-SCORE'] = item.tzScore
+				obj['STD. DEV'] = item.standardDeviation
+				obj['BUY & HOLD %(SPX)'] = `${item.BUYandHOLD}%`
         obj['WIN RATE %'] = `${item.winRate}%`
         obj['AVERAGE TRADE WIN %'] = `${item.averageWin}%`
         obj['AVERAGE TRADE LOSS %'] =  `${item.averageLoss}%`
+				obj['MAX RISK %'] = `${item.maxRisk}%`
         obj['TOTAL TRADES'] =  `${item.totalTrades}`
         obj['TOTAL POSITIVE'] = `${item.totalPositive}`
         obj['TOTAL NEGATIVE'] =`${item.totalNegative}`
         obj['TIME IN MARKET %'] = `${item.timeInMarket}%`
-								obj['BUY & HOLD %(SPX)'] = `${item.BUYandHOLD}%`
         summary.push(obj)
       })
 			return summary
