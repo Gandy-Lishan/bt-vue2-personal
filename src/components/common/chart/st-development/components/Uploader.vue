@@ -10,8 +10,6 @@
 			:http-request="uploadFile"
 			:before-upload="beforeUpload"
 			:multiple="false"
-			:limit="1"
-			:on-exceed="handleExceed"
 			:file-list="fileList"
 			ref="upload"
 		>
@@ -293,6 +291,7 @@ export default {
 				})
 		},
 		handleUploadSuccess(response, file, fileList) {
+			this.fileList = this.fileList.slice(-1)
 			console.log('上传成功回调：', response)
 		},
 		handleUploadError(error, file, fileList) {
