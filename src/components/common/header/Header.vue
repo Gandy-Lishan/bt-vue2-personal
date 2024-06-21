@@ -23,7 +23,6 @@
           >BacktestEdge</el-menu-item
         > -->
         <el-menu-item class="home-link" index="9"
-        v-show="is_admin"
           >Strategy</el-menu-item
         >
         <el-menu-item class="home-link" index="1"

@@ -445,7 +445,8 @@ export default {
       const field = rule.field
       const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 0 : this.data.short_ratio);
       const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 100 : this.data.long_ratio);
-debugger
+      if(this.data.short_ratio) this.data.short_ratio = short_ratio
+      if(this.data.long_ratio) this.data.long_ratio = long_ratio
       if (short_ratio === 0 && long_ratio === 0) {
           callback(new Error("The percentages cannot be both 0"));
       } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(short_ratio) && Number.isInteger(long_ratio)) {
@@ -723,7 +724,37 @@ debugger
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
         this.$refs['SelectCheck'].handleoptionsAllChange(true)
-        Object.assign(this.$data, this.$options.data())
+        this.$refs['Form'].resetFields()
+        console.log(this.data)
+        this.data = {
+          ...this.data,
+          ...{
+          start_date: '',
+          end_date: '',
+          find_type: 'stock/etf',
+          long_ratio: 100,
+          short_ratio: 0,
+          stop_loss_condition: 6,
+          take_profit_condition: 8,
+          time_in_market_condition: 5,
+          stop_loss: 15,
+          take_profit: 30,
+          time_in_market: 34,
+          total_capital: 1000000,
+          commission: 0,
+          rank_condition: 'StdDev',
+          daily_limit: 3,
+          capital_allocate: 'manual_input',
+          capital_allocate_num: 60,
+          signals: ['All']
+        }
+        }
+        this.rowUrl = null
+        this.btnLoading = false
+        this.previewBtnLoading = false
+        this.isPolling = false
+        this.processTips = ''
+        this.percentage = 0
         this.generateCPMName()
         this.setBacktestHistory(6)
         this.$refs['Form'].clearValidate()
