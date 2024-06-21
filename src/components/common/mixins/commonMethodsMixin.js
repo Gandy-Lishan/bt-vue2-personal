@@ -1,5 +1,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {capitalizeFirstLetter, timestampToTime, isJson, getSymbolInfo } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
+import { getSymbolInfo,getCoresSymbolDual } from '@/utils/globalFunc'
 import {
 	getBacktestName,
 	seeParams,
@@ -682,11 +683,7 @@ export const CommonMethodsMixin = {
 			// CIQ.Studies.studyLibrary['ST ROCLike'] = study
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
-			let symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
-			const {name:_name,type} = getSymbolInfo(symbolLabel)
-			if(type == 'custom'){
-				symbolLabel = _name
-			}
+			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)

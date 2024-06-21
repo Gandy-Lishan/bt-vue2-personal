@@ -297,7 +297,8 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter, createStateFilter} from '@/utils'
+import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {createStateFilter,maxNumOfStudy} from '@/utils/globalFunc'
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 

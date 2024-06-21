@@ -791,7 +791,8 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, LocalStorageUtil, getSymbolInfo, encodeBase64 } from '@/utils'
+import { timestampToTime, LocalStorageUtil, encodeBase64 } from '@/utils'
+import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {

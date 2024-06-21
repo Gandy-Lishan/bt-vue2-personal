@@ -5,7 +5,8 @@
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import { uniqueObjectArray } from '@/utils/formValidate'
- import {recoverSymbolOptixUrl,capitalizeFirstLetter,getSymbolInfo} from '@/utils'
+ import {capitalizeFirstLetter} from '@/utils'
+ import { recoverSymbolOptixUrl,getCoresSymbolDual } from "@/utils/globalFunc";
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -737,11 +738,7 @@
             }
 
             // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-            let symbolLabel = criteria.endsWith(2) ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-            const {name,type} = getSymbolInfo(symbolLabel)
-            if(type == 'custom'){
-                symbolLabel = name
-            }
+            const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
             if(!showInput || !field) return
 
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {

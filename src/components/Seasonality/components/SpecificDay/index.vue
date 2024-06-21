@@ -174,7 +174,7 @@
 import SDChart from "../SNChart/SDChart.vue";
 import MonthDays from "month-days-element";
 import { format } from 'date-fns';
-import { createStateFilter } from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 export default {
   name: 'SpecificDay',

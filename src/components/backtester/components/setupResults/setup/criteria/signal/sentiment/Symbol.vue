@@ -62,7 +62,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
-import { getSymbolInfo } from '@/utils'
+import { getCoresSymbolDual } from '@/utils/globalFunc'
 export default {
   name: 'symbol',
   props: {
@@ -394,11 +394,7 @@ export default {
           [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
-        let symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
-        const {name,type} = getSymbolInfo(symbolLabel)
-        if(type == 'custom'){
-            symbolLabel = name
-        }
+        const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
         let condition
         if([12,13].includes(this.sym.newCondition)){
           condition = `${conditionMap.get(this.sym.newCondition).name}`

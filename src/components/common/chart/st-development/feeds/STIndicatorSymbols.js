@@ -5,7 +5,8 @@
 import {config}  from "./STDataFeedAccessUrl.js";
 // import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
-import { createStateFilter,encodeBase64, getSymbolInfo } from '@/utils'
+import { encodeBase64 } from '@/utils'
+import {createStateFilter,getSymbolInfo} from '@/utils/globalFunc'
 
 CIQ.activateImports(quoteFeed, symbolLookupBase); // so we can use CIQ.inheritsFrom
 /**

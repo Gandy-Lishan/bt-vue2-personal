@@ -8,7 +8,8 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
-import {recoverSymbolOptixUrl,decodeBase64,getSymbolInfo} from '@/utils'
+import {decodeBase64} from '@/utils'
+import {recoverSymbolOptixUrl,getSymbolInfo} from '@/utils/globalFunc'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({

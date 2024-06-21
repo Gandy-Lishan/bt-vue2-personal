@@ -10,7 +10,8 @@ import {
     getAllMyIndicatorsList,
 } from '@/service/service.js'
 
-import {maxNumOfStudy,timeframeTransform,createStateFilter} from '@/utils'
+import {timeframeTransform} from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){

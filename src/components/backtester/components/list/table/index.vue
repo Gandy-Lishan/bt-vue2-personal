@@ -519,7 +519,8 @@ import {
   getFavoriteList,
 	getAnalystList
 } from '@/service/service.js'
-import {isJson, getSymbolInfo} from '@/utils'
+import {isJson} from '@/utils'
+import { getSymbolInfo } from '@/utils/globalFunc'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { copy } from "@/components/common/directives/copyBacktestID"

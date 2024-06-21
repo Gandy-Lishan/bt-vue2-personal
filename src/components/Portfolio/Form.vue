@@ -320,7 +320,8 @@
 </template>
 
 <script>
-import { isJson, timestampToTime, capitalizeFirstLetter, createStateFilter } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 

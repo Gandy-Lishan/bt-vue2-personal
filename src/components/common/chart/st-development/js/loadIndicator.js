@@ -5,7 +5,7 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
- import {maxNumOfStudy,recoverSymbolOptixUrl,getSymbolInfo} from '@/utils'
+ import {maxNumOfStudy,recoverSymbolOptixUrl,getCoresSymbolDual} from '@/utils/globalFunc'
  import qs from 'querystring'
  import {
     searchIndicator,
@@ -350,11 +350,7 @@
                             if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
                                 /** 指示Study归属的Symbol */
                                 const criteria = CIQ.store.state.chart.activatedMALayout[j].criteria;
-                                let symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
-                                const {name,type} = getSymbolInfo(symbolLabel)
-                                if(type == 'custom'){
-                                    symbolLabel = name
-                                }
+                                const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'))
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
                                         display: `(${symbolLabel})${techSymbolName}`,
@@ -384,11 +380,7 @@
                                 // study.panelHeight=indicatorHeight
                                 // CIQ.Studies.studyLibrary[indicatorList[i]] = study
                                 const isComparison = CIQ.store.state.chart.savedTechSD[j].parameters.isComparison;
-                                let symbolLabel = isComparison?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-                                const {name,type} = getSymbolInfo(symbolLabel)
-                                if(type == 'custom'){
-                                    symbolLabel = name
-                                }
+                                const symbolLabel = getCoresSymbolDual(isComparison)
                                 CIQ.store.state.chart.savedTechSD[j].inputs.display = `(${symbolLabel})${techSymbolName}` //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
@@ -420,11 +412,7 @@
                                             continue;
                                         }
                                         const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria;
-                                        let symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-                                        const {name,type} = getSymbolInfo(symbolLabel)
-                                        if(type == 'custom'){
-                                            symbolLabel = name
-                                        }
+                                        const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'))
                                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
                                             display:`(${symbolLabel})${techSymbolName}`
                                         },null,{

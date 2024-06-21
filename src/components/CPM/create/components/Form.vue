@@ -310,7 +310,8 @@
 import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
-import { timestampToTime, isJson , createStateFilter } from '@/utils'
+import { timestampToTime, isJson } from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 import { mapGetters } from "vuex"
 
 export default {
