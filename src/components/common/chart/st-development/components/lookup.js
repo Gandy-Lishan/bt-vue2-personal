@@ -553,6 +553,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
             results(arr) {
                 function closure(self, data) {
                     return function (e) {
+                        if (e.target.classList.contains('st-close')) return
                         CIQ.blur(self.input[0]);
                         //self.close();
                         self.selectItem(data, ()=>{     /** 新增了手动选择symbol列表的addSymbol的回调 */
@@ -592,14 +593,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);
                     CIQ.UI.stxtap(node, node.selectFC);
-                    // CIQ.UI.stxtap(node, function(event) {
-                    //     // 检查事件目标是否为 st-close 元素
-                    //     if (!event.target.classList.contains('st-close')) {
-                    //         node.selectFC(event);
-                    //     }
-                    // });
-
-
                 }
                 var scrollable = this.resultList;
                 if (scrollable[0]) scrollable[0].top();
