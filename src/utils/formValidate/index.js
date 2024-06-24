@@ -106,11 +106,12 @@ export const createTPSLValidateRule = (minVal) => {
 		callback()
 	}
 }
-export const createTPSLScopeValidateRule = (minVal, maxVal) => {
+export const createTPSLScopeValidateRule = (minVal, maxVal, canBeEqual) => {
 	return (_, value, callback) => {
 		// 给 Stop Loss 和 Take Profit 用
 		const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-		const isLessThanMin = Number(value) <= Number(minVal)
+		let isLessThanMin = Number(value) <= Number(minVal)
+		if(canBeEqual) isLessThanMin = Number(value) < Number(minVal)
 		const isMatched = !pattern.test(value)
 		if (isLessThanMin) callback(new Error(`Only positive numbers > ${minVal} allowed`))
 		if (isMatched) callback(new Error('Numeric input with two decimal places'))

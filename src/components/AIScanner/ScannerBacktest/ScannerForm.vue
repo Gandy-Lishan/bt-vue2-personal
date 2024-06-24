@@ -653,12 +653,12 @@ export default {
         { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
         ],
         take_profit_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         commission: [
           { validator: validateCommissionRule, trigger: 'blur' },
