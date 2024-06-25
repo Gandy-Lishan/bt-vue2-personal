@@ -645,12 +645,12 @@ export default {
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit_condition: [
         { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
