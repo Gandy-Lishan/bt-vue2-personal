@@ -372,12 +372,16 @@
             <label>
             14. Capital Allocate
             <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Funds allocation method. Choosing the Kelly formula<br/>
-                 allows the system to dynamically adjust fund allocation<br/>
-                  based on strategy performance. Selecting maximum <br/>
-                  capital allocation per trade enables you to manually <br/>
-                  specify the maximum capital allocation for each trade.</span>
+              <span slot="content">
+                Manual Input: This refers to entering a<br/> 
+                trade using a percentage of the cash <br/>
+                remaining in the account.<br/>
+                Auto Allocation: This involves <br/>
+                calculating the proportion of capital to <br/>
+                be used for entering trades on a given day, <br/>
+                based on the information of selected stocks for that day, <br/>
+                using the Kelly Criterion (Kelly Formula).
+              </span>
               <i class="iconfont icon-wenhao"></i>
             </el-tooltip>
           </label>
@@ -402,7 +406,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item>
-          <div class="processTips" v-if="percentage != 0"><i class="el-icon-loading"></i><span v-html="processTips"></span></div>
+          <div class="processTips" v-show="percentage != 0"><i v-show="percentage != 0" class="el-icon-loading"></i><span v-html="processTips"></span></div>
           </el-form-item>
         </el-col>
       </el-row>
@@ -439,9 +443,10 @@ export default {
       // 验证是否为正整数
       const integerValue = parseInt(value);
       const field = rule.field
-      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
-      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
-
+      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 0 : this.data.short_ratio);
+      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 100 : this.data.long_ratio);
+      if(this.data.short_ratio) this.data.short_ratio = short_ratio
+      if(this.data.long_ratio) this.data.long_ratio = long_ratio
       if (short_ratio === 0 && long_ratio === 0) {
           callback(new Error("The percentages cannot be both 0"));
       } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(short_ratio) && Number.isInteger(long_ratio)) {
@@ -477,23 +482,23 @@ export default {
       data: {
         start_date: '',
         end_date: '',
-        find_type: 'etf',
-        long_ratio: 80,
-        short_ratio: 20,
-        stop_loss_condition: 3,
-        take_profit_condition: 3,
+        find_type: 'stock/etf',
+        long_ratio: 100,
+        short_ratio: 0,
+        stop_loss_condition: 6,
+        take_profit_condition: 8,
         time_in_market_condition: 5,
         stop_loss: 15,
-        take_profit: 20,
+        take_profit: 30,
         time_in_market: 34,
         name: '',
         total_capital: 1000000,
         commission: 0,
-        rank_condition: 'WinRate',
+        rank_condition: 'StdDev',
         daily_limit: 3,
         capital_allocate: 'manual_input',
-        capital_allocate_num: 50,
-        signals: ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
+        capital_allocate_num: 60,
+        signals: ['All']
       },
       rowUrl: null,
       btnLoading: false,
@@ -528,7 +533,7 @@ export default {
         {
           value: 'MA',
           label: 'MA',
-          check: false
+          check: true
         },
         {
           value: 'MAGap',
@@ -553,17 +558,17 @@ export default {
         {
           value: 'Shooting Star followed by a fall',
           label: 'Shooting Star followed by a fall',
-          check: false
+          check: true
         },
         {
           value: 'UpTrend Pattern',
           label: 'UpTrend Pattern',
-          check: false
+          check: true
         },
         {
           value: 'DownTrend Pattern',
           label: 'DownTrend Pattern',
-          check: false
+          check: true
         },
         {
           value: 'Optix #1',
@@ -598,7 +603,7 @@ export default {
         {
           value: 'LowPoints',
           label: 'LowPoints',
-          check: false
+          check: true
         },
         {
           value: 'RSI',
@@ -640,20 +645,20 @@ export default {
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         commission: [
           { validator: validateCommissionRule, trigger: 'blur' },
@@ -679,7 +684,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(3)
+    this.setBacktestHistory(6)
     this.generateCPMName()
   },
   methods: {
@@ -717,14 +722,42 @@ export default {
     },
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
-      
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
-      this.$refs['SelectCheck'].handleoptionsAllChange(false)
-			Object.assign(this.$data, this.$options.data())
-      // this.data.signals = ['MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Optix #1', 'Optix #2', 'Optix #3', 'Optix #4', 'PriceBreakout', 'HighPoints', 'RSI']
-      this.generateCPMName()
-      this.setBacktestHistory(3)
-      this.$refs['Form'].clearValidate()
+        this.$refs['SelectCheck'].handleoptionsAllChange(true)
+        this.$refs['Form'].resetFields()
+        console.log(this.data)
+        this.data = {
+          ...this.data,
+          ...{
+          start_date: '',
+          end_date: '',
+          find_type: 'stock/etf',
+          long_ratio: 100,
+          short_ratio: 0,
+          stop_loss_condition: 6,
+          take_profit_condition: 8,
+          time_in_market_condition: 5,
+          stop_loss: 15,
+          take_profit: 30,
+          time_in_market: 34,
+          total_capital: 1000000,
+          commission: 0,
+          rank_condition: 'StdDev',
+          daily_limit: 3,
+          capital_allocate: 'manual_input',
+          capital_allocate_num: 60,
+          signals: ['All']
+        }
+        }
+        this.rowUrl = null
+        this.btnLoading = false
+        this.previewBtnLoading = false
+        this.isPolling = false
+        this.processTips = ''
+        this.percentage = 0
+        this.generateCPMName()
+        this.setBacktestHistory(6)
+        this.$refs['Form'].clearValidate()
     },
     selected(signals){
       console.log('触发了', signals)
@@ -871,7 +904,7 @@ export default {
           if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
           return pollingRes
         }
-        if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
+        if(code == 401 || code == 403 || code == 404 || code == 407 || this.percentage == 0 || this.processTips === '') return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
       } while (true); // Keep polling indefinitely
@@ -893,7 +926,7 @@ export default {
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      const _name = typeof name === 'string' && name ? name : ''
-     if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
+     if(code == 203 && this.processTips) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {

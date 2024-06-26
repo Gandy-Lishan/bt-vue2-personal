@@ -3843,6 +3843,8 @@ CIQ.Studies.calculateMovingAverageVIDYA = function (stx, sd) {
 
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+			/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+			var subField = field
 
 	sd.std = new CIQ.Studies.StudyDescriptor(sd.name, "sdev", sd.panel);
 	sd.std.chart = sd.chart;
@@ -3850,13 +3852,44 @@ CIQ.Studies.calculateMovingAverageVIDYA = function (stx, sd) {
 	sd.std.startFrom = sd.startFrom;
 	sd.std.inputs = { Field: field, "Standard Deviations": 1, Type: "ma" };
 	sd.std.outputs = { _STD: null };
+			// dual symbol new features
+			sd.std.parameters = sd.parameters
 	CIQ.Studies.calculateStandardDeviation(stx, sd.std);
 
 	CIQ.Studies.MA("ma", 20, "_STD " + sd.name, 0, "_MASTD", stx, sd);
 
+			if(
+				sd?.parameters?.isComparison ||
+				(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
+			){
+				var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+				if(
+					/**
+					 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
+						以導致中間值等值被賦值給field
+					*/
+					['Open','High','Low','Close','Volume'].includes(subField) ||
+					['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)
+				){
+					// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+					if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
+						field = comparisonSymbol?.url
+					}
+				}
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+				//filter valid rows
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
+			}else{
+				sd.yAxis = null
+				quotes = sd.chart.scrubbed
+			}
+			/********************************* */
+
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
-
 	var i, val, ft;
 	var start = sd.startFrom;
 	// find vmaPreviousDay
@@ -3876,7 +3909,7 @@ CIQ.Studies.calculateMovingAverageVIDYA = function (stx, sd) {
 	for (i = start; i < quotes.length; i++) {
 		var quote = quotes[i];
 		val = quote[field];
-		if (val && typeof val == "object") val = val[sd.subField];
+		if (val && typeof val == "object") val = val[subField];
 		var notOverflowing = i + offset >= 0 && i + offset < quotes.length;
 		var offsetQuote = notOverflowing ? quotes[i + offset] : null;
 		if (!val && val !== 0) {

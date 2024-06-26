@@ -1255,7 +1255,7 @@ export default {
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
         if(data.length<=1) {this.popUpMsgBox('Please select at least 2 indicators.'); return false}
 
-      }if(categories == 'OHLCV') {
+      }else if(categories == 'OHLCV') {
         const symbol = this.OHLCVData.symbol
         const condition = this.OHLCVData.condition
         if(!symbol) {

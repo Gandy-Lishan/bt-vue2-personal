@@ -85,7 +85,7 @@
             "Period": 13,
             "Overlay": false,
             "id": "$r001$st_combined$r001$ (13,n)",
-            "display": "$r001$st_combined$r001$ (13,n)"
+            "display": "Short Term Combined Model"
           },
           "outputs": {},
           "parameters": {
@@ -102,6 +102,7 @@
       ],
       "activatedMA": [],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
           "st_combined"
@@ -197,8 +198,8 @@
           "inputs": {
             "Period": 13,
             "Overlay": false,
-            "id": "$r001$aggregate_model$r001$ (13,n)",
-            "display": "$r001$aggregate_model$r001$ (13,n)"
+            "display": "Aggregate Signal Model",
+            "id": "$r001$aggregate_model$r001$ (13,n)"
           },
           "outputs": {},
           "parameters": {
@@ -215,6 +216,7 @@
       ],
       "activatedMA": [],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
           "aggregate_model"
@@ -797,6 +799,7 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
           "spx12_3mt_spread"
@@ -1397,7 +1400,7 @@
             "Period": 13,
             "Overlay": false,
             "id": "$r001$consecutive_of_nhsltot_above_12ma$r001$ (13,n)",
-            "display": "$r001$consecutive_of_nhsltot_above_12ma$r001$ (13,n)"
+            "display": "Consecutive Days NHSLTOT Above 12MA"
           },
           "outputs": {},
           "parameters": {
@@ -1419,6 +1422,7 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
           "consecutive_of_nhsltot_above_12ma"
@@ -1537,6 +1541,7 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [],
       "formIndicators": {
         "entry": [
           "breadth_bonds_hy_ad_50_200_spread"
@@ -1812,6 +1817,20 @@
         }
       ],
       "activatedMALayout": [],
+      "activatedTechLayout": [
+        {
+          "url": "Symbol Close",
+          "criteria": "entry",
+          "index": 0,
+          "symbolType": "symbol1"
+        },
+        {
+          "url": "Symbol Close",
+          "criteria": "exit",
+          "index": 0,
+          "symbolType": "symbol1"
+        }
+      ],
       "formIndicators": {
         "entry": [
           "Symbol Close",
