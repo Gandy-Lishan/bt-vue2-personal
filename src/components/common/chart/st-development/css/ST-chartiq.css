@@ -788,4 +788,13 @@ stx-hu-tooltip-field-value {
   pointer-events: all; /* 确保 .st-close 接受点击事件 */
 }
 
-.ciq-toggles {width: 70%;}
+.ciq-nav {
+  display: flex;
+  justify-content: space-between;
+}
+cq-side-nav{
+  flex: 1;
+}
+cq-side-nav .ciq-toggles{
+  width: 100%;
+}
