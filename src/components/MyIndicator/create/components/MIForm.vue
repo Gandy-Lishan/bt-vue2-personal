@@ -407,6 +407,7 @@ import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
+import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
 
 export default {
   name: 'MIForm',
@@ -742,8 +743,8 @@ export default {
 
       const commonData = {
         name: this.data.name,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
+        indicator_1: recoverSymbolOptixUrl(this.data.indicator_1_url),
+        indicator_2: recoverSymbolOptixUrl(this.data.indicator_2_url),
         time_frame: this.data.time_frame,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
         calculate: calculate,
@@ -825,8 +826,8 @@ export default {
 
       const commonData = {
         name: randomName,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
+        indicator_1: recoverSymbolOptixUrl(this.data.indicator_1_url),
+        indicator_2: recoverSymbolOptixUrl(this.data.indicator_2_url),
         time_frame: this.data.time_frame,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
         calculate: calculate,
