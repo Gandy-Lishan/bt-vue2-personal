@@ -362,7 +362,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
-// import UploaderVue from './st-development/components/Uploader.vue'
+import UploaderVue from './st-development/components/Uploader.vue'
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
