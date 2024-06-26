@@ -753,7 +753,10 @@ export default {
       };
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
+        const percentageStrings = this.weightData.map(item => {
+          if(Number(item.weight) < 0) return (item.weight / 100).toFixed(2).replace(/^-/, 'n')
+          return (item.weight / 100).toFixed(2)
+        });
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -1145,7 +1148,7 @@ export default {
         return maxTimeframe;
       },
     async displayData(data) {
-
+      debugger
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former_url;
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter_url;
