@@ -787,3 +787,5 @@ stx-hu-tooltip-field-value {
 .st-close {
   pointer-events: all; /* 确保 .st-close 接受点击事件 */
 }
+
+.ciq-toggles {width: 70%;}
