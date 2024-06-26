@@ -23,6 +23,9 @@
                 width="100px"
                 show-overflow-tooltip
             >
+            <template slot-scope="scope">
+                {{ getProcessedSymbol(scope.row.Symbol) }}
+            </template>
             </el-table-column>
             <el-table-column
                 prop="EntryDate"
@@ -161,7 +164,7 @@
 </template>
 
 <script>
-
+import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
 	name: 'Summary',
 	data() {
@@ -231,6 +234,12 @@ export default {
 		},
 	},
 	methods: {
+        // 处理custom symbol的特殊url显示
+		getProcessedSymbol(symbol) {
+			if (!symbol) return '';
+			const { name, type } = getSymbolInfo(symbol);
+			return type === 'custom' ? name : symbol;
+		},
         handleCurrentChange(page){
             this.queryInfo.page = page
         }

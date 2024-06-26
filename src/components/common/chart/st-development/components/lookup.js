@@ -1,4 +1,7 @@
-//import store from '../../../../src/store/store.ts'
+import {
+	symbolCsvFileDelete,
+} from '@/service/service'
+import {decodeBase64} from '@/utils'
 let __js_webcomponents_lookup_ = (_exports) => {
 
     /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -154,6 +157,23 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 function closure(results) {
                     self.params.driver.exchanges = restoredExchanges;
                     self.results(results);
+
+                    var stClose = self.getElementsByClassName("st-close")
+                    if(filter == 'CUSTOM SYMBOL'){
+                        for(var el = 0;el<stClose.length;el++){     
+                            const _result = results
+                            const _el = el
+                            CIQ.UI.stxtap(stClose[el],async ()=>{
+                                try {
+                                    let url = decodeBase64(_result[_el].data.symbol.split('||')[1])
+                                    await symbolCsvFileDelete(url)
+                                    console.log('删除成功')
+                                } catch (error) {
+                                    console.log('删除失败', error)
+                                }
+                            });       
+                        }               
+                    }
                 }
                 var exchanges = this.getAttribute("cq-exchanges");
                 if (exchanges) this.params.driver.exchanges = exchanges.split(",");
@@ -188,6 +208,27 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 input.value = "";
             }
     
+            /**
+             * 
+             * @param {*} val   在點擊組件時加載mySymbol, 切換過濾器或者搜索都訪問存好的數組 
+             * @param {*} field 
+             */
+            async updateMySymbol(val,field){
+                var loader = document.querySelector(".loaderLookup");
+                    if (loader) loader.show();  
+                    var filters = this.querySelector("cq-lookup-filters");
+                    if (filters) var overlay = filters.querySelector(".overlay");
+                    overlay.style.display = 'block'
+                    // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
+                    //     this.acceptText(val, field);
+                    // })
+                    await CIQ.store.dispatch('chart/set_mysymbolist',(data)=>{
+                        CIQ.store.commit('chart/SET_MYSYMBOLLIST',data)
+                        this.acceptText(val, field);
+                    })
+                    
+                overlay.style.display = 'none'
+            }
             initialize() {
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -208,8 +249,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     input.addEventListener("paste", function (e) {
                         var input = e.target;
                         setTimeout(function () {
-                            self.acceptText(input.value, self.currentFilter);
-                            
+                            self.acceptText(input.value, self.currentFilter);  
                         }, 0);
                     });
                 });
@@ -217,22 +257,30 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 if (filters) {
                     var allFilters = filters.querySelectorAll("cq-filter");
 
-                    var lookupInput = document.querySelector("cq-lookup-input");
-                    CIQ.UI.stxtap(lookupInput, function () {
-                        allFilters.forEach(function (f) { 
-                            if(f.classList.contains("true")){    
-                                self.acceptText(self.input.val(), f.innerHTML);
-                            }
+                    if(this.parentNode.className == 'ciq-search'){
+                        const ciqSearchNode = document.querySelector(".ciq-nav")
+                        var lookupInput = ciqSearchNode.querySelector("cq-lookup-input");
+                        CIQ.UI.stxtap(lookupInput, function () {
+                            if(document.querySelector('.ciq-search').active) return;
+                            allFilters.forEach(async function (f) { 
+                                if(f.classList.contains("true")){    
+                                    // 激活look bar前更新列表，之后的切换和搜索读vuex
+                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    self.acceptText(self.input.val(), f.innerHTML);
+                                }
+                            });
                         });
-                    });
-                    var comparisonInput = document.querySelector(".cq-comparison-new")
-                    CIQ.UI.stxtap(comparisonInput, function () {
-                        allFilters.forEach(function (f) { 
-                            if(f.classList.contains("true")){    
-                                self.acceptText(self.input.val(), f.innerHTML);
-                            }
+                    }
+                    else{
+                        var comparisonInput = document.querySelector(".cq-comparison-new")
+                        CIQ.UI.stxtap(comparisonInput, function () {
+                            allFilters.forEach(function (f) { 
+                                if(f.classList.contains("true")){    
+                                    self.acceptText(self.input.val(), f.innerHTML);
+                                }
+                            });
                         });
-                    });
+                    }
 
                     allFilters.forEach(function (filter) {
                         CIQ.UI.stxtap(filter, function () {
@@ -505,6 +553,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
             results(arr) {
                 function closure(self, data) {
                     return function (e) {
+                        if (e.target.classList.contains('st-close')) return
                         CIQ.blur(self.input[0]);
                         //self.close();
                         self.selectItem(data, ()=>{     /** 新增了手动选择symbol列表的addSymbol的回调 */
@@ -525,6 +574,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         self.input[0].value = "";
                     };
                 }
+
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
                 for (var i = 0; i < arr.length; i++) {
@@ -534,6 +584,10 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     for (var j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
+                    if(this.currentFilter == 'CUSTOM SYMBOL'){
+                        nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
+                    }
+
                     var node = document.createElement("cq-item");
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
@@ -639,7 +693,10 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 <cq-filter>STOCKS</cq-filter>
                 <cq-filter>INDEXES</cq-filter>
                 <cq-filter>MY FAVORITES</cq-filter>
+                <cq-filter>CUSTOM SYMBOL</cq-filter>
+                <div class="overlay"></div>
                 </cq-lookup-filters>
+                <cq-uploader cq-no-close></cq-uploader>
                 <cq-scroll></cq-scroll>
                 <cq-loader class="loaderLookup"></cq-loader>
             </cq-lookup-results>  

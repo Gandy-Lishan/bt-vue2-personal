@@ -791,7 +791,8 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, LocalStorageUtil } from '@/utils'
+import { timestampToTime, LocalStorageUtil, encodeBase64 } from '@/utils'
+import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {
@@ -949,6 +950,7 @@ export default {
       ],
       symbolList: [],
       indexList: [],
+      customStocksList: [],
       loading: false,
       options: [],
       tp: 10,
@@ -1065,6 +1067,13 @@ export default {
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.bd.symbol = newVal
+
+        // 在判断到symbol为custom symbol时把option初始化以保证selector内显示为label而不是默认value
+        const {name,type} = getSymbolInfo(newVal)
+        if(type == 'custom'){
+          this.options = [{value:newVal,label:name}]
+        }
+
         this.$emit('changeSymbolInfo', {symbol: this.bd.symbol, symbol2: this.bd.symbol2, strategy: this.bd.strategy})
       },
       immediate: true,
@@ -1186,7 +1195,14 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.bd.name = this.bd.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
+
+      // 在判断到symbol为custom symbol时把backtest name调整成正常形式
+      let bdSymbol = this.bd.symbol
+      const {name,type} = getSymbolInfo(bdSymbol)
+      if(type == 'custom'){
+        bdSymbol = name
+      }
+      this.bd.name = bdSymbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
     },
     getTradePrice(val) {
       this.$store.commit('form/SET_TRADE_PRICE', val)
@@ -1202,16 +1218,16 @@ export default {
       const {strategy, symbol, symbol2} = this.bd
       this.$emit('changeSymbolInfo', {strategy, symbol, symbol2})
       
-      let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==val)
-      let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==val)
-      if(!stockName && !indexName){
-          return
-      }
 
-      this.$store.commit('form/setComparisonSymbol', {
-        name:stockName?stockName.name:indexName.name,
-        url:stockName?stockName.stock:indexName.symbol,
-      })
+      const {name,url,type} = getSymbolInfo(val)
+    	if(type == 'other'){
+					return
+      }else{
+        this.$store.commit('form/setComparisonSymbol', {
+          name:name,
+          url:url,
+        })
+      }
 
       CIQ.addIndicators({})
     },
@@ -1308,6 +1324,16 @@ export default {
         }
       }
     },
+    async getCustomStocksList() {
+      let vm = this
+      await vm.$store.dispatch('chart/set_mysymbolist',(data)=>{
+        //vm.$store.commit('chart/SET_MYSYMBOLLIST',data)
+      })
+      vm.customStocksList = vm.$store.getters.getMySymbollist.map((item, index) => {
+        let url = encodeBase64(item.name) + '||' + encodeBase64(item.url)
+        return { value: `${url}`, label: `${item.name}`, name: `${item.name}`, key: `${item.name}_${item.url}_${index}` }
+      })
+    },
     remoteMethod: throttle(async function(query) {
       let vm = this
       if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
@@ -1316,7 +1342,10 @@ export default {
           await vm.getStocksList()
           await vm.getIndexsList()
         }
-        this.options = vm.symbolList.concat(vm.indexList)
+        await vm.getCustomStocksList()
+
+        this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
+        debugger
         vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
@@ -1336,6 +1365,12 @@ export default {
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
+        // todo
+        // var customSymbolListTemp = []
+        // customSymbolListTemp = await CIQ.store.dispatch('chart/set_mysymbolist',()=>{
+        //     this.acceptText(val, field);
+        // })
+       
         let list = symbolListTemp.concat(IndexListTemp)
         let options = []
         let wholeWord = []

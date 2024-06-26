@@ -192,7 +192,7 @@
 						</el-upload>
         </el-form-item>
       </div>
-      
+      <!-- <Uploader/> -->
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -297,11 +297,13 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter, createStateFilter} from '@/utils'
+import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {createStateFilter,maxNumOfStudy} from '@/utils/globalFunc'
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
+import Uploader from "@/components/common/chart/st-development/components/Uploader"
 const throttle = require('lodash/throttle')
 
 export default {
@@ -314,6 +316,7 @@ export default {
   },
   components: {
     searchBar,
+    Uploader
   },
   data() {
     var validateSenti = (rule, value, callback) => {
@@ -1793,16 +1796,12 @@ export default {
       try {
         await csvFileDelete(fileID)
         console.log('删除成功')
-        const index = this.fileList.indexOf(file)
-        if (index !== -1) {
-          this.fileList.splice(index, 1)
-        }
-        this.$refs.upload.clearFiles();
-        this.fileList = []
-
         this.clearUserOwnIndicatorSelect()
       } catch (error) {
         console.log('删除失败', error)
+      } finally {
+        this.$refs.upload.clearFiles();
+        this.fileList = []
       }
     },
     handlePreview(file) {

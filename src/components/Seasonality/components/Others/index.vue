@@ -123,7 +123,7 @@
 
 <script>
 import OCDChart from "../SNChart/OCDChart.vue"
-import { createStateFilter } from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 export default {
   name: 'Others',

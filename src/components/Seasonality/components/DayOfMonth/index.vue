@@ -147,7 +147,7 @@
 
 <script>
 import DOMChart from "../SNChart/DOMChart.vue"
-import { createStateFilter } from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 export default {
   name: 'DayOfMonth',

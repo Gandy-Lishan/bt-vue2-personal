@@ -62,6 +62,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
+import { getCoresSymbolDual } from '@/utils/globalFunc'
 export default {
   name: 'symbol',
   props: {
@@ -393,7 +394,7 @@ export default {
           [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
+        const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
         let condition
         if([12,13].includes(this.sym.newCondition)){
           condition = `${conditionMap.get(this.sym.newCondition).name}`
@@ -401,7 +402,6 @@ export default {
           condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          //display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
           display: `(${symbolLabel})${symbolCond.label} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,

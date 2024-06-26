@@ -5,7 +5,8 @@
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
  import { uniqueObjectArray } from '@/utils/formValidate'
- import {recoverSymbolOptixUrl,capitalizeFirstLetter} from '@/utils'
+ import {capitalizeFirstLetter} from '@/utils'
+ import { recoverSymbolOptixUrl,getCoresSymbolDual } from "@/utils/globalFunc";
 
  let __st_js_userownIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -397,7 +398,6 @@
     // 从列表进入后还原new indicator的设定和新的indicator
     // 我这里不用重新触发inputSelectHandler的思路来复现图表，因为这样会导致图表加载流程冗余
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
-debugger
         //考虑到addSeries必须在displaydata前设定好timeframe
         CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
 
@@ -552,7 +552,6 @@ debugger
             const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
             const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
             const ma2_showInput = ma2_value != '1'
-    debugger
             let fieldName1 = 'field',fieldName2 = 'field'
             if(newData.categories.includes('Symbol')){ // symbol
             }else{        
@@ -739,8 +738,7 @@ debugger
             }
 
             // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-            const symbolLabel = criteria.endsWith(2) ? CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
-
+            const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
             if(!showInput || !field) return
 
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
