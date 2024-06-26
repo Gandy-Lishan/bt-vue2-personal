@@ -163,7 +163,7 @@
 
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator, getRelatedBacktest, deleteBacktest } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
+import { capitalizeFirstLetter, isJson , trimTrailingZeros} from "@/utils"
 
 export default {
   name: 'MITable',
@@ -406,6 +406,7 @@ export default {
       }
     },
     getWeightedIndicatorData(item, sentimentList, symbolList) {
+      debugger
       const mul_indicator_obj = isJson(item.mul_indicator) ? JSON.parse(item.mul_indicator) : item.mul_indicator;
       const indicator_weight_arr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
       let combine_type_arr = mul_indicator_obj.combine_type ? (mul_indicator_obj.combine_type.includes('_') ? mul_indicator_obj.combine_type.split('_') : [mul_indicator_obj.combine_type]) : new Array(indicator_weight_arr.length).fill('si')
@@ -424,14 +425,14 @@ export default {
         const type = typeAttribute
         const weightData = {
               // weight: (weight * 100).toFixed(2),
-              weight: weight * 100,
+              weight: trimTrailingZeros(((Number(weight.replace(/^n/, '-'))) * 100).toFixed(2)),
               indicator: result_url,
               indicator_url: url,
               weightValidErrMsg: '',
               type
               }
         const included = `${result} (weight ${(weight * 100).toFixed()}%)`;
-        const included_url = `${result_url} (weight ${(weight * 100).toFixed()}%)`;
+        const included_url = `${result_url} (weight ${(Number(weight.replace(/^n/, '-')) * 100).toFixed()}%)`;
         return {
           included,
           included_url,
