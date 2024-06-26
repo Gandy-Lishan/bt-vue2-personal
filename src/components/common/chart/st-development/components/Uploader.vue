@@ -44,7 +44,7 @@
 					:label-width="formLabelWidth"
 					prop="indicatorName"
 				>
-					<el-input v-model="form.indicatorName" autocomplete="off"></el-input>
+					<el-input v-model="form.indicatorName" autocomplete="off" @keydown.native.prevent.enter="onEnter"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -178,6 +178,10 @@ export default {
         this.observer.disconnect();
     },
 	methods: {
+		/** disable enter while naming a custom symbol */
+		onEnter(event) {
+			event.preventDefault();
+  		},
         filterMutationObserver(){
             let self = this
             // 获取你想要观察的元素

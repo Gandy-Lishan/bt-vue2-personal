@@ -232,6 +232,7 @@
             <el-input
               v-model="form.indicatorName"
               autocomplete="off"
+              @keydown.native.prevent.enter="onEnter"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -693,6 +694,10 @@ export default {
     }
   },
   methods: {
+    /** disable enter while naming a custom symbol */
+		onEnter(event) {
+      event.preventDefault();
+    },
     ...mapMutations('form',['setFrequencyArray', 'setFreqencyLP']),
     /* 当用户选择indicator类别，进行搜索筛选*/
     selectCategory(e) {
