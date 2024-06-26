@@ -423,7 +423,7 @@ debugger
               type
               }
         const included = `${result} (weight ${(weight * 100).toFixed()}%)`;
-        const included_url = `${result_url} (weight ${(weight * 100).toFixed()}%)`;
+        const included_url = `${result_url} (weight ${(Number(weight.replace(/^n/, '-')) * 100).toFixed()}%)`;
         return {
           included,
           included_url,
