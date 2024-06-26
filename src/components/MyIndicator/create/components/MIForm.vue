@@ -403,7 +403,8 @@
 import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
-import {timeframeTransform, createStateFilter} from '@/utils'
+import {timeframeTransform} from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
 

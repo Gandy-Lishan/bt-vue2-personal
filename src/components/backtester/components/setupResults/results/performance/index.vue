@@ -72,6 +72,7 @@ import Trades from './trades'
 import TIM from './tim'
 import MaxMin from './MaxMin'
 import IndexesInfo from "./IndexesInfo"
+import { getSymbolInfo } from '@/utils/globalFunc'
 const XLSX = require('xlsx');
 
 export default {
@@ -152,7 +153,6 @@ export default {
 
               // -------------------------------------  start ----------------
               // this.tradePrice = initalData['basic']['trade_price'] == 0 ? 'Open' : 'Close'// tim数据计算依赖backtester创建时选择的tradePrice类别，如Close/Open
-              debugger
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
@@ -364,6 +364,12 @@ export default {
       this.$refs.timChild?.clearData()
       this.$refs.maxMinChild?.clearData()
     },
+    // 处理custom symbol的特殊url显示
+		getProcessedSymbol(symbol) {
+			if (!symbol) return '';
+			const { name, type } = getSymbolInfo(symbol);
+			return type === 'custom' ? name : symbol;
+		},
     handleDownloadCsv() {
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
@@ -435,7 +441,7 @@ export default {
       this.tradesData.forEach((item, index) => {
         const obj = {}
         obj['Trade #'] = index + 1
-        obj['Symbol'] = item.Symbol
+        obj['Symbol'] = this.getProcessedSymbol(item.Symbol)
         obj['Trade Date'] = item.Date
         obj['Action'] = item.TradeStatus
         obj['Indicator'] = item.Indicator.join(';')

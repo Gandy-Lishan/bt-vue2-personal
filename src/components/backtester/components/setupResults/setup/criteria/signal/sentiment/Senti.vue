@@ -747,7 +747,6 @@ export default {
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
         const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(indicator_url)
@@ -758,7 +757,6 @@ export default {
           condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          //display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
           display: `${name} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,

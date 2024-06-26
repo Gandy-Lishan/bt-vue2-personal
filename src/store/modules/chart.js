@@ -1,4 +1,8 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import {
+    getAllMySymbolsList,getSymbolCsv
+} from '@/service/service.js'
+import {Toast} from '@/utils'
 
 const state = {
 	curDate: '', //ai
@@ -52,24 +56,30 @@ const state = {
 	// studiesCount: 0,
 
 	// 以下管理user's own indicator chartiq 状态
+	/*********** START */
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
 
 	miFormWeightedList: [],
 	miBenmark: process.env.VUE_APP_DEFAULT_SYMBOL,
+	/******* END */
 
 	ma_color_1: ["#FF0000"],
     ma_color_2: ["#f59e0b"],
+
+	//用戶自定義symbolList, 緩存在vuex
+	mySymbolList: [],
+	mySymbolQuotefeedCache: [],
 }
 
 const mutations = {
-	// updateStudiesCount(state, val){
-	// 	state.studiesCount = val
-	// },
-	// updateRocLikeCount(state, val){
-	// 	state.rocLikeCount = val
-	// },
+	SET_MYSYMBOL_QUOTEFEED_CACHE(state,list){
+		state.mySymbolQuotefeedCache = list
+	},
+	SET_MYSYMBOLLIST(state,list){
+		state.mySymbolList = list
+	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
 	 */
@@ -255,17 +265,49 @@ const mutations = {
 }
 
 const actions = {
-	// update_roclike_count({ commit }, val) {
-	// 	return new Promise(resolve => {
-	// 		if(val == `add`){
-	// 			commit(`updateRocLikeCount`,state.rocLikeCount+1)
-	// 		}
-	// 		if(val == `remove`){
-	// 			commit(`updateRocLikeCount`,state.rocLikeCount-1)
-	// 		}
-	// 		resolve()
-	// 	})
-	// },
+	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
+	get_mysymbolCSV({ commit }, obj) {
+		return new Promise(async (resolve,reject) => {
+			const {url,timeframe} = obj
+			const quote = state.mySymbolQuotefeedCache.find(item=>item.url==url && item.timeframe==timeframe)
+			if(!quote){
+				try{
+					const res = await getSymbolCsv(url,timeframe)
+					if (res.data.status === 200 || res.data.status === 201) {
+						const csvContent = res.data.data.csv_content
+						commit('SET_MYSYMBOL_QUOTEFEED_CACHE', [...state.mySymbolQuotefeedCache, {
+							url: url,
+							timeframe: timeframe,
+							quotes: csvContent
+						}])
+						resolve(csvContent)
+					}else if (res.data.status === 401) {
+						Toast('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds',2000)
+						setTimeout(() => {
+							window.location.reload();
+						}, 2000); // 2000毫秒 = 3秒
+						reject(new Error('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds'));
+					} else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.data.status}`));
+					}
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(quote.quotes)
+			}
+		})
+	},
+	// 獲取mysymbol列表包括url和name etc.
+	set_mysymbolist({ commit }, cb) {
+		return new Promise(async resolve => {
+			let res = await getAllMySymbolsList(1,cb)
+			commit('SET_MYSYMBOLLIST', res)
+			resolve()
+		})
+	},
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {

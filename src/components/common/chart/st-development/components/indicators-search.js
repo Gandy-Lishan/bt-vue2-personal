@@ -10,7 +10,8 @@ import {
     getAllMyIndicatorsList,
 } from '@/service/service.js'
 
-import {maxNumOfStudy,timeframeTransform,createStateFilter} from '@/utils'
+import {timeframeTransform} from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
@@ -184,7 +185,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     var results = results
                     self.results(results);
                     
-                    var stClose = document.getElementsByClassName("st-close")
+                    var stClose = self.getElementsByClassName("st-close")
                     if(filter == 'MY FAVORITES'){
                         for(var el = 0;el<stClose.length;el++){     
                             var removeFavorite = function(data){
@@ -404,6 +405,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
+            /**
+             * 
+             * @param {*} val   在點擊組件時加載favIndi和myIndi, 切換過濾器或者搜索都訪問存好的數組 
+             * @param {*} field 
+             */
             async updateFavIndicatorAndMyIndicator(val,field){
                 var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
@@ -470,7 +476,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         allFilters.forEach(async function (f) {
                             // 判断点击事件触发前是否激活了indicators-search
                             if(f.classList.contains("true")){
-                                
+                                console.log('updateFavIndicatorAndMyIndicator')
                                 // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
                                 await self.updateFavIndicatorAndMyIndicator(self.input.val(), f.innerHTML)
                                 self.acceptText(self.input.val(), f.innerHTML);
@@ -818,7 +824,13 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);
-                    CIQ.UI.stxtap(node.querySelector("span"), node.selectFC);
+                    //CIQ.UI.stxtap(node.querySelector("span"), node.selectFC);
+                    CIQ.UI.stxtap(node, function(event) {
+                        // 检查事件目标是否为 st-close 元素
+                        if (!event.target.classList.contains('st-close')) {
+                            node.selectFC(event);
+                        }
+                    });
                 }
                 
                 var scrollable = this.resultList;

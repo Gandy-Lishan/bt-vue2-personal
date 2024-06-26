@@ -23,7 +23,6 @@
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
-import {maxNumOfStudy} from '@/utils'
 
 var claims = []
 /**

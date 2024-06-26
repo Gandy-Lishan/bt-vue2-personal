@@ -1,4 +1,5 @@
 import {CIQ} from "chartiq/js/chartiq.js";
+import { getCoresSymbolDual } from '@/utils/globalFunc'
 
 let __st_addons_standard_tooltip_ = (_exports) => {
 
@@ -492,7 +493,7 @@ if (!CIQ.Marker) {
                  for (var study in this.layout.studies) {
                      var sd = this.layout.studies[study];
                      const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-                     const symbolLabel = isSymbol2?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                     const symbolLabel = getCoresSymbolDual(isSymbol2)
 
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
@@ -504,7 +505,6 @@ if (!CIQ.Marker) {
                                  fields.push({
                                      member: output,
                                      display: `${name}${symbol}`,
-                                    //  display: name,
                                      panel: panel,
                                      yAxis: yAxis
                                  });

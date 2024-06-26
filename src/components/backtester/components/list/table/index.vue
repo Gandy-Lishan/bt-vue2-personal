@@ -29,7 +29,7 @@
 				v-model="searchItem"
 				placeholder="Search for the name of the backtest"
 				@keyup.enter.native="handleQuery"
-				clearable
+				clearable 
 				@clear="handleQuery"
 			>
 				<i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -193,8 +193,8 @@
 				align="center">
 				<template slot-scope="scope">
 					<div class="symbolBox">
-						<p>{{ scope.row.symbol }}</p>
-						<p v-if="scope.row.strategy === 'Dual' && scope.row.symbol2" style="">{{scope.row.symbol2}}</p>
+						<p>{{ getProcessedSymbol(scope.row.symbol) }}</p>
+						<p v-if="scope.row.strategy === 'Dual' && scope.row.symbol2" style="">{{ getProcessedSymbol(scope.row.symbol2) }}</p>
 					</div>
 				</template>
       </el-table-column>
@@ -520,6 +520,7 @@ import {
 	getAnalystList
 } from '@/service/service.js'
 import {isJson} from '@/utils'
+import { getSymbolInfo } from '@/utils/globalFunc'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { copy } from "@/components/common/directives/copyBacktestID"
@@ -579,7 +580,7 @@ export default {
 		},
 		isOptRuning() {
 			return this.$refs['OPT'].optimizeState
-		}
+		},
 	},
 	watch: {
 		userRole: {
@@ -599,6 +600,12 @@ export default {
 		},
 	},
 	methods: {
+		// 处理custom symbol的特殊url显示
+		getProcessedSymbol(symbol) {
+			if (!symbol) return '';
+			const { name, type } = getSymbolInfo(symbol);
+			return type === 'custom' ? name : symbol;
+		},
 		async refreshList() {
 			// 重置查询页码并获取数据 History
 			if (this.currentPage === 'History') {

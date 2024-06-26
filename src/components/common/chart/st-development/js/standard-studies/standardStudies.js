@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
-import { getPropertyByString } from "@/utils"
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 
@@ -3388,7 +3388,6 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 			var O = quote.Open,
 				C = quote.Close;
 			//if((!O && O!==0) || (!C && C!==0) || O===C) return stx.defaultColor;
-debugger
 			return {
 				fill_color:
 					O > C ? seriesParam0.fill_color_down : seriesParam0.fill_color_up,
