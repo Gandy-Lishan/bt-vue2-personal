@@ -644,7 +644,7 @@
                     resolve()   
                 }else{
                     var queryUrl =  config.indicatorMetadata + 
-                    "?indicator=" + indicator;
+                    "?indicator=" + recoverSymbolOptixUrl(indicator);
                     let _res = new Promise((resolve,reject)=>{ 
                         CIQ.axios.get(
                             queryUrl,
