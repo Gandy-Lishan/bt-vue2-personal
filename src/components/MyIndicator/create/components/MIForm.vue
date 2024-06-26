@@ -839,7 +839,10 @@ export default {
       };
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
+        const percentageStrings = this.weightData.map(item => {
+          if(Number(item.weight) < 0) return (item.weight / 100).toFixed(2).replace(/^-/, 'n')
+          return (item.weight / 100).toFixed(2)
+        });
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
