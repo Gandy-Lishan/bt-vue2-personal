@@ -163,7 +163,7 @@
 
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator, getRelatedBacktest, deleteBacktest } from '@/service/service'
-import { capitalizeFirstLetter, isJson } from "@/utils"
+import { capitalizeFirstLetter, isJson , trimTrailingZeros} from "@/utils"
 
 export default {
   name: 'MITable',
@@ -416,7 +416,7 @@ debugger
         const type = typeAttribute
         const weightData = {
               // weight: (weight * 100).toFixed(2),
-              weight: (Number(weight.replace(/^n/, '-'))) * 100,
+              weight: trimTrailingZeros(((Number(weight.replace(/^n/, '-'))) * 100).toFixed(2)),
               indicator: result_url,
               indicator_url: url,
               weightValidErrMsg: '',
