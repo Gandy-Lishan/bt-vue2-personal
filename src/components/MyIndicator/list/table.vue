@@ -267,6 +267,15 @@ export default {
       } catch (error) {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
+
+      /** create 携带aapl optix(url: aapl@indicator)的会上传indicator为aapl,所以在获取列表时把其还原成(aapl@indicator) */
+      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
+      listRes.data.results.forEach(obj => {
+        if(obj.combine_type == 'indicator'){
+          if(sentimentList.find((i)=>i.url == obj.indicator_1_url+'@indicator')) obj.indicator_1_url = obj.indicator_1_url+'@indicator'
+        }
+      });
+   
       this.total = listRes.data.count
       this.tableData = await this.processRowData(listRes.data.results)
       this.loading = false
@@ -362,7 +371,7 @@ export default {
       const maList = item.ma.split('_');
       const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
-debugger
+
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
         included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
