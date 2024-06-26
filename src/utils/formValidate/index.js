@@ -178,8 +178,9 @@ export const validatePercentageRule = (_, value, callback) => {
   //   if (numericValue < 0) {
   //     return 'Enter a non-negative value';
   //   }
-  const pattern = /^\d+$/
-  const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+  // const pattern = /^\d+$/
+		const pattern = /^[+-]?\d+$/
+  const isPositiveInteger = isNaN(value) || !pattern.test(value)
   if (isPositiveInteger) {
 	  return `Enter positive integers only`;
   }
