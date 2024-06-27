@@ -1446,7 +1446,7 @@
 				<hr />
 				<p>
 					Select the historical date you want to view in the date picker under
-					'AI Picks at the end of today'.
+					'Daily Picks at the end of today'.
 				</p>
 				<el-image
 					style="width: 100%; height: 50%"

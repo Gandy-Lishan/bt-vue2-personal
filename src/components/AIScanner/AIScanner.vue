@@ -17,7 +17,7 @@
 		<div class="table-header">
 			<div class='header-part1'>
 				<div class="tableLabel">
-					<h4>AI Picks at the end of today</h4>
+					<h4>Daily Picks at the end of today</h4>
 					<el-date-picker
 						v-model="date"
 						class="aiscanner-date"

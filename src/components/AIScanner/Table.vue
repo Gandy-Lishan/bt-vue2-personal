@@ -524,8 +524,8 @@ export default {
 			})
 			const ws = XLSX.utils.json_to_sheet(processedData);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'AI Picks at the end of today');
-      XLSX.writeFile(wb, 'AI_Stock_Recommended.xlsx');
+      XLSX.utils.book_append_sheet(wb, ws, 'Daily Picks at the end of today');
+      XLSX.writeFile(wb, 'Smart_Stock_Recommended.xlsx');
 		}
 	}
 };
