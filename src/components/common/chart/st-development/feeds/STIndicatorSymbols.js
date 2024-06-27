@@ -306,11 +306,15 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 exchDisp: ""
             }
             
-
-            results.push({
-                display: [item.name, item.name, item.exchDisp],
-                data: item
-            });
+            if (
+                item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+            ){
+                results.push({
+                    display: [item.name, item.name, item.exchDisp],
+                    data: item
+                });
+            }
         }); 
         cb(results)
     } 

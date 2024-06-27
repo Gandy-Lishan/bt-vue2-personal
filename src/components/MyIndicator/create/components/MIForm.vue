@@ -847,7 +847,7 @@ export default {
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
-          acc[`indicator_${index + 1}`] = item.indicator_url;
+          acc[`indicator_${index + 1}`] = recoverSymbolOptixUrl(item.indicator_url);
           return acc;
         }, {});
         mul_indicator.combine_type = this.weightData.map(item => {

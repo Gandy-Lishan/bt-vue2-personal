@@ -786,6 +786,7 @@ stx-hu-tooltip-field-value {
 }
 .st-close {
   pointer-events: all; /* 确保 .st-close 接受点击事件 */
+  margin-right: 10px;
 }
 
 .ciq-nav {
