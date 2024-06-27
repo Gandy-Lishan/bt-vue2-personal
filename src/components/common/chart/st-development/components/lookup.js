@@ -274,8 +274,9 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     else{
                         var comparisonInput = document.querySelector(".cq-comparison-new")
                         CIQ.UI.stxtap(comparisonInput, function () {
-                            allFilters.forEach(function (f) { 
+                            allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
+                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
