@@ -1373,23 +1373,23 @@
 				</section>
 			</section>
 			<section v-else-if="id.includes('ai')">
-				<h1 id="ai-0">The generation logic of AI Stock Scanner</h1>
+				<h1 id="ai-0">The generation logic of Smart Stock Scanner</h1>
 				<hr />
 				<p>
 					<strong
-						>The logic behind AI Stock Scanner's generation is aimed at
+						>The logic behind Smart Stock Scanner's generation is aimed at
 						improving user returns.</strong
 					>
 				</p>
 				<p>
-					<strong>Broad market coverage:</strong> AI Stock Scanner scans stocks
+					<strong>Broad market coverage:</strong> Smart Stock Scanner scans stocks
 					included in the S&P 1500 and some common index funds, providing
 					coverage across a wide market. This means it can capture signals from
 					multiple stocks and ETFs, providing users with more investment
 					opportunities.
 				</p>
 				<p>
-					<strong>Accurate signal filtering:</strong> AI Stock Scanner utilizes
+					<strong>Accurate signal filtering:</strong> Smart Stock Scanner utilizes
 					advanced filtering algorithms to extract signals that meet the
 					specified requirements from the scanned stocks and ETFs. This enables
 					users to obtain more precise signals that align with their investment
@@ -1403,7 +1403,7 @@
 					assess their potential profitability.
 				</p>
 				<p>
-					<strong>Data statistical analysis:</strong> AI Stock Scanner performs
+					<strong>Data statistical analysis:</strong> Smart Stock Scanner performs
 					data statistical analysis on the backtesting results to filter out
 					stocks that meet the specified requirements along with their
 					corresponding signals. Through data analysis, it identifies signals
@@ -1411,7 +1411,7 @@
 					more promising investment opportunities.
 				</p>
 				<p>
-					<strong>Information presentation and selection:</strong> AI Stock
+					<strong>Information presentation and selection:</strong> Smart Stock
 					Scanner presents the qualifying signals along with their backtesting
 					information, offering users an intuitive interface and data
 					visualization. This allows users to better understand and select
@@ -1419,7 +1419,7 @@
 					potential for investment returns.
 				</p>
 				<p>
-					In conclusion, AI Stock Scanner enhances the potential for user
+					In conclusion, Smart Stock Scanner enhances the potential for user
 					returns through broad market coverage, accurate signal filtering,
 					evaluation based on historical backtesting, data statistical analysis,
 					and information presentation and selection. It assists users in
@@ -1428,10 +1428,10 @@
 					informed investment decisions and ultimately improve investment
 					returns.
 				</p>
-				<h1 id="ai-1">AI Stock Scanner entrance</h1>
+				<h1 id="ai-1">Smart Stock Scanner entrance</h1>
 				<hr />
 				<p>
-					Click 'AI Stock Scanner' in the navigation bar at the top of the
+					Click 'Smart Stock Scanner' in the navigation bar at the top of the
 					homepage
 				</p>
 				<el-image
@@ -1442,7 +1442,7 @@
 					fit="fill"
 					lazy
 				></el-image>
-				<h1 id="ai-2">Modify AI Stock Scanner date</h1>
+				<h1 id="ai-2">Modify Smart Stock Scanner date</h1>
 				<hr />
 				<p>
 					Select the historical date you want to view in the date picker under
@@ -1460,7 +1460,7 @@
 				<hr />
 				<p>
 					Check the symbol you want to calculate for Cash Alloc(%) in the
-					selection box before the symbol name, and the AI Stock Scanner will
+					selection box before the symbol name, and the Smart Stock Scanner will
 					help you calculate the Cash Alloc(%) corresponding to the current
 					symbol
 				</p>
@@ -1528,7 +1528,7 @@
 				<h1 id="ai-4">Stock List Sorting</h1>
 				<hr />
 				<p>
-					On the AI Scanner page, you will see a stock list that contains
+					On the Smart Scanner page, you will see a stock list that contains
 					information about multiple stocks. Each column of the stock list has a
 					header, including Win Rate(%), Stop Loss(%), Profit Target(%), and
 					Best Time In Market(Bars).
@@ -1568,7 +1568,7 @@
 				</p>
 				<p>
 					By following the steps mentioned above, you can utilize the sorting
-					functionality of AI Scanner to sort the stock list in ascending or
+					functionality of Smart Scanner to sort the stock list in ascending or
 					descending order based on different columns. This enables you to
 					compare and analyze stock data based on various indicators such as Win
 					Rate(%), Stop Loss(%), Profit Target(%), or Best Time In Market(Bars),
@@ -1621,9 +1621,9 @@
 				></el-image>
 				<h1 id="ai-6">Switching AI Algorithms: SwingAI and MidTermAI</h1>
 				<hr />
-				<h2 id="ai-6-0">Opening the AI Stock Scanner System</h2>
+				<h2 id="ai-6-0">Opening the Smart Stock Scanner System</h2>
 				<p>
-					Make sure you have entered the AI ​​stock scanner system and the
+					Make sure you have entered the Smart Stock Scanner system and the
 					corresponding function buttons are displayed on the interface.
 				</p>
 				<el-image

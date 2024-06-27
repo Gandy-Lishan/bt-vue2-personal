@@ -26,11 +26,11 @@ export default {
       sections: [
         {
           id: 'ai-0',
-          title: 'The generation logic of AI Stock Scanner'
+          title: 'The generation logic of Smart Stock Scanner'
         },
-        { id: 'ai-1', title: 'AI Stock Scanner entrance' },
+        { id: 'ai-1', title: 'Smart Stock Scanner entrance' },
           {
-            id: 'ai-2', title: 'Modify AI Stock Scanner date'
+            id: 'ai-2', title: 'Modify Smart Stock Scanner date'
           },
           // { id: 'ai-3', title: 'Cash Alloc(%) for auto-adjusted stocks'},
           { id: 'ai-3', title: 'Using Filter Buttons'},

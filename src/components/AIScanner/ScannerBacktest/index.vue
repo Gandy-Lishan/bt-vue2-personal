@@ -1,7 +1,7 @@
 <template>
   <div class="CPMResults-container">
     <div class="back">
-				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to AI Stock Scanner List</span></router-link>
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to Smart Stock Scanner List</span></router-link>
 		</div>
     <el-collapse v-model="activeNames" :accordion="false" class="CPMResults-content">
       <el-collapse-item name="1" class="form">
