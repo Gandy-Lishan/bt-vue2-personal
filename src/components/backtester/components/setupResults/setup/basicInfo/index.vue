@@ -1342,10 +1342,10 @@ export default {
           await vm.getStocksList()
           await vm.getIndexsList()
         }
-        await vm.getCustomStocksList()
+        //await vm.getCustomStocksList()
 
-        this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
-        debugger
+        //this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
+        this.options = vm.symbolList.concat(vm.indexList)
         vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
