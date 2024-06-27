@@ -179,7 +179,8 @@
                             newStudy = JSON.parse(str)                                     
                             
                             CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
-                            CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i])    
+                            let sentiName = CIQ.findSentiIndicator(null,sentiUrlList[i])?.chart_name
+                            CIQ.Studies.addStudy(CIQ.stxx,sentiUrlList[i],{display:sentiName})    
                         
                     }
                 }   
@@ -680,7 +681,7 @@
                                     
                                     CIQ.Studies.studyLibrary[indicator] = newStudy
                                     let sentiName = CIQ.findSentiIndicator(null,indicator)?.chart_name
-                                    CIQ.Studies.addStudy(CIQ.stxx,indicator,{display:recoverSymbolOptixUrl(sentiName)})                
+                                    CIQ.Studies.addStudy(CIQ.stxx,indicator,{display:sentiName})                
                             }
   
                         resolve()                     
