@@ -16,6 +16,21 @@ import {__js_advanced_studies_chaikin_} from "./advance-studies/chaikin.js"
 import {__js_advanced_studies_chande_} from "./advance-studies/chande.js"
 import {__js_advanced_studies_linearRegression_} from "./advance-studies/linearRegression.js"
 import {__js_advanced_studies_coppock_} from "./advance-studies/coppock.js"
+import {__js_advanced_studies_detrended_} from "./advance-studies/detrended.js"
+import {__js_advanced_studies_disparity_} from "./advance-studies/disparity.js"
+import {__js_advanced_studies_highLowStudies_} from "./advance-studies/highLowStudies.js"
+import {__js_advanced_studies_easeOfMovement_} from "./advance-studies/easeOfMovement.js"
+import {__js_advanced_studies_elder_} from "./advance-studies/elder.js"
+import {__js_advanced_studies_fractalChaos_} from "./advance-studies/fractalChaos.js"
+import {__js_advanced_studies_intradayMomentum_} from "./advance-studies/intradayMomentum.js"
+import {__js_advanced_studies_williamsMFI_} from "./advance-studies/williamsMFI.js"
+import {__js_advanced_studies_massIndex_} from "./advance-studies/massIndex.js"
+import {__js_advanced_studies_moneyFlow_} from "./advance-studies/moneyFlow.js"
+import {__js_advanced_studies_keltner_} from "./advance-studies/keltner.js"
+import {__js_advanced_studies_priceVolumeOscillator_} from "./advance-studies/priceVolumeOscillator.js"
+import {__js_advanced_studies_primeNumber_} from "./advance-studies/primeNumber.js"
+import {__js_advanced_studies_pring_} from "./advance-studies/pring.js"
+
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -46,6 +61,19 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_chande_,
 			__js_advanced_studies_linearRegression_,
 			__js_advanced_studies_coppock_,
+			__js_advanced_studies_detrended_,
+			__js_advanced_studies_disparity_,
+			__js_advanced_studies_easeOfMovement_,
+			__js_advanced_studies_elder_,
+			__js_advanced_studies_fractalChaos_,
+			__js_advanced_studies_intradayMomentum_,
+			__js_advanced_studies_williamsMFI_,
+			__js_advanced_studies_massIndex_,
+			__js_advanced_studies_moneyFlow_,
+			__js_advanced_studies_keltner_,
+			__js_advanced_studies_priceVolumeOscillator_,
+			__js_advanced_studies_primeNumber_,
+			__js_advanced_studies_pring_,
 		)
 
 

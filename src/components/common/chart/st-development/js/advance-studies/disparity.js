@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_disparity_ = (_exports) => {
@@ -37,12 +37,9 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateDisparity = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		var subField = field
 
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -53,11 +50,24 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else {
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			if (!quotes[i]) continue;
 			var qMA = quotes[i]["_MA " + sd.name];
 			if (qMA)
-				quotes[i]["Result " + sd.name] = 100 * (quotes[i][field] / qMA - 1);
+				quotes[i]["Result " + sd.name] = 100 * (getPropertyByString(quotes[i],field,subField) / qMA - 1);
 		}
 	};
 
@@ -71,4 +81,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_disparity_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_disparity_}

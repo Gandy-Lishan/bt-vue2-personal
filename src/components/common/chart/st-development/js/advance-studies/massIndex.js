@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_massIndex_ = (_exports) => {
@@ -37,12 +37,21 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateMassIndex = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
 		if (quotes.length < Math.max(9, sd.days + 1)) {
 			sd.error = true;
 			return;
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			quotes[i]["_High-Low " + sd.name] = quotes[i].High - quotes[i].Low;
+			quotes[i]["_High-Low " + sd.name] = getPropertyByString(quotes[i],field,'High') - getPropertyByString(quotes[i],field,'Low');
 		}
 
 		CIQ.Studies.MA(
@@ -55,20 +64,28 @@ if (!CIQ.Studies) {
 			sd
 		);
 		CIQ.Studies.MA("exponential", 9, "_EMA " + sd.name, 0, "_EMA2", stx, sd);
-
+		debugger
 		var total = 0;
 		if (
 			quotes[sd.startFrom - 1] &&
 			quotes[sd.startFrom - 1]["_total " + sd.name]
 		)
 			total = quotes[sd.startFrom - 1]["_total " + sd.name];
+		
+		/** chartiq可能沒有考慮到high和low全是（或者周期内連續的）一樣的情況 */
 		for (var j = Math.max(17, sd.startFrom); j < quotes.length; j++) {
-			total += quotes[j]["_EMA " + sd.name] / quotes[j]["_EMA2 " + sd.name];
+			if(quotes[j]["_EMA " + sd.name] == 0 && quotes[j]["_EMA2 " + sd.name] == 0) total += 0
+			else total += quotes[j]["_EMA " + sd.name] / quotes[j]["_EMA2 " + sd.name];
+
 			if (j >= 17 + sd.days - 1) {
 				quotes[j]["Result " + sd.name] = total;
-				total -=
+				if(quotes[j - sd.days + 1]["_EMA " + sd.name] == 0 && quotes[j - sd.days + 1]["_EMA2 " + sd.name] == 0){
+					total -= 0;
+				}else{
+					total -=
 					quotes[j - sd.days + 1]["_EMA " + sd.name] /
 					quotes[j - sd.days + 1]["_EMA2 " + sd.name];
+				}
 			}
 			quotes[j]["_total " + sd.name] = total;
 		}
@@ -112,4 +129,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_massIndex_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_massIndex_}

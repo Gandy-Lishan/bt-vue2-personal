@@ -60,12 +60,12 @@
 			margin-left: 28px;
 			span {
 				font-size: 13px;
-				margin-top: 3px;
+				margin-top: -3px;
 				&::after {
 					content: '';
 					position: absolute;
-					right: 7px;
-					top: 37px;
+					right: 0px;
+					top: 35px;
 					display: block;
 					width: 5px;
 					height: 5px;
@@ -102,4 +102,7 @@
 }
 .el-menu--horizontal > .el-menu-item {
 	line-height: 76px;
+}
+.el-menu-item, .el-submenu__title {
+	padding: 0 10px;
 }

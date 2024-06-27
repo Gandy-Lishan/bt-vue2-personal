@@ -312,13 +312,9 @@ if (!CIQ.Marker) {
 		var expand = n.querySelector(".stx-marker-expand");
 		var header = n.querySelector("h4", template);
 		var text = n.querySelector("p", template);
-		var stem = n.querySelector(".stx-stem", template);
-		// stem.style.float = 'none'
-		// stem.style.marginLeft = '12px'
 		header.innerText = this.params.headline;
 		text.innerText = this.params.story;
 		this.hasText = !!params.headline || !!params.story;
-
 		this.deferAttach = true;
 
 		this.node = n.firstChild;
@@ -557,6 +553,60 @@ if (!CIQ.Marker) {
 		}
 	};
 
+	CIQ.Marker.stPerformance.drawSignalMarker = function (marker, style, params) {
+		var stx = marker.params.stx,
+			chart = stx.chart,
+			ctx = chart.context;
+		var x = params.x,
+			y = params.y,
+			width = params.midWidth * 2, // 使用宽度参数
+			height = params.midHeight * 2, // 使用高度参数
+			//category = params.category;
+			// headline = params.headline;
+			label = 'Last Signal'
+		var color = params.color ? params.color : style.backgroundColor;
+	
+		var labelLength = Math.round(ctx.measureText(label).width);
+
+		ctx.fillStyle = color;
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+	
+		// 绘制一个长矩形，(x, y) 为中心点
+		ctx.rect(x - width / 2, y - height / 2, width, height);
+		ctx.closePath();
+		ctx.fill();
+		ctx.stroke();
+
+    // 绘制倒三角形
+    ctx.beginPath();
+    ctx.moveTo(x, y + height / 2 - 3); // 矩形底部中心
+	ctx.lineTo(x - 10, y + height / 2 - 3); // 三角形左角
+    ctx.lineTo(x, y + height / 2 + 10 - 3); // 三角形左角
+    ctx.lineTo(x + 10, y + height / 2 - 3); // 三角形右角
+    ctx.lineTo(x, y + height / 2 - 3); // 回到中心点
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+		var xx = (width - (labelLength + 20)) / 2;
+		ctx.fillStyle = "black";
+		ctx.fillText(label, x - width / 2 + xx + 10, y);
+	
+		if (marker.highlight || marker.active) {
+			// Highlight or active state
+			width = width * 1.1;
+			height = height * 1.3;
+	
+			ctx.beginPath();
+				y = y + 1.6;
+				ctx.rect(x - width / 2, y - height / 2, width, height);
+			ctx.closePath();
+			ctx.stroke();
+		}
+	};
+	
 	/**
 	 * Draws square canvas markers based on the styles for {@link CIQ.Marker.stPerformance} markers.
 	 *
@@ -751,6 +801,7 @@ if (!CIQ.Marker) {
 			inverted: invert,
 			field: mParams.plotField	// <<<<== custom field
 		});
+		if(type === "last-signal") y = y-50
 
 		// This can happen if for some reason the marker is missing a tick.
 		//It's possible but rare,  in that scenario just abort the drawing to prevent throwing errors
@@ -800,6 +851,14 @@ if (!CIQ.Marker) {
 				y: y,
 				size: halfSide,
 				category: nParams.category,
+				color: color
+			});
+		} else if (type === "last-signal") {
+			CIQ.Marker.stPerformance.drawSignalMarker(marker, markerStyle, {
+				x: x,
+				y: y,
+				midHeight: halfSide,
+				midWidth: halfWidth,
 				color: color
 			});
 		} else {
@@ -1150,7 +1209,8 @@ if (!CIQ.Marker) {
 			stx = marker.params.stx;
 
 		CIQ.Marker.stPerformance.reconstituteExpanded(stx);
-		CIQ.Marker.stPerformance.consolidateExpanded(stx);
+		/** important!! 禁用marker expand 融合機制*/
+		//CIQ.Marker.stPerformance.consolidateExpanded(stx);
 		this.quickCache(marker);
 
 		if (expand.clickClosure) return;

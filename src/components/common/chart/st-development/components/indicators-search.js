@@ -10,7 +10,8 @@ import {
     getAllMyIndicatorsList,
 } from '@/service/service.js'
 
-import {maxNumOfStudy,timeframeTransform} from '@/utils'
+import {timeframeTransform} from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 
 const collator = new Intl.Collator('en');
 function SortArray(x, y){
@@ -184,7 +185,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     var results = results
                     self.results(results);
                     
-                    var stClose = document.getElementsByClassName("st-close")
+                    var stClose = self.getElementsByClassName("st-close")
                     if(filter == 'MY FAVORITES'){
                         for(var el = 0;el<stClose.length;el++){     
                             var removeFavorite = function(data){
@@ -233,8 +234,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         updated: item.updated,
                         category: item.category
                     }})
-                    let wholeWord = []
-                    try{
+
                         resu.push(...this.btvFavIndi.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
@@ -245,65 +245,54 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
     
                             var results = []
-                            const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+                            const milist = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
 
-                            resu.push(...list)
-                            resu.forEach(element => {
+                            resu.push(...milist)
+                            resu.map(element => {
+                                let item
                                 try{
-                                    var item = {
+                                    item = {
                                         name: element.name,
                                         url: element.url,
                                         updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
                                     }
-                                }catch(err){return}
+                                }catch(err){return null}
                            
                                 if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
-                                    return;
+                                    return null;
                                 }
         
                                 if (item.updated.indexOf("Quarterly") !==-1){
-                                    return;
+                                    return null;
                                 }
         
                                 if (item.name.indexOf("Seasonality") !==-1){
-                                    return;
+                                    return null;
                                 }
         
                                 if (CIQ.symbols.indexOf(item.name) !==-1){
-                                    return;
+                                    return null;
                                 }
           
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                                    return;
-                                }
-        
-                                if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                                    wholeWord.push({
-                                        display: [item.name,item.updated],
-                                        data: item
-                                    })
-                                    return
-                                } 
-                                   
                                 results.push({
-                                    display:[item.name,item.updated],
-                                    data:item
-                                })    
-                            }); 
+                                    display: [item.name, item.updated],
+                                    data: item,
+                                    priority: createStateFilter(value)(item),
+                                });
 
-                            // results.sort(SortArray)
-                            if(wholeWord.length>0)   results.unshift(...wholeWord)
-                            closure(results); 
+                                return null;
+                            }).filter(Boolean); // 过滤掉null值
+
+                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
-                    }catch{}
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
                     //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
                     const data = await CIQ.getFavorite()
-                   // try{
+
                         resu = JSON.parse(data.favorite_indicator)
 
                         resu.push(...this.btvFavIndi.data.data.map(item=>{return {
@@ -319,37 +308,34 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
 
                             resu.push(...list)
-                            resu.forEach(element => {
+                            resu.map(element => {
+                                let item
                                 try{
-                                    var item = {
-                                        symbol: element.url,
+                                    item = {
+                                        url: element.url,
                                         name: element.name,
                                         updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
                                         exchDisp: "",
                                     }
-                                }catch(err){return}
+                                }catch(err){return null}
     
-                                // 匹配关键词
-                                if (item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1 || item.symbol.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                                    results.push({
-                                        display: [item.name, item.updated],
-                                        data: item
-                                    });
-                                }         
-                            }); 
+                                results.push({
+                                    display: [item.name, item.updated],
+                                    data: item,
+                                    priority: createStateFilter(value)(item),
+                                });  
+                                
+                                return null
+                            }).filter(Boolean); // 过滤掉null值
 
-                            // fav动态加载，排序的话体验不好
-                           // results.sort(SortArray)
-                            closure(results);
+                           closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
                           loader.hide(); 
-                    //}catch{}
                 }else if (filter == "MOST POPULAR"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  
 
                     var results = []
-                    let wholeWord = []
                     for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
                         var fields = CIQ.store.state.chart.indicatorsList[i]
                         
@@ -381,25 +367,15 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         if (CIQ.symbols.indexOf(item.name) !==-1){
                             continue;
                         }
-                        if (item.name.toUpperCase().indexOf(value.toUpperCase()) === -1 && item.url.toUpperCase().indexOf(value.toUpperCase()) === -1){
-                            continue;
-                        }
 
-                        if(item.name.toUpperCase() === value.toUpperCase() || item.url.toUpperCase() === value.toUpperCase()){
-                            wholeWord.push({
-                                display: [item.name,item.updated],
-                                data: item
-                            })
-                            continue
-                        }
                         results.push({
-                            display:[item.name,item.updated],
-                            data:item
-                        })
+                            display: [item.name, item.updated],
+                            data: item,
+                            priority: createStateFilter(value)(item),
+                        });
                     }
-                    results.sort(SortArray)
-                    if(wholeWord.length>0)   results.unshift(...wholeWord)
-                    closure(results); 
+
+                    closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
                 }             
             }
             attachDriver(driver) {
@@ -429,16 +405,23 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
-            async updateFavIndicatorAndMyIndicator(){
+            /**
+             * 
+             * @param {*} val   在點擊組件時加載favIndi和myIndi, 切換過濾器或者搜索都訪問存好的數組 
+             * @param {*} field 
+             */
+            async updateFavIndicatorAndMyIndicator(val,field){
                 var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
 
                     var filters = this.querySelector("cq-indicators-lookup-filters");
                     if (filters) var overlay = filters.querySelector(".overlay");
                     overlay.style.display = 'block'
-                this.btvFavIndi = await getBTV1FavIndicator()
-                this.myIndicator = await getAllMyIndicatorsList(1,()=>{})
-
+                    this.btvFavIndi = await getBTV1FavIndicator()
+                    this.myIndicator = await getAllMyIndicatorsList(1,()=>{
+                        this.acceptText(val, field);
+                    })
+                    
                 overlay.style.display = 'none'
             }
             initialize() {
@@ -493,9 +476,9 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         allFilters.forEach(async function (f) {
                             // 判断点击事件触发前是否激活了indicators-search
                             if(f.classList.contains("true")){
-                                
+                                console.log('updateFavIndicatorAndMyIndicator')
                                 // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
-                                await self.updateFavIndicatorAndMyIndicator()
+                                await self.updateFavIndicatorAndMyIndicator(self.input.val(), f.innerHTML)
                                 self.acceptText(self.input.val(), f.innerHTML);
                             }
                         });

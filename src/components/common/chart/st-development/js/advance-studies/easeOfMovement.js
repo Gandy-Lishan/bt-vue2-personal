@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_easeOfMovement_ = (_exports) => {
@@ -39,15 +39,23 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateEaseOfMovement = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
 		}
+
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			var avgCurrent = (quotes[i].High + quotes[i].Low) / 2;
-			var avgPrior = (quotes[i - 1].High + quotes[i - 1].Low) / 2;
+			var avgCurrent = (getPropertyByString(quotes[i],field,'High') + getPropertyByString(quotes[i],field,'Low')) / 2;
+			var avgPrior = (getPropertyByString(quotes[i - 1],field,'High') + getPropertyByString(quotes[i - 1],field,'Low')) / 2;
 			var dm = avgCurrent - avgPrior;
-			var br = quotes[i].Volume / 100000000 / (quotes[i].High - quotes[i].Low);
+			var br = getPropertyByString(quotes[i],field,'Volume') / 100000000 / (getPropertyByString(quotes[i],field,'High') - getPropertyByString(quotes[i],field,'Low'));
 			var result = dm / br;
 			if (!isFinite(result)) quotes[i]["_EOM1 " + sd.name] = NaN;
 			//With NaN, the study plotter will plot from the previous point
@@ -76,4 +84,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_easeOfMovement_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_easeOfMovement_}

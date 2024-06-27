@@ -1,4 +1,5 @@
 import {CIQ} from "chartiq/js/chartiq.js";
+import { getCoresSymbolDual } from '@/utils/globalFunc'
 
 let __st_addons_standard_tooltip_ = (_exports) => {
 
@@ -492,57 +493,101 @@ if (!CIQ.Marker) {
                  for (var study in this.layout.studies) {
                      var sd = this.layout.studies[study];
                      const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
-                     const symbolLabel = isSymbol2?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                     const symbolLabel = getCoresSymbolDual(isSymbol2)
 
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
-                     for (var output in this.layout.studies[study].outputMap) {
-                         //a dumb way to show full name of indicator
-                         let _obj = CIQ.findSentiIndicator(null,output)
-                         if(_obj){
-                             //console.log(_obj)
-                             fields.push({
-                                 member: output,
-                                 display: _obj.chart_name,
-                                 panel: panel,
-                                 yAxis: yAxis
-                             });
-                             dupMap[output] = 1;
-                         }
-                         else if(CIQ.isUserIndicator(output)){    
-                             fields.push({
-                                 member: output,
-                                 display:output.split(/HASH/)[0],
-                                 panel: panel,
-                                 yAxis: yAxis
-                             });
-                             dupMap[output] = 1;
-                         }
-                        /********************lishan modify start*************************/
-                        else if(CIQ.isOwnIndicator(output)){
-                            fields.push({
-                                member: output,
-                                display:output.split(/CREATE/)[0],
-                                panel: panel,
-                                yAxis: yAxis
-                            });
-                            dupMap[output] = 1;
+                     if(sd.type == 'ST MA'){    // stma不需要symbol信息，有独立显示
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                let name = rocDisplayName(sd.inputs.Field) + ' MA' + sd.inputs.Period
+                                let symbol = sd.inputs.Field == 'field'?`(${symbolLabel})`:''
+                                 fields.push({
+                                     member: output,
+                                     display: `${name}${symbol}`,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
                         }
-                        /********************lishan modify end*************************/
-                         // 为了给一些scanner ai的indicator加辅助线，但是又得隐藏这条线的tooltip显示
-                        //  else if (output == 'supLine') {
-                        //    // continue
-                        //  }
-                         else if (output && !dupMap[output]) {
-                             fields.push({
-                                 member: output,
-                                 display: `${output}(${symbolLabel})`,
-                                 panel: panel,
-                                 yAxis: yAxis
-                             });
-                             dupMap[output] = 1;
-                         }
                      }
+                     else if(CIQ.findSymbolIndicator(sd.type,null)){
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                 fields.push({
+                                     member: output,
+                                     display: `(${symbolLabel})${sd.type}`,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
+                        }
+                     }
+                     else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                 fields.push({
+                                     member: output,
+                                     display: output,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
+                        }
+                     }else{
+                        for (var output in this.layout.studies[study].outputMap) {
+                            //a dumb way to show full name of indicator
+                            let _obj = CIQ.findSentiIndicator(null,output)
+                            if(_obj){
+                                //console.log(_obj)
+                                fields.push({
+                                    member: output,
+                                    display: _obj.chart_name,
+                                    panel: panel,
+                                    yAxis: yAxis
+                                });
+                                dupMap[output] = 1;
+                            }
+                            else if(CIQ.isUserIndicator(output)){    
+                                fields.push({
+                                    member: output,
+                                    display:output.split(/HASH/)[0],
+                                    panel: panel,
+                                    yAxis: yAxis
+                                });
+                                dupMap[output] = 1;
+                            }
+                           /********************lishan modify start*************************/
+                           else if(CIQ.isOwnIndicator(output)){
+                               fields.push({
+                                   member: output,
+                                   display:output.split(/CREATE/)[0],
+                                   panel: panel,
+                                   yAxis: yAxis
+                               });
+                               dupMap[output] = 1;
+                           }
+                           /********************lishan modify end*************************/
+                            // 为了给一些scanner ai的indicator加辅助线，但是又得隐藏这条线的tooltip显示
+                           //  else if (output == 'supLine') {
+                           //    // continue
+                           //  }
+                            else if (output && !dupMap[output]) {
+                                fields.push({
+                                    member: output,
+                                    //display: output,
+                                    display: `(${symbolLabel})${output}`,
+                                    panel: panel,
+                                    yAxis: yAxis
+                                });
+                                dupMap[output] = 1;
+                            }
+                        }
+                     }
+
                      
                      if (!dupMap[study + "_hist"]) {
                          fields.push({
@@ -790,7 +835,21 @@ if (!CIQ.Marker) {
              }
              this.huTooltip.render();
          }
-     
+            // 处理用户自定义indicator的显示名
+            function rocDisplayName(field) {
+                let display
+                let senti = CIQ.findSentiIndicator(null,field)
+                if(CIQ.isOwnIndicator(field)){
+                    display = field.split(/CREATE/)[0]
+                }else if(CIQ.isUserIndicator(field)){
+                    display = field.split(/HASH/)[0]
+                }else if(senti){
+                    display = senti.chart_name
+                }else {
+                    display = field
+                }
+                return display
+            }
          container.addEventListener("mouseout", hideTooltip);
      
          stx.append("deleteHighlighted", function () {

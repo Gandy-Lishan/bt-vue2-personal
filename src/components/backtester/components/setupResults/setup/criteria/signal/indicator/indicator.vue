@@ -60,6 +60,7 @@
 							@select="handleSentimentSelect"
               @clear="clearSentimentSelect"
 							highlight-first-item
+              :disabled="!isBTChartReady"
 						></el-autocomplete>
             <!-- <searchBar
               :id_name="'autocomplete-' + criteria + '-' + panelIndex"
@@ -95,6 +96,7 @@
 							placeholder="Input the technical indicator"
 							@select="handleTechnicalSelect"
               @clear="clearTechnicalSelect"
+              :disabled="!isBTChartReady"
 						></el-autocomplete>
             </div>
         </el-form-item>
@@ -151,6 +153,7 @@
                 placeholder="Select Users' Own Indicator File."
                 :fetch-suggestions="indicatorUsersSearch"
                 @select="handleUsersOwnIndicatorSelect"
+              :disabled="!isBTChartReady"
               >
               </el-autocomplete>
             </div>
@@ -189,7 +192,7 @@
 						</el-upload>
         </el-form-item>
       </div>
-      
+      <!-- <Uploader/> -->
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -229,6 +232,7 @@
             <el-input
               v-model="form.indicatorName"
               autocomplete="off"
+              @keydown.native.prevent.enter="onEnter"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -294,11 +298,13 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, maxNumOfStudy, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {createStateFilter,maxNumOfStudy} from '@/utils/globalFunc'
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
+import Uploader from "@/components/common/chart/st-development/components/Uploader"
 const throttle = require('lodash/throttle')
 
 export default {
@@ -311,6 +317,7 @@ export default {
   },
   components: {
     searchBar,
+    Uploader
   },
   data() {
     var validateSenti = (rule, value, callback) => {
@@ -369,7 +376,7 @@ export default {
         { value: 2, obj: { label: 'Symbol Low', field: 'Low' } },
         { value: 3, obj: { label: 'Symbol Close', field: 'Close' } },
         { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
-        { value: 5, obj: { label: 'Symbol Ratio', field: 'SRatio' } }
+        { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
       ],
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
@@ -687,6 +694,10 @@ export default {
     }
   },
   methods: {
+    /** disable enter while naming a custom symbol */
+		onEnter(event) {
+      event.preventDefault();
+    },
     ...mapMutations('form',['setFrequencyArray', 'setFreqencyLP']),
     /* 当用户选择indicator类别，进行搜索筛选*/
     selectCategory(e) {
@@ -719,26 +730,14 @@ export default {
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
       var list = this.sentimentIndicatorList
-      //console.log('sentiment list', list)
-      list.sort(function (a, b) {
-        return a.value.localeCompare(b.value)
-      })
-      var results = queryString
-        ? list.filter(
-          this.createStateSentimentFilter(queryString)
-        )
-        : list
-      cb(results)
-    },
-    createStateSentimentFilter(queryString) {
-      return (state) => {
-        if (state.value.indexOf('Seasonality') !== -1) {
-          return false
-        }
-        return (
-          state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+      list = list.filter(i => !i.value.includes('Seasonality'))
+
+      var results = list.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
@@ -746,28 +745,21 @@ export default {
         await getAllMyIndicatorsList(1, (data) => {
           this.createdIndicatorOptions = data
           const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
+          var results = list.map(item => ({
+              ...item,
+              priority: createStateFilter(queryString)(item),
+            }))
+            .filter(item => item.priority > 0)
+          cb(results.sort((a, b) => b.priority - a.priority))
         })
       }else{
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-            var results = queryString
-              ? list.filter(
-                this.createStateUsersFilter(queryString)
-              )
-              : list
-            cb(results)
-      }
-    },
-    createStateUsersFilter(queryString) {
-      return (state) => {
-        return (
-          state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
-        )
+        var results = list.map(item => ({
+            ...item,
+            priority: createStateFilter(queryString)(item),
+          }))
+          .filter(item => item.priority > 0)
+        cb(results.sort((a, b) => b.priority - a.priority))
       }
     },
     changeIndicatorType(type) {
@@ -776,46 +768,23 @@ export default {
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
       var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
-      // if (this.criteria === 'entry') {
-      //   let valueArr = ['ATR Trailing Stops', 'Parabolic SAR']
-      //   technicaltIndicatorList = technicaltIndicatorList.filter(
-      //     (item) => valueArr.indexOf(item.value) === -1
-      //   )
-      // }
-      var results = queryString
-        ? technicaltIndicatorList.filter(
-          this.createTechnicalFilter(queryString)
-        )
-        : technicaltIndicatorList
 
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createTechnicalFilter(queryString) {
-      return (technicaltIndicatorList) => {
-        return (
-          technicaltIndicatorList.value
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+      var results = technicaltIndicatorList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     indicatorRiskSearch(queryString, cb) {
       var riskIndicatorList = this.loadRiskList()
-      var results = queryString
-        ? riskIndicatorList.filter(this.createRiskFilter(queryString))
-        : riskIndicatorList
-      // Call callback to return the data of the suggestion list
-      cb(results)
-    },
-    createRiskFilter(queryString) {
-      return (riskIndicatorList) => {
-        return (
-          riskIndicatorList.value
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) !== -1
-        )
-      }
+
+      var results = riskIndicatorList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     resetIndicator() {
       this.si.sentimentIndicator = ''
@@ -1832,16 +1801,12 @@ export default {
       try {
         await csvFileDelete(fileID)
         console.log('删除成功')
-        const index = this.fileList.indexOf(file)
-        if (index !== -1) {
-          this.fileList.splice(index, 1)
-        }
-        this.$refs.upload.clearFiles();
-        this.fileList = []
-
         this.clearUserOwnIndicatorSelect()
       } catch (error) {
         console.log('删除失败', error)
+      } finally {
+        this.$refs.upload.clearFiles();
+        this.fileList = []
       }
     },
     handlePreview(file) {

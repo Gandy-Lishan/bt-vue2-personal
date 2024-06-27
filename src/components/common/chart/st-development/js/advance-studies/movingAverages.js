@@ -67,7 +67,7 @@ if (!CIQ.Studies) {
 	});
 
 	CIQ.Studies.calculateMovingAverageHull = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -107,7 +107,7 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMovingAverageDoubleExponential = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
@@ -173,14 +173,35 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMovingAverageTripleExponential = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
+		var quotes = sd.chart.scrubbed;
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+		var subField = field
 
 		CIQ.Studies.MA("ema", sd.days, field, 0, "_EMA1", stx, sd);
 		CIQ.Studies.MA("ema", sd.days, "_EMA1 " + sd.name, 0, "_EMA2", stx, sd);
 		CIQ.Studies.MA("ema", sd.days, "_EMA2 " + sd.name, 0, "_EMA3", stx, sd);
+		
+		if(
+			sd?.parameters?.isComparison ||
+			(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
+		){
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			if(CIQ.findBuiltinTechIndicator(null,sd.type)){
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+				field = comparisonSymbol?.url
+				//filter valid rows
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			}
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		}
 
 		var offset = parseInt(sd.inputs.Offset, 10);
 		if (isNaN(offset)) offset = 0;
@@ -188,7 +209,7 @@ if (!CIQ.Studies) {
 		var offsetBack = offset;
 		for (i = sd.startFrom - 1; i >= 0; i--) {
 			val = quotes[i][field];
-			if (val && typeof val == "object") val = val[sd.subField];
+			if (val && typeof val == "object") val = val[subField];
 			if (!val && val !== 0) continue;
 			if (offsetBack > 0) {
 				offsetBack--;
@@ -223,6 +244,16 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateMAEnvelope = function (stx, sd) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+
+		if(sd.parameters.isComparison){
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			sd.yAxis = null
+		}
+
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
 			sd.days,
@@ -259,23 +290,33 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.calculateMADev = function (stx, sd) {
-		var quotes = sd.chart.dataSet;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
+		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+		var subField = field
+
 		var pts = sd.inputs["Points Or Percent"];
 		if (!pts) pts = "Percent";
 		var maType = sd.inputs["Moving Average Type"];
 		if (!maType) maType = "exponential";
 		CIQ.Studies.MA(maType, sd.days, field, 0, "_MA", stx, sd);
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
 		var histogram = sd.name + "_hist";
 		for (var i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			var quote = quotes[i];
 			var val = quote[field];
-			if (val && typeof val == "object") val = val[sd.subField];
+			if (val && typeof val == "object") val = val[subField];
 			var qMA = quote["_MA " + sd.name];
 			if (qMA || qMA === 0) {
 				if (pts == "Points") quote[histogram] = val - qMA;
@@ -326,6 +367,15 @@ if (!CIQ.Studies) {
 			overlay: true,
 			seriesFN: CIQ.Studies.displayChannel,
 			calculateFN: function (stx, sd) {
+				if(sd.parameters.isComparison){
+					/**根据criteria动态设定study的Y轴属*******/
+					var actualXaxis = stx.getYAxisByField(stx.panels['chart'], CIQ.store.getters.getComparisonSymbol.url);
+					sd.yAxis = actualXaxis
+					/****************** */
+				}else{
+					sd.yAxis = null
+				}
+
 				sd.inputs["Moving Average Type"] = "triangular";
 				CIQ.Studies.calculateMAEnvelope(stx, sd);
 			},

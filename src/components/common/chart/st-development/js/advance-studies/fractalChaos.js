@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_fractalChaos_ = (_exports) => {
@@ -40,6 +40,21 @@ if (!CIQ.Studies) {
 	CIQ.Studies.calculateFractalChaos = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
 
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			if(sd.type == "Fractal Chaos Bands"){
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+				sd.yAxis = actualXaxis
+			}
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			if(sd.type == "Fractal Chaos Bands"){
+				sd.yAxis = null
+			}
+			quotes = sd.chart.scrubbed
+		}
+
 		var fractalHigh = 0;
 		var fractalLow = 0;
 		var test = 0;
@@ -49,18 +64,20 @@ if (!CIQ.Studies) {
 		}
 		for (var i = Math.max(4, sd.startFrom); i < quotes.length; i++) {
 			if (quotes[i].futureTick) break;
-			var nHi = !isNaN(quotes[i].High),
-				nLo = !isNaN(quotes[i].Low);
+			var nHi = !isNaN(getPropertyByString(quotes[i],field,'High')),
+				nLo = !isNaN(getPropertyByString(quotes[i],field,'Low'));
 			if (nHi || nLo) quotes[i]["Result " + sd.name] = 0;
 			var j;
 			test = 0;
 			for (j = 0; j <= i; j++) {
 				if (!quotes[i - j]) break;
-				if (quotes[i - j].High > quotes[i - 2].High) break;
-				if (j < 2 && quotes[i - j].High == quotes[i - 2].High) break;
-				if (quotes[i - j].High < quotes[i - 2].High) test++;
+				const iminusjHigh = getPropertyByString(quotes[i - j],field,'High')
+				const iminus2High = getPropertyByString(quotes[i - 2],field,'High')
+				if (iminusjHigh > iminus2High) break;
+				if (j < 2 && iminusjHigh == iminus2High) break;
+				if (iminusjHigh < iminus2High) test++;
 				if (test == 4) {
-					fractalHigh = quotes[i - 2].High;
+					fractalHigh = iminus2High;
 					break;
 				}
 			}
@@ -75,11 +92,13 @@ if (!CIQ.Studies) {
 			test = 0;
 			for (j = 0; j <= i; j++) {
 				if (!quotes[i - j]) break;
-				if (quotes[i - j].Low < quotes[i - 2].Low) break;
-				if (j < 2 && quotes[i - j].Low == quotes[i - 2].Low) break;
-				if (quotes[i - j].Low > quotes[i - 2].Low) test++;
+				const iminusjLow = getPropertyByString(quotes[i - j],field,'Low')
+				const iminus2Low = getPropertyByString(quotes[i - 2],field,'Low')
+				if (iminusjLow < iminus2Low) break;
+				if (j < 2 && iminusjLow == iminus2Low) break;
+				if (iminusjLow > iminus2Low) test++;
 				if (test == 4) {
-					fractalLow = quotes[i - 2].Low;
+					fractalLow = iminus2Low;
 					break;
 				}
 			}
@@ -118,4 +137,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_fractalChaos_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_fractalChaos_}

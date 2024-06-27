@@ -14,7 +14,7 @@
 						prop="symbol"
 					>
 						<el-input
-							v-model="backtestEditData.symbol"
+							:value="getProcessedSymbol(backtestEditData.symbol)"
 							disabled
 						></el-input>
 					</el-form-item>
@@ -111,7 +111,7 @@
 						<el-input disabled v-model="backtestEditData.direction2"> </el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="12">
 					<el-form-item label="Name:" prop="name">
 						<el-input disabled v-model="backtestEditData.name"></el-input>
 					</el-form-item>
@@ -122,6 +122,7 @@
 </template>
 <script>
 import { trimTrailingZeros } from '@/utils'
+import {getSymbolInfo} from '@/utils/globalFunc'
 export default {
   props: { backtestEditData: Object },
   name: 'ResForm',
@@ -216,7 +217,15 @@ export default {
       immediate: true,
       deep: true
     }
-  }
+  },
+  	methods: {
+		// 处理custom symbol的特殊url显示
+		getProcessedSymbol(symbol) {
+			if (!symbol) return '';
+			const { name, type } = getSymbolInfo(symbol);
+			return type === 'custom' ? name : symbol;
+		},
+	}
 }
 </script>
 <style lang="less" scoped>

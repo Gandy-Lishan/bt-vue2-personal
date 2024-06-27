@@ -23,7 +23,6 @@
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from 'chartiq/js/chartiq.js'
 import * as mqs from 'qs'
-import {maxNumOfStudy} from '@/utils'
 
 var claims = []
 /**
@@ -3406,7 +3405,7 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	if (!this.params.sd.permanent)
 		CIQ.Studies.removeStudy(CIQ.stxx, this.params.sd)
 
-	CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
+	// CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
 
 	this.contextDialog.forEach(function(studyContext) {
 		if (studyContext.close) studyContext.close()

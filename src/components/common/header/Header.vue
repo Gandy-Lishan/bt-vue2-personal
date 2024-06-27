@@ -17,22 +17,21 @@
         @select="handleSelect"
       >
         <!-- <el-menu-item class="ai-link" v-if="activeIndex==3"
-          >AI Stock Scanner</el-menu-item
+          >Smart Stock Scanner</el-menu-item
         > -->
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
         > -->
-        <!-- <el-menu-item class="home-link" index="9"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+        <el-menu-item class="home-link" index="9"
           >Strategy</el-menu-item
-        > -->
+        >
         <el-menu-item class="home-link" index="1"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >BacktestEdge</el-menu-item
         >
         <el-menu-item class="ai-link" index="3"
         v-if="getTokenRole() == 2 && getTokenRole() != 'None'"
-          >AI Stock Scanner</el-menu-item
+          >Smart Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
@@ -49,6 +48,10 @@
         <el-menu-item class="home-link" index="10"
         v-if="isAiTrading"
           >AI Trading</el-menu-item
+        >
+        <el-menu-item class="home-link" index="11"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
+          >Portfolio</el-menu-item
         >
         <!-- <el-menu-item class="seasonality-link home-link" index="8"
         v-if="userRole == 'analyst'"
@@ -68,14 +71,14 @@
             @click="changeSvg"
           ></div>
         </el-menu-item> -->
-        <el-submenu index="5">
+        <!-- <el-submenu index="5">
           <template slot="title"
             ><i class="el-icon-s-tools tools"></i
-          ></template>
+          ></template> -->
           <!-- <el-menu-item index="5-1">User: {{$store.state.app.role}}</el-menu-item> -->
           <!-- <el-menu-item index="5-1">Theme</el-menu-item> -->
           <!-- <el-menu-item index="5-2">Language</el-menu-item> -->
-        </el-submenu>
+        <!-- </el-submenu> -->
       </el-menu>
     </div>
 	</div>
@@ -95,55 +98,64 @@ export default {
   data() {
     return {
       activeIndex: '1',
-      isAiTrading: false
+      isAiTrading: false,
+      isButtonVisible: false
     }
   },
   computed: {
     userRole() {
       return this.$store.state.user.role
+    },
+    is_admin() {
+      return this.$store.state.user.is_admin
     }
   },
   watch: {
     '$route'(to, _) {
       console.log('to', to)
       // 在$route对象变化时执行逻辑
-      if (to.path.includes('/backtester') || to.name == 'Backtests') {
+      if (to.path.includes('/backtester') || to.name == 'Backtester') {
         this.activeIndex = '1'
-      } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart') {
+      } else if (to.path.includes('/scannerai') || to.name == 'scannerai_chart' || to.name == 'scannerai_backtest') {
         this.activeIndex = '3'
       }else if(to.path.includes('/doc')){
         this.activeIndex = '4'
-      }else if(to.path.includes('/myindicator') || to.name ==  'MIList'){
+      }else if(to.path.includes('/myindicator') || to.name ==  'MIList' || to.name == 'MIcreate'){
         this.activeIndex = '6'
-      }else if(to.path.includes('/seasonality') || to.name == 'seasonality'){
+      }else if(to.path.includes('/seasonality') || to.name == 'Seasonality'){
         this.activeIndex = '7'
       }else if(to.path.includes('/cpm') || to.name == 'CPM'){
         this.activeIndex = '8'
       }
       else if(to.path.includes('/strategy') || to.name == 'Strategy'){
         this.activeIndex = '9'
+      }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
+        this.activeIndex = '11'
       }
+      const currentDomain = window.location.hostname;
+    // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+    if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
       }
   },
   mounted() {
-    if (this.$route.name == 'strategy') {
-      this.activeIndex = '2'
-    } else if (this.$route.name == 'backtester' || this.$route.name == 'Backtests') {
+    if (this.$route.name == 'backtester' || this.$route.name == 'Backtester') {
       this.activeIndex = '1'
-    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
+    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart' || this.$route.name == 'scannerai_backtest') {
       this.activeIndex = '3'
     } else if (this.$route.path.includes('/doc')) {
       this.activeIndex = '4'
-    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'){
+    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'  || this.$route.name == 'MIcreate'){
       this.activeIndex = '6'
-    } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
+    } else if(this.$route.name == 'Seasonality'){
       this.activeIndex = '7'
     }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
       this.activeIndex = '8'
-    }else if(this.$route.name == 'Strategy' || this.$route.name == 'Strategy'){
+    }else if(this.$route.name == 'Strategy'){
       this.activeIndex = '9'
+    }else if(this.$route.name == 'Portfolio'){
+      this.activeIndex = '11'
     }
-		const email = getCookieData()?.username
+    const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
   },
@@ -200,6 +212,11 @@ export default {
         this.$router.push(path)
       }else if(key == '10') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
+      }else if(key == '11') {
+        path = this.$router.resolve({
+          path: '/portfolio'
+        }).href
+        this.$router.push(path)
       }
     },
   }

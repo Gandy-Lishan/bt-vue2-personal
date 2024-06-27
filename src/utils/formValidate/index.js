@@ -106,11 +106,12 @@ export const createTPSLValidateRule = (minVal) => {
 		callback()
 	}
 }
-export const createTPSLScopeValidateRule = (minVal, maxVal) => {
+export const createTPSLScopeValidateRule = (minVal, maxVal, canBeEqual) => {
 	return (_, value, callback) => {
 		// 给 Stop Loss 和 Take Profit 用
 		const pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-		const isLessThanMin = Number(value) <= Number(minVal)
+		let isLessThanMin = Number(value) <= Number(minVal)
+		if(canBeEqual) isLessThanMin = Number(value) < Number(minVal)
 		const isMatched = !pattern.test(value)
 		if (isLessThanMin) callback(new Error(`Only positive numbers > ${minVal} allowed`))
 		if (isMatched) callback(new Error('Numeric input with two decimal places'))
@@ -177,10 +178,11 @@ export const validatePercentageRule = (_, value, callback) => {
   //   if (numericValue < 0) {
   //     return 'Enter a non-negative value';
   //   }
-  const pattern = /^\d+$/
-  const isPositiveInteger = isNaN(value) || value <= 0 || !pattern.test(value)
+  // const pattern = /^\d+$/
+		const pattern = /^[+-]?\d+$/
+  const isPositiveInteger = isNaN(value) || !pattern.test(value)
   if (isPositiveInteger) {
-	  return `Enter positive integers only`;
+	  return `Enter integers only`;
   }
 	// Uncomment the following block to restrict values to <= 100
 	// if (numericValue > 100) {

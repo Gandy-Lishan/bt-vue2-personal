@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_pring_ = (_exports) => {
@@ -39,6 +39,14 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
 		var roc = {},
 			smp = {};
 		roc[1] = Number(sd.inputs["Lightest Rate of Change Period"]);
@@ -54,9 +62,9 @@ if (!CIQ.Studies) {
 		for (i = sd.startFrom; i < quotes.length; i++) {
 			if (!quotes[i]) continue;
 			for (j = 1; j <= 4; j++) {
-				if (i >= roc[j] && quotes[i - roc[j]] && quotes[i - roc[j]][field])
+				if (i >= roc[j] && quotes[i - roc[j]] && getPropertyByString(quotes[i - roc[j]],field,subField))
 					quotes[i]["_ROC" + j + " " + sd.name] =
-						100 * (quotes[i][field] / quotes[i - roc[j]][field] - 1);
+						100 * (getPropertyByString(quotes[i],field,subField) / getPropertyByString(quotes[i - roc[j]],field,subField) - 1);
 			}
 		}
 		for (j = 1; j <= 4; j++) {
@@ -155,4 +163,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_pring_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_pring_}

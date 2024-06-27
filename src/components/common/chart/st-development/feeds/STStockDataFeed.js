@@ -8,7 +8,8 @@ import {CIQ} from "chartiq/js/standard.js"
 import jutils from 'jutils-src'
 import LRUCache from 'lru-cache';
 import _this from "@/main";
-import {recoverSymbolOptixUrl} from '@/utils'
+import {decodeBase64} from '@/utils'
+import {recoverSymbolOptixUrl,getSymbolInfo} from '@/utils/globalFunc'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -29,9 +30,9 @@ function getCachedData(url) {
 }
 
 quoteFeedSimulator.sendAjax = async function (url, cb) {
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==CIQ.stxx.chart.symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==CIQ.stxx.chart.symbol)
-    CIQ.stxx.chart.symbolDisplay = stockName?stockName?.name:indexName?.name
+    const {name} = getSymbolInfo(CIQ.stxx.chart.symbol)
+    CIQ.stxx.chart.symbolDisplay = name
+
     try{
         const res = await getCachedData(url)
         if(res.status==200){
@@ -48,8 +49,13 @@ quoteFeedSimulator.sendAjax = async function (url, cb) {
 quoteFeedSimulator.url = config.pairDataUrl;
 
 quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
+    let symbol = CIQ.symbol
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
         var queryUrl = this.url + 
-        "?symbol=" + CIQ.symbol + 
+        "?symbol=" + symbol + 
         new_str +
         "&start="+start+
         "&end=" + end +
@@ -74,7 +80,7 @@ quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
             var div = document.querySelectorAll(".favBtnContainer")[0].querySelectorAll("button")[0]
             var count=0;
             for(var item in favoriteSymbolList){
-                if(favoriteSymbolList[item] == CIQ.symbol){
+                if(favoriteSymbolList[item] == symbol){
                     // del
                     div.style.cssText = "width: 188px;height: 35px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #409EFF;color: white;font-family: Helvetica, sans-serif;cursor:pointer"
                     div.innerHTML = "<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#FFFFFF'></path></svg><span>Remove from favorites</span></div>";
@@ -407,6 +413,11 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
         }
         default:
     }
+
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
     var queryUrl = this.url + 
        "?symbol=" + symbol + 
         new_str +
@@ -492,6 +503,11 @@ quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, en
         }
         default:
     }   
+
+    const {type} = getSymbolInfo(symbol)
+    if(!['stock','index'].includes(type)){
+        symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+    }
     var queryUrl = this.url + 
        "?symbol=" + symbol + 
         new_str +
@@ -551,176 +567,226 @@ quoteFeedSimulator.formatChartData = async function(response){
     }
 
     try{
-        if('High' in data[0]){
-            
-            for (var i = 0; i < data.length; i++) {
-                newQuotes[i] = {};
-                
-                var datatime = new Date(data[i].DT)
-                
-                var offset = datatime.getTimezoneOffset() * 60 * 1000
-                
-                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
-                
-                newQuotes[i].Open = data[i].Open;
-                newQuotes[i].High = data[i].High;
-                newQuotes[i].Low = data[i].Low;
-                newQuotes[i].Close = data[i].Close;
-                newQuotes[i].Volume = data[i].Volume;
-                
-                // 默认加载 ‘aapl’，它没有indicator，跳过
-                if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
-                for(var j in CIQ.objIndicator){
-                    var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+        const {type} = getSymbolInfo(CIQ.symbol)
+        if(type == 'custom'){
+            // 可能是custom symbol
+                const url = decodeBase64(CIQ.symbol.split('||')[1])
+                let res
+                try {
+                    res = await CIQ.store.dispatch('chart/get_mysymbolCSV',{url:url,timeframe:CIQ.store.state.form.pairDataFreq})
+                } catch (err) {console.error(err)}
+                let sortedRows = res.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+                //console.time('🚗Execution Time');
+                // 将 data 数组转化为以日期为键的字典
+                const dataDict = {};
+                data.forEach(item => {
+                    dataDict[item.DT] = item;
+                });
+                for (const i in sortedRows) {
+                    newQuotes[i] = {};
+                    newQuotes[i].DT = sortedRows[i].DT
+                    newQuotes[i].Open = Number(sortedRows[i].Open);
+                    newQuotes[i].High = Number(sortedRows[i].High);
+                    newQuotes[i].Low = Number(sortedRows[i].Low);
+                    newQuotes[i].Close = Number(sortedRows[i].Close);
+                    newQuotes[i].Volume = Number(sortedRows[i].Volume);
 
-                    newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
-                    // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
-                    if(data[i][str] != null){
-                        if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
-                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
-                    }else{
-                        if(i==0){
-                            newQuotes[i][CIQ.objIndicator[j]] = null;
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+                        //let matchedItem = data.find(item=>item.DT == sortedRows[i].DT)
+                        let matchedItem = dataDict[sortedRows[i].DT]
+                        newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(matchedItem){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
                         }else{
-                            //console.log('indicator值出现空值',data[i])
-                            newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                //console.log('indicator值出现空值',data[i])
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
                         }
-                    }
+                    } 
                 }
-            } 
-            
-            var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
-            for(var i = 0;i < node.children.length;i++){
-                node.children[i].style.display = "inherit"
-            }
+                //console.timeEnd('🚗Execution Time');
         }else{
-            for (var i = 0; i < data.length; i++) {
-                newQuotes[i] = {};
-
-                var datatime = new Date(data[i].DT)
-
-                var offset = datatime.getTimezoneOffset() * 60 * 1000
-                
-                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+            if('High' in data[0]){
+            
+                for (var i = 0; i < data.length; i++) {
+                    newQuotes[i] = {};
+                    
+                    var datatime = new Date(data[i].DT)
+                    
+                    var offset = datatime.getTimezoneOffset() * 60 * 1000
+                    
+                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+                    
+                    newQuotes[i].Open = data[i].Open;
+                    newQuotes[i].High = data[i].High;
+                    newQuotes[i].Low = data[i].Low;
+                    newQuotes[i].Close = data[i].Close;
+                    newQuotes[i].Volume = data[i].Volume;
+                    
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
     
-                newQuotes[i].Open = data[i].Close;
-                newQuotes[i].High = data[i].Close;
-                newQuotes[i].Low = data[i].Close;
-                newQuotes[i].Close = data[i].Close;
-                
-                if(data[i].Volume){
-                    newQuotes[i].Volume = data[i].Volume
-                }
-
-                // 默认加载 ‘aapl’，它没有indicator，跳过
-                if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
-                for(var j in CIQ.objIndicator){
-                    var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
-                    
-                    // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
-                    if(data[i][str] != null){
-                        if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
-                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];      
-                    }else{
-                        if(i==0){
-                            newQuotes[i][CIQ.objIndicator[j]] = null;
+                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(data[i][str] != null){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
                         }else{
-                            newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                //console.log('indicator值出现空值',data[i])
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
                         }
                     }
+                } 
+                
+                var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
+                for(var i = 0;i < node.children.length;i++){
+                    node.children[i].style.display = "inherit"
                 }
-            }
-            CIQ.stxx.setChartType("line"); 
-            var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
-            for(var i = 0;i < node.children.length;i++){
-                node.children[i].style.display = "inherit"
-            }
-            for(var i = 0;i < node.children.length;i++){
-                if(node.children[i].firstChild.nodeValue != "Line"){
-                    node.children[i].style.display = "none"
-                }
-            } 
-        }
-    }catch(err){}
-    // 可以封装成promise
-    //return new Promise(async(resolve)=>{
-        if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
-            /********************lishan modify start*************************/
-            for (const j in CIQ.objIndicator) {
-                const indicator = CIQ.objIndicator[j];
-            
-                // 进行 symbol 和 senti 判断，如果需要的话
-                // if (indicator.includes('symbol')) {
-                //     // 进行相应操作
-                // }
-                // if (indicator.includes('senti')) {
-                //     // 进行相应操作
-                // }
-            
-                if (CIQ.isUserIndicator(indicator)) {
-                    const [name, hash] = indicator.split(/HASH/);
-                    const res = await config.csvFileRead(name, hash);
-                    const datafeed = res.data.data.csv_content;
-            
-                    const sortedRows = datafeed.sort(
-                        (a, b) => new Date(a.DT) - new Date(b.DT)
-                    );
-            
-                    for (const i in sortedRows) {
-                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
-                        if (index == -1) {
-                            continue;
-                        }
-                        if (objIndicatorFirstDate[indicator] == null) {
-                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
-                        }
-                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+            }else{
+                for (var i = 0; i < data.length; i++) {
+                    newQuotes[i] = {};
+    
+                    var datatime = new Date(data[i].DT)
+    
+                    var offset = datatime.getTimezoneOffset() * 60 * 1000
+                    
+                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+        
+                    newQuotes[i].Open = data[i].Close;
+                    newQuotes[i].High = data[i].Close;
+                    newQuotes[i].Low = data[i].Close;
+                    newQuotes[i].Close = data[i].Close;
+                    
+                    if(data[i].Volume){
+                        newQuotes[i].Volume = data[i].Volume
                     }
-                }
-                if (CIQ.isOwnIndicator(indicator)) {
-                    const [_, url] = indicator.split(/CREATE/);
-                    let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
-                    if(!datafeed){
+    
+                    // 默认加载 ‘aapl’，它没有indicator，跳过
+                    if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    for(var j in CIQ.objIndicator){
+                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
                         
-                        const res = await config.getMyIndicatorData(url);
-                        if(res.data.code == 404) {
-                            _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
-                            setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); // 2000毫秒 = 3秒
+                        // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
+                        if(data[i][str] != null){
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];      
+                        }else{
+                            if(i==0){
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
+                            }else{
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
+                            }
                         }
-                        datafeed = res.data.data;
-                        // 暂存
-                        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
-                    }               
-            
-                    let sortedRows = datafeed.sort(
-                        (a, b) => new Date(a.DT) - new Date(b.DT)
-                    );
-                    const appendStr = data[data.length-1].DT.indexOf('000Z') == -1 ? '.000' : '.000Z'
-                    sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + appendStr }));
-                    
-                    for (const i in sortedRows) {
-                        const index = data.findIndex(item => item.DT == sortedRows[i].DT);
-                        if (index == -1) {
-                            continue;
-                        }
-                        if (objIndicatorFirstDate[indicator] == null) {
-                            objIndicatorFirstDate[indicator] = newQuotes[index].DT;
-                        }
-                    
-                        newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                     }
-                    
+                }
+                CIQ.stxx.setChartType("line"); 
+                var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
+                for(var i = 0;i < node.children.length;i++){
+                    node.children[i].style.display = "inherit"
+                }
+                for(var i = 0;i < node.children.length;i++){
+                    if(node.children[i].firstChild.nodeValue != "Line"){
+                        node.children[i].style.display = "none"
+                    }
+                } 
+            }
+        }
+
+    }catch(err){}
+
+    if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
+        /********************lishan modify start*************************/
+        for (const j in CIQ.objIndicator) {
+            const indicator = CIQ.objIndicator[j];
+        
+            // 进行 symbol 和 senti 判断，如果需要的话
+            // if (indicator.includes('symbol')) {
+            //     // 进行相应操作
+            // }
+            // if (indicator.includes('senti')) {
+            //     // 进行相应操作
+            // }
+        
+            if (CIQ.isUserIndicator(indicator)) {
+                const [name, hash] = indicator.split(/HASH/);
+                const res = await config.csvFileRead(name, hash);
+                const datafeed = res.data.data.csv_content;
+        
+                const sortedRows = datafeed.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+        
+                for (const i in sortedRows) {
+                    const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                    if (index == -1) {
+                        continue;
+                    }
+                    if (objIndicatorFirstDate[indicator] == null) {
+                        objIndicatorFirstDate[indicator] = newQuotes[index].DT;
+                    }
+                    newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
                 }
             }
-            /********************lishan modify end*************************/
-            // 停用数据截断，因为technical indicator不能被截断
-            // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
-            // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
+            if (CIQ.isOwnIndicator(indicator)) {
+                const [_, url] = indicator.split(/CREATE/);
+                let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
+                if(!datafeed){
+                    
+                    const res = await config.getMyIndicatorData(url);
+                    if(res.data.code == 404) {
+                        _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
+                        setTimeout(() => {
+                            window.location.reload();
+                            }, 2000); // 2000毫秒 = 3秒
+                    }
+                    datafeed = res.data.data;
+                    // 暂存
+                    localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
+                }               
+        
+                let sortedRows = datafeed.sort(
+                    (a, b) => new Date(a.DT) - new Date(b.DT)
+                );
+                const appendStr = data[data.length-1].DT.indexOf('000Z') == -1 ? '.000' : '.000Z'
+                sortedRows = sortedRows.map(item => ({ ...item, indicator_Close: item.close, DT: item.DT + appendStr }));
+                
+                for (const i in sortedRows) {
+                    const index = data.findIndex(item => item.DT == sortedRows[i].DT);
+                    if (index == -1) {
+                        continue;
+                    }
+                    if (objIndicatorFirstDate[indicator] == null) {
+                        objIndicatorFirstDate[indicator] = newQuotes[index].DT;
+                    }
+                
+                    newQuotes[index][indicator] = parseFloat(sortedRows[i]['indicator_Close']);
+                }
+                
+            }
         }
-    //})
-
+        /********************lishan modify end*************************/
+        // 停用数据截断，因为technical indicator不能被截断
+        // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
+        // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
+    }
+    
+    
     return newQuotes
 }
 

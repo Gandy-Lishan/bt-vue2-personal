@@ -964,7 +964,7 @@ class ChartTitle extends CIQ.UI.ModalTag {
 			// These strange characters create some spacing so that the title appears
 			// correctly in a browser tab
 			this.title =
-				symbol + " \u200b \u200b " + textPrice + " \u200b \u200b \u200b ";
+			symbolDisplay + " \u200b \u200b " + textPrice + " \u200b \u200b \u200b ";
 			if (todaysChange > 0) {
 				this.title += "\u25b2 " + txtChange;
 			} else if (todaysChange < 0) {
@@ -3797,8 +3797,15 @@ class Heading extends CIQ.UI.ContextTag {
 				el.classList[visibilityAction]("item-hidden");
 			});
 		};
-		input.addEventListener("input", updateListVisibility);
-		input.addEventListener("keyup", updateListVisibility);
+		input.addEventListener("input", (event) => {
+			updateListVisibility(event);
+		});
+		input.addEventListener("keyup", (event) => {
+			if (['-','=','+'].includes(event.key)) {
+				event.target.value += event.key;
+				updateListVisibility(event);
+			}
+		});
 
 		const minItemCount = this.getAttribute("cq-filter-min") || 15;
 
@@ -8900,7 +8907,7 @@ if (!CIQ.Studies) {
 						}catch(err){console.log(err);}
 						if (!sd.permanent) CIQ.Studies.removeStudy(self.context.stx, sd);
 
-						CIQ.setPanelHeight(Object.keys(CIQ.stxx.layout.studies))
+    					// CIQ.stxx.draw();
 						
 						if (self.node[0].hasAttribute("cq-marker"))
 							self.context.stx.modalEnd();
@@ -8997,24 +9004,8 @@ if (!CIQ.Studies) {
 					// 	const condition = `${conditionMap[sd.inputs.condition]}(${sd.inputs.period}-Day)`
 					// 	const display = `(${symbolLabel})${name} ${condition}`
 					// 	newChild.find("cq-label").html(display);
-	
-					let _obj = CIQ.findSentiIndicator(null,sd.type)
-					let _obj2 = CIQ.findBuiltinTechIndicator(null,sd.type)
-					
-					if(_obj){		
-						newChild.find("cq-label").html(_obj.chart_name)	
-						
-					}else if(_obj2){	
-						newChild.find("cq-label").html(sd.inputs.display);
 
-						// hide edit icon if it's a techinical study
-						if(newChild.find(".ciq-edit").length>0){
-							//newChild.find(".ciq-edit")[0].style.visibility = "hidden";
-						}	
-					}else{
-						//console.log('other studies')
-						newChild.find("cq-label").html(sd.inputs.display);
-					}
+					newChild.find("cq-label").html(sd.inputs.display)	
 					
 
 					var close = newChild.find(".ciq-close");
@@ -13347,6 +13338,7 @@ import {__st_js_loadIndicator_} from "./loadIndicator"
 
 import {__st_js_standard_studies_} from "./standard-studies/standardStudies"
 import {__js_standard_studies_medianPrice_} from "./standard-studies/standardMedianPrice.js"
+import {__js_standard_studies_momentum_} from "./standard-studies/standardMomentum.js"
 
 import {__st_js_chartengine_prototype_overwrite_} from "./standard-studies/chartEnginePrototypeOverwrite.js"
 import {__js_st_studies_customized_} from "./STCustomizedStudies"
@@ -13453,6 +13445,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_loadIndicator_,
 		__st_js_standard_studies_,
 		__js_standard_studies_medianPrice_,
+		__js_standard_studies_momentum_,
 		__st_js_chartengine_prototype_overwrite_,
 		__js_st_studies_customized_,
 		__st_js_indicatorType_,

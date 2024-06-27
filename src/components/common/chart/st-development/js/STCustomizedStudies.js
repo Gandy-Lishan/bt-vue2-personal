@@ -23,7 +23,7 @@
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
-import { getPropertyByString } from "@/utils"
+import { getPropertyByString } from "@/utils/globalFunc"
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -220,7 +220,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
-		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		var quotes = sd.chart.scrubbed;
 
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
@@ -238,7 +238,7 @@ if (!CIQ.Studies) {
 			quotes = sd.chart.scrubbed
 		} 
 
-
+debugger
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式
 		let resArr = []
@@ -250,6 +250,7 @@ if (!CIQ.Studies) {
 					field in row &&  getPropertyByString(row,field,subField)!=null
 				)
 				quotes = quotes.slice(indexROC) 
+
 				resArr = quotes.map((row, i) => {
 					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
 					if(field in row &&  getPropertyByString(row,field,subField)!=null){
@@ -261,7 +262,6 @@ if (!CIQ.Studies) {
 								getPropertyByString(row,field,subField) / 
 								getPropertyByString(quotes[i - period],field,subField)- 1
 							)).toFixed(4))
-							//console.log(row[field] , quotes[i - period][field],row,i)
 							return (change==Infinity || change==-Infinity) ? 0 : change
 						}
 						return NaN
@@ -427,16 +427,89 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
 				} 
 				break;
+			case 'NC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexNC = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNC) 
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(getPropertyByString(quotes[i - period],field,subField) == 0) return 0
+							
+							const change = parseFloat((
+								getPropertyByString(row,field,subField) - 
+								getPropertyByString(quotes[i - period],field,subField)
+							).toFixed(4))
+							//console.log(row[field] , quotes[i - period][field],row,i)
+							return change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				break;
+			case 'ATH':
+				// 从当前indicator数据出现那天开始计算
+				let indexATH = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATH) 
+				let indicatorATH = 0
+				let maxSoFar = -Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) >= maxSoFar) {
+							maxSoFar = getPropertyByString(row,field,subField);
+							indicatorATH = 1;
+						} else {
+							indicatorATH = 0;
+						}
+						return indicatorATH;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'ATL':
+				// 从当前indicator数据出现那天开始计算
+				let indexATL = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATL) 
+				let indicatorATL = 0
+				let minSoFar = Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) <= minSoFar) {
+							minSoFar = getPropertyByString(row,field,subField);
+							indicatorATL = 1;
+						} else {
+							indicatorATL = 0;
+						}
+						return indicatorATL;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
 			default:
 				console.error('no such condition')
 		}
-		
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
-			if(resArr[i]==-Infinity){
-				//console.log('-Infinity',quote)
-			}
-			
 			quote[sd.inputs.display] = resArr[i];
 			// quote['supLine'] = showSupLine;
 		}
@@ -451,7 +524,7 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
-		if (field == 'SRatio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 
 		var subField = field
@@ -1051,6 +1124,90 @@ if (!CIQ.Studies) {
 		}
 	};
 
+	CIQ.Studies.calculateNDayRealizedVolatility = function (stx, sd) {
+		var period = sd.inputs.period;
+
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		var quotes = sd.chart.scrubbed;
+
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		} 
+
+				let logArr = quotes.map((row, i) => {
+					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=1){
+							// 如果分母为0，直接返回0
+							if(getPropertyByString(quotes[i - 1],field,subField) == 0) return 0
+
+							return Math.log((
+								getPropertyByString(row,field,subField) / 
+								getPropertyByString(quotes[i - 1],field,subField)
+							))
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(logArr.length>1 && logArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				const volatilityArr = getPeriodParam(logArr, "volatility", period, 1);
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote["Result " + sd.name] = volatilityArr[i];
+		}
+	};
+
+	CIQ.Studies.calculateSQNMarketRegime = function (stx, sd) {
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		CIQ.stxx.calculateDailyChange(sd.chart);
+		var quotes = sd.chart.scrubbed;
+
+		CIQ.Studies.MA("simple", sd.days, 'change', 0, "_MA", stx, sd);
+
+		sd.std = new CIQ.Studies.StudyDescriptor(sd.name, "STD Dev", sd.panel);
+		sd.std.chart = sd.chart;
+		sd.std.startFrom = sd.startFrom;
+		sd.std.days = sd.days;
+		sd.std.inputs = {
+			Field: 'change',
+			"Standard Deviations": 1,
+			Type: "simple"
+		};
+		sd.std.outputs = { "_STD Dev": null };
+			// dual symbol new features
+			sd.std.parameters = sd.parameters
+		CIQ.Studies.calculateStandardDeviationSample(stx, sd.std);
+
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		} 
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote["Result " + sd.name] = 
+				(quote["_MA " + sd.name] / quote["_STD Dev " + sd.name]) * Math.sqrt(100);
+		}
+	};
+
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"MAGap": {
@@ -1117,7 +1274,7 @@ if (!CIQ.Studies) {
 		"Symbol Ratio": {
             name: "Symbol Ratio Line",
             calculateFN: CIQ.Studies.calculateSymbolOhlcv,
-            inputs: { Field: "SRatio",overlay: false},
+            inputs: { Field: "Ratio",overlay: false},
 			// outputs: { "Symbol Ratios": "#8cc176" },
         },
 		"MACDHistGap": {
@@ -1283,6 +1440,26 @@ if (!CIQ.Studies) {
 			inputs: { Period: 252 },
             calculateFN: CIQ.Studies.calculatePercentageBelowNDayHigh,
         },
+		"N-Day Realized Volatility": {
+            name: "N-Day Realized Volatility",
+			inputs: { period: 21 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateNDayRealizedVolatility(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
+		"SQN Market Regime": {
+            name: "SQN Market Regime",
+			inputs: { Period: 100 },
+            calculateFN: function (stx, sd) {	
+				CIQ.Studies.calculateSQNMarketRegime(stx, sd);
+			},
+			outputs: {
+				"Result": "auto",
+			},
+        },
 	});
 
 
@@ -1319,6 +1496,21 @@ if (!CIQ.Studies) {
 				}
 			}
 			return p2-p1
+			},
+			volatility: arr => {
+				// 计算平均值
+				const mean = arr.reduce((sum, num) => sum + num, 0) / arr.length;
+			
+				// 计算方差
+				const squaredDifferences = arr.map(num => Math.pow(num - mean, 2));
+				const variance = squaredDifferences.reduce((sum, squaredDiff) => sum + squaredDiff, 0) / (arr.length-1);
+			
+				// 计算标准差
+				const standardDeviation = Math.sqrt(variance);
+				
+				const volatilityValue = standardDeviation * 100 * Math.sqrt(252)
+
+				return volatilityValue;
 			}
 		};
 		
@@ -1331,7 +1523,7 @@ if (!CIQ.Studies) {
 			const sliceStart = i - period + add_bar
 			const sliceEnd = i + add_bar
 			const tmpData = typeDict[paramType](dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd).filter(item=>!isNaN(item)));
-			//console.log(dataSeries.slice(sliceStart<0?0:sliceStart, sliceEnd),tmpData)
+			
 			//dataArr.push(Number(tmpData.toFixed(3)));
 			dataArr.push(Number(tmpData));
 		}

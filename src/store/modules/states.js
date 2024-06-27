@@ -12,10 +12,14 @@ const state = {
 	beforeCalculateNewConditions: false,
 	cacheReRunData: {},
 	isCreateLoading: false,
-	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null
+	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
+	symbolUploadDomActive: false,
 }
 
 const mutations = {
+	DETECT_SYMBOL_UPLOAD_DOM(state,val) {
+		state.symbolUploadDomActive = val
+	},
     SET_SCANNERAI_FILTER_STATE(state,obj) {
 		state.scannerai_filter = obj
 	},
@@ -53,6 +57,13 @@ const mutations = {
 }
 
 const actions = {
+	detect_symbol_upload_dom({commit}){
+		return new Promise(resolve=>{
+			let node = document.querySelector('.symbol-upload')
+			commit('DETECT_SYMBOL_UPLOAD_DOM',Boolean(node))
+			resolve();
+		})
+	},
     set_scannerai_filter_state({commit}, obj){
 		return new Promise(resolve=>{
 			commit('SET_SCANNERAI_FILTER_STATE',obj)

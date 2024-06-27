@@ -36,7 +36,7 @@
         </div>
         <div class="searchBox">
           <el-input placeholder="Search" v-model="searchKey" size="mini" @keyup.enter.native="handleQuery" clearable @clear="handleQuery">
-            <i slot="append" class="el-input__icon el-icon-search"></i>
+            <i slot="append" class="el-input__icon el-icon-search" style="cursor: pointer;" @click="handleQuery"></i>
           </el-input>
         </div>
       </div>

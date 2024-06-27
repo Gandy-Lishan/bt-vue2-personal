@@ -704,7 +704,15 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Percentage Above N-Day Low",
 							"url": "Percentage Above N-Day Low"
-						}
+						},
+						{
+							"name": "N-Day Realized Volatility",
+							"url": "N-Day Realized Volatility"
+						},
+						{
+							"name": "SQN Market Regime",
+							"url": "SQN Market Regime"
+						},
 					]
 				},
 				{

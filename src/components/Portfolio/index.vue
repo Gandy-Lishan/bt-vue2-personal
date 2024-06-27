@@ -1,22 +1,6 @@
 <template>
   <div class="CPMResults-container">
     <div class="portfolio-header">
-      <!-- <h2 class="portfolio-title">Portfolio<i class="header-icon el-icon-info"></i></h2>
-        <div class="portfolio-des">
-        <p>
-          This page provides a highlight of our Strategies. These strategies are based on multiple trading models,
-          each with its own pros/cons. Some models have larger returns, while others have smaller drawdowns. Some models 
-          perform better in trending markets, while others perform better in choppy markets. These models were created to account 
-          for individual preferences, risk tolerance, etc. Ulti, the model that you want to use is up to you.
-        </p>
-        <p>
-          In the table below, a 'yellow' highlight on the row signifies a change in signal.
-        </p>
-        <p>
-          You can now subscribe to receive email notifications when a Strategy updates. Visit the <a href="https://users.sentimentrader.com/users/preferences/">
-          preferences page</a> to subscribe to our Strategies emails.
-        </p>
-        </div> -->
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
@@ -75,44 +59,34 @@
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
             <p @click.stop="() => {changeSecondTab('summary')}" :class="{ secondActive: activeSecondTab == 'summary' || '' }">Summary</p>
-            <p @click.stop="() => {changeSecondTab('filter')}" :class="{ secondActive: activeSecondTab == 'filter' || '' }">Dual Trend Model</p>
-          </div>
-          <div class="downLoadCsvBtn">
-              <el-button
-                @click.stop="() => {handleDownloadCsv()}"
-                style="display: inline-block"
-                type="primary"
-                plain
-                size="mini"
-                icon="el-icon-download"
-                >Export Data</el-button
-              >
+            <template v-for="(item, index) in strategy_details">
+            <p @click.stop="() => {changeSecondTab(`${item.model}_${index}`)}" :class="{ secondActive: activeSecondTab == `${item.model}_${index}` || '' }" :key="index">{{ item.model }}</p>
+            </template>
           </div>
         </template>
         <!-- <CPMSummary ref="Summary"></CPMSummary> -->
+        <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
         <div class="content">
-            <FilterTable v-show="activeSecondTab == 'filter'" ref="filterTable"
-            :data="filterTableData" 
+          <template v-for="(ele, index) in strategy_details">
+            <FilterTable v-show="activeSecondTab == `${ele.model}_${index}`"
+            :data="ele" 
             :label="filterTableData.label" 
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
+            :key="index"
             ></FilterTable>
-            <Statistics v-show="activeSecondTab == 'summary'" ref="Statistics" :tradesData="tradesData"></Statistics>
+          </template>
         </div>
       </el-collapse-item>
     </el-collapse>
   </div>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
 import Statistics from "./Statistics";
-// import TIM from "./components/tim";
-// import CorrInfo from "./components/corrInfo";
 import Form from "./Form";
-// import MaxMin from "../results/components/MaxMin";
 import ScannerBTTable from "./Table";
 import FilterTable from "./FilterTable";
-const XLSX = require('xlsx');
+import { isJson } from '@/utils';
 
 export default {
   name: 'Portfolio',
@@ -120,7 +94,7 @@ export default {
     return {
       activeNames: ['1', '2', '3'],
       activeTab: 'statistics',
-      activeSecondTab: 'filter',
+      activeSecondTab: 'summary',
       tradeDate: {},
       tradePrice: 'Close',
       chart_data: {},
@@ -148,7 +122,32 @@ export default {
           {label:'Expected Return(%)',value:'ExpectedReturn'},
           // {label:'Z-Score',value:'Z_Score'},
         ]
+      },
+      strategy_details: []
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+		console.log('TO', to, 'FROM', from)
+  if (from.path.includes('/strategy')) {
+    next(async _this => {
+      if (to.params.usedFor && to.params.usedFor === 'SetPortfolio') {
+        const data = isJson(to?.params?.data) ? JSON.parse(to?.params?.data) : []
+        if(!data || !data.length) return
+        const _percent = Math.floor(100 / data.length) || 0
+        const selectedStrategy = data.map(item => {return {...item, percent: _percent}})
+        const strategy_combination = [{}, ...selectedStrategy]
+        let totalWeight = 0
+        for (const row of selectedStrategy) {
+          totalWeight += parseFloat(row.percent) || 0
+        }
+        const percent = 100 - totalWeight
+        _this.$nextTick(() => {
+         _this.$refs['Form'].setPortfolio({strategy_combination, percent})
+        })
       }
+    })
+    } else {
+      next()
     }
   },
   components: {
@@ -163,6 +162,9 @@ export default {
     },
     changeSecondTab(val) {
       this.activeSecondTab = val
+      this.$nextTick(() => {
+      this.activeSecondTab = val    
+      })
     },
     scrollToTarget(refName, height=-80) {
       this.$nextTick(() => {
@@ -179,84 +181,28 @@ export default {
     displayResultsAndFilter(data) {
       
       // 至展示 filter 和 result 不重新赋值 form
-      const result = data.result
-      const list = JSON.parse(data['TRADE LIST'])
-      this.displayPreviewList(list)
       this.activeSecondTab = 'summary'
-      this.displaySummary(result)
+      this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
     displayResultsData(data) {
-      
+      const {row: {status}, portfolio_details:statistics, strategy_details} = data
       this.$refs['Form'].displayData(data)
       this.activeSecondTab = 'summary'
-      const status = data.status
       if(status !== 'finish' && status !== 'Finish') {
         this.scrollToTarget('formTarget', -200)
         this.clearResults()
         return
       }
-      const result = data.result
-      const list = JSON.parse(data['TRADE LIST'])
-      this.displaySummary(result)
-      this.displayPreviewList(list)
+      if(!statistics || !strategy_details) {this.popUpMessage('Portfolio is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
+      this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
-    displaySummary(result) {
-      
-      const statistics = {}
-      statistics.totalReturn = result['TOTAL RETURN']
-      statistics.medianReturn = result['MEDIAN RETURN']
-      statistics.averageReturn = result['AVERAGE RETURN']
-      statistics.tzScore = result['Z-SCORE'] 
-      statistics.standardDeviation = result['STD.DEV']
-      statistics.maxRisk = result['MAX RISK']
-      // statistics.buyHoldGain = _data.buy_and_hold 缺少
-      // MDD + STD.DEV 我没加进去的
-      statistics.winRate = result['WIN RATE']
-      statistics.averageWin = result['AVERAGE WIN']
-      statistics.averageLoss = result['AVERAGE LOSS']
-      statistics.totalTrades = result['TOTAL TRADES']
-      statistics.totalPositive = result['TOTAL POSITIVE']
-      statistics.totalNegative = result['TOTAL NEGATIVE']
-      statistics.timeInMarket = result['TIME IN MARKET']
-      const transformedResult = []
-      const _result = result.result
-      const ID = _result['ID']
-      const indexMap = {}
-      ID.forEach((id, index) => {
-        if (!(id in indexMap)) {
-          indexMap[id] = []
-        }
-        indexMap[id].push(index)
-      })
-      const _ID = Object.values(indexMap) //输出: [[0, 2], [1, 3]] 这里没有考虑传入数据总数的奇偶问题
-
-      for (let i = 0; i < _ID.length; i++) {
-        const dataSource = 1
-        const oppositeDataSource = 0
-        const data = {
-          Symbol: _result['Symbol'][_ID[i][dataSource]],
-          Signal: _result['Signal'][_ID[i][dataSource]],
-          Direction: _result['Direction'][_ID[i][dataSource]],
-          EntryDate: _result['Start Date'][_ID[i][oppositeDataSource]],
-          EntryAction: _result['Action'][_ID[i][oppositeDataSource]],
-          EntryPrice: _result['Close'][_ID[i][oppositeDataSource]],
-          ExitDate: _result['Start Date'][_ID[i][dataSource]],
-          ExitAction: _result['Action'][_ID[i][dataSource]],
-          ExitPrice: _result['Close'][_ID[i][dataSource]],
-          FloatProfit: _result['FloatProfit'][_ID[i][dataSource]],
-          ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
-          TradeNumber: i + 1
-        }
-        transformedResult.push(data)
-      }
-      transformedResult.sort(function(a, b) {
-          var dateA = new Date(a.EntryDate)
-          var dateB = new Date(b.EntryDate)
-          return dateA - dateB
-      })
-      this.tradesData = transformedResult
+    displaySummary(data) {
+      const {portfolio_details:statistics, strategy_details} = data
+      const _result = isJson(data.portfolio_details.portfolio_details) ? JSON.parse(data.portfolio_details.portfolio_details) : data.portfolio_details.portfolio_details
+      this.strategy_details = isJson(strategy_details) ? JSON.parse(strategy_details) : strategy_details
+      this.tradesData = _result
       this.$nextTick(() => {
         this.$refs['Statistics'].displayData(statistics)
       })
@@ -284,10 +230,10 @@ export default {
 		    this.loading = false
     },
     clearResults() {
-        this.activeSecondTab = 'filter'
-        this.displayPreviewList([])
+        this.activeSecondTab = 'summary'
         this.$refs['Statistics'].displayData({})
         this.tradesData = []
+        this.strategy_details = []
     },
     resetForm() {
       this.$nextTick(() => {
@@ -298,77 +244,6 @@ export default {
     },
     async refreshBTList() {
       await this.$refs['ScannerBTTable'].getDataList()
-    },
-    handleDownloadCsv() {
-      const {summary, trade} = this.$refs.Statistics.handleDownloadCsv()
-      const filterList = this.$refs.filterTable.exportTable()
-      if (
-        !(
-          summary.length &&
-          trade.length &
-          filterList.length
-        )
-      ) {
-        this.popUpMsgBox('No data available for download')
-        return
-      }
-      const dataList = [ 
-        filterList,
-        summary,
-        trade
-      ]
-      const sheetNames = [
-        'Preview Filter List',
-        'Summary',
-        'Trades'
-      ]
-      this.exportDataToCSV(dataList, sheetNames)
-    },
-    exportDataToCSV(dataList, sheetNames) {
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new()
-
-      for (let i = 0; i < dataList.length; i++) {
-        // Convert the data to a worksheet
-        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
-
-        // Add the worksheet to the workbook with the given name
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
-      }
-
-      // Convert the workbook to a binary string
-      const workbookBinaryString = XLSX.write(workbook, {
-        type: 'binary',
-        bookType: 'xlsx'
-      })
-      // Create a Blob from the binary string
-      const blob = new Blob([this.s2ab(workbookBinaryString)], {
-        type: 'application/octet-stream'
-      })
-
-      // Create a download URL for the Blob
-      const url = URL.createObjectURL(blob)
-
-      // Create a link element for downloading the CSV file
-      const link = document.createElement('a')
-      link.style.display = 'none'
-      link.setAttribute('href', url)
-      link.setAttribute('download', 'Results.xlsx')
-      link.innerHTML = 'Download XLSX'
-      // Append the link element to the document body
-      document.body.appendChild(link)
-
-      // Trigger the download
-      link.click()
-    },
-    // Utility function to convert a string to an ArrayBuffer
-    s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xff;
-      }
-      return buf;
     },
   }
 }
@@ -392,11 +267,14 @@ export default {
   font-weight: 300;
   color: #666;
   position: relative;
+  flex-wrap: wrap;
+  height: auto;
 }
 
 .portfolio-header {
   /deep/ .el-collapse-item__header {
     background-color: #fff;
+    height: 48px;
   }
 }
 .title {
@@ -406,9 +284,10 @@ export default {
   font-size: 18px;
   font-weight: 300;
   color: #666;
+  flex-wrap: wrap;
 }
 .title p {
-  padding: 0 20px;
+  padding: 0 5px;
   margin: 0;
 }
 .title p:hover {
@@ -430,15 +309,9 @@ export default {
   border-top: unset;
   border-bottom: unset;
 }
-
-.downLoadCsvBtn {
-	position: absolute;
-	right: 90px;
-  margin-left: 10px;
-	color: #333333;
-}
 .page-title {
-  padding: 0 0 0 20px;
+  margin: 0;
+  padding: 0 5px 0 5px;
 }
 .portfolio-des {
   padding: 0 20px;

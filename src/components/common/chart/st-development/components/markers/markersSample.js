@@ -152,10 +152,14 @@ MarkersSample.prototype.createAbstractMarker = function (abstractType) {
 };
 MarkersSample.prototype.hideMarkers = function () {
 	var stx = this.stx;
-	//直接写死算了,event是hammer tag
+
+	if(window.location.pathname.includes('/backtester')){
+		CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+	}
+
 	this.activeLabels = [
 		// 'circle',
-		// 'events',
+		//'events',
 		'triangle_buy','triangle_sell','dot_buy','dot_sell',
 		// dual symbol
 		'triangle_buy_2','triangle_sell_2','dot_buy_2','dot_sell_2'
@@ -331,12 +335,52 @@ CIQ.createOneTimeScannerMarkerHammer = function(trades,date,signal){
 
 	CIQ.stxx.draw();
 }
+CIQ.createOneTimeLastSignalMarker = function(date,content,comparisonSymbolUrl){
+	//hoverable marker
+	var datatime = new Date(date)
+	var offset = datatime.getTimezoneOffset() * 60 * 1000
+	const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
 
+
+	let params
+	if(comparisonSymbolUrl){
+		params = {
+			stx: CIQ.stxx,
+			xPositioner: "date",
+			plotField: comparisonSymbolUrl,		// <<<<== custom field
+			x: standardDate,
+			label: "events",
+			node: new CIQ.Marker.stPerformance({
+				type: "last-signal",
+				headline: `The Last Signal From Symbol ${comparisonSymbolUrl}`,
+				category: 'last-signal',
+				displayCategory: true,
+				displayStem: false,	
+			})
+		}
+	}else{
+		params = {
+			stx: CIQ.stxx,
+			xPositioner: "date",
+			x: standardDate,
+			label: "events",
+			node: new CIQ.Marker.stPerformance({
+				type: "last-signal",
+				headline: `The Last Signal From Symbol ${CIQ.stxx.chart.symbol}`,
+				category: 'last-signal',
+				displayCategory: true,
+				displayStem: false,	
+			})
+		}
+	}
+	new CIQ.Marker(params);
+}
 CIQ.createOneTimePatternMarker = function(date,content){
 	//CIQ.hideMarker()
 	CIQ.store.dispatch('states/set_isMarkerShown_flag',false)
 	// 显示pattern标记
 	var newNode;
+	
 	//hoverable marker
 	var datatime = new Date(date)
 	var offset = datatime.getTimezoneOffset() * 60 * 1000
@@ -355,6 +399,7 @@ CIQ.createOneTimePatternMarker = function(date,content){
 		label: "events",
 		node: newNode
 	});
+	CIQ.stxx.draw()
 }
 
 CIQ.setMarkerVisibility = function(type){

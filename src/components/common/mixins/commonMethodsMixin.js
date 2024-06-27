@@ -1,5 +1,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
+import { getSymbolInfo,getCoresSymbolDual } from '@/utils/globalFunc'
 import {
 	getBacktestName,
 	seeParams,
@@ -567,7 +568,6 @@ export const CommonMethodsMixin = {
 
 		calculateNewConditions(signals, criteria, panelIndex) {
 			if( !['Symbol', 'Sentiment', 'User'].includes(signals.analysis) ) return
-
 			const isROCLike = signals.isROCLike
 			const indicator = signals.indicator
 			const newCondition = signals.newCondition
@@ -582,18 +582,21 @@ export const CommonMethodsMixin = {
 				[7, { name: 'MA Ratio', abbr: 'MA' }],
 				[8, { name: 'Range Rank', abbr: 'RR' }],
 				[9, { name: 'DrawDown %', abbr: 'DD' }],
-				[10, { name:'DrawUp %', abbr: 'DU' }]
+				[10, { name:'DrawUp %', abbr: 'DU' }],
+				[11, { name:'Net Change', abbr: 'NC' }],
+				[12, { name:'All-time High', abbr: 'ATH' }],
+				[13, { name:'All-time Low', abbr: 'ATL' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
+			let stmaPeriod
 
 			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
 				// 是senti则为senti url, 反之为User的name
 				indicator_url = signal?signal.url:indicator
 			}
-
 			if (indicator_url && analysis === 'Sentiment') {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					if (
@@ -608,6 +611,7 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
+							stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
 							break
 						}
 					}
@@ -636,6 +640,7 @@ export const CommonMethodsMixin = {
 							indicator_url_with_ma = Object.keys(
 								CIQ.stxx.layout.studies[studyInstanceName].outputMap
 							)[0]
+							stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
 							break
 						}
 					}
@@ -678,12 +683,16 @@ export const CommonMethodsMixin = {
 			// CIQ.Studies.studyLibrary['ST ROCLike'] = study
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
-			const symbolLabel = criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
+			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
+			const name = indicator_url_with_ma
+                  ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
+                  : this.rocDisplayName(fieldName || indicator_url)
+			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Day)`
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `(${symbolLabel})${conditionMap.get(newCondition).name}(${this.rocDisplayName(field)}, ${conditionPeriod})`,
+					display: `(${symbolLabel})${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -695,17 +704,21 @@ export const CommonMethodsMixin = {
 				}
 			)
 			this.hideDuplicateROC()
-
+			if(CIQ.store.state.chart.trades.length == 0) return
 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 		// 处理用户自定义indicator的显示名
 		rocDisplayName(field) {
-			let display = field
+			let display
+			let senti = CIQ.findSentiIndicator(null,field)
 			if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
-			}
-			if(CIQ.isUserIndicator(field)){
+			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
+			}else if(senti){
+				display = senti.chart_name
+			}else {
+				display = field
 			}
 			return display
 		},
@@ -757,7 +770,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 10
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 13
 					}
 				return null
 			})	
@@ -1065,17 +1078,26 @@ export const CommonMethodsMixin = {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
 			const commitSymbol2 = (symbol2) => {
-				let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
-				let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
-				if(!stockName && !indexName){
+				// let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
+				// let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
+				// if(!stockName && !indexName){
+				// 	this.$store.commit('form/setComparisonSymbol', {})
+				// 	return
+				// }
+				// this.$store.commit('form/setComparisonSymbol', {
+				// 	name:stockName?stockName.name:indexName.name,
+				// 	url:symbol2,
+				// })
+
+				const {name,url,type} = getSymbolInfo(symbol2)
+    			if(type == 'other'){
 					this.$store.commit('form/setComparisonSymbol', {})
-					return
+				}else{
+					this.$store.commit('form/setComparisonSymbol', {
+						name:name,
+						url:url,
+					})
 				}
-		  
-				this.$store.commit('form/setComparisonSymbol', {
-					name:stockName?stockName.name:indexName.name,
-					url:symbol2,
-				})
 			}
 			commitIndicators('entry', data.formIndicators.entry);
 			commitIndicators('exit', data.formIndicators.exit);
@@ -1097,6 +1119,8 @@ export const CommonMethodsMixin = {
 			 * 2. activatedTechLayout加入Tech(ma除外)的默认配置（symbol为symbol1）
 			 */
 
+			//兼容錯誤歷史版本上indicatorlayout沒有activatedTechLayout的情況
+			if(!data.activatedTechLayout) data.activatedTechLayout = []; // 初始化新数组
 			//兼容sample backtest普通Tech没有此属性的情况
 			if (!data.activatedMALayout || (data.activatedMALayout.length>0 && !data.activatedMALayout[0].url)) {
 				if(!data.activatedMALayout) data.activatedMALayout = []

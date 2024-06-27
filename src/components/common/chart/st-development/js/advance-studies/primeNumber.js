@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils"
 
 
 let __js_advanced_studies_primeNumber_ = (_exports) => {
@@ -55,11 +55,19 @@ if (!CIQ.Studies) {
 			return true;
 		}
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
 
-			var high = quote.High;
+			var high = getPropertyByString(quote,field,'High');
 			if (!isNaN(high)) {
 				for (var h = 0; high > 0 && high <= 10; h++) high *= 10;
 				if (isPrime(high)) high += 2;
@@ -69,7 +77,7 @@ if (!CIQ.Studies) {
 				high /= Math.pow(10, h);
 			}
 
-			var low = quote.Low;
+			var low = getPropertyByString(quote,field,'Low');
 			if (!isNaN(low)) {
 				for (var l = 0; low > 0 && low <= 10; l++) low *= 10;
 				if (isPrime(low)) low -= 2;
@@ -86,10 +94,11 @@ if (!CIQ.Studies) {
 				if (!isNaN(low))
 					quote["Prime Bands Bottom " + sd.name] = Math.max(0, low);
 			} else {
+				var close = getPropertyByString(quote,field,'Close');
 				var value = 0;
 				var tolerance =
 					(sd.inputs["Tolerance Percentage"] * (high - low)) / 100;
-				var skew = high + low - 2 * quote.Close;
+				var skew = high + low - 2 * close;
 				if (skew < tolerance) value = 1;
 				else if (skew > tolerance) value = -1;
 				if (value) quote["Result " + sd.name] = value;
@@ -124,4 +133,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_primeNumber_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_primeNumber_}

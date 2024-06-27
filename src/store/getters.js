@@ -23,8 +23,7 @@ const getters = {
 		  state.chart.ma_color_2[panelIndex % state.chart.ma_color_2.length] :
 		  state.chart.ma_color_1[panelIndex % state.chart.ma_color_2.length];
 	  },
-	// getRocLikeCount: state => state.chart.rocLikeCount,
-	// getStudiesCount: state => state.chart.studiesCount,
+	getMySymbollist: state => state.chart.mySymbolList,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
@@ -35,6 +34,7 @@ const getters = {
 	getIsMarkerShownFlagState: state => state.states.isMarkerShown_flag,
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
+	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

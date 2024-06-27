@@ -108,7 +108,6 @@ MarkersSample.prototype.showmMarker = function () {
 	let { stx } = this;
 	// const startTime = performance.now()
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-	
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
@@ -214,6 +213,7 @@ MarkersSample.prototype.showmMarker = function () {
 					//if(!isSenti && isSymbol2) continue
 					if(isSenti || !isSymbol2){
 						const panel = sd['panel'] 
+						if(stx.panels[panel].hidden) continue
 						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 						const plotField = sd.panel == 'chart' && isSymbol2
 											? comparisonSymbol.url
@@ -271,6 +271,7 @@ MarkersSample.prototype.showmMarker = function () {
 					//if(!isSenti && isSymbol2) continue
 					if(isSenti || !isSymbol2){
 						const panel = sd['panel'] 
+						if(stx.panels[panel].hidden) continue
 						/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 						const plotField = sd.panel == 'chart' && isSymbol2
 											? comparisonSymbol.url
@@ -305,10 +306,8 @@ MarkersSample.prototype.showmMarker = function () {
 	}
 
 	/** dual symbol */
-	//var actualXaxis = stx.getYAxisByField(stx.panels[stx.chart.series[comparisonSymbol.url].parameters.panel], comparisonSymbol.url);
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
-
 		var datatime = new Date(mDataSet2[data].DT || mDataSet2[data].Date)
 		var offset = datatime.getTimezoneOffset() * 60 * 1000
 		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
@@ -397,6 +396,7 @@ MarkersSample.prototype.showmMarker = function () {
 				//if(!isSenti && !isSymbol2) continue
 				if(isSenti || isSymbol2){
 					const panel = sd['panel'] 
+					if(stx.panels[panel].hidden) continue
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 					const plotField = sd.panel == 'chart' && isSymbol2
 										? comparisonSymbol.url
@@ -455,6 +455,7 @@ MarkersSample.prototype.showmMarker = function () {
 				//if(!isSenti && !isSymbol2) continue
 				if(isSenti || isSymbol2){
 					const panel = sd['panel'] 
+					if(stx.panels[panel].hidden) continue
 					/** 只有在chart panel的并且是symbol2的Study需要把plotField设为symbol2 name */
 					const plotField = sd.panel == 'chart' && isSymbol2
 										? comparisonSymbol.url

@@ -56,7 +56,6 @@
 					</el-option>
 				</el-select>
 			</el-form-item>
-      
       <el-form-item
 				label="3.Timeframe"
 			>
@@ -88,7 +87,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle" v-if="data.categories != 'WIC'">
+		<div class="MI-form-middle" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
@@ -225,8 +224,8 @@
 			</div>
 		</div>
 
-		<el-divider v-if="data.categories != 'WIC'"></el-divider>
-		<div class="MI-form-bottom" v-if="data.categories != 'WIC'">
+		<el-divider v-if="!['WIC','OHLCV'].includes(data.categories)"></el-divider>
+		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<CheckInput
 				:config="EOCheckInputConfig"
 				ref="EOForm"
@@ -315,6 +314,67 @@
       </el-table-column>
       </el-table>
     </div>
+    <div class="SOHLCV-container"
+      v-if="data.categories == 'OHLCV'">
+      <div class="SLeft">
+				<el-form-item v-model="OHLCVData.symbol">
+					<el-autocomplete
+						class="inline-input"
+						v-model="OHLCVData.symbol"
+						:fetch-suggestions="querySearch"
+						placeholder="Please select symbol from the dropdown menu"
+						@select="
+							(item) => {
+								changeSymbol(item)
+							}
+						"
+					>
+						<i slot="prefix" class="el-input__icon el-icon-search"></i>
+						<!-- 使用 scoped slot 自定义选项 -->
+						<template slot-scope="{ item }">
+							<div class="custom-option">
+								<span class="item-label">{{
+									item.url
+								}}</span>
+								<!-- 在选项后面添加标识 -->
+								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
+									item.label
+								}}</span>
+								<span v-if="item.type === 'Symbol'" class="type-label"
+									>Symbol</span
+								>
+							</div>
+						</template>
+					</el-autocomplete>
+				</el-form-item>
+      </div>
+      <div class="SRight">
+        <el-form-item prop="symbolIndicator">
+            <div class="selectBox">
+              <el-select
+                v-model="OHLCVData.condition"
+                placeholder="Select Symbol Open/High/Low/Close/Volume"
+                @change="handleSymbolSelect"
+              >
+                <el-option
+                  v-for="item in symbolConditions"
+                  :key="item.value"
+                  :label="item.obj.label"
+                  :value="item.obj"
+                >
+                </el-option>
+              </el-select>
+            </div>
+        </el-form-item>
+				<CheckInput
+					:config="MAOHLCVCheckInputConfig"
+          :isDisabled="OHLCVData.condition==''"
+					ref="maohlcvForm"
+          @manageMAStudies="manageMAStudies"
+					@saveData="saveSubData"
+				></CheckInput>
+      </div>
+    </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
       <el-form-item>
@@ -344,8 +404,10 @@ import CheckInput from './CheckInput.vue'
 import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 import {timeframeTransform} from '@/utils'
+import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
+import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
 
 export default {
   name: 'MIForm',
@@ -382,6 +444,10 @@ export default {
         {
           label: 'Weighted Indicator Combination',
           value: 'WIC'
+        },
+        {
+          label: 'Symbol OHLCV',
+          value: 'OHLCV'
         }
       ],
       MA1CheckInputConfig: {
@@ -456,6 +522,23 @@ export default {
           value: 'monthly'
         }
       ],
+      /** symbol ohlcv */
+      OHLCVData: {symbol:'', condition:''},
+      MAOHLCVCheckInputConfig: {
+        label: 'Moving Average',
+        placeholder: 'Please input the moving average value',
+        checked: false,
+        field: 'ma1',
+        value: '',
+        type: 'SelectInput'
+      },
+      symbolConditions: [
+        { value: 0, obj: { label: 'Symbol Open', field: 'open' } },
+        { value: 1, obj: { label: 'Symbol High', field: 'high' } },
+        { value: 2, obj: { label: 'Symbol Low', field: 'low' } },
+        { value: 3, obj: { label: 'Symbol Close', field: 'close' } },
+        { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
+      ],
     }
   },
   computed: {
@@ -474,6 +557,7 @@ export default {
   watch: {
     handleGetMiBenmark: {
       async handler(newVal) {
+        debugger
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -506,6 +590,12 @@ export default {
          }
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh',{data:this.weightData,url:null})
       }
+        if(this.data.categories.includes('OHLCV')){
+          this.OHLCVData.symbol = newVal
+          
+          const checkInputRef = 'maohlcvForm'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+        }
        
       },
       //immediate: true,
@@ -539,7 +629,7 @@ export default {
     this.sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
     this.symbolList = JSON.parse(localStorage.getItem('symbolList'))
     this.dropdownList = this.getList()
-    console.log('this.dropdownList', this.dropdownList)
+    console.log('this.dropdownList', this.dropdownList,this.data.categories)
   },
   methods: {
     /**
@@ -554,11 +644,13 @@ export default {
       this.data.time_frame = this.findMaxFreq() 
 
       // userownIndicator需要封一个刷新函数用来刷新timeframe（或者symbol）修改后的图表
-      if(this.data.categories !== 'WIC') {
+      if(this.data.categories == 'WIC') {
+        await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
+      }else if(this.data.categories == 'OHLCV'){
+        this.changeSymbol(this.OHLCVData.symbol)
+      }else {
         await this.$store.dispatch('chart/set_miFormStateRefresh')
         this.refreshMAState()
-      }else {
-        await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
       }
     },
     handleExtremeLineChange(value,field) {
@@ -566,27 +658,24 @@ export default {
     },
     manageMAStudies(value,type,field,showInput) {
       let fieldName = 'field'
-      if(!this.data.categories.includes('Symbol')){
+      let criteria
+      if(this.data.categories == 'OHLCV'){
+        fieldName = CIQ.findSymbolIndicator(this.OHLCVData.condition,null)?.field
+        criteria = 'entry1'
+      }
+      else if(this.data.categories.includes('Symbol')){ // symbol
+        criteria = field == 'ma1' ? 'entry1' : 'entry2'
+
+      }else{    
         if(field == 'ma1'){
           fieldName = this.data.indicator_1_url
         }else if(field == 'ma2'){
           fieldName = this.data.indicator_2_url
         }
-      }else{
-        if(field == 'ma1'){
-          // 如果symbol则input1 的field为main panel的默认值
-        }else if(field == 'ma2' && this.data.indicator_1_url != this.data.indicator_2_url){
-          // 如果左右indicator不同则field为indicator_url反之为main panel的默认值
-          fieldName = this.data.indicator_2_url
-        } 
+        // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
+        criteria = 'entry1'
       }
 
-      let criteria
-      if(field == 'ma1'){
-        criteria = this.data.indicator_2_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'entry2' : 'entry1'
-      }else{
-        criteria = this.data.indicator_1_url && this.data.indicator_1_url!=this.data.indicator_2_url ? 'exit2' : 'exit1'
-      }
       CIQ.addOwnIndicatorMAStudy(
         value,
         type,
@@ -634,31 +723,42 @@ export default {
         }
       }
       let saveData = null;
-      if(this.data.categories !== 'WIC') {
+      if(this.data.categories == 'WIC') {
+      }else if(this.data.categories == 'OHLCV') {
+        this.$refs['maohlcvForm'].saveData();
+      }else{
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
       }
+      let calculate
+      if(this.data.categories === 'WIC'){
+        calculate = 'weight_combination'
+      }else if(this.data.categories === 'OHLCV'){
+        calculate = this.OHLCVData.condition.split(' ')[1].toLowerCase()
+      }else{
+        calculate = this.data.categories.split(' ')[1].toLowerCase()
+      }
+
       const commonData = {
         name: this.data.name,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
+        indicator_1: recoverSymbolOptixUrl(this.data.indicator_1_url),
+        indicator_2: recoverSymbolOptixUrl(this.data.indicator_2_url),
         time_frame: this.data.time_frame,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
+        calculate: calculate,
         extreme_optimism: this.data.extreme_optimism,
         extreme_pessimism: this.data.extreme_pessimism,
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase(), // combine_type : indicator or symbol,
         benchmark: CIQ.stxx.chart.symbol
       };
-      if(this.data.categories !== 'WIC') {
-        saveData = {
-          ...commonData
-        }
-      } else {
+      if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
+        const percentageStrings = this.weightData.map(item => {
+          if(Number(item.weight) < 0) return (item.weight / 100).toFixed(2).replace(/^-/, 'n')
+          return (item.weight / 100).toFixed(2)
+        });
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -682,6 +782,21 @@ export default {
           extreme_pessimism: 0,
           combine_type: 'indicator',
         };
+      } else if(this.data.categories == 'OHLCV') {
+        saveData = {
+          ...commonData,
+          calculate: this.symbolConditions.find(i=>i.obj.label == this.OHLCVData.condition)?.obj.field,
+          indicator_1: this.OHLCVData.symbol,
+          indicator_2: 'model_smart_money',
+          ma: this.data.ma1,
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          combine_type: 'ohlcv'
+        };
+      } else {
+        saveData = {
+          ...commonData
+        }
       }
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
@@ -691,7 +806,10 @@ export default {
       const validForm = this.validForm()
       if(!validForm) return
       let saveData = null;
-      if(this.data.categories !== 'WIC') {
+      if(this.data.categories == 'WIC') {
+      }else if(this.data.categories == 'OHLCV') {
+        this.$refs['maohlcvForm'].saveData();
+      }else{
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
@@ -700,24 +818,32 @@ export default {
       // 在名字后加上四位随机小数
       const randomNumber = Math.round((Math.random()) * 10000) / 10000
       const randomName = `${this.data.name}_${randomNumber}`
+      let calculate
+      if(this.data.categories === 'WIC'){
+        calculate = 'weight_combination'
+      }else if(this.data.categories === 'OHLCV'){
+        calculate = this.OHLCVData.condition.split(' ')[1].toLowerCase()
+      }else{
+        calculate = this.data.categories.split(' ')[1].toLowerCase()
+      }
+
       const commonData = {
         name: randomName,
-        indicator_1: this.data.indicator_1_url,
-        indicator_2: this.data.indicator_2_url,
+        indicator_1: recoverSymbolOptixUrl(this.data.indicator_1_url),
+        indicator_2: recoverSymbolOptixUrl(this.data.indicator_2_url),
         time_frame: this.data.time_frame,
         ma: `${this.data.ma1}_${this.data.ma2}_1`,
-        calculate: this.data.categories === 'WIC' ? 'weight_combination' : this.data.categories.split(' ')[1].toLowerCase(),
+        calculate: calculate,
         extreme_optimism: this.data.extreme_optimism,
         extreme_pessimism: this.data.extreme_pessimism,
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
-      if(this.data.categories !== 'WIC') {
-        saveData = {
-          ...commonData
-        }
-      } else {
+      if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
-        const percentageStrings = this.weightData.map(item => (item.weight / 100).toFixed(2));
+        const percentageStrings = this.weightData.map(item => {
+          if(Number(item.weight) < 0) return (item.weight / 100).toFixed(2).replace(/^-/, 'n')
+          return (item.weight / 100).toFixed(2)
+        });
         const indicator_weight = percentageStrings.join('_');
 
         const mul_indicator = this.weightData.reduce((acc, item, index) => {
@@ -741,6 +867,21 @@ export default {
           extreme_pessimism: 0,
           combine_type: 'indicator'
         };
+      }else if(this.data.categories == 'OHLCV') {
+        saveData = {
+          ...commonData,
+          calculate: this.symbolConditions.find(i=>i.obj.label == this.OHLCVData.condition)?.obj.field,
+          indicator_1: this.OHLCVData.symbol,
+          indicator_2: 'model_smart_money',
+          ma: this.data.ma1,
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          combine_type: 'ohlcv'
+        };
+      } else {
+        saveData = {
+          ...commonData
+        }
       }
       return await saveMyIndicators(saveData);
     },
@@ -803,34 +944,35 @@ export default {
           this.data.name+'CREATE'+url,
           CIQ.stxx.chart.symbol
         )
+      }else if(this.data.categories == 'OHLCV'){
+        CIQ.previewUserOwnIndicator(
+          [this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          this.OHLCVData.symbol
+        )
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 
     },
     saveSubData(field, value) {
       console.log(field, value)
+      debugger
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
       if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
-      var results = queryString
-        ? dropdownList.filter(this.createFilter(queryString))
-        : dropdownList
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (dropdownList) => {
-        const labelMatch = dropdownList.label.toLowerCase().includes(queryString.toLowerCase());
-        const urlMatch = dropdownList.url.toLowerCase().includes(queryString.toLowerCase());
-        return labelMatch || urlMatch;
-      };
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     getList() {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
-      const isSymbol = data.categories.includes('Symbol')
+      const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
 
       if (neitherOfThem) {
@@ -847,6 +989,7 @@ export default {
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
+      const isOHLCV = category.includes('OHLCV')
 
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
         const exitItem = list.find((item) => item[type=='Indicator'?'label':'url'] === this.data[indicatorProp])
@@ -865,6 +1008,8 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
+        this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
       }
 
       if (isSymbol) {
@@ -875,6 +1020,8 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
+        this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
       }
 
       if(isWIC) {
@@ -882,6 +1029,22 @@ export default {
         this.data['indicator_1_url'] = ''
         this.data['indicator_2'] = ''
         this.data['indicator_2_url'] = ''
+
+        this.OHLCVData = {symbol:'', condition:''}
+        CIQ.stxx.setChartType("line"); 
+      }
+
+      if(isOHLCV) {
+        this.data['indicator_1'] = ''
+        this.data['indicator_1_url'] = ''
+        this.data['indicator_2'] = ''
+        this.data['indicator_2_url'] = ''
+
+        // 还原weightData初始状态
+        this.weightData =  [
+          {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+        ]
+        CIQ.stxx.setChartType("candle"); 
       }
 
       this.dropdownList = this.getList()
@@ -990,7 +1153,7 @@ export default {
         return maxTimeframe;
       },
     async displayData(data) {
-
+      debugger
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former_url;
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter_url;
@@ -1002,10 +1165,28 @@ export default {
       this.rowUrl = data.url
 
       this.dropdownList = this.getList()
-      //如果类型时weight_combination
+      //如果类型是weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
-      } else {  //其他类型
+      }else if(data.categories == 'OHLCV'){
+        this.OHLCVData.symbol = data.indicator_1_url
+        this.OHLCVData.condition = this.symbolConditions.find(item=>item.obj.field == data.calculate)?.obj.label
+        const configMap = [
+          { key: 'ma', index: 0 },
+        ];
+
+        configMap.forEach(item => {
+          const value = data[item.key];
+          item.config = {
+            value: value,
+            checked: value != '1',
+          };
+        });
+
+        //覆盖checkbox初始化配置
+        this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
+        debugger
+      }else {  //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
           { key: 'ma', index: 1 },
@@ -1062,19 +1243,7 @@ export default {
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
-      if(categories !== 'WIC') {
-        // 只需要校验 indicator_1 和 indicator_2
-        const indicator_1_url = this.data.indicator_1_url
-        const indicator_2_url = this.data.indicator_2_url
-
-        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
-        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
-
-        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
-          this.popUpMsgBox('Please choose an indicator from the dropdown.')
-          return false
-        }
-      }else {
+      if(categories == 'WIC') {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
         const data = this.weightData
         let totalWeight = 0
@@ -1092,6 +1261,30 @@ export default {
         if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
         if(!inAllowedList) {this.popUpMsgBox('Please choose indicators from the dropdown.'); return false}
         if(data.length<=1) {this.popUpMsgBox('Please select at least 2 indicators.'); return false}
+
+      }else if(categories == 'OHLCV') {
+        const symbol = this.OHLCVData.symbol
+        const condition = this.OHLCVData.condition
+        if(!symbol) {
+          this.popUpMsgBox('Please choose an symbol name from the dropdown.')
+          return false
+        }
+        if(!condition) {
+          this.popUpMsgBox('Please choose an symbol condition from the dropdown.')
+          return false
+        }
+      }else {
+        // 只需要校验 indicator_1 和 indicator_2
+        const indicator_1_url = this.data.indicator_1_url
+        const indicator_2_url = this.data.indicator_2_url
+
+        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
+
+        if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
+          this.popUpMsgBox('Please choose an indicator from the dropdown.')
+          return false
+        }
       }
       return true
     },
@@ -1140,6 +1333,30 @@ export default {
       // 更新weightList并刷新chartiq状态
       this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
     },
+
+    /**
+     * symbol ohlcv
+     */
+    async changeSymbol(item) {
+      if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
+      else this.OHLCVData.symbol = item // from changeTimeFrame
+ 
+      // 用promise包裹indicator加载流程确保其在stma加载之前执行
+      await this.$store.dispatch('chart/set_miFormSOHLCVChange',{
+        data:{
+          symbol:this.OHLCVData.symbol,
+        }
+      })
+      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+      const checkInputRef = 'maohlcvForm'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+    },
+    handleSymbolSelect(item) {
+      this.OHLCVData.condition = item.label
+      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+      const checkInputRef = 'maohlcvForm'
+      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+    }
   }
 }
 </script>
@@ -1289,5 +1506,12 @@ h4 {
     margin-top: 5px;
     color: #6f7174;
   }
+}
+
+/** symbol ohlcv */
+.SOHLCV-container{
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+  grid-gap:50px;
 }
 </style>

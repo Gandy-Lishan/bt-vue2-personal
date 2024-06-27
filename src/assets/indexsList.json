@@ -805,7 +805,7 @@
     },
     {
         "symbol": "IWD",
-        "name": "Ressell 1000 ETF Value (IWD)"
+        "name": "Ressell 1000 Value ETF (IWD)"
     },
     {
         "symbol": "CDX",
@@ -897,6 +897,10 @@
     },
     {
         "symbol": "TRAN",
-        "name": "TRAN"
+        "name": "Dow Jones Transportation Index (TRAN)"
+    },
+    {
+        "symbol": "VGT",
+        "name": "Information Technology Index ETF (VGT)"
     }
 ]

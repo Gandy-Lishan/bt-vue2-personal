@@ -53,7 +53,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=13">
 					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
 							@input="calculateNewConditions"
@@ -337,7 +337,10 @@ export default {
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
         { value: 9, label: 'DrawDown %' },
-        { value: 10, label: 'DrawUp %' }
+        { value: 10, label: 'DrawUp %' },
+        { value: 11, label: 'Net Change' },
+        { value: 12, label: 'All-time High' },
+        { value: 13, label: 'All-time Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -434,7 +437,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 10
+      this.isROCLike = 5 <= val && val <= 13
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -450,6 +453,7 @@ export default {
               CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
             ) {
               if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+                //indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap).filter(i=>!i.startsWith('MA ‌ST MA'))[0]
                 indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
                 break
               }
@@ -582,6 +586,15 @@ export default {
           case "DrawUp %":
             _newCondition = 'DU'
             break;
+          case "Net Change":
+            _newCondition = 'NC'
+            break;
+          case "All-time High":
+            _newCondition = 'ATH'
+            break;
+          case "All-time Low":
+            _newCondition = 'ATL'
+            break;
           default:
             break;
         }
@@ -589,8 +602,16 @@ export default {
         const _period = this.senti.period
         const _conditionPeriod = this.senti.conditionPeriod
         const _maValue = this.senti.maValue
-        const _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
-        const _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+        
+        let _description1,_description2
+        if([12,13].includes(this.senti.newCondition)){
+          _description1 = `${sentiVal} ${ma} ${_newCondition} ${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+        }else{
+          _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+        }
+
         if(this.conditionRadio === 'Indicator Value') {this.description = _description1}
         else if(this.conditionRadio === 'Indicator Moving Average'){this.description = _description2}
       }
@@ -679,6 +700,7 @@ export default {
       if (!this.isROCLike) return
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
       let indicator_url_with_ma = ''
+      let stmaPeriod
       if (indicator_url) {
         // 如果当前indicator自带ma,indicator_url改为ma_url
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -688,12 +710,13 @@ export default {
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           ) {
             if (CIQ.stxx.layout.studies[studyInstanceName].type == 'ST MA') {
+              //indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap).filter(i=>!i.startsWith('MA ‌ST MA'))[0]
               indicator_url_with_ma = Object.keys(CIQ.stxx.layout.studies[studyInstanceName].outputMap)[0]
+              stmaPeriod = CIQ.stxx.layout.studies[studyInstanceName].inputs.Period
               break
             }
           }
         }
-
         for (var studyInstanceName in CIQ.stxx.layout.studies) {
           // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
           if (
@@ -717,17 +740,24 @@ export default {
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
           [9, { name:'DrawDown %', abbr: 'DD' }],
-          [10, { name:'DrawUp %', abbr: 'DU' }]
+          [10, { name:'DrawUp %', abbr: 'DU' }],
+          [11, { name:'Net Change', abbr: 'NC' }],
+          [12, { name:'All-time High', abbr: 'ATH' }],
+          [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
-        // this.$store.dispatch('chart/update_roclike_count','add')
-        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
-        // study.panelHeight = CIQ.setPanelHeight()
-        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  /** 指示Study归属的Symbol */
+        const name = indicator_url_with_ma
+                  ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
+                  : this.rocDisplayName(indicator_url)
+        let condition
+        if([12,13].includes(this.senti.newCondition)){
+          condition = `${conditionMap.get(this.senti.newCondition).name}`
+        }else{
+          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
+        }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `(${symbolLabel})${conditionMap.get(this.senti.newCondition).name}(${this.rocDisplayName(field)}, ${this.senti.conditionPeriod})`,
+          display: `${name} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod
@@ -745,14 +775,18 @@ export default {
     },
     // 处理用户自定义indicator的显示名
     rocDisplayName(field) {
-      let display = field
+			let display
+			let senti = CIQ.findSentiIndicator(null,field)
 			if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
-			}
-			if(CIQ.isUserIndicator(field)){
+			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
+			}else if(senti){
+				display = senti.chart_name
+			}else {
+				display = field
 			}
-      return display
+			return display
     },
     setPeriod(val) {
       let _val = val

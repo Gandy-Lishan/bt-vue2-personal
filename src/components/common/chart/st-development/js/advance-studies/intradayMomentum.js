@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_intradayMomentum_ = (_exports) => {
@@ -39,6 +39,13 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateIntradayMomentum = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		var period = sd.days;
 		if (quotes.length < period + 1) {
 			sd.error = true;
@@ -52,11 +59,11 @@ if (!CIQ.Studies) {
 			totalDown = quotes[sd.startFrom - 1]["_totDn " + sd.name];
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var diff = quotes[i].Close - quotes[i].Open;
+			var diff = getPropertyByString(quotes[i],field,'Close') - getPropertyByString(quotes[i],field,'Open');
 			if (diff > 0) totalUp += diff;
 			else totalDown -= diff;
 			if (i >= period) {
-				var pDiff = quotes[i - period].Close - quotes[i - period].Open;
+				var pDiff = getPropertyByString(quotes[i - period],field,'Close') - getPropertyByString(quotes[i - period],field,'Open');
 				if (pDiff > 0) totalUp -= pDiff;
 				else totalDown += pDiff;
 			}
@@ -85,4 +92,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_intradayMomentum_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_intradayMomentum_}

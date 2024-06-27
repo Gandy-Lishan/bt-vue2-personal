@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-import { getPropertyByString } from "@/utils"
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_atr_ = (_exports) => {
@@ -90,19 +90,18 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		if (!quotes) return;
 		CIQ.Studies.calculateStudyATR(stx, sd);
-
-		var field	// 它是流动的
-		if(sd.parameters.isComparison){
-			field = CIQ.store.getters.getComparisonSymbol.url
-			/**根据criteria动态设定study的Y轴属*******/
-			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
-			sd.yAxis = actualXaxis
-			/****************** */
-			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-		}else{
-			sd.yAxis = null
-			quotes = sd.chart.scrubbed
-		}
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					/**根据criteria动态设定study的Y轴属*******/
+					var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+					sd.yAxis = actualXaxis
+					/****************** */
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					sd.yAxis = null
+					quotes = sd.chart.scrubbed
+				}
 
 		var useHighLow = sd.inputs.HighLow;
 		for (var i = Math.max(sd.startFrom - 1, 1); i < quotes.length - 1; i++) {
@@ -115,12 +114,12 @@ if (!CIQ.Studies) {
 			var base = getPropertyByString(prices,field,'Close');
 			var result = base;
 			var offset = prices["ATR " + sd.name] * sd.inputs.Multiplier;
-			/** dual symbol features */
-			const pricesClose = getPropertyByString(prices,field,'Close');
-			const pricesHigh = getPropertyByString(prices,field,'High');
-			const pricesLow = getPropertyByString(prices,field,'Low');
-			const pdClose = getPropertyByString(prices,field,'Close');
-			/*************** */
+					/** dual symbol features */
+					const pricesClose = getPropertyByString(prices,field,'Close');
+					const pricesHigh = getPropertyByString(prices,field,'High');
+					const pricesLow = getPropertyByString(prices,field,'Low');
+					const pdClose = getPropertyByString(pd,field,'Close');
+					/*************** */
 			if (pricesClose > prev && pdClose > prev) {
 				if (useHighLow) base = pricesHigh;
 				result = Math.max(prev, base - offset);
@@ -147,7 +146,47 @@ if (!CIQ.Studies) {
 		sd.outputMap = {};
 		sd.outputMap["All Stops " + sd.name] = "";
 	};
-
+// CIQ.Studies.calculateATRStops = function (stx, sd) {
+// 	var quotes = sd.chart.scrubbed;
+// 	if (!quotes) return;
+// 	CIQ.Studies.calculateStudyATR(stx, sd);
+// 	var useHighLow = sd.inputs.HighLow;
+// 	for (var i = Math.max(sd.startFrom - 1, 1); i < quotes.length - 1; i++) {
+// 		var prices = quotes[i];
+// 		var pd = quotes[i - 1];
+// 		var prev = prices["Buy Stops " + sd.name];
+// 		if (!prev) prev = prices["Sell Stops " + sd.name];
+// 		if (!prev) prev = 0;
+// 		if (!prices || !pd) continue;
+// 		var base = prices.Close;
+// 		var result = base;
+// 		var offset = prices["ATR " + sd.name] * sd.inputs.Multiplier;
+// 		if (prices.Close > prev && pd.Close > prev) {
+// 			if (useHighLow) base = prices.High;
+// 			result = Math.max(prev, base - offset);
+// 		} else if (prices.Close <= prev && pd.Close <= prev) {
+// 			if (useHighLow) base = prices.Low;
+// 			result = Math.min(prev, base + offset);
+// 		} else if (prices.Close > prev) {
+// 			if (useHighLow) base = prices.High;
+// 			result = base - offset;
+// 		} else if (prices.Close <= prev) {
+// 			if (useHighLow) base = prices.Low;
+// 			result = base + offset;
+// 		}
+// 		if (base <= result) {
+// 			quotes[i + 1]["Buy Stops " + sd.name] = result;
+// 			delete quotes[i + 1]["Sell Stops " + sd.name];
+// 		} else if (base > result) {
+// 			quotes[i + 1]["Sell Stops " + sd.name] = result;
+// 			delete quotes[i + 1]["Buy Stops " + sd.name];
+// 		}
+// 		quotes[i + 1]["All Stops " + sd.name] = result;
+// 	}
+// 	sd.referenceOutput = "All Stops"; //so PSAR2 can draw a square wave
+// 	sd.outputMap = {};
+// 	sd.outputMap["All Stops " + sd.name] = "";
+// };
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		ATR: {
 			name: "Average True Range",

@@ -5,7 +5,7 @@
  //import {CIQ} from "./STMask.js"
  import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
  import {config} from "../feeds/STDataFeedAccessUrl.js"
- import {maxNumOfStudy,recoverSymbolOptixUrl} from '@/utils'
+ import {maxNumOfStudy,recoverSymbolOptixUrl,getCoresSymbolDual} from '@/utils/globalFunc'
  import qs from 'querystring'
  import {
     searchIndicator,
@@ -121,17 +121,18 @@
          //  load saved indicator layouts from stxx.layout
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
-            for(var i in stx.layout.studies){
-                /** 跳过非参与回测的indicator */
-                if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-                savedTechSD.push({
-                    type: stx.layout.studies[i].type,
-                    inputs: stx.layout.studies[i].inputs,
-                    outputs: stx.layout.studies[i].outputs,
-                    parameters: stx.layout.studies[i].parameters,
-                    panel: stx.layout.studies[i].panel
-                })
-            }
+            /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
+            // for(var i in stx.layout.studies){
+            //     /** 跳过非参与回测的indicator */
+            //     if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+            //     savedTechSD.push({
+            //         type: stx.layout.studies[i].type,
+            //         inputs: stx.layout.studies[i].inputs,
+            //         outputs: stx.layout.studies[i].outputs,
+            //         parameters: stx.layout.studies[i].parameters,
+            //         panel: stx.layout.studies[i].panel
+            //     })
+            // }
          }else{
             /** 如果type为loadFromBakctest或者outputSignalsResult的话,
              * vuex有techSD则存入savedTechSD */
@@ -234,6 +235,7 @@
                     const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
                     let _data = formatData(res.data)
                     stx.addSeries(comparisonSymbol.url, {
+                        highlightable: false,
                         display:comparisonSymbol.name, 
                         data:_data,
                         isComparison: false, 
@@ -313,11 +315,6 @@
  /** global symbol loading function, 
   * including chart initation,lookup component, addSymbol from setup form*/
  CIQ.addSymbol = async function(symbol,stx,callback){
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol)
-    if(!stockName && !indexName){
-        return
-    }
     /** addIndicators会读取存入的symbol并用于loadChart */
     CIQ.store.commit('form/getBacktestSymbol',symbol)
 
@@ -335,15 +332,16 @@
         var sd = stx.layout.studies[studyInstanceName]; 
         CIQ.Studies.removeStudy(stx, sd); 
      }
-     let indicatorHeight = CIQ.setPanelHeight(indicatorList)
+     //let indicatorHeight = CIQ.setPanelHeight(indicatorList)
 
      let resArr = []
      let sentiUrlList = []
      return new Promise(async resolve=>{
          for(var i in indicatorList){
              // 是tech
-             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null)
+             let indicatorObj = CIQ.findBuiltinTechIndicator(null,indicatorList[i]) || CIQ.findSymbolIndicator(indicatorList[i],null) 
              if(indicatorObj){
+                    let techSymbolName = indicatorObj.value?indicatorObj.value:indicatorObj.label
                      // load technical study, no need for adding MA
                      // if it's a technical study, skip sending query
  
@@ -352,17 +350,17 @@
                             if(CIQ.store.state.chart.activatedMALayout[j].url == indicatorList[i]){
                                 /** 指示Study归属的Symbol */
                                 const criteria = CIQ.store.state.chart.activatedMALayout[j].criteria;
-                                const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol  
+                                const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'))
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
-                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`,
+                                        display: `(${symbolLabel})${techSymbolName}`,
                                         Type: CIQ.store.state.chart.activatedMALayout[j].type,
                                         Field: CIQ.store.state.chart.activatedMALayout[j].field,
                                         Period: CIQ.store.state.chart.activatedMALayout[j].period,
                                     }
                                     : {
                                         // 目前来说maLikeTech就一个ma
-                                        display: `(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                        display: `(${symbolLabel})${techSymbolName}`
                                     }
                                 const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, j)
                                 const outputs = indicatorList[i] == 'ma' ? { MA: ma_color } : null
@@ -378,16 +376,19 @@
                         for(var j in CIQ.store.state.chart.savedTechSD){       /** 现在考虑到可能有多个tech indicator,url === study.type的判断不再适用 */
                             if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                                 count++
-                                var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                                study.panelHeight=indicatorHeight
-                                CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                                // var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                                // study.panelHeight=indicatorHeight
+                                // CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                                const isComparison = CIQ.store.state.chart.savedTechSD[j].parameters.isComparison;
+                                const symbolLabel = getCoresSymbolDual(isComparison)
+                                CIQ.store.state.chart.savedTechSD[j].inputs.display = `(${symbolLabel})${techSymbolName}` //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                 var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs, CIQ.store.state.chart.savedTechSD[j].outputs, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel); 
                             }
                         }
                         if(count==0){                                                         
-                            var study = CIQ.Studies.studyLibrary[indicatorList[i]]
-                            study.panelHeight=indicatorHeight
-                            CIQ.Studies.studyLibrary[indicatorList[i]] = study
+                            // var study = CIQ.Studies.studyLibrary[indicatorList[i]]
+                            // study.panelHeight=indicatorHeight
+                            // CIQ.Studies.studyLibrary[indicatorList[i]] = study
                             let activatedTechLayout = CIQ.store.state.chart.activatedTechLayout
                             activatedTechLayout.forEach(item=>{
                                 if(item.criteria && item.criteria.endsWith("2")){
@@ -411,9 +412,9 @@
                                             continue;
                                         }
                                         const criteria = CIQ.store.state.chart.activatedTechLayout[j].criteria;
-                                        const symbolLabel = criteria && criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol
+                                        const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'))
                                         var sd = CIQ.Studies.addStudy(stx, indicatorList[i],{
-                                            display:`(${symbolLabel})${indicatorObj.value?indicatorObj.value:indicatorObj.label}`
+                                            display:`(${symbolLabel})${techSymbolName}`
                                         },null,{
                                             // 新加了一个isComparison属性，专门用来判断是否归属symbol2，而不是用criteria判断
                                             isComparison: symbolType=='symbol2',
@@ -472,7 +473,7 @@
                      inputs: { Period: 13, Overlay: false},
                      outputs: 
                      {indicatorClose:senti_color[i%1],description: '',url:indicatorList[i]},
-                     panelHeight:indicatorHeight,
+                    //  panelHeight:indicatorHeight,
                      parameters: { init: {
                          studyOverZonesEnabled: false,
                          studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*1000)/1000:999,
@@ -492,17 +493,17 @@
                  
                  CIQ.Studies.studyLibrary[indicatorList[i]] = newStudy
                  var count = 0
-                 
+                /********************lishan modify start*************************/
+                var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
+                /********************lishan modify end*************************/
                  for(var j in CIQ.store.state.chart.savedTechSD){
                      if(indicatorList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                          count++
+                         CIQ.store.state.chart.savedTechSD[j].inputs.display = indicatorName //savedTechSD更新display，为了兼容display有问题的回测并修改它
                          var sd = CIQ.Studies.addStudy(stx, indicatorList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                      }
                  }
                  if(count==0){
-                    /********************lishan modify start*************************/
-                    var indicatorName = indicatorList[i].match(/(CREATE|HASH)/) ? indicatorList[i].split(/(CREATE|HASH)/)[0] : indicatorList[i]
-                    /********************lishan modify end*************************/
                      var sd = CIQ.Studies.addStudy(stx,indicatorList[i],{display:indicatorName})   
                  }
  
@@ -566,7 +567,7 @@
                          inputs: { Period: 13, Overlay: false},
                          outputs: 
                          {indicatorClose:senti_color[i%1],description: newQuotes[i].description,url:sentiUrlList[i]},
-                         panelHeight:indicatorHeight,
+                        //  panelHeight:indicatorHeight,
                          parameters: { init: {
                              studyOverZonesEnabled: false,
                              studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
@@ -586,15 +587,16 @@
                          
                          CIQ.Studies.studyLibrary[sentiUrlList[i]] = newStudy
                          var count = 0
-                         
+                         let sentiName = CIQ.findSentiIndicator(null,sentiUrlList[i])?.chart_name
                          for(var j in CIQ.store.state.chart.savedTechSD){
                              if(sentiUrlList[i] == CIQ.store.state.chart.savedTechSD[j].type){
                                  count++
+                                 CIQ.store.state.chart.savedTechSD[j].inputs.display = sentiName //savedTechSD更新display，为了兼容display有问题的回测并修改它
                                  var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i],CIQ.store.state.chart.savedTechSD[j].inputs,null, CIQ.store.state.chart.savedTechSD[j].parameters, CIQ.store.state.chart.savedTechSD[j].panel);
                              }
                          }
                          if(count==0){
-                             var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i])    
+                             var sd = CIQ.Studies.addStudy(stx, sentiUrlList[i],{display:sentiName})    
                          }
          
                          var newExtremeValue = {indicator:sentiUrlList[i],extremeOptimism:sd.parameters.studyOverBoughtValue,extremePessimism:sd.parameters.studyOverSoldValue}

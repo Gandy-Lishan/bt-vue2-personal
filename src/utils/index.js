@@ -1,4 +1,3 @@
-import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 // 字符串首字母大写
@@ -111,7 +110,7 @@ const Toast = (msg,duration) => {
   duration=isNaN(duration)?3000:duration  
   var m = document.createElement('div')  
   m.innerHTML = msg  
-  m.style.cssText="font-size: 1rem;color: rgb(255, 255, 255);background-color: rgba(0, 0, 0, 0.6);padding: 10px 15px;margin: 0 0 0 -60px;border-radius: 4px;position: fixed;    top: 50%;left: 50%;width: 130px;text-align: center;"
+  m.style.cssText="font-size: 1rem;color: rgb(255, 255, 255);background-color: rgba(0, 0, 0, 0.6);padding: 10px 15px;margin: 0 0 0 -60px;border-radius: 4px;position: fixed;    top: 50%;left: 50%;width: 130px;text-align: center;z-index: 999;"
   document.body.appendChild(m)  
   setTimeout(function() {  
       var d = 0.5
@@ -189,29 +188,6 @@ const checkProperties = (obj, properties) => {
   return true; // 如果所有属性都不为空，返回 true
 }
 
-// 限制同屏显示个数
-const maxNumOfStudy = (stx) => {
-    var countExistIndicator = 0
-    let studies = stx?stx.layout.studies:CIQ.stxx.layout.studies
-    for (var studyInstanceName in studies) {
-      if (CIQ.findBuiltinTechIndicator(null,studies[studyInstanceName].type)){
-        countExistIndicator--
-      }
-      if (studies[studyInstanceName].type == 'ST MA') {
-        countExistIndicator--
-      }
-      countExistIndicator++
-    }
-    if (countExistIndicator >= 20) {
-      CIQ.description('Maximum 20 signals can be displayed on chart')
-      CIQ.hideCover()
-      CIQ.nprogress.done()
-      return true
-    }else{
-      return false
-    }
-}
-
 const timeframeTransform = (val) => {
   let freq = 'Daily'
   switch(val){
@@ -247,31 +223,20 @@ const getTokenRole = () => {
   return 'None'
 }
 
-/**
- * dual symbol中依据study.parameters里的criteria判断计算数据源是第几个symbol并获取symbol的对应field数据
- * @param {*} obj dataSet一行数据
- * @param {*} field symbol2 name
- * @param {*} subField symbol2 name存在时使用的field
- * @returns 
- */
-const getPropertyByString = (obj, field, subField) => {
-  // if(symbol2){
-  //     return obj[symbol2]?obj[symbol2][field]:null
-  // }else{
-  //     return obj[field]
-  // }
-
-  if(!field) field = subField // 当field是流动时，比如accum里原值为quote.Low, 则：getPropertyByString(quote,field,'Low')， filed可能不存在或者为symbol2
-  var val = obj[field];   
-  if (val && typeof val == "object") val = val[subField];
-  return val
+const printConsole = (...content) => {
+  let print = console
+  if(print && print.log){
+    return print.log(...content)
+  }
 }
 
-const recoverSymbolOptixUrl = (url) => {
-  if(url && url.endsWith('@indicator')){
-      var i = url.indexOf('@indicator')
-      return url.slice(0,i)
-  }else return url
+const encodeBase64 = (str) => {
+  return btoa(encodeURIComponent(str));
 }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, maxNumOfStudy, timeframeTransform, getTokenRole, trimTrailingZeros, getPropertyByString, recoverSymbolOptixUrl}
+const decodeBase64 = (str) => {
+  return decodeURIComponent(atob(str));
+}
+
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64}

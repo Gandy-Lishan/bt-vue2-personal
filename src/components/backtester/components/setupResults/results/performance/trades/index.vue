@@ -20,9 +20,12 @@
                 prop="Symbol"
                 label="Symbol"
                 align="center"
-                width="80px"
+                width="100px"
                 show-overflow-tooltip
             >
+            <template slot-scope="scope">
+                {{ getProcessedSymbol(scope.row.Symbol) }}
+            </template>
             </el-table-column>
             <el-table-column
                 prop="EntryDate"
@@ -97,13 +100,9 @@
             >
                 <template slot-scope="scope">
                     <span v-if="scope.row.TotalReturn == 'none'">{{ '' }}</span>
-                    <span v-else-if="scope.row.TotalReturn > 0"
-                        >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
-                    >
-                    <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13"
-                        >{{ (scope.row.TotalReturn * 100).toFixed(2) }}%</span
-                    >
-                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
+                    <span v-else-if="scope.row.TotalReturn > 0">{{ scope.row.TotalReturn }}%</span>
+                    <span v-else-if="scope.row.TotalReturn < 0" style="color: #dd3a13">{{ scope.row.TotalReturn }}%</span>
+                    <span v-else-if="scope.row.TotalReturn == 0">{{ 0 }}%</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -116,6 +115,7 @@
                 prop="MarketCondition"
                 label="Market Condition"
                 align="center"
+                width="120px"
             >
             <template slot="header">
                 Market Condition
@@ -164,7 +164,7 @@
 </template>
 
 <script>
-
+import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
 	name: 'Summary',
 	data() {
@@ -199,12 +199,15 @@ export default {
 		tradesData: {
 			handler(newValue, _){
                 const mergedData = [];
+                const _newValue = JSON.parse(JSON.stringify(newValue))
                 for (let i = 0; i < newValue.length; i += 2) {
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
                     // 转换日期格式
                     const formatEntryDate = entryData['Date'].replaceAll('-','/')
                     const formatExitDate = exitData['Date'] ? exitData['Date'].replaceAll('-','/') : '';
+                    console.log(`第${i}组数据`, _newValue[i].Return)
+                    console.log(`第${i+1}}组数据`, _newValue[i + 1].Return)
                     mergedData.push({
                     'EntryDate': formatEntryDate,
                     'EntryAction': entryData.TradeStatus.toUpperCase(),
@@ -214,7 +217,7 @@ export default {
                     'ExitAction': exitData.TradeStatus.toUpperCase(),
                     'ExitPrice': exitData.TradePrice || '',
                     'TradeReturn': exitData.TradeReturn || '',
-                    'TotalReturn': exitData.Return || '',
+                    'TotalReturn': Number((exitData.Return * 100).toFixed(2)) || '',
                     'ExitReason': exitData.ExitReason || '',
                     'MarketCondition': exitData.MarketCondition || ['N\/A'],
                     'ExitIndicator': exitData.Indicator || '',
@@ -231,6 +234,12 @@ export default {
 		},
 	},
 	methods: {
+        // 处理custom symbol的特殊url显示
+		getProcessedSymbol(symbol) {
+			if (!symbol) return '';
+			const { name, type } = getSymbolInfo(symbol);
+			return type === 'custom' ? name : symbol;
+		},
         handleCurrentChange(page){
             this.queryInfo.page = page
         }

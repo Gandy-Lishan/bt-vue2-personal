@@ -22,7 +22,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index" align="center">
+									<el-table-column :label="l" :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '110px' : '140px'">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -37,7 +37,7 @@
 						</template>
 					</el-skeleton>
 				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;">
+				<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -48,7 +48,7 @@
 								border
 								style="height: 100%; margin: 0 auto"
 							>
-								<el-table-column prop="property" label="Property"  align="center">
+								<el-table-column prop="property" label="Property"  align="center" width="110px">
 								</el-table-column>
 
 								<template v-for="column in periods">
@@ -102,7 +102,7 @@
 						</template>
 					</el-skeleton>
 				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;">
+				<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -1559,5 +1559,9 @@ export default {
     position: absolute;
     top: 100px;
 		right: 5px;
+}
+.history-container, .zscore-container, .hr {
+	width: 1093px;
+	margin: 0 auto;
 }
 </style>

@@ -23,7 +23,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=13">
 					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="calculateNewConditions"
@@ -62,6 +62,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
+import { getCoresSymbolDual } from '@/utils/globalFunc'
 export default {
   name: 'symbol',
   props: {
@@ -108,7 +109,7 @@ export default {
         // Convert ".X" to "0.X" format
         if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
           value = '0' + value;
-          this.senti.value = value
+          this.sym.value = value
         }
         const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
         if (!pattern.test(value) && value != 0) {
@@ -139,7 +140,10 @@ export default {
         { value: 7, label: 'MA Ratio' },
         { value: 8, label: 'Range Rank' },
         { value: 9, label: 'DrawDown %' },
-        { value: 10, label: 'DrawUp %' }
+        { value: 10, label: 'DrawUp %' },
+        { value: 11, label: 'Net Change' },
+        { value: 12, label: 'All-time High' },
+        { value: 13, label: 'All-time Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -193,7 +197,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 10
+      this.isROCLike = 5 <= val && val <= 13
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -314,12 +318,26 @@ export default {
           case "DrawUp %":
             _newCondition = 'DU'
             break;
+          case "Net Change":
+            _newCondition = 'NC'
+            break;
+          case "All-time High":
+            _newCondition = 'ATH'
+            break;
+          case "All-time Low":
+            _newCondition = 'ATL'
+            break;
           default:
             break;
         }
         const _value = this.sym.value
         const _conditionPeriod = this.sym.conditionPeriod
-        const _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        let _description1
+        if([12,13].includes(this.sym.newCondition)){
+          _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
+        }else{
+          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+        }
         this.description = _description1
       }
       let desObj = {}
@@ -370,16 +388,21 @@ export default {
           [7, { name: 'MA Ratio', abbr: 'MA' }],
           [8, { name: 'Range Rank', abbr: 'RR' }],
           [9, { name: 'DrawDown %', abbr: 'DD' }],
-          [10, { name:'DrawUp %', abbr: 'DU' }]
+          [10, { name:'DrawUp %', abbr: 'DU' }],
+          [11, { name:'Net Change', abbr: 'NC' }],
+          [12, { name:'All-time High', abbr: 'ATH' }],
+          [13, { name:'All-time Low', abbr: 'ATL' }],
         ])
 
-        // this.$store.dispatch('chart/update_roclike_count','add')
-        // var study = CIQ.Studies.studyLibrary['ST ROCLike']
-        // study.panelHeight = CIQ.setPanelHeight()
-        // CIQ.Studies.studyLibrary['ST ROCLike'] = study
-        const symbolLabel = this.criteria.endsWith('2')?CIQ.store.getters.getComparisonSymbol.url:CIQ.stxx.chart.symbol   /** 指示Study归属的Symbol */
+        const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
+        let condition
+        if([12,13].includes(this.sym.newCondition)){
+          condition = `${conditionMap.get(this.sym.newCondition).name}`
+        }else{
+          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+        }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `(${symbolLabel})${conditionMap.get(this.sym.newCondition).name}(${field}, ${this.sym.conditionPeriod})`,
+          display: `(${symbolLabel})${symbolCond.label} ${condition}`,
           Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod
@@ -392,6 +415,7 @@ export default {
         this.hideDuplicateROC()
 
         // 解决附属ma或者roc漂移问题
+        if(CIQ.store.state.chart.trades.length == 0) return
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },

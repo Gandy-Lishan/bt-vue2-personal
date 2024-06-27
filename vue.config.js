@@ -18,6 +18,28 @@ function resolve(dir) {
 	return path.join(__dirname, dir)
 }
 
+
+
+const { writeFile, existsSync } = require('fs')
+// 动态生成版本号
+const createVersion = () => {
+//检测目录是否存在
+if (existsSync('./public')) {
+	writeFile(`./public/version.json`, `{"version":"${Date.now()}"}`, (err) => {
+	if (err) {
+		console.log('写入version.json失败')
+		console.log(err)
+	} else {
+		console.log('写入version.json成功')
+	}
+	})
+} else {
+	setTimeout(createVersion, 1000)
+}
+}
+setTimeout(createVersion, 10000)
+
+
 const config = {
 	publicPath: '/',
 	//去除生产环境的productionSourceMap减少了很大体积
@@ -304,8 +326,8 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "http://10.131.9.217:8000",
-				//target: 'https://devbt2api.sentimentrader.com/',
-				target: "https://bt2api.sentimentrader.com",
+				target: 'https://devbt2api.sentimentrader.com/',
+				//target: "https://bt2api.sentimentrader.com",
 				ws:true,
 				changeOrigin: true,
 				pathRewrite: {

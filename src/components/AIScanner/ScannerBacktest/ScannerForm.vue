@@ -7,6 +7,86 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
+        <el-col :span="6">
+          <el-form-item
+          prop="name"
+          >
+          <template slot="label">
+          <label>
+            1. Name
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-input v-model="data.name" placeholder="Enter a name"></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="total_capital"
+          >
+          <template slot="label">
+            <label>
+              2. Total Capital
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content"
+                  >The total capital for backtesting.</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input v-model="data.total_capital"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item
+          prop="commission"
+          >
+          <template slot="label">
+          <label>
+            3. Commission
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Trading commission rate.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-input v-model="data.commission"><template v-slot:append>(%)</template></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col :span="6">
+        <el-form-item prop="rank_condition">
+          <template slot="label">
+          <label>
+            4. Rank Condition
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >Ranking criteria. Choose one condition to determine<br/>
+                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+        <el-select
+            v-model="data.rank_condition"
+            placeholder="— Select type —"
+          >
+            <el-option
+              v-for="item in RankCondition"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
       <el-col :span="6">
         <el-form-item
           label="3. Start Date"
@@ -14,7 +94,7 @@
         >
         <template slot="label">
           <label>
-            1. Start Date
+            5. Start Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest start date. Data after this date will be used for backtesting</span>
@@ -38,7 +118,7 @@
 			  >
         <template slot="label">
           <label>
-            2. End Date
+            6. End Date
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest end date. Data before this date will be used for backtesting.</span>
@@ -60,7 +140,7 @@
         <el-form-item prop="find_type">
           <template slot="label">
           <label>
-            3. Type
+            7. Type
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The security type to search for. <br/>
@@ -92,7 +172,7 @@
           >
           <template slot="label">
           <label>
-            4. Signals
+            8. Signals
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The trading signals used. <br/>
@@ -110,7 +190,7 @@
          <el-form-item prop="long_short_ratio">
           <template slot="label">
             <label>
-              5. Long / Short Percentage
+              9. Long / Short Percentage
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >The long-short position during the backtest period. <br/>
@@ -141,7 +221,7 @@
           >
           <template slot="label">
             <label>
-              6. Take Profit
+              10. Take Profit
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set profit target range. 
@@ -171,7 +251,7 @@
           >
           <template slot="label">
             <label>
-              7. Stop Loss
+              11. Stop Loss
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set stop-loss range. 
@@ -201,7 +281,7 @@
           >
           <template slot="label">
             <label>
-              8. Time In Market
+              12. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Set market stay duration range.
@@ -228,92 +308,12 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item
-          prop="name"
-          >
-          <template slot="label">
-          <label>
-            9. Name
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-          <el-input v-model="data.name" placeholder="Enter a name"></el-input>
-        </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="total_capital"
-          >
-          <template slot="label">
-            <label>
-              10. Total Capital
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  >The total capital for backtesting.</span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <el-input v-model="data.total_capital"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item
-          prop="commission"
-          >
-          <template slot="label">
-          <label>
-            11. Commission
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Trading commission rate.</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-          <el-input v-model="data.commission"><template v-slot:append>(%)</template></el-input>
-        </el-form-item>
-        </el-col>
-        <el-col :span="6">
-        <el-form-item prop="rank_condition">
-          <template slot="label">
-          <label>
-            12. Rank Condition
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Ranking criteria. Choose one condition to determine<br/>
-                 how stocks or ETFs meeting the filtering criteria are ranked.</span>
-              <i class="iconfont icon-wenhao"></i>
-            </el-tooltip>
-          </label>
-        </template>
-        <el-select
-            v-model="data.rank_condition"
-            placeholder="— Select type —"
-          >
-            <el-option
-              v-for="item in RankCondition"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
         <el-form-item
         prop="daily_limit"
         >
         <template slot="label">
         <label>
-          13. Daily Stock Nums
+          13. MAX Daily Symbol Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
@@ -327,7 +327,7 @@
         </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item
+          <!-- <el-form-item
           prop="capital_allocate"
           >
           <template slot="label">
@@ -345,14 +345,70 @@
           </label>
           </template>
             <el-input v-model="data.capital_allocate" placeholder="Enter 'Kelly' or a number between 0 and 1"></el-input>
+            
+        <el-select v-model="data.capital_allocate" @change="handleQuery">
+          <el-option
+            v-for="capitalAll in capitalAllocates"
+            :key="capitalAll.value"
+            :label="capitalAll.label"
+            :value="capitalAll.value"
+          ></el-option>
+        </el-select>
+					<el-input 
+						placeholder="" 
+						v-model="searchItem" 
+						class="search"
+						@input="handleQuery"
+						clearable
+						@clear="handleQuery"
+					>
+						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+					</el-input>
+					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
+          </el-form-item> -->
+          <el-form-item
+          >
+          <template slot="label">
+            <label>
+            14. Capital Allocate
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Manual Input: This refers to entering a<br/> 
+                trade using a percentage of the cash <br/>
+                remaining in the account.<br/>
+                Auto Allocation: This involves <br/>
+                calculating the proportion of capital to <br/>
+                be used for entering trades on a given day, <br/>
+                based on the information of selected stocks for that day, <br/>
+                using the Kelly Criterion (Kelly Formula).
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item label-width="0px">
+            <el-select v-model="data.capital_allocate">
+              <el-option
+                v-for="capitalAll in capitalAllocates"
+                :key="capitalAll.value"
+                :label="capitalAll.label"
+                :value="capitalAll.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <el-form-item label-width="0px" v-if="data.capital_allocate === 'manual_input'" prop="capital_allocate_num">
+            <el-input v-show="data.capital_allocate === 'manual_input'" v-model="data.capital_allocate_num" placeholder="Enter Percentage"><template v-slot:append v-if="data.capital_allocate === 'manual_input'">(%)</template></el-input>
+          </el-form-item>
+          </div>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item>
-          <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
+          <div class="processTips" v-show="percentage != 0"><i v-show="percentage != 0" class="el-icon-loading"></i><span v-html="processTips"></span></div>
           </el-form-item>
         </el-col>
-        <el-col :span="6"></el-col>
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
@@ -383,37 +439,36 @@ export default {
     SelectCheck
   },
   data() {
-    var validateCapitalAllocate = (rule, value, callback) => {
-      if (value === 'Kelly') {
-          callback(); // 验证通过
-        } else {
-          // 验证是否为 0 到 1 的最大两位小数值
-          const numberValue = parseFloat(value);
-          if (!isNaN(numberValue) && numberValue >= 0 && numberValue <= 1) {
-            const decimalCount = (numberValue.toString().split('.')[1] || '').length;
-            if (decimalCount <= 2) {
-              callback(); // 验证通过
-            } else {
-              callback(new Error('Value between 0 and 1 with max two decimals'));
-            }
-          } else {
-            callback(new Error("Value should be 'Kelly' or a number 0-1"));
-          }
-        }
-    };
     var validateRatio = (rule, value, callback) => {
       // 验证是否为正整数
       const integerValue = parseInt(value);
       const field = rule.field
-      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 20 : this.data.short_ratio);
-      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 80 : this.data.long_ratio);
-
+      const short_ratio = field == 'short_ratio' ? integerValue : parseInt(typeof this.data.short_ratio === 'undefined' ? 0 : this.data.short_ratio);
+      const long_ratio = field == 'long_ratio' ? integerValue : parseInt(typeof this.data.long_ratio === 'undefined' ? 100 : this.data.long_ratio);
+      if(this.data.short_ratio) this.data.short_ratio = short_ratio
+      if(this.data.long_ratio) this.data.long_ratio = long_ratio
       if (short_ratio === 0 && long_ratio === 0) {
           callback(new Error("The percentages cannot be both 0"));
-      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(integerValue)) {
+      } else if (!isNaN(integerValue) && integerValue >= 0 && short_ratio + long_ratio <= 100 && Number.isInteger(short_ratio) && Number.isInteger(long_ratio)) {
+        this.$refs['Form'].fields.map(i => {
+            const _field = field === 'short_ratio' ? 'long_ratio' : 'short_ratio'
+            if (i.prop === _field) {
+                i.clearValidate()
+            }
+        })
           callback(); // 验证通过
       } else {
           callback(new Error("Percentages must sum to 100% and be positive whole numbers"));
+      }
+    };
+    var validatePercentage = (rule, value, callback) => {
+      // 验证是否为正整数
+      if(this.data.capital_allocate === 'Kelly') callback()
+      const integerValue = parseInt(value);
+      if (!isNaN(integerValue) && integerValue >= 0 && integerValue <= 100 && Number.isInteger(integerValue)) {
+          callback(); // 验证通过
+      } else {
+          callback(new Error("Only positive integers between 0 and 100 allowed"));
       }
     };
     var validateSignals = (rule, value, callback) => {
@@ -428,20 +483,21 @@ export default {
         start_date: '',
         end_date: '',
         find_type: 'stock/etf',
-        long_ratio: 80,
-        short_ratio: 20,
-        stop_loss_condition: 5,
-        take_profit_condition: 10,
-        time_in_market_condition: 13,
-        stop_loss: 10,
-        take_profit: 20,
-        time_in_market: 21,
+        long_ratio: 100,
+        short_ratio: 0,
+        stop_loss_condition: 6,
+        take_profit_condition: 8,
+        time_in_market_condition: 5,
+        stop_loss: 15,
+        take_profit: 30,
+        time_in_market: 34,
         name: '',
         total_capital: 1000000,
         commission: 0,
-        rank_condition: 'Kelly',
+        rank_condition: 'StdDev',
         daily_limit: 3,
-        capital_allocate: 'Kelly',
+        capital_allocate: 'manual_input',
+        capital_allocate_num: 60,
         signals: ['All']
       },
       rowUrl: null,
@@ -462,12 +518,16 @@ export default {
         { value: 'stock/etf', label: 'Stock & ETF' },
       ],
       RankCondition: [
-        { value: 'Kelly', label: 'Kelly'},
+        // { value: 'Kelly', label: 'Kelly'},
         { value: 'WinRate', label: 'Win Rate(%)'},
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
         { value: 'SharpeRatio', label: 'Sharpe Ratio'},
+      ],
+      capitalAllocates: [
+        { value: 'Kelly', label: 'Auto Allocation'},
+        { value: 'manual_input', label: 'Manual Input'}
       ],
       options: [
         {
@@ -585,37 +645,36 @@ export default {
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'change' }
         ],
         stop_loss: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit_condition: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'change' }
         ],
         take_profit: [
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'blur' },
-        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition)(rule, value, callback), trigger: 'change' }
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
+        { validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
         ],
         commission: [
           { validator: validateCommissionRule, trigger: 'blur' },
           { validator: validateCommissionRule, trigger: 'change' }
+        ],
+        capital_allocate_num: [
+          { validator: validatePercentage, trigger: 'blur' },
+          { validator: validatePercentage, trigger: 'change' }
         ],
         total_capital: [
           { validator: validateCapitalRule, trigger: 'blur'},
           { validator: validateCapitalRule, trigger: 'change' }
         ],
         daily_limit: [
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('Daily Stock Nums', 1, 5), trigger: 'change' }
-        ],
-        capital_allocate: [
-          { required: true, message: 'Enter Rank Condition', trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'blur' },
-          { validator: validateCapitalAllocate, trigger: 'change' },
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'change' }
         ],
         signals: [
           { validator: validateSignals, trigger: 'blur' },
@@ -625,7 +684,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(6)
     this.generateCPMName()
   },
   methods: {
@@ -637,7 +696,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `ScannerAI Backtest ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `Scanner Backtest ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -663,14 +722,42 @@ export default {
     },
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
-      
       if((!this.isPolling && this.btnLoading) || this.previewBtnLoading) return true
-      this.$refs['SelectCheck'].handleoptionsAllChange(true)
-			Object.assign(this.$data, this.$options.data())
-      this.data.signals = ['All']
-      this.generateCPMName()
-      this.setBacktestHistory(1)
-      this.$refs['Form'].clearValidate()
+        this.$refs['SelectCheck'].handleoptionsAllChange(true)
+        this.$refs['Form'].resetFields()
+        console.log(this.data)
+        this.data = {
+          ...this.data,
+          ...{
+          start_date: '',
+          end_date: '',
+          find_type: 'stock/etf',
+          long_ratio: 100,
+          short_ratio: 0,
+          stop_loss_condition: 6,
+          take_profit_condition: 8,
+          time_in_market_condition: 5,
+          stop_loss: 15,
+          take_profit: 30,
+          time_in_market: 34,
+          total_capital: 1000000,
+          commission: 0,
+          rank_condition: 'StdDev',
+          daily_limit: 3,
+          capital_allocate: 'manual_input',
+          capital_allocate_num: 60,
+          signals: ['All']
+        }
+        }
+        this.rowUrl = null
+        this.btnLoading = false
+        this.previewBtnLoading = false
+        this.isPolling = false
+        this.processTips = ''
+        this.percentage = 0
+        this.generateCPMName()
+        this.setBacktestHistory(6)
+        this.$refs['Form'].clearValidate()
     },
     selected(signals){
       console.log('触发了', signals)
@@ -712,7 +799,9 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals
+        signals,
+        capital_allocate,
+        capital_allocate_num
       } = this.data
       const saveData = {
         ...this.data,
@@ -720,7 +809,8 @@ export default {
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+        signals: JSON.stringify(signals.length !== 16 ? signals : ['All']),
+        capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
           properties.forEach(property => {
@@ -730,7 +820,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
       removeProperties(saveData, propertiesToRemove)
       return await perviewScannerForm(saveData)
     },
@@ -754,7 +844,9 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals
+        signals,
+        capital_allocate,
+        capital_allocate_num
       } = this.data
       const saveData = {
         ...this.data,
@@ -762,7 +854,8 @@ export default {
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All'])
+        signals: JSON.stringify(signals.length >= 16 ? ['All'] : signals),
+        capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
           properties.forEach(property => {
@@ -772,7 +865,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
       removeProperties(saveData, propertiesToRemove)
       let saveRes, previewRes
       if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
@@ -811,7 +904,7 @@ export default {
           if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
           return pollingRes
         }
-        if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
+        if(code == 401 || code == 403 || code == 404 || code == 407 || this.percentage == 0 || this.processTips === '') return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
       } while (true); // Keep polling indefinitely
@@ -833,7 +926,7 @@ export default {
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
      const _name = typeof name === 'string' && name ? name : ''
-     if(code == 203) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
+     if(code == 203 && this.processTips) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
@@ -857,7 +950,7 @@ export default {
       this.percentage = 0
     },
     displayData(data) {
-      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals} = data
+      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals, capital_allocate} = data
       this.rowUrl = url
       const target = this.data
       const [long_ratio, short_ratio] = long_short_ratio.split('/')
@@ -874,8 +967,10 @@ export default {
         take_profit_condition,
         time_in_market_condition,
         commission: trimTrailingZeros((commission * 100).toFixed(2)),
-        signals: isJson(signals) ? JSON.parse(signals) : signals
+        signals: isJson(signals) ? JSON.parse(signals) : signals,
+        capital_allocate: capital_allocate !== 'Kelly' ? 'manual_input' : 'Kelly'
       }
+      if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       
       for (const key in target) {
         if(key === 'signals') {
@@ -899,6 +994,11 @@ export default {
         }else {target[key] = prepareData[key]}
       }
       this.data = target
+    },
+    async rerunSCBacktest(data) {
+      data.end_date = timestampToTime(new Date())
+      this.displayData(data)
+      await this.submitForm()
     },
     async previewList() {
       let previewRes = null
@@ -1005,7 +1105,6 @@ export default {
     // color: #ffffff !important;
   }
   /deep/ .el-progress-bar__outer {
-    
     height: 100% !important;
     border-radius: 4px;
   }

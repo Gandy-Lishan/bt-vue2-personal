@@ -5,8 +5,9 @@
 import {config}  from "./STDataFeedAccessUrl.js";
 // import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
-import axios from "axios"
-import { result } from "lodash";
+import { encodeBase64 } from '@/utils'
+import {createStateFilter,getSymbolInfo} from '@/utils/globalFunc'
+
 CIQ.activateImports(quoteFeed, symbolLookupBase); // so we can use CIQ.inheritsFrom
 /**
  * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
@@ -79,42 +80,25 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 	maxResults,
 	cb
 ) {
+    var loader = document.querySelector(".loaderLookup");
+    if (loader) loader.show();  
     if (filter == 'ALL'){
         var resultsIndexsList = [];
         let indexsList = await loadIndexsList()
-        let wholeWord = []
+        let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < indexsList.length; i++) {
-            var fields = indexsList[i];
-            
+            var fields = indexsList[i]; 
             var item = {
                 symbol: fields.symbol,
                 name: fields.name,
                 exchDisp: ""
             };
-
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
-                    display: [item.symbol, item.name, item.exchDisp],
-                    data: item
-                })
-                continue
-            }
-
+            concatList.push(item)
             resultsIndexsList.push({
                 display: [item.symbol, item.name, item.exchDisp],
                 data: item
             });
         }
-        resultsIndexsList.sort(SortArray)
-
         var resultsStocksList = [];
         let stocksList = await loadStocksList()
         for (var i = 0; i < stocksList.length; i++) {
@@ -124,73 +108,93 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
-                    display: [item.symbol, item.name, item.exchDisp],
-                    data: item
-                })
-                continue
-            }
-
+            concatList.push(item)
             resultsStocksList.push({
                 display: [item.symbol, item.name, item.exchDisp],
                 data: item
             });
         }
-        resultsStocksList.sort(SortArray)
-        let res = resultsIndexsList.concat(resultsStocksList)
-        if(wholeWord.length>0)   res.unshift(...wholeWord)
-        cb(res);    
+
+        var resultsCustomSymbolList = [];
+        const mySymbolList = CIQ.store.getters.getMySymbollist
+        mySymbolList.forEach(element => {
+            // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
+            var item = {
+                symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
+                name: element.name,
+                exchDisp: ""
+            }
+            concatList.push(item)
+            resultsCustomSymbolList.push({
+                display: [item.name, item.name, item.exchDisp],
+                data: item
+            });
+        }); 
+
+        let res
+        if(text.trim()){
+            res = concatList.map(item => ({
+                ...item,
+                priority: createStateFilter(text)(item),
+              }))
+              .filter(item => item.priority > 0)
+            cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                /** displayName需要考慮到custom symbol url */
+                const {name,url,type} = getSymbolInfo(item.symbol)
+                let displayName = url
+                if(type == 'custom') displayName = name
+                /** END */
+                return {
+                    display: [displayName, item.name, item.exchDisp],
+                    data: item
+                }
+            }))
+        }else{
+            resultsIndexsList.sort(SortArray)
+            resultsStocksList.sort(SortArray)
+            res = resultsIndexsList.concat(resultsStocksList).concat(resultsCustomSymbolList)
+            cb(res);    
+        } 
     }
     else if (filter == 'INDEXES'){
 			var results = [];
             let indexsList = await loadIndexsList()
-            let wholeWord = []
+            let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
 			for (var i = 0; i < indexsList.length; i++) {
 				var fields = indexsList[i];
-                
                 var item = {
                     symbol: fields.symbol,
                     name: fields.name,
                     exchDisp: ""
                 };
-
-                if (
-                    item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                    item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-                )
-                {
-                    continue
-                }
-    
-                if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                    wholeWord.push({
+                concatList.push(item)
+			}
+            let res
+            if(text.trim()){
+                res = concatList.map(item => ({
+                    ...item,
+                    priority: createStateFilter(text)(item),
+                  }))
+                  .filter(item => item.priority > 0)
+                cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                    return {
                         display: [item.symbol, item.name, item.exchDisp],
                         data: item
-                    })
-                    continue
-                }
-
-				results.push({
-					display: [item.symbol, item.name, item.exchDisp],
-					data: item
-				});
-			}
-            results.sort(SortArray)
-            if(wholeWord.length>0)   results.unshift(...wholeWord)
-			cb(results);    
+                    }
+                }))
+            }else{
+                res = concatList.map(item=>{
+                    return {
+                        display: [item.symbol, item.name, item.exchDisp],
+                        data: item
+                    }
+                })
+                cb(res.sort(SortArray))
+            }      
 	}else if (filter == 'STOCKS') {
         var results = [];
         let stocksList = await loadStocksList()
-        let wholeWord = []
+        let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
             var item = {
@@ -198,30 +202,30 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 name: fields.name,
                 exchDisp: " "
             };
-            if (
-                item.symbol.indexOf(text) === -1 && item.symbol.toUpperCase().indexOf(text.toUpperCase()) === -1 &&
-                item.name.indexOf(text) === -1 && item.name.toUpperCase().indexOf(text.toUpperCase()) === -1
-            )
-            {
-                continue
-            }
-
-            if(item.symbol.toUpperCase() === text.toUpperCase() || item.name.toUpperCase() === text.toUpperCase()){
-                wholeWord.push({
+            concatList.push(item)
+        }
+        let res
+        if(text.trim()){
+            res = concatList.map(item => ({
+                ...item,
+                priority: createStateFilter(text)(item),
+              }))
+              .filter(item => item.priority > 0)
+            cb(res.sort((a, b) => b.priority - a.priority).map(item=>{
+                return {
                     display: [item.symbol, item.name, item.exchDisp],
                     data: item
-                })
-                continue
-            }
-            
-            results.push({
-                display: [item.symbol, item.name, item.exchDisp],
-                data: item
-            });
-        }
-        results.sort(SortArray)
-        if(wholeWord.length>0)   results.unshift(...wholeWord)
-        cb(results);  
+                }
+            }))
+        }else{
+            res = concatList.map(item=>{
+                return {
+                    display: [item.symbol, item.name, item.exchDisp],
+                    data: item
+                }
+            })
+            cb(res.sort(SortArray))
+        } 
     } else if (filter == 'MY FAVORITES'){
         var results = []
         var resu = CIQ.store.state.chart.favoriteSymbolList
@@ -291,8 +295,25 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             } catch (e) {}
             results.sort(SortArray)    
             cb(results);
-    }
-   
+    } else if (filter == 'CUSTOM SYMBOL') {
+        var results = []
+        const mySymbolList = CIQ.store.getters.getMySymbollist
+        mySymbolList.forEach(element => {
+            // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
+            var item = {
+                symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
+                name: element.name,
+                exchDisp: ""
+            }
+            
 
+            results.push({
+                display: [item.name, item.name, item.exchDisp],
+                data: item
+            });
+        }); 
+        cb(results)
+    } 
+    loader.hide();  
 };
 export { CIQ };

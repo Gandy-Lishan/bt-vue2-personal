@@ -56,16 +56,16 @@ export default {
 		},
 	},
 	mounted() {
-		const chartBox = document.getElementsByClassName('chart_box')[0] 
-   		 if (chartBox) chartBox.style.width = ''
+		// const chartBox = document.getElementsByClassName('chart_box')[0] 
+   		//  if (chartBox) chartBox.style.width = ''
 	},
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
 		async onChartReady() {
 			this.SET_CHART_READY_STATE(true)
-			if(!this.$store.state.user.is_admin) {
-				document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
-			}
+			// if(!this.$store.state.user.is_admin) {
+			// 	document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
+			// }
 			CIQ.hideCover()
             CIQ.nprogress.done()
 		},
@@ -84,7 +84,7 @@ header {
 		width: 100%;
 	}
 	p {
-		margin: 50px 2rem 0rem 0rem;
+		margin: 10px 2rem 0rem 0rem;
 		font-style: italic;
 		color: #6c6c6c;
 	}

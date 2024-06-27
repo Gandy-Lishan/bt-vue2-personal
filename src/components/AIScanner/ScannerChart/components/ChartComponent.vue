@@ -4,7 +4,7 @@
 		<el-button></el-button> -->
 		<div class="chart_box" id="chart_box">
 			<div class="back">
-				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to the stock scanner list</span></router-link>
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to Smart Stock Scanner List</span></router-link>
 			</div>
 			<chart :onChartReady="onChartReady" width="100%" height="100%">
         <LoadingOverlayChart
@@ -175,15 +175,15 @@ export default {
 			 return new Promise(async (resolve)=>{
 				// 默认显示signal indicator 和 tech indicator,如果没有就不显示
 				//if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
-					
+        const ma_color = this.$store.getters.getColorByCriteriaAndIndex(0, 0)
 				switch(this.other['_Signal']){
 					case "Symbol Close > its\' MA200 and Optix MA5 < 35":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+						await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 							Period: 5,
 							display:"ST MA",
 							Field: this.symbolUrl
-						});
+						},{ MA: ma_color });
 						CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 							Period: 200,
 							Field: "Close"
@@ -192,7 +192,7 @@ export default {
 						
 						break;
 					case "Symbol Close > its\' MA200 and Optix < 30":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ma",{
 							Period: 200,
 							Field: "Close"
@@ -201,17 +201,17 @@ export default {
 						
 						break;
 					case "Optix MA10 < 30 and Optix < 20":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
 							Period: 10,
 							display:"ST MA",
 							Field: this.symbolUrl
-						});
+						},{ MA: ma_color });
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix MA10 < 30 and Optix < 20")
 						
 						break;
 					case "Optix #4":
-						await CIQ.getIndicatorMatedata([this.symbolUrl])
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix CrossBelow 0.5")
 						
 						break;

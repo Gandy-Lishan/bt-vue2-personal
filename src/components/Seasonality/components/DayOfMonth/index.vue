@@ -147,6 +147,8 @@
 
 <script>
 import DOMChart from "../SNChart/DOMChart.vue"
+import {createStateFilter} from '@/utils/globalFunc'
+
 export default {
   name: 'DayOfMonth',
   data() {
@@ -246,23 +248,12 @@ export default {
       if(!dropdownList || dropdownList.length == 0) {
         dropdownList = JSON.parse(localStorage.getItem('symbolList'))
       }
-      var results = queryString
-        ? dropdownList.filter(this.createFilter(queryString))
-        : dropdownList
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (dropdownList) => {
-        const labelMatch =
-          dropdownList.label
-            .toLowerCase()
-            .indexOf(queryString.toLowerCase()) === 0
-        const urlMatch =
-          dropdownList.url.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        return labelMatch || urlMatch
-      }
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     handleSelect(item) {
       this.symbol = item.url

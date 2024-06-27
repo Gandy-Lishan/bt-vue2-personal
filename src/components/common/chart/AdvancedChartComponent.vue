@@ -24,6 +24,9 @@
 					<cq-menu class="ciq-search">
 						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
 					</cq-menu>
+					<cq-menu>
+						<div class='symbol-up'></div>
+					</cq-menu>
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
@@ -359,6 +362,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
+//import UploaderVue from './st-development/components/Uploader.vue'
 const throttle = require('lodash/throttle')
 const jutils = require("jutils-src")
 
@@ -372,10 +376,12 @@ export default class AdvancedChartComponent extends Vue {
 
 	stx: CIQ.ChartEngine | undefined
 	isCollapse: boolean | undefined
+	resizeObserver: any | undefined
 	
 	constructor() {
 		super()
 		this.isCollapse = false 
+		this.resizeObserver = null
 	}
 	mounted() {
 		const config = this.config || getCustomConfig()
@@ -436,6 +442,9 @@ export default class AdvancedChartComponent extends Vue {
 			this.chartInitialized({ chartEngine: uiContext.stx, uiContext, config })		
 
 			this.initializeToggle(uiContext.stx)
+			this.createResizeListener()
+
+			//this.symbolMutationObserver()
 		}, 0)			
 	}
 	// initiate lastPrice and grid button
@@ -491,6 +500,9 @@ export default class AdvancedChartComponent extends Vue {
 		// 防止chartiq还没加载完就切换到其他页面
 		CIQ.hideCover()
 		CIQ.nprogress.done()
+
+		// 取消监听所有目标元素
+		this.resizeObserver.disconnect();
 	}
 
 	createChartAndUI(config: any) {
@@ -529,7 +541,7 @@ export default class AdvancedChartComponent extends Vue {
 
 	resizePatternMatch() {
 		const yAxis = CIQ.stxx.chart.yAxis	
-		console.log(yAxis)
+		//console.log(yAxis)
 		const offset = (yAxis.high-yAxis.low)/4			// 依据Y轴长度设定的偏移量，以保证模式匹配阴影覆盖整个高度
 		for(var i=0;i<CIQ.stxx.drawingObjects.length;i++){
 			var myDrawing=CIQ.stxx.drawingObjects[i];
@@ -538,6 +550,79 @@ export default class AdvancedChartComponent extends Vue {
 			myDrawing.adjust()
 		}
 		CIQ.stxx.draw();
+	}
+
+	createResizeListener() {
+		const ele = document.querySelector('.chart-wrapper');
+		let isResizing = false;
+
+		// 監聽 mousedown 事件
+		ele.addEventListener('mousedown', (e) => {
+			isResizing = true;
+			//console.log('mousedown',isResizing)
+		});
+
+		// 監聽 mouseup 事件
+		ele.addEventListener('mouseup', (e) => {
+			setTimeout(() => {
+				isResizing = false;
+				CIQ.isResizing = false	
+			}, 500); // 0.5秒後設置isResizing為false
+		});
+
+		this.resizeObserver = new ResizeObserver(entries => {
+		for (let entry of entries) {
+			if (entry.target && isResizing) {
+				CIQ.isResizing = true
+			}
+		}
+		});
+
+		// 開始觀察目標元素
+		this.resizeObserver.observe(ele);
+	}
+	initializeSymbolUploader(node) {
+		const uploader = document.querySelector('.symbol-uploader')
+		if(uploader) return
+			if (node) {
+					const UploaderVueComponent = Vue.extend(UploaderVue);
+					const instance = new UploaderVueComponent({
+						store: this.$store,
+						router: this.$router, // 如果你有 router 也可以传递
+					}).$mount();
+					
+					// 将 Vue 组件的根元素插入到 node 内部，而不是替换 node 本身
+					node.appendChild(instance.$el);
+			}
+		}
+	symbolMutationObserver(){
+		// 选择需要观察变动的目标节点
+		const targetNode = document.body;
+
+		// 配置观察选项
+		const config = { childList: true, subtree: true };
+		var _this = this
+		const callback = function(mutationsList, observer) {
+			for(let mutation of mutationsList) {
+				if (mutation.type === 'childList') {
+					// 检查是否有 class 为 'symbol-upload' 的元素
+					let cqLookupFiltersElement = document.querySelector('cq-uploader');
+					console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
+					if (cqLookupFiltersElement) {	
+						_this.initializeSymbolUploader(cqLookupFiltersElement)
+						// 一旦找到了 'ciq-search' 元素，就可以停止觀察
+						observer.disconnect();
+						break;
+					}
+				}
+			}
+		};
+
+		// 创建一个观察者实例并传入回调函数
+		const observer = new MutationObserver(callback);
+
+		// 以上述配置开始观察目标节点
+		observer.observe(targetNode, config);
 	}
 }
 

@@ -27,7 +27,7 @@ export default {
         },
         {
           index: 'analyst',
-          lable: "Analysts' Backtest"
+          lable: "Analysts' Backtests"
         }
       ]
     }
