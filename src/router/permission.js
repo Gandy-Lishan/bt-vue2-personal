@@ -111,8 +111,8 @@ export function setRouterPermission(router) {
 				) {
 					const message =
 						getTokenRole() == 0
-							? 'Backtest Engine 2.0 and AI Stock Scanner'
-							: 'AI Stock Scanner'
+							? 'Backtest Engine 2.0 and Smart Stock Scanner'
+							: 'Smart Stock Scanner'
 					store.commit('states/setErrorMessage404', { status: 410, message })
 					next({ path: '/404' })
 	

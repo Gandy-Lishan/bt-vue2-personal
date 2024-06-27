@@ -84,7 +84,7 @@
 		<div class="theme-wrapper">
 			<h1 style="color: #00323c">
 				<i class="el-icon-s-marketing" style="color: #52d6f5"></i>
-				 Why choose AI Stock Scanner
+				 Why choose Smart Stock Scanner
 			</h1>
 			<div class="content">
 				<h4>
@@ -92,7 +92,7 @@
 					of Stock and ETF Investments.
 				</h4>
 				<p>
-					<strong>Automated Screening:</strong> AI Stock Scanner utilizes artificial
+					<strong>Automated Screening:</strong> Smart Stock Scanner utilizes artificial
 					intelligence technology to scan and filter SP1500 and index-based
 					ETFs. It can quickly and accurately analyze a large number of stocks
 					and ETFs, helping users quickly identify signals that meet their
@@ -101,13 +101,13 @@
 				<p>
 					<strong>Historical Backtesting:</strong> The selected signals and
 					their corresponding stocks and ETFs are backtested using historical
-					data. This means that AI Stock Scanner goes beyond simple screening and
+					data. This means that Smart Stock Scanner goes beyond simple screening and
 					considers historical performance to evaluate the reliability and
 					effectiveness of the selected signals. This helps users understand the
 					historical performance and potential risks of the signals.
 				</p>
 				<p>
-					<strong>Data Statistical Analysis:</strong> AI Stock Scanner performs data
+					<strong>Data Statistical Analysis:</strong> Smart Stock Scanner performs data
 					statistical analysis on the backtesting results. It not only provides
 					backtesting results but also extracts useful information and conducts
 					data analysis, helping users better understand the underlying logic of
@@ -115,7 +115,7 @@
 				</p>
 				<p>
 					<strong>Filtering High-Quality Signals:</strong> Through data
-					statistical analysis, AI Stock Scanner can filter out stocks that meet the
+					statistical analysis, Smart Stock Scanner can filter out stocks that meet the
 					requirements along with their corresponding signals. This means that
 					it doesn't just provide a large number of backtesting results but
 					helps users find signals that have been validated and have a higher
@@ -123,21 +123,21 @@
 					selection for users.
 				</p>
 				<p>
-					<strong>Information Presentation and Selection:</strong> AI Stock Scanner
+					<strong>Information Presentation and Selection:</strong> Smart Stock Scanner
 					displays the signals that meet the requirements along with their
 					backtesting information, providing users with an intuitive interface
 					and data visualization, enabling users to better understand and select
 					signals that meet their needs.
 				</p>
 				<p>
-					AI Stock Scanner provides users with an efficient, accurate, and reliable
+					Smart Stock Scanner provides users with an efficient, accurate, and reliable
 					signal filtering tool through automated screening, historical
 					backtesting, data statistical analysis, and information presentation,
 					helping users make wiser decisions in the stock and ETF markets.
 				</p>
 				<!-- <p>
-					先注释掉 AI Stock Scanner 教程链接
-					This tutorial will teach you how to quickly start using AI Stock Scanner and
+					先注释掉 Smart Stock Scanner 教程链接
+					This tutorial will teach you how to quickly start using Smart Stock Scanner and
 					thanks for reading!
 				</p> -->
 				<!-- <hr />

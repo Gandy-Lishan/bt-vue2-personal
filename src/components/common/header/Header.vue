@@ -17,7 +17,7 @@
         @select="handleSelect"
       >
         <!-- <el-menu-item class="ai-link" v-if="activeIndex==3"
-          >AI Stock Scanner</el-menu-item
+          >Smart Stock Scanner</el-menu-item
         > -->
         <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
           >BacktestEdge</el-menu-item
@@ -31,7 +31,7 @@
         >
         <el-menu-item class="ai-link" index="3"
         v-if="getTokenRole() == 2 && getTokenRole() != 'None'"
-          >AI Stock Scanner</el-menu-item
+          >Smart Stock Scanner</el-menu-item
         >
         <el-menu-item class="my-indicator-link home-link" index="6"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"

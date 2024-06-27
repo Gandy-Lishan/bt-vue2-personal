@@ -4,7 +4,7 @@
 		<el-button></el-button> -->
 		<div class="chart_box" id="chart_box">
 			<div class="back">
-				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to AI Stock Scanner List</span></router-link>
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to Smart Stock Scanner List</span></router-link>
 			</div>
 			<chart :onChartReady="onChartReady" width="100%" height="100%">
         <LoadingOverlayChart
