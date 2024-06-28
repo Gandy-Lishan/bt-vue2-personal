@@ -268,11 +268,29 @@ export default {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
 
+      /** private function */
+      function processIndicators(obj, indicatorList) {
+          const combineTypes = obj.combine_type.split('_');
+          for (let i = 1; i <= combineTypes.length; i++) {
+              const key = `indicator_${i}`;
+              if (combineTypes[i - 1] === 'si') {
+                  const newIndicator = `${obj[key]}@indicator`;
+                  if (indicatorList.includes(newIndicator)) {
+                      obj[key] = newIndicator;
+                  }
+              }
+          }
+      }
       /** create 携带aapl optix(url: aapl@indicator)的会上传indicator为aapl,所以在获取列表时把其还原成(aapl@indicator) */
       const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       listRes.data.results.forEach(obj => {
         if(obj.combine_type == 'indicator'){
           if(sentimentList.find((i)=>i.url == obj.indicator_1_url+'@indicator')) obj.indicator_1_url = obj.indicator_1_url+'@indicator'
+          if(obj.mul_indicator){
+            let parsedObj = JSON.parse(obj.mul_indicator)
+            processIndicators(parsedObj, sentimentList.map(i=>i.url));
+            obj.mul_indicator = JSON.stringify(parsedObj)
+          }
         }
       });
    

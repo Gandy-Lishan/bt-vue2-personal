@@ -400,17 +400,27 @@ export default {
 			}
 			try {
 				try {
-					await this.validateCSV(file)
-					await this.handleParseResult(this.csvContent, file)
+					/** START
+					 * 	remove empty line
+					 */
+					const fileContent = await this.readFileContent(file);
+					const filteredContent = this.filterEmptyLines(fileContent);
+					const newFile = new File([filteredContent], file.name, { type: file.type });
+					/********END********* */
+					
+					await this.validateCSV(newFile)
+					await this.handleParseResult(this.csvContent, newFile)
+
+					this.form.indicatorName = newFile.name.replace('.csv', '')
+					this.fileList.push(newFile)
+					
+					CIQ.hideCover()
+					CIQ.nprogress.done()
+					this.dialogFormVisible = true
 				} catch (error) {
 					console.log(error)
 					throw Error()
 				}
-				this.form.indicatorName = file.name.replace('.csv', '')
-				this.fileList.push(file)
-				CIQ.hideCover()
-				CIQ.nprogress.done()
-				this.dialogFormVisible = true
 			} catch (error) {
 				console.log('error', error)
 				this.dialogFormVisible = false
@@ -419,6 +429,23 @@ export default {
 				return Promise.reject(error)
 			}
 			return false
+		},
+		readFileContent(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = (event) => {
+					resolve(event.target.result);
+				};
+				reader.onerror = (error) => {
+					reject(error);
+				};
+				reader.readAsText(file);
+			});
+    	},
+		filterEmptyLines(content) {
+			const lines = content.split('\n');
+			const nonEmptyLines = lines.filter(line => line.trim() !== '');
+			return nonEmptyLines.join('\n');
 		},
 		handleUploadProgress(event, uid, fileList) {
 			// 上传进度回调
@@ -481,15 +508,15 @@ export default {
 		},
 		async validateCSV(file) {
 			const self = this
-			return await new Promise((resolve, reject) => {
+			return await new Promise(async (resolve, reject) => {
 				// 限制字段
 				let isDateFormat = true
 				let isNumFormat = true
 				let isNotEmpty = true
 				self.csvContent = []
-				const reader = new FileReader()
-				reader.onload = (e) => {
-					const content = e.target.result
+
+				try {
+					const content = await self.readFileContent(file);
 					// const hash = SparkMD5.hashBinary(reader.result)
 					// file.hash = hash
 					// self.file_hash = hash
@@ -522,43 +549,43 @@ export default {
 						step: function (row) {
 							const error = {}
 							const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/
-                            const numFormatRegex = /^-?\d+(\.\d{1,})?$/
-                            const requiredFields = {
-                                'Date': dateFormatRegex,
-                                'Open': numFormatRegex,
-                                'High': numFormatRegex,
-                                'Low': numFormatRegex,
-                                'Close': numFormatRegex,
-                                'Volume': numFormatRegex
-                            };
+							const numFormatRegex = /^-?\d+(\.\d{1,})?$/
+							const requiredFields = {
+								'Date': dateFormatRegex,
+								'Open': numFormatRegex,
+								'High': numFormatRegex,
+								'Low': numFormatRegex,
+								'Close': numFormatRegex,
+								'Volume': numFormatRegex
+							};
 							for (const key in row.data) {
 								if (Object.hasOwnProperty.call(row.data, key)) {
 									row.data[key] = row.data[key].trim()
 								}
 							}
-                            for (const field in requiredFields) {
-                                // 如果列名不存在則填充
-                                if (!row.data[field] && row.data[field] != 0){
-                                    if(field == 'Volume') row.data[field] = 1
-                                    else row.data[field] = row.data['Close'] 
-                                }  
-                            }
 							for (const field in requiredFields) {
-                                if (!requiredFields[field].test(row.data[field])) {
-                                    console.log(`${field} 格式校验失败`, row.data[field]);
-                                    error['Date'] = row.data['Date'];
-                                    error['Open'] = row.data['Open'];
-                                    error['High'] = row.data['High'];
-                                    error['Low'] = row.data['Low'];
-                                    error['Close'] = row.data['Close'];
-                                    error['Volume'] = row.data['Volume'];
-                                    if(field == 'Date') isDateFormat = false
-                                    else isNumFormat = false
-                                    errorRow.push(error)
-                                    // parser.pause()
-                                    return
-                                }
-                            }
+								// 如果列名不存在則填充
+								if (!row.data[field] && row.data[field] != 0){
+									if(field == 'Volume') row.data[field] = 1
+									else row.data[field] = row.data['Close'] 
+								}  
+							}
+							for (const field in requiredFields) {
+								if (!requiredFields[field].test(row.data[field])) {
+									console.log(`${field} 格式校验失败`, row.data[field]);
+									error['Date'] = row.data['Date'];
+									error['Open'] = row.data['Open'];
+									error['High'] = row.data['High'];
+									error['Low'] = row.data['Low'];
+									error['Close'] = row.data['Close'];
+									error['Volume'] = row.data['Volume'];
+									if(field == 'Date') isDateFormat = false
+									else isNumFormat = false
+									errorRow.push(error)
+									// parser.pause()
+									return
+								}
+							}
 							errorRow.push(error)
 							self.csvContent.push(row)
 							// parser.resume()
@@ -641,8 +668,11 @@ export default {
 							)
 						)
 					}
+				} catch (error) {
+					CIQ.hideCover();
+					CIQ.nprogress.done();
+					reject(error);
 				}
-				reader.readAsText(file)
 			})
 		},
 		validateFields(_data) {
