@@ -265,7 +265,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
                                     // 激活look bar前更新列表，之后的切换和搜索读vuex
-                                    //await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
@@ -276,7 +276,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         CIQ.UI.stxtap(comparisonInput, function () {
                             allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
-                                    //await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
@@ -694,6 +694,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 <cq-filter>STOCKS</cq-filter>
                 <cq-filter>INDEXES</cq-filter>
                 <cq-filter>MY FAVORITES</cq-filter>
+                <cq-filter>CUSTOM SYMBOL</cq-filter>
+                <div class="overlay"></div>
                 </cq-lookup-filters>
                 <cq-uploader cq-no-close></cq-uploader>
                 <cq-scroll></cq-scroll>
