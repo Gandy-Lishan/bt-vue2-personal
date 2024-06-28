@@ -53,7 +53,7 @@
 						</el-select>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
-					<el-button v-show="is_admin" @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+					<el-button v-show="is_admin || get_show_email" @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
 					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
@@ -89,6 +89,8 @@
 </template>
 
 <script>
+import {getCookieData} from "@/utils/cryptoUtils/cookie";
+
 const throttle = require('lodash/throttle')
 import { getAIPick } from '@/service/ai'
 import { timestampToTime } from '@/utils'
@@ -152,7 +154,16 @@ export default {
 	computed: {
 		is_admin() {
 			return this.$store.state.user.is_admin
-		}
+		},
+    get_show_email(){
+      let showList = ["jaclyn.wu@monicfinancial.com",'shhenryw@gmail.com']
+      let email = getCookieData()?.username;
+      if(showList.indexOf(email)){
+        return true
+      }else{
+        return false
+      }
+    }
 	},
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
