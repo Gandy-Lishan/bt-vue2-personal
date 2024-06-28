@@ -108,8 +108,10 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import {
 	compareArrays,
+
 } from '@/utils'
 import moment from 'moment'
+import { getSymbolInfo } from '@/utils/globalFunc'
 
 export default {
 	name: 'Uploader',
@@ -812,9 +814,14 @@ export default {
 					`Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
 				)
 			}
-			const symbol =
+			let symbol =
 				this.$store.state.form.backtestSymbol ||
 				process.env.VUE_APP_DEFAULT_SYMBOL
+			/** 防止当前为custom symbol时发送对比pairdata和my data出错 */
+			const {type} = getSymbolInfo(symbol)
+			if(!['stock','index'].includes(type)){
+				symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+			}
 			const res = await getPairData(startDate, endDate, frequency, symbol)
 			const pairDataDate = res.data.map((item) => {
 				const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
