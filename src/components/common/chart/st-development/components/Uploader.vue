@@ -404,7 +404,7 @@ export default {
 					 * 	remove empty line
 					 */
 					const fileContent = await this.readFileContent(file);
-					const filteredContent = this.filterEmptyLines(fileContent);
+					const filteredContent = await this.fillEmptyColsAndSkipEmptyLine(fileContent)
 					const newFile = new File([filteredContent], file.name, { type: file.type });
 					/********END********* */
 					
@@ -442,10 +442,40 @@ export default {
 				reader.readAsText(file);
 			});
     	},
-		filterEmptyLines(content) {
-			const lines = content.split('\n');
-			const nonEmptyLines = lines.filter(line => line.trim() !== '');
-			return nonEmptyLines.join('\n');
+		fillEmptyColsAndSkipEmptyLine(content){
+			return new Promise((resolve, reject) => {
+				let csvContent = []
+				Papa.parse(content, {
+							header: true, // 指定是否将第一行作为字段名
+							skipEmptyLines: true,
+							trimHeaders: true, // 去除表头中每个字段的空格
+							trimRows: true, // 去除数据行中每个字段的空格
+							step: function (row) {
+								const requiredFields = ['Date','Open','High','Low','Close','Volume',];
+
+								// 填充缺失字段
+								for (const field of requiredFields) {
+									// 如果列名不存在則填充
+									if (!row.data[field] && row.data[field] != 0){
+										if(field == 'Volume') row.data[field] = 1
+										else row.data[field] = row.data['Close'] 
+									}  
+								}
+
+								csvContent.push(row.data)
+							},
+							complete: function () {
+								// 将处理后的 csvContent 转换回 CSV 字符串
+								const csvString = Papa.unparse(csvContent, {
+									columns: ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
+								});
+                				resolve(csvString);
+							},
+							error: (error) => {
+								reject(error)
+							}
+				})
+			});
 		},
 		handleUploadProgress(event, uid, fileList) {
 			// 上传进度回调
@@ -543,7 +573,7 @@ export default {
 					const errorRow = []
 					const result = Papa.parse(content, {
 						header: true, // 指定是否将第一行作为字段名
-						skipEmptyLines: true,
+						skipEmptyLines: true,	// 已经在前面的fillEmptyCols移除了空行
 						trimHeaders: true, // 去除表头中每个字段的空格
 						trimRows: true, // 去除数据行中每个字段的空格
 						step: function (row) {
@@ -563,6 +593,7 @@ export default {
 									row.data[key] = row.data[key].trim()
 								}
 							}
+							/** 在前面的fillEmptyCols也填充了空列,可能不会进判断 */
 							for (const field in requiredFields) {
 								// 如果列名不存在則填充
 								if (!row.data[field] && row.data[field] != 0){
