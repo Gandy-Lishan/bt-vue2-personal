@@ -158,7 +158,7 @@ export default {
     get_show_email(){
       let showList = ["jaclyn.wu@monicfinancial.com",'shhenryw@gmail.com']
       let email = getCookieData()?.username;
-      if(showList.indexOf(email)){
+      if(showList.indexOf(email) !==-1){
         return true
       }else{
         return false
