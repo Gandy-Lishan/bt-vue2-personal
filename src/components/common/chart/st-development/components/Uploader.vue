@@ -272,8 +272,11 @@ export default {
 								'File uploaded successfully. You can click on the file to preview it.',
 							duration: 0
 						})
-					} else {
-						return Promise.reject(error)
+					} else if(code == 400){
+						return Promise.reject('Symbol name already exists')
+					}
+					else {
+						return Promise.reject('File upload failed.')
 					}
 					// ...
 				})
@@ -287,7 +290,7 @@ export default {
 					self.fileList = []
 					self.$notify.warning({
 						title: 'Tips',
-						message: 'File upload failed.',
+						message: error,
 						duration: 0
 					})
 
