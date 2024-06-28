@@ -1890,6 +1890,49 @@ export default {
       });
       return false
     },
+
+    /** START 
+     * util functions for indicator uploader */
+    readFileContent(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = (event) => {
+          const hash = SparkMD5.hashBinary(reader.result)
+          file.hash = hash
+          this.file_hash = hash
+          debugger
+					resolve(event.target.result);
+				};
+				reader.onerror = (error) => {
+					reject(error);
+				};
+				reader.readAsText(file);
+			});
+    	},
+		skipEmptyLine(content){
+			return new Promise((resolve, reject) => {
+				let csvContent = []
+				Papa.parse(content, {
+							header: true, // 指定是否将第一行作为字段名
+							skipEmptyLines: true,
+							trimHeaders: true, // 去除表头中每个字段的空格
+							trimRows: true, // 去除数据行中每个字段的空格
+							step: function (row) {
+								csvContent.push(row.data)
+							},
+							complete: function () {
+								// 将处理后的 csvContent 转换回 CSV 字符串
+								const csvString = Papa.unparse(csvContent);
+                resolve(csvString);
+							},
+							error: (error) => {
+								reject(error)
+							}
+				})
+			});
+		},
+    /******** END ***************/
+
     async beforeUpload(file) {
       CIQ.addCover('File verification in progress...')
       CIQ.nprogress.start()
@@ -1947,14 +1990,19 @@ export default {
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
       try {
-        try {
-          await this.validateCSV(file)
-          await this.handleParseResult(this.csvContent, file)
-        } catch (error) {
-          throw Error()
-        }
-        this.form.indicatorName = file.name.replace('.csv', '')
-        this.fileList.push(file)
+          /** START
+					 * 	remove empty line
+					 */
+					const fileContent = await this.readFileContent(file);
+					const filteredContent = await this.skipEmptyLine(fileContent)
+					const newFile = new File([filteredContent], file.name, { type: file.type });
+					/********END********* */
+
+          await this.validateCSV(newFile)
+          await this.handleParseResult(this.csvContent, newFile)
+  
+        this.form.indicatorName = newFile.name.replace('.csv', '')
+        this.fileList.push(newFile)
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.dialogFormVisible = true
@@ -2030,18 +2078,15 @@ export default {
     },
     async validateCSV(file) {
       const self = this
-      return await new Promise((resolve, reject) => {
+      return await new Promise(async (resolve, reject) => {
         // 限制字段
         let isDateFormat = true
         let isNumFormat = true
         let isNotEmpty = true
         self.csvContent = []
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          const content = e.target.result
-          const hash = SparkMD5.hashBinary(reader.result)
-          file.hash = hash
-          self.file_hash = hash
+        
+        try {
+          const content = await self.readFileContent(file);
           const rows = content.trim().split('\n')
           const headers = rows[0].trim().split(',')
           const lines = content.split('\n')
@@ -2177,8 +2222,11 @@ export default {
               )
             )
           }
-        }
-        reader.readAsText(file)
+        } catch (error) {
+					CIQ.hideCover();
+					CIQ.nprogress.done();
+					reject(error);
+				}
       })
     },
     validateFields(_data) {
