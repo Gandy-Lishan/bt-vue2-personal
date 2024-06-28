@@ -75,7 +75,7 @@ export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal) =>
 			callback(new Error(`Enter ${errorMsgEmpty}`))
 		}
 		const pattern = /^\d+$/
-		const isLessThanMin = Number(value) <= Number(minVal)
+		const isLessThanMin = Number(value) < Number(minVal)
 		if (isLessThanMin) callback(new Error(`Only positive integers > ${minVal} allowed`))
 		const isPositiveInteger = isNaN(value) || Number(value) <= 0 || !pattern.test(value)
 		if (isPositiveInteger) {
