@@ -50,7 +50,7 @@
           >AI Trading</el-menu-item
         >
         <el-menu-item class="home-link" index="11"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && is_admin"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isPortfolio"
           >Portfolio</el-menu-item
         >
         <!-- <el-menu-item class="seasonality-link home-link" index="8"
@@ -99,6 +99,7 @@ export default {
     return {
       activeIndex: '1',
       isAiTrading: false,
+      isPortfolio: false,
       isButtonVisible: false
     }
   },
@@ -158,6 +159,8 @@ export default {
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
+    if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
+    if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
   },
   methods: {
     getTokenRole() {
