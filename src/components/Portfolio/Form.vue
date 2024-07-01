@@ -642,7 +642,7 @@ export default {
       // 刷新Backtest列表
       this.$emit('refreshBTList')
       const code = saveRes.data?.code
-      const failedConditions = [203, 403, 404, 406]
+      const failedConditions = [203, 403, 404, 406, 443, 444, 445, 446, 500]
       if(failedConditions.includes(Number(code))) {
         // 保存失败, 不进入轮询
         return saveRes
@@ -657,7 +657,8 @@ export default {
         pollingRes = await getRunPortfolioResults(url)
         const code = pollingRes.data.code
         if (code === 200)  return pollingRes
-        if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
+        const _failedConditions = [401, 403, 443, 404, 407, 444, 445, 446, 500]
+        if(_failedConditions.includes(Number(code))) return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
       } while (true); // Keep polling indefinitely
