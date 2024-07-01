@@ -334,7 +334,6 @@ const actions = {
 			toggleOverlaySymbol('flex');
 			await getAllMySymbolsList(1,(data)=>{
 				commit('SET_MYSYMBOLLIST',data)
-				
 			})
 			toggleOverlaySymbol('none');
 			resolve()
@@ -344,8 +343,6 @@ const actions = {
 	set_myindicator({ commit }) {
 		return new Promise(async resolve => {
 			toggleOverlayIndicator('flex');
-
-			
 			let btvFavIndi = await getBTV1FavIndicator()
 			commit('SET_FAVINDICATORLIST', btvFavIndi)
 			await getAllMyIndicatorsList(1,(data)=>{

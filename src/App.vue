@@ -50,7 +50,7 @@ export default {
 
 		/** pre-fetching and updating the data */
 		this.fetchCustomList()
-		this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
+		this.updateInterval = setInterval(this.fetchCustomList, 20000); // Update every 5 minutes
 
 		console.log('用户权限', getCookieData())
 		const _this = this
