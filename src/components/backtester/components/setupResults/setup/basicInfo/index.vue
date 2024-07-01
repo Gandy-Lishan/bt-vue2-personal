@@ -1324,11 +1324,8 @@ export default {
         }
       }
     },
-    async getCustomStocksList() {
+    getCustomStocksList() {
       let vm = this
-      await vm.$store.dispatch('chart/set_mysymbolist',(data)=>{
-        //vm.$store.commit('chart/SET_MYSYMBOLLIST',data)
-      })
       vm.customStocksList = vm.$store.getters.getMySymbollist.map((item, index) => {
         let url = encodeBase64(item.name) + '||' + encodeBase64(item.url)
         return { value: `${url}`, label: `${item.name}`, name: `${item.name}`, key: `${item.name}_${item.url}_${index}` }
@@ -1342,10 +1339,9 @@ export default {
           await vm.getStocksList()
           await vm.getIndexsList()
         }
-        await vm.getCustomStocksList()
+        vm.getCustomStocksList()
 
         this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
-        //this.options = vm.symbolList.concat(vm.indexList)
         vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
@@ -1365,13 +1361,8 @@ export default {
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        // todo
-        // var customSymbolListTemp = []
-        // customSymbolListTemp = await CIQ.store.dispatch('chart/set_mysymbolist',()=>{
-        //     this.acceptText(val, field);
-        // })
        
-        let list = symbolListTemp.concat(IndexListTemp)
+        let list = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
         let options = []
         let wholeWord = []
         // keyword全匹配

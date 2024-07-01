@@ -24,6 +24,8 @@ const getters = {
 		  state.chart.ma_color_1[panelIndex % state.chart.ma_color_2.length];
 	  },
 	getMySymbollist: state => state.chart.mySymbolList,
+	getFavIndicatorList: state => state.chart.favIndicatorList,
+	getMyIndicatorList: state => state.chart.myIndicatorList,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
