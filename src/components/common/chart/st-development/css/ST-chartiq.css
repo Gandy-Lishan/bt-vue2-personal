@@ -483,6 +483,10 @@ cq-indicators-lookup-filters .overlay {
   height: 100%;
   pointer-events: auto;
   background-color: #ffffffd4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
 }
 cq-lookup-filters .overlay {
   position: absolute;
@@ -492,6 +496,10 @@ cq-lookup-filters .overlay {
   height: 100%;
   pointer-events: auto;
   background-color: #ffffffd4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
 }
 
 cq-indicators-lookup-filters cq-indicators-filter {

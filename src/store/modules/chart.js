@@ -3,7 +3,16 @@ import {
     getAllMySymbolsList,getSymbolCsv
 } from '@/service/service.js'
 import {Toast} from '@/utils'
-
+const toggleOverlay = function(displayStyle) {
+	var filters = document.querySelectorAll("cq-lookup-filters");
+	
+	filters.forEach(function(filter) {
+	  var overlay = filter.querySelector(".overlay");
+	  if (overlay) {
+		overlay.style.display = displayStyle;
+	  }
+	});
+  }
 const state = {
 	curDate: '', //ai
 	studySettingMA: { period: '', criteria: '', panelIndex: '' }, //chartiq
@@ -303,7 +312,9 @@ const actions = {
 	// 獲取mysymbol列表包括url和name etc.
 	set_mysymbolist({ commit }, cb) {
 		return new Promise(async resolve => {
+			toggleOverlay('flex');
 			let res = await getAllMySymbolsList(1,cb)
+			toggleOverlay('none');
 			commit('SET_MYSYMBOLLIST', res)
 			resolve()
 		})
