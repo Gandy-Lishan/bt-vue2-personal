@@ -45,6 +45,23 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					prop="total_return"
+					show-overflow-tooltip
+					label="TOTAL RETURN %"
+					align="center"
+					algin="center"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.total_return >= 0">{{
+							scope.row.total_return
+						}}%</span>
+						<span v-else-if="isNaN(scope.row.total_return)"></span>
+						<span v-else style="color: #dd3a13">{{
+							scope.row.total_return
+						}}%</span>
+					</template>
+				</el-table-column>
+				<el-table-column
 						prop="cash"
 						label="CASH"
 						align="center"
@@ -317,6 +334,7 @@ export default {
         const obj = {}
         obj['TOTAL ASSETS'] = item.total_assets
         obj['FLOAT PROFIT'] = item.float_profit
+        obj['TOTAL RETURN %'] = `${item.total_return}%`
         obj['CASH'] = item.cash
         obj['MARKET VALUE'] = item.market_value
 				obj['WIN RATE %'] = `${item.winrate}%`
