@@ -93,7 +93,7 @@
 				</el-table-column>
 				<el-table-column
 						prop="winrate"
-						label="WIN RATE"
+						label="WIN RATE %"
 						show-overflow-tooltip
 						align="center"
 				>
