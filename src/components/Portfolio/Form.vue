@@ -520,7 +520,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(240)
     this.generateCPMName()
   },
   methods: {
@@ -725,7 +725,7 @@ export default {
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
-      if([400, 401, 404, 403, 406, 407].includes(code)) //this.$emit('clearResults')
+      if([400, 401, 404, 403, 406, 407, 443, 444, 445, 446, 500].includes(code)) {this.popUpMsgBox('No results'); this.$emit('clearResults')}
       // 运行成或者失败后刷新列表
       this.$emit('refreshBTList')
       this.btnLoading = false
