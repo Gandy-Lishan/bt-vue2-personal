@@ -771,8 +771,8 @@ export default {
     },
     validateTotalPercentage(row) {
       let weight = 0
-      for (const row of [this.portfolioFirstLine,...this.strategy_combination.slice(1)]) {
-        weight += parseFloat(row.weight) || 0
+      for (const _row of [this.portfolioFirstLine,...this.strategy_combination.slice(1)]) {
+        weight += parseFloat(_row.percent) || 0
       }
       if(weight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'}
       return weight
@@ -786,8 +786,11 @@ export default {
     },
     deleteRow(scope) {
       this.strategy_combination.splice(scope.$index, 1)
-      const totalWeight = this.validateTotalPercentage(scope.row)
-      const percent = 100 - totalWeight
+      let weight = 0
+      for (const _row of this.strategy_combination.slice(1)) {
+        weight += parseFloat(_row.percent) || 0
+      }
+      const percent = 100 - weight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
     validateWeightRule(row) {
