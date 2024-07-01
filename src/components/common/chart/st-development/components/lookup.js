@@ -213,22 +213,22 @@ let __js_webcomponents_lookup_ = (_exports) => {
              * @param {*} val   在點擊組件時加載mySymbol, 切換過濾器或者搜索都訪問存好的數組 
              * @param {*} field 
              */
-            async updateMySymbol(val,field){
-                var loader = document.querySelector(".loaderLookup");
-                    if (loader) loader.show();  
-                    var filters = this.querySelector("cq-lookup-filters");
-                    if (filters) var overlay = filters.querySelector(".overlay");
-                    overlay.style.display = 'block'
-                    // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
-                    //     this.acceptText(val, field);
-                    // })
-                    await CIQ.store.dispatch('chart/set_mysymbolist',(data)=>{
-                        CIQ.store.commit('chart/SET_MYSYMBOLLIST',data)
-                        this.acceptText(val, field);
-                    })
+            // async updateMySymbol(val,field){
+            //     var loader = document.querySelector(".loaderLookup");
+            //         if (loader) loader.show();  
+            //         var filters = this.querySelector("cq-lookup-filters");
+            //         if (filters) var overlay = filters.querySelector(".overlay");
+            //         overlay.style.display = 'block'
+            //         // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
+            //         //     this.acceptText(val, field);
+            //         // })
+            //         await CIQ.store.dispatch('chart/set_mysymbolist',(data)=>{
+            //             CIQ.store.commit('chart/SET_MYSYMBOLLIST',data)
+            //             this.acceptText(val, field);
+            //         })
                     
-                overlay.style.display = 'none'
-            }
+            //     overlay.style.display = 'none'
+            // }
             initialize() {
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -265,7 +265,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
                                     // 激活look bar前更新列表，之后的切换和搜索读vuex
-                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    //await self.updateMySymbol(self.input.val(), f.innerHTML)
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
@@ -276,7 +276,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         CIQ.UI.stxtap(comparisonInput, function () {
                             allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
-                                    await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    //await self.updateMySymbol(self.input.val(), f.innerHTML)
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
@@ -695,13 +695,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 <cq-filter>INDEXES</cq-filter>
                 <cq-filter>MY FAVORITES</cq-filter>
                 <cq-filter>CUSTOM SYMBOL</cq-filter>
-                <div class="overlay"></div>
+                <div class="overlay">Updating list, please wait...</div>
                 </cq-lookup-filters>
                 <cq-uploader cq-no-close></cq-uploader>
                 <cq-scroll></cq-scroll>
                 <cq-loader class="loaderLookup"></cq-loader>
             </cq-lookup-results>  
         `;
+        // <div class="overlay"></div>
         CIQ.UI.addComponentDefinition("cq-lookup", Lookup);
     }
     

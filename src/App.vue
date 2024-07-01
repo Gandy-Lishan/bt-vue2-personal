@@ -34,7 +34,8 @@ export default {
 	data() {
 		return {
 			svgCode: '', // 显示 update 图标变化
-      isClosed: false, // 点击显示 update 组件
+      		isClosed: false, // 点击显示 update 组件
+			updateInterval: null,
 		}
 	},
 	components: {
@@ -46,6 +47,10 @@ export default {
 	},
 	async mounted() {
 		this.watchUpdate()
+
+		/** pre-fetching and updating the data */
+		this.fetchCustomList()
+		this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
 
 		console.log('用户权限', getCookieData())
 		const _this = this
@@ -170,7 +175,15 @@ export default {
 				})
 			})
       	},
-	}
+		fetchCustomList() {
+			this.$store.dispatch('chart/set_mysymbolist',(data)=>{
+				this.$store.commit('chart/SET_MYSYMBOLLIST',data)
+			})
+		}
+	},
+	beforeDestroy() {
+		clearInterval(this.updateInterval);
+	},
 }
 </script>
 <style lang="scss">

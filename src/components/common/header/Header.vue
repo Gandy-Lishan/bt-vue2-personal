@@ -158,6 +158,7 @@ export default {
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
+    
   },
   methods: {
     getTokenRole() {
