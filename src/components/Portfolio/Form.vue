@@ -520,7 +520,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(1)
+    this.setBacktestHistory(240)
     this.generateCPMName()
   },
   methods: {
@@ -642,7 +642,7 @@ export default {
       // 刷新Backtest列表
       this.$emit('refreshBTList')
       const code = saveRes.data?.code
-      const failedConditions = [203, 403, 404, 406]
+      const failedConditions = [203, 403, 404, 406, 443, 444, 445, 446, 500]
       if(failedConditions.includes(Number(code))) {
         // 保存失败, 不进入轮询
         return saveRes
@@ -657,7 +657,8 @@ export default {
         pollingRes = await getRunPortfolioResults(url)
         const code = pollingRes.data.code
         if (code === 200)  return pollingRes
-        if(code == 401 || code == 403 || code == 404 || code == 407) return pollingRes
+        const _failedConditions = [401, 403, 443, 404, 407, 444, 445, 446, 500]
+        if(_failedConditions.includes(Number(code))) return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
         await new Promise(resolve => setTimeout(resolve, 1500));
       } while (true); // Keep polling indefinitely
@@ -724,7 +725,7 @@ export default {
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
-      if([400, 401, 404, 403, 406, 407].includes(code)) //this.$emit('clearResults')
+      if([400, 401, 404, 403, 406, 407, 443, 444, 445, 446, 500].includes(code)) {this.popUpMsgBox('No results'); this.$emit('clearResults')}
       // 运行成或者失败后刷新列表
       this.$emit('refreshBTList')
       this.btnLoading = false
@@ -771,8 +772,8 @@ export default {
     },
     validateTotalPercentage(row) {
       let weight = 0
-      for (const row of [this.portfolioFirstLine,...this.strategy_combination.slice(1)]) {
-        weight += parseFloat(row.weight) || 0
+      for (const _row of [this.portfolioFirstLine,...this.strategy_combination.slice(1)]) {
+        weight += parseFloat(_row.percent) || 0
       }
       if(weight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'}
       return weight
@@ -786,8 +787,11 @@ export default {
     },
     deleteRow(scope) {
       this.strategy_combination.splice(scope.$index, 1)
-      const totalWeight = this.validateTotalPercentage(scope.row)
-      const percent = 100 - totalWeight
+      let weight = 0
+      for (const _row of this.strategy_combination.slice(1)) {
+        weight += parseFloat(_row.percent) || 0
+      }
+      const percent = 100 - weight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
     validateWeightRule(row) {
