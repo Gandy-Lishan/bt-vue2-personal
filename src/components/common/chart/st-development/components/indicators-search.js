@@ -5,10 +5,6 @@
 import {CIQ} from "chartiq/js/standard.js"
 import {config} from "../feeds/STDataFeedAccessUrl.js"
 import {config as mostPopularItems} from "../feeds/mostPopularItems.js"
-import {
-	getBTV1FavIndicator,
-    getAllMyIndicatorsList,
-} from '@/service/service.js'
 
 import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
@@ -149,8 +145,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.currentCategory = 'all'
 
                 // store btvFavIndi and myIndicator list while envoking the search bar
-                this.btvFavIndi = []
-                this.myIndicator = []
+                // this.btvFavIndi = []
+                // this.myIndicator = []
             }
     
             /**
@@ -235,7 +231,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         category: item.category
                     }})
 
-                        resu.push(...this.btvFavIndi.data.data.map(item=>{return {
+                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList
+                        resu.push(...favIndicatorList.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
                         }))
@@ -245,7 +242,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
     
                             var results = []
-                            const milist = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+                            const myIndicatorList = CIQ.store.getters.getMyIndicatorList
+                            const milist = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
 
                             resu.push(...milist)
                             resu.map(element => {
@@ -295,7 +293,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                         resu = JSON.parse(data.favorite_indicator)
 
-                        resu.push(...this.btvFavIndi.data.data.map(item=>{return {
+                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList
+                        resu.push(...favIndicatorList.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
                         }))
@@ -305,7 +304,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
                         
                             var results = []
-                            const list = this.myIndicator.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+                            const myIndicatorList = CIQ.store.getters.getMyIndicatorList
+                            const list = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
 
                             resu.push(...list)
                             resu.map(element => {
@@ -405,25 +405,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 input.value = "";
             }
                 
-            /**
-             * 
-             * @param {*} val   在點擊組件時加載favIndi和myIndi, 切換過濾器或者搜索都訪問存好的數組 
-             * @param {*} field 
-             */
-            async updateFavIndicatorAndMyIndicator(val,field){
-                var loader = document.querySelector(".loaderSearch");
-                    if (loader) loader.show();  
-
-                    var filters = this.querySelector("cq-indicators-lookup-filters");
-                    if (filters) var overlay = filters.querySelector(".overlay");
-                    overlay.style.display = 'block'
-                    this.btvFavIndi = await getBTV1FavIndicator()
-                    this.myIndicator = await getAllMyIndicatorsList(1,()=>{
-                        this.acceptText(val, field);
-                    })
-                    
-                overlay.style.display = 'none'
-            }
             initialize() {
                 // Close the dropdown menu if the user clicks outside of it
                 window.onclick = function(event) {
@@ -476,9 +457,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         allFilters.forEach(async function (f) {
                             // 判断点击事件触发前是否激活了indicators-search
                             if(f.classList.contains("true")){
-                                console.log('updateFavIndicatorAndMyIndicator')
-                                // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
-                                await self.updateFavIndicatorAndMyIndicator(self.input.val(), f.innerHTML)
+                                // // 激活indicators-search bar前更新列表，之后的切换和搜索读vuex
                                 self.acceptText(self.input.val(), f.innerHTML);
                             }
                         });
@@ -507,8 +486,15 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                         //CIQ.UI.stxtap()
                     });
+
+                    /** 响应分段获取的myIndicator列表变化 */
+                    CIQ.store.watch(
+                        (state) => state.chart.myIndicatorList,
+                        (newValue) => {
+                            self.acceptText(self.input.val(), self.currentFilter);
+                        }
+                    );
                 }
-    
                 if (typeof node.attr("cq-keystroke-claim") != "undefined") {
                     // add keyboard claim for entire body
                     this.addClaim(this);
@@ -929,7 +915,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     <cq-indicators-filter class="true">ALL</cq-indicators-filter>
                     <cq-indicators-filter>MY FAVORITES</cq-indicators-filter>
                     <cq-indicators-filter>MOST POPULAR</cq-indicators-filter>
-                    <div class="overlay"></div>
+                    <div class="overlay">Updating list, please wait...</div>
                 </cq-indicators-lookup-filters>
                 <cq-indicators-scroll></cq-indicators-scroll>
                 <cq-loader class="loaderSearch"></cq-loader>

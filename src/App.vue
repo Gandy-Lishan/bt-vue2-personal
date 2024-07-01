@@ -176,9 +176,10 @@ export default {
 			})
       	},
 		fetchCustomList() {
-			this.$store.dispatch('chart/set_mysymbolist',(data)=>{
-				this.$store.commit('chart/SET_MYSYMBOLLIST',data)
-			})
+			console.log('🚗  update custom symbol list and indicator list')
+			this.$store.dispatch('chart/set_mysymbolist')
+			// 包括了fav indicator
+			this.$store.dispatch('chart/set_myindicator')
 		}
 	},
 	beforeDestroy() {

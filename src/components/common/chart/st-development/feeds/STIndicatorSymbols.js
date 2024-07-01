@@ -117,7 +117,6 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 
         var resultsCustomSymbolList = [];
         const mySymbolList = CIQ.store.getters.getMySymbollist
-        debugger
         mySymbolList.forEach(element => {
             // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
             var item = {

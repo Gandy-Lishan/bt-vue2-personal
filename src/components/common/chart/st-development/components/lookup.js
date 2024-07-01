@@ -208,27 +208,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 input.value = "";
             }
     
-            /**
-             * 
-             * @param {*} val   在點擊組件時加載mySymbol, 切換過濾器或者搜索都訪問存好的數組 
-             * @param {*} field 
-             */
-            // async updateMySymbol(val,field){
-            //     var loader = document.querySelector(".loaderLookup");
-            //         if (loader) loader.show();  
-            //         var filters = this.querySelector("cq-lookup-filters");
-            //         if (filters) var overlay = filters.querySelector(".overlay");
-            //         overlay.style.display = 'block'
-            //         // this.mySymbol = await getAllMyIndicatorsList(1,()=>{
-            //         //     this.acceptText(val, field);
-            //         // })
-            //         await CIQ.store.dispatch('chart/set_mysymbolist',(data)=>{
-            //             CIQ.store.commit('chart/SET_MYSYMBOLLIST',data)
-            //             this.acceptText(val, field);
-            //         })
-                    
-            //     overlay.style.display = 'none'
-            // }
             initialize() {
                 this.addDefaultMarkup();
                 var node = this.node;
@@ -264,8 +243,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             if(document.querySelector('.ciq-search').active) return;
                             allFilters.forEach(async function (f) { 
                                 if(f.classList.contains("true")){    
-                                    // 激活look bar前更新列表，之后的切换和搜索读vuex
-                                    //await self.updateMySymbol(self.input.val(), f.innerHTML)
+                                    // 激活look bar前更新列表
                                     self.acceptText(self.input.val(), f.innerHTML);
                                 }
                             });
@@ -299,6 +277,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             self.acceptText(self.input.val(), self.currentFilter);
                         });
                     });
+
+                    /** 响应分段获取的mySymbolList列表变化 */
+                    CIQ.store.watch(
+                        (state) => state.chart.mySymbolList,
+                        (newValue) => {
+                            self.acceptText(self.input.val(), self.currentFilter);
+                        }
+                    );
                 }
     
                 if (typeof node.attr("cq-keystroke-claim") != "undefined") {

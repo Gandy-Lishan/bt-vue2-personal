@@ -1,10 +1,21 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-    getAllMySymbolsList,getSymbolCsv
+    getAllMySymbolsList,getSymbolCsv,
+	getBTV1FavIndicator,getAllMyIndicatorsList,
 } from '@/service/service.js'
 import {Toast} from '@/utils'
-const toggleOverlay = function(displayStyle) {
+const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
+	
+	filters.forEach(function(filter) {
+	  var overlay = filter.querySelector(".overlay");
+	  if (overlay) {
+		overlay.style.display = displayStyle;
+	  }
+	});
+  }
+const toggleOverlayIndicator = function(displayStyle) {
+	var filters = document.querySelectorAll("cq-indicators-lookup-filters");
 	
 	filters.forEach(function(filter) {
 	  var overlay = filter.querySelector(".overlay");
@@ -80,6 +91,8 @@ const state = {
 	//用戶自定義symbolList, 緩存在vuex
 	mySymbolList: [],
 	mySymbolQuotefeedCache: [],
+	myIndicatorList: [],
+	favIndicatorList: null,
 }
 
 const mutations = {
@@ -88,6 +101,12 @@ const mutations = {
 	},
 	SET_MYSYMBOLLIST(state,list){
 		state.mySymbolList = list
+	},
+	SET_MYINDICATORLIST(state,list){
+		state.myIndicatorList = list
+	},
+	SET_FAVINDICATORLIST(state,obj){
+		state.favIndicatorList = obj
 	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
@@ -310,12 +329,29 @@ const actions = {
 		})
 	},
 	// 獲取mysymbol列表包括url和name etc.
-	set_mysymbolist({ commit }, cb) {
+	set_mysymbolist({ commit }) {
 		return new Promise(async resolve => {
-			toggleOverlay('flex');
-			let res = await getAllMySymbolsList(1,cb)
-			toggleOverlay('none');
-			commit('SET_MYSYMBOLLIST', res)
+			toggleOverlaySymbol('flex');
+			await getAllMySymbolsList(1,(data)=>{
+				commit('SET_MYSYMBOLLIST',data)
+				
+			})
+			toggleOverlaySymbol('none');
+			resolve()
+		})
+	},
+	// 獲取myindicator和favindicator列表
+	set_myindicator({ commit }) {
+		return new Promise(async resolve => {
+			toggleOverlayIndicator('flex');
+
+			
+			let btvFavIndi = await getBTV1FavIndicator()
+			commit('SET_FAVINDICATORLIST', btvFavIndi)
+			await getAllMyIndicatorsList(1,(data)=>{
+				commit('SET_MYINDICATORLIST',data)
+			})
+			toggleOverlayIndicator('none');
 			resolve()
 		})
 	},
