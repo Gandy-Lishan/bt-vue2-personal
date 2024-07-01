@@ -681,7 +681,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 <cq-filter>INDEXES</cq-filter>
                 <cq-filter>MY FAVORITES</cq-filter>
                 <cq-filter>CUSTOM SYMBOL</cq-filter>
-                <div class="overlay">Updating list, please wait...</div>
+                <div class="overlay">Updating list</div>
                 </cq-lookup-filters>
                 <cq-uploader cq-no-close></cq-uploader>
                 <cq-scroll></cq-scroll>

@@ -915,7 +915,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     <cq-indicators-filter class="true">ALL</cq-indicators-filter>
                     <cq-indicators-filter>MY FAVORITES</cq-indicators-filter>
                     <cq-indicators-filter>MOST POPULAR</cq-indicators-filter>
-                    <div class="overlay">Updating list, please wait...</div>
+                    <div class="overlay">Updating list</div>
                 </cq-indicators-lookup-filters>
                 <cq-indicators-scroll></cq-indicators-scroll>
                 <cq-loader class="loaderSearch"></cq-loader>
