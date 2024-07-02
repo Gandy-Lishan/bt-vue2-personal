@@ -566,14 +566,6 @@ quoteFeedSimulator.formatChartData = async function(response){
         });
     }
 
-    var indicatorCutoffIndices = {};
-    if(!(CIQ.objIndicator && typeof CIQ.objIndicator == 'string')){
-        for(var j in CIQ.objIndicator){
-            var indicatorKey = CIQ.objIndicator[j];
-            var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
-            indicatorCutoffIndices[indicatorKey] = data.map(i=>i[str]).findLastIndex(el => el !== null);
-        }
-    }
     try{
         const {type} = getSymbolInfo(CIQ.symbol)
         if(type == 'custom'){
@@ -604,27 +596,20 @@ quoteFeedSimulator.formatChartData = async function(response){
                     // 默认加载 ‘aapl’，它没有indicator，跳过
                     if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
                     for(var j in CIQ.objIndicator){
-                        var indicatorKey = CIQ.objIndicator[j];
                         var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
-
-                        // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过
-                        if (i > indicatorCutoffIndices[indicatorKey]) {
-                            newQuotes[i][indicatorKey] = null;
-                            continue;
-                        }
-
                         //let matchedItem = data.find(item=>item.DT == sortedRows[i].DT)
                         let matchedItem = dataDict[sortedRows[i].DT]
+                        newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
                         // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
                         if(matchedItem){
-                            if(objIndicatorFirstDate[indicatorKey] == null) objIndicatorFirstDate[indicatorKey] = newQuotes[i].DT
-                            newQuotes[i][indicatorKey] = matchedItem[str];
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = matchedItem[str];
                         }else{
                             if(i==0){
-                                newQuotes[i][indicatorKey] = null;
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
                             }else{
                                 //console.log('indicator值出现空值',data[i])
-                                newQuotes[i][indicatorKey] = newQuotes[i-1][indicatorKey]
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
                             }
                         }
                     } 
@@ -632,6 +617,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 //console.timeEnd('🚗Execution Time');
         }else{
             if('High' in data[0]){
+            
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
@@ -650,25 +636,19 @@ quoteFeedSimulator.formatChartData = async function(response){
                     // 默认加载 ‘aapl’，它没有indicator，跳过
                     if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
                     for(var j in CIQ.objIndicator){
-                        var indicatorKey = CIQ.objIndicator[j];
                         var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
-
-                        // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过
-                        if (i > indicatorCutoffIndices[indicatorKey]) {
-                            newQuotes[i][indicatorKey] = null;
-                            continue;
-                        }
-
+    
+                        newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
                         // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
                         if(data[i][str] != null){
-                            if(objIndicatorFirstDate[indicatorKey] == null) objIndicatorFirstDate[indicatorKey] = newQuotes[i].DT
-                            newQuotes[i][indicatorKey] = data[i][str];
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];
                         }else{
                             if(i==0){
-                                newQuotes[i][indicatorKey] = null;
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
                             }else{
                                 //console.log('indicator值出现空值',data[i])
-                                newQuotes[i][indicatorKey] = newQuotes[i-1][indicatorKey]
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
                             }
                         }
                     }
@@ -700,24 +680,17 @@ quoteFeedSimulator.formatChartData = async function(response){
                     // 默认加载 ‘aapl’，它没有indicator，跳过
                     if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
                     for(var j in CIQ.objIndicator){
-                        var indicatorKey = CIQ.objIndicator[j];
                         var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
                         
-                        // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过
-                        if (i > indicatorCutoffIndices[indicatorKey]) {
-                            newQuotes[i][indicatorKey] = null;
-                            continue;
-                        }
-
                         // 如果为空则判断是否为第一个，是则设为0，不是则设值为前一个
                         if(data[i][str] != null){
-                            if(objIndicatorFirstDate[indicatorKey] == null) objIndicatorFirstDate[indicatorKey] = newQuotes[i].DT
-                            newQuotes[i][indicatorKey] = data[i][str];      
+                            if(objIndicatorFirstDate[CIQ.objIndicator[j]] == null) objIndicatorFirstDate[CIQ.objIndicator[j]] = newQuotes[i].DT
+                            newQuotes[i][CIQ.objIndicator[j]] = data[i][str];      
                         }else{
                             if(i==0){
-                                newQuotes[i][indicatorKey] = null;
+                                newQuotes[i][CIQ.objIndicator[j]] = null;
                             }else{
-                                newQuotes[i][indicatorKey] = newQuotes[i-1][indicatorKey]
+                                newQuotes[i][CIQ.objIndicator[j]] = newQuotes[i-1][CIQ.objIndicator[j]]
                             }
                         }
                     }
