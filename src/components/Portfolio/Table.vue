@@ -131,7 +131,7 @@
 					<template slot-scope="scope">
             <span v-if="scope.row[l.value] == 'Finish'">{{scope.row[l.value]}}</span>
             <span v-if="scope.row[l.value] == 'Running'">{{scope.row[l.value]}}</span>
-            <span v-if="scope.row[l.value] == 'Failed'">{{scope.row[l.value]}}</span>
+            <span v-if="scope.row[l.value] == 'Failed' || scope.row[l.value] == 'Fail'">{{scope.row[l.value]}}</span>
 					</template>
 				</el-table-column>
 			</template>
@@ -384,9 +384,9 @@ export default {
         data.row = row
         _this.$emit('displayResultsData', data)
         // 如果说之前的状态是 running 之后的状态变成了 finish 或者 fail, 那么需要刷新列表
-        if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Failed', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
+        if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Failed', 'failed', 'Fail', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
       }
-      if(status === 'Failed' || status === 'fail') _this.popUpMsgBox('Portfolio failed. Adjust filters and rerun')
+      if(status === 'Failed' || status === 'failed' || status === 'Fail' || status === 'fail') _this.popUpMsgBox('Portfolio failed. Adjust filters and rerun')
       if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Portfolio in progress. Details and editing are unavailable');return}
       if(code != 200) {_this.$emit('displayResultsData', {row})}
       row.viewLoading = false
