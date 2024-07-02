@@ -302,10 +302,14 @@ export default {
 						break;
           /** CPM pattern */
           case 'Head and Shoulders Top' :
+            debugger
+            CIQ.createCorrelationPatternMatchDrawing(chart_data.result, 'cpm')
             break;
           case 'Head and Shoulders Bottom' :
             break;
           case 'Double Top' :
+            debugger
+            CIQ.createCorrelationPatternMatchDrawing(chart_data.result, 'cpm')
             break;
           case 'Double Bottom' :
             break;

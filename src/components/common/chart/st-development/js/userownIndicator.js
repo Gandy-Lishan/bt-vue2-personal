@@ -29,7 +29,7 @@
             function () {
                 // 有result的情况下(success)执行此回调并计算TIM
                 if(chart_data.result){
-                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result, 'cpm')
                     CIQ.createCPMMarker(chart_data.result)
                     cb()
                 }
