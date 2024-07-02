@@ -963,8 +963,9 @@ class ChartTitle extends CIQ.UI.ModalTag {
 
 			// These strange characters create some spacing so that the title appears
 			// correctly in a browser tab
+			const titleSymbol = symbolDisplay || symbol || 'sentimentrader.com'
 			this.title =
-			symbolDisplay + " \u200b \u200b " + textPrice + " \u200b \u200b \u200b ";
+			titleSymbol + " \u200b \u200b " + textPrice + " \u200b \u200b \u200b ";
 			if (todaysChange > 0) {
 				this.title += "\u25b2 " + txtChange;
 			} else if (todaysChange < 0) {
