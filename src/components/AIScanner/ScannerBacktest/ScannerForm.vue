@@ -609,7 +609,28 @@ export default {
           value: 'RSI',
           label: 'RSI',
           check: true
-        }
+        },
+        /** cpm pattern */
+        {
+          value: 'Head and Shoulders Top',
+          label: 'Head and Shoulders Top',
+          check: true
+        },
+        {
+          value: 'Head and Shoulders Bottom',
+          label: 'Head and Shoulders Bottom',
+          check: true
+        },
+        {
+          value: 'Double Top',
+          label: 'Double Top',
+          check: true
+        },
+        {
+          value: 'Double Bottom',
+          label: 'Double Bottom',
+          check: true
+        },
       ],
       rules: {
         long_ratio: [

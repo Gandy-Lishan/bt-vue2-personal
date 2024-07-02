@@ -300,6 +300,15 @@ export default {
 						CIQ.createOneTimePatternMarker(this.other.date,"MACD")
 						
 						break;
+          /** CPM pattern */
+          case 'Head and Shoulders Top' :
+            break;
+          case 'Head and Shoulders Bottom' :
+            break;
+          case 'Double Top' :
+            break;
+          case 'Double Bottom' :
+            break;
 					default: 
 				}
 				if(this.other['Category'] != 'MidTermAI'){

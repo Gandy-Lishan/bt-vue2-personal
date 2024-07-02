@@ -18,7 +18,7 @@
         let timeframe = chart_data.timeframe
 
         CIQ.addCover()
-        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         CIQ.store.commit('form/getFrequency', timeframe) //考虑到addSeries必须写死timeframe
         CIQ.store.commit('form/getBacktestSymbol', symbol)
         CIQ.stxx.loadChart({ 
@@ -35,7 +35,7 @@
                 }
 
                 CIQ.hideCover()
-                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                //CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }
         ) 
     }
