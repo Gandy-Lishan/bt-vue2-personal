@@ -520,7 +520,7 @@ export default {
     }
   },
   mounted() {
-    this.setBacktestHistory(240)
+    this.setBacktestHistory(120)
     this.generateCPMName()
   },
   methods: {
@@ -561,7 +561,7 @@ export default {
       if((!this.isPolling && this.btnLoading)) return true
 			Object.assign(this.$data, this.$options.data())
       this.generateCPMName()
-      this.setBacktestHistory(1)
+      this.setBacktestHistory(120)
       this.$refs['Form'].clearValidate()
     },
     async checkDuplicateNames(name) {
