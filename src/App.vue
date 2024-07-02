@@ -34,7 +34,8 @@ export default {
 	data() {
 		return {
 			svgCode: '', // 显示 update 图标变化
-   isClosed: false // 点击显示 update 组件
+   isClosed: false, // 点击显示 update 组件
+			updateInterval: null
 		}
 	},
 	components: {
@@ -46,6 +47,11 @@ export default {
 	},
 	async mounted() {
 		this.watchUpdate()
+
+		/** pre-fetching and updating the data */
+		this.fetchCustomList()
+		this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
+    
 		console.log('用户权限', getCookieData())
 		const _this = this
 		if(Cookies.get('sentimen_session')){
@@ -168,8 +174,17 @@ export default {
 					customClass:'versionNotifyStyle', //自定义类名
 				})
 			})
-  }
+  },
+		fetchCustomList() {
+			console.log('🚗  update custom symbol list and indicator list')
+			this.$store.dispatch('chart/set_mysymbolist')
+			// 包括了fav indicator
+			this.$store.dispatch('chart/set_myindicator')
+		},
+	beforeDestroy() {
+		clearInterval(this.updateInterval);
 	}
+ }
 }
 </script>
 <style lang="scss">
