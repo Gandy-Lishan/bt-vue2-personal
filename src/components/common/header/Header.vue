@@ -50,7 +50,7 @@
           >AI Trading</el-menu-item
         >
         <el-menu-item class="home-link" index="11"
-        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isButtonVisible"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isPortfolio"
           >Portfolio</el-menu-item
         >
         <!-- <el-menu-item class="seasonality-link home-link" index="8"
@@ -99,6 +99,7 @@ export default {
     return {
       activeIndex: '1',
       isAiTrading: false,
+      isPortfolio: false,
       isButtonVisible: false
     }
   },
@@ -132,9 +133,9 @@ export default {
       }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
         this.activeIndex = '11'
       }
-      const currentDomain = window.location.hostname;
+      // const currentDomain = window.location.hostname;
     // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-    if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
+    // if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
       }
   },
   mounted() {
@@ -158,7 +159,8 @@ export default {
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
-    
+    if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
+    if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
   },
   methods: {
     getTokenRole() {
