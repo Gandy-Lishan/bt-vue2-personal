@@ -18,7 +18,7 @@
         let timeframe = chart_data.timeframe
 
         CIQ.addCover()
-        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         CIQ.store.commit('form/getFrequency', timeframe) //考虑到addSeries必须写死timeframe
         CIQ.store.commit('form/getBacktestSymbol', symbol)
         CIQ.stxx.loadChart({ 
@@ -29,13 +29,13 @@
             function () {
                 // 有result的情况下(success)执行此回调并计算TIM
                 if(chart_data.result){
-                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result)
+                    CIQ.createCorrelationPatternMatchDrawing(chart_data.result, 'cpm')
                     CIQ.createCPMMarker(chart_data.result)
                     cb()
                 }
 
                 CIQ.hideCover()
-                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                //CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }
         ) 
     }
