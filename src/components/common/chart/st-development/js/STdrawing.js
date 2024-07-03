@@ -121,7 +121,7 @@ let __st_js_drawing_ = _exports => {
     }
     
     CIQ.createCPMMarker = function(dataSet){
-        let quotes = pairDates(dataSet)
+        let quotes = pairDatesCPM(dataSet)
         quotes.forEach(item => { 
             // 显示pattern标记
             var newNode;
