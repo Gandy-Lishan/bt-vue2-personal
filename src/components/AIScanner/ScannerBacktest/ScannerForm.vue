@@ -631,6 +631,26 @@ export default {
           label: 'Double Bottom',
           check: true
         },
+        {
+          value: 'Triple Tap',
+          label: 'Triple Tap',
+          check: true
+        },
+        {
+          value: 'Rounding Bottom',
+          label: 'Rounding Bottom',
+          check: true
+        },
+        {
+          value: 'Ascending Channel',
+          label: 'Ascending Channel',
+          check: true
+        },
+        {
+          value: 'Descending Channel',
+          label: 'Descending Channel',
+          check: true
+        },
       ],
       rules: {
         long_ratio: [
