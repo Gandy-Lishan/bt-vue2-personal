@@ -388,7 +388,7 @@ export const CommonMethodsMixin = {
 					backtestInfo.entry2_description = Array.isArray(entry2_description) ? JSON.stringify(entry2_description) : entry2_description;
 					backtestInfo.exit2_description = Array.isArray(exit2_description) ? JSON.stringify(exit2_description) : exit2_description;
 					// 属性传递默认值
-					backtestInfo.risk_control = '//'
+					// backtestInfo.risk_control = '//'
 					backtestInfo.exclude_oo = 0
 					backtestInfo.market_environment = 0
 					backtestInfo.index_moving_average_slope = 0
