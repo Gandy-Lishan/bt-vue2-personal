@@ -1361,8 +1361,13 @@ export default {
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
+        var customStocksListTemp = vm.customStocksList.filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
        
-        let list = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp)
         let options = []
         let wholeWord = []
         // keyword全匹配
