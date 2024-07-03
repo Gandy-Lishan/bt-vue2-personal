@@ -263,76 +263,129 @@ CIQ.hideMarker = function(){
 	}catch(err){}	
 }
 
+// // 为了方便，用一次性marker,不注册了
+// CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
+// 	CIQ.createOneTimePatternMarker(date,name)
+
+// 	var quotes = CIQ.stxx.chart.dataSet;
+// 	for (var i = 0; i < quotes.length; i++) {
+// 		var quote = quotes[i];
+
+// 		let item = pionts.find(x=>{
+// 			var datatime = new Date(x.Date)
+// 			var offset = datatime.getTimezoneOffset() * 60 * 1000
+// 			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+// 			return standardDate.getTime()==quote.DT.getTime()
+// 		})
+// 		if(item){
+// 			// 添加study panel对应的小点
+// 			let yAxis = item.PointType == 'High' ? quote['High'] : quote['Low']
+// 			new CIQ.Marker({
+// 				stx: CIQ.stxx,
+// 				xPositioner: "date",
+// 				yPositioner: "value",
+// 				y:yAxis,
+// 				x: quote.DT,
+// 				label: "dot",
+// 				node: new CIQ.Marker.stPerformance({
+// 					type: "circle",
+// 					category: 'highlowline',
+// 					displayCategory: false,
+// 					displayStem: false,	
+// 				})
+// 			});
+// 		}
+// 	}
+
+// 	CIQ.stxx.draw();
+// }
 // 为了方便，用一次性marker,不注册了
 CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
 	CIQ.createOneTimePatternMarker(date,name)
 
 	var quotes = CIQ.stxx.chart.dataSet;
-	for (var i = 0; i < quotes.length; i++) {
-		var quote = quotes[i];
 
-		let item = pionts.find(x=>{
-			var datatime = new Date(x.Date)
-			var offset = datatime.getTimezoneOffset() * 60 * 1000
-			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-			return standardDate.getTime()==quote.DT.getTime()
-		})
-		if(item){
-			// 添加study panel对应的小点
-			let yAxis = item.PointType == 'High' ? quote['High'] : quote['Low']
-			new CIQ.Marker({
-				stx: CIQ.stxx,
-				xPositioner: "date",
-				yPositioner: "value",
-				y:yAxis,
-				x: quote.DT,
-				label: "dot",
-				node: new CIQ.Marker.stPerformance({
-					type: "circle",
-					category: 'highlowline',
-					displayCategory: false,
-					displayStem: false,	
-				})
-			});
-		}
+	console.time("🚗 🚗Total execution time");
+    // 将 entryTradeDateArr 转换为一个字典（哈希表）
+	let piontsDict = {};
+	for (let i = 0; i < pionts.length; i++) {
+		var datatime = new Date(x.Date)
+		var offset = datatime.getTimezoneOffset() * 60 * 1000
+		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime();
+		piontsDict[standardDate] = true;
 	}
 
+	for (var i = 0; i < quotes.length; i++) {
+		var quote = quotes[i];
+		if (quote.DT) {
+            var quoteTime = quote.DT.getTime();
+			// 使用字典来查找
+            if (piontsDict[quoteTime]) {
+				// 添加study panel对应的小点
+				let yAxis = item.PointType == 'High' ? quote['High'] : quote['Low']
+				new CIQ.Marker({
+					stx: CIQ.stxx,
+					xPositioner: "date",
+					yPositioner: "value",
+					y:yAxis,
+					x: quote.DT,
+					label: "dot",
+					node: new CIQ.Marker.stPerformance({
+						type: "circle",
+						category: 'highlowline',
+						displayCategory: false,
+						displayStem: false,	
+					})
+				});
+			}
+		}
+	}
+	console.timeEnd("🚗 🚗Total execution time");
 	CIQ.stxx.draw();
 }
-
 CIQ.createOneTimeScannerMarkerHammer = function(trades,date,signal){	
 	CIQ.createOneTimePatternMarker(date,signal)
 
 	// 显示trade study标记
 	var newNode;
 	var quotes = CIQ.stxx.chart.dataSet;
-	for (var i = 0; i < quotes.length; i++) {
-		var quote = quotes[i];
-		let entryTradeDateArr = eval('(' + trades + ')')
-		if(entryTradeDateArr){
-			let item = entryTradeDateArr.find(x=>{
-				var datatime = new Date(x)
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-				return standardDate.getTime()==quote.DT.getTime()
-			})
-			if(item){
-				newNode = document.querySelector("#stxMessage").cloneNode(true);
-				newNode.id = null;
-				newNode.innerHTML = signal;
-				
-				// hammer显示在进场前一天
-				new CIQ.Marker({
-					stx: CIQ.stxx,
-					xPositioner: "date",
-					x: quotes[i-1].DT,
-					label: "events",
-					node: newNode
-				});
-			}
+
+	//console.time("🚗 🚗Total execution time");
+    // 将 entryTradeDateArr 转换为一个字典（哈希表）
+    let entryTradeDateArr = eval('(' + trades + ')')
+	let entryTradeDateDict = {};
+	if(entryTradeDateArr){
+		for (let i = 0; i < entryTradeDateArr.length; i++) {
+			var datatime = new Date(entryTradeDateArr[i]);
+			var offset = datatime.getTimezoneOffset() * 60 * 1000;
+			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime();
+			entryTradeDateDict[standardDate] = true;
 		}
 	}
 
+    for (var i = 0; i < quotes.length; i++) {
+        var quote = quotes[i];
+        if (quote.DT) {
+            var quoteTime = quote.DT.getTime();
+
+            // 使用字典来查找
+            if (entryTradeDateDict[quoteTime]) {
+                newNode = document.querySelector("#stxMessage").cloneNode(true);
+                newNode.id = null;
+                newNode.innerHTML = signal;
+
+                // hammer显示在进场前一天
+                new CIQ.Marker({
+                    stx: CIQ.stxx,
+                    xPositioner: "date",
+                    x: quotes[i - 1].DT,
+                    label: "events",
+                    node: newNode
+                });
+            }
+        }
+    }
+	//console.timeEnd("🚗 🚗Total execution time");
 	CIQ.stxx.draw();
 }
 CIQ.createOneTimeLastSignalMarker = function(date,content,comparisonSymbolUrl){
