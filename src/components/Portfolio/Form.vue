@@ -312,7 +312,7 @@
       </el-table-column>
     </el-table>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
+      <el-button @click="dialogTableVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
       <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm selection</el-button>
    </span>
     </el-dialog>
