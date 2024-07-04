@@ -124,7 +124,7 @@ if (!CIQ.Studies) {
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 		
 				var showSupLine = (!sd.parameters.showSupLine && sd.parameters.showSupLine!=0)?null:sd.parameters.showSupLine
-				var yAxis = CIQ.stxx.panels[sd.name].yAxis
+				var yAxis = CIQ.stxx.panels[sd.panel].yAxis
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
 			calculateFN: CIQ.Studies.calculateRSI,
