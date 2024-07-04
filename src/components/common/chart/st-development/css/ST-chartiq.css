@@ -807,3 +807,6 @@ cq-side-nav{
 cq-side-nav .ciq-toggles{
   width: 100%;
 }
+cq-scroll {
+  height: 600px !important;
+}
