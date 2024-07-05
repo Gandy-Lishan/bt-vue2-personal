@@ -207,7 +207,7 @@ computed: {
 			const sums = [] //声明变量
 			columns.forEach((column, index) => {
 				if (index === 0) {
-					sums[index] = 'Average'
+					sums[index] = 'Average(%)'
 					return
 				}
 				// if (index === 1) {
@@ -238,7 +238,7 @@ computed: {
 				// *****************************************************
 
 				sums[index] = sums[index].toFixed(2)
-				sums[index] = sums[index] + ' %'
+				sums[index] = isNaN(sums[index]) ? '' : sums[index]
 			})
 			return sums
 		},
@@ -248,7 +248,6 @@ computed: {
       };
 		},
 		handleDownloadCsv() {
-			debugger
 			console.log('backtestResultList', this.backtestResultList)
 			const backtestHistoryList = this.backtestResultList
 			const result_quotes = this.result_quotes
