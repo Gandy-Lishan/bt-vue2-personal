@@ -7,7 +7,7 @@ import states from './modules/states'
 import user from './modules/user'
 
 Vue.use(Vuex)
-
+// TODO
 const store = new Vuex.Store({
   modules: {
     chart,
