@@ -1,5 +1,6 @@
 <template>
   <div class="MI-container">
+    <h4>Create My Own Indicator</h4>
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
@@ -9,7 +10,7 @@
 		size="mini"
     :rules="rules"
 	>
-		<h4>Create My Own Indicator</h4>
+
 		<div class="MI-form-top">
 			<el-form-item
 				label="1.Name"
@@ -1367,11 +1368,11 @@ export default {
  }
 h4 {
 	text-align: center;
-	margin: 0 0 30px 0;
+	margin: 0;
 	padding: 10px 0;
 	background: #5b9bd1;
 	color: white;
-	border-radius: 5px;
+	border-radius: 5px 5px 0 0;
 }
 .MI-form-container {
 	display: grid;
@@ -1379,9 +1380,10 @@ h4 {
 	margin: 0 auto;
 	align-items: center;
 	border: 1px solid #5b9bd1;
-	border-radius: 5px;
+	border-radius: 0 0 5px 5px;
 	padding: 0 10px 10px 10px;
   margin-bottom: 50px;
+  padding-top: 30px;
 }
 .WIC-form-container {
 	display: grid;
