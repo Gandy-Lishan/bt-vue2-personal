@@ -332,11 +332,6 @@ export default {
 						Field: "Close"
 					});
 				}
-
-        let chartDataset = CIQ.stxx.chart.dataSet
-        if(!('High' in chartDataset[0])){
-          CIQ.stxx.setChartType("candle");
-        }
 				
 				resolve()
 			 })	

@@ -93,9 +93,15 @@ const state = {
 	mySymbolQuotefeedCache: [],
 	myIndicatorList: [],
 	favIndicatorList: null,
+
+	//chart_type
+	chartType: 'line',
 }
 
 const mutations = {
+	SET_CHART_TYPE(state, val){
+		state.chartType = val
+	},
 	SET_MYSYMBOL_QUOTEFEED_CACHE(state,list){
 		state.mySymbolQuotefeedCache = list
 	},
@@ -293,6 +299,10 @@ const mutations = {
 }
 
 const actions = {
+	/** 控制图表绘制类型,line或者candle, myIndicator用CIQ.isOHLCVSelectedMI指标控制特殊判断 */
+	set_chart_type({ commit }, val) {
+		commit('SET_CHART_TYPE', val)
+	},
 	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
 	get_mysymbolCSV({ commit }, obj) {
 		return new Promise(async (resolve,reject) => {

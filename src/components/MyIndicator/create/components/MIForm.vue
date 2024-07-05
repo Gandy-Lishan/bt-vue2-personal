@@ -999,7 +999,6 @@ export default {
           this.data[urlProp] = ''
         }
       }
-
       if (isIndicator) {
         clearIndicatorIfMatch(this.sentimentList, 'indicator_1_url', 'indicator_1', 'Indicator')
         clearIndicatorIfMatch(this.sentimentList, 'indicator_2_url', 'indicator_2', 'Indicator')
@@ -1009,7 +1008,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if (isSymbol) {
@@ -1021,7 +1019,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if(isWIC) {
@@ -1030,11 +1027,15 @@ export default {
         this.data['indicator_2'] = ''
         this.data['indicator_2_url'] = ''
 
-        this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
+        this.OHLCVData = {symbol:'', condition:''} 
       }
 
+      CIQ.isOHLCVSelectedMI = false
+      this.$store.dispatch('chart/set_chart_type', 'line')
       if(isOHLCV) {
+        CIQ.isOHLCVSelectedMI = true
+        this.$store.dispatch('chart/set_chart_type', 'candle')
+        
         this.data['indicator_1'] = ''
         this.data['indicator_1_url'] = ''
         this.data['indicator_2'] = ''
@@ -1044,8 +1045,8 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
-        CIQ.stxx.setChartType("candle"); 
       }
+      CIQ.stxx.setChartType(this.$store.getters.getChartType); 
 
       this.dropdownList = this.getList()
 
