@@ -39,6 +39,7 @@
 									:data="backtestResultList"
 									stripe
 									show-summary
+									:summary-method="getSummaries"
 									class="aiResultsTable"
 									border
 								>
