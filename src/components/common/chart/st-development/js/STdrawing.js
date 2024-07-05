@@ -4,7 +4,7 @@ let __st_js_drawing_ = _exports => {
 
     var CIQ = typeof _CIQ !== 'undefined' ? _CIQ : _exports.CIQ
 
-    CIQ.createCorrelationPatternMatchDrawing = function(dataSet){
+    CIQ.createCorrelationPatternMatchDrawing = function(dataSet, type, numOfBars){
         // CIQ.Drawing.rectangle.prototype.intersected = function (tick, value, box) {
         //     if (!this.p0 || !this.p1) return null; // in case invalid drawing (such as from panel that no longer exists)
         //     var pointsToCheck = { 0: this.p0, 1: this.p1 };
@@ -47,7 +47,13 @@ let __st_js_drawing_ = _exports => {
 
         // Set all drawings to permanent
         CIQ.Drawing.prototype.permanent = true;    
-        let quotes = pairDates(dataSet)
+        let quotes
+        if(type == 'scannerai'){
+            quotes = pairDatesScanner(dataSet,numOfBars)
+        }
+        else if(type == 'cpm'){
+            quotes = pairDatesCPM(dataSet)
+        }
         //const yAxis = CIQ.stxx.chart.yAxis    
         //const offset = (yAxis.high-yAxis.low)/4            // 依据Y轴长度设定的偏移量，以保证模式匹配阴影覆盖整个高度
         
@@ -115,7 +121,7 @@ let __st_js_drawing_ = _exports => {
     }
     
     CIQ.createCPMMarker = function(dataSet){
-        let quotes = pairDates(dataSet)
+        let quotes = pairDatesCPM(dataSet)
         quotes.forEach(item => { 
             // 显示pattern标记
             var newNode;
@@ -143,7 +149,21 @@ let __st_js_drawing_ = _exports => {
         CIQ.stxx.draw()
     }
 
-    function pairDates(obj) {
+    function pairDatesScanner(arr,numOfBars) {
+        const endDateArr = arr;
+
+        // 创建新的配对数组
+        const pairArray = endDateArr.map((endDate) => {
+            let startDate = CIQ.getStartDateByNumberOfBars(endDate,numOfBars)
+            if (startDate) {
+                return [startDate, endDate];
+            }
+            return null;
+        }).filter(pair => pair !== null);;
+        debugger
+        return pairArray;
+    }
+    function pairDatesCPM(obj) {
         const startDateArr = obj['Start Date'];
         const endDateArr = obj['End Date'];
         const corrArr = obj['Correlation Percentage']

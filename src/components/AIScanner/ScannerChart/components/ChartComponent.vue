@@ -176,6 +176,16 @@ export default {
 				// 默认显示signal indicator 和 tech indicator,如果没有就不显示
 				//if(this.other['_Signal'] == 'MA') this.other['_Signal'] = 'Moving Average'
         const ma_color = this.$store.getters.getColorByCriteriaAndIndex(0, 0)
+        const patternMap = {
+          'Head and Shoulders Top': 17,
+          'Head and Shoulders Bottom': 17,
+          'Double Top': 13,
+          'Double Bottom': 13,
+          'Triple Tap': 21,
+          'Rounding Bottom': 21,
+          'Ascending Channel': 16,
+          'Descending Channel': 19,
+        };
 				switch(this.other['_Signal']){
 					case "Symbol Close > its\' MA200 and Optix MA5 < 35":
 						await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
@@ -300,6 +310,19 @@ export default {
 						CIQ.createOneTimePatternMarker(this.other.date,"MACD")
 						
 						break;
+          /** CPM pattern */
+          case 'Head and Shoulders Top' :   
+          case 'Head and Shoulders Bottom' :
+          case 'Double Top' : 
+          case 'Double Bottom' :
+          case 'Triple Tap' :
+          case 'Rounding Bottom' :
+          case 'Ascending Channel' :
+          case 'Descending Channel' :
+            const entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
+            CIQ.createCorrelationPatternMatchDrawing(entryTradeDateArr, 'scannerai', patternMap[this.other['_Signal']]);
+            CIQ.createOneTimePatternMarker(this.other.date,this.other['_Signal'])
+            break;
 					default: 
 				}
 				if(this.other['Category'] != 'MidTermAI'){
@@ -309,8 +332,7 @@ export default {
 						Field: "Close"
 					});
 				}
-
-				CIQ.stxx.setChartType("candle");
+				
 				resolve()
 			 })	
 		},

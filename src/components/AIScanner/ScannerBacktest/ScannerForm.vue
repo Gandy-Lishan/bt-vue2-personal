@@ -609,7 +609,48 @@ export default {
           value: 'RSI',
           label: 'RSI',
           check: true
-        }
+        },
+        /** cpm pattern */
+        {
+          value: 'Head and Shoulders Top',
+          label: 'Head and Shoulders Top',
+          check: true
+        },
+        {
+          value: 'Head and Shoulders Bottom',
+          label: 'Head and Shoulders Bottom',
+          check: true
+        },
+        {
+          value: 'Double Top',
+          label: 'Double Top',
+          check: true
+        },
+        {
+          value: 'Double Bottom',
+          label: 'Double Bottom',
+          check: true
+        },
+        {
+          value: 'Triple Tap',
+          label: 'Triple Tap',
+          check: true
+        },
+        {
+          value: 'Rounding Bottom',
+          label: 'Rounding Bottom',
+          check: true
+        },
+        {
+          value: 'Ascending Channel',
+          label: 'Ascending Channel',
+          check: true
+        },
+        {
+          value: 'Descending Channel',
+          label: 'Descending Channel',
+          check: true
+        },
       ],
       rules: {
         long_ratio: [

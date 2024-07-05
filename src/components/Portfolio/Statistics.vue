@@ -45,6 +45,23 @@
 					</template>
 				</el-table-column>
 				<el-table-column
+					prop="total_return"
+					show-overflow-tooltip
+					label="TOTAL RETURN %"
+					align="center"
+					algin="center"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.total_return >= 0">{{
+							scope.row.total_return
+						}}%</span>
+						<span v-else-if="isNaN(scope.row.total_return)"></span>
+						<span v-else style="color: #dd3a13">{{
+							scope.row.total_return
+						}}%</span>
+					</template>
+				</el-table-column>
+				<el-table-column
 						prop="cash"
 						label="CASH"
 						align="center"
@@ -76,7 +93,7 @@
 				</el-table-column>
 				<el-table-column
 						prop="winrate"
-						label="WIN RATE"
+						label="WIN RATE %"
 						show-overflow-tooltip
 						align="center"
 				>
@@ -119,7 +136,7 @@
 			<template v-for="(l, index) in tableCol">
 				<el-table-column
 					v-if="['Symbol', 'Entry Price', 'Current Price', 
-					'Shares', 'Profit', 'Market Value', 'Strategy'
+					'Shares', 'Profit', 'Market Value'
 					].includes(l.label)"
 					show-overflow-tooltip
 					:prop="l.value"
@@ -129,13 +146,34 @@
 					:key="index"
 					:sortable="
 						[
-							'Symbol', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value', 'Strategy'
+							'Symbol', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value'
 						].includes(l.label)
 							? 'custom'
 							: false
 					"
 					>
-          </el-table-column>
+     </el-table-column>
+					<el-table-column
+     v-if="l.label == 'Strategy'"
+     show-overflow-tooltip
+     :prop="l.value"
+     :label="l.label"
+     :width="l.width"
+     :min-width="l.minWidth"
+     :max-width="l.maxWidth"
+     align="center"
+     :key="index"
+     :sortable="
+     l.label === 'Strategy' ? 'custom' : false
+     "
+     >
+     <template slot-scope="scope">
+        <div v-for="(item, index) in scope.row[l.value]" :key="index">
+            <p><span v-if="scope.row[l.value]?.length > 1">{{ index + 1 }}.</span
+             >{{ item }}</p>
+        </div>
+      </template>
+     </el-table-column>
 					<el-table-column
 					v-if="l.label == 'Total Position(%)'"
 					show-overflow-tooltip
@@ -237,7 +275,8 @@ export default {
 				{
 					label: 'Strategy',
 					value: 'Strategy',
-					key: 'Strategy'
+					key: 'Strategy',
+					minWidth: '200px'
 				}
       ],
 		}
@@ -317,6 +356,7 @@ export default {
         const obj = {}
         obj['TOTAL ASSETS'] = item.total_assets
         obj['FLOAT PROFIT'] = item.float_profit
+        obj['TOTAL RETURN %'] = `${item.total_return}%`
         obj['CASH'] = item.cash
         obj['MARKET VALUE'] = item.market_value
 				obj['WIN RATE %'] = `${item.winrate}%`
@@ -412,6 +452,9 @@ export default {
 		padding: 30px 0px 30px 0px;
 		border-bottom: 2px solid #dddddd;
 	}
+	/deep/ .el-table .cell {
+  white-space: break-spaces;
+ }
 }
 .CPM-summary {
 	margin: 5px 0;

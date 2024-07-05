@@ -264,8 +264,8 @@ export default {
 					// 还原文件对象的 raw 属性
 					if (code == 200 || code == 201) {
 						let _this = document.querySelector('cq-lookup')
-						await _this.updateMySymbol(_this.input.val(), 'CUSTOM SYMBOL')
-						_this.acceptText(_this.input.val(),'CUSTOM SYMBOL')
+						await this.$store.dispatch('chart/set_mysymbolist')
+						//_this.acceptText(_this.input.val(),'CUSTOM SYMBOL')
 						// 文件上傳成功後把對應file in list加上url屬性用於delete時作爲參數傳入
 						file.url = JSON.parse(data).url
 						self.$notify.success({

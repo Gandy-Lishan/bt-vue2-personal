@@ -130,6 +130,7 @@ let __st_js_utils_ = (_exports) => {
         var standardEndDate = new Date(end.setTime(end.getTime() + offset))
         if(standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()) standardEndDate = quotes[quotes.length-1].DT
         const startDateIndex = quotes.findIndex(item => item.DT.getTime()==standardEndDate.getTime()) - barDistance + 1
+        if(startDateIndex < 0) return
         const startDate = quotes[startDateIndex].Date
         return startDate.slice(0,4)+ '-' + startDate.slice(4,6)+ '-' + startDate.slice(6,8)
     }

@@ -1,9 +1,29 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import {
-    getAllMySymbolsList,getSymbolCsv
+    getAllMySymbolsList,getSymbolCsv,
+	getBTV1FavIndicator,getAllMyIndicatorsList,
 } from '@/service/service.js'
 import {Toast} from '@/utils'
-
+const toggleOverlaySymbol = function(displayStyle) {
+	var filters = document.querySelectorAll("cq-lookup-filters");
+	
+	filters.forEach(function(filter) {
+	  var overlay = filter.querySelector(".overlay");
+	  if (overlay) {
+		overlay.style.display = displayStyle;
+	  }
+	});
+  }
+const toggleOverlayIndicator = function(displayStyle) {
+	var filters = document.querySelectorAll("cq-indicators-lookup-filters");
+	
+	filters.forEach(function(filter) {
+	  var overlay = filter.querySelector(".overlay");
+	  if (overlay) {
+		overlay.style.display = displayStyle;
+	  }
+	});
+  }
 const state = {
 	curDate: '', //ai
 	studySettingMA: { period: '', criteria: '', panelIndex: '' }, //chartiq
@@ -71,14 +91,28 @@ const state = {
 	//用戶自定義symbolList, 緩存在vuex
 	mySymbolList: [],
 	mySymbolQuotefeedCache: [],
+	myIndicatorList: [],
+	favIndicatorList: null,
+
+	//chart_type
+	chartType: 'line',
 }
 
 const mutations = {
+	SET_CHART_TYPE(state, val){
+		state.chartType = val
+	},
 	SET_MYSYMBOL_QUOTEFEED_CACHE(state,list){
 		state.mySymbolQuotefeedCache = list
 	},
 	SET_MYSYMBOLLIST(state,list){
 		state.mySymbolList = list
+	},
+	SET_MYINDICATORLIST(state,list){
+		state.myIndicatorList = list
+	},
+	SET_FAVINDICATORLIST(state,obj){
+		state.favIndicatorList = obj
 	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
@@ -265,6 +299,10 @@ const mutations = {
 }
 
 const actions = {
+	/** 控制图表绘制类型,line或者candle, myIndicator用CIQ.isOHLCVSelectedMI指标控制特殊判断 */
+	set_chart_type({ commit }, val) {
+		commit('SET_CHART_TYPE', val)
+	},
 	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
 	get_mysymbolCSV({ commit }, obj) {
 		return new Promise(async (resolve,reject) => {
@@ -301,10 +339,26 @@ const actions = {
 		})
 	},
 	// 獲取mysymbol列表包括url和name etc.
-	set_mysymbolist({ commit }, cb) {
+	set_mysymbolist({ commit }) {
 		return new Promise(async resolve => {
-			let res = await getAllMySymbolsList(1,cb)
-			commit('SET_MYSYMBOLLIST', res)
+			toggleOverlaySymbol('flex');
+			await getAllMySymbolsList(1,(data)=>{
+				commit('SET_MYSYMBOLLIST',data)
+			})
+			toggleOverlaySymbol('none');
+			resolve()
+		})
+	},
+	// 獲取myindicator和favindicator列表
+	set_myindicator({ commit }) {
+		return new Promise(async resolve => {
+			toggleOverlayIndicator('flex');
+			let btvFavIndi = await getBTV1FavIndicator()
+			commit('SET_FAVINDICATORLIST', btvFavIndi)
+			await getAllMyIndicatorsList(1,(data)=>{
+				commit('SET_MYINDICATORLIST',data)
+			})
+			toggleOverlayIndicator('none');
 			resolve()
 		})
 	},

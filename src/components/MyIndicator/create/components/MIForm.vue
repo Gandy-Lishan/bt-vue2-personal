@@ -1,5 +1,6 @@
 <template>
   <div class="MI-container">
+    <h4>Create My Own Indicator</h4>
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
@@ -9,7 +10,7 @@
 		size="mini"
     :rules="rules"
 	>
-		<h4>Create My Own Indicator</h4>
+
 		<div class="MI-form-top">
 			<el-form-item
 				label="1.Name"
@@ -999,7 +1000,6 @@ export default {
           this.data[urlProp] = ''
         }
       }
-
       if (isIndicator) {
         clearIndicatorIfMatch(this.sentimentList, 'indicator_1_url', 'indicator_1', 'Indicator')
         clearIndicatorIfMatch(this.sentimentList, 'indicator_2_url', 'indicator_2', 'Indicator')
@@ -1009,7 +1009,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if (isSymbol) {
@@ -1021,7 +1020,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if(isWIC) {
@@ -1030,11 +1028,15 @@ export default {
         this.data['indicator_2'] = ''
         this.data['indicator_2_url'] = ''
 
-        this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
+        this.OHLCVData = {symbol:'', condition:''} 
       }
 
+      CIQ.isOHLCVSelectedMI = false
+      this.$store.dispatch('chart/set_chart_type', 'line')
       if(isOHLCV) {
+        CIQ.isOHLCVSelectedMI = true
+        this.$store.dispatch('chart/set_chart_type', 'candle')
+        
         this.data['indicator_1'] = ''
         this.data['indicator_1_url'] = ''
         this.data['indicator_2'] = ''
@@ -1044,8 +1046,8 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
-        CIQ.stxx.setChartType("candle"); 
       }
+      CIQ.stxx.setChartType(this.$store.getters.getChartType); 
 
       this.dropdownList = this.getList()
 
@@ -1367,11 +1369,11 @@ export default {
  }
 h4 {
 	text-align: center;
-	margin: 0 0 30px 0;
+	margin: 0;
 	padding: 10px 0;
 	background: #5b9bd1;
 	color: white;
-	border-radius: 5px;
+	border-radius: 5px 5px 0 0;
 }
 .MI-form-container {
 	display: grid;
@@ -1379,9 +1381,10 @@ h4 {
 	margin: 0 auto;
 	align-items: center;
 	border: 1px solid #5b9bd1;
-	border-radius: 5px;
+	border-radius: 0 0 5px 5px;
 	padding: 0 10px 10px 10px;
   margin-bottom: 50px;
+  padding-top: 30px;
 }
 .WIC-form-container {
 	display: grid;
