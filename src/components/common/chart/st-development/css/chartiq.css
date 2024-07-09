@@ -1067,7 +1067,7 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover > sp
 .ciq-draw span {
   background-position: -250px -25px; }
 
-#grid,#lastP{
+#grid,#lastP,#report{
   margin-left: 10px;
 }
 .lastP span {

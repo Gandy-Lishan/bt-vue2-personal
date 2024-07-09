@@ -5,7 +5,7 @@ const compression = require("compression")
 const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
 var history = require('connect-history-api-fallback');
-
+const Mock = require('mockjs')
 // // algolia search
 // const algoliasearch = require('algoliasearch')
 // const searchClient = algoliasearch(
@@ -66,6 +66,23 @@ app.get('/api/strategiesJSON', (req, res) => {
         //res.end( data );
     });
 });
+
+// const useMock = true
+// app.get('/api/forecastList', (req, res) => {
+// if (useMock) {
+//     const list = Mock.mock({
+//         'list|1-10': [{
+//           'url': '@url', // 随机生成一个网址
+//           'trend': '@pick(["up", "down"])', // 随机选择一个趋势
+//           'description': '@sentence(5, 10)', // 随机生成一句描述
+//           'reportDate': '@date("yyyy-MM-dd")' // 随机生成一个日期
+//         }]
+//       });
+//     res.send(list)
+//     return
+// }
+// // ...res.send(normal business logic response data)
+// })
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
 app.use(express.static(path.join(__dirname, 'dist')))
@@ -82,6 +99,7 @@ app.use('/ai', (req, res, next) => {
     res.setHeader('Expires', '0');
     next();
 });
+
 
 if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
     let url =get_env("api_url",'https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com/')

@@ -1373,3 +1373,18 @@ export function getSymbolCsv(fileID,timeframe) {
 	})
 }
 /** MySymbol 接口END */
+
+export function getForecastList(symbol) {
+	const url = `/dev/dev/forecastreport/?symbol=${symbol}`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

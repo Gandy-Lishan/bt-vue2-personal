@@ -166,6 +166,12 @@ const routes = [
 			require(['@/components/Portfolio/index.vue'], resolve),
 	},
 	{
+		path: '/reports',
+		name: 'Reports',
+		component: resolve =>
+			require(['@/components/Reports/index.vue'], resolve),
+	},
+	{
 		path: '/cpm',
 		name: 'CPM',
 		component: resolve =>

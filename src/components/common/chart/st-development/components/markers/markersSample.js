@@ -263,7 +263,8 @@ CIQ.hideMarker = function(){
 	}catch(err){}	
 }
 
-// 为了方便，用一次性marker,不注册了
+// 定义global一次性marker,不注册了
+/** CPM page */
 CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
 	CIQ.createOneTimePatternMarker(date,name)
 
@@ -417,7 +418,6 @@ CIQ.createOneTimePatternMarker = function(date,content){
 	});
 	CIQ.stxx.draw()
 }
-
 CIQ.setMarkerVisibility = function(type){
 	//let markerVisibilityType = type=='buy'? "triangle_buy": "triangle_sell"
 	const visibilityTypeMap = {
@@ -433,6 +433,64 @@ CIQ.setMarkerVisibility = function(type){
 		CIQ.MarkersSample.showMarkers('mMarker')
 	}else{
 		CIQ.MarkersSample.setMarkerInvisibe(markerVisibilityType)
+	}
+}
+
+/** Report page */
+CIQ.createForecastMarker = async function(type){
+	const list = await CIQ.store.dispatch('chart/set_forecast',CIQ.stxx.chart.symbol)
+	const bullishList = list.filter(i=>i.forecast == 'Down')
+	const bearishList = list.filter(i=>i.forecast == 'Up')
+	if(!type || type == 'bullish'){
+		for (var i = 0; i < bullishList.length; i++) {
+			const {post_date,title,url,author} = bullishList[i]
+			var newNode;
+			var post_date_str = post_date.slice(0,10)
+			var datatime = new Date(post_date_str)
+			var offset = datatime.getTimezoneOffset() * 60 * 1000
+			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				newNode = document.querySelector("#stxForecast").cloneNode(true);
+				newNode.id = null;
+				newNode.classList.add('bullish')
+				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
+				new CIQ.Marker({
+					stx: CIQ.stxx,
+					xPositioner: "date",
+					x: standardDate,
+					label: "bullish",
+					node: newNode
+				});
+		}
+	}
+	if(!type || type == 'bearish'){
+		for (var i = 0; i < bearishList.length; i++) {
+			const {post_date,title,url,author} = bearishList[i]
+			var newNode;
+			var post_date_str = post_date.slice(0,10)
+			var datatime = new Date(post_date_str)
+			var offset = datatime.getTimezoneOffset() * 60 * 1000
+			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				newNode = document.querySelector("#stxForecast").cloneNode(true);
+				newNode.id = null;
+				newNode.classList.add('bearish')
+				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
+				new CIQ.Marker({
+					stx: CIQ.stxx,
+					xPositioner: "date",
+					x: standardDate,
+					label: "bearish",
+					node: newNode
+				});
+		}
+	}
+	CIQ.stxx.draw()
+}
+CIQ.removeForecastMarker = async function(type){
+	if(!type || type == 'bullish'){
+		CIQ.Marker.removeByLabel(CIQ.stxx, 'bullish');
+	}
+	if(!type || type == 'bearish'){
+		CIQ.Marker.removeByLabel(CIQ.stxx, 'bearish');
 	}
 }
 export {CIQ};
