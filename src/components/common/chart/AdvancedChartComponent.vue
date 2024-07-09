@@ -79,6 +79,24 @@
 							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown v-if="routeName == 'Reports'">
+						<cq-toggle class="report" id="report" @click="toggleReportsEvents('bullish')">
+							<span style='margin-right:10px;width: 32px'>
+							<svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'>
+								<rect x='192' y='192' width='640' height='640' fill='#1afa29'></rect>
+							</svg>
+							</span>
+							<cq-tooltip>bullish</cq-tooltip>
+						</cq-toggle>
+						<cq-toggle class="report" id="report" @click="toggleReportsEvents('bearish')">
+							<span style='margin-right:10px;width: 32px'>
+							<svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'>
+								<rect x='192' y='192' width='640' height='640' fill='#d81e06'></rect>
+							</svg>
+							</span>
+							<cq-tooltip>bearish</cq-tooltip>
+						</cq-toggle>
+					</cq-info-toggle-dropdown>
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
@@ -348,8 +366,10 @@
 			<span class="content"></span>
 			<span class="tooltip"></span>
 		</div>
-
+		<!-- last signal marker -->
 		<div id="stxMessage" class="myMes">
+		<!-- last signal marker -->
+		<div id="stxForecast" class="forecast"></div>
 		</div>
 	</cq-context>
 </template>
@@ -377,12 +397,20 @@ export default class AdvancedChartComponent extends Vue {
 	stx: CIQ.ChartEngine | undefined
 	isCollapse: boolean | undefined
 	resizeObserver: any | undefined
+	reportsAreDisplayed: any | undefined
+	routeName: string | null | undefined
 	
 	constructor() {
 		super()
 		this.isCollapse = false 
 		this.resizeObserver = null
+		this.reportsAreDisplayed = {
+			bullish: true,
+			bearish: true,
+		}
+		this.routeName = this.$route.name
 	}
+
 	mounted() {
 		const config = this.config || getCustomConfig()
 		
@@ -421,10 +449,6 @@ export default class AdvancedChartComponent extends Vue {
 				CIQ.studys.push(study)
 			}
 			
-			// 默认为折线图
-			// const chartType = this.$store.getters.getChartType
-			// debugger
-			// CIQ.stxx.setChartType(chartType);
 			CIQ.stxx.setLineStyle({ width: 3 });
 
 			// 防止Chartiq图表对主页面的鼠标滚轮事件产生冲突
@@ -540,7 +564,17 @@ export default class AdvancedChartComponent extends Vue {
 
 		CIQ.setMarkerVisibility(type)
 	}
+	toggleReportsEvents(typeOfEvent) {
+		if (this.reportsAreDisplayed[typeOfEvent]) {
+			this.reportsAreDisplayed[typeOfEvent] = false;
+			CIQ.removeForecastMarker(typeOfEvent)
+		} else {
+			CIQ.createForecastMarker(typeOfEvent);
+			this.reportsAreDisplayed[typeOfEvent] = true;
+		}
 
+	}
+	
 	resizePatternMatch() {
 		const yAxis = CIQ.stxx.chart.yAxis	
 		//console.log(yAxis)

@@ -16,12 +16,9 @@
         mode="horizontal"
         @select="handleSelect"
       >
-        <!-- <el-menu-item class="ai-link" v-if="activeIndex==3"
-          >Smart Stock Scanner</el-menu-item
-        > -->
-        <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
-          >BacktestEdge</el-menu-item
-        > -->
+        <el-menu-item class="home-link" index="12"
+          >Reports</el-menu-item
+        >
         <el-menu-item class="home-link" index="9"
           >Strategy</el-menu-item
         >
@@ -132,6 +129,8 @@ export default {
         this.activeIndex = '9'
       }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
         this.activeIndex = '11'
+      }else if(to.path.includes('/reports') || to.name == 'Reports'){
+        this.activeIndex = '12'
       }
       // const currentDomain = window.location.hostname;
     // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
@@ -155,6 +154,8 @@ export default {
       this.activeIndex = '9'
     }else if(this.$route.name == 'Portfolio'){
       this.activeIndex = '11'
+    }else if(this.$route.name == 'Reports'){
+      this.activeIndex = '12'
     }
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
@@ -172,11 +173,6 @@ export default {
       if (key == '1') {
         path = this.$router.resolve({
           path: '/'
-        }).href
-        this.$router.push(path)
-      } else if (key == '2') {
-        path = this.$router.resolve({
-          path: '/home/strategy'
         }).href
         this.$router.push(path)
       } else if (key == '3') {
@@ -218,6 +214,11 @@ export default {
       }else if(key == '11') {
         path = this.$router.resolve({
           path: '/portfolio'
+        }).href
+        this.$router.push(path)
+      }else if(key == '12') {
+        path = this.$router.resolve({
+          path: '/reports'
         }).href
         this.$router.push(path)
       }

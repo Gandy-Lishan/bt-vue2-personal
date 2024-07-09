@@ -2,6 +2,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import {
     getAllMySymbolsList,getSymbolCsv,
 	getBTV1FavIndicator,getAllMyIndicatorsList,
+	getForecastList,
 } from '@/service/service.js'
 import {Toast} from '@/utils'
 const toggleOverlaySymbol = function(displayStyle) {
@@ -96,9 +97,15 @@ const state = {
 
 	//chart_type
 	chartType: 'line',
+
+	//forecast
+	forecastList: [],
 }
 
 const mutations = {
+	SET_FORECAST(state, list){
+		state.forecastList = list
+	},
 	SET_CHART_TYPE(state, val){
 		state.chartType = val
 	},
@@ -299,6 +306,36 @@ const mutations = {
 }
 
 const actions = {
+	set_forecast({ commit }, symbol) {
+		return new Promise(async (resolve,reject) => {
+			const result = state.forecastList
+			if(result.length == 0){
+				try{
+					const res = await getForecastList(symbol)
+					if (res.status === 200 || res.status === 201) {
+						const list = res.data
+						commit('SET_FORECAST', list)
+						resolve(list)
+					}else if (res.data.status === 401) {
+						Toast('Symbol not provided.',2000)
+						reject(new Error('Symbol not provided.'));
+					} else if (res.data.status === 404) {
+						Toast('Such symbol no related report.',2000)
+						reject(new Error('Such symbol no related report.'));
+					} else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.data.status}`));
+					}
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(result)
+			}
+		})
+	},
+	
 	/** 控制图表绘制类型,line或者candle, myIndicator用CIQ.isOHLCVSelectedMI指标控制特殊判断 */
 	set_chart_type({ commit }, val) {
 		commit('SET_CHART_TYPE', val)
