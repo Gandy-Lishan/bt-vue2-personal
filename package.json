@@ -82,7 +82,6 @@
     "html-webpack-plugin": "^4.5.2",
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
-    "mockjs": "^1.1.0",
     "patch-package": "^8.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
