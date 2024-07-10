@@ -100,15 +100,24 @@ const state = {
 
 	//forecast
 	forecastList: [],
+	reportsAreDisplayed: {
+		bullish: true,
+		bearish: true,
+	}
 }
 
 const mutations = {
 	SET_FORECAST(state, list){
 		state.forecastList = list
 	},
+	SET_REPORT_DISPLAYED(state,obj){
+		state.reportsAreDisplayed[obj.type] = obj.val
+	},
+
 	SET_CHART_TYPE(state, val){
 		state.chartType = val
 	},
+
 	SET_MYSYMBOL_QUOTEFEED_CACHE(state,list){
 		state.mySymbolQuotefeedCache = list
 	},
@@ -306,20 +315,29 @@ const mutations = {
 }
 
 const actions = {
-	set_forecast({ commit }, symbol) {
+/** Begin fetch resources */
+	
+/** End fetch resources */
+
+
+/** Begin Report page*/
+	get_forecast({ commit }, symbol) {
 		return new Promise(async (resolve,reject) => {
-			const result = state.forecastList
-			if(result.length == 0){
+			const result = state.forecastList.find(item=>item.symbol==symbol)
+			if(!result){
 				try{
 					const res = await getForecastList(symbol)
 					if (res.status === 200 || res.status === 201) {
 						const list = res.data
-						commit('SET_FORECAST', list)
+						commit('SET_FORECAST', [...state.forecastList, {
+							symbol: symbol,
+							list: list,
+						}])
 						resolve(list)
-					}else if (res.data.status === 401) {
+					}else if (res.status === 401) {
 						Toast('Symbol not provided.',2000)
 						reject(new Error('Symbol not provided.'));
-					} else if (res.data.status === 404) {
+					} else if (res.status === 404) {
 						Toast('Such symbol no related report.',2000)
 						reject(new Error('Such symbol no related report.'));
 					} else {
@@ -331,15 +349,32 @@ const actions = {
 					reject(err)
 				}
 			}else{
-				resolve(result)
+				resolve(result.list)
 			}
 		})
 	},
+	reset_reports_events({ commit }) {
+		commit('SET_REPORT_DISPLAYED', {type:'bullish',val:true})
+		commit('SET_REPORT_DISPLAYED', {type:'bearish',val:true})
+	},
+	toggle_reports_events({ commit }, typeOfEvent) {
+		if (state.reportsAreDisplayed[typeOfEvent]) {
+			commit('SET_REPORT_DISPLAYED', {type:typeOfEvent,val:false})
+			CIQ.removeForecastMarker(typeOfEvent)
+		} else {
+			CIQ.createForecastMarker(typeOfEvent);
+			commit('SET_REPORT_DISPLAYED', {type:typeOfEvent,val:true})
+		}
+	},
+/** End Report page*/
+
 	
 	/** 控制图表绘制类型,line或者candle, myIndicator用CIQ.isOHLCVSelectedMI指标控制特殊判断 */
 	set_chart_type({ commit }, val) {
 		commit('SET_CHART_TYPE', val)
 	},
+
+	
 	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
 	get_mysymbolCSV({ commit }, obj) {
 		return new Promise(async (resolve,reject) => {
@@ -376,7 +411,7 @@ const actions = {
 		})
 	},
 	// 獲取mysymbol列表包括url和name etc.
-	set_mysymbolist({ commit }) {
+	get_mysymbolist({ commit }) {
 		return new Promise(async resolve => {
 			toggleOverlaySymbol('flex');
 			await getAllMySymbolsList(1,(data)=>{
@@ -387,7 +422,7 @@ const actions = {
 		})
 	},
 	// 獲取myindicator和favindicator列表
-	set_myindicator({ commit }) {
+	get_myindicator({ commit }) {
 		return new Promise(async resolve => {
 			toggleOverlayIndicator('flex');
 			let btvFavIndi = await getBTV1FavIndicator()
@@ -399,6 +434,9 @@ const actions = {
 			resolve()
 		})
 	},
+
+
+/** Begin MyIndicator page*/
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {
@@ -496,6 +534,9 @@ const actions = {
 			resolve()
 		})
 	},
+/** End MyIndicator page*/
+
+
 	Try(context, val) {
 		context.commit('setEntryData', val)
 	},
