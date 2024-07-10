@@ -438,7 +438,9 @@ CIQ.setMarkerVisibility = function(type){
 
 /** Report page */
 CIQ.createForecastMarker = async function(type){
-	const list = await CIQ.store.dispatch('chart/set_forecast',CIQ.stxx.chart.symbol)
+	if(!type) CIQ.removeForecastMarker()
+	
+	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
 	const bullishList = list.filter(i=>i.forecast == 'Down')
 	const bearishList = list.filter(i=>i.forecast == 'Up')
 	if(!type || type == 'bullish'){

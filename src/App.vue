@@ -177,9 +177,9 @@ export default {
   },
 		fetchCustomList() {
 			console.log('🚗  update custom symbol list and indicator list')
-			this.$store.dispatch('chart/set_mysymbolist')
+			this.$store.dispatch('chart/get_mysymbolist')
 			// 包括了fav indicator
-			this.$store.dispatch('chart/set_myindicator')
+			this.$store.dispatch('chart/get_myindicator')
 		},
 	beforeDestroy() {
 		clearInterval(this.updateInterval);

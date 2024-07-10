@@ -397,17 +397,17 @@ export default class AdvancedChartComponent extends Vue {
 	stx: CIQ.ChartEngine | undefined
 	isCollapse: boolean | undefined
 	resizeObserver: any | undefined
-	reportsAreDisplayed: any | undefined
+	//reportsAreDisplayed: any | undefined
 	routeName: string | null | undefined
 	
 	constructor() {
 		super()
 		this.isCollapse = false 
 		this.resizeObserver = null
-		this.reportsAreDisplayed = {
-			bullish: true,
-			bearish: true,
-		}
+		// this.reportsAreDisplayed = {
+		// 	bullish: true,
+		// 	bearish: true,
+		// }
 		this.routeName = this.$route.name
 	}
 
@@ -564,15 +564,8 @@ export default class AdvancedChartComponent extends Vue {
 
 		CIQ.setMarkerVisibility(type)
 	}
-	toggleReportsEvents(typeOfEvent) {
-		if (this.reportsAreDisplayed[typeOfEvent]) {
-			this.reportsAreDisplayed[typeOfEvent] = false;
-			CIQ.removeForecastMarker(typeOfEvent)
-		} else {
-			CIQ.createForecastMarker(typeOfEvent);
-			this.reportsAreDisplayed[typeOfEvent] = true;
-		}
-
+	async toggleReportsEvents(typeOfEvent) {
+		await this.$store.dispatch('chart/toggle_reports_events',typeOfEvent)
 	}
 	
 	resizePatternMatch() {

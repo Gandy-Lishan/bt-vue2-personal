@@ -12,6 +12,7 @@
 import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { LoadingOverlayChart } from "@/components/common"
+import { mapGetters } from "vuex"
 export default {
 name: 'Reports',
 data() {
@@ -24,12 +25,25 @@ components: {
     LoadingOverlayChart,
 },
 computed: {
+  ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
+    handleGetBacktestSymbol() {
+      return this.getBacktestSymbol
+    },
   chartLoadingSetting() {
     // 从 Vuex store 中获取全局 loading 状态
     return this.$store.state.chart.chartLoadingSetting
   },
 },
 watch: {
+  handleGetBacktestSymbol: {
+      handler(newVal) {
+        // 刷新symbol时reset reports_events marker状态
+        this.$store.dispatch('chart/reset_reports_events')
+        CIQ.createForecastMarker()
+      },
+      //immediate: true,
+      deep: true
+    },
   chartLoadingSetting: {
     handler(newValue, _) {
       // 在对象属性发生变化时触发的处理逻辑
