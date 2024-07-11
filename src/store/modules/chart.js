@@ -3,8 +3,13 @@ import {
     getAllMySymbolsList,getSymbolCsv,
 	getBTV1FavIndicator,getAllMyIndicatorsList,
 	getForecastList,
+	getStocksList,
+	getIndexsList,
+	getIndicatorsList
 } from '@/service/service.js'
 import {Toast} from '@/utils'
+import { uniqueObjectArray } from '@/utils/formValidate'
+
 const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
 	
@@ -197,21 +202,25 @@ const mutations = {
 	/**
 	 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
 	 */
-
-	getStocksList(state, list) {
+	SET_STOCKLIST(state, list) {
 		state.stocksList = list
 	},
 	/**
 	 * Sets up a mutations to store the IndexsList, it's usually called when the project is initiated
 	 */
-
-	getIndexsList(state, list) {
+	SET_INDEXLIST(state, list) {
 		state.indexsList = list
 	},
 	/**
+	 * Sets up a mutations to store the IndicatorsList, it's usually called when the project is initiated
+	 */
+	SET_INDICATORSLIST(state, data) {
+		state.indicatorsList = data
+	},
+
+	/**
 	 * set a single indicator to the indicator list
 	 */
-
 	getEntryIndicators(state, obj) {
 		let { index, value } = obj
 		state.indicators.formIndicators.entry[index] = value
@@ -241,13 +250,6 @@ const mutations = {
 		state.indicators.extraIndicators = val
 	},
 
-	/**
-	 * no bug occurs, however, the logic inside is confusing
-	 */
-
-	getIndicatorsList(state, data) {
-		state.indicatorsList = data
-	},
 	/**
 	 * Sets up a mutations to store the technical indicators
 	 */
@@ -316,7 +318,87 @@ const mutations = {
 
 const actions = {
 /** Begin fetch resources */
-	
+	fetch_stocklist({ commit }) {
+		return new Promise(async (resolve,reject) => {
+			const list = state.stocksList
+			if(list.length == 0){
+				try{
+					const res = await getStocksList()
+					if (res.status === 200 || res.status === 201) {
+						commit('SET_STOCKLIST', res.data)
+						resolve(res.data)
+					}else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.status}`));
+					}
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(list)
+			}
+		})
+	},
+	fetch_indexlist({ commit }) {
+		return new Promise(async (resolve,reject) => {
+			const list = state.indexsList
+			if(list.length == 0){
+				try{
+					const res = await getIndexsList()
+					if (res.status === 200 || res.status === 201) {
+						commit('SET_INDEXLIST', res.data)
+						resolve(res.data)
+					}else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.status}`));
+					}
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(list)
+			}
+		})
+	},
+	fetch_indicatorsList({ commit }) {
+		return new Promise(async (resolve,reject) => {
+			const list = state.indicatorsList
+			if(list.length == 0){
+				try{
+					const res = await getIndicatorsList()
+					if (res.status === 200 || res.status === 201) {
+						let allSymbolsList = uniqueObjectArray(res.data)
+						let newAllSymbolsList = []
+						for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
+							let item = allSymbolsList[i]
+							if (state.stocksList.find(j => j.stock == item.url)) {
+								let newName = item.url + ' Optix'
+								newAllSymbolsList.push({
+									chart_name: newName,
+									url: item.url + '@indicator',
+									updated: item.updated
+								})
+							} else {
+								newAllSymbolsList.push(allSymbolsList[i])
+							}
+						}
+						commit('SET_INDICATORSLIST', newAllSymbolsList)
+						resolve(newAllSymbolsList)
+					}else {
+						// 处理其他状态码
+						console.error(`Unexpected status code: ${res.status}`);
+						reject(new Error(`Unexpected error, status code: ${res.status}`));
+					}
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(list)
+			}
+		})
+	},
 /** End fetch resources */
 
 
@@ -343,7 +425,7 @@ const actions = {
 					} else {
 						// 处理其他状态码
 						console.error(`Unexpected status code: ${res.status}`);
-						reject(new Error(`Unexpected error, status code: ${res.data.status}`));
+						reject(new Error(`Unexpected error, status code: ${res.status}`));
 					}
 				}catch(err){
 					reject(err)
@@ -374,7 +456,7 @@ const actions = {
 		commit('SET_CHART_TYPE', val)
 	},
 
-	
+
 	// 獲取單個symbol ohlcv(讀取緩存或者直接請求數據)並緩存
 	get_mysymbolCSV({ commit }, obj) {
 		return new Promise(async (resolve,reject) => {
@@ -399,7 +481,7 @@ const actions = {
 						reject(new Error('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds'));
 					} else {
 						// 处理其他状态码
-						console.error(`Unexpected status code: ${res.status}`);
+						console.error(`Unexpected status code: ${res.data.status}`);
 						reject(new Error(`Unexpected error, status code: ${res.data.status}`));
 					}
 				}catch(err){

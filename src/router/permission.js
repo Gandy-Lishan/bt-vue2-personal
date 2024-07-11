@@ -1,14 +1,8 @@
 import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {
-	getIndicatorsList,
-	getStocksList,
-	getIndexsList
-} from '@/service/service'
 import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
-import { uniqueObjectArray } from '@/utils/formValidate'
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -174,36 +168,12 @@ async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
 	if (
-		store.state.chart.indicatorsList.length == 0 ||
-		store.state.chart.stocksList.length == 0 ||
-		store.state.chart.indexsList.length == 0
+		store.getters.getIndicatorsList.length == 0 ||
+		store.getters.getStockList.length == 0 ||
+		store.getters.getIndexList.length == 0
 	) {
-		const res = await getIndicatorsList()
-		let allSymbolsList = uniqueObjectArray(res.data)
-		const resStocks = await getStocksList()
-		let stocksList = resStocks.data
-		store.commit('chart/getStocksList', stocksList)
-		const resIndexs = await getIndexsList()
-		let indexsList = resIndexs.data
-		store.commit('chart/getIndexsList', indexsList)
-
-		let newAllSymbolsList = []
-		for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
-			let item = allSymbolsList[i]
-			if (stocksList.find(j => j.stock == item.url)) {
-				let newName = item.url + ' Optix'
-				newAllSymbolsList.push({
-					chart_name: newName,
-					url: item.url + '@indicator',
-					updated: item.updated
-				})
-			} else {
-				newAllSymbolsList.push(allSymbolsList[i])
-			}
-		}
-
-		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-		CIQ.indicatorList = newAllSymbolsList
-		store.commit('chart/getIndicatorsList', newAllSymbolsList)
+		await store.dispatch('chart/fetch_stocklist')
+		await store.dispatch('chart/fetch_indexlist')
+		await store.dispatch('chart/fetch_indicatorsList')
 	}
 }

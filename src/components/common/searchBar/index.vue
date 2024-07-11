@@ -60,7 +60,7 @@ export default {
                             searchClient,
                             queries: _that.generateQueries(query)
                         });
-                        // return _that.$store.state.chart.indicatorsList.filter(({ chart_name }) =>
+                        // return _that.$store.getters.getIndicatorsList.filter(({ chart_name }) =>
                         // chart_name.toLowerCase().includes(query.toLowerCase())
                         // );
                     },
