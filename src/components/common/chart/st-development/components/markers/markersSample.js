@@ -441,8 +441,8 @@ CIQ.createForecastMarker = async function(type){
 	if(!type) CIQ.removeForecastMarker()
 	
 	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
-	const bullishList = list.filter(i=>i.forecast == 'Down')
-	const bearishList = list.filter(i=>i.forecast == 'Up')
+	const bullishList = list.filter(i=>i.forecast == 'Up')
+	const bearishList = list.filter(i=>i.forecast == 'Down')
 	if(!type || type == 'bullish'){
 		for (var i = 0; i < bullishList.length; i++) {
 			const {post_date,title,url,author} = bullishList[i]
