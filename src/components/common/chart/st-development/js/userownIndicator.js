@@ -498,8 +498,9 @@
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
+        CIQ.isOHLCVSelectedMI = false
         if(newData.categories == "OHLCV"){
-            CIQ.stxx.setChartType("candle"); 
+            CIQ.isOHLCVSelectedMI = true
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)

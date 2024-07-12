@@ -49,9 +49,8 @@ export default {
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
-		this.fetchCustomList()
-		this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
-    
+		this.preFetchData()
+
 		console.log('用户权限', getCookieData())
 		const _this = this
 		if(Cookies.get('sentimen_session')){
@@ -141,6 +140,12 @@ export default {
 		// }
 	},
 	methods: {
+		preFetchData() {
+			this.fetchCustomList()
+			this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
+			
+			this.$store.dispatch('chart/get_symbollist_forecast')
+		},
 		changeSvg() {
 			this.isClosed = !this.isClosed
 			if (this.isClosed) {
@@ -177,9 +182,9 @@ export default {
   },
 		fetchCustomList() {
 			console.log('🚗  update custom symbol list and indicator list')
-			this.$store.dispatch('chart/set_mysymbolist')
+			this.$store.dispatch('chart/get_mysymbolist')
 			// 包括了fav indicator
-			this.$store.dispatch('chart/set_myindicator')
+			this.$store.dispatch('chart/get_myindicator')
 		},
 	beforeDestroy() {
 		clearInterval(this.updateInterval);

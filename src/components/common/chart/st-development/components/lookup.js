@@ -168,7 +168,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                     let url = decodeBase64(_result[_el].data.symbol.split('||')[1])
                                     await symbolCsvFileDelete(url)
 
-                                    await CIQ.store.dispatch('chart/set_mysymbolist')
+                                    await CIQ.store.dispatch('chart/get_mysymbolist')
                                     console.log('删除成功')
                                 } catch (error) {
                                     console.log('删除失败', error)

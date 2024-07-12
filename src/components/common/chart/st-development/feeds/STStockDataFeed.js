@@ -673,7 +673,15 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                     }
                 } 
-                
+
+                // normal datafeed
+                if(window.location.pathname.includes('/scannerai')){
+                    CIQ.store.dispatch('chart/set_chart_type', 'candle')
+                }else if(window.location.pathname.includes('/myindicator') && CIQ.isOHLCVSelectedMI){    // TODO
+                    CIQ.store.dispatch('chart/set_chart_type', 'candle')
+                }else{
+                    CIQ.store.dispatch('chart/set_chart_type', 'line')
+                }
                 var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
                 for(var i = 0;i < node.children.length;i++){
                     node.children[i].style.display = "inherit"
@@ -722,7 +730,11 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                     }
                 }
-                CIQ.stxx.setChartType("line"); 
+
+                // value Close only
+                CIQ.store.dispatch('chart/set_chart_type', 'line')
+
+                // CIQ.stxx.setChartType("line"); 
                 var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
                 for(var i = 0;i < node.children.length;i++){
                     node.children[i].style.display = "inherit"
@@ -813,7 +825,7 @@ quoteFeedSimulator.formatChartData = async function(response){
         // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
     }
     
-    
+    CIQ.stxx.setChartType(CIQ.store.getters.getChartType);
     return newQuotes
 }
 

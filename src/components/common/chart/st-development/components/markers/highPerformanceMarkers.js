@@ -291,19 +291,19 @@ if (!CIQ.Marker) {
 		CIQ.extend(this.params, params);
 		var template = (this.template = document.createElement("TEMPLATE"));
 		template.innerHTML =
-			// '<div class="stx-marker highlight">' +
-			// '<div class="stx-visual">' +
-			// '<div class="stx-marker-content">' +
-			// '<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
-			// "</div>" +
-			// "</div>" +
-			// '<div class="stx-stem"></div>' +
-			// "</div>";
 			'<div class="stx-marker highlight">' +
+				'<div class="stx-visual">' +
+					'<div class="stx-marker-content">' +
+						'<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
+					"</div>" +
+				"</div>" +
 				'<div class="stx-stem"></div>' +
-				'<div class="stx-visual"></div>' +
-				'<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
 			"</div>";
+			// '<div class="stx-marker highlight">' +
+			// 	'<div class="stx-stem"></div>' +
+			// 	'<div class="stx-visual"></div>' +
+			// 	'<div class="stx-performance-marker stx-marker-expand"><h4></h4><p></p></div>' +
+			// "</div>";
 		var n = this.template.content.cloneNode(true);
 		var marker = n.querySelector(".stx-marker", template);
 		marker.classList.add(params.type);

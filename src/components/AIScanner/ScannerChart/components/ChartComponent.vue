@@ -332,8 +332,7 @@ export default {
 						Field: "Close"
 					});
 				}
-
-				CIQ.stxx.setChartType("candle");
+				
 				resolve()
 			 })	
 		},

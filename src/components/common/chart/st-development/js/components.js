@@ -13332,6 +13332,7 @@ import {__js_webcomponents_indicatorsLookup_} from "../components/indicators-sea
 import {__js_webcomponents_indicatorsScroll_} from "../components/indicators-scroll.js"
 import {__js_webcomponents_lookup_} from "../components/lookup.js"
 import {__js_webcomponents_loader_} from "../components/loader.js"
+import {__js_webcomponents_reports_lookup_} from "../components/reportsLookup.js"
 
 import {__st_addons_standard_tooltip_} from "./STTooltip"
 import {__st_js_mask_} from "./STMask"
@@ -13360,6 +13361,7 @@ export {__js_webcomponents_favorites_ as favorites}
 export {__js_webcomponents_sentimentLookup_ as sentimentLookup}
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
+export {__js_webcomponents_reports_lookup_ as reportsLookup};
 
 // export {__st_js_standard_studies_ as stStudies};
 //export {__st_js_advanced_studies_accumulationDistribution_ as accumulationDistribution}
@@ -13440,6 +13442,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__js_webcomponents_sentimentLookup_,
 		__js_webcomponents_DescriptionContext_,
 		__js_webcomponents_indicators_,
+		__js_webcomponents_reports_lookup_,
 
 		__st_addons_standard_tooltip_,
 		__st_js_mask_,
