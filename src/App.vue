@@ -144,9 +144,7 @@ export default {
 			this.fetchCustomList()
 			this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
 			
-			if(window.location.pathname.includes('/reports')){
-				this.$store.dispatch('chart/get_symbollist_forecast')
-			}
+			this.$store.dispatch('chart/get_symbollist_forecast')
 		},
 		changeSvg() {
 			this.isClosed = !this.isClosed
