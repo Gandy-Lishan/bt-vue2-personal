@@ -17,6 +17,7 @@
         @select="handleSelect"
       >
         <el-menu-item class="home-link" index="12"
+        v-if="isReports"
           >Reports</el-menu-item
         >
         <el-menu-item class="home-link" index="9"
@@ -97,7 +98,8 @@ export default {
       activeIndex: '1',
       isAiTrading: false,
       isPortfolio: false,
-      isButtonVisible: false
+      isButtonVisible: false,
+      isReports: false,
     }
   },
   computed: {
@@ -160,6 +162,10 @@ export default {
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
+    
+    if(email === 'hao@sentimentrader.com') this.isReports = true
+    if(email !== 'hao@sentimentrader.com') this.isReports = false
+    
     if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
     if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
   },
