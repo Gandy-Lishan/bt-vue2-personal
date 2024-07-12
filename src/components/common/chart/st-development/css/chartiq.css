@@ -712,6 +712,20 @@ cq-lookup {
   .break-md cq-lookup {
     width: 95px; }
 
+cq-reports-lookup {
+  display: block;
+  width: 139px;
+  transition: width 200ms 0s;
+  z-index: 2; }
+  .stxMenuActive cq-reports-lookup {
+    width: 481px; }
+  .break-sm .stxMenuActive cq-reports-lookup, .break-md .stxMenuActive cq-reports-lookup {
+    width: 300px; }
+  .break-sm cq-reports-lookup {
+    width: 30px; }
+  .break-md cq-reports-lookup {
+    width: 95px; }
+
 .break-sm .ciq-search{
   margin-right: 40px;
   margin-left: 40px; }

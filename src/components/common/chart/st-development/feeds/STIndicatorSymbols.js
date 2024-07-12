@@ -317,6 +317,36 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }
         }); 
         cb(results)
+    } else if (filter == 'SYMBOLS') {
+        var results = []
+        const symbollistForecast = CIQ.store.getters.getSymbollistForecast
+        let stocksList = await loadStocksList()
+        let indexsList = await loadIndexsList()
+        symbollistForecast.forEach(element => {
+            const stocks = stocksList.find(i=>i.stock.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+            const indexs = indexsList.find(i=>i.symbol.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+            let res = stocks || indexs
+            if(res){
+                var item = {
+                    symbol: res.stock || res.symbol,
+                    name: res.name,
+                    exchDisp: "",
+                    market: element.market,
+                }
+                
+                if (
+                    item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                    item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                ){
+                    results.push({
+                        display: [item.symbol, item.name, item.exchDisp],
+                        data: item
+                    });
+                }
+            }else console.log('symbol does not exist in list',element.market)
+
+        }); 
+        cb(results)
     } 
     loader.hide();  
 };

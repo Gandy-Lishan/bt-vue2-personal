@@ -2,7 +2,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import {
     getAllMySymbolsList,getSymbolCsv,
 	getBTV1FavIndicator,getAllMyIndicatorsList,
-	getForecastList,
+	getForecastList,getSymbollistForecast,
 } from '@/service/service.js'
 import {Toast} from '@/utils'
 const toggleOverlaySymbol = function(displayStyle) {
@@ -103,12 +103,20 @@ const state = {
 	reportsAreDisplayed: {
 		bullish: true,
 		bearish: true,
-	}
+	},
+	symbollistForecast: [],
+	forecastMarket: process.env.VUE_APP_DEFAULT_SYMBOL, //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
 }
 
 const mutations = {
+	SET_FORECAST_MARKET(state, val){
+		state.forecastMarket = val
+	},
 	SET_FORECAST(state, list){
 		state.forecastList = list
+	},
+	SET_SYMBOLLIST_FORECAST(state, list){
+		state.symbollistForecast = list
 	},
 	SET_REPORT_DISPLAYED(state,obj){
 		state.reportsAreDisplayed[obj.type] = obj.val
@@ -326,7 +334,7 @@ const actions = {
 			const result = state.forecastList.find(item=>item.symbol==symbol)
 			if(!result){
 				try{
-					const res = await getForecastList(symbol)
+					const res = await getForecastList(CIQ.store.getters.getForecastMarket)
 					if (res.status === 200 || res.status === 201) {
 						const list = res.data
 						commit('SET_FORECAST', [...state.forecastList, {
@@ -365,6 +373,15 @@ const actions = {
 			CIQ.createForecastMarker(typeOfEvent);
 			commit('SET_REPORT_DISPLAYED', {type:typeOfEvent,val:true})
 		}
+	},
+	get_symbollist_forecast({ commit }) {
+		return new Promise(async resolve => {
+			toggleOverlaySymbol('flex');
+			let symbollistForecast = await getSymbollistForecast()
+			commit('SET_SYMBOLLIST_FORECAST',symbollistForecast)
+			toggleOverlaySymbol('none');
+			resolve()
+		})
 	},
 /** End Report page*/
 
