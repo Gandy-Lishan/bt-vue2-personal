@@ -49,9 +49,8 @@ export default {
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
-		this.fetchCustomList()
-		this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
-    
+		this.preFetchData()
+
 		console.log('用户权限', getCookieData())
 		const _this = this
 		if(Cookies.get('sentimen_session')){
@@ -141,6 +140,14 @@ export default {
 		// }
 	},
 	methods: {
+		preFetchData() {
+			this.fetchCustomList()
+			this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
+			
+			if(window.location.pathname.includes('/reports')){
+				this.$store.dispatch('chart/get_symbollist_forecast')
+			}
+		},
 		changeSvg() {
 			this.isClosed = !this.isClosed
 			if (this.isClosed) {

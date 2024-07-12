@@ -1388,3 +1388,18 @@ export function getForecastList(symbol) {
 			})
 	})
 }
+
+export function getSymbollistForecast() {
+	const url = `/dev/dev/forecastsymbollist/`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res = res.data.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

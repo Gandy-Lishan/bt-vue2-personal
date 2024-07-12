@@ -27,6 +27,8 @@ const getters = {
 	getFavIndicatorList: state => state.chart.favIndicatorList,
 	getMyIndicatorList: state => state.chart.myIndicatorList,
 	getChartType: state => state.chart.chartType,
+	getSymbollistForecast: state => state.chart.symbollistForecast,
+	getForecastMarket: state => state.chart.forecastMarket,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
