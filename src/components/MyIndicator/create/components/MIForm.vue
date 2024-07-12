@@ -409,6 +409,7 @@ import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
 import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
+import { uniqWith, isEqual } from "lodash"
 
 export default {
   name: 'MIForm',
@@ -624,13 +625,6 @@ export default {
           }
         },
     }
-  },
-  async mounted() {
-    // 从localStorage获取数据
-    this.sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-    this.symbolList = JSON.parse(localStorage.getItem('symbolList'))
-    this.dropdownList = this.getList()
-    console.log('this.dropdownList', this.dropdownList,this.data.categories)
   },
   methods: {
     /**
@@ -1105,15 +1099,14 @@ export default {
       this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq() {
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       let frequencyArray = []
       if(this.data.categories !== 'WIC') {
         const url_1 = this.data.indicator_1_url
         const url_2 = this.data.indicator_2_url
         if(this.data.categories.includes('Indicator')) {
           // 这个数据时 Daily
-          const updated_1 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
-          const updated_2 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
+          const updated_1 = this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
+          const updated_2 = this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
           frequencyArray = [updated_1, updated_2]
           console.log('updated_1 updated_2数组', [updated_1, updated_2])
         }
@@ -1122,7 +1115,7 @@ export default {
         frequencyArray = this.weightData.map(item => {
           const url = item.indicator_url
           if(item.type == 'Indicator') {
-            return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
+            return this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
           }
           return null
         })
@@ -1242,8 +1235,6 @@ export default {
       if(!formValid) return formValid
       // 按照选项校验 indicator 是否在允许范围
       const categories = this.data.categories
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       if(categories == 'WIC') {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
@@ -1255,7 +1246,7 @@ export default {
           totalWeight += parseFloat(row.weight) || 0
           row.weightValidErrMsg = validatePercentageRule(_, row.weight)
           if(row.weightValidErrMsg) rowWeightValid = false
-          const isIn = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
+          const isIn = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
           if(!isIn) inAllowedList = false
         }
         if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
@@ -1280,8 +1271,8 @@ export default {
         const indicator_1_url = this.data.indicator_1_url
         const indicator_2_url = this.data.indicator_2_url
 
-        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
-        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_1 = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_2 = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
 
         if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
           this.popUpMsgBox('Please choose an indicator from the dropdown.')
