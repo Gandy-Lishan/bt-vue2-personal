@@ -1,4 +1,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { obtainIndicatorsList } from "@/service/service";
+
+const CACHE_DURATION = 30 * 60 * 1000; // 30 分钟
 
 const state = {
 	errorMessage404:{status:null,message:''},
@@ -14,6 +17,7 @@ const state = {
 	isCreateLoading: false,
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
 	symbolUploadDomActive: false,
+	indicatorsPageListdata: {}
 }
 
 const mutations = {
@@ -53,7 +57,10 @@ const mutations = {
 	SET_CPM_RESULTS_DATA(state, data) {
 		state.cpmResultsData = data
 		sessionStorage.setItem('cpmResultsData', JSON.stringify(data))
-	}
+	},
+	SET_INDICATORS_PAGE_LIST_DATA(state, { type, data }) {
+		state.indicatorsPageListdata[type] = data
+}
 }
 
 const actions = {
@@ -122,6 +129,26 @@ const actions = {
 	setCpmResultsData({ commit }, data) {
 		commit('SET_CPM_RESULTS_DATA', data);
 	},
+	async fetchIndicatorsPageList({ commit }, type) {
+		debugger
+		const cachedData = localStorage.getItem(type);
+		const cachedTime = localStorage.getItem(`${type}_timestamp`);
+		const now = new Date().getTime();
+		if (cachedData && cachedTime && now - cachedTime < CACHE_DURATION) {
+						commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data: JSON.parse(cachedData) });
+		} else {
+						try {
+										let response = await obtainIndicatorsList(type);
+										const data = response?.data || [];
+										localStorage.setItem(type, JSON.stringify(data));
+										localStorage.setItem(`${type}_timestamp`, now);
+										commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data });
+						} catch (error) {
+										console.error('Error fetching data:', error);
+										commit('SET_DATA', { type, data: [] });
+						}
+		}
+}
 }
 export default {
 	namespaced: true,
