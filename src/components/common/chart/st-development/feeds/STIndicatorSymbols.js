@@ -2,7 +2,6 @@
 // Copyright 2001 - 2021, Sundial Capital Research, Inc. All rights reserved
 // -------------------------------------------------------------------------------------------
 
-import {config}  from "./STDataFeedAccessUrl.js";
 // import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
 import { encodeBase64 } from '@/utils'
@@ -39,40 +38,6 @@ CIQ.inheritsFrom(
  function SortArray(x, y){
     return collator.compare(x.data.symbol, y.data.symbol);
 }
-async function loadStocksList(){
-    let list = []
-    if (CIQ.store.state.chart.stocksList.length != 0) {
-        list = CIQ.store.state.chart.stocksList
-    }else{
-        var loader = document.querySelector(".loaderLookup");
-        if (loader) loader.show();  
-           
-        const res = await CIQ.axios.get(
-            config.getStocks, {cache:true}
-        )
-        loader.hide()
-        list = res.data
-        CIQ.store.commit('chart/getStocksList',res.data);
-    }
-    return list
-}
-async function loadIndexsList(){
-    let list = []
-    
-    if (CIQ.store.state.chart.indexsList.length != 0) {
-        list = CIQ.store.state.chart.indexsList
-    }else{
-        var loader = document.querySelector(".loaderLookup");
-        if (loader) loader.show();    
-        const res = await CIQ.axios.get(
-            config.getIndexes, {cache:true}
-        )
-        loader.hide()
-        list = res.data
-        CIQ.store.commit('chart/getIndexsList',res.data);  
-    }
-    return list
-}
 
 CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 	text,
@@ -84,7 +49,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     if (loader) loader.show();  
     if (filter == 'ALL'){
         var resultsIndexsList = [];
-        let indexsList = await loadIndexsList()
+        const indexsList = CIQ.store.getters.getIndexList
         let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < indexsList.length; i++) {
             var fields = indexsList[i]; 
@@ -100,7 +65,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             });
         }
         var resultsStocksList = [];
-        let stocksList = await loadStocksList()
+        const stocksList = CIQ.store.getters.getStockList
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
             var item = {
@@ -158,7 +123,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     }
     else if (filter == 'INDEXES'){
 			var results = [];
-            let indexsList = await loadIndexsList()
+            const indexsList = CIQ.store.getters.getIndexList
             let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
 			for (var i = 0; i < indexsList.length; i++) {
 				var fields = indexsList[i];
@@ -193,7 +158,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }      
 	}else if (filter == 'STOCKS') {
         var results = [];
-        let stocksList = await loadStocksList()
+        const stocksList = CIQ.store.getters.getStockList
         let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
@@ -237,7 +202,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 
             try {
                 var listStock = []
-                if(CIQ.store.state.chart.stocksList.length == 0){
+                if(CIQ.store.getters.getStockList.length == 0){
                     var res = await loadStocksList()
                     listStock = res.map(_obj=>{
                         var newObj = {}
@@ -246,7 +211,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                         return newObj
                     })
                 }else{
-                    listStock = CIQ.store.state.chart.stocksList.map(_obj=>{
+                    listStock = CIQ.store.getters.getStockList.map(_obj=>{
                         var newObj = {}
                         newObj['name'] = _obj.name
                         newObj['url'] = _obj.stock
@@ -255,7 +220,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 }
 
                 var listIndex = []
-                if(CIQ.store.state.chart.indexsList.length == 0){
+                if(CIQ.store.getters.getIndexList.length == 0){
                     var res = await loadIndexsList()
                     listIndex = res.map(_obj=>{
                         var newObj = {}
@@ -264,7 +229,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                         return newObj
                     })
                 }else{
-                    listIndex = CIQ.store.state.chart.indexsList.map(_obj=>{
+                    listIndex = CIQ.store.getters.getIndexList.map(_obj=>{
                         var newObj = {}
                         newObj['name'] = _obj.name
                         newObj['url'] = _obj.symbol
@@ -348,6 +313,6 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         }); 
         cb(results)
     } 
-    loader.hide();  
+    if (loader) loader.hide();  
 };
 export { CIQ };

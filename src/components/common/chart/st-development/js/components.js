@@ -13321,13 +13321,10 @@ if (!Scroll) {
 };
 
 // customized features
-import {__js_webcomponents_indicators_} from "../components/indicator.js"
 import {__js_webcomponents_studyContext_} from '../components/studyContext.js'
 import {__js_webcomponents_studyContextDefault_} from '../components/studyContextDefault.js'
 import {__js_webcomponents_studyContextMyindicator} from '../components/studyContextMyindicator.js'
 import {__js_webcomponents_DescriptionContext_} from "../components/descriptionDialog.js"
-import {__js_webcomponents_sentimentLookup_} from "../components/sentimentLookup.js"
-import {__js_webcomponents_favorites_} from "../components/favorites.js"
 import {__js_webcomponents_indicatorsLookup_} from "../components/indicators-search.js"
 import {__js_webcomponents_indicatorsScroll_} from "../components/indicators-scroll.js"
 import {__js_webcomponents_lookup_} from "../components/lookup.js"
@@ -13354,11 +13351,8 @@ import {__st_js_drawing_} from "./STdrawing"
 // import {__st_js_advanced_studies_accumulationDistribution_} from "./advance-studies/accumulationDistribution.js"
 
 let _exports = {CIQ};
-export {__js_webcomponents_indicators_ as indicators}
 export {__js_webcomponents_indicatorsScroll_ as indicatorsScrollindicatorsScroll};
 export {__js_webcomponents_indicatorsLookup_ as indicatorsLookup};
-export {__js_webcomponents_favorites_ as favorites}
-export {__js_webcomponents_sentimentLookup_ as sentimentLookup}
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
 export {__js_webcomponents_reports_lookup_ as reportsLookup};
@@ -13438,11 +13432,10 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 	(_exports.CIQ || CIQ).activateImports(
 		__js_webcomponents_indicatorsScroll_,
 		__js_webcomponents_indicatorsLookup_,
-		__js_webcomponents_favorites_,
-		__js_webcomponents_sentimentLookup_,
 		__js_webcomponents_DescriptionContext_,
 		__js_webcomponents_indicators_,
 		__js_webcomponents_reports_lookup_,
+
 
 		__st_addons_standard_tooltip_,
 		__st_js_mask_,

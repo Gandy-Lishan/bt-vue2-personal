@@ -1,14 +1,9 @@
 import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {
-	getIndicatorsList,
-	getStocksList,
-	getIndexsList
-} from '@/service/service'
 import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
-import { uniqueObjectArray } from '@/utils/formValidate'
+import { uniqWith, isEqual } from "lodash"
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -174,36 +169,66 @@ async function initiateIndicatorList() {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
 	if (
-		store.state.chart.indicatorsList.length == 0 ||
-		store.state.chart.stocksList.length == 0 ||
-		store.state.chart.indexsList.length == 0
+		store.getters.getIndicatorsList.length == 0 ||
+		store.getters.getStockList.length == 0 ||
+		store.getters.getIndexList.length == 0
 	) {
-		const res = await getIndicatorsList()
-		let allSymbolsList = uniqueObjectArray(res.data)
-		const resStocks = await getStocksList()
-		let stocksList = resStocks.data
-		store.commit('chart/getStocksList', stocksList)
-		const resIndexs = await getIndexsList()
-		let indexsList = resIndexs.data
-		store.commit('chart/getIndexsList', indexsList)
+		await store.dispatch('chart/fetch_stocklist')
+		await store.dispatch('chart/fetch_indexlist')
+		await store.dispatch('chart/fetch_indicatorsList')
 
-		let newAllSymbolsList = []
-		for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
-			let item = allSymbolsList[i]
-			if (stocksList.find(j => j.stock == item.url)) {
-				let newName = item.url + ' Optix'
-				newAllSymbolsList.push({
-					chart_name: newName,
-					url: item.url + '@indicator',
-					updated: item.updated
-				})
-			} else {
-				newAllSymbolsList.push(allSymbolsList[i])
-			}
-		}
-
-		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-		CIQ.indicatorList = newAllSymbolsList
-		store.commit('chart/getIndicatorsList', newAllSymbolsList)
+		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
+		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
+		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
+		const refactoredStocksList = await fetchDataList('getStockList')
+		const refactoredIndexsList = await fetchDataList('getIndexList')
+		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
+      	refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+		store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
+		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
+		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 	}
+}
+
+async function fetchDataList(source) {
+	const dataList = store.getters[source]
+	const sourceMap = {
+		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol' },
+		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol' },
+		getIndicatorsList: {
+			labelField: 'chart_name',
+			urlField: 'url',
+			updateField: 'updated',
+			type: 'Indicator'
+		}
+	}
+
+	if (dataList.length !== 0 || !dataList) {
+		const { labelField, urlField, type } = sourceMap[source]
+		// return dataList.map((item) => ({
+		// 	label: item[labelField],
+		// 	url: item[urlField],
+		// 	type
+		// }))
+		return dataList.map((item) => {
+			const obj = {
+				label: item[labelField],
+				url: item[urlField],
+				type
+			}
+			// if(item.updated === 'Daily') {
+			// 	obj.updated = item.updated
+			// 	return obj
+			// }
+			// 不需要限制 timeframe 为 Daily
+			if(item.updated) {
+				obj.updated = item.updated
+				return obj
+			}
+			if(!item.updated && (source === 'getIndexList' || source === 'getStockList')) {
+				return obj
+			}
+		})
+	}
+		
 }

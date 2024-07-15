@@ -223,7 +223,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 if (filter == "ALL"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
-                    const list = CIQ.store.state.chart.indicatorsList
+                    const list = CIQ.store.getters.getIndicatorsList
                     let resu = list.map(item=>{return {
                         name: item.chart_name,
                         url: item.url,
@@ -283,7 +283,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                        if (loader) loader.hide(); 
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
@@ -330,14 +330,14 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                           if (loader) loader.hide(); 
                 }else if (filter == "MOST POPULAR"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  
 
                     var results = []
-                    for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
-                        var fields = CIQ.store.state.chart.indicatorsList[i]
+                    for(var i=0;i<CIQ.store.getters.getIndicatorsList.length;i++){
+                        var fields = CIQ.store.getters.getIndicatorsList[i]
                         
                         try{
                             var item = {

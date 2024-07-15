@@ -796,8 +796,6 @@ import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {
-  getIndexsList,
-  getStocksList,
   getBacktestName
 } from '@/service/service.js'
 import searchBar from "@/components/common/searchBar"
@@ -948,8 +946,6 @@ export default {
         { value: 1, label: 'Only include upward sloping' },
         { value: 2, label: 'Only include downward sloping' },
       ],
-      symbolList: [],
-      indexList: [],
       customStocksList: [],
       loading: false,
       options: [],
@@ -1007,6 +1003,10 @@ export default {
     if(this.bd.backtest_period != 22) this.getBTDate()
   },
   computed: {
+    ...mapGetters({
+      symbolList: 'getStockList',
+      indexList: 'getIndexList',
+    }),
     ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
@@ -1287,43 +1287,6 @@ export default {
         return val
       }
     }, 500),
-    async getIndexsList() {
-      try {
-        let vm = this
-        if (vm.$store.state.chart.indexsList.length != 0) {
-          vm.indexList = vm.$store.state.chart.indexsList.map((item, index) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-          })
-        } else {
-          let res = await getIndexsList()
-          vm.indexList = res.data.map((item, index) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-          })
-          vm.loading = false
-        }
-      } catch (error) {
-        this.indexList = []
-        vm.loading = false
-      }
-    },
-    async getStocksList() {
-      let vm = this
-      if (vm.$store.state.chart.stocksList.length != 0) {
-        vm.symbolList = vm.$store.state.chart.stocksList.map((item, index) => {
-          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-        })
-      } else {
-        try {
-          let res = await getStocksList()
-          vm.symbolList = res.data.map((item, index) => {
-            return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-          })
-        } catch (error) {
-          console.warn(error)
-          vm.loading = false
-        }
-      }
-    },
     getCustomStocksList() {
       let vm = this
       vm.customStocksList = vm.$store.getters.getMySymbollist.map((item, index) => {
@@ -1335,28 +1298,30 @@ export default {
       let vm = this
       if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
         vm.loading = true
-        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-          await vm.getStocksList()
-          await vm.getIndexsList()
-        }
+        var symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        var IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+        
         vm.getCustomStocksList()
 
-        this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
+        this.options = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
         vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
         vm.loading = true
-        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-          await vm.getStocksList()
-          await vm.getIndexsList()
-        }
-
-        var symbolListTemp = vm.symbolList.filter((item) => {
+        var symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        var IndexListTemp = vm.indexList.filter((item) => {
+        var IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )

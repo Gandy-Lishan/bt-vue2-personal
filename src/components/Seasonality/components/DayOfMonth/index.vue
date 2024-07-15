@@ -148,6 +148,7 @@
 <script>
 import DOMChart from "../SNChart/DOMChart.vue"
 import {createStateFilter} from '@/utils/globalFunc'
+import { mapGetters } from "vuex"
 
 export default {
   name: 'DayOfMonth',
@@ -212,6 +213,11 @@ export default {
   components: {
     DOMChart
   },
+  computed: {
+    ...mapGetters({
+      symbolList: 'getRefactoredSymbolList'
+    })
+  },
   watch: {
      data: {
       handler(newVal, _) {
@@ -232,7 +238,7 @@ export default {
      },
   },
   mounted() {
-    this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+    this.dropdownList = this.symbolList
     this.data.monthSelection = new Date().getMonth()
   },
   methods: {
@@ -246,7 +252,7 @@ export default {
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       if(!dropdownList || dropdownList.length == 0) {
-        dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+        dropdownList = this.symbolList
       }
       var results = dropdownList.map(item => ({
           ...item,
