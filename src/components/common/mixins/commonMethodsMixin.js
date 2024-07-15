@@ -14,7 +14,6 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getIndicatorsList,
 	getOPTStatus
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
@@ -1369,11 +1368,10 @@ export const CommonMethodsMixin = {
 
 
 		async transformOldName(data,criteria){
-			const res = await getIndicatorsList()
+			const indicatorList = this.$store.getters.getIndicatorsList
 			const stockList = this.$store.getters.getStockList
-
 			data[criteria].signals.forEach(signal => {
-				const matchIndicatorsList = res.data.find(item=>item.chart_name == signal.indicator)
+				const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
 				const matchStockList = stockList.find(item=>item.name == signal.indicator)
 				if(matchIndicatorsList && matchStockList){
 					signal.indicator = matchIndicatorsList.url + ' Optix'

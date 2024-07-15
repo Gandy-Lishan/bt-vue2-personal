@@ -164,6 +164,7 @@
 <script>
 import { delMyIndicator, getMyIndicatorsList, searchIndicator, getRelatedBacktest, deleteBacktest } from '@/service/service'
 import { capitalizeFirstLetter, isJson , trimTrailingZeros} from "@/utils"
+import { mapGetters } from "vuex"
 
 export default {
   name: 'MITable',
@@ -241,6 +242,12 @@ export default {
     // 这里应该是请求下来的数据
     await this.getTableData(this.currentPage)
   },
+  computed: {
+    ...mapGetters({
+      sentimentList: 'getRefactoredSentimentList',
+      symbolList: 'getRefactoredSymbolList'
+    })
+  },
   methods: {
     isLastRow(index) {
       // 判断是否为最后一行
@@ -282,13 +289,12 @@ export default {
           }
       }
       /** create 携带aapl optix(url: aapl@indicator)的会上传indicator为aapl,所以在获取列表时把其还原成(aapl@indicator) */
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       listRes.data.results.forEach(obj => {
         if(obj.combine_type == 'indicator'){
-          if(sentimentList.find((i)=>i.url == obj.indicator_1_url+'@indicator')) obj.indicator_1_url = obj.indicator_1_url+'@indicator'
+          if(this.sentimentList.find((i)=>i.url == obj.indicator_1_url+'@indicator')) obj.indicator_1_url = obj.indicator_1_url+'@indicator'
           if(obj.mul_indicator){
             let parsedObj = JSON.parse(obj.mul_indicator)
-            processIndicators(parsedObj, sentimentList.map(i=>i.url));
+            processIndicators(parsedObj, this.sentimentList.map(i=>i.url));
             obj.mul_indicator = JSON.stringify(parsedObj)
           }
         }
@@ -299,12 +305,9 @@ export default {
       this.loading = false
     },
     async processRowData(resData) {
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
-
       let promise = resData.map(async item => {
       if (['ratio', 'spread'].includes(item.calculate)) {
-        const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, sentimentList, symbolList);
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, this.sentimentList, this.symbolList);
         return {
           ...item,
           categories: `${capitalizeFirstLetter(type)} ${capitalizeFirstLetter(item.calculate)}`,
@@ -324,7 +327,7 @@ export default {
         };
       }
       if (item.calculate === 'weight_combination' && (item.indicator_weight && item.mul_indicator)) {
-        const includedWeightDataArr = this.getWeightedIndicatorData(item, sentimentList, symbolList);
+        const includedWeightDataArr = this.getWeightedIndicatorData(item, this.sentimentList, this.symbolList);
         const included = includedWeightDataArr.map(item=>(item.included))
         const included_url = includedWeightDataArr.map(item=>(item.included_url))
         const weightData = includedWeightDataArr.map(item=>(item.weightData))
@@ -344,7 +347,7 @@ export default {
         };
       }
       if (item.combine_type === 'ohlcv') {
-        const {included, included_url, former, latter, former_url, latter_url, type} = this.getSOHLCVIncludedData(item, symbolList);
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getSOHLCVIncludedData(item, this.symbolList);
         return {
           ...item,
           indicator_2_url:'', // indicator2爲空
@@ -424,7 +427,6 @@ export default {
       }
     },
     getWeightedIndicatorData(item, sentimentList, symbolList) {
-      debugger
       const mul_indicator_obj = isJson(item.mul_indicator) ? JSON.parse(item.mul_indicator) : item.mul_indicator;
       const indicator_weight_arr = item.indicator_weight.includes('_') ? item.indicator_weight.split('_') : [item.indicator_weight];
       let combine_type_arr = mul_indicator_obj.combine_type ? (mul_indicator_obj.combine_type.includes('_') ? mul_indicator_obj.combine_type.split('_') : [mul_indicator_obj.combine_type]) : new Array(indicator_weight_arr.length).fill('si')

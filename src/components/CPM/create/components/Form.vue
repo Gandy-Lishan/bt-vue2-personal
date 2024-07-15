@@ -425,8 +425,8 @@ export default {
           { required: true, message: 'Enter a name', trigger: 'blur' }
         ],
         symbol: [
-          { validator: createVerifyValueInListRule(JSON.parse(localStorage.getItem('symbolList')), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
-          { validator: createVerifyValueInListRule(JSON.parse(localStorage.getItem('symbolList')), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
+          { validator: createVerifyValueInListRule(this.symbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
+          { validator: createVerifyValueInListRule(this.symbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }
@@ -458,6 +458,9 @@ export default {
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
     },
+    ...mapGetters({
+      symbolList: 'getRefactoredSymbolList'
+    })
   },
   watch: {
     handleGetBacktestSymbol: {
@@ -578,7 +581,7 @@ export default {
     },
     querySearch(queryString, cb) {
       if(!this.dropdownList || this.dropdownList.length == 0) {
-        this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+        this.dropdownList = this.symbolList
       }
       var results = this.dropdownList.map(item => ({
           ...item,

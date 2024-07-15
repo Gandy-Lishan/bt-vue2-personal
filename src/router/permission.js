@@ -3,6 +3,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCurDate } from '@/service/ai'
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
+import { uniqWith, isEqual } from "lodash"
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -175,5 +176,59 @@ async function initiateIndicatorList() {
 		await store.dispatch('chart/fetch_stocklist')
 		await store.dispatch('chart/fetch_indexlist')
 		await store.dispatch('chart/fetch_indicatorsList')
+
+		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
+		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
+		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
+		const refactoredStocksList = await fetchDataList('getStockList')
+		const refactoredIndexsList = await fetchDataList('getIndexList')
+		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
+      	refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+		store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
+		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
+		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 	}
+}
+
+async function fetchDataList(source) {
+	const dataList = store.getters[source]
+	const sourceMap = {
+		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol' },
+		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol' },
+		getIndicatorsList: {
+			labelField: 'chart_name',
+			urlField: 'url',
+			updateField: 'updated',
+			type: 'Indicator'
+		}
+	}
+
+	if (dataList.length !== 0 || !dataList) {
+		const { labelField, urlField, type } = sourceMap[source]
+		// return dataList.map((item) => ({
+		// 	label: item[labelField],
+		// 	url: item[urlField],
+		// 	type
+		// }))
+		return dataList.map((item) => {
+			const obj = {
+				label: item[labelField],
+				url: item[urlField],
+				type
+			}
+			// if(item.updated === 'Daily') {
+			// 	obj.updated = item.updated
+			// 	return obj
+			// }
+			// 不需要限制 timeframe 为 Daily
+			if(item.updated) {
+				obj.updated = item.updated
+				return obj
+			}
+			if(!item.updated && (source === 'getIndexList' || source === 'getStockList')) {
+				return obj
+			}
+		})
+	}
+		
 }

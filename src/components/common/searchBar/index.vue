@@ -60,9 +60,6 @@ export default {
                             searchClient,
                             queries: _that.generateQueries(query)
                         });
-                        // return _that.$store.getters.getIndicatorsList.filter(({ chart_name }) =>
-                        // chart_name.toLowerCase().includes(query.toLowerCase())
-                        // );
                     },
                     templates: {
                     item({ item, components, html }) {

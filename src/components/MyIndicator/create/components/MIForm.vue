@@ -409,7 +409,6 @@ import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay } from "@/components/common"
 import { mapGetters } from "vuex"
 import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
-import { uniqWith, isEqual } from "lodash"
 
 export default {
   name: 'MIForm',
@@ -493,9 +492,7 @@ export default {
         indicator_2_url: '',
         time_frame: 'daily'
       },
-      sentimentList: [],
       loading: false,
-      symbolList: [],
       weightData: [
         {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],
@@ -555,6 +552,10 @@ export default {
     handleGetMiBenmark() {
       return this.getMiBenmarkState
     },
+    ...mapGetters({
+      sentimentList: 'getRefactoredSentimentList',
+      symbolList: 'getRefactoredSymbolList'
+    })
   },
   watch: {
     handleGetMiBenmark: {
@@ -950,8 +951,6 @@ export default {
 
     },
     saveSubData(field, value) {
-      console.log(field, value)
-      debugger
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
@@ -969,7 +968,6 @@ export default {
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
-
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }

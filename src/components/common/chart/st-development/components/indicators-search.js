@@ -283,7 +283,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                        if (loader) loader.hide(); 
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
@@ -330,7 +330,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                           if (loader) loader.hide(); 
                 }else if (filter == "MOST POPULAR"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  

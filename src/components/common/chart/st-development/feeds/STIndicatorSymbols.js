@@ -283,6 +283,6 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         }); 
         cb(results)
     } 
-    loader.hide();  
+    if (loader) loader.hide();  
 };
 export { CIQ };

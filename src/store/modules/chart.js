@@ -108,10 +108,19 @@ const state = {
 	reportsAreDisplayed: {
 		bullish: true,
 		bearish: true,
-	}
+	},
+	// 何总写的提供给cpm,myindicator,seasonality的修改后的senti&symbol list
+	refactoredSentimentList: [],
+	refactoredSymbolList: [],
 }
 
 const mutations = {
+	SET_REFACTORED_SENTIMENTLIST(state, list){
+		state.refactoredSentimentList = list
+	},
+	SET_REFACTORED_SYMBOLLIST(state, list){
+		state.refactoredSymbolList = list
+	},
 	SET_FORECAST(state, list){
 		state.forecastList = list
 	},
