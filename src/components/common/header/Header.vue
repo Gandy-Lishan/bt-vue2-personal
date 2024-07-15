@@ -162,9 +162,9 @@ export default {
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
-    
-    if(email === 'hao@sentimentrader.com') this.isReports = true
-    if(email !== 'hao@sentimentrader.com') this.isReports = false
+    const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
+    if(allowedReportEmails.includes(email)) this.isReports = true
+    if(!allowedReportEmails.includes(email)) this.isReports = false
     
     if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
     if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
