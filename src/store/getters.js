@@ -30,7 +30,6 @@ const getters = {
 	getStockList: state => state.chart.stocksList,
 	getIndexList: state => state.chart.indexsList,
 	getIndicatorsList: state => state.chart.indicatorsList,
-	getIndexList: state => state.chart.indexsList,
 	getRefactoredSentimentList: state => state.chart.refactoredSentimentList,
 	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
 
