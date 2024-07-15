@@ -219,6 +219,20 @@ const routes = [
 		]
 	},
 	{
+		path: '/indicators',
+		name: 'Indicators',
+		component: resolve =>
+			require(['@/components/Indicators/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'IndicatorsList',
+				component: resolve =>
+					require(['@/components/Indicators/Table/index.vue'], resolve)
+			}
+		]
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',
