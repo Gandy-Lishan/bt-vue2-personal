@@ -13433,7 +13433,6 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__js_webcomponents_indicatorsScroll_,
 		__js_webcomponents_indicatorsLookup_,
 		__js_webcomponents_DescriptionContext_,
-		__js_webcomponents_indicators_,
 		__js_webcomponents_reports_lookup_,
 
 
