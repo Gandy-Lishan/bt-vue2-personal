@@ -203,43 +203,36 @@ computed: {
 		},
 		getSummaries(param) {
 			const { columns, data } = param
+			const sums = []
 
-			const sums = [] //声明变量
 			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = 'Average(%)'
-					return
-				}
-				// if (index === 1) {
-				// 	return
-				// }
-				const values = data.map((item) => {
-					return Number(
-						item[column.property].slice(0, item[column.property].length - 1)
-					)
-				})
-				let totalCount = 0 // 求平均数使用
-				sums[index] = values.reduce((prev, curr) => {
-					const value = Number(curr)
-					if (!isNaN(value) && value != 0) {
-						totalCount++
-						return prev + curr
-					} else {
-						return prev
+					if (index === 0) {
+							sums[index] = 'Average(%)'
+							return
 					}
-				}, 0)
 
-				sums[index] = sums[index] / totalCount
+					const values = data.map(item => {
+							const value = item[column.property]
+							return isNaN(value) ? 0 : parseFloat(value)
+					})
 
-				// ***********演示完要删**************************************
-				// if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
-				//   sums[index] = -sums[index]
-				// }
-				// *****************************************************
+					let totalCount = 0
 
-				sums[index] = sums[index].toFixed(2)
-				sums[index] = isNaN(sums[index]) ? '' : sums[index]
+					sums[index] = values.reduce((prev, curr) => {
+							if (!isNaN(curr) && curr !== 0) {
+									totalCount++
+									return prev + curr
+							}
+							return prev
+					}, 0)
+
+					if (totalCount > 0) {
+							sums[index] = (sums[index] / totalCount).toFixed(2)
+					} else {
+							sums[index] = ''
+					}
 			})
+
 			return sums
 		},
 		getCellStyle(value) {

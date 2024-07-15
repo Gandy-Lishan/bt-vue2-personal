@@ -32,6 +32,8 @@ const getters = {
 	getIndicatorsList: state => state.chart.indicatorsList,
 	getRefactoredSentimentList: state => state.chart.refactoredSentimentList,
 	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
+	getSymbollistForecast: state => state.chart.symbollistForecast,
+	getForecastMarket: state => state.chart.forecastMarket,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
@@ -43,6 +45,7 @@ const getters = {
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
 	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
+	getIndicatorsPageListData: (state) => state.states.indicatorsPageListdata,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

@@ -17,6 +17,7 @@
         @select="handleSelect"
       >
         <el-menu-item class="home-link" index="12"
+        v-if="isReports"
           >Reports</el-menu-item
         >
         <el-menu-item class="home-link" index="9"
@@ -94,10 +95,11 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
+      activeIndex: '',
       isAiTrading: false,
       isPortfolio: false,
-      isButtonVisible: false
+      isButtonVisible: false,
+      isReports: false,
     }
   },
   computed: {
@@ -138,28 +140,13 @@ export default {
       }
   },
   mounted() {
-    if (this.$route.name == 'backtester' || this.$route.name == 'Backtester') {
-      this.activeIndex = '1'
-    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart' || this.$route.name == 'scannerai_backtest') {
-      this.activeIndex = '3'
-    } else if (this.$route.path.includes('/doc')) {
-      this.activeIndex = '4'
-    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'  || this.$route.name == 'MIcreate'){
-      this.activeIndex = '6'
-    } else if(this.$route.name == 'Seasonality'){
-      this.activeIndex = '7'
-    }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
-      this.activeIndex = '8'
-    }else if(this.$route.name == 'Strategy'){
-      this.activeIndex = '9'
-    }else if(this.$route.name == 'Portfolio'){
-      this.activeIndex = '11'
-    }else if(this.$route.name == 'Reports'){
-      this.activeIndex = '12'
-    }
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
+    const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
+    if(allowedReportEmails.includes(email)) this.isReports = true
+    if(!allowedReportEmails.includes(email)) this.isReports = false
+    
     if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
     if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
   },

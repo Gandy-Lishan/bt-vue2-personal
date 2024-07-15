@@ -22,7 +22,8 @@
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
 					<cq-menu class="ciq-search">
-						<cq-lookup cq-keystroke-claim cq-uppercase></cq-lookup>
+						<cq-lookup cq-keystroke-claim cq-uppercase v-if="routeName != 'Reports'"></cq-lookup>
+						<cq-reports-lookup cq-keystroke-claim cq-uppercase v-if="routeName == 'Reports'"></cq-reports-lookup>
 					</cq-menu>
 					<cq-menu>
 						<div class='symbol-up'></div>
