@@ -201,42 +201,21 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         // }catch{}
 
             try {
-                var listStock = []
-                if(CIQ.store.getters.getStockList.length == 0){
-                    var res = await loadStocksList()
-                    listStock = res.map(_obj=>{
+                var listStock = CIQ.store.getters.getStockList.map(_obj=>{
                         var newObj = {}
                         newObj['name'] = _obj.name
                         newObj['url'] = _obj.stock
                         return newObj
                     })
-                }else{
-                    listStock = CIQ.store.getters.getStockList.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.stock
-                        return newObj
-                    })
-                }
 
-                var listIndex = []
-                if(CIQ.store.getters.getIndexList.length == 0){
-                    var res = await loadIndexsList()
-                    listIndex = res.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.symbol
-                        return newObj
-                    })
-                }else{
-                    listIndex = CIQ.store.getters.getIndexList.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.symbol
-                        return newObj
-                    })
-                }
 
+                var listIndex = CIQ.store.getters.getIndexList.map(_obj=>{
+                    var newObj = {}
+                    newObj['name'] = _obj.name
+                    newObj['url'] = _obj.symbol
+                    return newObj
+                })
+                
                 var list = [...listStock,...listIndex]
                 
                 resu.forEach(element => {
@@ -285,8 +264,8 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     } else if (filter == 'SYMBOLS') {
         var results = []
         const symbollistForecast = CIQ.store.getters.getSymbollistForecast
-        let stocksList = await loadStocksList()
-        let indexsList = await loadIndexsList()
+        let stocksList = CIQ.store.getters.getStockList
+        let indexsList = CIQ.store.getters.getIndexList
         symbollistForecast.forEach(element => {
             const stocks = stocksList.find(i=>i.stock.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
             const indexs = indexsList.find(i=>i.symbol.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
