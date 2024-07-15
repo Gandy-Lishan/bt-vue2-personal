@@ -333,7 +333,7 @@ export default {
         const weightData = includedWeightDataArr.map(item=>(item.weightData))
         return {
           ...item,
-          categories: 'Indicator Weight Combination',
+          categories: 'Weighted Indicator Combination',
           included,
           included_url,
           key: item.url,
@@ -501,7 +501,6 @@ export default {
       // 考慮到ohlcb不能改為symbol ohlcv在miform内，不然會和 symbol這個字段判斷衝突
       if(row.categories == 'Symbol OHLCV') row.categories = 'OHLCV'
       const data = JSON.stringify(row)
-      debugger
       this.$router.push({
         name: 'MIcreate',
         params: {

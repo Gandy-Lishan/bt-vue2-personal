@@ -1042,7 +1042,6 @@ export default {
       CIQ.stxx.setChartType(this.$store.getters.getChartType); 
 
       this.dropdownList = this.getList()
-
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     async handleSelect(item, source) {

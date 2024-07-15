@@ -569,7 +569,6 @@ const actions = {
 				indicator1 : state.miFormCategoriesIndicator1,
 				indicator2 : state.miFormCategoriesIndicator2,
 			}
-
 			CIQ.updateUserOwnIndicator(newVal,oldVal).then(()=>{
 				commit('miFormStateChange', val)
 				resolve()
