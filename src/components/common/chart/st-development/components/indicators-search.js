@@ -186,27 +186,18 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         for(var el = 0;el<stClose.length;el++){     
                             var removeFavorite = function(data){
                                 var url = data
-                                CIQ.UI.stxtap(stClose[el],()=>{
-                                    CIQ.getFavorite().then(data=>{
-                                        var favoriteSymbolList = []
-                                        var favoriteIndicatorList = []
-                                        try{
-                                            favoriteSymbolList = JSON.parse(data.favorite_symbol)
-                                            favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-                                        }catch{}
-                                        //console.log(favoriteIndicatorList)
-                                            for(var item in favoriteIndicatorList){
-                                                if(favoriteIndicatorList[item].url == url){
-                                                    favoriteIndicatorList.splice(item,1)
-                                                    CIQ.updateFavorite(JSON.stringify(favoriteIndicatorList),JSON.stringify(favoriteSymbolList))
-                                                    // var node = document.getElementsByClassName("cookie")
-                                                    // node[0].innerHTML = "Add To Favorite Indicators"
-
-                                                    //description("Indicator is removed from favorite indicators")
-                                                }
-                                            }
-                                        })
-                                });       
+                                const favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
+                                CIQ.UI.stxtap(stClose[el],async ()=>{
+                                    for(var item in favoriteIndicatorList){
+                                        if(favoriteIndicatorList[item].url == url){
+                                            favoriteIndicatorList.splice(item,1)
+                                            await CIQ.store.dispatch('chart/update_favorite', {
+                                                indicator: JSON.stringify(favoriteIndicatorList),
+                                                symbol: JSON.stringify(CIQ.store.getters.getFavoriteSymbolList)
+                                            })
+                                        }
+                                    }
+                                })     
                             }
                             removeFavorite(results[el].data.url)
                         }               
@@ -231,8 +222,8 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         category: item.category
                     }})
 
-                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList
-                        resu.push(...favIndicatorList.data.data.map(item=>{return {
+                        const favoriteIndicatorListBtv1 = CIQ.store.getters.getFavoriteIndicatorListBtv1
+                        resu.push(...favoriteIndicatorListBtv1.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0]}
                         }))
@@ -287,14 +278,13 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
-                    //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
-                    const data = await CIQ.getFavorite()     // btv2 fav
-
-                        resu = JSON.parse(data.favorite_indicator).map(item => ({...item, source:'Backtest Engine v2.0'}))
-
-                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList     // btv1 fav
-                        resu.push(...favIndicatorList.data.data.map(item=>{return {
+                    
+                        // btv2 fav
+                        resu = CIQ.store.getters.getFavoriteIndicatorList.map(item => ({...item, source:'Backtest Engine v2.0'}))
+                        // btv1 fav
+                        const favoriteIndicatorListBtv1 = CIQ.store.getters.getFavoriteIndicatorListBtv1     
+                        resu.push(...favoriteIndicatorListBtv1.data.data.map(item=>{return {
                             name:item.chart_name[0],
                             url:item.url[0],
                             source:'Backtest Engine v1.0'

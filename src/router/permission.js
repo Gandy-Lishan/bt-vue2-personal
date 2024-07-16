@@ -188,6 +188,12 @@ async function initiateIndicatorList() {
 		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
 		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 	}
+	if (
+		store.getters.getFavoriteIndicatorList.length == 0 ||
+		store.getters.getFavoriteSymbolList.length == 0
+	) {
+		await store.dispatch('chart/get_favorite')
+	}
 }
 
 async function fetchDataList(source) {

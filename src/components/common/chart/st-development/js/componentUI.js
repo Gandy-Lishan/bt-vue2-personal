@@ -22,7 +22,6 @@
 
 //import store from '../../../../stocksystemui/src/store/store.ts'
 import { CIQ } from 'chartiq/js/chartiq.js'
-import * as mqs from 'qs'
 
 var claims = []
 /**
@@ -3099,21 +3098,7 @@ CIQ.UI.SentimentLook.prototype.remove = function() {
  * add a symbol to favoriteList
  */
 CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
-	const data = await CIQ.getFavorite()
-	var favoriteSymbolList = []
-	var favoriteIndicatorList = []
-	try {
-		favoriteSymbolList = JSON.parse(data.favorite_symbol)
-		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	} catch {}
-
-	//console.log('addSYmbolCookie,getFavorite: ',data)
-	if (!data.favorite_symbol) {
-		favoriteSymbolList = []
-	}
-	if (!data.favorite_indicator) {
-		favoriteIndicatorList = []
-	}
+	let favoriteSymbolList = CIQ.store.getters.getFavoriteSymbolList
 
 	// if a symbol doesn't exist in list, switch button
 	var div = document
@@ -3129,11 +3114,11 @@ CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
 	// filter redundant items
 	if (favoriteSymbolList.indexOf(CIQ.stxx.chart.symbol) === -1) {
 		favoriteSymbolList.push(CIQ.stxx.chart.symbol)
-		//console.log('addSYmbolCookie,updateFavorite: ',favoriteSymbolList)
-		CIQ.updateFavorite(
-			JSON.stringify(favoriteIndicatorList),
-			JSON.stringify(favoriteSymbolList)
-		)
+
+		await CIQ.store.dispatch('chart/update_favorite', {
+			indicator: JSON.stringify(CIQ.store.getters.getFavoriteIndicatorList),
+			symbol: JSON.stringify(favoriteSymbolList)
+		})
 	}
 }
 
@@ -3141,21 +3126,7 @@ CIQ.UI.SentimentLook.prototype.addSymbolCookie = async function() {
  * remove a symbol from favoriteList
  */
 CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function() {
-	const data = await CIQ.getFavorite()
-	var favoriteSymbolList = []
-	var favoriteIndicatorList = []
-	try {
-		favoriteSymbolList = JSON.parse(data.favorite_symbol)
-		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	} catch {}
-	//console.log('delSYmbolCookie: ',favoriteSymbolList)
-
-	if (!data.favorite_symbol) {
-		favoriteSymbolList = []
-	}
-	if (!data.favorite_indicator) {
-		favoriteIndicatorList = []
-	}
+	let favoriteSymbolList = CIQ.store.getters.getFavoriteSymbolList
 
 	for (var item in favoriteSymbolList) {
 		if (favoriteSymbolList[item] == CIQ.stxx.chart.symbol) {
@@ -3165,16 +3136,17 @@ CIQ.UI.SentimentLook.prototype.delSymbolCookie = async function() {
 	var div = document
 		.querySelectorAll('.favBtnContainer')[0]
 		.querySelectorAll('button')[0]
-	//document.querySelectorAll(".cq-comparison-new")[0].classList.remove('stxMenuActive')
+
 	div.style.cssText =
 		'width: 188px;height: 32px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #f8f8f9;font-family: Helvetica, sans-serif;cursor:pointer;color: #666'
 	div.innerHTML =
 		"<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#1296db'></path></svg><span>Add to favorites</span></div>"
 	div.attributes.stxtap.nodeValue = 'SentimentLook.addSymbolCookie()'
-	CIQ.updateFavorite(
-		JSON.stringify(favoriteIndicatorList),
-		JSON.stringify(favoriteSymbolList)
-	)
+
+	await CIQ.store.dispatch('chart/update_favorite', {
+		indicator: JSON.stringify(CIQ.store.getters.getFavoriteIndicatorList),
+		symbol: JSON.stringify(favoriteSymbolList)
+	})
 
 	this.contextDialog.forEach(function(studyContext) {
 		if (studyContext.close) studyContext.close()
@@ -3423,74 +3395,8 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 	//CIQ.addIndicators({})
 }
 
-/**
- * customized features below
- * get favorites indicators and symbol from backend and update vuex store
- */
-CIQ.getFavorite = function() {
-	return new Promise((resolve, reject) => {
-		//set 10 sec as default,However, some time-consuming requests are processed separately
-		// todo 先不加5秒的超时检测，因为这样会和响应拦截器冲突
-		CIQ.axios
-			.get('/dev/dev/favorites/', { cache: true, withCredentials: true })
-			.then(res => {
-				//console.log(res.data.favorite_symbol)
-				var favoriteSymbolList = []
-				var favoriteIndicatorList = []
-				try {
-					favoriteSymbolList = JSON.parse(res.data.favorite_symbol)
-					favoriteIndicatorList = JSON.parse(res.data.favorite_indicator)
-				} catch {}
-				CIQ.store.commit(
-					'chart/setFavoriteIndicatorList',
-					favoriteIndicatorList
-				)
-				CIQ.store.commit('chart/setFavoriteSymbolList', favoriteSymbolList)
-
-				resolve(res.data)
-			})
-		// .catch(err=>{
-		// 	// todo, 暂时用于进入backteser路由的权限控制
-		// 	console.log(err)
-		// 	//window.location.href = "/404?mes="+err.response.status+"&desc= the Backtester Page"
-		// 	reject(err)
-		// })
-	})
-}
-
-/**
- * customized features below
- * update favorites indicators and symbol in backend and update vuex store
- */
-CIQ.updateFavorite = function(indicator, symbol) {
-	//console.log("updateFavorite",symbol)
-	CIQ.store.commit('chart/setFavoriteIndicatorList', JSON.parse(indicator))
-	CIQ.store.commit('chart/setFavoriteSymbolList', JSON.parse(symbol))
-	var mFavorite = {}
-	mFavorite.favorite_indicator = indicator
-	mFavorite.favorite_symbol = symbol
-	console.log(mFavorite)
-
-	return new Promise((resolve, reject) => {
-		CIQ.axios
-			.put('/dev/dev/favorites/', mqs.stringify(mFavorite), {
-				cache: true,
-				withCredentials: true
-			})
-			.then(res => {
-				resolve(res.data)
-			})
-			.catch(err => {
-				reject(err)
-			})
-	})
-}
 CIQ.UI.StudyEdit.prototype.updateOverlayEdit = async function() {
-	var favoriteIndicatorList = []
-	const data = await CIQ.getFavorite()
-	try {
-		favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	} catch {}
+	const favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
 
 	for (var item in favoriteIndicatorList) {
 		if (favoriteIndicatorList[item].url == this.params.sd.type) {
@@ -3515,29 +3421,12 @@ CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node) {
 		if (studyContext.close) studyContext.close()
 	})
 
-	const data = await CIQ.getFavorite()
-	// after getting the res....
-	var favoriteSymbolList = []
-	var favoriteIndicatorList = []
-	try {
-		var favoriteSymbolList = JSON.parse(data.favorite_symbol)
-		var favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	} catch {}
+	let favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
 
-	if (!data.favorite_symbol) {
-		favoriteSymbolList = []
-	}
-	if (!data.favorite_indicator) {
-		favoriteIndicatorList = []
-	}
 	let _obj = CIQ.findSentiIndicator(null, this.params.sd.type)
 	var mFavorite = {}
 	mFavorite.url = this.params.sd.type
 	mFavorite.name = _obj.chart_name
-
-	// var node = document.getElementsByClassName("cookie")
-	// node[0].innerHTML = "Remove From Favorite Indicators"
-	// node[0].attributes.stxtap.nodeValue="StudyEdit.delIndicatorCookie()";
 
 	favoriteIndicatorList.push(mFavorite)
 	// 1. 去重
@@ -3547,10 +3436,10 @@ CIQ.UI.StudyEdit.prototype.addIndicatorCookie = async function(node) {
 		return arr.filter(a => !res.has(a.url) && res.set(a.url, 1))
 	}
 
-	await CIQ.updateFavorite(
-		JSON.stringify(filterDuplicate(favoriteIndicatorList)),
-		JSON.stringify(favoriteSymbolList)
-	)
+	await CIQ.store.dispatch('chart/update_favorite', {
+		indicator: JSON.stringify(filterDuplicate(favoriteIndicatorList)),
+		symbol: JSON.stringify(CIQ.store.getters.getFavoriteSymbolList)
+	})
 	console.log('after add:', filterDuplicate(favoriteIndicatorList))
 }
 /**
@@ -3561,21 +3450,7 @@ CIQ.UI.StudyEdit.prototype.delIndicatorCookie = async function(node) {
 		if (studyContext.close) studyContext.close()
 	})
 
-	const data = await CIQ.getFavorite()
-	// after getting the res....
-	var favoriteSymbolList = []
-	var favoriteIndicatorList = []
-	try {
-		var favoriteSymbolList = JSON.parse(data.favorite_symbol)
-		var favoriteIndicatorList = JSON.parse(data.favorite_indicator)
-	} catch {}
-
-	if (!data.favorite_symbol) {
-		favoriteSymbolList = []
-	}
-	if (!data.favorite_indicator) {
-		favoriteIndicatorList = []
-	}
+	let favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
 
 	for (var item in favoriteIndicatorList) {
 		if (favoriteIndicatorList[item].url == this.params.sd.type) {
@@ -3583,14 +3458,10 @@ CIQ.UI.StudyEdit.prototype.delIndicatorCookie = async function(node) {
 		}
 	}
 
-	// var node = document.getElementsByClassName("cookie")
-	// node[0].innerHTML = "Add To Favorite Indicators"
-	// node[0].attributes.stxtap.nodeValue="StudyEdit.addIndicatorCookie()";
-
-	await CIQ.updateFavorite(
-		JSON.stringify(favoriteIndicatorList),
-		JSON.stringify(favoriteSymbolList)
-	)
+	await CIQ.store.dispatch('chart/update_favorite', {
+		indicator: JSON.stringify(favoriteIndicatorList),
+		symbol: JSON.stringify(CIQ.store.getters.getFavoriteSymbolList)
+	})
 
 	console.log('after del:', favoriteIndicatorList)
 }
