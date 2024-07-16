@@ -215,7 +215,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                     newObj['url'] = _obj.symbol
                     return newObj
                 })
-                
+
                 var list = [...listStock,...listIndex]
                 
                 resu.forEach(element => {
