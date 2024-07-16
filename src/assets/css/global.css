@@ -569,8 +569,18 @@ input[type="time"] {
   text-align: center;
   padding: 0px;
 }
-
+.my-favorite-table.el-table .cell {
+  font-weight: 700;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+  padding: 0px;
+}
 .virtual-table.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
+  padding: 2px 0px;
+}
+.my-favorite-table.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
   padding: 2px 0px;
 }
 .virtual-table.el-table .cell.el-tooltip {

@@ -130,7 +130,6 @@ const actions = {
 		commit('SET_CPM_RESULTS_DATA', data);
 	},
 	async fetchIndicatorsPageList({ commit }, type) {
-		debugger
 		const cachedData = localStorage.getItem(type);
 		const cachedTime = localStorage.getItem(`${type}_timestamp`);
 		const now = new Date().getTime();

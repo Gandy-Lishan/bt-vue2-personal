@@ -627,7 +627,6 @@ export default {
     // },
     ...mapActions('states', ['fetchIndicatorsPageList']),
     async loadMore (type) {
-      debugger
       this.optionsChecked = type
       if(this.tableData.length === 0) this.loading = true
       let _results
@@ -640,7 +639,6 @@ export default {
         _results = []
        this.loading = false
       }
-      debugger
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
       this.loading = false

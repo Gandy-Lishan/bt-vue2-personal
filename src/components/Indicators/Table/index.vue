@@ -54,7 +54,7 @@
               </div>
             </ais-instant-search>
           </div>
-          <div class="searchBox">
+          <div class="searchBox" v-show="selectedTitle === 'Indicators'">
             <el-select v-model="searchCategory" slot="prepend" placeholder="" size="mini">
 							<el-option
 								v-for="category in categories"
@@ -75,7 +75,7 @@
     </div>
   </div>
 </template>
-<script>
+<script> 
 import StrategiesTable from "./ForTest";
 import SummaryTable from "./SummaryTable";
 import Popular from "./Popular";
@@ -99,7 +99,7 @@ export default {
       searchKey: '',
       tag: 'All',
       searchCategory: '',
-      hasSearched: false,
+      hasSearched: true,
       categories: [
         {
           label: 'Stocks Indicator List',
@@ -181,13 +181,43 @@ export default {
     SummaryTable,
     Popular
   },
+  mounted() {
+    // 使用 querySelector 获取 input 元素
+    const inputElement = document.querySelector('.ais-SearchBox-input');
+
+    if (inputElement) {
+      // 监听 input 事件
+      inputElement.addEventListener('input', this.handleInput);
+      // 监听 change 事件
+      inputElement.addEventListener('change', this.handleChange);
+      // 监听 blur 事件
+      inputElement.addEventListener('blur', this.handleBlur);
+    }
+  },
   beforeDestroy () {
     // 离开此组件前保存筛选条件状态
     console.log('离开此组件前保存筛选条件状态', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
     LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
+     // 使用 querySelector 获取 input 元素
+     const inputElement = this.$el.querySelector('.ais-SearchBox-input');
+    if (inputElement) {
+      // 移除事件监听
+      inputElement.removeEventListener('input', this.handleInput);
+      inputElement.removeEventListener('change', this.handleChange);
+      inputElement.removeEventListener('blur', this.handleBlur);
+    }
   },
   methods: {
     ...mapActions('states', ['fetchIndicatorsPageList']),
+    handleInput(event) {
+      console.log('Input event:', event.target.value);
+    },
+    handleChange(event) {
+      console.log('Change event:', event.target.value);
+    },
+    handleBlur(event) {
+      console.log('Blur event:', event.target.value);
+    },
     onInputChange(event) {
       console.log('onInputChange', event)
       this.hasSearched = event.currentTarget.value.trim().length > 0;

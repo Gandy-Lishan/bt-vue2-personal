@@ -1,14 +1,13 @@
 <template>
 	<div class="StrategiesContent">
-		<div class="strategiesTable">
 			<el-table
 				ref="Table"
-				class="ScannerBTTable"
+				class="my-favorite-table"
 				:data="paginatedData"
 				empty-text="No data"
 				v-loading="loading"
 				@sort-change="onSortChange"
-				size="small"
+				size="mini"
 				style="width: 100%; height: 100%; margin: 0 auto"
 				stripe
 			>
@@ -83,13 +82,14 @@
 				:total="immutableTableData.length"
 				layout="total, sizes, prev, pager, next, jumper"
 			></el-pagination>
-		</div>
 	</div>
 </template>
 
 <script>
 import { getStrategySummaryList } from '@/service/service'
 import { LocalStorageUtil, timestampToTime } from "@/utils"
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'SummaryTable',
   props: {
@@ -104,63 +104,41 @@ export default {
       total: 0,
       searchKey: '',
       tableCol: [
-        {
-          label: 'Model Name',
-          value: 'model_name',
-          key: 'model_name',
-					minWidth: '250px',
-					maxWidth: '300px'
-        },
-        {
-          label: 'Strategy CAGR',
-          value: 'CAGR',
-          key: 'CAGR'
-        },
-        {
-          label: 'Benchmark CAGR',
-          value: 'benchmark_CAGR',
-          key: 'benchmark_CAGR'
-        },
-        {
-          label: 'Max Drawdown',
-          value: 'max_drawdown',
-          key: 'max_drawdown'
-        },
-        {
-          label: 'Net Profit(%)',
-          value: 'net_profit_pct',
-          key: 'net_profit_pct'
-        },
-        {
-          label: 'Sharpe Ratio',
-          value: 'sharp_ratio',
-          key: 'sharp_ratio'
-        },
-        {
-          label: 'Profit/Loss Ratio',
-          value: 'profit_loss_ratio',
-          key: 'profit_loss_ratio'
-        },
-        {
-          label: 'Average Win',
-          value: 'average_win',
-          key: 'average_win'
-        },
-        {
-          label: 'Average Loss',
-          value: 'average_loss',
-          key: 'average_loss'
-        },
-        {
-          label: 'Total Trades',
-          value: 'total_trades',
-          key: 'total_trades'
-        },
-        {
-          label: 'Win Rate(%)',
-          value: 'win_rate_pct',
-          key: 'win_rate_pct'
-        }
+								{
+										key: 'chart_name',
+										label: 'Name',
+										value: 'chart_name'
+								},
+								{
+										key: 'groups',
+										label: 'Groups',
+										value: 'groups'
+								},
+								{
+										key: 'timeframe',
+										label: 'Time Frame',
+										value: 'timeframe'
+								},
+								{
+										key: 'last_value',
+										label: 'Value',
+										value: 'last_value'
+								},
+								{
+										key: 'last_change',
+										label: 'Change',
+										value: 'last_change'
+								},
+								{
+										key: 'last_update',
+										label: 'Date',
+										value: 'last_update'
+								},
+								{
+										key: 'sentiment',
+										label: 'Sentiment',
+										value: 'sentiment'
+								}
       ],
       tableData: [],
       immutableTableData: [],
@@ -169,17 +147,38 @@ export default {
     }
   },
   computed: {
+		...mapGetters(['getFavIndicatorList', 'getMyIndicatorList']),
 		paginatedData() {
       // 计算分页数据
       const startIndex = (this.currentPage - 1) * this.pageSize;
       const endIndex = startIndex + this.pageSize;
       return this.immutableTableData.slice(startIndex, endIndex);
 		},
+		favoritesList() {
+				return this.getFavIndicatorList
+		},
+		indicatorsList() {
+				return this.getMyIndicatorList
+		}
 	},
-  // async mounted() {
-  //   await this.getDataList()
-  // },
+	created() {
+		debugger
+		console.log('favoritesList', this.favoritesList)
+		console.log('indicatorsList', this.indicatorsList)
+		// if(this.favoritesList) {
+		// 	const res = [...favIndicatorList.data.data].map(item=>
+		// 	({
+		// 		name:item.chart_name[0],
+		// 		url:item.url[0]
+		// 	}))
+		// }
+	},
   methods: {
+			see() {
+		console.log('favoritesList', this.favoritesList)
+		console.log('indicatorsList', this.indicatorsList)
+
+			},
     handleSizeChange(size) {
 			this.pageSize = size;
 			this.currentPage = 1; // Reset to the first page when the page size changes
