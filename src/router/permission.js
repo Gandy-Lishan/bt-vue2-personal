@@ -1,6 +1,7 @@
 import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCurDate } from '@/service/ai'
+import { getIndicatorsRowData } from "@/service/service";
 import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
 import store from '../store'
 import { uniqWith, isEqual } from "lodash"
@@ -27,7 +28,13 @@ export function setRouterPermission(router) {
 		if (backtestID) LocalStorageUtil.set('backtestID', backtestID)
 		// 当跳转携带 indicator 和 symbol 时，填充
 		const indicator = getQueryVariable('indicator')
-		const symbol = getQueryVariable('index')
+		let symbol = getQueryVariable('index')
+		if (symbol === 'Unknown'){
+			const rowData = await getIndicatorsRowData(indicator)
+      const {market_symbol} = rowData?.data
+			const _symbol = market_symbol || 'SPX'
+			symbol = _symbol
+		}
 		if (indicator) LocalStorageUtil.set('indicator', indicator)
 		if (symbol) LocalStorageUtil.set('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求

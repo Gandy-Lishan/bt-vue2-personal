@@ -11,7 +11,8 @@
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
           </div>
           <div class="search-container">
-            <ais-instant-search
+            <Search></Search>
+            <!-- <ais-instant-search
             :search-client="searchClient"
             index-name="charts"
             :insights="true"
@@ -30,29 +31,13 @@
                     <ul v-if="Number(items.length) > 0">
                       <li v-for="item in items" :key="item.objectID">
                         <span @click="openScreen(item)"><ais-highlight :hit="item" attribute="chart_name" class="chart_name"/></span>
-                        <!-- <a><ais-highlight :hit="item" attribute="description" /></a> -->
-
-                        <!-- <button
-                          type="button"
-                          @click="sendEvent('click', item, 'Item Starred')"
-                        >
-                          Star
-                        </button>
-
-                        <button
-                          type="button"
-                          @click="sendEvent('conversion', item, 'Item Ordered')"
-                        >
-                          Order
-                        </button> -->
                       </li>
                     </ul>
                     </template>
                   </ais-hits>
-                  <!-- <div class="pagination" :class="{ active: hasSearched }"><ais-pagination /></div> -->
                 </div>
               </div>
-            </ais-instant-search>
+            </ais-instant-search> -->
           </div>
           <div class="searchBox" v-show="selectedTitle === 'Indicators'">
             <el-select v-model="searchCategory" slot="prepend" placeholder="" size="mini">
@@ -78,6 +63,7 @@
 <script> 
 import StrategiesTable from "./ForTest";
 import SummaryTable from "./SummaryTable";
+import Search from "./Search";
 import Popular from "./Popular";
 import { mapActions, mapGetters } from 'vuex'
 import { getIndicatorsRowData } from "@/service/service";
@@ -179,7 +165,8 @@ export default {
   components: {
     StrategiesTable,
     SummaryTable,
-    Popular
+    Popular,
+    Search
   },
   mounted() {
     // 使用 querySelector 获取 input 元素
@@ -255,7 +242,6 @@ export default {
     },
     async downloadCSV() {
       // 访问组件示例数据
-      debugger
       const type = this.searchCategory
       let data = this.indicatorsListData[type]
       if(!data || !data.length) {
