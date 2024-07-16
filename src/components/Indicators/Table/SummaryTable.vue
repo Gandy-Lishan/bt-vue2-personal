@@ -147,7 +147,7 @@ export default {
     }
   },
   computed: {
-		...mapGetters(['getFavIndicatorList', 'getMyIndicatorList']),
+		...mapGetters(['getFavoriteIndicatorListBtv1', 'getMyIndicatorList']),
 		paginatedData() {
       // 计算分页数据
       const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -155,7 +155,7 @@ export default {
       return this.immutableTableData.slice(startIndex, endIndex);
 		},
 		favoritesList() {
-				return this.getFavIndicatorList
+				return this.getFavoriteIndicatorListBtv1
 		},
 		indicatorsList() {
 				return this.getMyIndicatorList
