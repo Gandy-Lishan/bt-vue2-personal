@@ -208,7 +208,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                         })
                                 });       
                             }
-                            removeFavorite(results[el].data.symbol)
+                            removeFavorite(results[el].data.url)
                         }               
                     }
                 }
@@ -223,7 +223,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 if (filter == "ALL"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
-                    const list = CIQ.store.state.chart.indicatorsList
+                    const list = CIQ.store.getters.getIndicatorsList
                     let resu = list.map(item=>{return {
                         name: item.chart_name,
                         url: item.url,
@@ -283,30 +283,30 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                        if (loader) loader.hide(); 
                 }else if (filter == "MY FAVORITES"){  
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
                     //var resu = CIQ.store.state.chart.favoriteIndicatorList
                     var resu = []
-                    const data = await CIQ.getFavorite()
+                    const data = await CIQ.getFavorite()     // btv2 fav
 
-                        resu = JSON.parse(data.favorite_indicator)
+                        resu = JSON.parse(data.favorite_indicator).map(item => ({...item, source:'Backtest Engine v2.0'}))
 
-                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList
+                        const favIndicatorList = CIQ.store.getters.getFavIndicatorList     // btv1 fav
                         resu.push(...favIndicatorList.data.data.map(item=>{return {
                             name:item.chart_name[0],
-                            url:item.url[0]}
-                        }))
+                            url:item.url[0],
+                            source:'Backtest Engine v1.0'
+                        }}))
                         // 去重
                         resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
                             return resu.find(item => item.url === url);
                         });
                         
                             var results = []
-                            const myIndicatorList = CIQ.store.getters.getMyIndicatorList
-                            const list = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-
+                            const myIndicatorList = CIQ.store.getters.getMyIndicatorList     // custom indicator
+                            const list = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe, source:'Custom Indicator'}))
                             resu.push(...list)
                             resu.map(element => {
                                 let item
@@ -316,11 +316,12 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                         name: element.name,
                                         updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
                                         exchDisp: "",
+                                        source: element.source,
                                     }
                                 }catch(err){return null}
     
                                 results.push({
-                                    display: [item.name, item.updated],
+                                    display: [item.name, item.updated, item.source],
                                     data: item,
                                     priority: createStateFilter(value)(item),
                                 });  
@@ -330,14 +331,14 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
 
-                          loader.hide(); 
+                           if (loader) loader.hide(); 
                 }else if (filter == "MOST POPULAR"){
                     var loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  
 
                     var results = []
-                    for(var i=0;i<CIQ.store.state.chart.indicatorsList.length;i++){
-                        var fields = CIQ.store.state.chart.indicatorsList[i]
+                    for(var i=0;i<CIQ.store.getters.getIndicatorsList.length;i++){
+                        var fields = CIQ.store.getters.getIndicatorsList[i]
                         
                         try{
                             var item = {
@@ -803,7 +804,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
                     if(currentFilter == 'MY FAVORITES'){
-                        nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
+                        if(item.display[2]=='Backtest Engine v2.0'){
+                            nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
+                        }else{
+                            nodeText += "<div class='ciq-icon'></div>"
+                        }
                     }
                     
                     var node = document.createElement("cq-item");

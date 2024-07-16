@@ -210,7 +210,7 @@ export default {
                     }
                 }
             };
-
+// TODO 考虑优化
             // 创建一个MutationObserver实例并传入回调函数
             const observer = new MutationObserver(callback);
 

@@ -3,10 +3,9 @@
  */
 import {printConsole} from '@/utils'
 
-let currentVersion // 当前版本
 let version // 新版本
 // const timeData = 60 * 1000 // 检查间隔时间
-const timeData = 20 * 1000 // 检查间隔时间
+const timeData = 300 * 1000 // 检查间隔时间
 let hidden = false // 页面是否隐藏
 let setTimeoutId
 let needTip = true // 默认开启提示

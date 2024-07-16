@@ -22,12 +22,12 @@ let __st_js_indicatorType_ = _exports => {
 	CIQ.findSentiIndicator = function(name, url) {
 		let signal
 		if (name) {
-			signal = CIQ.store.state.chart.indicatorsList.find(i => {
+			signal = CIQ.store.getters.getIndicatorsList.find(i => {
 				return i.chart_name == name
 			})
 		}
 		if (url) {
-			signal = CIQ.store.state.chart.indicatorsList.find(i => {
+			signal = CIQ.store.getters.getIndicatorsList.find(i => {
 				return i.url == url
 			})
 		}

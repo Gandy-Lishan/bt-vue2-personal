@@ -677,7 +677,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 // normal datafeed
                 if(window.location.pathname.includes('/scannerai')){
                     CIQ.store.dispatch('chart/set_chart_type', 'candle')
-                }else if(window.location.pathname.includes('/myindicator') && CIQ.isOHLCVSelectedMI){    // TODO
+                }else if(window.location.pathname.includes('/myindicator') && CIQ.isOHLCVSelectedMI){    // TODO 考虑用vuex state替代CIQ全局变量
                     CIQ.store.dispatch('chart/set_chart_type', 'candle')
                 }else{
                     CIQ.store.dispatch('chart/set_chart_type', 'line')
