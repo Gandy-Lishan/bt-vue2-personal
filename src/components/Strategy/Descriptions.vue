@@ -79,7 +79,7 @@
 														</table>
 														<template v-if="item.trade_table_outfile">
 															<hr />
-															<p>Details of the 10 Most Recent Transactions</p>
+															<p>Details of the 10 Most Recent Transactions(Table updated on a monthly basis)</p>
 															<p></p>
 															<center>
 																<img
