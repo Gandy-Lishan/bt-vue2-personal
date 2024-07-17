@@ -12,9 +12,9 @@
       </template>
       <Chart v-if="enlargedTable !== null" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
     </div>
-    <div class="image-hover" :style="hoverStyle" v-if="showImg">
-      <img style="height: 300px; width: 100%;" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
-    </div>
+    <!-- <div class="image-hover" :style="hoverStyle">
+      <img style="height: 300px; width: 100%;" v-if="showImg" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
+    </div> -->
   </div>
 </template>
 
@@ -186,7 +186,7 @@ export default {
       const clientHight = (this.$refs['ForTest'].offsetHeight)
       const clientWidth = (this.$refs['ForTest'].offsetWidth)
       console.log(this.$refs['ForTest'])
-      console.log(clientHight, clientWidth)
+      // console.log(clientHight, clientWidth)
       const container = this.$refs['ForTest']
       if(container) {
         console.log('container', container.getBoundingClientRect())
@@ -195,6 +195,7 @@ export default {
       //   const element = this.$refs[data.refName]
       //   if(element) console.log('element', element[0].getBoundingClientRect())
       // }
+      debugger
       this.showImg = data?.showImg
       this.hoveredImage = data?.hoveredImage
       this.hoverStyle = data?.hoverStyle
@@ -203,6 +204,7 @@ export default {
       console.log('Received data from child:', data);
     },
     onLoad() {
+      debugger
       this.showImg = true
     },
     onError() {
@@ -232,13 +234,13 @@ export default {
   }
 }
 
-.image-hover {
-  position: fixed;
-    z-index: 2000;
-    border: 1px solid #ccc;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
+// .image-hover {
+//   position: fixed;
+//     z-index: 2000;
+//     border: 1px solid #ccc;
+//     background: #fff;
+//     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+//   }
 // .right {
 //   display: grid;
 //   grid-template-columns: 1fr;

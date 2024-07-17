@@ -4,6 +4,7 @@
       :data="tableData"
       :item-size="itemSize"
       key-prop="url"
+      class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
       <el-table
         v-el-table-infinite-scroll="loadMore"
@@ -45,7 +46,7 @@
               :sortable="l.sortable"
             >
             <template slot-scope="scope">
-              <el-button type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
@@ -61,9 +62,9 @@
           </el-divider>
         </div>
       </el-table>
-      <!-- <div v-if="showImg" class="image-hover" :style="hoverStyle">
-        <img :src="hoveredImage" :alt="hoveredChartName"  @load="onLoad" @error="onError" style="max-width: 400px; min-width: 300px ;z-index: 2000"/>
-      </div> -->
+      <div class="image-hover" :style="hoverStyle">
+        <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
+      </div>
     </virtual-scroll>
 </template>
 
@@ -663,77 +664,54 @@ export default {
       await this.$emit('loadMore', item.value, true)
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
-      // 获取 table 容器的宽高
-      // console.log('event', event)
-      // if(this.type.includes('Seasonality')) {this.handleCellMouseLeave();return}
-      // const clientHight = parseFloat(this.$refs['Table'].bodyHeight.height)
-      // const clientWidth = parseFloat(this.$refs['Table'].bodyWidth)
-      // if(this.showImg) return
-      // this.showImg = true
-      // this.hoveredChartName = row?.chart_name || '';
-      // this.hoverStyle.display = 'block';
-      // console.log(clientHight, event.clientY)
-      //   this.hoverStyle.top = `${event.clientY - 400}px`;
-      //   this.hoverStyle.left = `${event.clientX}px`;
-      // 超出屏幕
-      // else if (window.innerHeight > (event.clientY+ 500)){
-      //   console.log(event.clientY+ 500,window.innerHeight);
-      //   this.hoverStyle.top = `${event.clientY-500}px`;
-      // this.hoverStyle.left = `${event.clientX}px`;
-      // this.hoverStyle.right = `${event.clientY + 500 }px`;
-      // this.hoverStyle.bottom = `${event.clientX}px`;
-      // }
-      // if(this.type.includes('Seasonality')) this.sendData({
-      //   showImg: false,
-      //   hoveredChartName: '',
-      //   hoveredImage: '',
+      if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
+        let _t = '50%'
+        let _r = '10%'
+        const hoverElement = event.target
+        const container = this.$el.querySelector('.virtual-table')
+        if(hoverElement && container) {
+          let moveUp = 0
+          const containerRect = container.getBoundingClientRect()
+          const hoverElementRect = hoverElement.getBoundingClientRect()
+          // 计算相对于顶部的位置
+          const topPosition = hoverElementRect.top - containerRect.top + container.scrollTop
+          const containerHeight = container.clientHeight
+          console.log('Top position', topPosition)
+          // 如果高度超过容器, 向上移
+          if((topPosition + 350) > containerHeight)  moveUp = - (topPosition + 350 - containerHeight)
+          _t = topPosition + 50 + moveUp
+        }
+        console.log(event, this.enlarged)
+      //   this.sendData({
+      //   showImg: true,
+      //   hoveredChartName: row?.chart_name || '',
+      //   hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`,
       //   hoverStyle: {
-      //     display: 'none'
-      //   }
+      //     top: `${event.clientY}px`,
+      //     left: `${event.clientX}px`,
+      //     display: 'block'
+      //   },
+      //   refName: this.refName
       // })
-      if(row.url && !this.type.includes('Seasonality')) {
-        this.sendData({
-        showImg: true,
-        hoveredChartName: row?.chart_name || '',
-        hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`,
-        hoverStyle: {
-          top: `${event.clientX}px`,
-          left: `${event.clientX}px`,
-          display: 'block'
-        },
-        refName: this.refName
-      })
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
-      this.hoverStyle = { 
-        top: `${event.clientX}px`,
-        left: `${event.clientX}px`,
+      // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
+      _t=`${_t}px`;_r=`10%`
+      this.hoverStyle = {
+        top: _t,
+        right: _r,
         display: 'block'
       }
     }
-      return
-
-      this.fetchImage(row);
-    }, 1000),
+    }, 0),
     handleCellMouseLeave() {
-      this.sendData({
-        showImg: false,
-        hoveredChartName: '',
-        hoveredImage: '',
-        hoverStyle: {
-          display: 'none'
-        }
-      })
       this.showImg = false
       this.hoveredChartName = ''
       this.hoveredImage = ''
       this.hoverStyle = {
         display: 'none'
       }
-    },
-    fetchImage(row) {
-      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png` // Adjust according to your API response
     },
     updateChart(row) {
       console.log(row)
@@ -751,6 +729,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.virtualScroll {
+  position: relative;
+}
+.image-hover {
+    position: absolute;
+    z-index: 2000;
+  }
 .virtual-table {
   /deep/ .el-table {
     border: 1px solid #d9d9d9;
@@ -798,17 +783,6 @@ export default {
     font-weight: 600;
     color: #333;
   }
-  .image-hover {
-    position: absolute;
-    z-index: 2000;
-    border: 1px solid #ccc;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-  .image-hover img {
-    max-width: 100px;
-    max-height: 100px;
-  }
   .header-span {
     display: flex;
     align-items: center;
@@ -847,6 +821,10 @@ export default {
   }
   /deep/ .el-table__cell gutter {
     width: 0px !important;
+  }
+  .chart-name-btn:hover {
+    color: #1d4ed7;
+    text-decoration: underline;
   }
 }
 </style>
