@@ -458,6 +458,7 @@ CIQ.createForecastMarker = async function(type){
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
+					yPositioner: "below_candle",
 					x: standardDate,
 					label: "bullish",
 					node: newNode
