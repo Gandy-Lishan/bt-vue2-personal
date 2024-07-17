@@ -329,7 +329,7 @@
 				var div = document
                     .querySelectorAll(".favBtnContainer")[0]
                     .querySelectorAll("button")[0]
-                    
+
 				var count=0;
 				for(var item in favoriteSymbolList){
 					if(favoriteSymbolList[item] == CIQ.stxx.chart.symbol){
@@ -510,9 +510,9 @@
                      parameters: { init: {
                          studyOverZonesEnabled: false,
                          studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*1000)/1000:999,
-                         studyOverBoughtColor: "#FF0000",
+                         studyOverBoughtColor: process.env.VUE_APP_RED,
                          studyOverSoldValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.upper_extreme_value*1000)/1000:-999,
-                         studyOverSoldColor: "#00DD00",
+                         studyOverSoldColor: process.env.VUE_APP_GREEN
                      }},
                      attributes:{
                          studyOverBoughtValue:{"step":0.001},
@@ -604,9 +604,9 @@
                          parameters: { init: {
                              studyOverZonesEnabled: false,
                              studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
-                             studyOverBoughtColor: "#FF0000",
+                             studyOverBoughtColor: process.env.VUE_APP_RED,
                              studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,
-                             studyOverSoldColor: "#00DD00",
+                             studyOverSoldColor: process.env.VUE_APP_GREEN
                          }},
                          attributes:{
                              studyOverBoughtValue:{"step":0.001},

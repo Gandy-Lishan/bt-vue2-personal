@@ -111,9 +111,9 @@
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: 999,
-                            studyOverBoughtColor: "#FF0000",
+                            studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: 999,
-                            studyOverSoldColor: "#00DD00",
+                            studyOverSoldColor: process.env.VUE_APP_GREEN
                         }},
                         attributes:{
                             studyOverBoughtValue:{"step":0.001},
@@ -164,9 +164,9 @@
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
                                 studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
-                                studyOverBoughtColor: "#FF0000",
+                                studyOverBoughtColor: process.env.VUE_APP_RED,
                                 studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,
-                                studyOverSoldColor: "#00DD00",
+                                studyOverSoldColor: process.env.VUE_APP_GREEN
                             }},
                             attributes:{
                                 studyOverBoughtValue:{"step":0.001},
@@ -623,9 +623,9 @@ debugger
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: extremeLines?Math.round(extremeLines.op*1000)/1000:NaN,
-                            studyOverBoughtColor: "#FF0000",
+                            studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: extremeLines?Math.round(extremeLines.ep*1000)/1000:NaN,
-                            studyOverSoldColor: "#00DD00",
+                            studyOverSoldColor: process.env.VUE_APP_GREEN
                         }},
                         attributes:{
                             studyOverBoughtValue:{"step":0.001},
@@ -666,9 +666,9 @@ debugger
                                     parameters: { init: {
                                         studyOverZonesEnabled: false,
                                         studyOverBoughtValue: newQuotes.opt_extreme?Math.round(newQuotes.opt_extreme*1000)/1000:NaN,
-                                        studyOverBoughtColor: "#FF0000",
+                                        studyOverBoughtColor: process.env.VUE_APP_RED,
                                         studyOverSoldValue: newQuotes.pess_extreme?Math.round(newQuotes.pess_extreme*1000)/1000:NaN,
-                                        studyOverSoldColor: "#00DD00",
+                                        studyOverSoldColor: process.env.VUE_APP_GREEN
                                     }},
                                     attributes:{
                                         studyOverBoughtValue:{"step":0.001},
