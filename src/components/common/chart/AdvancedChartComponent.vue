@@ -384,8 +384,6 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 import UploaderVue from './st-development/components/Uploader.vue'
-const throttle = require('lodash/throttle')
-const jutils = require("jutils-src")
 
 @Component({})
 export default class AdvancedChartComponent extends Vue {
@@ -474,6 +472,7 @@ export default class AdvancedChartComponent extends Vue {
 			this.symbolMutationObserver()
 		}, 0)			
 	}
+
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
 		stx.layout.headsUp={floating:true};

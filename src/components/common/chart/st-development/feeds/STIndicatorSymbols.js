@@ -193,12 +193,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         } 
     } else if (filter == 'MY FAVORITES'){
         var results = []
-        var resu = CIQ.store.state.chart.favoriteSymbolList
-        // var resu = []
-        // const data = await CIQ.getFavorite()
-        // try{
-        //     resu = JSON.parse(data.favorite_indicator)
-        // }catch{}
+        var resu = CIQ.store.getters.getFavoriteSymbolList
 
             try {
                 var listStock = CIQ.store.getters.getStockList.map(_obj=>{

@@ -1,5 +1,6 @@
 import axios from '../axios'
 import { uniqueObjectArray } from '@/utils/formValidate'
+import * as mqs from 'qs'
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -1466,3 +1467,40 @@ export function getIndicatorsRowData(url) {
 	})
 }
 /* Indicators Page 接口 END */
+
+/** Begin fetch BTV2 fav indicator & symbol list*/
+export function getFavorite() {
+	const path =`/dev/dev/favorites/`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { cache: true, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function updateFavorite(indicator,symbol) {
+	const path =`/dev/dev/favorites/`
+	var mFavorite = {}
+	mFavorite.favorite_indicator = indicator
+	mFavorite.favorite_symbol = symbol
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(path, mqs.stringify(mFavorite), {
+				cache: true,
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/** End fetch BTV2 fav indicator & symbol list*/

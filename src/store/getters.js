@@ -24,7 +24,7 @@ const getters = {
 		  state.chart.ma_color_1[panelIndex % state.chart.ma_color_2.length];
 	  },
 	getMySymbollist: state => state.chart.mySymbolList,
-	getFavIndicatorList: state => state.chart.favIndicatorList,
+	getFavoriteIndicatorListBtv1: state => state.chart.favoriteIndicatorListBtv1,
 	getMyIndicatorList: state => state.chart.myIndicatorList,
 	getChartType: state => state.chart.chartType,
 	getStockList: state => state.chart.stocksList,
@@ -34,6 +34,8 @@ const getters = {
 	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
 	getSymbollistForecast: state => state.chart.symbollistForecast,
 	getForecastMarket: state => state.chart.forecastMarket,
+	getFavoriteIndicatorList: state => state.chart.favoriteIndicatorList,
+	getFavoriteSymbolList: state => state.chart.favoriteSymbolList,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
