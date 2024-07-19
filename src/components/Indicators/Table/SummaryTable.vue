@@ -1,337 +1,279 @@
 <template>
-	<div class="StrategiesContent">
+	<div class="virtualScroll">
+    <button @click="see">Test See</button>
 			<el-table
 				ref="Table"
-				class="my-favorite-table"
-				:data="paginatedData"
+				class="virtual-table"
+				:data="tableData"
 				empty-text="No data"
 				v-loading="loading"
-				@sort-change="onSortChange"
 				size="mini"
+        border
 				style="width: 100%; height: 100%; margin: 0 auto"
 				stripe
+				@cell-mouse-enter="handleCellMouseEnter"
+        @cell-mouse-leave="handleCellMouseLeave"
 			>
-				<template v-for="l in tableCol">
+			<el-table-column align="center" width="70px">
+				<template slot-scope="scope">
+          <el-button-group>
+            <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
+            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
+				<template v-for="l in columns">
 					<el-table-column
+						:key="l.label"
 						:label="l.label"
 						:prop="l.value"
-						:key="l.key"
 						show-overflow-tooltip
 						:min-width="l.minWidth"
 						:max-width="l.maxWidth"
-						v-if="
-							[
-								'model_name',
-								'sharp_ratio',
-								'total_trades'
-							].includes(l.value)
-						"
-						:sortable="
-							[
-								'model_name',
-								'sharp_ratio',
-								'total_trades'
-							].includes(l.value)
-								? 'custom'
-								: false
-						"
-					>
-						<template slot-scope="scope">
-							<span class="tableText" v-if="l.value === 'model_name'">
-								<el-button type="text" @click="
-										() => {
-											viewSignalDescription(scope.row)
-										}
-									">{{ scope.row[l.value] }}</el-button>
-							</span>
-							<span class="tableText" v-else>
-								{{ scope.row[l.value] }}
-							</span>
-						</template>
-					</el-table-column>
-					<el-table-column
-						:label="l.label"
-						:prop="l.value"
-						:key="l.key"
-						show-overflow-tooltip
 						:width="l.width"
-						v-if="['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)"
-            :sortable="
-							['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)
-								? 'custom'
-								: false
-						"
+						:sortable="l.sortable"
 					>
 					<template slot-scope="scope">
-						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}%
-						</span>
-            <span class="tableText" v-else>
-							{{ scope.row[l.value] }}
-						</span>
+						<el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+						<img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+						<span v-else>{{ scope.row[l.value] }}</span>
 					</template>
 					</el-table-column>
 				</template>
 			</el-table>
-			<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:page-sizes="[10, 30, 50, 100, 200]"
-				:page-size="pageSize"
-				:current-page="currentPage"
-				:total="immutableTableData.length"
-				layout="total, sizes, prev, pager, next, jumper"
-			></el-pagination>
+			<div class="image-hover" :style="hoverStyle">
+        <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
+      </div>
 	</div>
 </template>
 
 <script>
-import { getStrategySummaryList } from '@/service/service'
-import { LocalStorageUtil, timestampToTime } from "@/utils"
-import { mapGetters } from 'vuex'
+import { getIndicatorsRowData } from '@/service/service'
+import { mapGetters, mapActions } from 'vuex'
+import { capitalizeFirstLetter, unifyNumber } from "@/utils"
+const debounce = require('lodash/debounce')
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'SummaryTable',
-  props: {
-    urlToNameMap: Object,
-		tag: String
-  },
   data() {
     return {
       loading: false,
-      pageSize: 10, // Default page size
-      currentPage: 1, // Default current page
-      total: 0,
-      searchKey: '',
-      tableCol: [
-								{
-										key: 'chart_name',
-										label: 'Name',
-										value: 'chart_name'
-								},
-								{
-										key: 'groups',
-										label: 'Groups',
-										value: 'groups'
-								},
-								{
-										key: 'timeframe',
-										label: 'Time Frame',
-										value: 'timeframe'
-								},
-								{
-										key: 'last_value',
-										label: 'Value',
-										value: 'last_value'
-								},
-								{
-										key: 'last_change',
-										label: 'Change',
-										value: 'last_change'
-								},
-								{
-										key: 'last_update',
-										label: 'Date',
-										value: 'last_update'
-								},
-								{
-										key: 'sentiment',
-										label: 'Sentiment',
-										value: 'sentiment'
-								}
+      columns: [
+				{
+						key: 'chart_name',
+						label: 'Name',
+						value: 'chart_name',
+						minWidth: '250px'
+				},
+				{
+						key: 'groups',
+						label: 'Groups',
+						value: 'groups'
+				},
+				{
+						key: 'timeframe',
+						label: 'Time Frame',
+						value: 'timeframe'
+				},
+				{
+						key: 'last_value',
+						label: 'Value',
+						value: 'last_value'
+				},
+				{
+						key: 'last_change',
+						label: 'Change',
+						value: 'last_change'
+				},
+				{
+						key: 'last_update',
+						label: 'Date',
+						value: 'last_update'
+				},
+				{
+						key: 'sentiment',
+						label: 'Sentiment',
+						value: 'sentiment'
+				}
       ],
       tableData: [],
-      immutableTableData: [],
-      currentSort: {}, // 当前的排序信息
-      dataList: [],
+			hoveredChartName: '',
+      showImg: false,
+      hoveredImage: '',
+      hoverStyle: {
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        display: 'none'
+      },
     }
   },
   computed: {
-		...mapGetters(['getFavoriteIndicatorListBtv1', 'getMyIndicatorList']),
-		paginatedData() {
-      // 计算分页数据
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.immutableTableData.slice(startIndex, endIndex);
-		},
-		favoritesList() {
+		...mapGetters(['getFavoriteIndicatorListBtv1', 'getMyIndicatorList', 'getFavoriteIndicatorList', 'getFavoriteSymbolList']),
+		favoritesBtv1List() {
 				return this.getFavoriteIndicatorListBtv1
+		},
+		favoritesBtv2List() {
+				return this.getFavoriteIndicatorList
 		},
 		indicatorsList() {
 				return this.getMyIndicatorList
+		},
+		_favoriteSymbolList() {
+			return this.getFavoriteSymbolList
 		}
 	},
 	created() {
-		debugger
-		console.log('favoritesList', this.favoritesList)
+		console.log('favoritesList', this.favoritesBtv1List)
 		console.log('indicatorsList', this.indicatorsList)
-		// if(this.favoritesList) {
-		// 	const res = [...favIndicatorList.data.data].map(item=>
-		// 	({
-		// 		name:item.chart_name[0],
-		// 		url:item.url[0]
-		// 	}))
-		// }
+		console.log('favoritesBTV2List', this.favoritesBtv2List)
 	},
   methods: {
-			see() {
-		console.log('favoritesList', this.favoritesList)
-		console.log('indicatorsList', this.indicatorsList)
-
-			},
-    handleSizeChange(size) {
-			this.pageSize = size;
-			this.currentPage = 1; // Reset to the first page when the page size changes
-		},
-    handleCurrentChange(currentPage) {
-			this.currentPage = currentPage;
-		},
-    portfolio() {
-      console.log('paginatedData', this.paginatedData.filter(item => item.selection))
-    },
-    async getDataList() {
-      this.loading = true
-      let res = null
-      const page = this.currentPage
+    ...mapActions('chart', ['update_favorite']),
+		async see() {
+			console.log('favoritesBTV1List', this.favoritesBtv1List)
+			console.log('indicatorsList', this.indicatorsList)
+			console.log('favoritesBTV2List', this.favoritesBtv2List)
+			let resu = []
+											
+			// btv2 fav
+			resu = this.favoritesBtv2List.map(item => ({...item, source:'Backtest Engine v2.0'}))
+			// btv1 fav
+			resu.push(...this.favoritesBtv1List.data.data.map(item=>{return {
+					name:item.chart_name[0],
+					url:item.url[0],
+					source:'Backtest Engine v1.0'
+			}}))
+			// 去重
+			resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+					return resu.find(item => item.url === url);
+			});
+			console.log('resu', resu)
+			const fetchData = async(res) => {
 			try {
-				res = await getStrategySummaryList()
-        const code = res?.data?.code
-				if (code == 200) {
-          const data = res?.data?.data
-          for (const item of data) {
-            item.selection = false;
-            item.date = timestampToTime(item.date)
-						const urlToNameMap = Object.keys(this.urlToNameMap).length > 0 ? this.urlToNameMap : LocalStorageUtil.get('urlToNameMap')
-              const {model_name, updated, category, favorite} = urlToNameMap[item.model]
-              if (model_name !== undefined) {
-                  item['model_name'] = model_name;
-                  item['updated'] = updated
-									item['category'] = category
-									item['favorite'] = favorite
+					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
+					const dataPromises = responses.map(response => response);
+					const allData = await Promise.all(dataPromises);
+					const detailData = allData.map(data => data.data);
+					this.tableData = detailData.map(obj => {
+						const groups = obj['groups']
+            for (const key in obj) {
+              if (Object.hasOwnProperty.call(obj, key)) {
+                if(key === 'timeframe') {
+                  if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
+                  else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
+                  else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
+                }else if(key === 'groups') {
+                  // 大写首字母
+                  obj[key] = capitalizeFirstLetter(obj[key])
+                }
+                if(['last_value', 'last_change'].includes(key)) {
+                  // 保留特定小数点
+                  if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
+                }
+                if((key === 'last_value' || key === 'last_change') && (groups === 'stocks' || groups === 'Stocks')){
+                  if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
+                  // 加 %
+                }
+								if(key === 'url') {
+									obj['source'] = resu.find(item => item.url === obj[key])?.source
+								}
               }
-          }
-					this.tableData = data
-          this.immutableTableData = data
-          console.log('Summary 列表数据', this.immutableTableData)
-					this.total = data.length
-				}
-			} catch(error) {
-				console.log('报错了', error)
-        if(error.response.status === 404) {
-          const newPage = page != 1 ? page - 1 : 1
-          this.handleCurrentChange(newPage)
-          return
+            }
+            return obj
+          })
+					console.log('detailData',detailData)
+			} catch (error) {
+					console.error('Error:', error);
+			}
+			}
+			await fetchData(resu)
+		},
+		handleCellMouseEnter: debounce(function (row, column, cell, event){
+      if(row.url && column.property === 'chart_name') {
+        let _t = '50%'
+        let _l = '300px'
+        const hoverElement = event.target
+        const container = this.$el.querySelector('.virtual-table')
+        if(hoverElement && container) {
+          let moveUp = 0
+          const containerRect = container.getBoundingClientRect()
+          const hoverElementRect = hoverElement.getBoundingClientRect()
+          // 计算相对于顶部的位置
+          const topPosition = hoverElementRect.top - containerRect.top + container.scrollTop
+          const containerHeight = container.clientHeight
+          console.log('Top position', topPosition)
+          // 如果高度超过容器, 向上移
+          if((topPosition + 350) > containerHeight)  moveUp = - (topPosition + 350 - containerHeight)
+          _t = topPosition + 50 + moveUp
         }
-        this.currentPage = 1
-        this.total = 0
-        this.tableData = []
-        this.immutableTableData = data
-      } finally {
-        this.loading = false
-				this.highlightedTag(this.tag)
+      //   this.sendData({
+      //   showImg: true,
+      //   hoveredChartName: row?.chart_name || '',
+      //   hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`,
+      //   hoverStyle: {
+      //     top: `${event.clientY}px`,
+      //     left: `${event.clientX}px`,
+      //     display: 'block'
+      //   },
+      //   refName: this.refName
+      // })
+      this.showImg = true
+      this.hoveredChartName = row?.chart_name || ''
+      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
+      // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
+      _t=`${_t}px`;_l= `${column.realWidth || 300}px`
+      this.hoverStyle = {
+        top: _t,
+        left: _l,
+        display: 'block'
+      }
+    }
+    }, 0),
+    handleCellMouseLeave() {
+      this.showImg = false
+      this.hoveredChartName = ''
+      this.hoveredImage = ''
+      this.hoverStyle = {
+        display: 'none'
       }
     },
-    onSortChange(column){
-			var sortingOrder = column.order
-			var colName = column.prop
-      console.log('colName', colName)
-      this.currentSort = {
-        prop: colName,
-        order: sortingOrder
-      };
-			// 数字字符串转数字类型排序
-			if(['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.immutableTableData.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _b - _a
-					})
-				}else if(sortingOrder == 'descending'){
-					this.immutableTableData.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _a - _b
-					})
-				}else{
-				}
-			}
-			// 数字类型排序
-			if(['sharp_ratio', 'total_trades'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.immutableTableData.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.immutableTableData.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
-				}
-			}
-			// 日期类型排序
-			if(['date'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.immutableTableData.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.immutableTableData.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
-			// 字符串类型排序
-			if(['model_name'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.immutableTableData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.immutableTableData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else{
-				}
-			}
-		},
-    handleQuery(searchItem){
-      if (searchItem) {
-				const trimmedStr = searchItem.trim();
-				const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
-				this.immutableTableData = this.tableData.filter((item) => {
-					return regex.test(item.model_name);
-				});
-			} else {
-				this.immutableTableData = this.tableData;
-			}
+		updateChart(row) {
+      console.log(row)
+      window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return
     },
-    // 使用反斜杠转义特殊字符
-    escapeRegExp(str) {
-      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    onLoad() {
+      this.showImg = true
     },
-    async viewSignalDescription(row) {
-			const { model: url, model_name } = row
-			this.$router.push({
-				path: '/strategy/descriptions',
-				query: {
-					url,
-          name: model_name
+    onError() {
+      this.showImg = false
+    },
+		async deleteRow(row, isAdd) {
+			console.log(row)
+			debugger
+			if(row.source === 'Backtest Engine v2.0') {
+				this.loading = true
+				try {
+					// 可以移除
+					// 查找 URL 所在的索引
+					const favList = cloneDeep(this.favoritesBtv2List)
+					let index = favList.findIndex(item => item.url === row.url);
+					if (index !== -1 && !isAdd) favList.splice(index, 1);
+					if (isAdd) favList.push({url: row.url, name: row.chart_name})
+					await this.update_favorite({
+						indicator: JSON.stringify(favList),
+						symbol: JSON.stringify(this._favoriteSymbolList)
+					})
+					await this.see()
+					this.popUpMsgBox('Successful deleted')
+				} catch (error) {
+					this.popUpMsgBox('Delete failed')
+				} finally {
+					this.loading = false
 				}
-			})
-		},
-		highlightedTag(tag) {
-			// 重置分页和排序信息
-			this.currentPage = 1;
-			if (tag !== 'All' && tag !== 'Favorites') {
-				this.immutableTableData = this.tableData.filter(
-					(item) => item.category === tag
-				)
-			} else if(tag === 'All'){
-				this.immutableTableData = [...this.tableData]
-			}else if(tag === 'Favorites'){
-				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
+			}else {
+
 			}
 		}
   }
@@ -339,5 +281,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../index.less";
+.virtualScroll {
+	position: relative;
+	.image-hover {
+			position: absolute;
+			z-index: 2000;
+	}
+	.chart-name-btn:hover {
+			color: #1d4ed7;
+			text-decoration: underline;
+	}
+	/deep/ .el-icon-close {
+		font-weight: 700;
+		color: #5b9bd1;
+	}
+} 
 </style>

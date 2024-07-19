@@ -74,6 +74,11 @@ const XLSX = require('xlsx');
 
 export default {
   name: 'IndicatorsList',
+  provide() {
+    return {
+      addIndicatorsFavorites: this.addIndicatorsFavorites
+    };
+  },
   data() {
     return {
       searchClient: algoliasearch(
@@ -302,6 +307,12 @@ export default {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, name);
       XLSX.writeFile(wb, `${name}.xlsx`);
+    },
+    
+    addIndicatorsFavorites(row, isAdd) {
+      // 添加收藏夹
+      console.log('添加收藏夹', row)
+      this.$refs['My Favorites'].addRow(row, isAdd)
     }
   }
 }

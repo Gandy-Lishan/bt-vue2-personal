@@ -34,6 +34,13 @@
               </template>
             </div>
           </template>
+          <el-table-column align="center" width="50px" v-if="this.enlarged">
+            <template slot-scope="scope">
+              <el-button-group>
+                <el-button type="text" icon="el-icon-plus" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+              </el-button-group>
+            </template>
+          </el-table-column>
           <template v-for="l in columns">
             <el-table-column
               :key="l.label"
@@ -92,7 +99,7 @@ export default {
   components: {
     VirtualScroll
   },
-  inject: ['sendData', 'toggleEnlarge'],
+  inject: ['sendData', 'toggleEnlarge', 'addIndicatorsFavorites'],
   data() {
     return {
       virtualList: [],
@@ -127,7 +134,8 @@ export default {
             {
               key: 'groups',
               label: 'Groups',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -137,12 +145,14 @@ export default {
             {
               key: 'last_value',
               label: 'Value',
-              value: 'last_value'
+              value: 'last_value',
+              addPercentSign: true
             },
             {
               key: 'last_change',
               label: 'Change',
-              value: 'last_change'
+              value: 'last_change',
+              addPercentSign: true
             },
             {
               key: 'last_update',
@@ -167,7 +177,8 @@ export default {
             {
               key: 'url',
               label: 'Symbol',
-              value: 'url'
+              value: 'url',
+              allCapLetters: true
             },
             {
               key: 'timeframe',
@@ -212,7 +223,8 @@ export default {
             {
               key: 'url',
               label: 'Symbol',
-              value: 'url'
+              value: 'url',
+              allCapLetters: true
             },
             {
               key: 'timeframe',
@@ -337,7 +349,8 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -377,7 +390,8 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -417,7 +431,8 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -456,7 +471,8 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -495,7 +511,8 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'timeframe',
@@ -535,17 +552,20 @@ export default {
             {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'win_rate',
               label: 'Win Rate',
-              value: 'win_rate'
+              value: 'win_rate',
+              addPercentSign: true
             },
             {
               key: 'avg_return',
               label: 'Avg Return',
-              value: 'avg_return'
+              value: 'avg_return',
+              addPercentSign: true
             },
             {
               key: 'last_update',
@@ -568,19 +588,27 @@ export default {
               minWidth: '250px'
             },
             {
+              key: 'underlying_name',
+              label: 'Name',
+              value: 'underlying_name',
+            },
+            {
               key: 'groups',
               label: 'Group',
-              value: 'groups'
+              value: 'groups',
+              capFirstLetter: true
             },
             {
               key: 'win_rate',
               label: 'Win Rate',
-              value: 'win_rate'
+              value: 'win_rate',
+              addPercentSign: true
             },
             {
               key: 'avg_return',
               label: 'Avg Return',
-              value: 'avg_return'
+              value: 'avg_return',
+              addPercentSign: true
             },
             {
               key: 'last_update',
@@ -603,20 +631,33 @@ export default {
               minWidth: '250px'
             },
             {
-              
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
+              key: 'underlying_name',
+              label: 'Name',
+              value: 'underlying_name'
             },
             {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
+              key: 'groups',
+              label: 'Groups',
+              value: 'groups',
+              capFirstLetter: true
             },
             {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
+              key: 'win_rate',
+              label: 'Win Rate',
+              value: 'win_rate',
+              addPercentSign: true
+            },
+            {
+              key: 'avg_return',
+              label: 'Avg Return',
+              value: 'avg_return',
+              addPercentSign: true
+            },
+            {
+              key: 'avg_net_return',
+              label: 'Avg Net Return',
+              value: 'avg_net_return',
+              addPercentSign: true
             },
             {
               key: 'last_update',
@@ -666,10 +707,10 @@ export default {
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
         let _t = '50%'
-        let _r = '10%'
+        let _l = 0
         const hoverElement = event.target
         const container = this.$el.querySelector('.virtual-table')
-        if(hoverElement && container) {
+        if(hoverElement && container && column.realWidth) {
           let moveUp = 0
           const containerRect = container.getBoundingClientRect()
           const hoverElementRect = hoverElement.getBoundingClientRect()
@@ -697,10 +738,10 @@ export default {
       this.hoveredChartName = row?.chart_name || ''
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
-      _t=`${_t}px`;_r=`10%`
+      _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {
         top: _t,
-        right: _r,
+        left: _l,
         display: 'block'
       }
     }
@@ -723,6 +764,9 @@ export default {
     },
     onError() {
       this.showImg = false
+    },
+    addRow(row) {
+      this.addIndicatorsFavorites(row, true)
     }
   }
 }
@@ -747,18 +791,22 @@ export default {
     font-weight: 600;
     color: #333;
     padding: 0px;
-    &:first-child .cell {
+    .cell {
       padding-left: 0px;
       padding-right: 0px;
     }
   }
+  /deep/ .el-icon-plus {
+		font-weight: 700;
+		color: #5b9bd1;
+	}
   /deep/ tr th.is-leaf.el-table__cell {
     background-color: #ffffff;
     text-align: left;
     .cell {
       font-weight: 600;
       color: #333;
-      padding-left: 10px;
+      padding-left: 0px;
     }
   }
   /deep/ th.el-table__cell.gutter:last-of-type{

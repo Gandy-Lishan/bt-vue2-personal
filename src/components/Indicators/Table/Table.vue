@@ -21,6 +21,7 @@
 <script>
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
+import { capitalizeFirstLetter, unifyNumber } from "@/utils"
 export default {
   props: {
     tableInfo: Object,
@@ -61,539 +62,6 @@ export default {
     indicatorsListData() {
       return this.getIndicatorsPageListData
     },
-    columns() {
-      const columnsMap = new Map(([
-        ['stockColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Groups',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['NASDAQColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'z_score',
-              label: 'Z-Score',
-              value: 'z_score'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['SP1500Columns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'z_score',
-              label: 'Z-Score',
-              value: 'z_score'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['bondColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['commodityColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFSectorColumns', 
-          [
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFSectorBreadthColumns', 
-          [
-            {
-              key: 'breadth_measure',
-              label: 'Breadth Measure',
-              value: 'breadth_measure'
-            },
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'group',
-              label: 'Group',
-              value: 'group'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFFoundFlowColumns', 
-          [
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFMonthlyFundFlowColumns', 
-          [
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFSharesColumns', 
-          [
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['bondSeasonalityColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'win_rate',
-              label: 'Win Rate',
-              value: 'win_rate'
-            },
-            {
-              key: 'avg_return',
-              label: 'Avg Return',
-              value: 'avg_return'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['commoditySeasonalityColumns', 
-          [
-            {
-              key: 'url',
-              label: 'Symbol',
-              value: 'url'
-            },
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'win_rate',
-              label: 'Win Rate',
-              value: 'win_rate'
-            },
-            {
-              key: 'avg_return',
-              label: 'Avg Return',
-              value: 'avg_return'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['ETFSeasonalityColumns', 
-          [
-            {
-              key: 'breadth_measure',
-              label: 'Breadth Measure',
-              value: 'breadth_measure'
-            },
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name'
-            },
-            {
-              
-              key: 'time_frame',
-              label: 'Time Frame',
-              value: 'time_frame'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ]
-      ]))
-      return columnsMap.get(`${this.tableInfo['type']}Columns`)
-    }
   },
   watch: {
     selectedTitle: {
@@ -631,9 +99,46 @@ export default {
       if(this.tableData.length === 0) this.loading = true
       let _results
       try {
-        const key = this.urlMap[this.optionsChecked]
-        await this.fetchIndicatorsPageList(key)
-        _results = this.indicatorsListData[key]
+        const url = this.urlMap[this.optionsChecked]
+        await this.fetchIndicatorsPageList(url)
+        _results = this.indicatorsListData[url]
+          _results = _results.map(obj => {
+            for (const key in obj) {
+              debugger
+              if (Object.hasOwnProperty.call(obj, key)) {
+                if(key === 'timeframe') {
+                  if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
+                  else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
+                  else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
+                }else if(key === 'groups' && ['stock_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url)) {
+                  // 大写首字母
+                  obj[key] = capitalizeFirstLetter(obj[key])
+                }
+                if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return'].includes(key)) {
+                  // 保留特定小数点
+                  if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
+                  else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
+                  else if(key === 'win_rate' || key === 'avg_net_return'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
+                  else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}
+                }
+                if(
+                  ((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list')
+                  || (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality'].includes(url))
+                  || (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
+                  || (key === 'avg_net_return' && url === 'etf_seasonality')
+                ){
+                  if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
+                  // 加 %
+                }else if((key === 'url' && ['ndx_100_complete_list', 'sp_1500_complete_list'].includes(url))) {
+                  // 全部大写
+                  obj[key] = obj[key].toUpperCase()
+                }
+              }
+            }
+            return obj
+          })
+          debugger
+          console.log(_results)
       } catch (error) {
         console.log('error', error)
         _results = []

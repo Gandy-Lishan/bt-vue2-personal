@@ -209,7 +209,7 @@ export default {
     },
     onError() {
       this.showImg = false
-    }
+    },
   }
 }
 </script>

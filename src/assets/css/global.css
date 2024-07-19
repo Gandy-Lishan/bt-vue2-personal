@@ -723,6 +723,9 @@ color: #333341;
 	font-weight: 600;
   color: #333;
 }
+.virtual-table.el-table--border .el-table__cell:first-child .cell {
+  padding-left: 0px;
+}
 
 button#checkResBtn {
   padding: 0px 3px;
