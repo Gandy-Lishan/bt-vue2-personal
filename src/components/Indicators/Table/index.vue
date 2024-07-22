@@ -55,7 +55,7 @@
       <br>
       <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
-      <SummaryTable v-show="selectedTitle === 'My Favorites'" ref="My Favorites" :urlToNameMap="urlToNameMap" :tag="tag"></SummaryTable>
+      <SummaryTable v-show="selectedTitle === 'My Favorites'" ref="Favorites" :urlToNameMap="urlToNameMap" :tag="tag"></SummaryTable>
     </div>
     </div>
   </div>
@@ -173,18 +173,8 @@ export default {
     Popular,
     Search
   },
-  mounted() {
-    // 使用 querySelector 获取 input 元素
-    const inputElement = document.querySelector('.ais-SearchBox-input');
-
-    if (inputElement) {
-      // 监听 input 事件
-      inputElement.addEventListener('input', this.handleInput);
-      // 监听 change 事件
-      inputElement.addEventListener('change', this.handleChange);
-      // 监听 blur 事件
-      inputElement.addEventListener('blur', this.handleBlur);
-    }
+  async mounted() {
+    await this.$refs['Favorites'].see()
   },
   beforeDestroy () {
     // 离开此组件前保存筛选条件状态
@@ -235,7 +225,7 @@ export default {
     },
     async getUrlToNameMap(map) {
       this.urlToNameMap = map
-      await this.$refs['My Favorites'].getDataList()
+      await this.$refs['Favorites'].getDataList()
     },
     // handleQuery() {
     //   this.$refs[this.selectedTitle].handleQuery(this.searchKey)
@@ -243,7 +233,7 @@ export default {
     highlightedTag(tag) {
       console.log('tag', tag)
       this.tag = tag
-      this.$refs['My Favorites'].highlightedTag(tag)
+      this.$refs['Favorites'].highlightedTag(tag)
     },
     async downloadCSV() {
       // 访问组件示例数据
@@ -309,10 +299,12 @@ export default {
       XLSX.writeFile(wb, `${name}.xlsx`);
     },
     
-    addIndicatorsFavorites(row, isAdd) {
+    async addIndicatorsFavorites(row, isAdd) {
       // 添加收藏夹
       console.log('添加收藏夹', row)
-      this.$refs['My Favorites'].addRow(row, isAdd)
+      debugger
+      debugger
+      await this.$refs['Favorites'].deleteRow(row, isAdd)
     }
   }
 }

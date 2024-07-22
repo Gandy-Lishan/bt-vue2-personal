@@ -148,7 +148,7 @@ export default {
                 const chart = this;
                 const index = allKeysName.find(key => key !== url);
                 const button = document.createElement('button');
-                button.innerHTML = 'With Backtest Engine v2.0';
+                button.innerHTML = 'Backtest With Indicator';
                 button.style.position = 'absolute';
 
                 const subtitleBBox = chart.subtitle.getBBox();

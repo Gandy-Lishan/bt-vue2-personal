@@ -37,7 +37,7 @@
           <el-table-column align="center" width="50px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button type="text" icon="el-icon-plus" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+                <el-button type="text" icon="el-icon-star-off" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
               </el-button-group>
             </template>
           </el-table-column>

@@ -10,7 +10,8 @@
          :style="{ width: enlargedTable === item.label ? '60%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
-      <Chart v-if="enlargedTable !== null" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+      <Chart v-if="enlargedTable !== null && displayRow?.type !== 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+      <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type === 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
     </div>
     <!-- <div class="image-hover" :style="hoverStyle">
       <img style="height: 300px; width: 100%;" v-if="showImg" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
@@ -21,6 +22,7 @@
 <script>
 import Table from "./Table";
 import Chart from "./Chart"
+import SeasonalityChart from "./SeasonalityChart"
 
 export default {
   name: 'ForTest',
@@ -168,7 +170,8 @@ export default {
   },
   components: {
     Chart,
-    Table
+    Table,
+    SeasonalityChart
   },
   methods: {
     toggleEnlarge(label) {
@@ -180,6 +183,7 @@ export default {
       }
     },
     updateChart(row) {
+      console.log('updateChart', row)
       this.displayRow = row
     },
     sendData(data) {

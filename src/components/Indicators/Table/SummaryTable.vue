@@ -1,6 +1,6 @@
 <template>
 	<div class="virtualScroll">
-    <button @click="see">Test See</button>
+    <!-- <button @click="see">Test See</button> -->
 			<el-table
 				ref="Table"
 				class="virtual-table"
@@ -18,7 +18,7 @@
 				<template slot-scope="scope">
           <el-button-group>
             <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
-            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" icon="el-icon-star-on" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -251,8 +251,7 @@ export default {
     },
 		async deleteRow(row, isAdd) {
 			console.log(row)
-			debugger
-			if(row.source === 'Backtest Engine v2.0') {
+			if(row.source === 'Backtest Engine v2.0' || (row.groups && isAdd)) {
 				this.loading = true
 				try {
 					// 可以移除
@@ -260,7 +259,8 @@ export default {
 					const favList = cloneDeep(this.favoritesBtv2List)
 					let index = favList.findIndex(item => item.url === row.url);
 					if (index !== -1 && !isAdd) favList.splice(index, 1);
-					if (isAdd) favList.push({url: row.url, name: row.chart_name})
+					if (index === -1 && isAdd) favList.push({url: row.url, name: row.chart_name})
+					if(index !== -1 && isAdd) {this.popUpMsgBox('This indicator already exists in favorites'); this.loading = false; return}
 					await this.update_favorite({
 						indicator: JSON.stringify(favList),
 						symbol: JSON.stringify(this._favoriteSymbolList)
