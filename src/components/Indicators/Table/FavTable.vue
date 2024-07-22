@@ -1,24 +1,37 @@
 <template>
-	<div class="virtualScroll">
-    <!-- <button @click="see">Test See</button> -->
+    <virtual-scroll
+      :ref="refName"
+      :data="tableData"
+      :item-size="itemSize"
+      key-prop="url"
+      class="virtualScroll"
+      @change="(renderData) => virtualList = renderData">
 			<el-table
+      v-el-table-infinite-scroll="loadMore"
 				ref="Table"
 				class="virtual-table"
-				:data="tableData"
+				:data="virtualList"
 				empty-text="No data"
 				v-loading="loading"
 				size="mini"
         border
-				style="width: 100%; height: 100%; margin: 0 auto"
+        row-key="url"
 				stripe
 				@cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
+				height="600"
 			>
+			<el-table-column>
+				<template #header>
+					<div class="header-span">
+						<span>My Favorites</span>
+					</div>
+				</template>
 			<el-table-column align="center" width="70px">
 				<template slot-scope="scope">
           <el-button-group>
             <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
-            <el-button type="text" icon="el-icon-star-on" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-star-on" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -40,11 +53,12 @@
 					</template>
 					</el-table-column>
 				</template>
+			</el-table-column>
 			</el-table>
 			<div class="image-hover" :style="hoverStyle">
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
-	</div>
+  </virtual-scroll>
 </template>
 
 <script>
@@ -52,10 +66,21 @@ import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
 import { capitalizeFirstLetter, unifyNumber } from "@/utils"
 const debounce = require('lodash/debounce')
+import VirtualScroll from 'el-table-virtual-scroll'
+import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
-  name: 'SummaryTable',
+	props: {
+		selectedTitle: String
+	},
+  name: 'FavTable',
+  components: {
+    VirtualScroll
+  },
+  directives: {
+    ElTableInfiniteScroll
+  },
   data() {
     return {
       loading: false,
@@ -97,6 +122,7 @@ export default {
 						value: 'sentiment'
 				}
       ],
+      virtualList: [],
       tableData: [],
 			hoveredChartName: '',
       showImg: false,
@@ -124,6 +150,16 @@ export default {
 			return this.getFavoriteSymbolList
 		}
 	},
+	watch: {
+    selectedTitle: {
+      async handler (title) {
+        if(title === 'My Favorites'){
+					await this.see()
+					this.$emit('updateChart', this.tableData[0])
+				}
+      }
+    }
+  },
 	created() {
 		console.log('favoritesList', this.favoritesBtv1List)
 		console.log('indicatorsList', this.indicatorsList)
@@ -132,6 +168,7 @@ export default {
   methods: {
     ...mapActions('chart', ['update_favorite']),
 		async see() {
+			this.loading = true
 			console.log('favoritesBTV1List', this.favoritesBtv1List)
 			console.log('indicatorsList', this.indicatorsList)
 			console.log('favoritesBTV2List', this.favoritesBtv2List)
@@ -186,6 +223,9 @@ export default {
 					console.log('detailData',detailData)
 			} catch (error) {
 					console.error('Error:', error);
+					this.tableData = []
+			} finally {
+				this.loading = false
 			}
 			}
 			await fetchData(resu)
@@ -241,7 +281,8 @@ export default {
     },
 		updateChart(row) {
       console.log(row)
-      window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return
+      this.$emit("updateChart", row || {})
+      // window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return
     },
     onLoad() {
       this.showImg = true
@@ -251,7 +292,8 @@ export default {
     },
 		async deleteRow(row, isAdd) {
 			console.log(row)
-			if(row.source === 'Backtest Engine v2.0' || (row.groups && isAdd)) {
+			debugger
+			if(row.source === 'Backtest Engine v2.0') {
 				this.loading = true
 				try {
 					// 可以移除
@@ -268,12 +310,12 @@ export default {
 					await this.see()
 					this.popUpMsgBox('Successful deleted')
 				} catch (error) {
-					this.popUpMsgBox('Delete failed')
+        	this.popUpMsgBox('Failed to remove favorites')
 				} finally {
 					this.loading = false
 				}
-			}else {
-
+			}else if(row.source === 'Backtest Engine v1.0') {
+					// 请在主站的收藏夹中移除
 			}
 		}
   }
@@ -295,5 +337,104 @@ export default {
 		font-weight: 700;
 		color: #5b9bd1;
 	}
-} 
+}
+.image-hover {
+    position: absolute;
+    z-index: 2000;
+  }
+.virtual-table {
+  /deep/ .el-table {
+    border: 1px solid #d9d9d9;
+  }
+  /deep/ tr th.el-table__cell
+   {
+    text-align: center;
+    background-color: #d9d9d9;
+    font-weight: 600;
+    color: #333;
+    padding: 0px;
+    .cell {
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+  /deep/ .el-icon-plus {
+		font-weight: 700;
+		color: #5b9bd1;
+	}
+  /deep/ tr th.is-leaf.el-table__cell {
+    background-color: #ffffff;
+    text-align: left;
+    .cell {
+      font-weight: 600;
+      color: #333;
+      padding-left: 0px;
+    }
+  }
+  /deep/ th.el-table__cell.gutter:last-of-type{
+    border-bottom: none;
+    border-bottom-width: 1px;
+    background-color: #e5e7eb;
+  }
+  /deep/ .el-select {
+    width: 100%;
+  }
+  /deep/ .el-select .el-input__inner {
+    background-color: #d9d9d9;
+    font-weight: 600;
+    color: #333;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-color: #d9d9d9;
+  }
+  /deep/ .el-select .el-input .el-select__caret {
+    font-weight: 600;
+    color: #333;
+  }
+  .header-span {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid #d9d9d9;
+    span {
+      display: inline-block;
+      flex-grow: 1;
+      padding: 2px 0;
+      border-left: 2px solid #d9d9d9;
+    }
+    .el-icon-full-screen {
+      padding: 0px;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      &:hover {
+        color: #409eff;
+      }
+    }
+    .span {
+      cursor: pointer;
+      &:hover{
+      background-color: #ffffff;
+      }
+    }
+    .activated {
+      background-color: #ffffff;
+    }
+  }
+  /deep/ .el-button--mini, .el-button--small {
+    font-size: 10px;
+  }
+  /deep/ .el-button--mini, .el-button--mini.is-round {
+    padding: 0px;
+  }
+  /deep/ .el-table__cell gutter {
+    width: 0px !important;
+  }
+  .chart-name-btn:hover {
+    color: #1d4ed7;
+    text-decoration: underline;
+  }
+}
 </style>

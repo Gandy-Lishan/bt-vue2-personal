@@ -11,7 +11,7 @@
         :style="{ width: '60%', display: 'block' }"
         ></Table>
      </template>
-     <Chart :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
    </div>
    <div class="image-hover" :style="hoverStyle" v-if="showImg">
      <img style="height: 300px; width: 100%;" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>

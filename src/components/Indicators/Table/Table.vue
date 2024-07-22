@@ -58,10 +58,16 @@ export default {
     VirtualScrollTable,
   },
   computed: {
-    ...mapGetters(['getIndicatorsPageListData']),
+    ...mapGetters(['getIndicatorsPageListData', 'getFavoriteIndicatorListBtv1', 'getFavoriteIndicatorList']),
     indicatorsListData() {
       return this.getIndicatorsPageListData
     },
+    favoritesBtv1List() {
+				return this.getFavoriteIndicatorListBtv1
+		},
+		favoritesBtv2List() {
+				return this.getFavoriteIndicatorList
+		}
   },
   watch: {
     selectedTitle: {
@@ -104,7 +110,6 @@ export default {
         _results = this.indicatorsListData[url]
           _results = _results.map(obj => {
             for (const key in obj) {
-              debugger
               if (Object.hasOwnProperty.call(obj, key)) {
                 if(key === 'timeframe') {
                   if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
@@ -121,6 +126,25 @@ export default {
                   else if(key === 'win_rate' || key === 'avg_net_return'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
                   else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}
                 }
+                if(key === 'url' && obj['url'] === 'survey_aaii_bears') debugger
+                const isInBtv1List = this.favoritesBtv1List.data.data.find(item => item.url[0] === obj['url'])
+                const isInBtv2List = this.favoritesBtv2List.find(item => item.url === obj['url'])
+                if(key === 'url' && isInBtv1List) {
+                  obj['source'] = 'Backtest Engine v1.0'
+                  obj['favorite'] = true
+                }else if(key === 'url' && isInBtv2List) {
+                  obj['source'] = 'Backtest Engine v2.0'
+                  obj['favorite'] = true
+                }else if(key === 'url' && isInBtv2List && isInBtv1List) {
+                  obj['source'] = 'Backtest Engine v1.0 & v2.0'
+                  obj['favorite'] = true
+                }else if(key === 'url' && !isInBtv1List && !isInBtv2List) {
+                  obj['source'] = 'Backtest Engine v2.0'
+                  obj['favorite'] = false
+                }
+                // 加按钮 loading
+                obj['loading'] = false
+
                 if(
                   ((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list')
                   || (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality'].includes(url))

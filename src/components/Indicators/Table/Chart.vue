@@ -1,5 +1,5 @@
 <template>
-  <div id="container" style="height: 100%"></div>
+  <div :id="id" style="height: 100%"></div>
 </template>
 
 <script>
@@ -13,7 +13,8 @@ import axios from "@/axios";
 export default {
   name: 'Chart',
   props: {
-    row: Object
+    row: Object,
+    id: String
   },
   mounted() {
     Exporting(Highcharts);
@@ -32,6 +33,7 @@ export default {
   },
   methods: {
     async renderChart() {
+      debugger
       if(!this.row.url) return
       const {url, pess, opt, chart_name, last_value} = this.row;
 
@@ -68,7 +70,7 @@ export default {
         const minX = Math.min(...allData.map(d => d[0]));
         const maxX = Math.max(...allData.map(d => d[0]));
 
-        Highcharts.stockChart('container', {
+        Highcharts.stockChart(this.id, {
           rangeSelector: { selected: 4 },
           title: {
             text: chart_name || 'SPY Optix',
@@ -204,5 +206,6 @@ export default {
 <style lang="less" scoped>
 .highcharts-container {
   width: 100% !important;
+  height: 100% !important;
 }
 </style>

@@ -10,7 +10,7 @@
          :style="{ width: enlargedTable === item.label ? '60%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
-      <Chart v-if="enlargedTable !== null && displayRow?.type !== 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type !== 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
       <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type === 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
     </div>
     <!-- <div class="image-hover" :style="hoverStyle">

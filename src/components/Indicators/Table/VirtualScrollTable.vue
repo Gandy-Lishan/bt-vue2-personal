@@ -11,6 +11,7 @@
         ref="Table"
         class="virtual-table"
         :data="virtualList"
+				empty-text="No data"
         stripe
         border
         size="mini"
@@ -37,7 +38,8 @@
           <el-table-column align="center" width="50px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button type="text" icon="el-icon-star-off" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+                <el-button v-if="scope.row.favorite == false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-if="scope.row.favorite == true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope.row)" title="Remove to favorites" :loading="scope.row.loading"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -765,8 +767,16 @@ export default {
     onError() {
       this.showImg = false
     },
-    addRow(row) {
-      this.addIndicatorsFavorites(row, true)
+    async addRow(row) {
+      row.loading = true
+      try {
+        await this.addIndicatorsFavorites(row, !row.favorite)
+        row.favorite = !row.favorite
+      } catch (error) {
+        console.warn('移除收藏夹失败', error)
+      } finally {
+        row.loading = false
+      }
     }
   }
 }

@@ -55,14 +55,14 @@
       <br>
       <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
-      <SummaryTable v-show="selectedTitle === 'My Favorites'" ref="Favorites" :urlToNameMap="urlToNameMap" :tag="tag"></SummaryTable>
+      <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
     </div>
     </div>
   </div>
 </template>
 <script> 
 import StrategiesTable from "./ForTest";
-import SummaryTable from "./SummaryTable";
+import Favorites from "./Favorites";
 import Search from "./Search";
 import Popular from "./Popular";
 import { mapActions, mapGetters } from 'vuex'
@@ -86,9 +86,7 @@ export default {
         '080aea2b84a5e1263909139a3d6f1df1'
       ),
       selectedTitle: 'Indicators',
-      urlToNameMap: [],
       searchKey: '',
-      tag: 'All',
       searchCategory: '',
       hasSearched: true,
       categories: [
@@ -169,12 +167,9 @@ export default {
   },
   components: {
     StrategiesTable,
-    SummaryTable,
+    Favorites,
     Popular,
     Search
-  },
-  async mounted() {
-    await this.$refs['Favorites'].see()
   },
   beforeDestroy () {
     // 离开此组件前保存筛选条件状态
@@ -222,18 +217,6 @@ export default {
     },
     portfolio() {
       this.$refs['Indicators'].portfolio()
-    },
-    async getUrlToNameMap(map) {
-      this.urlToNameMap = map
-      await this.$refs['Favorites'].getDataList()
-    },
-    // handleQuery() {
-    //   this.$refs[this.selectedTitle].handleQuery(this.searchKey)
-    // },
-    highlightedTag(tag) {
-      console.log('tag', tag)
-      this.tag = tag
-      this.$refs['Favorites'].highlightedTag(tag)
     },
     async downloadCSV() {
       // 访问组件示例数据
@@ -302,8 +285,6 @@ export default {
     async addIndicatorsFavorites(row, isAdd) {
       // 添加收藏夹
       console.log('添加收藏夹', row)
-      debugger
-      debugger
       await this.$refs['Favorites'].deleteRow(row, isAdd)
     }
   }
