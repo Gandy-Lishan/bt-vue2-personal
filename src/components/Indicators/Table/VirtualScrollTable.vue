@@ -27,15 +27,20 @@
               <span>{{ label }}</span>
               <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
             </div>
+            <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CH3YMinMax'].includes(type)">
+              <template v-for="item in options">
+                <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
+              </template>
+            </div>
           </template>
-          <el-table-column>
+          <!-- <el-table-column>
           <template #header>
             <div class="header-span">
               <template v-for="item in options">
                 <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
               </template>
             </div>
-          </template>
+          </template> -->
           <el-table-column align="center" width="50px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
@@ -47,7 +52,7 @@
           <template v-for="l in columns">
             <el-table-column
               :key="l.label"
-              :label="l.label"
+              :label="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -62,7 +67,7 @@
 					  </template>
             </el-table-column>
           </template>
-        </el-table-column>
+        <!-- </el-table-column> -->
         </el-table-column>
         <div slot="append">
           <el-divider>
@@ -94,7 +99,8 @@ export default {
     type: String,
     label: String,
     loading: Boolean,
-    firstRow: Object
+    firstRow: Object,
+    cssMonthLabel: String
   },
   directives: {
     ElTableInfiniteScroll
@@ -125,6 +131,7 @@ export default {
       return this.loading
     },
     columns() {
+      debugger
       const columnsMap = new Map(([
         ['stockColumns', 
           [
@@ -262,46 +269,6 @@ export default {
             ]
         ],
         ['bondColumns', 
-          [
-            {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name',
-              minWidth: '250px'
-            },
-            {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups'
-            },
-            {
-              key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
-            }
-            ]
-        ],
-        ['commodityColumns', 
           [
             {
               key: 'chart_name',
@@ -544,13 +511,18 @@ export default {
             }
             ]
         ],
-        ['BondSeasonalityColumns', 
+        ['CommoditySeasonalityColumns', 
           [
             {
               key: 'chart_name',
-              label: 'Name',
+              label: 'Symbol',
               value: 'chart_name',
               minWidth: '250px'
+            },
+            {
+              key: 'underlying_name',
+              label: 'Name',
+              value: 'underlying_name',
             },
             {
               key: 'groups',
@@ -582,18 +554,13 @@ export default {
             }
             ]
         ],
-        ['CommoditySeasonalityColumns', 
+        ['BondSeasonalityColumns', 
           [
             {
               key: 'chart_name',
-              label: 'Symbol',
+              label: 'Name',
               value: 'chart_name',
               minWidth: '250px'
-            },
-            {
-              key: 'underlying_name',
-              label: 'Name',
-              value: 'underlying_name',
             },
             {
               key: 'groups',
@@ -673,11 +640,208 @@ export default {
               value: 'sentiment'
             }
             ]
-        ]
+        ],
+        ['popularColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '250px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Group',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment'
+            }
+          ]
+        ],
+        ['commodityColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '250px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Group',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment'
+            }
+            ]
+        ],
+        ['cssScreenColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Optix',
+              value: 'chart_name',
+              minWidth: '250px'
+            },
+            {
+              key: 'name',
+              label: 'Name',
+              value: 'name',
+            },
+            {
+              key: 'sub_type',
+              label: 'Group',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'last_value',
+              label: 'Optix Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_update',
+              label: 'Optix Date',
+              value: 'last_update'
+            },
+            {
+              key: 'AvgReturn',
+              label: 'Average Return (%)', // month 是动态变化的
+              value: 'AvgReturn',
+              addPercentSign: true
+            }
+          ]
+        ],
+        ['cstScreenColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Optix',
+              value: 'chart_name',
+              minWidth: '250px'
+            },
+            {
+              key: 'name',
+              label: 'Name',
+              value: 'name',
+            },
+            {
+              key: 'sub_type',
+              label: 'Group',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'last_value',
+              label: 'Optix Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_update',
+              label: 'Optix Date',
+              value: 'last_update'
+            },
+            {
+              key: 'close',
+              label: 'Close',
+              value: 'close'
+            },
+            {
+              key: 'MA',
+              label: '200-Day Moving Average',
+              value: 'MA'
+            }
+          ]
+        ],
+        ['CH3YMinMaxColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Optix',
+              value: 'chart_name',
+              minWidth: '250px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'last_value',
+              label: 'Optix Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_update',
+              label: 'Optix Date',
+              value: 'last_update'
+            },
+            {
+              key: 'max',
+              label: '3-Year Max',
+              value: 'max'
+            },
+            {
+              key: 'min',
+              label: '3-Year Min',
+              value: 'min'
+            },
+          ]
+        ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
+      if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key))
       return columns
     }
@@ -685,7 +849,7 @@ export default {
   watch: {
 		label: {
 			handler(newValue){
-        if(newValue === 'Most Popular') {
+        if(newValue === 'Most Popular Charts') {
           this.isMostPopular = true
           this.enlarged = true
         }
@@ -783,38 +947,29 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'sentiment'].indexOf(colName) !== -1) {
-            if (sortingOrder == 'ascending') {
-                this.tableData.sort((a, b) => {
-                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
-                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
-                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    return _b - _a
-                })
-            } else if (sortingOrder == 'descending') {
-                this.tableData.sort((a, b) => {
-                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
-                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
-                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    return _a - _b
-                })
-            }
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment'].indexOf(colName) !== -1) {
+          if (sortingOrder == 'ascending') {
+              this.tableData.sort((a, b) => {
+                  b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
+                  a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
+                  let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+                  let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+                  _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                  _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                  return _b - _a
+              })
+          } else if (sortingOrder == 'descending') {
+              this.tableData.sort((a, b) => {
+                  b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
+                  a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
+                  let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+                  let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+                  _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                  _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                  return _a - _b
+              })
+          }
         }
-			// 数字类型排序
-			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
-				}
-			}
 			// 日期类型排序
 			if(['last_update'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
@@ -856,14 +1011,26 @@ export default {
         this.tableData = sortedData
         }
 			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.tableData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.tableData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}
-			}
-		},
+			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type'].indexOf(colName) !== -1){
+        if(sortingOrder === 'ascending') {
+          this.tableData.sort((a, b) => {
+          const aValue = a[colName] || '';
+          const bValue = b[colName] || '';
+          if (!aValue) return 1;
+          if (!bValue) return -1;
+            return aValue.localeCompare(bValue, 'en', { sensitivity: 'base' });
+          });
+          } else if(sortingOrder === 'descending') {
+          this.tableData.sort((a, b) => {
+          const aValue = a[colName] || '';
+          const bValue = b[colName] || '';
+          if (!aValue) return 1;
+          if (!bValue) return -1;
+            return bValue.localeCompare(aValue, 'en', { sensitivity: 'base' });
+          });
+			  }
+      }
+		}
   }
 }
 </script>

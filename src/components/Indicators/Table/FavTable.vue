@@ -293,7 +293,6 @@ export default {
     },
 		async deleteRow(row, isAdd) {
 			console.log(row)
-			debugger
 			if(row.source === 'Backtest Engine v2.0') {
 				this.loading = true
 				try {

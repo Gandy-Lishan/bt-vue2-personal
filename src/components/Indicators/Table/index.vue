@@ -9,35 +9,10 @@
             <h4  @click="selectedTitle = 'Indicators'" :class="{ 'selected': selectedTitle === 'Indicators' }">Indicators</h4>
             <h4  @click="selectedTitle = 'Popular'" :class="{ 'selected': selectedTitle === 'Popular' }">Most Popular</h4>
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
+            <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4>
           </div>
           <div class="search-container">
             <Search></Search>
-            <!-- <ais-instant-search
-            :search-client="searchClient"
-            index-name="charts"
-            :insights="true"
-            >
-            <div class="search-panel">
-                <div class="search-panel__search-box">
-                  <ais-search-box
-                    placeholder="Search here…"
-                    class="searchbox"
-                    onchange="onInputChange"
-                  />
-                </div>
-                <div class="search-panel__results" :class="{ active: hasSearched }">
-                  <ais-hits>
-                    <template v-slot:default="{ items }">
-                    <ul v-if="Number(items.length) > 0">
-                      <li v-for="item in items" :key="item.objectID">
-                        <span @click="openScreen(item)"><ais-highlight :hit="item" attribute="chart_name" class="chart_name"/></span>
-                      </li>
-                    </ul>
-                    </template>
-                  </ais-hits>
-                </div>
-              </div>
-            </ais-instant-search> -->
           </div>
           <div class="searchBox" v-show="selectedTitle === 'Indicators'">
             <el-select v-model="searchCategory" slot="prepend" placeholder="" size="mini">
@@ -56,6 +31,7 @@
       <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
+      <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity>
     </div>
     </div>
   </div>
@@ -65,6 +41,7 @@ import StrategiesTable from "./ForTest";
 import Favorites from "./Favorites";
 import Search from "./Search";
 import Popular from "./Popular";
+import Commodity from "./Commodity";
 import { mapActions, mapGetters } from 'vuex'
 import { getIndicatorsRowData } from "@/service/service";
 import { LocalStorageUtil } from "@/utils";
@@ -169,7 +146,8 @@ export default {
     StrategiesTable,
     Favorites,
     Popular,
-    Search
+    Search,
+    Commodity
   },
   beforeDestroy () {
     // 离开此组件前保存筛选条件状态

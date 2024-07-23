@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     async renderChart() {
-      debugger
       if(!this.row.url) return
       const {url, pess, opt, chart_name, last_value} = this.row;
 

@@ -199,7 +199,6 @@ export default {
       //   const element = this.$refs[data.refName]
       //   if(element) console.log('element', element[0].getBoundingClientRect())
       // }
-      debugger
       this.showImg = data?.showImg
       this.hoveredImage = data?.hoveredImage
       this.hoverStyle = data?.hoverStyle
@@ -208,7 +207,6 @@ export default {
       console.log('Received data from child:', data);
     },
     onLoad() {
-      debugger
       this.showImg = true
     },
     onError() {

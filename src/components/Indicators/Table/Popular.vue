@@ -34,16 +34,16 @@ export default {
    return {
      tableInfoList: [
        {
-         label: 'Most Popular',
-         type: 'stock',
+         label: 'Most Popular Charts',
+         type: 'popular',
          refName: 'popularVirtualScroll',
          itemSize: 40,
          keyProp: 'url',
          options: [
            {
-             label: 'Stocks Indicator List',
-             value: 'stock',
-             type: 'stock',
+             label: 'Most Popular Charts',
+             value: 'popular',
+             type: 'popular',
            }
          ]
        }
