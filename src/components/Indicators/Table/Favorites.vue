@@ -6,7 +6,7 @@
           v-bind="$attrs"
           :key="item.type"
           :tableInfo="item"
-          :ref="item.refName"
+          ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
           :style="{ width: '60%', display: 'block' }"
         ></FavTable>
@@ -36,7 +36,7 @@
         {
           label: 'My Favorites',
           type: 'favorite',
-          refName: 'popularVirtualScroll',
+          refName: 'favoriteVirtualScroll',
           itemSize: 40,
           keyProp: 'url',
           options: [
@@ -62,7 +62,6 @@
   },
   methods: {
     updateChart(row) {
-      debugger
       this.displayRow = row
     },
     sendData(data) {

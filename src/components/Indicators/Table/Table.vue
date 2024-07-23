@@ -115,7 +115,7 @@ export default {
                   if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
                   else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
                   else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-                }else if(key === 'groups' && ['stock_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url)) {
+                }else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url)) {
                   // 大写首字母
                   obj[key] = capitalizeFirstLetter(obj[key])
                 }
@@ -161,7 +161,6 @@ export default {
             }
             return obj
           })
-          debugger
           console.log(_results)
       } catch (error) {
         console.log('error', error)

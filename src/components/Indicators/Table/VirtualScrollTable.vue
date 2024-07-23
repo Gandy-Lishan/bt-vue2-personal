@@ -19,6 +19,7 @@
         v-loading="_loading"
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
+			  @sort-change="changeTableSort"
         :height="!enlarged ? 300 : 600">
         <el-table-column>
           <template #header>
@@ -52,7 +53,7 @@
               :min-width="l.minWidth"
               :max-width="l.maxWidth"
               :width="l.width"
-              :sortable="l.sortable"
+              sortable="custom"
             >
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
@@ -777,7 +778,92 @@ export default {
       } finally {
         row.loading = false
       }
-    }
+    },
+    changeTableSort(column){
+			var sortingOrder = column.order
+			var colName = column.prop
+			  // 数字字符串转数字类型排序
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'sentiment'].indexOf(colName) !== -1) {
+            if (sortingOrder == 'ascending') {
+                this.tableData.sort((a, b) => {
+                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                    return _b - _a
+                })
+            } else if (sortingOrder == 'descending') {
+                this.tableData.sort((a, b) => {
+                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+                    return _a - _b
+                })
+            }
+        }
+			// 数字类型排序
+			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.data.content.sort((a,b) => {
+						return b[colName] - a[colName]
+					})
+				}else if(sortingOrder == 'descending'){
+					this.data.content.sort((a,b) => {
+						return a[colName] - b[colName]
+					})
+				}else{
+				}
+			}
+			// 日期类型排序
+			if(['last_update'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.tableData.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.tableData.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+      if (['last_update'].indexOf(colName) !== -1) {
+        // 处理日期字符串
+        const isValidDate = date => !isNaN(Date.parse(date));
+        const sortedData = this.tableData.sort((a, b) => {
+        const dateA = new Date(a[colName])
+        const dateB = new Date(b[colName])
+        const isDateAValid = isValidDate(a[colName])
+        const isDateBValid = isValidDate(b[colName])
+        // 都是无效日期，保持原顺序
+        if (!isDateAValid && !isDateBValid) return 0
+
+        //a 是无效日期，排到最后 
+        if (!isDateAValid) return 1;
+
+        // b 是无效日期，排到最后
+        if (!isDateBValid) return -1
+
+        // 都是有效日期，按日期排序
+        if (sortingOrder === 'ascending') {
+        return dateB - dateA;
+        } else if (sortingOrder === 'descending') {
+        return dateA - dateB;
+        }
+        return 0
+        })
+        this.tableData = sortedData
+        }
+			// 字符串类型排序
+			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.tableData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.tableData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}
+			}
+		},
   }
 }
 </script>

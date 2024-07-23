@@ -285,7 +285,7 @@ export default {
     async addIndicatorsFavorites(row, isAdd) {
       // 添加收藏夹
       console.log('添加收藏夹', row)
-      await this.$refs['Favorites'].deleteRow(row, isAdd)
+      await this.$refs['Favorites'].$refs.favoriteVirtualScroll[0].deleteRow(row, isAdd)
     }
   }
 }
