@@ -295,6 +295,14 @@ export default {
 					'Descending Channel': "Descending channel is a chart pattern that indicates a downward trend in a security's price. <br/>Visually, a descending channel angles downward, from a high point to a lower point. The idea behind the descending channel <br/>is that once established, it may signify a continuation of lower high and low prices. Once the trendlines are solid and extended, <br/>traders can get a sense of points of price support and resistance.",
 					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.<br/>The whole backtest period is considered as ALL.',
 					'ExpectedReturn': 'ExpectedReturn = (WinRate * ProfitTarget - (100.0 - WinRate) * StopLoss) / 100.0',
+					'Symbol All-Time High': 'Symbol All-Time High is the highest price a stock or stock symbol has reached in its trading history. <br/>Stocks that hit all-time high are often viewed as positive indicators, as it shows that investor <br/>confidence and demand for the stock is continuing to grow.',
+					'Symbol All-Time Low': 'Symbol All-Time Low for a stock refers to the lowest price the stock has ever traded at over its entire history. <br/>It indicates the stock has lost significant value compared to its past performance. Investors <br/>view all-time low as a sign of deep trouble.',
+					'Symbol 52-Week High': 'Symbol 52-Week High is the highest price at which a stock has traded in the last 52 weeks (1 year). <br/>A stock hitting a new 52-week high is often seen as a positive technical indicator that the stock is <br/>gaining momentum and is in an uptrend.',
+					'Symbol 52-Week Low': 'Symbol 52-Week Low is the lowest price at which a stock has traded in the past 52 weeks (1 year). <br/>Stocks trading at or near 52-week lows are generally considered to be in a downtrend or under significant <br/>selling pressure. 52-week lows can trigger technical sell signals and further downward momentum as investors try to cut their losses.',
+					'Symbol 4-Week High': "Symbol 4-Week High refers to the highest price at which a stock has traded in the last 4 weeks (1 month). <br/>It is a shorter-term technical indicator that gives an idea of a stock's recent price performance. <br/>Stocks that make new four-week highs are often seen as having positive short-term momentum because they are trading at the highest <br/>price levels of the past month.",
+					'Symbol 4-Week Low': "Symbol 4-Week Low is the lowest price at which a stock has traded in the past 4 weeks (1 month). <br/>Tracking whether a stock is near its 4-week low gives an idea of how weak the stock's recent price has been <br/>compared to the past month. Stocks trading at or near 4-week lows are usually considered to be under <br/>short-term selling pressure or in a recent downtrend.",
+					'Symbol 13-Week High': 'Symbol 13-Week High is the highest price at which a stock has traded in the past 13 weeks (3 months). <br/>Stocks that make new 13-week high are often seen as having positive medium-term momentum because they <br/>are trading at their highest levels of the past quarter. A new 13-week high can be a bullish signal <br/>that a stock is in an uptrend.',
+					'Symbol 13-Week Low': "Symbol 13-Week Low refers to the lowest price a stock has traded at over the past 13 weeks (3 months). <br/>Stocks trading at or near their 13-week lows are often seen as being in a medium-term downtrend or under selling pressure. <br/>The 13-week low gives a longer-term view on a stock's recent price weakness. Hitting a new 13-week low can be <br/>a bearish signal, suggesting the stock is in a downward trend.",
 				},
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
@@ -345,7 +353,8 @@ export default {
 			});
 					const signalArr = 
 					['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI', 
-					'Head and Shoulders Top', 'Head and Shoulders Bottom', 'Double Top', 'Double Bottom', 'Triple Tap', 'Rounding Bottom', 'Ascending Channel', 'Descending Channel']
+					'Head and Shoulders Top', 'Head and Shoulders Bottom', 'Double Top', 'Double Bottom', 'Triple Tap', 'Rounding Bottom', 'Ascending Channel', 'Descending Channel',
+					'Symbol All-Time High','Symbol All-Time Low','Symbol 52-Week High','Symbol 52-Week Low','Symbol 4-Week High','Symbol 4-Week Low','Symbol 13-Week High','Symbol 13-Week Low']
 					if (!signalArr.includes(binding.value.item)) {
 				// 隐藏元素
 				el.style.display = 'none';
@@ -491,7 +500,8 @@ export default {
 			// 设置当前悬停的项
 				const signalArr = 
 				['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI', 
-				'Head and Shoulders Top', 'Head and Shoulders Bottom', 'Double Top', 'Double Bottom', 'Triple Tap', 'Rounding Bottom', 'Ascending Channel', 'Descending Channel']
+				'Head and Shoulders Top', 'Head and Shoulders Bottom', 'Double Top', 'Double Bottom', 'Triple Tap', 'Rounding Bottom', 'Ascending Channel', 'Descending Channel',
+				'Symbol All-Time High','Symbol All-Time Low','Symbol 52-Week High','Symbol 52-Week Low','Symbol 4-Week High','Symbol 4-Week Low','Symbol 13-Week High','Symbol 13-Week Low']
 				if(signalArr.includes(item)) {
 					this.currentItem = item;
 					// 显示弹窗

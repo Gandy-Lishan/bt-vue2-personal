@@ -651,6 +651,47 @@ export default {
           label: 'Descending Channel',
           check: true
         },
+        /** 8 high-low signals */
+        {
+          value: 'Symbol All-Time High',
+          label: 'Symbol All-Time High',
+          check: true
+        },
+        {
+          value: 'Symbol All-Time Low',
+          label: 'Symbol All-Time Low',
+          check: true
+        },
+        {
+          value: 'Symbol 52-Week High',
+          label: 'Symbol 52-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 52-Week Low',
+          label: 'Symbol 52-Week Low',
+          check: true
+        },
+        {
+          value: 'Symbol 4-Week High',
+          label: 'Symbol 4-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 4-Week Low',
+          label: 'Symbol 4-Week Low',
+          check: true
+        },
+        {
+          value: 'Symbol 13-Week High',
+          label: 'Symbol 13-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 13-Week Low',
+          label: 'Symbol 13-Week Low',
+          check: true
+        },
       ],
       rules: {
         long_ratio: [
