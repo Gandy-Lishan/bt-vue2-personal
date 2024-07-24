@@ -456,7 +456,7 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bullish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
+				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
@@ -481,7 +481,7 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bearish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
+				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
