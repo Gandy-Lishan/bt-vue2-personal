@@ -320,7 +320,8 @@ export default {
           case 'Ascending Channel' :
           case 'Descending Channel' :
             const entryTradeDateArr = this.other['EntryTradeDate'] ? eval('(' + this.other['EntryTradeDate'] + ')') : []
-            CIQ.createCorrelationPatternMatchDrawing(entryTradeDateArr, 'scannerai', patternMap[this.other['_Signal']]);
+            // 需要包括最新一天的cpm阴影
+            CIQ.createCorrelationPatternMatchDrawing([...entryTradeDateArr,this.other.date], 'scannerai', patternMap[this.other['_Signal']]);
             CIQ.createOneTimePatternMarker(this.other.date,this.other['_Signal'])
             break;
 					default: 
