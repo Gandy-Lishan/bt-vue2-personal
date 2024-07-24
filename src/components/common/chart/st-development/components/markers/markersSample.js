@@ -437,15 +437,14 @@ CIQ.setMarkerVisibility = function(type){
 }
 
 /** Report page */
-CIQ.createForecastMarker = async function(type){
-	if(!type) CIQ.removeForecastMarker()
-	
+CIQ.createForecastMarker = async function(){
 	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
+	await CIQ.store.dispatch('chart/get_forecast_author_list',[...new Set(list.map(item=>item.author))])
 	const bullishList = list.filter(i=>i.forecast == 'Up')
 	const bearishList = list.filter(i=>i.forecast == 'Down')
-	if(!type || type == 'bullish'){
+
 		for (var i = 0; i < bullishList.length; i++) {
-			const {post_date,title,url,author} = bullishList[i]
+			const {post_date,title,url,author,timeframe} = bullishList[i]
 			var newNode;
 			var post_date_str = post_date.slice(0,10)
 			var datatime = new Date(post_date_str)
@@ -454,6 +453,9 @@ CIQ.createForecastMarker = async function(type){
 				newNode = document.querySelector("#stxForecast").cloneNode(true);
 				newNode.id = null;
 				newNode.classList.add('bullish')
+				newNode.setAttribute('data-market', "bullish");
+				newNode.setAttribute('data-author', author);
+				newNode.setAttribute('data-timeframe', timeframe);
 				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
 				new CIQ.Marker({
 					stx: CIQ.stxx,
@@ -464,10 +466,10 @@ CIQ.createForecastMarker = async function(type){
 					node: newNode
 				});
 		}
-	}
-	if(!type || type == 'bearish'){
+
+
 		for (var i = 0; i < bearishList.length; i++) {
-			const {post_date,title,url,author} = bearishList[i]
+			const {post_date,title,url,author,timeframe} = bearishList[i]
 			var newNode;
 			var post_date_str = post_date.slice(0,10)
 			var datatime = new Date(post_date_str)
@@ -476,6 +478,9 @@ CIQ.createForecastMarker = async function(type){
 				newNode = document.querySelector("#stxForecast").cloneNode(true);
 				newNode.id = null;
 				newNode.classList.add('bearish')
+				newNode.setAttribute('data-market', "bearish");
+				newNode.setAttribute('data-author', author);
+				newNode.setAttribute('data-timeframe', timeframe);
 				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><a href=${url} target="_blank">Click to read report</a>`;
 				new CIQ.Marker({
 					stx: CIQ.stxx,
@@ -485,16 +490,12 @@ CIQ.createForecastMarker = async function(type){
 					node: newNode
 				});
 		}
-	}
+
 	CIQ.stxx.draw()
 }
-CIQ.removeForecastMarker = async function(type){
-	if(!type || type == 'bullish'){
-		CIQ.Marker.removeByLabel(CIQ.stxx, 'bullish');
-	}
-	if(!type || type == 'bearish'){
-		CIQ.Marker.removeByLabel(CIQ.stxx, 'bearish');
-	}
+CIQ.removeForecastMarker = async function(){
+	CIQ.Marker.removeByLabel(CIQ.stxx, 'bullish');
+	CIQ.Marker.removeByLabel(CIQ.stxx, 'bearish');
 }
 export {CIQ};
 export default marker;

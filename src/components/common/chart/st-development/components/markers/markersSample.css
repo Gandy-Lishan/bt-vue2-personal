@@ -181,6 +181,9 @@
 	border-radius: 4px;
 	padding: 10px;
   }
+.forecast.hidden {
+	display: none;
+}
   .forecast:before {
 	border: solid;
 	content: "";
