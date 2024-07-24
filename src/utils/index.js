@@ -238,5 +238,20 @@ const decodeBase64 = (str) => {
   return decodeURIComponent(atob(str));
 }
 
+// 用于格式化数字 num 为传入的数字, fixedNum 表示需要保存到几位小数点
+const unifyNumber = (num, fixedNum) => {
+  if (num === '' || num === null || num === 'null') {
+    return ''
+  } else {
+    let handleNum = parseFloat(num)
+    let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > fixedNum
+    if (isToFixed) {
+      return isNaN(handleNum.toFixed(fixedNum)) ? NaN : handleNum.toFixed(fixedNum)
+    } else {
+      return isNaN(handleNum) ? NaN : handleNum
+    }
+  }
+}
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber}

@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-import { getPropertyByString } from "@/utils"
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_primeNumber_ = (_exports) => {

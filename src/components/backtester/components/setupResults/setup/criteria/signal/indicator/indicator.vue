@@ -369,7 +369,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
-      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value')),
+      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -1395,7 +1395,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+        let sentimentList = JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value'))
 
         for (let i = 0; i < sentimentList.length; i++) {
           if (this.si.sentimentIndicator === sentimentList[i].value) {
@@ -1517,7 +1517,7 @@ export default {
             this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
-            let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+            let sentimentList = JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value'))
 
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {

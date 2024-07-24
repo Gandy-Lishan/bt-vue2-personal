@@ -14,7 +14,6 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getIndicatorsList,
 	getOPTStatus
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
@@ -1078,8 +1077,8 @@ export const CommonMethodsMixin = {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
 			const commitSymbol2 = (symbol2) => {
-				// let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==symbol2)
-				// let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==symbol2)
+				// let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==symbol2)
+				// let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==symbol2)
 				// if(!stockName && !indexName){
 				// 	this.$store.commit('form/setComparisonSymbol', {})
 				// 	return
@@ -1369,11 +1368,10 @@ export const CommonMethodsMixin = {
 
 
 		async transformOldName(data,criteria){
-			const res = await getIndicatorsList()
-			const stockList = this.$store.state.chart.stocksList
-
+			const indicatorList = this.$store.getters.getIndicatorsList
+			const stockList = this.$store.getters.getStockList
 			data[criteria].signals.forEach(signal => {
-				const matchIndicatorsList = res.data.find(item=>item.chart_name == signal.indicator)
+				const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
 				const matchStockList = stockList.find(item=>item.name == signal.indicator)
 				if(matchIndicatorsList && matchStockList){
 					signal.indicator = matchIndicatorsList.url + ' Optix'

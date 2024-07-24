@@ -80,24 +80,7 @@
 							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown v-if="routeName == 'Reports'">
-						<cq-toggle class="report" id="report" @click="toggleReportsEvents('bullish')">
-							<span style='margin-right:10px;width: 32px'>
-							<svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'>
-								<rect x='192' y='192' width='640' height='640' fill='#1afa29'></rect>
-							</svg>
-							</span>
-							<cq-tooltip>bullish</cq-tooltip>
-						</cq-toggle>
-						<cq-toggle class="report" id="report" @click="toggleReportsEvents('bearish')">
-							<span style='margin-right:10px;width: 32px'>
-							<svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'>
-								<rect x='192' y='192' width='640' height='640' fill='#d81e06'></rect>
-							</svg>
-							</span>
-							<cq-tooltip>bearish</cq-tooltip>
-						</cq-toggle>
-					</cq-info-toggle-dropdown>
+					<div class="reports-filter-container" v-if="routeName == 'Reports'"></div>
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
@@ -105,15 +88,15 @@
 						</cq-toggle>
 						<cq-toggle class="sell" id="sell" @click="changeMarkerVisibility('sell')" style="visibility:hidden">
 							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#d81e06'></path></svg></span>
-							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 1)</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>SELL(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="buy_2" id="buy_2" @click="changeMarkerVisibility('buy_2')" style="visibility:hidden">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#92d2cc'></path></svg></span>
-							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>BUY(SYMBOL 2)</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>BUY(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 						<cq-toggle class="sell_2" id="sell_2" @click="changeMarkerVisibility('sell_2')" style="visibility:hidden">
 							<span style='margin-right:10px;width: 32px'><svg t='1636008125523' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2169' width='30' height='30' ><path d='M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z' p-id='2170' fill='#ff5290'></path></svg></span>
-							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;''>SELL(SYMBOL 2)</cq-tooltip>
+							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>SELL(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<div class="favBtnContainer">
@@ -384,8 +367,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 import UploaderVue from './st-development/components/Uploader.vue'
-const throttle = require('lodash/throttle')
-const jutils = require("jutils-src")
+import ReportsFilter from './st-development/components/ReportsFilter.vue'
 
 @Component({})
 export default class AdvancedChartComponent extends Vue {
@@ -472,8 +454,10 @@ export default class AdvancedChartComponent extends Vue {
 			this.createResizeListener()
 
 			this.symbolMutationObserver()
+			this.initializeReportsFilter()
 		}, 0)			
 	}
+
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
 		stx.layout.headsUp={floating:true};
@@ -565,9 +549,6 @@ export default class AdvancedChartComponent extends Vue {
 
 		CIQ.setMarkerVisibility(type)
 	}
-	async toggleReportsEvents(typeOfEvent) {
-		await this.$store.dispatch('chart/toggle_reports_events',typeOfEvent)
-	}
 	
 	resizePatternMatch() {
 		const yAxis = CIQ.stxx.chart.yAxis	
@@ -611,6 +592,18 @@ export default class AdvancedChartComponent extends Vue {
 		// 開始觀察目標元素
 		this.resizeObserver.observe(ele);
 	}
+	initializeReportsFilter() {
+		const reportsFilter = document.querySelector('.reports-filter-container')
+		if(reportsFilter){
+			const FilterVueComponent = Vue.extend(ReportsFilter);
+			const instance = new FilterVueComponent({
+				store: this.$store,
+			}).$mount();
+			
+			// 将 Vue 组件的根元素插入到 node 内部，而不是替换 node 本身
+			reportsFilter.appendChild(instance.$el);
+		}
+	}
 	initializeSymbolUploader(node) {
 		const uploader = document.querySelector('.symbol-uploader')
 		if(uploader) return
@@ -637,7 +630,8 @@ export default class AdvancedChartComponent extends Vue {
 				if (mutation.type === 'childList') {
 					// 检查是否有 class 为 'symbol-upload' 的元素
 					let cqLookupFiltersElement = document.querySelector('cq-uploader');
-					console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
+					//console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
+					// TODO 考虑优化
 					if (cqLookupFiltersElement) {	
 						_this.initializeSymbolUploader(cqLookupFiltersElement)
 						// 一旦找到了 'ciq-search' 元素，就可以停止觀察

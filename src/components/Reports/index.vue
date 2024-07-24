@@ -37,8 +37,7 @@ computed: {
 watch: {
   handleGetBacktestSymbol: {
       handler(newVal) {
-        // 刷新symbol时reset reports_events marker状态
-        this.$store.dispatch('chart/reset_reports_events')
+        CIQ.removeForecastMarker()
         CIQ.createForecastMarker()
       },
       //immediate: true,

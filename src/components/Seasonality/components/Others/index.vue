@@ -124,6 +124,7 @@
 <script>
 import OCDChart from "../SNChart/OCDChart.vue"
 import {createStateFilter} from '@/utils/globalFunc'
+import { mapGetters } from "vuex"
 
 export default {
   name: 'Others',
@@ -175,6 +176,11 @@ export default {
   components: {
     OCDChart
   },
+  computed: {
+    ...mapGetters({
+      symbolList: 'getRefactoredSymbolList'
+    })
+  },
   watch: {
     data: {
     handler(newVal, _) {
@@ -197,7 +203,7 @@ export default {
     },
   },
   mounted() {
-    this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+    this.dropdownList = this.symbolList
     console.log('this.dropdownList', this.dropdownList)
   },
   methods: {
@@ -211,7 +217,7 @@ export default {
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       if(!dropdownList || dropdownList.length == 0) {
-        dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+        dropdownList = this.symbolList
       }
       var results = dropdownList.map(item => ({
           ...item,

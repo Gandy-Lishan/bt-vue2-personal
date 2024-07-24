@@ -3,8 +3,8 @@ import { decodeBase64 } from '..'
 // global functions(not like mixin, it can be used for .js)
 const getSymbolInfo = (url) => {
     //console.time('🚗Execution Time');
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==url)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==url)
+    let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==url)
+    let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==url)
     //console.timeEnd('🚗Execution Time');
     if (stockName) {
         return {name: stockName?.name, url: url, type:'stock'}
