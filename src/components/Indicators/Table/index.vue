@@ -7,14 +7,14 @@
         <div class="tableHeader">
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Indicators'" :class="{ 'selected': selectedTitle === 'Indicators' }">Indicators</h4>
+            <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4>
             <h4  @click="selectedTitle = 'Popular'" :class="{ 'selected': selectedTitle === 'Popular' }">Most Popular</h4>
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
-            <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4>
           </div>
           <div class="search-container">
             <Search></Search>
           </div>
-          <div class="searchBox" v-show="selectedTitle === 'Indicators'">
+          <div class="searchBox">
             <el-select v-model="searchCategory" slot="prepend" placeholder="" size="mini">
 							<el-option
 								v-for="category in categories"
@@ -44,7 +44,7 @@ import Popular from "./Popular";
 import Commodity from "./Commodity";
 import { mapActions, mapGetters } from 'vuex'
 import { getIndicatorsRowData } from "@/service/service";
-import { LocalStorageUtil } from "@/utils";
+import { isJson, LocalStorageUtil } from "@/utils";
 import algoliasearch from 'algoliasearch/lite';
 import 'instantsearch.css/themes/algolia-min.css';
 const XLSX = require('xlsx');
@@ -64,83 +64,109 @@ export default {
       ),
       selectedTitle: 'Indicators',
       searchKey: '',
-      searchCategory: '',
       hasSearched: true,
-      categories: [
-        {
-          label: 'Stocks Indicator List',
-          value: 'stock_complete_list',
-          refName: 'stockVirtualScroll'
-        },
-        {
-          label: 'NASDAQ 100 Optix',
-          value: 'ndx_100_complete_list',
-          refName: 'stockVirtualScroll'
-        },
-        {
-          label: 'S&P 1500 Optix',
-          value: 'sp_1500_complete_list',
-          refName: 'stockVirtualScroll'
-        },
-        {
-          label: 'Bond Indicator List',
-          value: 'bond_complete_list',
-          refName: 'bondVirtualScroll'
-        },
-        // {
-        //   label: 'Commodity Indicator List',
-        //   value: 'commodity_complete_list',
-        //   refName: 'commodityVirtualScroll'
-        // },
-        {
-          label: 'ETF Sector List',
-          value: 'etf_complete_list',
-          refName: 'ETFVirtualScroll'
-        },
-        {
-          label: 'ETF Sector Breadth',
-          value: 'etf_breadth',
-          refName: 'ETFVirtualScroll'
-        },
-        {
-          label: 'ETF Fund Flow',
-          value: 'etf_flow',
-          refName: 'ETFVirtualScroll'
-        },
-        {
-          label: 'ETF Monthly Fund Flow',
-          value: 'monthly_fund_flows',
-          refName: 'ETFVirtualScroll'
-        },
-        {
-          label: 'ETF Shares Outstanding',
-          value: 'shares_outstanding',
-          refName: 'ETFVirtualScroll'
-        },
-        {
-          label: 'Commodity Seasonality',
-          value: 'commod_seasonality',
-          refName: 'seasonalityVirtualScroll'
-        },
-        {
-          label: 'Bond Seasonality',
-          value: 'bond_seasonality',
-          refName: 'seasonalityVirtualScroll'
-        },
-        {
-          label: 'ETF Seasonality',
-          value: 'etf_seasonality',
-          refName: 'seasonalityVirtualScroll'
-        }
-      ],
-      searchCategory: 'stock_complete_list'
+      searchCategory: ''
     }
   },
   computed: {
     ...mapGetters(['getIndicatorsPageListData']),
     indicatorsListData() {
       return this.getIndicatorsPageListData
-    }
+    },
+    categories() {
+      if(this.selectedTitle === 'Indicators') {
+        this.searchCategory = 'stock_complete_list'
+        return [
+        {
+          label: 'Stocks Indicator List',
+          value: 'stock_complete_list'
+        },
+        {
+          label: 'NASDAQ 100 Optix',
+          value: 'ndx_100_complete_list'
+        },
+        {
+          label: 'S&P 1500 Optix',
+          value: 'sp_1500_complete_list'
+        },
+        {
+          label: 'Bond Indicator List',
+          value: 'bond_complete_list'
+        },
+        {
+          label: 'ETF Sector List',
+          value: 'etf_complete_list'
+        },
+        {
+          label: 'ETF Sector Breadth',
+          value: 'etf_breadth'
+        },
+        {
+          label: 'ETF Fund Flow',
+          value: 'etf_flow'
+        },
+        {
+          label: 'ETF Monthly Fund Flow',
+          value: 'monthly_fund_flows'
+        },
+        {
+          label: 'ETF Shares Outstanding',
+          value: 'shares_outstanding'
+        },
+        {
+          label: 'Commodity Seasonality',
+          value: 'commod_seasonality'
+        },
+        {
+          label: 'Bond Seasonality',
+          value: 'bond_seasonality'
+        },
+        {
+          label: 'ETF Seasonality',
+          value: 'etf_seasonality'
+        }
+      ]
+      }
+      if(this.selectedTitle === 'Popular') {
+        this.searchCategory = 'most_popular'
+        return [
+          {
+            label: 'Most Popular Charts',
+            value: 'most_popular'
+          }
+        ]
+      }
+      if(this.selectedTitle === 'My Favorites') {
+        this.searchCategory = 'my_favorites'
+        return [
+          {
+            label: 'My Favorites',
+            value: 'my_favorites'
+          }
+        ]
+      }
+      if(this.selectedTitle === 'Commodity') {
+        this.searchCategory = 'commodity_complete_list'
+        return [
+          {
+            label: 'Commodity Indicator List',
+            value: 'commodity_complete_list'
+          },
+          {
+            label: 'Commodity Sentiment & Seasonality Screen',
+            value: 'commod_sentiment_seasonality'
+          },
+          {
+            label: 'Commodity Sentiment & Trend Screen',
+            value: 'commod_optix_trend'
+          },
+          {
+            label: 'Commodity Hedgers - 3-year Min/Max',
+            value: 'cot_max_min'
+          }
+        ]
+      }
+    },
   },
   components: {
     StrategiesTable,
@@ -198,8 +224,15 @@ export default {
     },
     async downloadCSV() {
       // 访问组件示例数据
+      debugger
       const type = this.searchCategory
       let data = this.indicatorsListData[type]
+      let cssMonth = null
+      if(type === 'commod_sentiment_seasonality') {
+        const {month, screen_data} = data
+        cssMonth = month
+        data = isJson(screen_data) ? JSON.parse(screen_data) : []
+      }
       if(!data || !data.length) {
         await this.fetchIndicatorsPageList(type)
         data = this.indicatorsListData[type] || []
@@ -220,10 +253,12 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      const keysSort = ['Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Change', 'Win Rate', 'Avg Return', 'Date' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min' ]
+      if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonth}`)}
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Groups', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
       const keysMap = new Map([
         ['chart_name', 'Name'],
-        ['groups', 'Groups'],
+        ['sub_type', 'Groups'],
         ['timeframe', 'Time Frame'],
         ['time_frame', 'Time Frame'],
         ['last_value', 'Value'],
@@ -231,9 +266,15 @@ export default {
         ['last_update', 'Date']
       ])
       if(type === 'etf_breadth') keysMap.set('chart_name', 'Breadth Measure')
-      if(type === 'bond_seasonality' || type === 'commod_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
+      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
+      if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
+      if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) keysMap.set('chart_name', 'Symbol')
+      if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
+      if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', 'Average Return (%)');}
+      if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
+      if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
 
 			const processedData = data.map(item => {
         const obj = {}
@@ -252,6 +293,7 @@ export default {
         })
         return sortedObj
       }
+      debugger
       const sortedArray = processedData.map(obj => sortObjectKeys(obj))
       const name = this.categories.find(item => item.value === type).label
 			const ws = XLSX.utils.json_to_sheet(sortedArray);

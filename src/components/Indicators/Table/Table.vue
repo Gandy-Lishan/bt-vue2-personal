@@ -55,7 +55,7 @@ export default {
         commodity: 'commodity_complete_list',
         cssScreen: 'commod_sentiment_seasonality',
         cstScreen: 'commod_optix_trend',
-        CH3YMinMax: 'cot_max_min'
+        CHMinMax: 'cot_max_min'
       },
       firstRow: {}
     }
@@ -96,11 +96,12 @@ export default {
         await this.fetchIndicatorsPageList(url)
         _results = this.indicatorsListData[url]
         if(url === 'commod_sentiment_seasonality') {
-          debugger
           const {month, screen_data} = _results
           this.cssMonthLabel = `for ${month}`
           _results = isJson(screen_data) ? JSON.parse(screen_data) : []
         }
+        if(!this.favoritesBtv1List) await this.$store.dispatch('chart/get_myindicator')
+        if(!this.favoritesBtv2List.length) await this.$store.dispatch('chart/get_favorite')
         console.log('commod_sentiment_seasonality', _results)
           _results = _results.map(obj => {
             for (const key in obj) {
@@ -109,7 +110,7 @@ export default {
                   if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
                   else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
                   else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-                }else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
+                }else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
                   // 大写首字母
                   obj[key] = capitalizeFirstLetter(obj[key])
                 }
@@ -117,24 +118,23 @@ export default {
                   // 保留特定小数点
                   if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
                   else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
-                  else if(key === 'win_rate' || key === 'avg_net_return'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
+                  else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
                   else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}
-                  else if(key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
                 }
-                if(key === 'last_update' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend')) obj[key] = timestampToTime(obj[key])
-                if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend')) obj['url'] = obj[key]
-                const isInBtv1List = this.favoritesBtv1List.data.data.find(item => (item.url[0] === obj['url'] || item.url[0] === obj['chart_url']))
-                const isInBtv2List = this.favoritesBtv2List.find(item => (item.url === obj['url'] || item.url === obj['chart_url']))
-                if((key === 'url' || key === 'chart_url') && isInBtv1List) {
+                if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj[key] = timestampToTime(obj[key])
+                if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
+                const isInBtv1List = this.favoritesBtv1List.data.data.find(item => (item.url[0] === obj['url']))
+                const isInBtv2List = this.favoritesBtv2List.find(item => (item.url === obj['url']))
+                if((key === 'url') && isInBtv1List) {
                   obj['source'] = 'Backtest Engine v1.0'
                   obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && isInBtv2List) {
+                }else if((key === 'url') && isInBtv2List) {
                   obj['source'] = 'Backtest Engine v2.0'
                   obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && isInBtv2List && isInBtv1List) {
+                }else if((key === 'url') && isInBtv2List && isInBtv1List) {
                   obj['source'] = 'Backtest Engine v1.0 & v2.0'
                   obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && !isInBtv1List && !isInBtv2List) {
+                }else if((key === 'url') && !isInBtv1List && !isInBtv2List) {
                   obj['source'] = 'Backtest Engine v2.0'
                   obj['favorite'] = false
                 }
@@ -143,10 +143,10 @@ export default {
 
                 if(
                   ((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list')
-                  || (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality'].includes(url))
+                  || (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
                   || (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
                   || (key === 'avg_net_return' && url === 'etf_seasonality'
-                  || (key === 'AvgReturn' && url === 'cot_max_min')
+                  || (key === 'AvgReturn' && url === 'commod_sentiment_seasonality')
                   )
                 ){
                   if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`

@@ -39,7 +39,7 @@ export default {
           label: 'Commodity Indicator List',
           type: 'commodity',
           refName: 'commodityVirtualScroll',
-          itemSize: 50,
+          itemSize: 40,
           keyProp: 'url',
           options: [
             {
@@ -53,7 +53,7 @@ export default {
           label: 'Commodity Sentiment & Seasonality Screen',
           type: 'cssScreen',
           refName: 'cssVirtualScroll',
-          itemSize: 50,
+          itemSize: 40,
           keyProp: 'url',
           options: [
             {
@@ -67,7 +67,7 @@ export default {
           label: 'Commodity Sentiment & Trend Screen',
           type: 'cstScreen',
           refName: 'cstVirtualScroll',
-          itemSize: 50,
+          itemSize: 40,
           keyProp: 'url',
           options: [
             {
@@ -79,15 +79,15 @@ export default {
         },
         {
           label: 'Commodity Hedgers - 3-year Min/Max',
-          type: 'CH3YMinMax',
-          refName: 'CH3YMinMaxVirtualScroll',
-          itemSize: 50,
+          type: 'CHMinMax',
+          refName: 'CHMinMaxVirtualScroll',
+          itemSize: 40,
           keyProp: 'url',
           options: [
             {
               label: 'Commodity Hedgers - 3-year Min/Max',
-              value: 'CH3YMinMax',
-              type: 'CH3YMinMax'
+              value: 'CHMinMax',
+              type: 'CHMinMax'
             }
           ]
         },

@@ -27,7 +27,7 @@
               <span>{{ label }}</span>
               <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
             </div>
-            <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CH3YMinMax'].includes(type)">
+            <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
               <template v-for="item in options">
                 <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
               </template>
@@ -131,7 +131,6 @@ export default {
       return this.loading
     },
     columns() {
-      debugger
       const columnsMap = new Map(([
         ['stockColumns', 
           [
@@ -142,9 +141,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
+              key: 'sub_type',
               label: 'Groups',
-              value: 'groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -277,8 +276,8 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
-              label: 'Group',
+              key: 'sub_type',
+              label: 'Groups',
               value: 'groups'
             },
             {
@@ -317,9 +316,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -358,9 +357,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -399,9 +398,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -439,9 +438,9 @@ export default {
               value: 'chart_name'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -479,9 +478,9 @@ export default {
               value: 'chart_name'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -525,9 +524,9 @@ export default {
               value: 'underlying_name',
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -563,9 +562,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'groups',
-              label: 'Group',
-              value: 'groups',
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -596,7 +595,7 @@ export default {
           [
             {
               key: 'chart_name',
-              label: 'Breadth Measure',
+              label: 'Symbol',
               value: 'chart_name',
               minWidth: '250px'
             },
@@ -606,9 +605,9 @@ export default {
               value: 'underlying_name'
             },
             {
-              key: 'groups',
+              key: 'sub_type',
               label: 'Groups',
-              value: 'groups',
+              value: 'sub_type',
               capFirstLetter: true
             },
             {
@@ -651,7 +650,7 @@ export default {
             },
             {
               key: 'sub_type',
-              label: 'Group',
+              label: 'Groups',
               value: 'sub_type',
               capFirstLetter: true
             },
@@ -692,7 +691,7 @@ export default {
             },
             {
               key: 'sub_type',
-              label: 'Group',
+              label: 'Groups',
               value: 'sub_type',
               capFirstLetter: true
             },
@@ -738,7 +737,7 @@ export default {
             },
             {
               key: 'sub_type',
-              label: 'Group',
+              label: 'Groups',
               value: 'sub_type',
               capFirstLetter: true
             },
@@ -775,7 +774,7 @@ export default {
             },
             {
               key: 'sub_type',
-              label: 'Group',
+              label: 'Groups',
               value: 'sub_type',
               capFirstLetter: true
             },
@@ -801,39 +800,38 @@ export default {
             }
           ]
         ],
-        ['CH3YMinMaxColumns', 
+        ['CHMinMaxColumns', 
           [
             {
               key: 'chart_name',
-              label: 'Optix',
+              label: 'Name',
               value: 'chart_name',
               minWidth: '250px'
             },
             {
-              key: 'url',
+              key: 'symbol',
               label: 'Symbol',
-              value: 'url',
-              allCapLetters: true
+              value: 'symbol'
             },
             {
               key: 'last_value',
-              label: 'Optix Value',
+              label: 'Last Value',
               value: 'last_value'
             },
             {
               key: 'last_update',
-              label: 'Optix Date',
+              label: 'Last Update',
               value: 'last_update'
             },
             {
-              key: 'max',
+              key: 'three_year_max',
               label: '3-Year Max',
-              value: 'max'
+              value: 'three_year_max'
             },
             {
-              key: 'min',
+              key: 'three_year_min',
               label: '3-Year Min',
-              value: 'min'
+              value: 'three_year_min'
             },
           ]
         ],
@@ -841,7 +839,9 @@ export default {
       const columns = columnsMap.get(`${this.checkedType}Columns`)
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
+      if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
+      if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key))
       return columns
     }

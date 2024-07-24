@@ -134,18 +134,18 @@ const actions = {
 		const cachedTime = localStorage.getItem(`${type}_timestamp`);
 		const now = new Date().getTime();
 		if (cachedData && cachedTime && now - cachedTime < CACHE_DURATION) {
-						commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data: JSON.parse(cachedData) });
+			commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data: JSON.parse(cachedData) });
 		} else {
-						try {
-										let response = await obtainIndicatorsList(type);
-										const data = response?.data || [];
-										localStorage.setItem(type, JSON.stringify(data));
-										localStorage.setItem(`${type}_timestamp`, now);
-										commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data });
-						} catch (error) {
-										console.error('Error fetching data:', error);
-										commit('SET_DATA', { type, data: [] });
-						}
+			try {
+				let response = await obtainIndicatorsList(type);
+				const data = response?.data || [];
+				localStorage.setItem(type, JSON.stringify(data));
+				localStorage.setItem(`${type}_timestamp`, now);
+				commit('SET_INDICATORS_PAGE_LIST_DATA', { type, data });
+			} catch (error) {
+				console.error('Error fetching data:', error);
+				commit('SET_DATA', { type, data: [] });
+			}
 		}
 }
 }
