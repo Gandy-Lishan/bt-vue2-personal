@@ -61,7 +61,6 @@ quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
     this.sendAjax(queryUrl,async function (status, response){
         const {name} = getSymbolInfo(CIQ.stxx.chart.symbol)
         CIQ.stxx.chart.symbolDisplay = name
-        debugger
 
         const isWholeData = CIQ.initialDate.start==parseInt(process.env.VUE_APP_START_DATE)
         console.log("moreAvailable:",CIQ.store.getters.getScannerAIFlagState?false:isWholeData?false:true)

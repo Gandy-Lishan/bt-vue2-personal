@@ -107,11 +107,8 @@ const state = {
 
 	//forecast
 	forecastList: [],
-	reportsAreDisplayed: {
-		bullish: true,
-		bearish: true,
-	},
-  symbollistForecast: [],
+	forecastAuthorList: [],
+  	symbollistForecast: [],
 	forecastMarket: process.env.VUE_APP_DEFAULT_SYMBOL, //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
 	// 何总写的提供给cpm,myindicator,seasonality的修改后的senti&symbol list
 	refactoredSentimentList: [],
@@ -125,11 +122,11 @@ const mutations = {
 	SET_FORECAST(state, list){
 		state.forecastList = list
 	},
+	SET_FORECAST_AUTHOR_LIST(state, list){
+		state.forecastAuthorList = list
+	},
 	SET_SYMBOLLIST_FORECAST(state, list){
 		state.symbollistForecast = list
-	},
-	SET_REPORT_DISPLAYED(state,obj){
-		state.reportsAreDisplayed[obj.type] = obj.val
 	},
   	SET_REFACTORED_SENTIMENTLIST(state, list){
 		state.refactoredSentimentList = list
@@ -504,18 +501,8 @@ const actions = {
 			}
 		})
 	},
-	reset_reports_events({ commit }) {
-		commit('SET_REPORT_DISPLAYED', {type:'bullish',val:true})
-		commit('SET_REPORT_DISPLAYED', {type:'bearish',val:true})
-	},
-	toggle_reports_events({ commit }, typeOfEvent) {
-		if (state.reportsAreDisplayed[typeOfEvent]) {
-			commit('SET_REPORT_DISPLAYED', {type:typeOfEvent,val:false})
-			CIQ.removeForecastMarker(typeOfEvent)
-		} else {
-			CIQ.createForecastMarker(typeOfEvent);
-			commit('SET_REPORT_DISPLAYED', {type:typeOfEvent,val:true})
-		}
+	get_forecast_author_list({ commit }, list) {
+		commit('SET_FORECAST_AUTHOR_LIST', list)
 	},
 	get_symbollist_forecast({ commit }) {
 		return new Promise(async resolve => {
