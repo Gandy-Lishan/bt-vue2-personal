@@ -34,6 +34,9 @@ const getters = {
 	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
 	getSymbollistForecast: state => state.chart.symbollistForecast,
 	getForecastMarket: state => state.chart.forecastMarket,
+	getForecastList: state => state.chart.forecastList,
+	getForecastAuthorList: state => state.chart.forecastAuthorList,
+	getForecastTimeframeList: state => state.chart.forecastTimeframeList,
 	getFavoriteIndicatorList: state => state.chart.favoriteIndicatorList,
 	getFavoriteSymbolList: state => state.chart.favoriteSymbolList,
 
