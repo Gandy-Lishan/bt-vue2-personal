@@ -19,6 +19,8 @@
 <script>
 import Table from "./Table";
 import Chart from "./Chart"
+import { mapActions, mapGetters } from 'vuex'
+import { isJson } from '@/utils'
 
 export default {
  name: 'ForTest',
@@ -36,6 +38,7 @@ export default {
              label: 'Most Popular Charts',
              value: 'popular',
              type: 'popular',
+             url: 'most_popular'
            }
          ]
        }
@@ -43,6 +46,11 @@ export default {
      displayRow: {}
    }
  },
+ computed: {
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
+  },
  components: {
    Chart,
    Table
@@ -51,6 +59,21 @@ export default {
    updateChart(row) {
      this.displayRow = row
    },
+   updateTable(row) {
+      const url = row.source_list
+      const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === url))
+      const value = findTable.options.find(ele => ele.url === url).value
+      const refName = findTable.refName
+      // 改数据
+      const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+      const findIndex = _results.findIndex(ele => ele.url === row.url)
+      if(findIndex !== -1) {
+        const find = _results[findIndex]
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
+        this.$refs[refName][0].loadMore(value)
+      }
+    }
  }
 }
 </script>

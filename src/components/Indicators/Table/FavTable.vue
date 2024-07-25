@@ -288,13 +288,22 @@ export default {
           })
           // 遍历出来, 要只要是哪张表
           const urlTypes = Array.from(Object.keys(this.indicatorsListData))
-          const sourceTable = urlTypes.map(url => {
+          let sourceTable = urlTypes.map(url => {
             const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
               return list.map(item => {
                 if(item.url === scope.row.url) return item
               }).filter(item => item !== undefined)
           }).filter(item => item.length > 0).flat()
           console.log('sourceTable', sourceTable) // [{}]
+          // Create a set to keep track of URLs with fav: true
+          let favUrls = new Set()
+          sourceTable.forEach(item => {
+              if (item.favorite) {
+                  favUrls.add(item.url);
+              }
+          });
+          // Filter the dictionary to remove items with the same URL and fav: false
+          sourceTable = sourceTable.filter(item => !(item.favorite === false && favUrls.has(item.url)));
           if(sourceTable.length > 0) this.removeIndicatorsFavorites(sourceTable)
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表

@@ -198,14 +198,13 @@ export default {
       this.displayRow = row
     },
     updateTable(row) {
-      const _row = row[0]
-      const url = _row.source_list
+      const url = row.source_list
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === url))
       const value = findTable.options.find(ele => ele.url === url).value
       const refName = findTable.refName
       // 改数据
       const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
-      const findIndex = _results.findIndex(ele => ele.url === _row.url)
+      const findIndex = _results.findIndex(ele => ele.url === row.url)
       if(findIndex !== -1) {
         const find = _results[findIndex]
         _results.splice(findIndex, 1, {...find, favorite: !find.favorite})

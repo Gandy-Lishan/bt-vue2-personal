@@ -291,7 +291,6 @@ export default {
         })
         return sortedObj
       }
-      debugger
       const sortedArray = processedData.map(obj => sortObjectKeys(obj))
       const category = this.categories.find(item => item.value === type)
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
@@ -302,9 +301,29 @@ export default {
       XLSX.writeFile(wb, `${xlsxName}.xlsx`);
     },
     
-    async removeIndicatorsFavorites(row) {
+    async removeIndicatorsFavorites(row) {   
+      const sourceRefNameMap = new Map([
+        [[
+          'stock_complete_list', 'ndx_100_complete_list', 'sp_1500_complete_list',
+          'bond_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow',
+          'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality',
+          'bond_seasonality', 'etf_seasonality'
+        ],'Indicators'],
+        [[
+          'commodity_complete_list', 'commod_sentiment_seasonality', 
+          'commod_optix_trend', 'cot_max_min'
+        ],'Commodity'],
+        [['most_popular'], 'Popular']
+      ])
       // 改变 vuex 和 table 的数据
-      this.$refs['Indicators'].updateTable(row)
+      const _row = row[0]
+      const url = _row.source_list
+      const pRefName = sourceRefNameMap.get(Array.from(sourceRefNameMap.keys()).find(keys => keys.find(key => key === url)))
+      this.$refs[pRefName].updateTable(_row)
+      // 移除收藏的时候同步 most popular 数据
+      const _results = isJson(this.indicatorsListData['most_popular']) ? JSON.parse(this.indicatorsListData['most_popular']) : []
+      const findIndex =_results.findIndex(item => item.url === _row.url)
+      if(findIndex !== -1 && url !== 'most_popular') {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
     }
   }
 }

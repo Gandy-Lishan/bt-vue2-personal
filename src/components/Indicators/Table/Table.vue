@@ -84,7 +84,6 @@ export default {
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
     async loadMore (type) {
-      debugger
       this.optionsChecked = type
       if(this.tableData.length === 0) this.loading = true
       let _results
