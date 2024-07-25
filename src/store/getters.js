@@ -50,7 +50,8 @@ const getters = {
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
 	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
-	getIndicatorsPageListData: (state) => state.states.indicatorsPageListdata,
+	getIndicatorsPageListData: (state) => state.chart.indicatorsPageListdata,
+	getCssMonthLabel: state => state.chart.cssMonthLabel,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,
