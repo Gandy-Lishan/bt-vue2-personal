@@ -13,9 +13,6 @@
       </template>
       <Chart :row="displayRow" :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
     </div>
-    <div class="image-hover" :style="hoverStyle" v-if="showImg">
-      <img style="height: 300px; width: 100%;" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
-    </div>
   </div>
  </template>
  
@@ -25,11 +22,6 @@
  
  export default {
   name: 'ForTest',
-  provide() {
-    return {
-      sendData: this.sendData
-    };
-  },
   data () {
     return {
       tableInfoList: [
@@ -49,11 +41,6 @@
         }
       ],
       displayRow: {},
-      showImg: false,
-      hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/etf_spy_250.png`,
-      hoverStyle: {display: 'none'},
-      hoveredChartName: '',
-      enlargedTable: 'Most Popular',
     }
   },
   components: {
@@ -64,32 +51,6 @@
     updateChart(row) {
       this.displayRow = row
     },
-    sendData(data) {
-      const clientHight = (this.$refs['ForTest'].offsetHeight)
-      const clientWidth = (this.$refs['ForTest'].offsetWidth)
-      console.log(this.$refs['ForTest'])
-      console.log(clientHight, clientWidth)
-      const container = this.$refs['ForTest']
-      if(container) {
-        console.log('container', container.getBoundingClientRect())
-      }
-      // if(data.refName) {
-      //   const element = this.$refs[data.refName]
-      //   if(element) console.log('element', element[0].getBoundingClientRect())
-      // }
-      this.showImg = data?.showImg
-      this.hoveredImage = data?.hoveredImage
-      this.hoverStyle = data?.hoverStyle
-      console.log(data?.hoverStyle?.top, data?.hoverStyle?.left)
-      this.hoveredChartName = data?.hoveredChartName
-      console.log('Received data from child:', data);
-    },
-    onLoad() {
-      this.showImg = true
-    },
-    onError() {
-      this.showImg = false
-    }
   }
  }
  </script>
