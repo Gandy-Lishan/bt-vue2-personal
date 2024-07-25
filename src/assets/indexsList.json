@@ -903,7 +903,8 @@
         "symbol": "VGT",
         "name": "Information Technology Index ETF (VGT)"
     },
-    {   "symbol": "ENVX", 
+    {
+        "symbol": "ENVX",
         "name": "Enovix (ENVX)"
     }
 ]
