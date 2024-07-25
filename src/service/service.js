@@ -1,5 +1,6 @@
 import axios from '../axios'
 import { uniqueObjectArray } from '@/utils/formValidate'
+import { transformChangedKey } from '@/utils/globalFunc'
 import * as mqs from 'qs'
 
 function get_env(name, value) {
@@ -601,6 +602,7 @@ export function getCPMList(page, sort, name) {
 		axios
 			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
+				transformChangedKey(res,'get_cpm_bts')
 				resolve(res)
 			})
 			.catch(err => {
@@ -734,6 +736,7 @@ export function getCPMResults(url) {
 		axios
 			.get(path)
 			.then(res => {
+				transformChangedKey(res,'run_cpm_bt')
 				resolve(res)
 			})
 			.catch(err => {

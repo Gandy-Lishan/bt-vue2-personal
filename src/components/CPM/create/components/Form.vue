@@ -425,8 +425,8 @@ export default {
           { required: true, message: 'Enter a name', trigger: 'blur' }
         ],
         symbol: [
-          { validator: createVerifyValueInListRule(this.symbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
-          { validator: createVerifyValueInListRule(this.symbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }

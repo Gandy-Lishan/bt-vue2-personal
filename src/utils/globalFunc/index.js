@@ -98,4 +98,21 @@ const getCoresSymbolDual = (isSymbol2) => {
     }
   }
 
-  export {maxNumOfStudy,getPropertyByString, recoverSymbolOptixUrl, createStateFilter, getSymbolInfo, getCoresSymbolDual}
+  // 兼容被改过key的股票列表
+  const transformChangedKey = (res,source) => {
+      const changedNameMap = {'crude':'Crude','bitcoin':'Bitcoin'}
+      switch(source){
+        case 'get_cpm_bts':
+          res.data.results = res.data.results.map(item=>{
+            let changedKey = changedNameMap[item.symbol]
+            return changedKey?{...item, symbol:changedKey}:item
+          })
+          break;
+        case 'run_cpm_bt':
+          let changedKey = changedNameMap[res.data.data.symbol]
+          if(changedKey) res.data.data.symbol = changedKey 
+          break
+        default:
+      }
+  }
+  export {maxNumOfStudy,getPropertyByString, recoverSymbolOptixUrl, createStateFilter, getSymbolInfo, getCoresSymbolDual, transformChangedKey}
