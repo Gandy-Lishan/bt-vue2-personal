@@ -91,6 +91,8 @@ export function setRouterPermission(router) {
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcOrAwYSJ4eSBTuZhZqrInKI+C5rORbU/iO3bXPPpsd6sndEt+m/nzXAA8wNg3qTiym8DmTFO9E1dYMIsK/g/dxfId4fRWpIj47FlICxoE7RkeeNCd3UV1JMZlEx/hFtyHUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwABeUfgFvahpjXNn+xUxHH8smHHrUp+gLpfKeBmaxIqC9U1mEqJebqxfuVk5hKzD484S3SOmHNzyYYuYGXx/e00GDaFa0z0UNm3b+NNYl1y1DN4TaiD7WavEay3z0BbTUGNhgskUX8Zgd2tTLScWF/fG6dMUn/AUuoF+dXnjAfKnjcQ7K4NNSqhSnn3DYbpzWB7tQ81fTdf+YSTTVueh/vFiE801WK2HHYPXSXGyyHpTrOSgNBAgEnjmO1n4imKBKbw=='
 		// )
 
+		// test ignlore
+
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			if (
