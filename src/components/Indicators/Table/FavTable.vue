@@ -1,13 +1,10 @@
 <template>
     <virtual-scroll
-      :ref="refName"
       :data="tableData"
-      :item-size="itemSize"
       key-prop="url"
       class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
 			<el-table
-      v-el-table-infinite-scroll="loadMore"
 				ref="Table"
 				class="virtual-table"
 				:data="virtualList"
@@ -32,7 +29,7 @@
 				<template slot-scope="scope">
           <el-button-group>
             <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
-            <el-button type="text" size="mini" icon="el-icon-star-on" @click="deleteRow(scope.row)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -65,10 +62,9 @@
 <script>
 import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
-import { capitalizeFirstLetter, unifyNumber } from "@/utils"
+import { capitalizeFirstLetter, unifyNumber, isJson } from "@/utils"
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
-import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
@@ -79,9 +75,7 @@ export default {
   components: {
     VirtualScroll
   },
-  directives: {
-    ElTableInfiniteScroll
-  },
+  inject: ['removeIndicatorsFavorites'],
   data() {
     return {
       loading: false,
@@ -137,19 +131,12 @@ export default {
     }
   },
   computed: {
-		...mapGetters(['getFavoriteIndicatorListBtv1', 'getMyIndicatorList', 'getFavoriteIndicatorList', 'getFavoriteSymbolList']),
-		favoritesBtv1List() {
-				return this.getFavoriteIndicatorListBtv1
-		},
-		favoritesBtv2List() {
-				return this.getFavoriteIndicatorList
-		},
-		indicatorsList() {
-				return this.getMyIndicatorList
-		},
-		_favoriteSymbolList() {
-			return this.getFavoriteSymbolList
-		}
+    ...mapGetters({
+      favoritesBtv1List: 'getFavoriteIndicatorListBtv1',
+      favoritesBtv2List: 'getFavoriteIndicatorList',
+      _favoriteSymbolList: 'getFavoriteSymbolList',
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
 	},
 	watch: {
     selectedTitle: {
@@ -167,7 +154,7 @@ export default {
 		console.log('favoritesBTV2List', this.favoritesBtv2List)
 	},
   methods: {
-    ...mapActions('chart', ['update_favorite']),
+    ...mapActions('chart', ['update_indicators_favorite']),
 		async see() {
 			this.loading = true
 			console.log('favoritesBTV1List', this.favoritesBtv1List)
@@ -210,6 +197,8 @@ export default {
                   // 保留特定小数点
                   if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
                 }
+                obj['loading'] = false
+                obj['favorite'] = true
                 if((key === 'last_value' || key === 'last_change') && (groups === 'stocks' || groups === 'Stocks')){
                   if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
                   // 加 %
@@ -249,17 +238,6 @@ export default {
           if((topPosition + 350) > containerHeight)  moveUp = - (topPosition + 350 - containerHeight)
           _t = topPosition + 50 + moveUp
         }
-      //   this.sendData({
-      //   showImg: true,
-      //   hoveredChartName: row?.chart_name || '',
-      //   hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`,
-      //   hoverStyle: {
-      //     top: `${event.clientY}px`,
-      //     left: `${event.clientX}px`,
-      //     display: 'block'
-      //   },
-      //   refName: this.refName
-      // })
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
@@ -291,6 +269,44 @@ export default {
     onError() {
       this.showImg = false
     },
+    async addRow(scope) {
+      try {
+        if(scope.row.source !== 'Backtest Engine v2.0') return
+        this.loading = true
+        scope.row.loading = true
+        const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
+        let favList = cloneDeep(this.favoritesBtv2List)
+        let index = favList.findIndex(item => item.url === scope.row.url)
+          // 添加收藏夹但是已经在收藏夹里面了
+          console.log(index, isFavorite)
+        // 在收藏夹中但是要移除
+        if(index !== -1 && isFavorite) {
+          favList.splice(index, 1)
+          await this.update_indicators_favorite({
+            indicator: JSON.stringify(favList),
+            symbol: JSON.stringify(this._favoriteSymbolList)
+          })
+          // 遍历出来, 要只要是哪张表
+          const urlTypes = Array.from(Object.keys(this.indicatorsListData))
+          const sourceTable = urlTypes.map(url => {
+            const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+              return list.map(item => {
+                if(item.url === scope.row.url) return item
+              }).filter(item => item !== undefined)
+          }).filter(item => item.length > 0).flat()
+          console.log('sourceTable', sourceTable) // [{}]
+          if(sourceTable.length > 0) this.removeIndicatorsFavorites(sourceTable)
+        }
+        // 改变 table, vueX 中的数据并接口改变 favorite 列表
+        this.tableData.splice(scope.$index, 1)
+        console.log('this.tableData', this.tableData)
+      } catch (error) {
+        console.warn('移除收藏夹失败', error)
+      } finally {
+        scope.row.loading = false
+        this.loading = false
+      }
+    },
 		async deleteRow(row, isAdd) {
 			console.log(row)
 			if(row.source === 'Backtest Engine v2.0') {
@@ -303,7 +319,7 @@ export default {
 					if (index !== -1 && !isAdd) favList.splice(index, 1);
 					if (index === -1 && isAdd) favList.push({url: row.url, name: row.chart_name})
 					if(index !== -1 && isAdd) {this.popUpMsgBox('This indicator already exists in favorites'); this.loading = false; return}
-					await this.update_favorite({
+					await this.update_indicators_favorite({
 						indicator: JSON.stringify(favList),
 						symbol: JSON.stringify(this._favoriteSymbolList)
 					})

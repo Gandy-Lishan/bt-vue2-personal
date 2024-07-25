@@ -13,9 +13,6 @@
       <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type !== 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
       <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type === 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
     </div>
-    <!-- <div class="image-hover" :style="hoverStyle">
-      <img style="height: 300px; width: 100%;" v-if="showImg" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
-    </div> -->
   </div>
 </template>
 
@@ -23,12 +20,13 @@
 import Table from "./Table";
 import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
+import { mapActions, mapGetters } from 'vuex'
+import { isJson } from '@/utils'
 
 export default {
   name: 'ForTest',
   provide() {
     return {
-      sendData: this.sendData,
       toggleEnlarge: this.toggleEnlarge
     };
   },
@@ -45,17 +43,20 @@ export default {
             {
               label: 'Stocks Indicator List',
               value: 'stock',
-              type: 'stock'
+              type: 'stock',
+              url: 'stock_complete_list'
             },
             {
               label: 'NASDAQ 100 Optix',
               value: 'NASDAQ',
-              type: 'stock'
+              type: 'stock',
+              url: 'ndx_100_complete_list',
             },
             {
               label: 'S&P 1500 Optix',
               value: 'SP1500',
-              type: 'stock'
+              type: 'stock',
+              url: 'sp_1500_complete_list',
             }
           ]
         },
@@ -69,7 +70,8 @@ export default {
             {
               label: 'Bond Indicator List',
               value: 'bond',
-              type: 'bond'
+              type: 'bond',
+              url: 'bond_complete_list'
             }
           ]
         },
@@ -97,27 +99,32 @@ export default {
             {
               label: 'ETF Sector List',
               value: 'ETFSector',
-              type: 'ETF'
+              type: 'ETF',
+              url: 'etf_complete_list'
             },
             {
               label: 'ETF Sector Breadth',
               value: 'ETFSectorBreadth',
-              type: 'ETF'
+              type: 'ETF',
+              url: 'etf_breadth'
             },
             {
               label: 'ETF Fund Flow',
               value: 'ETFFundFlow',
-              type: 'ETF'
+              type: 'ETF',
+              url: 'etf_flow'
             },
             {
               label: 'ETF Monthly Fund Flow',
               value: 'ETFMonthlyFund',
-              type: 'ETF'
+              type: 'ETF',
+              url: 'monthly_fund_flows'
             },
             {
               label: 'ETF Shares Outstanding',
               value: 'ETFShares',
-              type: 'ETF'
+              type: 'ETF',
+              url: 'shares_outstanding'
             },
           ]
         },
@@ -131,17 +138,20 @@ export default {
             {
               label: 'Commodity Seasonality',
               value: 'CommoditySeasonality',
-              type: 'seasonality'
+              type: 'seasonality',
+              url: 'commod_seasonality'
             },
             {
               label: 'Bond Seasonality',
               value: 'BondSeasonality',
-              type: 'seasonality'
+              type: 'seasonality',
+              url: 'bond_seasonality'
             },
             {
               label: 'ETF Seasonality',
               value: 'ETFSeasonality',
-              type: 'seasonality'
+              type: 'seasonality',
+              url: 'etf_seasonality'
             }
           ]
         },
@@ -161,10 +171,6 @@ export default {
         // },
       ],
       displayRow: {},
-      showImg: false,
-      hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/etf_spy_250.png`,
-      hoverStyle: {display: 'none'},
-      hoveredChartName: '',
       enlargedTable: null,
     }
   },
@@ -172,6 +178,11 @@ export default {
     Chart,
     Table,
     SeasonalityChart
+  },
+  computed: {
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
   },
   methods: {
     toggleEnlarge(label) {
@@ -186,32 +197,22 @@ export default {
       console.log('updateChart', row)
       this.displayRow = row
     },
-    sendData(data) {
-      const clientHight = (this.$refs['ForTest'].offsetHeight)
-      const clientWidth = (this.$refs['ForTest'].offsetWidth)
-      console.log(this.$refs['ForTest'])
-      // console.log(clientHight, clientWidth)
-      const container = this.$refs['ForTest']
-      if(container) {
-        console.log('container', container.getBoundingClientRect())
+    updateTable(row) {
+      const _row = row[0]
+      const url = _row.source_list
+      const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === url))
+      const value = findTable.options.find(ele => ele.url === url).value
+      const refName = findTable.refName
+      // 改数据
+      const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+      const findIndex = _results.findIndex(ele => ele.url === _row.url)
+      if(findIndex !== -1) {
+        const find = _results[findIndex]
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
+        this.$refs[refName][0].loadMore(value)
       }
-      // if(data.refName) {
-      //   const element = this.$refs[data.refName]
-      //   if(element) console.log('element', element[0].getBoundingClientRect())
-      // }
-      this.showImg = data?.showImg
-      this.hoveredImage = data?.hoveredImage
-      this.hoverStyle = data?.hoverStyle
-      console.log(data?.hoverStyle?.top, data?.hoverStyle?.left)
-      this.hoveredChartName = data?.hoveredChartName
-      console.log('Received data from child:', data);
-    },
-    onLoad() {
-      this.showImg = true
-    },
-    onError() {
-      this.showImg = false
-    },
+    }
   }
 }
 </script>

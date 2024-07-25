@@ -53,7 +53,7 @@ export default {
   name: 'IndicatorsList',
   provide() {
     return {
-      addIndicatorsFavorites: this.addIndicatorsFavorites
+      removeIndicatorsFavorites: this.removeIndicatorsFavorites
     };
   },
   data() {
@@ -69,10 +69,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getIndicatorsPageListData']),
-    indicatorsListData() {
-      return this.getIndicatorsPageListData
-    },
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData',
+      cssMonthLabel: 'getCssMonthLabel'
+    }),
     categories() {
       if(this.selectedTitle === 'Indicators') {
         this.searchCategory = 'stock_complete_list'
@@ -154,15 +154,18 @@ export default {
           },
           {
             label: 'Commodity Sentiment & Seasonality Screen',
-            value: 'commod_sentiment_seasonality'
+            value: 'commod_sentiment_seasonality',
+            name: 'CSScreen'
           },
           {
             label: 'Commodity Sentiment & Trend Screen',
-            value: 'commod_optix_trend'
+            value: 'commod_optix_trend',
+            name: 'CSTcreen'
           },
           {
             label: 'Commodity Hedgers - 3-year Min/Max',
-            value: 'cot_max_min'
+            value: 'cot_max_min',
+            name: 'ComHedgMinMax'
           }
         ]
       }
@@ -189,7 +192,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('states', ['fetchIndicatorsPageList']),
+    ...mapActions('chart', ['fetchIndicatorsPageList']),
     handleInput(event) {
       console.log('Input event:', event.target.value);
     },
@@ -224,15 +227,10 @@ export default {
     },
     async downloadCSV() {
       // 访问组件示例数据
-      debugger
       const type = this.searchCategory
-      let data = this.indicatorsListData[type]
-      let cssMonth = null
-      if(type === 'commod_sentiment_seasonality') {
-        const {month, screen_data} = data
-        cssMonth = month
-        data = isJson(screen_data) ? JSON.parse(screen_data) : []
-      }
+      let data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+      let cssMonthLabel = this.cssMonthLabel
+      let xlsxName = null
       if(!data || !data.length) {
         await this.fetchIndicatorsPageList(type)
         data = this.indicatorsListData[type] || []
@@ -254,7 +252,7 @@ export default {
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
       let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min' ]
-      if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonth}`)}
+      if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Groups', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
       const keysMap = new Map([
         ['chart_name', 'Name'],
@@ -272,7 +270,7 @@ export default {
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) keysMap.set('chart_name', 'Symbol')
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
-      if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', 'Average Return (%)');}
+      if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
 
@@ -295,17 +293,18 @@ export default {
       }
       debugger
       const sortedArray = processedData.map(obj => sortObjectKeys(obj))
-      const name = this.categories.find(item => item.value === type).label
+      const category = this.categories.find(item => item.value === type)
+      if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
+      if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
 			const ws = XLSX.utils.json_to_sheet(sortedArray);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, name);
-      XLSX.writeFile(wb, `${name}.xlsx`);
+      XLSX.utils.book_append_sheet(wb, ws, xlsxName);
+      XLSX.writeFile(wb, `${xlsxName}.xlsx`);
     },
     
-    async addIndicatorsFavorites(row, isAdd) {
-      // 添加收藏夹
-      console.log('添加收藏夹', row)
-      await this.$refs['Favorites'].$refs.favoriteVirtualScroll[0].deleteRow(row, isAdd)
+    async removeIndicatorsFavorites(row) {
+      // 改变 vuex 和 table 的数据
+      this.$refs['Indicators'].updateTable(row)
     }
   }
 }

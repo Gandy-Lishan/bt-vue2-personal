@@ -410,7 +410,7 @@ export default {
               return item !== null && item !== undefined && item !== '';
             });
 						const preTimArray = timArray.map(item => item[field])
-            console.log('timArray', timArray)
+            //console.log('timArray', timArray)
             
             const calculateReturn = (item, entryPrice) => {
               const value = item;
@@ -433,7 +433,7 @@ export default {
               current < min ? current : min
             );
 
-						console.log('最大值 最小值', maxItem, minItem)
+						//console.log('最大值 最小值', maxItem, minItem)
 
             const maxReturn = maxItem < entryPrice ? 0 : calculateReturn(maxItem, entryPrice);
             const minReturn = minItem > entryPrice ? 0 : calculateReturn(minItem, entryPrice);

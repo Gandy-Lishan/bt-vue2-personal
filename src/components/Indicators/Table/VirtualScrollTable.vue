@@ -44,8 +44,8 @@
           <el-table-column align="center" width="50px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button v-if="scope.row.favorite == false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope.row)" title="Add to favorites" :loading="scope.row.loading"></el-button>
-                <el-button v-if="scope.row.favorite == true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope.row)" title="Remove to favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove to favorites" :loading="scope.row.loading"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -86,7 +86,10 @@
 <script>
 import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
+import { mapGetters, mapActions } from 'vuex'
+import { isJson } from '@/utils'
 const debounce = require('lodash/debounce')
+const cloneDeep = require('lodash/cloneDeep')
 
 export default {
   props: {
@@ -99,8 +102,7 @@ export default {
     type: String,
     label: String,
     loading: Boolean,
-    firstRow: Object,
-    cssMonthLabel: String
+    firstRow: Object
   },
   directives: {
     ElTableInfiniteScroll
@@ -108,7 +110,7 @@ export default {
   components: {
     VirtualScroll
   },
-  inject: ['sendData', 'toggleEnlarge', 'addIndicatorsFavorites'],
+  inject: ['toggleEnlarge'],
   data() {
     return {
       virtualList: [],
@@ -127,6 +129,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      cssMonthLabel: 'getCssMonthLabel',
+      favoritesBtv1List: 'getFavoriteIndicatorListBtv1',
+      favoritesBtv2List: 'getFavoriteIndicatorList',
+      _favoriteSymbolList: 'getFavoriteSymbolList',
+      indicatorsListData: 'getIndicatorsPageListData'
+    }),
     _loading() {
       return this.loading
     },
@@ -844,7 +853,7 @@ export default {
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key))
       return columns
-    }
+    },
   },
   watch: {
 		label: {
@@ -858,6 +867,7 @@ export default {
 		}
 	},
   methods: {
+    ...mapActions('chart', ['update_indicators_favorite']),
     _toggleEnlarge() {
       this.toggleEnlarge(this.label)
       this.enlarged = !this.enlarged
@@ -884,23 +894,10 @@ export default {
           // 计算相对于顶部的位置
           const topPosition = hoverElementRect.top - containerRect.top + container.scrollTop
           const containerHeight = container.clientHeight
-          console.log('Top position', topPosition)
           // 如果高度超过容器, 向上移
           if((topPosition + 350) > containerHeight)  moveUp = - (topPosition + 350 - containerHeight)
           _t = topPosition + 50 + moveUp
         }
-        console.log(event, this.enlarged)
-      //   this.sendData({
-      //   showImg: true,
-      //   hoveredChartName: row?.chart_name || '',
-      //   hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`,
-      //   hoverStyle: {
-      //     top: `${event.clientY}px`,
-      //     left: `${event.clientX}px`,
-      //     display: 'block'
-      //   },
-      //   refName: this.refName
-      // })
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
@@ -922,7 +919,6 @@ export default {
       }
     },
     updateChart(row) {
-      console.log(row)
       if(!this.enlarged) {window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return}
       this.$emit("updateChart", row)
     },
@@ -932,15 +928,42 @@ export default {
     onError() {
       this.showImg = false
     },
-    async addRow(row) {
-      row.loading = true
+    async addRow(scope) {
       try {
-        await this.addIndicatorsFavorites(row, !row.favorite)
-        row.favorite = !row.favorite
+        if(scope.row.source !== 'Backtest Engine v2.0') return
+        scope.row.loading = true
+        const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
+        scope.row.favorite = !scope.row.favorite
+        let favList = cloneDeep(this.favoritesBtv2List)
+        let index = favList.findIndex(item => item.url === scope.row.url)
+          // 添加收藏夹但是已经在收藏夹里面了
+          console.log(index, isFavorite)
+        if(index !== -1 && !isFavorite) {this.popUpMsgBox('This indicator already exists in favorites'); this.loading = false; return}
+        // 在收藏夹中但是要移除
+        if(index !== -1 && isFavorite) favList.splice(index, 1)
+        // 不在收藏夹中添加收藏夹
+        if(index === -1 && !isFavorite) favList = [...favList, {url: scope.row.url, name: scope.row.chart_name}]
+        // 接口更新
+        if((index !== -1 && isFavorite) || (index === -1 && !isFavorite)) await this.update_indicators_favorite({
+            indicator: JSON.stringify(favList),
+            symbol: JSON.stringify(this._favoriteSymbolList)
+          })
+        // 不在收藏夹中但是要移除
+        if(index === -1 && isFavorite) return
+        // 改变 table, vueX 中的数据并接口改变 favorite 列表
+        console.log('this.tableData', this.tableData)
+        const url = scope.row.source_list
+        const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        const findIndex = _results.findIndex(ele => ele.url === _row.url)
+        if(findIndex !== -1) {
+          const find = _results[findIndex]
+          _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+          this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
+        }
       } catch (error) {
         console.warn('移除收藏夹失败', error)
       } finally {
-        row.loading = false
+        scope.row.loading = false
       }
     },
     changeTableSort(column){
