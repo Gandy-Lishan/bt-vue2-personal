@@ -761,6 +761,58 @@ const actions = {
                   else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
                 }else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
                   // 大写首字母
+									if(url === 'bond_complete_list') {
+										if(['Bond Optix', '10-Year Optix', '10-Year Treasury Hedgers Position',
+										'10-Year Bond Put/Call Ratio', '10-Year Treasury Seasonality','Conference Board - Bonds',
+										'Ultra 10-Year Treasuries Hedgers Position', 'Ultra 10-Year Treasury Hedgers Position',
+										'2-Year / 10-Year Yield Curve', 'BBB - AAA Corporate Bond Yield Spread'].includes(obj['chart_name'])) {
+											obj['sub_type'] = '10-Year Treasury'
+										}
+										else if(['TLT Optix', 'TLT Seasonality', 'TLT Open Interest Ratio'].includes(obj['chart_name'])) {
+											obj['sub_type'] = '20-Year Treasury'
+										}
+										else if(['2-Year Optix','2-Year Treasury Hedgers Position','2-Year Treasury Seasonality'].includes(obj['chart_name'])) {
+											obj['sub_type'] = '2-Year Treasury'
+										}
+										else if(['30-Year Treasury Hedgers Position','30-Year Bond Put/Call Ratio','Rydex Bond Bear Assets',
+										'Rydex Bond Bull Assets','Rydex Bond Bull Ratio', '30-Year Treasury Seasonality', 'AAII Allocation - Bonds', 
+										'Strategist Allocation - Bonds', '30-Year Optix', 'Fund Flow - Combined Bond', 'Fund Flow - ETF Bond',
+										'Fund Flow - Mutual Fund Bond', 'Ultra 30-Year Treasuries Hedgers Position', 'Ultra 30-Year Treasury Hedgers Position'].includes(obj['chart_name'])) {
+											obj['sub_type'] = '30-Year Treasury'
+										}
+										else if(['5-Year Treasury Hedgers Position', '5-Year Treasury Seasonality', '5-Year Treasury', '5-Year Optix'].includes(obj['chart_name'])) {
+											obj['sub_type'] = '5-Year Treasury'
+										}
+										else if(['Eurodollar Optix','Eurodollar Hedgers Position','Eurodollar Price Seasonality'].includes(obj['chart_name'])) {
+											obj['sub_type'] = 'Eurodollar'
+										}
+										else if(['High Yield Bond Advance-Decline','High Yield Bond NH - NL',
+										'HYG Optix','JNK Optix','HYG Seasonality','JNK Seasonality',
+										'High Yield Bond Cumulative A/D Line', 'High Yield McClellan Oscillator', 'High Yield McClellan Summation'].includes(obj['chart_name'])) {
+											obj['sub_type'] = 'High-Yield'
+										}
+										else if(['BND Optix', 'LQD Optix','LQD Seasonality'].includes(obj['chart_name'])) {
+											obj['sub_type'] = 'Investment Grade'
+										}
+									}
+									if(obj['sub_type'] == 'vol') obj['sub_type'] = 'Volatility'
+									else if(obj['sub_type'] == 'stock_sent') obj['sub_type'] = 'Stock Sentiment'
+									else if(obj['sub_type'] == 'pc_ratio') obj['sub_type'] = 'PutCall'
+									else if(obj['sub_type'] == 'cot' || obj['sub_type'] == 'cot_max_min') obj['sub_type'] = 'COT'
+									else if(obj['sub_type'] == 'etf_index' || obj['sub_type'] == 'etf_social_index') obj['sub_type'] = 'Index'
+									else if(obj['sub_type'] == 'etf_etf' || obj['sub_type'] == 'etf_social_sector' || obj['sub_type'] == 'etf_sector') obj['sub_type'] = 'Sector'
+									else if(obj['sub_type'] == 'etf_bond' || obj['sub_type'] == 'etf_social_bond') obj['sub_type'] = 'Bond'
+									else if(obj['sub_type'] == 'etf_commod' || obj['sub_type'] == 'etf_social_commod') obj['sub_type'] = 'Commodity'
+									else if(obj['sub_type'] == 'etf_breadth') obj['sub_type'] = 'Sector Breadth'
+									else if(obj['sub_type'] == 'etf_country' || obj['sub_type'] == 'etf_social_country') obj['sub_type'] = 'Country'
+									else if(obj['sub_type'] == 'stock_sent') obj['sub_type'] = 'Stock Sentiment'
+									else if(obj['sub_type'] == 'etf_social') obj['sub_type'] = 'Social'
+									else if(obj['sub_type'] == 'seasonality') obj['sub_type'] = 'Seasonality'
+									else if(obj['sub_type'] == 'optix') obj['sub_type'] = 'Optix'
+									else if(obj['sub_type'] == 'model') obj['sub_type'] = 'Model'
+									else if(obj['sub_type'] == 'more') obj['sub_type'] = 'More'
+									else if(obj['sub_type'] == 'rydex') obj['sub_type'] = 'Rydex'
+									else if(obj['sub_type'] == 'etf_etf') obj['sub_type'] = 'Rydex'
                   obj[key] = capitalizeFirstLetter(obj[key])
                 }
                 if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return', 'AvgReturn'].includes(key)) {

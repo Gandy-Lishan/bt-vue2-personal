@@ -287,7 +287,7 @@ export default {
             {
               key: 'sub_type',
               label: 'Groups',
-              value: 'groups'
+              value: 'sub_type'
             },
             {
               key: 'timeframe',

@@ -126,164 +126,165 @@ export default {
      return monthNames[monthIndex - 1];
    },
    createLineChart(dayOfYearData, chart_name, last_value, basicChartOptions) {
-  // 计算数据的最大值和最小值
-  const allData = dayOfYearData.concat(dayOfYearData.map(point => ({
-    x: point.x,
-    y: point.y * -1
-  })));
-  const yValues = allData.map(point => point.y);
-  const minY = Math.min(...yValues);
-  const maxY = Math.max(...yValues);
-
-  Highcharts.chart('line-chart-container', {
-   chart: {
-    marginBottom: 0, // 调整图表底部边距
-    spacingBottom: 0 // 调整图表与容器底部的间距
-   },
-    title: {
-      text: chart_name || 'SPY Optix',
-      style: { fontWeight: 'bold', fontFamily: 'Arial' }
-    },
-    subtitle: {
-      text: last_value !== undefined && last_value !== null ? `Last Value: ${last_value}` : ''
-    },
-    yAxis: {
-      title: {
-       enabled: true,
-        text: 'Cumulative Return (%)',
-        style: {"color": "#000000", "fontWeight": "bold"}
-      },
-      plotLines: [{
-           color: '#dddddd',
-           width: 1,
-           value: 0
-       }],
-      tickInterval: (maxY - minY) / 10, // 动态设置 y 轴刻度间隔
-      min: minY,
-      max: maxY,
-      endOnTick: false,
-      startOnTick: false,
-      labels: {
-        enabled: true,
-        formatter: function () {
-          return Highcharts.numberFormat(this.value, 1); // 保留小数点后一位
-        }
-      },
-       gridLineWidth: 0,
-       tickPixelInterval: 37
-    },
-    xAxis: {
-     type: 'linear',
-     plotLines: [{
-         color: 'darkgreen',
-         width: 1,
-         label: {
-             verticalAlign: 'bottom',
-             y: -10,
-             textAlign: 'right',
-             style: {
-                 color: 'darkgreen',
-                 fontWeight: 'bold'
-             }
-         },
-         value: 150
-     }],
-     title: {
-         enabled: true,
-         text: "Trading Day Of The Year",
-         style: {"color": "#000000", "fontWeight": "bold"}
-     },
-     tickWidth: 0,
-     tickInterval: 10
-    },
-    series: [{
-      type: 'line',
-      name: 'Average of All Years',
-      animation: true,
-      color: "#2f7ed8",
-      dashStyle: "",
-      data: dayOfYearData,
-      dataGrouping: {
-          enabled: false,
-          enableMouseTracking: true
-      },
-      id: "seasonality_line_chart",
-      lineWidth: 2,
-      name: "Average of All Years",
-      showInLegend: true,
-      type: "line"
-    }, {
-      data: dayOfYearData.map(point => ({
+      // 计算数据的最大值和最小值
+      debugger
+      const allData = dayOfYearData.concat(dayOfYearData.map(point => ({
         x: point.x,
-        y: point.y * -1 // 模拟不同数据集
-      })),
-      animation: true,
-      color: "#8E2323",
-      dashStyle: "",
-      dataGrouping: {
-          enabled: false,
-          enableMouseTracking: true
-      },
-      id: "seasonality_line_chart",
-      lineWidth: 2,
-      name: "Current Year Performance",
-      showInLegend: true,
-      visible:false,
-      type: "line"
-    }],
-    rangeSelector: {enabled: false},
-    navigator: {enabled: false},
-    legend: {
-        enabled: true,
-        padding: 10,
-        itemMarginTop: 15,
+        y: point.y * -1
+      })));
+      const yValues = allData.map(point => point.y);
+      const minY = Math.min(...yValues);
+      const maxY = Math.max(...yValues);
 
-        verticalAlign: 'top' 
-    },
-    navigation: {enabled: false},
-    credits: {
-        enabled: true,
-        text: "SENTIMENTRADER",
-        href: 'https://sentimentrader.com',
-        position: {
-            align: 'right',
-            y:-65,
-            x:-20
-        }
-    },
-    tooltip: { 
-      shared: true, 
-      crosshairs: true, 
-      headerFormat: '<span style="font-size: 10px">Day {point.key}</span><br/>', 
-      valueDecimals: 2 
-        }, 
-    exporting: {
-      enabled: true,
-      buttons: {
-        contextButton: {
-          menuItems: [
-            'printChart',
-            'downloadPNG',
-            'downloadJPEG',
-            'downloadPDF'
-          ]
-        }
-      }
-    },
-    plotOptions: {
-      series: {
-        states: {
-          hover: {
-            enabled: false
+      Highcharts.chart('line-chart-container', {
+      chart: {
+        marginBottom: 0, // 调整图表底部边距
+        spacingBottom: 0 // 调整图表与容器底部的间距
+      },
+        title: {
+          text: chart_name || 'SPY Optix',
+          style: { fontWeight: 'bold', fontFamily: 'Arial' }
+        },
+        subtitle: {
+          text: last_value !== undefined && last_value !== null ? `Last Value: ${last_value}` : ''
+        },
+        yAxis: {
+          title: {
+          enabled: true,
+            text: 'Cumulative Return (%)',
+            style: {"color": "#000000", "fontWeight": "bold"}
           },
-          inactive: {
-            enabled: false
+          plotLines: [{
+              color: '#dddddd',
+              width: 1,
+              value: 0
+          }],
+          tickInterval: (maxY - minY) / 10, // 动态设置 y 轴刻度间隔
+          min: minY,
+          max: maxY,
+          endOnTick: false,
+          startOnTick: false,
+          labels: {
+            enabled: true,
+            formatter: function () {
+              return Highcharts.numberFormat(this.value, 1); // 保留小数点后一位
+            }
+          },
+          gridLineWidth: 0,
+          tickPixelInterval: 37
+        },
+        xAxis: {
+        type: 'linear',
+        plotLines: [{
+            color: 'darkgreen',
+            width: 1,
+            label: {
+                verticalAlign: 'bottom',
+                y: -10,
+                textAlign: 'right',
+                style: {
+                    color: 'darkgreen',
+                    fontWeight: 'bold'
+                }
+            },
+            value: 150
+        }],
+        title: {
+            enabled: true,
+            text: "Trading Day Of The Year",
+            style: {"color": "#000000", "fontWeight": "bold"}
+        },
+        tickWidth: 0,
+        tickInterval: 10
+        },
+        series: [{
+          type: 'line',
+          name: 'Average of All Years',
+          animation: true,
+          color: "#2f7ed8",
+          dashStyle: "",
+          data: dayOfYearData,
+          dataGrouping: {
+              enabled: false,
+              enableMouseTracking: true
+          },
+          id: "seasonality_line_chart",
+          lineWidth: 2,
+          name: "Average of All Years",
+          showInLegend: true,
+          type: "line"
+        }, {
+          data: dayOfYearData.map(point => ({
+            x: point.x,
+            y: point.y * -1 // 模拟不同数据集
+          })),
+          animation: true,
+          color: "#8E2323",
+          dashStyle: "",
+          dataGrouping: {
+              enabled: false,
+              enableMouseTracking: true
+          },
+          id: "seasonality_line_chart",
+          lineWidth: 2,
+          name: "Current Year Performance",
+          showInLegend: true,
+          visible:false,
+          type: "line"
+        }],
+        rangeSelector: {enabled: false},
+        navigator: {enabled: false},
+        legend: {
+            enabled: true,
+            padding: 10,
+            itemMarginTop: 15,
+
+            verticalAlign: 'top' 
+        },
+        navigation: {enabled: false},
+        credits: {
+            enabled: true,
+            text: "SENTIMENTRADER",
+            href: 'https://sentimentrader.com',
+            position: {
+                align: 'right',
+                y:-65,
+                x:-20
+            }
+        },
+        tooltip: { 
+          shared: true, 
+          crosshairs: true, 
+          headerFormat: '<span style="font-size: 10px">Day {point.key}</span><br/>', 
+          valueDecimals: 2 
+            }, 
+        exporting: {
+          enabled: true,
+          buttons: {
+            contextButton: {
+              menuItems: [
+                'printChart',
+                'downloadPNG',
+                'downloadJPEG',
+                'downloadPDF'
+              ]
+            }
           }
-        }
-      }
-    },
-    chart: basicChartOptions
-  });
+        },
+        plotOptions: {
+          series: {
+            states: {
+              hover: {
+                enabled: false
+              },
+              inactive: {
+                enabled: false
+              }
+            }
+          }
+        },
+        chart: basicChartOptions
+      });
 },
 createBarChart(monthData, basicChartOptions) {
   // 计算数据的最大值和最小值
