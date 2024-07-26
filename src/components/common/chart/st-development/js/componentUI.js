@@ -3320,26 +3320,30 @@ CIQ.UI.StudyEdit.prototype.remove = function() {
 		// lishan chartIQ todo
 		if (indexOfEntry != -1) {
 			if (indexOfExit != -1) {
-				CIQ.store.commit('chart/getExitIndicators', {
+				CIQ.store.commit('chart/getIndicators', {
 					index: indexOfExit,
-					value: ''
+					value: '',
+					criteria:'exit'
 				})
 			}
-			CIQ.store.commit('chart/getEntryIndicators', {
+			CIQ.store.commit('chart/getIndicators', {
 				index: indexOfEntry,
-				value: ''
+				value: '',
+				criteria:'entry'
 			})
 		} else if (indexOfExit != -1) {
 			if (indexOfEntry != -1) {
-				CIQ.store.commit('chart/getEntryIndicators', {
+				CIQ.store.commit('chart/getIndicators', {
 					index: indexOfEntry,
-					value: ''
+					value: '',
+					criteria:'entry'
 				})
 			}
 			// lishan chartIQ todo
-			CIQ.store.commit('chart/getExitIndicators', {
+			CIQ.store.commit('chart/getIndicators', {
 				index: indexOfExit,
-				value: ''
+				value: '',
+				criteria:'exit'
 			})
 		}
 		if (

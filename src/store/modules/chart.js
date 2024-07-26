@@ -217,6 +217,8 @@ const mutations = {
 	getExtremeValue: (state, list) => {
 		state.extremeValue = list
 	},
+
+
 	/**
 	 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
 	 */
@@ -235,19 +237,20 @@ const mutations = {
 	SET_INDICATORSLIST(state, data) {
 		state.indicatorsList = data
 	},
-
 	/**
-	 * set a single indicator to the indicator list
+	 * Sets up a mutations to store the technical indicators
 	 */
-	getEntryIndicators(state, obj) {
-		let { index, value } = obj
-		state.indicators.formIndicators.entry[index] = value
+	SET_TECH_CATEGORY(state, data) {
+		state.technicalCategory = data
 	},
-	getExitIndicators(state, obj) {
-		let { index, value } = obj
-		state.indicators.formIndicators.exit[index] = value
+	SET_BUILTIN_LIST(state, data) {
+		state.builtinList = data
 	},
-	// 以上两个准备被替换
+	SET_FORMAT_TECH_LIST(state, list) {
+		state.formateTechnicalList = list
+	},
+
+
 	getIndicators(state, obj) {
 		let {index, value, criteria} = obj
 		state.indicators.formIndicators[criteria][index] = value
@@ -259,21 +262,11 @@ const mutations = {
 		let {criteria, list} = obj
 		state.indicators.formIndicators[criteria] = list
 	},
-
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */
-
 	getExtraIndicators(state, val) {
 		state.indicators.extraIndicators = val
-	},
-
-	/**
-	 * Sets up a mutations to store the technical indicators
-	 */
-
-	getBuiltinList(state, data) {
-		state.builtinList = data
 	},
 
 	getTradesData(state, data) {
@@ -292,9 +285,7 @@ const mutations = {
 	getTechLayout(state, val) {
 		state.activatedTechLayout = val
 	},
-	saveFormatTechnicalList(state, list) {
-		state.formateTechnicalList = list
-	},
+
 	RESET_CHART_STUDY_STATE: state => {
 		// 清空chartiq indicator study信息
 		;(state.indicators = {
@@ -463,6 +454,30 @@ const actions = {
 			}else{
 				resolve(list)
 			}
+		})
+	},
+	initiate_tech_list({ commit }, list){
+		return new Promise(async (resolve,reject) => {
+			let buildinTechList = []
+			for (let i = 0; i < list.length; i++) {
+				list[i].studies.forEach((item) => {
+					buildinTechList.push({
+						class:list[i].class,
+						value:item.name,
+						url:item.url
+					})
+				})
+			}
+			let formatList = buildinTechList.filter(item=>
+				item.class !== 'No_display_technical_indicator' &&
+				item.class !== 'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+			).sort(function (a, b) {
+				return a.value.localeCompare(b.value)
+			})
+			commit('SET_TECH_CATEGORY', list)
+			commit('SET_BUILTIN_LIST',buildinTechList);
+			commit('SET_FORMAT_TECH_LIST', formatList)
+			resolve()
 		})
 	},
 /** End fetch resources */

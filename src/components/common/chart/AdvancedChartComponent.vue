@@ -631,7 +631,7 @@ export default class AdvancedChartComponent extends Vue {
 					// 检查是否有 class 为 'symbol-upload' 的元素
 					let cqLookupFiltersElement = document.querySelector('cq-uploader');
 					//console.log('symbol-upload element has been rendered',cqLookupFiltersElement);
-					// TODO 考虑优化
+					// TODO 考虑DOM优化
 					if (cqLookupFiltersElement) {	
 						_this.initializeSymbolUploader(cqLookupFiltersElement)
 						// 一旦找到了 'ciq-search' 元素，就可以停止觀察

@@ -69,7 +69,7 @@
 				>
 						<template slot="header">
 							Trend
-							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['Trend']">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
@@ -93,7 +93,7 @@
 					<template slot-scope="scope">
 						<!-- {{ scope.row.Signal }} -->
 						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
-						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent[midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]]">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
@@ -116,7 +116,7 @@
 				>
 						<template slot="header">
 							Expected Return(%)
-							<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['ExpectedReturn']">
 							</span>
 							<i class="iconfont icon-wenhao"></i>

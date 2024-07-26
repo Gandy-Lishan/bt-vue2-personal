@@ -767,9 +767,7 @@ export default {
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
-      var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
-
-      var results = technicaltIndicatorList.map(item => ({
+      var results = this.$store.getters.getFormateTechnicalList.map(item => ({
           ...item,
           priority: createStateFilter(queryString)(item),
         }))
