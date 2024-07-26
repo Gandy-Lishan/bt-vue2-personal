@@ -307,7 +307,7 @@ export default {
           'stock_complete_list', 'ndx_100_complete_list', 'sp_1500_complete_list',
           'bond_complete_list', 'etf_complete_list', 'etf_breadth', 'etf_flow',
           'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality',
-          'bond_seasonality', 'etf_seasonality'
+          'bond_seasonality', 'etf_seasonality', 'commodity_complete_list'
         ],'Indicators'],
         [[
           'commodity_complete_list', 'commod_sentiment_seasonality', 

@@ -366,10 +366,9 @@ export default {
               minWidth: '250px'
             },
             {
-              key: 'sub_type',
-              label: 'Groups',
-              value: 'sub_type',
-              capFirstLetter: true
+              key: 'name',
+              label: 'Name',
+              value: 'name'
             },
             {
               key: 'timeframe',
@@ -405,6 +404,11 @@ export default {
               label: 'Symbol',
               value: 'chart_name',
               minWidth: '250px'
+            },
+            {
+              key: 'name',
+              label: 'Name',
+              value: 'name'
             },
             {
               key: 'sub_type',

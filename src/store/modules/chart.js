@@ -794,7 +794,7 @@ const actions = {
 										else if(['BND Optix', 'LQD Optix','LQD Seasonality'].includes(obj['chart_name'])) {
 											obj['sub_type'] = 'Investment Grade'
 										}
-									}
+									}else if(url === 'etf_flow') obj['sub_type'] = capitalizeFirstLetter(obj['url'].split('_')[0])
 									if(obj['sub_type'] == 'vol') obj['sub_type'] = 'Volatility'
 									else if(obj['sub_type'] == 'stock_sent') obj['sub_type'] = 'Stock Sentiment'
 									else if(obj['sub_type'] == 'pc_ratio') obj['sub_type'] = 'PutCall'
@@ -813,6 +813,8 @@ const actions = {
 									else if(obj['sub_type'] == 'more') obj['sub_type'] = 'More'
 									else if(obj['sub_type'] == 'rydex') obj['sub_type'] = 'Rydex'
 									else if(obj['sub_type'] == 'etf_etf') obj['sub_type'] = 'Rydex'
+
+
                   obj[key] = capitalizeFirstLetter(obj[key])
                 }
                 if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return', 'AvgReturn'].includes(key)) {
