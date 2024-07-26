@@ -7,7 +7,7 @@ import states from './modules/states'
 import user from './modules/user'
 
 Vue.use(Vuex)
-// TODO
+// TODO 按照page细分, 并做code grouping
 const store = new Vuex.Store({
   modules: {
     chart,

@@ -8872,14 +8872,14 @@ if (!CIQ.Studies) {
 							var indexOfExit2 = CIQ.store.state.chart.indicators.formIndicators.exit2.indexOf(sd.type)
 							if(indexOfEntry != -1){
 								if(indexOfExit != -1){
-									CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+									CIQ.store.commit('chart/getIndicators',{index:indexOfExit,value:'',criteria:'exit'})
 								}
-								CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
+								CIQ.store.commit('chart/getIndicators',{index:indexOfEntry,value:'',criteria:'entry'})
 							}else if(indexOfExit != -1){
 								if(indexOfEntry != -1){
-									CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
+									CIQ.store.commit('chart/getIndicators',{index:indexOfEntry,value:'',criteria:'entry'})
 								}
-								CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+								CIQ.store.commit('chart/getIndicators',{index:indexOfExit,value:'',criteria:'exit'})
 							}
 							if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(sd.type) != -1){
 								// remove item in extraIndicator
