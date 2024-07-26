@@ -295,16 +295,15 @@ export default {
               }).filter(item => item !== undefined)
           }).filter(item => item.length > 0).flat()
           console.log('sourceTable', sourceTable) // [{}]
-          // Create a set to keep track of URLs with fav: true
-          let favUrls = new Set()
+          sourceTable = sourceTable.filter(item => (item.favorite));
           sourceTable.forEach(item => {
-              if (item.favorite) {
-                  favUrls.add(item.url);
-              }
-          });
-          // Filter the dictionary to remove items with the same URL and fav: false
-          sourceTable = sourceTable.filter(item => !(item.favorite === false && favUrls.has(item.url)));
-          if(sourceTable.length > 0) this.removeIndicatorsFavorites(sourceTable)
+            const {url, source_list: _sourceRowUrl} = item
+            if(url) {
+              const  _results = isJson(this.indicatorsListData[_sourceRowUrl]) ? JSON.parse(this.indicatorsListData[_sourceRowUrl]) : []
+              const find = _results.find(ele => ele.url === url)
+              if(find) this.removeIndicatorsFavorites([find])
+            }
+          })
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         this.tableData.splice(scope.$index, 1)
