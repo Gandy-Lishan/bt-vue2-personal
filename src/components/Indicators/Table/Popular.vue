@@ -11,10 +11,7 @@
         :style="{ width: '60%', display: 'block' }"
         ></Table>
      </template>
-     <Chart :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
-   </div>
-   <div class="image-hover" :style="hoverStyle" v-if="showImg">
-     <img style="height: 300px; width: 100%;" :src="hoveredImage" :alt="hoveredChartName" @load="onLoad" @error="onError"/>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
    </div>
  </div>
 </template>
@@ -22,40 +19,38 @@
 <script>
 import Table from "./Table";
 import Chart from "./Chart"
+import { mapActions, mapGetters } from 'vuex'
+import { isJson } from '@/utils'
 
 export default {
  name: 'ForTest',
- provide() {
-   return {
-     sendData: this.sendData
-   };
- },
  data () {
    return {
      tableInfoList: [
        {
-         label: 'Most Popular',
-         type: 'stock',
+         label: 'Most Popular Charts',
+         type: 'popular',
          refName: 'popularVirtualScroll',
          itemSize: 40,
          keyProp: 'url',
          options: [
            {
-             label: 'Stocks Indicator List',
-             value: 'stock',
-             type: 'stock',
+             label: 'Most Popular Charts',
+             value: 'popular',
+             type: 'popular',
+             url: 'most_popular'
            }
          ]
        }
      ],
-     displayRow: {},
-     showImg: false,
-     hoveredImage: `https://d1wrgh3h32hjn2.cloudfront.net/etf_spy_250.png`,
-     hoverStyle: {display: 'none'},
-     hoveredChartName: '',
-     enlargedTable: 'Most Popular',
+     displayRow: {}
    }
  },
+ computed: {
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
+  },
  components: {
    Chart,
    Table
@@ -64,32 +59,21 @@ export default {
    updateChart(row) {
      this.displayRow = row
    },
-   sendData(data) {
-     const clientHight = (this.$refs['ForTest'].offsetHeight)
-     const clientWidth = (this.$refs['ForTest'].offsetWidth)
-     console.log(this.$refs['ForTest'])
-     console.log(clientHight, clientWidth)
-     const container = this.$refs['ForTest']
-     if(container) {
-       console.log('container', container.getBoundingClientRect())
-     }
-     // if(data.refName) {
-     //   const element = this.$refs[data.refName]
-     //   if(element) console.log('element', element[0].getBoundingClientRect())
-     // }
-     this.showImg = data?.showImg
-     this.hoveredImage = data?.hoveredImage
-     this.hoverStyle = data?.hoverStyle
-     console.log(data?.hoverStyle?.top, data?.hoverStyle?.left)
-     this.hoveredChartName = data?.hoveredChartName
-     console.log('Received data from child:', data);
-   },
-   onLoad() {
-     this.showImg = true
-   },
-   onError() {
-     this.showImg = false
-   }
+   updateTable(row) {
+      const url = row.source_list
+      const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === url))
+      const value = findTable.options.find(ele => ele.url === url).value
+      const refName = findTable.refName
+      // 改数据
+      const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+      const findIndex = _results.findIndex(ele => ele.url === row.url)
+      if(findIndex !== -1) {
+        const find = _results[findIndex]
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
+        this.$refs[refName][0].loadMore(value)
+      }
+    }
  }
 }
 </script>

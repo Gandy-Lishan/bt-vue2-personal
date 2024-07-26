@@ -2,7 +2,7 @@ import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCurDate } from '@/service/ai'
 import { getIndicatorsRowData } from "@/service/service";
-import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
+import { getQueryVariable, LocalStorageUtil, getTokenRole, printConsole } from '@/utils'
 import store from '../store'
 import { uniqWith, isEqual } from "lodash"
 
@@ -51,7 +51,7 @@ export function setRouterPermission(router) {
 		// )
 	
 		/* hao@sentimentrader.com */
-		console.log(process.env.NODE_ENV)
+		printConsole(process.env.NODE_ENV)
 		// Cookies.set(
 		// 	'sentimen_session',
 		// 	'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
@@ -97,6 +97,8 @@ export function setRouterPermission(router) {
 		// 	'sentimen-session',
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcOrAwYSJ4eSBTuZhZqrInKI+C5rORbU/iO3bXPPpsd6sndEt+m/nzXAA8wNg3qTiym8DmTFO9E1dYMIsK/g/dxfId4fRWpIj47FlICxoE7RkeeNCd3UV1JMZlEx/hFtyHUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwABeUfgFvahpjXNn+xUxHH8smHHrUp+gLpfKeBmaxIqC9U1mEqJebqxfuVk5hKzD484S3SOmHNzyYYuYGXx/e00GDaFa0z0UNm3b+NNYl1y1DN4TaiD7WavEay3z0BbTUGNhgskUX8Zgd2tTLScWF/fG6dMUn/AUuoF+dXnjAfKnjcQ7K4NNSqhSnn3DYbpzWB7tQ81fTdf+YSTTVueh/vFiE801WK2HHYPXSXGyyHpTrOSgNBAgEnjmO1n4imKBKbw=='
 		// )
+
+		// test ignlore
 
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
