@@ -59,30 +59,11 @@ export default class AdvancedWrapper extends Vue {
 		// CIQ.chartBox = document.getElementsByClassName("chart_box")[0] as HTMLElement;
 		// CIQ.setPanelHeight([])
 
-		this.loadShortLong(config)
+		this.initiateTechList(config)
 	}
 
-	// load short and long technical list
-    loadShortLong(config:any) {
-		CIQ.technicalCategory = config.technicalClassCategory
-		let buildinTechList = []
-		for (let i = 0; i < CIQ.technicalCategory.length; i++) {
-			CIQ.technicalCategory[i].studies.forEach((item:any) => {
-				buildinTechList.push({
-					class:CIQ.technicalCategory[i].class,
-					value:item.name,
-					url:item.url
-				})
-			})
-		}
-		let formatList = buildinTechList.filter(item=>
-			item.class !== 'No_display_technical_indicator' &&
-			item.class !== 'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
-		).sort(function (a, b) {
-			return a.value.localeCompare(b.value)
-		})
-		store.commit('chart/getBuiltinList',buildinTechList);
-		store.commit('chart/saveFormatTechnicalList', formatList)
+    async initiateTechList(config:any) {
+		await store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
     }
 }
 </script>

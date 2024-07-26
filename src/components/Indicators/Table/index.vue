@@ -7,7 +7,7 @@
         <div class="tableHeader">
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Indicators'" :class="{ 'selected': selectedTitle === 'Indicators' }">Indicators</h4>
-            <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4>
+            <!-- <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4> -->
             <h4  @click="selectedTitle = 'Popular'" :class="{ 'selected': selectedTitle === 'Popular' }">Most Popular</h4>
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
           </div>
@@ -31,7 +31,7 @@
       <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
-      <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity>
+      <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
     </div>
     </div>
   </div>
@@ -176,7 +176,7 @@ export default {
     Favorites,
     Popular,
     Search,
-    Commodity
+    // Commodity
   },
   beforeDestroy () {
     // 离开此组件前保存筛选条件状态

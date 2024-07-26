@@ -143,8 +143,6 @@ export default {
 		preFetchData() {
 			this.fetchCustomList()
 			this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
-			
-			this.$store.dispatch('chart/get_symbollist_forecast')
 		},
 		changeSvg() {
 			this.isClosed = !this.isClosed

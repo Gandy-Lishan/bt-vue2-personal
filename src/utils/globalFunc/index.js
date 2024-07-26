@@ -99,6 +99,7 @@ const getCoresSymbolDual = (isSymbol2) => {
   }
 
   // 兼容被改过key的股票列表
+  // TODO 兼容更多改过key的股票列表的情况
   const transformChangedKey = (res,source) => {
       const changedNameMap = {'crude':'Crude','bitcoin':'Bitcoin'}
       switch(source){

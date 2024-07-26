@@ -45,7 +45,7 @@
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
-                <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove to favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -287,7 +287,8 @@ export default {
             {
               key: 'sub_type',
               label: 'Groups',
-              value: 'sub_type'
+              value: 'sub_type',
+              minWidth: '150px',
             },
             {
               key: 'timeframe',
@@ -322,7 +323,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -403,7 +404,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
               key: 'name',
@@ -448,7 +449,8 @@ export default {
             {
               key: 'chart_name',
               label: 'Symbol',
-              value: 'chart_name'
+              value: 'chart_name',
+              minWidth: '250px'
             },
             {
               key: 'sub_type',
@@ -488,7 +490,8 @@ export default {
             {
               key: 'chart_name',
               label: 'Symbol',
-              value: 'chart_name'
+              value: 'chart_name',
+              minWidth: '250px'
             },
             {
               key: 'sub_type',
@@ -535,6 +538,7 @@ export default {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -610,12 +614,13 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'underlying_name',
               label: 'Name',
-              value: 'underlying_name'
+              value: 'underlying_name',
+              minWidth: '200px'
             },
             {
               key: 'sub_type',
@@ -747,6 +752,7 @@ export default {
               key: 'name',
               label: 'Name',
               value: 'name',
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -784,6 +790,7 @@ export default {
               key: 'name',
               label: 'Name',
               value: 'name',
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
