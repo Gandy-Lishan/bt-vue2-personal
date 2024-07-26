@@ -61,7 +61,7 @@ export default {
           ]
         },
         {
-          label: 'Bond',
+          label: 'Bond & Commodity',
           type: 'bond',
           refName: 'bondVirtualScroll',
           itemSize: 50,
@@ -72,6 +72,12 @@ export default {
               value: 'bond',
               type: 'bond',
               url: 'bond_complete_list'
+            },
+            {
+              label: 'Commodity Indicator List',
+              value: 'commodity',
+              type: 'commodity',
+              url: 'commodity_complete_list'
             }
           ]
         },
