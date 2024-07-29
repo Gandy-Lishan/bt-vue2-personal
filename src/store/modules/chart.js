@@ -810,6 +810,7 @@ const actions = {
 											obj['sub_type'] = 'Investment Grade'
 										}
 									}else if(url === 'etf_flow') obj['sub_type'] = capitalizeFirstLetter(obj['url'].split('_')[0])
+									else if(url === 'monthly_fund_flows') obj['sub_type'] = capitalizeFirstLetter(obj['url'].split('_')[1])	
 									if(obj['sub_type'] == 'vol') obj['sub_type'] = 'Volatility'
 									else if(obj['sub_type'] == 'stock_sent') obj['sub_type'] = 'Stock Sentiment'
 									else if(obj['sub_type'] == 'pc_ratio') obj['sub_type'] = 'PutCall'
