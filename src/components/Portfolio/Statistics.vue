@@ -250,13 +250,13 @@ export default {
           label: 'Entry Price',
           value: 'Entry Price',
           key: 'Entry Price',
-					minWidth: '90px'
+										width: '90px'
         },
 				{
           label: 'Current Price',
           value: 'Current Price',
           key: 'Current Price',
-					minWidth: '100px'
+					width: '100px'
         },
 				{
           label: 'Shares',
@@ -274,14 +274,14 @@ export default {
           label: 'Market Value',
           value: 'Market Value',
           key: 'Market Value',
-					minWidth: '90px',
+					width: '90px',
 					maxWidth: '160px'
         },
 				{
 					label: 'Total Position(%)',
 					value: 'Total position(%)',
 					key: 'Total position(%)',
-					minWidth: '140px',
+					width: '140px',
 					maxWidth: '180px'
 				},
 				{
