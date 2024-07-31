@@ -87,9 +87,9 @@ export default {
 						minWidth: '250px'
 				},
 				{
-						key: 'groups',
+						key: 'sub_type',
 						label: 'Groups',
-						value: 'groups'
+						value: 'sub_type'
 				},
 				{
 						key: 'timeframe',
@@ -132,7 +132,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      favoritesBtv1List: 'getFavoriteIndicatorListBtv1',
+      favoritesBtv1List: 'getIndicatorPageBtv1List',
       favoritesBtv2List: 'getFavoriteIndicatorList',
       _favoriteSymbolList: 'getFavoriteSymbolList',
       indicatorsListData: 'getIndicatorsPageListData'
@@ -149,7 +149,7 @@ export default {
     }
   },
 	created() {
-		console.log('favoritesList', this.favoritesBtv1List)
+		console.log('favoritesBTV1List', this.favoritesBtv1List)
 		console.log('indicatorsList', this.indicatorsList)
 		console.log('favoritesBTV2List', this.favoritesBtv2List)
 	},
@@ -160,66 +160,100 @@ export default {
 			console.log('favoritesBTV1List', this.favoritesBtv1List)
 			console.log('indicatorsList', this.indicatorsList)
 			console.log('favoritesBTV2List', this.favoritesBtv2List)
-			let resu = []
-											
-			// btv2 fav
-			resu = this.favoritesBtv2List.map(item => ({...item, source:'Backtest Engine v2.0'}))
-			// btv1 fav
-			resu.push(...this.favoritesBtv1List.data.data.map(item=>{return {
-					name:item.chart_name[0],
-					url:item.url[0],
-					source:'Backtest Engine v1.0'
-			}}))
-			// 去重
-			resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
-					return resu.find(item => item.url === url);
-			});
-			console.log('resu', resu)
-			const fetchData = async(res) => {
+			const fetchData = async (res) => {
 			try {
 					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
 					const dataPromises = responses.map(response => response);
 					const allData = await Promise.all(dataPromises);
 					const detailData = allData.map(data => data.data);
-					this.tableData = detailData.map(obj => {
-						const groups = obj['groups']
-            for (const key in obj) {
-              if (Object.hasOwnProperty.call(obj, key)) {
-                if(key === 'timeframe') {
-                  if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
-                  else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
-                  else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-                }else if(key === 'groups') {
-                  // 大写首字母
-                  obj[key] = capitalizeFirstLetter(obj[key])
-                }
-                if(['last_value', 'last_change'].includes(key)) {
-                  // 保留特定小数点
-                  if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
-                }
-                obj['loading'] = false
-                obj['favorite'] = true
-                if((key === 'last_value' || key === 'last_change') && (groups === 'stocks' || groups === 'Stocks')){
-                  if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
-                  // 加 %
-                }
-								if(key === 'url') {
-									obj['source'] = resu.find(item => item.url === obj[key])?.source
-								}
-              }
-            }
-            return obj
-          })
 					console.log('detailData',detailData)
+          return detailData
 			} catch (error) {
 					console.error('Error:', error);
-					this.tableData = []
+					return []
 			} finally {
 				this.loading = false
 			}
 			}
-			await fetchData(resu)
+
+			let resu = []
+											
+			// btv2 fav
+			resu = this.favoritesBtv2List.map(item => ({...item, source:'Backtest Engine v2.0'}))
+			resu = await fetchData(resu)
+      console.log('BTV2', resu)
+			// btv1 fav
+			resu.push(...this.favoritesBtv1List.data.data.map(item=>({
+        ...item,
+				source:'Backtest Engine v1.0'})))
+      console.log('BTV1', resu)
+			// 去重
+			resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+					return resu.find(item => item.url === url);
+			});
+
+      this.tableData = this.processFavoriteData(resu)
 		},
+    processFavoriteData(data) {
+      return data.map(obj => {
+        const subType = obj['sub_type']
+        for (const key in obj) {
+          if (Object.hasOwnProperty.call(obj, key)) {
+            if(key === 'timeframe') {
+              if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
+              else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
+              else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
+            }
+            const subTypeMapping = {
+              model: 'Model',
+              more: 'More',
+              breadth: 'Breadth',
+              surveys: 'Surveys',
+              shorts: 'Shorts',
+              cash: 'Cash',
+              insiders: 'Insiders',
+              rydex: 'Rydex',
+              seasonality: 'Seasonality',
+              etf_index: 'Index',
+              etf_bond: 'Bond',
+              etf_social: 'Social',
+              etf_commod: 'Commodity',
+              etf_breadth: 'Sector Breadth',
+              etf_country: 'Country',
+              etf_etf: 'Sector',
+              pc_ratio: 'PutCall',
+              stock_sent: 'Stock',
+              equity: 'COT',
+              cot: 'COT',
+              optix: 'Optix',
+              vol: 'Volatility',
+              etf_fund_index: 'Index',
+              etf_social_index: 'Index',
+              etf_fund_sector: 'Sector',
+              etf_social_sector: 'Sector',
+              etf_fund_commodity: 'Commodity',
+              etf_social_commod: 'Commodity',
+              etf_fund_bond: 'Bond',
+              etf_social_bond: 'Bond',
+              etf_fund_country: 'Country',
+              etf_social_country: 'Country',
+            }
+            if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
+            if(['last_value', 'last_change'].includes(key)) {
+              // 保留特定小数点
+              if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
+            }
+            obj['loading'] = false
+            obj['favorite'] = true
+            if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
+              if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
+              // 加 %
+            }
+          }
+        }
+        return obj
+      })
+    },
 		handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && column.property === 'chart_name') {
         let _t = '50%'

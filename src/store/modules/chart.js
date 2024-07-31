@@ -875,7 +875,7 @@ get_indicator_page_btv1_list({ commit }) {
 											else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}}
 									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['last_update'] = timestampToTime(obj[key])
 									if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
-									const isInBtv1List = state.indicatorPageBtv1List.data.data.find(item => (item.url[0] === obj['url']))
+									const isInBtv1List = state.indicatorPageBtv1List.data.data.find(item => (item.url === obj['url']))
 									const isInBtv2List = state.favoriteIndicatorList.find(item => (item.url === obj['url']))
 									if((key === 'url' || key === 'chart_url') && isInBtv1List) {
 											obj['source'] = 'Backtest Engine v1.0'
