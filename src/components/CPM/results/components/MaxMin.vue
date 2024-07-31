@@ -11,7 +11,7 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'">										
+									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="124px">										
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
