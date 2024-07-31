@@ -13,7 +13,6 @@
         :data="virtualList"
 				empty-text="No data"
         stripe
-        border
         size="mini"
         row-key="url"
         v-loading="_loading"
@@ -190,7 +189,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'url',
@@ -236,7 +235,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '180px'
             },
             {
               key: 'url',
@@ -282,13 +281,13 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
               key: 'sub_type',
               label: 'Groups',
               value: 'sub_type',
-              minWidth: '150px',
+              minWidth: '100px',
             },
             {
               key: 'timeframe',
@@ -364,12 +363,13 @@ export default {
               key: 'chart_name',
               label: 'Breadth Measure',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
-              key: 'name',
+              key: 'underlying_name',
               label: 'Name',
-              value: 'name'
+              value: 'underlying_name',
+              minWidth: '150px'
             },
             {
               key: 'timeframe',
@@ -404,12 +404,13 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '150px'
             },
             {
-              key: 'name',
+              key: 'underlying_name',
               label: 'Name',
-              value: 'name'
+              value: 'underlying_name',
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -450,7 +451,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
               key: 'sub_type',
@@ -491,7 +492,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -532,13 +533,13 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'sub_type',
@@ -576,7 +577,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -614,18 +615,18 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '200px'
+              minWidth: '150px'
             },
             {
-              key: 'sub_type',
+              key: 'groups',
               label: 'Groups',
-              value: 'sub_type',
+              value: 'groups',
               capFirstLetter: true
             },
             {
@@ -705,7 +706,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '180px'
             },
             {
               key: 'sub_type',
@@ -890,7 +891,9 @@ export default {
     async changeOption(item) {
       if(this.options.length === 1) return
       this.checkedType = item.value; 
-      await this.$emit('loadMore', item.value, true)
+      await this.$nextTick(async () => {
+        await this.$emit('loadMore', item.value, true)
+      })
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {

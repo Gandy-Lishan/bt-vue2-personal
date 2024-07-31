@@ -3,15 +3,16 @@
     <div class="left" ref="ForTest">
      <template v-for="item in tableInfoList">
         <FavTable
-          v-bind="$attrs"
           :key="item.type"
+          v-bind="$attrs"
           :tableInfo="item"
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
           :style="{ width: '60%', display: 'block' }"
         ></FavTable>
       </template>
-      <Chart :row="displayRow" :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
+      <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
     </div>
   </div>
  </template>
@@ -19,6 +20,7 @@
  <script>
  import FavTable from "./FavTable";
  import Chart from "./Chart"
+import SeasonalityChart from "./SeasonalityChart"
  
  export default {
   name: 'ForTest',
@@ -29,7 +31,7 @@
           label: 'My Favorites',
           type: 'favorite',
           refName: 'favoriteVirtualScroll',
-          itemSize: 40,
+          itemSize: 50,
           keyProp: 'url',
           options: [
             {
@@ -45,7 +47,8 @@
   },
   components: {
     Chart,
-    FavTable
+    FavTable,
+    SeasonalityChart
   },
   methods: {
     updateChart(row) {
@@ -65,11 +68,4 @@
     width: 40%;
   }
  }
- .image-hover {
-  position: fixed;
-    z-index: 2000;
-    border: 1px solid #ccc;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
  </style>

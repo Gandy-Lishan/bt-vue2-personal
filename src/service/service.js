@@ -1434,6 +1434,22 @@ export function getIndicatorsRowData(url) {
 			})
 	})
 }
+
+export function obtainBTV1IndicatorsList() {
+
+	const path =`/dev/st_data/btv1_user_favorite_indicator`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { cache: true, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* Indicators Page 接口 END */
 
 /** Begin fetch BTV2 fav indicator & symbol list*/

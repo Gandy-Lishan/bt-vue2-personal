@@ -86,7 +86,7 @@ export default {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
     async loadMore (type, isUpdateChart) {
       this.optionsChecked = type
-      if(this.tableData.length === 0) this.loading = true
+      this.loading = true
       let _results
       try {
         const url = this.urlMap[this.optionsChecked]
@@ -96,7 +96,6 @@ export default {
       } catch (error) {
         console.log('error', error)
         _results = []
-       this.loading = false
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
