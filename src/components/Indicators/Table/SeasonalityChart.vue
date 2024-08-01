@@ -124,7 +124,7 @@
            title: {
            enabled: true,
              text: 'Cumulative Return (%)',
-             style: {"color": "#000000", "fontWeight": "bold"}
+             style: {"color": "#000000", "fontWeight": "bold", 'fontSize': '10px'}
            },
            plotLines: [{
                color: '#dddddd',
@@ -266,7 +266,7 @@
           title: {
             enabled: true,
             text: "Average Return",
-            style: {"color": "#000000", "fontWeight": "bold"}
+            style: {"color": "#000000", "fontWeight": "bold", 'fontSize': '10px'}
            },
            labels: {
                enabled: true,
