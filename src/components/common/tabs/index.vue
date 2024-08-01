@@ -97,8 +97,8 @@ main .el-menu--horizontal > .el-menu-item{
   width: 50%;
   text-align: center;
   color: #333;
-  font-weight: 800;
-  font-size: 17px;
+  font-weight: 700;
+  font-size: 16px;
   background-color: #d7d7d7;
   border-radius: 4px;
   &:hover {

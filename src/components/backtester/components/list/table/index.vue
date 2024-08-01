@@ -864,7 +864,7 @@ export default {
 .BTTable /deep/ .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
 	border-bottom: none;
 }
-/deep/ .el-button {
+/deep/ .el-button--info.is-plain {
 	font-weight: 600;
 	color: #333;
 }
