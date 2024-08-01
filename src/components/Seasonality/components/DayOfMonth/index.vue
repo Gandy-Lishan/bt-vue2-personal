@@ -287,4 +287,11 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+}
+/deep/ .el-button--primary, /deep/ .el-input__inner, /deep/ .el-input-group__append {
+  font-weight: 600;
+}
 </style>

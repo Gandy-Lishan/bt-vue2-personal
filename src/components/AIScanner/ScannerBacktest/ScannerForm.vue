@@ -206,7 +206,7 @@
                   <template v-slot:append>(%)</template>
                 </el-input>
               </el-form-item>
-              <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
+              <span class="sign">&nbsp;&nbsp;/&nbsp;&nbsp;</span>
               <el-form-item prop="short_ratio" label-width="0px">
                 <el-input v-model="data.short_ratio" placeholder="Enter ratio">
                   <template v-slot:append>(%)</template>
@@ -236,7 +236,7 @@
                 <template v-slot:append>(%)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+            <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="take_profit" label-width="0px">
           <el-input v-model="data.take_profit" placeholder="Enter number">
             <template v-slot:append>(%)</template>
@@ -266,7 +266,7 @@
                   <template v-slot:append>(%)</template>
                 </el-input>
             </el-form-item>
-              <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+              <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
               <el-form-item prop="stop_loss" label-width="0px">
               <el-input v-model="data.stop_loss" placeholder="Enter number">
                 <template v-slot:append>(%)</template>
@@ -296,7 +296,7 @@
                 <template v-slot:append>(bars)</template>
               </el-input>
           </el-form-item>
-            <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+            <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
           <el-form-item prop="time_in_market" label-width="0px">
           <el-input v-model="data.time_in_market" placeholder="Enter bars">
             <template v-slot:append>(bars)</template>
@@ -397,7 +397,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="sign">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <el-form-item label-width="0px" v-if="data.capital_allocate === 'manual_input'" prop="capital_allocate_num">
             <el-input v-show="data.capital_allocate === 'manual_input'" v-model="data.capital_allocate_num" placeholder="Enter Percentage"><template v-slot:append v-if="data.capital_allocate === 'manual_input'">(%)</template></el-input>
           </el-form-item>
@@ -1199,6 +1199,13 @@ export default {
   /deep/ .el-progress {
     height: 100%;
   }
+}
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+}
+/deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
+  font-weight: 500;
 }
 }
 </style>

@@ -973,4 +973,13 @@ export default {
     height: 100%;
   }
 }
+
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+  width: 300px;
+}
+/deep/ .el-button, /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
+  font-weight: 500;
+}
 </style>

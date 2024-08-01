@@ -549,11 +549,14 @@ input[type="time"] {
     .default-table-class .el-table .cell,
     .CPM-trades .el-table .cell,
     .CPM-TIM .el-table .cell,
-    .ScannerBTTable .el-table .cell
+    .ScannerBTTable .el-table .cell,
+    .el-table.aiscanner-table .cell,
+    .el-table.my-indicator-table .cell,
+    .el-table.BTTable .cell
   {
   padding: 0px;
   font-weight: 600;
-	font-size: 16px;
+	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
   text-align: center;
@@ -575,7 +578,9 @@ input[type="time"] {
     .default-table-class .el-table .cell p,
     .CPM-trades .el-table .cell p,
     .CPM-TIM .el-table .cell p,
-    .ScannerBTTable .el-table .cell p
+    .ScannerBTTable .el-table .cell p,
+    .el-table.aiscanner-table .cell p,
+    .el-table.my-indicator-table .cell p
   {
   margin: 0px;
   }
@@ -598,7 +603,7 @@ input[type="time"] {
   overflow: visible;
 }
 .strategiesTable .el-table .cell {
-  font-weight: 400;
+  font-weight: 600;
 	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
@@ -611,11 +616,18 @@ input[type="time"] {
   .CPM-trades .table thead tr th,
   .CPM-TIM .table thead tr th,
   .ScannerBTTable .table thead tr th,
-  .strategiesTable .table thead tr th
+  .strategiesTable .table thead tr th,
+  .el-table.aiscanner-table thead tr th,
+  .el-table.my-indicator-table  thead tr th,
+  .el-table.BTTable thead tr th
   {
   font-weight: 700 !important;
   color: #333341;
-	font-size: 18px;
+	font-size: 17px;
+}
+.el-table.portfolioTable thead tr th {
+  font-weight: 700 !important;
+  color: #333341
 }
 .otherIndexContainer .table thead tr th
 {
@@ -631,10 +643,16 @@ color: #333341;
 .CPM-trades .el-table th.el-table__cell>.cell,
 .CPM-TIM .el-table th.el-table__cell>.cell,
 .ScannerBTTable .el-table th.el-table__cell>.cell,
-.strategiesTable .el-table th.el-table__cell>.cell
+.strategiesTable .el-table th.el-table__cell>.cell,
+.el-table.aiscanner-table th.el-table__cell>.cell,
+.el-table.my-indicator-table th.el-table__cell>.cell,
+.el-table.BTTable th.el-table__cell>.cell
 {
   font-weight: 700 !important;
-	font-size: 18px;
+	font-size: 17px;
+}
+.el-table.portfolioTable th.el-table__cell>.cell {
+  font-weight: 700 !important;
 }
 .virtual-table.el-table th.el-table__cell>.cell {
   font-weight: 700 !important;
