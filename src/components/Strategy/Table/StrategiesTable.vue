@@ -599,4 +599,7 @@ export default {
 .el-table /deep/ tr.highlighted{
   background-color: yellow;
 }
+/deep/ .el-button {
+	font-weight: 600;
+}
 </style>

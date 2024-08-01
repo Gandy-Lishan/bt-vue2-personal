@@ -612,11 +612,22 @@ export default {
 /deep/ .el-select .el-input__inner, .el-select {
   width: 100%;
   margin: 0;
-  font-weight: 500;
-  color: #909399;
+  font-weight: 600;
+  font-size: 18px;
+  color: #333;
 }
 .my-indicator-list{
   padding: 20px;
   margin: 0 auto;
+}
+/deep/ .el-form--inline .el-form-item__label {
+	font-weight: 600;
+	color: #606266;
+}
+/deep/ .el-form-item__content {
+	font-weight: 500;
+}
+/deep/ .el-button {
+	font-weight: 600;
 }
 </style>

@@ -341,4 +341,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../index.less";
+/deep/ .el-button {
+	font-weight: 600;
+}
 </style>
