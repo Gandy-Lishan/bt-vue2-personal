@@ -557,7 +557,7 @@ input[type="time"] {
   padding: 0px;
   font-weight: 600;
 	font-size: 14px;
-  color: #333341;
+  color: #606266;
   font-family: "Open Sans",sans-serif;
   text-align: center;
 }
@@ -605,7 +605,7 @@ input[type="time"] {
 .strategiesTable .el-table .cell {
   font-weight: 600;
 	font-size: 14px;
-  color: #333341;
+  color: #606266;
   font-family: "Open Sans",sans-serif;
 }
 .tim-container .table thead tr th,
@@ -649,6 +649,7 @@ color: #333341;
 .el-table.BTTable th.el-table__cell>.cell
 {
   font-weight: 700 !important;
+  color: #333341;
 	font-size: 16px;
 }
 .el-table.portfolioTable th.el-table__cell>.cell {

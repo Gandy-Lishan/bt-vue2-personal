@@ -85,10 +85,6 @@
   margin-bottom: 0;
   width: 50%;
 }
-.aiscanner-table .cell{
-  display: flex !important;
-  align-items: center !important;
-}
 .aiscanner-table .dark-row {
   background: rgb(219 219 219) !important
 }

@@ -437,6 +437,6 @@ export default {
 	font-weight: 600;
 }
 /deep/ .el-button--info {
-  color: #333;
+  color: #606266;
 }
 </style>

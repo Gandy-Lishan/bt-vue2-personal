@@ -866,6 +866,6 @@ export default {
 }
 /deep/ .el-button--info.is-plain {
 	font-weight: 600;
-	color: #333;
+	color: #606266;
 }
 </style>
