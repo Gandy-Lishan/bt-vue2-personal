@@ -62,7 +62,7 @@
 <script>
 import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
-import { capitalizeFirstLetter, unifyNumber, isJson } from "@/utils"
+import { capitalizeFirstLetter, unifyNumber, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
 import cloneDeep from 'lodash/cloneDeep'
@@ -243,6 +243,7 @@ export default {
               // 保留特定小数点
               if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
             }
+            if(key === 'last_update') obj[key] = timestampToTime(obj[key])
             obj['loading'] = false
             obj['favorite'] = true
             if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
