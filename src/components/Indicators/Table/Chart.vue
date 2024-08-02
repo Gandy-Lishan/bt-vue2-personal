@@ -80,47 +80,112 @@
       };
  
       const createYAxisConfig = (series) => {
-        return series.map((serie, i) => ({
-          title: {
-            text: serie?.name || 'SPY Optix',
-            style: { color: i === 0 ? '#434348' : '#2f7ed8', fontWeight: 'bold', fontSize: '10px'
-             }
-          },
-          opposite: true,
-          top: `${(100 / series.length) * i}%`,
-          height: `${100 / series.length}%`,
-          offset: 0,
-          lineWidth: 0, // 去掉右边 Y 轴的竖线
-          gridLineWidth: 1,
-          plotLines: serie?.name === url ? [
-             {
-               value: pess || 20,
-               color: 'rgba(0, 128, 0, 1)',
-               dashStyle: 'shortdash',
-               width: 2,
-               label: { text: `${pess || 20}` },
-               zIndex: 5
-             },
-             {
-               value: opt || 80,
-               color: 'rgba(255, 0, 0, 1)',
-               dashStyle: 'shortdash',
-               width: 2,
-               label: { text: `${opt || 80}` },
-               zIndex: 5
-             }
-           ] : []
-        }));
-      };
+  return series.map((serie, i) => {
+    let minYAxis, maxYAxis;
+    
+    // Calculate min and max for the y-axis only for the bottom axis
+    if (i === series.length - 1) {
+      const data = serie.data.map(d => d[1]);
+      const minDataValue = Math.min(...data);
+      const maxDataValue = Math.max(...data);
+
+      // Determine the min and max values for the bottom y-axis
+      minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
+      maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
+
+      console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
+    }
+
+    return {
+      title: {
+        text: serie?.name || 'SPY Optix',
+        style: {
+          color: i === 0 ? '#434348' : '#2f7ed8',
+          fontWeight: 'bold',
+          fontSize: '10px'
+        }
+      },
+      opposite: true,
+      top: `${(100 / series.length) * i}%`,
+      height: `${100 / series.length}%`,
+      offset: 0,
+      lineWidth: 0, // Remove the right-side y-axis line
+      gridLineWidth: 1,
+      min: i === series.length - 1 ? minYAxis : null, // Set the calculated min value for the bottom axis
+      max: i === series.length - 1 ? maxYAxis : null, // Set the calculated max value for the bottom axis
+      plotLines: i === series.length - 1 ? [
+        {
+          value: pess || null,
+          color: 'rgba(0, 128, 0, 1)',
+          dashStyle: 'shortdash',
+          width: 2,
+          label: { text: `${pess || ''}` },
+          zIndex: 5
+        },
+        {
+          value: opt || null,
+          color: 'rgba(255, 0, 0, 1)',
+          dashStyle: 'shortdash',
+          width: 2,
+          label: { text: `${opt || ''}` },
+          zIndex: 5
+        }
+      ] : [],
+    };
+  });
+};
  
       const createChart = (series, allKeysName, basicChartOptions) => {
         const yAxisConfig = createYAxisConfig(series);
         const allData = series.flatMap(s => s.data);
-        const minX = Math.min(...allData.map(d => d[0]));
-        const maxX = Math.max(...allData.map(d => d[0]));
+        const minX = Math.min(...allData.map(d => d[0]))
+        // const maxX = Math.max(...allData.map(d => d[0]));
  
         Highcharts.stockChart(this.id, {
-          rangeSelector: { selected: 4 },
+          rangeSelector: {
+            buttons: [
+            {
+              type: 'month',
+              count: 3,
+              text: '3m'
+            }, {
+              type: 'month',
+              count: 6,
+              text: '6m'
+            }, {
+              type: 'ytd',
+              text: 'YTD'
+            }, {
+              type: 'year',
+              count: 1,
+              text: '1y'
+            }, {
+              type: 'year',
+              count: 3,
+              text: '3y'
+            }, {
+              type: 'year',
+              count: 5,
+              text: '5y'
+            }, {
+              type: 'year',
+              count: 10,
+              text: '10y'
+            }, {
+              type: 'year',
+              count: 15,
+              text: '15y'
+            }, {
+              type: 'year',
+              count: 20,
+              text: '20y'
+            }, {
+              type: 'all',
+              text: 'All'
+            }
+          ],
+          selected: 6 // Sets the default selected button (4 corresponds to '1y')
+          },
           title: {
             text: chart_name || 'SPY Optix',
             style: { fontWeight: 'bold', fontFamily: 'Arial' }
@@ -147,7 +212,14 @@
             crosshair: { label: { enabled: false } },
             ordinal: false,
             min: minX,
-            max: maxX
+            labels: {format: '{value:%Y}'}
+          },
+          navigator: {
+            xAxis: {
+              labels: {
+                format: '{value:%Y}' // Format for navigator x-axis labels
+              }
+            }
           },
           legend: {
             enabled: true,
@@ -167,6 +239,8 @@
             }
           },
           tooltip: {
+           xDateFormat: '%m-%d-%Y',
+           followTouchMove: true,
            shared: true,
            useHTML: true,
            crosshairs: true, 
@@ -175,7 +249,7 @@
              this.points.forEach(point => {
                // Add a colored circle before the series name
                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-               s += `${colorSpan}<span>${point.series.name}</span>: ${Highcharts.numberFormat(point.y, 2)}<br>`;
+               s += `${colorSpan}<span>${point.series.name}</span>: ${Highcharts.numberFormat(point.y,2)}<br>`;
              });
              return s;
            }
