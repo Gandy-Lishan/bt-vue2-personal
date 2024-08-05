@@ -80,60 +80,60 @@
       };
  
       const createYAxisConfig = (series) => {
-  return series.map((serie, i) => {
-    let minYAxis, maxYAxis;
-    
-    // Calculate min and max for the y-axis only for the bottom axis
-    if (i === series.length - 1) {
-      const data = serie.data.map(d => d[1]);
-      const minDataValue = Math.min(...data);
-      const maxDataValue = Math.max(...data);
+        return series.map((serie, i) => {
+          let minYAxis, maxYAxis;
+          
+          // Calculate min and max for the y-axis only for the bottom axis
+          if (i === series.length - 1) {
+            const data = serie.data.map(d => d[1]);
+            const minDataValue = Math.min(...data);
+            const maxDataValue = Math.max(...data);
 
-      // Determine the min and max values for the bottom y-axis
-      minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
-      maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
+            // Determine the min and max values for the bottom y-axis
+            minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
+            maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
 
-      console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
-    }
+            console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
+          }
 
-    return {
-      title: {
-        text: serie?.name || 'SPY Optix',
-        style: {
-          color: i === 0 ? '#434348' : '#2f7ed8',
-          fontWeight: 'bold',
-          fontSize: '10px'
-        }
-      },
-      opposite: true,
-      top: `${(100 / series.length) * i}%`,
-      height: `${100 / series.length}%`,
-      offset: 0,
-      lineWidth: 0, // Remove the right-side y-axis line
-      gridLineWidth: 1,
-      min: i === series.length - 1 ? minYAxis : null, // Set the calculated min value for the bottom axis
-      max: i === series.length - 1 ? maxYAxis : null, // Set the calculated max value for the bottom axis
-      plotLines: i === series.length - 1 ? [
-        {
-          value: pess || null,
-          color: 'rgba(0, 128, 0, 1)',
-          dashStyle: 'shortdash',
-          width: 2,
-          label: { text: `${pess || ''}` },
-          zIndex: 5
-        },
-        {
-          value: opt || null,
-          color: 'rgba(255, 0, 0, 1)',
-          dashStyle: 'shortdash',
-          width: 2,
-          label: { text: `${opt || ''}` },
-          zIndex: 5
-        }
-      ] : [],
-    };
-  });
-};
+          return {
+            title: {
+              text: serie?.name || 'SPY Optix',
+              style: {
+                color: i === 0 ? '#434348' : '#2f7ed8',
+                fontWeight: 'bold',
+                fontSize: '10px'
+              }
+            },
+            opposite: true,
+            top: `${i===0?0:35}%`,
+            height: `${i===0?35:60}%`,
+            offset: 0,
+            lineWidth: 0, // Remove the right-side y-axis line
+            gridLineWidth: 1,
+            min: i === series.length - 1 ? minYAxis : null, // Set the calculated min value for the bottom axis
+            max: i === series.length - 1 ? maxYAxis : null, // Set the calculated max value for the bottom axis
+            plotLines: i === series.length - 1 ? [
+              {
+                value: pess || null,
+                color: 'rgba(0, 128, 0, 1)',
+                dashStyle: 'shortdash',
+                width: 2,
+                label: { text: `${pess || ''}` },
+                zIndex: 5
+              },
+              {
+                value: opt || null,
+                color: 'rgba(255, 0, 0, 1)',
+                dashStyle: 'shortdash',
+                width: 2,
+                label: { text: `${opt || ''}` },
+                zIndex: 5
+              }
+            ] : [],
+          };
+        });
+      };
  
       const createChart = (series, allKeysName, basicChartOptions) => {
         const yAxisConfig = createYAxisConfig(series);
@@ -215,10 +215,14 @@
             labels: {format: '{value:%Y}'}
           },
           navigator: {
+            series: {
+                data: series[series.length - 1].data,  // Use data from the bottom series
+                color: '#2f7ed8'  // Set the color to match the bottom series
+            },
             xAxis: {
-              labels: {
-                format: '{value:%Y}' // Format for navigator x-axis labels
-              }
+                labels: {
+                    format: '{value:%Y}' // Format for navigator x-axis labels
+                }
             }
           },
           legend: {
