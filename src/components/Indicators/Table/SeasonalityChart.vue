@@ -65,7 +65,6 @@
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         console.log('res', res.data);
         const originalData = res.data;
-        debugger
         if (originalData.length === 0) return;
  
         // 处理折线图数据
@@ -105,8 +104,6 @@
        })));
        const currentDay = currentDayOfYearData?.length || 0
        const yValues = allData.map(point => point.y);
-       const minY = Math.min(...yValues);
-       const maxY = Math.max(...yValues);
  
        Highcharts.chart('line-chart-container', {
        chart: {
@@ -131,11 +128,6 @@
                width: 1,
                value: 0
            }],
-           tickInterval: (maxY - minY) / 10, // 动态设置 y 轴刻度间隔
-           min: minY,
-           max: maxY,
-           endOnTick: false,
-           startOnTick: false,
            labels: {
              enabled: true,
              formatter: function () {

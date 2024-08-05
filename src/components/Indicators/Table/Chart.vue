@@ -249,7 +249,7 @@
              this.points.forEach(point => {
                // Add a colored circle before the series name
                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-               s += `${colorSpan}<span>${point.series.name}</span>: ${Highcharts.numberFormat(point.y,2)}<br>`;
+               s += `${colorSpan}<span>${point.series.name}</span>: <b>${Highcharts.numberFormat(point.y,2)}</b><br>`;
              });
              return s;
            }

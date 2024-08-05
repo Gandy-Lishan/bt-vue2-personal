@@ -159,7 +159,7 @@ const mutations = {
 		state.favoriteIndicatorListBtv1 = obj
 	},
 	SET_INDICATOR_PAGE_BTV1_LIST(state, array) {
-		state.indicatorPageBtv1List = array
+		state.indicatorPageBtv1List = array?.data || []
 	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
@@ -777,6 +777,7 @@ get_indicator_page_btv1_list({ commit }) {
         }
         if(!state.indicatorPageBtv1List) await dispatch('get_indicator_page_btv1_list')
         if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
+									debugger
         console.log('commod_sentiment_seasonality', _results)
 								_results = _results.map(obj => {
 										for (const key in obj) {
@@ -875,7 +876,7 @@ get_indicator_page_btv1_list({ commit }) {
 											else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}}
 									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['last_update'] = timestampToTime(obj[key])
 									if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
-									const isInBtv1List = state.indicatorPageBtv1List.data.data.find(item => (item.url === obj['url']))
+									const isInBtv1List = state.indicatorPageBtv1List.find(item => (item.url === obj['url']))
 									const isInBtv2List = state.favoriteIndicatorList.find(item => (item.url === obj['url']))
 									if((key === 'url' || key === 'chart_url') && isInBtv1List) {
 											obj['source'] = 'Backtest Engine v1.0'
