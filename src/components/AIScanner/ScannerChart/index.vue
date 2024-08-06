@@ -48,7 +48,7 @@
 												:label="l.replace('[%]', 'Later [%]')"
 												:prop="l"
 												:key="index"
-												:width="l == 'Entry Date' ? '128px' : 'auto'"
+												:width="l == 'Entry Date' ? '128px' : '110px'"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[l])">
@@ -80,6 +80,7 @@
 												:key="column"
 												:label="column"
 												:prop="column"
+												width="110px"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[column])">

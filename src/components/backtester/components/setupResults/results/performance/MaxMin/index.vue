@@ -8,6 +8,7 @@
 								:row-class-name="tableRowClassName"
 								stripe
 								border
+								class="MaxMinTable"
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
@@ -16,7 +17,7 @@
 												{{ displayData(scope.row[l]) }}
 										</template>
 									</el-table-column>
-									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :key="index" align="center" v-if="![
+									<el-table-column :label="l !== '1 Year Later'? l.replace('[%]', 'Later [%]') : l.replace('[%]', '   Later [%]')"  :key="index" align="center" v-if="![
 										'Dates of 1 Signals',
 										'Max Gain',
 										'Max Loss'].includes(l)">

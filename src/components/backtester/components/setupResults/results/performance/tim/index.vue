@@ -12,17 +12,16 @@
 		<el-tabs v-model="activeTIM" type="card" v-loading="loading">
 			<el-tab-pane label="Exit With Default Time-In-Market" name="first">
 				<div class="history-container">
-					<el-skeleton :rows="6" :loading="loading" animated>
 						<template>
 							<el-table
 								:data="backtestHistoryList"
 								:row-class-name="tableRowClassName"
 								stripe
 								border
-								style="height: 100%; margin: 0 auto"
+								style="height: 100%; margin: 0 auto;"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : 'auto'">
+									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : '104px'">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -35,50 +34,47 @@
 								</div>
 							</el-table>
 						</template>
-					</el-skeleton>
 					<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
-				</div>
-				<div class="zscore-container">
-					<el-skeleton :rows="2" :loading="loading" animated>
-						<template>
-							<el-table
-								:data="result_quotes"
-								:show-header="false"
-								stripe
-								border
-								style="height: 100%; margin: 0 auto"
-							>
-								<el-table-column prop="property" label="Property"  align="center" width="125px">
-								</el-table-column>
-
-								<template v-for="column in periods">
-									<el-table-column
-										:key="column.period"
-										:label="column.period"
-										:prop="column.period"
-										align="center"
-									>
-										<template slot-scope="scope">
-											<p class="tableText" :class="getCellStyle(scope.row[column.period])">
-												{{
-													!Number.isNaN(scope.row[column.period])
-														? typeof scope.row[column.period] == 'string'
-															? scope.row[column.period]
-															: parseFloat(scope.row[column.period]).toFixed(1)
-														: null
-												}}
-											</p>
-										</template>
+					<div class="zscore-container">
+							<template>
+								<el-table
+									:data="result_quotes"
+									:show-header="false"
+									stripe
+									border
+									style="height: 100%; margin: 0 auto"
+								>
+									<el-table-column prop="property" label="Property"  align="center" width="125px">
 									</el-table-column>
-								</template>
-							</el-table>
-						</template>
-					</el-skeleton>
+
+									<template v-for="column in periods">
+										<el-table-column
+											:key="column.period"
+											:label="column.period"
+											:prop="column.period"
+											align="center"
+											width="104px"
+										>
+											<template slot-scope="scope">
+												<p class="tableText" :class="getCellStyle(scope.row[column.period])">
+													{{
+														!Number.isNaN(scope.row[column.period])
+															? typeof scope.row[column.period] == 'string'
+																? scope.row[column.period]
+																: parseFloat(scope.row[column.period]).toFixed(1)
+															: null
+													}}
+												</p>
+											</template>
+										</el-table-column>
+									</template>
+								</el-table>
+							</template>
+					</div>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane label="Exit with Customized Time-In-Market" name="second">
 				<div class="history-container">
-					<el-skeleton :rows="6" :loading="loading" animated>
 						<template>
 							<el-table
 								:data="TIMHistoryList"
@@ -87,7 +83,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
-									<el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center">
+									<el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center"  width="120px">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -100,11 +96,7 @@
 								</div>
 							</el-table>
 						</template>
-					</el-skeleton>
-				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
 				<div class="zscore-container">
-					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
 							<el-table
 								:data="TIMResult_quotes"
@@ -113,7 +105,7 @@
 								border
 								style="height: 100%; margin: 0 auto"
 							>
-								<el-table-column prop="property" label="Property" align="center">
+								<el-table-column prop="property" label="Property" align="center" width="120px">
 								</el-table-column>
 
 								<template v-for="column in periodsTIM">
@@ -122,6 +114,7 @@
 										:label="column.period"
 										:prop="column.period"
 										align="center"
+										width="120px"
 									>
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[column.period])">
@@ -138,7 +131,7 @@
 								</template>
 							</el-table>
 						</template>
-					</el-skeleton>
+				</div>
 				</div>
 				<el-dialog
 					title="Edit exit with different TIM Table"
@@ -1563,15 +1556,6 @@ export default {
 }
 .history-container, .zscore-container, .hr {
 	margin: 0 auto;
-}
-@media (min-width: 1600px) {
-	.history-container, .zscore-container, .hr {
-		width: 1093px
-	}
-}
-@media (min-width: 1280px) and (max-width: 1600px) {
-	.history-container, .zscore-container, .hr {
-		width: 830px
-	}
+	width: 855px;
 }
 </style>

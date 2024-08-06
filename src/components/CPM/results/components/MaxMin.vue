@@ -8,6 +8,7 @@
 								:row-class-name="tableRowClassName"
 								stripe
 								border
+								class="MaxMinTable"
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
@@ -20,14 +21,14 @@
 										'Dates of 1 Signals',
 										'Max Gain',
 										'Max Loss'].includes(l)">
-										<el-table-column label="Max Loss" align="center" class-name="redHeader">
+										<el-table-column label="Max Loss" align="center" class-name="redHeader" width="60px">
 											<template slot-scope="scope">
 												<p class="negative-value">
 													{{ scope.row[l]['Max Loss'] }}
 												</p>
 												</template>
 										</el-table-column>
-										<el-table-column label="Max Gain" align="center">
+										<el-table-column label="Max Gain" align="center" width="60px">
 											<template slot-scope="scope">
 												<p class="tableText">
 													{{ scope.row[l]['Max Gain'] }}
