@@ -45,21 +45,7 @@
      animation: false,
      alignTicks: false,
      backgroundColor: 'transparent',
-     renderTo: 'charts',
- 
-     events: {
-         redraw: function (event) {
-             //don't repeatadly find scale extremes 
-             clearTimeout(zoomTime);
- 
-             zoomTime = setTimeout(function() {
-             
-                 var e = event.target.axes[0].getExtremes();
-                 window.favoriteConfig.chartScale = [e.min, e.max].join(",");
- 
-             }, 50);
-         }
-     }
+     renderTo: 'charts'
  };
       try {
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
@@ -82,6 +68,7 @@
           name: this.getMonthName(entry.symbol),
           y: entry.AvgReturn
         }));
+        console.log('monthData', monthData)
  
         this.createLineChart(dayOfYearData, currentDayOfYearData, chart_name, last_value, basicChartOptions);
         this.createBarChart(monthData, basicChartOptions);
@@ -250,11 +237,12 @@
       const maxY = Math.max(...yValues);
  
       Highcharts.chart('bar-chart-container', {
-        chart: {
-          type: 'column',
-        },
+        // chart: {
+        //   type: 'column',
+        // },
         title: false,
         yAxis: [{
+          // type: 'logarithmic',
           title: {
             enabled: true,
             text: "Average Return",
@@ -277,7 +265,7 @@
            title: {
              enabled: true,
              text: "Month Of The Year",
-            style: {"color": "#000000", "fontWeight": "bold"}
+            style: {"color": "#000000", "fontWeight": "bold", 'fontSize': '10px'}
           },
           gridLineColor: '#dddddd',
           gridLineWidth: 1,
@@ -307,7 +295,8 @@
               valueSuffix: '%'
           },
           showInLegend: true,
-          type: "column"
+          type: "column",
+          min: -0.5
         }],
         rangeSelector: {enabled: false},
         navigator: {enabled: false},

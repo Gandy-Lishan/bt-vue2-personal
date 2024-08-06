@@ -556,7 +556,7 @@ input[type="time"] {
   {
   padding: 0px;
   font-weight: 600;
-	font-size: 14px;
+	font-size: 15px;
   color: #606266;
   font-family: "Open Sans",sans-serif;
   text-align: center;
@@ -604,7 +604,7 @@ input[type="time"] {
 }
 .strategiesTable .el-table .cell {
   font-weight: 600;
-	font-size: 14px;
+	font-size: 15px;
   color: #606266;
   font-family: "Open Sans",sans-serif;
 }
