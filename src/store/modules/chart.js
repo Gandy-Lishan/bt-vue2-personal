@@ -156,6 +156,9 @@ const mutations = {
 	SET_FAVORITE_INDICATOR_LIST_BTV1(state,obj){
 		state.favoriteIndicatorListBtv1 = obj
 	},
+	SET_INDICATOR_PAGE_BTV1_LIST(state, res) {
+		state.indicatorPageBtv1List = res?.data?.data || res?.data || []
+	},
 	/**
 	 * 更新user's own indicator Weighted列表状态
 	 */

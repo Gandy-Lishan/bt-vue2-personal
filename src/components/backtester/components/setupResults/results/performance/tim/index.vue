@@ -22,7 +22,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '124px' : '138px'">
+									<el-table-column :label="l" :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : 'auto'">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -48,7 +48,7 @@
 								border
 								style="height: 100%; margin: 0 auto"
 							>
-								<el-table-column prop="property" label="Property"  align="center" width="124px">
+								<el-table-column prop="property" label="Property"  align="center" width="125px">
 								</el-table-column>
 
 								<template v-for="column in periods">
@@ -1563,5 +1563,11 @@ export default {
 .history-container, .zscore-container, .hr {
 	width: 1093px;
 	margin: 0 auto;
+}
+@media (min-width: 1680px) {
+	width: 1093px;
+}
+@media (max-width: 1679px) {
+	width: 830px;
 }
 </style>
