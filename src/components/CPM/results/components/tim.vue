@@ -19,7 +19,7 @@
             style="height: 100%; margin: 0 auto"
 						class="CPM-ZScore"
           >
-            <el-table-column prop="property" label="Property"  align="center">
+            <el-table-column prop="property" label="Property"  align="center" width="120px">
             </el-table-column>
 
             <template v-for="column in periods">
@@ -28,6 +28,7 @@
                 :label="column.period"
                 :prop="column.period"
                 align="center"
+								width="110px"
               >
                 <template slot-scope="scope">
                   <span class="tableText" :class="getCellStyle(scope.row[column.period])">
@@ -46,7 +47,7 @@
         </template>
       </el-skeleton>
     	</div>
-    <hr style="height:2px;border:none;color:#333;background-color:#333;">
+    <hr style="height:2px;border:none;color:#333;background-color:#333;width: 880px;">
     <div class="CPM-TIM">
       <el-skeleton :rows="6" :loading="loading" animated>
         <template>
@@ -58,7 +59,7 @@
             style="height: 100%; margin: 0 auto"
           >
             <template v-for="(l, index) in defaultTableLabels">
-              <el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center">
+              <el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center" :width="l === 'Entry Date' ? '120px' : '110px'">
                 <template slot-scope="scope">
                   <span class="tableText" :class="getCellStyle(scope.row[l])">
                     {{ displayData(scope.row[l]) }}
