@@ -45,9 +45,10 @@
 								>
 										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
-												:label="l"
+												:label="l.replace('[%]', 'Later [%]')"
 												:prop="l"
 												:key="index"
+												:width="l == 'Entry Date' ? '128px' : 'auto'"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[l])">
@@ -72,7 +73,7 @@
 
 										<template v-for="column in defaultTableLabels">
 											
-										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column">
+										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column" width="128px">
 										</el-table-column>
 											<el-table-column
 												v-else
@@ -261,7 +262,7 @@ computed: {
 				const obj = {}
 				obj['Entry Date'] = item['Entry Date']
 				for(var i=1;i < defaultTableLabels.length;i++ ){
-					obj[defaultTableLabels[i]] = item[defaultTableLabels[i]]
+					obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
 				}
 				_backtestHistoryList.push(obj)
 			})
@@ -273,9 +274,9 @@ computed: {
 					const value = item[defaultTableLabels[i]]
 					// 检查值是否有效
 					if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-						zscore[defaultTableLabels[i]] = value;
+						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = value;
 					} else {
-						zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
 					}
 				}
 				_backtestHistoryList.push(zscore);
@@ -426,12 +427,21 @@ computed: {
 	}
 }
 .aiResultsTable{
-	width: 1200px; 
+	width: 100%; 
 	height: 100%; 
 	margin: 0 auto
 }
+@media (min-width: 1600px) {
+	.aiResultsTable, .hint-btn-box {
+	width: 1200px;
+	}
+}
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.aiResultsTable, .hint-btn-box {
+	width: 850px;
+	}
+}
 .hint-btn-box{
-  width: 1200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

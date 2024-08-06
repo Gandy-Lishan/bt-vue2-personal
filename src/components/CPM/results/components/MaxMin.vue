@@ -16,7 +16,7 @@
 												{{ displayData(scope.row[l]) }}
 										</template>
 									</el-table-column>
-									<el-table-column :label="l"  :key="index" align="center" v-if="![
+									<el-table-column :label="l.replace('[%]', 'Later [%]')" :key="index" align="center" v-if="![
 										'Dates of 1 Signals',
 										'Max Gain',
 										'Max Loss'].includes(l)">

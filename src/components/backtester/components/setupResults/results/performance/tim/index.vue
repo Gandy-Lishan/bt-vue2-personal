@@ -22,7 +22,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : 'auto'">
+									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : 'auto'">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -36,8 +36,8 @@
 							</el-table>
 						</template>
 					</el-skeleton>
+					<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
 				</div>
-				<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
 				<div class="zscore-container">
 					<el-skeleton :rows="2" :loading="loading" animated>
 						<template>
@@ -87,7 +87,7 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
-									<el-table-column :label="l" :prop="l" :key="index" align="center">
+									<el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center">
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -486,6 +486,7 @@ export default {
                 this.tradesData,
                 periodArray
             )
+												console.log('backtestHistoryList', this.backtestHistoryList)
             const res = await getCustomTIM(rowID)
             let timPeriodArray = null
             try {
@@ -1561,13 +1562,16 @@ export default {
 		right: 5px;
 }
 .history-container, .zscore-container, .hr {
-	width: 1093px;
 	margin: 0 auto;
 }
-@media (min-width: 1680px) {
-	width: 1093px;
+@media (min-width: 1600px) {
+	.history-container, .zscore-container, .hr {
+		width: 1093px
+	}
 }
-@media (max-width: 1679px) {
-	width: 830px;
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.history-container, .zscore-container, .hr {
+		width: 830px
+	}
 }
 </style>

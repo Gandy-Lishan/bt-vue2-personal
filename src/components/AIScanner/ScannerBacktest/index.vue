@@ -420,11 +420,4 @@ export default {
   margin-left: 10px;
 	color: #333333;
 }
-// .delete-btn {
-// 	background-color: #f59e0b;
-//   border: unset;
-// }
-// .delete-btn:hover {
-//   background-color: rgb(251, 192, 92);
-// }
 </style>

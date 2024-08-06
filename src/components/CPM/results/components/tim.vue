@@ -58,7 +58,7 @@
             style="height: 100%; margin: 0 auto"
           >
             <template v-for="(l, index) in defaultTableLabels">
-              <el-table-column :label="l" :prop="l" :key="index" align="center">
+              <el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center">
                 <template slot-scope="scope">
                   <span class="tableText" :class="getCellStyle(scope.row[l])">
                     {{ displayData(scope.row[l]) }}
@@ -902,5 +902,18 @@ p {
 }
 .negative-value{
   color: #dd3a13;
+}
+.CPM-TIM-Contianer {
+	margin: 0 auto;
+}
+@media (min-width: 1600px) {
+	.CPM-TIM-Contianer  {
+		width: 1093px
+	}
+}
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.CPM-TIM-Contianer  {
+		width: 830px
+	}
 }
 </style>

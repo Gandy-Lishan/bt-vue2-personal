@@ -454,9 +454,18 @@ export default class PerformanceComponent extends Vue {
 	margin-top: 20px;
 }
 .aisummaryTable{
-	width: 1140px; 
 	margin: 0 auto; 
 	margin-top: 20px; 
+}
+@media (min-width: 1600px) {
+	.aisummaryTable{
+	width: 1140px; 
+	}
+}
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.aisummaryTable{
+		width: 830px
+	}
 }
 </style>
 
