@@ -166,7 +166,6 @@ export default {
                                             initalData['Symbol2 Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
                                           : ''
-
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -314,7 +313,7 @@ export default {
 
         const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
         if(this.showLastSignalMarker1) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,null)
-        if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,comparisonSymbolUrl)
+        if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker2,`last signal`,comparisonSymbolUrl)
         this.$store.dispatch('states/set_isMarkerShown_flag',true)
       } catch (error) {
         console.error(error)
