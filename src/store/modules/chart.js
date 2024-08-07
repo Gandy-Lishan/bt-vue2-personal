@@ -777,7 +777,6 @@ get_indicator_page_btv1_list({ commit }) {
         }
         if(!state.indicatorPageBtv1List) await dispatch('get_indicator_page_btv1_list')
         if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
-									debugger
         console.log('commod_sentiment_seasonality', _results)
 								_results = _results.map(obj => {
 										for (const key in obj) {
@@ -910,11 +909,15 @@ get_indicator_page_btv1_list({ commit }) {
 											// 全部大写
 											obj[key] = obj[key].toUpperCase()
 									}
-							}
-					}
+												}
+										}
 					return obj
 			})
-          console.log(_results)
+    console.log(_results)
+				if(url === 'etf_seasonality') {
+					const findIndex = _results.findIndex(item => (item['url'] === 'seasonality_amj'))
+					if(findIndex !== -1) _results.splice(findIndex, 1)
+				}
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: _results });
 			} catch (error) {
 				console.error('Error fetching data:', error);
