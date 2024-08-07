@@ -56,6 +56,7 @@
             :row-class-name="tableRowClassName"
             stripe
             border
+						class="CPM-TIM-Table"
             style="height: 100%; margin: 0 auto"
           >
             <template v-for="(l, index) in defaultTableLabels">
@@ -907,14 +908,8 @@ p {
 .CPM-TIM-Contianer {
 	margin: 0 auto;
 }
-@media (min-width: 1600px) {
-	.CPM-TIM-Contianer  {
-		width: 1093px
-	}
-}
-@media (min-width: 1280px) and (max-width: 1600px) {
-	.CPM-TIM-Contianer  {
-		width: 830px
-	}
+.CPM-header, .CPM-ZScore, .CPM-TIM-Table {
+	width: 893px;
+	margin: 0 auto;
 }
 </style>

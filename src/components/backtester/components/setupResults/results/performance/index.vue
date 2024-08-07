@@ -677,7 +677,6 @@ export default {
   padding-bottom: 1rem;
 }
 .hint-btn-box{
-  width: 1200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

@@ -794,25 +794,24 @@ const actions = {
                 obj['loading'] = false
 								// 加来源列表
 								obj['source_list'] = url
-
-                if(
-                  ((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list')
-                  || (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
-                  || (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
-                  || (key === 'avg_net_return' && url === 'etf_seasonality'
-                  || (key === 'AvgReturn' && url === 'commod_sentiment_seasonality')
-                  )
-                ){
-                  if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
-                  // 加 %
-                }else if((key === 'url' && ['ndx_100_complete_list', 'sp_1500_complete_list', 'cot_max_min'].includes(url))) {
-                  // 全部大写
-                  obj[key] = obj[key].toUpperCase()
-                }
-              }
-            }
-            return obj
-          })
+									if(
+											((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list' && obj['last_change_type'] === 'percent')
+											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
+											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
+											|| (key === 'avg_net_return' && url === 'etf_seasonality'
+											|| (key === 'AvgReturn' && url === 'commod_sentiment_seasonality')
+											)
+									){
+											if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
+											// 加 %
+									}else if((key === 'url' && ['ndx_100_complete_list', 'sp_1500_complete_list', 'cot_max_min'].includes(url))) {
+											// 全部大写
+											obj[key] = obj[key].toUpperCase()
+									}
+							}
+					}
+					return obj
+			})
           console.log(_results)
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: _results });
 			} catch (error) {
