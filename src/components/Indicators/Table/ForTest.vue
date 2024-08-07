@@ -7,7 +7,7 @@
          :tableInfo="item"
          :ref="item.refName"
          @updateChart="updateChart" 
-         :style="{ width: enlargedTable === item.label ? '60%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
+         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
       <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `${chartHight}`}"></Chart>
@@ -148,17 +148,17 @@ export default {
               url: 'commod_seasonality'
             },
             {
+              label: 'ETF Seasonality',
+              value: 'ETFSeasonality',
+              type: 'seasonality',
+              url: 'etf_seasonality'
+            },
+            {
               label: 'Bond Seasonality',
               value: 'BondSeasonality',
               type: 'seasonality',
               url: 'bond_seasonality'
             },
-            {
-              label: 'ETF Seasonality',
-              value: 'ETFSeasonality',
-              type: 'seasonality',
-              url: 'etf_seasonality'
-            }
           ]
         },
         // {
@@ -215,7 +215,7 @@ export default {
 
       console.log(`Distance from bottom: ${elementBottomToViewportBottom}px`);
       this.chartHight = elementBottomToViewportBottom
-      this.$forceUpdate();
+      // this.$forceUpdate();
       // return distanceFromBottom;
     },
     toggleEnlarge(label) {
@@ -265,7 +265,7 @@ export default {
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
 }
 

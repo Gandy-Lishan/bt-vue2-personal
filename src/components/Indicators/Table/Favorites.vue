@@ -8,7 +8,7 @@
           :tableInfo="item"
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
-          :style="{ width: '60%', display: 'block' }"
+          :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
       <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
@@ -65,7 +65,7 @@ import SeasonalityChart from "./SeasonalityChart"
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
  }
  </style>

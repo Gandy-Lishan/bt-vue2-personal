@@ -8,7 +8,7 @@
         :tableInfo="item"
         :ref="item.refName"
         @updateChart="updateChart" 
-        :style="{ width: '60%', display: 'block' }"
+        :style="{ width: '65%', display: 'block' }"
         ></Table>
      </template>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
@@ -94,7 +94,7 @@ export default {
  align-items: stretch;
  flex-grow: 1;
  .indicators-chart {
-   width: 40%;
+   width: 35%;
  }
 }
 

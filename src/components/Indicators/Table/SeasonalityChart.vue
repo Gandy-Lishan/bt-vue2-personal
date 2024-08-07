@@ -101,9 +101,6 @@
            text: chart_name || 'SPY Optix',
            style: { fontWeight: 'bold', fontFamily: 'Arial' }
          },
-         subtitle: {
-           text: last_value !== undefined && last_value !== null ? `Last Value: ${last_value}` : ''
-         },
          yAxis: {
            title: {
            enabled: true,
