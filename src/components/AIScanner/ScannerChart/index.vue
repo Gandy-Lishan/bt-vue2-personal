@@ -434,12 +434,12 @@ computed: {
 }
 @media (min-width: 1600px) {
 	.aiResultsTable, .hint-btn-box {
-	width: 1200px;
+	  width: 900px;
 	}
 }
 @media (min-width: 1280px) and (max-width: 1600px) {
 	.aiResultsTable, .hint-btn-box {
-	width: 850px;
+	  width: 900px;
 	}
 }
 .hint-btn-box{
@@ -455,6 +455,10 @@ computed: {
 	font-weight: 300;
 	margin: 10px 10px 10px 10px;
 }
+}
+.history-container {
+	width: 900px;
+	margin: 0 auto;
 }
 </style>
 

@@ -495,4 +495,8 @@ export default {
 .negative-value{
   color: #dd3a13;
 }
+.history-container {
+	width: 965px;
+	margin: 0 auto;
+}
 </style>

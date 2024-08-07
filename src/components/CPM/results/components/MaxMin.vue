@@ -497,4 +497,7 @@ export default {
 .negative-value{
   color: #dd3a13;
 }
+.MaxMinTable {
+	width: 968px;
+}
 </style>

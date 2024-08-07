@@ -140,9 +140,11 @@
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
         // const maxX = Math.max(...allData.map(d => d[0]));
- 
         Highcharts.stockChart(this.id, {
           rangeSelector: {
+            inputEnabled: true,
+            inputDateFormat: '%Y/%m/%d',
+            inputEditDateFormat: '%Y/%m%d',
             buttons: [
             {
               type: 'month',
