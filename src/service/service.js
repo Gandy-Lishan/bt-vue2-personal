@@ -1437,7 +1437,7 @@ export function getIndicatorsRowData(url) {
 
 export function obtainBTV1IndicatorsList() {
 
-	const path =`/dev/st_data/btv1_user_favorite_indicator`
+	const path =`/st_data/btv1_user_favorite_indicator`
 
 	return new Promise((resolve, reject) => {
 		axios
