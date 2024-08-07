@@ -1,5 +1,17 @@
 <template>
-      <virtual-scroll
+<div>
+  <div>
+    <div class="header-span">
+      <span>{{ label }}</span>
+      <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
+    </div>
+    <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
+      <template v-for="item in options">
+        <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
+      </template>
+    </div>
+  </div>
+  <virtual-scroll
       :ref="refName"
       :data="tableData"
       :item-size="itemSize"
@@ -19,9 +31,9 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="!enlarged ? 300 : 600">
-        <el-table-column>
-          <template #header>
+        :height="!enlarged ? 300 : 'auto'">
+        <!-- <el-table-column> -->
+          <!-- <template #header>
             <div class="header-span">
               <span>{{ label }}</span>
               <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
@@ -31,7 +43,7 @@
                 <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
               </template>
             </div>
-          </template>
+          </template> -->
           <!-- <el-table-column>
           <template #header>
             <div class="header-span">
@@ -40,7 +52,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="50px" v-if="this.enlarged">
+          <el-table-column align="center" width="35px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
@@ -67,19 +79,18 @@
             </el-table-column>
           </template>
         <!-- </el-table-column> -->
-        </el-table-column>
-        <div slot="append">
+        <!-- </el-table-column> -->
+        <!-- <div slot="append">
           <el-divider>
-            <!-- <span v-show="!isOver[checkedType]"><i class="el-icon-loading"></i> Loading...</span>
-            <span v-show="isOver[checkedType]">It's over~</span> -->
             <span>It's over~</span>
           </el-divider>
-        </div>
+        </div> -->
       </el-table>
       <div class="image-hover" :style="hoverStyle">
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
-    </virtual-scroll>
+  </virtual-scroll>
+</div>
 </template>
 
 <script>
@@ -174,7 +185,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              width: '90px'
             },
             {
               key: 'sentiment',
@@ -890,7 +902,7 @@ export default {
     },
     async changeOption(item) {
       if(this.options.length === 1) return
-      this.checkedType = item.value; 
+      this.checkedType = item.value;     
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, true)
       })
@@ -933,7 +945,7 @@ export default {
       }
     },
     updateChart(row) {
-      if(!this.enlarged) {window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return}
+      if(!this.enlarged) {window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`;return}
       this.$emit("updateChart", row)
     },
     onLoad() {
@@ -1105,7 +1117,55 @@ export default {
 <style lang="less" scoped>
 .virtualScroll {
   position: relative;
+  /deep/ .el-table .sort-caret {
+    left: 2px;
+  }
+  /deep/ .el-table .caret-wrapper {
+    width: 10px;
+  }
+  /deep/.el-table__body-wrapper.is-scrolling-none {
+    height: 500px !important;
+  }
 }
+
+.header-span {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    // border: 2px solid #d9d9d9;
+    &:first-child{
+      background-color: #d9d9d9;
+    }
+    span {
+      display: inline-block;
+      flex-grow: 1;
+      padding: 2px 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      border-left: 2px solid #d9d9d9;
+      padding: 5px 0;
+    }
+    .el-icon-full-screen {
+      padding: 0px;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      &:hover {
+        color: #409eff;
+      }
+    }
+    .span {
+      cursor: pointer;
+      background-color: #d9d9d9;
+      &:hover{
+      background-color: #ffffff;
+      }
+    }
+    .activated {
+      background-color: #ffffff;
+    }
+  }
 .image-hover {
     position: absolute;
     z-index: 2000;
@@ -1161,38 +1221,8 @@ export default {
     font-weight: 600;
     color: #333;
   }
-  .header-span {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border: 2px solid #d9d9d9;
-    span {
-      display: inline-block;
-      flex-grow: 1;
-      padding: 2px 0;
-      border-left: 2px solid #d9d9d9;
-    }
-    .el-icon-full-screen {
-      padding: 0px;
-      font-size: 18px;
-      margin-right: 10px;
-      cursor: pointer;
-      &:hover {
-        color: #409eff;
-      }
-    }
-    .span {
-      cursor: pointer;
-      &:hover{
-      background-color: #ffffff;
-      }
-    }
-    .activated {
-      background-color: #ffffff;
-    }
-  }
   /deep/ .el-button--mini, .el-button--small {
-    font-size: 10px;
+    font-size: 14px;
   }
   /deep/ .el-button--mini, .el-button--mini.is-round {
     padding: 0px;
