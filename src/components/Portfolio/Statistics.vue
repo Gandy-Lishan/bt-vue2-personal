@@ -142,6 +142,8 @@
 					:prop="l.value"
 					:label="l.label"
 					:width="l.width"
+					:min-width="l.minWidth"
+					:max-width="l.maxWidth"
 					align="center"
 					:key="index"
 					:sortable="
@@ -180,6 +182,8 @@
 					:prop="l.value"
 					:label="l.label"
 					:width="l.width"
+					:min-width="l.minWidth"
+					:max-width="l.maxWidth"
 					align="center"
 					:key="index"
 					:sortable="
@@ -240,37 +244,45 @@ export default {
           label: 'Symbol',
           value: 'Symbol',
           key: 'Symbol',
-					width: '100px'
+					minWidth: '120px'
         },
 				{
           label: 'Entry Price',
           value: 'Entry Price',
-          key: 'Entry Price'
+          key: 'Entry Price',
+										width: '90px'
         },
 				{
           label: 'Current Price',
           value: 'Current Price',
-          key: 'Current Price'
+          key: 'Current Price',
+					width: '100px'
         },
 				{
           label: 'Shares',
           value: 'Shares',
-          key: 'Shares'
+          key: 'Shares',
+					width: '100px'
         },
 				{
           label: 'Profit',
           value: 'Profit',
-          key: 'Profit'
+          key: 'Profit',
+					width: '90px'
         },
 				{
           label: 'Market Value',
           value: 'Market Value',
-          key: 'Market Value'
+          key: 'Market Value',
+					width: '90px',
+					maxWidth: '160px'
         },
 				{
 					label: 'Total Position(%)',
 					value: 'Total position(%)',
-					key: 'Total position(%)'
+					key: 'Total position(%)',
+					width: '140px',
+					maxWidth: '180px'
 				},
 				{
 					label: 'Strategy',

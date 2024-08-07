@@ -911,6 +911,7 @@ export default {
     line-height: 1;
     font-size: 10px;
     color: #F56C6C;
+    font-weight: 500;
     white-space: nowrap;
   }
   .delete-btn {
@@ -920,14 +921,17 @@ export default {
   .delete-btn:hover {
     background-color: rgb(251, 192, 92);
   }
-  /deep/ .el-input.is-disabled .el-input__inner {
+  /deep/ .el-input .el-input__inner {
     color: #333;
     background-color: #fbfbfb;
+    font-weight: 600
   }
   /deep/ .el-autocomplete {
     width: 100%;
     .el-input--mini .el-input__inner {
       margin-left: 0px;
+      font-weight: 600;
+      color: #333;
     }
   }
     /deep/ .el-input-group--append .el-input__inner, .el-input-group__prepend {
@@ -947,6 +951,17 @@ export default {
   /deep/ .el-input-group__append,
   /deep/ .el-input-group__prepend {
     padding: 0 5px;
+  }
+  /deep/ .el-form-item__label {
+    font-weight: 600;
+    color: #333;
+    width: 150px;
+  }
+  /deep/ .el-checkbox__label {
+    font-weight: 600;
+  }
+  /deep/ .el-button--primary {
+    font-weight: 600;
   }
   .conditionBox {
     display: flex;

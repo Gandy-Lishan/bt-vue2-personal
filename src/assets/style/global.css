@@ -38,8 +38,9 @@
   height: 78px !important;
   display: flex !important;
   align-items: center !important;
-  color: #6b7280 !important;
-  font-weight: 500 !important;
+  color: #333341 !important;
+  font-weight: 600 !important;
+  font-size: 17px;
 }
 .el-submenu__title:hover{
   color:#5b9bd1 !important;
@@ -83,10 +84,6 @@
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.aiscanner-table .cell{
-  display: flex !important;
-  align-items: center !important;
 }
 .aiscanner-table .dark-row {
   background: rgb(219 219 219) !important

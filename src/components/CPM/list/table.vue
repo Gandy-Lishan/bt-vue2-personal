@@ -423,7 +423,7 @@ export default {
   margin: 5px 0;
 }
 .showDate .el-button--info.is-plain {
-  width: 125px;
+  width: 130px;
 }
 .el-tag--plain.el-tag--success {
   color: #289F6D;
@@ -432,5 +432,11 @@ export default {
 .el-tag--plain.el-tag--danger {
   color: #dd3a13;
   border-color: #dd3a13;
+}
+/deep/ .el-button--text, /deep/ .el-button--info {
+	font-weight: 600;
+}
+/deep/ .el-button--info {
+  color: #606266;
 }
 </style>

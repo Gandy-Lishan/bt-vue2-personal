@@ -800,14 +800,20 @@ export default {
 		flex: 1;
 	}
 	.entryBox {
+		font-weight: 600;
 		p:first-child {
-			font-weight: 500;
+			font-weight: 600;
+			font-size: 16px;
 			color: #99a9bf;
 		}
 	}
-	.exitBox p:first-child {
-		font-weight: 500;
-		color: #99a9bf;
+	.exitBox {
+		font-weight: 600;
+		p:first-child {
+			font-size: 16px;
+			font-weight: 600;
+			color: #99a9bf;
+		}
 	}
 }
 .fls-btn {
@@ -819,8 +825,9 @@ export default {
 	margin: 20px 28px 10px 10px
 }
 .urlBox p:first-child {
-		font-weight: 500;
+		font-weight: 600;
 		color: #99a9bf;
+		font-size: 16px;
 }
 .symbolBox {
 	display: flex;
@@ -856,5 +863,9 @@ export default {
 }
 .BTTable /deep/ .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
 	border-bottom: none;
+}
+/deep/ .el-button--info.is-plain {
+	font-weight: 600;
+	color: #606266;
 }
 </style>

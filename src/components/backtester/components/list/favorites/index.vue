@@ -38,7 +38,7 @@ export default {
         {
           label: 'Symbol',
           field: 'symbol',
-          width: '80px'
+          width: '100px'
         },
         {
           label: 'DesExpand',
@@ -54,7 +54,7 @@ export default {
         {
           label: 'Timeframe',
           field: 'frequency',
-          width: '115px'
+          width: '120px'
         },
         {
           label: 'Last Signal Date',

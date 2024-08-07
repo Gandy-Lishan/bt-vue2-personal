@@ -1505,4 +1505,11 @@ h4 {
 	grid-template-columns: 1fr 1fr;
   grid-gap:50px;
 }
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+}
+/deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
+  font-weight: 600;
+}
 </style>

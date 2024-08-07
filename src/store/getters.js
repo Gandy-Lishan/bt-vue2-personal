@@ -55,6 +55,7 @@ const getters = {
 	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
 	getIndicatorsPageListData: (state) => state.chart.indicatorsPageListdata,
 	getCssMonthLabel: state => state.chart.cssMonthLabel,
+	getIndicatorPageBtv1List: state => state.chart.indicatorPageBtv1List,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

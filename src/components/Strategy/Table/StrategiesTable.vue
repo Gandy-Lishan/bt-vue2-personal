@@ -221,7 +221,7 @@ export default {
 					key: 'update_frequency',
 				},
 				{
-					label: 'YTD until 06/30/24 Return(%)',
+					label: 'YTD until 07/31/24 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 				},
@@ -598,5 +598,8 @@ export default {
 @import '../index.less';
 .el-table /deep/ tr.highlighted{
   background-color: yellow;
+}
+/deep/ .el-button {
+	font-weight: 600;
 }
 </style>

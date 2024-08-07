@@ -568,5 +568,11 @@ export default {
 .el-table /deep/ thead .iconfont{
 	color: #606266;
 }
-
+/deep/ .el-form--inline .el-form-item__label {
+	font-weight: 600;
+	color: #606266;
+}
+/deep/ .el-form-item__content {
+	font-weight: 500;
+}
 </style>
