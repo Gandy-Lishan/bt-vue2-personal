@@ -1330,6 +1330,9 @@ export default {
 					)
 				)
 			}
+			console.log('used_quotes', used_quotes)
+			console.log('period_dict', period_dict)
+			console.log('positive_list', positive_list)
 			const res = period_dict.map((val, i) => ({
 				Period: val['timeframe'],
 				Median: median_list[i],
@@ -1410,7 +1413,7 @@ export default {
 			})
 			if (arr.length == 0) return NaN
 
-			let return_series = arr.map((x) => (x > 0 ? 1 : 0))
+			let return_series = arr.map((x) => (parseFloat(x) > 0 ? 1 : 0))
 			return parseFloat(this.calculate_mean(return_series).toFixed(2))
 		},
 		calculate_mean(arr) {
@@ -1441,7 +1444,7 @@ export default {
 								: quotes[i + period][field] - row[field]) /
 								row[field]) *
 							100
-						).toFixed(1)
+						)
 					)
 					return {
 						...row,
@@ -1469,7 +1472,7 @@ export default {
 			quotes = quotes.map((row, i) => {
 				if (i >= period) {
 					const change = parseFloat(
-						(100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+						(100 * (minCloseArr[i] / row[field] - 1))
 					)
 					return {
 						...row,
@@ -1486,7 +1489,7 @@ export default {
 			quotes = quotes.map((row, i) => {
 				if (i >= period) {
 					const change = parseFloat(
-						(100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+						(100 * (maxCloseArr[i] / row[field] - 1))
 					)
 					return {
 						...row,
