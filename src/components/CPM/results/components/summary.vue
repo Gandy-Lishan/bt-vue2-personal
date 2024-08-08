@@ -134,7 +134,7 @@
 </template>
 
 <script>
-
+import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
   name: 'CPMSummary',
   data() {
@@ -147,6 +147,10 @@ export default {
     displayData(data) {
       this.summary = {
         ...data
+      }
+      const {name,type} = getSymbolInfo(this.summary.symbol)
+      if(type == 'custom'){
+        this.summary.symbol = name
       }
     }
   }
