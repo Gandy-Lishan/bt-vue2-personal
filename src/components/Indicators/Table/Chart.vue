@@ -247,8 +247,8 @@
             href: 'https://sentimentrader.com',
             position: {
               align: 'right',
-              y: -125,
-              x: -100
+              y: -120,
+              x: -50
             }
           },
           tooltip: {

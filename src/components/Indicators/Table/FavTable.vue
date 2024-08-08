@@ -1,4 +1,10 @@
 <template>
+<div>
+  <div>
+    <div class="header-span">
+      <span>My Favorites</span>
+    </div>
+  </div>
     <virtual-scroll
       :data="tableData"
       key-prop="url"
@@ -6,12 +12,11 @@
       @change="(renderData) => virtualList = renderData">
 			<el-table
 				ref="Table"
-				class="virtual-table"
+				class="indicator-fav-table"
 				:data="virtualList"
 				empty-text="No data"
 				v-loading="loading"
 				size="mini"
-        border
         row-key="url"
 				stripe
 				@cell-mouse-enter="handleCellMouseEnter"
@@ -19,13 +24,13 @@
 			  @sort-change="changeTableSort"
 				height="600"
 			>
-			<el-table-column>
-				<template #header>
+			<!-- <el-table-column> -->
+				<!-- <template #header>
 					<div class="header-span">
 						<span>My Favorites</span>
 					</div>
-				</template>
-			<el-table-column align="center" width="70px">
+				</template> -->
+			<el-table-column align="center" width="35px">
 				<template slot-scope="scope">
           <el-button-group>
             <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
@@ -51,12 +56,13 @@
 					</template>
 					</el-table-column>
 				</template>
-			</el-table-column>
+			<!-- </el-table-column> -->
 			</el-table>
 			<div class="image-hover" :style="hoverStyle">
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
+</div>
 </template>
 
 <script>
@@ -165,6 +171,7 @@ export default {
 					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
 					const dataPromises = responses.map(response => response);
 					const allData = await Promise.all(dataPromises);
+          console.log('allData', allData)
 					const detailData = allData.map(data => data.data);
 					console.log('detailData',detailData)
           return detailData
@@ -183,7 +190,7 @@ export default {
 			resu = await fetchData(resu)
       console.log('BTV2', resu)
 			// btv1 fav
-			resu.push(...this.favoritesBtv1List.data.data.map(item=>({
+			resu.push(...this.favoritesBtv1List.map(item=>({
         ...item,
 				source:'Backtest Engine v1.0'})))
       console.log('BTV1', resu)
@@ -482,11 +489,47 @@ export default {
 		color: #5b9bd1;
 	}
 }
+  
+  .header-span {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid #d9d9d9;
+    background-color: #d9d9d9;
+    span {
+      display: inline-block;
+      flex-grow: 1;
+      padding: 2px 0;
+      border-left: 2px solid #d9d9d9;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 5px 0;
+    }
+    .el-icon-full-screen {
+      padding: 0px;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      &:hover {
+        color: #409eff;
+      }
+    }
+    .span {
+      cursor: pointer;
+      &:hover{
+      background-color: #ffffff;
+      }
+    }
+    .activated {
+      background-color: #ffffff;
+    }
+  }
 .image-hover {
     position: absolute;
     z-index: 2000;
   }
-.virtual-table {
+.indicator-fav-table {
   /deep/ .el-table {
     border: 1px solid #d9d9d9;
   }
@@ -496,7 +539,7 @@ export default {
     background-color: #d9d9d9;
     font-weight: 600;
     color: #333;
-    padding: 0px;
+    padding: 4px 0;
     .cell {
       padding-left: 0px;
       padding-right: 0px;
@@ -537,38 +580,8 @@ export default {
     font-weight: 600;
     color: #333;
   }
-  .header-span {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border: 2px solid #d9d9d9;
-    span {
-      display: inline-block;
-      flex-grow: 1;
-      padding: 2px 0;
-      border-left: 2px solid #d9d9d9;
-    }
-    .el-icon-full-screen {
-      padding: 0px;
-      font-size: 18px;
-      margin-right: 10px;
-      cursor: pointer;
-      &:hover {
-        color: #409eff;
-      }
-    }
-    .span {
-      cursor: pointer;
-      &:hover{
-      background-color: #ffffff;
-      }
-    }
-    .activated {
-      background-color: #ffffff;
-    }
-  }
   /deep/ .el-button--mini, .el-button--small {
-    font-size: 10px;
+    font-size: 14px;
   }
   /deep/ .el-button--mini, .el-button--mini.is-round {
     padding: 0px;
