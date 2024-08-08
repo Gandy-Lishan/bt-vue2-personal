@@ -70,7 +70,7 @@
  
             button.onclick = function () {
               const indexParam = url || 'etf_spy';
-              window.location.href = `/backtester/sr/setup?index=${indexParam}&indicator=${url}`;
+              window.open(`/backtester/sr/setup?index=${indexParam}&indicator=${url}`, '_blank')
             };
  
             chart.container.parentNode.style.position = 'relative';

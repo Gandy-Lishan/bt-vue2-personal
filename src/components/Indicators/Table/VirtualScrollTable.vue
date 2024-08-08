@@ -20,7 +20,7 @@
       @change="(renderData) => virtualList = renderData">
       <el-table
         v-el-table-infinite-scroll="loadMore"
-        ref="Table"
+        :ref="`${refName}Table`"
         class="virtual-table"
         :data="virtualList"
 				empty-text="No data"
@@ -902,10 +902,12 @@ export default {
     },
     async changeOption(item) {
       if(this.options.length === 1) return
+      this.$refs[`${this.refName}Table`].clearSort()
       this.checkedType = item.value;     
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, true)
       })
+      // this.$forceUpdate()
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
@@ -945,7 +947,7 @@ export default {
       }
     },
     updateChart(row) {
-      if(!this.enlarged) {window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`;return}
+      if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
       this.$emit("updateChart", row)
     },
     onLoad() {
@@ -959,7 +961,8 @@ export default {
         if(scope.row.source !== 'Backtest Engine v2.0') return
         scope.row.loading = true
         const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
-        scope.row.favorite = !scope.row.favorite
+        let flag = false
+        if(!flag) {scope.row.favorite = !scope.row.favorite; flag = true}
         let favList = cloneDeep(this.favoritesBtv2List)
         let index = favList.findIndex(item => item.url === scope.row.url)
           // 添加收藏夹但是已经在收藏夹里面了
@@ -979,13 +982,14 @@ export default {
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         console.log('this.tableData', this.tableData)
         const url = scope.row.source_list
-        const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
-        const findIndex = _results.findIndex(ele => ele.url === scope.row.url)
-        if(findIndex !== -1) {
-          const find = _results[findIndex]
-          _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
-          this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
-        }
+        // const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        // const findIndex = _results.findIndex(ele => ele.url === scope.row.url)
+        // if(findIndex !== -1) {
+        //   const find = _results[findIndex]
+        //   _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        //   this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
+        // }
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // 在 Most Popular 去更新对应的表; 不在 Most Popular 去更新 Most Popular
         if(url !== 'most_popular') {
           const _url = 'most_popular'
@@ -993,7 +997,7 @@ export default {
           const _find = _popularResults.find(ele => ele.url === scope.row.url)
           if(_find) {
             _find.source_list = 'most_popular'
-            this.removeIndicatorsFavorites([_find])
+            this.removeIndicatorsFavorites([_find], true)
           }
         }
         else if(url === 'most_popular') {

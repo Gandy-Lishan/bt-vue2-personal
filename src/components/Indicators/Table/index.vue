@@ -210,7 +210,7 @@ export default {
       if(!item.chart_url) return
       const rowData = await getIndicatorsRowData(item.chart_url)
       const {market_symbol, url} = rowData?.data
-      window.location.href = `/backtester/sr/setup?index=${market_symbol || 'SPX'}&indicator=${url || item.chart_url}`
+      window.open(`/backtester/sr/setup?index=${market_symbol || 'SPX'}&indicator=${url || item.chart_url}`, '_blank')
       // this.$router.push({
       //     name: 'IndicatorChart',
       //     query: {
@@ -301,7 +301,8 @@ export default {
       XLSX.writeFile(wb, `${xlsxName}.xlsx`);
     },
     
-    async removeIndicatorsFavorites(row) {   
+    async removeIndicatorsFavorites(row, isSyncPopular) {   
+      debugger
       const sourceRefNameMap = new Map([
         [[
           'stock_complete_list', 'ndx_100_complete_list', 'sp_1500_complete_list',
@@ -323,7 +324,7 @@ export default {
       // 移除收藏的时候同步 most popular 数据
       const _results = isJson(this.indicatorsListData['most_popular']) ? JSON.parse(this.indicatorsListData['most_popular']) : []
       const findIndex =_results.findIndex(item => item.url === _row.url)
-      if(findIndex !== -1 && url !== 'most_popular') {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
+      if(findIndex !== -1 && url !== 'most_popular' && isSyncPopular) {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
     }
   }
 }

@@ -96,7 +96,7 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      return `<a href="${url}" style="width: 250px; background-color: #fff; display: inline-block;">${value}</a>`;
+      return `<a href="${url}" target="_blank" style="width: 250px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
     performAutocomplete(suggestion, dataset) {
       let url = '';
