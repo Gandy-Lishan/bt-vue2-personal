@@ -186,9 +186,8 @@ export default {
 			let resu = []
 											
 			// btv2 fav
-			resu = this.favoritesBtv2List.map(item => ({...item, source:'Backtest Engine v2.0'}))
-			resu = await fetchData(resu)
-      console.log('BTV2', resu)
+			resu = await fetchData(this.favoritesBtv2List)
+			resu = resu.map(item => ({...item, source:'Backtest Engine v2.0'}))
 			// btv1 fav
 			resu.push(...this.favoritesBtv1List.map(item=>({
         ...item,
@@ -198,6 +197,7 @@ export default {
 			resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
 					return resu.find(item => item.url === url);
 			});
+      console.log('resu', resu)
 
       this.tableData = this.processFavoriteData(resu)
 		},
@@ -262,20 +262,19 @@ export default {
         return obj
       })
     },
-		handleCellMouseEnter: debounce(function (row, column, cell, event){
-      if(row.url && column.property === 'chart_name') {
+    handleCellMouseEnter: debounce(function (row, column, cell, event){
+      if(row.url && !row.sub_type.includes('Seasonality') && column.property === 'chart_name') {
         let _t = '50%'
-        let _l = '300px'
+        let _l = 0
         const hoverElement = event.target
-        const container = this.$el.querySelector('.virtual-table')
-        if(hoverElement && container) {
+        const container = this.$el.querySelector('.indicator-fav-table')
+        if(hoverElement && container && column.realWidth) {
           let moveUp = 0
           const containerRect = container.getBoundingClientRect()
           const hoverElementRect = hoverElement.getBoundingClientRect()
           // 计算相对于顶部的位置
           const topPosition = hoverElementRect.top - containerRect.top + container.scrollTop
           const containerHeight = container.clientHeight
-          console.log('Top position', topPosition)
           // 如果高度超过容器, 向上移
           if((topPosition + 350) > containerHeight)  moveUp = - (topPosition + 350 - containerHeight)
           _t = topPosition + 50 + moveUp
@@ -284,7 +283,7 @@ export default {
       this.hoveredChartName = row?.chart_name || ''
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
-      _t=`${_t}px`;_l= `${column.realWidth || 300}px`
+      _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {
         top: _t,
         left: _l,
@@ -313,6 +312,7 @@ export default {
     },
     async addRow(scope) {
       try {
+        debugger
         if(scope.row.source !== 'Backtest Engine v2.0') return
         this.loading = true
         scope.row.loading = true
@@ -338,12 +338,14 @@ export default {
           }).filter(item => item.length > 0).flat()
           console.log('sourceTable', sourceTable) // [{}]
           sourceTable = sourceTable.filter(item => (item.favorite));
+          //是否同步 most_popular
+          const isSyncPopular = !sourceTable.find(item => item.source_list === 'most_popular')
           sourceTable.forEach(item => {
             const {url, source_list: _sourceRowUrl} = item
             if(url) {
               const  _results = isJson(this.indicatorsListData[_sourceRowUrl]) ? JSON.parse(this.indicatorsListData[_sourceRowUrl]) : []
               const find = _results.find(ele => ele.url === url)
-              if(find) this.removeIndicatorsFavorites([find])
+              if(find) this.removeIndicatorsFavorites([find], isSyncPopular)
             }
           })
         }
@@ -476,10 +478,6 @@ export default {
 <style lang="less" scoped>
 .virtualScroll {
 	position: relative;
-	.image-hover {
-			position: absolute;
-			z-index: 2000;
-	}
 	.chart-name-btn:hover {
 			color: #1d4ed7;
 			text-decoration: underline;
@@ -489,6 +487,11 @@ export default {
 		color: #5b9bd1;
 	}
 }
+
+.image-hover {
+			position: absolute;
+			z-index: 2000;
+	}
   
   .header-span {
     display: flex;

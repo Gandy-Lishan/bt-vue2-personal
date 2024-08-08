@@ -3,6 +3,8 @@
     <div class="left">
       <template v-for="item in tableInfoList">
         <Table
+          v-bind="$attrs"
+          v-on="$listeners"
          :key="item.type"
          :tableInfo="item"
          :ref="item.refName"
