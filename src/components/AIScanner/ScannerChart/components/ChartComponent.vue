@@ -526,7 +526,7 @@ export default {
                 : quotes[i + period][field] - row[field]) /
                 row[field]) *
               100
-            ).toFixed(1)
+            )
           )
           return {
             ...row,
@@ -554,7 +554,7 @@ export default {
       quotes = quotes.map((row, i) => {
         if (i >= period) {
           const change = parseFloat(
-            (100 * (minCloseArr[i] / row[field] - 1)).toFixed(1)
+            (100 * (minCloseArr[i] / row[field] - 1))
           )
           return {
             ...row,
@@ -570,7 +570,7 @@ export default {
       quotes = quotes.map((row, i) => {
         if (i >= period) {
           const change = parseFloat(
-            (100 * (maxCloseArr[i] / row[field] - 1)).toFixed(1)
+            (100 * (maxCloseArr[i] / row[field] - 1))
           )
           return {
             ...row,
