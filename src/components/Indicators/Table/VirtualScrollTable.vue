@@ -180,13 +180,12 @@ export default {
               key: 'last_change',
               label: 'Change',
               value: 'last_change',
-              addPercentSign: true
+              addPercentSign: true,
             },
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update',
-              width: '90px'
+              value: 'last_update'
             },
             {
               key: 'sentiment',
