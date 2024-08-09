@@ -486,6 +486,12 @@ export default {
 		font-weight: 700;
 		color: #5b9bd1;
 	}
+  /deep/ .el-table .sort-caret {
+    left: 2px;
+  }
+  /deep/ .el-table .caret-wrapper {
+    width: 10px;
+  }
 }
 
 .image-hover {
@@ -540,7 +546,7 @@ export default {
    {
     text-align: center;
     background-color: #d9d9d9;
-    font-weight: 600;
+    font-weight: 700;
     color: #333;
     padding: 4px 0;
     .cell {
