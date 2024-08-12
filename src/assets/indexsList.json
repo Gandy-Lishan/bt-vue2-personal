@@ -906,5 +906,9 @@
     {
         "symbol": "ENVX",
         "name": "Enovix (ENVX)"
+    },
+    {
+        "symbol": "TNX",
+        "name": "10-Year Treasury Note Yield (TNX)"
     }
 ]
