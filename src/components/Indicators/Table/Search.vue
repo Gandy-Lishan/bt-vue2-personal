@@ -96,7 +96,7 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      return `<a href="${url}" target="_blank" style="width: 250px; background-color: #fff; display: inline-block;">${value}</a>`;
+      return `<a href="${url}" target="_blank" style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
     performAutocomplete(suggestion, dataset) {
       let url = '';
@@ -237,6 +237,6 @@ export default {
     padding: 2px 0 2px 2px;
 }
 input#aa-search-input {
-  width: 230px;
+  width: 500px;
 }
 </style>
