@@ -912,6 +912,7 @@ export default {
       if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
         let _t = '50%'
         let _l = 0
+        let {url} = row
         const hoverElement = event.target
         const container = this.$el.querySelector('.virtual-table')
         if(hoverElement && container && column.realWidth) {
@@ -927,7 +928,8 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent') url = url.toLowerCase()
+      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {

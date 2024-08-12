@@ -37,15 +37,25 @@
       if (!this.row.url) return;
       const { url, chart_name, last_value } = this.row;
       var basicChartOptions = {
-     zoomType: 'x',
-     pinchType: '',
-     style: {
-         "fontFamily": "Open Sans , sans-serif"
-     },
-     animation: false,
-     alignTicks: false,
-     backgroundColor: 'transparent',
-     renderTo: 'charts'
+        zoomType: 'x',
+        pinchType: '',
+        style: {
+            "fontFamily": "Open Sans , sans-serif"
+        },
+        animation: false,
+        alignTicks: false,
+        backgroundColor: 'transparent',
+        renderTo: 'charts',
+        events: {
+          load: function (event) {
+            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 330, 120,33)
+                .attr({
+                    'opacity': 0.25
+                })
+                .add();
+
+        },
+      },
  };
       try {
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);

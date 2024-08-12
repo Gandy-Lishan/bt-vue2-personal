@@ -57,7 +57,7 @@
  
             const chart = this;
             const button = document.createElement('button');
-            button.innerHTML = 'Backtest With Indicator';
+            button.innerHTML = 'Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/7}px`;
             button.style.left = (chart.chartWidth / 2 - 82) + 'px';

@@ -248,7 +248,9 @@ export default {
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
               // 保留特定小数点
-              if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
+              if(['last_value', 'last_change'].includes(key)) obj[key] = unifyNumber(obj[key], 4)
+							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
+
             }
             if(key === 'last_update') obj[key] = timestampToTime(obj[key])
             obj['loading'] = false
@@ -562,7 +564,7 @@ export default {
     background-color: #ffffff;
     text-align: left;
     .cell {
-      font-weight: 600;
+      font-weight: 700;
       color: #333;
       padding-left: 0px;
     }
