@@ -1993,16 +1993,16 @@ export default {
           /** START
 					 * 	remove empty line
 					 */
-					const fileContent = await this.readFileContent(file);
-					const filteredContent = await this.skipEmptyLine(fileContent)
-					const newFile = new File([filteredContent], file.name, { type: file.type });
+					// const fileContent = await this.readFileContent(file);
+					// const filteredContent = await this.skipEmptyLine(fileContent)
+					// const newFile = new File([filteredContent], file.name, { type: file.type });
 					/********END********* */
 
-          await this.validateCSV(newFile)
-          await this.handleParseResult(this.csvContent, newFile)
+          await this.validateCSV(file)
+          await this.handleParseResult(this.csvContent, file)
   
-        this.form.indicatorName = newFile.name.replace('.csv', '')
-        this.fileList.push(newFile)
+        this.form.indicatorName = file.name.replace('.csv', '')
+        this.fileList.push(file)
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.dialogFormVisible = true
