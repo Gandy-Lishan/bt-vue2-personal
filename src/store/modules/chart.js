@@ -896,7 +896,7 @@ get_indicator_page_btv1_list({ commit }) {
 								obj['source_list'] = url
 
 									if(
-											((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list' && obj['last_change_type'] === 'percent')
+											((key === 'last_value' || key === 'last_change') && (url === 'stock_complete_list' || url === 'most_popular') && obj['last_change_type'] === 'percent')
 											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_net_return' && url === 'etf_seasonality'

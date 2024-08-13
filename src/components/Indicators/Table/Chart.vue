@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name, last_value} = this.row;
+      const {url, pess, opt, chart_name} = this.row;
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -137,7 +137,7 @@
         });
       };
  
-      const createChart = (series, allKeysName, basicChartOptions) => {
+      const createChart = (series, allKeysName, basicChartOptions, row) => {
         console.log('series: ', series);
         const yAxisConfig = createYAxisConfig(series);
         const allData = series.flatMap(s => s.data);
@@ -290,6 +290,8 @@
       };
  
       try {
+      const {last_value, last_change_type} = this.row;
+      console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         const originalData = res.data;
  
@@ -319,18 +321,22 @@
  
         const series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
-          let last_val = data[key].slice(-1)[0][1]
-          console.log('last_val', last_val)
+          let last_val = null
+          if(last_value !== null && last_value !== undefined) {
+            if(last_change_type === 'percent') last_val = (parseFloat(last_value)/100).toFixed(2)
+            else last_val = last_value.toFixed(2)
+          }
+          else {last_val = data[key].slice(-1)[0][1].toFixed(2)}
           if(key.includes('_') && url !== 'smart_dumb') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else name = key
           return {
-            name: `${name}${key.includes('_') && last_val !== null && last_val !== undefined ? ` (Last = ${last_val.toFixed(2)})` : ''}`,
+            name: `${name}${key.includes('_') && last_val !== null && last_val !== undefined ? ` (Last = ${last_val})` : ''}`,
             data: data[key]
           }
         })
-        createChart(series, allKeysName, basicChartOptions);
+        createChart(series, allKeysName, basicChartOptions, this.row);
       } catch (error) {
         console.error('Error fetching data', error);
       }
