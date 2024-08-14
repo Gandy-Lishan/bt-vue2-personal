@@ -29,8 +29,9 @@
   </div>
 </template>
 <script>
-// import algoliasearch from 'algoliasearch/lite';
-// import autocomplete from 'autocomplete.js/dist/autocomplete';
+import { mapGetters,mapActions } from "vuex";
+import { isJson } from '@/utils'
+import { getIndicatorsRowData } from "@/service/service";
 
 export default {
   data() {
@@ -54,6 +55,11 @@ export default {
       suggestions: [],
     };
   },
+  computed: {
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
+  },
   mounted() {
     console.log(window)
     this.blogs = this.client.initIndex('blog');
@@ -62,6 +68,7 @@ export default {
     this.initAutocomplete();
   },
   methods: {
+    ...mapActions('chart', ['fetchIndicatorsPageList']),
     initAutocomplete() {
       autocomplete('#aa-search-input', {}, [
         {
@@ -78,11 +85,11 @@ export default {
           },
         },
       ])
-        .on('autocomplete:selected', (event, suggestion, dataset) =>
-          this.performAutocomplete(suggestion, dataset)
+        .on('autocomplete:selected', async (event, suggestion, dataset) =>
+          await this.performAutocomplete(suggestion, dataset)
         )
-        .on('autocomplete:autocompleted', (event, suggestion, dataset) =>
-          this.performAutocomplete(suggestion, dataset)
+        .on('autocomplete:autocompleted', async (event, suggestion, dataset) =>
+        await this.performAutocomplete(suggestion, dataset)
         );
     },
     filterEvent(event) {
@@ -96,24 +103,83 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      return `<a href="${url}" target="_blank" style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
+      const test  = () => {
+        console.log('test')
+      }
+      return `<a onclick="test()" style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
-    performAutocomplete(suggestion, dataset) {
-      let url = '';
+    async performAutocomplete(suggestion, dataset) {
+      let searchUrl = '';
       if (dataset === 'charts') {
-        url = this.chartUrl(suggestion);
+        searchUrl = this.chartUrl(suggestion);
       } else if (dataset === 'reports') {
-        url = this.reportUrl(suggestion);
+        searchUrl = this.reportUrl(suggestion);
       } else {
         if (suggestion.category === 'Lite') return;
-        url = suggestion.url;
+        searchUrl = suggestion.url;
       }
-
-      window.location.assign(url);
-    },
+      console.log('searchUrl', searchUrl)
+      debugger
+      const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      let sourceTable = urlTypes.map(url => {
+        const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+          return list.map(item => {
+            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined)
+      }).filter(item => item.length > 0).flat()
+      console.log('sourceTable', sourceTable)
+      // 存在第一次并未请求全部表单的情况
+      if(sourceTable.length) {
+        const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
+        this.$emit('enLargeTable', source_list, sourceTable[0])
+      }else {
+        const {data:rowData} = await getIndicatorsRowData(searchUrl)
+        const {type, groups} = rowData
+        let requireUrl = ''
+        if(type === 'stock_nasdaq') {
+          requireUrl = 'ndx_100_complete_list'
+        }else if(type === 'stock_sent') {
+          requireUrl = 'sp_1500_complete_list'
+        }else if(type === 'etf_opt') {
+          requireUrl = 'etf_breadth'
+        }else if(type === 'etf_fund') {
+          requireUrl = 'etf_flow'
+        }else if(type === 'mff') {
+          requireUrl = 'monthly_fund_flows'
+        }else if(type === 'shares') {
+          requireUrl = 'shares_outstanding'
+        }else if(type === 'etf_seasonality') {
+          requireUrl = 'etf_seasonality'
+        }else if(type === 'bond_seasonality') {
+          requireUrl = 'bond_seasonality'
+        }else if(groups === 'commod') {
+          requireUrl = 'commodity_complete_list'
+        }
+        await this.fetchIndicatorsPageList(requireUrl)
+        const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+        const _sourceList = _list.map(item => {
+            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+        }).filter(item => item !== undefined).shift()
+        console.log('_sourceList', _sourceList.source_list)
+        this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
+      /* 如果匹配不到, 使用下面的规则请求个别表单
+      ndx_100_complete_list: type: stock_nasdaq
+      sp_1500_complete_list: type: stock_sent
+      commodity_complete_list: groups: commod
+      etf_breadth: type: etf_opt
+      etf_flow: type: etf_fund
+      monthly_fund_flows： type: mff
+      shares_outstanding: type: shares
+      etf_seasonality: type: etf_seasonality
+      bond_seasonality: type: bond_seasonality
+      */
+      // window.location.assign(url);
+    }
+  },
     chartUrl(suggestion) {
       const chart_url = suggestion.chart_url.toLowerCase()
-      return `/backtester/sr/setup?index=${'Unknown'}&indicator=${chart_url}`;
+      // return `/backtester/sr/setup?index=${'Unknown'}&indicator=${chart_url}`;
+      return `${chart_url}`
     },
     reportUrl(suggestion) {
       return `/users/report/${suggestion.filename}`;

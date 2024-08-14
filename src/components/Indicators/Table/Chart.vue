@@ -142,6 +142,8 @@
         const yAxisConfig = createYAxisConfig(series);
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
+        const { url } = row
+        const selector = url !== 'risk_levels' ? 6 : 3
         // const maxX = Math.max(...allData.map(d => d[0]));
         Highcharts.stockChart(this.id, {
           rangeSelector: {
@@ -189,7 +191,7 @@
               text: 'All'
             }
           ],
-          selected: 6 // Sets the default selected button (4 corresponds to '1y')
+          selected: selector // Sets the default selected button (4 corresponds to '1y')
           },
           title: {
             text: chart_name || 'SPY Optix',
@@ -221,7 +223,6 @@
           },
           navigator: {
             series: {
-                data: series[series.length - 1].data,  // Use data from the bottom series
                 color: '#2f7ed8'  // Set the color to match the bottom series
             },
             xAxis: {
@@ -276,7 +277,8 @@
                 inactive: {
                   enabled: false
                 }
-              }
+              },
+              showInNavigator: true
             }
           },
           series: series.map((s, i) => ({
@@ -327,9 +329,11 @@
             else last_val = last_value.toFixed(2)
           }
           else {last_val = data[key].slice(-1)[0][1].toFixed(2)}
-          if(key.includes('_') && url !== 'smart_dumb') name = chart_name
+          if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
+          else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
+          else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
             name: `${name}${key.includes('_') && last_val !== null && last_val !== undefined ? ` (Last = ${last_val})` : ''}`,

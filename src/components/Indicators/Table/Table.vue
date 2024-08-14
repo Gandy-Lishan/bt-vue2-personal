@@ -3,6 +3,7 @@
     <VirtualScrollTable
         v-bind="$attrs"
         v-on="$listeners"
+        ref="virtualScroll"
         :refName="tableInfo['refName']"
         :itemSize="tableInfo['itemSize']"
         :options="tableInfo['options']"
@@ -101,6 +102,10 @@ export default {
       this.firstRow = this.tableData[0] || {}
       if(isUpdateChart) this.$emit('updateChart', this.firstRow)
       this.loading = false
+    },
+    enLargeTable(checked, row) {
+      debugger
+      this.$refs['virtualScroll']._toggleEnlarge(checked, row)
     }
   }
 

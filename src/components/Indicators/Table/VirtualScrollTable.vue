@@ -4,6 +4,10 @@
     <div class="header-span">
       <span>{{ label }}</span>
       <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="isMostPopular" @click="downloadCSV">
+        <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
     <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
       <template v-for="item in options">
@@ -896,7 +900,14 @@ export default {
 	},
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
-    _toggleEnlarge() {
+    async _toggleEnlarge(checked, row) {
+      if(checked && row) {
+        // 图表显示
+      }
+      if(checked && this.checkedType !== checked && row) {
+        const option = this.options.find(item => item.value === checked)
+        if(option) await this.changeOption(option)
+      }
       this.toggleEnlarge(this.label)
       this.enlarged = !this.enlarged
       this.$emit("updateChart", this.firstRow || {})
@@ -1183,11 +1194,11 @@ export default {
           value: 'etf_seasonality',
           type: 'ETFSeasonality'
         },
-        // {
-        //   label: 'Most Popular Charts',
-        //   value: 'most_popular',
-        //   type: 'popular'
-        // },
+        {
+          label: 'Most Popular Charts',
+          value: 'most_popular',
+          type: 'popular'
+        },
         // {
         //   label: 'My Favorites',
         //   value: 'my_favorites',
