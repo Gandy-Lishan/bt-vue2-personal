@@ -1302,15 +1302,15 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       // 如果当前行的 `cacBelowBband` 值等于 highlightValue，就高亮该行
       if (this.highlightValue && row.chart_name === this.highlightValue) {
-        const targetName = row.chart_name
-        const sortByName = (dict, targetName) => {
-          return dict.sort((a, b) => {
-              if (a.chart_name === targetName) return -1;
-              if (b.chart_name === targetName) return 1;
-              return 0;
-          });
-        }
-        this.tableData = sortByName(this.tableData, targetName)
+        // const targetName = row.chart_name
+        // const sortByName = (dict, targetName) => {
+        //   return dict.sort((a, b) => {
+        //       if (a.chart_name === targetName) return -1;
+        //       if (b.chart_name === targetName) return 1;
+        //       return 0;
+        //   });
+        // }
+        // this.tableData = sortByName(this.tableData, targetName)
         return 'highlighted';
       }
       return '';
