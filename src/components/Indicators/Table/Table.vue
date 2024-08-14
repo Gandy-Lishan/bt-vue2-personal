@@ -103,9 +103,9 @@ export default {
       if(isUpdateChart) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
-    enLargeTable(checked, row) {
+    async enLargeTable(checked, row) {
       debugger
-      this.$refs['virtualScroll']._toggleEnlarge(checked, row)
+      await this.$refs['virtualScroll']._toggleEnlarge(checked, row)
     }
   }
 

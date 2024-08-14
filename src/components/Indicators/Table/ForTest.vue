@@ -247,13 +247,13 @@ export default {
         this.$refs[refName][0].loadMore(value)
       }
     },
-    enLargeTable(source_list, row) {
+    async enLargeTable(source_list, row) {
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
       console.log('findTable', findTable)
       if(!findTable) return
       const checked = findTable.options.find(ele => ele.url === source_list).value
       const findRefsName = findTable?.refName
-      this.$refs[findRefsName][0].enLargeTable(checked, row)
+      await this.$refs[findRefsName][0].enLargeTable(checked, row)
     }
   }
 }

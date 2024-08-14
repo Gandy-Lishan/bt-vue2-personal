@@ -325,8 +325,8 @@ export default {
       const findIndex =_results.findIndex(item => item.url === _row.url)
       if(findIndex !== -1 && url !== 'most_popular' && isSyncPopular) {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
     },
-    enLargeTable(source_list, row) {
-      this.$refs['Indicators'].enLargeTable(source_list, row)
+    async enLargeTable(source_list, row) {
+      await this.$refs['Indicators'].enLargeTable(source_list, row)
     }
   }
 }
@@ -346,7 +346,8 @@ export default {
 }
 .search-container {
   position: absolute;
-  left: 50%;
+  right: 0;
+  bottom: 0;
 }
 .search-panel__search-box {
   position: relative;

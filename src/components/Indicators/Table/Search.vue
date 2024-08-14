@@ -60,6 +60,13 @@ export default {
       indicatorsListData: 'getIndicatorsPageListData'
     })
   },
+  watch: {
+    searchInput(value) {
+      if (value) return
+      // 清空 highlighted 字段
+      if (value === '') this.$store.commit('states/SET_INDI_TABLE_HIGHLIGHTED', true)
+    },
+  },
   mounted() {
     console.log(window)
     this.blogs = this.client.initIndex('blog');
@@ -131,7 +138,7 @@ export default {
       // 存在第一次并未请求全部表单的情况
       if(sourceTable.length) {
         const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
-        this.$emit('enLargeTable', source_list, sourceTable[0])
+        await this.$emit('enLargeTable', source_list, sourceTable[0])
       }else {
         const {data:rowData} = await getIndicatorsRowData(searchUrl)
         const {type, groups} = rowData
@@ -161,7 +168,7 @@ export default {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
         }).filter(item => item !== undefined).shift()
         console.log('_sourceList', _sourceList.source_list)
-        this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
+        await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
       /* 如果匹配不到, 使用下面的规则请求个别表单
       ndx_100_complete_list: type: stock_nasdaq
       sp_1500_complete_list: type: stock_sent

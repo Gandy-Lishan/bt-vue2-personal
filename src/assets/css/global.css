@@ -1110,3 +1110,6 @@ button#checkResBtn {
     /* border-bottom-color: #fff; */
   }
 }
+.virtual-table tr.highlighted {
+  background-color: yellow;
+}

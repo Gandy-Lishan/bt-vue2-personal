@@ -3,19 +3,25 @@
   <div>
     <div class="header-span">
       <span>{{ label }}</span>
-      <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="isMostPopular" @click="downloadCSV">
-        <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <el-tooltip effect="dark" placement="top" content="Enlarge to View">
+        <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
+      </el-tooltip>
+      <el-tooltip effect="dark" placement="top" content="Download List" v-show="isMostPopular">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="isMostPopular" @click="downloadCSV">
+          <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </el-tooltip>
     </div>
     <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
-          <svg :key="`${item.label}_svg`" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="checkedType === item.value && enlarged" @click="downloadCSV">
-            <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="checkedType === item.value && enlarged" @click="downloadCSV">
+              <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </el-tooltip>
       </template>
     </div>
   </div>
@@ -32,10 +38,10 @@
         class="virtual-table"
         :data="virtualList"
 				empty-text="No data"
-        stripe
         size="mini"
         row-key="url"
         v-loading="_loading"
+        :row-class-name="tableRowClassName"
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
@@ -144,7 +150,8 @@ export default {
       },
       checkedType: this.type,
       enlarged: false,
-      isMostPopular: false
+      isMostPopular: false,
+      highlightValue: ''
     }
   },
   computed: {
@@ -153,7 +160,8 @@ export default {
       favoritesBtv1List: 'getFavoriteIndicatorListBtv1',
       favoritesBtv2List: 'getFavoriteIndicatorList',
       _favoriteSymbolList: 'getFavoriteSymbolList',
-      indicatorsListData: 'getIndicatorsPageListData'
+      indicatorsListData: 'getIndicatorsPageListData',
+      clearIndiTableHighlighted: 'getClearIndiTableHighlighted'
     }),
     _loading() {
       return this.loading
@@ -883,7 +891,10 @@ export default {
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
-      if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key))
+      if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
+        if(item.key === 'chart_name') item.minWidth = '200px'
+        return item
+      })
       return columns
     },
   },
@@ -896,20 +907,29 @@ export default {
         }
 			},
       immediate: true
-		}
+		},
+    clearIndiTableHighlighted: {
+      handler(newValue) {
+        if(newValue) this.highlightValue = ''
+      }
+    }
 	},
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
-      if(checked && row) {
-        // 图表显示
-      }
+      this.toggleEnlarge(this.label)
+      this.enlarged = !this.enlarged
       if(checked && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
         if(option) await this.changeOption(option)
       }
-      this.toggleEnlarge(this.label)
-      this.enlarged = !this.enlarged
+    debugger
+      if(checked && row && row?.chart_name) {
+        // 图表显示和排序高亮
+        this.$emit("updateChart", row || {})
+        this.highlightValue = row.chart_name
+        return
+      }
       this.$emit("updateChart", this.firstRow || {})
     },
     async loadMore () {
@@ -1279,6 +1299,22 @@ export default {
       XLSX.utils.book_append_sheet(wb, ws, xlsxName);
       XLSX.writeFile(wb, `${xlsxName}.xlsx`);
     },
+    tableRowClassName({ row, rowIndex }) {
+      // 如果当前行的 `cacBelowBband` 值等于 highlightValue，就高亮该行
+      if (this.highlightValue && row.chart_name === this.highlightValue) {
+        const targetName = row.chart_name
+        const sortByName = (dict, targetName) => {
+          return dict.sort((a, b) => {
+              if (a.chart_name === targetName) return -1;
+              if (b.chart_name === targetName) return 1;
+              return 0;
+          });
+        }
+        this.tableData = sortByName(this.tableData, targetName)
+        return 'highlighted';
+      }
+      return '';
+    },
   }
 }
 </script>
@@ -1406,6 +1442,9 @@ export default {
   .chart-name-btn:hover {
     color: #1d4ed7;
     text-decoration: underline;
+  }
+  /deep/ .highlighted {
+    background-color: yellow;
   }
 }
 </style>
