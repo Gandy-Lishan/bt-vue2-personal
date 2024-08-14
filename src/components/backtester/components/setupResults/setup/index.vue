@@ -276,7 +276,7 @@ export default {
 		}
 		else if(this.routerEnterTag == 2){
 			// 如果跳转携带 backtestID 则填充
-			const backtestID = localStorage.get('backtestID')
+			const backtestID = localStorage.getItem('backtestID')
 			if(backtestID) {
 				const res = await seeParams(backtestID)
 				// res.data.commission = (res.data.commission * 100).toFixed(2)
