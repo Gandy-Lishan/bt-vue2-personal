@@ -25,7 +25,7 @@ export function setRouterPermission(router) {
 		}
 		// 当跳转携带 backtestID 时，填充
 		const backtestID = getQueryVariable('backtestID')
-		if (backtestID) LocalStorageUtil.set('backtestID', backtestID)
+		if (backtestID) localStorage.set('backtestID', backtestID)
 		// 当跳转携带 indicator 和 symbol 时，填充
 		const indicator = getQueryVariable('indicator')
 		let symbol = getQueryVariable('index')

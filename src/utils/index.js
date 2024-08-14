@@ -55,7 +55,7 @@ const getQueryVariable = (variable) => {
     var pair = vars[i].split("=")
     //如果当前元素的键等于参数名，则返回对应的值
     if (pair[0] == variable) {
-      return decodeURIComponent(pair[1])
+      return pair[1]
     }
   }
   //如果没有找到匹配的参数名，则返回false
