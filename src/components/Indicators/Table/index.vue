@@ -179,9 +179,6 @@ export default {
     // Commodity
   },
   beforeDestroy () {
-    // 离开此组件前保存筛选条件状态
-    console.log('离开此组件前保存筛选条件状态', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
-    LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
      // 使用 querySelector 获取 input 元素
      const inputElement = this.$el.querySelector('.ais-SearchBox-input');
     if (inputElement) {
