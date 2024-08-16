@@ -137,8 +137,25 @@ export default {
         const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
         await this.$emit('enLargeTable', source_list, sourceTable[0])
       }else {
-        const {data:rowData} = await getIndicatorsRowData(searchUrl)
-        const {type, groups} = rowData
+        let res = {}
+        try {
+          const {data:rowData} = await getIndicatorsRowData(searchUrl)
+          res = rowData
+        } catch (error) {
+          if(error?.response?.status === 404) {
+            this.$message({
+              message: `<strong>Unable to find the corresponding indicator</strong>`,
+              center: true,
+              dangerouslyUseHTMLString: true,
+              showClose: true,
+              duration: 8000,
+              customClass: 'no-icon',
+              type: 'warning'
+            })
+            return
+          }
+        }
+        const {type, groups} = res
         let requireUrl = ''
         if(type === 'stock_nasdaq') {
           requireUrl = 'ndx_100_complete_list'
@@ -173,7 +190,19 @@ export default {
         const _sourceList = _list.map(item => {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
         }).filter(item => item !== undefined).shift()
-        console.log('_sourceList', _sourceList.source_list)
+        console.log('_sourceList', _sourceList)
+        if(!_sourceList || !_sourceList.length) {
+          this.$message({
+            message: `<strong>Unable to find the corresponding indicator</strong>`,
+            center: true,
+            dangerouslyUseHTMLString: true,
+            showClose: true,
+            duration: 8000,
+            customClass: 'no-icon',
+            type: 'warning'
+          })
+          return
+        }
         await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
       /* 如果匹配不到, 使用下面的规则请求个别表单
       ndx_100_complete_list: type: stock_nasdaq

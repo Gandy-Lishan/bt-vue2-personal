@@ -22,7 +22,7 @@
 import Table from "./Table";
 import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
 export default {
@@ -194,16 +194,16 @@ export default {
     })
   },
   mounted() {
-    this.getDistanceFromBottom();
+    // this.getDistanceFromBottom();
     // 监听窗口大小变化事件
-    window.addEventListener('resize', this.getDistanceFromBottom);
+    // window.addEventListener('resize', this.getDistanceFromBottom);
     // 监听滚动事件
-    window.addEventListener('scroll', this.getDistanceFromBottom);
+    // window.addEventListener('scroll', this.getDistanceFromBottom);
   },
   beforeDestroy() {
     // 清除事件监听器
-    window.removeEventListener('resize', this.getDistanceFromBottom);
-    window.removeEventListener('scroll', this.getDistanceFromBottom);
+    // window.removeEventListener('resize', this.getDistanceFromBottom);
+    // window.removeEventListener('scroll', this.getDistanceFromBottom);
   },
   methods: {
     getDistanceFromBottom() {
