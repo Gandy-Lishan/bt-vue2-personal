@@ -325,8 +325,8 @@
           let name = 'SPY Optix'
           let last_val = null
           if(last_value !== null && last_value !== undefined) {
-            if(last_change_type === 'percent') last_val = (parseFloat(last_value)/100).toFixed(2)
-            else last_val = last_value.toFixed(2)
+              if(last_change_type === 'percent') last_val = parseFloat((parseFloat(last_value)/100)).toFixed(2)
+              else last_val = last_value.toFixed(2)
           }
           else {last_val = data[key].slice(-1)[0][1].toFixed(2)}
           if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
