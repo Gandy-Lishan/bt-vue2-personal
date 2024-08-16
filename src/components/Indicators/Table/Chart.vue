@@ -142,7 +142,7 @@
         const yAxisConfig = createYAxisConfig(series);
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
-        const { url } = row
+        const { url, type } = row
         const selector = url !== 'risk_levels' ? 6 : 3
         // const maxX = Math.max(...allData.map(d => d[0]));
         Highcharts.stockChart(this.id, {
@@ -284,8 +284,10 @@
           series: series.map((s, i) => ({
             ...s,
             yAxis: i,
-            type: 'line',
-            color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+            type: i === 0 || type !== 'mff' ? 'line' : 'column',
+            color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8'),
+            threshold: type === 'mff' ? 0 : null,
+            pointWidth: type === 'mff' ? 2 : null
           })),
           chart: basicChartOptions
         });
