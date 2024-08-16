@@ -253,6 +253,12 @@ export default {
       if(!findTable) return
       const checked = findTable.options.find(ele => ele.url === source_list).value
       const findRefsName = findTable?.refName
+      // 应该清空缩小已放大的 table
+      const clearRefName = this.tableInfoList.map(item => item.refName).filter(item => item !== findRefsName)
+      console.log('clearRefName', clearRefName)
+      clearRefName.forEach(item => {
+        this.$refs[item][0].clearEnlarge()
+      })
       await this.$refs[findRefsName][0].enLargeTable(checked, row)
     }
   }

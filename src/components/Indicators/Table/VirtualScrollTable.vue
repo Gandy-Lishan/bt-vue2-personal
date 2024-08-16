@@ -917,7 +917,7 @@ export default {
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
-      if(checked && checked instanceof PointerEvent && !row) {this.toggleEnlarge(this.label);this.enlarged = !this.enlarged}
+      if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.toggleEnlarge(this.label);this.enlarged = !this.enlarged}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
         if(option) await this.changeOption(option)
@@ -1324,6 +1324,9 @@ export default {
       }
       return '';
     },
+    clearHighlightValue() {
+      this.highlightValue = ''
+    }
   }
 }
 </script>

@@ -104,8 +104,14 @@ export default {
       this.loading = false
     },
     async enLargeTable(checked, row) {
-      debugger
       await this.$refs['virtualScroll']._toggleEnlarge(checked, row)
+    },
+    async clearEnlarge() {
+      console.log("this.$refs['virtualScroll']", this.$refs['virtualScroll'].enlarged)
+      if(this.$refs['virtualScroll'].enlarged && this.$refs['virtualScroll'].highlightValue) {
+        this.$refs['virtualScroll'].clearHighlightValue()
+        await this.$refs['virtualScroll']._toggleEnlarge()
+      }
     }
   }
 
