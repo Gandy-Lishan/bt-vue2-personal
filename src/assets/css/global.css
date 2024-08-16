@@ -922,7 +922,7 @@ button#checkResBtn {
     background-color: hsl(5, 68%, 96%);
   }
   .indexTable td.tg-0lax.r500 {
-    background-color: #ffffff;
+    background-color: hsl(5, 70%, 100%)
   }
   .tg .tg-0lax {
     text-align: left;

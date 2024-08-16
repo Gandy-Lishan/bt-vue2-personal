@@ -110,10 +110,7 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      const test  = () => {
-        console.log('test')
-      }
-      return `<a onclick="test()" style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
+      return `<a style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
     async performAutocomplete(suggestion, dataset) {
       let searchUrl = '';
@@ -128,8 +125,8 @@ export default {
       console.log('searchUrl', searchUrl)
       debugger
       const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
-      let sourceTable = urlTypes.map(url => {
-        const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+      let sourceTable = urlTypes.map(type => {
+        const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
           return list.map(item => {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
           }).filter(item => item !== undefined)
@@ -161,7 +158,16 @@ export default {
           requireUrl = 'bond_seasonality'
         }else if(groups === 'commod') {
           requireUrl = 'commodity_complete_list'
+        }else if(groups === 'bonds'){
+          requireUrl = 'bonds_complete_list'
+        }else if(type === 'etf_opt') {
+          reportUrl = 'etf_complete_list'
+        }else if(type === 'commod_seasonality') {
+          url = 'commod_seasonality'
+        }else if(groups === 'stocks') {
+          requireUrl = 'stock_complete_list'
         }
+        if(!requireUrl) return
         await this.fetchIndicatorsPageList(requireUrl)
         const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
         const _sourceList = _list.map(item => {

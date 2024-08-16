@@ -332,6 +332,7 @@ const mutations = {
 		state.miBenmark = val
 	},
 	SET_INDICATORS_PAGE_LIST_DATA(state, { url, data }) {
+		if(!url) return
 		state.indicatorsPageListdata[url] = JSON.stringify(data)
 	}
 }

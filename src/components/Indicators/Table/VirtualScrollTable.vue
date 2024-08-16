@@ -917,15 +917,14 @@ export default {
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
-      this.toggleEnlarge(this.label)
-      this.enlarged = !this.enlarged
-      if(checked && this.checkedType !== checked && row) {
+      if(checked && checked instanceof PointerEvent && !row) {this.toggleEnlarge(this.label);this.enlarged = !this.enlarged}
+      if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
         if(option) await this.changeOption(option)
       }
-    debugger
-      if(checked && row && row?.chart_name) {
+      if(checked && typeof checked === 'string' && row && row?.chart_name) {
         // 图表显示和排序高亮
+        if(!this.enlarged) {this.toggleEnlarge(this.label);this.enlarged = true}
         this.$emit("updateChart", row || {})
         this.highlightValue = row.chart_name
         return
@@ -1026,6 +1025,7 @@ export default {
         //   _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
         //   this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // }
+        console.log('VirtaulScroll 保存之前的 URL', url)
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // 在 Most Popular 去更新对应的表; 不在 Most Popular 去更新 Most Popular
         if(url !== 'most_popular') {
@@ -1311,6 +1311,15 @@ export default {
         //   });
         // }
         // this.tableData = sortByName(this.tableData, targetName)
+        // this.$nextTick(() => {
+        //   debugger
+
+        //   const tableBody = this.$refs[`${this.refName}Table`].$el.querySelector('.el-table__body-wrapper tbody');
+        //   const rows = tableBody.children;
+        //   if (rows[rowIndex]) {
+        //     rows[rowIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //   }
+        // });
         return 'highlighted';
       }
       return '';
