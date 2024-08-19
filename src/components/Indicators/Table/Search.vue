@@ -191,7 +191,8 @@ export default {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
         }).filter(item => item !== undefined).shift()
         console.log('_sourceList', _sourceList)
-        if(!_sourceList || !_sourceList.length) {
+        // 如果是对象并且对象为空, 说明没有匹配到数据
+        if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
           this.$message({
             message: `<strong>Unable to find the corresponding indicator</strong>`,
             center: true,
