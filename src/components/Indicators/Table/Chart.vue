@@ -81,8 +81,8 @@ import { isJson } from '@/utils';
       };
  
       const createYAxisConfig = (series, row) => {
-        debugger
-        const {type, sub_type} = row
+        const {sub_type, source_list, url} = row
+        const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list'
         // commodity_complete_list
         // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
         return series.map((serie, i) => {
@@ -120,7 +120,7 @@ import { isJson } from '@/utils';
             labels: { enabled: (i === 0 || i === 1), style: {fontSize: '10px'} },
             min:  (i === series.length - 1) ? minYAxis : null, // Set the calculated min value for the bottom axis
             max:  (i === series.length - 1) ? maxYAxis : null, // Set the calculated max value for the bottom axis
-            plotLines: i === series.length - 1 ? [
+            plotLines: (i === series.length - 1) && !isCot ? [
               {
                 value: pess || null,
                 color: 'rgba(0, 128, 0, 1)',
@@ -286,29 +286,47 @@ import { isJson } from '@/utils';
               showInNavigator: true
             }
           },
-          series: series.map((s, i) => ({
+          series: series.map((s, i) => {
+          const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
+          let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+          const isOptPess = s.name === 'opt' || s.name === 'pess'
+          if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
+          if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
+          return{
             ...s,
             yAxis: i,
-            type: i === 0 || type !== 'mff' ? 'line' : 'column',
-            color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8'),
+            type: _type,
+            color,
             threshold: type === 'mff' ? 0 : null,
-            pointWidth: type === 'mff' ? 2 : null
-          })),
+            pointWidth: type === 'mff' ? 2 : null,
+            dashStyle: !isOptPess ? 'Solid' : 'Dash',
+            showInNavigator: !isOptPess ? true : false,
+            enableMouseTracking: !isOptPess ? true : false,
+            showInLegend: !isOptPess ? true : false
+          }}),
           chart: basicChartOptions
         });
       };
  
       try {
-      const {last_value, last_change_type} = this.row;
+      const {last_value, last_change_type, market_symbol} = this.row;
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data;
-        debugger
-        originalData = isJson(originalData) ? JSON.parse(originalData) : [];
+        try {
+          if(typeof originalData === 'string') {
+            originalData = originalData.replace(/NaN/g, 'null')
+            originalData = JSON.parse(originalData)
+          }
+        } catch (error) {
+          console.log('error', error)
+        }
         if (originalData.length === 0) return;
  
-        const allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date');
+        const allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
         allKeysName.sort((a, b) => {
+          if(a.toLocaleLowerCase() === market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase()) return -1
+          if(a.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() === market_symbol.toLocaleLowerCase()) return 1
           // 检查元素中是否含有下划线
           const aHasUnderscore = a.includes('_');
           const bHasUnderscore = b.includes('_');
