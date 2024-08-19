@@ -920,7 +920,7 @@ export default {
       if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.toggleEnlarge(this.label);this.enlarged = !this.enlarged}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
-        if(option) await this.changeOption(option)
+        if(option) await this.changeOption(option, false)
       }
       if(checked && typeof checked === 'string' && row && row?.chart_name) {
         // 图表显示和排序高亮
@@ -934,12 +934,12 @@ export default {
     async loadMore () {
       // await this.$emit('loadMore', this.checkedType)
     },
-    async changeOption(item) {
+    async changeOption(item, isUpdateChart) {
       if(this.options.length === 1) return
       this.$refs[`${this.refName}Table`].clearSort()
       this.checkedType = item.value;     
       await this.$nextTick(async () => {
-        await this.$emit('loadMore', item.value, true)
+        await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
       })
       // this.$forceUpdate()
     },
