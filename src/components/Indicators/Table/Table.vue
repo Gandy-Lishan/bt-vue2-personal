@@ -108,7 +108,7 @@ export default {
     },
     async clearEnlarge() {
       console.log("this.$refs['virtualScroll']", this.$refs['virtualScroll'].enlarged)
-      if(this.$refs['virtualScroll'].enlarged && this.$refs['virtualScroll'].highlightValue) {
+      if(this.$refs['virtualScroll'].enlarged) {
         this.$refs['virtualScroll'].clearHighlightValue()
         await this.$refs['virtualScroll']._toggleEnlarge()
       }
