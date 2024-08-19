@@ -9,6 +9,7 @@
  import Exporting from 'highcharts/modules/exporting';
  import ExportData from 'highcharts/modules/export-data';
  import axios from "@/axios";
+import { isJson } from '@/utils';
  
  export default {
   name: 'Chart',
@@ -79,7 +80,11 @@
         }
       };
  
-      const createYAxisConfig = (series) => {
+      const createYAxisConfig = (series, row) => {
+        debugger
+        const {type, sub_type} = row
+        // commodity_complete_list
+        // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
         return series.map((serie, i) => {
           let minYAxis, maxYAxis;
           
@@ -139,7 +144,7 @@
  
       const createChart = (series, allKeysName, basicChartOptions, row) => {
         console.log('series: ', series);
-        const yAxisConfig = createYAxisConfig(series);
+        const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
         const { url, type } = row
@@ -297,8 +302,9 @@
       const {last_value, last_change_type} = this.row;
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
-        const originalData = res.data;
- 
+        let originalData = res.data;
+        debugger
+        originalData = isJson(originalData) ? JSON.parse(originalData) : [];
         if (originalData.length === 0) return;
  
         const allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date');
