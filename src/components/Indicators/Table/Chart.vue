@@ -60,7 +60,7 @@ import { isJson } from '@/utils';
             const button = document.createElement('button');
             button.innerHTML = 'Backtest This Indicator';
             button.style.position = 'absolute';
-            button.style.top = `${chart.chartHeight/7}px`;
+            button.style.top = `${chart.chartHeight/10}px`;
             button.style.left = (chart.chartWidth / 2 - 82) + 'px';
             button.style.fontSize = '12px';
             button.style.fontWeight = 600;
