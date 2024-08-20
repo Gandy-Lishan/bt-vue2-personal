@@ -325,7 +325,7 @@ import { isJson } from '@/utils';
         }
         if (originalData.length === 0) return;
  
-        const allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
+        let allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
         allKeysName.sort((a, b) => {
           if(market_symbol && typeof market_symbol === 'string') {
             if(a.toLocaleLowerCase() === market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase()) return -1
@@ -346,6 +346,10 @@ import { isJson } from '@/utils';
               return a.localeCompare(b);
           }
         });
+        if(allKeysName.includes('opt') && allKeysName.includes('pess') && !market_symbol) {
+          allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
+          allKeysName = allKeysName.concat(['opt', 'pess'])
+        }
         const data = allKeysName.reduce((acc, keyName) => {
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
