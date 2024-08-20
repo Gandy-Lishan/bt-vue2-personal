@@ -87,6 +87,7 @@ import { isJson } from '@/utils';
         // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
         return series.map((serie, i) => {
           let minYAxis, maxYAxis;
+          const isOptPess = serie?.name === 'opt' || serie?.name === 'pess';
           
           // Calculate min and max for the y-axis only for the bottom axis
           if (i === series.length - 1) {
@@ -103,7 +104,7 @@ import { isJson } from '@/utils';
 
           return {
             title: {
-              text: serie?.name || 'SPY Optix',
+              text: !isOptPess ? serie?.name || 'SPY Optix' : '',
               style: {
                 color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8'),
                 fontWeight: 'bold',
@@ -126,7 +127,7 @@ import { isJson } from '@/utils';
                 color: 'rgba(0, 128, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${pess || ''}`, style: {fontSize: '10px', color: 'rgba(0, 128, 0, 1)', fontWeight: 'bold'} },
+                label: { text: `${pess || ''}`, style: {fontSize: '10px', color: 'rgba(0, 128, 0, 1)'} },
                 zIndex: 5
               },
               {
@@ -134,7 +135,7 @@ import { isJson } from '@/utils';
                 color: 'rgba(255, 0, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${opt || ''}`, style: {fontSize: '10px', color: 'rgba(255, 0, 0, 1)', fontWeight: 'bold'} },
+                label: { text: `${opt || ''}`, style: {fontSize: '10px', color: 'rgba(255, 0, 0, 1)'} },
                 zIndex: 5
               }
             ] : [],
@@ -353,9 +354,26 @@ import { isJson } from '@/utils';
         const series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
           let last_val = null
-          if(last_value !== null && last_value !== undefined) {
-              if(last_change_type === 'percent') last_val = parseFloat((parseFloat(last_value)/100)).toFixed(2)
-              else last_val = last_value.toFixed(2)
+          if (last_value !== null && last_value !== undefined) {
+               // 处理 last_value 的值类型
+              if (typeof last_value === 'string') {
+                  // 尝试将字符串转换为数字
+                  last_val = last_value.replace(/[^\d.-]/g, '');
+                  // 尝试将字符串转换为数字
+                  last_val = parseFloat(last_val);
+              }
+              
+              if (typeof last_value === 'number' && !isNaN(last_value)) {
+                  // 如果 last_value 是数字类型
+                  if (last_change_type === 'percent') {
+                      last_val = (last_value / 100).toFixed(2);  // 处理百分比
+                  } else {
+                      last_val = last_value.toFixed(2);  // 处理一般的数值
+                  }
+              } else {
+                  console.error('last_value 不是一个有效的数字:', last_value, typeof last_value);
+                  last_val = null;  // 或者根据需求设置一个默认值或错误标识
+              }
           }
           else {last_val = data[key].slice(-1)[0][1].toFixed(2)}
           if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
