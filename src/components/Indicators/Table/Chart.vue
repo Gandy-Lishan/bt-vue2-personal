@@ -311,7 +311,7 @@ import { isJson } from '@/utils';
       };
  
       try {
-      const {last_value, last_change_type, market_symbol} = this.row;
+      let {last_value, last_change_type, market_symbol} = this.row;
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data;
@@ -353,29 +353,29 @@ import { isJson } from '@/utils';
  
         const series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
-          let last_val = null
           if (last_value !== null && last_value !== undefined) {
                // 处理 last_value 的值类型
+               if (typeof last_value === 'string' && last_value.includes('%'))  last_value = parseFloat(last_value.replace('%', '')) / 100;
               if (typeof last_value === 'string') {
                   // 尝试将字符串转换为数字
-                  last_val = last_value.replace(/[^\d.-]/g, '');
+                  last_value = last_value.replace(/[^\d.-]/g, '');
                   // 尝试将字符串转换为数字
-                  last_val = parseFloat(last_val);
+                  last_value = parseFloat(last_value);
               }
               
               if (typeof last_value === 'number' && !isNaN(last_value)) {
                   // 如果 last_value 是数字类型
                   if (last_change_type === 'percent') {
-                      last_val = (last_value / 100).toFixed(2);  // 处理百分比
+                    last_value = (last_value / 100).toFixed(2);  // 处理百分比
                   } else {
-                      last_val = last_value.toFixed(2);  // 处理一般的数值
+                    last_value = last_value.toFixed(2);  // 处理一般的数值
                   }
               } else {
                   console.error('last_value 不是一个有效的数字:', last_value, typeof last_value);
-                  last_val = null;  // 或者根据需求设置一个默认值或错误标识
+                  last_value = null;  // 或者根据需求设置一个默认值或错误标识
               }
           }
-          else {last_val = data[key].slice(-1)[0][1].toFixed(2)}
+          else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
@@ -383,7 +383,7 @@ import { isJson } from '@/utils';
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && last_val !== null && last_val !== undefined ? ` (Last = ${last_val})` : ''}`,
+            name: `${name}${key.includes('_') && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key]
           }
         })
