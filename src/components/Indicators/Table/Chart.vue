@@ -326,8 +326,10 @@ import { isJson } from '@/utils';
  
         const allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
         allKeysName.sort((a, b) => {
-          if(a.toLocaleLowerCase() === market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase()) return -1
-          if(a.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() === market_symbol.toLocaleLowerCase()) return 1
+          if(market_symbol && typeof market_symbol === 'string') {
+            if(a.toLocaleLowerCase() === market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase()) return -1
+            if(a.toLocaleLowerCase() !== market_symbol.toLocaleLowerCase() && b.toLocaleLowerCase() === market_symbol.toLocaleLowerCase()) return 1
+          }
           // 检查元素中是否含有下划线
           const aHasUnderscore = a.includes('_');
           const bHasUnderscore = b.includes('_');
