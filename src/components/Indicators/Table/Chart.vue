@@ -125,7 +125,7 @@ import { isJson } from '@/utils';
                 value: pess || null,
                 color: 'rgba(0, 128, 0, 1)',
                 dashStyle: 'shortdash',
-                width: 2,
+                width: 1,
                 label: { text: `${pess || ''}`, style: {fontSize: '10px', color: 'rgba(0, 128, 0, 1)', fontWeight: 'bold'} },
                 zIndex: 5
               },
@@ -133,7 +133,7 @@ import { isJson } from '@/utils';
                 value: opt || null,
                 color: 'rgba(255, 0, 0, 1)',
                 dashStyle: 'shortdash',
-                width: 2,
+                width: 1,
                 label: { text: `${opt || ''}`, style: {fontSize: '10px', color: 'rgba(255, 0, 0, 1)', fontWeight: 'bold'} },
                 zIndex: 5
               }
@@ -290,8 +290,8 @@ import { isJson } from '@/utils';
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
           const isOptPess = s.name === 'opt' || s.name === 'pess'
-          if(s.name === 'opt') color = 'rgba(255, 0, 0, 0.6)'
-          if(s.name === 'pess') color = 'rgba(0, 128, 0, 0.6)'
+          if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
+          if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
           return{
             ...s,
             yAxis: i,
