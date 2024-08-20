@@ -6,14 +6,8 @@
       <el-tooltip effect="dark" placement="top" content="Enlarge to View">
         <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
       </el-tooltip>
-      <el-tooltip effect="dark" placement="top" content="Download List" v-show="isMostPopular">
-        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="isMostPopular" @click="downloadCSV">
-          <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </el-tooltip>
     </div>
-    <div class="header-span" v-show="!['popular', 'commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
+    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
         <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
@@ -45,7 +39,7 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="!enlarged ? 300 : 'auto'">
+        :height="!enlarged ? 300 : 620">
         <!-- <el-table-column> -->
           <!-- <template #header>
             <div class="header-span">
@@ -901,7 +895,7 @@ export default {
   watch: {
 		label: {
 			handler(newValue){
-        if(newValue === 'Most Popular Charts') {
+        if(newValue === 'Most Popular') {
           this.isMostPopular = true
           this.enlarged = true
         }
@@ -1342,7 +1336,7 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 500px !important;
+    height: 585px !important;
   }
 }
 

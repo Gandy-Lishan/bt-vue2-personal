@@ -11,7 +11,7 @@
         :style="{ width: '65%', display: 'block' }"
         ></Table>
      </template>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
  </div>
 </template>
@@ -28,7 +28,7 @@ export default {
    return {
      tableInfoList: [
        {
-         label: 'Most Popular Charts',
+         label: 'Most Popular',
          type: 'popular',
          refName: 'popularVirtualScroll',
          itemSize: 40,

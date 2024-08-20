@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="strategy-container">
-    <br>
     <div class="strategy-main">
       <div class="strategy-header">
         <div class="tableHeader">
@@ -16,7 +15,6 @@
           </div>
         </div>
       </div>
-      <br>
       <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>

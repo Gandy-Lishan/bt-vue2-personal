@@ -11,8 +11,8 @@
           :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
-      <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
+      <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
     </div>
   </div>
  </template>

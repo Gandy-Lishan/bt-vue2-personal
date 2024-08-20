@@ -12,8 +12,8 @@
          :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
-      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `600px`}"></Chart>
-      <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `600px`}"></SeasonalityChart>
+      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></Chart>
+      <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></SeasonalityChart>
     </div>
   </div>
 </template>
@@ -180,7 +180,7 @@ export default {
       ],
       displayRow: {},
       enlargedTable: null,
-      chartHight: '600px'
+      chartHight: '700px'
     }
   },
   components: {

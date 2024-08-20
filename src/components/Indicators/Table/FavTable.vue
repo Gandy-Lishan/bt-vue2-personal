@@ -3,12 +3,17 @@
   <div>
     <div class="header-span">
       <span>My Favorites</span>
-      <el-tooltip effect="dark" placement="top" content="Download List">
-        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" @click="downloadCSV">
-          <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </el-tooltip>
+    </div>
+    <div class="header-span">
+      <template v-for="item in tableInfo['options']">
+        <span :key="item.label" :class="{activated: true, span: true}">{{ item.label }}</span>
+        <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" @click="downloadCSV">
+            <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </el-tooltip>
+      </template>
     </div>
   </div>
     <virtual-scroll
@@ -28,7 +33,7 @@
 				@cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-				height="600"
+				height="620"
 			>
 			<!-- <el-table-column> -->
 				<!-- <template #header>
@@ -82,7 +87,8 @@ const XLSX = require('xlsx');
 
 export default {
 	props: {
-		selectedTitle: String
+		selectedTitle: String,
+    tableInfo: Object
 	},
   name: 'FavTable',
   components: {
@@ -654,6 +660,9 @@ export default {
   /deep/ .el-table .caret-wrapper {
     width: 10px;
   }
+  /deep/.el-table__body-wrapper.is-scrolling-none {
+    height: 585px !important;
+  }
 }
 
 .image-hover {
@@ -665,21 +674,22 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    border: 2px solid #d9d9d9;
-    background-color: #d9d9d9;
+    &:first-child {
+      background-color: #d9d9d9;
+    }
     span {
       display: inline-block;
       flex-grow: 1;
-      padding: 2px 0;
-      border-left: 2px solid #d9d9d9;
       text-align: center;
       font-size: 14px;
       font-weight: 700;
       padding: 5px 0;
+      border-left: 2px solid #d9d9d9;
     }
     svg {
       cursor: pointer;
       margin-right: 10px;
+      background-color: #ffffff;
     }
     .el-icon-full-screen {
       padding: 0px;

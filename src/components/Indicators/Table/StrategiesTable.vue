@@ -24,7 +24,7 @@
         :data="virtualList1"
         stripe
         row-key="id"
-        height="600">
+        height="800">
         <virtual-column type="selection" width="60"></virtual-column>
         <el-table-column label="id" prop="id"></el-table-column>
         <el-table-column label="内容" width="260" prop="text"></el-table-column>
