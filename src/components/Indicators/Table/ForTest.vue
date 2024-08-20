@@ -242,7 +242,7 @@ export default {
       const findIndex = _results.findIndex(ele => ele.url === row.url)
       if(findIndex !== -1) {
         const find = _results[findIndex]
-        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite, loading: false})
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
         this.$refs[refName][0].loadMore(value)
       }
