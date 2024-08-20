@@ -290,8 +290,8 @@ import { isJson } from '@/utils';
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
           const isOptPess = s.name === 'opt' || s.name === 'pess'
-          if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
-          if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
+          if(s.name === 'opt') color = 'rgba(255, 0, 0, 0.6)'
+          if(s.name === 'pess') color = 'rgba(0, 128, 0, 0.6)'
           return{
             ...s,
             yAxis: i,
@@ -302,7 +302,8 @@ import { isJson } from '@/utils';
             dashStyle: !isOptPess ? 'Solid' : 'Dash',
             showInNavigator: !isOptPess ? true : false,
             enableMouseTracking: !isOptPess ? true : false,
-            showInLegend: !isOptPess ? true : false
+            showInLegend: !isOptPess ? true : false,
+            lineWidth: !isOptPess ? 2 : 1
           }}),
           chart: basicChartOptions
         });
