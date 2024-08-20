@@ -989,7 +989,10 @@ export default {
     },
     async addRow(scope) {
       try {
-        if(scope.row.source !== 'Backtest Engine v2.0') return
+        if(scope.row.source !== 'Backtest Engine v2.0') {
+          this.popUpMsgBox('This indicator is from BTV1. Please remove it from your BTV1 favorites')
+          return
+        }
         scope.row.loading = true
         const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
         let flag = false
