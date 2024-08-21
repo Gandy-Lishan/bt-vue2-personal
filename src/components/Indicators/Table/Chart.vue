@@ -149,7 +149,7 @@ import { isJson } from '@/utils';
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
         const { url, type } = row
-        let selector = 6
+        let selector = 5
         if(url === 'risk_levels') {
           selector = 3
         }
