@@ -13,7 +13,7 @@
          ></Table>
       </template>
       <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></Chart>
-      <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></SeasonalityChart>
+      <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></SeasonalityChart>
     </div>
   </div>
 </template>

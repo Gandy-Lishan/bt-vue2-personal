@@ -149,7 +149,13 @@ import { isJson } from '@/utils';
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
         const { url, type } = row
-        const selector = url !== 'risk_levels' ? 6 : 3
+        let selector = 6
+        if(url === 'risk_levels') {
+          selector = 3
+        }
+        if(url === 'smart_dumb') {
+          selector = 4
+        }
         // const maxX = Math.max(...allData.map(d => d[0]));
         Highcharts.stockChart(this.id, {
           rangeSelector: {

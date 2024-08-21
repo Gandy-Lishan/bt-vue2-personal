@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="line-chart-container"></div>
-    <div id="bar-chart-container"></div>
+    <div :id="`line-${id}`" style="width: 100%; height: 490px;"></div>
+    <div :id="`bar-${id}`" style="width: 100%; height: 210px;"></div>
   </div>
  </template>
  
@@ -15,7 +15,8 @@
  export default {
   name: 'SeasonalityChart',
    props: {
-     row: Object
+     row: Object,
+     id: String
    },
    mounted() {
      Exporting(Highcharts);
@@ -48,7 +49,7 @@
         renderTo: 'charts',
         events: {
           load: function (event) {
-            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 330, 120,33)
+            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 400, 120,33)
                 .attr({
                     'opacity': 0.25
                 })
@@ -102,7 +103,7 @@
        const currentDay = currentDayOfYearData?.length || 0
        const yValues = allData.map(point => point.y);
  
-       Highcharts.chart('line-chart-container', {
+       Highcharts.chart(`line-${this.id}`, {
        chart: {
          marginBottom: 0, // 调整图表底部边距
          spacingBottom: 0 // 调整图表与容器底部的间距
@@ -243,7 +244,7 @@
       const minY = Math.min(...yValues);
       const maxY = Math.max(...yValues);
  
-      Highcharts.chart('bar-chart-container', {
+      Highcharts.chart(`bar-${this.id}`, {
         // chart: {
         //   type: 'column',
         // },
@@ -354,26 +355,3 @@
   }
 };
 </script>
-
-<style scoped>
-#container {
- display: flex;
- flex-direction: column;
- align-items: center;
-}
-
-#line-chart-container,
-#bar-chart-container {
- width: 100%;
-}
-#line-chart-container {
- height: 420px;
-}
-#bar-chart-container {
- height: 180px;
-}
-
-#bar-chart-container {
- margin-top: 20px;
-}
-</style>

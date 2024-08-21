@@ -11,7 +11,7 @@
           :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
-      <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
+      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow.type && displayRow?.type.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
       <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
     </div>
   </div>
@@ -53,6 +53,7 @@ import SeasonalityChart from "./SeasonalityChart"
   methods: {
     updateChart(row) {
       this.displayRow = row
+      console.log(row)
     },
   }
  }
