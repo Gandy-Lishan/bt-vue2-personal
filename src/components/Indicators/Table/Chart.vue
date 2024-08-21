@@ -304,7 +304,10 @@ import { isJson } from '@/utils';
             showInNavigator: !isOptPess ? true : false,
             enableMouseTracking: !isOptPess ? true : false,
             showInLegend: !isOptPess ? true : false,
-            lineWidth: !isOptPess ? 2 : 1
+            lineWidth: !isOptPess ? 2 : 1,
+            dataGrouping: {
+                enabled: false
+            }
           }}),
           chart: basicChartOptions
         });
