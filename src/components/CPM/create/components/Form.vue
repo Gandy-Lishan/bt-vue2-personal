@@ -8,7 +8,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="12">
+    <el-col :span="6">
       <el-form-item
         label="1. Correlation Pattern Match Name"
         prop="name"
@@ -16,7 +16,7 @@
         <el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
       </el-form-item>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="6">
       <el-form-item prop="symbol">
         <template slot="label">
           <label>
@@ -54,6 +54,31 @@
         </el-autocomplete>
       </el-form-item>
     </el-col>
+    <el-col :span="6">
+      <el-form-item prop="condition" label="3. Condition">
+        <el-select
+            v-model="data.condition"
+            placeholder="— Select Condition —"
+          >
+            <el-option
+              v-for="item in conditionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item
+        label="4. Period"
+        prop="period"
+      >
+        <el-input v-model="data.period">
+        </el-input>
+      </el-form-item>
+    </el-col>
   </el-row>
   </el-form>
   <el-form
@@ -66,12 +91,12 @@
   <el-row :gutter="10">
     <el-col :span="4">
       <el-form-item
-				label="3. Pattern Start Date"
+				label="5. Pattern Start Date"
         prop="start_date"
 			>
       <template slot="label">
         <label>
-          3. Pattern Start Date
+          5. Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >The date on which you would like to start the price comparison.</span>
@@ -92,12 +117,12 @@
     </el-col>
     <el-col :span="4">
       <el-form-item
-				label="4. Pattern End Date"
+				label="6. Pattern End Date"
         prop="end_date"
 			>
       <template slot="label">
         <label>
-          4. Pattern End Date
+          6. Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >The date on which you would like to stop the price comparison.</span>
@@ -118,7 +143,7 @@
     </el-col>
     <el-col :span="4">
       <el-form-item
-        label="5. Number of Bars"
+        label="7. Number of Bars"
         prop="bars_num"
       >
         <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
@@ -129,7 +154,7 @@
       </el-form-item>
     </el-col>
     <el-col :span="4">
-      <el-form-item prop="timeframe" label="6. Timeframe">
+      <el-form-item prop="timeframe" label="8. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -150,12 +175,12 @@
       <el-row :gutter="10">
         <el-col :span="14">
           <el-form-item
-            label="7. Correlation Percentage"
+            label="9. Correlation Percentage"
             prop="corr_per"
           >
             <template slot="label">
               <label>
-                7. Correlation Percentage
+                9. Correlation Percentage
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
                     This is the minimum threshold required for matching patterns. <br />
@@ -193,7 +218,7 @@
     <el-col :span="12">
       <el-row :gutter="10">
         <el-col :span="8">
-        <el-form-item prop="direction" label="8. Direction">
+        <el-form-item prop="direction" label="10. Direction">
           <el-select
               v-model="data.direction"
               placeholder="— Select Direction —"
@@ -210,12 +235,12 @@
         </el-col>
         <el-col :span="8">
         <el-form-item
-          label="9. Time In Market"
+          label="11. Time In Market"
           prop="tim"
         >
           <template slot="label">
             <label>
-              9. Time In Market
+              11. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content">
                   Input a value of bars to stay in market after entry.<br />Exit
@@ -236,10 +261,10 @@
         </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item prop="backtestHistory" label="10. Lookback Period">
+          <el-form-item prop="backtestHistory" label="12. Lookback Period">
               <template slot="label">
                 <label>
-                  10. Lookback Period
+                  12. Lookback Period
                   <el-tooltip effect="dark" placement="top">
                     <span slot="content"
                       >Specify the start and end date of the backtest. <br />
@@ -272,7 +297,7 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item
-              label="11. Custom Duration"
+              label="13. Custom Duration"
               prop="year"
               v-if="data.lookback_period == 'Custom'"
             >
@@ -341,6 +366,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
+        condition: 'None',
+        period: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -349,6 +376,11 @@ export default {
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
         { value: 'Monthly', label: 'Monthly' }
+      ],
+      conditionOptions: [
+        { value: 'None', label: 'None' },
+        { value: 'Above', label: 'Above' },
+        { value: 'Below', label: 'Below' }
       ],
       directionOptions: [
         { value: 'Long', label: 'Long' },
@@ -429,7 +461,12 @@ export default {
           { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
+        ],
+        period: [
+          { validator: createPositiveIntegerRule('period', 1), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('period', 1), trigger: 'change' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
@@ -823,6 +860,11 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
+        }else if(key === 'condition' && !data[key]) {
+          // 默认 None
+          target[key] = 'None'
+        }else if(key === 'period' && !data[key]) {
+          target[key] = 200
         }else {
           target[key] = data[key]
         }
