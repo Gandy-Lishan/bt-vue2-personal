@@ -378,17 +378,14 @@ import { isJson } from '@/utils';
               
               if (typeof last_value === 'number' && !isNaN(last_value)) {
                   // 如果 last_value 是数字类型
-                  if (last_change_type === 'percent') {
-                    last_value = (last_value / 100).toFixed(2);  // 处理百分比
-                  } else {
                     last_value = last_value.toFixed(2);  // 处理一般的数值
-                  }
               } else {
                   console.error('last_value 不是一个有效的数字:', last_value, typeof last_value);
                   last_value = null;  // 或者根据需求设置一个默认值或错误标识
               }
           }
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
+          console.log('last_value_chart', last_value)
           if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
