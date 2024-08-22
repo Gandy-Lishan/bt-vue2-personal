@@ -1230,7 +1230,7 @@ export default {
       let xlsxName = null
       if(!data || !data.length) {
         await this.fetchIndicatorsPageList(type)
-        data = this.indicatorsListData[type] || []
+        data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
       }
       if (!data.length) {
         this.popUpMsgBox('No data available for download')

@@ -368,6 +368,7 @@ export default {
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         this.tableData.splice(scope.$index, 1)
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
         console.log('this.tableData', this.tableData)
       } catch (error) {
         console.warn('移除收藏夹失败', error)
@@ -572,7 +573,7 @@ export default {
       let xlsxName = null
       if(!data || !data.length) {
         await this.fetchIndicatorsPageList(type)
-        data = this.indicatorsListData[type] || []
+        data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
       }
       if (!data.length) {
         this.popUpMsgBox('No data available for download')
