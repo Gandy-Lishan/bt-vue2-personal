@@ -1248,7 +1248,7 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Groups', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
       const keysMap = new Map([
@@ -1258,7 +1258,8 @@ export default {
         ['time_frame', 'Time Frame'],
         ['last_value', 'Value'],
         ['last_change', 'Change'],
-        ['last_update', 'Date']
+        ['last_update', 'Date'],
+        ['sentiment', 'Sentiment'],
       ])
       if(type === 'etf_breadth') keysMap.set('chart_name', 'Breadth Measure')
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}

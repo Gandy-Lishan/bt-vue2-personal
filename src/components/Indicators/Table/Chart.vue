@@ -9,7 +9,6 @@
  import Exporting from 'highcharts/modules/exporting';
  import ExportData from 'highcharts/modules/export-data';
  import axios from "@/axios";
-import { isJson } from '@/utils';
  
  export default {
   name: 'Chart',
