@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name} = this.row;
+      const {url, pess, opt, chart_name, market_symbol} = this.row;
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -69,8 +69,7 @@
             button.style.background = 'unset';
  
             button.onclick = function () {
-              const indexParam = url || 'etf_spy';
-              window.open(`/backtester/sr/setup?index=${indexParam}&indicator=${url}`, '_blank')
+              window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${url}`, '_blank')
             };
  
             chart.container.parentNode.style.position = 'relative';
