@@ -206,13 +206,24 @@ export default {
 			resu.push(...this.favoritesBtv1List.map(item=>({
         ...item,
 				source:'Backtest Engine v1.0'})))
-      console.log('BTV1', resu)
 			// 去重
-			resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
-					return resu.find(item => item.url === url);
-			});
+      resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+          // 查找相同 url 的项目
+          let item = resu.find(item => item.url === url);
+          // 如果来源为 v1.0，修改为 v2.0
+          if (item?.source === 'Backtest Engine v1.0') {
+              item.source = 'Backtest Engine v2.0';
+          }
+          return item;
+      });
       console.log('resu', resu)
-
+      if(Array.isArray(this.favoritesBtv1List) && this.favoritesBtv1List.length > 0) {
+        const favList = resu.map(item => ({url: item.url, name: item.chart_name}))
+        await this.update_indicators_favorite({
+            indicator: JSON.stringify(favList),
+            symbol: JSON.stringify(this._favoriteSymbolList)
+        })
+      }
       this.tableData = this.processFavoriteData(resu)
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
 		},
@@ -514,6 +525,11 @@ export default {
           type: 'bond'
         },
         {
+          label: 'Commodity Indicator List',
+          value: 'commodity_complete_list',
+          type: 'commodity'
+        },
+        {
           label: 'ETF Sector List',
           value: 'etf_complete_list',
           type: 'ETFSector'
@@ -591,12 +607,12 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
-      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Groups', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
       const keysMap = new Map([
         ['chart_name', 'Name'],
-        ['sub_type', 'Groups'],
+        ['sub_type', 'Group'],
         ['timeframe', 'Time Frame'],
         ['time_frame', 'Time Frame'],
         ['last_value', 'Value'],
