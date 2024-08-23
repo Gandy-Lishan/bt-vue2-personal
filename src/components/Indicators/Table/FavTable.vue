@@ -205,23 +205,17 @@ export default {
         ...item,
 				source:'Backtest Engine v1.0'})))
 			// 去重
-      resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
-          // 查找相同 url 的项目
-          let item = resu.find(item => item.url === url);
-          // 如果来源为 v1.0，修改为 v2.0
-          if (item?.source === 'Backtest Engine v1.0') {
-              item.source = 'Backtest Engine v2.0';
-          }
-          return item;
-      });
+      resu = Object.values(
+          resu.reduce((acc, item) => {
+              const { url, source } = item;
+              // 如果相同的 url 不存在，或者存在但 source 为 v1.0, 则更新
+              if (!acc[url] || source === 'Backtest Engine v1.0') {
+                  acc[url] = item;
+              }
+              return acc;
+          }, {})
+      );
       console.log('resu', resu)
-      if(Array.isArray(this.favoritesBtv1List) && this.favoritesBtv1List.length > 0) {
-        const favList = resu.map(item => ({url: item.url, name: item.chart_name}))
-        await this.update_indicators_favorite({
-            indicator: JSON.stringify(favList),
-            symbol: JSON.stringify(this._favoriteSymbolList)
-        })
-      }
       this.tableData = this.processFavoriteData(resu)
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
 		},
