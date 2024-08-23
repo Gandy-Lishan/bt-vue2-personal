@@ -688,6 +688,7 @@ export default {
       if(!indicator) return
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
+      if(!ele) ele = CIQ.findSentiIndicator(null, `${indicator}@indicator`)
       ele = {...ele, value: ele.chart_name}
       if(this.criteria.startsWith('entry')) {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
       LocalStorageUtil.remove('indicator')
