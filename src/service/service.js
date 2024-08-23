@@ -1458,7 +1458,7 @@ export function getFavorite() {
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(path, { cache: true, withCredentials: true })
+			.get(path, { cache: false, withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})
@@ -1476,7 +1476,7 @@ export function updateFavorite(indicator,symbol) {
 	return new Promise((resolve, reject) => {
 		axios
 			.put(path, mqs.stringify(mFavorite), {
-				cache: true,
+				cache: false,
 				withCredentials: true
 			})
 			.then(res => {
