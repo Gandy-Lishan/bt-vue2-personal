@@ -174,12 +174,10 @@ export default {
 		console.log('favoritesBTV2List', this.favoritesBtv2List)
 	},
   methods: {
-    ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
+    ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList', 'get_indicator_page_btv1_list']),
 		async see() {
 			this.loading = true
-			console.log('favoritesBTV1List', this.favoritesBtv1List)
-			console.log('indicatorsList', this.indicatorsList)
-			console.log('favoritesBTV2List', this.favoritesBtv2List)
+      await this.get_indicator_page_btv1_list()
 			const fetchData = async (res) => {
 			try {
 					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));

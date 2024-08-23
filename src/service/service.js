@@ -1441,7 +1441,7 @@ export function obtainBTV1IndicatorsList() {
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(path, { cache: true, withCredentials: true })
+			.get(path, { cache: false, withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})
