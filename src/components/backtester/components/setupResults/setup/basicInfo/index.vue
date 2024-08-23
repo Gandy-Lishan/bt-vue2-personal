@@ -463,8 +463,7 @@
                         {{bdFormLabel['market_environment']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest a specific market environments like a <br /> 'bull
-                            market', select the environment here.</span>
+                            >If you'd like to backtest a specific market environments like a <br /> 'Above 200-bar Moving Average', select the environment here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -520,7 +519,7 @@
                         {{bdFormLabel['index_moving_average_slope']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest based on the slope of the 252 Days Moving Average of the Index, <br />select the appropriate slope direction here.</span>
+                            >If you'd like to backtest based on the slope of the Moving Average of the Index, <br />select the appropriate period and slope direction here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
