@@ -15,6 +15,9 @@
       <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></SeasonalityChart>
     </div>
+    <div class="footer-des">
+      <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
+    </div>
   </div>
 </template>
 
@@ -22,6 +25,7 @@
 import Table from "./Table";
 import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
+import Description from "./Description";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -29,7 +33,8 @@ export default {
   name: 'ForTest',
   provide() {
     return {
-      toggleEnlarge: this.toggleEnlarge
+      toggleEnlarge: this.toggleEnlarge,
+      checkedOption: this.checkedOption,
     };
   },
   data () {
@@ -43,19 +48,19 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Stocks Indicator List',
+              label: 'Stock Market Sentiment',
               value: 'stock',
               type: 'stock',
               url: 'stock_complete_list'
             },
             {
-              label: 'NASDAQ 100 Optix',
+              label: 'NASDAQ 100 Stock Sentiment',
               value: 'NASDAQ',
               type: 'stock',
               url: 'ndx_100_complete_list',
             },
             {
-              label: 'S&P 1500 Optix',
+              label: 'S&P 1500 Stock Sentiment',
               value: 'SP1500',
               type: 'stock',
               url: 'sp_1500_complete_list',
@@ -70,13 +75,13 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Bond Indicator List',
+              label: 'Bond Market Sentiment',
               value: 'bond',
               type: 'bond',
               url: 'bond_complete_list'
             },
             {
-              label: 'Commodity Indicator List',
+              label: 'Commodity Market Sentiment',
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'
@@ -91,7 +96,7 @@ export default {
         //   keyProp: 'url',
         //   options: [
         //     {
-        //       label: 'Commodity Indicator List',
+        //       label: 'Commodity Market Sentiment',
         //       value: 'commodity',
         //       type: 'commodity'
         //     }
@@ -105,7 +110,7 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'ETF Sector List',
+              label: 'Most Active ETF Sentiment',
               value: 'ETFSector',
               type: 'ETF',
               url: 'etf_complete_list'
@@ -117,19 +122,19 @@ export default {
               url: 'etf_breadth'
             },
             {
-              label: 'ETF Fund Flow',
+              label: 'Most Active ETF Fund Flow',
               value: 'ETFFundFlow',
               type: 'ETF',
               url: 'etf_flow'
             },
             {
-              label: 'ETF Monthly Fund Flow',
+              label: 'Monthly Fund Flow',
               value: 'ETFMonthlyFund',
               type: 'ETF',
               url: 'monthly_fund_flows'
             },
             {
-              label: 'ETF Shares Outstanding',
+              label: 'Most Active ETF Shares Outstanding',
               value: 'ETFShares',
               type: 'ETF',
               url: 'shares_outstanding'
@@ -144,7 +149,7 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Commodity Seasonality',
+              label: 'Commodity Market Seasonality',
               value: 'CommoditySeasonality',
               type: 'seasonality',
               url: 'commod_seasonality'
@@ -156,7 +161,7 @@ export default {
               url: 'etf_seasonality'
             },
             {
-              label: 'Bond Seasonality',
+              label: 'Bond Market Seasonality',
               value: 'BondSeasonality',
               type: 'seasonality',
               url: 'bond_seasonality'
@@ -171,7 +176,7 @@ export default {
         //   keyProp: 'url',
         //   options: [
         //     {
-        //       label: 'Stocks Indicator List',
+        //       label: 'Stock Market Sentiment',
         //       value: 'stock',
         //       type: 'mostPopular',
         //     }
@@ -180,13 +185,15 @@ export default {
       ],
       displayRow: {},
       enlargedTable: null,
-      chartHight: '700px'
+      chartHight: '700px',
+      checkedType: null
     }
   },
   components: {
     Chart,
     Table,
-    SeasonalityChart
+    SeasonalityChart,
+    Description
   },
   computed: {
     ...mapGetters({
@@ -227,6 +234,9 @@ export default {
       } else {
         this.enlargedTable = label; // Enlarge the clicked table
       }
+    },
+    checkedOption(checkedType) {
+      this.checkedType = checkedType
     },
     updateChart(row) {
       console.log('updateChart', row)

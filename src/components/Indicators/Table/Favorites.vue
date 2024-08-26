@@ -14,6 +14,9 @@
       <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
       <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
     </div>
+    <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
   </div>
  </template>
  
@@ -21,6 +24,7 @@
  import FavTable from "./FavTable";
  import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
+import Description from "./Description";
  
  export default {
   name: 'ForTest',
@@ -48,7 +52,8 @@ import SeasonalityChart from "./SeasonalityChart"
   components: {
     Chart,
     FavTable,
-    SeasonalityChart
+    SeasonalityChart,
+    Description
   },
   methods: {
     updateChart(row) {

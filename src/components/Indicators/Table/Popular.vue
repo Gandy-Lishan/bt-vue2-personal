@@ -13,12 +13,16 @@
      </template>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
+   <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
  </div>
 </template>
 
 <script>
 import Table from "./Table";
 import Chart from "./Chart"
+import Description from "./Description";
 import { mapActions, mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -53,7 +57,8 @@ export default {
   },
  components: {
    Chart,
-   Table
+   Table,
+   Description
  },
  methods: {
    updateChart(row) {
