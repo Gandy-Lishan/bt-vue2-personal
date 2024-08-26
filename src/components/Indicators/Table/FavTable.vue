@@ -549,7 +549,7 @@ export default {
         {
           label: 'Commodity Seasonality',
           value: 'commod_seasonality',
-          value: 'CommoditySeasonality'
+          type: 'CommoditySeasonality'
         },
         {
           label: 'Bond Seasonality',

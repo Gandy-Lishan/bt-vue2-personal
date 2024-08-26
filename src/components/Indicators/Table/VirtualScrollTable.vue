@@ -347,6 +347,12 @@ export default {
               minWidth: '150px'
             },
             {
+              key: 'underlying_name',
+              label: 'Name',
+              value: 'underlying_name',
+              minWidth: '100px'
+            },
+            {
               key: 'sub_type',
               label: 'Groups',
               value: 'sub_type',
@@ -1173,6 +1179,11 @@ export default {
           type: 'bond'
         },
         {
+          label: 'Commodity Indicator List',
+          value: 'commodity_complete_list',
+          type: 'commodity'
+        },
+        {
           label: 'ETF Sector List',
           value: 'etf_complete_list',
           type: 'ETFSector'
@@ -1200,7 +1211,7 @@ export default {
         {
           label: 'Commodity Seasonality',
           value: 'commod_seasonality',
-          value: 'CommoditySeasonality'
+          type: 'CommoditySeasonality'
         },
         {
           label: 'Bond Seasonality',
@@ -1248,12 +1259,12 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Groups', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
-      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Groups', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
       const keysMap = new Map([
         ['chart_name', 'Name'],
-        ['sub_type', 'Groups'],
+        ['sub_type', 'Group'],
         ['timeframe', 'Time Frame'],
         ['time_frame', 'Time Frame'],
         ['last_value', 'Value'],
@@ -1261,12 +1272,13 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment'],
       ])
-      if(type === 'etf_breadth') keysMap.set('chart_name', 'Breadth Measure')
+      if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
-      if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) keysMap.set('chart_name', 'Symbol')
+      if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
+      if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
