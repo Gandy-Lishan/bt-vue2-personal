@@ -1113,3 +1113,6 @@ button#checkResBtn {
 .virtual-table tr.highlighted {
   background-color: yellow;
 }
+.virtual-table tr.even {
+  background-color: #f6f3f3;
+}
