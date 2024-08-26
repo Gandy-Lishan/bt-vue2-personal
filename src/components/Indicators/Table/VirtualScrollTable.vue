@@ -3,7 +3,7 @@
   <div>
     <div class="header-span">
       <span>{{ label }}</span>
-      <el-tooltip effect="dark" placement="top" content="Enlarge to View">
+      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Exit Full Screen' : 'Enlarge to View'">
         <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
       </el-tooltip>
     </div>
@@ -98,6 +98,9 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
+  <div class="dataTables_info" v-show="enlarged && pageLength">
+    {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
+  </div>
 </div>
 </template>
 
@@ -129,7 +132,7 @@ export default {
   components: {
     VirtualScroll
   },
-  inject: ['toggleEnlarge', 'removeIndicatorsFavorites'],
+  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption'],
   data() {
     return {
       virtualList: [],
@@ -891,6 +894,9 @@ export default {
       })
       return columns
     },
+    pageLength() {
+      return this.tableData.length || 0
+    }
   },
   watch: {
 		label: {
@@ -912,7 +918,7 @@ export default {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
       if(this._loading) return
-      if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.enlarged = !this.enlarged;this.toggleEnlarge(this.label);}
+      if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.enlarged = !this.enlarged;this.toggleEnlarge(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
         if(option) await this.changeOption(option, false)
@@ -932,7 +938,8 @@ export default {
     async changeOption(item, isUpdateChart) {
       if(this.options.length === 1) return
       this.$refs[`${this.refName}Table`].clearSort()
-      this.checkedType = item.value;     
+      this.checkedType = item.value; 
+      this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
       })
@@ -1153,27 +1160,27 @@ export default {
       // 访问组件示例数据
       const checks = [
         {
-          label: 'Stocks Indicator List',
+          label: 'Stock Market Sentiment',
           value: 'stock_complete_list',
           type: 'stock'
         },
         {
-          label: 'NASDAQ 100 Optix',
+          label: 'NASDAQ 100 Stock Sentiment',
           value: 'ndx_100_complete_list',
           type: 'NASDAQ'
         },
         {
-          label: 'S&P 1500 Optix',
+          label: 'S&P 1500 Stock Sentiment',
           value: 'sp_1500_complete_list',
           type: 'SP1500'
         },
         {
-          label: 'Bond Indicator List',
+          label: 'Bond Market Sentiment',
           value: 'bond_complete_list',
           type: 'bond'
         },
         {
-          label: 'ETF Sector List',
+          label: 'Most Active ETF Sentiment',
           value: 'etf_complete_list',
           type: 'ETFSector'
         },
@@ -1183,27 +1190,27 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
-          label: 'ETF Fund Flow',
+          label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
         },
         {
-          label: 'ETF Monthly Fund Flow',
+          label: 'Monthly Fund Flow',
           value: 'monthly_fund_flows',
           type: 'ETFMonthlyFund'
         },
         {
-          label: 'ETF Shares Outstanding',
+          label: 'Most Active ETF Shares Outstanding',
           value: 'shares_outstanding',
           type: 'ETFShares'
         },
         {
-          label: 'Commodity Seasonality',
+          label: 'Commodity Market Seasonality',
           value: 'commod_seasonality',
           value: 'CommoditySeasonality'
         },
         {
-          label: 'Bond Seasonality',
+          label: 'Bond Market Seasonality',
           value: 'bond_seasonality',
           type: 'BondSeasonality'
         },
@@ -1321,7 +1328,8 @@ export default {
         // });
         return 'highlighted';
       }
-      return '';
+      if(rowIndex % 2 === 0) return 'even'
+      return ''
     },
     clearHighlightValue() {
       if(this.highlightValue !== '') this.highlightValue = ''
@@ -1342,6 +1350,7 @@ export default {
   /deep/.el-table__body-wrapper.is-scrolling-none {
     height: 585px !important;
   }
+  border: 2px solid  #e9e9e9;
 }
 
 .header-span {
@@ -1416,7 +1425,7 @@ export default {
     .cell {
       font-weight: 600;
       color: #333;
-      padding-left: 0px;
+      padding: 5px 0px 5px 0px;
     }
   }
   /deep/ th.el-table__cell.gutter:last-of-type{
@@ -1457,5 +1466,10 @@ export default {
   /deep/ .highlighted {
     background-color: yellow;
   }
+}
+.dataTables_info {
+  color: #333;
+  font-weight: 500;
+  margin-top: 10px;
 }
 </style>
