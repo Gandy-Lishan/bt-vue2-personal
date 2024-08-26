@@ -33,14 +33,14 @@ export default {
     return {
       tableInfoList: [
         {
-          label: 'Commodity Indicator List',
+          label: 'Commodity Market Sentiment',
           type: 'commodity',
           refName: 'commodityVirtualScroll',
           itemSize: 40,
           keyProp: 'url',
           options: [
             {
-              label: 'Commodity Indicator List',
+              label: 'Commodity Market Sentiment',
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'

@@ -497,32 +497,32 @@ export default {
       // 访问组件示例数据
       const checks = [
         {
-          label: 'Stocks Indicator List',
+          label: 'Stock Market Sentiment',
           value: 'stock_complete_list',
           type: 'stock'
         },
         {
-          label: 'NASDAQ 100 Optix',
+          label: 'NASDAQ 100 Stock Sentiment',
           value: 'ndx_100_complete_list',
           type: 'NASDAQ'
         },
         {
-          label: 'S&P 1500 Optix',
+          label: 'S&P 1500 Stock Sentiment',
           value: 'sp_1500_complete_list',
           type: 'SP1500'
         },
         {
-          label: 'Bond Indicator List',
+          label: 'Bond Market Sentiment',
           value: 'bond_complete_list',
           type: 'bond'
         },
         {
-          label: 'Commodity Indicator List',
+          label: 'Commodity Market Sentiment',
           value: 'commodity_complete_list',
           type: 'commodity'
         },
         {
-          label: 'ETF Sector List',
+          label: 'Most Active ETF Sentiment',
           value: 'etf_complete_list',
           type: 'ETFSector'
         },
@@ -532,27 +532,27 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
-          label: 'ETF Fund Flow',
+          label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
         },
         {
-          label: 'ETF Monthly Fund Flow',
+          label: 'Monthly Fund Flow',
           value: 'monthly_fund_flows',
           type: 'ETFMonthlyFund'
         },
         {
-          label: 'ETF Shares Outstanding',
+          label: 'Most Active ETF Shares Outstanding',
           value: 'shares_outstanding',
           type: 'ETFShares'
         },
         {
-          label: 'Commodity Seasonality',
+          label: 'Commodity Market Seasonality',
           value: 'commod_seasonality',
           value: 'CommoditySeasonality'
         },
         {
-          label: 'Bond Seasonality',
+          label: 'Bond Market Seasonality',
           value: 'bond_seasonality',
           type: 'BondSeasonality'
         },
@@ -693,7 +693,7 @@ export default {
       text-align: center;
       font-size: 14px;
       font-weight: 700;
-      padding: 5px 0;
+      padding: 8px 0;
       border-left: 2px solid #d9d9d9;
     }
     svg {
