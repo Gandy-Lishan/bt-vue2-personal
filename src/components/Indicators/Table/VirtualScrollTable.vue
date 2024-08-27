@@ -1,6 +1,7 @@
 <template>
 <div>
   <div>
+    checkedType{{checkedType}}
     <div class="header-span">
       <span>{{ label }}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Exit Full Screen' : 'Enlarge to View'">
@@ -18,6 +19,47 @@
         </el-tooltip>
       </template>
     </div>
+  </div>
+  <div class="filter-div">
+<el-row>
+  <el-col :span="18">
+    <el-row>
+      <div class="btns">
+        <el-button size="small"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+        <div class="select-option">
+          <span>Group</span>
+          <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test">
+          <el-option
+            v-for="item in groupsOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </div>
+        <div class="select-option">
+          <span>Time Frame</span>
+          <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test">
+          <el-option
+            v-for="item in timeframeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </div>
+      </div>
+    </el-row>
+  </el-col>
+  <el-col :span="6">
+    <el-input
+      size="small"
+      placeholder="Search"
+      v-model="input"
+      clearable>
+    </el-input>
+  </el-col>
+</el-row>
   </div>
   <virtual-scroll
       :ref="refName"
@@ -148,7 +190,24 @@ export default {
       checkedType: this.type,
       enlarged: false,
       isMostPopular: false,
-      highlightValue: ''
+      highlightValue: '',
+      groupsFilter: '',
+      timeframeFilter: '',
+      groupsOptions:  [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: 'Breadth', label: 'Breadth' },
+        { value: 'Cash', label: 'Cash' },
+        { value: 'COT', label: 'COT' },
+        { value: 'Index', label: 'Index' },
+        { value: 'Insiders', label: 'Insiders' },
+        { value: 'Optix', label: 'Optix' },
+        { value: 'PutCall', label: 'PutCall' },
+        { value: 'Rydex', label: 'Rydex' },
+        { value: 'Shorts', label: 'Shorts' },
+        { value: 'Surveys', label: 'Surveys' },
+        { value: 'Volatility', label: 'Volatility' }
+      ],
     }
   },
   computed: {
@@ -902,7 +961,18 @@ export default {
     },
     pageLength() {
       return this.tableData.length || 0
-    }
+    },
+    groupsOptions() {
+    },
+    timeframeOptions() {
+      const timeframes = this.tableData.map(item => item.timeframe)
+      debugger
+      // 去重
+      const _timeframes = [...new Set(timeframes)]
+      return _timeframes.map(item => {
+        return {label: item, value: item}
+      })
+    },
   },
   watch: {
 		label: {
@@ -1496,5 +1566,31 @@ export default {
   color: #333;
   font-weight: 500;
   margin-top: 10px;
+}
+.filter-div {
+  padding: 10px 5px;
+  border-left: 2px solid #d9d9d9;
+  border-right: 2px solid #d9d9d9;
+  /deep/ .el-input__inner {
+    margin-left: 0px;
+  }
+  .btns {
+    .el-button{
+      margin-right: 10px;
+    }
+  }
+  .select-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9d9d9;
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 3px;
+    span {
+      font-size: 14px;
+      margin-right: 5px
+    }
+  }
 }
 </style>
