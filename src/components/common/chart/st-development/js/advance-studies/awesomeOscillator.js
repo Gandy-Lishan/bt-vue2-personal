@@ -109,4 +109,4 @@ if (!CIQ.Studies) {
 }
 
 };
-epxort {__js_advanced_studies_awesomeOscillator_}
+export {__js_advanced_studies_awesomeOscillator_}

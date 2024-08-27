@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_ulcerIndex_ = (_exports) => {
@@ -39,25 +39,33 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateUlcerIndex = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < 2 * sd.days - 1) {
-			sd.error = true;
-			return;
-		}
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < 2 * sd.days - 1) {
+					sd.error = true;
+					return;
+				}
 
 		function getHV(p, x, f) {
 			var h = null;
 			for (var j = x - p + 1; j <= x; j++) {
 				if (j < 0) continue;
-				h = h === null ? quotes[j][f] : Math.max(h, quotes[j][f]);
+				h = h === null ? getPropertyByString(quotes[j],field,f) : Math.max(h, getPropertyByString(quotes[j],field,f));
 			}
 			return h;
 		}
 		var i;
 		for (i = Math.max(sd.startFrom, sd.days - 1); i < quotes.length; i++) {
 			quotes[i]["_PD2 " + sd.name] = Math.pow(
-				100 * (quotes[i][field] / getHV(sd.days, i, field) - 1),
+				100 * (getPropertyByString(quotes[i],field,subField) / getHV(sd.days, i, subField) - 1),
 				2
 			);
 		}
@@ -82,4 +90,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_ulcerIndex_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_ulcerIndex_}

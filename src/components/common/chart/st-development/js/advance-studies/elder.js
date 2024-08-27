@@ -239,6 +239,7 @@ if (!CIQ.Studies) {
 			inputs: { Period: 13 },
 			outputs: { "Elder Bull Power": "#00DD00", "Elder Bear Power": "#FF0000" }
 		},
+		/** 无需处理dual symbol */
 		"Elder Impulse": {
 			name: "Elder Impulse System",
 			calculateFN: CIQ.Studies.calculateElderImpulse,

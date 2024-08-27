@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_ehlerFisher_ = (_exports) => {
@@ -39,6 +39,13 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateEhlerFisher = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -48,7 +55,7 @@ if (!CIQ.Studies) {
 			var l = Number.MAX_VALUE,
 				h = Number.MAX_VALUE * -1;
 			for (var j = x - p + 1; j <= x; j++) {
-				var d = (quotes[j].High + quotes[j].Low) / 2;
+				var d = (getPropertyByString(quotes[j],field,'High') + getPropertyByString(quotes[j],field,'Low')) / 2;
 				l = Math.min(l, d);
 				h = Math.max(h, d);
 			}
@@ -68,7 +75,7 @@ if (!CIQ.Studies) {
 			n =
 				0.33 *
 					2 *
-					(((quotes[i].High + quotes[i].Low) / 2 - lh[0]) /
+					(((getPropertyByString(quotes[i],field,'High') + getPropertyByString(quotes[i],field,'Low')) / 2 - lh[0]) /
 						Math.max(0.000001, lh[1] - lh[0]) -
 						0.5) +
 				0.67 * n;
@@ -93,4 +100,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_ehlerFisher_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_ehlerFisher_}

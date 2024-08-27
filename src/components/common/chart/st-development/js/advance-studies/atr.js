@@ -188,6 +188,7 @@ if (!CIQ.Studies) {
 // 	sd.outputMap["All Stops " + sd.name] = "";
 // };
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
+		/** 无需处理dual symbol */
 		ATR: {
 			name: "Average True Range",
 			calculateFN: CIQ.Studies.calculateStudyATR,

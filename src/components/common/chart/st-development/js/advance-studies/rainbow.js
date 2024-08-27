@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_rainbow_ = (_exports) => {
@@ -37,28 +37,39 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateRainbow = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
+
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				var subField = field
+
+				var f = field;
+				for (var j = 1; j <= 10; j++) {
+					CIQ.Studies.MA("simple", sd.days, f, 0, "SMA" + j, stx, sd);
+					f = "SMA" + j + " " + sd.name;
+				}
+
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
+		
+				if (quotes.length < sd.days + 1) {
+					sd.error = true;
+					return;
+				}
 
 		function getLLVHHV(p, x) {
 			var h = Number.MAX_VALUE * -1,
 				l = Number.MAX_VALUE;
 			for (var j = x - p + 1; j <= x; j++) {
 				if (j < 0) continue;
-				h = Math.max(h, quotes[j].Close);
-				l = Math.min(l, quotes[j].Close);
+				h = Math.max(h, getPropertyByString(quotes[j],field,'Close'));
+				l = Math.min(l, getPropertyByString(quotes[j],field,'Close'));
 			}
 			return [l, h];
-		}
-
-		var f = field;
-		for (var j = 1; j <= 10; j++) {
-			CIQ.Studies.MA("simple", sd.days, f, 0, "SMA" + j, stx, sd);
-			f = "SMA" + j + " " + sd.name;
 		}
 
 		for (var i = Math.max(sd.startFrom, 10); i < quotes.length; i++) {
@@ -81,7 +92,7 @@ if (!CIQ.Studies) {
 				var lh = getLLVHHV(sd.inputs["HHV/LLV Lookback"], i);
 				if (count) {
 					quotes[i][sd.name + "_hist"] =
-						(100 * (quotes[i][field] - accum / count)) /
+						(100 * (getPropertyByString(quotes[i],field,subField) - accum / count)) /
 						Math.max(0.000001, lh[1] - lh[0]);
 					quotes[i]["Over " + sd.name] =
 						(100 * (max - min)) / Math.max(0.000001, lh[1] - lh[0]);
@@ -203,6 +214,7 @@ if (!CIQ.Studies) {
 	};
 
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
+		/** 无需处理dual symbol */
 		"Rainbow MA": {
 			name: "Rainbow Moving Average",
 			overlay: true,
@@ -234,4 +246,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_rainbow_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_rainbow_}
