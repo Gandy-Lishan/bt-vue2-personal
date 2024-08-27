@@ -9,9 +9,6 @@
         autocomplete="off"
       />
     </div>
-    <!-- <button @click="filterEvent" id="searchSelected">
-      {{ filterButton }}<i class="fa fa-angle-down" aria-hidden="true"></i>
-    </button> -->
     <div v-if="suggestions.length">
       <div v-for="suggestion in suggestions" :key="suggestion.objectID">
         <div v-if="suggestion._highlightResult.chart_name">
