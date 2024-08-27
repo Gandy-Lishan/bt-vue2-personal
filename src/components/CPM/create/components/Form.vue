@@ -365,7 +365,7 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
-        condition: 'None',
+        condition: 0,
         period: 200
       },
       dropdownList: [],
@@ -377,9 +377,9 @@ export default {
         { value: 'Monthly', label: 'Monthly' }
       ],
       conditionOptions: [
-        { value: 'None', label: 'None' },
-        { value: 'Above', label: 'Above' },
-        { value: 'Below', label: 'Below' }
+        { value: 0, label: 'None' },
+        { value: 1, label: 'Above' },
+        { value: 2, label: 'Below' }
       ],
       directionOptions: [
         { value: 'Long', label: 'Long' },
@@ -886,7 +886,7 @@ export default {
           else {target['year'] = ''}
         }else if(key === 'condition' && !data[key]) {
           // 默认 None
-          target[key] = 'None'
+          target[key] = 0
         }else if(key === 'period' && !data[key]) {
           target[key] = 200
         }else {
