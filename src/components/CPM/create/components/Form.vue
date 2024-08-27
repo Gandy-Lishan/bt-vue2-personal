@@ -54,6 +54,31 @@
         </el-autocomplete>
       </el-form-item>
     </el-col>
+    <el-col :span="6">
+      <el-form-item prop="ma_condition" label="3. Condition">
+        <el-select
+            v-model="data.ma_condition"
+            placeholder="— Select Condition —"
+          >
+            <el-option
+              v-for="item in conditionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item
+        label="4. Period"
+        prop="ma"
+      >
+        <el-input v-model="data.ma">
+        </el-input>
+      </el-form-item>
+    </el-col>
   </el-row>
   </el-form>
   <el-form
@@ -341,8 +366,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
-        condition: 0,
-        period: 200
+        ma_condition: 0,
+        ma: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -436,7 +461,12 @@ export default {
           { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
+        ],
+        ma: [
+          { validator: createPositiveIntegerRule('period', 1), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('period', 1), trigger: 'change' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
@@ -830,10 +860,10 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
-        }else if(key === 'condition' && !data[key]) {
+        }else if(key === 'ma_condition' && !data[key]) {
           // 默认 None
           target[key] = 0
-        }else if(key === 'period' && !data[key]) {
+        }else if(key === 'ma' && !data[key]) {
           target[key] = 200
         }else {
           target[key] = data[key]
