@@ -53,9 +53,9 @@
       </el-form-item>
     </el-col>
     <el-col :span="6">
-      <el-form-item prop="condition" label="3. Condition">
+      <el-form-item prop="ma_condition" label="3. Condition">
         <el-select
-            v-model="data.condition"
+            v-model="data.ma_condition"
             placeholder="— Select Condition —"
           >
             <el-option
@@ -71,9 +71,9 @@
     <el-col :span="6">
       <el-form-item
         label="4. Period"
-        prop="period"
+        prop="ma"
       >
-        <el-input v-model="data.period">
+        <el-input v-model="data.ma">
         </el-input>
       </el-form-item>
     </el-col>
@@ -365,8 +365,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
-        condition: 0,
-        period: 200
+        ma_condition: 0,
+        ma: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -464,7 +464,7 @@ export default {
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
         ],
-        period: [
+        ma: [
           { validator: createPositiveIntegerRule('period', 1), trigger: 'blur' },
           { validator: createPositiveIntegerRule('period', 1), trigger: 'change' }
         ],
@@ -884,10 +884,10 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
-        }else if(key === 'condition' && !data[key]) {
+        }else if(key === 'ma_condition' && !data[key]) {
           // 默认 None
           target[key] = 0
-        }else if(key === 'period' && !data[key]) {
+        }else if(key === 'ma' && !data[key]) {
           target[key] = 200
         }else {
           target[key] = data[key]
