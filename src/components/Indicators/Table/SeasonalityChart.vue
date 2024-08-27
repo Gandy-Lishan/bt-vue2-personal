@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div :id="`line-${id}`" style="width: 100%; height: 490px;"></div>
-    <div :id="`bar-${id}`" style="width: 100%; height: 210px;"></div>
+    <div :id="`line-${id}`" style="width: 100%; height: 510px;"></div>
+    <div :id="`bar-${id}`" style="width: 100%; height: 230px;"></div>
   </div>
  </template>
  

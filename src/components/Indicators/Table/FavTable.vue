@@ -7,17 +7,53 @@
     <div class="header-span">
       <template v-for="item in tableInfo['options']">
         <span :key="item.label" :class="{activated: true, span: true}">{{ item.label }}</span>
-        <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
-          <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" @click="downloadCSV">
-            <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </el-tooltip>
       </template>
     </div>
   </div>
+  <div class="filter-div">
+    <el-row>
+      <el-col :span="18">
+        <el-row>
+          <div class="btns">
+            <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+            <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
+              <span>Group</span>
+              <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+              <el-option
+                v-for="item in groupsOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
+            <div class="select-option" v-show="Array.isArray(timeframeOptions) && timeframeOptions.length !== 0">
+              <span>Time Frame</span>
+              <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+              <el-option
+                v-for="item in timeframeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
+          </div>
+        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <el-input
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable>
+        </el-input>
+      </el-col>
+    </el-row>
+  </div>
     <virtual-scroll
-      :data="tableData"
+      :data="filterData"
       key-prop="url"
       class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
@@ -73,6 +109,9 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
+  <div class="dataTables_info" v-show="pageLength">
+    {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
+  </div>
 </div>
 </template>
 
@@ -83,7 +122,6 @@ import { capitalizeFirstLetter, unifyNumber, isJson, timestampToTime } from "@/u
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
 import cloneDeep from 'lodash/cloneDeep'
-const XLSX = require('xlsx');
 
 export default {
 	props: {
@@ -147,6 +185,12 @@ export default {
         left: '0px',
         display: 'none'
       },
+      groupsFilter: '',
+      timeframeFilter: '',
+      searchInput: '',
+      filterData: [],
+      groupsOptions: [],
+      timeframeOptions: []
     }
   },
   computed: {
@@ -156,16 +200,26 @@ export default {
       favoritesBtv2List: 'getFavoriteIndicatorList',
       _favoriteSymbolList: 'getFavoriteSymbolList',
       indicatorsListData: 'getIndicatorsPageListData'
-    })
+    }),
+    pageLength() {
+      return this.filterData.length || 0
+    }
 	},
 	watch: {
     selectedTitle: {
       async handler (title) {
         if(title === 'My Favorites'){
 					await this.see()
-					this.$emit('updateChart', this.tableData[0])
+					this.$emit('updateChart', this.tableData[0] || this.filterData[0])
 				}
       }
+    },
+    tableData: {
+      handler(newValue) {
+        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+      },
+      immediate: true,
+      depp: true
     }
   },
 	created() {
@@ -217,6 +271,12 @@ export default {
       );
       console.log('resu', resu)
       this.tableData = this.processFavoriteData(resu)
+      let _groups = [...new Set(this.tableData.map(item => item.sub_type))].map(item => ({label: item, value: item}))
+      let _timeframe = [...new Set(this.tableData.map(item => item.timeframe))].map(item => ({label: item, value: item}))
+      _groups.unshift({label: '----', value: ''})
+      _timeframe.unshift({label: '----', value: ''})
+      this.groupsOptions = _groups
+      this.timeframeOptions = _timeframe
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
 		},
     processFavoriteData(data) {
@@ -370,7 +430,7 @@ export default {
           })
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
-        this.tableData.splice(scope.$index, 1)
+        this.filterData.splice(scope.$index, 1) //todo
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
         console.log('this.tableData', this.tableData)
       } catch (error) {
@@ -413,7 +473,7 @@ export default {
 			  // 数字字符串转数字类型排序
         if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'sentiment'].indexOf(colName) !== -1) {
             if (sortingOrder == 'ascending') {
-                this.tableData.sort((a, b) => {
+                this.filterData.sort((a, b) => {
                     let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
                     let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
                     _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
@@ -421,7 +481,7 @@ export default {
                     return _b - _a
                 })
             } else if (sortingOrder == 'descending') {
-                this.tableData.sort((a, b) => {
+                this.filterData.sort((a, b) => {
                     let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
                     let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
                     _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
@@ -430,27 +490,14 @@ export default {
                 })
             }
         }
-			// 数字类型排序
-			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
-				}
-			}
 			// 日期类型排序
 			if(['last_update'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
-					this.tableData.sort((a,b) => {
+					this.filterData.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
 					})
 				}else if(sortingOrder == 'descending'){
-					this.tableData.sort((a,b) => {
+					this.filterData.sort((a,b) => {
 						return new Date(a[colName]) - new Date(b[colName])
 					})
 				}else{
@@ -459,7 +506,7 @@ export default {
       if (['last_update'].indexOf(colName) !== -1) {
         // 处理日期字符串
         const isValidDate = date => !isNaN(Date.parse(date));
-        const sortedData = this.tableData.sort((a, b) => {
+        const sortedData = this.filterData.sort((a, b) => {
         const dateA = new Date(a[colName])
         const dateB = new Date(b[colName])
         const isDateAValid = isValidDate(a[colName])
@@ -481,18 +528,17 @@ export default {
         }
         return 0
         })
-        this.tableData = sortedData
+        this.filterData = sortedData
         }
 			// 字符串类型排序
 			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
-					this.tableData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+					this.filterData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
-					this.tableData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}
 			}
 		},
-
     async downloadCSV() {
       // 访问组件示例数据
       const checks = [
@@ -658,6 +704,62 @@ export default {
       link.click();
       document.body.removeChild(link);
     },
+    
+    handleQuery: debounce(function () { this._filterData() }, 500),
+    _filterData(){
+		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
+      console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
+    },
+    filterGroups(searchResult){
+      if (this.groupsFilter) {
+        return searchResult
+        .filter(item=>(item["groups"].toLowerCase() == this.groupsFilter.toLocaleLowerCase() || item["sub_type"].toLowerCase() == this.groupsFilter.toLocaleLowerCase()))
+      }else {
+        return searchResult
+      }
+	  },
+    filterTimeFrame(searchResult){
+      if (this.timeframeFilter) {
+        return searchResult
+        .filter(item=>item["timeframe"].toLowerCase() == this.timeframeFilter.toLocaleLowerCase())
+      }else {
+        return searchResult
+      }
+	  },
+    filterIndicator(searchResult){
+      if (this.indicatorFilter) {
+        return searchResult
+        .filter(item=>(item["chart_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase() || item["underlying_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase()))
+      }else {
+        return searchResult
+      }
+	  },
+    getSearchResult() {
+      if(this.searchInput){
+        // 在搜索之前对搜索关键词进行转义
+        const trimmedStr = this.searchInput.trim()
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+        return this.tableData.filter(item => {
+            // 获取所有需要匹配的属性
+            const properties = [
+              item['chart_name'],
+              item['market_symbol'],
+              item['underlying_name'],
+              item['timeframe'],
+              item['groups'],
+              item['sub_type']
+            ];
+          // 检查任意一个属性是否匹配
+          return properties.some(property => regex.test(property));
+        });
+      }else{
+        return this.tableData
+      }
+    },
+    // 使用反斜杠转义特殊字符
+    escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
   }
 }
 </script>
@@ -680,8 +782,9 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 585px !important;
+    height: 575px !important
   }
+  border: 2px solid #e9e9e9;
 }
 
 .image-hover {
@@ -703,7 +806,7 @@ export default {
       font-size: 14px;
       font-weight: 700;
       padding: 8px 0;
-      border-left: 2px solid #d9d9d9;
+      border: 2px solid #d9d9d9;
     }
     svg {
       cursor: pointer;
@@ -796,6 +899,37 @@ export default {
   .chart-name-btn:hover {
     color: #1d4ed7;
     text-decoration: underline;
+  }
+}
+.dataTables_info {
+  color: #333;
+  font-weight: 500;
+  margin-top: 10px;
+}
+.filter-div {
+  padding: 10px 5px;
+  border-left: 2px solid #d9d9d9;
+  border-right: 2px solid #d9d9d9;
+  /deep/ .el-input__inner {
+    margin-left: 0px;
+  }
+  .btns {
+    .el-button{
+      margin-right: 10px;
+    }
+  }
+  .select-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9d9d9;
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 3px;
+    span {
+      font-size: 14px;
+      margin-right: 5px
+    }
   }
 }
 </style>
