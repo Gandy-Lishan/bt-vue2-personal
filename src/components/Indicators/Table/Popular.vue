@@ -8,17 +8,21 @@
         :tableInfo="item"
         :ref="item.refName"
         @updateChart="updateChart" 
-        :style="{ width: '60%', display: 'block' }"
+        :style="{ width: '65%', display: 'block' }"
         ></Table>
      </template>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
+   <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
  </div>
 </template>
 
 <script>
 import Table from "./Table";
 import Chart from "./Chart"
+import Description from "./Description";
 import { mapActions, mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -28,7 +32,7 @@ export default {
    return {
      tableInfoList: [
        {
-         label: 'Most Popular Charts',
+         label: 'Most Popular',
          type: 'popular',
          refName: 'popularVirtualScroll',
          itemSize: 40,
@@ -53,7 +57,8 @@ export default {
   },
  components: {
    Chart,
-   Table
+   Table,
+   Description
  },
  methods: {
    updateChart(row) {
@@ -69,7 +74,7 @@ export default {
       const findIndex = _results.findIndex(ele => ele.url === row.url)
       if(findIndex !== -1) {
         const find = _results[findIndex]
-        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite, loading: false})
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
         this.$refs[refName][0].loadMore(value)
       }
@@ -94,7 +99,7 @@ export default {
  align-items: stretch;
  flex-grow: 1;
  .indicators-chart {
-   width: 40%;
+   width: 35%;
  }
 }
 

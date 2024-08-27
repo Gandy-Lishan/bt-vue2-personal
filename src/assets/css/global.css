@@ -590,18 +590,25 @@ input[type="time"] {
 }
 .virtual-table.el-table .cell {
   font-weight: 700;
-	font-size: 10px;
+	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
   text-align: center;
   padding: 0px;
 }
+.indicator-fav-table.el-table .cell {
+  font-weight: 700;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+}
 .virtual-table.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
   padding: 2px 0px;
 }
-.virtual-table.el-table .cell.el-tooltip {
+/* .virtual-table.el-table .cell.el-tooltip {
   overflow: visible;
-}
+} */
 .strategiesTable .el-table .cell {
   font-weight: 600;
 	font-size: 15px;
@@ -915,7 +922,7 @@ button#checkResBtn {
     background-color: hsl(5, 68%, 96%);
   }
   .indexTable td.tg-0lax.r500 {
-    background-color: #ffffff;
+    background-color: hsl(5, 70%, 100%)
   }
   .tg .tg-0lax {
     text-align: left;
@@ -1102,4 +1109,10 @@ button#checkResBtn {
   .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:hover, .nav-tabs.nav-justified>.active>a:focus {
     /* border-bottom-color: #fff; */
   }
+}
+.virtual-table tr.highlighted {
+  background-color: yellow;
+}
+.virtual-table tr.even {
+  background-color: #f6f3f3;
 }

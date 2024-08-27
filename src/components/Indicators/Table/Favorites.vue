@@ -8,11 +8,14 @@
           :tableInfo="item"
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
-          :style="{ width: '60%', display: 'block' }"
+          :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
-      <SeasonalityChart :row="displayRow"  v-if="displayRow && displayRow?.type?.includes('seasonality')" class="indicators-chart" :style="{ height: '600px'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
+      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
+    </div>
+    <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
   </div>
  </template>
@@ -21,6 +24,7 @@
  import FavTable from "./FavTable";
  import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
+import Description from "./Description";
  
  export default {
   name: 'ForTest',
@@ -48,11 +52,13 @@ import SeasonalityChart from "./SeasonalityChart"
   components: {
     Chart,
     FavTable,
-    SeasonalityChart
+    SeasonalityChart,
+    Description
   },
   methods: {
     updateChart(row) {
       this.displayRow = row
+      console.log(row)
     },
   }
  }
@@ -65,7 +71,7 @@ import SeasonalityChart from "./SeasonalityChart"
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
  }
  </style>

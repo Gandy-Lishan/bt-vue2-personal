@@ -41,7 +41,7 @@ export const createPositiveIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 			callback(new Error(`Enter positive integers only`))
 		}
 		if((maxVal && (minVal !== undefined || minVal !== null)) && (value > maxVal || value < minVal)) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
-		if((minVal && (maxVal !== undefined || maxVal !== null)) && value < minVal) {callback(new Error(`Only positive integers > ${minVal} allowed`))}
+		if((minVal && (maxVal !== undefined || maxVal !== null)) && value <= minVal) {callback(new Error(`Only positive integers > ${minVal} allowed`))}
 		if((maxVal && (minVal !== undefined || minVal !== null)) && value > maxVal) {callback(new Error(`Only positive integers < ${maxVal} allowed`))}
 		callback()
 	}

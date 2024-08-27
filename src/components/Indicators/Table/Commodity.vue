@@ -7,7 +7,7 @@
          :tableInfo="item"
          :ref="item.refName"
          @updateChart="updateChart" 
-         :style="{ width: enlargedTable === item.label ? '60%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
+         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
       <Chart :id="'indiChart'" v-if="enlargedTable && displayRow?.type !== 'commod_seasonality'" :row="displayRow" class="indicators-chart" :style="{ height: '600px'}"></Chart>
@@ -33,14 +33,14 @@ export default {
     return {
       tableInfoList: [
         {
-          label: 'Commodity Indicator List',
+          label: 'Commodity Market Sentiment',
           type: 'commodity',
           refName: 'commodityVirtualScroll',
           itemSize: 40,
           keyProp: 'url',
           options: [
             {
-              label: 'Commodity Indicator List',
+              label: 'Commodity Market Sentiment',
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'
@@ -155,7 +155,7 @@ export default {
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
 }
 

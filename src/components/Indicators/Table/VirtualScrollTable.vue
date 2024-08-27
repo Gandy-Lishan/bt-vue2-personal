@@ -1,5 +1,67 @@
 <template>
-      <virtual-scroll
+<div>
+  <div>
+    checkedType{{checkedType}}
+    <div class="header-span">
+      <span>{{ label }}</span>
+      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Exit Full Screen' : 'Enlarge to View'">
+        <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
+      </el-tooltip>
+    </div>
+    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
+      <template v-for="item in options">
+        <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
+        <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="checkedType === item.value && enlarged" @click="downloadCSV">
+              <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </el-tooltip>
+      </template>
+    </div>
+  </div>
+  <div class="filter-div">
+<el-row>
+  <el-col :span="18">
+    <el-row>
+      <div class="btns">
+        <el-button size="small"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+        <div class="select-option">
+          <span>Group</span>
+          <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test">
+          <el-option
+            v-for="item in groupsOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </div>
+        <div class="select-option">
+          <span>Time Frame</span>
+          <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test">
+          <el-option
+            v-for="item in timeframeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </div>
+      </div>
+    </el-row>
+  </el-col>
+  <el-col :span="6">
+    <el-input
+      size="small"
+      placeholder="Search"
+      v-model="input"
+      clearable>
+    </el-input>
+  </el-col>
+</el-row>
+  </div>
+  <virtual-scroll
       :ref="refName"
       :data="tableData"
       :item-size="itemSize"
@@ -8,20 +70,20 @@
       @change="(renderData) => virtualList = renderData">
       <el-table
         v-el-table-infinite-scroll="loadMore"
-        ref="Table"
+        :ref="`${refName}Table`"
         class="virtual-table"
         :data="virtualList"
 				empty-text="No data"
-        stripe
         size="mini"
         row-key="url"
         v-loading="_loading"
+        :row-class-name="tableRowClassName"
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="!enlarged ? 300 : 600">
-        <el-table-column>
-          <template #header>
+        :height="!enlarged ? 300 : 620">
+        <!-- <el-table-column> -->
+          <!-- <template #header>
             <div class="header-span">
               <span>{{ label }}</span>
               <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
@@ -31,7 +93,7 @@
                 <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
               </template>
             </div>
-          </template>
+          </template> -->
           <!-- <el-table-column>
           <template #header>
             <div class="header-span">
@@ -40,7 +102,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="50px" v-if="this.enlarged">
+          <el-table-column align="center" width="35px" v-if="this.enlarged">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
@@ -67,19 +129,21 @@
             </el-table-column>
           </template>
         <!-- </el-table-column> -->
-        </el-table-column>
-        <div slot="append">
+        <!-- </el-table-column> -->
+        <!-- <div slot="append">
           <el-divider>
-            <!-- <span v-show="!isOver[checkedType]"><i class="el-icon-loading"></i> Loading...</span>
-            <span v-show="isOver[checkedType]">It's over~</span> -->
             <span>It's over~</span>
           </el-divider>
-        </div>
+        </div> -->
       </el-table>
       <div class="image-hover" :style="hoverStyle">
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
-    </virtual-scroll>
+  </virtual-scroll>
+  <div class="dataTables_info" v-show="enlarged && pageLength">
+    {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
+  </div>
+</div>
 </template>
 
 <script>
@@ -87,6 +151,7 @@ import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
+const XLSX = require('xlsx');
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -109,7 +174,7 @@ export default {
   components: {
     VirtualScroll
   },
-  inject: ['toggleEnlarge', 'removeIndicatorsFavorites'],
+  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption'],
   data() {
     return {
       virtualList: [],
@@ -124,7 +189,25 @@ export default {
       },
       checkedType: this.type,
       enlarged: false,
-      isMostPopular: false
+      isMostPopular: false,
+      highlightValue: '',
+      groupsFilter: '',
+      timeframeFilter: '',
+      groupsOptions:  [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: 'Breadth', label: 'Breadth' },
+        { value: 'Cash', label: 'Cash' },
+        { value: 'COT', label: 'COT' },
+        { value: 'Index', label: 'Index' },
+        { value: 'Insiders', label: 'Insiders' },
+        { value: 'Optix', label: 'Optix' },
+        { value: 'PutCall', label: 'PutCall' },
+        { value: 'Rydex', label: 'Rydex' },
+        { value: 'Shorts', label: 'Shorts' },
+        { value: 'Surveys', label: 'Surveys' },
+        { value: 'Volatility', label: 'Volatility' }
+      ],
     }
   },
   computed: {
@@ -133,7 +216,8 @@ export default {
       favoritesBtv1List: 'getFavoriteIndicatorListBtv1',
       favoritesBtv2List: 'getFavoriteIndicatorList',
       _favoriteSymbolList: 'getFavoriteSymbolList',
-      indicatorsListData: 'getIndicatorsPageListData'
+      indicatorsListData: 'getIndicatorsPageListData',
+      clearIndiTableHighlighted: 'getClearIndiTableHighlighted'
     }),
     _loading() {
       return this.loading
@@ -169,7 +253,7 @@ export default {
               key: 'last_change',
               label: 'Change',
               value: 'last_change',
-              addPercentSign: true
+              addPercentSign: true,
             },
             {
               key: 'last_update',
@@ -323,6 +407,12 @@ export default {
               label: 'Symbol',
               value: 'chart_name',
               minWidth: '150px'
+            },
+            {
+              key: 'underlying_name',
+              label: 'Name',
+              value: 'underlying_name',
+              minWidth: '100px'
             },
             {
               key: 'sub_type',
@@ -863,42 +953,79 @@ export default {
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
-      if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key))
+      if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
+        if(item.key === 'chart_name') item.minWidth = '200px'
+        return item
+      })
       return columns
+    },
+    pageLength() {
+      return this.tableData.length || 0
+    },
+    groupsOptions() {
+    },
+    timeframeOptions() {
+      const timeframes = this.tableData.map(item => item.timeframe)
+      debugger
+      // 去重
+      const _timeframes = [...new Set(timeframes)]
+      return _timeframes.map(item => {
+        return {label: item, value: item}
+      })
     },
   },
   watch: {
 		label: {
 			handler(newValue){
-        if(newValue === 'Most Popular Charts') {
+        if(newValue === 'Most Popular') {
           this.isMostPopular = true
           this.enlarged = true
         }
 			},
       immediate: true
-		}
+		},
+    clearIndiTableHighlighted: {
+      handler(newValue) {
+        if(newValue) this.highlightValue = ''
+      }
+    }
 	},
   methods: {
-    ...mapActions('chart', ['update_indicators_favorite']),
-    _toggleEnlarge() {
-      this.toggleEnlarge(this.label)
-      this.enlarged = !this.enlarged
+    ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
+    async _toggleEnlarge(checked, row) {
+      if(this._loading) return
+      if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.enlarged = !this.enlarged;this.toggleEnlarge(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
+      if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
+        const option = this.options.find(item => item.value === checked)
+        if(option) await this.changeOption(option, false)
+      }
+      if(checked && typeof checked === 'string' && row && row?.chart_name) {
+        // 图表显示和排序高亮
+        if(!this.enlarged) {this.toggleEnlarge(this.label);this.enlarged = true}
+        this.$emit("updateChart", row || {})
+        this.highlightValue = row.chart_name
+        return
+      }
       this.$emit("updateChart", this.firstRow || {})
     },
     async loadMore () {
       // await this.$emit('loadMore', this.checkedType)
     },
-    async changeOption(item) {
+    async changeOption(item, isUpdateChart) {
       if(this.options.length === 1) return
+      this.$refs[`${this.refName}Table`].clearSort()
       this.checkedType = item.value; 
+      this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
-        await this.$emit('loadMore', item.value, true)
+        await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
       })
+      // this.$forceUpdate()
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
         let _t = '50%'
         let _l = 0
+        let {url} = row
         const hoverElement = event.target
         const container = this.$el.querySelector('.virtual-table')
         if(hoverElement && container && column.realWidth) {
@@ -914,7 +1041,8 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent') url = url.toLowerCase()
+      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {
@@ -933,7 +1061,7 @@ export default {
       }
     },
     updateChart(row) {
-      if(!this.enlarged) {window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return}
+      if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
       this.$emit("updateChart", row)
     },
     onLoad() {
@@ -944,10 +1072,14 @@ export default {
     },
     async addRow(scope) {
       try {
-        if(scope.row.source !== 'Backtest Engine v2.0') return
+        if(scope.row.source !== 'Backtest Engine v2.0') {
+          this.popUpMsgBox('This indicator is from BTV1. Please remove it from your BTV1 favorites')
+          return
+        }
         scope.row.loading = true
         const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
-        scope.row.favorite = !scope.row.favorite
+        let flag = false
+        if(!flag) {scope.row.favorite = !scope.row.favorite; flag = true}
         let favList = cloneDeep(this.favoritesBtv2List)
         let index = favList.findIndex(item => item.url === scope.row.url)
           // 添加收藏夹但是已经在收藏夹里面了
@@ -967,13 +1099,15 @@ export default {
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         console.log('this.tableData', this.tableData)
         const url = scope.row.source_list
-        const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
-        const findIndex = _results.findIndex(ele => ele.url === scope.row.url)
-        if(findIndex !== -1) {
-          const find = _results[findIndex]
-          _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
-          this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
-        }
+        // const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        // const findIndex = _results.findIndex(ele => ele.url === scope.row.url)
+        // if(findIndex !== -1) {
+        //   const find = _results[findIndex]
+        //   _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        //   this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
+        // }
+        console.log('VirtaulScroll 保存之前的 URL', url)
+        this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // 在 Most Popular 去更新对应的表; 不在 Most Popular 去更新 Most Popular
         if(url !== 'most_popular') {
           const _url = 'most_popular'
@@ -981,7 +1115,7 @@ export default {
           const _find = _popularResults.find(ele => ele.url === scope.row.url)
           if(_find) {
             _find.source_list = 'most_popular'
-            this.removeIndicatorsFavorites([_find])
+            this.removeIndicatorsFavorites([_find], true)
           }
         }
         else if(url === 'most_popular') {
@@ -1097,7 +1231,204 @@ export default {
           });
 			  }
       }
-		}
+		},
+    async downloadCSV() {
+      // 访问组件示例数据
+      const checks = [
+        {
+          label: 'Stock Market Sentiment',
+          value: 'stock_complete_list',
+          type: 'stock'
+        },
+        {
+          label: 'NASDAQ 100 Stock Sentiment',
+          value: 'ndx_100_complete_list',
+          type: 'NASDAQ'
+        },
+        {
+          label: 'S&P 1500 Stock Sentiment',
+          value: 'sp_1500_complete_list',
+          type: 'SP1500'
+        },
+        {
+          label: 'Bond Market Sentiment',
+          value: 'bond_complete_list',
+          type: 'bond'
+        },
+        {
+          label: 'Commodity Indicator List',
+          value: 'commodity_complete_list',
+          type: 'commodity'
+        },
+        {
+          label: 'Most Active ETF Sentiment',
+          value: 'etf_complete_list',
+          type: 'ETFSector'
+        },
+        {
+          label: 'ETF Sector Breadth',
+          value: 'etf_breadth',
+          type: 'ETFSectorBreadth'
+        },
+        {
+          label: 'Most Active ETF Fund Flow',
+          value: 'etf_flow',
+          type: 'ETFFundFlow'
+        },
+        {
+          label: 'Monthly Fund Flow',
+          value: 'monthly_fund_flows',
+          type: 'ETFMonthlyFund'
+        },
+        {
+          label: 'Most Active ETF Shares Outstanding',
+          value: 'shares_outstanding',
+          type: 'ETFShares'
+        },
+        {
+          label: 'Commodity Market Seasonality',
+          value: 'commod_seasonality',
+          type: 'CommoditySeasonality'
+        },
+        {
+          label: 'Bond Market Seasonality',
+          value: 'bond_seasonality',
+          type: 'BondSeasonality'
+        },
+        {
+          label: 'ETF Seasonality',
+          value: 'etf_seasonality',
+          type: 'ETFSeasonality'
+        },
+        {
+          label: 'Most Popular Charts',
+          value: 'most_popular',
+          type: 'popular'
+        },
+        // {
+        //   label: 'My Favorites',
+        //   value: 'my_favorites',
+        //   type: 'favorite'
+        // }
+      ]
+      const type = checks.find(item => item.type === this.checkedType)?.value
+      if(!type) return
+      let data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+      let cssMonthLabel = this.cssMonthLabel
+      let xlsxName = null
+      if(!data || !data.length) {
+        await this.fetchIndicatorsPageList(type)
+        data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+      }
+      if (!data.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      /* 
+      NASDAQColumns 多 url(Symbol) z_score
+      SP1500Columns 多 url(Symbol) z_score
+      ETFSectorColumns chart_name 名为 Symbol
+      ETFSectorBreadthColumns chart_name 名为 Breadth Measure
+      ETFFundFlowColumns chart_name 名为 Symbol
+      ETFMonthlyFundColumns chart_name 名为 Symbol
+      ETFSharesColumns chart_name 名为 Symbol
+      BondSeasonalityColumns 多 win_rate, avg_return
+      CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
+      ETFSeasonalityColumns chart_name 名为 Symbol
+      */
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
+      if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
+      const keysMap = new Map([
+        ['chart_name', 'Name'],
+        ['sub_type', 'Group'],
+        ['timeframe', 'Time Frame'],
+        ['time_frame', 'Time Frame'],
+        ['last_value', 'Value'],
+        ['last_change', 'Change'],
+        ['last_update', 'Date'],
+        ['sentiment', 'Sentiment'],
+      ])
+      if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
+      if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
+      if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
+      if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
+      if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
+      if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
+      if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
+      if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {
+        // Name 放在 Symbol 前面
+        keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
+      }
+
+			const processedData = data.map(item => {
+        const obj = {}
+        const itemKeys = Array.from(Object.keys(item))
+        itemKeys.forEach(key => {
+          if(keysMap.get(key)) obj[keysMap.get(key)] = item[key]
+        })
+        return obj
+			})
+      const sortObjectKeys = (obj) => {
+      const sortedObj = {}
+        keysSort.forEach(key => {
+            if (key in obj) {
+                sortedObj[key] = obj[key]
+            }
+        })
+        return sortedObj
+      }
+      const sortedArray = processedData.map(obj => sortObjectKeys(obj))
+      const category = checks.find(item => item.value === type)
+      if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
+      if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
+      const _keySort = Array.from(Object.keys(sortedArray[0]))
+      let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key] || ''}"`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${xlsxName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    tableRowClassName({ row, rowIndex }) {
+      // 如果当前行的 `cacBelowBband` 值等于 highlightValue，就高亮该行
+      if (this.highlightValue && row.chart_name === this.highlightValue) {
+        // const targetName = row.chart_name
+        // const sortByName = (dict, targetName) => {
+        //   return dict.sort((a, b) => {
+        //       if (a.chart_name === targetName) return -1;
+        //       if (b.chart_name === targetName) return 1;
+        //       return 0;
+        //   });
+        // }
+        // this.tableData = sortByName(this.tableData, targetName)
+        // this.$nextTick(() => {
+        //   debugger
+
+        //   const tableBody = this.$refs[`${this.refName}Table`].$el.querySelector('.el-table__body-wrapper tbody');
+        //   const rows = tableBody.children;
+        //   if (rows[rowIndex]) {
+        //     rows[rowIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //   }
+        // });
+        return 'highlighted';
+      }
+      if(rowIndex % 2 === 0) return 'even'
+      return ''
+    },
+    clearHighlightValue() {
+      if(this.highlightValue !== '') this.highlightValue = ''
+    }
   }
 }
 </script>
@@ -1105,7 +1436,60 @@ export default {
 <style lang="less" scoped>
 .virtualScroll {
   position: relative;
+  /deep/ .el-table .sort-caret {
+    left: 2px;
+  }
+  /deep/ .el-table .caret-wrapper {
+    width: 10px;
+  }
+  /deep/.el-table__body-wrapper.is-scrolling-none {
+    height: 585px !important;
+  }
+  border: 2px solid  #e9e9e9;
 }
+
+.header-span {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    // border: 2px solid #d9d9d9;
+    &:first-child{
+      background-color: #d9d9d9;
+    }
+    svg {
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    span {
+      display: inline-block;
+      flex-grow: 1;
+      padding: 2px 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      border-left: 2px solid #d9d9d9;
+      padding: 5px 0;
+    }
+    .el-icon-full-screen {
+      padding: 0px;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      &:hover {
+        color: #409eff;
+      }
+    }
+    .span {
+      cursor: pointer;
+      background-color: #d9d9d9;
+      &:hover{
+      background-color: #ffffff;
+      }
+    }
+    .activated {
+      background-color: #ffffff;
+    }
+  }
 .image-hover {
     position: absolute;
     z-index: 2000;
@@ -1136,7 +1520,7 @@ export default {
     .cell {
       font-weight: 600;
       color: #333;
-      padding-left: 0px;
+      padding: 5px 0px 5px 0px;
     }
   }
   /deep/ th.el-table__cell.gutter:last-of-type{
@@ -1161,38 +1545,8 @@ export default {
     font-weight: 600;
     color: #333;
   }
-  .header-span {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border: 2px solid #d9d9d9;
-    span {
-      display: inline-block;
-      flex-grow: 1;
-      padding: 2px 0;
-      border-left: 2px solid #d9d9d9;
-    }
-    .el-icon-full-screen {
-      padding: 0px;
-      font-size: 18px;
-      margin-right: 10px;
-      cursor: pointer;
-      &:hover {
-        color: #409eff;
-      }
-    }
-    .span {
-      cursor: pointer;
-      &:hover{
-      background-color: #ffffff;
-      }
-    }
-    .activated {
-      background-color: #ffffff;
-    }
-  }
   /deep/ .el-button--mini, .el-button--small {
-    font-size: 10px;
+    font-size: 14px;
   }
   /deep/ .el-button--mini, .el-button--mini.is-round {
     padding: 0px;
@@ -1203,6 +1557,40 @@ export default {
   .chart-name-btn:hover {
     color: #1d4ed7;
     text-decoration: underline;
+  }
+  /deep/ .highlighted {
+    background-color: yellow;
+  }
+}
+.dataTables_info {
+  color: #333;
+  font-weight: 500;
+  margin-top: 10px;
+}
+.filter-div {
+  padding: 10px 5px;
+  border-left: 2px solid #d9d9d9;
+  border-right: 2px solid #d9d9d9;
+  /deep/ .el-input__inner {
+    margin-left: 0px;
+  }
+  .btns {
+    .el-button{
+      margin-right: 10px;
+    }
+  }
+  .select-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9d9d9;
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 3px;
+    span {
+      font-size: 14px;
+      margin-right: 5px
+    }
   }
 }
 </style>

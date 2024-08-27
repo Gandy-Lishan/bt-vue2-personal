@@ -3,15 +3,20 @@
     <div class="left">
       <template v-for="item in tableInfoList">
         <Table
+          v-bind="$attrs"
+          v-on="$listeners"
          :key="item.type"
          :tableInfo="item"
          :ref="item.refName"
          @updateChart="updateChart" 
-         :style="{ width: enlargedTable === item.label ? '60%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
+         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
          ></Table>
       </template>
-      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `${chartHight}`}"></Chart>
-      <SeasonalityChart v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `${chartHight}`}"></SeasonalityChart>
+      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></Chart>
+      <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `694px`}"></SeasonalityChart>
+    </div>
+    <div class="footer-des">
+      <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
     </div>
   </div>
 </template>
@@ -20,14 +25,16 @@
 import Table from "./Table";
 import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
-import { mapActions, mapGetters } from 'vuex'
+import Description from "./Description";
+import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
 export default {
   name: 'ForTest',
   provide() {
     return {
-      toggleEnlarge: this.toggleEnlarge
+      toggleEnlarge: this.toggleEnlarge,
+      checkedOption: this.checkedOption,
     };
   },
   data () {
@@ -41,19 +48,19 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Stocks Indicator List',
+              label: 'Stock Market Sentiment',
               value: 'stock',
               type: 'stock',
               url: 'stock_complete_list'
             },
             {
-              label: 'NASDAQ 100 Optix',
+              label: 'NASDAQ 100 Stock Sentiment',
               value: 'NASDAQ',
               type: 'stock',
               url: 'ndx_100_complete_list',
             },
             {
-              label: 'S&P 1500 Optix',
+              label: 'S&P 1500 Stock Sentiment',
               value: 'SP1500',
               type: 'stock',
               url: 'sp_1500_complete_list',
@@ -68,13 +75,13 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Bond Indicator List',
+              label: 'Bond Market Sentiment',
               value: 'bond',
               type: 'bond',
               url: 'bond_complete_list'
             },
             {
-              label: 'Commodity Indicator List',
+              label: 'Commodity Market Sentiment',
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'
@@ -89,7 +96,7 @@ export default {
         //   keyProp: 'url',
         //   options: [
         //     {
-        //       label: 'Commodity Indicator List',
+        //       label: 'Commodity Market Sentiment',
         //       value: 'commodity',
         //       type: 'commodity'
         //     }
@@ -103,7 +110,7 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'ETF Sector List',
+              label: 'Most Active ETF Sentiment',
               value: 'ETFSector',
               type: 'ETF',
               url: 'etf_complete_list'
@@ -115,19 +122,19 @@ export default {
               url: 'etf_breadth'
             },
             {
-              label: 'ETF Fund Flow',
+              label: 'Most Active ETF Fund Flow',
               value: 'ETFFundFlow',
               type: 'ETF',
               url: 'etf_flow'
             },
             {
-              label: 'ETF Monthly Fund Flow',
+              label: 'Monthly Fund Flow',
               value: 'ETFMonthlyFund',
               type: 'ETF',
               url: 'monthly_fund_flows'
             },
             {
-              label: 'ETF Shares Outstanding',
+              label: 'Most Active ETF Shares Outstanding',
               value: 'ETFShares',
               type: 'ETF',
               url: 'shares_outstanding'
@@ -142,23 +149,23 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Commodity Seasonality',
+              label: 'Commodity Market Seasonality',
               value: 'CommoditySeasonality',
               type: 'seasonality',
               url: 'commod_seasonality'
-            },
-            {
-              label: 'Bond Seasonality',
-              value: 'BondSeasonality',
-              type: 'seasonality',
-              url: 'bond_seasonality'
             },
             {
               label: 'ETF Seasonality',
               value: 'ETFSeasonality',
               type: 'seasonality',
               url: 'etf_seasonality'
-            }
+            },
+            {
+              label: 'Bond Market Seasonality',
+              value: 'BondSeasonality',
+              type: 'seasonality',
+              url: 'bond_seasonality'
+            },
           ]
         },
         // {
@@ -169,7 +176,7 @@ export default {
         //   keyProp: 'url',
         //   options: [
         //     {
-        //       label: 'Stocks Indicator List',
+        //       label: 'Stock Market Sentiment',
         //       value: 'stock',
         //       type: 'mostPopular',
         //     }
@@ -178,13 +185,15 @@ export default {
       ],
       displayRow: {},
       enlargedTable: null,
-      chartHight: '600px'
+      chartHight: '700px',
+      checkedType: null
     }
   },
   components: {
     Chart,
     Table,
-    SeasonalityChart
+    SeasonalityChart,
+    Description
   },
   computed: {
     ...mapGetters({
@@ -192,16 +201,16 @@ export default {
     })
   },
   mounted() {
-    this.getDistanceFromBottom();
+    // this.getDistanceFromBottom();
     // 监听窗口大小变化事件
-    window.addEventListener('resize', this.getDistanceFromBottom);
+    // window.addEventListener('resize', this.getDistanceFromBottom);
     // 监听滚动事件
-    window.addEventListener('scroll', this.getDistanceFromBottom);
+    // window.addEventListener('scroll', this.getDistanceFromBottom);
   },
   beforeDestroy() {
     // 清除事件监听器
-    window.removeEventListener('resize', this.getDistanceFromBottom);
-    window.removeEventListener('scroll', this.getDistanceFromBottom);
+    // window.removeEventListener('resize', this.getDistanceFromBottom);
+    // window.removeEventListener('scroll', this.getDistanceFromBottom);
   },
   methods: {
     getDistanceFromBottom() {
@@ -215,7 +224,7 @@ export default {
 
       console.log(`Distance from bottom: ${elementBottomToViewportBottom}px`);
       this.chartHight = elementBottomToViewportBottom
-      this.$forceUpdate();
+      // this.$forceUpdate();
       // return distanceFromBottom;
     },
     toggleEnlarge(label) {
@@ -225,6 +234,9 @@ export default {
       } else {
         this.enlargedTable = label; // Enlarge the clicked table
       }
+    },
+    checkedOption(checkedType) {
+      this.checkedType = checkedType
     },
     updateChart(row) {
       console.log('updateChart', row)
@@ -240,10 +252,24 @@ export default {
       const findIndex = _results.findIndex(ele => ele.url === row.url)
       if(findIndex !== -1) {
         const find = _results[findIndex]
-        _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
+        _results.splice(findIndex, 1, {...find, favorite: !find.favorite, loading: false})
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
         this.$refs[refName][0].loadMore(value)
       }
+    },
+    async enLargeTable(source_list, row) {
+      const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
+      console.log('findTable', findTable)
+      if(!findTable) return
+      const checked = findTable.options.find(ele => ele.url === source_list).value
+      const findRefsName = findTable?.refName
+      // 应该清空缩小已放大的 table
+      const clearRefName = this.tableInfoList.map(item => item.refName).filter(item => item !== findRefsName)
+      console.log('clearRefName', clearRefName)
+      clearRefName.forEach(item => {
+        this.$refs[item][0].clearEnlarge()
+      })
+      await this.$refs[findRefsName][0].enLargeTable(checked, row)
     }
   }
 }
@@ -265,7 +291,7 @@ export default {
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
 }
 

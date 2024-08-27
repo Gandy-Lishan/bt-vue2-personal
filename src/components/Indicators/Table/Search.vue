@@ -9,9 +9,6 @@
         autocomplete="off"
       />
     </div>
-    <!-- <button @click="filterEvent" id="searchSelected">
-      {{ filterButton }}<i class="fa fa-angle-down" aria-hidden="true"></i>
-    </button> -->
     <div v-if="suggestions.length">
       <div v-for="suggestion in suggestions" :key="suggestion.objectID">
         <div v-if="suggestion._highlightResult.chart_name">
@@ -29,8 +26,9 @@
   </div>
 </template>
 <script>
-// import algoliasearch from 'algoliasearch/lite';
-// import autocomplete from 'autocomplete.js/dist/autocomplete';
+import { mapGetters,mapActions } from "vuex";
+import { isJson } from '@/utils'
+import { getIndicatorsRowData } from "@/service/service";
 
 export default {
   data() {
@@ -54,6 +52,18 @@ export default {
       suggestions: [],
     };
   },
+  computed: {
+    ...mapGetters({
+      indicatorsListData: 'getIndicatorsPageListData'
+    })
+  },
+  watch: {
+    searchInput(value) {
+      if (value) return
+      // 清空 highlighted 字段
+      if (value === '') this.$store.commit('states/SET_INDI_TABLE_HIGHLIGHTED', true)
+    },
+  },
   mounted() {
     console.log(window)
     this.blogs = this.client.initIndex('blog');
@@ -62,6 +72,7 @@ export default {
     this.initAutocomplete();
   },
   methods: {
+    ...mapActions('chart', ['fetchIndicatorsPageList']),
     initAutocomplete() {
       autocomplete('#aa-search-input', {}, [
         {
@@ -78,11 +89,11 @@ export default {
           },
         },
       ])
-        .on('autocomplete:selected', (event, suggestion, dataset) =>
-          this.performAutocomplete(suggestion, dataset)
+        .on('autocomplete:selected', async (event, suggestion, dataset) =>
+          await this.performAutocomplete(suggestion, dataset)
         )
-        .on('autocomplete:autocompleted', (event, suggestion, dataset) =>
-          this.performAutocomplete(suggestion, dataset)
+        .on('autocomplete:autocompleted', async (event, suggestion, dataset) =>
+        await this.performAutocomplete(suggestion, dataset)
         );
     },
     filterEvent(event) {
@@ -96,24 +107,119 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      return `<a href="${url}" style="width: 250px; background-color: #fff; display: inline-block;">${value}</a>`;
+      return `<a style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
-    performAutocomplete(suggestion, dataset) {
-      let url = '';
+    async performAutocomplete(suggestion, dataset) {
+      let searchUrl = '';
       if (dataset === 'charts') {
-        url = this.chartUrl(suggestion);
+        searchUrl = this.chartUrl(suggestion);
       } else if (dataset === 'reports') {
-        url = this.reportUrl(suggestion);
+        searchUrl = this.reportUrl(suggestion);
       } else {
         if (suggestion.category === 'Lite') return;
-        url = suggestion.url;
+        searchUrl = suggestion.url;
       }
-
-      window.location.assign(url);
-    },
+      console.log('searchUrl', searchUrl)
+      debugger
+      const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      let sourceTable = urlTypes.map(type => {
+        const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+          return list.map(item => {
+            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined)
+      }).filter(item => item.length > 0).flat()
+      console.log('sourceTable', sourceTable)
+      // 存在第一次并未请求全部表单的情况
+      if(sourceTable.length) {
+        const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
+        await this.$emit('enLargeTable', source_list, sourceTable[0])
+      }else {
+        let res = {}
+        try {
+          const {data:rowData} = await getIndicatorsRowData(searchUrl)
+          res = rowData
+        } catch (error) {
+          if(error?.response?.status === 404) {
+            this.$message({
+              message: `<strong>Unable to find the corresponding indicator</strong>`,
+              center: true,
+              dangerouslyUseHTMLString: true,
+              showClose: true,
+              duration: 8000,
+              customClass: 'no-icon',
+              type: 'warning'
+            })
+            return
+          }
+        }
+        const {type, groups} = res
+        let requireUrl = ''
+        if(type === 'stock_nasdaq') {
+          requireUrl = 'ndx_100_complete_list'
+        }else if(type === 'stock_sent') {
+          requireUrl = 'sp_1500_complete_list'
+        }else if(type === 'etf_opt') {
+          requireUrl = 'etf_breadth'
+        }else if(type === 'etf_fund') {
+          requireUrl = 'etf_flow'
+        }else if(type === 'mff') {
+          requireUrl = 'monthly_fund_flows'
+        }else if(type === 'shares') {
+          requireUrl = 'shares_outstanding'
+        }else if(type === 'etf_seasonality') {
+          requireUrl = 'etf_seasonality'
+        }else if(type === 'bond_seasonality') {
+          requireUrl = 'bond_seasonality'
+        }else if(groups === 'commod') {
+          requireUrl = 'commodity_complete_list'
+        }else if(groups === 'bonds'){
+          requireUrl = 'bonds_complete_list'
+        }else if(type === 'etf_opt') {
+          reportUrl = 'etf_complete_list'
+        }else if(type === 'commod_seasonality') {
+          url = 'commod_seasonality'
+        }else if(groups === 'stocks') {
+          requireUrl = 'stock_complete_list'
+        }
+        if(!requireUrl) return
+        await this.fetchIndicatorsPageList(requireUrl)
+        const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+        const _sourceList = _list.map(item => {
+            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+        }).filter(item => item !== undefined).shift()
+        console.log('_sourceList', _sourceList)
+        // 如果是对象并且对象为空, 说明没有匹配到数据
+        if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
+          this.$message({
+            message: `<strong>Unable to find the corresponding indicator</strong>`,
+            center: true,
+            dangerouslyUseHTMLString: true,
+            showClose: true,
+            duration: 8000,
+            customClass: 'no-icon',
+            type: 'warning'
+          })
+          return
+        }
+        await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
+      /* 如果匹配不到, 使用下面的规则请求个别表单
+      ndx_100_complete_list: type: stock_nasdaq
+      sp_1500_complete_list: type: stock_sent
+      commodity_complete_list: groups: commod
+      etf_breadth: type: etf_opt
+      etf_flow: type: etf_fund
+      monthly_fund_flows： type: mff
+      shares_outstanding: type: shares
+      etf_seasonality: type: etf_seasonality
+      bond_seasonality: type: bond_seasonality
+      */
+      // window.location.assign(url);
+    }
+  },
     chartUrl(suggestion) {
       const chart_url = suggestion.chart_url.toLowerCase()
-      return `/backtester/sr/setup?index=${'Unknown'}&indicator=${chart_url}`;
+      // return `/backtester/sr/setup?index=${'Unknown'}&indicator=${chart_url}`;
+      return `${chart_url}`
     },
     reportUrl(suggestion) {
       return `/users/report/${suggestion.filename}`;
@@ -237,6 +343,6 @@ export default {
     padding: 2px 0 2px 2px;
 }
 input#aa-search-input {
-  width: 230px;
+  width: 500px;
 }
 </style>

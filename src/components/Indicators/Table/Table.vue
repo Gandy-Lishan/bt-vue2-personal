@@ -3,6 +3,7 @@
     <VirtualScrollTable
         v-bind="$attrs"
         v-on="$listeners"
+        ref="virtualScroll"
         :refName="tableInfo['refName']"
         :itemSize="tableInfo['itemSize']"
         :options="tableInfo['options']"
@@ -101,6 +102,16 @@ export default {
       this.firstRow = this.tableData[0] || {}
       if(isUpdateChart) this.$emit('updateChart', this.firstRow)
       this.loading = false
+    },
+    async enLargeTable(checked, row) {
+      await this.$refs['virtualScroll']._toggleEnlarge(checked, row)
+    },
+    async clearEnlarge() {
+      console.log("this.$refs['virtualScroll']", this.$refs['virtualScroll'].enlarged)
+      this.$refs['virtualScroll'].clearHighlightValue()
+      if(this.$refs['virtualScroll'].enlarged) {
+        await this.$refs['virtualScroll']._toggleEnlarge()
+      }
     }
   }
 
@@ -109,6 +120,6 @@ export default {
 
 <style lang="less" scoped>
 .outsideTable {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 </style>

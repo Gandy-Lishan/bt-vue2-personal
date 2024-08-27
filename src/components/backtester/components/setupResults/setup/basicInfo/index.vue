@@ -463,8 +463,7 @@
                         {{bdFormLabel['market_environment']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest a specific market environments like a <br /> 'bull
-                            market', select the environment here.</span>
+                            >If you'd like to backtest a specific market environments like a <br /> 'Above 200-bar Moving Average', select the environment here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -520,7 +519,7 @@
                         {{bdFormLabel['index_moving_average_slope']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest based on the slope of the 252 Days Moving Average of the Index, <br />select the appropriate slope direction here.</span>
+                            >If you'd like to backtest based on the slope of the Moving Average of the Index, <br />select the appropriate period and slope direction here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -938,13 +937,29 @@ export default {
       ],
       MEOptions: [
         { value: 0, label: 'Market Environment' },
-        { value: 1, label: 'Only include bull markets' },
-        { value: 2, label: 'Only include bear markets' },
+        { value: 1, label: 'Above 50-bar Moving Average' },
+        { value: 2, label: 'Below 50-bar Moving Average' },
+        { value: 3, label: 'Above 100-bar Moving Average' },
+        { value: 4, label: 'Below 100-bar Moving Average' },
+        { value: 5, label: 'Above 150-bar Moving Average' },
+        { value: 6, label: 'Below 150-bar Moving Average' },
+        { value: 7, label: 'Above 200-bar Moving Average' },
+        { value: 8, label: 'Below 200-bar Moving Average' },
+        { value: 9, label: 'Above 252-bar Moving Average' },
+        { value: 10, label: 'Below 252-bar Moving Average' }
       ],
       IMASOptions: [
         { value: 0, label: 'Index Moving Average Slope' },
-        { value: 1, label: 'Only include upward sloping' },
-        { value: 2, label: 'Only include downward sloping' },
+        { value: 1, label: 'Upward Sloping 50-bar Moving Average' },
+        { value: 2, label: 'Downward Sloping 50-bar Moving Average' },
+        { value: 3, label: 'Upward Sloping 200-bar Moving Average' },
+        { value: 4, label: 'Downward Sloping 200-bar Moving Average' },
+        { value: 5, label: 'Upward Sloping 150-bar Moving Average' },
+        { value: 6, label: 'Downward Sloping 150-bar Moving Average' },
+        { value: 7, label: 'Upward Sloping 100-bar Moving Average' },
+        { value: 8, label: 'Downward Sloping 100-bar Moving Average' },
+        { value: 9, label: 'Upward Sloping 252-bar Moving Average' },
+        { value: 10, label: 'Downward Sloping 252-bar Moving Average' }
       ],
       customStocksList: [],
       loading: false,
@@ -1107,16 +1122,20 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
-      if(!val) return
-      // 预填充 btv2 按钮跳转过来携带的 symbol
-      let symbol = LocalStorageUtil.get('symbol')
-      if(!symbol) return
-      symbol = symbol.replace(/"/g, '')
-      this.bd.symbol = symbol
-      this.$store.commit('form/getBacktestSymbol', symbol)
-      // this.getSymbol(symbol)
-      LocalStorageUtil.remove('symbol')
+    isBTChartReady: {
+      async handler(val) {
+        if(!val) return
+        // 预填充 btv2 按钮跳转过来携带的 symbol
+        let symbol = LocalStorageUtil.get('symbol')
+        await this.remoteMethod(symbol)
+        if(!this.options) return
+        symbol = this.options[0]?.value
+        symbol = symbol.replace(/"/g, '')
+        this.bd.symbol = symbol
+        this.$store.commit('form/getBacktestSymbol', symbol)
+        this.getSymbol(symbol)
+        LocalStorageUtil.remove('symbol')
+      }
     },
     userRole: {
       handler(role) {

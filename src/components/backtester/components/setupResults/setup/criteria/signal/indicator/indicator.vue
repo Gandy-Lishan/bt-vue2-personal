@@ -688,6 +688,7 @@ export default {
       if(!indicator) return
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
+      if(!ele) ele = CIQ.findSentiIndicator(null, `${indicator}@indicator`)
       ele = {...ele, value: ele.chart_name}
       if(this.criteria.startsWith('entry')) {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
       LocalStorageUtil.remove('indicator')
@@ -1991,16 +1992,16 @@ export default {
           /** START
 					 * 	remove empty line
 					 */
-					const fileContent = await this.readFileContent(file);
-					const filteredContent = await this.skipEmptyLine(fileContent)
-					const newFile = new File([filteredContent], file.name, { type: file.type });
+					// const fileContent = await this.readFileContent(file);
+					// const filteredContent = await this.skipEmptyLine(fileContent)
+					// const newFile = new File([filteredContent], file.name, { type: file.type });
 					/********END********* */
 
-          await this.validateCSV(newFile)
-          await this.handleParseResult(this.csvContent, newFile)
+          await this.validateCSV(file)
+          await this.handleParseResult(this.csvContent, file)
   
-        this.form.indicatorName = newFile.name.replace('.csv', '')
-        this.fileList.push(newFile)
+        this.form.indicatorName = file.name.replace('.csv', '')
+        this.fileList.push(file)
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.dialogFormVisible = true
