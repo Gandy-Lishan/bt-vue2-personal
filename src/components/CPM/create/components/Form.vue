@@ -341,6 +341,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
+        condition: 0,
+        period: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -349,6 +351,11 @@ export default {
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
         { value: 'Monthly', label: 'Monthly' }
+      ],
+      conditionOptions: [
+        { value: 0, label: 'None' },
+        { value: 1, label: 'Above' },
+        { value: 2, label: 'Below' }
       ],
       directionOptions: [
         { value: 'Long', label: 'Long' },
@@ -823,6 +830,11 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
+        }else if(key === 'condition' && !data[key]) {
+          // 默认 None
+          target[key] = 0
+        }else if(key === 'period' && !data[key]) {
+          target[key] = 200
         }else {
           target[key] = data[key]
         }
