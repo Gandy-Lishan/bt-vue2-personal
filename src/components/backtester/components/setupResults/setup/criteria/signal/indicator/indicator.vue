@@ -683,6 +683,10 @@ export default {
     },
     isBTChartReady(val) {
       if(!val) return
+          // 预填充 btv2 按钮跳转过来携带的 symbol
+          let symbol = LocalStorageUtil.get('symbol')
+          symbol = symbol.replace(/"/g, '')
+          this.$store.commit('form/getBacktestSymbol', symbol)
       // 预填充 btv2 按钮跳转过来携带的 indicator
 			let indicator = LocalStorageUtil.get('indicator')
       if(!indicator) return
@@ -690,7 +694,10 @@ export default {
       let ele = CIQ.findSentiIndicator(null, indicator)
       if(!ele) ele = CIQ.findSentiIndicator(null, `${indicator}@indicator`)
       ele = {...ele, value: ele.chart_name}
-      if(this.criteria.startsWith('entry')) {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
+      if(this.criteria.startsWith('entry')) {
+        this.si.sentimentIndicator = ele.value;
+        this.handleSentimentSelect(ele)
+      }
       LocalStorageUtil.remove('indicator')
     }
   },
@@ -883,19 +890,9 @@ export default {
         criteria: this.criteria
       })
 
-
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
-       
-       // 暂时禁用，防止同名indicator附带的条件也不刷新，或者被替换的indicator还不被移除
-      // // avoid add indicator redundantly
-      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
-      //   if (sd.type == item.url) {
-      //     return
-      //   }
-      // }
       CIQ.addIndicators({})
     },
     clearSymbolSelect() {

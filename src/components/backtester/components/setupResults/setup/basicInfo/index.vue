@@ -1132,8 +1132,8 @@ export default {
         symbol = this.options[0]?.value
         symbol = symbol.replace(/"/g, '')
         this.bd.symbol = symbol
-        this.$store.commit('form/getBacktestSymbol', symbol)
-        this.getSymbol(symbol)
+        // this.$store.commit('form/getBacktestSymbol', symbol)
+        // this.getSymbol(symbol)
         LocalStorageUtil.remove('symbol')
       }
     },
