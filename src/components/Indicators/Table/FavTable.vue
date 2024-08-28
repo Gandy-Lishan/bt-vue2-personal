@@ -216,7 +216,7 @@ export default {
     },
     tableData: {
       handler(newValue) {
-        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+        if(Array.isArray(newValue) && newValue.length !== 0)this.filterData = newValue
       },
       immediate: true,
       depp: true
@@ -430,7 +430,7 @@ export default {
           })
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
-        this.filterData.splice(scope.$index, 1) //todo
+        this.tableData = this.tableData.filter(item => item.url !== scope.row.url)
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
         console.log('this.tableData', this.tableData)
       } catch (error) {

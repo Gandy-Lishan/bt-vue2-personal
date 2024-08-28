@@ -41,7 +41,7 @@
               </el-option>
             </el-select>
             </div>
-            <div class="select-option" v-show="Array.isArray(indicatorOptions) && indicatorOptions.length !== 0">>
+            <div class="select-option" v-show="Array.isArray(indicatorOptions) && indicatorOptions.length !== 0">
               <span>Indicator</span>
               <el-select v-model="indicatorFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
               <el-option
@@ -1039,7 +1039,7 @@ export default {
         { value: 'Bond', label: 'Bond' },
         { value: 'Commodity', label: 'Commodity' },
         { value: 'Sector', label: 'Sector' },
-        { value: 'Stock', label: 'Stock' }
+        { value: 'Stocks', label: 'Stocks' }
       ]
       if(this.isMostPopular) return [
         { value: '', label: '----' },
@@ -1081,26 +1081,26 @@ export default {
     indicatorOptions() {
       if(this.checkedType === 'ETFSectorBreadth') return [
         { value: '', label: '----' },
-        { value: '10-Day Sum Advance/Decline Ratio', label: '10-Day Sum Advance/Decline Ratio' },
-        { value: '12 Week High', label: '12 Week High' },
-        { value: '12 Week Low', label: '12 Week Low' },
-        { value: '3-month ROC', label: '3-month ROC' },
-        { value: '4 Week High', label: '4 Week High' },
-        { value: '4 Week Low', label: '4 Week Low' },
-        { value: 'Above Bband', label: 'Above Bband' },
-        { value: 'Advance / Decline', label: 'Advance / Decline' },
-        { value: 'Below Bband', label: 'Below Bband' },
-        { value: 'Breadth ( > 10 Day Avg)', label: 'Breadth ( > 10 Day Avg)' },
-        { value: 'Breadth ( > 200 Day Avg)', label: 'Breadth ( > 200 Day Avg)' },
-        { value: 'Breadth ( > 50 Day Avg)', label: 'Breadth ( > 50 Day Avg)' },
+        { value: '10 A/D Ratio', label: '10-Day Sum Advance/Decline Ratio' },
+        { value: '12W High', label: '12 Week High' },
+        { value: '12W Low', label: '12 Week Low' },
+        { value: '3M ROC', label: '3-month ROC' },
+        { value: '4W High', label: '4 Week High' },
+        { value: '4W Low', label: '4 Week Low' },
+        { value: 'Above BB', label: 'Above Bband' },
+        { value: 'A/Decline', label: 'Advance / Decline' },
+        { value: 'Below BB', label: 'Below Bband' },
+        { value: '> 10 Day', label: 'Breadth ( > 10 Day Avg)' },
+        { value: '> 200 Day', label: 'Breadth ( > 200 Day Avg)' },
+        { value: '> 50 Day', label: 'Breadth ( > 50 Day Avg)' },
         { value: 'Cumulative A/D Line', label: 'Cumulative A/D Line' },
-        { value: 'McClellan Oscillator', label: 'McClellan Oscillator' },
-        { value: 'McClellan Summation', label: 'McClellan Summation' },
+        { value: 'MC Osc', label: 'McClellan Oscillator' },
+        { value: 'MC Summ', label: 'McClellan Summation' },
         { value: 'New High', label: 'New High' },
         { value: 'New Low', label: 'New Low' },
-        { value: 'Panic Breadth Composite', label: 'Panic Breadth Composite' },
-        { value: 'RSI 14-Day < 30', label: 'RSI 14-Day < 30' },
-        { value: 'RSI 14-Day > 70', label: 'RSI 14-Day > 70' }
+        { value: 'Panic Composite', label: 'Panic Breadth Composite' },
+        { value: 'RSI < 30', label: 'RSI 14-Day < 30' },
+        { value: 'RSI > 70', label: 'RSI 14-Day > 70' }
       ]
       return []
     }
@@ -1150,8 +1150,13 @@ export default {
       // await this.$emit('loadMore', this.checkedType)
     },
     async changeOption(item, isUpdateChart) {
+      if(this.loading) return
       if(this.options.length === 1) return
       this.$refs[`${this.refName}Table`].clearSort()
+      this.searchInput = ''
+      this.groupsFilter = ''
+      this.timeframeFilter = ''
+      this.indicatorFilter = ''
       this.checkedType = item.value; 
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
@@ -1566,7 +1571,7 @@ export default {
     clearHighlightValue() {
       if(this.highlightValue !== '') this.highlightValue = ''
     },
-    handleQuery: debounce(function () { this._filterData() }, 500),
+    handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
     _filterData(){
 		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
       console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
@@ -1588,14 +1593,30 @@ export default {
         return searchResult
       }
 	  },
-    filterIndicator(searchResult){
-      if (this.indicatorFilter) {
-        return searchResult
-        .filter(item=>(item["chart_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase() || item["underlying_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase()))
-      }else {
-        return searchResult
+    filterIndicator(searchResult) {
+  if (this.indicatorFilter) {
+    // 将过滤条件转换为小写，并将其拆分成关键字数组
+    const filterKeywords = this.indicatorFilter.toLowerCase().split('').filter(item => item);
+    console.log('filterKeywords', filterKeywords);
+    
+    return searchResult.filter(item => {
+      const chartName = item["chart_name"].toLowerCase();
+      
+      // 检查关键字是否按顺序出现在 chartName 中
+      let currentIndex = 0;
+      for (const keyword of filterKeywords) {
+        currentIndex = chartName.indexOf(keyword, currentIndex);
+        if (currentIndex === -1) {
+          return false; // 如果某个关键字未找到，则过滤掉该项
+        }
+        currentIndex++; // 移动到下一个字符的位置
       }
-	  },
+      return true; // 所有关键字都按顺序找到
+    });
+  } else {
+    return searchResult;
+  }
+},
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
@@ -1604,6 +1625,7 @@ export default {
         return this.tableData.filter(item => {
             // 获取所有需要匹配的属性
             const properties = [
+              item['url'],
               item['chart_name'],
               item['market_symbol'],
               item['underlying_name'],
