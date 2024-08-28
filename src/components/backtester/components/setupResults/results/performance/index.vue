@@ -148,6 +148,7 @@ export default {
               if (typeof res.data == 'string') {
                 initalData = JSON.parse(res.data)
               } else {
+                if(typeof res.data == 'string') {initalData = res.data.replace(/NaN/g, 'null'); initalData = JSON.parse(initalData)}
                 initalData = res.data
               }
 
@@ -257,7 +258,7 @@ export default {
                   const datatime = new Date(initalData['basic']['start_date'])
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
-                  this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || [])
+                  this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
                 });
               }
               // ------------------------------ end -----------------------------------
