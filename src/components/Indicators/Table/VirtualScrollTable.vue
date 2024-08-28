@@ -1142,6 +1142,7 @@ export default {
         if(!this.enlarged) {this.toggleEnlarge(this.label);this.enlarged = true}
         this.$emit("updateChart", row || {})
         this.highlightValue = row.chart_name
+        console.log('图表显示和排序高亮 Table', this.checkedType)
         return
       }
       this.$emit("updateChart", this.firstRow || {})
