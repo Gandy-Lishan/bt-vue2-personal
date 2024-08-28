@@ -35,8 +35,8 @@ export function setRouterPermission(router) {
 			const _symbol = market_symbol || 'SPX'
 			symbol = _symbol
 		}
-		if (indicator) LocalStorageUtil.set('indicator', indicator)
-		if (symbol) LocalStorageUtil.set('symbol', symbol)
+		if (indicator) sessionStorage.setItem('indicator', indicator)
+		if (symbol) sessionStorage.setItem('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
