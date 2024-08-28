@@ -54,6 +54,21 @@
     </el-col>
     <el-col :span="6">
       <el-form-item prop="ma_condition" label="3. Condition">
+      <template slot="label">
+        <label>
+          3. Condition
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the relationship between the closing price of the End Date of the selected pattern<br/>
+              and the Moving Average of the specified Period.<br/>
+              For example, if you select Condition as Above and Period = 200,<br/>
+              it means that the End Date of all selected patterns must close at a price greater than<br/>
+              the Symbol Close 200-day Moving Average.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <el-select
             v-model="data.ma_condition"
             placeholder="— Select Condition —"
@@ -73,6 +88,17 @@
         label="4. Period"
         prop="ma"
       >
+      <template slot="label">
+        <label>
+          4. Period
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the period of the Symbol Close's Moving Average, which defaults to 200.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <el-input v-model="data.ma">
         </el-input>
       </el-form-item>
@@ -515,7 +541,7 @@ export default {
     },
   },
   async mounted() {
-    this.setBacktestHistory(10)
+    this.setBacktestHistory(1)
     this.generateCPMName()
   },
   methods: {
@@ -555,7 +581,7 @@ export default {
       }
       this.processTips = ''
       this.percentage = 0
-      this.setBacktestHistory(10)
+      this.setBacktestHistory(1)
       this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
       formRef.forEach(ref => {
@@ -611,7 +637,7 @@ export default {
       this.data.end_date = timestampToTime(new Date());
       const endDate = new Date(this.data.end_date);
       const startDate = new Date(endDate);
-      startDate.setDate(endDate.getDate() - val);
+      startDate.setMonth(endDate.getMonth() - val);
       this.data.start_date = timestampToTime(startDate);
     },
     handleDisabledStartDate(time) {
