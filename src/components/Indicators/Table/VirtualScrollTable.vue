@@ -1150,8 +1150,13 @@ export default {
       // await this.$emit('loadMore', this.checkedType)
     },
     async changeOption(item, isUpdateChart) {
+      if(this.loading) return
       if(this.options.length === 1) return
       this.$refs[`${this.refName}Table`].clearSort()
+      this.searchInput = ''
+      this.groupsFilter = ''
+      this.timeframeFilter = ''
+      this.indicatorFilter = ''
       this.checkedType = item.value; 
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
@@ -1566,7 +1571,7 @@ export default {
     clearHighlightValue() {
       if(this.highlightValue !== '') this.highlightValue = ''
     },
-    handleQuery: debounce(function () { this._filterData() }, 500),
+    handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
     _filterData(){
 		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
       console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
