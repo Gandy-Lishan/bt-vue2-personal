@@ -1625,6 +1625,7 @@ export default {
         return this.tableData.filter(item => {
             // 获取所有需要匹配的属性
             const properties = [
+              item['url'],
               item['chart_name'],
               item['market_symbol'],
               item['underlying_name'],
