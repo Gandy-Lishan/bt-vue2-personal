@@ -12,7 +12,7 @@
 			<template v-for="(item, index) in medianReturn">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ val }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ !isNaN(val) ? val : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
@@ -30,7 +30,7 @@
 			<template v-for="(item, index) in consistency">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ val }}%</td>
+						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ !isNaN(val) ? `${val}%` : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
