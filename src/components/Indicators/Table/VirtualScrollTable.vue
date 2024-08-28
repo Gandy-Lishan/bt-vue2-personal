@@ -1039,7 +1039,7 @@ export default {
         { value: 'Bond', label: 'Bond' },
         { value: 'Commodity', label: 'Commodity' },
         { value: 'Sector', label: 'Sector' },
-        { value: 'Stock', label: 'Stock' }
+        { value: 'Stocks', label: 'Stocks' }
       ]
       if(this.isMostPopular) return [
         { value: '', label: '----' },
