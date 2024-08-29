@@ -3,7 +3,7 @@
   <div>
     <div class="header-span">
       <span>{{ label }}</span>
-      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Exit Full Screen' : 'Enlarge to View'">
+      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
       </el-tooltip>
     </div>
