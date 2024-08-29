@@ -101,7 +101,7 @@
           </el-tooltip>
         </label>
       </template>
-        <el-input v-model="data.ma">
+        <el-input v-model="data.ma" :disabled="data.ma_condition == 0">
         </el-input>
       </el-form-item>
     </el-col>
@@ -491,8 +491,8 @@ export default {
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
         ],
         ma: [
-          { validator: createPositiveIntegerRule('period', 1), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('period', 1), trigger: 'change' }
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'change' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
