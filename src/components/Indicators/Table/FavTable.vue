@@ -805,7 +805,7 @@ export default {
       text-align: center;
       font-size: 14px;
       font-weight: 700;
-      padding: 8px 0;
+      padding: 5px 0;
       border: 2px solid #d9d9d9;
     }
     svg {

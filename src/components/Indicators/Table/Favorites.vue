@@ -11,8 +11,8 @@
           :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
-      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
+      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px'}"></Chart>
     </div>
     <div class="footer-des">
       <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>

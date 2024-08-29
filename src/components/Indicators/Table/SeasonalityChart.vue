@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div :id="`line-${id}`" style="width: 100%; height: 510px;"></div>
-    <div :id="`bar-${id}`" style="width: 100%; height: 230px;"></div>
+    <div :id="`line-${id}`" style="width: 100%; height: 520px; background-color: #fff;"></div>
+    <div :id="`bar-${id}`" style="width: 100%; height: 220px; background-color: #fff;"></div>
   </div>
  </template>
  
@@ -49,7 +49,7 @@
         renderTo: 'charts',
         events: {
           load: function (event) {
-            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 400, 120,33)
+            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 430, 120,33)
                 .attr({
                     'opacity': 0.25
                 })

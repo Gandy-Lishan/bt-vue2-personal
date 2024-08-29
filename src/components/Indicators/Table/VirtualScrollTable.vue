@@ -703,7 +703,7 @@ export default {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'groups',
@@ -727,6 +727,7 @@ export default {
               key: 'avg_net_return',
               label: 'Avg Net Return',
               value: 'avg_net_return',
+              minWidth: '100px',
               addPercentSign: true
             },
             {

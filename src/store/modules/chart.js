@@ -915,10 +915,19 @@ get_indicator_page_btv1_list({ commit }) {
 					return obj
 			})
     console.log(_results)
-				if(url === 'etf_seasonality') {
-					const findIndex = _results.findIndex(item => (item['url'] === 'seasonality_amj'))
-					if(findIndex !== -1) _results.splice(findIndex, 1)
-				}
+				if (url === 'etf_seasonality') {
+					const seenUrls = new Set();
+					_results = _results.filter(item => {
+							if (item['url'] === 'etf_seasonality') {
+									if (!seenUrls.has(item['url'])) {
+											seenUrls.add(item['url']);
+											return true;
+									}
+									return false;
+							}
+							return true;
+					});
+			}
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: _results });
 			} catch (error) {
 				console.error('Error fetching data:', error);
