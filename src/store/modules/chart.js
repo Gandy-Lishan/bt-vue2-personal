@@ -787,7 +787,15 @@ get_indicator_page_btv1_list({ commit }) {
 																else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
 																else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
 														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
-									if(url === 'bond_complete_list' && key === 'sub_type') {
+										if(url === 'commodity_complete_list' && key === 'sub_type' && obj['url'].startsWith('vol_')) {
+											obj[key] = 'Volatility'
+										}else if(url === 'etf_complete_list' && obj['sub_type'] === 'etf_bond' && obj['url'].startsWith('etf_') && (obj['underlying_name'] && obj['underlying_name'].endsWith('Treasury'))) {
+												obj['chart_name'] = obj['underlying_name'].replace('Treasury', 'Optix')
+												if(obj['sub_type'] === 'etf_bond') obj['sub_type'] = 'Bond'
+										}else if(url === 'etf_seasonality' && obj['type'] === 'etf_seasonality' && (obj['underlying_name'] && (obj['underlying_name'].includes('Industrial') || obj['underlying_name'].includes('Discretionary')))) {
+												if(obj['underlying_name'].includes('Industrial')) obj['underlying_name'] = obj['underlying_name'].replace('Industrial', 'Ind.')
+													if(obj['underlying_name'].includes('Discretionary')) obj['underlying_name'] = obj['underlying_name'].replace('Discretionary', 'Disc.')
+										} else if(url === 'bond_complete_list' && key === 'sub_type') {
 										const chartNamesFor10Year = [
 										'Bond Optix', '10-Year Optix', '10-Year Treasury Hedgers Position',
 										'10-Year Bond Put/Call Ratio', '10-Year Treasury Seasonality','Conference Board - Bonds',

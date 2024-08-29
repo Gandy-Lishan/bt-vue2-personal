@@ -1400,7 +1400,7 @@ export default {
           type: 'bond'
         },
         {
-          label: 'Commodity Indicator List',
+          label: 'Commodity Market Sentiment',
           value: 'commodity_complete_list',
           type: 'commodity'
         },
@@ -1496,7 +1496,7 @@ export default {
       if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
-      if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
+      if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
@@ -1531,7 +1531,7 @@ export default {
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
       if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
       const _keySort = Array.from(Object.keys(sortedArray[0]))
-      let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key] || ''}"`).join(',')).join('\n');
+      let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
       csvContent = `${_keySort.join(',')}\n${csvContent}`;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
