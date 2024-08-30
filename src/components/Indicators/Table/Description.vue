@@ -243,7 +243,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .accordion {
-  margin: 20px 0px 0px 0px;
   padding: 0px 0px 20px 0px;
 }
 /deep/ .el-collapse-item__header {

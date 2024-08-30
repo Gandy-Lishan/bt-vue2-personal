@@ -939,6 +939,20 @@ export default {
             },
           ]
         ],
+        ['researchColumns', 
+          [
+            {
+              key: 'date_published',
+              label: 'Date Published',
+              value: 'date_published'
+            },
+            {
+              key: 'title',
+              label: 'Title',
+              value: 'title'
+            }
+          ]
+        ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
@@ -1208,6 +1222,7 @@ export default {
     updateChart(row) {
       if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
       this.$emit("updateChart", row)
+      this.$emit("showDetails", row, true)
     },
     onLoad() {
       this.showImg = true

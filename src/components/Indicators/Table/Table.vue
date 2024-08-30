@@ -16,6 +16,7 @@
         :cssMonthLabel="cssMonthLabel"
         @loadMore="loadMore"
         @updateChart="updateChart"
+        @showDetails="$emit('showDetails', row, isShowDetails)"
         >
     </VirtualScrollTable>
   </div>

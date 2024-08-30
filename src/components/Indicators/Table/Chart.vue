@@ -65,7 +65,7 @@
             button.style.fontWeight = 600;
             button.style.color = '#1f77b4';
             button.style.border = 'unset';
-            button.style.width = '210px';
+            button.style.width = '220px';
             button.style.background = 'unset';
  
             button.onclick = function () {

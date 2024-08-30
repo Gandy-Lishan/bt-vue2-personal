@@ -1,5 +1,8 @@
 <template>
   <div class="indicators-container" ref="indiRef">
+    <div class="footer-des">
+      <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
+    </div>
     <div class="left">
       <template v-for="item in tableInfoList">
         <Table
@@ -9,14 +12,14 @@
          :tableInfo="item"
          :ref="item.refName"
          @updateChart="updateChart" 
-         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: enlargedTable === item.label || enlargedTable === null ? 'block' : 'none' }"
+         @showDetails="showDetails"
+         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
          ></Table>
       </template>
+      <!-- 点击之后详情页放在这里 -->
+      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails"></Details>
       <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></SeasonalityChart>
-    </div>
-    <div class="footer-des">
-      <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
     </div>
   </div>
 </template>
@@ -26,11 +29,12 @@ import Table from "./Table";
 import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
+import Details from "./Details";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
 export default {
-  name: 'ForTest',
+  name: 'IndicatorTable',
   provide() {
     return {
       toggleEnlarge: this.toggleEnlarge,
@@ -186,14 +190,16 @@ export default {
       displayRow: {},
       enlargedTable: null,
       chartHight: '700px',
-      checkedType: null
+      checkedType: null,
+      isShowDetails: false
     }
   },
   components: {
     Chart,
     Table,
     SeasonalityChart,
-    Description
+    Description,
+    Details
   },
   computed: {
     ...mapGetters({
@@ -241,6 +247,10 @@ export default {
     updateChart(row) {
       console.log('updateChart', row)
       this.displayRow = row
+    },
+    showDetails(row, isShowDetails) {
+      console.log('showDetails', row)
+      this.isShowDetails = isShowDetails
     },
     updateTable(row) {
       const url = row.source_list
