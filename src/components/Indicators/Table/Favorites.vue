@@ -1,6 +1,9 @@
 <template>
   <div class="indicators-container">
-    <div class="left" ref="ForTest">
+    <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
+    <div class="left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
         <FavTable
           :key="item.type"
@@ -11,11 +14,8 @@
           :style="{ width: '65%', display: 'block' }"
         ></FavTable>
       </template>
-      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '694px'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '694px'}"></Chart>
-    </div>
-    <div class="footer-des">
-      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px'}"></Chart>
     </div>
   </div>
  </template>
@@ -27,7 +27,7 @@ import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
  
  export default {
-  name: 'ForTest',
+  name: 'IndicatorTable',
   data () {
     return {
       tableInfoList: [

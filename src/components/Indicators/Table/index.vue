@@ -9,26 +9,28 @@
             <!-- <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4> -->
             <h4  @click="selectedTitle = 'Popular'" :class="{ 'selected': selectedTitle === 'Popular' }">Most Popular</h4>
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
+            <h4  @click="selectedTitle = 'Details'" :class="{ 'selected': selectedTitle === 'Details' }">Details</h4>
           </div>
           <div class="search-container">
             <Search @enLargeTable="enLargeTable"></Search>
           </div>
         </div>
       </div>
-      <StrategiesTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></StrategiesTable>
+      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
+      <Details v-show="selectedTitle === 'Details'" ref="Details" :selectedTitle="selectedTitle"></Details>
       <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
     </div>
     </div>
   </div>
 </template>
 <script> 
-import StrategiesTable from "./ForTest";
+import IndicatorTable from "./IndicatorTable";
 import Favorites from "./Favorites";
 import Search from "./Search";
 import Popular from "./Popular";
-// import Commodity from "./Commodity";
+import Details from "./Details.vue";
 import { mapActions, mapGetters } from 'vuex'
 import { isJson } from "@/utils";
 
@@ -51,10 +53,11 @@ export default {
     }),
   },
   components: {
-    StrategiesTable,
+    IndicatorTable,
     Favorites,
     Popular,
     Search,
+    Details
     // Commodity
   },
   methods: {
@@ -153,5 +156,8 @@ export default {
     text-decoration: underline;
     color: #409EFF
   }
+}
+.strategy-main {
+  background-color: #fff;
 }
 </style>

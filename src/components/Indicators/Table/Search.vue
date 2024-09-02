@@ -232,6 +232,7 @@ export default {
 .aa-input-container {
     display: inline-block;
     position: relative;
+    background-color: #fff;
 }
 
 .aa-input-search {

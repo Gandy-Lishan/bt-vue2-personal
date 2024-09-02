@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="height: 100%"></div>
+  <div :id="id" style="height: 745px; background-color: #fff;"></div>
  </template>
  
  <script>
@@ -57,15 +57,15 @@
  
             const chart = this;
             const button = document.createElement('button');
-            button.innerHTML = 'Backtest This Indicator';
+            button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/10}px`;
             button.style.left = (chart.chartWidth / 2 - 82) + 'px';
-            button.style.fontSize = '12px';
+            button.style.fontSize = '16px';
             button.style.fontWeight = 600;
             button.style.color = '#1f77b4';
             button.style.border = 'unset';
-            button.style.width = '200px';
+            button.style.width = '220px';
             button.style.background = 'unset';
  
             button.onclick = function () {

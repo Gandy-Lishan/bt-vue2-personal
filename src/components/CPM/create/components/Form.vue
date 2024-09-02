@@ -53,9 +53,24 @@
       </el-form-item>
     </el-col>
     <el-col :span="6">
-      <el-form-item prop="condition" label="3. Condition">
+      <el-form-item prop="ma_condition" label="3. Condition">
+      <template slot="label">
+        <label>
+          3. Condition
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the relationship between the closing price of the End Date of the selected pattern<br/>
+              and the Moving Average of the specified Period.<br/>
+              For example, if you select Condition as Above and Period = 200,<br/>
+              it means that the End Date of all selected patterns must close at a price greater than<br/>
+              the Symbol Close 200-day Moving Average.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
         <el-select
-            v-model="data.condition"
+            v-model="data.ma_condition"
             placeholder="— Select Condition —"
           >
             <el-option
@@ -71,9 +86,20 @@
     <el-col :span="6">
       <el-form-item
         label="4. Period"
-        prop="period"
+        prop="ma"
       >
-        <el-input v-model="data.period">
+      <template slot="label">
+        <label>
+          4. Period
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the period of the Symbol Close's Moving Average, which defaults to 200.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
+        <el-input v-model="data.ma" :disabled="data.ma_condition == 0">
         </el-input>
       </el-form-item>
     </el-col>
@@ -365,8 +391,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
-        condition: 'None',
-        period: 200
+        ma_condition: 0,
+        ma: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -377,9 +403,9 @@ export default {
         { value: 'Monthly', label: 'Monthly' }
       ],
       conditionOptions: [
-        { value: 'None', label: 'None' },
-        { value: 'Above', label: 'Above' },
-        { value: 'Below', label: 'Below' }
+        { value: 0, label: 'None' },
+        { value: 1, label: 'Above' },
+        { value: 2, label: 'Below' }
       ],
       directionOptions: [
         { value: 'Long', label: 'Long' },
@@ -464,9 +490,9 @@ export default {
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
         ],
-        period: [
-          { validator: createPositiveIntegerRule('period', 1), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('period', 1), trigger: 'change' }
+        ma: [
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'change' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
@@ -515,7 +541,7 @@ export default {
     },
   },
   async mounted() {
-    this.setBacktestHistory(10)
+    this.setBacktestHistory(1)
     this.generateCPMName()
   },
   methods: {
@@ -555,7 +581,7 @@ export default {
       }
       this.processTips = ''
       this.percentage = 0
-      this.setBacktestHistory(10)
+      this.setBacktestHistory(1)
       this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
       formRef.forEach(ref => {
@@ -611,7 +637,7 @@ export default {
       this.data.end_date = timestampToTime(new Date());
       const endDate = new Date(this.data.end_date);
       const startDate = new Date(endDate);
-      startDate.setDate(endDate.getDate() - val);
+      startDate.setMonth(endDate.getMonth() - val);
       this.data.start_date = timestampToTime(startDate);
     },
     handleDisabledStartDate(time) {
@@ -884,10 +910,10 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
-        }else if(key === 'condition' && !data[key]) {
+        }else if(key === 'ma_condition' && !data[key]) {
           // 默认 None
-          target[key] = 'None'
-        }else if(key === 'period' && !data[key]) {
+          target[key] = 0
+        }else if(key === 'ma' && !data[key]) {
           target[key] = 200
         }else {
           target[key] = data[key]

@@ -1,69 +1,74 @@
 <template>
 <div>
   <div>
-    checkedType{{checkedType}}
     <div class="header-span">
       <span>{{ label }}</span>
-      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Exit Full Screen' : 'Enlarge to View'">
+      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
       </el-tooltip>
     </div>
     <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
-        <el-tooltip effect="dark" placement="top" content="Download List" :key="`${item.label}_svg`">
-            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" v-show="checkedType === item.value && enlarged" @click="downloadCSV">
-              <path d="M1 8.5C1 4.96474 1 3.19632 2.09816 2.09816C3.19632 1 4.96395 1 8.5 1C12.0353 1 13.8037 1 14.9018 2.09816C16 3.19632 16 4.96395 16 8.5C16 12.0353 16 13.8037 14.9018 14.9018C13.8037 16 12.0361 16 8.5 16C4.96474 16 3.19632 16 2.09816 14.9018C1 13.8037 1 12.0361 1 8.5Z" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8.49865 4.58203V10.1478C8.75602 10.151 9.00944 9.97414 9.19734 9.75861L10.4526 8.35098M8.49786 10.1478C8.24997 10.1447 7.99812 9.96861 7.79918 9.75782L6.53839 8.35177M5.32812 12.4776H11.6439" stroke="#333333" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </el-tooltip>
       </template>
     </div>
   </div>
-  <div class="filter-div">
-<el-row>
-  <el-col :span="18">
+  <div class="filter-div" v-show="enlarged">
     <el-row>
-      <div class="btns">
-        <el-button size="small"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
-        <div class="select-option">
-          <span>Group</span>
-          <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test">
-          <el-option
-            v-for="item in groupsOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        </div>
-        <div class="select-option">
-          <span>Time Frame</span>
-          <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test">
-          <el-option
-            v-for="item in timeframeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        </div>
-      </div>
+      <el-col :span="18">
+        <el-row>
+          <div class="btns">
+            <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+            <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
+              <span>Group</span>
+              <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+              <el-option
+                v-for="item in groupsOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
+            <div class="select-option" v-show="Array.isArray(timeframeOptions) && timeframeOptions.length !== 0">
+              <span>Time Frame</span>
+              <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+              <el-option
+                v-for="item in timeframeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
+            <div class="select-option" v-show="Array.isArray(indicatorOptions) && indicatorOptions.length !== 0">
+              <span>Indicator</span>
+              <el-select v-model="indicatorFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
+              <el-option
+                v-for="item in indicatorOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
+          </div>
+        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <el-input
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable>
+        </el-input>
+      </el-col>
     </el-row>
-  </el-col>
-  <el-col :span="6">
-    <el-input
-      size="small"
-      placeholder="Search"
-      v-model="input"
-      clearable>
-    </el-input>
-  </el-col>
-</el-row>
   </div>
   <virtual-scroll
       :ref="refName"
-      :data="tableData"
+      :data="filterData"
       :item-size="itemSize"
       key-prop="url"
       class="virtualScroll"
@@ -151,7 +156,6 @@ import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
-const XLSX = require('xlsx');
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -193,21 +197,9 @@ export default {
       highlightValue: '',
       groupsFilter: '',
       timeframeFilter: '',
-      groupsOptions:  [
-        { value: '', label: '----' },
-        { value: 'Model', label: 'Model' },
-        { value: 'Breadth', label: 'Breadth' },
-        { value: 'Cash', label: 'Cash' },
-        { value: 'COT', label: 'COT' },
-        { value: 'Index', label: 'Index' },
-        { value: 'Insiders', label: 'Insiders' },
-        { value: 'Optix', label: 'Optix' },
-        { value: 'PutCall', label: 'PutCall' },
-        { value: 'Rydex', label: 'Rydex' },
-        { value: 'Shorts', label: 'Shorts' },
-        { value: 'Surveys', label: 'Surveys' },
-        { value: 'Volatility', label: 'Volatility' }
-      ],
+      indicatorFilter: '',
+      searchInput: '',
+      filterData: []
     }
   },
   computed: {
@@ -711,7 +703,7 @@ export default {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'groups',
@@ -735,6 +727,7 @@ export default {
               key: 'avg_net_return',
               label: 'Avg Net Return',
               value: 'avg_net_return',
+              minWidth: '100px',
               addPercentSign: true
             },
             {
@@ -946,6 +939,20 @@ export default {
             },
           ]
         ],
+        ['researchColumns', 
+          [
+            {
+              key: 'date_published',
+              label: 'Date Published',
+              value: 'date_published'
+            },
+            {
+              key: 'title',
+              label: 'Title',
+              value: 'title'
+            }
+          ]
+        ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
@@ -960,19 +967,158 @@ export default {
       return columns
     },
     pageLength() {
-      return this.tableData.length || 0
+      return this.filterData.length || 0
     },
     groupsOptions() {
+      if(this.checkedType === 'stock') return [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: 'Breadth', label: 'Breadth' },
+        { value: 'Cash', label: 'Cash' },
+        { value: 'COT', label: 'COT' },
+        { value: 'Index', label: 'Index' },
+        { value: 'Insiders', label: 'Insiders' },
+        { value: 'Optix', label: 'Optix' },
+        { value: 'PutCall', label: 'PutCall' },
+        { value: 'Rydex', label: 'Rydex' },
+        { value: 'Shorts', label: 'Shorts' },
+        { value: 'Surveys', label: 'Surveys' },
+        { value: 'Volatility', label: 'Volatility' }
+      ]
+      if(this.checkedType === 'bond') return [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: '10-Year Treasury', label: '10-Year Treasury' },
+        { value: '2-Year Treasury', label: '2-Year Treasury' },
+        { value: '20-Year Treasury', label: '20-Year Treasury' },
+        { value: '30-Year Treasury', label: '30-Year Treasury' },
+        { value: 'Cot', label: 'Cot' },
+        { value: 'Etf_bond', label: 'Etf_bond' },
+        { value: 'Eurodollar', label: 'Eurodollar' },
+        { value: 'High-Yield', label: 'High-Yield' },
+        { value: 'Investment Grade', label: 'Investment Grade' },
+        { value: 'Volatility', label: 'Volatility' }
+      ]
+      if(this.checkedType === 'commodity') return [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: 'Commodity', label: 'Commodity' },
+        { value: 'COT', label: 'COT' },
+        { value: 'Optix', label: 'Optix' },
+        { value: 'PutCall', label: 'PutCall' },
+        { value: 'Rydex', label: 'Rydex' },
+        { value: 'Seasonality', label: 'Seasonality' },
+        { value: 'Volatility', label: 'Volatility' }
+      ]
+      if(this.checkedType === 'ETFSector' || this.checkedType === 'ETFFundFlow'  || this.checkedType === 'ETFShares') return [
+        { value: '', label: '----' },
+        { value: 'Bond', label: 'Bond' },
+        { value: 'Commodity', label: 'Commodity' },
+        { value: 'Country', label: 'Country' },
+        { value: 'Index', label: 'Index' },
+        { value: 'Sector', label: 'Sector' }
+      ]
+      if(this.checkedType === 'ETFSectorBreadth') return [
+        { value: '', label: '----' },
+        { value: 'Basic Materials (XLB)', label: 'Basic Materials (XLB)' },
+        { value: 'BMV IPC (MEXBOL)', label: 'BMV IPC (MEXBOL)' },
+        { value: 'Brazil Stock Index (IBOV)', label: 'Brazil Stock Index (IBOV)' },
+        { value: 'CAC 40 (CAC)', label: 'CAC 40 (CAC)' },
+        { value: 'Consumer Disc. (XLY)', label: 'Consumer Disc. (XLY)' },
+        { value: 'Consumer Staples (XLP)', label: 'Consumer Staples (XLP)' },
+        { value: 'DAX (DAX)', label: 'DAX (DAX)' },
+        { value: 'Dow Jones Ind. (DIA)', label: 'Dow Jones Ind. (DIA)' },
+        { value: 'Emerging Markets (MXEF)', label: 'Emerging Markets (MXEF)' },
+        { value: 'Energy (XLE)', label: 'Energy (XLE)' },
+        { value: 'Financials (XLF)', label: 'Financials (XLF)' },
+        { value: 'FTSE 100 (FTSE)', label: 'FTSE 100 (FTSE)' },
+        { value: 'Hang Seng (HSI)', label: 'Hang Seng (HSI)' },
+        { value: 'Healthcare (XLV)', label: 'Healthcare (XLV)' },
+        { value: 'Ind.s (XLI)', label: 'Ind.s (XLI)' },
+        { value: 'Korea Stock Index (KOSPI)', label: 'Korea Stock Index (KOSPI)' },
+        { value: 'NASDAQ 100 ETF (QQQ)', label: 'NASDAQ 100 ETF (QQQ)' },
+        { value: 'NASDAQ Composite (COMP)', label: 'NASDAQ Composite (COMP)' },
+        { value: 'NIfty 50 Index', label: 'NIfty 50 Index' },
+        { value: 'Nikkei 225 (NKY)', label: 'Nikkei 225 (NKY)' },
+        { value: 'Russell 2000 ETF (IWM)', label: 'Russell 2000 ETF (IWM)' },
+        { value: 'S&P 500 ETF (SPY)', label: 'S&P 500 ETF (SPY)' },
+        { value: 'SENSEX Index', label: 'SENSEX Index' },
+        { value: 'Shanghai (SHCOMP)', label: 'Shanghai (SHCOMP)' },
+        { value: 'Swiss Market Index (SMI)', label: 'Swiss Market Index (SMI)' },
+        { value: 'Technology (XLK)', label: 'Technology (XLK)' },
+        { value: 'Toronto Stock Exchange (TSX)', label: 'Toronto Stock Exchange (TSX)' },
+        { value: 'Utilities (XLU)', label: 'Utilities (XLU)' }
+      ]
+      if(this.checkedType === 'ETFMonthlyFund') return [
+        { value: '', label: '----' },
+        { value: 'Bond', label: 'Bond' },
+        { value: 'Commodity', label: 'Commodity' },
+        { value: 'Sector', label: 'Sector' },
+        { value: 'Stocks', label: 'Stocks' }
+      ]
+      if(this.isMostPopular) return [
+        { value: '', label: '----' },
+        { value: 'Model', label: 'Model' },
+        { value: 'Breadth', label: 'Breadth' },
+        { value: 'Commodity', label: 'Commodity' },
+        { value: 'COT', label: 'COT' },
+        { value: 'Index', label: 'Index' },
+        { value: 'Optix', label: 'Optix' },
+        { value: 'PutCall', label: 'PutCall' },
+        { value: 'Shorts', label: 'Shorts' },
+        { value: 'Rydex', label: 'Rydex' },
+        { value: 'Surveys', label: 'Surveys' },
+        { value: 'Volatility', label: 'Volatility' }
+      ]
+      return []
     },
     timeframeOptions() {
-      const timeframes = this.tableData.map(item => item.timeframe)
-      debugger
-      // 去重
-      const _timeframes = [...new Set(timeframes)]
-      return _timeframes.map(item => {
-        return {label: item, value: item}
-      })
+      if(['stock', 'bond', 'ETFSectorBreadth'].includes(this.checkedType) || this.isMostPopular) return [
+        { value: '', label: '----' },
+        { value: 'Short', label: 'Short' },
+        { value: 'Medium', label: 'Medium' },
+        { value: 'Long', label: 'Long' }
+      ]
+      if(this.checkedType === 'ETFFundFlow') return [
+        { value: '', label: '----' },
+        { value: 'Short', label: 'Short' }
+      ]
+      if(this.checkedType === 'ETFMonthlyFund') return [
+        { value: '', label: '----' },
+        { value: 'Long', label: 'Long' }
+      ]
+      if(this.checkedType === 'ETFShares') return [
+        { value: '', label: '----' },
+        { value: 'Medium', label: 'Medium' }
+      ]
+      return []
     },
+    indicatorOptions() {
+      if(this.checkedType === 'ETFSectorBreadth') return [
+        { value: '', label: '----' },
+        { value: '10 A/D Ratio', label: '10-Day Sum Advance/Decline Ratio' },
+        { value: '12W High', label: '12 Week High' },
+        { value: '12W Low', label: '12 Week Low' },
+        { value: '3M ROC', label: '3-month ROC' },
+        { value: '4W High', label: '4 Week High' },
+        { value: '4W Low', label: '4 Week Low' },
+        { value: 'Above BB', label: 'Above Bband' },
+        { value: 'A/Decline', label: 'Advance / Decline' },
+        { value: 'Below BB', label: 'Below Bband' },
+        { value: '> 10 Day', label: 'Breadth ( > 10 Day Avg)' },
+        { value: '> 200 Day', label: 'Breadth ( > 200 Day Avg)' },
+        { value: '> 50 Day', label: 'Breadth ( > 50 Day Avg)' },
+        { value: 'Cumulative A/D Line', label: 'Cumulative A/D Line' },
+        { value: 'MC Osc', label: 'McClellan Oscillator' },
+        { value: 'MC Summ', label: 'McClellan Summation' },
+        { value: 'New High', label: 'New High' },
+        { value: 'New Low', label: 'New Low' },
+        { value: 'Panic Composite', label: 'Panic Breadth Composite' },
+        { value: 'RSI < 30', label: 'RSI 14-Day < 30' },
+        { value: 'RSI > 70', label: 'RSI 14-Day > 70' }
+      ]
+      return []
+    }
   },
   watch: {
 		label: {
@@ -988,6 +1134,13 @@ export default {
       handler(newValue) {
         if(newValue) this.highlightValue = ''
       }
+    },
+    tableData: {
+      handler(newValue) {
+        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+      },
+      immediate: true,
+      depp: true
     }
 	},
   methods: {
@@ -1004,6 +1157,7 @@ export default {
         if(!this.enlarged) {this.toggleEnlarge(this.label);this.enlarged = true}
         this.$emit("updateChart", row || {})
         this.highlightValue = row.chart_name
+        console.log('图表显示和排序高亮 Table', this.checkedType)
         return
       }
       this.$emit("updateChart", this.firstRow || {})
@@ -1012,8 +1166,13 @@ export default {
       // await this.$emit('loadMore', this.checkedType)
     },
     async changeOption(item, isUpdateChart) {
+      if(this.loading) return
       if(this.options.length === 1) return
       this.$refs[`${this.refName}Table`].clearSort()
+      this.searchInput = ''
+      this.groupsFilter = ''
+      this.timeframeFilter = ''
+      this.indicatorFilter = ''
       this.checkedType = item.value; 
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
@@ -1063,6 +1222,7 @@ export default {
     updateChart(row) {
       if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
       this.$emit("updateChart", row)
+      this.$emit("showDetails", row, true)
     },
     onLoad() {
       this.showImg = true
@@ -1097,7 +1257,6 @@ export default {
         // 不在收藏夹中但是要移除
         if(index === -1 && isFavorite) return
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
-        console.log('this.tableData', this.tableData)
         const url = scope.row.source_list
         // const  _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
         // const findIndex = _results.findIndex(ele => ele.url === scope.row.url)
@@ -1106,7 +1265,7 @@ export default {
         //   _results.splice(findIndex, 1, {...find, favorite: !find.favorite})
         //   this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // }
-        console.log('VirtaulScroll 保存之前的 URL', url)
+        console.log('VirtaulScroll 保存之前的 URL', url) // todo
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // 在 Most Popular 去更新对应的表; 不在 Most Popular 去更新 Most Popular
         if(url !== 'most_popular') {
@@ -1150,7 +1309,7 @@ export default {
 			  // 数字字符串转数字类型排序
         if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
-              this.tableData.sort((a, b) => {
+              this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
                   a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
                   let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
@@ -1160,7 +1319,7 @@ export default {
                   return _b - _a
               })
           } else if (sortingOrder == 'descending') {
-              this.tableData.sort((a, b) => {
+              this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
                   a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
                   let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
@@ -1174,11 +1333,11 @@ export default {
 			// 日期类型排序
 			if(['last_update'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
-					this.tableData.sort((a,b) => {
+					this.filterData.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
 					})
 				}else if(sortingOrder == 'descending'){
-					this.tableData.sort((a,b) => {
+					this.filterData.sort((a,b) => {
 						return new Date(a[colName]) - new Date(b[colName])
 					})
 				}else{
@@ -1187,7 +1346,7 @@ export default {
       if (['last_update'].indexOf(colName) !== -1) {
         // 处理日期字符串
         const isValidDate = date => !isNaN(Date.parse(date));
-        const sortedData = this.tableData.sort((a, b) => {
+        const sortedData = this.filterData.sort((a, b) => {
         const dateA = new Date(a[colName])
         const dateB = new Date(b[colName])
         const isDateAValid = isValidDate(a[colName])
@@ -1209,12 +1368,12 @@ export default {
         }
         return 0
         })
-        this.tableData = sortedData
+        this.filterData = sortedData
         }
 			// 字符串类型排序
 			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type'].indexOf(colName) !== -1){
         if(sortingOrder === 'ascending') {
-          this.tableData.sort((a, b) => {
+          this.filterData.sort((a, b) => {
           const aValue = a[colName] || '';
           const bValue = b[colName] || '';
           if (!aValue) return 1;
@@ -1222,7 +1381,7 @@ export default {
             return aValue.localeCompare(bValue, 'en', { sensitivity: 'base' });
           });
           } else if(sortingOrder === 'descending') {
-          this.tableData.sort((a, b) => {
+          this.filterData.sort((a, b) => {
           const aValue = a[colName] || '';
           const bValue = b[colName] || '';
           if (!aValue) return 1;
@@ -1256,7 +1415,7 @@ export default {
           type: 'bond'
         },
         {
-          label: 'Commodity Indicator List',
+          label: 'Commodity Market Sentiment',
           value: 'commodity_complete_list',
           type: 'commodity'
         },
@@ -1352,7 +1511,7 @@ export default {
       if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
-      if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
+      if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
@@ -1387,7 +1546,7 @@ export default {
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
       if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
       const _keySort = Array.from(Object.keys(sortedArray[0]))
-      let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key] || ''}"`).join(',')).join('\n');
+      let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
       csvContent = `${_keySort.join(',')}\n${csvContent}`;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1428,7 +1587,80 @@ export default {
     },
     clearHighlightValue() {
       if(this.highlightValue !== '') this.highlightValue = ''
-    }
+    },
+    handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
+    _filterData(){
+		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
+      console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
+    },
+    filterGroups(searchResult){
+      debugger
+      if (this.groupsFilter) {
+        return searchResult
+        .filter(item=>(item["groups"].toLowerCase() == this.groupsFilter.toLocaleLowerCase() || item["sub_type"].toLowerCase() == this.groupsFilter.toLocaleLowerCase()))
+      }else {
+        return searchResult
+      }
+	  },
+    filterTimeFrame(searchResult){
+      if (this.timeframeFilter) {
+        return searchResult
+        .filter(item=>item["timeframe"].toLowerCase() == this.timeframeFilter.toLocaleLowerCase())
+      }else {
+        return searchResult
+      }
+	  },
+    filterIndicator(searchResult) {
+  if (this.indicatorFilter) {
+    // 将过滤条件转换为小写，并将其拆分成关键字数组
+    const filterKeywords = this.indicatorFilter.toLowerCase().split('').filter(item => item);
+    console.log('filterKeywords', filterKeywords);
+    
+    return searchResult.filter(item => {
+      const chartName = item["chart_name"].toLowerCase();
+      
+      // 检查关键字是否按顺序出现在 chartName 中
+      let currentIndex = 0;
+      for (const keyword of filterKeywords) {
+        currentIndex = chartName.indexOf(keyword, currentIndex);
+        if (currentIndex === -1) {
+          return false; // 如果某个关键字未找到，则过滤掉该项
+        }
+        currentIndex++; // 移动到下一个字符的位置
+      }
+      return true; // 所有关键字都按顺序找到
+    });
+  } else {
+    return searchResult;
+  }
+},
+    getSearchResult() {
+      if(this.searchInput){
+        // 在搜索之前对搜索关键词进行转义
+        const trimmedStr = this.searchInput.trim()
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+        return this.tableData.filter(item => {
+            // 获取所有需要匹配的属性
+            const properties = [
+              item['url'],
+              item['chart_name'],
+              item['market_symbol'],
+              item['underlying_name'],
+              item['timeframe'],
+              item['groups'],
+              item['sub_type']
+            ];
+          // 检查任意一个属性是否匹配
+          return properties.some(property => regex.test(property));
+        });
+      }else{
+        return this.tableData
+      }
+    },
+    // 使用反斜杠转义特殊字符
+    escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
   }
 }
 </script>
@@ -1443,7 +1675,7 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 585px !important;
+    height: 575px !important
   }
   border: 2px solid  #e9e9e9;
 }
@@ -1467,7 +1699,7 @@ export default {
       text-align: center;
       font-size: 14px;
       font-weight: 700;
-      border-left: 2px solid #d9d9d9;
+      border: 2px solid #d9d9d9;
       padding: 5px 0;
     }
     .el-icon-full-screen {

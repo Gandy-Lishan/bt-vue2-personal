@@ -1,6 +1,9 @@
 <template>
  <div class="indicators-container">
-   <div class="left" ref="ForTest">
+   <div class="footer-des">
+      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
+   <div class="left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
        <Table
         v-bind="$attrs"
@@ -13,9 +16,6 @@
      </template>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
-   <div class="footer-des">
-      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
-    </div>
  </div>
 </template>
 
@@ -27,7 +27,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
 export default {
- name: 'ForTest',
+ name: 'IndicatorTable',
  data () {
    return {
      tableInfoList: [

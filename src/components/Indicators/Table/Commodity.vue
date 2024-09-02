@@ -1,6 +1,6 @@
 <template>
   <div class="indicators-container">
-    <div class="left" ref="ForTest">
+    <div class="left" ref="IndicatorTable">
       <template v-for="item in tableInfoList">
         <Table
          :key="item.type"

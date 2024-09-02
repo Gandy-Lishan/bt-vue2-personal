@@ -684,11 +684,11 @@ export default {
     isBTChartReady(val) {
       if(!val) return
           // 预填充 btv2 按钮跳转过来携带的 symbol
-          let symbol = LocalStorageUtil.get('symbol')
+          let symbol = sessionStorage.getItem('symbol')
           symbol = symbol.replace(/"/g, '')
           this.$store.commit('form/getBacktestSymbol', symbol)
       // 预填充 btv2 按钮跳转过来携带的 indicator
-			let indicator = LocalStorageUtil.get('indicator')
+			let indicator = sessionStorage.getItem('indicator')
       if(!indicator) return
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
@@ -698,7 +698,7 @@ export default {
         this.si.sentimentIndicator = ele.value;
         this.handleSentimentSelect(ele)
       }
-      LocalStorageUtil.remove('indicator')
+      sessionStorage.removeItem('indicator')
     }
   },
   methods: {
