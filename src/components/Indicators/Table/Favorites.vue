@@ -1,7 +1,7 @@
 <template>
   <div class="indicators-container">
     <div class="footer-des">
-      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+      <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
     <div class="left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
@@ -11,9 +11,11 @@
           :tableInfo="item"
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
-          :style="{ width: '65%', display: 'block' }"
+          @showDetails="showDetails"
+          :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
         ></FavTable>
       </template>
+      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails"></Details>
       <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px'}"></SeasonalityChart>
       <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px'}"></Chart>
     </div>
@@ -25,6 +27,7 @@
  import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
+import Details from "./Details";
  
  export default {
   name: 'IndicatorTable',
@@ -47,19 +50,24 @@ import Description from "./Description";
         }
       ],
       displayRow: {},
+      isShowDetails: false
     }
   },
   components: {
     Chart,
     FavTable,
     SeasonalityChart,
-    Description
+    Description,
+    Details
   },
   methods: {
     updateChart(row) {
       this.displayRow = row
       console.log(row)
     },
+    showDetails(row, isShowDetails) {
+      this.isShowDetails = isShowDetails
+    }
   }
  }
  </script>

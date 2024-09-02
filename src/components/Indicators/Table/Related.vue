@@ -17,7 +17,6 @@
  
  <script>
  import Table from "./Table";
- import { mapGetters } from 'vuex'
  
  export default {
   name: 'Related',
@@ -35,7 +34,7 @@
               label: 'Related Charts',
               value: 'related',
               type: 'related',
-              url: 'related_charts'
+              url: 'related'
             }
           ]
         }
@@ -43,15 +42,8 @@
       displayRow: {}
     }
   },
-  computed: {
-     ...mapGetters({
-       indicatorsListData: 'getIndicatorsPageListData'
-     })
-   },
   components: {
     Table
-  },
-  methods: {
   }
  }
  </script>

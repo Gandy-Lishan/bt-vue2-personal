@@ -331,7 +331,7 @@
           console.log('error', error)
         }
         if (originalData.length === 0) return;
- 
+        this.$emit('passIndicatorData', originalData, url)
         let allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
         allKeysName.sort((a, b) => {
           if(market_symbol && typeof market_symbol === 'string') {

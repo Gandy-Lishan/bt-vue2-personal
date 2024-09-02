@@ -1,7 +1,7 @@
 <template>
  <div class="indicators-container">
    <div class="footer-des">
-      <Description :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+      <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
    <div class="left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
@@ -10,10 +10,12 @@
         :key="item.type"
         :tableInfo="item"
         :ref="item.refName"
-        @updateChart="updateChart" 
-        :style="{ width: '65%', display: 'block' }"
+        @updateChart="updateChart"
+        @showDetails="showDetails"
+        :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
         ></Table>
      </template>
+     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails"></Details>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
  </div>
@@ -23,7 +25,8 @@
 import Table from "./Table";
 import Chart from "./Chart"
 import Description from "./Description";
-import { mapActions, mapGetters } from 'vuex'
+import Details from "./Details";
+import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
 export default {
@@ -47,7 +50,8 @@ export default {
          ]
        }
      ],
-     displayRow: {}
+     displayRow: {},
+     isShowDetails: false
    }
  },
  computed: {
@@ -58,7 +62,8 @@ export default {
  components: {
    Chart,
    Table,
-   Description
+   Description,
+   Details
  },
  methods: {
    updateChart(row) {
@@ -78,6 +83,9 @@ export default {
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: _results})
         this.$refs[refName][0].loadMore(value)
       }
+    },
+    showDetails(row, isShowDetails) {
+      this.isShowDetails = isShowDetails
     }
  }
 }

@@ -1003,6 +1003,11 @@ button#checkResBtn {
 				clear: both;
 			}
 	}
+  .construction-container {
+    width: auto;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
   .portfolio-container {
     width: 95%;
   }

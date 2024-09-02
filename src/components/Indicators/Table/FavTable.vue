@@ -382,6 +382,7 @@ export default {
 		updateChart(row) {
       console.log(row)
       this.$emit("updateChart", row || {})
+      this.$emit("showDetails", row, true)
       // window.location.href = `/backtester/sr/setup?index=${row.market_symbol || 'SPX'}&indicator=${row.url}`;return
     },
     onLoad() {
@@ -785,6 +786,9 @@ export default {
     height: 575px !important
   }
   border: 2px solid #e9e9e9;
+  /deep/ .el-button--text {
+    color: rgb(31, 119, 180);
+  }
 }
 
 .image-hover {

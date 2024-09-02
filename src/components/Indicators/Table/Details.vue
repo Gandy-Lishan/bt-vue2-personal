@@ -3,9 +3,6 @@
     <div class="back">
 			<span @click="$emit('showDetails', {}, false)"><i class="el-icon-arrow-left"></i>Back to List</span>
 		</div>
-    <div  class="chart-name">
-      <h3 v-html="(row &&row.chart_name) || ''"></h3><el-button type="text"><em>(See this indicator on the large chart)</em></el-button>
-    </div>
     <el-collapse  v-model="activeName" accordion>
       <el-collapse-item name="1">
         <template slot="title">
@@ -15,7 +12,7 @@
           </h3>
         </template>
         <div class="centent">
-          <el-button type="primary" size="small">Download CSV File</el-button>
+          <el-button type="primary" size="small" @click="$emit('downloadCSV')">Download CSV File</el-button>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2">
@@ -31,8 +28,9 @@
             <h4  @click="selectedTitle = 'Related'" :class="{ 'selected': selectedTitle === 'Related' }">Related Charts</h4>
           </div>
           <div>
-            <Construction v-show="selectedTitle === 'Detail'" ref="Construction"></Construction>
-            <Research v-show="selectedTitle === 'Research'" ref="Research"></Research>
+            <Construction v-show="selectedTitle === 'Detail'" ref="Construction" :convertedHTML="convertedHTML" :title="title"></Construction>
+            <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
+            <Related v-show="selectedTitle === 'Related'" ref="Related" :related="related"></Related>
           </div>
         </div>
       </el-collapse-item>
@@ -43,6 +41,7 @@
 <script>
 import Research from "./Research";
 import Construction from "./Construction";
+import Related from "./Related";
 import { getIndicatorsRowData } from '@/service/service'
 
 export default {
@@ -56,15 +55,30 @@ export default {
       activeTab: 'first',
       selectedTitle: 'Detail',
       convertedHTML: '',
+      title: '',
+      blog_results: [],
+      related: []
     }
   },
   watch: {
     row: {
       async handler(newValue) {
         if(!newValue.url) return;
-        const res = await getIndicatorsRowData(newValue.url)
-        console.log('res', res)
-        const _this = this
+        try {
+          this.title = newValue.chart_name
+          const res = await getIndicatorsRowData(newValue.url)
+          let originalData = res?.data
+          if(typeof originalData === 'string') {
+            originalData = originalData.replace(/NaN/g, 'null')
+            originalData = JSON.parse(originalData)
+          }
+          console.log('originalData', originalData)
+          this.blog_results = originalData.blog_results
+          this.related = originalData.related
+        } catch (error) {
+          console.log('error', error)
+          return
+        }
         const convertToHTML = (text) => {
 					// 替换换行符、制表符、大于号、和与号
 					text = text.replace(/\\r/g, '<br>')
@@ -75,9 +89,7 @@ export default {
 					text = text.replace(/&rsquo;/g, '\'')
 					return text
       	}
-        _this.$nextTick(() => {
-          _this.convertedHTML = convertToHTML(newValue.description)
-        })
+        this.convertedHTML = convertToHTML(newValue.description)
       },
       deep: true
     },
@@ -89,12 +101,8 @@ export default {
   },
   components: {
     Research,
-    Construction
-  },
-  methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    }
+    Construction,
+    Related
   }
 }
 </script>
@@ -130,14 +138,6 @@ export default {
 h3 {  
   margin: 0;
   padding: 0;
-}
-.chart-name {
-  display: flex;
-  h3 {
-    font-size: 23px;
-    margin-right: 5px;
-  }
-  margin: 15px 0  15px 15px;
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;

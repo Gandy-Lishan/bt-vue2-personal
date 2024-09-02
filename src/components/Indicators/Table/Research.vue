@@ -1,8 +1,8 @@
 <template>
   <div class="indicators-container">
-    <h3 style="font-size: 23px; font-weight: 300;">This chart has been mentioned in 6 blog post(s). The
+    <!-- <h3 style="font-size: 23px; font-weight: 300;">This chart has been mentioned in {{ blog_results_length }} blog post(s). The
       posts are listed below.</h3>
-    <hr style="border-top: 1px solid #eee; margin: 20px 0">
+    <hr style="border-top: 1px solid #eee; margin: 20px 0"> -->
     <div class="left" ref="IndicatorTable">
       <template v-for="item in tableInfoList">
         <Table
@@ -18,7 +18,6 @@
  
  <script>
  import Table from "./Table";
- import { mapGetters } from 'vuex'
  
  export default {
   name: 'Research',
@@ -36,23 +35,16 @@
               label: 'Blog Posts',
               value: 'research',
               type: 'research',
-              url: 'research_posts'
+              url: 'research'
             }
           ]
         }
       ],
-      displayRow: {}
+      displayRow: {},
     }
   },
-  computed: {
-     ...mapGetters({
-       indicatorsListData: 'getIndicatorsPageListData'
-     })
-   },
   components: {
     Table
-  },
-  methods: {
   }
  }
  </script>

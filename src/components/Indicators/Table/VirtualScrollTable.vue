@@ -1,19 +1,19 @@
 <template>
 <div>
   <div>
-    <div class="header-span">
+    <div class="header-span" v-show="(!showReport && !showRelated)">
       <span>{{ label }}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
       </el-tooltip>
     </div>
-    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type)">
+    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated)">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
       </template>
     </div>
   </div>
-  <div class="filter-div" v-show="enlarged">
+  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated)">
     <el-row>
       <el-col :span="18">
         <el-row>
@@ -128,6 +128,7 @@
             >
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row[l.value]}`" target="_blank">{{ scope.row[l.value] }}</a>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
@@ -163,14 +164,15 @@ export default {
   props: {
     refName: String,
     itemSize: Number,
-    tableInfo: Object,
     isOver: Object,
     tableData: Array,
     options: Array,
     type: String,
     label: String,
     loading: Boolean,
-    firstRow: Object
+    firstRow: Object,
+    showReport: Boolean,
+    showRelated: Boolean
   },
   directives: {
     ElTableInfiniteScroll
@@ -942,19 +944,22 @@ export default {
         ['researchColumns', 
           [
             {
-              key: 'date_published',
+              key: 'publish_date',
               label: 'Date Published',
-              value: 'date_published'
+              value: 'publish_date'
             },
             {
               key: 'title',
               label: 'Title',
-              value: 'title'
+              value: 'title',
+              minWidth: '300px'
             }
           ]
         ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
+      if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
+      if(this.type === 'related') {return columnsMap.get('stockColumns')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
@@ -1123,8 +1128,12 @@ export default {
   watch: {
 		label: {
 			handler(newValue){
+        console.log('newValue', newValue)
         if(newValue === 'Most Popular') {
           this.isMostPopular = true
+          this.enlarged = true
+        }
+        if(newValue === 'Research & Blog Posts' || newValue === 'Related Charts') {
           this.enlarged = true
         }
 			},
@@ -1158,6 +1167,7 @@ export default {
         this.$emit("updateChart", row || {})
         this.highlightValue = row.chart_name
         console.log('图表显示和排序高亮 Table', this.checkedType)
+        this.updateChart(row)
         return
       }
       this.$emit("updateChart", this.firstRow || {})
@@ -1220,7 +1230,13 @@ export default {
       }
     },
     updateChart(row) {
-      if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
+      if(this.showRelated) return
+      // if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
+      if(!this.enlarged) {
+        this.enlarged = true
+        this.toggleEnlarge(this.label);
+        this.checkedOption( this.enlarged ? this.checkedType : null)
+      }
       this.$emit("updateChart", row)
       this.$emit("showDetails", row, true)
     },
@@ -1678,6 +1694,9 @@ export default {
     height: 575px !important
   }
   border: 2px solid  #e9e9e9;
+  /deep/ .el-button--text {
+    color: rgb(31, 119, 180);
+  }
 }
 
 .header-span {

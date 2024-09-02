@@ -1,7 +1,7 @@
 <template>
   <div class="indicators-container" ref="indiRef">
     <div class="footer-des">
-      <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
+      <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
     </div>
     <div class="left">
       <template v-for="item in tableInfoList">
@@ -17,8 +17,8 @@
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails"></Details>
-      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></Chart>
+      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}" @passIndicatorData="passIndicatorData"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></SeasonalityChart>
     </div>
   </div>
@@ -191,7 +191,9 @@ export default {
       enlargedTable: null,
       chartHight: '700px',
       checkedType: null,
-      isShowDetails: false
+      isShowDetails: false,
+      indicatorCSVData: [],
+      indicatorsCSVName: ''
     }
   },
   components: {
@@ -280,22 +282,38 @@ export default {
         this.$refs[item][0].clearEnlarge()
       })
       await this.$refs[findRefsName][0].enLargeTable(checked, row)
-    }
+    },
+    passIndicatorData(data, url) {
+      this.indicatorCSVData = data
+      this.indicatorsCSVName = url
+    },
+    downloadCSV() {
+      const data = this.indicatorCSVData
+      const xlsxName = this.indicatorsCSVName
+      if (!data || !data.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const _keySort = Array.from( Object.keys(data[0]))
+      let csvContent = data.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${xlsxName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
   }
 }
 </script>
 
 <style lang="less" scoped>
-.indicators-container {
-  // display: grid;
-  // grid-template-columns: 70% 30%;
-  // position: relative;
-  // display: flex;
-}
 .left {
-  // display: grid;
-  // grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: repeat(3, 1fr);
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
@@ -304,23 +322,4 @@ export default {
     width: 35%;
   }
 }
-
-// .image-hover {
-//   position: fixed;
-//     z-index: 2000;
-//     border: 1px solid #ccc;
-//     background: #fff;
-//     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-//   }
-// .right {
-//   display: grid;
-//   grid-template-columns: 1fr;
-//   grid-template-rows: 400px auto;
-//   .image-hover {
-//     height: 400px;
-//   }
-  // .indicators-chart {
-  //   width: 100%;
-  // }
-// }
 </style>

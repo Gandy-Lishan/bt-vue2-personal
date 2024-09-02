@@ -2,23 +2,23 @@
 	<div class="page-content-wrapper" id="app">
 		<div class="page-content">
 			<div class="page-head">
-				<div class="container">
+				<div class="container construction-container">
 					<div class="page-title">
-						<h1 v-text="title"></h1>
+						<h1>{{title}}<a href="#"><small><small><em>(See this indicator on the large chart)</em></small></small></a></h1>
 					</div>
 				</div>
 			</div>
-			<div class="container">
+			<div class="container construction-container">
 
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<div v-html="convertedHTML"></div>
+								<div v-html="_convertedHTML"></div>
 								<div v-html="performanceHTML"></div>
 								<div v-html="annualReturnHTML"></div>
 
-								<div class="portlet light">
+								<!-- <div class="portlet light">
 									<div class="portlet-title">
 										<div class="caption">Historical Return Details</div>
 									</div>
@@ -99,7 +99,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -115,11 +115,14 @@ import { timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
+	props: {
+		convertedHTML: String,
+		title: String
+	},
 	data() {
 		return {
-			convertedHTML: '',
+			_convertedHTML: '',
 			performanceHTML: '',
-			title: '',
 			annualReturnHTML: '',
 			signalDes: [],
 			activeTab: 'CASH',
@@ -140,6 +143,16 @@ export default {
 				]),
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
 				backtestStrategy: null
+		}
+	},
+	watch: {
+		convertedHTML: {
+			handler(str) {
+				if(!str) return
+				const _this = this
+				this.$nextTick(() => {_this._convertedHTML = str;})
+				},
+				immediate: true
 		}
 	},
 	beforeRouteEnter(to, from, next) {
