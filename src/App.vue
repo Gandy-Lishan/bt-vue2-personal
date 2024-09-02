@@ -161,21 +161,24 @@ export default {
 				console.log("🚀 ~ file: App.vue:20 ~ window.addEventListener ~ res:", res)
 				let msg = res.detail.msg,
 				version = res.detail.version
-				this.$notify({
-					title: "New Update of Website Detected",
-					duration: 0,
-					position: "bottom-right",
-					dangerouslyUseHTMLString: true,
-					message: this.$createElement("CnNotify", {
-					// 使用自定义组件
-					ref: "CnNotify",
-					props: {
-						msg: msg,
-						version: version
-					},
-					}),
-					customClass:'versionNotifyStyle', //自定义类名
-				})
+
+				sessionStorage.setItem('version', version) // 存入版本version
+        		location.reload() // 刷新
+				// this.$notify({
+				// 	title: "New Update of Website Detected",
+				// 	duration: 0,
+				// 	position: "bottom-right",
+				// 	dangerouslyUseHTMLString: true,
+				// 	message: this.$createElement("CnNotify", {
+				// 	// 使用自定义组件
+				// 	ref: "CnNotify",
+				// 	props: {
+				// 		msg: msg,
+				// 		version: version
+				// 	},
+				// 	}),
+				// 	customClass:'versionNotifyStyle', //自定义类名
+				// })
 			})
   },
 		fetchCustomList() {
