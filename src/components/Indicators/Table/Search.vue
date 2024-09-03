@@ -57,13 +57,6 @@ export default {
       indicatorsListData: 'getIndicatorsPageListData'
     })
   },
-  watch: {
-    searchInput(value) {
-      if (value) return
-      // 清空 highlighted 字段
-      if (value === '') this.$store.commit('states/SET_INDI_TABLE_HIGHLIGHTED', true)
-    },
-  },
   mounted() {
     console.log(window)
     this.blogs = this.client.initIndex('blog');

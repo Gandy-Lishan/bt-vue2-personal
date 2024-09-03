@@ -128,7 +128,7 @@
             >
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
-              <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row[l.value]}`" target="_blank">{{ scope.row[l.value] }}</a>
+              <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
@@ -196,7 +196,6 @@ export default {
       checkedType: this.type,
       enlarged: false,
       isMostPopular: false,
-      highlightValue: '',
       groupsFilter: '',
       timeframeFilter: '',
       indicatorFilter: '',
@@ -211,7 +210,6 @@ export default {
       favoritesBtv2List: 'getFavoriteIndicatorList',
       _favoriteSymbolList: 'getFavoriteSymbolList',
       indicatorsListData: 'getIndicatorsPageListData',
-      clearIndiTableHighlighted: 'getClearIndiTableHighlighted'
     }),
     _loading() {
       return this.loading
@@ -944,9 +942,9 @@ export default {
         ['researchColumns', 
           [
             {
-              key: 'publish_date',
+              key: 'post_date',
               label: 'Date Published',
-              value: 'publish_date'
+              value: 'post_date'
             },
             {
               key: 'title',
@@ -1139,11 +1137,6 @@ export default {
 			},
       immediate: true
 		},
-    clearIndiTableHighlighted: {
-      handler(newValue) {
-        if(newValue) this.highlightValue = ''
-      }
-    },
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
@@ -1165,7 +1158,6 @@ export default {
         // 图表显示和排序高亮
         if(!this.enlarged) {this.toggleEnlarge(this.label);this.enlarged = true}
         this.$emit("updateChart", row || {})
-        this.highlightValue = row.chart_name
         console.log('图表显示和排序高亮 Table', this.checkedType)
         this.updateChart(row)
         return
@@ -1238,7 +1230,7 @@ export default {
         this.checkedOption( this.enlarged ? this.checkedType : null)
       }
       this.$emit("updateChart", row)
-      this.$emit("showDetails", row, true)
+      this.$emit("showDetails", row, true, this.checkedType)
     },
     onLoad() {
       this.showImg = true
@@ -1576,33 +1568,8 @@ export default {
       document.body.removeChild(link);
     },
     tableRowClassName({ row, rowIndex }) {
-      // 如果当前行的 `cacBelowBband` 值等于 highlightValue，就高亮该行
-      if (this.highlightValue && row.chart_name === this.highlightValue) {
-        // const targetName = row.chart_name
-        // const sortByName = (dict, targetName) => {
-        //   return dict.sort((a, b) => {
-        //       if (a.chart_name === targetName) return -1;
-        //       if (b.chart_name === targetName) return 1;
-        //       return 0;
-        //   });
-        // }
-        // this.tableData = sortByName(this.tableData, targetName)
-        // this.$nextTick(() => {
-        //   debugger
-
-        //   const tableBody = this.$refs[`${this.refName}Table`].$el.querySelector('.el-table__body-wrapper tbody');
-        //   const rows = tableBody.children;
-        //   if (rows[rowIndex]) {
-        //     rows[rowIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        //   }
-        // });
-        return 'highlighted';
-      }
       if(rowIndex % 2 === 0) return 'even'
       return ''
-    },
-    clearHighlightValue() {
-      if(this.highlightValue !== '') this.highlightValue = ''
     },
     handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
     _filterData(){

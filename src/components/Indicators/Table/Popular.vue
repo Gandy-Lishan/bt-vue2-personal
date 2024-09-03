@@ -15,7 +15,7 @@
         :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
         ></Table>
      </template>
-     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails"></Details>
+     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" style="width: 65%" @showDetails="showDetails"></Details>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
    </div>
  </div>
@@ -85,7 +85,7 @@ export default {
       }
     },
     showDetails(row, isShowDetails) {
-      this.isShowDetails = isShowDetails
+      this.isShowDetails = isShowDetails 
     }
  }
 }

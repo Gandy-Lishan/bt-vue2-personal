@@ -1,7 +1,6 @@
 <template>
   <div class="indicators-container">
-    <h3 style="font-size: 23px; font-weight: 300;">Related Charts</h3>
-    <hr style="border-top: 1px solid #eee; margin: 20px 0">
+    <h3 style="font-size: 23px; font-weight: 300; margin: 10px 0;">Related Charts</h3>
     <div class="left" ref="IndicatorTable">
       <template v-for="item in tableInfoList">
         <Table

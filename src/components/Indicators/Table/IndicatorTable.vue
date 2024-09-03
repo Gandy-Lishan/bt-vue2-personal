@@ -17,7 +17,7 @@
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
       <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}" @passIndicatorData="passIndicatorData"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></SeasonalityChart>
     </div>
@@ -193,7 +193,8 @@ export default {
       checkedType: null,
       isShowDetails: false,
       indicatorCSVData: [],
-      indicatorsCSVName: ''
+      indicatorsCSVName: '',
+      checkedTitle: ''
     }
   },
   components: {
@@ -250,9 +251,10 @@ export default {
       console.log('updateChart', row)
       this.displayRow = row
     },
-    showDetails(row, isShowDetails) {
+    showDetails(row, isShowDetails, checkedType) {
       console.log('showDetails', row)
       this.isShowDetails = isShowDetails
+      this.checkedTitle = checkedType
     },
     updateTable(row) {
       const url = row.source_list

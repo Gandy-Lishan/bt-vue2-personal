@@ -56,7 +56,6 @@ const getters = {
 	getIndicatorsPageListData: (state) => state.chart.indicatorsPageListdata,
 	getCssMonthLabel: state => state.chart.cssMonthLabel,
 	getIndicatorPageBtv1List: state => state.chart.indicatorPageBtv1List,
-	getClearIndiTableHighlighted: state => state.states.clearIndiTableHighlighted,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

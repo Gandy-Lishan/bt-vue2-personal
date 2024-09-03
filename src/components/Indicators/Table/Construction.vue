@@ -4,7 +4,7 @@
 			<div class="page-head">
 				<div class="container construction-container">
 					<div class="page-title">
-						<h1>{{title}}<a href="#"><small><small><em>(See this indicator on the large chart)</em></small></small></a></h1>
+						<h1 class="construction">{{title}}</h1>
 					</div>
 				</div>
 			</div>
@@ -13,7 +13,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet light">
-							<div col="col-md-12">
+							<div col="col-md-12 construction">
 								<div v-html="_convertedHTML"></div>
 								<div v-html="performanceHTML"></div>
 								<div v-html="annualReturnHTML"></div>
@@ -150,7 +150,7 @@ export default {
 			handler(str) {
 				if(!str) return
 				const _this = this
-				this.$nextTick(() => {_this._convertedHTML = str;})
+				_this._convertedHTML = str;
 				},
 				immediate: true
 		}

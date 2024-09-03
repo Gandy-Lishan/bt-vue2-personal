@@ -1,9 +1,8 @@
 <template>
   <div class="outsideTable">
     <div class="post-title" v-if="showReport">
-      <h3 style="font-size: 23px; font-weight: 300;">This chart has been mentioned in {{ blog_results_length }} blog post(s). The
+      <h3 style="font-size: 23px; font-weight: 300; margin: 10px 0;">This chart has been mentioned in {{ blog_results_length }} blog post(s). The
       posts are listed below.</h3>
-    <hr style="border-top: 1px solid #eee; margin: 20px 0">
     </div>
     <VirtualScrollTable
         v-bind="$attrs"
@@ -23,7 +22,7 @@
         :showRelated="showRelated"
         @loadMore="loadMore"
         @updateChart="$emit('updateChart', row)"
-        @showDetails="$emit('showDetails', row, isShowDetails)"
+        @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
         >
     </VirtualScrollTable>
   </div>
@@ -94,26 +93,47 @@ export default {
     },
     blog_results: {
       handler (arr) {
-        if(Array.isArray(arr) && arr.length > 0) {
+        if(Array.isArray(arr)) this.showReport = true
+        if(Array.isArray(arr) && arr.length !== 0) {
             console.log('blog_results', arr)
-            this.showReport = true
+            this.loading = true
             this.blog_results_length = arr.length
             this.tableData = arr.map((item, index) => {
-              const dateStr = item.publish_date
-              const formattedDate = dateStr ? new Date(dateStr.replace(' ', 'T')).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''
+              const dateStr = item.post_date
+              let formattedDate = ''
+              if (dateStr) {
+                const dateObj = new Date(dateStr);
+  
+                if (!isNaN(dateObj)) {
+                    const options = { year: 'numeric', month: 'long', day: '2-digit' };
+                    formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObj);
+                } else {
+                    console.log("Invalid date format");
+                }
+              } else {
+                  console.log("Date is null or undefined");
+              }
               return {
                 ...item,
-                publish_date: formattedDate,
+                blog_url: item.url,
+                post_date: formattedDate,
                 url: `${item.title}_${index}`
               }
             })
+            const _this = this
+            _this.$nextTick(() => {
+              _this.loading = false
+            })
+            console.log('this.tableData ', this.tableData )
         }
       }
     },
     related: {
       handler (arr) {
         console.log('related', arr)
-        if(Array.isArray(arr) && arr.length > 0) {
+        if(Array.isArray(arr)) this.showRelated = true
+        if(Array.isArray(arr) && arr.length !== 0) {
+          this.loading = true
           this.tableData = arr.map(obj => {
           const subType = obj['sub_type']
           for (const key in obj) {
@@ -173,8 +193,11 @@ export default {
             }
           }
           return obj
-      })
-          this.showRelated = true
+        })
+        const _this = this
+        _this.$nextTick(() => {
+          _this.loading = false
+        })
         }
       }
     }
@@ -208,7 +231,6 @@ export default {
     },
     async clearEnlarge() {
       console.log("this.$refs['virtualScroll']", this.$refs['virtualScroll'].enlarged)
-      this.$refs['virtualScroll'].clearHighlightValue()
       if(this.$refs['virtualScroll'].enlarged) {
         await this.$refs['virtualScroll']._toggleEnlarge()
       }
