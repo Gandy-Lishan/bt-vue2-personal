@@ -1082,6 +1082,11 @@ export default {
         { value: 'Medium', label: 'Medium' },
         { value: 'Long', label: 'Long' }
       ]
+      if(this.checkedType === 'ETFSector') return [
+        { value: '', label: '----' },
+        { value: 'Short', label: 'Short' },
+        { value: 'Medium', label: 'Medium' }
+      ]
       if(this.checkedType === 'ETFFundFlow') return [
         { value: '', label: '----' },
         { value: 'Short', label: 'Short' }

@@ -94,8 +94,6 @@ export default {
             });
             return text
           }
-          this.title = newValue.chart_name
-				  this.convertedHTML = convertToHTML(newValue.description)
           const res = await getIndicatorsRowData(newValue.url)
           let originalData = res?.data
           if(typeof originalData === 'string') {
@@ -105,6 +103,8 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
+          this.title = originalData.chart_name
+				  this.convertedHTML = convertToHTML(originalData.description)
         } catch (error) {
           console.log('error', error)
           return
