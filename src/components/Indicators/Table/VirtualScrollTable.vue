@@ -1076,7 +1076,7 @@ export default {
       return []
     },
     timeframeOptions() {
-      if(['stock', 'bond', 'ETFSectorBreadth'].includes(this.checkedType) || this.isMostPopular) return [
+      if(['stock', 'bond', 'commodity', 'ETFSectorBreadth'].includes(this.checkedType) || this.isMostPopular) return [
         { value: '', label: '----' },
         { value: 'Short', label: 'Short' },
         { value: 'Medium', label: 'Medium' },
