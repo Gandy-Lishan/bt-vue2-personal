@@ -77,6 +77,7 @@ export default {
       async handler(newValue) {
         if(!newValue.url) return;
         try {
+          if(this.selectedTitle !== 'Detail') this.selectedTitle = 'Detail'
           const convertToHTML = (text) => {
             // 替换换行符、制表符、大于号、和与号
             text = text.replace(/\\r/g, '<br>')
