@@ -85,6 +85,13 @@ export default {
             text = text.replace(/&gt;/g, '>')
             text = text.replace(/&amp;/g, '&')
             text = text.replace(/&rsquo;/g, '\'')
+            // 正则表达式匹配 <a href="{{url_for('user.anything_here')}}">...</a>
+            const regex = /<a href="{{url_for\('user\.([^']+)'\)}}">([^<]+)<\/a>/g;
+
+            // 替换匹配到的内容为相应的 URL，并添加 target="_blank"
+            text = text.replace(regex, (match, p1, p2) => {
+            return `<a href="https://users.sentimentrader.com/users/charts/${p1}" target="_blank">${p2}</a>`;
+            });
             return text
           }
           this.title = newValue.chart_name
