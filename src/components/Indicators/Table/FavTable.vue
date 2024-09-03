@@ -714,7 +714,7 @@ export default {
     filterGroups(searchResult){
       if (this.groupsFilter) {
         return searchResult
-        .filter(item=>(item["groups"].toLowerCase() == this.groupsFilter.toLocaleLowerCase() || item["sub_type"].toLowerCase() == this.groupsFilter.toLocaleLowerCase()))
+        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase())))
       }else {
         return searchResult
       }
@@ -722,7 +722,7 @@ export default {
     filterTimeFrame(searchResult){
       if (this.timeframeFilter) {
         return searchResult
-        .filter(item=>item["timeframe"].toLowerCase() == this.timeframeFilter.toLocaleLowerCase())
+        .filter(item=>((item["timeframe"] && item["timeframe"].toLowerCase()) == this.timeframeFilter.toLowerCase()))
       }else {
         return searchResult
       }
@@ -730,7 +730,7 @@ export default {
     filterIndicator(searchResult){
       if (this.indicatorFilter) {
         return searchResult
-        .filter(item=>(item["chart_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase() || item["underlying_name"].toLowerCase() == this.indicatorFilter.toLocaleLowerCase()))
+        .filter(item=>(((item["chart_name"] && item["chart_name"].toLowerCase()) == this.indicatorFilter.toLowerCase()) || ((item["underlying_name"] && item["underlying_name"].toLowerCase()) == this.indicatorFilter.toLowerCase())))
       }else {
         return searchResult
       }

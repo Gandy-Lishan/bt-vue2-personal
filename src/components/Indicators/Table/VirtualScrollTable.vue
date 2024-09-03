@@ -1582,10 +1582,9 @@ export default {
       console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
     },
     filterGroups(searchResult){
-      debugger
       if (this.groupsFilter) {
         return searchResult
-        .filter(item=>(item["groups"].toLowerCase() == this.groupsFilter.toLocaleLowerCase() || item["sub_type"].toLowerCase() == this.groupsFilter.toLocaleLowerCase()))
+        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase())))
       }else {
         return searchResult
       }
@@ -1593,7 +1592,7 @@ export default {
     filterTimeFrame(searchResult){
       if (this.timeframeFilter) {
         return searchResult
-        .filter(item=>item["timeframe"].toLowerCase() == this.timeframeFilter.toLocaleLowerCase())
+        .filter(item=>((item["timeframe"] && item["timeframe"].toLowerCase()) == this.timeframeFilter.toLowerCase()))
       }else {
         return searchResult
       }
