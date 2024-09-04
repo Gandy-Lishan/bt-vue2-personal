@@ -1555,11 +1555,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Amer Equity Invt",
-        "url": "AEL",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Amer Eagle Outf",
         "url": "AEO",
         "updated": "Daily"
@@ -1812,11 +1807,6 @@
     {
         "chart_name": "Allegheny Tech",
         "url": "ATI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Atlantic Tele-Ne",
-        "url": "ATNI",
         "updated": "Daily"
     },
     {
@@ -3570,11 +3560,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Kaman Corp",
-        "url": "KAMN",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Kb Home",
         "url": "KBH",
         "updated": "Daily"
@@ -3935,11 +3920,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Mdc Holdings Inc",
-        "url": "MDC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Mondelez Inter-A",
         "url": "MDLZ",
         "updated": "Daily"
@@ -3957,11 +3937,6 @@
     {
         "chart_name": "Medifast Inc",
         "url": "MED",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Methode Elec",
-        "url": "MEI",
         "updated": "Daily"
     },
     {
@@ -4675,11 +4650,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Pioneer Natural",
-        "url": "PXD",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Papa John'S Intl",
         "url": "PZZA",
         "updated": "Daily"
@@ -5320,11 +5290,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Teletech Hldgs",
-        "url": "TTEC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Tetra Tech Inc",
         "url": "TTEK",
         "updated": "Daily"
@@ -5627,11 +5592,6 @@
     {
         "chart_name": "Whirlpool Corp",
         "url": "WHR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Encore Wire",
-        "url": "WIRE",
         "updated": "Daily"
     },
     {
@@ -6030,11 +5990,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Northfield Banco",
-        "url": "NFBK",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "News Corp-Cl B",
         "url": "NWS",
         "updated": "Daily"
@@ -6147,11 +6102,6 @@
     {
         "chart_name": "Walker & Dunlop",
         "url": "WD",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Westrock Co",
-        "url": "WRK",
         "updated": "Daily"
     },
     {
@@ -8025,11 +7975,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Chatham Lodging Trust",
-        "url": "CLDT",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Coca-Cola Bottling Co Consolidated",
         "url": "COKE",
         "updated": "Daily"
@@ -8150,11 +8095,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "OraSure Technologies Inc",
-        "url": "OSUR",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Par Pacific Holdings Inc",
         "url": "PARR",
         "updated": "Daily"
@@ -8237,11 +8177,6 @@
     {
         "chart_name": "Whitestone REIT",
         "url": "WSR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Xperi Corp",
-        "url": "XPER",
         "updated": "Daily"
     },
     {
@@ -10330,11 +10265,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "EQUITRANS MIDSTREAM CORP",
-        "url": "ETRN",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "NVENT ELECTRIC PLC",
         "url": "NVT",
         "updated": "Daily"
@@ -11345,11 +11275,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Resources Connection Inc",
-        "url": "RGP",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "RadNet Inc",
         "url": "RDNT",
         "updated": "Daily"
@@ -11452,11 +11377,6 @@
     {
         "chart_name": "Otis Worldwide Corp",
         "url": "OTIS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Apartment Income REIT Corp",
-        "url": "AIRC",
         "updated": "Daily"
     },
     {
@@ -12220,11 +12140,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cerence Inc",
-        "url": "CRNC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "DT Midstream Inc",
         "url": "DTM",
         "updated": "Daily"
@@ -12955,16 +12870,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Shockwave Medical Inc",
-        "url": "SWAV",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Agiliti Inc",
-        "url": "AGTI",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Vital Energy Inc",
         "url": "VTLE",
         "updated": "Daily"
@@ -12997,11 +12902,6 @@
     {
         "chart_name": "Keurig Dr Pepper Inc",
         "url": "KDP",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Anywhere Real Estate Inc",
-        "url": "HOUS",
         "updated": "Daily"
     },
     {
@@ -13810,18 +13710,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Berkshire Hathaway Inc",
-        "url": "BRK_B",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "World Kinect Corp",
         "url": "WKC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Brown-Forman Corp",
-        "url": "BF_B",
         "updated": "Daily"
     },
     {
@@ -13907,11 +13797,6 @@
     {
         "chart_name": "Erie Indemnity Co",
         "url": "ERIE",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Moog Inc",
-        "url": "MOG_A",
         "updated": "Daily"
     },
     {
@@ -14220,11 +14105,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Clearway Energy Inc",
-        "url": "CWEN_A",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Hannon Armstrong Sustainable I",
         "url": "HASI",
         "updated": "Daily"
@@ -14370,11 +14250,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Seneca Foods-A",
-        "url": "SENEA",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "SPX MA50/200 Spread",
         "url": "spx_ma_50_200_spread",
         "updated": "Daily"
@@ -14448,5 +14323,155 @@
         "chart_name": "Conference Board LEI Model",
         "url": "conf_board_lei_model_indicator",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Percentage of S&P 500 stocks with 50-day average > 200-day average",
+        "url": "spy_ma50_above_ma200",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Percentage of sectors with 50-day average > 200-day average",
+        "url": "sp_sectors_ma50_above_ma200",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "StepStone Group Inc",
+        "url": "STEP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Berkshire Hathaway Inc",
+        "url": "BRK_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brown-Forman Corp",
+        "url": "BF_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Six Flags Entertainment Corp",
+        "url": "FUN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moog Inc",
+        "url": "MOG_A",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marathon Digital Holdings Inc",
+        "url": "MARA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Protagonist Therapeutics Inc",
+        "url": "PTGX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BioMarin Pharmaceutical Inc",
+        "url": "BMRN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Texas Pacific Land Corp",
+        "url": "TPL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RB Global Inc",
+        "url": "RBA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KKR & Co Inc",
+        "url": "KKR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smurfit WestRock PLC",
+        "url": "SW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Duolingo Inc",
+        "url": "DUOL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Virtu Financial Inc",
+        "url": "VIRT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Altair Engineering Inc",
+        "url": "ALTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gates Industrial Corp PLC",
+        "url": "GTES",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tidewater Inc",
+        "url": "TDW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Krystal Biotech Inc",
+        "url": "KRYS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DigitalOcean Holdings Inc",
+        "url": "DOCN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cactus Inc",
+        "url": "WHD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IAC Inc",
+        "url": "IAC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sarepta Therapeutics Inc",
+        "url": "SRPT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cohen & Steers Inc",
+        "url": "CNS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clearway Energy Inc",
+        "url": "CWEN_A",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ryan Specialty Holdings Inc",
+        "url": "RYAN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Warner Music Group Corp",
+        "url": "WMG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NEXTracker Inc",
+        "url": "NXT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TNX - 1.3 month EMA",
+        "url": "tnx_1_point_3_month_ema",
+        "updated": "Monthly"
     }
 ]

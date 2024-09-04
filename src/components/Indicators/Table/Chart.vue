@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name, market_symbol} = this.row;
+      const {url, pess, opt, chart_name, last_value} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -140,7 +140,7 @@
           };
         });
       };
- 
+
       const createChart = (series, allKeysName, basicChartOptions, row) => {
         console.log('series: ', series);
         const yAxisConfig = createYAxisConfig(series, row);
