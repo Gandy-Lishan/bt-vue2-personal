@@ -19,7 +19,7 @@
       </h3>
     </div> -->
     <div class="chart-name">
-      <h1>{{title}}<el-button type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
+      <h1>{{title}}<el-button v-if="row && !row.type.includes('seasonality')" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
       <el-button type="text" icon="el-icon-back" @click="$emit('showDetails', {}, false)">Return</el-button>
     </div>
     <div class="centent">
