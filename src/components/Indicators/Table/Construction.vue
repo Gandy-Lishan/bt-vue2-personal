@@ -14,6 +14,8 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12 construction">
+								<slot></slot>
+								<h4 v-if="_convertedHTML !== ''"><b>Construction:</b></h4>
 								<div v-html="_convertedHTML"></div>
 								<div v-html="performanceHTML"></div>
 								<div v-html="annualReturnHTML"></div>
@@ -150,7 +152,7 @@ export default {
 			handler(str) {
 				if(!str) return
 				const _this = this
-				_this._convertedHTML = str;
+				_this._convertedHTML = str
 				},
 				immediate: true
 		}

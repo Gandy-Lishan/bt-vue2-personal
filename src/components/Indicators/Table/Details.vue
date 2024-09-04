@@ -1,27 +1,12 @@
 <template>
   <div class="details">
-    <!-- <div class="back">
-			<span @click="$emit('showDetails', {}, false)"><i class="el-icon-arrow-left"></i>Back to {{backToListTitle}}</span>
-		</div>
     <div class="chart-name">
-      <h1>{{title}}<el-button type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
-    </div>
-    <div class="detail-title">
-      <h3>
-        Data Access -
-        <small><em>For internal use only...no distribution is allowed.</em></small>
-      </h3>
-      <el-button type="primary" size="mini" @click="$emit('downloadCSV')">Download CSV File</el-button>
-    </div>
-    <div class="seasonality-detail-title">
-      <h3>
-        Chart Details - Data last updated on <em>January 2024</em>
-      </h3>
-    </div> -->
-    <div class="chart-name">
-      <h1>{{title}}<el-button v-if="row && !row.type.includes('seasonality')" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
+      <h1>{{title}}<el-button style="margin-left: 5px;" v-if="row && row.type && !row.type.includes('seasonality')" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
       <el-button type="text" icon="el-icon-back" @click="$emit('showDetails', {}, false)">Return</el-button>
     </div>
+    <ul class="indicator-info">
+      <li :key="index" v-for="(item, index) in indicatorInfo">{{item}}</li>
+    </ul>
     <div class="centent">
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Detail'" :class="{ 'selected': selectedTitle === 'Detail' }">Indicator Detail</h4>
@@ -32,20 +17,51 @@
             </div>
           </div>
           <div>
-            <Construction v-show="selectedTitle === 'Detail'" ref="Construction" :convertedHTML="convertedHTML" :title="title"></Construction>
+            <Construction v-show="selectedTitle === 'Detail'" ref="Construction" :convertedHTML="convertedHTML" :title="title">
+             <div v-show="showReturns">
+									<h4><b>Threshold Return Analysis:</b></h4>
+									<p>
+										In order to provide more detailed information about our indicators, threshold return analysis has been performed for each.
+										The below data describes the annualized returns for the underlying while the indicator value is above / below the extreme values 
+										as well as the returns of the underlying while the indicator is between the extreme values. Note that the returns provided are 
+										describing the periods that the indicator is only in the threshold region (e.g., above, between, below).
+									</p>
+									<div class='col-md-6'>
+										<table class="threshold-table">
+											<thead>
+												<tr>
+													<th>Location of Indicator</th>
+													<th>Annualized Return</th>
+													<th>% of Time</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Above Extreme</td>
+													<td>{{ Above_Annualized }}%</td>
+													<td>{{ parseInt(percent_time_above) }}%</td>
+												</tr>
+												<!-- The between and below are reversed for some reason. Reversed them here. -->
+												<tr>
+													<td>Between Extremes</td>
+													<td>{{ Below_Annualized }}%</td>
+													<td>{{ parseInt(percent_time_below) }}%</td>
+												</tr>
+												<tr>
+													<td>Below Extreme</td>
+													<td>{{ Between_Annualized }}%</td>
+													<td>{{ parseInt(percent_time_between) }}%</td>
+												</tr>
+											</tbody>
+										</table>
+										<br>
+									</div>
+								</div>
+            </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
             <Related v-show="selectedTitle === 'Related'" ref="Related" :related="related"></Related>
           </div>
         </div>
-    <!-- <el-collapse  v-model="activeName" accordion>
-      <el-collapse-item name="1">
-        <template slot="title">
-          <h3 class="panel-title">
-            Indicator Details and Other Charts
-          </h3>
-        </template>
-      </el-collapse-item>
-    </el-collapse> -->
   </div>
 </template>
 
@@ -69,7 +85,15 @@ export default {
       convertedHTML: '',
       title: '',
       blog_results: [],
-      related: []
+      related: [],
+      indicatorInfo: [],
+      showReturns: false,
+      percent_time_above: '',
+      percent_time_below: '',
+      percent_time_between: '',
+      Above_Annualized: '',
+      Below_Annualized: '',
+      Between_Annualized: ''
     }
   },
   watch: {
@@ -106,6 +130,37 @@ export default {
           this.related = originalData.related
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
+          const indicatorInfo = []
+          for (const key in originalData) {
+            if (Object.prototype.hasOwnProperty.call(originalData, key)) {
+              const element = originalData[key];
+              if(key === 'timeframe') indicatorInfo.push(`Time Frame: ${element}`)
+              if(key === 'updated') {
+                const str = (element || 'Daily')
+                const firstWord = str.split(' ')[0]
+                indicatorInfo.push(`Update Schedule: ${firstWord}`)
+              }
+              if(key === 'source') indicatorInfo.push(`Source: ${element || 'Sentimentrader'}`)
+              if(key === 'show_returns' && element) {
+                this.showReturns = true
+                this.percent_time_above = originalData.percent_time_above
+                this.percent_time_below = originalData.percent_time_below
+                this.percent_time_between = originalData.percent_time_between
+                this.Above_Annualized = originalData.Above_Annualized
+                this.Below_Annualized = originalData.Below_Annualized
+                this.Between_Annualized = originalData.Between_Annualized
+              }else if(key === 'show_returns' && !element) {
+                this.showReturns = false
+                this.percent_time_above = ''
+                this.percent_time_below = ''
+                this.percent_time_between = ''
+                this.Above_Annualized = ''
+                this.Below_Annualized = ''
+                this.Between_Annualized = ''
+              }
+            }
+          }
+          this.indicatorInfo = indicatorInfo
         } catch (error) {
           console.log('error', error)
           return
@@ -179,7 +234,6 @@ export default {
     margin: 0;
     font-weight: 500;
     font-size: 24px;
-    color: #697882;
   }
   .el-button--text {
     color: rgb(31, 119, 180);
@@ -188,6 +242,14 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 15px 15px 0px 15px;
+}
+.indicator-info {
+  padding: 15px 15px 0px 15px;
+  font-weight: 700;
+  list-style-type: disc;
+  li {
+    margin-left: 15px;
+  }
 }
 .detail-title {
   display: flex;

@@ -16,7 +16,7 @@
         ></Table>
      </template>
      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" style="width: 65%" @showDetails="showDetails"></Details>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '694px'}"></Chart>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
    </div>
  </div>
 </template>
@@ -86,6 +86,10 @@ export default {
     },
     showDetails(row, isShowDetails) {
       this.isShowDetails = isShowDetails 
+    },
+    enLargeTable(row) {
+      debugger
+      this.$refs['popularVirtualScroll'][0].$refs['virtualScroll'].updateChart(row)
     }
  }
 }

@@ -114,7 +114,8 @@ export default {
       }
       console.log('searchUrl', searchUrl)
       debugger
-      const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      // const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      const urlTypes = Array.from(Object.keys(this.indicatorsListData))
       let sourceTable = urlTypes.map(type => {
         const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
           return list.map(item => {
