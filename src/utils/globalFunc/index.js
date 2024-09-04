@@ -13,7 +13,7 @@ const getSymbolInfo = (url) => {
     } else {
         // 第三种情况：既不是 stockName 也不是 indexName，可能是custom symbol
         try {
-          return {name: decodeBase64(url.split('||')[0]), url: url, type:'custom'}
+          return {name: decodeBase64(url.split('||')[0]), symbol: decodeBase64(url.split('||')[1]), url: url, type:'custom'}
         } catch (error) {
           return {name: '', url: url, type:'other'}
         }  
@@ -99,6 +99,7 @@ const getCoresSymbolDual = (isSymbol2) => {
   }
 
   // 兼容被改过key的股票列表
+  // TODO 兼容更多改过key的股票列表的情况
   const transformChangedKey = (res,source) => {
       const changedNameMap = {'crude':'Crude','bitcoin':'Bitcoin'}
       switch(source){

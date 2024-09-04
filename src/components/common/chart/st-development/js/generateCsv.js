@@ -361,7 +361,7 @@ let __st_js_generateCsv_ = (_exports) => {
  function generateFinalOutput(arrData,finalData,sd,index,indexNum,criteria){
      if(!sd.type) return finalData
      var resultIndex = ''
-     var categoryList = CIQ.technicalCategory
+     var categoryList = CIQ.store.getters.getTechnicalCategory
      // todo, rerun获取conditionRadio
      var conditionRadio = CIQ.store.state.form.conditionRadio[criteria][indexNum]
      var formatSmallNum = function(num){

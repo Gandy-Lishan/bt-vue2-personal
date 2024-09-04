@@ -307,7 +307,7 @@
             >
             <template slot="header">
                 Market Condition
-                    <el-tooltip effect="dark" placement="top" style="diaplay: inline">
+                    <el-tooltip effect="dark" placement="top" style="display: inline">
                     <span slot="content" v-html="textContent['MarketCondition']">
                     </span>
                     <i class="iconfont icon-wenhao"></i>

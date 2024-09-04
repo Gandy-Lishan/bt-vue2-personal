@@ -8,12 +8,12 @@ let __st_js_indicatorType_ = _exports => {
 	CIQ.findBuiltinTechIndicator = function(value, url) {
 		let signal
 		if (value) {
-			signal = CIQ.store.state.chart.builtinList.find(i => {
+			signal = CIQ.store.getters.getBuiltinList.find(i => {
 				return i.value == value
 			})
 		}
 		if (url) {
-			signal = CIQ.store.state.chart.builtinList.find(i => {
+			signal = CIQ.store.getters.getBuiltinList.find(i => {
 				return i.url == url
 			})
 		}

@@ -14,7 +14,7 @@ const state = {
 	cacheReRunData: {},
 	isCreateLoading: false,
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
-	symbolUploadDomActive: false
+	symbolUploadDomActive: false,
 }
 
 const mutations = {
@@ -54,7 +54,7 @@ const mutations = {
 	SET_CPM_RESULTS_DATA(state, data) {
 		state.cpmResultsData = data
 		sessionStorage.setItem('cpmResultsData', JSON.stringify(data))
-	}
+	},
 }
 
 const actions = {

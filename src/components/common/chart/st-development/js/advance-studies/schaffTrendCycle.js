@@ -21,8 +21,7 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
 
 let __js_advanced_studies_schaffTrendCycle_ = (_exports) => {
@@ -42,10 +41,7 @@ if (!CIQ.Studies) {
 		var period = sd.days;
 		var shortCycle = Number(sd.inputs["Short Cycle"]);
 		var longCycle = Number(sd.inputs["Long Cycle"]);
-		if (quotes.length < Math.max(period, shortCycle, longCycle) + 1) {
-			sd.error = true;
-			return;
-		}
+
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		var factor = 0.5;
@@ -68,6 +64,17 @@ if (!CIQ.Studies) {
 			stx,
 			sd
 		);
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < Math.max(period, shortCycle, longCycle) + 1) {
+					sd.error = true;
+					return;
+				}
 
 		function getLLVHHV(p, x, n) {
 			var l = null,
@@ -141,4 +148,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_schaffTrendCycle_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_schaffTrendCycle_}

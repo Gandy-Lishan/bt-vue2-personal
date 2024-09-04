@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_stochastics_ = (_exports) => {
@@ -52,6 +52,14 @@ if (!CIQ.Studies) {
 		if (!fastPeriod) fastPeriod = sd.days;
 
 		var quotes = sd.chart.scrubbed;
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < Math.max(fastPeriod, sd.days) + 1) {
 			sd.error = true;
 			return;
@@ -64,13 +72,13 @@ if (!CIQ.Studies) {
 		var slowPeriod = sd.inputs["%D Periods"];
 		if (!slowPeriod) slowPeriod = 3;
 
-		function computeStochastics(position, field, days) {
+		function computeStochastics(position, field, subField, days) {
 			var beg = position - days + 1;
 			var high = Number.MAX_VALUE * -1,
 				low = Number.MAX_VALUE;
 			for (var i = beg; i <= position; i++) {
-				var lowField = quotes[i][field == "Close" ? "Low" : field],
-					highField = quotes[i][field == "Close" ? "High" : field];
+				var lowField =getPropertyByString(quotes[i],field == "Close" ? "Low" : field,subField == "Close" ? "Low" : subField),
+					highField = getPropertyByString(quotes[i],field == "Close" ? "High" : field,subField == "Close" ? "High" : subField);
 				if (!lowField && lowField !== 0) continue;
 				if (!highField && highField !== 0) continue;
 				low = Math.min(low, lowField);
@@ -80,7 +88,7 @@ if (!CIQ.Studies) {
 			var k =
 				high == low
 					? 0
-					: ((quotes[position][field] - low) / (high - low)) * 100;
+					: ((getPropertyByString(quotes[position],field,subField) - low) / (high - low)) * 100;
 			return k;
 		}
 
@@ -91,11 +99,12 @@ if (!CIQ.Studies) {
 		}
 
 		for (var i = Math.max(fastPeriod, sd.startFrom); i < quotes.length; i++) {
-			var stoch = computeStochastics(i, field, fastPeriod);
+			var stoch = computeStochastics(i, field, subField, fastPeriod);
 			if (stoch !== null)
 				quotes[i]["_Fast%K " + sd.name] = computeStochastics(
 					i,
 					field,
+					subField,
 					fastPeriod
 				);
 		}
@@ -119,6 +128,13 @@ if (!CIQ.Studies) {
 		var pDPeriods = Number(sd.inputs["%D Periods"]);
 
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (
 			quotes.length < pKPeriods + pKSmoothPeriods + pK2SmoothPeriods - 1 ||
 			quotes.length < pDPeriods
@@ -131,8 +147,8 @@ if (!CIQ.Studies) {
 			var l = null,
 				h = null;
 			for (var j = x - p + 1; j <= x; j++) {
-				l = l === null ? quotes[j].Low : Math.min(l, quotes[j].Low);
-				h = h === null ? quotes[j].High : Math.max(h, quotes[j].High);
+				l = l === null ? getPropertyByString(quotes[j],field,'Low') : Math.min(l, getPropertyByString(quotes[j],field,'Low'));
+				h = h === null ? getPropertyByString(quotes[j],field,'High') : Math.max(h, getPropertyByString(quotes[j],field,'High'));
 			}
 			return [l, h];
 		}
@@ -141,7 +157,7 @@ if (!CIQ.Studies) {
 		for (i = Math.max(pKPeriods, sd.startFrom) - 1; i < quotes.length; i++) {
 			var quote = quotes[i];
 			var lh = getLLVHHV(pKPeriods, i);
-			quote["_H " + sd.name] = quote.Close - (lh[0] + lh[1]) / 2;
+			quote["_H " + sd.name] = getPropertyByString(quote,field,'Close') - (lh[0] + lh[1]) / 2;
 			quote["_DHL " + sd.name] = lh[1] - lh[0];
 		}
 
@@ -273,4 +289,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_stochastics_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_stochastics_}

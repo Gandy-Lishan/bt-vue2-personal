@@ -92,6 +92,14 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
 		var span = sd.inputs.Interval;
 		if (!span) span = "daily";
 		var roc = {
@@ -109,10 +117,10 @@ if (!CIQ.Studies) {
 				if (
 					i >= roc[span][j] &&
 					quotes[i - roc[span][j]] &&
-					quotes[i - roc[span][j]][field]
+					getPropertyByString(quotes[i - roc[span][j]],field,subField)
 				)
 					quotes[i]["_ROC" + j + " " + sd.name] =
-						100 * (quotes[i][field] / quotes[i - roc[span][j]][field] - 1);
+						100 * (getPropertyByString(quotes[i],field,subField) / getPropertyByString(quotes[i - roc[span][j]],field,subField) - 1);
 			}
 		}
 		for (j = 0; j < map[span].length; j++) {

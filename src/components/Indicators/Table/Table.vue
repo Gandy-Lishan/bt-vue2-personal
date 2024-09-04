@@ -1,8 +1,13 @@
 <template>
   <div class="outsideTable">
+    <div class="post-title" v-if="showReport">
+      <h3 style="font-size: 23px; font-weight: 300; margin: 10px 0;">This chart has been mentioned in {{ blog_results_length }} blog post(s). The
+      posts are listed below.</h3>
+    </div>
     <VirtualScrollTable
         v-bind="$attrs"
         v-on="$listeners"
+        ref="virtualScroll"
         :refName="tableInfo['refName']"
         :itemSize="tableInfo['itemSize']"
         :options="tableInfo['options']"
@@ -13,7 +18,11 @@
         :loading="loading"
         :firstRow="firstRow"
         :cssMonthLabel="cssMonthLabel"
+        :showReport="showReport"
+        :showRelated="showRelated"
         @loadMore="loadMore"
+        @updateChart="$emit('updateChart', row)"
+        @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
         >
     </VirtualScrollTable>
   </div>
@@ -22,12 +31,14 @@
 <script>
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
-import { isJson } from '@/utils'
+import { isJson, capitalizeFirstLetter, unifyNumber, timestampToTime } from '@/utils'
 
 export default {
   props: {
     tableInfo: Object,
-    selectedTitle: String
+    selectedTitle: String,
+    blog_results: Array,
+    related: Array
   },
   name: 'Table',
   data() {
@@ -58,7 +69,10 @@ export default {
         cstScreen: 'commod_optix_trend',
         CHMinMax: 'cot_max_min'
       },
-      firstRow: {}
+      firstRow: {},
+      blog_results_length: 0,
+      showReport: false,
+      showRelated: false
     }
   },
   components: {
@@ -76,6 +90,116 @@ export default {
       handler (title) {
         if(title === 'Popular') this.$emit('updateChart', this.firstRow)
       },
+    },
+    blog_results: {
+      handler (arr) {
+        if(Array.isArray(arr)) this.showReport = true
+        if(Array.isArray(arr) && arr.length !== 0) {
+            console.log('blog_results', arr)
+            this.loading = true
+            this.blog_results_length = arr.length
+            this.tableData = arr.map((item, index) => {
+              const dateStr = item.post_date
+              let formattedDate = ''
+              if (dateStr) {
+                const dateObj = new Date(dateStr);
+  
+                if (!isNaN(dateObj)) {
+                    const options = { year: 'numeric', month: 'long', day: '2-digit' };
+                    formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObj);
+                } else {
+                    console.log("Invalid date format");
+                }
+              } else {
+                  console.log("Date is null or undefined");
+              }
+              return {
+                ...item,
+                blog_url: item.url,
+                post_date: formattedDate,
+                url: `${item.title}_${index}`
+              }
+            })
+            const _this = this
+            _this.$nextTick(() => {
+              _this.loading = false
+            })
+            console.log('this.tableData ', this.tableData )
+        }
+      }
+    },
+    related: {
+      handler (arr) {
+        console.log('related', arr)
+        if(Array.isArray(arr)) this.showRelated = true
+        if(Array.isArray(arr) && arr.length !== 0) {
+          this.loading = true
+          this.tableData = arr.map(obj => {
+          const subType = obj['sub_type']
+          for (const key in obj) {
+            if (Object.hasOwnProperty.call(obj, key)) {
+              if(key === 'timeframe') {
+                if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
+                else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
+                else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
+              }
+              const subTypeMapping = {
+                model: 'Model',
+                models: 'Model',
+                more: 'More',
+                breadth: 'Breadth',
+                surveys: 'Surveys',
+                shorts: 'Shorts',
+                cash: 'Cash',
+                insiders: 'Insiders',
+                rydex: 'Rydex',
+                seasonality: 'Seasonality',
+                etf_index: 'Index',
+                etf_bond: 'Bond',
+                etf_social: 'Social',
+                etf_commod: 'Commodity',
+                etf_breadth: 'Sector Breadth',
+                etf_country: 'Country',
+                etf_etf: 'Sector',
+                pc_ratio: 'PutCall',
+                stock_sent: 'Stock',
+                equity: 'COT',
+                cot: 'COT',
+                optix: 'Optix',
+                vol: 'Volatility',
+                etf_fund_index: 'Index',
+                etf_social_index: 'Index',
+                etf_fund_sector: 'Sector',
+                etf_social_sector: 'Sector',
+                etf_fund_commodity: 'Commodity',
+                etf_social_commod: 'Commodity',
+                etf_fund_bond: 'Bond',
+                etf_social_bond: 'Bond',
+                etf_fund_country: 'Country',
+                etf_social_country: 'Country',
+              }
+              if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
+              if(['last_value', 'last_change'].includes(key)) {
+                // 保留特定小数点
+                if(['last_value', 'last_change'].includes(key)) obj[key] = unifyNumber(obj[key], 4)
+                if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
+
+              }
+              if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+              if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
+                if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
+                // 加 %
+              }
+            }
+          }
+          return obj
+        })
+        const _this = this
+        _this.$nextTick(() => {
+          _this.loading = false
+        })
+        }
+      }
     }
   },
   async mounted() {
@@ -83,25 +207,34 @@ export default {
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
-    async loadMore (type) {
-      debugger
+    async loadMore (type, isUpdateChart) {
       this.optionsChecked = type
-      if(this.tableData.length === 0) this.loading = true
+      this.loading = true
       let _results
       try {
         const url = this.urlMap[this.optionsChecked]
+        if(!url) {this.loading = false;return}
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
           console.log(url, _results)
       } catch (error) {
         console.log('error', error)
         _results = []
-       this.loading = false
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
+      if(isUpdateChart) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
+    async enLargeTable(checked, row) {
+      await this.$refs['virtualScroll']._toggleEnlarge(checked, row)
+    },
+    async clearEnlarge() {
+      console.log("this.$refs['virtualScroll']", this.$refs['virtualScroll'].enlarged)
+      if(this.$refs['virtualScroll'].enlarged) {
+        await this.$refs['virtualScroll']._toggleEnlarge()
+      }
+    }
   }
 
 }
@@ -109,6 +242,6 @@ export default {
 
 <style lang="less" scoped>
 .outsideTable {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 </style>

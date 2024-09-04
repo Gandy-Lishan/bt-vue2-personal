@@ -2,7 +2,7 @@ import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCurDate } from '@/service/ai'
 import { getIndicatorsRowData } from "@/service/service";
-import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
+import { getQueryVariable, LocalStorageUtil, getTokenRole, printConsole } from '@/utils'
 import store from '../store'
 import { uniqWith, isEqual } from "lodash"
 
@@ -35,14 +35,27 @@ export function setRouterPermission(router) {
 			const _symbol = market_symbol || 'SPX'
 			symbol = _symbol
 		}
-		if (indicator) LocalStorageUtil.set('indicator', indicator)
-		if (symbol) LocalStorageUtil.set('symbol', symbol)
+		if (indicator) sessionStorage.setItem('indicator', indicator)
+		if (symbol) sessionStorage.setItem('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-	/* normal user */
-	// Cookies.set(
-	// 	'sentimen_session',
-	// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
-	// )
+		printConsole(process.env.NODE_ENV)
+		if(process.env.NODE_ENV == 'development'){
+			Cookies.set(
+				'sentimen_session',
+				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			)
+		}
+		/* dean */
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcXnDSFIxtMrVEk8NDM/J1BJ6b0zEi712Cd/Wuu8VCSDrgP5IovRDyZmwIXdFxicPZZ07rW868yMR7Iab1kh0zUC3WoQQZnBaLpZ27Buvu5pUu/F7+211xHuWOEuyEQt6D9lMQDeQ5jAGpV/J/uVsLqfD9n+0hQxUhLItFmELpTrxVpiNQOZ0MtBHJiNo+fyKF63WtW8kFlRGqLEpCU8U/lXLL+RR4vvII1X6o84D0TYzg7G4kSsmu3tQJj7QpZ+Rfmqht63Tk4/E8FpXch/WeSjDcnUfavjAa8KynVD7Ega5+/8+OuiQuNiSc89YrXYjCTPiEOsd/zGwruaBmugeGl4lK7gx5Ukquf9L72KLFaJJB+vnmBRKuxM6AtJ1D2CtQdE2w2Fde38kYPyl24AB5S'
+		// )
+
+		/* normal user */
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
+		// )
 	
 		/* hao@sentimentrader.com */
 		// Cookies.set(
@@ -91,6 +104,8 @@ export function setRouterPermission(router) {
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcOrAwYSJ4eSBTuZhZqrInKI+C5rORbU/iO3bXPPpsd6sndEt+m/nzXAA8wNg3qTiym8DmTFO9E1dYMIsK/g/dxfId4fRWpIj47FlICxoE7RkeeNCd3UV1JMZlEx/hFtyHUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwABeUfgFvahpjXNn+xUxHH8smHHrUp+gLpfKeBmaxIqC9U1mEqJebqxfuVk5hKzD484S3SOmHNzyYYuYGXx/e00GDaFa0z0UNm3b+NNYl1y1DN4TaiD7WavEay3z0BbTUGNhgskUX8Zgd2tTLScWF/fG6dMUn/AUuoF+dXnjAfKnjcQ7K4NNSqhSnn3DYbpzWB7tQ81fTdf+YSTTVueh/vFiE801WK2HHYPXSXGyyHpTrOSgNBAgEnjmO1n4imKBKbw=='
 		// )
 
+		// test ignlore
+
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			if (
@@ -123,10 +138,10 @@ export function setRouterPermission(router) {
 
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
 					await initiateCurrentDate()
-					await initiateIndicatorList()
+					await initiateList(to.name)
 					store.dispatch('states/set_scannerai_flag', true)
 				} else {
-					await initiateIndicatorList()
+					await initiateList(to.name)
 					store.dispatch('states/set_scannerai_flag', false)
 				}
 				next()
@@ -172,7 +187,7 @@ async function initiateCurrentDate() {
 	})
 }
 
-async function initiateIndicatorList() {
+async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
 	if (
@@ -200,6 +215,10 @@ async function initiateIndicatorList() {
 		store.getters.getFavoriteSymbolList.length == 0
 	) {
 		await store.dispatch('chart/get_favorite')
+	}
+
+	if (pathname == 'Reports' && store.getters.getSymbollistForecast.length == 0){
+		await store.dispatch('chart/get_symbollist_forecast')
 	}
 }
 

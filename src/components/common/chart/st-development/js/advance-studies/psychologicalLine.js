@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_psychologicalLine_ = (_exports) => {
@@ -39,6 +39,15 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculatePsychologicalLine = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+		
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+	
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -48,12 +57,12 @@ if (!CIQ.Studies) {
 		var accum = 0;
 		for (var i = Math.max(sd.startFrom - sd.days, 1); i < quotes.length; i++) {
 			if (quotes[i].futureTick) break;
-			var up = Number(quotes[i].Close > quotes[i - 1].Close);
+			var up = Number(getPropertyByString(quotes[i],field,'Close') > getPropertyByString(quotes[i - 1],field,'Close'));
 			if (up) accum += increment;
 			array.push(up);
 			if (array.length > sd.days) accum -= array.shift() * increment;
 			if (i < sd.startFrom) continue;
-			if (!isNaN(quotes[i].Close)) quotes[i]["Result " + sd.name] = accum;
+			if (!isNaN(getPropertyByString(quotes[i],field,'Close'))) quotes[i]["Result " + sd.name] = accum;
 		}
 	};
 
@@ -68,4 +77,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_psychologicalLine_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_psychologicalLine_}

@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_relativeVigor_ = (_exports) => {
@@ -39,6 +39,13 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateRelativeVigor = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -46,10 +53,14 @@ if (!CIQ.Studies) {
 		var i;
 		for (i = sd.startFrom; i < quotes.length; i++) {
 			var qt = quotes[i];
-			if (!isNaN(qt.Close) && !isNaN(qt.Open))
-				qt["_Change " + sd.name] = qt.Close - qt.Open;
+			let qtClose = getPropertyByString(qt,field,'Close')
+			let qtOpen = getPropertyByString(qt,field,'Open')
+			let qtHigh = getPropertyByString(qt,field,'High')
+			let qtLow = getPropertyByString(qt,field,'Low')
+			if (!isNaN(qtClose) && !isNaN(qtOpen))
+				qt["_Change " + sd.name] = qtClose - qtOpen;
 			if (!isNaN(qt.High) && !isNaN(qt.Low))
-				qt["_Range " + sd.name] = qt.High - qt.Low;
+				qt["_Range " + sd.name] = qtHigh - qtLow;
 		}
 
 		CIQ.Studies.MA("triangular", 4, "_Change " + sd.name, 0, "_Numer", stx, sd);
@@ -119,4 +130,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_relativeVigor_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_relativeVigor_}

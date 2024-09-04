@@ -157,7 +157,7 @@
 				show-overflow-tooltip
 				align="center">
 				<template slot="header">
-						<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+						<el-tooltip effect="dark" placement="top" style="display: inline">
 						<span slot="content" v-html="typeTooltip"></span>
 							<el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
 								<el-submenu index="Strategy">

@@ -30,6 +30,9 @@ const getters = {
 	getStockList: state => state.chart.stocksList,
 	getIndexList: state => state.chart.indexsList,
 	getIndicatorsList: state => state.chart.indicatorsList,
+	getTechnicalCategory: state => state.chart.technicalCategory,
+	getBuiltinList: state => state.chart.builtinList,
+	getFormateTechnicalList: state => state.chart.formateTechnicalList,
 	getRefactoredSentimentList: state => state.chart.refactoredSentimentList,
 	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
 	getSymbollistForecast: state => state.chart.symbollistForecast,
@@ -52,6 +55,7 @@ const getters = {
 	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
 	getIndicatorsPageListData: (state) => state.chart.indicatorsPageListdata,
 	getCssMonthLabel: state => state.chart.cssMonthLabel,
+	getIndicatorPageBtv1List: state => state.chart.indicatorPageBtv1List,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

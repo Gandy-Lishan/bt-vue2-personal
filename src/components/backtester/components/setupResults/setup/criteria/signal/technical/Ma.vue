@@ -5,7 +5,7 @@
 		<el-form :model="tech" :rules="rules" ref="maForm" size="mini">
 			<div class="condition-container">
 				<el-form-item
-						style="diaplay: inline"
+						style="display: inline"
 						effect="light"
 						content="Compare with indicator value"
 						placement="bottom"
@@ -31,7 +31,7 @@
 				</el-form-item>
 				<div class="conditionSelect">
 					<el-form-item
-							style="diaplay: inline"
+							style="display: inline"
 							effect="light"
 							content="The way of comparing between comparison and value"
 							placement="bottom"

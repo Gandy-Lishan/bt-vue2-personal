@@ -786,7 +786,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 					"class": "Stochastics_like",
 					"studies":[
 						{
-							"name": "Stochastic Momentum",
+							"name": "Stochastic Momentum Index",
 							"url": "Stch Mtm"
 						},
 						{

@@ -29,6 +29,7 @@
           </label>
         </template>
         <el-autocomplete
+            ref="autocomplete"
             class="inline-input"
             v-model="data.symbol"
             :fetch-suggestions="querySearch"
@@ -44,10 +45,7 @@
           <template slot-scope="{ item }">
             <div class="custom-option">
               <span class="symbol-label">{{
-                item.url
-              }}</span>
-              <span class="symbol-url">{{
-                item.label
+                item.type == 'Custom' ? item.label : item.url
               }}</span>
             </div>
           </template>
@@ -361,9 +359,10 @@
 import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
-import { timestampToTime, isJson } from '@/utils'
+import { timestampToTime, isJson, encodeBase64 } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { mapGetters } from "vuex"
+import { getSymbolInfo } from '@/utils/globalFunc'
 
 export default {
   name: 'Form',
@@ -483,8 +482,9 @@ export default {
           { required: true, message: 'Enter a name', trigger: 'blur' }
         ],
         symbol: [
-          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
-          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList, 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
+          // 需要考虑到custom symbol校验
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
@@ -529,6 +529,12 @@ export default {
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.data.symbol = newVal
+        // 在判断到symbol为custom symbol时更新autocomplete input value以保证selector内显示为label而不是默认value
+        const {name,type} = getSymbolInfo(newVal)
+        if(type == 'custom'){
+          // 处理选中项的操作，例如更新输入框的显示值为 item.label
+          this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = name;}) 
+        }
       },
       immediate: true,
       deep: true
@@ -596,7 +602,14 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = this.data.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
+
+      // 在判断到symbol为custom symbol时把backtest name调整成正常形式
+      let bdSymbol = this.data.symbol
+      const {name,type} = getSymbolInfo(bdSymbol)
+      if(type == 'custom'){
+        bdSymbol = name
+      }
+      this.data.name = bdSymbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
     },
     resetChart() {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
@@ -642,9 +655,17 @@ export default {
       const startDay = timestampToTime(new Date(this.data.start_date))
       return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
     },
+    getCustomStocksList() {
+      let vm = this
+      return vm.$store.getters.getMySymbollist.map((item, index) => {
+        let url = encodeBase64(item.name) + '||' + encodeBase64(item.url)
+        return { label: `${item.name}`, url: `${url}`, type: 'Custom' }
+      })
+    },
     querySearch(queryString, cb) {
       if(!this.dropdownList || this.dropdownList.length == 0) {
         this.dropdownList = this.symbolList
+        this.dropdownList = this.dropdownList.concat(this.getCustomStocksList())
       }
       var results = this.dropdownList.map(item => ({
           ...item,
@@ -656,7 +677,10 @@ export default {
 
     handleSelect(item) {
       this.data.symbol = item.url
-
+      if(item.type == 'Custom'){
+        // 防止symbol 选中时不触发handleGetBacktestSymbol,而导致没有更新autocomplete input value
+        this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = item.label;}) 
+      }
       // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
       CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
         this.calculateBarDistance()

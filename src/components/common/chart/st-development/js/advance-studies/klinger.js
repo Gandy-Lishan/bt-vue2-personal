@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_klinger_ = (_exports) => {
@@ -45,6 +45,14 @@ if (!CIQ.Studies) {
 		var quotes = sd.chart.scrubbed;
 		var shortCycle = Number(sd.inputs["Short Cycle"]);
 		var longCycle = Number(sd.inputs["Long Cycle"]);
+
+				var _field	// 它是流动的
+				if(sd.parameters.isComparison){
+					_field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(_field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < Math.max(shortCycle, longCycle) + 1) {
 			sd.error = true;
 			return;
@@ -58,8 +66,8 @@ if (!CIQ.Studies) {
 			longEMA = "_EMA-L " + sd.name,
 			i;
 		for (i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			var sv = quotes[i].Volume;
-			if (quotes[i]["hlc/3"] < quotes[i - 1]["hlc/3"]) sv *= -1;
+			var sv = getPropertyByString(quotes[i],_field,'Volume');
+			if (getPropertyByString(quotes[i],_field,'hlc/3') < getPropertyByString(quotes[i - 1],_field,'hlc/3')) sv *= -1;
 			if (sv) quotes[i][signedVolume] = sv;
 		}
 
@@ -125,4 +133,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_klinger_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_klinger_}

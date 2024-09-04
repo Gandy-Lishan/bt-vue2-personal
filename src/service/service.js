@@ -14,19 +14,6 @@ const author = {
 	password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 }
 export function getIndicatorsList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + "/getAllSymbols"
-	// //return axios.get(url, {auth: author})
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	//         //console.log(res)
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/indicatorsList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -41,17 +28,6 @@ export function getIndicatorsList() {
 	})
 }
 export function getIndexsList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getIndexes'
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/indexsList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -66,17 +42,6 @@ export function getIndexsList() {
 	})
 }
 export function getStocksList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getStocks'
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/stocksList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -1469,6 +1434,22 @@ export function getIndicatorsRowData(url) {
 			})
 	})
 }
+
+export function obtainBTV1IndicatorsList() {
+
+	const path =`/dev/st_data/btv1_user_favorite_indicator`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { cache: false, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* Indicators Page 接口 END */
 
 /** Begin fetch BTV2 fav indicator & symbol list*/
@@ -1477,7 +1458,7 @@ export function getFavorite() {
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(path, { cache: true, withCredentials: true })
+			.get(path, { cache: false, withCredentials: true })
 			.then(res => {
 				resolve(res)
 			})
@@ -1495,7 +1476,7 @@ export function updateFavorite(indicator,symbol) {
 	return new Promise((resolve, reject) => {
 		axios
 			.put(path, mqs.stringify(mFavorite), {
-				cache: true,
+				cache: false,
 				withCredentials: true
 			})
 			.then(res => {

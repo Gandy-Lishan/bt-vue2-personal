@@ -8,7 +8,8 @@ import {
     getIndicatorsList,
     getSymbollistForecast,
 	getFavorite,updateFavorite,
-	obtainIndicatorsList
+	obtainIndicatorsList,
+	obtainBTV1IndicatorsList
 } from '@/service/service.js'
 import {Toast, capitalizeFirstLetter, isJson, unifyNumber, timestampToTime } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
@@ -115,7 +116,8 @@ const state = {
 	refactoredSentimentList: [],
 	refactoredSymbolList: [],
 	indicatorsPageListdata: {},
-	cssMonthLabel: ''
+	cssMonthLabel: '',
+	indicatorPageBtv1List: null
 }
 
 const mutations = {
@@ -223,6 +225,8 @@ const mutations = {
 	getExtremeValue: (state, list) => {
 		state.extremeValue = list
 	},
+
+
 	/**
 	 * Sets up a mutations to store the StocksList, it's usually called when the project is initiated
 	 */
@@ -241,19 +245,20 @@ const mutations = {
 	SET_INDICATORSLIST(state, data) {
 		state.indicatorsList = data
 	},
-
 	/**
-	 * set a single indicator to the indicator list
+	 * Sets up a mutations to store the technical indicators
 	 */
-	getEntryIndicators(state, obj) {
-		let { index, value } = obj
-		state.indicators.formIndicators.entry[index] = value
+	SET_TECH_CATEGORY(state, data) {
+		state.technicalCategory = data
 	},
-	getExitIndicators(state, obj) {
-		let { index, value } = obj
-		state.indicators.formIndicators.exit[index] = value
+	SET_BUILTIN_LIST(state, data) {
+		state.builtinList = data
 	},
-	// 以上两个准备被替换
+	SET_FORMAT_TECH_LIST(state, list) {
+		state.formateTechnicalList = list
+	},
+
+
 	getIndicators(state, obj) {
 		let {index, value, criteria} = obj
 		state.indicators.formIndicators[criteria][index] = value
@@ -265,21 +270,11 @@ const mutations = {
 		let {criteria, list} = obj
 		state.indicators.formIndicators[criteria] = list
 	},
-
 	/**
 	 * no bug occurs, however, the logic inside is confusing
 	 */
-
 	getExtraIndicators(state, val) {
 		state.indicators.extraIndicators = val
-	},
-
-	/**
-	 * Sets up a mutations to store the technical indicators
-	 */
-
-	getBuiltinList(state, data) {
-		state.builtinList = data
 	},
 
 	getTradesData(state, data) {
@@ -298,9 +293,7 @@ const mutations = {
 	getTechLayout(state, val) {
 		state.activatedTechLayout = val
 	},
-	saveFormatTechnicalList(state, list) {
-		state.formateTechnicalList = list
-	},
+
 	RESET_CHART_STUDY_STATE: state => {
 		// 清空chartiq indicator study信息
 		;(state.indicators = {
@@ -339,6 +332,7 @@ const mutations = {
 		state.miBenmark = val
 	},
 	SET_INDICATORS_PAGE_LIST_DATA(state, { url, data }) {
+		if(!url) return
 		state.indicatorsPageListdata[url] = JSON.stringify(data)
 	}
 }
@@ -492,6 +486,30 @@ const actions = {
 			}
 		})
 	},
+	initiate_tech_list({ commit }, list){
+		return new Promise(async (resolve,reject) => {
+			let buildinTechList = []
+			for (let i = 0; i < list.length; i++) {
+				list[i].studies.forEach((item) => {
+					buildinTechList.push({
+						class:list[i].class,
+						value:item.name,
+						url:item.url
+					})
+				})
+			}
+			let formatList = buildinTechList.filter(item=>
+				item.class !== 'No_display_technical_indicator' &&
+				item.class !== 'Not_in_backtest_technical_indicator_but_visible_in_chatiq'
+			).sort(function (a, b) {
+				return a.value.localeCompare(b.value)
+			})
+			commit('SET_TECH_CATEGORY', list)
+			commit('SET_BUILTIN_LIST',buildinTechList);
+			commit('SET_FORMAT_TECH_LIST', formatList)
+			resolve()
+		})
+	},
 /** End fetch resources */
 
 
@@ -609,7 +627,13 @@ const actions = {
 		})
 	},
 
-
+get_indicator_page_btv1_list({ commit }) {
+		return new Promise(async resolve => {
+			let btv1List = await obtainBTV1IndicatorsList()
+			commit('SET_INDICATOR_PAGE_BTV1_LIST', btv1List)
+			resolve()
+		})
+	},
 /** Begin MyIndicator page*/
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
@@ -752,50 +776,136 @@ const actions = {
           state.cssMonthLabel = `for ${month}`
           _results = isJson(screen_data) ? JSON.parse(screen_data) : []
         }
-        if(!state.favoriteIndicatorListBtv1) await dispatch('get_myindicator')
+        if(!state.indicatorPageBtv1List) await dispatch('get_indicator_page_btv1_list')
         if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
         console.log('commod_sentiment_seasonality', _results)
-          _results = _results.map(obj => {
-            for (const key in obj) {
-              if (Object.hasOwnProperty.call(obj, key)) {
-                if(key === 'timeframe') {
-                  if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
-                  else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
-                  else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-                }else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
-                  // 大写首字母
-                  obj[key] = capitalizeFirstLetter(obj[key])
-                }
-                if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return', 'AvgReturn'].includes(key)) {
-                  // 保留特定小数点
-                  if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
-                  else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
-                  else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
-                  else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}
-                }
-                if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['last_update'] = timestampToTime(obj[key])
-                if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
-                const isInBtv1List = state.favoriteIndicatorListBtv1.data.data.find(item => (item.url[0] === obj['url']))
-                const isInBtv2List = state.favoriteIndicatorList.find(item => (item.url === obj['url']))
-                if((key === 'url' || key === 'chart_url') && isInBtv1List) {
-                  obj['source'] = 'Backtest Engine v1.0'
-                  obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && isInBtv2List) {
-                  obj['source'] = 'Backtest Engine v2.0'
-                  obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && isInBtv2List && isInBtv1List) {
-                  obj['source'] = 'Backtest Engine v1.0 & v2.0'
-                  obj['favorite'] = true
-                }else if((key === 'url' || key === 'chart_url') && !isInBtv1List && !isInBtv2List) {
-                  obj['source'] = 'Backtest Engine v2.0'
-                  obj['favorite'] = false
-                }
-                // 加按钮 loading
-                obj['loading'] = false
+								_results = _results.map(obj => {
+										for (const key in obj) {
+												if (Object.hasOwnProperty.call(obj, key)) {
+														if(key === 'timeframe') {
+																if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
+																else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
+																else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
+														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
+										if(url === 'commodity_complete_list' && key === 'sub_type' && obj['url'].startsWith('vol_')) {
+											obj[key] = 'Volatility'
+										}else if(url === 'etf_complete_list' && obj['sub_type'] === 'etf_bond' && obj['url'].startsWith('etf_') && (obj['underlying_name'] && obj['underlying_name'].endsWith('Treasury'))) {
+												obj['chart_name'] = obj['underlying_name'].replace('Treasury', 'Optix')
+												if(obj['sub_type'] === 'etf_bond') obj['sub_type'] = 'Bond'
+										}else if(url === 'etf_seasonality' && obj['type'] === 'etf_seasonality' && (obj['underlying_name'] && (obj['underlying_name'].includes('Industrial') || obj['underlying_name'].includes('Discretionary')))) {
+												if(obj['underlying_name'].includes('Industrial')) obj['underlying_name'] = obj['underlying_name'].replace('Industrial', 'Ind.')
+													if(obj['underlying_name'].includes('Discretionary')) obj['underlying_name'] = obj['underlying_name'].replace('Discretionary', 'Disc.')
+										} else if(url === 'bond_complete_list' && key === 'sub_type') {
+										const chartNamesFor10Year = [
+										'Bond Optix', '10-Year Optix', '10-Year Treasury Hedgers Position',
+										'10-Year Bond Put/Call Ratio', '10-Year Treasury Seasonality','Conference Board - Bonds',
+										'Ultra 10-Year Treasuries Hedgers Position', 'Ultra 10-Year Treasury Hedgers Position',
+										'2-Year / 10-Year Yield Curve', 'BBB - AAA Corporate Bond Yield Spread'
+										]
+										const chartNamesFor20Year = [
+											'TLT Optix', 'TLT Seasonality', 'TLT Open Interest Ratio'
+										]
+										const chartNamesFor2Year = [
+											'2-Year Optix', '2-Year Treasury Hedgers Position', '2-Year Treasury Seasonality'
+										]
+										const chartNamesFor30Year = [
+											'30-Year Treasury Hedgers Position', '30-Year Bond Put/Call Ratio', 'Rydex Bond Bear Assets',
+											'Rydex Bond Bull Assets', 'Rydex Bond Bull Ratio', '30-Year Treasury Seasonality', 'AAII Allocation - Bonds',
+											'Strategist Allocation - Bonds', '30-Year Optix', 'Fund Flow - Combined Bond', 'Fund Flow - ETF Bond',
+											'Fund Flow - Mutual Fund Bond', 'Ultra 30-Year Treasuries Hedgers Position', 'Ultra 30-Year Treasury Hedgers Position'
+										]
+										const chartNamesFor5Year = [
+											'5-Year Treasury Hedgers Position', '5-Year Treasury Seasonality', '5-Year Treasury', '5-Year Optix'
+										]
+										const chartNamesForEurodollar = [
+											'Eurodollar Optix', 'Eurodollar Hedgers Position', 'Eurodollar Price Seasonality'
+										]
+										const chartNamesForHighYield = [
+											'High Yield Bond Advance-Decline', 'High Yield Bond NH - NL',
+											'HYG Optix', 'JNK Optix', 'HYG Seasonality', 'JNK Seasonality',
+											'High Yield Bond Cumulative A/D Line', 'High Yield McClellan Oscillator', 'High Yield McClellan Summation'
+										]
+										const chartNamesForInvestmentGrade = [
+											'BND Optix', 'LQD Optix', 'LQD Seasonality'
+										]
+										if(chartNamesFor10Year.includes(obj['chart_name'])) obj['sub_type'] = '10-Year Treasury'
+										else if(chartNamesFor20Year.includes(obj['chart_name'])) obj['sub_type'] = '20-Year Treasury'
+										else if(chartNamesFor2Year.includes(obj['chart_name'])) obj['sub_type'] = '2-Year Treasury'
+										else if(chartNamesFor30Year.includes(obj['chart_name'])) obj['sub_type'] = '30-Year Treasury'
+										else if(chartNamesFor5Year.includes(obj['chart_name'])) obj['sub_type'] = '5-Year Treasury'
+										else if(chartNamesForEurodollar.includes(obj['chart_name'])) obj['sub_type'] = 'Eurodollar'
+										else if(chartNamesForHighYield.includes(obj['chart_name'])) obj['sub_type'] = 'High-Yield'
+										else if(chartNamesForInvestmentGrade.includes(obj['chart_name'])) obj['sub_type'] = 'Investment Grade'
+										else {obj['sub_type'] = capitalizeFirstLetter(obj['sub_type'])}
+									}else {
+										if (obj['sub_type'] === 'vol') {
+											obj['sub_type'] = 'Volatility';
+										} else if (obj['sub_type'] === 'stock_sent') {
+											obj['sub_type'] = 'Stock Sentiment';
+										} else if (obj['sub_type'] === 'pc_ratio') {
+											obj['sub_type'] = 'PutCall';
+										}else if (['equity', 'cot'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'COT';
+										} else if (['etf_index', 'etf_social_index'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'Index';
+										} else if (['etf_etf', 'etf_social_sector', 'etf_sector', 'mff_sector'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'Sector';
+										} else if (['etf_bond', 'etf_social_bond', 'mff_bond'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'Bond';
+										} else if (['etf_commod', 'etf_social_commod', 'mff_commod'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'Commodity';
+										} else if (obj['sub_type'] === 'etf_breadth') {
+											obj['sub_type'] = 'Sector Breadth';
+										} else if (['etf_country', 'etf_social_country'].includes(obj['sub_type'])) {
+											obj['sub_type'] = 'Country';
+										} else if (obj['sub_type'] === 'etf_social') {
+											obj['sub_type'] = 'Social';
+										} else if (obj['sub_type'] === 'seasonality') {
+											obj['sub_type'] = 'Seasonality';
+										} else if (obj['sub_type'] === 'optix') {
+											obj['sub_type'] = 'Optix';
+										} else if (obj['sub_type'] === 'model') {
+											obj['sub_type'] = 'Model';
+										} else if (obj['sub_type'] === 'more') {
+											obj['sub_type'] = 'More';
+										} else if (obj['sub_type'] === 'rydex') {
+											obj['sub_type'] = 'Rydex';
+										} else if (obj['sub_type'] === 'mff_stocks') {
+											obj['sub_type'] = 'Stocks';
+										} else if (obj['sub_type'].startsWith('etf_fund_')) {
+											obj['sub_type'] = obj['sub_type'].split('_')[2].charAt(0).toUpperCase() + obj['sub_type'].split('_')[2].slice(1); // Capitalize the 3rd part
+										} else {
+											obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
+										}}}
+									if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return', 'AvgReturn'].includes(key)) {
+											if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
+											else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
+											else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
+											else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}}
+									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['last_update'] = timestampToTime(obj[key])
+									if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
+									const isInBtv1List = state.indicatorPageBtv1List.find(item => (item.url === obj['url']))
+									const isInBtv2List = state.favoriteIndicatorList.find(item => (item.url === obj['url']))
+									if((key === 'url' || key === 'chart_url') && isInBtv1List) {
+											obj['source'] = 'Backtest Engine v1.0'
+											obj['favorite'] = true
+									}else if((key === 'url' || key === 'chart_url') && isInBtv2List) {
+											obj['source'] = 'Backtest Engine v2.0'
+											obj['favorite'] = true
+									}else if((key === 'url' || key === 'chart_url') && isInBtv2List && isInBtv1List) {
+											obj['source'] = 'Backtest Engine v1.0 & v2.0'
+											obj['favorite'] = true
+									}else if((key === 'url' || key === 'chart_url') && !isInBtv1List && !isInBtv2List) {
+											obj['source'] = 'Backtest Engine v2.0'
+											obj['favorite'] = false
+									}
+									// 加按钮 loading
+									obj['loading'] = false
 								// 加来源列表
 								obj['source_list'] = url
+
 									if(
-											((key === 'last_value' || key === 'last_change') && url === 'stock_complete_list' && obj['last_change_type'] === 'percent')
+											((key === 'last_value' || key === 'last_change') && (url === 'stock_complete_list' || url === 'most_popular') && obj['last_change_type'] === 'percent')
 											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_net_return' && url === 'etf_seasonality'
@@ -808,11 +918,24 @@ const actions = {
 											// 全部大写
 											obj[key] = obj[key].toUpperCase()
 									}
-							}
-					}
+												}
+										}
 					return obj
 			})
-          console.log(_results)
+    console.log(_results)
+				if (url === 'etf_seasonality') {
+					const seenUrls = new Set();
+					_results = _results.filter(item => {
+							if (item['url'] === 'etf_seasonality') {
+									if (!seenUrls.has(item['url'])) {
+											seenUrls.add(item['url']);
+											return true;
+									}
+									return false;
+							}
+							return true;
+					});
+			}
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: _results });
 			} catch (error) {
 				console.error('Error fetching data:', error);

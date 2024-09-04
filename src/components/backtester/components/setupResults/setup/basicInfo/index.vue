@@ -1122,16 +1122,20 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
-      if(!val) return
-      // 预填充 btv2 按钮跳转过来携带的 symbol
-      let symbol = LocalStorageUtil.get('symbol')
-      if(!symbol) return
-      symbol = symbol.replace(/"/g, '')
-      this.bd.symbol = symbol
-      this.$store.commit('form/getBacktestSymbol', symbol)
-      // this.getSymbol(symbol)
-      LocalStorageUtil.remove('symbol')
+    isBTChartReady: {
+      async handler(val) {
+        if(!val) return
+        // 预填充 btv2 按钮跳转过来携带的 symbol
+        let symbol = sessionStorage.getItem('symbol')
+        await this.remoteMethod(symbol)
+        if(!this.options) return
+        symbol = this.options[0]?.value
+        symbol = symbol.replace(/"/g, '')
+        this.bd.symbol = symbol
+        // this.$store.commit('form/getBacktestSymbol', symbol)
+        // this.getSymbol(symbol)
+        sessionStorage.removeItem('symbol')
+      }
     },
     userRole: {
       handler(role) {

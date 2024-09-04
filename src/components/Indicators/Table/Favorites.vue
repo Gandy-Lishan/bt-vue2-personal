@@ -1,17 +1,23 @@
 <template>
   <div class="indicators-container">
-    <div class="left" ref="ForTest">
+    <div class="footer-des">
+      <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
+    </div>
+    <div class="left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
         <FavTable
-          v-bind="$attrs"
           :key="item.type"
+          v-bind="$attrs"
           :tableInfo="item"
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
-          :style="{ width: '60%', display: 'block' }"
+          @showDetails="showDetails"
+          :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
         ></FavTable>
       </template>
-      <Chart :row="displayRow" :id="'FavChart'" class="indicators-chart" :style="{height: '600px'}"></Chart>
+      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" style="width: 65%" @showDetails="showDetails"></Details>
+      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px'}"></Chart>
     </div>
   </div>
  </template>
@@ -19,9 +25,12 @@
  <script>
  import FavTable from "./FavTable";
  import Chart from "./Chart"
+import SeasonalityChart from "./SeasonalityChart"
+import Description from "./Description";
+import Details from "./Details";
  
  export default {
-  name: 'ForTest',
+  name: 'IndicatorTable',
   data () {
     return {
       tableInfoList: [
@@ -29,7 +38,7 @@
           label: 'My Favorites',
           type: 'favorite',
           refName: 'favoriteVirtualScroll',
-          itemSize: 40,
+          itemSize: 50,
           keyProp: 'url',
           options: [
             {
@@ -41,16 +50,24 @@
         }
       ],
       displayRow: {},
+      isShowDetails: false
     }
   },
   components: {
     Chart,
-    FavTable
+    FavTable,
+    SeasonalityChart,
+    Description,
+    Details
   },
   methods: {
     updateChart(row) {
       this.displayRow = row
+      console.log(row)
     },
+    showDetails(row, isShowDetails) {
+      this.isShowDetails = isShowDetails
+    }
   }
  }
  </script>
@@ -62,14 +79,7 @@
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 35%;
   }
  }
- .image-hover {
-  position: fixed;
-    z-index: 2000;
-    border: 1px solid #ccc;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
  </style>

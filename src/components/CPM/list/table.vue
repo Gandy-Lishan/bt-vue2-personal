@@ -189,7 +189,7 @@
 <script>
 import { delCPM, getCPMList, getCPMResults } from '@/service/service'
 import { capitalizeFirstLetter } from "@/utils"
-
+import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
   name: 'Table',
   data() {
@@ -265,6 +265,14 @@ export default {
             item.period = [item.start_date, item.end_date]
 						return item
 					})
+
+          for(var i in data){
+            const {name,type} = getSymbolInfo(data[i].symbol)
+            if(type == 'custom'){
+              data[i].symbol = name
+            }
+          }
+
 					this.tableData = data
 					this.total = res.data.count
 				}

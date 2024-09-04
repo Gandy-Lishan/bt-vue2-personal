@@ -30,7 +30,19 @@ import {__js_advanced_studies_keltner_} from "./advance-studies/keltner.js"
 import {__js_advanced_studies_priceVolumeOscillator_} from "./advance-studies/priceVolumeOscillator.js"
 import {__js_advanced_studies_primeNumber_} from "./advance-studies/primeNumber.js"
 import {__js_advanced_studies_pring_} from "./advance-studies/pring.js"
-
+import {__js_advanced_studies_psychologicalLine_} from "./advance-studies/psychologicalLine.js"
+import {__js_advanced_studies_qstick_} from "./advance-studies/qstick.js"
+import {__js_advanced_studies_rainbow_} from "./advance-studies/rainbow.js"
+import {__js_advanced_studies_schaffTrendCycle_} from "./advance-studies/schaffTrendCycle.js"
+import {__js_advanced_studies_twiggsMoneyFlow_} from "./advance-studies/twiggsMoneyFlow.js"
+import {__js_advanced_studies_ulcerIndex_} from "./advance-studies/ulcerIndex.js"
+import {__js_advanced_studies_ultimateOscillator_} from "./advance-studies/ultimateOscillator.js"
+import {__js_advanced_studies_klinger_} from "./advance-studies/klinger.js"
+import {__js_advanced_studies_relativeVigor_} from "./advance-studies/relativeVigor.js"
+import {__js_advanced_studies_ehlerFisher_} from "./advance-studies/ehlerFisher.js"
+import {__js_advanced_studies_priceMomentumOscillator_} from "./advance-studies/priceMomentumOscillator.js"
+import {__js_advanced_studies_trendIntensity_} from "./advance-studies/trendIntensity.js"
+import {__js_advanced_studies_stochastics_} from "./advance-studies/stochastics.js"
 
 let extendOverwrite = () => {
 if (!CIQ.Studies) {
@@ -63,6 +75,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_coppock_,
 			__js_advanced_studies_detrended_,
 			__js_advanced_studies_disparity_,
+			__js_advanced_studies_highLowStudies_,
 			__js_advanced_studies_easeOfMovement_,
 			__js_advanced_studies_elder_,
 			__js_advanced_studies_fractalChaos_,
@@ -74,6 +87,19 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_priceVolumeOscillator_,
 			__js_advanced_studies_primeNumber_,
 			__js_advanced_studies_pring_,
+			__js_advanced_studies_psychologicalLine_,
+			__js_advanced_studies_qstick_,
+			__js_advanced_studies_rainbow_,
+			__js_advanced_studies_schaffTrendCycle_,
+			__js_advanced_studies_twiggsMoneyFlow_,
+			__js_advanced_studies_ulcerIndex_,
+			__js_advanced_studies_ultimateOscillator_,
+			__js_advanced_studies_klinger_,
+			__js_advanced_studies_relativeVigor_,
+			__js_advanced_studies_ehlerFisher_,
+			__js_advanced_studies_priceMomentumOscillator_,
+			__js_advanced_studies_trendIntensity_,
+			__js_advanced_studies_stochastics_,
 		)
 
 

@@ -4,7 +4,7 @@
 		<div class="signal-option-box">
 			<div class="entry-title-box">
 				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
-				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;diaplay: inline">
+				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
 					<span slot="content" v-html="config['criteriaTitleTP']">
           </span>
 					<i class="iconfont icon-wenhao"></i>
@@ -13,7 +13,7 @@
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
-					<el-tooltip effect="dark" placement="top" style="diaplay: inline">
+					<el-tooltip effect="dark" placement="top" style="display: inline">
 						<span slot="content" v-html="config['scoreTP']">
             </span>
 						<i class="iconfont icon-wenhao"></i>
@@ -41,7 +41,7 @@
 					</div>
 					<div class="period-box" v-if="isUsePeriodLimit">
 						<span>Period: </span>
-						<el-tooltip effect="dark" placement="top" style="diaplay: inline; margin-right: 5px;">
+						<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
 							<span slot="content" v-html="config['periodTP']">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
@@ -398,7 +398,7 @@
 								<el-tooltip
 									effect="dark"
 									placement="top"
-									style="diaplay: inline"
+									style="display: inline"
 								>
 									<span slot="content" v-html="config['DOBTP']">
 									</span>
@@ -669,23 +669,6 @@ export default {
 					item.title = 'Condition' + (index + 1)
 				})
 				this.editableTabsValue = activeName
-				let criteria = this.criteriaNum
-				// 移除senti indicator附属ma
-				let techList = this.$store.state.chart.formateTechnicalList
-				let removedUrl = techList.find(i=>i.value == this.indicatorValArr[absoluteIndex])?.url
-
-				var activatedMAList = this.$store.state.chart.activatedMA
-				var MAListIndex = activatedMAList.findIndex(
-				(item) =>
-					item.url == removedUrl &&
-					item.criteria == criteria &&
-					item.index == absoluteIndex
-				)
-				if (MAListIndex != -1) {
-					activatedMAList.splice(MAListIndex, 1)
-				}
-				this.$store.commit('chart/getMA', activatedMAList)
-				//
 
 				this.indicatorValArr.splice(absoluteIndex, 1)
 				this.indicatorValArr.push('')
@@ -697,21 +680,33 @@ export default {
 				this.freqArray.splice(absoluteIndex, 1)
 				this.freqArray.push('')
 				const freqObj = {
-						index: absoluteIndex,
-						value: 'Daily',
-						criteria,
-						key: `${criteria}_${absoluteIndex}`
-					}
-					this.setFrequencyArray(freqObj)
+					index: absoluteIndex,
+					value: 'Daily',
+					criteria: this.criteriaNum,
+					key: `${this.criteriaNum}_${absoluteIndex}`
+				}
+				this.setFrequencyArray(freqObj)
 				if (
 					this.relation == 2 &&
 					this.score >= this.indicatorRadioArr.length + 1
 				) {
 					this.score = this.indicatorRadioArr.length
 				}
-				// if (this.relation == 3 && this.signals_in_market >= (this.indicatorRadioArr.length + 1)) {
-				// 	this.signals_in_market = this.indicatorRadioArr.length
-				// }
+
+				/**  Begin: 移除indicator附属ma */
+				let removedUrl = CIQ.findBuiltinTechIndicator(this.indicatorValArr[absoluteIndex],null)?.url
+				var activatedMAList = this.$store.state.chart.activatedMA
+				var MAListIndex = activatedMAList.findIndex(
+				(item) =>
+					item.url == (removedUrl || removedSenti) &&
+					item.criteria == this.criteriaNum &&
+					item.index == absoluteIndex
+				)
+				if (MAListIndex != -1) {
+					activatedMAList.splice(MAListIndex, 1)
+				}
+				this.$store.commit('chart/getMA', activatedMAList)
+				/**  End */
 				//When removing a tab, remove the corresponding indicator from vuex to refresh the status
 				this.$store.commit(`chart/getIndicators`, {
 					index: absoluteIndex,
@@ -720,7 +715,7 @@ export default {
 				})
 				
 				// 如果是MA，则移除它的信息和位置
-				CIQ.removeMALayout(removedUrl, criteria, absoluteIndex)
+				CIQ.removeMALayout(removedUrl, this.criteriaNum, absoluteIndex)
 
 				// 移除chartiq对应的extraIndicators
 				let extraIndicators = []

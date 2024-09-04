@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_ultimateOscillator_ = (_exports) => {
@@ -45,6 +45,13 @@ if (!CIQ.Studies) {
 			sd.inputs["Cycle 3"]
 		];
 		var start = Math.max(cycle[0], cycle[1], cycle[2]);
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < start + 1) {
 			sd.error = true;
 			return;
@@ -61,22 +68,22 @@ if (!CIQ.Studies) {
 				acctr = quotes[sd.startFrom - 1]["_acctr " + sd.name].slice();
 		}
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			var minLC = Math.min(quotes[i].Low, quotes[i - 1].Close);
-			var bp = quotes[i].Close - minLC;
-			var tr = Math.max(quotes[i].High, quotes[i - 1].Close) - minLC;
+			var minLC = Math.min(getPropertyByString(quotes[i],field,'Low'), getPropertyByString(quotes[i - 1],field,'Close'));
+			var bp = getPropertyByString(quotes[i],field,'Close') - minLC;
+			var tr = Math.max(getPropertyByString(quotes[i],field,'High'), getPropertyByString(quotes[i - 1],field,'Close')) - minLC;
 			for (var x = 0; x < cycle.length; x++) {
 				accbp[x] += bp;
 				acctr[x] += tr;
 				if (i > cycle[x]) {
 					var p_minLC = Math.min(
-						quotes[i - cycle[x]].Low,
-						quotes[i - cycle[x] - 1].Close
+						getPropertyByString(quotes[i - cycle[x]],field,'Low'),
+						getPropertyByString(quotes[i - cycle[x] - 1],field,'Close')
 					);
-					var p_bp = quotes[i - cycle[x]].Close - p_minLC;
+					var p_bp = getPropertyByString(quotes[i - cycle[x]],field,'Close') - p_minLC;
 					var p_tr =
 						Math.max(
-							quotes[i - cycle[x]].High,
-							quotes[i - cycle[x] - 1].Close
+							getPropertyByString(quotes[i - cycle[x]],field,'High'),
+							getPropertyByString(quotes[i - cycle[x] - 1],field,'Close')
 						) - p_minLC;
 					accbp[x] -= p_bp;
 					acctr[x] -= p_tr;
@@ -113,4 +120,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_ultimateOscillator_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_ultimateOscillator_}
