@@ -1584,7 +1584,7 @@ export default {
     filterGroups(searchResult){
       if (this.groupsFilter) {
         return searchResult
-        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase())))
+        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase()) ||  ((item["underlying_name"] && item["underlying_name"].toLowerCase()) == this.groupsFilter.toLowerCase())))
       }else {
         return searchResult
       }
