@@ -1,9 +1,9 @@
 <template>
 	<div class="page-content-wrapper" id="app">
-		<div class="page-content">
+		<div class="page-content construction">
 			<div class="page-head">
 				<div class="container construction-container">
-					<div class="page-title">
+					<div class="page-title" style="display: none;">
 						<h1 class="construction">{{title}}</h1>
 					</div>
 				</div>

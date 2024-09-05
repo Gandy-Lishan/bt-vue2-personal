@@ -1033,6 +1033,9 @@ button#checkResBtn {
 		padding: 15px 0 15px;
 		direction: ltr;
 	}
+  .page-content.construction {
+    padding: 0;
+  }
   .page-title {
 		display: inline-block;
     float: left;

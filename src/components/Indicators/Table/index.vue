@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators" @openPopularDetail="openPopularDetail"></IndicatorTable>
+      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
       <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
@@ -35,7 +35,8 @@ export default {
   name: 'IndicatorsList',
   provide() {
     return {
-      removeIndicatorsFavorites: this.removeIndicatorsFavorites
+      removeIndicatorsFavorites: this.removeIndicatorsFavorites,
+      enLargeTableFromIndex: this.enLargeTable
     };
   },
   data() {
@@ -83,14 +84,13 @@ export default {
       if(findIndex !== -1 && url !== 'most_popular' && isSyncPopular) {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
     },
     async enLargeTable(source_list, row) {
+      if(source_list === 'most_popular') {
+        if(this.selectedTitle !== 'Popular') this.selectedTitle = 'Popular'
+        this.$refs['Popular'].enLargeTable(row)
+        return
+      }
       if(this.selectedTitle !== 'Indicators') this.selectedTitle = 'Indicators'
       await this.$refs['Indicators'].enLargeTable(source_list, row)
-    },
-    openPopularDetail(row) {
-      if(this.selectedTitle !== 'Popular') this.selectedTitle = 'Popular'
-      debugger
-      this.$refs['Popular'].enLargeTable(row)
-      console.log("this.$refs['Popular']", )
     }
   }
 }

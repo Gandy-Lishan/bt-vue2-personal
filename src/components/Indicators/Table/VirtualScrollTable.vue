@@ -166,6 +166,7 @@ import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
+import { getIndicatorsRowData } from "@/service/service";
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -189,7 +190,7 @@ export default {
   components: {
     VirtualScroll
   },
-  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption'],
+  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex'],
   data() {
     return {
       virtualList: [],
@@ -1153,7 +1154,7 @@ export default {
 		},
     tableData: {
       handler(newValue) {
-        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+        if(Array.isArray(newValue)) this.filterData = newValue
       },
       immediate: true,
       depp: true
@@ -1235,8 +1236,11 @@ export default {
         display: 'none'
       }
     },
-    updateChart(row) {
-      if(this.showRelated) return
+    async updateChart(row) {
+      if(this.showRelated) {
+        await this.clickRelated(row)
+        return
+      }
       // if(!this.enlarged) {window.open(`/backtester/sr/setup?index=${row.market_symbol || 'Unknown'}&indicator=${row.url}`, '_blank');return}
       if(!this.enlarged) {
         this.enlarged = true
@@ -1252,10 +1256,118 @@ export default {
     onError() {
       this.showImg = false
     },
+    async clickRelated(row) {
+      debugger
+      const {url:searchUrl} = row
+        if(searchUrl === 'vol_vix_transform') {
+          this.$message({
+            message: `<strong>Unable to find the corresponding indicator</strong>`,
+            center: true,
+            dangerouslyUseHTMLString: true,
+            showClose: true,
+            duration: 8000,
+            customClass: 'no-icon',
+            type: 'warning'
+          })
+          return
+        }
+        const urlTypes = Array.from(Object.keys(this.indicatorsListData))
+        let sourceTable = urlTypes.map(type => {
+          const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+            return list.map(item => {
+              if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+            }).filter(item => item !== undefined)
+        }).filter(item => item.length > 0).flat()
+        if(sourceTable.length) {
+          const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
+          this.enLargeTableFromIndex(source_list, sourceTable[0])
+        }else {
+          let res = {}
+          try {
+            const {data:rowData} = await getIndicatorsRowData(searchUrl)
+            res = rowData
+          } catch (error) {
+            if(error?.response?.status === 404) {
+              this.$message({
+                message: `<strong>Unable to find the corresponding indicator</strong>`,
+                center: true,
+                dangerouslyUseHTMLString: true,
+                showClose: true,
+                duration: 8000,
+                customClass: 'no-icon',
+                type: 'warning'
+              })
+              return
+            }
+          }
+          const {type, groups} = res
+          let requireUrl = ''
+          if(type === 'stock_nasdaq') {
+            requireUrl = 'ndx_100_complete_list'
+          }else if(type === 'stock_sent') {
+            requireUrl = 'sp_1500_complete_list'
+          }else if(type === 'etf_opt') {
+            requireUrl = 'etf_breadth'
+          }else if(type === 'etf_fund') {
+            requireUrl = 'etf_flow'
+          }else if(type === 'mff') {
+            requireUrl = 'monthly_fund_flows'
+          }else if(type === 'shares') {
+            requireUrl = 'shares_outstanding'
+          }else if(type === 'etf_seasonality') {
+            requireUrl = 'etf_seasonality'
+          }else if(type === 'bond_seasonality') {
+            requireUrl = 'bond_seasonality'
+          }else if(groups === 'commod') {
+            requireUrl = 'commodity_complete_list'
+          }else if(groups === 'bonds'){
+            requireUrl = 'bonds_complete_list'
+          }else if(type === 'etf_opt') {
+            reportUrl = 'etf_complete_list'
+          }else if(type === 'commod_seasonality') {
+            url = 'commod_seasonality'
+          }else if(groups === 'stocks') {
+            requireUrl = 'stock_complete_list'
+          }
+          if(!requireUrl) return
+          await this.fetchIndicatorsPageList(requireUrl)
+          const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+          const _sourceList = _list.map(item => {
+              if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined).shift()
+          console.log('_sourceList', _sourceList)
+          // 如果是对象并且对象为空, 说明没有匹配到数据
+          if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
+            this.$message({
+              message: `<strong>Unable to find the corresponding indicator</strong>`,
+              center: true,
+              dangerouslyUseHTMLString: true,
+              showClose: true,
+              duration: 8000,
+              customClass: 'no-icon',
+              type: 'warning'
+            })
+            return
+          }
+          await this.enLargeTableFromIndex(_sourceList.source_list, _sourceList)
+        /* 如果匹配不到, 使用下面的规则请求个别表单
+        ndx_100_complete_list: type: stock_nasdaq
+        sp_1500_complete_list: type: stock_sent
+        commodity_complete_list: groups: commod
+        etf_breadth: type: etf_opt
+        etf_flow: type: etf_fund
+        monthly_fund_flows： type: mff
+        shares_outstanding: type: shares
+        etf_seasonality: type: etf_seasonality
+        bond_seasonality: type: bond_seasonality
+        */
+        // window.location.assign(url);
+        }
+    },
     async addRow(scope) {
       try {
         if(scope.row.source !== 'Backtest Engine v2.0') {
-          this.popUpMsgBox('This indicator is from BTV1. Please remove it from your BTV1 favorites')
+          this.popUpMsgBox(`This indicator is migrated from user website. Please remove it from <a href="https://users.sentimentrader.com/users/favorites/" target="_blank">your favorites</a>.`)
           return
         }
         scope.row.loading = true
