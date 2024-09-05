@@ -18,7 +18,7 @@
       </template>
       <!-- 点击之后详情页放在这里 -->
       <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}" @passIndicatorData="passIndicatorData"></Chart>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}" @passIndicatorData="passIndicatorData"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
     </div>
   </div>
@@ -189,7 +189,6 @@ export default {
       ],
       displayRow: {},
       enlargedTable: null,
-      chartHight: '700px',
       checkedType: null,
       isShowDetails: false,
       indicatorCSVData: [],
@@ -209,33 +208,7 @@ export default {
       indicatorsListData: 'getIndicatorsPageListData'
     })
   },
-  mounted() {
-    // this.getDistanceFromBottom();
-    // 监听窗口大小变化事件
-    // window.addEventListener('resize', this.getDistanceFromBottom);
-    // 监听滚动事件
-    // window.addEventListener('scroll', this.getDistanceFromBottom);
-  },
-  beforeDestroy() {
-    // 清除事件监听器
-    // window.removeEventListener('resize', this.getDistanceFromBottom);
-    // window.removeEventListener('scroll', this.getDistanceFromBottom);
-  },
   methods: {
-    getDistanceFromBottom() {
-      const element = this.$refs.indiRef;
-      const rect = element.getBoundingClientRect();
-      console.log('window', window)
-      console.log('rect', rect)
-      const elementBottomToViewportBottom = window.innerHeight - rect.top;
-      // const scrollY = window.scrollY;
-      // const distanceFromBottom = elementBottomToViewportBottom + scrollY;
-
-      console.log(`Distance from bottom: ${elementBottomToViewportBottom}px`);
-      this.chartHight = elementBottomToViewportBottom
-      // this.$forceUpdate();
-      // return distanceFromBottom;
-    },
     toggleEnlarge(label) {
       console.log('toggleEnlarge', label)
       if (this.enlargedTable === label) {

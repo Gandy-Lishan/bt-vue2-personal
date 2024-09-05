@@ -39,18 +39,18 @@
 												<tr>
 													<td>Above Extreme</td>
 													<td>{{ Above_Annualized }}%</td>
-													<td>{{ parseInt(percent_time_above) }}%</td>
+													<td>{{ percent_time_above }}%</td>
 												</tr>
 												<!-- The between and below are reversed for some reason. Reversed them here. -->
 												<tr>
 													<td>Between Extremes</td>
 													<td>{{ Below_Annualized }}%</td>
-													<td>{{ parseInt(percent_time_below) }}%</td>
+													<td>{{ percent_time_below }}%</td>
 												</tr>
 												<tr>
 													<td>Below Extreme</td>
 													<td>{{ Between_Annualized }}%</td>
-													<td>{{ parseInt(percent_time_between) }}%</td>
+													<td>{{ percent_time_between }}%</td>
 												</tr>
 											</tbody>
 										</table>
@@ -131,6 +131,19 @@ export default {
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
           const indicatorInfo = []
+          const unifyNumber = (num) => {
+            if (num === '') {
+              return 0
+            } else {
+              let handleNum = parseFloat(num)
+              let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > 1
+              if (isToFixed) {
+                return isNaN(handleNum.toFixed(1)) ? NaN : handleNum.toFixed(1)
+              } else {
+                return isNaN(handleNum) ? NaN : handleNum
+              }
+            }
+          }
           for (const key in originalData) {
             if (Object.prototype.hasOwnProperty.call(originalData, key)) {
               const element = originalData[key];
@@ -143,12 +156,12 @@ export default {
               if(key === 'source') indicatorInfo.push(`Source: ${element || 'Sentimentrader'}`)
               if(key === 'show_returns' && element) {
                 this.showReturns = true
-                this.percent_time_above = originalData.percent_time_above
-                this.percent_time_below = originalData.percent_time_below
-                this.percent_time_between = originalData.percent_time_between
-                this.Above_Annualized = originalData.Above_Annualized
-                this.Below_Annualized = originalData.Below_Annualized
-                this.Between_Annualized = originalData.Between_Annualized
+                this.percent_time_above = unifyNumber(originalData.percent_time_above)
+                this.percent_time_below = unifyNumber(originalData.percent_time_below)
+                this.percent_time_between = unifyNumber(originalData.percent_time_between)
+                this.Above_Annualized = unifyNumber(originalData.Above_Annualized)
+                this.Below_Annualized = unifyNumber(originalData.Below_Annualized)
+                this.Between_Annualized = unifyNumber(originalData.Between_Annualized)
               }else if(key === 'show_returns' && !element) {
                 this.showReturns = false
                 this.percent_time_above = ''
