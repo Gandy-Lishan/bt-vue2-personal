@@ -54,7 +54,7 @@
                     'opacity': 0.25
                 })
                 .add();
- 
+            if(url === 'smart_dumb' || url === 'risk_levels') return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
