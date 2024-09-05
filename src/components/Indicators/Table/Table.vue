@@ -38,7 +38,9 @@ export default {
     tableInfo: Object,
     selectedTitle: String,
     blog_results: Array,
-    related: Array
+    related: Array,
+    selectedTitle: String,
+    isShowDetails: [Boolean, Object]
   },
   name: 'Table',
   data() {
@@ -88,13 +90,13 @@ export default {
   watch: {
     selectedTitle: {
       handler (title) {
-        if(title === 'Popular') this.$emit('updateChart', this.firstRow)
+        if(title === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       },
     },
     blog_results: {
       handler (arr) {
         if(Array.isArray(arr)) this.showReport = true
-        if(Array.isArray(arr) && arr.length !== 0) {
+        if(Array.isArray(arr)) {
             console.log('blog_results', arr)
             this.loading = true
             this.blog_results_length = arr.length
@@ -132,7 +134,7 @@ export default {
       handler (arr) {
         console.log('related', arr)
         if(Array.isArray(arr)) this.showRelated = true
-        if(Array.isArray(arr) && arr.length !== 0) {
+        if(Array.isArray(arr)) {
           this.loading = true
           this.tableData = arr.map(obj => {
           const subType = obj['sub_type']

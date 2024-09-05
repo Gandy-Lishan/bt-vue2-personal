@@ -10,6 +10,7 @@
         :key="item.type"
         :tableInfo="item"
         :ref="item.refName"
+        :isShowDetails="isShowDetails"
         @updateChart="updateChart"
         @showDetails="showDetails"
         :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
