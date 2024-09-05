@@ -932,6 +932,16 @@ button#checkResBtn {
   .indexTable td.tg-0lax.r500 {
     background-color: hsl(5, 70%, 100%)
   }
+  .threshold-table th, .threshold-table td {
+    padding: 8px;
+  }
+  .threshold-table>thead>tr>th {
+    border-bottom: 2px solid #ddd;
+    font-weight: 400;
+  }
+  .threshold-table td {
+    border-top: 1px solid #ddd;
+  }
   .tg .tg-0lax {
     text-align: left;
     vertical-align: top;
@@ -1012,7 +1022,7 @@ button#checkResBtn {
 			}
 	}
   .construction-container {
-    width: auto;
+    width: unset;
     padding-right: 0px;
     padding-left: 0px;
   }

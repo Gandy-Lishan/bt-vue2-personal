@@ -113,8 +113,21 @@ export default {
         searchUrl = suggestion.url;
       }
       console.log('searchUrl', searchUrl)
-      debugger
-      const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      // vol_vix_transform 不存在
+      if(searchUrl === 'vol_vix_transform') {
+        this.$message({
+          message: `<strong>Unable to find the corresponding indicator</strong>`,
+          center: true,
+          dangerouslyUseHTMLString: true,
+          showClose: true,
+          duration: 8000,
+          customClass: 'no-icon',
+          type: 'warning'
+        })
+        return
+      }
+      // const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+      const urlTypes = Array.from(Object.keys(this.indicatorsListData))
       let sourceTable = urlTypes.map(type => {
         const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
           return list.map(item => {

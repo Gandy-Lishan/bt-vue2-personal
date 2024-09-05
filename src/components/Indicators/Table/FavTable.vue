@@ -269,6 +269,17 @@ export default {
               return acc;
           }, {})
       );
+      // 将 source 为 "Backtest Engine v1.0" 的项排在最后
+      resu.sort((a, b) => {
+        if (a.source === 'Backtest Engine v1.0' && b.source !== 'Backtest Engine v1.0') {
+          return 1;
+        }
+        if (a.source !== 'Backtest Engine v1.0' && b.source === 'Backtest Engine v1.0') {
+          return -1;
+        }
+        return 0;
+      });
+      
       console.log('resu', resu)
       this.tableData = this.processFavoriteData(resu)
       let _groups = [...new Set(this.tableData.map(item => item.sub_type))].map(item => ({label: item, value: item}))

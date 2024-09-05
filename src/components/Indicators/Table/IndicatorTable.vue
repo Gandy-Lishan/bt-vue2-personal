@@ -18,8 +18,8 @@
       </template>
       <!-- 点击之后详情页放在这里 -->
       <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}" @passIndicatorData="passIndicatorData"></Chart>
-      <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`}"></SeasonalityChart>
+      <Chart :chartHight="chartHight" :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}" @passIndicatorData="passIndicatorData"></Chart>
+      <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
     </div>
   </div>
 </template>
@@ -272,6 +272,9 @@ export default {
       }
     },
     async enLargeTable(source_list, row) {
+      if(source_list === 'most_popular') {
+        this.$emit('openPopularDetail', row)
+      }
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
       console.log('findTable', findTable)
       if(!findTable) return
@@ -323,5 +326,8 @@ export default {
   .indicators-chart {
     width: 35%;
   }
+}
+.showDetailsChart {
+  margin-top: 50px;
 }
 </style>

@@ -4,7 +4,16 @@
     <div class="header-span" v-show="(!showReport && !showRelated)">
       <span>{{ label }}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
-        <i class="el-icon-full-screen" @click="_toggleEnlarge" v-show="!isMostPopular"></i>
+        <!-- <i class="el-icon-full-screen" ></i> -->
+          <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
+            <path d="M96 96H64V85.3333H85.3333V64H96V96Z" fill="black"/>
+            <path d="M0 96H32V85.3333H10.6667V64H0V96Z" fill="black"/>
+            <path d="M0 0H32V10.6667H10.6667V32H0V0Z" fill="black"/>
+            <path d="M96 0H64V10.6667H85.3333V32H96V0Z" fill="black"/>
+          </svg>
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular">
+            <path d="M32 32H0V21.3333H21.3333V0H32V32ZM32 64H0V74.6667H21.3333V96H32V64ZM96 64H64V96H74.6667V74.6667H96V64ZM64 32H96V21.3333H74.6667V0H64V32Z" fill="black"/>
+          </svg>
       </el-tooltip>
     </div>
     <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated)">
@@ -1584,7 +1593,7 @@ export default {
     filterGroups(searchResult){
       if (this.groupsFilter) {
         return searchResult
-        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase())))
+        .filter(item=>(((item["groups"] && item["groups"].toLowerCase()) == this.groupsFilter.toLowerCase()) || ((item["sub_type"] && item["sub_type"].toLowerCase()) == this.groupsFilter.toLowerCase()) ||  ((item["underlying_name"] && item["underlying_name"].toLowerCase()) == this.groupsFilter.toLowerCase())))
       }else {
         return searchResult
       }
@@ -1681,6 +1690,8 @@ export default {
     svg {
       cursor: pointer;
       margin-right: 10px;
+      width: 20px;
+      height: 20px;
     }
     span {
       display: inline-block;

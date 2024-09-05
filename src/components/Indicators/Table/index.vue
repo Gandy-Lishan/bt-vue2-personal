@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
+      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators" @openPopularDetail="openPopularDetail"></IndicatorTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
       <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
@@ -85,6 +85,12 @@ export default {
     async enLargeTable(source_list, row) {
       if(this.selectedTitle !== 'Indicators') this.selectedTitle = 'Indicators'
       await this.$refs['Indicators'].enLargeTable(source_list, row)
+    },
+    openPopularDetail(row) {
+      if(this.selectedTitle !== 'Popular') this.selectedTitle = 'Popular'
+      debugger
+      this.$refs['Popular'].enLargeTable(row)
+      console.log("this.$refs['Popular']", )
     }
   }
 }
