@@ -136,7 +136,15 @@ export default {
         if(Array.isArray(arr)) this.showRelated = true
         if(Array.isArray(arr)) {
           this.loading = true
-          this.tableData = arr.map(obj => {
+          const uniqueData = Array.from(
+            arr.reduce((map, item) => {
+              if (!map.has(item.url)) {
+                map.set(item.url, item);
+              }
+              return map;
+            }, new Map()).values()
+          )
+          this.tableData = uniqueData.map(obj => {
           const subType = obj['sub_type']
           for (const key in obj) {
             if (Object.hasOwnProperty.call(obj, key)) {

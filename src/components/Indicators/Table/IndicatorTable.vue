@@ -245,10 +245,6 @@ export default {
       }
     },
     async enLargeTable(source_list, row) {
-      if(source_list === 'most_popular') {
-        this.$emit('openPopularDetail', row)
-        return
-      }
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
       console.log('findTable', findTable)
       if(!findTable) return

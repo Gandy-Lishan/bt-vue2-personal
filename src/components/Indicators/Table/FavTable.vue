@@ -4,11 +4,11 @@
     <div class="header-span">
       <span>My Favorites</span>
     </div>
-    <div class="header-span">
+    <!-- <div class="header-span">
       <template v-for="item in tableInfo['options']">
         <span :key="item.label" :class="{activated: true, span: true}">{{ item.label }}</span>
       </template>
-    </div>
+    </div> -->
   </div>
   <div class="filter-div">
     <el-row>
@@ -69,7 +69,7 @@
 				@cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-				height="620"
+				height="650"
 			>
 			<!-- <el-table-column> -->
 				<!-- <template #header>
@@ -794,7 +794,7 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 575px !important
+    height: 605px !important
   }
   border: 2px solid #e9e9e9;
   /deep/ .el-button--text {

@@ -11,7 +11,7 @@
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Detail'" :class="{ 'selected': selectedTitle === 'Detail' }">Indicator Detail</h4>
             <h4  @click="selectedTitle = 'Research'" :class="{ 'selected': selectedTitle === 'Research' }">Research & Blog Posts</h4>
-            <h4  @click="selectedTitle = 'Related'" :class="{ 'selected': selectedTitle === 'Related' }">Related Charts</h4>
+            <h4  @click="selectedTitle = 'Related'" :class="{ 'selected': selectedTitle === 'Related' }" v-show="isShowRelated">Related Charts</h4>
             <div class="btns">
               <el-button type="primary" size="mini" @click="$emit('downloadCSV')">Download CSV File</el-button>
             </div>
@@ -59,7 +59,7 @@
 								</div>
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
-            <Related v-show="selectedTitle === 'Related'" ref="Related" :related="related"></Related>
+            <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related"></Related>
           </div>
         </div>
   </div>
@@ -201,6 +201,9 @@ export default {
       ])
       if(map.has(this.checkedTitle)) return map.get(this.checkedTitle)
       else return this.checkedTitle
+    },
+    isShowRelated() {
+      return this.row && this.row.source_list && !['ndx_100_complete_list', 'sp_1500_complete_list'].includes(this.row.source_list)
     }
   },
   components: {
