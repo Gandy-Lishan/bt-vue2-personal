@@ -849,14 +849,6 @@ export default {
 	margin: 0 10px;
 	align-self: stretch;
 }
-@media (min-width: 1280px) and (max-width: 1365px) {
-	.criteria {
-		padding-bottom: 5px;
-	}
-	.criteria:nth-child(1) {
-		border-bottom: 2px solid #cacaca;
-	}
-}
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria {
 		padding-bottom: 5px;
