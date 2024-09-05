@@ -51,6 +51,10 @@
         v-if="isReports"
           >Reports</el-menu-item
         >
+        <el-menu-item class="home-link" index="13"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+          >Indicators</el-menu-item
+        >
         <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>
@@ -129,6 +133,8 @@ export default {
         this.activeIndex = '11'
       }else if(to.path.includes('/reports') || to.name == 'Reports'){
         this.activeIndex = '12'
+      }else if(to.path.includes('/indicators') || to.name == 'Indicators'){
+        this.activeIndex = '13'
       }
       // const currentDomain = window.location.hostname;
     // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
@@ -202,6 +208,11 @@ export default {
       }else if(key == '12') {
         path = this.$router.resolve({
           path: '/reports'
+        }).href
+        this.$router.push(path)
+      }else if(key == '13') {
+        path = this.$router.resolve({
+          path: '/indicators'
         }).href
         this.$router.push(path)
       }
