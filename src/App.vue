@@ -210,7 +210,7 @@ a:hover{
 }
 
 #app {
-	overflow-y: auto;
+	overflow-y: hidden;
 	overflow-x: hidden;
   font-family: "Open Sans",sans-serif;
 }
