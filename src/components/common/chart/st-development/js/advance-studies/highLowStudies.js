@@ -186,6 +186,7 @@ if (!CIQ.Studies) {
 			calculateFN: CIQ.Studies.calculateMaxHighMinLow,
 			inputs: { "High Period": 20, "Low Period": 20 }
 		},
+		/** 无需处理dual symbol */
 		GAPO: {
 			name: "Gopalakrishnan Range Index",
 			calculateFN: CIQ.Studies.calculateMaxHighMinLow
@@ -208,9 +209,9 @@ if (!CIQ.Studies) {
 				init: {
 					studyOverZonesEnabled: true,
 					studyOverBoughtValue: -20,
-					studyOverBoughtColor: "auto",
+					studyOverBoughtColor: process.env.VUE_APP_RED,
 					studyOverSoldValue: -80,
-					studyOverSoldColor: "auto"
+					studyOverSoldColor: process.env.VUE_APP_GREEN
 				}
 			}
 		},
@@ -242,4 +243,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_highLowStudies_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_highLowStudies_}

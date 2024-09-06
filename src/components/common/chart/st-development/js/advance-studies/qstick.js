@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_qstick_ = (_exports) => {
@@ -37,12 +37,21 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateQStick = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
-			quotes[i]["_Close-Open " + sd.name] = quotes[i].Close - quotes[i].Open;
+			quotes[i]["_Close-Open " + sd.name] = getPropertyByString(quotes[i],field,'Close') - getPropertyByString(quotes[i],field,'Open');
 		}
 		CIQ.Studies.MA(
 			sd.inputs["Moving Average Type"],
@@ -65,4 +74,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_qstick_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_qstick_}

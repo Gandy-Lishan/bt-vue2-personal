@@ -170,7 +170,58 @@
 	z-index: 2;
 } */
 
-
+/* backteser edge forecast marker node style */
+.forecast {
+	position: absolute;
+	opacity: .8;
+	text-align: center;
+	width: 176px;
+	color: #606060;
+	background-size: contain;
+	border-radius: 4px;
+	padding: 10px;
+  }
+.forecast.hidden {
+	display: none;
+}
+  .forecast:before {
+	border: solid;
+	content: "";
+	position: absolute;
+	z-index: 99;
+  }
+  .forecast.bullish {
+	background: #9be5b0;
+	margin-bottom: -35px;
+  }
+  .forecast.bearish {
+	background: #e9c0c0;
+	margin-bottom: 35px;
+  }
+  .forecast.bullish:hover {
+	background: #62e687;
+  }
+  .forecast.bearish:hover{
+	background: #eba8a8;
+  }
+  .forecast.bullish:before {
+	border-width: 0px 6px 11px 6px;
+    top: -10px;
+	left: 80px;
+	border-color: #9be5b0 transparent;
+  }
+  .forecast.bearish:before{
+	border-width: 11px 6px 0 6px;
+	bottom: -10px;
+	left: 80px;
+	border-color: #e9c0c0 transparent;
+  }
+  .forecast.bullish:hover:before {
+	border-color: #62e687 transparent;
+  }
+  .forecast.bearish:hover:before {
+	border-color: #eba8a8 transparent;
+  }
 
 /* scanner marker node style */
 .myMes {

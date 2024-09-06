@@ -276,8 +276,9 @@ export default {
 		}
 		else if(this.routerEnterTag == 2){
 			// 如果跳转携带 backtestID 则填充
-			const backtestID = LocalStorageUtil.get('backtestID')
+			let backtestID = localStorage.getItem('backtestID')
 			if(backtestID) {
+				backtestID = backtestID.replace(/['"\/]/g, '')
 				const res = await seeParams(backtestID)
 				// res.data.commission = (res.data.commission * 100).toFixed(2)
 				this.$store.state.form.favoriteBacktestRowData.id = res.data.id
@@ -847,14 +848,6 @@ export default {
 	opacity: 0.8;
 	margin: 0 10px;
 	align-self: stretch;
-}
-@media (min-width: 1280px) and (max-width: 1365px) {
-	.criteria {
-		padding-bottom: 5px;
-	}
-	.criteria:nth-child(1) {
-		border-bottom: 2px solid #cacaca;
-	}
 }
 @media (min-width: 820px) and (max-width: 1279px) {
 	.criteria {

@@ -1,5 +1,7 @@
 import axios from '../axios'
 import { uniqueObjectArray } from '@/utils/formValidate'
+import { transformChangedKey } from '@/utils/globalFunc'
+import * as mqs from 'qs'
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -12,19 +14,6 @@ const author = {
 	password: 'TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx'
 }
 export function getIndicatorsList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + "/getAllSymbols"
-	// //return axios.get(url, {auth: author})
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	//         //console.log(res)
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/indicatorsList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -39,17 +28,6 @@ export function getIndicatorsList() {
 	})
 }
 export function getIndexsList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getIndexes'
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/indexsList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -64,17 +42,6 @@ export function getIndexsList() {
 	})
 }
 export function getStocksList() {
-	// const url = get_env("SERVICE_URL",'https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev') + '/getStocks'
-
-	// return new Promise((resolve,reject)=>{
-	// 	axios.get(url, {cache:true, auth: author})
-	// 	.then(res=>{
-	// 		resolve(res)
-	// 	}).catch(err=>{
-	// 		reject(err)
-	// 	})
-	// })
-
 	const url = '/api/stocksList'
 	return new Promise((resolve, reject) => {
 		axios
@@ -600,6 +567,7 @@ export function getCPMList(page, sort, name) {
 		axios
 			.get(url, { withCredentials: true, retry: null })
 			.then(res => {
+				transformChangedKey(res,'get_cpm_bts')
 				resolve(res)
 			})
 			.catch(err => {
@@ -733,6 +701,7 @@ export function getCPMResults(url) {
 		axios
 			.get(path)
 			.then(res => {
+				transformChangedKey(res,'run_cpm_bt')
 				resolve(res)
 			})
 			.catch(err => {
@@ -1373,3 +1342,149 @@ export function getSymbolCsv(fileID,timeframe) {
 	})
 }
 /** MySymbol 接口END */
+
+export function getForecastList(symbol) {
+	const url = `/dev/dev/forecastreport/?symbol=${symbol}`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getSymbollistForecast() {
+	const url = `/dev/dev/forecastsymbollist/`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				res = res.data.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+/* Indicators Page 接口 START */
+export function getAllIndicatorsList(page) {
+	let url = '/dev/st_data/commodity_complete_list/?page='
+
+	return new Promise((resolve, reject) => {
+		const allData = []
+
+		function fetchPageData(page) {
+			axios
+				.get(url + page)
+				.then(res => {
+					const data = res.data.results
+
+					// 将当前页的数据添加到总数据数组中
+					allData.push(...data)
+
+					if (res.data.next) {
+						// 继续递归请求下一页数据
+						fetchPageData(page + 1)
+					} else {
+						// 所有数据已获取完毕，返回结果
+						resolve(allData)
+					}
+				})
+				.catch(err => {
+					reject(err)
+				})
+		}
+
+		// 开始递归请求第一页数据
+		fetchPageData(page)
+	})
+}
+export function obtainIndicatorsList(type, page) {
+	const path =`/dev/st_data/${type}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getIndicatorsRowData(url) {
+	const path =`/dev/st_data/search_url_info?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function obtainBTV1IndicatorsList() {
+
+	const path =`/dev/st_data/btv1_user_favorite_indicator`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { cache: false, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* Indicators Page 接口 END */
+
+/** Begin fetch BTV2 fav indicator & symbol list*/
+export function getFavorite() {
+	const path =`/dev/dev/favorites/`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { cache: false, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function updateFavorite(indicator,symbol) {
+	const path =`/dev/dev/favorites/`
+	var mFavorite = {}
+	mFavorite.favorite_indicator = indicator
+	mFavorite.favorite_symbol = symbol
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(path, mqs.stringify(mFavorite), {
+				cache: false,
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/** End fetch BTV2 fav indicator & symbol list*/

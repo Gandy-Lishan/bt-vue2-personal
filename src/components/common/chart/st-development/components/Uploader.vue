@@ -210,7 +210,7 @@ export default {
                     }
                 }
             };
-
+// TODO 考虑DOM优化 
             // 创建一个MutationObserver实例并传入回调函数
             const observer = new MutationObserver(callback);
 
@@ -264,7 +264,7 @@ export default {
 					// 还原文件对象的 raw 属性
 					if (code == 200 || code == 201) {
 						let _this = document.querySelector('cq-lookup')
-						await this.$store.dispatch('chart/set_mysymbolist')
+						await this.$store.dispatch('chart/get_mysymbolist')
 						//_this.acceptText(_this.input.val(),'CUSTOM SYMBOL')
 						// 文件上傳成功後把對應file in list加上url屬性用於delete時作爲參數傳入
 						file.url = JSON.parse(data).url

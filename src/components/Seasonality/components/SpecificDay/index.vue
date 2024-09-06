@@ -175,6 +175,7 @@ import SDChart from "../SNChart/SDChart.vue";
 import MonthDays from "month-days-element";
 import { format } from 'date-fns';
 import {createStateFilter} from '@/utils/globalFunc'
+import { mapGetters } from "vuex"
 
 export default {
   name: 'SpecificDay',
@@ -307,13 +308,16 @@ export default {
     this.calculateHolidayDates()
   },
   mounted() {
-    this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+    this.dropdownList = this.symbolList
   },
   computed: {
     monthDaysText() {
       return {
       }
-    }
+    },
+    ...mapGetters({
+      symbolList: 'getRefactoredSymbolList'
+    })
   },
   methods: {
     calculateHolidayDates() {
@@ -397,7 +401,7 @@ export default {
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
       if(!dropdownList || dropdownList.length == 0) {
-        dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+        dropdownList = this.symbolList
       }
       var results = dropdownList.map(item => ({
           ...item,
@@ -637,6 +641,13 @@ export default {
   .popover{
     width: 100%;
   }
+}
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+}
+/deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag {
+  font-weight: 600;
 }
 @import "../../index.less";
 </style>

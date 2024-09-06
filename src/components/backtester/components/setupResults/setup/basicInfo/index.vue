@@ -463,8 +463,7 @@
                         {{bdFormLabel['market_environment']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest a specific market environments like a <br /> 'bull
-                            market', select the environment here.</span>
+                            >If you'd like to backtest a specific market environments like a <br /> 'Above 200-bar Moving Average', select the environment here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -520,7 +519,7 @@
                         {{bdFormLabel['index_moving_average_slope']}}
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
-                            >If you'd like to backtest based on the slope of the 252 Days Moving Average of the Index, <br />select the appropriate slope direction here.</span>
+                            >If you'd like to backtest based on the slope of the Moving Average of the Index, <br />select the appropriate period and slope direction here.</span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>
                       </label>
@@ -796,8 +795,6 @@ import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import {
-  getIndexsList,
-  getStocksList,
   getBacktestName
 } from '@/service/service.js'
 import searchBar from "@/components/common/searchBar"
@@ -940,16 +937,30 @@ export default {
       ],
       MEOptions: [
         { value: 0, label: 'Market Environment' },
-        { value: 1, label: 'Only include bull markets' },
-        { value: 2, label: 'Only include bear markets' },
+        { value: 1, label: 'Above 50-bar Moving Average' },
+        { value: 2, label: 'Below 50-bar Moving Average' },
+        { value: 3, label: 'Above 100-bar Moving Average' },
+        { value: 4, label: 'Below 100-bar Moving Average' },
+        { value: 5, label: 'Above 150-bar Moving Average' },
+        { value: 6, label: 'Below 150-bar Moving Average' },
+        { value: 7, label: 'Above 200-bar Moving Average' },
+        { value: 8, label: 'Below 200-bar Moving Average' },
+        { value: 9, label: 'Above 252-bar Moving Average' },
+        { value: 10, label: 'Below 252-bar Moving Average' }
       ],
       IMASOptions: [
         { value: 0, label: 'Index Moving Average Slope' },
-        { value: 1, label: 'Only include upward sloping' },
-        { value: 2, label: 'Only include downward sloping' },
+        { value: 1, label: 'Upward Sloping 50-bar Moving Average' },
+        { value: 2, label: 'Downward Sloping 50-bar Moving Average' },
+        { value: 3, label: 'Upward Sloping 200-bar Moving Average' },
+        { value: 4, label: 'Downward Sloping 200-bar Moving Average' },
+        { value: 5, label: 'Upward Sloping 150-bar Moving Average' },
+        { value: 6, label: 'Downward Sloping 150-bar Moving Average' },
+        { value: 7, label: 'Upward Sloping 100-bar Moving Average' },
+        { value: 8, label: 'Downward Sloping 100-bar Moving Average' },
+        { value: 9, label: 'Upward Sloping 252-bar Moving Average' },
+        { value: 10, label: 'Downward Sloping 252-bar Moving Average' }
       ],
-      symbolList: [],
-      indexList: [],
       customStocksList: [],
       loading: false,
       options: [],
@@ -1007,6 +1018,10 @@ export default {
     if(this.bd.backtest_period != 22) this.getBTDate()
   },
   computed: {
+    ...mapGetters({
+      symbolList: 'getStockList',
+      indexList: 'getIndexList',
+    }),
     ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
@@ -1107,16 +1122,20 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
-      if(!val) return
-      // 预填充 btv2 按钮跳转过来携带的 symbol
-      let symbol = LocalStorageUtil.get('symbol')
-      if(!symbol) return
-      symbol = symbol.replace(/"/g, '')
-      this.bd.symbol = symbol
-      this.$store.commit('form/getBacktestSymbol', symbol)
-      // this.getSymbol(symbol)
-      LocalStorageUtil.remove('symbol')
+    isBTChartReady: {
+      async handler(val) {
+        if(!val) return
+        // 预填充 btv2 按钮跳转过来携带的 symbol
+        let symbol = sessionStorage.getItem('symbol')
+        await this.remoteMethod(symbol)
+        if(!this.options) return
+        symbol = this.options[0]?.value
+        symbol = symbol.replace(/"/g, '')
+        this.bd.symbol = symbol
+        // this.$store.commit('form/getBacktestSymbol', symbol)
+        // this.getSymbol(symbol)
+        sessionStorage.removeItem('symbol')
+      }
     },
     userRole: {
       handler(role) {
@@ -1287,43 +1306,6 @@ export default {
         return val
       }
     }, 500),
-    async getIndexsList() {
-      try {
-        let vm = this
-        if (vm.$store.state.chart.indexsList.length != 0) {
-          vm.indexList = vm.$store.state.chart.indexsList.map((item, index) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-          })
-        } else {
-          let res = await getIndexsList()
-          vm.indexList = res.data.map((item, index) => {
-            return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-          })
-          vm.loading = false
-        }
-      } catch (error) {
-        this.indexList = []
-        vm.loading = false
-      }
-    },
-    async getStocksList() {
-      let vm = this
-      if (vm.$store.state.chart.stocksList.length != 0) {
-        vm.symbolList = vm.$store.state.chart.stocksList.map((item, index) => {
-          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-        })
-      } else {
-        try {
-          let res = await getStocksList()
-          vm.symbolList = res.data.map((item, index) => {
-            return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-          })
-        } catch (error) {
-          console.warn(error)
-          vm.loading = false
-        }
-      }
-    },
     getCustomStocksList() {
       let vm = this
       vm.customStocksList = vm.$store.getters.getMySymbollist.map((item, index) => {
@@ -1335,28 +1317,30 @@ export default {
       let vm = this
       if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
         vm.loading = true
-        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-          await vm.getStocksList()
-          await vm.getIndexsList()
-        }
+        var symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        var IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+        
         vm.getCustomStocksList()
 
-        this.options = vm.symbolList.concat(vm.indexList).concat(vm.customStocksList)
+        this.options = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
         vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
         vm.loading = true
-        if (vm.symbolList.length == 0 || vm.indexList.length == 0) {
-          await vm.getStocksList()
-          await vm.getIndexsList()
-        }
-
-        var symbolListTemp = vm.symbolList.filter((item) => {
+        var symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        var IndexListTemp = vm.indexList.filter((item) => {
+        var IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )

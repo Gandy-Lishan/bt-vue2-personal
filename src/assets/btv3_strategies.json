@@ -17,7 +17,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -131,7 +131,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -245,7 +245,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -358,7 +358,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -473,7 +473,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -593,7 +593,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -708,7 +708,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -828,7 +828,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -969,7 +969,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1213,7 +1213,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1332,7 +1332,7 @@
     "market_environment": 0,
     "index_moving_average_slope": 0,
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1451,7 +1451,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1570,7 +1570,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1860,7 +1860,7 @@
     "market_environment": 0,
     "index_moving_average_slope": 0,
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -1973,7 +1973,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2202,7 +2202,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2461,7 +2461,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2663,7 +2663,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -2915,7 +2915,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3170,7 +3170,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3611,7 +3611,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -3835,7 +3835,7 @@
     "direction": "Long",
     "frequency": "Daily",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "trade_price": 0,
     "market_slope": 0,
     "exclude_oo": 0,
@@ -4155,7 +4155,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -4469,7 +4469,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -4783,7 +4783,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -5097,7 +5097,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -5411,7 +5411,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -5725,7 +5725,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6039,7 +6039,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6353,7 +6353,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -6662,7 +6662,7 @@
     "direction": "Long",
     "frequency": "Daily",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "win_rate": 0.0,
     "trade_price": 0,
     "market_slope": 0,
@@ -6976,7 +6976,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7290,7 +7290,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7604,7 +7604,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -7918,7 +7918,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -8232,7 +8232,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -8546,7 +8546,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -8860,7 +8860,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9174,7 +9174,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "1998-12-22",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9488,7 +9488,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -9802,7 +9802,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10116,7 +10116,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10430,7 +10430,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -10744,7 +10744,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11058,7 +11058,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11372,7 +11372,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -11686,7 +11686,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -12000,7 +12000,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",
@@ -12314,7 +12314,7 @@
     "index_moving_average_slope": 0,
     "backtest_period": "22",
     "start_date": "2006-07-01",
-    "end_date": "2024-06-30",
+    "end_date": "2024-08-30",
     "risk_control": "//",
     "description": {
       "Introduction": "",

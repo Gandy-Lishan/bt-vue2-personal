@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_priceMomentumOscillator_ = (_exports) => {
@@ -44,19 +44,28 @@ if (!CIQ.Studies) {
 			Signal: Number(sd.inputs["Signal Period"])
 		};
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < periods.Smooth + periods.Double) {
-			sd.error = true;
-			return;
-		}
+
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < periods.Smooth + periods.Double) {
+					sd.error = true;
+					return;
+				}
 		var i;
 		for (i = sd.startFrom; i < quotes.length; i++) {
 			if (!quotes[i]) continue;
 			if (!quotes[i - 1]) continue;
-			var denom = quotes[i - 1][field];
+			var denom = getPropertyByString(quotes[i - 1],field,subField);
 			if (denom) {
-				quotes[i]["_ROCx10 " + sd.name] = 1000 * (quotes[i][field] / denom - 1);
+				quotes[i]["_ROCx10 " + sd.name] = 1000 * (getPropertyByString(quotes[i],field,subField) / denom - 1);
 			}
 		}
 		CIQ.Studies.MA(
@@ -104,9 +113,9 @@ if (!CIQ.Studies) {
 				init: {
 					studyOverZonesEnabled: true,
 					studyOverBoughtValue: 2.5,
-					studyOverBoughtColor: "auto",
+					studyOverBoughtColor: process.env.VUE_APP_RED,
 					studyOverSoldValue: -2.5,
-					studyOverSoldColor: "auto"
+					studyOverSoldColor: process.env.VUE_APP_GREEN
 				}
 			},
 			attributes: {
@@ -118,4 +127,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_priceMomentumOscillator_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_priceMomentumOscillator_}

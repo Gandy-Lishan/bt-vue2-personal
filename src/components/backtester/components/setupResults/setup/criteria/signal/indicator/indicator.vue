@@ -369,7 +369,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
-      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value')),
+      sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -683,14 +683,22 @@ export default {
     },
     isBTChartReady(val) {
       if(!val) return
+          // 预填充 btv2 按钮跳转过来携带的 symbol
+          let symbol = sessionStorage.getItem('symbol')
+          symbol = symbol.replace(/"/g, '')
+          this.$store.commit('form/getBacktestSymbol', symbol)
       // 预填充 btv2 按钮跳转过来携带的 indicator
-			let indicator = LocalStorageUtil.get('indicator')
+			let indicator = sessionStorage.getItem('indicator')
       if(!indicator) return
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
+      if(!ele) ele = CIQ.findSentiIndicator(null, `${indicator}@indicator`)
       ele = {...ele, value: ele.chart_name}
-      if(this.criteria.startsWith('entry')) {this.si.sentimentIndicator = ele.value;this.handleSentimentSelect(ele)}
-      LocalStorageUtil.remove('indicator')
+      if(this.criteria.startsWith('entry')) {
+        this.si.sentimentIndicator = ele.value;
+        this.handleSentimentSelect(ele)
+      }
+      sessionStorage.removeItem('indicator')
     }
   },
   methods: {
@@ -767,9 +775,7 @@ export default {
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
-      var technicaltIndicatorList = this.$store.state.chart.formateTechnicalList
-
-      var results = technicaltIndicatorList.map(item => ({
+      var results = this.$store.getters.getFormateTechnicalList.map(item => ({
           ...item,
           priority: createStateFilter(queryString)(item),
         }))
@@ -884,19 +890,9 @@ export default {
         criteria: this.criteria
       })
 
-
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
-       
-       // 暂时禁用，防止同名indicator附带的条件也不刷新，或者被替换的indicator还不被移除
-      // // avoid add indicator redundantly
-      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
-      //   if (sd.type == item.url) {
-      //     return
-      //   }
-      // }
       CIQ.addIndicators({})
     },
     clearSymbolSelect() {
@@ -1395,7 +1391,7 @@ export default {
         this.$refs.siForm.validate((valid) => {
           validForm = valid
         })
-        let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+        let sentimentList = JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value'))
 
         for (let i = 0; i < sentimentList.length; i++) {
           if (this.si.sentimentIndicator === sentimentList[i].value) {
@@ -1517,7 +1513,7 @@ export default {
             this.indicatorRadio = 'Sentiment Indicator'
             this.si.sentimentIndicator =
               newVal[this.criteria].signals[index].indicator
-            let sentimentList = JSON.parse(JSON.stringify(this.$store.state.chart.indicatorsList).replace(/chart_name/g, 'value'))
+            let sentimentList = JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value'))
 
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {
@@ -1993,16 +1989,16 @@ export default {
           /** START
 					 * 	remove empty line
 					 */
-					const fileContent = await this.readFileContent(file);
-					const filteredContent = await this.skipEmptyLine(fileContent)
-					const newFile = new File([filteredContent], file.name, { type: file.type });
+					// const fileContent = await this.readFileContent(file);
+					// const filteredContent = await this.skipEmptyLine(fileContent)
+					// const newFile = new File([filteredContent], file.name, { type: file.type });
 					/********END********* */
 
-          await this.validateCSV(newFile)
-          await this.handleParseResult(this.csvContent, newFile)
+          await this.validateCSV(file)
+          await this.handleParseResult(this.csvContent, file)
   
-        this.form.indicatorName = newFile.name.replace('.csv', '')
-        this.fileList.push(newFile)
+        this.form.indicatorName = file.name.replace('.csv', '')
+        this.fileList.push(file)
         CIQ.hideCover()
         CIQ.nprogress.done()
         this.dialogFormVisible = true

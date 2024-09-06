@@ -2,7 +2,6 @@
 // Copyright 2001 - 2021, Sundial Capital Research, Inc. All rights reserved
 // -------------------------------------------------------------------------------------------
 
-import {config}  from "./STDataFeedAccessUrl.js";
 // import { CIQ, quoteFeed, symbolLookupBase } from "./jsDemo/js/standard.js";
 import { CIQ, quoteFeed, symbolLookupBase } from "chartiq/js/standard.js";
 import { encodeBase64 } from '@/utils'
@@ -39,40 +38,6 @@ CIQ.inheritsFrom(
  function SortArray(x, y){
     return collator.compare(x.data.symbol, y.data.symbol);
 }
-async function loadStocksList(){
-    let list = []
-    if (CIQ.store.state.chart.stocksList.length != 0) {
-        list = CIQ.store.state.chart.stocksList
-    }else{
-        var loader = document.querySelector(".loaderLookup");
-        if (loader) loader.show();  
-           
-        const res = await CIQ.axios.get(
-            config.getStocks, {cache:true}
-        )
-        loader.hide()
-        list = res.data
-        CIQ.store.commit('chart/getStocksList',res.data);
-    }
-    return list
-}
-async function loadIndexsList(){
-    let list = []
-    
-    if (CIQ.store.state.chart.indexsList.length != 0) {
-        list = CIQ.store.state.chart.indexsList
-    }else{
-        var loader = document.querySelector(".loaderLookup");
-        if (loader) loader.show();    
-        const res = await CIQ.axios.get(
-            config.getIndexes, {cache:true}
-        )
-        loader.hide()
-        list = res.data
-        CIQ.store.commit('chart/getIndexsList',res.data);  
-    }
-    return list
-}
 
 CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
 	text,
@@ -84,7 +49,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     if (loader) loader.show();  
     if (filter == 'ALL'){
         var resultsIndexsList = [];
-        let indexsList = await loadIndexsList()
+        const indexsList = CIQ.store.getters.getIndexList
         let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < indexsList.length; i++) {
             var fields = indexsList[i]; 
@@ -100,7 +65,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             });
         }
         var resultsStocksList = [];
-        let stocksList = await loadStocksList()
+        const stocksList = CIQ.store.getters.getStockList
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
             var item = {
@@ -158,7 +123,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     }
     else if (filter == 'INDEXES'){
 			var results = [];
-            let indexsList = await loadIndexsList()
+            const indexsList = CIQ.store.getters.getIndexList
             let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
 			for (var i = 0; i < indexsList.length; i++) {
 				var fields = indexsList[i];
@@ -193,7 +158,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }      
 	}else if (filter == 'STOCKS') {
         var results = [];
-        let stocksList = await loadStocksList()
+        const stocksList = CIQ.store.getters.getStockList
         let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
         for (var i = 0; i < stocksList.length; i++) {
             var fields = stocksList[i];
@@ -228,49 +193,23 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         } 
     } else if (filter == 'MY FAVORITES'){
         var results = []
-        var resu = CIQ.store.state.chart.favoriteSymbolList
-        // var resu = []
-        // const data = await CIQ.getFavorite()
-        // try{
-        //     resu = JSON.parse(data.favorite_indicator)
-        // }catch{}
+        var resu = CIQ.store.getters.getFavoriteSymbolList
 
             try {
-                var listStock = []
-                if(CIQ.store.state.chart.stocksList.length == 0){
-                    var res = await loadStocksList()
-                    listStock = res.map(_obj=>{
+                var listStock = CIQ.store.getters.getStockList.map(_obj=>{
                         var newObj = {}
                         newObj['name'] = _obj.name
                         newObj['url'] = _obj.stock
                         return newObj
                     })
-                }else{
-                    listStock = CIQ.store.state.chart.stocksList.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.stock
-                        return newObj
-                    })
-                }
 
-                var listIndex = []
-                if(CIQ.store.state.chart.indexsList.length == 0){
-                    var res = await loadIndexsList()
-                    listIndex = res.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.symbol
-                        return newObj
-                    })
-                }else{
-                    listIndex = CIQ.store.state.chart.indexsList.map(_obj=>{
-                        var newObj = {}
-                        newObj['name'] = _obj.name
-                        newObj['url'] = _obj.symbol
-                        return newObj
-                    })
-                }
+
+                var listIndex = CIQ.store.getters.getIndexList.map(_obj=>{
+                    var newObj = {}
+                    newObj['name'] = _obj.name
+                    newObj['url'] = _obj.symbol
+                    return newObj
+                })
 
                 var list = [...listStock,...listIndex]
                 
@@ -317,7 +256,37 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
             }
         }); 
         cb(results)
+    } else if (filter == 'SYMBOLS') {
+        var results = []
+        const symbollistForecast = CIQ.store.getters.getSymbollistForecast
+        let stocksList = CIQ.store.getters.getStockList
+        let indexsList = CIQ.store.getters.getIndexList
+        symbollistForecast.forEach(element => {
+            const stocks = stocksList.find(i=>i.stock.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+            const indexs = indexsList.find(i=>i.symbol.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+            let res = stocks || indexs
+            if(res){
+                var item = {
+                    symbol: res.stock || res.symbol,
+                    name: res.name,
+                    exchDisp: "",
+                    market: element.market,
+                }
+                
+                if (
+                    item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                    item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                ){
+                    results.push({
+                        display: [item.symbol, item.name, item.exchDisp],
+                        data: item
+                    });
+                }
+            }else console.log('symbol does not exist in list',element.market)
+
+        }); 
+        cb(results)
     } 
-    loader.hide();  
+    if (loader) loader.hide();  
 };
 export { CIQ };

@@ -121,6 +121,7 @@ if (!CIQ.Studies) {
 			inputs: {},
 			centerline: null // so centerline is drawn but not included in the range calculation
 		},
+		/** 无需处理dual symbol */
 		"Fractal Chaos Bands": {
 			name: "Fractal Chaos Bands",
 			overlay: true,

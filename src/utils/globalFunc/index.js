@@ -3,8 +3,8 @@ import { decodeBase64 } from '..'
 // global functions(not like mixin, it can be used for .js)
 const getSymbolInfo = (url) => {
     //console.time('🚗Execution Time');
-    let stockName = CIQ.store.state.chart.stocksList.find(x=>x.stock==url)
-    let indexName = CIQ.store.state.chart.indexsList.find(x=>x.symbol==url)
+    let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==url)
+    let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==url)
     //console.timeEnd('🚗Execution Time');
     if (stockName) {
         return {name: stockName?.name, url: url, type:'stock'}
@@ -13,7 +13,7 @@ const getSymbolInfo = (url) => {
     } else {
         // 第三种情况：既不是 stockName 也不是 indexName，可能是custom symbol
         try {
-          return {name: decodeBase64(url.split('||')[0]), url: url, type:'custom'}
+          return {name: decodeBase64(url.split('||')[0]), symbol: decodeBase64(url.split('||')[1]), url: url, type:'custom'}
         } catch (error) {
           return {name: '', url: url, type:'other'}
         }  
@@ -98,4 +98,22 @@ const getCoresSymbolDual = (isSymbol2) => {
     }
   }
 
-  export {maxNumOfStudy,getPropertyByString, recoverSymbolOptixUrl, createStateFilter, getSymbolInfo, getCoresSymbolDual}
+  // 兼容被改过key的股票列表
+  // TODO 兼容更多改过key的股票列表的情况
+  const transformChangedKey = (res,source) => {
+      const changedNameMap = {'crude':'Crude','bitcoin':'Bitcoin'}
+      switch(source){
+        case 'get_cpm_bts':
+          res.data.results = res.data.results.map(item=>{
+            let changedKey = changedNameMap[item.symbol]
+            return changedKey?{...item, symbol:changedKey}:item
+          })
+          break;
+        case 'run_cpm_bt':
+          let changedKey = changedNameMap[res.data.data.symbol]
+          if(changedKey) res.data.data.symbol = changedKey 
+          break
+        default:
+      }
+  }
+  export {maxNumOfStudy,getPropertyByString, recoverSymbolOptixUrl, createStateFilter, getSymbolInfo, getCoresSymbolDual, transformChangedKey}

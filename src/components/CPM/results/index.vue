@@ -55,7 +55,7 @@
         </template>
       <div class="content">
           <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
-          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeDate="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
+          <TIM v-show="activeTab == 'results'" ref="TIM" :tradeData="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
           <CorrInfo v-show="activeTab == 'corrInfo'" ref="CorrInfo"></CorrInfo>
           <MaxMin
             ref="maxMinChild"
@@ -321,7 +321,7 @@ export default {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
           for(var i=1;i < defaultTableLabels.length;i++ ){
-            obj[defaultTableLabels[i]] = item[defaultTableLabels[i]]
+            obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
           }
           _backtestHistoryList.push(obj)
         })
@@ -332,9 +332,9 @@ export default {
             const value = item[periods[i - 1].period];
             // 检查值是否有效
             if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-              zscore[defaultTableLabels[i]] = value;
+              zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = value;
             } else {
-              zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+              zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
             }
           }
           _backtestHistoryList.push(zscore);
@@ -348,7 +348,7 @@ export default {
         Object.keys(item).forEach(key => {
           if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
             Object.keys(item[key]).forEach(subKey => {
-              transformedItem[`${key} - ${subKey}`] = item[key][subKey];
+              transformedItem[`${key.replace('[%]', 'Later [%]')} - ${subKey}`] = item[key][subKey];
             });
           }
         });

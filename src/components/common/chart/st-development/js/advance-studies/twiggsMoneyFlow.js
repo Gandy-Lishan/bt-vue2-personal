@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_twiggsMoneyFlow_ = (_exports) => {
@@ -39,6 +39,13 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateTwiggsMoneyFlow = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
 		if (quotes.length < sd.days) {
 			sd.error = true;
 			return;
@@ -53,17 +60,17 @@ if (!CIQ.Studies) {
 				sumVolume = startQuote["_sumV " + sd.name];
 		}
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
-			var trh = Math.max(quotes[i - 1].Close, quotes[i].High);
-			var trl = Math.min(quotes[i - 1].Close, quotes[i].Low);
+			var trh = Math.max(getPropertyByString(quotes[i - 1],field,'Close'), getPropertyByString(quotes[i],field,'High'));
+			var trl = Math.min(getPropertyByString(quotes[i - 1],field,'Close'), getPropertyByString(quotes[i],field,'Low'));
 			quotes[i]["_MFV " + sd.name] =
-				(quotes[i].Volume * (2 * quotes[i].Close - trh - trl)) /
+				(getPropertyByString(quotes[i],field,'Volume') * (2 * getPropertyByString(quotes[i],field,'Close') - trh - trl)) /
 				(trh - trl === 0 ? 999999 : trh - trl);
 			if (i > sd.days - 1) {
 				sumMoneyFlow *= (sd.days - 1) / sd.days;
 				sumVolume *= (sd.days - 1) / sd.days;
 			}
 			sumMoneyFlow += quotes[i]["_MFV " + sd.name];
-			sumVolume += quotes[i].Volume;
+			sumVolume += getPropertyByString(quotes[i],field,'Volume');
 			if (i > sd.days - 1) {
 				if (sumVolume)
 					quotes[i]["Result " + sd.name] =
@@ -84,4 +91,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_twiggsMoneyFlow_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_twiggsMoneyFlow_}

@@ -3775,6 +3775,7 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	}
 	var futureTicks = [];
 	for (i = start; i < quotes.length; i++) {
+		console.log(i, '		', acc)
 		var quote = quotes[i];
 		val = quote[field];
 		if (val && typeof val == "object") val = val[subField];
@@ -4847,6 +4848,7 @@ CIQ.extend(CIQ.Studies.studyLibrary, {
 		inputs: {},
 		outputs: { "True Range": "auto" }
 	},
+	/** 无需处理dual symbol */
 	volume: {
 		name: "Volume Chart",
 		range: "0 to max",

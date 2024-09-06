@@ -307,7 +307,7 @@
             >
             <template slot="header">
                 Market Condition
-                    <el-tooltip effect="dark" placement="top" style="diaplay: inline">
+                    <el-tooltip effect="dark" placement="top" style="display: inline">
                     <span slot="content" v-html="textContent['MarketCondition']">
                     </span>
                     <i class="iconfont icon-wenhao"></i>
@@ -359,5 +359,18 @@ export default {
 <style lang="less" scoped>
 .CPM-summary {
 	margin: 5px 0;
+}
+.statistics-container {
+	margin: 0 auto;
+}
+@media (min-width: 1600px) {
+	.statistics-container {
+		width: 1093px
+	}
+}
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.statistics-container{
+		width: 830px
+	}
 }
 </style>

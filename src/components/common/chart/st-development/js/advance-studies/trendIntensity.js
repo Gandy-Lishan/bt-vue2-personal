@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_trendIntensity_ = (_exports) => {
@@ -39,18 +39,29 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateTrendIntensity = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
-		if (quotes.length < sd.days + 1) {
-			sd.error = true;
-			return;
-		}
+
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 
+		CIQ.Studies.MA("ma", sd.days, field, 0, "_SMA", stx, sd);
+		
+				var subField = field
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+					//filter valid rows
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else {
+					quotes = sd.chart.scrubbed
+				}
+				if (quotes.length < sd.days + 1) {
+					sd.error = true;
+					return;
+				}
 		function computeTII(gain, loss) {
 			if (Math.abs(loss) < 0.00000001) return 100;
 			return 100 - 100 / (1 + gain / loss);
 		}
-		CIQ.Studies.MA("ma", sd.days, field, 0, "_SMA", stx, sd);
+		
 		var gain = 0,
 			loss = 0,
 			i,
@@ -60,7 +71,7 @@ if (!CIQ.Studies) {
 		for (i = Math.max(0, sd.startFrom - maxLength); i < quotes.length; i++) {
 			if (!quotes[i]["_SMA " + sd.name] && quotes[i]["_SMA " + sd.name] !== 0)
 				continue;
-			change = quotes[i][field] - quotes[i]["_SMA " + sd.name];
+			change = getPropertyByString(quotes[i],field,subField) - quotes[i]["_SMA " + sd.name];
 			if (change < 0) loss += change * -1;
 			else gain += change;
 			queue.push(change);
@@ -94,9 +105,9 @@ if (!CIQ.Studies) {
 				init: {
 					studyOverZonesEnabled: true,
 					studyOverBoughtValue: 80,
-					studyOverBoughtColor: "auto",
+					studyOverBoughtColor: process.env.VUE_APP_RED,
 					studyOverSoldValue: 20,
-					studyOverSoldColor: "auto"
+					studyOverSoldColor: process.env.VUE_APP_GREEN
 				}
 			}
 		}
@@ -104,4 +115,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_trendIntensity_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_trendIntensity_}

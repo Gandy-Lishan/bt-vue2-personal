@@ -16,12 +16,6 @@
         mode="horizontal"
         @select="handleSelect"
       >
-        <!-- <el-menu-item class="ai-link" v-if="activeIndex==3"
-          >Smart Stock Scanner</el-menu-item
-        > -->
-        <!-- <el-menu-item class="home-link" v-if="activeIndex==1"
-          >BacktestEdge</el-menu-item
-        > -->
         <el-menu-item class="home-link" index="9"
           >Strategy</el-menu-item
         >
@@ -53,10 +47,14 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None' && isPortfolio"
           >Portfolio</el-menu-item
         >
-        <!-- <el-menu-item class="seasonality-link home-link" index="8"
-        v-if="userRole == 'analyst'"
-          >Correlation Pattern Match</el-menu-item
-        > -->
+        <el-menu-item class="home-link" index="12"
+        v-if="isReports"
+          >Reports</el-menu-item
+        >
+        <el-menu-item class="home-link" index="13"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
+          >Indicators</el-menu-item
+        >
         <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>
@@ -97,10 +95,11 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
+      activeIndex: '',
       isAiTrading: false,
       isPortfolio: false,
-      isButtonVisible: false
+      isButtonVisible: false,
+      isReports: false,
     }
   },
   computed: {
@@ -132,6 +131,10 @@ export default {
         this.activeIndex = '9'
       }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
         this.activeIndex = '11'
+      }else if(to.path.includes('/reports') || to.name == 'Reports'){
+        this.activeIndex = '12'
+      }else if(to.path.includes('/indicators') || to.name == 'Indicators'){
+        this.activeIndex = '13'
       }
       // const currentDomain = window.location.hostname;
     // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
@@ -139,26 +142,13 @@ export default {
       }
   },
   mounted() {
-    if (this.$route.name == 'backtester' || this.$route.name == 'Backtester') {
-      this.activeIndex = '1'
-    } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart' || this.$route.name == 'scannerai_backtest') {
-      this.activeIndex = '3'
-    } else if (this.$route.path.includes('/doc')) {
-      this.activeIndex = '4'
-    } else if(this.$route.name == 'myindicator' || this.$route.name == 'MIList'  || this.$route.name == 'MIcreate'){
-      this.activeIndex = '6'
-    } else if(this.$route.name == 'Seasonality'){
-      this.activeIndex = '7'
-    }else if(this.$route.name == 'CPM' || this.$route.name == 'CPM'){
-      this.activeIndex = '8'
-    }else if(this.$route.name == 'Strategy'){
-      this.activeIndex = '9'
-    }else if(this.$route.name == 'Portfolio'){
-      this.activeIndex = '11'
-    }
     const email = getCookieData()?.username
     if(email === 'hao@sentimentrader.com') this.isAiTrading = true
     if(email !== 'hao@sentimentrader.com') this.isAiTrading = false
+    const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
+    if(allowedReportEmails.includes(email)) this.isReports = true
+    if(!allowedReportEmails.includes(email)) this.isReports = false
+    
     if(['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = true
     if(!['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)) this.isPortfolio = false
   },
@@ -172,11 +162,6 @@ export default {
       if (key == '1') {
         path = this.$router.resolve({
           path: '/'
-        }).href
-        this.$router.push(path)
-      } else if (key == '2') {
-        path = this.$router.resolve({
-          path: '/home/strategy'
         }).href
         this.$router.push(path)
       } else if (key == '3') {
@@ -218,6 +203,16 @@ export default {
       }else if(key == '11') {
         path = this.$router.resolve({
           path: '/portfolio'
+        }).href
+        this.$router.push(path)
+      }else if(key == '12') {
+        path = this.$router.resolve({
+          path: '/reports'
+        }).href
+        this.$router.push(path)
+      }else if(key == '13') {
+        path = this.$router.resolve({
+          path: '/indicators'
         }).href
         this.$router.push(path)
       }

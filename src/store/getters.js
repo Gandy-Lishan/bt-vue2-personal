@@ -24,8 +24,24 @@ const getters = {
 		  state.chart.ma_color_1[panelIndex % state.chart.ma_color_2.length];
 	  },
 	getMySymbollist: state => state.chart.mySymbolList,
-	getFavIndicatorList: state => state.chart.favIndicatorList,
+	getFavoriteIndicatorListBtv1: state => state.chart.favoriteIndicatorListBtv1,
 	getMyIndicatorList: state => state.chart.myIndicatorList,
+	getChartType: state => state.chart.chartType,
+	getStockList: state => state.chart.stocksList,
+	getIndexList: state => state.chart.indexsList,
+	getIndicatorsList: state => state.chart.indicatorsList,
+	getTechnicalCategory: state => state.chart.technicalCategory,
+	getBuiltinList: state => state.chart.builtinList,
+	getFormateTechnicalList: state => state.chart.formateTechnicalList,
+	getRefactoredSentimentList: state => state.chart.refactoredSentimentList,
+	getRefactoredSymbolList: state => state.chart.refactoredSymbolList,
+	getSymbollistForecast: state => state.chart.symbollistForecast,
+	getForecastMarket: state => state.chart.forecastMarket,
+	getForecastList: state => state.chart.forecastList,
+	getForecastAuthorList: state => state.chart.forecastAuthorList,
+	getForecastTimeframeList: state => state.chart.forecastTimeframeList,
+	getFavoriteIndicatorList: state => state.chart.favoriteIndicatorList,
+	getFavoriteSymbolList: state => state.chart.favoriteSymbolList,
 
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
@@ -37,6 +53,9 @@ const getters = {
 	getIsEditFinishFlagState: state => state.states.isEditFinish_flag,
 	getBeforeCalculateNewConditions: state => state.states.beforeCalculateNewConditions,
 	getSymbolUploadDomActive: state => state.states.symbolUploadDomActive,
+	getIndicatorsPageListData: (state) => state.chart.indicatorsPageListdata,
+	getCssMonthLabel: state => state.chart.cssMonthLabel,
+	getIndicatorPageBtv1List: state => state.chart.indicatorPageBtv1List,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

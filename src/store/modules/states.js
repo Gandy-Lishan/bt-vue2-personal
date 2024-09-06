@@ -1,8 +1,9 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { obtainIndicatorsList } from "@/service/service";
 
 const state = {
 	errorMessage404:{status:null,message:''},
-    scannerai_filter: {},
+  scannerai_filter: {},
 	scannerai_flag: false,
 	isBacktestRunning_flag:false,
 	isRunAllSignalProcessing_flag:false,
@@ -53,7 +54,7 @@ const mutations = {
 	SET_CPM_RESULTS_DATA(state, data) {
 		state.cpmResultsData = data
 		sessionStorage.setItem('cpmResultsData', JSON.stringify(data))
-	}
+	},
 }
 
 const actions = {
@@ -121,7 +122,7 @@ const actions = {
 	},
 	setCpmResultsData({ commit }, data) {
 		commit('SET_CPM_RESULTS_DATA', data);
-	},
+	}
 }
 export default {
 	namespaced: true,

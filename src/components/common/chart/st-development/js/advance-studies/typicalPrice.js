@@ -43,11 +43,13 @@ if (!CIQ.Studies) {
 	);
 } else {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
+		/** 无需处理dual symbol */
 		"Typical Price": {
 			name: "Typical Price",
 			calculateFN: CIQ.Studies.calculateTypicalPrice,
 			inputs: { Period: 14 }
 		},
+		/** 无需处理dual symbol */
 		"Weighted Close": {
 			name: "Weighted Close",
 			calculateFN: CIQ.Studies.calculateTypicalPrice,

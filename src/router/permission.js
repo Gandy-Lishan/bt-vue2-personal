@@ -1,14 +1,10 @@
 import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {
-	getIndicatorsList,
-	getStocksList,
-	getIndexsList
-} from '@/service/service'
 import { getCurDate } from '@/service/ai'
-import { getQueryVariable, LocalStorageUtil, getTokenRole } from '@/utils'
+import { getIndicatorsRowData } from "@/service/service";
+import { getQueryVariable, LocalStorageUtil, getTokenRole, printConsole } from '@/utils'
 import store from '../store'
-import { uniqueObjectArray } from '@/utils/formValidate'
+import { uniqWith, isEqual } from "lodash"
 
 export function setRouterPermission(router) {
 	router.beforeEach(async (to, from, next) => {
@@ -29,18 +25,37 @@ export function setRouterPermission(router) {
 		}
 		// 当跳转携带 backtestID 时，填充
 		const backtestID = getQueryVariable('backtestID')
-		if (backtestID) LocalStorageUtil.set('backtestID', backtestID)
+		if (backtestID) localStorage.setItem('backtestID', backtestID)
 		// 当跳转携带 indicator 和 symbol 时，填充
 		const indicator = getQueryVariable('indicator')
-		const symbol = getQueryVariable('index')
-		if (indicator) LocalStorageUtil.set('indicator', indicator)
-		if (symbol) LocalStorageUtil.set('symbol', symbol)
+		let symbol = getQueryVariable('index')
+		if (symbol === 'Unknown'){
+			const rowData = await getIndicatorsRowData(indicator)
+      const {market_symbol} = rowData?.data
+			const _symbol = market_symbol || 'SPX'
+			symbol = _symbol
+		}
+		if (indicator) sessionStorage.setItem('indicator', indicator)
+		if (symbol) sessionStorage.setItem('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
-	/* normal user */
-	// Cookies.set(
-	// 	'sentimen_session',
-	// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
-	// )
+		printConsole(process.env.NODE_ENV)
+		if(process.env.NODE_ENV == 'development'){
+			Cookies.set(
+				'sentimen_session',
+				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			)
+		}
+		/* dean */
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcXnDSFIxtMrVEk8NDM/J1BJ6b0zEi712Cd/Wuu8VCSDrgP5IovRDyZmwIXdFxicPZZ07rW868yMR7Iab1kh0zUC3WoQQZnBaLpZ27Buvu5pUu/F7+211xHuWOEuyEQt6D9lMQDeQ5jAGpV/J/uVsLqfD9n+0hQxUhLItFmELpTrxVpiNQOZ0MtBHJiNo+fyKF63WtW8kFlRGqLEpCU8U/lXLL+RR4vvII1X6o84D0TYzg7G4kSsmu3tQJj7QpZ+Rfmqht63Tk4/E8FpXch/WeSjDcnUfavjAa8KynVD7Ega5+/8+OuiQuNiSc89YrXYjCTPiEOsd/zGwruaBmugeGl4lK7gx5Ukquf9L72KLFaJJB+vnmBRKuxM6AtJ1D2CtQdE2w2Fde38kYPyl24AB5S'
+		// )
+
+		/* normal user */
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	"IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdUTF4lDbhFi%2BG/AK9qppMeRdVuhKlUa0iTjInguKLY7tZjyiWv57kyoLcG888O0xAhu0H/KHwXnj1L5puZwd3oFOSUz5DVakcIvHH3J9PUYaNMpsGlkwwSBd%2BCLMUQOmEslNzkWxIy7QN7mFzarQpWbNCIQXhJam4wGXldOAHfqsyEupNJmR9e5VGQxRhK0qNMEApCb0dIU5tWjR3yBCYhwkCLBkzvCEJ0fFzEHYPXuMqtn%2Bj%2Bdwv4hlFMvXmn%2BSUbtYDNr/4eSJSwBV9tf4QGp9BmW5vD2SctAsQjfQo%2B9v6wt/wEpNFJgOL25VvoGF9hfB6KUV9TRts17P5ja%2BOaxkiCSWmF2MCRuZVqvaaEYXdhjzof%2BffgfACVlcYey8SSN4batfkGv%2BpxANe945EO"
+		// )
 	
 		/* hao@sentimentrader.com */
 		// Cookies.set(
@@ -89,6 +104,8 @@ export function setRouterPermission(router) {
 		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcOrAwYSJ4eSBTuZhZqrInKI+C5rORbU/iO3bXPPpsd6sndEt+m/nzXAA8wNg3qTiym8DmTFO9E1dYMIsK/g/dxfId4fRWpIj47FlICxoE7RkeeNCd3UV1JMZlEx/hFtyHUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwABeUfgFvahpjXNn+xUxHH8smHHrUp+gLpfKeBmaxIqC9U1mEqJebqxfuVk5hKzD484S3SOmHNzyYYuYGXx/e00GDaFa0z0UNm3b+NNYl1y1DN4TaiD7WavEay3z0BbTUGNhgskUX8Zgd2tTLScWF/fG6dMUn/AUuoF+dXnjAfKnjcQ7K4NNSqhSnn3DYbpzWB7tQ81fTdf+YSTTVueh/vFiE801WK2HHYPXSXGyyHpTrOSgNBAgEnjmO1n4imKBKbw=='
 		// )
 
+		// test ignlore
+
 		if (Cookies.isKey('sentimen_session') || Cookies.isKey('devbt2Userid')) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			if (
@@ -121,10 +138,10 @@ export function setRouterPermission(router) {
 
 				if (to.name == 'scannerai' || to.name == 'scannerai_chart') {
 					await initiateCurrentDate()
-					await initiateIndicatorList()
+					await initiateList(to.name)
 					store.dispatch('states/set_scannerai_flag', true)
 				} else {
-					await initiateIndicatorList()
+					await initiateList(to.name)
 					store.dispatch('states/set_scannerai_flag', false)
 				}
 				next()
@@ -170,40 +187,80 @@ async function initiateCurrentDate() {
 	})
 }
 
-async function initiateIndicatorList() {
+async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
 	if (
-		store.state.chart.indicatorsList.length == 0 ||
-		store.state.chart.stocksList.length == 0 ||
-		store.state.chart.indexsList.length == 0
+		store.getters.getIndicatorsList.length == 0 ||
+		store.getters.getStockList.length == 0 ||
+		store.getters.getIndexList.length == 0
 	) {
-		const res = await getIndicatorsList()
-		let allSymbolsList = uniqueObjectArray(res.data)
-		const resStocks = await getStocksList()
-		let stocksList = resStocks.data
-		store.commit('chart/getStocksList', stocksList)
-		const resIndexs = await getIndexsList()
-		let indexsList = resIndexs.data
-		store.commit('chart/getIndexsList', indexsList)
+		await store.dispatch('chart/fetch_stocklist')
+		await store.dispatch('chart/fetch_indexlist')
+		await store.dispatch('chart/fetch_indicatorsList')
 
-		let newAllSymbolsList = []
-		for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
-			let item = allSymbolsList[i]
-			if (stocksList.find(j => j.stock == item.url)) {
-				let newName = item.url + ' Optix'
-				newAllSymbolsList.push({
-					chart_name: newName,
-					url: item.url + '@indicator',
-					updated: item.updated
-				})
-			} else {
-				newAllSymbolsList.push(allSymbolsList[i])
-			}
-		}
-
-		// still use CIQ.indicatorList to store filtered allSymbolsList even used local cache
-		CIQ.indicatorList = newAllSymbolsList
-		store.commit('chart/getIndicatorsList', newAllSymbolsList)
+		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
+		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
+		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
+		const refactoredStocksList = await fetchDataList('getStockList')
+		const refactoredIndexsList = await fetchDataList('getIndexList')
+		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
+      	refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+		store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
+		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
+		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 	}
+	if (
+		store.getters.getFavoriteIndicatorList.length == 0 ||
+		store.getters.getFavoriteSymbolList.length == 0
+	) {
+		await store.dispatch('chart/get_favorite')
+	}
+
+	if (pathname == 'Reports' && store.getters.getSymbollistForecast.length == 0){
+		await store.dispatch('chart/get_symbollist_forecast')
+	}
+}
+
+async function fetchDataList(source) {
+	const dataList = store.getters[source]
+	const sourceMap = {
+		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol' },
+		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol' },
+		getIndicatorsList: {
+			labelField: 'chart_name',
+			urlField: 'url',
+			updateField: 'updated',
+			type: 'Indicator'
+		}
+	}
+
+	if (dataList.length !== 0 || !dataList) {
+		const { labelField, urlField, type } = sourceMap[source]
+		// return dataList.map((item) => ({
+		// 	label: item[labelField],
+		// 	url: item[urlField],
+		// 	type
+		// }))
+		return dataList.map((item) => {
+			const obj = {
+				label: item[labelField],
+				url: item[urlField],
+				type
+			}
+			// if(item.updated === 'Daily') {
+			// 	obj.updated = item.updated
+			// 	return obj
+			// }
+			// 不需要限制 timeframe 为 Daily
+			if(item.updated) {
+				obj.updated = item.updated
+				return obj
+			}
+			if(!item.updated && (source === 'getIndexList' || source === 'getStockList')) {
+				return obj
+			}
+		})
+	}
+		
 }

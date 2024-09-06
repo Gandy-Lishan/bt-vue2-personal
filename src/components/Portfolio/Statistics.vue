@@ -136,29 +136,54 @@
 			<template v-for="(l, index) in tableCol">
 				<el-table-column
 					v-if="['Symbol', 'Entry Price', 'Current Price', 
-					'Shares', 'Profit', 'Market Value', 'Strategy'
+					'Shares', 'Profit', 'Market Value'
 					].includes(l.label)"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
 					:width="l.width"
+					:min-width="l.minWidth"
+					:max-width="l.maxWidth"
 					align="center"
 					:key="index"
 					:sortable="
 						[
-							'Symbol', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value', 'Strategy'
+							'Symbol', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value'
 						].includes(l.label)
 							? 'custom'
 							: false
 					"
 					>
-          </el-table-column>
+     </el-table-column>
+					<el-table-column
+     v-if="l.label == 'Strategy'"
+     show-overflow-tooltip
+     :prop="l.value"
+     :label="l.label"
+     :width="l.width"
+     :min-width="l.minWidth"
+     :max-width="l.maxWidth"
+     align="center"
+     :key="index"
+     :sortable="
+     l.label === 'Strategy' ? 'custom' : false
+     "
+     >
+     <template slot-scope="scope">
+        <div v-for="(item, index) in scope.row[l.value]" :key="index">
+            <p><span v-if="scope.row[l.value]?.length > 1">{{ index + 1 }}.</span
+             >{{ item }}</p>
+        </div>
+      </template>
+     </el-table-column>
 					<el-table-column
 					v-if="l.label == 'Total Position(%)'"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
 					:width="l.width"
+					:min-width="l.minWidth"
+					:max-width="l.maxWidth"
 					align="center"
 					:key="index"
 					:sortable="
@@ -219,42 +244,51 @@ export default {
           label: 'Symbol',
           value: 'Symbol',
           key: 'Symbol',
-					width: '100px'
+					minWidth: '120px'
         },
 				{
           label: 'Entry Price',
           value: 'Entry Price',
-          key: 'Entry Price'
+          key: 'Entry Price',
+										width: '90px'
         },
 				{
           label: 'Current Price',
           value: 'Current Price',
-          key: 'Current Price'
+          key: 'Current Price',
+					width: '100px'
         },
 				{
           label: 'Shares',
           value: 'Shares',
-          key: 'Shares'
+          key: 'Shares',
+					width: '100px'
         },
 				{
           label: 'Profit',
           value: 'Profit',
-          key: 'Profit'
+          key: 'Profit',
+					width: '90px'
         },
 				{
           label: 'Market Value',
           value: 'Market Value',
-          key: 'Market Value'
+          key: 'Market Value',
+					width: '90px',
+					maxWidth: '160px'
         },
 				{
 					label: 'Total Position(%)',
 					value: 'Total position(%)',
-					key: 'Total position(%)'
+					key: 'Total position(%)',
+					width: '140px',
+					maxWidth: '180px'
 				},
 				{
 					label: 'Strategy',
 					value: 'Strategy',
-					key: 'Strategy'
+					key: 'Strategy',
+					minWidth: '200px'
 				}
       ],
 		}
@@ -430,6 +464,9 @@ export default {
 		padding: 30px 0px 30px 0px;
 		border-bottom: 2px solid #dddddd;
 	}
+	/deep/ .el-table .cell {
+  white-space: break-spaces;
+ }
 }
 .CPM-summary {
 	margin: 5px 0;

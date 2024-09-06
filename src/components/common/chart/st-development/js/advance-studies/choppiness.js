@@ -84,9 +84,9 @@ if (!CIQ.Studies) {
 				init: {
 					studyOverZonesEnabled: true,
 					studyOverBoughtValue: 61.8,
-					studyOverBoughtColor: "auto",
+					studyOverBoughtColor: process.env.VUE_APP_RED,
 					studyOverSoldValue: 38.2,
-					studyOverSoldColor: "auto"
+					studyOverSoldColor: process.env.VUE_APP_GREEN
 				}
 			},
 			attributes: {

@@ -549,23 +549,70 @@ input[type="time"] {
     .default-table-class .el-table .cell,
     .CPM-trades .el-table .cell,
     .CPM-TIM .el-table .cell,
-    .ScannerBTTable .el-table .cell
-    {
+    .ScannerBTTable .el-table .cell,
+    .el-table.aiscanner-table .cell,
+    .el-table.my-indicator-table .cell,
+    .el-table.BTTable .cell
+  {
+  padding: 0px;
   font-weight: 600;
-	font-size: 16px;
-  color: #333341;
+	font-size: 15px;
+  color: #606266;
   font-family: "Open Sans",sans-serif;
   text-align: center;
 }
+.historyContainer .aisummaryTable.el-table .el-table__cell.is-center,
+.el-table.my-indicator-table.other-table.default-table-class .el-table__cell.is-center,
+.CPM-trades .el-table.el-table--fit.el-table--border .el-table__cell.is-center,
+.CPM-TIM .el-table.CPM-ZScore.el-table--fit.el-table--striped .el-table__cell.is-center,
+.CPM-TIM .el-table.el-table--fit.el-table--striped .el-table__cell.is-center,
+.history-container .el-table.el-table--fit.el-table--striped .el-table__cell.is-center
+{
+  padding: 0px;
+}
+.tim-container .el-table .cell p,
+ .summaryContainer .el-table .cell p,
+  .historyContainer .el-table .cell p,
+   .history-container .el-table .cell p,
+    .my-indicator-table .el-table .cell p,
+    .default-table-class .el-table .cell p,
+    .CPM-trades .el-table .cell p,
+    .CPM-TIM .el-table .cell p,
+    .ScannerBTTable .el-table .cell p,
+    .el-table.aiscanner-table .cell p,
+    .el-table.my-indicator-table .cell p
+  {
+  margin: 0px;
+  }
 .otherIndexContainer .el-table .cell {
   font-weight: 600;
   color: #333341;
 }
-
-.strategiesTable .el-table .cell {
-  font-weight: 400;
+.virtual-table.el-table .cell {
+  font-weight: 700;
 	font-size: 14px;
   color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+  padding: 0px;
+}
+.indicator-fav-table.el-table .cell {
+  font-weight: 700;
+	font-size: 14px;
+  color: #333341;
+  font-family: "Open Sans",sans-serif;
+  text-align: center;
+}
+.virtual-table.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
+  padding: 2px 0px;
+}
+/* .virtual-table.el-table .cell.el-tooltip {
+  overflow: visible;
+} */
+.strategiesTable .el-table .cell {
+  font-weight: 600;
+	font-size: 15px;
+  color: #606266;
   font-family: "Open Sans",sans-serif;
 }
 .tim-container .table thead tr th,
@@ -576,11 +623,18 @@ input[type="time"] {
   .CPM-trades .table thead tr th,
   .CPM-TIM .table thead tr th,
   .ScannerBTTable .table thead tr th,
-  .strategiesTable .table thead tr th
+  .strategiesTable .table thead tr th,
+  .el-table.aiscanner-table thead tr th,
+  .el-table.my-indicator-table  thead tr th,
+  .el-table.BTTable thead tr th
   {
   font-weight: 700 !important;
   color: #333341;
-	font-size: 18px;
+	font-size: 17px;
+}
+.el-table.portfolioTable thead tr th {
+  font-weight: 700 !important;
+  color: #333341
 }
 .otherIndexContainer .table thead tr th
 {
@@ -596,10 +650,23 @@ color: #333341;
 .CPM-trades .el-table th.el-table__cell>.cell,
 .CPM-TIM .el-table th.el-table__cell>.cell,
 .ScannerBTTable .el-table th.el-table__cell>.cell,
-.strategiesTable .el-table th.el-table__cell>.cell
+.strategiesTable .el-table th.el-table__cell>.cell,
+.el-table.aiscanner-table th.el-table__cell>.cell,
+.el-table.my-indicator-table th.el-table__cell>.cell,
+.el-table.BTTable th.el-table__cell>.cell
 {
   font-weight: 700 !important;
-	font-size: 18px;
+  color: #333341;
+	font-size: 16px;
+}
+.MaxMinTable tr:first-child th>.cell {
+  width: 104px;
+}
+.el-table.portfolioTable th.el-table__cell>.cell {
+  font-weight: 700 !important;
+}
+.virtual-table.el-table th.el-table__cell>.cell {
+  font-weight: 700 !important;
 }
 .CPM-trades .el-table th.el-table__cell>.cell {
   font-size: 16px;
@@ -696,6 +763,9 @@ color: #333341;
 	font-weight: 600;
   color: #333;
 }
+.virtual-table.el-table--border .el-table__cell:first-child .cell {
+  padding-left: 0px;
+}
 
 button#checkResBtn {
   padding: 0px 3px;
@@ -733,6 +803,9 @@ button#checkResBtn {
 		padding-right: 0px;
 		padding-left: 0px;
 	}
+  .col-md-12.construction {
+    width: auto;
+	}
 	h1, h2, h3, h4, h5, h6 {
 		font-weight: 300;
 	}
@@ -744,6 +817,11 @@ button#checkResBtn {
     margin-left: 20px;
     padding: 10px 0;
 	}
+  h1.construction {
+    color: #333;
+		font-size: 16px;
+    padding: 0px;
+  }
 	h3 {
 		font-size: 23px;
 	}
@@ -852,7 +930,17 @@ button#checkResBtn {
     background-color: hsl(5, 68%, 96%);
   }
   .indexTable td.tg-0lax.r500 {
-    background-color: #ffffff;
+    background-color: hsl(5, 70%, 100%)
+  }
+  .threshold-table th, .threshold-table td {
+    padding: 8px;
+  }
+  .threshold-table>thead>tr>th {
+    border-bottom: 2px solid #ddd;
+    font-weight: 400;
+  }
+  .threshold-table td {
+    border-top: 1px solid #ddd;
   }
   .tg .tg-0lax {
     text-align: left;
@@ -933,6 +1021,11 @@ button#checkResBtn {
 				clear: both;
 			}
 	}
+  .construction-container {
+    width: unset;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
   .portfolio-container {
     width: 95%;
   }
@@ -940,7 +1033,10 @@ button#checkResBtn {
 		padding: 15px 0 15px;
 		direction: ltr;
 	}
-	.page-title {
+  .page-content.construction {
+    padding: 0;
+  }
+  .page-title {
 		display: inline-block;
     float: left;
     padding: 19px 0 0 0;
@@ -1039,4 +1135,10 @@ button#checkResBtn {
   .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:hover, .nav-tabs.nav-justified>.active>a:focus {
     /* border-bottom-color: #fff; */
   }
+}
+.virtual-table tr.highlighted {
+  background-color: yellow;
+}
+.virtual-table tr.even {
+  background-color: #f6f3f3;
 }

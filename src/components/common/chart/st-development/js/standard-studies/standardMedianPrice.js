@@ -80,6 +80,7 @@ let __js_standard_studies_medianPrice_ = (_exports) => {
 		};
 	
 		CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
+			/** 无需处理dual symbol */
 			"Med Price": {
 				name: "Median Price",
 				calculateFN: CIQ.Studies.calculateTypicalPrice,

@@ -8,7 +8,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="12">
+    <el-col :span="6">
       <el-form-item
         label="1. Correlation Pattern Match Name"
         prop="name"
@@ -16,7 +16,7 @@
         <el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
       </el-form-item>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="6">
       <el-form-item prop="symbol">
         <template slot="label">
           <label>
@@ -29,6 +29,7 @@
           </label>
         </template>
         <el-autocomplete
+            ref="autocomplete"
             class="inline-input"
             v-model="data.symbol"
             :fetch-suggestions="querySearch"
@@ -44,14 +45,62 @@
           <template slot-scope="{ item }">
             <div class="custom-option">
               <span class="symbol-label">{{
-                item.url
-              }}</span>
-              <span class="symbol-url">{{
-                item.label
+                item.type == 'Custom' ? item.label : item.url
               }}</span>
             </div>
           </template>
         </el-autocomplete>
+      </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item prop="ma_condition" label="3. Condition">
+      <template slot="label">
+        <label>
+          3. Condition
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the relationship between the closing price of the End Date of the selected pattern<br/>
+              and the Moving Average of the specified Period.<br/>
+              For example, if you select Condition as Above and Period = 200,<br/>
+              it means that the End Date of all selected patterns must close at a price greater than<br/>
+              the Symbol Close 200-day Moving Average.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
+        <el-select
+            v-model="data.ma_condition"
+            placeholder="— Select Condition —"
+          >
+            <el-option
+              v-for="item in conditionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item
+        label="4. Period"
+        prop="ma"
+      >
+      <template slot="label">
+        <label>
+          4. Period
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content">
+              It represents the period of the Symbol Close's Moving Average, which defaults to 200.
+            </span>
+            <i class="iconfont icon-wenhao"></i>
+          </el-tooltip>
+        </label>
+      </template>
+        <el-input v-model="data.ma" :disabled="data.ma_condition == 0">
+        </el-input>
       </el-form-item>
     </el-col>
   </el-row>
@@ -66,12 +115,12 @@
   <el-row :gutter="10">
     <el-col :span="4">
       <el-form-item
-				label="3. Pattern Start Date"
+				label="5. Pattern Start Date"
         prop="start_date"
 			>
       <template slot="label">
         <label>
-          3. Pattern Start Date
+          5. Pattern Start Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >The date on which you would like to start the price comparison.</span>
@@ -92,12 +141,12 @@
     </el-col>
     <el-col :span="4">
       <el-form-item
-				label="4. Pattern End Date"
+				label="6. Pattern End Date"
         prop="end_date"
 			>
       <template slot="label">
         <label>
-          4. Pattern End Date
+          6. Pattern End Date
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >The date on which you would like to stop the price comparison.</span>
@@ -118,7 +167,7 @@
     </el-col>
     <el-col :span="4">
       <el-form-item
-        label="5. Number of Bars"
+        label="7. Number of Bars"
         prop="bars_num"
       >
         <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
@@ -129,7 +178,7 @@
       </el-form-item>
     </el-col>
     <el-col :span="4">
-      <el-form-item prop="timeframe" label="6. Timeframe">
+      <el-form-item prop="timeframe" label="8. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -150,12 +199,12 @@
       <el-row :gutter="10">
         <el-col :span="14">
           <el-form-item
-            label="7. Correlation Percentage"
+            label="9. Correlation Percentage"
             prop="corr_per"
           >
             <template slot="label">
               <label>
-                7. Correlation Percentage
+                9. Correlation Percentage
                 <el-tooltip effect="dark" placement="top">
                   <span slot="content">
                     This is the minimum threshold required for matching patterns. <br />
@@ -193,7 +242,7 @@
     <el-col :span="12">
       <el-row :gutter="10">
         <el-col :span="8">
-        <el-form-item prop="direction" label="8. Direction">
+        <el-form-item prop="direction" label="10. Direction">
           <el-select
               v-model="data.direction"
               placeholder="— Select Direction —"
@@ -210,12 +259,12 @@
         </el-col>
         <el-col :span="8">
         <el-form-item
-          label="9. Time In Market"
+          label="11. Time In Market"
           prop="tim"
         >
           <template slot="label">
             <label>
-              9. Time In Market
+              11. Time In Market
               <el-tooltip effect="dark" placement="top">
                 <span slot="content">
                   Input a value of bars to stay in market after entry.<br />Exit
@@ -236,10 +285,10 @@
         </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item prop="backtestHistory" label="10. Lookback Period">
+          <el-form-item prop="backtestHistory" label="12. Lookback Period">
               <template slot="label">
                 <label>
-                  10. Lookback Period
+                  12. Lookback Period
                   <el-tooltip effect="dark" placement="top">
                     <span slot="content"
                       >Specify the start and end date of the backtest. <br />
@@ -272,7 +321,7 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item
-              label="11. Custom Duration"
+              label="13. Custom Duration"
               prop="year"
               v-if="data.lookback_period == 'Custom'"
             >
@@ -310,9 +359,10 @@
 import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
 import { LoadingOverlay } from "@/components/common"
-import { timestampToTime, isJson } from '@/utils'
+import { timestampToTime, isJson, encodeBase64 } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { mapGetters } from "vuex"
+import { getSymbolInfo } from '@/utils/globalFunc'
 
 export default {
   name: 'Form',
@@ -341,6 +391,8 @@ export default {
         exclude_overlap: true,
         direction: 'Long',
         bars_num: 0,
+        ma_condition: 0,
+        ma: 200
       },
       dropdownList: [],
       percentage: 0,
@@ -349,6 +401,11 @@ export default {
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
         { value: 'Monthly', label: 'Monthly' }
+      ],
+      conditionOptions: [
+        { value: 0, label: 'None' },
+        { value: 1, label: 'Above' },
+        { value: 2, label: 'Below' }
       ],
       directionOptions: [
         { value: 'Long', label: 'Long' },
@@ -425,11 +482,17 @@ export default {
           { required: true, message: 'Enter a name', trigger: 'blur' }
         ],
         symbol: [
-          { validator: createVerifyValueInListRule(JSON.parse(localStorage.getItem('symbolList')), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
-          { validator: createVerifyValueInListRule(JSON.parse(localStorage.getItem('symbolList')), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
+          // 需要考虑到custom symbol校验
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
+          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
         ],
         tim: [
-          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' }
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
+        ],
+        ma: [
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('period', 1, 252), trigger: 'change' }
         ],
         start_date: [
         { required: true, message: 'Select start date', trigger: 'blur' },
@@ -458,18 +521,27 @@ export default {
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
     },
+    ...mapGetters({
+      symbolList: 'getRefactoredSymbolList'
+    })
   },
   watch: {
     handleGetBacktestSymbol: {
       handler(newVal) {
         this.data.symbol = newVal
+        // 在判断到symbol为custom symbol时更新autocomplete input value以保证selector内显示为label而不是默认value
+        const {name,type} = getSymbolInfo(newVal)
+        if(type == 'custom'){
+          // 处理选中项的操作，例如更新输入框的显示值为 item.label
+          this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = name;}) 
+        }
       },
       immediate: true,
       deep: true
     },
   },
   async mounted() {
-    this.setBacktestHistory(10)
+    this.setBacktestHistory(1)
     this.generateCPMName()
   },
   methods: {
@@ -509,7 +581,7 @@ export default {
       }
       this.processTips = ''
       this.percentage = 0
-      this.setBacktestHistory(10)
+      this.setBacktestHistory(1)
       this.generateCPMName()
       const formRef = ['BasicForm', 'PreviewForm', 'BacktestForm']
       formRef.forEach(ref => {
@@ -530,7 +602,14 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = this.data.symbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
+
+      // 在判断到symbol为custom symbol时把backtest name调整成正常形式
+      let bdSymbol = this.data.symbol
+      const {name,type} = getSymbolInfo(bdSymbol)
+      if(type == 'custom'){
+        bdSymbol = name
+      }
+      this.data.name = bdSymbol + '  ' + year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
     },
     resetChart() {
       CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
@@ -558,7 +637,7 @@ export default {
       this.data.end_date = timestampToTime(new Date());
       const endDate = new Date(this.data.end_date);
       const startDate = new Date(endDate);
-      startDate.setDate(endDate.getDate() - val);
+      startDate.setMonth(endDate.getMonth() - val);
       this.data.start_date = timestampToTime(startDate);
     },
     handleDisabledStartDate(time) {
@@ -576,9 +655,17 @@ export default {
       const startDay = timestampToTime(new Date(this.data.start_date))
       return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
     },
+    getCustomStocksList() {
+      let vm = this
+      return vm.$store.getters.getMySymbollist.map((item, index) => {
+        let url = encodeBase64(item.name) + '||' + encodeBase64(item.url)
+        return { label: `${item.name}`, url: `${url}`, type: 'Custom' }
+      })
+    },
     querySearch(queryString, cb) {
       if(!this.dropdownList || this.dropdownList.length == 0) {
-        this.dropdownList = JSON.parse(localStorage.getItem('symbolList'))
+        this.dropdownList = this.symbolList
+        this.dropdownList = this.dropdownList.concat(this.getCustomStocksList())
       }
       var results = this.dropdownList.map(item => ({
           ...item,
@@ -590,7 +677,10 @@ export default {
 
     handleSelect(item) {
       this.data.symbol = item.url
-
+      if(item.type == 'Custom'){
+        // 防止symbol 选中时不触发handleGetBacktestSymbol,而导致没有更新autocomplete input value
+        this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = item.label;}) 
+      }
       // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
       CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
         this.calculateBarDistance()
@@ -820,6 +910,11 @@ export default {
         }else if(key == 'year'){
           if(this.data.lookback_period == 'Custom') {target['year'] = data['lookback_period']}
           else {target['year'] = ''}
+        }else if(key === 'ma_condition' && !data[key]) {
+          // 默认 None
+          target[key] = 0
+        }else if(key === 'ma' && !data[key]) {
+          target[key] = 200
         }else {
           target[key] = data[key]
         }
@@ -969,5 +1064,14 @@ export default {
   /deep/ .el-progress {
     height: 100%;
   }
+}
+
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+  width: 300px;
+}
+/deep/ .el-button, /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
+  font-weight: 500;
 }
 </style>

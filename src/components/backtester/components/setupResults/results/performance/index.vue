@@ -148,6 +148,7 @@ export default {
               if (typeof res.data == 'string') {
                 initalData = JSON.parse(res.data)
               } else {
+                if(typeof res.data == 'string') {initalData = res.data.replace(/NaN/g, 'null'); initalData = JSON.parse(initalData)}
                 initalData = res.data
               }
 
@@ -166,7 +167,6 @@ export default {
                                             initalData['Symbol2 Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
                                           : ''
-
               data.uuid = initalData['UUID']
               data.symbol = initalData['Symbol']
               data.frequency = initalData['Frequency']
@@ -257,7 +257,7 @@ export default {
                   const datatime = new Date(initalData['basic']['start_date'])
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
-                  this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || [])
+                  this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
                 });
               }
               // ------------------------------ end -----------------------------------
@@ -314,7 +314,7 @@ export default {
 
         const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
         if(this.showLastSignalMarker1) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,null)
-        if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker1,`last signal`,comparisonSymbolUrl)
+        if(comparisonSymbolUrl && this.showLastSignalMarker2) CIQ.createOneTimeLastSignalMarker(this.showLastSignalMarker2,`last signal`,comparisonSymbolUrl)
         this.$store.dispatch('states/set_isMarkerShown_flag',true)
       } catch (error) {
         console.error(error)
@@ -482,7 +482,7 @@ export default {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
           for(var i=1;i < defaultTableLabels.length;i++ ){
-            obj[defaultTableLabels[i]] = item[defaultTableLabels[i]]
+            obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
           }
           _backtestHistoryList.push(obj)
         })
@@ -493,9 +493,9 @@ export default {
             const value = item[periods[i - 1].period];
             // 检查值是否有效
             if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-              zscore[defaultTableLabels[i]] = value;
+              zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = value;
             } else {
-              zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+              zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
             }
           }
           _backtestHistoryList.push(zscore);
@@ -507,7 +507,7 @@ export default {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
           for(var i=1;i < defaultTIMTableLabels.length;i++ ){
-            obj[defaultTIMTableLabels[i]] = item[defaultTIMTableLabels[i]]
+            obj[defaultTIMTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTIMTableLabels[i]]
           }
           _TIMHistoryList.push(obj)
         })
@@ -518,9 +518,9 @@ export default {
             const value = item[periodsTIM[i - 1].period];
             // 检查值是否有效
             if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-              zscore[defaultTIMTableLabels[i]] = value;
+              zscore[defaultTIMTableLabels[i].replace('[%]', 'Later [%]')] = value;
             } else {
-              zscore[defaultTIMTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+              zscore[defaultTIMTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
             }
           }
           _TIMHistoryList.push(zscore)
@@ -534,7 +534,7 @@ export default {
           Object.keys(item).forEach(key => {
             if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
               Object.keys(item[key]).forEach(subKey => {
-                transformedItem[`${key} - ${subKey}`] = item[key][subKey];
+                transformedItem[`${key.replace('[%]', 'Later [%]')} - ${subKey}`] = item[key][subKey];
               });
             }
           });
@@ -677,7 +677,6 @@ export default {
   padding-bottom: 1rem;
 }
 .hint-btn-box{
-  width: 1200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

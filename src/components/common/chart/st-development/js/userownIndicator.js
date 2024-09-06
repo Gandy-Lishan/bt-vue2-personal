@@ -111,9 +111,9 @@
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: 999,
-                            studyOverBoughtColor: "#FF0000",
+                            studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: 999,
-                            studyOverSoldColor: "#00DD00",
+                            studyOverSoldColor: process.env.VUE_APP_GREEN
                         }},
                         attributes:{
                             studyOverBoughtValue:{"step":0.001},
@@ -164,9 +164,9 @@
                             parameters: { init: {
                                 studyOverZonesEnabled: false,
                                 studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
-                                studyOverBoughtColor: "#FF0000",
+                                studyOverBoughtColor: process.env.VUE_APP_RED,
                                 studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,
-                                studyOverSoldColor: "#00DD00",
+                                studyOverSoldColor: process.env.VUE_APP_GREEN
                             }},
                             attributes:{
                                 studyOverBoughtValue:{"step":0.001},
@@ -245,7 +245,7 @@
                 var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                 if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
             }
-
+debugger
             if(oldData.categories != newData.categories){
                 // 仅当大类切换（indicator->symbol->wic）才移除现存studies
                 if(oldData.categories.split(' ')[0] != newData.categories.split(' ')[0]){
@@ -491,15 +491,16 @@
             }) 
         }
 
-        if(newData.categories == "Indicator Weight Combination"){
+        if(newData.categories == "Weighted Indicator Combination"){
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
             CIQ.store.dispatch('chart/set_miFormWeightedListChange',{data:newData.weight_list,url:newData.url})
         }
 
+        CIQ.isOHLCVSelectedMI = false
         if(newData.categories == "OHLCV"){
-            CIQ.stxx.setChartType("candle"); 
+            CIQ.isOHLCVSelectedMI = true
             // WIC 列表加载
             // 自定义indicator
             await getUserOwnIndicatorMatedata(newData.url,extremeLines)
@@ -622,9 +623,9 @@
                         parameters: { init: {
                             studyOverZonesEnabled: false,
                             studyOverBoughtValue: extremeLines?Math.round(extremeLines.op*1000)/1000:NaN,
-                            studyOverBoughtColor: "#FF0000",
+                            studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: extremeLines?Math.round(extremeLines.ep*1000)/1000:NaN,
-                            studyOverSoldColor: "#00DD00",
+                            studyOverSoldColor: process.env.VUE_APP_GREEN
                         }},
                         attributes:{
                             studyOverBoughtValue:{"step":0.001},
@@ -665,9 +666,9 @@
                                     parameters: { init: {
                                         studyOverZonesEnabled: false,
                                         studyOverBoughtValue: newQuotes.opt_extreme?Math.round(newQuotes.opt_extreme*1000)/1000:NaN,
-                                        studyOverBoughtColor: "#FF0000",
+                                        studyOverBoughtColor: process.env.VUE_APP_RED,
                                         studyOverSoldValue: newQuotes.pess_extreme?Math.round(newQuotes.pess_extreme*1000)/1000:NaN,
-                                        studyOverSoldColor: "#00DD00",
+                                        studyOverSoldColor: process.env.VUE_APP_GREEN
                                     }},
                                     attributes:{
                                         studyOverBoughtValue:{"step":0.001},

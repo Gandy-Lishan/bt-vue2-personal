@@ -190,6 +190,7 @@ if (!CIQ.Studies) {
 			inputs: { Period: 14, Field: "field" },
 			outputs: { Forecast: "auto" }
 		},
+		/** 无需处理dual symbol */
 		"Lin Incpt": {
 			name: "Linear Reg Intercept",
 			overlay: true,
@@ -197,12 +198,14 @@ if (!CIQ.Studies) {
 			inputs: { Period: 14, Field: "field" },
 			outputs: { Intercept: "auto" }
 		},
+		/** 无需处理dual symbol */
 		"Lin R2": {
 			name: "Linear Reg R2",
 			calculateFN: CIQ.Studies.calculateLinearRegressionIndicator,
 			inputs: { Period: 14, Field: "field" },
 			outputs: { RSquared: "auto" }
 		},
+		/** 无需处理dual symbol */
 		"LR Slope": {
 			name: "Linear Reg Slope",
 			calculateFN: CIQ.Studies.calculateLinearRegressionIndicator,

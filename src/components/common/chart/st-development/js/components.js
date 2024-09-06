@@ -8872,14 +8872,14 @@ if (!CIQ.Studies) {
 							var indexOfExit2 = CIQ.store.state.chart.indicators.formIndicators.exit2.indexOf(sd.type)
 							if(indexOfEntry != -1){
 								if(indexOfExit != -1){
-									CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+									CIQ.store.commit('chart/getIndicators',{index:indexOfExit,value:'',criteria:'exit'})
 								}
-								CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
+								CIQ.store.commit('chart/getIndicators',{index:indexOfEntry,value:'',criteria:'entry'})
 							}else if(indexOfExit != -1){
 								if(indexOfEntry != -1){
-									CIQ.store.commit('chart/getEntryIndicators',{index:indexOfEntry,value:''})
+									CIQ.store.commit('chart/getIndicators',{index:indexOfEntry,value:'',criteria:'entry'})
 								}
-								CIQ.store.commit('chart/getExitIndicators',{index:indexOfExit,value:''})
+								CIQ.store.commit('chart/getIndicators',{index:indexOfExit,value:'',criteria:'exit'})
 							}
 							if(CIQ.store.state.chart.indicators.extraIndicators.indexOf(sd.type) != -1){
 								// remove item in extraIndicator
@@ -13321,17 +13321,15 @@ if (!Scroll) {
 };
 
 // customized features
-import {__js_webcomponents_indicators_} from "../components/indicator.js"
 import {__js_webcomponents_studyContext_} from '../components/studyContext.js'
 import {__js_webcomponents_studyContextDefault_} from '../components/studyContextDefault.js'
 import {__js_webcomponents_studyContextMyindicator} from '../components/studyContextMyindicator.js'
 import {__js_webcomponents_DescriptionContext_} from "../components/descriptionDialog.js"
-import {__js_webcomponents_sentimentLookup_} from "../components/sentimentLookup.js"
-import {__js_webcomponents_favorites_} from "../components/favorites.js"
 import {__js_webcomponents_indicatorsLookup_} from "../components/indicators-search.js"
 import {__js_webcomponents_indicatorsScroll_} from "../components/indicators-scroll.js"
 import {__js_webcomponents_lookup_} from "../components/lookup.js"
 import {__js_webcomponents_loader_} from "../components/loader.js"
+import {__js_webcomponents_reports_lookup_} from "../components/reportsLookup.js"
 
 import {__st_addons_standard_tooltip_} from "./STTooltip"
 import {__st_js_mask_} from "./STMask"
@@ -13340,9 +13338,9 @@ import {__st_js_loadIndicator_} from "./loadIndicator"
 import {__st_js_standard_studies_} from "./standard-studies/standardStudies"
 import {__js_standard_studies_medianPrice_} from "./standard-studies/standardMedianPrice.js"
 import {__js_standard_studies_momentum_} from "./standard-studies/standardMomentum.js"
+import {__js_st_studies_customized_} from "./STCustomizedStudies"
 
 import {__st_js_chartengine_prototype_overwrite_} from "./standard-studies/chartEnginePrototypeOverwrite.js"
-import {__js_st_studies_customized_} from "./STCustomizedStudies"
 import {__st_js_indicatorType_} from "./indicatorType"
 import {__st_js_generateCsv_} from "./generateCsv"
 import {__st_js_utils_} from "./utils"
@@ -13353,13 +13351,11 @@ import {__st_js_drawing_} from "./STdrawing"
 // import {__st_js_advanced_studies_accumulationDistribution_} from "./advance-studies/accumulationDistribution.js"
 
 let _exports = {CIQ};
-export {__js_webcomponents_indicators_ as indicators}
 export {__js_webcomponents_indicatorsScroll_ as indicatorsScrollindicatorsScroll};
 export {__js_webcomponents_indicatorsLookup_ as indicatorsLookup};
-export {__js_webcomponents_favorites_ as favorites}
-export {__js_webcomponents_sentimentLookup_ as sentimentLookup}
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
+export {__js_webcomponents_reports_lookup_ as reportsLookup};
 
 // export {__st_js_standard_studies_ as stStudies};
 //export {__st_js_advanced_studies_accumulationDistribution_ as accumulationDistribution}
@@ -13436,19 +13432,20 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 	(_exports.CIQ || CIQ).activateImports(
 		__js_webcomponents_indicatorsScroll_,
 		__js_webcomponents_indicatorsLookup_,
-		__js_webcomponents_favorites_,
-		__js_webcomponents_sentimentLookup_,
 		__js_webcomponents_DescriptionContext_,
-		__js_webcomponents_indicators_,
+		__js_webcomponents_reports_lookup_,
+
 
 		__st_addons_standard_tooltip_,
 		__st_js_mask_,
 		__st_js_loadIndicator_,
+
 		__st_js_standard_studies_,
 		__js_standard_studies_medianPrice_,
 		__js_standard_studies_momentum_,
-		__st_js_chartengine_prototype_overwrite_,
 		__js_st_studies_customized_,
+
+		__st_js_chartengine_prototype_overwrite_,
 		__st_js_indicatorType_,
 		__st_js_generateCsv_,
 		__st_js_utils_,
@@ -13457,71 +13454,8 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_drawing_,
 
 		
-		/**************advanced_studies*************** */
-		// __st_js_advanced_studies_accumulationDistribution_,
-		// __js_advanced_studies_adx_,
-		// __js_advanced_studies_alligator_,
-		// __js_advanced_studies_aroon_,
-		// __js_advanced_studies_atr_,
-		// __js_advanced_studies_awesomeOscillator_,
-		// __js_advanced_studies_balanceOfPower_,
-		// __js_advanced_studies_bollinger_,
-		// __js_advanced_studies_cci_,
-		// __js_advanced_studies_centerOfGravity_,
-		// __js_advanced_studies_chaikin_,
-		// __js_advanced_studies_chande_,
-		// __js_advanced_studies_choppiness_,
-		// __js_advanced_studies_comparisonStudies_,
-		// __js_advanced_studies_coppock_,
-		// __js_advanced_studies_darvasBox_,
-		// __js_advanced_studies_detrended_,
-		// __js_advanced_studies_disparity_,
-		// __js_advanced_studies_easeOfMovement_,
-		// __js_advanced_studies_ehlerFisher_,
-		// __js_advanced_studies_elder_,
-		// __js_advanced_studies_fractalChaos_,
-		// __js_advanced_studies_highLowStudies_,
-		// __js_advanced_studies_ichimoku_,
-		// __js_advanced_studies_intradayMomentum_,
-		// __js_advanced_studies_keltner_,
-		// __js_advanced_studies_klinger_,
-		// __js_advanced_studies_linearRegression_,
-		// __js_advanced_studies_macd_,
-		// __js_advanced_studies_massIndex_,
-		// __js_advanced_studies_moneyFlow_,
-		// __js_advanced_studies_movingAverages_,
-		// __js_advanced_studies_parabolicSAR_,
-		// __js_advanced_studies_pivotPoints_,
-		// __js_advanced_studies_prettyGoodOscillator_,
-		// __js_advanced_studies_priceMomentumOscillator_,
-		// __js_advanced_studies_priceVolumeOscillator_,
-		// __js_advanced_studies_primeNumber_,
-		// __js_advanced_studies_pring_,
-		// __js_advanced_studies_projectedVolume_,
-		// __js_advanced_studies_psychologicalLine_,
-		// __js_advanced_studies_qstick_,
-		// __js_advanced_studies_rainbow_,
-		// __js_advanced_studies_randomWalk_,
-		// __js_advanced_studies_relativeVigor_,
-		// __js_advanced_studies_rsi_,
-		// __js_advanced_studies_schaffTrendCycle_,
-		// __js_advanced_studies_shinohara_,
-		// __js_advanced_studies_stochastics_,
-		// __js_advanced_studies_supertrend_,
-		// __js_advanced_studies_swingIndex_,
-		// __js_advanced_studies_trendIntensity_,
-		// __js_advanced_studies_trix_,
-		// __js_advanced_studies_twiggsMoneyFlow_,
-		// __js_advanced_studies_typicalPrice_,
-		// __js_advanced_studies_ulcerIndex_,
-		// __js_advanced_studies_ultimateOscillator_,
-		// __js_advanced_studies_valuationLines_,
-		// __js_advanced_studies_volatilityIndex_,
-		// __js_advanced_studies_volumeProfile_,
-		// __js_advanced_studies_volumeStudies_,
-		// __js_advanced_studies_vortex_,
-		// __js_advanced_studies_williamsMFI_,
-		/**************************************** */
+		
+
 		// customized features above
 		__js_webcomponents_abstractMarker_,
 		__js_webcomponents_advertisement_,

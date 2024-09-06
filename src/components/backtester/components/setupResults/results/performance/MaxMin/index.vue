@@ -8,26 +8,27 @@
 								:row-class-name="tableRowClassName"
 								stripe
 								border
+								class="MaxMinTable"
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'">										
+									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="124px">										
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
 									</el-table-column>
-									<el-table-column :label="l"  :key="index" align="center" v-if="![
+									<el-table-column :label="l !== '1 Year Later'? l.replace('[%]', 'Later [%]') : l.replace('[%]', '   Later [%]')"  :key="index" align="center" v-if="![
 										'Dates of 1 Signals',
 										'Max Gain',
 										'Max Loss'].includes(l)">
-										<el-table-column label="Max Loss" align="center" width="70px" class-name="redHeader">
+										<el-table-column label="Max Loss" align="center" class-name="redHeader" width="60px">
 											<template slot-scope="scope">
 												<p class="negative-value">
 													{{ scope.row[l]['Max Loss'] }}
 												</p>
 												</template>
 										</el-table-column>
-										<el-table-column label="Max Gain" align="center" width="80px">
+										<el-table-column label="Max Gain" align="center" width="60px">
 											<template slot-scope="scope">
 												<p class="tableText">
 													{{ scope.row[l]['Max Gain'] }}
@@ -408,7 +409,7 @@ export default {
               return item !== null && item !== undefined && item !== '';
             });
 						const preTimArray = timArray.map(item => item[field])
-            console.log('timArray', timArray)
+            //console.log('timArray', timArray)
             
             const calculateReturn = (item, entryPrice) => {
               const value = item;
@@ -431,7 +432,7 @@ export default {
               current < min ? current : min
             );
 
-						console.log('最大值 最小值', maxItem, minItem)
+						//console.log('最大值 最小值', maxItem, minItem)
 
             const maxReturn = maxItem < entryPrice ? 0 : calculateReturn(maxItem, entryPrice);
             const minReturn = minItem > entryPrice ? 0 : calculateReturn(minItem, entryPrice);
@@ -493,5 +494,9 @@ export default {
 }
 .negative-value{
   color: #dd3a13;
+}
+.history-container {
+	width: 965px;
+	margin: 0 auto;
 }
 </style>

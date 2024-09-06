@@ -84,25 +84,6 @@ const routes = [
 							], resolve)
 					}
 				]
-			},
-			{
-				path: 'brainstorm',
-				name: 'Brainstorm',
-				component: resolve =>
-					require([
-						'@/components/backtester/components/Brainstorm/index.vue'
-					], resolve),
-				redirect: '/backtester/brainstorm/exit_with_custom_TIM_frame',
-				children: [
-					{
-						path: 'exit_with_custom_TIM_frame',
-						name: 'ExitWithCustomTIMFrame',
-						component: resolve =>
-							require([
-								'@/components/backtester/components/Brainstorm/ExitWithCustomTIMFrame.vue'
-							], resolve)
-					}
-				]
 			}
 		]
 	},
@@ -166,6 +147,12 @@ const routes = [
 			require(['@/components/Portfolio/index.vue'], resolve),
 	},
 	{
+		path: '/reports',
+		name: 'Reports',
+		component: resolve =>
+			require(['@/components/Reports/index.vue'], resolve),
+	},
+	{
 		path: '/cpm',
 		name: 'CPM',
 		component: resolve =>
@@ -209,6 +196,20 @@ const routes = [
 				name: 'Descriptions',
 				component: resolve =>
 					require(['@/components/Strategy/Descriptions.vue'], resolve)
+			}
+		]
+	},
+	{
+		path: '/indicators',
+		name: 'Indicators',
+		component: resolve =>
+			require(['@/components/Indicators/index.vue'], resolve),
+		children: [
+			{
+				path: '',
+				name: 'IndicatorsList',
+				component: resolve =>
+					require(['@/components/Indicators/Table/index.vue'], resolve)
 			}
 		]
 	},

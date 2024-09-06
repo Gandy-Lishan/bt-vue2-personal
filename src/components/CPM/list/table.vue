@@ -189,7 +189,7 @@
 <script>
 import { delCPM, getCPMList, getCPMResults } from '@/service/service'
 import { capitalizeFirstLetter } from "@/utils"
-
+import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
   name: 'Table',
   data() {
@@ -265,6 +265,14 @@ export default {
             item.period = [item.start_date, item.end_date]
 						return item
 					})
+
+          for(var i in data){
+            const {name,type} = getSymbolInfo(data[i].symbol)
+            if(type == 'custom'){
+              data[i].symbol = name
+            }
+          }
+
 					this.tableData = data
 					this.total = res.data.count
 				}
@@ -423,7 +431,7 @@ export default {
   margin: 5px 0;
 }
 .showDate .el-button--info.is-plain {
-  width: 125px;
+  width: 130px;
 }
 .el-tag--plain.el-tag--success {
   color: #289F6D;
@@ -432,5 +440,11 @@ export default {
 .el-tag--plain.el-tag--danger {
   color: #dd3a13;
   border-color: #dd3a13;
+}
+/deep/ .el-button--text, /deep/ .el-button--info {
+	font-weight: 600;
+}
+/deep/ .el-button--info {
+  color: #606266;
 }
 </style>

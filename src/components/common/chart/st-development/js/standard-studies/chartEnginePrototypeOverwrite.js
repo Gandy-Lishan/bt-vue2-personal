@@ -306,8 +306,11 @@ if (CIQ.ChartEngine) {
 				// : 80
 				: 100
 		const studiesPanelsSize = studiesLen * studiesHeight
-		let chartPanelSize = 680
-
+		//let chartPanelSize = 680
+		// 目前解决方案: 判断是否为report page,是的话就动态设置高度
+		let chartPanelSize = window.location.pathname=='/reports'?window.innerHeight - 260:680
+		// TODO 考虑优化
+		
 		// 正常添加指標時總高度按照680 + number of indicator * n來算， resize時按照resize結果賦值
 		if(!CIQ.isResizing){
 			chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	

@@ -1,5 +1,6 @@
 <template>
   <div class="MI-container">
+    <h4>Create My Own Indicator</h4>
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
@@ -9,7 +10,7 @@
 		size="mini"
     :rules="rules"
 	>
-		<h4>Create My Own Indicator</h4>
+
 		<div class="MI-form-top">
 			<el-form-item
 				label="1.Name"
@@ -491,9 +492,7 @@ export default {
         indicator_2_url: '',
         time_frame: 'daily'
       },
-      sentimentList: [],
       loading: false,
-      symbolList: [],
       weightData: [
         {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],
@@ -553,6 +552,10 @@ export default {
     handleGetMiBenmark() {
       return this.getMiBenmarkState
     },
+    ...mapGetters({
+      sentimentList: 'getRefactoredSentimentList',
+      symbolList: 'getRefactoredSymbolList'
+    })
   },
   watch: {
     handleGetMiBenmark: {
@@ -623,13 +626,6 @@ export default {
           }
         },
     }
-  },
-  async mounted() {
-    // 从localStorage获取数据
-    this.sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-    this.symbolList = JSON.parse(localStorage.getItem('symbolList'))
-    this.dropdownList = this.getList()
-    console.log('this.dropdownList', this.dropdownList,this.data.categories)
   },
   methods: {
     /**
@@ -955,8 +951,6 @@ export default {
 
     },
     saveSubData(field, value) {
-      console.log(field, value)
-      debugger
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
@@ -974,7 +968,6 @@ export default {
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
-
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }
@@ -999,7 +992,6 @@ export default {
           this.data[urlProp] = ''
         }
       }
-
       if (isIndicator) {
         clearIndicatorIfMatch(this.sentimentList, 'indicator_1_url', 'indicator_1', 'Indicator')
         clearIndicatorIfMatch(this.sentimentList, 'indicator_2_url', 'indicator_2', 'Indicator')
@@ -1009,7 +1001,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if (isSymbol) {
@@ -1021,7 +1012,6 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
       }
 
       if(isWIC) {
@@ -1030,11 +1020,15 @@ export default {
         this.data['indicator_2'] = ''
         this.data['indicator_2_url'] = ''
 
-        this.OHLCVData = {symbol:'', condition:''}
-        CIQ.stxx.setChartType("line"); 
+        this.OHLCVData = {symbol:'', condition:''} 
       }
 
+      CIQ.isOHLCVSelectedMI = false
+      this.$store.dispatch('chart/set_chart_type', 'line')
       if(isOHLCV) {
+        CIQ.isOHLCVSelectedMI = true
+        this.$store.dispatch('chart/set_chart_type', 'candle')
+        
         this.data['indicator_1'] = ''
         this.data['indicator_1_url'] = ''
         this.data['indicator_2'] = ''
@@ -1044,11 +1038,10 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
-        CIQ.stxx.setChartType("candle"); 
       }
+      CIQ.stxx.setChartType(this.$store.getters.getChartType); 
 
       this.dropdownList = this.getList()
-
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
     },
     async handleSelect(item, source) {
@@ -1103,15 +1096,14 @@ export default {
       this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq() {
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
       let frequencyArray = []
       if(this.data.categories !== 'WIC') {
         const url_1 = this.data.indicator_1_url
         const url_2 = this.data.indicator_2_url
         if(this.data.categories.includes('Indicator')) {
           // 这个数据时 Daily
-          const updated_1 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
-          const updated_2 = sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
+          const updated_1 = this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.updated?.toLowerCase()
+          const updated_2 = this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.updated?.toLowerCase()
           frequencyArray = [updated_1, updated_2]
           console.log('updated_1 updated_2数组', [updated_1, updated_2])
         }
@@ -1120,7 +1112,7 @@ export default {
         frequencyArray = this.weightData.map(item => {
           const url = item.indicator_url
           if(item.type == 'Indicator') {
-            return sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
+            return this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.updated?.toLowerCase()
           }
           return null
         })
@@ -1240,8 +1232,6 @@ export default {
       if(!formValid) return formValid
       // 按照选项校验 indicator 是否在允许范围
       const categories = this.data.categories
-      const sentimentList = JSON.parse(localStorage.getItem('sentimentList'))
-      const symbolList = JSON.parse(localStorage.getItem('symbolList'))
 
       if(categories == 'WIC') {
         // 需要验证百分比总和，和每一列的indicator是否都在允许范围
@@ -1253,7 +1243,7 @@ export default {
           totalWeight += parseFloat(row.weight) || 0
           row.weightValidErrMsg = validatePercentageRule(_, row.weight)
           if(row.weightValidErrMsg) rowWeightValid = false
-          const isIn = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
+          const isIn = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === row.indicator_url.toLocaleLowerCase()))?.label || false)
           if(!isIn) inAllowedList = false
         }
         if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
@@ -1278,8 +1268,8 @@ export default {
         const indicator_1_url = this.data.indicator_1_url
         const indicator_2_url = this.data.indicator_2_url
 
-        const inAllowedList_1 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
-        const inAllowedList_2 = ((sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_1 = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_1_url.toLocaleLowerCase()))?.label || false)
+        const inAllowedList_2 = ((this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()) || this.symbolList.find(ele => ele.url.toLocaleLowerCase() === indicator_2_url.toLocaleLowerCase()))?.label || false)
 
         if(!indicator_1_url || !indicator_2_url || !inAllowedList_1 || !inAllowedList_2 ) {
           this.popUpMsgBox('Please choose an indicator from the dropdown.')
@@ -1367,11 +1357,11 @@ export default {
  }
 h4 {
 	text-align: center;
-	margin: 0 0 30px 0;
+	margin: 0;
 	padding: 10px 0;
 	background: #5b9bd1;
 	color: white;
-	border-radius: 5px;
+	border-radius: 5px 5px 0 0;
 }
 .MI-form-container {
 	display: grid;
@@ -1379,9 +1369,10 @@ h4 {
 	margin: 0 auto;
 	align-items: center;
 	border: 1px solid #5b9bd1;
-	border-radius: 5px;
+	border-radius: 0 0 5px 5px;
 	padding: 0 10px 10px 10px;
   margin-bottom: 50px;
+  padding-top: 30px;
 }
 .WIC-form-container {
 	display: grid;
@@ -1513,5 +1504,12 @@ h4 {
 	display: inline-grid;
 	grid-template-columns: 1fr 1fr;
   grid-gap:50px;
+}
+/deep/ .el-form-item__label {
+  font-weight: 600;
+  color: #333;
+}
+/deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
+  font-weight: 600;
 }
 </style>

@@ -45,9 +45,10 @@
 								>
 										<template v-for="(l, index) in defaultTableLabels">
 											<el-table-column
-												:label="l"
+												:label="l.replace('[%]', 'Later [%]')"
 												:prop="l"
 												:key="index"
+												:width="l == 'Entry Date' ? '128px' : '110px'"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[l])">
@@ -72,13 +73,14 @@
 
 										<template v-for="column in defaultTableLabels">
 											
-										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column">
+										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column" width="128px">
 										</el-table-column>
 											<el-table-column
 												v-else
 												:key="column"
 												:label="column"
 												:prop="column"
+												width="110px"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[column])">
@@ -203,43 +205,36 @@ computed: {
 		},
 		getSummaries(param) {
 			const { columns, data } = param
+			const sums = []
 
-			const sums = [] //声明变量
 			columns.forEach((column, index) => {
-				if (index === 0) {
-					sums[index] = 'Average'
-					return
-				}
-				// if (index === 1) {
-				// 	return
-				// }
-				const values = data.map((item) => {
-					return Number(
-						item[column.property].slice(0, item[column.property].length - 1)
-					)
-				})
-				let totalCount = 0 // 求平均数使用
-				sums[index] = values.reduce((prev, curr) => {
-					const value = Number(curr)
-					if (!isNaN(value) && value != 0) {
-						totalCount++
-						return prev + curr
-					} else {
-						return prev
+					if (index === 0) {
+							sums[index] = 'Average(%)'
+							return
 					}
-				}, 0)
 
-				sums[index] = sums[index] / totalCount
+					const values = data.map(item => {
+							const value = item[column.property]
+							return isNaN(value) ? 0 : parseFloat(value)
+					})
 
-				// ***********演示完要删**************************************
-				// if(this.rowData && this.rowData.Symbol=='WWW' && sums[index]<0){
-				//   sums[index] = -sums[index]
-				// }
-				// *****************************************************
+					let totalCount = 0
 
-				sums[index] = sums[index].toFixed(2)
-				sums[index] = sums[index] + ' %'
+					sums[index] = values.reduce((prev, curr) => {
+							if (!isNaN(curr) && curr !== 0) {
+									totalCount++
+									return prev + curr
+							}
+							return prev
+					}, 0)
+
+					if (totalCount > 0) {
+							sums[index] = (sums[index] / totalCount).toFixed(2)
+					} else {
+							sums[index] = ''
+					}
 			})
+
 			return sums
 		},
 		getCellStyle(value) {
@@ -248,7 +243,6 @@ computed: {
       };
 		},
 		handleDownloadCsv() {
-			debugger
 			console.log('backtestResultList', this.backtestResultList)
 			const backtestHistoryList = this.backtestResultList
 			const result_quotes = this.result_quotes
@@ -269,7 +263,7 @@ computed: {
 				const obj = {}
 				obj['Entry Date'] = item['Entry Date']
 				for(var i=1;i < defaultTableLabels.length;i++ ){
-					obj[defaultTableLabels[i]] = item[defaultTableLabels[i]]
+					obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
 				}
 				_backtestHistoryList.push(obj)
 			})
@@ -281,9 +275,9 @@ computed: {
 					const value = item[defaultTableLabels[i]]
 					// 检查值是否有效
 					if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-						zscore[defaultTableLabels[i]] = value;
+						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = value;
 					} else {
-						zscore[defaultTableLabels[i]] = ''; // 或者您可以设置为其他默认值
+						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
 					}
 				}
 				_backtestHistoryList.push(zscore);
@@ -434,12 +428,21 @@ computed: {
 	}
 }
 .aiResultsTable{
-	width: 1200px; 
+	width: 100%; 
 	height: 100%; 
 	margin: 0 auto
 }
+@media (min-width: 1600px) {
+	.aiResultsTable, .hint-btn-box {
+	  width: 900px;
+	}
+}
+@media (min-width: 1280px) and (max-width: 1600px) {
+	.aiResultsTable, .hint-btn-box {
+	  width: 900px;
+	}
+}
 .hint-btn-box{
-  width: 1200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -452,6 +455,10 @@ computed: {
 	font-weight: 300;
 	margin: 10px 10px 10px 10px;
 }
+}
+.history-container {
+	width: 900px;
+	margin: 0 auto;
 }
 </style>
 
