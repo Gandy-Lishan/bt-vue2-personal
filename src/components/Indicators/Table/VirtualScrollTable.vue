@@ -16,7 +16,7 @@
           </svg>
       </el-tooltip>
     </div>
-    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated)">
+    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
       </template>
