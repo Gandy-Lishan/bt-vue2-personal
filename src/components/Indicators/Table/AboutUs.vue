@@ -89,7 +89,7 @@ export default {
 
 <style lang="less" scoped>
 .page-footer {
-  margin-top: 30px;
+  margin-top: 80px;
   background-color: #2e2e2e; /* 深色背景 */
   color: #b0b0b0; /* 字体颜色 */
   padding: 20px 0;

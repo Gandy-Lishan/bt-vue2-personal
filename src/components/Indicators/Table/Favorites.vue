@@ -18,6 +18,7 @@
       <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" style="width: 65%" @showDetails="showDetails"></Details>
       <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
       <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
+      <AboutUs></AboutUs>
     </div>
   </div>
  </template>
@@ -28,6 +29,7 @@
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
 import Details from "./Details";
+import AboutUs from "./AboutUs";
  
  export default {
   name: 'IndicatorTable',
@@ -58,7 +60,8 @@ import Details from "./Details";
     FavTable,
     SeasonalityChart,
     Description,
-    Details
+    Details,
+    AboutUs
   },
   methods: {
     updateChart(row) {
