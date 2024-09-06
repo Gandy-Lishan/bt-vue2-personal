@@ -20,6 +20,7 @@
       <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
       <Chart :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}" @passIndicatorData="passIndicatorData"></Chart>
       <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
+      <AboutUs></AboutUs>
     </div>
   </div>
 </template>
@@ -30,6 +31,7 @@ import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
 import Details from "./Details";
+import AboutUs from "./AboutUs";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -201,7 +203,8 @@ export default {
     Table,
     SeasonalityChart,
     Description,
-    Details
+    Details,
+    AboutUs
   },
   computed: {
     ...mapGetters({
