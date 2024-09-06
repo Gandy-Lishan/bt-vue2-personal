@@ -18,6 +18,7 @@
      </template>
      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" style="width: 65%" @showDetails="showDetails"></Details>
      <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
+     <AboutUs></AboutUs>
    </div>
  </div>
 </template>
@@ -27,6 +28,7 @@ import Table from "./Table";
 import Chart from "./Chart"
 import Description from "./Description";
 import Details from "./Details";
+import AboutUs from "./AboutUs";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -64,7 +66,8 @@ export default {
    Chart,
    Table,
    Description,
-   Details
+   Details,
+   AboutUs
  },
  methods: {
    updateChart(row) {
