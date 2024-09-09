@@ -17,7 +17,7 @@
         ></Table>
      </template>
      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" style="width: 65%" @showDetails="showDetails"></Details>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '85px' : '0'}"></Chart>
      <AboutUs></AboutUs>
    </div>
  </div>
