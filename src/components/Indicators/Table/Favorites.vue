@@ -16,8 +16,8 @@
         ></FavTable>
       </template>
       <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" style="width: 65%" @showDetails="showDetails"></Details>
-      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
+      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px'}"></Chart>
       <AboutUs></AboutUs>
     </div>
   </div>
