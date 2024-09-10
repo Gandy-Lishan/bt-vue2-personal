@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="height: 745px; background-color: #fff;"></div>
+  <div :id="id" style="height: 800px; background-color: #fff;"></div>
  </template>
  
  <script>
@@ -49,7 +49,7 @@
           load: function (event) {
             var e = event.target.axes[0].getExtremes();
             this.defaultChartScale = [e.min, e.max];
-            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 0, 530, 120,33)
+            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 0, 600, 120,33)
                 .attr({
                     'opacity': 0.25
                 })
