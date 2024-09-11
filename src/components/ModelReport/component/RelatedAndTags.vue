@@ -27,4 +27,26 @@ export default {
 .uppercase {
  text-transform: uppercase;
 }
+.blog-post-tags {
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  color: #a0a9b4;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 7px 10px;
+}
+.blog-post-tags>li {
+  list-style: none;
+  display: inline-block;
+  margin-right: 5px;
+  margin-top: 20px;
+}
+.blog-post-tags>li>a {
+  color: #a0a9b4;
+  font-size: 13px;
+  font-weight: 900;
+  background-color: #f4f6f8;
+  padding: 7px 10px;
+}
 </style>

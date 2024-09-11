@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-.analysis_solutions_yellow {
- background-color: #fbc01f;
+a:hover {
+ 	font-weight: unset;
 }
 </style>

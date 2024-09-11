@@ -40,7 +40,7 @@
                <article v-html="latestPost.post_content"></article>
                <hr />
                <!-- Related content and tags -->
-               <RelatedAndTags />
+               <RelatedAndTags :latestPost="latestPost" />
              </div>
              <!-- END INFO BLOCK -->
              <SidebarSentimentEdge :categoryPosts="categoryPosts" :serviceType="serviceType" :title="title"/>
@@ -56,13 +56,13 @@
 
 <script>
 import BlogPostForecast from "./component/BlogPostForecast.vue";
-// import RelatedAndTags from "//component/RelatedAndTags";
+import RelatedAndTags from "./component/RelatedAndTags";
 import SidebarSentimentEdge from "./component/SidebarSentimentEdge";
 
 export default {
  components: {
    BlogPostForecast,
-   // RelatedAndTags,
+   RelatedAndTags,
    SidebarSentimentEdge,
  },
  props: {
@@ -78,6 +78,16 @@ export default {
  data() {
   return {
    categoryPosts: [
+    {
+     id: 1,
+     url: '/sentimentedge-post',
+     title: "SentimentEdge Post",
+    },
+    {
+     id: 1,
+     url: '/sentimentedge-post',
+     title: "SentimentEdge Post",
+    },
     {
      id: 1,
      url: '/sentimentedge-post',
@@ -107,18 +117,56 @@ export default {
 };
 </script>
 
-<style less scoped>
+<style>
 .analysis_solutions_yellow {
  background-color: #fbc01f;
 }
 .blog-single-head-date {
  position: relative;
 }
+.btn {
+  font-size: 14px;
+  outline: 0 !important;
+  background-image: none !important;
+  filter: none;
+  box-shadow: none;
+  text-shadow: none;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  line-height: 1.428;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 7px 14px;
+}
+.btn>i {
+  font-size: 14px;
+}
+.btn-default>i {
+  color: #aaa;
+}
+.btn-block {
+  display: block;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
 .print-right {
  position: absolute;
  right: 0;
  margin-top: -10px;
  margin-right: 15px;
+}
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  border-width: 1px;
+  padding: 6px 12px;
 }
 .like-button {
  position: absolute;
@@ -130,7 +178,10 @@ export default {
  color: #5b9bd1 !important;
 }
 .container {
- margin: 0 auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media (min-width: 768px) {
@@ -147,5 +198,20 @@ export default {
  .container {
    width: 1170px;
  }
+}
+
+@media (min-width: 992px) {
+  .col-md-12 {
+    width: 100%;
+  }
+  .col-md-9 {
+    width: 75%;
+  }
+  .col-md-3 {
+    width: 25%;
+  }
+  .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+    float: left;
+  }
 }
 </style>

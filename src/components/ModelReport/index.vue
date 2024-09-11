@@ -1,6 +1,7 @@
 <template>
   <div class="ModelReport">
    <Sentimentedge :title="title" :latestPost="latestPost"></Sentimentedge>
+   <!-- <router-view></router-view> -->
   </div>
 </template>
 
@@ -26,6 +27,13 @@ export default {
       forecast: 'Strong Buy',
       probability: 90,
      }
+    ],
+    /* tag */
+    dbTags: [
+      {
+        id: 1,
+        tag: 'Breadth'
+      }
     ]
    }
   }
