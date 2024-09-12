@@ -76,17 +76,6 @@ export default {
 a:hover {
  	font-weight: unset;
 }
-.font-green-jungle {
- color: #26c281;
-}
-
-.font-red-thunderbird {
- color: #e7505a;
-}
-
-.font-lg {
- font-size: 1.5em;
-}
 .panel {
   margin-bottom: 20px;
   background-color: #fff;

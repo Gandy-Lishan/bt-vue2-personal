@@ -81,7 +81,8 @@
 
                   <div class="row" style="padding:10px">
                     <div
-                      class="blog-single-head"
+                      class="blog-sing
+                      e-head"
                       v-for="post in blogPosts"
                       :key="post.url"
                     >
@@ -101,7 +102,6 @@
                         </span>
                       </div>
                       <div class="row" style="margin-bottom:10px;">
-                        <p>
                           <article>
                             <img
                               v-if="post.image"
@@ -119,12 +119,11 @@
                               {{ truncate(post.post_content, 500) }}
                             </span>
                           </article>
-                        </p>
                       </div>
                     </div>
                   </div>
 
-                  <PreviousNextPage />
+                  <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" />
                 </div>
               </div>
             </div>
@@ -136,16 +135,51 @@
 </template>
 
 <script>
-// import PreviousNextPage from './PreviousNextPage.vue'; // 假设你有这个分页组件
+import PreviousNextPage from './component/PreviousNextPage'; // 假设你有这个分页组件
+import { timestampToTime } from "@/utils";
+
 export default {
   name: 'Archives',
   data() {
     return {
-      title: '', // 从服务器获取的标题
-      serviceType: '', // 获取服务类型
+      title: 'SentimentEdge Archives', // 从服务器获取的标题
+      serviceType: 'sentimentedge', // 获取服务类型
       messages: [], // 消息数组
-      blogPosts: [] // 博客文章数组
+      blogPosts: [
+        {
+          title: 'The Nasdaq quickly falls back into a correction',
+          post_date: ' 2024-09-10',
+          author: '',
+          image: 'blog/20240909-195021_1725911420586.jpg',
+          meta_description: '',
+          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
+        },
+        {
+          title: 'The Nasdaq quickly falls back into a correction',
+          post_date: ' 2024-09-10',
+          author: '',
+          image: 'blog/20240909-195021_1725911420586.jpg',
+          meta_description: '',
+          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
+        },
+        {
+          title: 'The Nasdaq quickly falls back into a correction',
+          post_date: ' 2024-09-10',
+          author: '',
+          image: 'blog/20240909-195021_1725911420586.jpg',
+          meta_description: '',
+          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
+        }
+      ], // 博客文章数组
+      previousPage: 1,
+      currentPage: 2, // 当前页码
+      nextPage: 3,
+      total: 139,
+
     };
+  },
+  components: {
+    PreviousNextPage
   },
   computed: {
     bodyClass() {
@@ -155,7 +189,7 @@ export default {
   methods: {
     formatDate(date) {
       // 实现你的日期格式化逻辑
-      return new Date(date).toLocaleDateString();
+      return timestampToTime(date)
     },
     truncate(text, length) {
       // 实现字符串截断逻辑
@@ -166,6 +200,9 @@ export default {
 </script>
 
 <style scoped>
+a:hover {
+ 	font-weight: unset;
+}
 /* 保留原有的 CSS 样式 */
 .aa-dropdown-menu {
   margin-top: 0px !important;

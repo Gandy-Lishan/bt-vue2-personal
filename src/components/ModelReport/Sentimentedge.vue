@@ -95,7 +95,7 @@ export default {
     }
    ],
    title: 'SentimentEdge',
-   serviceType: 'SentimentEdge'
+   serviceType: 'SentimentEdge',
   }
  },
  methods: {
@@ -123,25 +123,6 @@ export default {
 }
 .blog-single-head-date {
  position: relative;
-}
-.btn {
-  font-size: 14px;
-  outline: 0 !important;
-  background-image: none !important;
-  filter: none;
-  box-shadow: none;
-  text-shadow: none;
-  display: inline-block;
-  margin-bottom: 0;
-  font-weight: 400;
-  line-height: 1.428;
-  text-align: center;
-  white-space: nowrap;
-  cursor: pointer;
-  user-select: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 7px 14px;
 }
 .btn>i {
   font-size: 14px;
