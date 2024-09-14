@@ -260,11 +260,13 @@ export default {
   padding: 15px 15px 0px 15px;
 }
 .indicator-info {
+  display: flex;
+  align-items: center;
   padding: 15px 15px 0px 15px;
   font-weight: 700;
   list-style-type: disc;
   li {
-    margin-left: 15px;
+    margin: 0 15px 0 15px;
   }
 }
 .detail-title {

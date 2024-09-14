@@ -186,7 +186,9 @@ export default {
   props: {
     tableData: Array,
     option: Number,
-    tradingIndex: [Number, String]
+    tradingIndex: [Number, String],
+    newest_day: [Object, Number],
+    newest_month: [Object, Number]
   },
   data() {
     return {
@@ -242,7 +244,8 @@ export default {
   },
   methods: {
     tableRowClassName({row, rowIndex}) {
-      if(rowIndex == (this.tradingIndex-1) && this.option == 3) return 'highlighted'
+      const {Day, Month} = row
+      if((this.option == 3 && rowIndex == (this.tradingIndex-1)) || (this.option == 2 && this.newest_day == Day && this.newest_month == Month)) return 'highlighted'
 			return ''
 		},
     handleSizeChange(size) {

@@ -241,6 +241,22 @@ const routes = [
 		]
 	},
 	{
+		path: '/modelReport',
+		component: resolve => require(['@/components/ModelReport/index.vue'], resolve),
+		children: [
+			{
+				path: 'sentimentedge',
+				component: resolve =>
+					require(['@/components/ModelReport/Sentimentedge.vue'], resolve)
+			},
+			{
+				path: 'archives',
+				component: resolve =>
+					require(['@/components/ModelReport/Archives.vue'], resolve)
+			},
+		]
+	},
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}
