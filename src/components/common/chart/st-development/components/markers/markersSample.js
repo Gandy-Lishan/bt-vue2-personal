@@ -4,6 +4,7 @@
 // Usage: new MarkersSample(stxx);
 //
 import { CIQ, markers } from "chartiq/js/standard.js";
+import EventBus from "@/event-bus";
 var _css;
 if (
 	typeof define === "undefined" &&
@@ -489,6 +490,7 @@ CIQ.createForecastMarker = async function(){
 						
 						await CIQ.removeForecastMarker();
 						await CIQ.createForecastMarker();
+
 					}
 				});
 				
@@ -540,23 +542,26 @@ CIQ.createForecastMarker = async function(){
 					if (!isHovered) {
 						isHovered = true;  // 设置为悬浮状态
 						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bearish" };
-						
+						console.log('mouseenter',EventBus)
 						await CIQ.removeForecastMarker();
 						await CIQ.createForecastMarker();
+						EventBus.emit('triggerFunction');
 					}
 				});
 				newNode.addEventListener('mouseleave', async function() {
 					isHovered = false;
 					hoveredMarkerInfo = null;
-					
+					console.log('mouseleave')
 					await CIQ.removeForecastMarker();
 					await CIQ.createForecastMarker();
+					EventBus.emit('triggerFunction');
 				});
 		}
 
 	CIQ.stxx.draw()
 }
 CIQ.removeForecastMarker = async function(){
+	console.log('removeForecastMarker')
 	CIQ.Marker.removeByLabel(CIQ.stxx, 'bullish');
 	CIQ.Marker.removeByLabel(CIQ.stxx, 'bearish');
 }
