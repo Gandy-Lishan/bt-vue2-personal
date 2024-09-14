@@ -436,8 +436,11 @@ CIQ.setMarkerVisibility = function(type){
 	}
 }
 
+let hoveredMarkerInfo = null;
+let isHovered = false;  // 标志位，防止重复触发
 /** Report page */
 CIQ.createForecastMarker = async function(){
+	console.log('createForecastMarker')
 	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
 	await CIQ.store.dispatch('chart/get_forecast_author_list',[...new Set(list.map(item=>item.author))])
 	const bullishList = list.filter(i=>i.forecast == 'Up')
@@ -456,7 +459,19 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bullish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
+				newNode.innerHTML = `<h3>${title}</h3>`;
+									
+				if (
+					hoveredMarkerInfo && 
+					hoveredMarkerInfo.author === author && 
+					hoveredMarkerInfo.timeframe === timeframe &&
+					hoveredMarkerInfo.market === "bullish" &&
+					hoveredMarkerInfo.post_date === post_date
+				) {
+					//newNode.style.height = "auto";  // 恢复悬浮效果
+					newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
+				}
+
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
@@ -465,12 +480,30 @@ CIQ.createForecastMarker = async function(){
 					label: "bullish",
 					node: newNode
 				});
+
+				// 添加 hover 监听器
+				newNode.addEventListener('mouseenter', async function() {
+					if (!isHovered) {
+						isHovered = true;  // 设置为悬浮状态
+						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bullish" };
+						
+						await CIQ.removeForecastMarker();
+						await CIQ.createForecastMarker();
+					}
+				});
+				
+				newNode.addEventListener('mouseleave', async function() {
+					hoveredMarkerInfo = null;
+					isHovered = false;
+					await CIQ.removeForecastMarker();
+					await CIQ.createForecastMarker();
+				});
 		}
 
 
 		for (var i = 0; i < bearishList.length; i++) {
 			const {post_date,title,url,author,timeframe} = bearishList[i]
-			var newNode;
+			let newNode;
 			var post_date_str = post_date.slice(0,10)
 			var datatime = new Date(post_date_str)
 			var offset = datatime.getTimezoneOffset() * 60 * 1000
@@ -481,13 +514,43 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bearish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
+				newNode.innerHTML = `<h3>${title}</h3>`;
+					
+				if (
+					hoveredMarkerInfo && 
+					hoveredMarkerInfo.author === author && 
+					hoveredMarkerInfo.timeframe === timeframe &&
+					hoveredMarkerInfo.market === "bearish" &&
+					hoveredMarkerInfo.post_date === post_date
+				) {
+					//newNode.style.height = "auto";  // 恢复悬浮效果
+					newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
+				}
+
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
 					x: standardDate,
 					label: "bearish",
 					node: newNode
+				});
+
+				// 添加 hover 监听器
+				newNode.addEventListener('mouseenter', async function() {
+					if (!isHovered) {
+						isHovered = true;  // 设置为悬浮状态
+						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bearish" };
+						
+						await CIQ.removeForecastMarker();
+						await CIQ.createForecastMarker();
+					}
+				});
+				newNode.addEventListener('mouseleave', async function() {
+					isHovered = false;
+					hoveredMarkerInfo = null;
+					
+					await CIQ.removeForecastMarker();
+					await CIQ.createForecastMarker();
 				});
 		}
 
