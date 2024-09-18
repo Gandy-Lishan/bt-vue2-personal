@@ -173,13 +173,15 @@
 /* backteser edge forecast marker node style */
 .forecast {
 	position: absolute;
-	opacity: .8;
+	opacity: .9;
 	text-align: center;
 	width: 176px;
 	color: #606060;
 	background-size: contain;
 	border-radius: 4px;
 	padding: 10px;
+
+	z-index: 1;
   }
 .forecast.hidden {
 	display: none;
@@ -188,7 +190,7 @@
 	border: solid;
 	content: "";
 	position: absolute;
-	z-index: 99;
+
   }
   .forecast.bullish {
 	background: #9be5b0;
@@ -200,9 +202,11 @@
   }
   .forecast.bullish:hover {
 	background: #62e687;
+	z-index: 2;
   }
   .forecast.bearish:hover{
 	background: #eba8a8;
+	z-index: 2;
   }
   .forecast.bullish:before {
 	border-width: 0px 6px 11px 6px;

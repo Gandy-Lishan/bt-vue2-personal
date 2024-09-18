@@ -29,6 +29,7 @@
     
 <script>
 import { mapGetters } from 'vuex'
+import EventBus from "@/event-bus";
 
 export default {
 	name: 'ReportsFilter',
@@ -72,16 +73,22 @@ export default {
 		},
 	},
     mounted() {
+		EventBus.on('triggerFunction', this.filterReports);
     },
+	beforeUnmount() {
+		// 在组件卸载前取消监听
+		EventBus.off('triggerFunction', this.filterReports);
+	},
     beforeDestroy() {
     },
 	methods: {
 		filterReports(){
+			console.log('filterReports')
 			document.querySelectorAll('.forecast').forEach(report => {
 				const reportAuthor = report.getAttribute('data-author');
 				const reportTimeframe = report.getAttribute('data-timeframe');
 				const reportMarket = report.getAttribute('data-market');
-
+				if(report.id == 'stxForecast') return
 				if (
 				(this.valueAuthor.includes(reportAuthor)) &&	// if select no author or current report's author in list
 				(this.valueTimeframe.includes(reportTimeframe)) &&
