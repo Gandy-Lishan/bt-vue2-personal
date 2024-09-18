@@ -89,6 +89,7 @@ export default {
 
 <style lang="less" scoped>
 .page-footer {
+  width: 100%;
   margin-top: 80px;
   background-color: #2e2e2e; /* 深色背景 */
   color: #b0b0b0; /* 字体颜色 */
@@ -119,6 +120,10 @@ export default {
     padding: 20px 0;
 
     .container {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-left: auto;
+      margin-right: auto;
       .row {
         display: flex;
         justify-content: space-between;

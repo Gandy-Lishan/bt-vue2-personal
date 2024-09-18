@@ -3,7 +3,7 @@
     <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
     </div>
-    <div class="left">
+    <div class="indicator-left">
       <template v-for="item in tableInfoList">
         <Table
           v-bind="$attrs"
@@ -293,7 +293,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.left {
+.indicator-left {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
