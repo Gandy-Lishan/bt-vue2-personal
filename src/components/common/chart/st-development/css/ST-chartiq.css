@@ -569,6 +569,8 @@ stx-hu-sttooltip {
 	color: white;
 	font-size: 14px;
 	fill: #2a51d0;
+
+  transform: translateX(250px);
 }
 
 stx-hu-tooltip-field {

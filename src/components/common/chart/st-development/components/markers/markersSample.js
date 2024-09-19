@@ -490,7 +490,7 @@ CIQ.createForecastMarker = async function(){
 						
 						await CIQ.removeForecastMarker();
 						await CIQ.createForecastMarker();
-
+						EventBus.emit('triggerFunction');
 					}
 				});
 				
@@ -499,6 +499,7 @@ CIQ.createForecastMarker = async function(){
 					isHovered = false;
 					await CIQ.removeForecastMarker();
 					await CIQ.createForecastMarker();
+					EventBus.emit('triggerFunction');
 				});
 		}
 
@@ -525,7 +526,6 @@ CIQ.createForecastMarker = async function(){
 					hoveredMarkerInfo.market === "bearish" &&
 					hoveredMarkerInfo.post_date === post_date
 				) {
-					//newNode.style.height = "auto";  // 恢复悬浮效果
 					newNode.innerHTML = `<h3>${title}</h3><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a>`;
 				}
 
@@ -542,7 +542,7 @@ CIQ.createForecastMarker = async function(){
 					if (!isHovered) {
 						isHovered = true;  // 设置为悬浮状态
 						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bearish" };
-						console.log('mouseenter',EventBus)
+						console.log('mouseenter')
 						await CIQ.removeForecastMarker();
 						await CIQ.createForecastMarker();
 						EventBus.emit('triggerFunction');
