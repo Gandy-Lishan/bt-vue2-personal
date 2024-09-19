@@ -3,7 +3,7 @@
     <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
-    <div class="left" ref="IndicatorTable">
+    <div class="indicator-left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
         <FavTable
           :key="item.type"
@@ -76,7 +76,7 @@ import AboutUs from "./AboutUs";
  </script>
  
  <style lang="less" scoped>
- .left {
+ .indicator-left {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
