@@ -179,6 +179,7 @@
 		max-height: 1000px;
 	}
 }
+
 .forecast {
 	position: absolute;
 	opacity: .9;
@@ -189,7 +190,12 @@
 	border-radius: 4px;
 	padding: 10px;
 	z-index: 1;
-  }
+	.pwrap {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 250ms ease-in-out;
+	}
+}
 
 .forecast.hidden {
 	display: none;
@@ -216,7 +222,9 @@
   .forecast.bearish:hover{
 	background: #eba8a8;
 	z-index: 2;
-	animation: expandHeight 2s ease forwards;
+	.pwrap {
+		grid-template-rows: 1fr;
+	}
   }
 
   .forecast.bullish:before {
