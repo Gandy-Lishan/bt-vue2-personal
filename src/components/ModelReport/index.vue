@@ -1,11 +1,37 @@
 <template>
   <div class="ModelReport">
+    <div class="container">
+      <div class="strategy-header">
+        <div class="tableHeader">
+          <div class="headerSelect">
+            <a :href="`/MR/sentimentedge`">
+              <h4 @click="selectedTitle = 'sentimentedge'" :class="{ 'selected': selectedTitle === 'sentimentedge' }">SentimentEdge</h4>
+            </a>
+            <a :href="`/MR/kaeppelscorner`">
+              <h4 @click="selectedTitle = 'kaeppelscorner'" :class="{ 'selected': selectedTitle === 'kaeppelscorner' }">Kaeppel's Corner</h4>
+            </a>
+            <a :href="`/MR/modeledge`">
+              <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
+            </a>
+            <!-- <a :href="`/MR/archived_reports/${currentYear}`"> -->
+            <a :href="generatedLink()">
+              <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report Archives</h4>
+            </a>
+            <!-- </a> -->
+            <h4></h4>
+          </div>
+          <div class="search-container">
+            <Search></Search>
+          </div>
+        </div>
+      </div>
+    </div>
    <!-- <Sentimentedge :title="title" :latestPost="latestPost"></Sentimentedge> -->
    <!-- <router-view></router-view> -->
-   <!-- <Archives></Archives> -->
-   <!-- <BlogTags :title="blogTagsTitle" :tagPosts="tagPosts" :previousPage="previousPage" :nextPage="nextPage"></BlogTags> -->
-    <!-- <ReportArchives :title="reportArchivesTitle" :dailyReportBlogs="dailyReportBlogs"></ReportArchives> -->
-    <!-- <ActiveStudies
+   <!-- <Archives></Archives>
+   <BlogTags :title="blogTagsTitle" :tagPosts="tagPosts" :previousPage="previousPage" :nextPage="nextPage"></BlogTags>
+    <ReportArchives :title="reportArchivesTitle" :dailyReportBlogs="dailyReportBlogs"></ReportArchives>
+    <ActiveStudies
      :title="archivesStudies"
      :showStudySubForm="true"
      :premium="'premium'"
@@ -17,22 +43,24 @@
      :longTermBullish="0"
      :longTermBearish="0"
      :forecasts="forecasts"
-    ></ActiveStudies> -->
+    ></ActiveStudies>
     <ArchivedStudies
      :title="'Archived Studies'"
     >
-
-    </ArchivedStudies>
+    </ArchivedStudies> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import Sentimentedge from "./Sentimentedge"
 import Archives from "./Archives";
 import BlogTags from "./BlogTags";
 import ReportArchives from "./ReportArchives";
 import ActiveStudies from "./ActiveStudies";
 import ArchivedStudies from "./ArchivedStudies";
+import { getBlogReportList, getBlogReportInfo } from "@/service/service";
 
 export default {
  name: 'ModelReport',
@@ -132,11 +160,141 @@ export default {
      }
     ],
     archivesStudies: 'Archived Studies',
+    selectedTitle: 'sentimentedge',
+    currentYear: (new Date()).getFullYear()
   }
- }
+ },
+ watch: {
+  '$route'(to, from) {
+    console.log('to', to)
+    console.log('from', from)
+  }
+  },
+  computed: {
+    currentYear() {
+      const path = this.$route.path
+      if(path.includes('/MR/blog/daily_report')) {
+        const year = path.match(/(\d{4})$/)[0]
+        this.selectedTitle = 'archived_reports'
+        return `/MR/archived_reports/${year}`
+      }else {
+        return `/MR/archived_reports/${this.currentYear}`
+      }
+    }
+  },
+ beforeRouteEnter(to, from, next) {
+  const isPathSubstring = (paths, toPath) => {
+    return paths.some(path => toPath.includes(path))
+  }
+  if (isPathSubstring([
+    '/MR/sentimentedge',
+    '/MR/kaeppelscorner',
+    '/MR/modeledge',
+    '/MR/archives/sentimentedge',
+    '/MR/archives/kaeppelscorner',
+    '/MR/archives/modeledge',
+    '/MR/blog',
+    '/MR/archived_reports'
+  ], to.path)) {
+    next(async _this => {
+      if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
+      if(isPathSubstring(['/MR/kaeppelscorner', '/MR/archives/kaeppelscorner'], to.path)) _this.selectedTitle = 'kaeppelscorner'
+      if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
+      if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
+        _this.selectedTitle = 'archived_reports'
+      }
+    })
+    } else {
+      next(_this => {
+        _this.selectedTitle = ''
+      })
+    }
+  },
+  methods: {
+    changeSelectTitle() {
+      console.log('route', this.$route.path)
+      const path = this.$route.path
+      if(path.includes('/MR/blog/daily_report')) {
+        const year = path.match(/(\d{4})$/)[0]
+        this.selectedTitle = 'archived_reports'
+        this.$router.push({
+          path: `/MR/archived_reports/${year}`
+        })
+      }else {
+        this.$router.push({
+          path: `/MR/archived_reports/${this.currentYear}`
+        })
+      }
+    },
+    generatedLink() {
+      // 动态生成的跳转链接
+      const path = this.$route.path;
+      let year;
+
+      if (path.includes('/MR/blog/daily_report')) {
+        year = path.match(/(\d{4})$/)[0];
+        this.selectedTitle = 'archived_reports';
+        return `/MR/archived_reports/${year}`;
+      } else {
+        return `/MR/archived_reports/${this.currentYear}`;
+      }
+    },
+  }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "./index.css";
+
+.strategy-header {
+	display: flex;
+	align-items: flex-end;
+	.tableHeader {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    border-bottom: 2px solid #e9e9e9;
+    margin: 20px 0 10px 0;
+	}
+	.searchBox {
+    display: flex;
+    align-content: flex-end;
+    margin-left: 20px;
+    .el-select .el-input__inner {
+      width: 180px;
+    }
+	}
+	h4 {
+    margin: 0;
+    margin-right: 20px;
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 20px;
+    &:hover{
+        color: #1d4ed7;
+    }
+    &.selected {
+      border-bottom: 2px solid #1d4ed7;
+      color: #1d4ed7;
+    }
+	}
+	.headerSelect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+	}
+	.btns {
+    display: flex;
+    justify-content: space-between;
+    button.el-button.el-button--primary.el-button--mini {
+      width: 145px;
+    }
+	}
+}
 </style>

@@ -32,7 +32,7 @@
                    style="padding:10px"
                  >
                    <h3>
-                     <a :href="getPostUrl(row)">
+                     <a :href="`/MR/blog/${row.url}`">
                        {{ row.title }}
                      </a>
                    </h3>
@@ -59,7 +59,7 @@
                  <a
                    v-for="year in archiveYears"
                    :key="year"
-                   :href="getArchiveUrl(year)"
+                   :href="`/MR/archived_reports/${year}`"
                    class="btn blue btn-block"
                  >
                    {{ year }} Archives
@@ -77,21 +77,12 @@
 <script>
 //import FlashedMessages from '@/components/FlashedMessages.vue'; // 假设 FlashedMessages 是另一个组件
 import { timestampToTime } from "@/utils";
+import { getArchivedReports } from "@/service/service";
 
 export default {
  name: 'ReportArchives',
  components: {
    //FlashedMessages,
- },
- props: {
-   title: {
-     type: String,
-     required: true,
-   },
-   dailyReportBlogs: {
-     type: Array,
-     required: true,
-   },
  },
  data() {
    return {
@@ -99,25 +90,56 @@ export default {
        2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014,
        2013, 2012,
      ],
+     dailyReportBlogs: [],
+     reportDetails: {
+      title: 'Daily Report : Risk appetite is waning despite stocks\' rise',
+      url: 'daily_report_09_18_2024',
+      user_level: 'basic',
+      post_content: ``,
+      post_date: '2024-09-18 18:32:04',
+      author: 'Jason Goepfert',
+      published: '',
+      publish_date: '',
+      confidence: '',
+      bias: '',
+      meta_description: '',
+      timeframe: '',
+      asset: '',
+      count_likes: ''
+     }
    };
  },
+ beforeRouteEnter(to, from, next) {
+  console.log('to', to)
+  console.log('from', from)
+  if (to.path.includes('/MR/archived_reports')) {
+    next(async _this => {
+      const year = to.params.year || (new Date()).getFullYear()
+      _this.title = `Archived Reports for ${year}`
+      const {data: {results}} = await getArchivedReports(year)
+      console.log('res', results)
+      _this.dailyReportBlogs = results
+    })
+    } else {
+      next()
+    }
+  },
  methods: {
-   getPostUrl(row) {
-     // 生成博客文章的 URL，假设使用 Vue Router
-     return this.$router.resolve({
-       name: 'UserBlogPost',
-       params: { slug: row.url },
-     }).href;
-   },
-   getArchiveUrl(year) {
-     // 生成归档 URL
-     return this.$router.resolve({
-       name: `ArchivedReports${year}`,
-     }).href;
-   },
-   formatDate(date) {
-     // 日期格式化
-     return timestampToTime(date)
+   formatDate(dateStr) {
+     let formattedDate = ''
+    if (dateStr) {
+      const dateObj = new Date(dateStr);
+
+      if (!isNaN(dateObj)) {
+          const options = { year: 'numeric', month: 'long', day: '2-digit' };
+          formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObj);
+      } else {
+          console.log("Invalid date format");
+      }
+    } else {
+        console.log("Date is null or undefined");
+    }
+    return formattedDate
    },
    truncate(text, length) {
      // 文本截断逻辑

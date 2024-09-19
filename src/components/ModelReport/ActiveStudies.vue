@@ -4,7 +4,9 @@
    <div class="row margin-bottom-40">
     <div class="col-md-12 col-sm-12">
      <div class="content-page">
-      <h1 v-html="title"></h1>
+      <div class="page-head">
+        <h1 v-html="title" class="page-title"></h1>
+      </div>
       <hr />
       <!-- <div class="row thumbnail">
        <div class="col-md-9">

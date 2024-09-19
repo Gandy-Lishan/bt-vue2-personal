@@ -5,7 +5,7 @@
      v-if="previousPage" 
      class="btn grey-cascade" 
      style="align-self:center" 
-     :href="getPageUrl(previousPage)"
+     :href="`/MR/archives/${requestedType}/${previousPage}`"
    >
      &larr; previous page
    </a>
@@ -15,7 +15,7 @@
      <a 
        v-if="currentPage > 5" 
        class="btn grey-cascade" 
-       :href="getPageUrl(1)"
+       :href="`/MR/archives/${requestedType}`"
      >
        1
      </a>
@@ -28,7 +28,7 @@
        :key="pageNum" 
        v-if="pageNum > 0" 
        class="btn grey-cascade" 
-       :href="getPageUrl(pageNum)"
+       :href="`/MR/archives/${requestedType}/${pageNum}`"
      >
        {{ pageNum }}
      </a>
@@ -42,7 +42,7 @@
        :key="pageNum" 
        v-if="pageNum <= total" 
        class="btn grey-cascade" 
-       :href="getPageUrl(pageNum)"
+       :href="`/MR/archives/${requestedType}/${pageNum}`"
      >
        {{ pageNum }}
      </a>
@@ -52,7 +52,7 @@
      <a 
        v-if="currentPage < total - 4" 
        class="btn grey-cascade" 
-       :href="getPageUrl(total)"
+       :href="`/MR/archives/${requestedType}/${total}`"
      >
        {{ total }}
      </a>
@@ -63,7 +63,7 @@
      v-if="nextPage" 
      class="btn grey-cascade" 
      style="float:right;align-self:center" 
-     :href="getPageUrl(nextPage)"
+     :href="`/MR/archives/${this.requestedType}/${nextPage}`"
    >
      next page &rarr;
    </a>
@@ -95,11 +95,15 @@ export default {
      required: true
    }
  },
+ computed: {
+   requestedType() {
+    if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
+    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else return this.serviceType.toLowerCase();
+   }
+ },
  methods: {
-   getPageUrl(pageNumber) {
-     // 根据具体路由需求生成 URL，这里假设使用 Vue Router
-     return this.$router.resolve({ name: 'YourRouteName', params: { service: this.serviceType, page_number: pageNumber }}).href;
-   },
    getPageRange(start, end) {
      let range = [];
      for (let i = start; i <= end; i++) {

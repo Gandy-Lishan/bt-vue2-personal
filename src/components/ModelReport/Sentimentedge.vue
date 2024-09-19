@@ -6,31 +6,54 @@
        <!-- BEGIN CONTENT -->
        <div class="col-md-12 col-sm-12">
          <div class="content-page">
-           <h1 v-html="title"></h1>
+          <div class="page-head">
+           <h1 v-html="title" class="page-title"></h1>
+          </div>
            <hr />
            <div class="row margin-bottom-30">
              <!-- BEGIN INFO BLOCK -->
-             <div class="col-md-9">
-               <div class="analysis_solutions_yellow">
+             <div class="col-md-9" :class="{ 'blog': serviceType === 'Blog' }">
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'SentimentEdge'">
                  <img
                    align="center"
                    alt=""
-                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/b339eded-b1af-945a-2a41-50b18255e7be.png"
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/50434469-0496-c58b-44b7-4c1817cf1dac.png"
                    width="564"
                    style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                    class="mcnImage"
                  />
                </div>
-               <router-link :to="{ name: 'sentimentedge_post', params: { slug: latestPost.url }}">
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'Kaeppel\'s Corner'">
+                 <img
+                   align="center"
+                   alt=""
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/c317db3d-2d06-155d-5c53-b1abfba1bb3d.png"
+                   width="564"
+                   style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                   class="mcnImage"
+                 />
+               </div>
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'ModelEdge'">
+                 <img
+                   align="center"
+                   alt=""
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/13d4bb49-034a-7505-dba1-d8f33133b5a0.png"
+                   width="564"
+                   style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                   class="mcnImage"
+                 />
+               </div>
+                <a :href="`/MR/${requestedType}/${latestPost.url}`" v-if="serviceType !== 'Blog'">
                  <h2><strong v-html="latestPost.title"></strong></h2>
-               </router-link>
+                </a>
                <div class="blog-single-head-date">
                  <i class="icon-calendar font-bluesteel"></i>
-                 {{ formatDate(latestPost.post_date) }} | {{ latestPost.author }}
-                 <button class="btn btn-default like-button" @click="likePost(latestPost.id, latestPost.author)">
-                   <i class="fa fa-thumbs-o-up" id="like-icon"></i>
+                 {{ formatDate(latestPost.post_date) }}{{ latestPost.author }}
+                 <button class="btn btn-default like-button no-print" @click="likePost(latestPost.id, latestPost.author)" v-if="serviceType !== 'Blog'">
+                   <i class="fa fa-heart-o" id="like-icon" v-if="!latestPost.is_favorite"></i>
+                   <i class="fa fa-heart" id="like-icon" v-else></i>
                  </button>
-                 <button class="btn btn-default print-right" @click="printPage">
+                 <button class="btn btn-default print-right no-print" @click="printPage" v-if="serviceType !== 'Blog'">
                    <i class="fa fa-print"></i>
                  </button>
                </div>
@@ -40,10 +63,10 @@
                <article v-html="latestPost.post_content"></article>
                <hr />
                <!-- Related content and tags -->
-               <RelatedAndTags :latestPost="latestPost" />
+               <RelatedAndTags :latestPost="latestPost" class="no-print"/>
              </div>
              <!-- END INFO BLOCK -->
-             <SidebarSentimentEdge :categoryPosts="categoryPosts" :serviceType="serviceType" :title="title"/>
+             <SidebarSentimentEdge v-if="serviceType !== 'Blog'" class="no-print" :categoryPosts="categoryPosts" :serviceType="serviceType" :title="title"/>
            </div>
          </div>
        </div>
@@ -51,58 +74,121 @@
      </div>
      <!-- END SIDEBAR & CONTENT -->
    </div>
+   <AboutUs class="no-print"></AboutUs> 
  </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { getBlogReportList, getBlogReportInfo } from "@/service/service";
+import { timestampToTime } from "@/utils";
 import BlogPostForecast from "./component/BlogPostForecast.vue";
 import RelatedAndTags from "./component/RelatedAndTags";
 import SidebarSentimentEdge from "./component/SidebarSentimentEdge";
+import AboutUs from "@/components/Indicators/Table/AboutUs";
 
 export default {
  components: {
    BlogPostForecast,
    RelatedAndTags,
    SidebarSentimentEdge,
- },
- props: {
-   title: {
-     type: String,
-     required: true,
-   },
-   latestPost: {
-     type: Object,
-     required: true,
-   },
+   AboutUs
  },
  data() {
   return {
-   categoryPosts: [
-    {
-     id: 1,
-     url: '/sentimentedge-post',
-     title: "SentimentEdge Post",
-    },
-    {
-     id: 1,
-     url: '/sentimentedge-post',
-     title: "SentimentEdge Post",
-    },
-    {
-     id: 1,
-     url: '/sentimentedge-post',
-     title: "SentimentEdge Post",
-    }
-   ],
-   title: 'SentimentEdge',
-   serviceType: 'SentimentEdge',
+   title: '',
+   serviceType: '',
+   latestPost: {},
+   categoryPosts: []
   }
  },
+ watch: {
+  '$route'(to, from) {
+    console.log('to', to)
+    console.log('from', from)
+  }
+  },
+ computed: {
+  ...mapGetters({
+    reportArchives: 'getReportArchives'
+  }),
+  requestedType() {
+    if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
+    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else return this.serviceType.toLowerCase();
+  }
+ },
+ beforeRouteEnter(to, from, next) {
+  console.log('to', to)
+  console.log('from', from)
+  const isPathSubstring = (paths, toPath) => {
+    return paths.some(path => toPath.includes(path))
+  }
+  if (isPathSubstring([
+    '/MR/sentimentedge',
+    '/MR/kaeppelscorner',
+    '/MR/modeledge',
+    '/MR/blog'
+  ], to.path) && ['sentimentedge', 'kaeppelscorner', 'modeledge', 'blog'].includes(to.params.serviceType)) {
+    next(async _this => {
+      const serviceType = to.params.serviceType
+      const reportUrl = to.params.reportUrl
+      if(serviceType === 'sentimentedge') {
+        _this.title = 'SentimentEdge'
+        _this.serviceType = 'SentimentEdge'
+      }else if(serviceType === 'kaeppelscorner') {
+        _this.title = 'Kaeppel\'s Corner'
+        _this.serviceType = 'Kaeppel\'s Corner'
+      }else if(serviceType === 'modeledge') {
+        _this.title = 'ModelEdge'
+        _this.serviceType = 'ModelEdge'
+      }else if(serviceType === 'blog' && reportUrl) {
+      }
+      debugger
+      /* 先拿对应的 report list 取最新的 post */
+      let reportsArchivesTen = []
+      if(_this.reportArchives[serviceType]) {
+        reportsArchivesTen = JSON.parse(_this.reportArchives[serviceType])
+      }else {
+        const {data: reports} =  await getBlogReportList({
+          user_level: serviceType
+        })
+        _this.setReportArchives({serviceType, archives: reports.results})
+        reportsArchivesTen = reports.results
+      }
+      const requestedBlog = reportUrl || reportsArchivesTen.slice(0, 1)[0]?.url
+      const {data: latestPost} = await getBlogReportInfo(requestedBlog || '')
+      _this.categoryPosts = reportsArchivesTen.slice(0, 10) || []
+      if(!reportUrl) {
+        latestPost.is_favorite = reportsArchivesTen.slice(0, 1)[0]?.is_favorite || false
+      }else {
+        const findBlog = reportsArchivesTen.find(x => x.url == reportUrl)
+        if(findBlog) latestPost.is_favorite = findBlog.is_favorite
+        else {
+          const {data: {results}} =  await getBlogReportList({
+            url: reportUrl
+          })
+          const findBlog = results.find(x => x.url == reportUrl)
+          if(findBlog) latestPost.is_favorite = findBlog.is_favorite
+        }
+      }
+      _this.latestPost = latestPost
+      console.log('_this.latestPost', _this.latestPost)
+      if(serviceType === 'blog' && reportUrl) {
+        _this.title = latestPost?.title
+        _this.serviceType = 'Blog'
+      }
+    })
+    } else {
+      next()
+    }
+  },
  methods: {
+  ...mapActions('states', ['setReportArchives']),
    formatDate(date) {
-     // 自定义日期格式化方法
-     const options = { year: "numeric", month: "long", day: "numeric" };
-     return new Date(date).toLocaleDateString(undefined, options);
+     if(!date) return ''
+     return `${timestampToTime(date)} | `
    },
    likePost(postId, author) {
      // 点赞按钮点击事件逻辑
@@ -145,7 +231,7 @@ export default {
 .btn-default {
   color: #333;
   background-color: #fff;
-  border-color: #ccc;
+  border-color: #ccc !important;
   border-width: 1px;
   padding: 6px 12px;
 }
@@ -193,6 +279,20 @@ export default {
   }
   .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
     float: left;
+  }
+
+.col-md-9.blog {
+  width: 100%;
+}
+}
+@media print {
+  .navbar, .footer, .no-print {
+    display: none;
+  }
+
+  /* 确保要打印的部分是可见的 */
+  [ref="printableComponent"] {
+    display: block;
   }
 }
 </style>

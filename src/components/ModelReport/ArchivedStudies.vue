@@ -3,7 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1 v-html="title"></h1>
+          <div class="page-head">
+            <h1 v-html="title" class="page-title"></h1>
+          </div>
           <hr />
           <p>
             This page lists studies that were provided in a Daily Report. At the time

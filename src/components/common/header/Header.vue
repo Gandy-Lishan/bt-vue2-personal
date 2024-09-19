@@ -112,7 +112,6 @@ export default {
   },
   watch: {
     '$route'(to, _) {
-      console.log('to', to)
       // 在$route对象变化时执行逻辑
       if (to.path.includes('/backtester') || to.name == 'Backtester') {
         this.activeIndex = '1'

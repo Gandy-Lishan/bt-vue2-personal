@@ -5,7 +5,23 @@
         <div class="row margin-bottom-40">
           <div class="col-md-12 col-sm-12">
             <div class="content-page">
-              <h1>{{ title }}</h1>
+              <div class="page-head">
+                <h1 class="page-title">{{ title }}</h1>
+                <div class="date-picker">
+                  <el-date-picker
+                    v-model="start_date"
+                    type="date"
+                    size="small"
+                    placeholder="Select Start Date">
+                  </el-date-picker>
+                  <el-date-picker
+                    v-model="end_date"
+                    type="date"
+                    size="small"
+                    placeholder="Select End Date">
+                  </el-date-picker>
+                </div>
+              </div>
               <hr />
               <div class="row margin-bottom-30">
                 <div class="col-md-12">
@@ -87,19 +103,22 @@
                       :key="post.url"
                     >
                       <h1 class="blog-single-head-title">
-                        <router-link :to="{ name: 'blogPost', params: { slug: post.url } }">
+                        <a :href="`/MR/${serviceType}/${post.url}`">
                           {{ post.title }}
-                        </router-link>
+                        </a>
+                        <!-- <router-link :to="{ name: 'blogPost', params: { slug: post.url } }">
+                          {{ post.title }}
+                        </router-link> -->
                       </h1>
                       <div class="blog-single-head-date">
                         <i class="icon-calendar font-bluesteel"></i>
                         {{ formatDate(post.post_date) }}
-                        <span v-if="post.author === ''">
+                        <!-- <span v-if="post.author === ''">
                           | <i class="icon-user font-bluesteel"></i>
                           <router-link :to="{ name: 'authorBlogs', params: { author: 'Jason Goepfert' } }">
                             Jason Goepfert
                           </router-link>
-                        </span>
+                        </span> -->
                       </div>
                       <div class="row" style="margin-bottom:10px;">
                           <article>
@@ -109,21 +128,20 @@
                               style="margin-right:10px;margin-top:10px;"
                               height="200"
                               width="267"
-                              :src="'https://dnpgic06wp5lx.cloudfront.net/' + post.image"
+                              :src="post.image"
                               align="left"
                             />
                             <span v-if="post.meta_description">
                               {{ post.meta_description }}
                             </span>
-                            <span v-else>
-                              {{ truncate(post.post_content, 500) }}
+                            <span v-else v-html="truncate(post.post_content, 500)">
                             </span>
                           </article>
                       </div>
                     </div>
                   </div>
 
-                  <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" />
+                  <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
                 </div>
               </div>
             </div>
@@ -137,46 +155,68 @@
 <script>
 import PreviousNextPage from './component/PreviousNextPage'; // 假设你有这个分页组件
 import { timestampToTime } from "@/utils";
+import { getBlogReportList } from "@/service/service";
 
 export default {
   name: 'Archives',
   data() {
     return {
-      title: 'SentimentEdge Archives', // 从服务器获取的标题
-      serviceType: 'sentimentedge', // 获取服务类型
+      title: '', // 从服务器获取的标题
       messages: [], // 消息数组
-      blogPosts: [
-        {
-          title: 'The Nasdaq quickly falls back into a correction',
-          post_date: ' 2024-09-10',
-          author: '',
-          image: 'blog/20240909-195021_1725911420586.jpg',
-          meta_description: '',
-          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
-        },
-        {
-          title: 'The Nasdaq quickly falls back into a correction',
-          post_date: ' 2024-09-10',
-          author: '',
-          image: 'blog/20240909-195021_1725911420586.jpg',
-          meta_description: '',
-          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
-        },
-        {
-          title: 'The Nasdaq quickly falls back into a correction',
-          post_date: ' 2024-09-10',
-          author: '',
-          image: 'blog/20240909-195021_1725911420586.jpg',
-          meta_description: '',
-          post_content: 'The Nasdaq Composite and Nasdaq 100 both suffered corrections in August, partially recovering during torrid rallies, then fell back into correction territory. This has not been a sign of smart money distribution. Rather, both indexes had a strong tendency to rebound in the months ahead, with almost exclusive gains over the next 6-12 months.'
-        }
-      ], // 博客文章数组
-      previousPage: 1,
-      currentPage: 2, // 当前页码
-      nextPage: 3,
-      total: 139,
-
+      previousPage: null,
+      currentPage: 1, // 当前页码
+      nextPage: 2,
+      total: 0,
+      serviceType: '',
+      blogPosts: []
     };
+  },
+  computed: {
+   requestedType() {
+    if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
+    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else return this.serviceType.toLowerCase();
+   }
+ },
+  beforeRouteEnter(to, from, next) {
+    debugger
+  if (to.path.includes('/MR/archives') && ['sentimentedge', 'kaeppelscorner', 'modeledge'].includes(to.params.serviceType)) {
+    next(async _this => {
+      const serviceType = to.params.serviceType
+      const page = to.params.page || ''
+      if(serviceType === 'sentimentedge') {
+        _this.title = `SentimentEdge Archives${page ?  ` - Page ${page}`: ''}`
+        _this.serviceType = 'sentimentedge'
+      }else if(serviceType === 'kaeppelscorner') {
+        _this.title = `Kaeppel\'s Corner Archives${page ?  ` - Page ${page}`: ''}`
+        _this.serviceType = 'kaeppelscornerr'
+      }else if(serviceType === 'modeledge') {
+        _this.title = `ModelEdge Archives${page ?  ` - Page ${page}`: ''}`
+        _this.serviceType = 'modeledge'
+      }
+      debugger
+      const {data: {results, count, previous, next}} = await getBlogReportList({
+        user_level: serviceType,
+        page: !page ? _this.currentPage : page
+      })
+
+      const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = count
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      _this.blogPosts = results
+      
+    })
+    } else {
+      next()
+    }
   },
   components: {
     PreviousNextPage
@@ -188,8 +228,8 @@ export default {
   },
   methods: {
     formatDate(date) {
-      // 实现你的日期格式化逻辑
-      return timestampToTime(date)
+     if(!date) return ''
+     return `${timestampToTime(date)}`
     },
     truncate(text, length) {
       // 实现字符串截断逻辑
@@ -199,7 +239,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style less scoped >
 a:hover {
  	font-weight: unset;
 }
@@ -233,5 +273,11 @@ a:hover {
 
 .invest_solutions_green {
   background-color: #009769;
+}
+.date-picker /deep/ .el-input--prefix .el-input__inner {
+  padding-left: 0px;
+}
+.date-picker /deep/ .el-input--suffix .el-input__inner {
+  padding-right: 0px;
 }
 </style>

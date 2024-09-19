@@ -1,11 +1,11 @@
 <template>
- <div class="blog-single-foot">
-   <h3>Tagged As:</h3>
+ <div class="blog-single-foot" v-if="latestPost.blog_tags && latestPost.blog_tags.length > 0">
+   <h3 class="page-title">Tagged As:</h3>
    <ul class="blog-post-tags">
-     <li v-for="tag in latestPost.dbTags" :key="tag.id" class="uppercase">
-       <router-link :to="{ name: 'tagged_blogs', params: { tag: tag.tag }}">
+     <li v-for="(tag, index) in latestPost.blog_tags" :key="index" class="uppercase">
+        <a :href="`/MR/tags/${tag.tag}`">
          <span v-html="tag.tag"></span>
-       </router-link>
+       </a>
      </li>
    </ul>
  </div>
@@ -19,6 +19,7 @@ export default {
      type: Object,
      required: true,
    },
+   serviceType: String
  },
 };
 </script>
