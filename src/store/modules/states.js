@@ -1,5 +1,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { obtainIndicatorsList } from "@/service/service";
+import { report } from 'process';
 
 const state = {
 	errorMessage404:{status:null,message:''},
@@ -15,6 +16,7 @@ const state = {
 	isCreateLoading: false,
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
 	symbolUploadDomActive: false,
+	reportArchives: {}
 }
 
 const mutations = {
@@ -54,6 +56,9 @@ const mutations = {
 	SET_CPM_RESULTS_DATA(state, data) {
 		state.cpmResultsData = data
 		sessionStorage.setItem('cpmResultsData', JSON.stringify(data))
+	},
+	SET_REPORT_ARCHIVES: (state, {service_type, archives}) => {
+		state.reportArchives[service_type] = JSON.stringify(archives)
 	},
 }
 
@@ -122,6 +127,9 @@ const actions = {
 	},
 	setCpmResultsData({ commit }, data) {
 		commit('SET_CPM_RESULTS_DATA', data);
+	},
+	setReportArchives({ commit }, data) {
+		commit('SET_REPORT_ARCHIVES', data)
 	}
 }
 export default {

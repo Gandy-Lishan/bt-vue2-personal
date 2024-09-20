@@ -5,7 +5,9 @@
     <div class="col-md-12 col-sm-12">
      <div class="content-page">
       <div class="page-head">
-        <h1 v-html="title" class="page-title"></h1>
+        <div class="page-title">
+          <h1 v-html="title"></h1>
+        </div>
       </div>
       <hr />
       <!-- <div class="row thumbnail">
@@ -93,7 +95,7 @@
        <div style="clear:both;"></div>
        <hr />
        <div id="example_wrapper" class="dataTabkes_wrapper no-footer">
-        <table id="example" class="display compact_active_studies table-active-toolbar" cellspacing="0" width="100%">
+        <table id="example" class="display compact_active_studies table-active-toolbar dataTable no-footer" cellspacing="0" width="100%">
           <thead>
             <tr>
               <th>Date</th>
@@ -131,20 +133,42 @@
 </template>
 
 <script>
+import { getActiveStudies } from "@/service/service";
+
 export default {
- props: {
-   title: String,
-   showStudySubForm: Boolean,
-   premium: Boolean,
-   userSubActiveStudy: Boolean,
-   shortTermBullish: Number,
-   shortTermBearish: Number,
-   medTermBullish: Number,
-   medTermBearish: Number,
-   longTermBullish: Number,
-   longTermBearish: Number,
-   forecasts: Array
+ data() {
+  return {
+    title: 'Active Studies',
+    showStudySubForm: false,
+    premium: false,
+    userSubActiveStudy: false,
+    shortTermBullish: 0,
+    shortTermBearish: 0,
+    medTermBullish: 0,
+    medTermBearish: 0,
+    longTermBullish: 0,
+    longTermBearish: 0,
+    forecasts: []
+  }
  },
+
+ beforeRouteEnter(to, from, next) {
+  if (to.path === '/MR/active_studies') {
+    next(async _this => {
+      const {data: {active_studies, short_term_bearish, short_term_bullish, med_term_bearish, med_term_bullish, long_term_bearish, long_term_bullish, premium_notes, daily_reports, basic_notes, active_research}} = await getActiveStudies()
+      console.log('active_studies', active_studies)
+      _this.forecasts = active_studies
+      _this.shortTermBullish = short_term_bullish
+      _this.shortTermBearish = short_term_bearish
+      _this.medTermBullish = med_term_bullish
+      _this.medTermBearish = med_term_bearish
+      _this.longTermBullish = long_term_bullish
+      _this.longTermBearish = long_term_bearish
+    })
+  }else {
+    next()
+  }
+  },
  methods: {
    subscribeToStudyAlerts() {
      // 处理订阅逻辑
@@ -153,11 +177,12 @@ export default {
      // 处理取消订阅逻辑
    },
    forecastLink(forecast) {
-     if (forecast.index.endsWith('-blog')) {
-       return `/public/blog_post/${forecast.filename}`;
-     } else {
-       return `/user/download_file/${forecast.filename}`;
-     }
+    //  if (forecast.index.endsWith('-blog')) {
+    //    return `/public/blog_post/${forecast.filename}`;
+    //  } else {
+    //    return `/user/download_file/${forecast.filename}`;
+    //  }
+    return ''
    }
  }
 };
@@ -165,12 +190,20 @@ export default {
 
 <style scoped>
 /* 样式可保持不变 */
+th {
+    text-align: left;
+}
+td, th {
+    padding: 0;
+}
+.nowrap {
+  white-space: nowrap;
+}
 .tg {
  border-collapse: collapse;
  border-spacing: 0;
  border-color: #ccc;
 }
-
 .tg td,
 .tg th {
  font-family: Arial, sans-serif;
@@ -211,7 +244,24 @@ export default {
  color: #ffffff;
  text-align: center;
 }
-
+.tg .tg-baqh {
+    text-align: center;
+    vertical-align: top;
+}
+.tg td {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px 5px;
+  border-style: solid;
+  border-width: 0px;
+  overflow: hidden;
+  word-break: normal;
+  border-color: #ccc;
+  color: #333;
+  background-color: #fff;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+}
 .center {
  text-align: center;
 }
@@ -226,5 +276,20 @@ export default {
  .col-md-4 {
   width: 33.33%;
  }
+}
+.page-head .page-title>h1 {
+  color: #656565;
+  font-size: 22px;
+  font-weight: 400;
+  margin: 0;
+  margin-left: 20px;
+}
+h4 {
+  font-size: 18px;
+  line-height: 1.25em;
+}
+.primary-link {
+    color: #65a0d0;
+    font-weight: 600;
 }
 </style>

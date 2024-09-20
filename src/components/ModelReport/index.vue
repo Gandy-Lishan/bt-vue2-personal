@@ -13,11 +13,12 @@
             <a :href="`/MR/modeledge`">
               <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
             </a>
-            <!-- <a :href="`/MR/archived_reports/${currentYear}`"> -->
             <a :href="generatedLink()">
               <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report Archives</h4>
             </a>
-            <!-- </a> -->
+            <a :href="`/MR/active_studies`">
+              <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
+            </a>
             <h4></h4>
           </div>
           <div class="search-container">
@@ -194,7 +195,8 @@ export default {
     '/MR/archives/kaeppelscorner',
     '/MR/archives/modeledge',
     '/MR/blog',
-    '/MR/archived_reports'
+    '/MR/archived_reports',
+    '/MR/active_studies'
   ], to.path)) {
     next(async _this => {
       if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
@@ -203,6 +205,7 @@ export default {
       if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
         _this.selectedTitle = 'archived_reports'
       }
+      if(isPathSubstring(['/MR/active_studies'], to.path)) _this.selectedTitle = 'active_studies'
     })
     } else {
       next(_this => {
