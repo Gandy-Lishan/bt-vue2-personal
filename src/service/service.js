@@ -1552,4 +1552,17 @@ export const getActiveStudies = () => {
 			})
 	})
 }
+export const getArchivedStudies = () => {
+	const path = `/dev/st_data/archived_studies`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* Blog Report END*/

@@ -47,23 +47,22 @@
     <div class="col-md-12">
      <div class="portlet light">
       <div class="col-md-12">
-
        <div class="col-md-7">
-        <h4>Active Studies Description</h4>
-        <span class="well well-sm" style="float: right; display: inline-block;">
-          <p><b>What is an "active study"?</b></p>
-          <p>For every study we do that has a solid conclusion, we track it in the Active Studies. Research that includes one of these compelling studies will have a forecast attached to it, that looks like the following. It shows whether the forecast is for higher prices (green up arrow), or lower prices (red down arrow), an ETF that tracks the appropriate market, and whether the time frame is short-term (< 1 month), medium-term (1-6 months) or long-term (> 6 months). 
-            <a href="https://www.sentimentrader.com/users/knowledge_base_article/How%20accurate%20are%20your%20studies%3F">Learn more</a>
+          <h4>Active Studies Description</h4>
+          <span class="well well-sm" style="float: right; display: inline-block;">
+            <p><b>What is an "active study"?</b></p>
+            <p>For every study we do that has a solid conclusion, we track it in the Active Studies. Research that includes one of these compelling studies will have a forecast attached to it, that looks like the following. It shows whether the forecast is for higher prices (green up arrow), or lower prices (red down arrow), an ETF that tracks the appropriate market, and whether the time frame is short-term (< 1 month), medium-term (1-6 months) or long-term (> 6 months). 
+              <a href="https://www.sentimentrader.com/users/knowledge_base_article/How%20accurate%20are%20your%20studies%3F">Learn more</a>
+            </p>
+          </span>
+          <p>This page lists all studies that are provided in the Daily Report that are still considered to be active. 
+            You may filter the listings below by market/symbol and timeframe.
           </p>
-        </span>
-        <p>This page lists all studies that are provided in the Daily Report that are still considered to be active. 
-          You may filter the listings below by market/symbol and timeframe.
-        </p>
-        <p>Forecast Legend: 
-          <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i> (Up), 
-          <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i> (Down), 
-          <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
-        </p>
+          <p>Forecast Legend: 
+            <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i> (Up), 
+            <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i> (Down), 
+            <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
+          </p>
       </div>
 
        <div class="col-md-4">
@@ -94,19 +93,64 @@
 
        <div style="clear:both;"></div>
        <hr />
-       <div id="example_wrapper" class="dataTabkes_wrapper no-footer">
-        <table id="example" class="display compact_active_studies table-active-toolbar dataTable no-footer" cellspacing="0" width="100%">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Study Title</th>
-              <th>Market</th>
-              <th>Forecast</th>
-              <th>Timeframe</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="forecast in forecasts" :key="forecast.index" v-if="forecast.market">
+       <div class="dataTables_wrapper">
+        <div class="filter-div">
+          <el-row>
+            <el-col :span="18">
+              <el-row>
+                <div class="btns">
+                  <div class="select-option">
+                    <span>Market</span>
+                    <el-select v-model="marketFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+                    <el-option
+                      v-for="item in marketOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                  </div>
+                  <div class="select-option">
+                    <span>Timeframe</span>
+                    <el-select v-model="timeframeFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
+                    <el-option
+                      v-for="item in timeframeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                  </div>
+                </div>
+              </el-row>
+            </el-col>
+            <el-col :span="6">
+              <el-input
+                @input="handleQuery"
+                size="small"
+                placeholder="Search"
+                v-model="searchInput"
+                clearable>
+              </el-input>
+            </el-col>
+          </el-row>
+        </div>
+        <div id="example_wrapper" class="dataTabkes_wrapper no-footer">
+          <table id="example" class="display compact_active_studies table-active-toolbar dataTable no-footer" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th :class="getSortClass('date')" @click="sortTable('date')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="descending" aria-label="Date: activate to sort column ascending" style="width: 71px;">Date</th>
+                <th :class="getSortClass('title')"  @click="sortTable('title')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending" style="width: 603px;">Study Title</th>
+                <th :class="getSortClass('market')"  @click="sortTable('market')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Market: activate to sort column ascending" style="width: 59px;">Market</th>
+                <th :class="getSortClass('forecast')"  @click="sortTable('forecast')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Forecast: activate to sort column ascending" style="width: 69px;">Forecast</th>
+                <th :class="getSortClass('timeframe')" @click="sortTable('timeframe')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Timeframe: activate to sort column ascending" style="width: 90px;">Timeframe</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(forecast, index) in paginatedData" 
+              :key="forecast.index" 
+              :class="{'odd': index % 2 === 1, 'even': index % 2 === 0}" 
+              v-if="forecast.market">
               <td class="nowrap">{{ forecast.date }}</td>
               <td>
                 <a :href="forecastLink(forecast)" target="_blank" class="item-name primary-link">
@@ -121,21 +165,56 @@
               </td>
               <td>{{ forecast.timeframe }}</td>
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+          <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing {{start}} to {{end}} of {{total}} entries</div>
+            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+              <a class="paginate_button previous" 
+                :class="{ disabled: currentPage === 1 }"
+                @click="prevPage">Previous</a>
+                <template>
+                  <span>
+                    <!-- 显示页码 -->
+                    <a v-for="page in totalPages"
+                      v-if="shouldDisplayPage(page)"
+                      :key="page"
+                      class="paginate_button"
+                      :class="{ current: currentPage === page }"
+                      @click="goToPage(page)">
+                      {{ page }}
+                    </a>
+                    
+                    <!-- 前面的省略号 -->
+                    <span v-if="showEllipsisStart" class="ellipsis">…</span>
+                    
+                    <!-- 后面的省略号 -->
+                    <span v-if="showEllipsisEnd" class="ellipsis">…</span>
+                  </span>
+                </template>
+              <a class="paginate_button next" 
+                :class="{ disabled: currentPage === totalPages }"
+                @click="nextPage">Next</a>
+            </div>
+        </div>
        </div>
       </div>
      </div>
     </div>
    </div>
   </div>
+  <AboutUs></AboutUs> 
  </div>
 </template>
 
 <script>
+import AboutUs from "@/components/Indicators/Table/AboutUs";
+const debounce = require('lodash/debounce')
 import { getActiveStudies } from "@/service/service";
 
 export default {
+  components: {
+    AboutUs
+  },
  data() {
   return {
     title: 'Active Studies',
@@ -148,16 +227,53 @@ export default {
     medTermBearish: 0,
     longTermBullish: 0,
     longTermBearish: 0,
-    forecasts: []
+    forecasts: [],
+    start: 1,
+    end: 25,
+    currentPage: 1,
+    perPage: 25,
+    currentSortColumn: '',
+    currentSortDirection: '',
+    marketFilter: '',
+    timeframeFilter: '',
+    marketOptions: [],
+    timeframeOptions: [],
+    searchInput: '',
   }
  },
-
+ computed: {
+    totalPages() {
+      return Math.ceil(this.forecasts.length / this.perPage)
+    },
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      this.start = start + 1
+      this.end = end
+      return this.forecasts.slice(start, end); 
+    },
+    total() {
+      return this.forecasts.length
+    },
+    showEllipsisStart() {
+      return this.currentPage > 4; // 如果当前页大于 4，显示前面的省略号
+    },
+    showEllipsisEnd() {
+      return this.currentPage < this.totalPages - 3; // 如果当前页小于倒数第 4 页，显示后面的省略号
+    }
+  },
  beforeRouteEnter(to, from, next) {
   if (to.path === '/MR/active_studies') {
     next(async _this => {
       const {data: {active_studies, short_term_bearish, short_term_bullish, med_term_bearish, med_term_bullish, long_term_bearish, long_term_bullish, premium_notes, daily_reports, basic_notes, active_research}} = await getActiveStudies()
       console.log('active_studies', active_studies)
       _this.forecasts = active_studies
+      let _market = [...new Set(_this.forecasts.map(item => item.market))].map(item => ({label: item.toUpperCase(), value: item}))
+      let _timeframe = [...new Set(_this.forecasts.map(item => item.timeframe))].map(item => ({label: item, value: item}))
+      _market.unshift({label: '----', value: ''})
+      _timeframe.unshift({label: '----', value: ''})
+      _this.marketOptions = _market
+      _this.timeframeOptions = _timeframe
       _this.shortTermBullish = short_term_bullish
       _this.shortTermBearish = short_term_bearish
       _this.medTermBullish = med_term_bullish
@@ -183,7 +299,108 @@ export default {
     //    return `/user/download_file/${forecast.filename}`;
     //  }
     return ''
-   }
+   },
+   shouldDisplayPage(page) {
+      if (this.totalPages <= 7) {
+        return true; // 如果总页数小于等于 7，显示所有页
+      }
+      // 始终显示第一页、最后一页、当前页及其相邻的页码
+      return page === 1 || page === this.totalPages || Math.abs(this.currentPage - page) <= 1;
+    },
+    goToPage(page) {
+      this.currentPage = page; // 切换到点击的页码
+    },
+   goToPage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    getSortClass(column) {
+      // 返回 class 用于改变图标和样式
+      if (this.currentSortColumn === column) {
+        return this.currentSortDirection === 'descending'
+          ? 'sorting_asc'
+          : 'sorting_desc';
+      }
+      return 'sorting';
+    },
+    sortTable(column) {
+      // 如果点击的列和当前排序的列相同，切换排序方向
+      if (this.currentSortColumn === column) {
+        this.currentSortDirection =
+          this.currentSortDirection === 'ascending' ? 'descending' : 'ascending';
+      } else {
+        // 如果点击的是新列，默认使用降序排序
+        this.currentSortColumn = column;
+        this.currentSortDirection = 'descending';
+      }
+      // 判断是否需要排序
+      if (!this.currentSortColumn) return
+      console.log('currentSortColumn', this.currentSortColumn)
+      this.forecasts.sort((a, b) => {
+        const key = this.currentSortColumn;
+        const isAsc = this.currentSortDirection === 'descending';
+
+        if (a[key] < b[key]) return isAsc ? -1 : 1;
+        if (a[key] > b[key]) return isAsc ? 1 : -1;
+        return 0;
+      });
+    },
+    handleQuery: debounce(function () { this._filterData() }, 500),
+    _filterData(){
+		  this.forecasts = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+    },
+    filterTimeFrame(searchResult){
+      if (this.timeframeFilter) {
+        return searchResult
+        .filter(item=>((item["timeframe"] && item["timeframe"].toLowerCase()) == this.timeframeFilter.toLowerCase()))
+      }else {
+        return searchResult
+      }
+	  },
+    filterMarket(searchResult){
+      if (this.marketFilter) {
+        return searchResult
+        .filter(item=>(((item["market"] && item["market"].toLowerCase()) == this.marketFilter.toLowerCase())))
+      }else {
+        return searchResult
+      }
+	  },
+    getSearchResult() {
+      if(this.searchInput){
+        // 在搜索之前对搜索关键词进行转义
+        const trimmedStr = this.searchInput.trim()
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+        return this.forecasts.filter(item => {
+            // 获取所有需要匹配的属性
+            const properties = [
+              item['date'],
+              item['title'],
+              item['market'],
+              item['timeframe'],
+              item['forecast']
+            ];
+          // 检查任意一个属性是否匹配
+          return properties.some(property => regex.test(property));
+        });
+      }else{
+        return this.forecasts
+      }
+    },
+    // 使用反斜杠转义特殊字符
+    escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
  }
 };
 </script>
@@ -191,10 +408,10 @@ export default {
 <style scoped>
 /* 样式可保持不变 */
 th {
-    text-align: left;
+  text-align: left;
 }
 td, th {
-    padding: 0;
+  padding: 0;
 }
 .nowrap {
   white-space: nowrap;
@@ -262,6 +479,121 @@ td, th {
   border-top-width: 1px;
   border-bottom-width: 1px;
 }
+.table {
+  background-color: transparent;
+  display: table;
+  border-collapse: separate;
+  box-sizing: border-box;
+  text-indent: initial;
+  unicode-bidi: isolate;
+  line-height: normal;
+  font-weight: normal;
+  font-size: medium;
+  font-style: normal;
+  color: -internal-quirk-inherit;
+  text-align: start;
+  border-spacing: 2px;
+  border-color: gray;
+  white-space: normal;
+  font-variant: normal;
+}
+table.dataTable {
+  margin: 0 auto;
+  clear: both;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+table.dataTable, table.dataTable th, table.dataTable td {
+  box-sizing: content-box
+}
+table.dataTable.no-footer {
+  border-bottom: 1px solid #111;
+}
+table.dataTable thead th, table.dataTable tfoot th {
+  font-weight: bold
+}
+table.dataTable thead th, table.dataTable thead td {
+  padding: 10px 18px;
+  border-bottom: 1px solid #111;
+}
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
+  cursor: pointer;
+}
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+table.dataTable thead .sorting {
+    background-image: url("../../assets/sort_both.png");
+}
+table.dataTable thead .sorting_desc {
+  background-image: url('../../assets/sort_desc.png');
+}
+table.dataTable thead .sorting_asc {
+    background-image: url("../../assets/sort_asc.png");
+}
+.dataTable > thead > tr > th.sorting, .dataTable > thead > tr > th.sorting_asc, .dataTable > thead > tr > th.sorting_desc {
+  padding-right: 18px;
+}
+table.dataTable tbody tr {
+  background-color: #ffffff;
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+  background-color: #f9f9f9;
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+    background-color: #f6f3f3;
+}
+.nowrap {
+    white-space: nowrap;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+  padding: 8px 10px;
+}
+table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
+  border-top: 1px solid #ddd;
+}
+table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
+    border-top: none;
+}
+.dataTables_wrapper .dataTables_info {
+  clear: both;
+  float: left;
+  padding-top: 0.755em;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+  color: #333;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0.5em 1em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  color: #333 !important;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  cursor: default;
+  color: #666 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  color: #333 !important;
+  border: 1px solid #979797;
+  background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: white !important;
+  border: 1px solid #111;
+  background: linear-gradient(to bottom, #585858 0%, #111 100%);
+}
 .center {
  text-align: center;
 }
@@ -289,7 +621,34 @@ h4 {
   line-height: 1.25em;
 }
 .primary-link {
-    color: #65a0d0;
-    font-weight: 600;
+  color: #65a0d0;
+  font-weight: 600;
+}
+.dataTables_wrapper .dataTables_paginate {
+  float: right;
+  text-align: right;
+  padding-top: 0.25em;
+}
+.filter-div {
+  padding-bottom: 20px;
+}
+.filter-div /deep/ .el-input__inner {
+  margin-left: 0px;
+}
+.filter-div .btns .el-button{
+  margin-right: 10px;
+}
+.filter-div .select-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+  margin-right: 10px;
+  padding: 3px;
+}
+.filter-div .select-option span {
+  font-size: 14px;
+  margin-right: 5px
 }
 </style>

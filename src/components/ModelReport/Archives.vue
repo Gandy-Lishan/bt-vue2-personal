@@ -180,7 +180,6 @@ export default {
    }
  },
   beforeRouteEnter(to, from, next) {
-    debugger
   if (to.path.includes('/MR/archives') && ['sentimentedge', 'kaeppelscorner', 'modeledge'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
