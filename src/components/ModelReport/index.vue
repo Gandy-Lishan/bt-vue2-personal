@@ -7,11 +7,20 @@
             <a :href="`/MR/sentimentedge`">
               <h4 @click="selectedTitle = 'sentimentedge'" :class="{ 'selected': selectedTitle === 'sentimentedge' }">SentimentEdge</h4>
             </a>
+            <a :href="`/MR/modeledge`">
+              <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
+            </a>
             <a :href="`/MR/kaeppelscorner`">
               <h4 @click="selectedTitle = 'kaeppelscorner'" :class="{ 'selected': selectedTitle === 'kaeppelscorner' }">Kaeppel's Corner</h4>
             </a>
-            <a :href="`/MR/modeledge`">
-              <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
+            <a :href="`/MR/tradingedge`">
+              <h4 @click="selectedTitle = 'tradingedge'" :class="{ 'selected': selectedTitle === 'tradingedge' }">TradingEdge</h4>
+            </a>
+            <a :href="`/MR/favorites`">
+              <h4 @click="selectedTitle = 'favorites'" :class="{ 'selected': selectedTitle === 'favorites' }">My Favorites</h4>
+            </a>
+            <a :href="`/MR/archived_studies`">
+              <h4 @click="selectedTitle = 'archived_studies'" :class="{ 'selected': selectedTitle === 'archived_studies' }">Archived Studies</h4>
             </a>
             <a :href="generatedLink()">
               <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report Archives</h4>
@@ -191,21 +200,28 @@ export default {
     '/MR/sentimentedge',
     '/MR/kaeppelscorner',
     '/MR/modeledge',
+    '/MR/tradingedge',
     '/MR/archives/sentimentedge',
     '/MR/archives/kaeppelscorner',
     '/MR/archives/modeledge',
+    '/MR/archives/tradingedge',
     '/MR/blog',
     '/MR/archived_reports',
-    '/MR/active_studies'
+    '/MR/active_studies',
+    '/MR/archived_studies',
+    '/MR/favorites'
   ], to.path)) {
     next(async _this => {
       if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
       if(isPathSubstring(['/MR/kaeppelscorner', '/MR/archives/kaeppelscorner'], to.path)) _this.selectedTitle = 'kaeppelscorner'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
+      if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
       if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
         _this.selectedTitle = 'archived_reports'
       }
       if(isPathSubstring(['/MR/active_studies'], to.path)) _this.selectedTitle = 'active_studies'
+      if(isPathSubstring(['/MR/archived_studies'], to.path)) _this.selectedTitle = 'archived_studies'
+      if(isPathSubstring(['/MR/favorites'], to.path)) _this.selectedTitle = 'favorites'
     })
     } else {
       next(_this => {
@@ -274,12 +290,12 @@ export default {
     padding: 10px 0;
     cursor: pointer;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     &:hover{
         color: #1d4ed7;
     }
     &.selected {
-      border-bottom: 2px solid #1d4ed7;
+      border-bottom: 4px solid #1d4ed7;
       color: #1d4ed7;
     }
 	}

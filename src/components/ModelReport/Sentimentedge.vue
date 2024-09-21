@@ -17,7 +17,7 @@
                  <img
                    align="center"
                    alt=""
-                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/50434469-0496-c58b-44b7-4c1817cf1dac.png"
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/b339eded-b1af-945a-2a41-50b18255e7be.png"
                    width="564"
                    style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                    class="mcnImage"
@@ -27,7 +27,7 @@
                  <img
                    align="center"
                    alt=""
-                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/c317db3d-2d06-155d-5c53-b1abfba1bb3d.png"
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/13d4bb49-034a-7505-dba1-d8f33133b5a0.png"
                    width="564"
                    style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                    class="mcnImage"
@@ -37,7 +37,17 @@
                  <img
                    align="center"
                    alt=""
-                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/13d4bb49-034a-7505-dba1-d8f33133b5a0.png"
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/c317db3d-2d06-155d-5c53-b1abfba1bb3d.png"
+                   width="564"
+                   style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                   class="mcnImage"
+                 />
+               </div>
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'TradingEdge'">
+                 <img
+                   align="center"
+                   alt=""
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/cc8eb3aa-99a2-9543-8161-126926d8506e.png"
                    width="564"
                    style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                    class="mcnImage"
@@ -47,9 +57,9 @@
                  <h2><strong v-html="latestPost.title"></strong></h2>
                 </a>
                <div class="blog-single-head-date">
-                 <i class="icon-calendar font-bluesteel"></i>
+                <i class="fa fa-calendar" aria-hidden="true"></i>
                  {{ formatDate(latestPost.post_date) }}{{ latestPost.author }}
-                 <button class="btn btn-default like-button no-print" @click="likePost(latestPost.id, latestPost.author)" v-if="serviceType !== 'Blog'">
+                 <button class="btn btn-default like-button no-print" @click="likePost(latestPost.url, latestPost.is_favorite)" v-if="serviceType !== 'Blog'">
                    <i class="fa fa-heart-o" id="like-icon" v-if="!latestPost.is_favorite"></i>
                    <i class="fa fa-heart" id="like-icon" v-else></i>
                  </button>
@@ -80,7 +90,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { getBlogReportList, getBlogReportInfo } from "@/service/service";
+import { getBlogReportList, getBlogReportInfo, addMRFavorites, removeMRFavorites } from "@/service/service";
 import { timestampToTime } from "@/utils";
 import BlogPostForecast from "./component/BlogPostForecast.vue";
 import RelatedAndTags from "./component/RelatedAndTags";
@@ -129,8 +139,9 @@ export default {
     '/MR/sentimentedge',
     '/MR/kaeppelscorner',
     '/MR/modeledge',
+    '/MR/tradingedge',
     '/MR/blog'
-  ], to.path) && ['sentimentedge', 'kaeppelscorner', 'modeledge', 'blog'].includes(to.params.serviceType)) {
+  ], to.path) && ['sentimentedge', 'kaeppelscorner', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const reportUrl = to.params.reportUrl
@@ -143,7 +154,11 @@ export default {
       }else if(serviceType === 'modeledge') {
         _this.title = 'ModelEdge'
         _this.serviceType = 'ModelEdge'
-      }else if(serviceType === 'blog' && reportUrl) {
+      }else if(serviceType === 'tradingedge') {
+        _this.title = 'TradingEdge'
+        _this.serviceType = 'TradingEdge'
+      }
+      else if(serviceType === 'blog' && reportUrl) {
       }
       debugger
       /* 先拿对应的 report list 取最新的 post */
@@ -190,9 +205,17 @@ export default {
      if(!date) return ''
      return `${timestampToTime(date)} | `
    },
-   likePost(postId, author) {
+   async likePost(url, isFavorite) {
+    debugger
+    try {
+      if(isFavorite) await removeMRFavorites(url)
+      else await addMRFavorites(url)
+      this.latestPost.is_favorite = !this.latestPost.is_favorite
+    } catch (error) {
+      console.log(error)
+    }
      // 点赞按钮点击事件逻辑
-     console.log(`Liked post ${postId} by ${author}`);
+     console.log(`Liked post ${url} by ${isFavorite}`);
      // 你可以在此处添加你的点赞逻辑，比如发送 API 请求
    },
    printPage() {

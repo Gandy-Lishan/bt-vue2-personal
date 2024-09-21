@@ -1565,4 +1565,70 @@ export const getArchivedStudies = () => {
 			})
 	})
 }
+export const addMRFavorites = (blog_url) => {
+	const url = `/dev/st_data/blog_favortie_add`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	formData.append('blog', blog_url)
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export const removeMRFavorites = (blog_url) => {
+	const url = `/dev/st_data/blog_favortie_delete?blog=${blog_url}`
+	const headers = {
+			'Content-Type': 'application/json'
+	}
+	const data = {
+			blog: blog_url
+	}
+
+	return new Promise((resolve, reject) => {
+			axios
+					.delete(url, {
+							headers,
+							data, // 通过请求体发送数据
+							withCredentials: true
+					})
+					.then(res => {
+							resolve(res)
+					})
+					.catch(err => {
+							reject(err)
+					})
+	})
+}
+export const getMRFavoritesList = (filtersObj) => {
+	let path = '/dev/st_data/blog_favortie_list'
+// 过滤掉 undefined, null, '' 的属性
+const filteredFiltersObj = Object.fromEntries(
+	Object.entries(filtersObj).filter(([key, value]) => value !== undefined && value !== null && value !== '')
+);
+// 转换为查询参数
+const queryParams = new URLSearchParams(filteredFiltersObj).toString();
+// 如果有查询参数，将它们附加到路径上
+if (queryParams) {
+	path += `?${queryParams}`;
+}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* Blog Report END*/

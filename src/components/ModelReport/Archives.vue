@@ -12,12 +12,19 @@
                     v-model="start_date"
                     type="date"
                     size="small"
+                    @change="changeDate"
+						        value-format="yyyy-MM-dd"
+                  :picker-options="startPickerOptions"
                     placeholder="Select Start Date">
                   </el-date-picker>
+                 <span class="date-picker-span">-</span>
                   <el-date-picker
                     v-model="end_date"
                     type="date"
                     size="small"
+                    @change="changeDate"
+						        value-format="yyyy-MM-dd"
+                 :picker-options="endPickerOptions"
                     placeholder="Select End Date">
                   </el-date-picker>
                 </div>
@@ -153,7 +160,7 @@
 </template>
 
 <script>
-import PreviousNextPage from './component/PreviousNextPage'; // 假设你有这个分页组件
+import PreviousNextPage from './component/PreviousNextPage';
 import { timestampToTime } from "@/utils";
 import { getBlogReportList } from "@/service/service";
 
@@ -168,7 +175,15 @@ export default {
       nextPage: 2,
       total: 0,
       serviceType: '',
-      blogPosts: []
+      blogPosts: [],
+      start_date: null,
+      end_date: null,
+      startPickerOptions: {
+        disabledDate: this.handleDisabledStartDate
+      },
+      endPickerOptions: {
+        disabledDate: this.handleDisabledEndDate
+      },
     };
   },
   computed: {
@@ -176,11 +191,12 @@ export default {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
     else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else if(this.serviceType.toLowerCase() === 'tradingedge') return 'tradingedge';
     else return this.serviceType.toLowerCase();
    }
  },
   beforeRouteEnter(to, from, next) {
-  if (to.path.includes('/MR/archives') && ['sentimentedge', 'kaeppelscorner', 'modeledge'].includes(to.params.serviceType)) {
+  if (to.path.includes('/MR/archives') && ['sentimentedge', 'kaeppelscorner', 'modeledge','tradingedge'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const page = to.params.page || ''
@@ -193,6 +209,9 @@ export default {
       }else if(serviceType === 'modeledge') {
         _this.title = `ModelEdge Archives${page ?  ` - Page ${page}`: ''}`
         _this.serviceType = 'modeledge'
+      }else if(serviceType === 'tradingedge') {
+        _this.title = `TradingEdge Archives${page ?  ` - Page ${page}`: ''}`
+        _this.serviceType = 'tradingedge'
       }
       debugger
       const {data: {results, count, previous, next}} = await getBlogReportList({
@@ -233,7 +252,46 @@ export default {
     truncate(text, length) {
       // 实现字符串截断逻辑
       return text.length > length ? text.slice(0, length) + '...' : text;
-    }
+    },
+    async changeDate(val) {
+      console.log(val);
+      console.log(this.start_date, this.end_date);
+      const _this = this
+      const page = this.$route.params.page
+      const {data: {results, count, previous, next}} = await getBlogReportList({
+        user_level: _this.serviceType,
+        page: !page ? _this.currentPage : page,
+        start_date: _this.start_date,
+        end_date: _this.end_date
+      })
+
+      const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = count
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      _this.blogPosts = results
+    },
+    handleDisabledStartDate(time) {
+      const today = timestampToTime(new Date())
+      const endDay = timestampToTime(new Date(this.end_date))
+      // 如果endDate取消选择，则startDate可以选择全部
+      if(this.end_date){
+        return timestampToTime(time) >= endDay
+      }else{
+        return (timestampToTime(time) > today)
+      }
+    },
+    handleDisabledEndDate(time) {
+      const today = timestampToTime(new Date())
+      const startDay = timestampToTime(new Date(this.start_date))
+      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+    },
   }
 };
 </script>
@@ -274,9 +332,12 @@ a:hover {
   background-color: #009769;
 }
 .date-picker /deep/ .el-input--prefix .el-input__inner {
-  padding-left: 0px;
+  margin-left: 0px;
 }
 .date-picker /deep/ .el-input--suffix .el-input__inner {
-  padding-right: 0px;
+  margin-left: 0px;
+}
+.date-picker .date-picker-span {
+  margin: 0px 5px;
 }
 </style>

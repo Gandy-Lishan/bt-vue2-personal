@@ -251,9 +251,14 @@ const routes = [
 					require(['@/components/ModelReport/ActiveStudies.vue'], resolve)
 			},
 			{
-				path: '/MR/actived_studies',
+				path: '/MR/archived_studies',
 				component: resolve =>
 					require(['@/components/ModelReport/ArchivedStudies.vue'], resolve)
+			},
+			{
+				path: '/MR/favorites',
+				component: resolve =>
+					require(['@/components/ModelReport/Favorites.vue'], resolve)
 			},
 			{
 				path: '/MR/archives/:serviceType(\\w+)/:page?',

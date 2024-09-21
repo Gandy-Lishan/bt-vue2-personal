@@ -73,8 +73,8 @@
           >
             <thead>
               <tr>
-                <th :class="getSortClass('date')" @click="sortTable('date')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="descending" aria-label="Date: activate to sort column ascending" style="width: 71px;">Date</th>
-                <th :class="getSortClass('title')"  @click="sortTable('title')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending" style="width: 374px;">Report Title</th>
+                <th :class="getSortClass('date')" @click="sortTable('date')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="descending" aria-label="Date: activate to sort column ascending" style="width: 75px;">Date</th>
+                <th :class="getSortClass('title')"  @click="sortTable('title')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending" style="width: 370px;">Report Title</th>
                 <th :class="getSortClass('market')"  @click="sortTable('market')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Market: activate to sort column ascending" style="width: 72px;">Market</th>
                 <th :class="getSortClass('forecast')"  @click="sortTable('forecast')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Forecast: activate to sort column ascending" style="width: 69px;">Forecast</th>
                 <th tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Outcome: activate to sort column ascending" style="width: 74px;">Outcome</th>
@@ -92,7 +92,7 @@
                 </td>
 
                 <td>
-                  <a
+                  <!-- <a
                     v-if="typeof index === 'string' && index.endsWith('-blog')"
                     :href="`/public/blog_post/${forecast.filename}`"
                     target="_blank"
@@ -107,7 +107,10 @@
                     class="item-name primary-link"
                   >
                     {{ forecast.title }}
-                  </a>
+                  </a> -->
+                  <a :href="forecastLink(forecast)" target="_blank" class="item-name primary-link">
+                  {{ forecast.title }}
+                </a>
                 </td>
 
                 <td>
@@ -178,36 +181,75 @@
             </tbody>
             </table>
             <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing {{start}} to {{end}} of {{total}} entries</div>
-                <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
-                  <a class="paginate_button previous" 
-                    :class="{ disabled: currentPage === 1 }"
-                    @click="prevPage">Previous</a>
-                    <template>
-                      <span>
-                        <template v-for="page in totalPages">
-                          <!-- 显示页码 -->
-                          <a
-                            v-if="shouldDisplayPage(page)"
-                            :key="page"
-                            class="paginate_button"
-                            :class="{ current: currentPage === page }"
-                            @click="goToPage(page)">
-                            {{ page }}
-                          </a>
-                          <!-- 后面的省略号 -->
-                          <span v-if="!shouldDisplayPage(page)" :key="page" class="ellipsis">…</span>
-                        </template>
-                      </span>
-                    </template>
-                  <a class="paginate_button next" 
-                    :class="{ disabled: currentPage === totalPages }"
-                    @click="nextPage">Next</a>
-                </div>
-            </div>
+              <div class="dataTables_paginate paging_simple_numbers" id="example_paginate" style="display:inline-flex;justify-content:space-between;">
+                <a
+                  class="paginate_button previous"
+                  :class="{ disabled: currentPage === 1 }"
+                  @click="prevPage"
+                >
+                Previous
+                </a>
+                <div class="pagination" style="flex-grow:1;text-align:center">
+                  <!-- 显示第一页的链接，如果当前页不在第一页 -->
+                  <a 
+                    v-if="currentPage > 5" 
+                    class="paginate_button"
+                    :class="{ current: currentPage === 1 }"
+                    @click="goToPage(1)"
+                  >
+                    1
+                  </a>
+                <span v-if="currentPage > 6">...</span>
+                <!-- 显示当前页前的两页 -->
+                <a 
+                  v-for="pageNum in getPageRange(currentPage - 4, currentPage - 1)" 
+                  :key="pageNum" 
+                  v-if="pageNum > 0" 
+                  class="paginate_button" 
+                  :class="{ current: currentPage === pageNum }"
+                  @click="goToPage(pageNum)"
+                >
+                  {{ pageNum }}
+                </a>
+                <!-- 当前页 -->
+                <a class="paginate_button current" href="#">{{ currentPage }}</a>
+                    <!-- 显示当前页后的两页 -->
+                <a 
+                  v-for="pageNum in getPageRange(currentPage + 1, currentPage + 4)" 
+                  :key="pageNum" 
+                  v-if="pageNum <= totalPages" 
+                  class="paginate_button"
+                  :class="{ current: currentPage === pageNum }"
+                  @click="goToPage(pageNum)"
+                >
+                  {{ pageNum }}
+                </a>
+                <!-- 显示最后一页的链接，如果当前页不在最后几页 -->
+                <span v-if="currentPage < totalPages - 5">...</span>
+                <a 
+                  v-if="currentPage < totalPages - 4" 
+                  class="paginate_button" 
+                  :class="{ current: currentPage === pageNum }"
+                  @click="goToPage(pageNum)"
+                >
+                  {{ totalPages }}
+                </a>
+              </div>
+              <!-- 下一页 -->
+              <a 
+                v-if="currentPage < totalPages" 
+                class="paginate_button" 
+                style="float:right;align-self:center" 
+                @click="nextPage"
+              >
+                next page &rarr;
+              </a>
+              </div>
           </div>
         </div>
       </div>
     </div>
+    <AboutUs></AboutUs> 
   </div>
 </template>
 
@@ -225,6 +267,7 @@ export default {
    return {
     title: 'Archived Studies',
     forecasts: [],
+    filterData: [],
     start: 1,
     end: 25,
     currentPage: 1,
@@ -240,30 +283,28 @@ export default {
  },
  computed: {
     totalPages() {
-      return Math.ceil(this.forecasts.length / this.perPage)
+      return Math.ceil(this.filterData.length / this.perPage)
     },
     paginatedData() {
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
       this.start = start + 1
       this.end = end
-      return this.forecasts.slice(start, end); 
+      return this.filterData.slice(start, end); 
     },
     total() {
-      return this.forecasts.length
+      return this.filterData.length
     },
-    showEllipsisEnd() {
-      return this.totalPages > 7; // 如果当前页小于倒数第 4 页，显示后面的省略号
-    }
   },
  beforeRouteEnter(to, from, next) {
-  if (to.path === '/MR/actived_studies') {
+  if (to.path === '/MR/archived_studies') {
     next(async _this => {
-      const {data: active_studies} = await getArchivedStudies()
-      console.log('actived_studies', active_studies)
-      _this.forecasts = active_studies
-      let _market = [...new Set(_this.forecasts.map(item => item.market))].map(item => ({label: item.toUpperCase(), value: item}))
-      let _timeframe = [...new Set(_this.forecasts.map(item => item.timeframe))].map(item => ({label: item, value: item}))
+      const {data: archived_studies} = await getArchivedStudies()
+      console.log('archived_studies', archived_studies)
+      _this.forecasts = archived_studies
+      _this.filterData = _this.forecasts
+      let _market = [...new Set(_this.filterData.map(item => item.market))].map(item => ({label: item.toUpperCase(), value: item}))
+      let _timeframe = [...new Set(_this.filterData.map(item => item.timeframe))].map(item => ({label: item, value: item}))
       _market.unshift({label: '----', value: ''})
       _timeframe.unshift({label: '----', value: ''})
       _this.marketOptions = _market
@@ -281,12 +322,7 @@ export default {
      // 处理取消订阅逻辑
    },
    forecastLink(forecast) {
-    //  if (forecast.index.endsWith('-blog')) {
-    //    return `/public/blog_post/${forecast.filename}`;
-    //  } else {
-    //    return `/user/download_file/${forecast.filename}`;
-    //  }
-    return ''
+    return `https://sentimentrader.com/blog/${forecast.filename}`;
    },
    goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {
@@ -325,7 +361,7 @@ export default {
       // 判断是否需要排序
       if (!this.currentSortColumn) return
       console.log('currentSortColumn', this.currentSortColumn)
-      this.forecasts.sort((a, b) => {
+      this.filterData.sort((a, b) => {
         const key = this.currentSortColumn;
         const isAsc = this.currentSortDirection === 'descending';
 
@@ -336,7 +372,7 @@ export default {
     },
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
-		  this.forecasts = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+		  this.filterData = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
     },
     filterTimeFrame(searchResult){
       if (this.timeframeFilter) {
@@ -379,10 +415,13 @@ export default {
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
-    shouldDisplayPage(page) {
-      // 始终显示第一页、最后一页、当前页及其相邻的页码
-      return page <= 7 || page === this.totalPages
-    },
+    getPageRange(start, end) {
+     let range = [];
+     for (let i = start; i <= end; i++) {
+       range.push(i);
+     }
+     return range;
+   }
  }
 };
 </script>
