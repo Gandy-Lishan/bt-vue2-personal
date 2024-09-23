@@ -225,7 +225,7 @@ export default {
     })
     } else {
       next(_this => {
-        _this.selectedTitle = ''
+        _this.selectedTitle = 'sentimentedge'
         _this.$router.push({
           path: '/MR/sentimentedge'
         })
