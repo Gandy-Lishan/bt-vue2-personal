@@ -110,7 +110,7 @@
                      :key="post.url"
                    >
                      <h1 class="blog-single-head-title">
-                       <a :href="`/MR/${serviceType}/${post.url}`">
+                       <a  href="javascript:void(0)" @click.prevent="goToModelReport(post.url)">
                          {{ post.title }}
                        </a>
                        <!-- <router-link :to="{ name: 'blogPost', params: { slug: post.url } }">
@@ -161,7 +161,7 @@
 
 <script>
 import { timestampToTime } from "@/utils";
-import { getMRFavoritesList } from "@/service/service";
+import { getMRFavoritesList, getBlogReportInfo} from "@/service/service";
 import PreviousNextPage from './component/PreviousNextPage';
 
 export default {
@@ -221,6 +221,11 @@ export default {
    }
  },
  methods: {
+  async goToModelReport(url) {
+    const {data: latestPost } = await getBlogReportInfo(url)
+    console.log(latestPost.user_level);
+    window.location.href = `/MR/${latestPost.user_level}/${url}`;
+  },
    formatDate(date) {
     if(!date) return ''
     return `${timestampToTime(date)}`
