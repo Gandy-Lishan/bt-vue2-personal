@@ -180,7 +180,7 @@
               </tr>
             </tbody>
             </table>
-            <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing {{start}} to {{end}} of {{total}} entries</div>
+            <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing {{start}} to {{total >= perPage ? end : total }} of {{total}} entries</div>
               <div class="dataTables_paginate paging_simple_numbers" id="example_paginate" style="display:inline-flex;justify-content:space-between;">
                 <a
                   class="paginate_button previous"
@@ -303,8 +303,13 @@ export default {
       console.log('archived_studies', archived_studies)
       _this.forecasts = archived_studies
       _this.filterData = _this.forecasts
-      let _market = [...new Set(_this.filterData.map(item => item.market))].map(item => ({label: item.toUpperCase(), value: item}))
-      let _timeframe = [...new Set(_this.filterData.map(item => item.timeframe))].map(item => ({label: item, value: item}))
+      let _market = [...new Set(_this.filterData.map(item => item.market))]
+                    .map(item => ({ label: item.toUpperCase(), value: item }))
+                    .sort((a, b) => a.label.trim().toLowerCase().localeCompare(b.label.trim().toLowerCase()))
+                    const priority = ['Short-Term', 'Medium-Term', 'Long-Term'];
+      let _timeframe = [...new Set(_this.filterData.map(item => item.timeframe))]
+                      .map(item => ({ label: item, value: item }))
+                      .sort((a, b) => priority.indexOf(a.label) - priority.indexOf(b.label))
       _market.unshift({label: '----', value: ''})
       _timeframe.unshift({label: '----', value: ''})
       _this.marketOptions = _market
