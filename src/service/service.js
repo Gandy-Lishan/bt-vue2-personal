@@ -1588,15 +1588,13 @@ export const removeMRFavorites = (blog_url) => {
 	const headers = {
 			'Content-Type': 'application/json'
 	}
-	const data = {
-			blog: blog_url
-	}
+	const formData = new FormData()
+	formData.append('blog', blog_url)
 
 	return new Promise((resolve, reject) => {
 			axios
-					.delete(url, {
+					.post(url, formData, {
 							headers,
-							data, // 通过请求体发送数据
 							withCredentials: true
 					})
 					.then(res => {
