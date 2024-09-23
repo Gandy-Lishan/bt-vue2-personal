@@ -92,9 +92,6 @@ methods:{
 
 <style lang="less" scoped>
 .chart-wrapper {
-
-	border: none;
-
 	resize: none;
 }
 </style>

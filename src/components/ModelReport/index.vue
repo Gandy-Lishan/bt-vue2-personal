@@ -23,7 +23,7 @@
               <h4 @click="selectedTitle = 'archived_studies'" :class="{ 'selected': selectedTitle === 'archived_studies' }">Archived Studies</h4>
             </a>
             <a :href="generatedLink()">
-              <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report Archives</h4>
+              <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report</h4>
             </a>
             <a :href="`/MR/active_studies`">
               <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>

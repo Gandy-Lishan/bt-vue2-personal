@@ -216,6 +216,8 @@ export default {
       debugger
       const {data: {results, count, previous, next}} = await getBlogReportList({
         user_level: serviceType,
+        start_date: _this.start_date,
+        end_date: _this.end_date,
         page: !page ? _this.currentPage : page
       })
 

@@ -148,6 +148,7 @@
                    </div>
                  </div>
 
+                 <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
                </div>
              </div>
            </div>
@@ -161,6 +162,7 @@
 <script>
 import { timestampToTime } from "@/utils";
 import { getMRFavoritesList } from "@/service/service";
+import PreviousNextPage from './component/PreviousNextPage';
 
 export default {
  name: 'Favorites',
@@ -187,15 +189,32 @@ export default {
  beforeRouteEnter(to, from, next) {
  if (to.path.includes('/MR/favorites')) {
    next(async _this => {
-     debugger
-     const {data: favorites} = await getMRFavoritesList({})
-     _this.blogPosts = favorites
+     const page = to.params.page || ''
+     const {data: {results, count, previous, next}} = await getMRFavoritesList({
+      start_date: _this.start_date,
+      end_date: _this.end_date,
+      page: !page ? _this.currentPage : page
+     })
+     const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = count
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      _this.blogPosts = results
      
    })
    } else {
      next()
    }
  },
+ components: {
+    PreviousNextPage
+  },
  computed: {
    bodyClass() {
      return 'page-sidebar-closed-hide-logo';

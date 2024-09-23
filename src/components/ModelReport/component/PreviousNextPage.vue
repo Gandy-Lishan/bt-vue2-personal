@@ -23,34 +23,36 @@
      <span v-if="currentPage > 6">...</span>
 
      <!-- 显示当前页前的两页 -->
-     <a 
+      <template v-if="pageNum > 0">
+      <a 
        v-for="pageNum in getPageRange(currentPage - 4, currentPage - 1)" 
        :key="pageNum" 
-       v-if="pageNum > 0" 
        class="btn grey-cascade" 
        :href="`/MR/archives/${requestedType}/${pageNum}`"
-     >
-       {{ pageNum }}
-     </a>
+      >
+        {{ pageNum }}
+      </a>
+      </template>
 
      <!-- 当前页 -->
      <a class="btn grey-cascade active" href="#">{{ currentPage }}</a>
 
      <!-- 显示当前页后的两页 -->
-     <a 
-       v-for="pageNum in getPageRange(currentPage + 1, currentPage + 4)" 
-       :key="pageNum" 
-       v-if="pageNum <= total" 
-       class="btn grey-cascade" 
-       :href="`/MR/archives/${requestedType}/${pageNum}`"
-     >
-       {{ pageNum }}
-     </a>
+      <template v-if="pageNum <= total">
+        <a 
+        v-for="pageNum in getPageRange(currentPage + 1, currentPage + 4)" 
+        :key="pageNum" 
+        class="btn grey-cascade" 
+        :href="`/MR/archives/${requestedType}/${pageNum}`"
+        >
+          {{ pageNum }}
+        </a>
+      </template>
 
      <!-- 显示最后一页的链接，如果当前页不在最后几页 -->
      <span v-if="currentPage < total - 5">...</span>
      <a 
-       v-if="currentPage < total - 4" 
+       v-if="currentPage < total - 4 && total > 10"
        class="btn grey-cascade" 
        :href="`/MR/archives/${requestedType}/${total}`"
      >
