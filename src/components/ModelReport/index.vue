@@ -1,7 +1,7 @@
 <template>
   <div class="ModelReport">
     <div class="container">
-      <div class="strategy-header">
+      <div class="strategy-header MRHeader" :class="{ 'fixed': isHeaderFixed }" ref="MRHeader">
         <div class="tableHeader">
           <div class="headerSelect">
             <a :href="`/MR/sentimentedge`">
@@ -28,7 +28,6 @@
             <a :href="`/MR/active_studies`">
               <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
             </a>
-            <h4></h4>
           </div>
           <div class="search-container">
             <Search></Search>
@@ -171,7 +170,10 @@ export default {
     ],
     archivesStudies: 'Archived Studies',
     selectedTitle: 'sentimentedge',
-    currentYear: (new Date()).getFullYear()
+    currentYear: (new Date()).getFullYear(),
+    isHeaderFixed: false,
+    lastScrollY: 0,
+    scrollingUp: false,
   }
  },
  watch: {
@@ -191,6 +193,12 @@ export default {
         return `/MR/archived_reports/${this.currentYear}`
       }
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
  beforeRouteEnter(to, from, next) {
   const isPathSubstring = (paths, toPath) => {
@@ -261,6 +269,21 @@ export default {
         return `/MR/archived_reports/${this.currentYear}`;
       }
     },
+    handleScroll() {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > this.lastScrollY) {
+        // 向上滚动，显示并固定 header
+        this.scrollingUp = true;
+        this.isHeaderFixed = true;
+      } else {
+        // 向下滚动，隐藏 header
+        this.scrollingUp = false;
+        this.isHeaderFixed = false;
+      }
+
+      this.lastScrollY = currentScrollY;
+    },
   }
 }
 </script>
@@ -271,13 +294,15 @@ export default {
 .strategy-header {
 	display: flex;
 	align-items: flex-end;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 	.tableHeader {
     position: relative;
     display: flex;
     align-items: flex-end;
+    justify-content: center;
     width: 100%;
-    border-bottom: 2px solid #e9e9e9;
-    margin: 20px 0 10px 0;
 	}
 	.searchBox {
     display: flex;
@@ -288,8 +313,7 @@ export default {
     }
 	}
 	h4 {
-    margin: 0;
-    margin-right: 20px;
+    margin: 0 5px;
     padding: 10px 0;
     cursor: pointer;
     font-weight: bold;
@@ -306,6 +330,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     a {
       text-decoration: none;
       color: #333;
@@ -318,5 +343,46 @@ export default {
       width: 145px;
     }
 	}
+}
+// .strategy-header {
+//   position: relative;
+// }
+.MRHeader {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  transition: transform 0.3s ease; /* 平滑的过渡效果 */
+}
+.MRHeader.fixed {
+  top: 79px;
+}
+
+.MRHeader.fixed {
+  position: fixed;
+  transform: translateY(0); /* 固定在页面顶部 */
+}
+
+.MRHeader:not(.fixed) {
+  transform: translateY(-100%); /* 隐藏 header */
+  box-shadow: none;
+  position: relative;
+  border-bottom: 2px solid rgba(233, 233, 233);
+}
+@media (min-width: 768px) {
+  .strategy-header.fixed .tableHeader {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .strategy-header.fixed .tableHeader {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .strategy-header.fixed .tableHeader {
+    width: 1170px;
+  }
 }
 </style>
