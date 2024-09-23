@@ -70,9 +70,15 @@ methods:{
     let timeframeBtn = document.querySelector('.ciq-period')
     //let footer = document.querySelector('.ciq-footer')
 
-    //search.style.visibility = 'hidden'
-    indicatorSearch.style.visibility = 'hidden'
-    studies.style.visibility = 'hidden'
+    //如果是ActiveStudies, 屏幕较窄, 用display代替visibility
+    if(this.$route.name=='ActiveStudies'){
+      indicatorSearch.style.display = 'none'
+      studies.style.display = 'none'
+    }else{
+      indicatorSearch.style.visibility = 'hidden'
+      studies.style.visibility = 'hidden'
+    }
+    
     favBtnContainer.style.display = 'none'
     timeframeBtn.style.display = 'none'
     // footer.style.display = 'none'

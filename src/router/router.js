@@ -247,6 +247,7 @@ const routes = [
 		children: [
 			{
 				path: '/MR/active_studies',
+				name: 'ActiveStudies',
 				component: resolve =>
 					require(['@/components/ModelReport/ActiveStudies.vue'], resolve)
 			},
