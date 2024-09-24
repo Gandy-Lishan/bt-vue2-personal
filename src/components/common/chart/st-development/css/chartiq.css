@@ -6343,3 +6343,11 @@ cq-context.full-screen cq-drawing-palette .tool-group {
     overflow: auto !important; } }
 
 /*# sourceMappingURL=chartiq.css.map */
+
+
+.ciq-display .ps {
+  transform: translateX(-99px);
+}
+.ciq-preferences {
+  padding: 0 15px 0 10px;
+}
