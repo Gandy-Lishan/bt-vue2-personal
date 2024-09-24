@@ -441,7 +441,6 @@ let hoveredMarkerInfo = null;
 let isHovered = false;  // 标志位，防止重复触发
 /** Report page */
 CIQ.createForecastMarker = async function(){
-	console.log('createForecastMarker')
 	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
 	await CIQ.store.dispatch('chart/get_forecast_author_list',[...new Set(list.map(item=>item.author))])
 	const bullishList = list.filter(i=>i.forecast == 'Up')
