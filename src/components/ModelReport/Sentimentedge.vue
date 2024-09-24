@@ -280,7 +280,7 @@ export default {
  }
 }
 @media (min-width: 992px) {
- .container {
+ .container{
    width: 970px;
  }
 }

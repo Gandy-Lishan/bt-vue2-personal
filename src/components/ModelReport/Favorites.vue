@@ -110,7 +110,7 @@
                      :key="post.url"
                    >
                      <h1 class="blog-single-head-title">
-                       <a :href="`/MR/${serviceType}/${post.url}`">
+                       <a  href="javascript:void(0)" @click.prevent="goToModelReport(post.url)">
                          {{ post.title }}
                        </a>
                        <!-- <router-link :to="{ name: 'blogPost', params: { slug: post.url } }">
@@ -118,14 +118,11 @@
                        </router-link> -->
                      </h1>
                      <div class="blog-single-head-date">
-                       <i class="icon-calendar font-bluesteel"></i>
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
                        {{ formatDate(post.post_date) }}
-                       <!-- <span v-if="post.author === ''">
-                         | <i class="icon-user font-bluesteel"></i>
-                         <router-link :to="{ name: 'authorBlogs', params: { author: 'Jason Goepfert' } }">
-                           Jason Goepfert
-                         </router-link>
-                       </span> -->
+                       <span>
+                         | {{post.author}}
+                       </span>
                      </div>
                      <div class="row" style="margin-bottom:10px;">
                          <article>
@@ -148,6 +145,7 @@
                    </div>
                  </div>
 
+                 <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
                </div>
              </div>
            </div>
@@ -160,7 +158,8 @@
 
 <script>
 import { timestampToTime } from "@/utils";
-import { getMRFavoritesList } from "@/service/service";
+import { getMRFavoritesList, getBlogReportInfo} from "@/service/service";
+import PreviousNextPage from './component/PreviousNextPage';
 
 export default {
  name: 'Favorites',
@@ -172,7 +171,7 @@ export default {
      currentPage: 1, // 当前页码
      nextPage: 2,
      total: 0,
-     serviceType: 'blog',
+     serviceType: 'favorites',
      blogPosts: [],
      start_date: null,
      end_date: null,
@@ -185,23 +184,50 @@ export default {
    };
  },
  beforeRouteEnter(to, from, next) {
- if (to.path.includes('/MR/favorites')) {
+  const isPathSubstring = (paths, toPath) => {
+    return paths.some(path => toPath.includes(path))
+  }
+ if ((isPathSubstring(['/MR/favorites'], to.path))) {
    next(async _this => {
+     const page = to.params.page || ''
      debugger
-     const {data: favorites} = await getMRFavoritesList({})
-     _this.blogPosts = favorites
+     const {data: {results, count, previous, next}} = await getMRFavoritesList({
+      start_date: _this.start_date,
+      end_date: _this.end_date,
+      page: !page ? _this.currentPage : page
+     })
+     const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = Math.ceil(Number(count) / 10)
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      if(page) _this.currentPage = Number(page)
+      _this.blogPosts = results
      
    })
    } else {
      next()
    }
  },
+ components: {
+    PreviousNextPage
+  },
  computed: {
    bodyClass() {
      return 'page-sidebar-closed-hide-logo';
    }
  },
  methods: {
+  async goToModelReport(url) {
+    const {data: latestPost } = await getBlogReportInfo(url)
+    console.log(latestPost.user_level);
+    window.location.href = `/MR/${latestPost.user_level}/${url}`;
+  },
    formatDate(date) {
     if(!date) return ''
     return `${timestampToTime(date)}`
@@ -242,10 +268,11 @@ export default {
        const match = url.match(regex)
        return match ? match[1] : null
      }
-     _this.total = count
+     _this.total = Math.ceil(Number(count) / 10)
      _this.previousPage = getPageValue(previous)
      _this.nextPage = getPageValue(next)
      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+     if(page) _this.currentPage = Number(page)
      _this.blogPosts = results
    }
  }

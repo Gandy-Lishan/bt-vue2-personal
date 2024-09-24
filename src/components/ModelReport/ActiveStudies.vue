@@ -216,8 +216,8 @@
               <a 
                 v-if="currentPage < totalPages - 4" 
                 class="paginate_button" 
-                :class="{ current: currentPage === pageNum }"
-                @click="goToPage(pageNum)"
+                :class="{ current: currentPage ===  totalPages}"
+                @click="goToPage(totalPages)"
               >
                 {{ totalPages }}
               </a>
@@ -302,8 +302,9 @@ export default {
   if (to.path === '/MR/active_studies') {
     next(async _this => {
       const {data: {active_studies, short_term_bearish, short_term_bullish, med_term_bearish, med_term_bullish, long_term_bearish, long_term_bullish, premium_notes, daily_reports, basic_notes, active_research}} = await getActiveStudies()
-      console.log('active_studies', active_studies)
-      _this.forecasts = active_studies
+      _this.forecasts = active_studies.sort((a,b) => {
+        return new Date(b['date']) - new Date(a['date'])
+      })
       _this.filterData = _this.forecasts
       let _market = [...new Set(_this.filterData.map(item => item.market))]
                     .map(item => ({ label: item.toUpperCase(), value: item }))
@@ -392,6 +393,7 @@ export default {
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
 		  this.filterData = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+      if(this.currentPage != 1) this.currentPage = 1
       debugger
     },
     filterTimeFrame(searchResult){

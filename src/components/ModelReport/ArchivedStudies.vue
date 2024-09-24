@@ -229,8 +229,8 @@
                 <a 
                   v-if="currentPage < totalPages - 4" 
                   class="paginate_button" 
-                  :class="{ current: currentPage === pageNum }"
-                  @click="goToPage(pageNum)"
+                  :class="{ current: currentPage === totalPages }"
+                  @click="goToPage(totalPages)"
                 >
                   {{ totalPages }}
                 </a>
@@ -301,7 +301,9 @@ export default {
     next(async _this => {
       const {data: archived_studies} = await getArchivedStudies()
       console.log('archived_studies', archived_studies)
-      _this.forecasts = archived_studies
+      _this.forecasts = archived_studies.sort((a,b) => {
+        return new Date(b['date']) - new Date(a['date'])
+      })
       _this.filterData = _this.forecasts
       let _market = [...new Set(_this.filterData.map(item => item.market))]
                     .map(item => ({ label: item.toUpperCase(), value: item }))
@@ -378,6 +380,7 @@ export default {
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
 		  this.filterData = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+      if(this.currentPage != 1) this.currentPage = 1
     },
     filterTimeFrame(searchResult){
       if (this.timeframeFilter) {
@@ -395,6 +398,7 @@ export default {
         return searchResult
       }
 	  },
+
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
