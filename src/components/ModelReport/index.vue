@@ -29,9 +29,6 @@
               <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
             </a>
           </div>
-          <div class="search-container">
-            <Search></Search>
-          </div>
         </div>
       </div>
     </div>
@@ -233,10 +230,12 @@ export default {
     })
     } else {
       next(_this => {
-        _this.selectedTitle = 'sentimentedge'
-        _this.$router.push({
-          path: '/MR/sentimentedge'
-        })
+        if(!to.path.includes('/MR/tags')) {
+          _this.selectedTitle = 'sentimentedge'
+          _this.$router.push({
+            path: '/MR/sentimentedge'
+          })
+        }
       })
     }
   },

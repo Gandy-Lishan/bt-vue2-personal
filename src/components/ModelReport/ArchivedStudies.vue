@@ -4,9 +4,9 @@
       <div class="row">
         <div class="col-md-12">
           <div class="page-head">
-            <h1 v-html="title" class="page-title"></h1>
+            <!-- <h1 v-html="title" class="page-title"></h1> -->
           </div>
-          <hr />
+          <!-- <hr /> -->
           <p>
             This page lists studies that were provided in a Daily Report. At the time
             of the report, the study forecasted a market direction (up, down, or flat)
@@ -680,5 +680,8 @@ h4 {
 .filter-div .select-option span {
   font-size: 14px;
   margin-right: 5px
+}
+.page-head {
+  padding-top: 20px;
 }
 </style>

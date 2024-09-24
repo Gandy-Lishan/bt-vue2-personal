@@ -5,11 +5,11 @@
     <div class="col-md-12 col-sm-12">
      <div class="content-page">
       <div class="page-head">
-        <div class="page-title">
-          <h1 v-html="title"></h1>
-        </div>
+        <!-- <div class="page-title"> -->
+          <!-- <h1 v-html="title"></h1> -->
+        <!-- </div> -->
       </div>
-      <hr />
+      <!-- <hr /> -->
       <!-- <div class="row thumbnail">
        <div class="col-md-9">
         <p>As a premium subscriber, you have the option to subscribe to our Study Alerts. These alerts will be emailed out 
@@ -693,5 +693,8 @@ h4 {
 .filter-div .select-option span {
   font-size: 14px;
   margin-right: 5px
+}
+.page-head {
+  padding-top: 35px;
 }
 </style>

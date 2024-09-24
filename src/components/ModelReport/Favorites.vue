@@ -6,7 +6,7 @@
          <div class="col-md-12 col-sm-12">
            <div class="content-page">
              <div class="page-head">
-               <h1 class="page-title">{{ title }}</h1>
+               <!-- <h1 class="page-title">{{ title }}</h1> -->
                <div class="date-picker">
                  <el-date-picker
                    v-model="start_date"
@@ -28,6 +28,7 @@
                    placeholder="Select End Date">
                  </el-date-picker>
                </div>
+             <Search></Search>
              </div>
              <hr />
              <div class="row margin-bottom-30">
@@ -160,6 +161,7 @@
 import { timestampToTime } from "@/utils";
 import { getMRFavoritesList, getBlogReportInfo} from "@/service/service";
 import PreviousNextPage from './component/PreviousNextPage';
+import Search from "./component/Search";
 
 export default {
  name: 'Favorites',
@@ -215,7 +217,8 @@ export default {
    }
  },
  components: {
-    PreviousNextPage
+    PreviousNextPage,
+    Search
   },
  computed: {
    bodyClass() {
@@ -322,5 +325,11 @@ a:hover {
 }
 .date-picker .date-picker-span {
   margin: 0px 5px;
+}
+.page-head {
+  display: flex;
+  padding-top: 35px;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

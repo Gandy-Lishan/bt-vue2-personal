@@ -7,9 +7,9 @@
        <div class="col-md-12 col-sm-12">
          <div class="content-page">
           <div class="page-head">
-           <h1 v-html="title" class="page-title"></h1>
+           <!-- <h1 v-html="title" class="page-title"></h1> -->
           </div>
-           <hr />
+           <!-- <hr /> -->
            <div class="row margin-bottom-30">
              <!-- BEGIN INFO BLOCK -->
              <div class="col-md-9" :class="{ 'blog': serviceType === 'Blog' }">
@@ -317,5 +317,8 @@ export default {
   [ref="printableComponent"] {
     display: block;
   }
+}
+.page-head {
+  padding-top: 35px;
 }
 </style>

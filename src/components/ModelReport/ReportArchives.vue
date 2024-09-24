@@ -188,4 +188,7 @@ export default {
  box-shadow: none;
  text-shadow: none;
 }
+.page-head {
+  padding-top: 0px;
+}
 </style>
