@@ -3,7 +3,7 @@
    <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
-   <div class="left" ref="IndicatorTable">
+   <div class="indicator-left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
        <Table
         v-bind="$attrs"
@@ -106,7 +106,7 @@ export default {
  // position: relative;
  // display: flex;
 }
-.left {
+.indicator-left {
  // display: grid;
  // grid-template-columns: repeat(2, 1fr);
  // grid-template-rows: repeat(3, 1fr);

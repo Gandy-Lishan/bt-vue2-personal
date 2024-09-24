@@ -158,7 +158,6 @@ export default {
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-		console.log('TO', to, 'FROM', from)
   if (to.path.includes('/strategy/descriptions')) {
     next(async _this => {
 			const url = to?.query?.url

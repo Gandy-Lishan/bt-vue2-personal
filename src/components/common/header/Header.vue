@@ -112,7 +112,6 @@ export default {
   },
   watch: {
     '$route'(to, _) {
-      console.log('to', to)
       // 在$route对象变化时执行逻辑
       if (to.path.includes('/backtester') || to.name == 'Backtester') {
         this.activeIndex = '1'
@@ -131,7 +130,7 @@ export default {
         this.activeIndex = '9'
       }else if(to.path.includes('/portfolio') || to.name == 'Portfolio'){
         this.activeIndex = '11'
-      }else if(to.path.includes('/reports') || to.name == 'Reports'){
+      }else if(to.path.includes('/MR') || to.name == 'ModelReport'){
         this.activeIndex = '12'
       }else if(to.path.includes('/indicators') || to.name == 'Indicators'){
         this.activeIndex = '13'
@@ -207,7 +206,7 @@ export default {
         this.$router.push(path)
       }else if(key == '12') {
         path = this.$router.resolve({
-          path: '/reports'
+          path: '/MR/sentimentedge'
         }).href
         this.$router.push(path)
       }else if(key == '13') {

@@ -241,6 +241,48 @@ const routes = [
 		]
 	},
 	{
+		path: '/MR',
+		name: 'ModelReport',
+		component: resolve => require(['@/components/ModelReport/index.vue'], resolve),
+		children: [
+			{
+				path: '/MR/active_studies',
+				name: 'ActiveStudies',
+				component: resolve =>
+					require(['@/components/ModelReport/ActiveStudies.vue'], resolve)
+			},
+			{
+				path: '/MR/archived_studies',
+				component: resolve =>
+					require(['@/components/ModelReport/ArchivedStudies.vue'], resolve)
+			},
+			{
+				path: '/MR/favorites/:page?',
+				component: resolve =>
+					require(['@/components/ModelReport/Favorites.vue'], resolve)
+			},
+			{
+				path: '/MR/archives/:serviceType(\\w+)/:page?',
+				component: resolve =>
+					require(['@/components/ModelReport/Archives.vue'], resolve)
+			},
+			{
+				path: '/MR/tags/:blogTag/:page?',
+				component: resolve => require(['@/components/ModelReport/BlogTags.vue'], resolve)
+			},
+			{
+				path: '/MR/archived_reports/:year',
+				component: resolve =>
+					require(['@/components/ModelReport/ReportArchives.vue'], resolve)
+			},
+			{
+				path: '/MR/:serviceType(\\w+)/:reportUrl?',
+				component: resolve =>
+					require(['@/components/ModelReport/Sentimentedge.vue'], resolve)
+			},
+	]
+	},
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}

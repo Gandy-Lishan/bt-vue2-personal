@@ -171,16 +171,32 @@
 } */
 
 /* backteser edge forecast marker node style */
+@keyframes expandHeight {
+	from {
+		max-height: 100px;
+	}
+	to {
+		max-height: 1000px;
+	}
+}
+
 .forecast {
 	position: absolute;
-	opacity: .8;
+	opacity: .9;
 	text-align: center;
 	width: 176px;
 	color: #606060;
 	background-size: contain;
 	border-radius: 4px;
 	padding: 10px;
-  }
+	z-index: 1;
+	.pwrap {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 250ms ease-in-out;
+	}
+}
+
 .forecast.hidden {
 	display: none;
 }
@@ -188,7 +204,7 @@
 	border: solid;
 	content: "";
 	position: absolute;
-	z-index: 99;
+
   }
   .forecast.bullish {
 	background: #9be5b0;
@@ -200,10 +216,17 @@
   }
   .forecast.bullish:hover {
 	background: #62e687;
+	z-index: 2;
+	animation: expandHeight 2s ease forwards;
   }
   .forecast.bearish:hover{
 	background: #eba8a8;
+	z-index: 2;
+	.pwrap {
+		grid-template-rows: 1fr;
+	}
   }
+
   .forecast.bullish:before {
 	border-width: 0px 6px 11px 6px;
     top: -10px;
