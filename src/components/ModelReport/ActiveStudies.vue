@@ -393,6 +393,7 @@ export default {
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
 		  this.filterData = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+      if(this.currentPage != 1) this.currentPage = 1
       debugger
     },
     filterTimeFrame(searchResult){

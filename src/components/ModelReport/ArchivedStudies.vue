@@ -380,6 +380,7 @@ export default {
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
 		  this.filterData = this.filterMarket(this.filterTimeFrame(this.getSearchResult()))
+      if(this.currentPage != 1) this.currentPage = 1
     },
     filterTimeFrame(searchResult){
       if (this.timeframeFilter) {
@@ -397,6 +398,7 @@ export default {
         return searchResult
       }
 	  },
+
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
