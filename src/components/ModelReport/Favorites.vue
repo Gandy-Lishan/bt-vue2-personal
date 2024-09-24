@@ -118,14 +118,11 @@
                        </router-link> -->
                      </h1>
                      <div class="blog-single-head-date">
-                       <i class="icon-calendar font-bluesteel"></i>
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
                        {{ formatDate(post.post_date) }}
-                       <!-- <span v-if="post.author === ''">
-                         | <i class="icon-user font-bluesteel"></i>
-                         <router-link :to="{ name: 'authorBlogs', params: { author: 'Jason Goepfert' } }">
-                           Jason Goepfert
-                         </router-link>
-                       </span> -->
+                       <span>
+                         | {{post.author}}
+                       </span>
                      </div>
                      <div class="row" style="margin-bottom:10px;">
                          <article>
@@ -174,7 +171,7 @@ export default {
      currentPage: 1, // 当前页码
      nextPage: 2,
      total: 0,
-     serviceType: 'blog',
+     serviceType: 'favorites',
      blogPosts: [],
      start_date: null,
      end_date: null,
@@ -187,9 +184,13 @@ export default {
    };
  },
  beforeRouteEnter(to, from, next) {
- if (to.path.includes('/MR/favorites')) {
+  const isPathSubstring = (paths, toPath) => {
+    return paths.some(path => toPath.includes(path))
+  }
+ if ((isPathSubstring(['/MR/favorites'], to.path))) {
    next(async _this => {
      const page = to.params.page || ''
+     debugger
      const {data: {results, count, previous, next}} = await getMRFavoritesList({
       start_date: _this.start_date,
       end_date: _this.end_date,
@@ -201,10 +202,11 @@ export default {
         const match = url.match(regex)
         return match ? match[1] : null
       }
-      _this.total = count
+      _this.total = Math.ceil(Number(count) / 10)
       _this.previousPage = getPageValue(previous)
       _this.nextPage = getPageValue(next)
       if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      if(page) _this.currentPage = Number(page)
       _this.blogPosts = results
      
    })
@@ -266,10 +268,11 @@ export default {
        const match = url.match(regex)
        return match ? match[1] : null
      }
-     _this.total = count
+     _this.total = Math.ceil(Number(count) / 10)
      _this.previousPage = getPageValue(previous)
      _this.nextPage = getPageValue(next)
      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+     if(page) _this.currentPage = Number(page)
      _this.blogPosts = results
    }
  }

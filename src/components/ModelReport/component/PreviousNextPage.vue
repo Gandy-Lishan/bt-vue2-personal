@@ -5,7 +5,7 @@
      v-if="previousPage" 
      class="btn grey-cascade" 
      style="align-self:center" 
-     :href="`/MR/archives/${requestedType}/${previousPage}`"
+     :href="`/MR/${requestedType}/${previousPage}`"
    >
      &larr; previous page
    </a>
@@ -15,7 +15,7 @@
      <a 
        v-if="currentPage > 5" 
        class="btn grey-cascade" 
-       :href="`/MR/archives/${requestedType}`"
+       :href="`/MR/${requestedType}`"
      >
        1
      </a>
@@ -23,38 +23,37 @@
      <span v-if="currentPage > 6">...</span>
 
      <!-- 显示当前页前的两页 -->
-      <template v-if="pageNum > 0">
-      <a 
-       v-for="pageNum in getPageRange(currentPage - 4, currentPage - 1)" 
-       :key="pageNum" 
-       class="btn grey-cascade" 
-       :href="`/MR/archives/${requestedType}/${pageNum}`"
-      >
-        {{ pageNum }}
-      </a>
+      <template v-for="pageNum in getPageRange(currentPage - 4, currentPage)">
+        <a 
+          v-if="pageNum > 0 && pageNum != currentPage"
+          :key="pageNum" 
+          class="btn grey-cascade" 
+          :href="`/MR/${requestedType}/${pageNum}`"
+        >
+          {{ pageNum }}
+        </a>
       </template>
 
      <!-- 当前页 -->
      <a class="btn grey-cascade active" href="#">{{ currentPage }}</a>
 
      <!-- 显示当前页后的两页 -->
-      <template v-if="pageNum <= total">
         <a 
-        v-for="pageNum in getPageRange(currentPage + 1, currentPage + 4)" 
+        v-for="pageNum in getPageRange(currentPage + 1, currentPage + 5)" 
+        v-if="pageNum <= total"
         :key="pageNum" 
         class="btn grey-cascade" 
-        :href="`/MR/archives/${requestedType}/${pageNum}`"
+        :href="`/MR/${requestedType}/${pageNum}`"
         >
           {{ pageNum }}
         </a>
-      </template>
 
      <!-- 显示最后一页的链接，如果当前页不在最后几页 -->
      <span v-if="currentPage < total - 5">...</span>
      <a 
-       v-if="currentPage < total - 4 && total > 10"
+       v-if="currentPage < total - 4"
        class="btn grey-cascade" 
-       :href="`/MR/archives/${requestedType}/${total}`"
+       :href="`/MR/${requestedType}/${total}`"
      >
        {{ total }}
      </a>
@@ -65,7 +64,7 @@
      v-if="nextPage" 
      class="btn grey-cascade" 
      style="float:right;align-self:center" 
-     :href="`/MR/archives/${this.requestedType}/${nextPage}`"
+     :href="`/MR/${this.requestedType}/${nextPage}`"
    >
      next page &rarr;
    </a>
@@ -99,9 +98,9 @@ export default {
  },
  computed: {
    requestedType() {
-    if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
-    else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    if(this.serviceType.toLowerCase() === 'sentimentedge') return 'archives/sentimentedge';
+    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'archives/kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'modeledge') return 'archives/modeledge';
     else return this.serviceType.toLowerCase();
    }
  },
