@@ -7,22 +7,33 @@
             <!-- <h1 v-html="title" class="page-title"></h1> -->
           </div>
           <!-- <hr /> -->
-          <p>
-            This page lists studies that were provided in a Daily Report. At the time
-            of the report, the study forecasted a market direction (up, down, or flat)
-            and usually highlighted its most effective time frame, which has now
-            passed. Now that the study is "completed", it is graded from 1 star to 5
-            stars. A rating of 1 means the forecast was not accurate and a rating of 5
-            means the forecast was very accurate.
-          </p>
-          <p>
-            Forecast Legend:
-            <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i>
-            (Up),
-            <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i>
-            (Down),
-            <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
-          </p>
+          <div class="panel-group accordion">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <p class="page-title">Archived Studies Description</p>
+                </template>
+                <div class="centent">
+                  <p>
+                    This page lists studies that were provided in a Daily Report. At the time
+                    of the report, the study forecasted a market direction (up, down, or flat)
+                    and usually highlighted its most effective time frame, which has now
+                    passed. Now that the study is "completed", it is graded from 1 star to 5
+                    stars. A rating of 1 means the forecast was not accurate and a rating of 5
+                    means the forecast was very accurate.
+                  </p>
+                  <p>
+                    Forecast Legend:
+                    <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i>
+                    (Up),
+                    <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i>
+                    (Down),
+                    <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
+                  </p>
+                </div>
+                </el-collapse-item>
+            </el-collapse>
+          </div>
           <div id="example_wrapper" class="dataTables_wrapper no-footer">
             <div class="filter-div">
               <el-row>
@@ -683,5 +694,34 @@ h4 {
 }
 .page-head {
   padding-top: 20px;
+}
+.accordion {
+ padding: 0px 0px 10px 0px;
+}
+.accordion /deep/ .el-collapse-item__content {
+  font-size: 16px;
+  color: #3e4d5c;
+  direction: ltr;
+  background: #fff;
+  font-weight: 400;
+}
+.accordion /deep/ .el-collapse-item__content {
+  padding-bottom: 0px;
+  line-height: 1.5;
+}
+.accordion p.page-title {
+  margin: 0 0 0 5px;
+}
+.accordion /deep/ .el-collapse-item__header {
+ background-color: #c0c4cc5c;
+ border-bottom: 1px solid #e0e0e0;
+ border-top-left-radius: 3px;
+ border-top-right-radius: 3px;
+ font-size: 18px;
+ font-weight: 300;
+ color: #666;
+ position: relative;
+ flex-wrap: wrap;
+ height: auto;
 }
 </style>

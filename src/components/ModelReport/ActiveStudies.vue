@@ -46,50 +46,59 @@
    <div class="row">
     <div class="col-md-12">
      <div class="portlet light">
-      <div class="col-md-12">
-       <div class="col-md-7">
-          <h4>Active Studies Description</h4>
-          <span class="well well-sm" style="float: right; display: inline-block;">
-            <p><b>What is an "active study"?</b></p>
-            <p>For every study we do that has a solid conclusion, we track it in the Active Studies. Research that includes one of these compelling studies will have a forecast attached to it, that looks like the following. It shows whether the forecast is for higher prices (green up arrow), or lower prices (red down arrow), an ETF that tracks the appropriate market, and whether the time frame is short-term (< 1 month), medium-term (1-6 months) or long-term (> 6 months). 
-              <a href="https://www.sentimentrader.com/users/knowledge_base_article/How%20accurate%20are%20your%20studies%3F">Learn more</a>
-            </p>
-          </span>
-          <p>This page lists all studies that are provided in the Daily Report that are still considered to be active. 
-            You may filter the listings below by market/symbol and timeframe.
-          </p>
-          <p>Forecast Legend: 
-            <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i> (Up), 
-            <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i> (Down), 
-            <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
-          </p>
-      </div>
-
-       <div class="col-md-4">
-         <h4>Active Studies Summary (stocks-only)</h4>
-         <table class="tg" style="table-layout: fixed; width: 415px;">
-           <tr>
-             <th class="tg-m0ac">Time Frame</th>
-             <th class="tg-w7sd">Bullish</th>
-             <th class="tg-0mq6">Bearish</th>
-           </tr>
-           <tr>
-             <td class="tg-baqh">Short-Term</td>
-             <td class="tg-baqh">{{ shortTermBullish }}</td>
-             <td class="tg-baqh">{{ shortTermBearish }}</td>
-           </tr>
-           <tr>
-             <td class="tg-baqh">Medium-Term</td>
-             <td class="tg-baqh">{{ medTermBullish }}</td>
-             <td class="tg-baqh">{{ medTermBearish }}</td>
-           </tr>
-           <tr>
-             <td class="tg-baqh">Long-Term</td>
-             <td class="tg-baqh">{{ longTermBullish }}</td>
-             <td class="tg-baqh">{{ longTermBearish }}</td>
-           </tr>
-         </table>
-       </div>
+        <div class="panel-group accordion">
+          <el-collapse accordion>
+            <el-collapse-item>
+              <template slot="title">
+                <p class="page-title">Active Studies Description</p>
+              </template>
+              <div class="centent">
+                <div class="col-md-7">
+                    <h4>Active Studies Description</h4>
+                    <span class="well well-sm" style="float: right; display: inline-block;">
+                      <p><b>What is an "active study"?</b></p>
+                      <p>For every study we do that has a solid conclusion, we track it in the Active Studies. Research that includes one of these compelling studies will have a forecast attached to it, that looks like the following. It shows whether the forecast is for higher prices (green up arrow), or lower prices (red down arrow), an ETF that tracks the appropriate market, and whether the time frame is short-term (< 1 month), medium-term (1-6 months) or long-term (> 6 months). 
+                        <a href="https://www.sentimentrader.com/users/knowledge_base_article/How%20accurate%20are%20your%20studies%3F">Learn more</a>
+                      </p>
+                    </span>
+                    <p>This page lists all studies that are provided in the Daily Report that are still considered to be active. 
+                      You may filter the listings below by market/symbol and timeframe.
+                    </p>
+                    <p>Forecast Legend: 
+                      <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i> (Up), 
+                      <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i> (Down), 
+                      <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
+                    </p>
+                </div>
+                <div class="col-md-4">
+                  <h4>Active Studies Summary (stocks-only)</h4>
+                  <table class="tg" style="table-layout: fixed; width: 415px;">
+                    <tr>
+                      <th class="tg-m0ac">Time Frame</th>
+                      <th class="tg-w7sd">Bullish</th>
+                      <th class="tg-0mq6">Bearish</th>
+                    </tr>
+                    <tr>
+                      <td class="tg-baqh">Short-Term</td>
+                      <td class="tg-baqh">{{ shortTermBullish }}</td>
+                      <td class="tg-baqh">{{ shortTermBearish }}</td>
+                    </tr>
+                    <tr>
+                      <td class="tg-baqh">Medium-Term</td>
+                      <td class="tg-baqh">{{ medTermBullish }}</td>
+                      <td class="tg-baqh">{{ medTermBearish }}</td>
+                    </tr>
+                    <tr>
+                      <td class="tg-baqh">Long-Term</td>
+                      <td class="tg-baqh">{{ longTermBullish }}</td>
+                      <td class="tg-baqh">{{ longTermBearish }}</td>
+                    </tr>
+                  </table>
+                </div>
+            </div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
        <div style="clear:both;"></div>
        <ChartReports></ChartReports>
        <hr />
@@ -234,7 +243,6 @@
             </div>
           </div>
        </div>
-      </div>
      </div>
     </div>
    </div>
@@ -695,6 +703,36 @@ h4 {
   margin-right: 5px
 }
 .page-head {
-  padding-top: 35px;
+  padding-top: 20px;
+}
+.accordion {
+ padding: 0px 0px 10px 0px;
+}
+.accordion /deep/ .el-collapse-item__content {
+  font-size: 16px;
+  color: #3e4d5c;
+  direction: ltr;
+  background: #fff;
+  font-weight: 400;
+}
+.accordion /deep/ .el-collapse-item__content {
+  padding-bottom: 0px;
+  padding-top: 10px;
+  line-height: 1.5;
+}
+.accordion p.page-title {
+  margin: 0 0 0 5px;
+}
+.accordion /deep/ .el-collapse-item__header {
+ background-color: #c0c4cc5c;
+ border-bottom: 1px solid #e0e0e0;
+ border-top-left-radius: 3px;
+ border-top-right-radius: 3px;
+ font-size: 18px;
+ font-weight: 300;
+ color: #666;
+ position: relative;
+ flex-wrap: wrap;
+ height: auto;
 }
 </style>
