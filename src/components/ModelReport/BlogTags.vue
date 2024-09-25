@@ -42,7 +42,7 @@
                  class="btn grey-cascade"
                  :href="getPageUrl(previousPage)"
                >
-                 &larr; previous page
+                 Previous
                </a>
                <a
                  v-if="nextPage"
@@ -50,7 +50,7 @@
                  style="float:right;"
                  :href="getPageUrl(nextPage)"
                >
-                 next page &rarr;
+                 Next
                </a>
              </div>
              <!-- END INFO BLOCK -->

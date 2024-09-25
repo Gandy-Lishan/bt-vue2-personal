@@ -1526,8 +1526,19 @@ export const getBlogReportInfo = (url) => {
 			})
 	})
 }
-export const getArchivedReports = (year) => {
-	const path = `/dev/st_data/archived_reports/?year=${year}`
+export const getArchivedReports = (filtersObj) => {
+	let path = `/dev/st_data/archived_reports`
+	// 过滤掉 undefined, null, '' 的属性
+	const filteredFiltersObj = Object.fromEntries(
+		Object.entries(filtersObj).filter(([key, value]) => value !== undefined && value !== null && value !== '')
+	);
+	// 转换为查询参数
+	const queryParams = new URLSearchParams(filteredFiltersObj).toString();
+	// 如果有查询参数，将它们附加到路径上
+	if (queryParams) {
+		path += `?${queryParams}`;
+	}
+
 	return new Promise((resolve, reject) => {
 		axios
 			.get(path)

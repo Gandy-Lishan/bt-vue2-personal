@@ -48,6 +48,7 @@
                      {{ truncate(row.post_content, 500) }}
                    </p>
                  </div>
+                 <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
                </div>
 
                <!-- Archives Sidebar -->
@@ -76,8 +77,8 @@
 
 <script>
 //import FlashedMessages from '@/components/FlashedMessages.vue'; // 假设 FlashedMessages 是另一个组件
-import { timestampToTime } from "@/utils";
 import { getArchivedReports } from "@/service/service";
+import PreviousNextPage from './component/PreviousNextPage';
 
 export default {
  name: 'ReportArchives',
@@ -87,8 +88,7 @@ export default {
  data() {
    return {
      archiveYears: [
-       2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014,
-       2013, 2012,
+       2024, 2023, 2022, 2021, 2020
      ],
      dailyReportBlogs: [],
      reportDetails: {
@@ -106,18 +106,42 @@ export default {
       timeframe: '',
       asset: '',
       count_likes: ''
-     }
+     },
+     previousPage: null,
+     currentPage: 1, // 当前页码
+     nextPage: 2,
+     total: 0,
+     serviceType: 'archived_reports',
    };
+ },
+ components: {
+   PreviousNextPage,
  },
  beforeRouteEnter(to, from, next) {
   console.log('to', to)
   console.log('from', from)
   if (to.path.includes('/MR/archived_reports')) {
     next(async _this => {
+      const page = to.params.page || ''
       const year = to.params.year || (new Date()).getFullYear()
-      _this.title = `Archived Reports for ${year}`
-      const {data: {results}} = await getArchivedReports(year)
+      _this.serviceType = `archived_reports/${year}`
+      _this.title = `Archived Reports for ${year}${(page && page != 1) ?  ` - Page ${page}`: ''}`
+      const {data: {results, count, previous, next}} = await getArchivedReports({
+        year,
+        page: !page ? _this.currentPage : page
+      })
       console.log('res', results)
+      const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = Math.ceil(Number(count) / 10);
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      if(page) _this.currentPage = Number(page)
       _this.dailyReportBlogs = results
     })
     } else {
