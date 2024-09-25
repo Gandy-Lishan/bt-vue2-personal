@@ -17,7 +17,7 @@ export default {
 name: 'Reports',
 data() {
   return {
-    default_symbol: process.env.VUE_APP_DEFAULT_SYMBOL
+    default_symbol: 'SPY'
   }
 },
 components: {
@@ -66,14 +66,24 @@ methods:{
     //let search = document.querySelector(".ciq-search")
     let indicatorSearch = document.querySelector(".ciq-indicators-search")
     let studies = document.querySelector(".ciq-studies")
+    let display = document.querySelector(".ciq-display")
     let favBtnContainer = document.querySelector(".favBtnContainer")
     let timeframeBtn = document.querySelector('.ciq-period')
+    let chHeadsup = document.querySelector(".ch-headsup")
+    let huTooltip = document.querySelector(".hu-tooltip")
+    let gridGroup = document.querySelector(".grid-group")
+    let lastpGroup = document.querySelector(".lastp-group")
     //let footer = document.querySelector('.ciq-footer')
 
     //如果是ActiveStudies, 屏幕较窄, 用display代替visibility
     if(this.$route.name=='ActiveStudies'){
       indicatorSearch.style.display = 'none'
       studies.style.display = 'none'
+      display.style.display = 'none'
+      chHeadsup.style.visibility = 'hidden'
+      huTooltip.style.visibility = 'hidden'
+      gridGroup.style.visibility = 'hidden'
+      lastpGroup.style.visibility = 'hidden'
     }else{
       indicatorSearch.style.visibility = 'hidden'
       studies.style.visibility = 'hidden'

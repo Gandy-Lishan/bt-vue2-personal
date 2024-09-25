@@ -31,7 +31,7 @@
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
-					<cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown class="ch-headsup">
 					<cq-toggle
 							class="ciq-CH"
 							cq-member="crosshair">
@@ -50,7 +50,7 @@
 						</cq-menu-dropdown>
 					</cq-menu>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown  class="hu-tooltip">
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
 							<span></span>
 							<cq-tooltip>Info</cq-tooltip>
@@ -68,13 +68,13 @@
 							</cq-menu-dropdown>
 						</cq-menu>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown class="grid-group">
 						<cq-toggle class="grid" id="grid" stxtap="Layout.xAixsGridLine()">
 							<span></span>
 							<cq-tooltip>grid</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown class="lastp-group">
 						<cq-toggle class="lastP" id="lastP" stxtap="Layout.lastPriceLabel()">
 							<span></span>
 							<cq-tooltip>last price</cq-tooltip>
