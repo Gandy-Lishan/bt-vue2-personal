@@ -217,7 +217,7 @@ async function initiateList(pathname) {
 		await store.dispatch('chart/get_favorite')
 	}
 
-	if (pathname == 'Reports' && store.getters.getSymbollistForecast.length == 0){
+	if (pathname == 'ActiveStudies' && store.getters.getSymbollistForecast.length == 0){
 		await store.dispatch('chart/get_symbollist_forecast')
 	}
 }

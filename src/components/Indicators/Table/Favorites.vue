@@ -3,7 +3,7 @@
     <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="'Stock'" :checkedType="'stock'"></Description>
     </div>
-    <div class="left" ref="IndicatorTable">
+    <div class="indicator-left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
         <FavTable
           :key="item.type"
@@ -16,8 +16,9 @@
         ></FavTable>
       </template>
       <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" style="width: 65%" @showDetails="showDetails"></Details>
-      <SeasonalityChart :id="'FavChart'" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: '745px', marginTop: isShowDetails ? '125px' : '0'}"></Chart>
+      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px'}"></Chart>
+      <AboutUs></AboutUs>
     </div>
   </div>
  </template>
@@ -28,6 +29,7 @@
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
 import Details from "./Details";
+import AboutUs from "./AboutUs";
  
  export default {
   name: 'IndicatorTable',
@@ -58,7 +60,8 @@ import Details from "./Details";
     FavTable,
     SeasonalityChart,
     Description,
-    Details
+    Details,
+    AboutUs
   },
   methods: {
     updateChart(row) {
@@ -73,7 +76,7 @@ import Details from "./Details";
  </script>
  
  <style lang="less" scoped>
- .left {
+ .indicator-left {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;

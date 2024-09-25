@@ -508,7 +508,7 @@
                      {indicatorClose:senti_color[i%1],description: '',url:indicatorList[i]},
                     //  panelHeight:indicatorHeight,
                      parameters: { init: {
-                         studyOverZonesEnabled: false,
+                         studyOverZonesEnabled: true,
                          studyOverBoughtValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.lower_extreme_value*1000)/1000:999,
                          studyOverBoughtColor: process.env.VUE_APP_RED,
                          studyOverSoldValue: ownIndicatorInfo?Math.round(ownIndicatorInfo.upper_extreme_value*1000)/1000:-999,
@@ -602,7 +602,7 @@
                          {indicatorClose:senti_color[i%1],description: newQuotes[i].description,url:sentiUrlList[i]},
                         //  panelHeight:indicatorHeight,
                          parameters: { init: {
-                             studyOverZonesEnabled: false,
+                             studyOverZonesEnabled: true,
                              studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
                              studyOverBoughtColor: process.env.VUE_APP_RED,
                              studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,

@@ -1,0 +1,157 @@
+/*   
+Template Name: Metronic - Responsive Website Template build with Twitter Bootstrap 3.1.1
+*/
+
+/* General body settings */
+body { 
+	color: #3e4d5c; 
+	direction: ltr;
+	background: #fff;
+ 	font-weight: 400;
+}
+* {
+	box-sizing: border-box;
+}
+
+/***
+General typography 
+***/
+h1 {
+	margin-bottom: 15px;
+	font-size: 33px;
+}
+h2 {
+	font-size: 27px;
+}
+b, strong {
+	font-weight: 700;
+}
+h1, h2, h3, h4, h5, h6 {
+ font-weight: 300;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0 0 10px;
+}
+.h1, .h1, h2, .h2, h3, .h3 {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+/***
+Fix link outlines after click
+***/
+a {
+	color: #5b9bd1;
+}
+a, a:focus, a:hover, a:active {
+	outline: 0;
+ text-decoration: none;
+}
+a:hover {
+ 	/* font-weight: bold; */
+	text-decoration: underline;
+	color: #3175af;
+}
+.font-green-jungle {
+ color: #26c281;
+}
+
+.font-red-thunderbird {
+ color: #e7505a;
+}
+
+.font-lg {
+ font-size: 1.5em;
+}
+[class*=" fa-"], [class*=" glyphicon-"], [class*=" icon-"], [class^=fa-], [class^=glyphicon-], [class^=icon-] {
+	display: inline-block;
+	margin-top: 1px;
+	font-size: 14px;
+	line-height: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+.icon-user-female, .icon-user-follow, .icon-user-following, .icon-user-unfollow, .icon-trophy, .icon-screen-smartphone, .icon-screen-desktop, .icon-plane, .icon-notebook, .icon-moustache, .icon-mouse, .icon-magnet, .icon-energy, .icon-emoticon-smile, .icon-disc, .icon-cursor-move, .icon-crop, .icon-credit-card, .icon-chemistry, .icon-user, .icon-speedometer, .icon-social-youtube, .icon-social-twitter, .icon-social-tumblr, .icon-social-facebook, .icon-social-dropbox, .icon-social-dribbble, .icon-shield, .icon-screen-tablet, .icon-magic-wand, .icon-hourglass, .icon-graduation, .icon-ghost, .icon-game-controller, .icon-fire, .icon-eyeglasses, .icon-envelope-open, .icon-envelope-letter, .icon-bell, .icon-badge, .icon-anchor, .icon-wallet, .icon-vector, .icon-speech, .icon-puzzle, .icon-printer, .icon-present, .icon-playlist, .icon-pin, .icon-picture, .icon-map, .icon-layers, .icon-handbag, .icon-globe-alt, .icon-globe, .icon-frame, .icon-folder-alt, .icon-film, .icon-feed, .icon-earphones-alt, .icon-earphones, .icon-drop, .icon-drawer, .icon-docs, .icon-directions, .icon-direction, .icon-diamond, .icon-cup, .icon-compass, .icon-call-out, .icon-call-in, .icon-call-end, .icon-calculator, .icon-bubbles, .icon-briefcase, .icon-book-open, .icon-basket-loaded, .icon-basket, .icon-bag, .icon-action-undo, .icon-action-redo, .icon-wrench, .icon-umbrella, .icon-trash, .icon-tag, .icon-support, .icon-size-fullscreen, .icon-size-actual, .icon-shuffle, .icon-share-alt, .icon-share, .icon-rocket, .icon-question, .icon-pie-chart, .icon-pencil, .icon-note, .icon-music-tone-alt, .icon-music-tone, .icon-microphone, .icon-loop, .icon-logout, .icon-login, .icon-list, .icon-like, .icon-home, .icon-grid, .icon-graph, .icon-equalizer, .icon-dislike, .icon-cursor, .icon-control-start, .icon-control-rewind, .icon-control-play, .icon-control-pause, .icon-control-forward, .icon-control-end, .icon-calendar, .icon-bulb, .icon-bar-chart, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-ban, .icon-bubble, .icon-camcorder, .icon-camera, .icon-check, .icon-clock, .icon-close, .icon-cloud-download, .icon-cloud-upload, .icon-doc, .icon-envelope, .icon-eye, .icon-flag, .icon-folder, .icon-heart, .icon-info, .icon-key, .icon-link, .icon-lock, .icon-lock-open, .icon-magnifier, .icon-magnifier-add, .icon-magnifier-remove, .icon-paper-clip, .icon-paper-plane, .icon-plus, .icon-pointer, .icon-power, .icon-refresh, .icon-reload, .icon-settings, .icon-star, .icon-symbol-female, .icon-symbol-male, .icon-target, .icon-volume-1, .icon-volume-2, .icon-volume-off, .icon-users {
+	font-family: 'Simple-Line-Icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+hr {
+	margin: 20px 0;
+	border: 0;
+	border-top: 1px solid #eee;
+	border-bottom: 0;
+}
+.row {
+	margin-right: -15px;
+	margin-left: -15px;
+}
+.btn {
+	font-size: 14px;
+	outline: 0 !important;
+	background-image: none !important;
+	filter: none;
+	box-shadow: none;
+	text-shadow: none;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 400;
+	line-height: 1.428;
+	text-align: center;
+	white-space: nowrap;
+	cursor: pointer;
+	user-select: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	padding: 7px 14px;
+}
+.btn:hover, .btn:focus {
+	text-decoration: none;
+}
+.grey-cascade.btn {
+	color: #fff;
+	background-color: #95a5a6;
+}
+.gray-cascade.btn.active, .gray-cascade.btn:active, .gray-cascade.btn:focus, .gray-cascade.btn:hover {
+	color: #fff;
+	background-color: #829596;
+}
+a.btn.grey-cascade.active, a.btn.grey-cascade:active, a.gray-cascade.btn:focus, a.gray-cascade.btn:hover {
+	color: #fff;
+	background-color: #829596;
+}
+.margin-bottom-30 {
+	margin-bottom: 30px;
+}
+.page-container {
+	clear: both;
+}
+.page-head .page-title {
+	display: inline-block;
+	padding: 19px 0;
+}
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+	position: relative;
+	min-height: 1px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.clearfix:after, .dl-horizontal dd:after, .container:after, .container-fluid:after, .row:after, .form-horizontal .form-group:after, .btn-toolbar:after, .btn-group-vertical>.btn-group:after, .nav:after, .navbar:after, .navbar-header:after, .navbar-collapse:after, .pager:after, .panel-body:after, .modal-footer:after {
+	clear: both;
+}
+.clearfix:before, .clearfix:after, .dl-horizontal dd:before, .dl-horizontal dd:after, .container:before, .container:after, .container-fluid:before, .container-fluid:after, .row:before, .row:after, .form-horizontal .form-group:before, .form-horizontal .form-group:after, .btn-toolbar:before, .btn-toolbar:after, .btn-group-vertical>.btn-group:before, .btn-group-vertical>.btn-group:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after, .pager:before, .pager:after, .panel-body:before, .panel-body:after, .modal-footer:before, .modal-footer:after {
+	display: table;
+	content: '';
+}
+.portlet {
+	margin-top: 0;
+	margin-bottom: 25px;
+}
+.portlet.light {
+	padding: 12px 20px 15px 20px;
+	background-color: #fff;
+	padding: 0;
+	border-radius: 4px;
+}

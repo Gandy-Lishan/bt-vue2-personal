@@ -3,7 +3,7 @@
     <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
     </div>
-    <div class="left">
+    <div class="indicator-left">
       <template v-for="item in tableInfoList">
         <Table
           v-bind="$attrs"
@@ -18,8 +18,9 @@
       </template>
       <!-- 点击之后详情页放在这里 -->
       <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'" v-if="enlargedTable !== null && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}" @passIndicatorData="passIndicatorData"></Chart>
-      <SeasonalityChart :id="'indiChart'" v-if="enlargedTable !== null && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: `745px`, marginTop: isShowDetails ? '125px' : '0'}"></SeasonalityChart>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData"></Chart>
+      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }"></SeasonalityChart>
+      <AboutUs></AboutUs>
     </div>
   </div>
 </template>
@@ -30,6 +31,7 @@ import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
 import Details from "./Details";
+import AboutUs from "./AboutUs";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 
@@ -201,7 +203,8 @@ export default {
     Table,
     SeasonalityChart,
     Description,
-    Details
+    Details,
+    AboutUs
   },
   computed: {
     ...mapGetters({
@@ -226,7 +229,9 @@ export default {
     },
     showDetails(row, isShowDetails, checkedType) {
       console.log('showDetails', row)
-      this.isShowDetails = isShowDetails
+      this.$nextTick(() => {
+        this.isShowDetails = isShowDetails
+      })
       this.checkedTitle = checkedType
     },
     updateTable(row) {
@@ -288,7 +293,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.left {
+.indicator-left {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;

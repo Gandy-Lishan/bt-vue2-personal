@@ -280,13 +280,17 @@ if (CIQ.ChartEngine) {
 		const newRemainingPercentForEach = indicatorHeight / clientHeight;
     	const newPercent = mainChartHeight / clientHeight;
 
-		Object.values(this.panels).forEach((panel) => {
-			//panel.percent /= adjustment;
-			panel.percent = newRemainingPercentForEach;
-		});
-
-		panelToModify.percent = newPercent;
-		// console.log(newPercent,'+++',Object.values(this.panels).map(i=>i.percent))
+		if(Object.keys(this.panels).length-1 == 1) {
+			Object.values(this.panels).forEach((panel) => {
+				panel.percent = 0.5;
+			});
+			panelToModify.percent = 0.5;
+		}else{
+			Object.values(this.panels).forEach((panel) => {
+				panel.percent = newRemainingPercentForEach;
+			});
+			panelToModify.percent = newPercent;
+		}
 		this.adjustPanelPositions();
 		this.savePanels();
 	};
@@ -300,7 +304,7 @@ if (CIQ.ChartEngine) {
 			studiesLen <= 0
 			? 0
 			:studiesLen <= 1
-			? 200
+			? 100
 			: studiesLen <= 2
 				? 100
 				// : 80

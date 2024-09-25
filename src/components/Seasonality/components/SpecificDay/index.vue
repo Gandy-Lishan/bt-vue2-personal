@@ -209,6 +209,7 @@ export default {
         { label: 'June Quad Option Expiration', month: 6, day: 21, value: 13 },
         { label: 'September Quad Option Expiration', month: 9, day: 20, value: 14 },
         { label: 'December Quad Option Expiration', month: 12, day: 20, value: 15 },
+        { label: 'Election Day(US)', month: 11, day: 5, value: 16 },
       ],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate

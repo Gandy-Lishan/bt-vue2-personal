@@ -109,7 +109,7 @@
                         {indicatorClose:color[i%7],description: '',url:indicatorList[i]},
                         // panelHeight:indicatorHeight,
                         parameters: { init: {
-                            studyOverZonesEnabled: false,
+                            studyOverZonesEnabled: true,
                             studyOverBoughtValue: 999,
                             studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: 999,
@@ -162,7 +162,7 @@
                             {indicatorClose:color[i%7],description: newQuotes[i].description,url:sentiUrlList[i]},
                             // panelHeight:indicatorHeight,
                             parameters: { init: {
-                                studyOverZonesEnabled: false,
+                                studyOverZonesEnabled: true,
                                 studyOverBoughtValue: newQuotes[i].opt_extreme?Math.round(newQuotes[i].opt_extreme*1000)/1000:NaN,
                                 studyOverBoughtColor: process.env.VUE_APP_RED,
                                 studyOverSoldValue: newQuotes[i].pess_extreme?Math.round(newQuotes[i].pess_extreme*1000)/1000:NaN,
@@ -621,7 +621,7 @@ debugger
                         outputs: 
                         {indicatorClose:color,description: '',url:indicator},
                         parameters: { init: {
-                            studyOverZonesEnabled: false,
+                            studyOverZonesEnabled: true,
                             studyOverBoughtValue: extremeLines?Math.round(extremeLines.op*1000)/1000:NaN,
                             studyOverBoughtColor: process.env.VUE_APP_RED,
                             studyOverSoldValue: extremeLines?Math.round(extremeLines.ep*1000)/1000:NaN,
@@ -664,7 +664,7 @@ debugger
                                     outputs: 
                                     {indicatorClose:color,description: newQuotes.description,url:indicator},
                                     parameters: { init: {
-                                        studyOverZonesEnabled: false,
+                                        studyOverZonesEnabled: true,
                                         studyOverBoughtValue: newQuotes.opt_extreme?Math.round(newQuotes.opt_extreme*1000)/1000:NaN,
                                         studyOverBoughtColor: process.env.VUE_APP_RED,
                                         studyOverSoldValue: newQuotes.pess_extreme?Math.round(newQuotes.pess_extreme*1000)/1000:NaN,

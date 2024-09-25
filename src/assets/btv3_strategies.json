@@ -89,7 +89,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": 10,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": -10,
@@ -203,7 +203,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": 0.45,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": 0.45,
@@ -315,7 +315,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -430,7 +430,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -545,7 +545,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -665,7 +665,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -780,7 +780,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -925,7 +925,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1119,7 +1119,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1140,7 +1140,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1161,7 +1161,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1285,7 +1285,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1404,7 +1404,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1523,7 +1523,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1710,7 +1710,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -1930,7 +1930,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -2151,7 +2151,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -2379,7 +2379,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -2399,7 +2399,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -2613,7 +2613,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -2848,7 +2848,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3093,7 +3093,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3114,7 +3114,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3480,7 +3480,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3501,7 +3501,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3522,7 +3522,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3543,7 +3543,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,
@@ -3789,7 +3789,7 @@
           },
           "outputs": {},
           "parameters": {
-            "studyOverZonesEnabled": false,
+            "studyOverZonesEnabled": true,
             "studyOverBoughtValue": null,
             "studyOverBoughtColor": "#FF0000",
             "studyOverSoldValue": null,

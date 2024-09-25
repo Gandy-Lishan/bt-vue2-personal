@@ -127,7 +127,6 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-		console.log('TO', to, 'FROM', from)
   if (from.path.includes('/strategy')) {
     next(async _this => {
       if (to.params.usedFor && to.params.usedFor === 'SetPortfolio') {
