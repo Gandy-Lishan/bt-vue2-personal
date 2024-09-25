@@ -7,7 +7,7 @@
        <div class="col-md-12 col-sm-12">
          <div class="content-page">
           <div class="page-head">
-           <!-- <h1 v-html="title" class="page-title"></h1> -->
+           <h1 v-html="title" class="page-title" v-if="serviceType === 'Blog'"></h1>
           </div>
            <!-- <hr /> -->
            <div class="row margin-bottom-30">
@@ -178,13 +178,13 @@ export default {
       if(!reportUrl) {
         latestPost.is_favorite = reportsArchivesTen.slice(0, 1)[0]?.is_favorite || false
       }else {
-        const findBlog = reportsArchivesTen.find(x => x.url == reportUrl)
+        const findBlog = reportsArchivesTen.find(x => x.url == requestedBlog)
         if(findBlog) latestPost.is_favorite = findBlog.is_favorite
         else {
           const {data: {results}} =  await getBlogReportList({
-            url: reportUrl
+            url: requestedBlog
           })
-          const findBlog = results.find(x => x.url == reportUrl)
+          const findBlog = results.find(x => x.url == requestedBlog)
           if(findBlog) latestPost.is_favorite = findBlog.is_favorite
         }
       }
