@@ -271,7 +271,7 @@ const routes = [
 				component: resolve => require(['@/components/ModelReport/BlogTags.vue'], resolve)
 			},
 			{
-				path: '/MR/archived_reports/:year',
+				path: '/MR/archived_reports/:year/:page?',
 				component: resolve =>
 					require(['@/components/ModelReport/ReportArchives.vue'], resolve)
 			},
