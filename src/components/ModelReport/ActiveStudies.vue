@@ -238,7 +238,7 @@
               style="float:right;align-self:center" 
               @click="nextPage"
             >
-              next page &rarr;
+              Next
             </a>
             </div>
           </div>

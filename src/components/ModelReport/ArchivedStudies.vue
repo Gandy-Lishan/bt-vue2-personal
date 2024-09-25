@@ -88,8 +88,8 @@
                 <th :class="getSortClass('title')"  @click="sortTable('title')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending" style="width: 370px;">Report Title</th>
                 <th :class="getSortClass('market')"  @click="sortTable('market')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Market: activate to sort column ascending" style="width: 72px;">Market</th>
                 <th :class="getSortClass('forecast')"  @click="sortTable('forecast')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Forecast: activate to sort column ascending" style="width: 69px;">Forecast</th>
-                <th tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Outcome: activate to sort column ascending" style="width: 74px;">Outcome</th>
-                <th tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Rating: activate to sort column ascending" style="width: 71px;">Rating</th>
+                <th :class="getSortClass('outcome')" @click="sortTable('outcome')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Outcome: activate to sort column ascending" style="width: 74px;">Outcome</th>
+                <th :class="getSortClass('rating')" @click="sortTable('rating')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Rating: activate to sort column ascending" style="width: 71px;">Rating</th>
                 <th :class="getSortClass('timeframe')" @click="sortTable('timeframe')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Timeframe: activate to sort column ascending" style="width: 90px;">Timeframe</th>
               </tr>
             </thead>
@@ -253,7 +253,7 @@
                 style="float:right;align-self:center" 
                 @click="nextPage"
               >
-                next page &rarr;
+                Next
               </a>
               </div>
           </div>
