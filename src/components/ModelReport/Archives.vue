@@ -188,23 +188,23 @@ export default {
   computed: {
    requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'quantedge') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
     else if(this.serviceType.toLowerCase() === 'tradingedge') return 'tradingedge';
     else return this.serviceType.toLowerCase();
    }
  },
   beforeRouteEnter(to, from, next) {
-  if (to.path.includes('/MR/archives') && ['sentimentedge', 'kaeppelscorner', 'modeledge','tradingedge'].includes(to.params.serviceType)) {
+  if (to.path.includes('/MR/archives') && ['sentimentedge', 'quantedge', 'modeledge','tradingedge'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const page = to.params.page || ''
       if(serviceType === 'sentimentedge') {
         _this.title = `SentimentEdge Archives${page ?  ` - Page ${page}`: ''}`
         _this.serviceType = 'sentimentedge'
-      }else if(serviceType === 'kaeppelscorner') {
+      }else if(serviceType === 'quantedge') {
         _this.title = `Kaeppel\'s Corner Archives${page ?  ` - Page ${page}`: ''}`
-        _this.serviceType = 'kaeppelscornerr'
+        _this.serviceType = 'quantedge'
       }else if(serviceType === 'modeledge') {
         _this.title = `ModelEdge Archives${page ?  ` - Page ${page}`: ''}`
         _this.serviceType = 'modeledge'

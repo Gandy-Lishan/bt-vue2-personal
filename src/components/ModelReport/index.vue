@@ -1,6 +1,6 @@
 <template>
   <div class="ModelReport">
-    <div class="container">
+    <div class="container no-print">
       <div class="strategy-header MRHeader" :class="{ 'fixed': isHeaderFixed }" ref="MRHeader">
         <div class="tableHeader">
           <div class="headerSelect">
@@ -10,8 +10,8 @@
             <a :href="`/MR/modeledge`">
               <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
             </a>
-            <a :href="`/MR/kaeppelscorner`">
-              <h4 @click="selectedTitle = 'kaeppelscorner'" :class="{ 'selected': selectedTitle === 'kaeppelscorner' }">Kaeppel's Corner</h4>
+            <a :href="`/MR/quantedge`">
+              <h4 @click="selectedTitle = 'quantedge'" :class="{ 'selected': selectedTitle === 'quantedge' }">Kaeppel's Corner</h4>
             </a>
             <a :href="`/MR/tradingedge`">
               <h4 @click="selectedTitle = 'tradingedge'" :class="{ 'selected': selectedTitle === 'tradingedge' }">TradingEdge</h4>
@@ -203,11 +203,11 @@ export default {
   }
   if (isPathSubstring([
     '/MR/sentimentedge',
-    '/MR/kaeppelscorner',
+    '/MR/quantedge',
     '/MR/modeledge',
     '/MR/tradingedge',
     '/MR/archives/sentimentedge',
-    '/MR/archives/kaeppelscorner',
+    '/MR/archives/quantedge',
     '/MR/archives/modeledge',
     '/MR/archives/tradingedge',
     '/MR/blog',
@@ -218,7 +218,7 @@ export default {
   ], to.path)) {
     next(async _this => {
       if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
-      if(isPathSubstring(['/MR/kaeppelscorner', '/MR/archives/kaeppelscorner'], to.path)) _this.selectedTitle = 'kaeppelscorner'
+      if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path)) _this.selectedTitle = 'quantedge'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
       if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
       if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
@@ -382,6 +382,11 @@ export default {
 @media (min-width: 1200px) {
   .strategy-header.fixed .tableHeader {
     width: 1170px;
+  }
+}
+@media print {
+  .no-print {
+    display: none;
   }
 }
 </style>

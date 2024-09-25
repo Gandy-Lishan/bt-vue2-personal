@@ -99,7 +99,7 @@ export default {
  computed: {
    requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'archives/sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'archives/kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'quantedge') return 'archives/quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'archives/modeledge';
     else return this.serviceType.toLowerCase();
    }
