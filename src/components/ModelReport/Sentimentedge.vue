@@ -23,7 +23,7 @@
                    class="mcnImage"
                  />
                </div>
-               <div class="analysis_solutions_yellow" v-if="serviceType === 'Kaeppel\'s Corner'">
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'quantedge'">
                  <img
                    align="center"
                    alt=""
@@ -124,7 +124,7 @@ export default {
   }),
   requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'quantedge') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
     else return this.serviceType.toLowerCase();
   }
@@ -137,20 +137,20 @@ export default {
   }
   if (isPathSubstring([
     '/MR/sentimentedge',
-    '/MR/kaeppelscorner',
+    '/MR/quantedge',
     '/MR/modeledge',
     '/MR/tradingedge',
     '/MR/blog'
-  ], to.path) && ['sentimentedge', 'kaeppelscorner', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
+  ], to.path) && ['sentimentedge', 'quantedge', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const reportUrl = to.params.reportUrl
       if(serviceType === 'sentimentedge') {
         _this.title = 'SentimentEdge'
         _this.serviceType = 'SentimentEdge'
-      }else if(serviceType === 'kaeppelscorner') {
+      }else if(serviceType === 'quantedge') {
         _this.title = 'Kaeppel\'s Corner'
-        _this.serviceType = 'Kaeppel\'s Corner'
+        _this.serviceType = 'quantedge'
       }else if(serviceType === 'modeledge') {
         _this.title = 'ModelEdge'
         _this.serviceType = 'ModelEdge'
