@@ -113,5 +113,9 @@ export default {
 /deep/ .el-input__inner {
 	margin-left: 0;
 }
+
+/deep/ .el-select__tags {
+	flex-wrap: nowrap;
+}
 </style>
     
