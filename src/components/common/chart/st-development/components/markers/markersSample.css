@@ -171,15 +171,6 @@
 } */
 
 /* backteser edge forecast marker node style */
-@keyframes expandHeight {
-	from {
-		max-height: 100px;
-	}
-	to {
-		max-height: 1000px;
-	}
-}
-
 .forecast {
 	position: absolute;
 	opacity: .9;
@@ -217,7 +208,10 @@
   .forecast.bullish:hover {
 	background: #62e687;
 	z-index: 2;
-	animation: expandHeight 2s ease forwards;
+	.pwrap {
+		grid-template-rows: 1fr;
+	}
+	
   }
   .forecast.bearish:hover{
 	background: #eba8a8;
@@ -245,6 +239,7 @@
   .forecast.bearish:hover:before {
 	border-color: #eba8a8 transparent;
   }
+
 
 /* scanner marker node style */
 .myMes {
