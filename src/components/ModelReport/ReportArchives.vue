@@ -126,7 +126,10 @@ export default {
       const year = to.params.year || (new Date()).getFullYear()
       _this.serviceType = `archived_reports/${year}`
       _this.title = `Archived Reports for ${year}${(page && page != 1) ?  ` - Page ${page}`: ''}`
-      const {data: {results, count, previous, next}} = await getArchivedReports(year)
+      const {data: {results, count, previous, next}} = await getArchivedReports({
+        year,
+        page: !page ? _this.currentPage : page
+      })
       console.log('res', results)
       const getPageValue = (url) => {
         if(url === null) return url
