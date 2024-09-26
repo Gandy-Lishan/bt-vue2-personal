@@ -60,7 +60,7 @@
                  <a
                    v-for="year in archiveYears"
                    :key="year"
-                   :href="`/MR/archived_reports/${year}`"
+                   :href="`/MR/${year <= 2019 ? 'old_' : ''}archived_reports/${year}`"
                    class="btn blue btn-block"
                  >
                    {{ year }} Archives
@@ -82,13 +82,10 @@ import PreviousNextPage from './component/PreviousNextPage';
 
 export default {
  name: 'ReportArchives',
- components: {
-   //FlashedMessages,
- },
  data() {
    return {
      archiveYears: [
-       2024, 2023, 2022, 2021, 2020
+      2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014
      ],
      dailyReportBlogs: [],
      reportDetails: {

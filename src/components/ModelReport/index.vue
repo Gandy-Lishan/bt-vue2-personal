@@ -211,6 +211,7 @@ export default {
     '/MR/archived_reports',
     '/MR/active_studies',
     '/MR/archived_studies',
+    '/MR/old_archived_reports',
     '/MR/favorites'
   ], to.path)) {
     next(async _this => {
@@ -218,7 +219,7 @@ export default {
       if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path)) _this.selectedTitle = 'quantedge'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
       if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
-      if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
+      if(isPathSubstring(['/MR/blog', '/MR/archived_reports', 'old_archived_reports'], to.path)) {
         _this.selectedTitle = 'archived_reports'
       }
       if(isPathSubstring(['/MR/active_studies'], to.path)) _this.selectedTitle = 'active_studies'
