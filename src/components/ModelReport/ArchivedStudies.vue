@@ -13,7 +13,7 @@
                 <template slot="title">
                   <p class="page-title">Archived Studies Description (click to expand)</p>
                 </template>
-                <div class="centent">
+                <div class="centent" style="text-align: justify;">
                   <p>
                     This page lists studies that were provided in a Daily Report. At the time
                     of the report, the study forecasted a market direction (up, down, or flat)
