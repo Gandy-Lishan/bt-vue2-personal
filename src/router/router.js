@@ -276,6 +276,10 @@ const routes = [
 					require(['@/components/ModelReport/ReportArchives.vue'], resolve)
 			},
 			{
+				path: '/MR/old_archived_reports/:year/:page?',
+				component: resolve => require(['@/components/ModelReport/OldReportArchives.vue'], resolve)
+			},
+			{
 				path: '/MR/:serviceType(\\w+)/:reportUrl?',
 				component: resolve =>
 					require(['@/components/ModelReport/Sentimentedge.vue'], resolve)

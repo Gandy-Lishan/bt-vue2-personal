@@ -1,7 +1,7 @@
 <template>
   <div class="ModelReport">
     <div class="container no-print">
-      <div class="strategy-header MRHeader" :class="{ 'fixed': isHeaderFixed }" ref="MRHeader">
+      <div class="strategy-header">
         <div class="tableHeader">
           <div class="headerSelect">
             <a :href="`/MR/sentimentedge`">
@@ -168,9 +168,6 @@ export default {
     archivesStudies: 'Archived Studies',
     selectedTitle: 'sentimentedge',
     currentYear: (new Date()).getFullYear(),
-    isHeaderFixed: false,
-    lastScrollY: 0,
-    scrollingUp: false,
   }
  },
  watch: {
@@ -214,6 +211,7 @@ export default {
     '/MR/archived_reports',
     '/MR/active_studies',
     '/MR/archived_studies',
+    '/MR/old_archived_reports',
     '/MR/favorites'
   ], to.path)) {
     next(async _this => {
@@ -221,7 +219,7 @@ export default {
       if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path)) _this.selectedTitle = 'quantedge'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
       if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
-      if(isPathSubstring(['/MR/blog', '/MR/archived_reports'], to.path)) {
+      if(isPathSubstring(['/MR/blog', '/MR/archived_reports', 'old_archived_reports'], to.path)) {
         _this.selectedTitle = 'archived_reports'
       }
       if(isPathSubstring(['/MR/active_studies'], to.path)) _this.selectedTitle = 'active_studies'
@@ -267,22 +265,7 @@ export default {
       } else {
         return `/MR/archived_reports/${this.currentYear}`;
       }
-    },
-    handleScroll() {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > this.lastScrollY) {
-        // 向上滚动，显示并固定 header
-        this.scrollingUp = true;
-        this.isHeaderFixed = true;
-      } else {
-        // 向下滚动，隐藏 header
-        this.scrollingUp = false;
-        this.isHeaderFixed = false;
-      }
-
-      this.lastScrollY = currentScrollY;
-    },
+    }
   }
 }
 </script>
@@ -295,7 +278,7 @@ export default {
 	align-items: flex-end;
   justify-content: center;
   background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  border-bottom: 1px solid #eee;
 	.tableHeader {
     position: relative;
     display: flex;
@@ -346,29 +329,6 @@ export default {
 // .strategy-header {
 //   position: relative;
 // }
-.MRHeader {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  z-index: 2000;
-  width: 100%;
-  transition: transform 0.3s ease; /* 平滑的过渡效果 */
-}
-.MRHeader.fixed {
-  top: 79px;
-}
-
-.MRHeader.fixed {
-  position: fixed;
-  transform: translateY(0); /* 固定在页面顶部 */
-}
-
-.MRHeader:not(.fixed) {
-  transform: translateY(-100%); /* 隐藏 header */
-  box-shadow: none;
-  position: relative;
-  border-bottom: 2px solid rgba(233, 233, 233);
-}
 @media (min-width: 768px) {
   .strategy-header.fixed .tableHeader {
     width: 750px;
