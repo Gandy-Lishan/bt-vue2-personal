@@ -40,7 +40,7 @@
                     <img
                       align="center"
                       alt=""
-                      src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/50434469-0496-c58b-44b7-4c1817cf1dac.png"
+                      src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/b339eded-b1af-945a-2a41-50b18255e7be.png"
                       width="564"
                       style="max-width:880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                       class="mcnImage"
