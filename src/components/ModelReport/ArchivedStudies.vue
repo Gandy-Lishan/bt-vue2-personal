@@ -11,7 +11,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <p class="page-title">Archived Studies Description</p>
+                  <p class="page-title">Archived Studies Description (click to expand)</p>
                 </template>
                 <div class="centent">
                   <p>

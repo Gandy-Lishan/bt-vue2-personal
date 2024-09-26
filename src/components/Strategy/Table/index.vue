@@ -5,7 +5,7 @@
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <h2 class="page-title">Strategies</h2><i class="header-icon el-icon-info"></i>
+          <h2 class="page-title">Strategies (click to expand)</h2><i class="header-icon el-icon-info"></i>
         </template>
         <p>
           This page provides a highlight of our Strategies. These strategies are based on multiple trading models, each with its own pros/cons. 

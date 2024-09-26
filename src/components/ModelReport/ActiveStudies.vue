@@ -50,7 +50,7 @@
           <el-collapse accordion>
             <el-collapse-item>
               <template slot="title">
-                <p class="page-title">Active Studies Description</p>
+                <p class="page-title">Active Studies Description (click to expand)</p>
               </template>
               <div class="centent">
                 <div class="col-md-7">
