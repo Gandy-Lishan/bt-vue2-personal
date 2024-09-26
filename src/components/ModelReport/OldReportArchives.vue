@@ -172,7 +172,7 @@ export default {
  methods: {
    downloadLink(filename) {
     //  return `/user/download_file/${filename}`;
-     return `https://users.sentimentrader.com/users/report/${this.year}/${filename}`
+     return `https://users.sentimentrader.com/users/report/${filename}`
    },
    imageLink(image) {
      return `https://dnpgic06wp5lx.cloudfront.net/${image}`;
