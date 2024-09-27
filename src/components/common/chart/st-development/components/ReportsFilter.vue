@@ -72,13 +72,6 @@ export default {
 			deep: true
 		},
 	},
-    mounted() {
-		EventBus.on('triggerFunction', this.filterReports);
-    },
-	beforeUnmount() {
-		// 在组件卸载前取消监听
-		EventBus.off('triggerFunction', this.filterReports);
-	},
     beforeDestroy() {
     },
 	methods: {

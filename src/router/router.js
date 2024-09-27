@@ -257,6 +257,21 @@ const routes = [
 					require(['@/components/ModelReport/ArchivedStudies.vue'], resolve)
 			},
 			{
+				path: '/MR/old_archived_reports/2014',
+				component: resolve =>
+					require(['@/components/ModelReport/ReportArchives2014.vue'], resolve)
+			},
+			{
+				path: '/MR/old_archived_reports/2013',
+				component: resolve =>
+					require(['@/components/ModelReport/ReportArchives2013.vue'], resolve)
+			},
+			{
+				path: '/MR/old_archived_reports/2012',
+				component: resolve =>
+					require(['@/components/ModelReport/ReportArchives2012.vue'], resolve)
+			},
+			{
 				path: '/MR/favorites/:page?',
 				component: resolve =>
 					require(['@/components/ModelReport/Favorites.vue'], resolve)

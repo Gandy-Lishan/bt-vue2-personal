@@ -11,14 +11,14 @@ if (
 	typeof module === "object" &&
 	typeof require === "function"
 )
-	_css = require("./markersSample.css");
+	_css = require("./markersSample.scss");
 else if (typeof define === "function" && define.amd)
-	define(["./markersSample.css"], function (m) {
+	define(["./markersSample.scss"], function (m) {
 		_css = m;
 	});
 else if (typeof window !== "undefined")
-	CIQ.loadStylesheet("st-development/components/markers/markersSample.css");
-if (_css) CIQ.addInternalStylesheet(_css, "markersSample.css");
+	CIQ.loadStylesheet("st-development/components/markers/markersSample.scss");
+if (_css) CIQ.addInternalStylesheet(_css, "markersSample.scss");
 CIQ.activateImports(markers);
 var MarkersSample = function (stx) {
 	this.stx = stx;
@@ -437,8 +437,6 @@ CIQ.setMarkerVisibility = function(type){
 	}
 }
 
-let hoveredMarkerInfo = null;
-let isHovered = false;  // 标志位，防止重复触发
 /** Report page */
 CIQ.createForecastMarker = async function(){
 	const list = await CIQ.store.dispatch('chart/get_forecast',CIQ.stxx.chart.symbol)
@@ -459,23 +457,19 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bullish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><div class="pwrap"><div style="overflow: hidden"><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a></div></div>`;
+				newNode.innerHTML = `
+				<div>
+					<div class="forecast__marker-background"></div>
+					<div class="forecast__marker-stem"></div>
+					<div class="forecast__marker-tooltip">
+						<h3>${title}</h3>
+						<div style="overflow: hidden">
+							<p>${post_date_str} | ${author}</p><p>${timeframe}</p>
+							<a href=${url} target="_blank">Click to read report</a>
+						</div>
+					</div>
+				</div>`;
 									
-				if (
-					hoveredMarkerInfo && 
-					hoveredMarkerInfo.author === author && 
-					hoveredMarkerInfo.timeframe === timeframe &&
-					hoveredMarkerInfo.market === "bullish" &&
-					hoveredMarkerInfo.post_date === post_date
-				) {
-					// Access the element with the class 'pwrap' inside newNode
-					const pwrapElement = newNode.querySelector('.pwrap');
-					// Modify its grid-template-rows property
-					if (pwrapElement) {
-						pwrapElement.style.gridTemplateRows = '1fr';
-					}
-				}
-
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
@@ -483,25 +477,6 @@ CIQ.createForecastMarker = async function(){
 					x: standardDate,
 					label: "bullish",
 					node: newNode
-				});
-
-				// 添加 hover 监听器
-				newNode.addEventListener('mouseenter', async function() {
-					if (!isHovered) {
-						isHovered = true;  // 设置为悬浮状态
-						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bullish" };
-						await CIQ.removeForecastMarker();
-						await CIQ.createForecastMarker();
-						EventBus.emit('triggerFunction');
-					}
-				});
-				
-				newNode.addEventListener('mouseleave', async function() {
-					isHovered = false;
-					hoveredMarkerInfo = null;
-					await CIQ.removeForecastMarker();
-					await CIQ.createForecastMarker();
-					EventBus.emit('triggerFunction');
 				});
 		}
 
@@ -519,48 +494,25 @@ CIQ.createForecastMarker = async function(){
 				newNode.setAttribute('data-market', "bearish");
 				newNode.setAttribute('data-author', author);
 				newNode.setAttribute('data-timeframe', timeframe);
-				newNode.innerHTML = `<h3>${title}</h3><div class="pwrap"><div style="overflow: hidden"><p>${post_date_str} | ${author}</p><p>${timeframe}</p><a href=${url} target="_blank">Click to read report</a></div></div>`;
+				newNode.innerHTML = `
+				<div>
+					<div class="forecast__marker-background"></div>
+					<div class="forecast__marker-stem"></div>
+					<div class="forecast__marker-tooltip">
+						<h3>${title}</h3>
+						<div style="overflow: hidden">
+							<p>${post_date_str} | ${author}</p><p>${timeframe}</p>
+							<a href=${url} target="_blank">Click to read report</a>
+						</div>
+					</div>
+				</div>`;
 		
-				if (
-					hoveredMarkerInfo && 
-					hoveredMarkerInfo.author === author && 
-					hoveredMarkerInfo.timeframe === timeframe &&
-					hoveredMarkerInfo.market === "bearish" &&
-					hoveredMarkerInfo.post_date === post_date
-				) {
-					// Access the element with the class 'pwrap' inside newNode
-					const pwrapElement = newNode.querySelector('.pwrap');
-					// Modify its grid-template-rows property
-					if (pwrapElement) {
-						pwrapElement.style.gridTemplateRows = '1fr';
-					}
-				}
 				new CIQ.Marker({
 					stx: CIQ.stxx,
 					xPositioner: "date",
 					x: standardDate,
 					label: "bearish",
 					node: newNode
-				});
-
-				// 添加 hover 监听器, 为了让上下重叠的marker在触发hover后能够刷新marker并重新排列
-				newNode.addEventListener('mouseenter', async function() {
-					if (!isHovered) {
-						isHovered = true;  // 设置为悬浮状态
-						hoveredMarkerInfo = { author, timeframe, post_date, "market":"bearish" };
-						console.log('mouseenter')
-						await CIQ.removeForecastMarker();
-						await CIQ.createForecastMarker();
-						EventBus.emit('triggerFunction');
-					}
-				});
-				newNode.addEventListener('mouseleave', async function() {
-					isHovered = false;
-					hoveredMarkerInfo = null;
-					console.log('mouseleave')
-					await CIQ.removeForecastMarker();
-					await CIQ.createForecastMarker();
-					EventBus.emit('triggerFunction');
 				});
 		}
 
