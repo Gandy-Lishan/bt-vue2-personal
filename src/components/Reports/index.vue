@@ -37,6 +37,7 @@ computed: {
 watch: {
   handleGetBacktestSymbol: {
       handler(newVal) {
+        // debugger
         CIQ.removeForecastMarker()
         CIQ.createForecastMarker()
       },
@@ -58,7 +59,6 @@ beforeDestroy() {
 methods:{
   onChartReady(){
     this.hideComponents()	
-    CIQ.createForecastMarker()
     CIQ.hideCover()
     CIQ.nprogress.done()
   },
