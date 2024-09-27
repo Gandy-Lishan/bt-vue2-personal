@@ -124,6 +124,9 @@
                        <span>
                          | {{post.author}}
                        </span>
+                       <button class="btn btn-default like-button no-print" @click="likePost(post.url, true)" title="Unlike this post">
+                          <i class="fa fa-heart" id="like-icon"></i>
+                        </button>
                      </div>
                      <div class="row" style="margin-bottom:10px;">
                          <article>
@@ -159,7 +162,7 @@
 
 <script>
 import { timestampToTime } from "@/utils";
-import { getMRFavoritesList, getBlogReportInfo} from "@/service/service";
+import { getMRFavoritesList, getBlogReportInfo, removeMRFavorites} from "@/service/service";
 import PreviousNextPage from './component/PreviousNextPage';
 import Search from "./component/Search";
 
@@ -277,7 +280,31 @@ export default {
      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
      if(page) _this.currentPage = Number(page)
      _this.blogPosts = results
-   }
+   },
+   async likePost(url, isFavorite) {
+    const _this = this
+    try {
+      await removeMRFavorites(url)
+      const {data: {results, count, previous, next}} = await getMRFavoritesList({
+      start_date: _this.start_date,
+      end_date: _this.end_date,
+      page: _this.currentPage
+     })
+     const getPageValue = (url) => {
+        if(url === null) return url
+        const regex = /[?&]page=(\d+)/
+        const match = url.match(regex)
+        return match ? match[1] : null
+      }
+      _this.total = Math.ceil(Number(count) / 10)
+      _this.previousPage = getPageValue(previous)
+      _this.nextPage = getPageValue(next)
+      if(_this.nextPage) _this.currentPage = (Number(_this.nextPage) - 1)
+      _this.blogPosts = results
+    } catch (error) {
+      console.log(error)
+    }
+   },
  }
 };
 </script>
@@ -331,5 +358,8 @@ a:hover {
   padding-top: 35px;
   align-items: center;
   justify-content: space-between;
+}
+.like-button {
+  position: static;
 }
 </style>
