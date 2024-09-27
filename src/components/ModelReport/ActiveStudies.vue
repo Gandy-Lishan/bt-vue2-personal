@@ -50,13 +50,13 @@
           <el-collapse accordion>
             <el-collapse-item>
               <template slot="title">
-                <p class="page-title">Active Studies Description</p>
+                <p class="page-title">Active Studies Description (click to expand)</p>
               </template>
               <div class="centent">
                 <div class="col-md-7">
                     <!-- <h4>Active Studies Description</h4> -->
-                    <span class="well well-sm" style="float: right; display: inline-block;">
-                      <p><b>What is an "active study"?</b></p>
+                    <span class="well well-sm" style="float: right; display: inline-block; text-align: justify;">
+                      <p style="margin-top: 0;"><b>What is an "active study"?</b></p>
                       <p>For every study we do that has a solid conclusion, we track it in the Active Studies. Research that includes one of these compelling studies will have a forecast attached to it, that looks like the following. It shows whether the forecast is for higher prices (green up arrow), or lower prices (red down arrow), an ETF that tracks the appropriate market, and whether the time frame is short-term (< 1 month), medium-term (1-6 months) or long-term (> 6 months). 
                         <a href="https://www.sentimentrader.com/users/knowledge_base_article/How%20accurate%20are%20your%20studies%3F">Learn more</a>
                       </p>
