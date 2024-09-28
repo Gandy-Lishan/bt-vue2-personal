@@ -1537,7 +1537,7 @@ export default {
       if((_this.bd.strategy === 'Single' && _this.isRiskControl && _this.bd.direction == 'Short')
       || (_this.bd.strategy === 'Dual' && _this.isRiskControl && (_this.bd.direction == 'Short' || _this.bd.direction2 == 'Short'))
       ) {
-        if(_this.isTakeProfit && _this.isStopLoss && _this.tp < _this.sl) {
+        if(_this.isTakeProfit && _this.isStopLoss && parseFloat(_this.tp) < parseFloat(_this.sl)) {
           _this.popUpMsgBox('When short selling, Take Profit must be greater than Stop Loss')
           return false
         }
