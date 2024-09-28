@@ -167,6 +167,10 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 .el-table th.el-table__cell.is-leaf {
   border-bottom: 2px solid #dddddd;
 }
+.el-table .border-top-row td.el-table__cell,
+.el-table .border-top-row th.el-table__cell.is-leaf {
+  border-top: 2px solid #333;
+}
 .CPM-summary .el-table td.el-table__cell,
 .CPM-summary .el-table th.el-table__cell.is-leaf {
   border: unset;

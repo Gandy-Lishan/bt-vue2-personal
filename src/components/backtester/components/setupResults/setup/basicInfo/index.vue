@@ -706,7 +706,8 @@
                             Exit Criteria selection or be solely used in the Exit Criteria
                             "Only Use Risk Control".<br/>
                             Note: When short selling, to prevent unlimited additional margin, <br/>
-                            it is mandatory to ensure that the take-profit is greater than the stop-loss.
+                            it is mandatory to ensure that the take-profit is greater than the stop-loss. <br>
+                            When short selling, Take Profit must be greater than Stop Loss.
                           </span>
                           <i class="iconfont icon-wenhao"></i> </el-tooltip
                       ></el-checkbox>
@@ -1531,6 +1532,15 @@ export default {
         if(_this.isTakeProfit) takeProfitValid = _this.validateTP(_this.tp)
         if(_this.isTimeInMarket) timeInMarketValid = _this.validateTIM(_this.tim)
         riskControlValid = (_this.isStopLoss ? (stopLossValid == '') : true) && (_this.isTakeProfit ? (takeProfitValid == '') : true) && (_this.isTimeInMarket ? (timeInMarketValid == '') : true)
+      }
+      /* 如果 Direction 是 Short 强制规定 take profit 必须要大于 stop loss */
+      if((_this.bd.strategy === 'Single' && _this.isRiskControl && _this.bd.direction == 'Short')
+      || (_this.bd.strategy === 'Dual' && _this.isRiskControl && (_this.bd.direction == 'Short' || _this.bd.direction2 == 'Short'))
+      ) {
+        if(_this.isTakeProfit && _this.isStopLoss && _this.tp < _this.sl) {
+          _this.popUpMsgBox('When short selling, Take Profit must be greater than Stop Loss')
+          return false
+        }
       }
       /* 如果勾选了 exclude overlapping observations,则校验 exclude overlapping observations */
       if(_this.isExcludeOO) excludeValid = (_this.validateExclude(_this.bd.exclude_oo) === '')
