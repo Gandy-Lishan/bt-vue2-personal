@@ -12,7 +12,7 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="150px">										
+									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="160px">										
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
@@ -538,6 +538,6 @@ export default {
   color: #dd3a13;
 }
 .MaxMinTable {
-	width: 991px;
+	width: 1001px;
 }
 </style>
