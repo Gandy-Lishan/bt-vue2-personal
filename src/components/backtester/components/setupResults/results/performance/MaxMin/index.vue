@@ -106,7 +106,7 @@ export default {
 				)
 				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of 1 Signals' && item != 'Max Gain' && item != 'Max Loss')
 				
-				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': '# of Times > 5%'}, {'Dates of 1 Signals': '# of Times > 10%' }]
+				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': '# of Times > -5%'}, {'Dates of 1 Signals': '# of Times > -10%' }]
 				defaultTableLabels.forEach(label => {
 					medianMaxGainArray.forEach(ele => {
 						if(ele['Dates of 1 Signals'] === 'Median') {
@@ -138,21 +138,23 @@ export default {
 								const avgMaxLoss = maxLossValues.reduce((sum, current) => sum + current, 0) / maxLossValues.length
 								ele[label] = {"Max Gain": avgMaxGain.toFixed(2), "Max Loss": avgMaxLoss.toFixed(2)}
 						}
-						else if(ele['Dates of 1 Signals'] === '# of Times > 5%') {
+						else if(ele['Dates of 1 Signals'] === '# of Times > -5%') {
 							// 计算大于-5%的个数
 							const monthData = backtestHistoryList.map(entry => entry[label])
-							const maxGainValues = monthData.map(entry => entry["Max Gain"])
+							// const maxGainValues = monthData.map(entry => entry["Max Gain"])
 							const maxLossValues = monthData.map(entry => entry["Max Loss"])
-							const lenMaxGain = maxGainValues.filter(num => num > 5).length
+							// const lenMaxGain = maxGainValues.filter(num => num > 5).length
+							const lenMaxGain = ''
 							const lenMaxLoss = maxLossValues.filter(num => num < -5).length
 							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
 					}
-					else if(ele['Dates of 1 Signals'] === '# of Times > 10%') {
+					else if(ele['Dates of 1 Signals'] === '# of Times > -10%') {
 							// 计算大于-5%的个数
 							const monthData = backtestHistoryList.map(entry => entry[label])
-							const maxGainValues = monthData.map(entry => entry["Max Gain"])
+							// const maxGainValues = monthData.map(entry => entry["Max Gain"])
 							const maxLossValues = monthData.map(entry => entry["Max Loss"])
-							const lenMaxGain = maxGainValues.filter(num => parseFloat(num) > 10).length
+							// const lenMaxGain = maxGainValues.filter(num => parseFloat(num) > 10).length
+							const lenMaxGain = ''
 							const lenMaxLoss = maxLossValues.filter(num => parseFloat(num) < -10).length
 							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
 					}
