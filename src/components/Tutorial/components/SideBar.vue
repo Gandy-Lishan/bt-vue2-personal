@@ -87,12 +87,10 @@ export default {
 
 <style scoped>
 .sidebar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 300px;
-  height: 90vh;
-  overflow-y: scroll;
   margin-top: 122px;
   padding-bottom: 20px;
   background-color: #fff;

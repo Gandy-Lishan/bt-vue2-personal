@@ -2004,7 +2004,6 @@ export default {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
 		Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	color: rgb(0, 50, 60);
-	position: relative;
 	margin-right: 220px;
 }
 .hideMargin {

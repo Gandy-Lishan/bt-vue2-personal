@@ -133,9 +133,6 @@ nav a:hover {
 	border-top-right-radius: 20px;
 	border-bottom-right-radius: 20px;
 }
-.content {
-  margin-top: 50px;
-}
 p {
 	margin: 0;
 	padding: 0;

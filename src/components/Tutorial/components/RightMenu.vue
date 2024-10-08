@@ -65,7 +65,7 @@ export default {
 .right-menu-wrapper {
 	width: 220px;
 	float: right;
-	position: fixed;
+	position: absolute;
 	top: 0;
 	right: 0;
 	font-size: 0.8rem;
