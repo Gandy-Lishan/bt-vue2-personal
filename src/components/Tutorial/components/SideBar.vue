@@ -93,7 +93,7 @@ export default {
   width: 300px;
   height: 90vh;
   overflow-y: scroll;
-  margin-top: 70px;
+  margin-top: 122px;
   padding-bottom: 20px;
   background-color: #fff;
 }

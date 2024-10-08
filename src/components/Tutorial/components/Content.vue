@@ -2066,7 +2066,7 @@ h3 {
 }
 .sidebar-untoggle {
 	left: 300px;
-	top: 100px;
+	top: 119px;
 }
 .sidebar-toggle {
 	left: 0;

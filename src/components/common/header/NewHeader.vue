@@ -1,13 +1,11 @@
 <template>
   <div>
     <header class="main-nav">
-      <a href="/" alt="Logo">
-        <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="30px">
-      </a>
+      <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="100%" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-submenu index="1">
           <template slot="title"><i class="fa fa-question-circle" aria-hidden="true" style="margin-right: 3px;"></i>Help</template>
-          <el-menu-item index="2-1">Tutorial Document</el-menu-item>
+          <el-menu-item index="1-1">Tutorial Document</el-menu-item>
         </el-submenu>
         <el-menu-item index="2">
           <svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,6 +56,23 @@ export default {
   data() {
     return {
       navs: [
+        {
+          label: 'Help',
+          keyPath: '1',
+          path: '/doc',
+          subMenu: [
+            {
+              label: 'Tutorial Document',
+              keyPath: '1-1',
+              path: '/doc'
+            }
+          ]
+        },
+        {
+          label: 'Tutorial Videos',
+          keyPath: '2',
+          path: '/youtube'
+        },
         {
           label: 'Strategy',
           keyPath: '3',
@@ -156,7 +171,7 @@ export default {
       console.log('path', path)
       const nav = this.navs.find(ele => path.includes(ele.path))
       console.log('nav', nav)
-      if(nav && !nav.subMenu && nav.label !== 'AI Trading') this.activeIndex = nav.keyPath
+      if(nav && !nav.subMenu && (nav.label !== 'AI Trading' && nav.label !== 'Tutorial Videos')) this.activeIndex = nav.keyPath
       if(nav && nav.subMenu) this.activeIndex = nav.subMenu.find(ele => path.includes(ele.path)).keyPath
     }
   },
@@ -165,6 +180,20 @@ export default {
       console.log(key, keyPath);
       if(key === '9') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
+        return
+      }
+      if(key === '1-1') {
+        this.$router.push('/doc')
+        return
+      }
+      if(key === '2') {
+        let path = '/'
+        if (this.$route.path.includes('/backtester')) {
+          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
+        }else if(this.$route.path.includes('myindicator') || this.$route.path.includes('MIList')){
+          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        }
+        window.open(path, '_blank')
         return
       }
       this.activeIndex = key
@@ -193,6 +222,9 @@ export default {
         const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
         return allowedReportEmails.includes(email)
       }
+    },
+    backHome() {
+      this.$router.push('/')
     }
   }
 }
@@ -209,6 +241,10 @@ export default {
   border-bottom: 1px solid #eee;
   /deep/ .el-menu.el-menu--horizontal {
     border-bottom: none;
+  }
+  img {
+    padding-left: 10px;
+    cursor: pointer;
   }
 }
 .el-menu-item * {
