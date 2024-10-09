@@ -268,7 +268,7 @@ export default {
   &.bottom {
     /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title:hover {
       background-color: #666;
-      color: black
+      color: white !important
     }
     .el-submenu__title i {
       color: white !important;
