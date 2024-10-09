@@ -47,15 +47,6 @@
 .el-submenu__title:hover i{
   color:#909399 !important;
 }
-.el-submenu__title i {
-  color: #333;
-}
-.el-menu--horizontal>.el-submenu .el-submenu__title {
-  color: #333;
-}
-.el-menu--horizontal>.el-menu-item {
-  color: #333;
-}
 
 .el-icon-arrow-down {display: none;}
 .el-menu--inline .el-menu-item {
@@ -139,18 +130,6 @@
   color: #FFF;
   background-color: #5b9bd1;
   border-color: #5b9bd1;
-}
-
-.el-menu--horizontal>.el-menu-item.is-active, .help-link-active, .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
-  border-bottom: 4px solid #5b9bd1;
-  color: #5b9bd1 !important;
-}
-.help-link-active .el-submenu__title{
-  color: #5b9bd1 !important;
-}
-.el-menu--horizontal>.el-menu-item.news-icon.is-active {
-  border-bottom: none;
-  color: #5b9bd1 !important;
 }
 
 .el-notification {
