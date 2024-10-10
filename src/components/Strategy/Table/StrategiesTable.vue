@@ -571,7 +571,7 @@ export default {
 					const hour = date.getHours();
 					const minute = date.getMinutes();
 					const second = date.getSeconds();
-					matchStrategy.name = `${matchStrategy.name}(${year}-${month}-${day} ${hour}:${minute}:${second})`
+					matchStrategy.name = `${matchStrategy.name} (${year}-${month}-${day} ${hour}:${minute}:${second})`
 					this.$store.commit('form/getRunBacktestData', matchStrategy)
 
 					this.$router.push({

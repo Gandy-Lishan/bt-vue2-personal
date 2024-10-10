@@ -85,7 +85,9 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 /* .el-tabs--left{
 	overflow-x: scroll !important;
 } */
-
+li.el-submenu.is-active.report-menu .el-submenu__title {
+  height: 56px !important;
+}
 .set-up-criteria.el-tabs,
 .set-up-criteria.el-tabs  .el-tabs__item,
 .set-up-criteria.el-tabs .el-tabs__item.is-active{

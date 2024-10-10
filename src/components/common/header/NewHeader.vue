@@ -273,6 +273,12 @@ export default {
     .el-submenu__title i {
       color: white !important;
     }
+    .report-menu /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
+      height: 56px !important;
+    }
+    /deep/ .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover {
+    background-color: #666 !important;
+    }
   }
   /deep/ li.el-submenu.report-menu .el-submenu__title{
     color: white;
