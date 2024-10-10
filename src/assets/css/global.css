@@ -805,6 +805,10 @@ button#checkResBtn {
 		padding-right: 15px;
 		padding-left: 15px;
 	}
+  .col-md-12.indicators {
+		padding-right: 0px;
+		padding-left: 0px;
+  }
   .col-md-12.portfolio {
 		padding-right: 0px;
 		padding-left: 0px;

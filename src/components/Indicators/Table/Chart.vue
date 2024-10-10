@@ -141,7 +141,7 @@
         });
       };
 
-      const createChart = (series, allKeysName, basicChartOptions, row) => {
+      const createChart = (series, allKeysName, basicChartOptions, row, zoonsData) => {
         console.log('series: ', series);
         const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
@@ -311,7 +311,9 @@
             lineWidth: !isOptPess ? 2 : 1,
             dataGrouping: {
                 enabled: false
-            }
+            },
+            zoneAxis: 'x',
+            zones: url === 'risk_measure' ? zoonsData : [],
           }}),
           chart: basicChartOptions
         });
@@ -319,6 +321,7 @@
  
       try {
       let {last_value, last_change_type, market_symbol} = this.row;
+      let zoonsData = [];
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data;
@@ -357,11 +360,20 @@
           allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
           allKeysName = allKeysName.concat(['opt', 'pess'])
         }
+        if(allKeysName.includes('Color') && url === 'risk_measure') {
+          allKeysName = allKeysName.filter(keyName => keyName !== 'Color')
+          originalData.forEach(item => {
+            const pointColor = item['Color'] ? '#ff0000' : '#000000';  // 红色为 false，黑色为 true
+            zoonsData.push({
+              value: new Date(item['date']).getTime(),   // 时间点
+              color: pointColor  // 对应的颜色
+            })
+          })
+        }
         const data = allKeysName.reduce((acc, keyName) => {
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
         }, {});
- 
         const series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
           if (last_value !== null && last_value !== undefined) {
@@ -395,7 +407,7 @@
             data: data[key]
           }
         })
-        createChart(series, allKeysName, basicChartOptions, this.row);
+        createChart(series, allKeysName, basicChartOptions, this.row, zoonsData);
       } catch (error) {
         console.error('Error fetching data', error);
       }

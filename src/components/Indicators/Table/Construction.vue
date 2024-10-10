@@ -11,7 +11,7 @@
 			<div class="container construction-container">
 
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-12 indicators">
 						<div class="portlet light">
 							<div col="col-md-12 construction">
 								<slot></slot>

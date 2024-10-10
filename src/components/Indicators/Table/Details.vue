@@ -117,6 +117,10 @@ export default {
             text = text.replace(regex, (match, p1, p2) => {
             return `<a href="https://users.sentimentrader.com/users/charts/${p1}" target="_blank">${p2}</a>`;
             });
+            text = text.replace(
+              /<a href="\/users\/(.*?)">/g, 
+              '<a href="https://users.sentimentrader.com/users/$1" target="_blank">'
+            );
             return text
           }
           const res = await getIndicatorsRowData(newValue.url)
