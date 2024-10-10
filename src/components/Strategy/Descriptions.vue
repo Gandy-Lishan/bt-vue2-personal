@@ -23,6 +23,7 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
+								<StrategyChart :index1="'SPY'" :strat_data="strat_data" :load_strategy_chart="true"></StrategyChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -125,11 +126,15 @@
 </template>
 
 <script>
-import { getStrategyDescription, getStrategiesJSON } from '@/service/service'
+import StrategyChart from "./Table/StrategyChart";
+import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
 import { timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
+	components: {
+		StrategyChart
+	},
 	data() {
 		return {
 			convertedHTML: '',
@@ -154,7 +159,8 @@ export default {
 					['trades_per_year', `Trades<br />Per Year`]
 				]),
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
-				backtestStrategy: null
+				backtestStrategy: null,
+				strat_data: []
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -171,6 +177,90 @@ export default {
 				_this.signalDes = res?.data?.data
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
+				const {start_date, end_date} = _data
+				const buy_signal = 
+				[
+					"2012-05-15",
+					"2012-11-15",
+					"2013-08-28",
+					"2014-02-04",
+					"2014-08-08",
+					"2014-10-13",
+					"2015-01-16",
+					"2015-08-25",
+					"2016-01-14",
+					"2018-03-28",
+					"2018-10-16",
+					"2018-12-19",
+					"2018-12-26",
+					"2019-06-03",
+					"2019-08-15",
+					"2020-03-02",
+					"2020-03-10",
+					"2020-03-13",
+					"2020-03-17",
+					"2020-03-24",
+					"2020-09-21",
+					"2022-01-20",
+					"2022-03-14",
+					"2022-04-25",
+					"2022-05-13",
+					"2022-06-17",
+					"2022-09-01",
+					"2022-09-28",
+					"2022-12-29",
+					"2023-08-17",
+					"2023-10-04",
+					"2024-04-22",
+					"2024-07-31"
+			]
+				const sell_signal = 
+				[
+					"2012-06-26",
+					"2012-12-18",
+					"2013-10-09",
+					"2014-02-28",
+					"2014-09-19",
+					"2014-11-07",
+					"2015-03-02",
+					"2015-10-06",
+					"2016-02-26",
+					"2018-05-09",
+					"2018-11-27",
+					"2018-12-24",
+					"2019-01-04",
+					"2019-06-20",
+					"2019-09-26",
+					"2020-03-09",
+					"2020-03-12",
+					"2020-03-16",
+					"2020-03-23",
+					"2020-03-25",
+					"2020-10-12",
+					"2022-02-24",
+					"2022-03-22",
+					"2022-05-12",
+					"2022-06-16",
+					"2022-06-27",
+					"2022-09-27",
+					"2022-10-28",
+					"2023-01-27",
+					"2023-09-28",
+					"2023-11-14",
+					"2024-05-23",
+					"2024-08-07"
+			]
+				const pairRes = await getPairData(start_date, end_date, 'Daily', 'SPY')
+				const pairDataDate = pairRes.data.map((item) => {
+						const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+						if (dateRegex.test(item.DT)) {
+							const currentDate = timestampToTime(item.DT)
+							return [new Date(item.DT).getTime(), item.Close, buy_signal.includes(currentDate) ? 1 : null, sell_signal.includes(currentDate) ? -1 : null]
+						} else {
+								return [null, item.Close, buy_signal.includes(currentDate) ? 1 : null, sell_signal.includes(currentDate) ? -1 : null]
+						}
+				})
+				console.log('pairDataDate', pairDataDate)
 				const description = Array.isArray(data) ? data[0]?.description : ''
 				const convertToHTML = (text) => {
 					// 替换换行符、制表符、大于号、和与号
@@ -232,7 +322,7 @@ export default {
 						}
 					})
 					return text
-      	}
+    }
 				let _res = await getStrategiesJSON()
 				let strategies = _res?.data
 				_this.backtestStrategy = strategies.find((item) => item.name === _this.title) ? strategies.find((item) => item.name === _this.title) : null
@@ -245,9 +335,10 @@ export default {
 					return `${month} ${year}`
 				}
 
-				_this.$nextTick(() => {
+				_this.$nextTick(async () => {
 					if(!_data) return
 					const  {start_date, end_date} = _data
+					console.log('_data', _data)
 					_this.convertedHTML = convertToHTML(description)
 					_this.performanceHTML = `
 						<h3>Performance</h3>
@@ -301,8 +392,9 @@ export default {
 							}).join('')}
 						</ol>
 					`
+				_this.strat_data = pairDataDate
 				})
-      }
+    }
 			}
     })
     } else {
