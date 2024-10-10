@@ -56,6 +56,24 @@
 										</table>
 										<br>
 									</div>
+                  <div class="col-md-6" v-show="return_segments && Array.isArray(return_segments) && return_segments.length
+                   > 0">
+                    <el-button size="small" @click="isShowInfoTable = !isShowInfoTable">Hide Info Table</el-button>
+                    <table class="threshold-table" v-show="isShowInfoTable">
+											<thead>
+												<tr>
+													<th>Location of Indicator</th>
+													<th>Annualized Return</th>
+													<th>% of Time</th>
+												</tr>
+											</thead>
+											<tbody>
+                        <tr v-for="(item, index) in return_segments" :key="index">
+                          <td v-for="(val, key, i) in item" :key="i">{{val}}</td>
+                        </tr>
+											</tbody>
+										</table>
+                  </div>
 								</div>
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
@@ -93,7 +111,9 @@ export default {
       percent_time_between: '',
       Above_Annualized: '',
       Below_Annualized: '',
-      Between_Annualized: ''
+      Between_Annualized: '',
+      return_segments: [],
+      isShowInfoTable: false
     }
   },
   watch: {
@@ -134,6 +154,7 @@ export default {
           this.related = originalData.related
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
+          this.return_segments = originalData.return_segments
           const indicatorInfo = []
           const unifyNumber = (num) => {
             if (num === '') {
