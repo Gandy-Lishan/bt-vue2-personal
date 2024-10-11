@@ -2043,7 +2043,7 @@ h3 {
 	width: 40px;
 	height: 40px;
 	display: inline-block;
-	position: fixed;
+	position: absolute;
 	text-align: center;
 	line-height: 44px;
 	margin: 5px 8px;
@@ -2065,11 +2065,11 @@ h3 {
 }
 .sidebar-untoggle {
 	left: 300px;
-	top: 119px;
+	top: 126px;
 }
 .sidebar-toggle {
 	left: 0;
-	top: 100px;
+	top: 123px;
 }
 .image-border {
 	border: 1px solid #00323c;
