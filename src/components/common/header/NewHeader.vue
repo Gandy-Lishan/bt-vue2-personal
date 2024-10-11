@@ -217,6 +217,9 @@ export default {
       if(['Strategy', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
+      if(label === 'Smart Stock Scanner') {
+        return (getTokenRole() == 2 && getTokenRole() != 'None')
+      }
       if(label === 'AI Trading') {
         return email === 'hao@sentimentrader.com'
       }
