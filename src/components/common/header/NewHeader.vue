@@ -3,14 +3,6 @@
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="fa fa-question-circle" aria-hidden="true" style="margin-right: 3px;"></i>
-            Help
-            <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
-          </template>
-          <el-menu-item index="1-1">Tutorial Document</el-menu-item>
-        </el-submenu>
         <el-menu-item index="2" class="tutorial-svg">
           <svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M164.301 0H21.4442C15.761 5.18001e-08 10.3105 2.25765 6.29191 6.27628C2.27327 10.2949 0.0156251 15.7454 0.015625 21.4286V164.286C0.0156251 169.969 2.27327 175.419 6.29191 179.438C10.3105 183.457 15.761 185.714 21.4442 185.714H164.301C169.985 185.714 175.435 183.457 179.454 179.438C183.472 175.419 185.73 169.969 185.73 164.286V21.4286C185.73 15.7454 183.472 10.2949 179.454 6.27628C175.435 2.25765 169.985 5.18001e-08 164.301 0ZM21.4442 14.2857H164.301C166.196 14.2857 168.013 15.0383 169.352 16.3778C170.692 17.7174 171.444 19.5342 171.444 21.4286V164.286C171.444 166.18 170.692 167.997 169.352 169.336C168.013 170.676 166.196 171.429 164.301 171.429H21.4442C19.5498 171.429 17.733 170.676 16.3934 169.336C15.0539 167.997 14.3013 166.18 14.3013 164.286V21.4286C14.3013 19.5342 15.0539 17.7174 16.3934 16.3778C17.733 15.0383 19.5498 14.2857 21.4442 14.2857Z" fill="#333"/>
@@ -19,6 +11,14 @@
           </svg>
           Tutorial Videos
         </el-menu-item>
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="fa fa-question-circle" aria-hidden="true" style="margin-right: 3px;"></i>
+            Help
+            <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
+          </template>
+          <el-menu-item index="1-1">Tutorial Document</el-menu-item>
+        </el-submenu>
       </el-menu>
     </header>
     <header class="main-nav bottom">
@@ -62,6 +62,11 @@ export default {
     return {
       navs: [
         {
+          label: 'Tutorial Videos',
+          keyPath: '2',
+          path: '/youtube'
+        },
+        {
           label: 'Help',
           keyPath: '1',
           path: '/doc',
@@ -72,46 +77,6 @@ export default {
               path: '/doc'
             }
           ]
-        },
-        {
-          label: 'Tutorial Videos',
-          keyPath: '2',
-          path: '/youtube'
-        },
-        {
-          label: 'Strategy',
-          keyPath: '3',
-          path: '/strategy'
-        },
-        {
-          label: 'BacktestEdge',
-          keyPath: '4',
-          path: '/backtester'
-        },
-        {
-          label: 'Smart Stock Scanner',
-          keyPath: '5',
-          path: '/scannerai'
-        },
-        {
-          label: 'My Indicator',
-          keyPath: '6',
-          path: '/myindicator'
-        },
-        {
-          label: 'Seasonality',
-          keyPath: '7',
-          path: '/seasonality'
-        },
-        {
-          label: 'Correlation Pattern Match',
-          keyPath: '8',
-          path: '/cpm'
-        },
-        {
-          label: 'AI Trading',
-          keyPath: '9',
-          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
         {
           label: 'Reports',
@@ -164,6 +129,41 @@ export default {
           label: 'Indicators',
           keyPath: '11',
           path: '/indicators'
+        },
+        {
+          label: 'Strategy',
+          keyPath: '3',
+          path: '/strategy'
+        },
+        {
+          label: 'BacktestEdge',
+          keyPath: '4',
+          path: '/backtester'
+        },
+        {
+          label: 'Smart Stock Scanner',
+          keyPath: '5',
+          path: '/scannerai'
+        },
+        {
+          label: 'My Indicator',
+          keyPath: '6',
+          path: '/myindicator'
+        },
+        {
+          label: 'Seasonality',
+          keyPath: '7',
+          path: '/seasonality'
+        },
+        {
+          label: 'Correlation Pattern Match',
+          keyPath: '8',
+          path: '/cpm'
+        },
+        {
+          label: 'AI Trading',
+          keyPath: '9',
+          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
       ],
       activeIndex: '1',
