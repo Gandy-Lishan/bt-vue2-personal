@@ -69,7 +69,7 @@
 											</thead>
 											<tbody>
                         <tr v-for="(item, index) in return_segments" :key="index">
-                          <td v-for="(val, key, i) in item" :key="i">{{val}}</td>
+                          <td v-for="(val, key, i) in item" :key="i">{{val}}{{key === 'Return' || key === 'Time' ? '%' : ''}}</td>
                         </tr>
 											</tbody>
 										</table>
