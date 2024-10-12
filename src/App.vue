@@ -25,7 +25,7 @@
 	</div>
 </template>
 <script>
-import { Header, Footer, RecentUpdate, FloatBtns, CnNotify } from "@/components/common"
+import { Header, NewHeader, Footer, RecentUpdate, FloatBtns, CnNotify } from "@/components/common"
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import Cookies from 'vue-cookies'
 import axios from "./axios";
@@ -39,11 +39,11 @@ export default {
 		}
 	},
 	components: {
-		Header,
+		Header: NewHeader,
 		Footer,
 		RecentUpdate,
 		FloatBtns,
-		CnNotify,
+		CnNotify
 	},
 	async mounted() {
 		this.watchUpdate()
@@ -210,8 +210,8 @@ a:hover{
 }
 
 #app {
-	overflow-y: auto;
-	overflow-x: hidden;
+		overflow-x: hidden;
+		overflow-y: auto;
   font-family: "Open Sans",sans-serif;
 }
 

@@ -319,6 +319,8 @@
  
       try {
       let {last_value, last_change_type, market_symbol} = this.row;
+      let zoonsData = [];
+      let isRiskMeasure = false
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data;
@@ -357,12 +359,25 @@
           allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
           allKeysName = allKeysName.concat(['opt', 'pess'])
         }
+        if(allKeysName.includes('Color') && url === 'risk_measure') {
+          isRiskMeasure = true
+          allKeysName = allKeysName.filter(keyName => keyName !== 'Color')
+          originalData.forEach(item => {
+            const pointColor = item['Color'] ? '#ff0000' : '#000000';
+            if (zoonsData.length === 0 || zoonsData[zoonsData.length - 1].color !== pointColor){
+              zoonsData.push({
+              value: new Date(item['date']).getTime(),   // 时间点
+              color: pointColor  // 对应的颜色
+            })
+            }  // 红色为 false，黑色为 true
+            
+          })
+        }
         const data = allKeysName.reduce((acc, keyName) => {
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
         }, {});
- 
-        const series = Object.keys(data).map(key => {
+        let series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
           if (last_value !== null && last_value !== undefined) {
                // 处理 last_value 的值类型
@@ -392,9 +407,28 @@
           else name = key
           return {
             name: `${name}${key.includes('_') && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
-            data: data[key]
+            data: data[key],
+            zoneAxis: 'x',
+            zones: url === 'risk_measure' ? zoonsData : [],
           }
         })
+        if(isRiskMeasure) {
+          // 循环结束后，确保将最后一天的数据添加到 zones
+          series.forEach(serie => {
+            console.log('serie-forEach', serie)
+            if(serie.data.length > 0) {
+              const lastValue = serie.data[serie.data.length - 1]
+              const lastPointColor = url === 'risk_measure' ? (lastValue['Color'] ? '#000000' : '#ff0000') : null;
+              // 检查是否已经添加了最后一个区间，如果没有，则添加
+              if (zoonsData.length === 0 || zoonsData[zoonsData.length - 1].value !== lastValue[0]) {
+                zoonsData.push({
+                  "value": lastValue[0],   // 最后一天时间点
+                  "color": lastPointColor  // 最后一天对应的颜色
+                });
+              }
+            }
+          })
+        }
         createChart(series, allKeysName, basicChartOptions, this.row);
       } catch (error) {
         console.error('Error fetching data', error);
@@ -408,5 +442,8 @@
  .highcharts-container {
   width: 100% !important;
   height: 100% !important;
+ }
+ .test {
+  color: #000000;
  }
  </style>

@@ -26,11 +26,6 @@
 	}
 }
 
-.navbar {
-	height: 78px;
-  width: 100vw;
-}
-
 .header_logo {
 	display: flex;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
@@ -49,7 +44,6 @@
 		.home-link,
 		.help-link,
 		.ai-link {
-			height: 78px;
 			display: flex;
 			align-items: center;
 			color: #333;
@@ -111,9 +105,6 @@
 		}
 	}
 }
-.el-menu--horizontal > .el-menu-item {
-	line-height: 76px;
-}
 .el-menu-item, .el-submenu__title {
-	padding: 0 5px;
+	padding: 0 10px;
 }

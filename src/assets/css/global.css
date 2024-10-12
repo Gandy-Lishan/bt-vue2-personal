@@ -85,7 +85,9 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
 /* .el-tabs--left{
 	overflow-x: scroll !important;
 } */
-
+li.el-submenu.is-active.report-menu .el-submenu__title {
+  height: 56px !important;
+}
 .set-up-criteria.el-tabs,
 .set-up-criteria.el-tabs  .el-tabs__item,
 .set-up-criteria.el-tabs .el-tabs__item.is-active{
@@ -803,6 +805,10 @@ button#checkResBtn {
 		padding-right: 15px;
 		padding-left: 15px;
 	}
+  .col-md-12.indicators {
+		padding-right: 0px;
+		padding-left: 0px;
+  }
   .col-md-12.portfolio {
 		padding-right: 0px;
 		padding-left: 0px;

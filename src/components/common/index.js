@@ -7,6 +7,7 @@ import Tabs from "./tabs"
 import LoadingOverlay from "./progress/LoadingOverlay" 
 import LoadingOverlayChart from "./progress/LoadingOverlayChart"
 import CnNotify from "./cnNotify/CnNotify.vue"
+import NewHeader from "./header/NewHeader"
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   LoadingOverlay,
   LoadingOverlayChart,
   CnNotify,
+  NewHeader
 }
