@@ -154,11 +154,10 @@ export default {
      let yAxis = [
        {
          name: 'spx',
-         title: { text: this.strategy_titles['spx'], x:10, y: 0, style: { color: this.strategy_colors['spx'], fontWeight: 'bold', fontSize: '10px' } },
-         labels: { align: 'right', style: { color: this.strategy_colors['spx'] } },
+         labels: { align: 'right', x: 0, style: { color: this.strategy_colors['spx'] } },
          top: '0%',
          height: '100%',
-         offset: 0
+         offset: 30
        },
        {
          name: 'buy_signal',
@@ -179,11 +178,10 @@ export default {
         yAxis = [...yAxis, 
           {
             name: 'spx2',
-            title: { text: this.strategy_titles['spx2'], x: 10, y: 30, style: { color: this.strategy_colors['spx2'], fontWeight: 'bold', fontSize: '10px' } },
-            labels: { align: 'right', style: { color: this.strategy_colors['spx2'] } },
+            labels: { align: 'right', x: 0, style: { color: this.strategy_colors['spx2'] } },
             top: '0%',
             height: '100%',
-            offset: 0
+            offset: 30
           },
           {
             name: 'buy_signal2',
