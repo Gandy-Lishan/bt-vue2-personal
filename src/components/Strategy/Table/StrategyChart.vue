@@ -8,7 +8,6 @@ import 'highcharts/indicators/indicators';
 import 'highcharts/indicators/bollinger-bands';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import { timestampToTime } from '@/utils';
 
 export default {
  name: 'StrategyChart',
@@ -16,38 +15,51 @@ export default {
    return {
      strategy_sets: {
        spx: [],
+       spx2: [],
        buy_signal: [],
-       sell_signal: []
+       buy_signal2: [],
+       sell_signal: [],
+       sell_signal2: []
      },
      strategy_titles: {
-       spx: 'SPY',  // Assuming `index1` is passed from props or data
+       spx: '',  // Assuming `index1` is passed from props or data
+       spx2: '',  // Assuming `index1` is passed from props or data
        buy_signal: 'Buy Signal',
-       sell_signal: 'Sell Signal'
+       buy_signal2: 'Buy Signal2',
+       sell_signal: 'Sell Signal',
+       sell_signal2: 'Sell Signal2'
      },
      strategy_types: {
        spx: 'line',
+       spx2: 'line',
        buy_signal: 'scatter',
-       sell_signal: 'scatter'
+       buy_signal2: 'scatter',
+       sell_signal: 'scatter',
+       sell_signal2: 'scatter'
      },
      strategy_colors: {
        spx: "#000000",
+       spx2: "#0000ff",
        buy_signal: "#008000",
-       sell_signal: "#ff0000"
+       buy_signal2: "#00ff00",
+       sell_signal: "#ff0000",
+       sell_signal2: "#ffa500",
      },
      strategy_marker: {
        spx: "circle",
+       spx2: "spuare",
        buy_signal: 'triangle',
-       sell_signal: 'triangle-down'
+       buy_signal2: 'triangle',
+       sell_signal: 'triangle-down',
+       sell_signal2: 'triangle-down'
      },
      strat_marker_radius: {
        spx: 5,
+       spx2: 5,
        buy_signal: 7,
-       sell_signal: 7
-     },
-     strategy_suffixes: {
-       spx: "",
-       buy_signal: "",
-       sell_signal: ""
+       buy_signal2: 7,
+       sell_signal: 7,
+       sell_signal2: 7
      }
    };
  },
@@ -62,28 +74,45 @@ export default {
   index1: 指标的名称
   load_strategy_chart: 是否加载策略图表
   */
-   strat_data: Array,
+   strat_data: Object,
    index1: String,  // Assuming index1 is passed as a prop
-   load_strategy_chart: Boolean
+   load_strategy_chart: Boolean,
  },
  watch: {
    strat_data: {
     handler(newValue, oldValue) {
-       if (newValue && Array.isArray(newValue) && newValue.length > 0) {
-         this.splitDataStrats(newValue);
+      if(Array.from(Object.keys(newValue)).length !== 0) {
+        const {strat_data, symbolName} = newValue
+
+       if (strat_data && Array.isArray(strat_data) && strat_data.length > 0) {
+          const [_strat_data, _strat_data2] = strat_data
+          const {symbol1, symbol2} = symbolName
+          this.strategy_titles = {
+            ...this.strategy_titles,
+            spx: symbol1 || '',
+            spx2: symbol2 || '',
+            buy_signal: `Buy Signal(${symbol1 || ''})`,
+            sell_signal: `Sell Signal(${symbol1 || ''})`,
+            buy_signal2: `Buy Signal(${symbol2 || ''})`,
+            sell_signal2: `Sell Signal(${symbol2 || ''})`,
+          }
+         this.splitDataStrats(_strat_data, _strat_data2);
          this.createChartStrat();
        }
-    }
-   },
+      }
+    }, 
    deep: true
+   }
   },
   mounted() {
     Exporting(Highcharts);
     ExportData(Highcharts);
   },
  methods: {
-   splitDataStrats(data_strat) {
+   splitDataStrats(data_strat, data_strat2) {
      const dataLength = data_strat.length;
+     const offset = 15
+
       for (let i = 0; i < dataLength; i++) {
         const date = data_strat[i][0],
             spx = data_strat[i][1],
@@ -95,22 +124,41 @@ export default {
 
         // Buy 和 Sell 信号放在 SPX 的线上
         if (buy_signal !== null) {
-          this.strategy_sets.buy_signal.push([date, spx]);  // 用 spx 值作为 buy_signal 的 y 轴值
+          this.strategy_sets.buy_signal.push([date, spx - offset]);  // 用 spx 值作为 buy_signal 的 y 轴值
         }
         if (sell_signal !== null) {
-          this.strategy_sets.sell_signal.push([date, spx]);  // 用 spx 值作为 sell_signal 的 y 轴值
+          this.strategy_sets.sell_signal.push([date, spx + offset]);  // 用 spx 值作为 sell_signal 的 y 轴值
+        }
+      }
+      if(data_strat2 && Array.isArray(data_strat2) && data_strat2.length) {
+        for (let i = 0; i < data_strat2.length; i++) {
+          const date2 = data_strat2[i][0],
+              spx2 = data_strat2[i][1],
+              buy_signal2 = data_strat2[i][2],
+              sell_signal2 = data_strat2[i][3];
+
+          // SPX 数据
+          this.strategy_sets.spx2.push([date2, spx2]);
+
+          // Buy 和 Sell 信号放在 SPX 的线上
+          if (buy_signal2 !== null) {
+            this.strategy_sets.buy_signal2.push([date2, spx2 - offset]);  // 用 spx 值作为 buy_signal 的 y 轴值
+          }
+          if (sell_signal2 !== null) {
+            this.strategy_sets.sell_signal2.push([date2, spx2 + offset]);  // 用 spx 值作为 sell_signal 的 y 轴值
+          }
         }
       }
    },
    createChartStrat() {
-     const yAxis = [
+     let yAxis = [
        {
          name: 'spx',
-         title: { text: this.strategy_titles['spx'], style: { color: this.strategy_colors['spx'] } },
-         labels: { align: 'right', x: 0, style: { color: this.strategy_colors['spx'] } },
+         title: { text: this.strategy_titles['spx'], x:10, y: 0, style: { color: this.strategy_colors['spx'], fontWeight: 'bold', fontSize: '10px' } },
+         labels: { align: 'right', style: { color: this.strategy_colors['spx'] } },
          top: '0%',
          height: '100%',
-         offset: 30
+         offset: 0
        },
        {
          name: 'buy_signal',
@@ -125,13 +173,44 @@ export default {
          labels: { enabled: false }
        }
      ];
+     const {strat_data} = this.strat_data
+     const [_strat1, _strat2] = strat_data
+     if(_strat2 && Array.isArray(_strat2) && _strat2.length) {
+        yAxis = [...yAxis, 
+          {
+            name: 'spx2',
+            title: { text: this.strategy_titles['spx2'], x: 10, y: 30, style: { color: this.strategy_colors['spx2'], fontWeight: 'bold', fontSize: '10px' } },
+            labels: { align: 'right', style: { color: this.strategy_colors['spx2'] } },
+            top: '0%',
+            height: '100%',
+            offset: 0
+          },
+          {
+            name: 'buy_signal2',
+            linkedTo: 3,
+            title: { enabled: false },
+            labels: { enabled: false }
+          },
+          {
+            name: 'sell_signal2',
+            linkedTo: 3,
+            title: { enabled: false },
+            labels: { enabled: false }
+          }
+        ]
+     } 
 
      Highcharts.stockChart('strategy_chart', {
        title: { text: "" },
        navigator: { 
-        series: {
-            color: '#2f7ed8'  // Set the color to match the bottom series
-        }
+        series: [
+          {
+              color: '#2f7ed8'  // Set the color to match the bottom series
+          },
+          {
+              color: '#333'  // Set the color to match the bottom series
+          }
+        ] 
         },
        rangeSelector: {
          selected: 3,
@@ -201,8 +280,9 @@ export default {
           } else {
             // 处理独立点的 tooltip
             const name = this.series.name;
+            const offset = name.includes('Sell') ? -15 : 15
             let s = `${name}<br>`;
-            s += `<span>x: <b>${Highcharts.dateFormat('%m-%d-%Y', this.x)}</b></span><br><span>y: <b>${this.y}</b></span><br>`;
+            s += `<span>x: <b>${Highcharts.dateFormat('%m-%d-%Y', this.x)}</b></span><br><span>y: <b>${this.y + offset}</b></span><br>`;
             return s;
           }
         }
@@ -222,27 +302,35 @@ export default {
           },
           events: {
             mouseOver: function () {
+              // 暂时禁用 line 的鼠标跟踪，防止 tooltip 触发
+              try {
+                if(this.chart?.series) {
+                    this.chart.series.forEach(series => {
+                    if (series.type === 'line') {
+                      series.update({ enableMouseTracking: false });
+                    }
+                  });
+                }
+              } catch (error) {
+                console.log('error', error)
+              }
               // 当 hover 到 scatter（三角形）时，隐藏其他 series 的 tooltip
               this.chart.tooltip.hide();
-              // 暂时禁用 line 的鼠标跟踪，防止 tooltip 触发
-              // if(this.chart?.series) {
-              //   this.chart.series.forEach(series => {
-              //   if (series.type === 'line') {
-              //     series.update({ enableMouseTracking: false });
-              //   }
-              // });
-              // }
             },
             mouseOut: function () {
               console.log('mouseOut', this.chart);
               // 当移出 scatter 时，重新启用 line 的鼠标跟踪和 tooltip
-              // if(this.chart?.series) {
-              //   this.chart.series.forEach(series => {
-              //     if (series.type === 'line') {
-              //       series.update({ enableMouseTracking: true });
-              //     }
-              //   });
-              // }
+              try {
+                if(this.chart?.series) {
+                  this.chart.series.forEach(series => {
+                    if (series.type === 'line') {
+                      series.update({ enableMouseTracking: true });
+                    }
+                  });
+                }
+              } catch (error) {
+                console.log('error', error)
+              }
               // 重新显示 tooltip
               this.chart.tooltip.refresh();
             }
@@ -281,9 +369,11 @@ export default {
    },
    getSeriesListStrat(yAxis) {
       const strat_series = [];
+      debugger
       for (let i = 0; i < yAxis.length; i++) {
-        const name = yAxis[i].name;
-        const isSignal = name === 'buy_signal' || name === 'sell_signal';
+        let name = yAxis[i].name;
+        if(name.endsWith('2') && Array.isArray(this.strategy_sets[`${name}2`]) && this.strategy_sets[`${name}2`].length) name = `${name}2`
+        const isSignal = ['buy_signal', 'buy_signal2', 'sell_signal', 'sell_signal2'].includes(name)
         const series = {
           name: this.strategy_titles[name],
           type: this.strategy_types[name],  // 继续使用 scatter 类型
@@ -328,7 +418,8 @@ export default {
               opacity: 1,
             },
           },
-        };
+          showInNavigator: !isSignal
+        }
         strat_series.push(series);
       }
       return strat_series;

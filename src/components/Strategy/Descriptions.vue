@@ -23,7 +23,7 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<StrategyChart :index1="'SPY'" :strat_data="strat_data" :load_strategy_chart="true"></StrategyChart>
+								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -128,7 +128,7 @@
 <script>
 import StrategyChart from "./Table/StrategyChart";
 import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
-import { timestampToTime } from '@/utils'
+import { isJson, timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
@@ -160,7 +160,8 @@ export default {
 				]),
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
 				backtestStrategy: null,
-				strat_data: []
+				strat_data: {},
+				isShowChart: false
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -168,6 +169,8 @@ export default {
     next(async _this => {
 			const url = to?.query?.url
 			_this.title = to?.query?.name
+			const frequency = to?.query?.frequency
+			let isShowChart = false
 			if(url) {
 			// 发送请求取得具体描述信息
       const res = await getStrategyDescription(url)
@@ -177,80 +180,26 @@ export default {
 				_this.signalDes = res?.data?.data
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
-				const {start_date, end_date} = _data
-				const buy_signal = 
-				[
-					"2012-05-15",
-					"2012-11-15",
-					"2013-08-28",
-					"2014-02-04",
-					"2014-08-08",
-					"2014-10-13",
-					"2015-01-16",
-					"2015-08-25",
-					"2016-01-14",
-					"2018-03-28",
-					"2018-10-16",
-					"2018-12-19",
-					"2018-12-26",
-					"2019-06-03",
-					"2019-08-15",
-					"2020-03-02",
-					"2020-03-10",
-					"2020-03-13",
-					"2020-03-17",
-					"2020-03-24",
-					"2020-09-21",
-					"2022-01-20",
-					"2022-03-14",
-					"2022-04-25",
-					"2022-05-13",
-					"2022-06-17",
-					"2022-09-01",
-					"2022-09-28",
-					"2022-12-29",
-					"2023-08-17",
-					"2023-10-04",
-					"2024-04-22",
-					"2024-07-31"
-			]
-				const sell_signal = 
-				[
-					"2012-06-26",
-					"2012-12-18",
-					"2013-10-09",
-					"2014-02-28",
-					"2014-09-19",
-					"2014-11-07",
-					"2015-03-02",
-					"2015-10-06",
-					"2016-02-26",
-					"2018-05-09",
-					"2018-11-27",
-					"2018-12-24",
-					"2019-01-04",
-					"2019-06-20",
-					"2019-09-26",
-					"2020-03-09",
-					"2020-03-12",
-					"2020-03-16",
-					"2020-03-23",
-					"2020-03-25",
-					"2020-10-12",
-					"2022-02-24",
-					"2022-03-22",
-					"2022-05-12",
-					"2022-06-16",
-					"2022-06-27",
-					"2022-09-27",
-					"2022-10-28",
-					"2023-01-27",
-					"2023-09-28",
-					"2023-11-14",
-					"2024-05-23",
-					"2024-08-07"
-			]
-				const pairRes = await getPairData(start_date, end_date, 'Daily', 'SPY')
+				let {start_date:_start_date, 
+					end_date:_end_date, buy_signal:_buy_signal, 
+					sell_signal: _sell_signal, buy_signal_2: _buy_signal_2, 
+					sell_signal_2: _sell_signal_2, single_model,
+					symbol1,
+					symbol2
+				} = _data
+				let pairDataDate2 = null
+				const symbolName = {symbol1, symbol2}
+				debugger
+				if(single_model === 'False') {
+					_buy_signal = _data.buy_signal_1
+					_sell_signal = _data.sell_signal_1
+				}
+				const buy_signal = eval(_buy_signal)
+				const sell_signal = eval(_sell_signal)
+				const start_date = timestampToTime(_start_date)
+				const end_date = timestampToTime(new Date())
+				const isShowChart = buy_signal.length === 0 && sell_signal.length === 0
+				const pairRes = await getPairData(start_date, end_date, frequency || 'Daily', symbol1)
 				const pairDataDate = pairRes.data.map((item) => {
 						const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
 						if (dateRegex.test(item.DT)) {
@@ -260,6 +209,20 @@ export default {
 								return [null, item.Close, buy_signal.includes(currentDate) ? 1 : null, sell_signal.includes(currentDate) ? -1 : null]
 						}
 				})
+				if(single_model === 'False') {
+					const buy_signal2 = eval(_buy_signal_2)
+					const sell_signal2 = eval(_sell_signal_2)
+					const pairRes = await getPairData(start_date, end_date, frequency || 'Daily', symbol2)
+					pairDataDate2 = pairRes.data.map((item) => {
+						const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+						if (dateRegex.test(item.DT)) {
+							const currentDate = timestampToTime(item.DT)
+							return [new Date(item.DT).getTime(), item.Close, buy_signal2.includes(currentDate) ? 1 : null, sell_signal2.includes(currentDate) ? -1 : null]
+						} else {
+								return [null, item.Close, buy_signal2.includes(currentDate) ? 1 : null, sell_signal2.includes(currentDate) ? -1 : null]
+						}
+					})
+				}
 				console.log('pairDataDate', pairDataDate)
 				const description = Array.isArray(data) ? data[0]?.description : ''
 				const convertToHTML = (text) => {
@@ -392,7 +355,11 @@ export default {
 							}).join('')}
 						</ol>
 					`
-				_this.strat_data = pairDataDate
+				_this.isShowChart = isShowChart
+				_this.strat_data = {
+					strat_data: [pairDataDate, pairDataDate2],
+					symbolName
+				}
 				})
     }
 			}
