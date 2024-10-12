@@ -790,7 +790,7 @@ button#checkResBtn {
 .page-content-wrapper {
 	color: #333;
 	background-color: #fff;
-  cursor: text;
+  user-select: text;
 	line-height: 1.5em;
 	font-size: 15px !important;
 	font-family: "Open Sans",sans-serif !important;
@@ -1031,6 +1031,17 @@ button#checkResBtn {
 				clear: both;
 			}
 	}
+.portlet .note.note-info {
+  background-color: #eee;
+  border-color: #666;
+  color: #000;
+}
+.portlet .note {
+  margin: 0 0 20px 0;
+  padding: 15px 30px 15px 15px;
+  border-left: 5px solid #eee;
+  border-radius: 0 4px 4px 0;
+}
   .construction-container {
     width: unset;
     padding-right: 0px;

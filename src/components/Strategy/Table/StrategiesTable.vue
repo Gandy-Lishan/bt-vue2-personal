@@ -499,11 +499,12 @@ export default {
 			}
 		},
 		async viewSignalDescription(row) {
-			const { url, model_name } = row
+			const { url, model_name, frequency } = row
 			this.$router.push({
 				path: '/strategy/descriptions',
 				query: {
 					url,
+					frequency,
           name: model_name
 				}
 			})
