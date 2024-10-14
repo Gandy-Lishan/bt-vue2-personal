@@ -353,6 +353,7 @@ export default {
 <style lang="less" scoped>
 .back {
 	font-size: 1.1rem;
+  margin-bottom: 20px;
 	i {
 		font-weight: bold;
 	}
@@ -365,9 +366,6 @@ export default {
 	}
 }
 .CPMResults-container {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-gap: 20px;
   margin: 5px auto auto auto;
   width: 90%;
   padding: 20px;
