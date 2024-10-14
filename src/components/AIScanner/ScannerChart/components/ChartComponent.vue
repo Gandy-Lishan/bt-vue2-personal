@@ -1217,7 +1217,7 @@ export default {
 }
 .back {
     position: absolute;
-    top: 109px;
+    top: 153px;
     left: 48px;
 	font-size: 1.1rem;
 	i {
