@@ -100,6 +100,24 @@
 					>
 					</el-radio>
 				</el-form-item>
+        <div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="ma_type"
+							filterable
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							placeholder="Please select condition"
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period">
 						<el-input
@@ -349,9 +367,14 @@ export default {
         { value: 3, label: 'CrossAbove' },
         { value: 4, label: 'CrossBelow' }
       ],
+      MATypeConditions: [
+        { value: 'S', label: 'Simple' },
+        { value: 'M', label: 'Exponential' },
+      ],
       conditionRadio: 'Indicator Value',
       description: '',
       editSentiVal: '',
+      ma_type: 'S',
       rules: {
         value: [{ validator: validateValue, trigger: 'blur' }],
         conditionPeriod: [{ validator: validateConditionPeriod, trigger: 'blur' }],
@@ -494,9 +517,11 @@ export default {
       this.$refs.sentiForm.clearValidate()
     },
     setDesciption(index) {
+      debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
+        'ma_type': this.ma_type
       }
       let criteria = ''
       let direction = ''
@@ -562,7 +587,10 @@ export default {
         this.conditionRadio === 'Indicator Value'
           ? this.senti.value
           : this.senti.maValue
-      this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
+      let ma_type = this.conditionRadio === 'Indicator Moving Average' ? this.ma_type : ''
+      if(ma_type === 'S') ma_type = 'simple'
+      if(ma_type === 'M') ma_type = 'exponential'
+      this.description = `${sentiVal} ${ma_type !== '' ? ma_type + ' ' : ''}${ma} ${period} ${condition} ${value}`
       if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} Moving Average ${period}`
       if (this.isROCLike) {
         let _newCondition = this.newConditions[this.senti.newCondition].label
@@ -961,6 +989,7 @@ export default {
 
         if(cond){
           this.senti.conditionPeriod = cond.conditionPeriod ? cond.conditionPeriod : ''
+          this.ma_type = cond.ma_type || 'S'
         }else{
           this.senti.conditionPeriod = ''
         }

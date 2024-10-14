@@ -755,7 +755,7 @@ export default {
 }
 .condition-container {
 	display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 .el-select {
   margin: 0 5px;
