@@ -368,7 +368,7 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  margin: 50px auto auto auto;
+  margin: 5px auto auto auto;
   width: 90%;
   padding: 20px;
 }
