@@ -251,6 +251,9 @@ export default {
   /deep/ .el-menu.el-menu--horizontal {
     border-bottom-color: transparent;
   }
+  .el-menu-item {
+    font-size: 14px;
+  }
   img {
     padding-left: 10px;
     cursor: pointer;
@@ -270,7 +273,7 @@ export default {
   }
   &.bottom {
     /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title:hover {
-      background-color: #666;
+      background-color: #5b9bd1;
       color: white !important
     }
     .el-submenu__title i {
@@ -279,7 +282,7 @@ export default {
     .report-menu /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
       height: 56px !important;
     }
-    /deep/ .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover {
+    /deep/ .el-menu--horizontal>.el-menu-item:not(.is-disabled):not(.is-active):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):not(.is-active):hover {
     background-color: #666 !important;
     }
   }
@@ -291,7 +294,7 @@ export default {
   }
   /deep/ li.el-submenu.is-active.report-menu {
     color: white !important;
-    background-color: #666;
+    background-color: #5b9bd1;
     border-bottom: 4px solid #5b9bd1;
   }
 }
@@ -302,7 +305,7 @@ export default {
   font-weight: 600;
 }
 .el-submenu /deep/ .el-submenu__title {
-  font-size: 14px;
+  font-size: 16px;
 }
 .main-nav.top {
   /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
@@ -332,22 +335,22 @@ export default {
 }
 li.el-menu-item.is-active.menu-item-active {
   color: black !important;
-  background-color: #666;
+  background-color: rgb(91, 155, 209);
 }
 .el-menu--horizontal>.el-menu-item.is-active {
   border-bottom: 4px solid #5b9bd1 !important;
 }
 .help-link-active, .el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
   color: black !important;
-  background-color: #666 !important;
+  background-color:  rgb(91, 155, 209) !important;
 }
 .el-menu--horizontal.el-menu-bottom li.el-menu-item {
   text-align: center;
   color: white !important;
 }
-.el-menu--horizontal.el-menu-bottom li.el-menu-item:hover {
-  background-color: #666 !important;
-}
+// .el-menu--horizontal.el-menu-bottom li.el-menu-item:hover {
+//   background-color: #666 !important;
+// }
 .el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title {
   font-weight: 600;
 }
