@@ -591,6 +591,21 @@ export default {
           check: true
         },
         {
+          value: 'Optix #5',
+          label: 'Optix #5',
+          check: true
+        },
+        {
+          value: 'Optix #6',
+          label: 'Optix #6',
+          check: true
+        },
+        {
+          value: 'Optix #7',
+          label: 'Optix #7',
+          check: true
+        },
+        {
           value: 'PriceBreakout',
           label: 'PriceBreakout',
           check: true
