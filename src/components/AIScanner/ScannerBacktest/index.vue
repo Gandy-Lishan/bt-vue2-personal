@@ -116,7 +116,15 @@ export default {
           {label:'Expected Return(%)',value:'ExpectedReturn'},
           // {label:'Z-Score',value:'Z_Score'},
         ]
-      }
+      },
+      midTermMap: {
+        'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
+        'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
+        'Optix MA10 < 30 and Optix < 20':'Optix #3',
+        'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'Optix #5',
+        'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'Optix #6',
+        'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7',
+      },
     }
   },
   components: {
@@ -213,7 +221,7 @@ export default {
         const oppositeDataSource = 0
         const data = {
           Symbol: _result['Symbol'][_ID[i][dataSource]],
-          Signal: _result['Signal'][_ID[i][dataSource]],
+          Signal: this.midTermMap[_result['Signal'][_ID[i][dataSource]]] || _result['Signal'][_ID[i][dataSource]],
           Direction: _result['Direction'][_ID[i][dataSource]],
           EntryDate: _result['Start Date'][_ID[i][oppositeDataSource]],
           EntryAction: _result['Action'][_ID[i][oppositeDataSource]],
