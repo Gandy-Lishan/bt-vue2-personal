@@ -591,17 +591,17 @@ export default {
           check: true
         },
         {
-          value: 'Optix #5',
+          value: 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
           label: 'Optix #5',
           check: true
         },
         {
-          value: 'Optix #6',
+          value: 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
           label: 'Optix #6',
           check: true
         },
         {
-          value: 'Optix #7',
+          value: 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
           label: 'Optix #7',
           check: true
         },
