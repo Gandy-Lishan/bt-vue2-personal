@@ -754,7 +754,7 @@ export default {
         if([12,13].includes(this.senti.newCondition)){
           condition = `${conditionMap.get(this.senti.newCondition).name}`
         }else{
-          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Day)`
+          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: `${name} ${condition}`,
