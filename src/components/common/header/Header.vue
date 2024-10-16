@@ -17,6 +17,7 @@
         @select="handleSelect"
       >
         <el-menu-item class="home-link" index="9"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Strategy</el-menu-item
         >
         <el-menu-item class="home-link" index="1"
@@ -48,7 +49,7 @@
           >Portfolio</el-menu-item
         >
         <el-menu-item class="home-link" index="12"
-        v-if="isReports"
+        v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Reports</el-menu-item
         >
         <el-menu-item class="home-link" index="13"

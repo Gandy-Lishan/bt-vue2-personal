@@ -4,7 +4,7 @@
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <p class="page-title">Portfolio</p><i class="header-icon el-icon-info"></i>
+          <p class="page-title">Portfolio (click to expand)</p><i class="header-icon el-icon-info"></i>
         </template>
         <div class="portfolio-des">
           <p>
@@ -272,7 +272,6 @@ export default {
 
 .portfolio-header {
   /deep/ .el-collapse-item__header {
-    background-color: #fff;
     height: 48px;
   }
 }

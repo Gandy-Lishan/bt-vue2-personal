@@ -111,7 +111,7 @@ const state = {
 	forecastList: [],
 	forecastAuthorList: [],
   	symbollistForecast: [],
-	forecastMarket: process.env.VUE_APP_DEFAULT_SYMBOL, //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
+	forecastMarket: 'SPY', //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
 	// 何总写的提供给cpm,myindicator,seasonality的修改后的senti&symbol list
 	refactoredSentimentList: [],
 	refactoredSymbolList: [],

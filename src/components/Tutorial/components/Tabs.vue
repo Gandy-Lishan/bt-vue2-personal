@@ -219,10 +219,6 @@ export default {
 	background-color: #b2b6bf;
 	border-color: #b2b6bf;
 }
-
-.content {
-	margin-top: 20px;
-}
 .content p {
 	line-height: 1.7;
 	word-wrap: break-word;

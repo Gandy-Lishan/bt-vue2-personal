@@ -1,29 +1,5 @@
 <template>
 	<div class="doc-container">
-		<div class="header">
-			<div class="box">
-				<img src="../../assets/newLogo.png" />
-				<p style="color: rgb(0 50 60); font-weight: 500; font-size: 18px" class="betaNote">Tutorial</p>
-				<nav>
-					<el-menu
-					:default-active="activeIndex"
-						class="el-menu-demo menu doc-menu"
-						mode="horizontal"
-						@select="handleSelect"
-					>
-					<el-submenu class="doc-title" index="1">
-							<template slot="title">
-								<span>Tutorial</span>	
-							</template>
-							<el-menu-item index="1-1">BacktestEdge Tutorial</el-menu-item>
-							<!-- <el-menu-item index="1-2">Smart Scanner Tutorial</el-menu-item> -->
-						</el-submenu>
-				</el-menu>
-					<!-- <router-link active-class="active" to="/doc/guide/0">BacktestEdge Tutorial</router-link>
-					<router-link active-class="active" to="/doc/scanner">Smart Scanner Tutorial</router-link> -->
-				</nav>
-			</div>
-		</div>
 		<div class="contents">
 			<div class="content">
 				<!--指定组件的位置-->
@@ -42,6 +18,7 @@ export default {
 		}
 	},
 	methods: {
+
 		handleSelect(key) {
 			this.activeIndex = key
 			let path = null
@@ -155,9 +132,6 @@ nav a:hover {
 	background-color: #608bd2;
 	border-top-right-radius: 20px;
 	border-bottom-right-radius: 20px;
-}
-.content {
-  margin-top: 100px;
 }
 p {
 	margin: 0;

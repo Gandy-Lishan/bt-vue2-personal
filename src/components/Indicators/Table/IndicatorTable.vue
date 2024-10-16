@@ -54,7 +54,7 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Stock Market Sentiment',
+              label: 'Stock Market Indicators',
               value: 'stock',
               type: 'stock',
               url: 'stock_complete_list'
@@ -81,13 +81,13 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'Bond Market Sentiment',
+              label: 'Bond Market Indicators',
               value: 'bond',
               type: 'bond',
               url: 'bond_complete_list'
             },
             {
-              label: 'Commodity Market Sentiment',
+              label: 'Commodity Market Indicators',
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'

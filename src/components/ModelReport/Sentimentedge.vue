@@ -7,7 +7,7 @@
        <div class="col-md-12 col-sm-12">
          <div class="content-page">
           <div class="page-head">
-           <!-- <h1 v-html="title" class="page-title"></h1> -->
+           <h1 v-html="title" class="page-title" v-if="serviceType === 'Blog'"></h1>
           </div>
            <!-- <hr /> -->
            <div class="row margin-bottom-30">
@@ -23,7 +23,7 @@
                    class="mcnImage"
                  />
                </div>
-               <div class="analysis_solutions_yellow" v-if="serviceType === 'Kaeppel\'s Corner'">
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'quantedge'">
                  <img
                    align="center"
                    alt=""
@@ -124,7 +124,7 @@ export default {
   }),
   requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'quantedge') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
     else return this.serviceType.toLowerCase();
   }
@@ -137,20 +137,20 @@ export default {
   }
   if (isPathSubstring([
     '/MR/sentimentedge',
-    '/MR/kaeppelscorner',
+    '/MR/quantedge',
     '/MR/modeledge',
     '/MR/tradingedge',
     '/MR/blog'
-  ], to.path) && ['sentimentedge', 'kaeppelscorner', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
+  ], to.path) && ['sentimentedge', 'quantedge', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const reportUrl = to.params.reportUrl
       if(serviceType === 'sentimentedge') {
         _this.title = 'SentimentEdge'
         _this.serviceType = 'SentimentEdge'
-      }else if(serviceType === 'kaeppelscorner') {
+      }else if(serviceType === 'quantedge') {
         _this.title = 'Kaeppel\'s Corner'
-        _this.serviceType = 'Kaeppel\'s Corner'
+        _this.serviceType = 'quantedge'
       }else if(serviceType === 'modeledge') {
         _this.title = 'ModelEdge'
         _this.serviceType = 'ModelEdge'
@@ -178,13 +178,13 @@ export default {
       if(!reportUrl) {
         latestPost.is_favorite = reportsArchivesTen.slice(0, 1)[0]?.is_favorite || false
       }else {
-        const findBlog = reportsArchivesTen.find(x => x.url == reportUrl)
+        const findBlog = reportsArchivesTen.find(x => x.url == requestedBlog)
         if(findBlog) latestPost.is_favorite = findBlog.is_favorite
         else {
           const {data: {results}} =  await getBlogReportList({
-            url: reportUrl
+            url: requestedBlog
           })
-          const findBlog = results.find(x => x.url == reportUrl)
+          const findBlog = results.find(x => x.url == requestedBlog)
           if(findBlog) latestPost.is_favorite = findBlog.is_favorite
         }
       }

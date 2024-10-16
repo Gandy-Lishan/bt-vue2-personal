@@ -12,7 +12,7 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="124px">										
+									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="160px">										
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
@@ -106,34 +106,67 @@ export default {
 				)
 				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of 1 Signals' && item != 'Max Gain' && item != 'Max Loss')
 				
-				const medianMaGainObj = {'Dates of 1 Signals': 'Median'}
+				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': '# of Times > -5%'}, {'Dates of 1 Signals': '# of Times > -10%' }]
 				defaultTableLabels.forEach(label => {
-					const monthData = backtestHistoryList.map(entry => entry[label])
+					medianMaxGainArray.forEach(ele => {
+						if(ele['Dates of 1 Signals'] === 'Median') {
+							// 计算中位数
+							const monthData = backtestHistoryList.map(entry => entry[label])
 
-					const maGainValues = monthData.map(entry => entry["Max Gain"])
-					const maxLossValues = monthData.map(entry => entry["Max Loss"])
+							const maxGainValues = monthData.map(entry => entry["Max Gain"])
+							const maxLossValues = monthData.map(entry => entry["Max Loss"])
 
-					maGainValues.sort((a, b) => a - b)
-					maxLossValues.sort((a, b) => a - b)
-					// 计算中位数
-					const medianMaGain = maGainValues.length % 2 === 0
-						? ((maGainValues[maGainValues.length / 2 - 1] + maGainValues[maGainValues.length / 2]) / 2).toFixed(2)
-						: maGainValues[Math.floor(maGainValues.length / 2)]
+							maxGainValues.sort((a, b) => a - b)
+							maxLossValues.sort((a, b) => a - b)
+							// 计算中位数
+							const medianMaxGain = maxGainValues.length % 2 === 0
+								? ((maxGainValues[maxGainValues.length / 2 - 1] + maxGainValues[maxGainValues.length / 2]) / 2).toFixed(2)
+								: maxGainValues[Math.floor(maxGainValues.length / 2)]
 
-					const medianMaxLoss = maxLossValues.length % 2 === 0
-						? ((maxLossValues[maxLossValues.length / 2 - 1] + maxLossValues[maxLossValues.length / 2]) / 2).toFixed(2)
-						: maxLossValues[Math.floor(maxLossValues.length / 2)]
-						
-					medianMaGainObj[label] = {"Max Gain": medianMaGain, "Max Loss": medianMaxLoss}	
+							const medianMaxLoss = maxLossValues.length % 2 === 0
+								? ((maxLossValues[maxLossValues.length / 2 - 1] + maxLossValues[maxLossValues.length / 2]) / 2).toFixed(2)
+								: maxLossValues[Math.floor(maxLossValues.length / 2)]
+								
+							ele[label] = {"Max Gain": medianMaxGain, "Max Loss": medianMaxLoss}
+						}
+						else if(ele['Dates of 1 Signals'] === 'Mean') {
+								// 计算平均值
+								const monthData = backtestHistoryList.map(entry => entry[label])
+								const maxGainValues = monthData.map(entry => entry["Max Gain"])
+								const maxLossValues = monthData.map(entry => entry["Max Loss"])
+								const avgMaxGain = maxGainValues.reduce((sum, current) => sum + current, 0) / maxGainValues.length
+								const avgMaxLoss = maxLossValues.reduce((sum, current) => sum + current, 0) / maxLossValues.length
+								ele[label] = {"Max Gain": avgMaxGain.toFixed(2), "Max Loss": avgMaxLoss.toFixed(2)}
+						}
+						else if(ele['Dates of 1 Signals'] === '# of Times > -5%') {
+							// 计算大于-5%的个数
+							const monthData = backtestHistoryList.map(entry => entry[label])
+							// const maxGainValues = monthData.map(entry => entry["Max Gain"])
+							const maxLossValues = monthData.map(entry => entry["Max Loss"])
+							// const lenMaxGain = maxGainValues.filter(num => num > 5).length
+							const lenMaxGain = ''
+							const lenMaxLoss = maxLossValues.filter(num => num < -5).length
+							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
+					}
+					else if(ele['Dates of 1 Signals'] === '# of Times > -10%') {
+							// 计算大于-5%的个数
+							const monthData = backtestHistoryList.map(entry => entry[label])
+							// const maxGainValues = monthData.map(entry => entry["Max Gain"])
+							const maxLossValues = monthData.map(entry => entry["Max Loss"])
+							// const lenMaxGain = maxGainValues.filter(num => parseFloat(num) > 10).length
+							const lenMaxGain = ''
+							const lenMaxLoss = maxLossValues.filter(num => parseFloat(num) < -10).length
+							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
+					}
 				})
-				console.log('计算结果', medianMaGainObj)
-				this.backtestHistoryList = [...backtestHistoryList, medianMaGainObj]
+			})
+				console.log('计算结果', medianMaxGainArray)
+				this.backtestHistoryList = [...backtestHistoryList, ...medianMaxGainArray]
 				var offset = datatime.getTimezoneOffset() * 60 * 1000
 				this.start_date = new Date(
 						datatime.setTime(datatime.getTime() + offset)
 				)
 		},
-
 		getAllDefaultTableLabels() {
 			let periodArray = [
 				{ period: 1, timeframe: 'Week' },
@@ -374,6 +407,7 @@ export default {
 			})
 		},
 		calculateBacktestHistory(dataSet, periodArray) {
+			debugger
 			/*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
@@ -477,6 +511,12 @@ export default {
 		},
 		exportData() {
 			return {maxMinData: this.backtestHistoryList};
+		},
+		tableRowClassName({row, rowIndex}) {
+		if (row['Dates of 1 Signals'] === 'Mean') {
+				return 'border-top-row'
+		}
+			return ''
 		}
 	}
 }
@@ -496,7 +536,7 @@ export default {
   color: #dd3a13;
 }
 .history-container {
-	width: 965px;
+	width: 1001px;
 	margin: 0 auto;
 }
 </style>

@@ -221,7 +221,7 @@ export default {
 					key: 'update_frequency',
 				},
 				{
-					label: 'YTD until 08/30/24 Return(%)',
+					label: 'YTD until 09/30/24 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 				},
@@ -499,11 +499,12 @@ export default {
 			}
 		},
 		async viewSignalDescription(row) {
-			const { url, model_name } = row
+			const { url, model_name, frequency } = row
 			this.$router.push({
 				path: '/strategy/descriptions',
 				query: {
 					url,
+					frequency,
           name: model_name
 				}
 			})
@@ -563,12 +564,21 @@ export default {
 				// 		exit: ['model_smart_money']
 				// 	}
 				// }
-          this.$store.commit('form/getRunBacktestData', matchStrategy)
+					/* 为防止跳转 BT 出现重名, 在这里加上时间戳 */
+					const date = new Date()
+					const year = date.getFullYear();
+					const month = date.getMonth() + 1;
+					const day = date.getDate();
+					const hour = date.getHours();
+					const minute = date.getMinutes();
+					const second = date.getSeconds();
+					matchStrategy.name = `${matchStrategy.name} (${year}-${month}-${day} ${hour}:${minute}:${second})`
+					this.$store.commit('form/getRunBacktestData', matchStrategy)
 
-          this.$router.push({
-            name: 'SetUp',
-            params: { data: JSON.stringify(matchStrategy), usedFor: 'showBTForm' }
-          },()=>{})
+					this.$router.push({
+							name: 'SetUp',
+							params: { data: JSON.stringify(matchStrategy), usedFor: 'showBTForm' }
+					},()=>{})
 			}
 			console.log('matchStrategy', matchStrategy)
 		},

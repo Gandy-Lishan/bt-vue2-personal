@@ -136,7 +136,7 @@ export default {
       }).filter(item => item.length > 0).flat()
       console.log('sourceTable', sourceTable)
       // 存在第一次并未请求全部表单的情况
-      if(sourceTable.length) {
+      if(sourceTable.length > 0) {
         const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
         await this.$emit('enLargeTable', source_list, sourceTable[0])
       }else {

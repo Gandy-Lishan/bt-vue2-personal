@@ -72,13 +72,6 @@ export default {
 			deep: true
 		},
 	},
-    mounted() {
-		EventBus.on('triggerFunction', this.filterReports);
-    },
-	beforeUnmount() {
-		// 在组件卸载前取消监听
-		EventBus.off('triggerFunction', this.filterReports);
-	},
     beforeDestroy() {
     },
 	methods: {
@@ -112,6 +105,10 @@ export default {
 }
 /deep/ .el-input__inner {
 	margin-left: 0;
+}
+
+/deep/ .el-select__tags {
+	flex-wrap: nowrap;
 }
 </style>
     

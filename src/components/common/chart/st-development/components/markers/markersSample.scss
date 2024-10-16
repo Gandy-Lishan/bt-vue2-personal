@@ -171,80 +171,114 @@
 } */
 
 /* backteser edge forecast marker node style */
-@keyframes expandHeight {
-	from {
-		max-height: 100px;
-	}
-	to {
-		max-height: 1000px;
-	}
-}
-
+$bullish-color: #9be5b0;
+$bearish-color: #e9c0c0;
+$bullish-hover: #62e687;
+$bearish-hover: #eba8a8;
 .forecast {
 	position: absolute;
 	opacity: .9;
 	text-align: center;
-	width: 176px;
+	width: 15px; /* Marker 的宽度 */
+    height: 15px; /* Marker 的高度 */
 	color: #606060;
-	background-size: contain;
-	border-radius: 4px;
-	padding: 10px;
+	padding: 5px;
 	z-index: 1;
-	.pwrap {
-		display: grid;
-		grid-template-rows: 0fr;
-		transition: grid-template-rows 250ms ease-in-out;
+	.forecast__marker-background{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 50%;
+		z-index: 2;
+		transition: background 0.3s; /* 背景颜色过渡 */
+	}
+	.forecast__marker-stem {
+		z-index: 1;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%); /* 水平居中 */
+		width: 3px; /* 虚线的宽度 */
+		height: 30px; /* 虚线的高度 */
+		border-left: 1px dashed rgba(0, 0, 0, 0.8); /* 垂直虚线样式 */
+	}
+	.forecast__marker-tooltip {
+		position: absolute;
+		bottom: 60px; /* 悬浮框相对 Marker 的位置 */
+		left: 50%;
+		transform: translateX(-50%);
+		border: 1px solid #ccc; /* 悬浮框的边框 */
+		border-radius: 20px; /* 悬浮框的圆角 */
+		padding: 10px; /* 悬浮框的内边距 */
+		opacity: 0; /* 初始状态为透明 */
+		visibility: hidden; /* 初始状态不可见 */
+		transition: opacity 0.3s ease, visibility 0.3s; /* 过渡效果 */
+		min-width: 250px;
+
+		box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+		transition: opacity 0.2s 0s, visibility 0.2s 0s;
+	}
+	&::after {
+		content: ""; /* 伪元素需要 content 属性 */
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 50%;
+		transition: transform 0.2s 0s, opacity 0.2s 0s, border 0.2s 0s;
+	}
+	&.bullish {
+		margin-bottom: -35px;
+		.forecast__marker-background{
+			background: $bullish-color;
+		}
+		.forecast__marker-stem {
+			bottom: 100%;
+		}
+		.forecast__marker-tooltip {
+			background: $bullish-color;
+		}
+		:hover {
+			.forecast__marker-background {
+				background: $bullish-hover;
+			}
+		}
+	}
+	&.bearish {
+		margin-bottom: 35px;
+		.forecast__marker-background{
+			background: $bearish-color;
+		}
+		.forecast__marker-stem {
+			top: 100%;
+		}
+		.forecast__marker-tooltip {
+			background: $bearish-color;
+		}
+		:hover {
+			.forecast__marker-background {
+				background: $bearish-hover
+			}
+		}
+	}
+	&:hover {
+		z-index: 2;
+		.forecast__marker-tooltip {
+			opacity: 1; /* 鼠标悬浮时变为不透明 */
+			visibility: visible; /* 鼠标悬浮时可见 */
+		}
+		&::after {
+			transform: scale(1.8);
+			border: 1px solid #0a0505;
+			opacity: .2;
+		}
+	}
+	&.hidden {
+		display: none;
 	}
 }
-
-.forecast.hidden {
-	display: none;
-}
-  .forecast:before {
-	border: solid;
-	content: "";
-	position: absolute;
-
-  }
-  .forecast.bullish {
-	background: #9be5b0;
-	margin-bottom: -35px;
-  }
-  .forecast.bearish {
-	background: #e9c0c0;
-	margin-bottom: 35px;
-  }
-  .forecast.bullish:hover {
-	background: #62e687;
-	z-index: 2;
-	animation: expandHeight 2s ease forwards;
-  }
-  .forecast.bearish:hover{
-	background: #eba8a8;
-	z-index: 2;
-	.pwrap {
-		grid-template-rows: 1fr;
-	}
-  }
-
-  .forecast.bullish:before {
-	border-width: 0px 6px 11px 6px;
-    top: -10px;
-	left: 80px;
-	border-color: #9be5b0 transparent;
-  }
-  .forecast.bearish:before{
-	border-width: 11px 6px 0 6px;
-	bottom: -10px;
-	left: 80px;
-	border-color: #e9c0c0 transparent;
-  }
-  .forecast.bullish:hover:before {
-	border-color: #62e687 transparent;
-  }
-  .forecast.bearish:hover:before {
-	border-color: #eba8a8 transparent;
-  }
 
 /* scanner marker node style */
 .myMes {

@@ -65,11 +65,11 @@ export default {
 .right-menu-wrapper {
 	width: 220px;
 	float: right;
-	position: fixed;
+	position: absolute;
 	top: 0;
 	right: 0;
 	font-size: 0.8rem;
-	margin-top: 30px;
+	margin-top: 53px;
 }
 .right-menu-wrapper .right-menu-margin {
 	margin-top: 4.6rem;

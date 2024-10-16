@@ -7,22 +7,33 @@
             <!-- <h1 v-html="title" class="page-title"></h1> -->
           </div>
           <!-- <hr /> -->
-          <p>
-            This page lists studies that were provided in a Daily Report. At the time
-            of the report, the study forecasted a market direction (up, down, or flat)
-            and usually highlighted its most effective time frame, which has now
-            passed. Now that the study is "completed", it is graded from 1 star to 5
-            stars. A rating of 1 means the forecast was not accurate and a rating of 5
-            means the forecast was very accurate.
-          </p>
-          <p>
-            Forecast Legend:
-            <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i>
-            (Up),
-            <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i>
-            (Down),
-            <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
-          </p>
+          <div class="panel-group accordion">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <p class="page-title">Archived Studies Description (click to expand)</p>
+                </template>
+                <div class="centent" style="text-align: justify;">
+                  <p>
+                    This page lists studies that were provided in a Daily Report. At the time
+                    of the report, the study forecasted a market direction (up, down, or flat)
+                    and usually highlighted its most effective time frame, which has now
+                    passed. Now that the study is "completed", it is graded from 1 star to 5
+                    stars. A rating of 1 means the forecast was not accurate and a rating of 5
+                    means the forecast was very accurate.
+                  </p>
+                  <p>
+                    Forecast Legend:
+                    <i class="font-green-jungle font-lg fa fa-arrow-up" aria-hidden="true"></i>
+                    (Up),
+                    <i class="font-red-thunderbird font-lg fa fa-arrow-down" aria-hidden="true"></i>
+                    (Down),
+                    <i class="font-lg fa fa-minus" aria-hidden="true"></i> (Flat).
+                  </p>
+                </div>
+                </el-collapse-item>
+            </el-collapse>
+          </div>
           <div id="example_wrapper" class="dataTables_wrapper no-footer">
             <div class="filter-div">
               <el-row>
@@ -77,8 +88,8 @@
                 <th :class="getSortClass('title')"  @click="sortTable('title')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending" style="width: 370px;">Report Title</th>
                 <th :class="getSortClass('market')"  @click="sortTable('market')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Market: activate to sort column ascending" style="width: 72px;">Market</th>
                 <th :class="getSortClass('forecast')"  @click="sortTable('forecast')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Forecast: activate to sort column ascending" style="width: 69px;">Forecast</th>
-                <th tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Outcome: activate to sort column ascending" style="width: 74px;">Outcome</th>
-                <th tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Rating: activate to sort column ascending" style="width: 71px;">Rating</th>
+                <th :class="getSortClass('outcome')" @click="sortTable('outcome')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Outcome: activate to sort column ascending" style="width: 74px;">Outcome</th>
+                <th :class="getSortClass('rating')" @click="sortTable('rating')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Rating: activate to sort column ascending" style="width: 71px;">Rating</th>
                 <th :class="getSortClass('timeframe')" @click="sortTable('timeframe')" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Timeframe: activate to sort column ascending" style="width: 90px;">Timeframe</th>
               </tr>
             </thead>
@@ -242,7 +253,7 @@
                 style="float:right;align-self:center" 
                 @click="nextPage"
               >
-                next page &rarr;
+                Next
               </a>
               </div>
           </div>
@@ -683,5 +694,34 @@ h4 {
 }
 .page-head {
   padding-top: 20px;
+}
+.accordion {
+ padding: 0px 0px 10px 0px;
+}
+.accordion /deep/ .el-collapse-item__content {
+  font-size: 16px;
+  color: #3e4d5c;
+  direction: ltr;
+  background: #fff;
+  font-weight: 400;
+}
+.accordion /deep/ .el-collapse-item__content {
+  padding-bottom: 0px;
+  line-height: 1.5;
+}
+.accordion p.page-title {
+  margin: 0 0 0 5px;
+}
+.accordion /deep/ .el-collapse-item__header {
+ background-color: #c0c4cc5c;
+ border-bottom: 1px solid #e0e0e0;
+ border-top-left-radius: 3px;
+ border-top-right-radius: 3px;
+ font-size: 18px;
+ font-weight: 300;
+ color: #666;
+ position: relative;
+ flex-wrap: wrap;
+ height: auto;
 }
 </style>

@@ -23,6 +23,7 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
+								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -125,11 +126,15 @@
 </template>
 
 <script>
-import { getStrategyDescription, getStrategiesJSON } from '@/service/service'
-import { timestampToTime } from '@/utils'
+import StrategyChart from "./Table/StrategyChart";
+import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
+import { isJson, timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
+	components: {
+		StrategyChart
+	},
 	data() {
 		return {
 			convertedHTML: '',
@@ -154,7 +159,9 @@ export default {
 					['trades_per_year', `Trades<br />Per Year`]
 				]),
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
-				backtestStrategy: null
+				backtestStrategy: null,
+				strat_data: {},
+				isShowChart: false
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -162,6 +169,8 @@ export default {
     next(async _this => {
 			const url = to?.query?.url
 			_this.title = to?.query?.name
+			const frequency = to?.query?.frequency
+			let isShowChart = false
 			if(url) {
 			// 发送请求取得具体描述信息
       const res = await getStrategyDescription(url)
@@ -171,6 +180,50 @@ export default {
 				_this.signalDes = res?.data?.data
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
+				let {start_date:_start_date, 
+					end_date:_end_date, buy_signal:_buy_signal, 
+					sell_signal: _sell_signal, buy_signal_2: _buy_signal_2, 
+					sell_signal_2: _sell_signal_2, single_model,
+					symbol1,
+					symbol2
+				} = _data
+				let pairDataDate2 = null
+				const symbolName = {symbol1, symbol2}
+				debugger
+				if(single_model === 'False') {
+					_buy_signal = _data.buy_signal_1
+					_sell_signal = _data.sell_signal_1
+				}
+				const buy_signal = eval(_buy_signal)
+				const sell_signal = eval(_sell_signal)
+				const start_date = timestampToTime(_start_date)
+				const end_date = timestampToTime(new Date())
+				const isShowChart = buy_signal.length === 0 && sell_signal.length === 0
+				const pairRes = await getPairData(start_date, end_date, frequency || 'Daily', symbol1)
+				const pairDataDate = pairRes.data.map((item) => {
+						const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+						if (dateRegex.test(item.DT)) {
+							const currentDate = timestampToTime(item.DT)
+							return [new Date(item.DT).getTime(), item.Close, buy_signal.includes(currentDate) ? 1 : null, sell_signal.includes(currentDate) ? -1 : null]
+						} else {
+								return [null, item.Close, buy_signal.includes(currentDate) ? 1 : null, sell_signal.includes(currentDate) ? -1 : null]
+						}
+				})
+				if(single_model === 'False') {
+					const buy_signal2 = eval(_buy_signal_2)
+					const sell_signal2 = eval(_sell_signal_2)
+					const pairRes = await getPairData(start_date, end_date, frequency || 'Daily', symbol2)
+					pairDataDate2 = pairRes.data.map((item) => {
+						const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+						if (dateRegex.test(item.DT)) {
+							const currentDate = timestampToTime(item.DT)
+							return [new Date(item.DT).getTime(), item.Close, buy_signal2.includes(currentDate) ? 1 : null, sell_signal2.includes(currentDate) ? -1 : null]
+						} else {
+								return [null, item.Close, buy_signal2.includes(currentDate) ? 1 : null, sell_signal2.includes(currentDate) ? -1 : null]
+						}
+					})
+				}
+				console.log('pairDataDate', pairDataDate)
 				const description = Array.isArray(data) ? data[0]?.description : ''
 				const convertToHTML = (text) => {
 					// 替换换行符、制表符、大于号、和与号
@@ -232,7 +285,7 @@ export default {
 						}
 					})
 					return text
-      	}
+    }
 				let _res = await getStrategiesJSON()
 				let strategies = _res?.data
 				_this.backtestStrategy = strategies.find((item) => item.name === _this.title) ? strategies.find((item) => item.name === _this.title) : null
@@ -245,9 +298,10 @@ export default {
 					return `${month} ${year}`
 				}
 
-				_this.$nextTick(() => {
+				_this.$nextTick(async () => {
 					if(!_data) return
 					const  {start_date, end_date} = _data
+					console.log('_data', _data)
 					_this.convertedHTML = convertToHTML(description)
 					_this.performanceHTML = `
 						<h3>Performance</h3>
@@ -301,8 +355,13 @@ export default {
 							}).join('')}
 						</ol>
 					`
+				_this.isShowChart = isShowChart
+				_this.strat_data = {
+					strat_data: [pairDataDate, pairDataDate2],
+					symbolName
+				}
 				})
-      }
+    }
 			}
     })
     } else {

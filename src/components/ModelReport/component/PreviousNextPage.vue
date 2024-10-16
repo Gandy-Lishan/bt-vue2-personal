@@ -2,12 +2,12 @@
  <div class="pagination-container" style="display:flex;justify-content:space-between;">
    <!-- 上一页 -->
    <a 
-     v-if="previousPage" 
+     v-if="currentPage > 1" 
      class="btn grey-cascade" 
      style="align-self:center" 
-     :href="`/MR/${requestedType}/${previousPage}`"
+     :href="`/MR/${requestedType}/${currentPage - 1}`"
    >
-     &larr; previous page
+     Previous
    </a>
 
    <div class="pagination" style="flex-grow:1;text-align:center">
@@ -66,7 +66,7 @@
      style="float:right;align-self:center" 
      :href="`/MR/${this.requestedType}/${nextPage}`"
    >
-     next page &rarr;
+     Next
    </a>
  </div>
 </template>
@@ -99,7 +99,7 @@ export default {
  computed: {
    requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'archives/sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'kaeppel\'s corner') return 'archives/kaeppelscorner';
+    else if(this.serviceType.toLowerCase() === 'quantedge') return 'archives/quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'archives/modeledge';
     else return this.serviceType.toLowerCase();
    }
