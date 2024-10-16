@@ -435,12 +435,20 @@ export default {
           value: 'Indicator Ratio'
         },
         {
+          label: 'Indicator Addition',
+          value: 'Indicator Addition'
+        },
+        {
           label: 'Symbol Spread',
           value: 'Symbol Spread'
         },
         {
           label: 'Symbol Ratio',
           value: 'Symbol Ratio'
+        },
+        {
+          label: 'Symbol Addition',
+          value: 'Symbol Addition'
         },
         {
           label: 'Weighted Indicator Combination',
