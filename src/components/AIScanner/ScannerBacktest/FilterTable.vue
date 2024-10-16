@@ -219,6 +219,9 @@ export default {
 					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #2':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #4':"stocks that Optix crossbelow 0.5.",
+					'Optix #5': 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
+					'Optix #6': 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
+					'Optix #7': 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
 					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
 					'Optix #3':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
 					'PriceBreakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a long signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
@@ -247,7 +250,10 @@ export default {
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
 					'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
-					'Optix MA10 < 30 and Optix < 20':'Optix #3'
+					'Optix MA10 < 30 and Optix < 20':'Optix #3',
+					'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'Optix #5',
+					'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'Optix #6',
+					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7'
 				},
 				pageSize: 10, // Default page size
       	currentPage: 1, // Default current page
