@@ -219,6 +219,9 @@ export default {
 					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #2':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #4':"stocks that Optix crossbelow 0.5.",
+					'Optix #5': 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
+					'Optix #6': 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
+					'Optix #7': 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
 					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
 					'Optix #3':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
 					'Optix #5':'stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35 then above 43.',
@@ -253,7 +256,7 @@ export default {
 					'Optix MA10 < 30 and Optix < 20':'Optix #3',
 					'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'Optix #5',
 					'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'Optix #6',
-					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7',
+					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7'
 				},
 				pageSize: 10, // Default page size
       	currentPage: 1, // Default current page
