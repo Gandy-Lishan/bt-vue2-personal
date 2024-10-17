@@ -49,7 +49,6 @@
 					CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {
                         Period: period,
                         Field: sd.inputs.Field,
-                        Type: sd.inputs.Type,
                         Offset: 0
                     })
                     return
