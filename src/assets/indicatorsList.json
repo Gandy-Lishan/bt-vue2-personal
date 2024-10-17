@@ -1670,11 +1670,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Amc Networks-A",
-        "url": "AMCX",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Adv Micro Device",
         "url": "AMD",
         "updated": "Daily"
@@ -2440,11 +2435,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Calavo Growers I",
-        "url": "CVGW",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Commvault System",
         "url": "CVLT",
         "updated": "Daily"
@@ -2597,11 +2587,6 @@
     {
         "chart_name": "Darden Restauran",
         "url": "DRI",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Dril-Quip Inc",
-        "url": "DRQ",
         "updated": "Daily"
     },
     {
@@ -3340,11 +3325,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Haverty Furnitur",
-        "url": "HVT",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Hawkins Inc",
         "url": "HWKN",
         "updated": "Daily"
@@ -4022,11 +4002,6 @@
     {
         "chart_name": "Mosaic Co/The",
         "url": "MOS",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Movado Group",
-        "url": "MOV",
         "updated": "Daily"
     },
     {
@@ -4930,11 +4905,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Us Silica Holdin",
-        "url": "SLCA",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Sl Green Realty",
         "url": "SLG",
         "updated": "Daily"
@@ -5340,11 +5310,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "United Community",
-        "url": "UCBI",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Udr Inc",
         "url": "UDR",
         "updated": "Daily"
@@ -5712,11 +5677,6 @@
     {
         "chart_name": "Zebra Tech Corp",
         "url": "ZBRA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Olympic Steel",
-        "url": "ZEUS",
         "updated": "Daily"
     },
     {
@@ -8090,11 +8050,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Nu Skin Enterprises Inc",
-        "url": "NUS",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Par Pacific Holdings Inc",
         "url": "PARR",
         "updated": "Daily"
@@ -8162,11 +8117,6 @@
     {
         "chart_name": "Uniti Group Inc",
         "url": "UNIT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Varex Imaging Corp",
-        "url": "VREX",
         "updated": "Daily"
     },
     {
@@ -10425,11 +10375,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "MERCER INTERNATIONAL INC",
-        "url": "MERC",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "AMBAC FINANCIAL GROUP INC",
         "url": "AMBC",
         "updated": "Daily"
@@ -11322,11 +11267,6 @@
     {
         "chart_name": "Arrowhead Pharmaceuticals Inc",
         "url": "ARWR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Designer Brands Inc",
-        "url": "DBI",
         "updated": "Daily"
     },
     {
@@ -12240,11 +12180,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "B. Riley Financial Inc",
-        "url": "RILY",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Sylvamo Corp",
         "url": "SLVM",
         "updated": "Daily"
@@ -12510,11 +12445,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "SunPower Corp",
-        "url": "SPWR",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Chord Energy Corp",
         "url": "CHRD",
         "updated": "Daily"
@@ -12587,11 +12517,6 @@
     {
         "chart_name": "Crane NXT Co",
         "url": "CXT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Enhabit Inc",
-        "url": "EHAB",
         "updated": "Daily"
     },
     {
@@ -13865,11 +13790,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Chesapeake Energy Corp",
-        "url": "CHK",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Carlyle Group Inc/The",
         "url": "CG",
         "updated": "Daily"
@@ -14340,23 +14260,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Berkshire Hathaway Inc",
-        "url": "BRK_B",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Brown-Forman Corp",
-        "url": "BF_B",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Six Flags Entertainment Corp",
         "url": "FUN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Moog Inc",
-        "url": "MOG_A",
         "updated": "Daily"
     },
     {
@@ -14450,11 +14355,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Clearway Energy Inc",
-        "url": "CWEN_A",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ryan Specialty Holdings Inc",
         "url": "RYAN",
         "updated": "Daily"
@@ -14473,5 +14373,260 @@
         "chart_name": "TNX - 1.3 month EMA",
         "url": "tnx_1_point_3_month_ema",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "Berkshire Hathaway Inc",
+        "url": "BRK_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PEP (Presidential Election Party)",
+        "url": "presidential_election_party",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Federal Funds Effective Rate",
+        "url": "fedfunds",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "David S&P 500 Aggregate Baskets",
+        "url": "spx_oversold_basket",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Impinj Inc",
+        "url": "PI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CNH Industrial NV",
+        "url": "CNH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brown-Forman Corp",
+        "url": "BF_B",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Parsons Corp",
+        "url": "PSN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gap Inc/The",
+        "url": "GAP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palantir Technologies Inc",
+        "url": "PLTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TransMedics Group Inc",
+        "url": "TMDX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hamilton Lane Inc",
+        "url": "HLNE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSW Industrials Inc",
+        "url": "CSWI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moog Inc",
+        "url": "MOG_A",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TG Therapeutics Inc",
+        "url": "TGTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TXNM Energy Inc",
+        "url": "TXNM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Western Alliance Bancorp",
+        "url": "WAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BlackRock Inc",
+        "url": "9903115D",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chesapeake Energy Corp",
+        "url": "EXE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ADMA Biologics Inc",
+        "url": "ADMA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Innovex International Inc",
+        "url": "INVX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zurn Elkay Water Solutions Cor",
+        "url": "ZWS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Schneider National Inc",
+        "url": "SNDR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inspire Medical Systems Inc",
+        "url": "INSP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avantor Inc",
+        "url": "AVTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Viper Energy Inc",
+        "url": "VNOM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SolarWinds Corp",
+        "url": "SWI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clearway Energy Inc",
+        "url": "CWEN_A",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Community Banks Inc/GA",
+        "url": "UCB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amentum Holdings Inc",
+        "url": "AMTM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dell Technologies Inc",
+        "url": "DELL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Curbline Properties Corp",
+        "url": "CURB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clear Secure Inc",
+        "url": "YOU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amc Networks-A",
+        "url": "AMCX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Calavo Growers I",
+        "url": "CVGW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dril-Quip Inc",
+        "url": "DRQ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Haverty Furnitur",
+        "url": "HVT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Movado Group",
+        "url": "MOV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Us Silica Holdin",
+        "url": "SLCA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Community",
+        "url": "UCBI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Olympic Steel",
+        "url": "ZEUS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nu Skin Enterprises Inc",
+        "url": "NUS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Varex Imaging Corp",
+        "url": "VREX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MERCER INTERNATIONAL INC",
+        "url": "MERC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Designer Brands Inc",
+        "url": "DBI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "B. Riley Financial Inc",
+        "url": "RILY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SunPower Corp",
+        "url": "SPWR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Enhabit Inc",
+        "url": "EHAB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chesapeake Energy Corp",
+        "url": "CHK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zoom Video Communications Inc",
+        "url": "ZM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Equity Yield Advantage Ratio (EYAR)",
+        "url": "pe_interest_ratio",
+        "updated": "Daily"
     }
 ]
