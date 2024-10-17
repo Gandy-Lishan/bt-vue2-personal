@@ -686,7 +686,7 @@ export const CommonMethodsMixin = {
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
-			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Day)`
+			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Bar)`
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',

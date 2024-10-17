@@ -399,7 +399,7 @@ export default {
         if([12,13].includes(this.sym.newCondition)){
           condition = `${conditionMap.get(this.sym.newCondition).name}`
         }else{
-          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Day)`
+          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: `(${symbolLabel})${symbolCond.label} ${condition}`,

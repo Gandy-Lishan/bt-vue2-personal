@@ -9002,7 +9002,7 @@ if (!CIQ.Studies) {
 					// 		'DD' : 'DrawDown %',
 					// 		'DU' : 'DrawUp %',
 					// 	}
-					// 	const condition = `${conditionMap[sd.inputs.condition]}(${sd.inputs.period}-Day)`
+					// 	const condition = `${conditionMap[sd.inputs.condition]}(${sd.inputs.period}-Bar)`
 					// 	const display = `(${symbolLabel})${name} ${condition}`
 					// 	newChild.find("cq-label").html(display);
 

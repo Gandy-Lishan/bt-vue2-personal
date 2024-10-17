@@ -221,6 +221,40 @@ export default {
             await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
 						CIQ.createOneTimePatternMarker(this.other.date,"Optix CrossBelow 0.5")						
 						break;
+          case "Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35":  // Optix #5
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
+						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+							Period: 5,
+							display:"ST MA",
+							Field: this.symbolUrl
+						},{ MA: ma_color });
+            CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+							Period: 200,
+							Field: "Close"
+						});
+						CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35")						
+						break;
+          case "Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35":  // Optix #6
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
+						CIQ.Studies.addStudy(CIQ.stxx, "ST MA",{
+							Period: 10,
+							display:"ST MA",
+							Field: this.symbolUrl
+						},{ MA: ma_color });
+            CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+							Period: 200,
+							Field: "Close"
+						});
+						CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35")						
+						break;
+          case "Symbol Close > its\' MA200 and Optix > 43 After Below 30":  // Optix #7
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
+            CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+							Period: 200,
+							Field: "Close"
+						});
+						CIQ.createOneTimePatternMarker(this.other.date,"Symbol Close > its\' MA200 and Optix > 43 After Below 30")						
+						break;
 					case 'UpTrend Pattern':
 						var points = eval('(' + this.other.Point + ')')
 						CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
