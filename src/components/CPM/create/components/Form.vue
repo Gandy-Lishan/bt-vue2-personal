@@ -72,6 +72,7 @@
         <el-select
             v-model="data.ma_condition"
             placeholder="— Select Condition —"
+            @change="handleCPMMAChange"
           >
             <el-option
               v-for="item in conditionOptions"
@@ -99,7 +100,7 @@
           </el-tooltip>
         </label>
       </template>
-        <el-input v-model="data.ma" :disabled="data.ma_condition == 0">
+        <el-input v-model="data.ma" :disabled="data.ma_condition == 0" @change="handleCPMMAChange">
         </el-input>
       </el-form-item>
     </el-col>
@@ -545,6 +546,13 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    handleCPMMAChange() {
+      if(this.data.ma_condition == 0){
+        CIQ.removeCPMMA()
+      }else{
+        CIQ.drawCPMMA(this.data.ma)
+      }
+    },
     createYearLimitRule(errorMsgEmpty) {
       return (_, value, callback) => {
         if(value === '') {
