@@ -272,7 +272,7 @@ export default {
             this.points.forEach(point => {
               // Add a colored circle before the series name
               const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px; border: 1px solid black"></span>`;
-              s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y}</b><br>`;
+              s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
             });
             return s;
           } else {
@@ -280,7 +280,7 @@ export default {
             const name = this.series.name;
             const offset = name.includes('Sell') ? -15 : 15
             let s = `${name}<br>`;
-            s += `<span>x: <b>${Highcharts.dateFormat('%m-%d-%Y', this.x)}</b></span><br><span>y: <b>${this.y + offset}</b></span><br>`;
+            s += `<span>x: <b>${Highcharts.dateFormat('%m-%d-%Y', this.x)}</b></span><br><span>y: <b>${(this.y + offset).toFixed(2)}</b></span><br>`;
             return s;
           }
         }
