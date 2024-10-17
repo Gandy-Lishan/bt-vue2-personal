@@ -172,10 +172,6 @@
         "stock": "AMAT"
     },
     {
-        "name": "Amc Networks-A",
-        "stock": "AMCX"
-    },
-    {
         "name": "Adv Micro Device",
         "stock": "AMD"
     },
@@ -788,10 +784,6 @@
         "stock": "CVBF"
     },
     {
-        "name": "Calavo Growers I",
-        "stock": "CVGW"
-    },
-    {
         "name": "Commvault System",
         "stock": "CVLT"
     },
@@ -914,10 +906,6 @@
     {
         "name": "Darden Restauran",
         "stock": "DRI"
-    },
-    {
-        "name": "Dril-Quip Inc",
-        "stock": "DRQ"
     },
     {
         "name": "Dte Energy Co",
@@ -1508,10 +1496,6 @@
         "stock": "HUM"
     },
     {
-        "name": "Haverty Furnitur",
-        "stock": "HVT"
-    },
-    {
         "name": "Hawkins Inc",
         "stock": "HWKN"
     },
@@ -2054,10 +2038,6 @@
     {
         "name": "Mosaic Co/The",
         "stock": "MOS"
-    },
-    {
-        "name": "Movado Group",
-        "stock": "MOV"
     },
     {
         "name": "Marathon Petrole",
@@ -2780,10 +2760,6 @@
         "stock": "SLB"
     },
     {
-        "name": "Us Silica Holdin",
-        "stock": "SLCA"
-    },
-    {
         "name": "Sl Green Realty",
         "stock": "SLG"
     },
@@ -3108,10 +3084,6 @@
         "stock": "UBSI"
     },
     {
-        "name": "United Community",
-        "stock": "UCBI"
-    },
-    {
         "name": "Udr Inc",
         "stock": "UDR"
     },
@@ -3406,10 +3378,6 @@
     {
         "name": "Zebra Tech Corp",
         "stock": "ZBRA"
-    },
-    {
-        "name": "Olympic Steel",
-        "stock": "ZEUS"
     },
     {
         "name": "Zions Bancorp",
@@ -4040,10 +4008,6 @@
         "stock": "NSA"
     },
     {
-        "name": "Nu Skin Enterprises Inc",
-        "stock": "NUS"
-    },
-    {
         "name": "Par Pacific Holdings Inc",
         "stock": "PARR"
     },
@@ -4098,10 +4062,6 @@
     {
         "name": "Uniti Group Inc",
         "stock": "UNIT"
-    },
-    {
-        "name": "Varex Imaging Corp",
-        "stock": "VREX"
     },
     {
         "name": "Valvoline Inc",
@@ -4298,10 +4258,6 @@
     {
         "name": "EXTREME NETWORKS INC",
         "stock": "EXTR"
-    },
-    {
-        "name": "MERCER INTERNATIONAL INC",
-        "stock": "MERC"
     },
     {
         "name": "AMBAC FINANCIAL GROUP INC",
@@ -4606,10 +4562,6 @@
     {
         "name": "Arrowhead Pharmaceuticals Inc",
         "stock": "ARWR"
-    },
-    {
-        "name": "Designer Brands Inc",
-        "stock": "DBI"
     },
     {
         "name": "Essential Utilities Inc",
@@ -4932,10 +4884,6 @@
         "stock": "PGNY"
     },
     {
-        "name": "B. Riley Financial Inc",
-        "stock": "RILY"
-    },
-    {
         "name": "Sylvamo Corp",
         "stock": "SLVM"
     },
@@ -5076,10 +5024,6 @@
         "stock": "THRY"
     },
     {
-        "name": "SunPower Corp",
-        "stock": "SPWR"
-    },
-    {
         "name": "Chord Energy Corp",
         "stock": "CHRD"
     },
@@ -5138,10 +5082,6 @@
     {
         "name": "Crane NXT Co",
         "stock": "CXT"
-    },
-    {
-        "name": "Enhabit Inc",
-        "stock": "EHAB"
     },
     {
         "name": "Radian Group Inc",
@@ -5732,10 +5672,6 @@
         "stock": "ABR"
     },
     {
-        "name": "Chesapeake Energy Corp",
-        "stock": "CHK"
-    },
-    {
         "name": "Carlyle Group Inc/The",
         "stock": "CG"
     },
@@ -5996,20 +5932,8 @@
         "stock": "STEP"
     },
     {
-        "name": "Berkshire Hathaway Inc",
-        "stock": "BRK_B"
-    },
-    {
-        "name": "Brown-Forman Corp",
-        "stock": "BF_B"
-    },
-    {
         "name": "Six Flags Entertainment Corp",
         "stock": "FUN"
-    },
-    {
-        "name": "Moog Inc",
-        "stock": "MOG_A"
     },
     {
         "name": "Marathon Digital Holdings Inc",
@@ -6084,10 +6008,6 @@
         "stock": "CNS"
     },
     {
-        "name": "Clearway Energy Inc",
-        "stock": "CWEN_A"
-    },
-    {
         "name": "Ryan Specialty Holdings Inc",
         "stock": "RYAN"
     },
@@ -6098,5 +6018,193 @@
     {
         "name": "NEXTracker Inc",
         "stock": "NXT"
+    },
+    {
+        "name": "Berkshire Hathaway Inc",
+        "stock": "BRK_B"
+    },
+    {
+        "name": "Impinj Inc",
+        "stock": "PI"
+    },
+    {
+        "name": "CNH Industrial NV",
+        "stock": "CNH"
+    },
+    {
+        "name": "Brown-Forman Corp",
+        "stock": "BF_B"
+    },
+    {
+        "name": "Parsons Corp",
+        "stock": "PSN"
+    },
+    {
+        "name": "Gap Inc/The",
+        "stock": "GAP"
+    },
+    {
+        "name": "Palantir Technologies Inc",
+        "stock": "PLTR"
+    },
+    {
+        "name": "TransMedics Group Inc",
+        "stock": "TMDX"
+    },
+    {
+        "name": "Hamilton Lane Inc",
+        "stock": "HLNE"
+    },
+    {
+        "name": "CSW Industrials Inc",
+        "stock": "CSWI"
+    },
+    {
+        "name": "Moog Inc",
+        "stock": "MOG_A"
+    },
+    {
+        "name": "TG Therapeutics Inc",
+        "stock": "TGTX"
+    },
+    {
+        "name": "TXNM Energy Inc",
+        "stock": "TXNM"
+    },
+    {
+        "name": "Western Alliance Bancorp",
+        "stock": "WAL"
+    },
+    {
+        "name": "BlackRock Inc",
+        "stock": "9903115D"
+    },
+    {
+        "name": "Chesapeake Energy Corp",
+        "stock": "EXE"
+    },
+    {
+        "name": "ADMA Biologics Inc",
+        "stock": "ADMA"
+    },
+    {
+        "name": "Innovex International Inc",
+        "stock": "INVX"
+    },
+    {
+        "name": "Zurn Elkay Water Solutions Cor",
+        "stock": "ZWS"
+    },
+    {
+        "name": "Schneider National Inc",
+        "stock": "SNDR"
+    },
+    {
+        "name": "Inspire Medical Systems Inc",
+        "stock": "INSP"
+    },
+    {
+        "name": "Avantor Inc",
+        "stock": "AVTR"
+    },
+    {
+        "name": "Viper Energy Inc",
+        "stock": "VNOM"
+    },
+    {
+        "name": "SolarWinds Corp",
+        "stock": "SWI"
+    },
+    {
+        "name": "Clearway Energy Inc",
+        "stock": "CWEN_A"
+    },
+    {
+        "name": "United Community Banks Inc/GA",
+        "stock": "UCB"
+    },
+    {
+        "name": "Amentum Holdings Inc",
+        "stock": "AMTM"
+    },
+    {
+        "name": "Dell Technologies Inc",
+        "stock": "DELL"
+    },
+    {
+        "name": "Curbline Properties Corp",
+        "stock": "CURB"
+    },
+    {
+        "name": "Clear Secure Inc",
+        "stock": "YOU"
+    },
+    {
+        "name": "Amc Networks-A",
+        "stock": "AMCX"
+    },
+    {
+        "name": "Calavo Growers I",
+        "stock": "CVGW"
+    },
+    {
+        "name": "Dril-Quip Inc",
+        "stock": "DRQ"
+    },
+    {
+        "name": "Haverty Furnitur",
+        "stock": "HVT"
+    },
+    {
+        "name": "Movado Group",
+        "stock": "MOV"
+    },
+    {
+        "name": "Us Silica Holdin",
+        "stock": "SLCA"
+    },
+    {
+        "name": "United Community",
+        "stock": "UCBI"
+    },
+    {
+        "name": "Olympic Steel",
+        "stock": "ZEUS"
+    },
+    {
+        "name": "Nu Skin Enterprises Inc",
+        "stock": "NUS"
+    },
+    {
+        "name": "Varex Imaging Corp",
+        "stock": "VREX"
+    },
+    {
+        "name": "MERCER INTERNATIONAL INC",
+        "stock": "MERC"
+    },
+    {
+        "name": "Designer Brands Inc",
+        "stock": "DBI"
+    },
+    {
+        "name": "B. Riley Financial Inc",
+        "stock": "RILY"
+    },
+    {
+        "name": "SunPower Corp",
+        "stock": "SPWR"
+    },
+    {
+        "name": "Enhabit Inc",
+        "stock": "EHAB"
+    },
+    {
+        "name": "Chesapeake Energy Corp",
+        "stock": "CHK"
+    },
+    {
+        "name": "Zoom Video Communications Inc",
+        "stock": "ZM"
     }
 ]
