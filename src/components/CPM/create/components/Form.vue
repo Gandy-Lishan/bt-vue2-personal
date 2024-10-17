@@ -72,6 +72,7 @@
         <el-select
             v-model="data.ma_condition"
             placeholder="— Select Condition —"
+            @change="handleCPMMAChange"
           >
             <el-option
               v-for="item in conditionOptions"
@@ -99,7 +100,7 @@
           </el-tooltip>
         </label>
       </template>
-        <el-input v-model="data.ma" :disabled="data.ma_condition == 0">
+        <el-input v-model="data.ma" :disabled="data.ma_condition == 0" @change="handleCPMMAChange">
         </el-input>
       </el-form-item>
     </el-col>
@@ -545,6 +546,14 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    handleCPMMAChange() {
+      debugger
+      if(this.data.ma_condition == 0){
+        CIQ.removeCPMMA()
+      }else{
+        CIQ.drawCPMMA(this.data.ma)
+      }
+    },
     createYearLimitRule(errorMsgEmpty) {
       return (_, value, callback) => {
         if(value === '') {
@@ -573,6 +582,8 @@ export default {
         tim: 21,
         symbol: 'SPX',
         timeframe: 'Daily',
+        ma: 200,
+        ma_condition: 0,
       }
       this.rowUrl = null
       this.data = {
@@ -617,6 +628,7 @@ export default {
       this.$store.commit('form/getBacktestSymbol', "SPX")
       CIQ.addIndicators({},()=>{
         this.calculateBarDistance()
+        this.handleCPMMAChange()
         CIQ.hideCover()
         CIQ.nprogress.done()
       })
@@ -626,6 +638,7 @@ export default {
       this.$store.commit('form/getFreqHighPriority', val)
       CIQ.addIndicators({},()=>{
         this.calculateBarDistance()
+        this.handleCPMMAChange()
         CIQ.hideCover()
         CIQ.nprogress.done()
       })
@@ -684,6 +697,7 @@ export default {
       // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
       CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
         this.calculateBarDistance()
+        this.handleCPMMAChange()
         CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
         CIQ.hideCover()
         CIQ.nprogress.done()

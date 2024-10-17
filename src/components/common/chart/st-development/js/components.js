@@ -8086,6 +8086,8 @@ if (!CIQ.Studies) {
 					var inputs = [];
 					for (var i = 0;i < this.helper.inputs.length; i++){
 						if (this.helper.inputs[i].heading == 'Period' || this.helper.inputs[i].heading == 'Type'){
+							// 特殊情况之一: 当cpm时不在图表修改ma的周期和类
+							if(window.location.pathname === '/cpm/results') continue
 							inputs.push(this.helper.inputs[i])
 						}
 					}

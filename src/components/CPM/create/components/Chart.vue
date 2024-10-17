@@ -62,7 +62,12 @@ export default {
 			this.hideComponents()	
 			console.log('chart_data',this.chart_data)
 
-			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{
+			// 如果 Condition != None, 则画一根周期 = Period 的均线；
+			if(this.chart_data.name && this.chart_data.ma_condition > 0) {	//只有在编辑查看cpm,且有condition,才显示均线
+				CIQ.drawCPMMA(this.chart_data.ma)
+			}
+
+			if(this.chart_data.name) CIQ.displayCPMLayout(this.chart_data,()=>{		
 				// 有result的情况下(success)执行此回调并计算TIM
 				// backtest cpm后需要加载Chart后更新tim
 				this.$emit('prepareData', this.chart_data)
