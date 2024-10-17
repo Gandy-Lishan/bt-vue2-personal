@@ -1665,3 +1665,17 @@ if (queryParams) {
 	})
 }
 /* Blog Report END*/
+
+export function getTempData() {
+	const url = '/api/temp_data'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

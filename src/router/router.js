@@ -304,6 +304,10 @@ const routes = [
 	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
+	},
+	{
+		path: '/summary_chart',
+		component: resolve => require(['@/components/SummaryChart/index.vue'], resolve)
 	}
 ]
 
