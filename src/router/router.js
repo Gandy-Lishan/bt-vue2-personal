@@ -307,7 +307,7 @@ const routes = [
 	},
 	{
 		path: '/summary_chart',
-		component: resolve => require(['@/components/SummaryChart/index.vue'], resolve)
+		component: resolve => require(['@/components/SummaryChart/_index.vue'], resolve)
 	}
 ]
 
