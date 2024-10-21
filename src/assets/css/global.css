@@ -949,8 +949,14 @@ button#checkResBtn {
     border-bottom: 2px solid #ddd;
     font-weight: 400;
   }
+  .sum-threshold-table>thead>tr>th {
+    border: 1px solid #ddd;
+  }
   .threshold-table td {
     border-top: 1px solid #ddd;
+  }
+  .sum-threshold-table td{
+    border: 1px solid #ddd;
   }
   .tg .tg-0lax {
     text-align: left;

@@ -1,18 +1,44 @@
 <template>
- <div id="summaryChart"  style="height: 800px; background-color: #fff;"></div>
+  <div class="perfomance-chart page-content-wrapper">
+   <div id="summaryChart"  style="height: 800px;"></div>
+   <div class="table" v-if="resultDf">
+    <table class="threshold-table sum-threshold-table">
+      <thead>
+       <tr>
+        <th></th>
+        <th>Buy & Hold</th>
+        <th>OVTLYR</th>
+       </tr>
+      </thead>
+      <tbody>
+      <template v-for="(key, keyIndex) in Object.keys(resultDf)">
+        <tr :key="keyIndex">
+           <template v-if="key.includes('Symbol ')">
+            <td><b>{{key.replace('Symbol ', '')}}</b></td>
+            <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
+            <td>{{resultDf[key]}}</td>
+           </template>
+        </tr>
+      </template>
+    </tbody>
+     </table>
+   </div>
+  </div>
 </template>
 
 <script>
 import Highcharts from 'highcharts/highstock';
-import 'highcharts/indicators/indicators';
-import 'highcharts/indicators/bollinger-bands';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import axios from "@/axios";
 import { getTempData } from "@/service/service";
 
 export default {
- name: 'Chart',
+ name: 'summaryChart',
+ data() {
+  return {
+   resultDf: null,
+  }
+ },
  mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
@@ -27,6 +53,28 @@ export default {
       item['EntryDate'] = eval(item['EntryDate'])
       item['ExitDate'] = eval(item['ExitDate'])
       return item
+     })
+     console.log('resultDf', resultDf)
+     const _this = this
+     _this.$nextTick(() => {
+      _this.resultDf = resultDf.map((item,index) => {
+       if(index === 0) return {
+        ['Symbol Total Trading Days']: item['Symbol Total Trading Days'],
+        ['Symbol Buy Signal']: item['Symbol Buy Signals'],
+        ['Symbol Avg.Holding Period']: item['Avg.Holding Period'],
+        ['Symbol Exposure']: item['Symbol Exposure'],
+        ['Symbol Signal Return']: item['Symbol Signal Return'],
+        ['Symbol Max Drawdown']: item['Symbol Max Drawdown'],
+        ['Benchmark Total Trading Days']: item['Total Trading Days'],
+        ['Benchmark Buy Signal']: '',
+        ['Benchmark Avg.Holding Period']: '',
+        ['Benchmark Exposure']: '100%',
+        ['Benchmark Signal Return']: item['Benchmark Signal Return'],
+        ['Benchmark Max Drawdown']: item['Benchmark Max Drawdown']
+       }
+      }).filter(ele => ele !== null && ele !== '' && ele !== undefined).shift(0)
+
+      console.log(' _this.resultDf',  _this.resultDf)
      })
      const processCumulativeJson = (resultDf, keys) => {
       let result = [];
@@ -95,7 +143,7 @@ export default {
        } else if (timeSpan >= 6 * 30 * 24 * 3600 * 1000) { // 6-12个月
          selected = 2; // 'YTD'
        } else if (timeSpan >= 3 * 30 * 24 * 3600 * 1000) { // 3-6个月
-         selected = 1; // '6m'
+         selected = 1; // '6m'   
        } else {
          selected = 0; // '3m'
        }
@@ -103,13 +151,13 @@ export default {
 
 
         var basicChartOptions = {
-          // zoomType: 'x',
-          // pinchType: '',
+          zoomType: 'x',
+          pinchType: '',
           style: {
             "fontFamily": "Open Sans , sans-serif"
           },
           animation: false,
-          // alignTicks: false,
+          alignTicks: false,
           backgroundColor: 'transparent',
           renderTo: 'charts',
 
@@ -297,49 +345,18 @@ export default {
      };
      createChart(series)
    },
-   async fetchData() {
-     const today = '2024-10-10';
-     const symbolName = 'AAPL';
-
-     // 获取信号数据
-     const signalData = await getTempData();
-     console.log('signalData', signalData)
-     const resultDf = signalData.data.map(item => {
-      item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
-      item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);
-      item['EntryDate'] = eval(item['EntryDate'])
-      item['ExitDate'] = eval(item['ExitDate'])
-      return item
-     })
-     const processCumulativeJson = (resultDf, keys) => {
-      let result = [];
-      const jsonData = resultDf.map(item => item['Cumulative Json']);
-
-      // date 和 Buy and Hold Cumulative 始终从 jsonData[0] 提取
-      result[0] = jsonData[0].map(item => new Date(item['Date']).getTime());
-
-      // Strategy Cumulative 从不同的 jsonData 项中提取
-      for (let i = 0; i < jsonData.length; i++) {
-          result[i + 1] = jsonData[i].map(item => item['Strategy Cumulative']);
-      }
-      result[jsonData.length + 1] = jsonData[0].map(item => item['Buy and Hold Cumulative']);
-
-      return result;
-    }
-    const result = processCumulativeJson(resultDf, ['Date', 'Strategy Cumulative', 'Strategy Cumulative', 'Strategy Cumulative', 'Buy and Hold Cumulative']);
-    console.log('result', result)
-     this.plotData(result);
-   },
  }
 }
 </script>
 
 <style lang="less" scoped>
-.highcharts-container {
- width: 100% !important;
- height: 100% !important;
-}
-.test {
- color: #000000;
+.perfomance-chart {
+ overflow: hidden;
+ display: flex;
+ justify-content: space-between;
+ background-color: #fff;
+ #summaryChart {
+  border: 1px solid #ccc;
+ }
 }
 </style>
