@@ -63,6 +63,7 @@ if (CIQ.ChartEngine) {
 	 */
 	CIQ.ChartEngine.prototype.calculateATR = function (chart, period, data) {
 		if (!data) data = chart.dataSet;
+		console.log('calculateATR',chart)
 		var state = chart.state.calculations.atr;
 		if (!state) state = chart.state.calculations.atr = {};
 		if (!period) period = 20;

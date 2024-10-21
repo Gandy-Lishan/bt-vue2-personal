@@ -39,6 +39,42 @@
             }
         ) 
     }
+    CIQ.drawCPMMA = function(period) {
+
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (
+					sd.type == 'ma' && sd.panel == 'chart'
+				) {
+					CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {
+                        Period: period,
+                        Field: sd.inputs.Field,
+                        Offset: 0
+                    })
+                    return
+				}
+                
+			}			
+
+        CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+            Period: period,
+            Field: "Close"
+        });
+    }
+    CIQ.removeCPMMA = function() {
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]
+            if (
+                sd.type == 'ma' && sd.panel == 'chart'
+            ) {
+                CIQ.Studies.removeStudy(
+                    CIQ.stxx,
+                    sd
+                )
+            }
+            
+        }			
+    }
     // user's own indicator的 weight indicator加载函数单独设定
     //var symbol
 

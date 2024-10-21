@@ -1432,6 +1432,7 @@ export default {
 	position: absolute;
 	top: 100%;
 	left: 0;
+	z-index: 10;
 }
 .el-select-dropdown__item {
 	padding: 0 5px;

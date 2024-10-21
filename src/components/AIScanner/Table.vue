@@ -281,6 +281,9 @@ export default {
 					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
 					'Optix #4':"stocks that Optix crossbelow 0.5.",
 					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35 then above 43.',
+					'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'stocks that are above their 200-day moving average with an Optix 10-day moving average less than 35 then above 43.',
+					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'stocks that are above their 200-day moving average with an Optix less than 30 then above 43.',
 					'PriceBreakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a long signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
 					'HighPoints':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a long signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
 					'LowPoints':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a short signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
@@ -307,8 +310,11 @@ export default {
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
 					'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
-					'Optix MA10 < 30 and Optix < 20':'Optix #3'
-				},
+					'Optix MA10 < 30 and Optix < 20':'Optix #3',
+					'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'Optix #5',
+					'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'Optix #6',
+					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7',
+							},
 				pageSize: 10, // Default page size
       			currentPage: 1, // Default current page
 
