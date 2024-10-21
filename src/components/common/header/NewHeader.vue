@@ -248,6 +248,9 @@ export default {
   padding: 0px 20px 0px 20px;
   border-bottom: 1px solid #eee;
   height: 62px;
+  /deep/ .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover {
+    background-color: #5b9bd1 !important;
+  }
   /deep/ .el-menu.el-menu--horizontal {
     border-bottom-color: transparent;
   }
