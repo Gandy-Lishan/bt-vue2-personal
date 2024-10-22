@@ -875,8 +875,11 @@ export default {
 				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
-				if (this.editableTabs.length === 1) {
+				if (this.editableTabs.length <= 1) {
 					this.handleTabsEdit(null, 'add')
+					for (let i = 0; i < 2 - this.editableTabs.length; i++) {
+						this.handleTabsEdit(null, 'add')
+					}
 					this.editableTabsValue = '1'
 				}
 				if (val == 2) {
