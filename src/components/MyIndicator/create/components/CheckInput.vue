@@ -27,6 +27,7 @@
 
 <script>
 import { createPositiveIntegerValidate, createEOEPValidate } from '@/utils/formValidate';
+const debounce = require('lodash/debounce')
 
 export default {
   name: 'CheckInput',
@@ -106,13 +107,13 @@ export default {
       this.MAType = val
       this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
-    handleInput(val) {
+    handleInput: debounce(function (val) {
       if(this.config.type == 'SelectInput'){
         this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else {
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
-    },
+    }, 500),
     validateForm() {
       if(this.showInput) {
         this.validateValue(this.value)
