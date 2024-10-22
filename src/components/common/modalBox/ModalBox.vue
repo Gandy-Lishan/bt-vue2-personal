@@ -61,6 +61,34 @@
     justify-content: center;
   }
   
+  /* 大屏幕 */
+@media (min-width: 1201px) {
+  .modal-content {
+    max-width: 1000px; /* 大屏幕最大宽度 */
+  }
+}
+
+/* 中等屏幕 */
+@media (max-width: 1200px) {
+  .modal-content {
+    max-width: 800px; 
+  }
+}
+
+/* 小屏幕 */
+@media (max-width: 992px) {
+  .modal-content {
+    max-width: 600px; 
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%; 
+  }
+}
+
   .close-button {
     position: absolute;
     top: 24px;

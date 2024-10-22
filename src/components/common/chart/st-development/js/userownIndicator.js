@@ -245,7 +245,7 @@
                 var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                 if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
             }
-debugger
+
             if(oldData.categories != newData.categories){
                 // 仅当大类切换（indicator->symbol->wic）才移除现存studies
                 if(oldData.categories.split(' ')[0] != newData.categories.split(' ')[0]){

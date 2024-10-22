@@ -372,12 +372,10 @@
 
 		<ModalBox ref="modalBox">
 			<template v-if="modalContent === 'first'">
-				<h2>第一个弹窗内容</h2>
-				<p>这里是第一个弹窗的内容。</p>
+				<StrategySigal></StrategySigal>
 			</template>
-			<template v-else>
-				<h2>第二个弹窗内容</h2>
-				<p>这里是第二个弹窗的内容。</p>
+			<template v-if="modalContent === 'second'">
+				<SummaryChart></SummaryChart>
 			</template>
 		</ModalBox>
 	</cq-context>
@@ -393,11 +391,15 @@ import { getCustomConfig, marker } from './resources' // ChartIQ library resourc
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 import UploaderVue from './st-development/components/Uploader.vue'
 import ReportsFilter from './st-development/components/ReportsFilter.vue'
-import ModalBox from '../modalBox/ModalBox.vue'
+import ModalBox from '@/components/common/modalBox/ModalBox.vue'
+import SummaryChart from '@/components/SummaryChart/_index.vue'
+import StrategySigal from '@/components/common/strategySignal/StrategySignal.vue'
 
 @Component({
   components: {
     ModalBox,
+	SummaryChart,
+	StrategySigal,
   },
 })
 export default class AdvancedChartComponent extends Vue {
@@ -412,7 +414,7 @@ export default class AdvancedChartComponent extends Vue {
 	resizeObserver: any | undefined
 	//reportsAreDisplayed: any | undefined
 	routeName: string | null | undefined
-	modalContent: string | null | undefined
+	modalContent: string | null = null
 	
 	constructor() {
 		super()
