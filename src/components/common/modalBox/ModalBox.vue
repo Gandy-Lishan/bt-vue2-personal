@@ -6,7 +6,7 @@
         <slot></slot>
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   export default {
@@ -52,7 +52,7 @@
     padding: 24px;
     border-radius: 16px;
     position: relative;
-    max-width: 893;
+    max-width: 893px;
     width: 100%;
     box-shadow: 34px 4px 74px -24px #38327c14;
     display: flex;

@@ -80,6 +80,20 @@
 							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
+
+					<cq-info-toggle-dropdown class="lastp-group">
+						<cq-toggle class="lastP" id="lastP" @click="openModal('first')">
+							<span></span>
+							<cq-tooltip>弹窗1</cq-tooltip>
+						</cq-toggle>
+					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown class="lastp-group">
+						<cq-toggle class="lastP" id="lastP" @click="openModal('second')">
+							<span></span>
+							<cq-tooltip>弹窗2</cq-tooltip>
+						</cq-toggle>
+					</cq-info-toggle-dropdown>
+
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
@@ -355,6 +369,17 @@
 		<!-- last signal marker -->
 		<div id="stxForecast" class="forecast"></div>
 		</div>
+
+		<ModalBox ref="modalBox">
+			<template v-if="modalContent === 'first'">
+				<h2>第一个弹窗内容</h2>
+				<p>这里是第一个弹窗的内容。</p>
+			</template>
+			<template v-else>
+				<h2>第二个弹窗内容</h2>
+				<p>这里是第二个弹窗的内容。</p>
+			</template>
+		</ModalBox>
 	</cq-context>
 </template>
 
@@ -368,8 +393,13 @@ import { getCustomConfig, marker } from './resources' // ChartIQ library resourc
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 import UploaderVue from './st-development/components/Uploader.vue'
 import ReportsFilter from './st-development/components/ReportsFilter.vue'
+import ModalBox from '../modalBox/ModalBox.vue'
 
-@Component({})
+@Component({
+  components: {
+    ModalBox,
+  },
+})
 export default class AdvancedChartComponent extends Vue {
 	
 	@Prop() config: any
@@ -382,9 +412,11 @@ export default class AdvancedChartComponent extends Vue {
 	resizeObserver: any | undefined
 	//reportsAreDisplayed: any | undefined
 	routeName: string | null | undefined
+	modalContent: string | null | undefined
 	
 	constructor() {
 		super()
+		this.modalContent = null, // 用于存储弹窗内容的状态
 		this.isCollapse = false 
 		this.resizeObserver = null
 		// this.reportsAreDisplayed = {
@@ -457,6 +489,14 @@ export default class AdvancedChartComponent extends Vue {
 			this.initializeReportsFilter()
 		}, 0)			
 	}
+
+	openModal(contentType: string) {
+      this.modalContent = contentType; // 设置要显示的内容
+	  const modal = this.$refs.modalBox as any;
+      if (modal) {
+        modal.open(); // 确保 modal 存在后再调用 open 方法
+      }
+    }
 
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {
