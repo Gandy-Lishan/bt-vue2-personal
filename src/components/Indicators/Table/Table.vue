@@ -56,6 +56,7 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
+        SPTrend: 'sp_1500_trend_list',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
         CommoditySeasonality: 'commod_seasonality',

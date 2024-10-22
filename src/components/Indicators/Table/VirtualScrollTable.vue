@@ -361,6 +361,52 @@ export default {
             }
             ]
         ],
+        ['SPTrendColumns', 
+          [
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '180px'
+            },
+            {
+              key: 'sector',
+              label: 'Sector',
+              value: 'sector'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'trend_score',
+              label: 'Trend Score',
+              value: 'trend_score'
+            },
+            {
+              key: '5_score_chg',
+              label: '5-Day Score Chg',
+              value: '5_score_chg'
+            },
+            {
+              key: 'last_update',
+              label: 'RelTrend Score',
+              value: 'last_update'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment'
+            }
+            ]
+        ],
         ['bondColumns', 
           [
             {
