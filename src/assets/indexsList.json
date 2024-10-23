@@ -910,5 +910,9 @@
     {
         "symbol": "TNX",
         "name": "10-Year Treasury Note Yield (TNX)"
+    },
+    {
+        "symbol": "UTIL",
+        "name": "Dow Jones Utility Average (UTIL) "
     }
 ]
