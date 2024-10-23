@@ -452,7 +452,7 @@ debugger
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
            
-        if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
+        if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio' || newData.categories == 'Symbol Addition'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 CIQ.store.commit('form/setComparisonSymbol', {
@@ -504,7 +504,7 @@ debugger
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
         }
         
-        if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
+        if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'|| newData.categories == 'Indicator Addition'){
             // indicator1
             await getUserOwnIndicatorMatedata(newData.indicator1.url,null)
             // indicator2
