@@ -81,13 +81,13 @@
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
-						<cq-toggle class="lastP" id="lastP" @click="openModal('first')">
+						<cq-toggle class="trading-signal" @click="openModal('first')">
 							<span></span>
 							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
-						<cq-toggle class="lastP" id="lastP" @click="openModal('second')">
+						<cq-toggle class="performance-summary" @click="openModal('second')">
 							<span></span>
 							<cq-tooltip>Performance Summary</cq-tooltip>
 						</cq-toggle>

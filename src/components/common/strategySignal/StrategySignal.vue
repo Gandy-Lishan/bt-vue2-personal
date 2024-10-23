@@ -42,7 +42,6 @@ export default {
 
   methods: {
     async loadChart() {
-      debugger
       if (this.chart) {
         this.chart.destroy(); // 销毁旧图表
       }
@@ -51,8 +50,13 @@ export default {
 
       try {
         const signalData = await getSymbolStrategySigal(this.symbol);
-        const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
-        this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
+        if(signalData.data.status == 504) {
+          this.popUpMsgBox(signalData.data.msg)
+          this.$emit('error');  // 向父组件发出 'error' 事件
+        }else {
+          const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
+          this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
+        }
       } catch (error) {
         console.error(`Error fetching data for symbol: ${this.symbol}`, error);
         this.$emit('error');  // 向父组件发出 'error' 事件
