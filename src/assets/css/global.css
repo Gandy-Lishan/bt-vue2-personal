@@ -951,6 +951,7 @@ button#checkResBtn {
   }
   .sum-threshold-table>thead>tr>th {
     border: 1px solid #ddd;
+    font-weight: bold;
   }
   .threshold-table td {
     border-top: 1px solid #ddd;

@@ -376,7 +376,7 @@
 				></StrategySigal>
 			</template>
 			<template v-if="modalContent === 'second'">
-				<SummaryChart></SummaryChart>
+				<SummaryChart symbol="AAPL"></SummaryChart>
 			</template>
 		</ModalBox>
 	</cq-context>
