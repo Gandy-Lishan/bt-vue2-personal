@@ -70,12 +70,6 @@ export default {
               value: 'SP1500',
               type: 'stock',
               url: 'sp_1500_complete_list',
-            },
-            {
-              label: 'S&P 1500 Trend',
-              value: 'SPTrend',
-              type: 'stock',
-              url: 'sp_1500_trend'
             }
           ]
         },
@@ -178,6 +172,27 @@ export default {
               type: 'seasonality',
               url: 'bond_seasonality'
             },
+          ]
+        },
+        {
+          label: 'Stock Trend',
+          type: 'SPTrend',
+          refName: 'SPTrendVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'S&P 1500 Stock Trend Score',
+              value: 'SPTrend',
+              type: 'SPTrend',
+              url: 'sp_1500_trend_reltrend'
+            },
+            {
+              label: 'Trend Scores for Sector',
+              value: 'TrendSector',
+              type: 'SPTrend',
+              url: 'sector_trend_score'
+            }
           ]
         },
         // {

@@ -9,6 +9,7 @@
             <!-- <h4  @click="selectedTitle = 'Commodity'" :class="{ 'selected': selectedTitle === 'Commodity' }">Commodity</h4> -->
             <h4  @click="selectedTitle = 'Popular'" :class="{ 'selected': selectedTitle === 'Popular' }">Most Popular</h4>
             <h4  @click="selectedTitle = 'My Favorites'" :class="{ 'selected': selectedTitle === 'My Favorites' }">My Favorites</h4>
+            <!-- <h4  @click="selectedTitle = 'Trend Score'" :class="{ 'selected': selectedTitle === 'Trend Score' }">Trend Scores for Sector</h4> -->
           </div>
           <div class="search-container">
             <Search @enLargeTable="enLargeTable"></Search>
@@ -18,6 +19,7 @@
       <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
       <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
       <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
+      <!-- <TrendScoreTable v-show="selectedTitle === 'Trend Score'"></TrendScoreTable> -->
       <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
     </div>
     </div>
@@ -28,6 +30,7 @@ import IndicatorTable from "./IndicatorTable";
 import Favorites from "./Favorites";
 import Search from "./Search";
 import Popular from "./Popular";
+// import TrendScoreTable from "./TrendScoreTable";
 import { mapActions, mapGetters } from 'vuex'
 import { isJson } from "@/utils";
 
@@ -54,7 +57,8 @@ export default {
     IndicatorTable,
     Favorites,
     Popular,
-    Search
+    Search,
+    // TrendScoreTable
     // Commodity
   },
   methods: {

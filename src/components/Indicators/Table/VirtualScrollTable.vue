@@ -22,7 +22,7 @@
       </template>
     </div>
   </div>
-  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated)">
+  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
     <el-row>
       <el-col :span="18">
         <el-row>
@@ -76,6 +76,7 @@
     </el-row>
   </div>
   <virtual-scroll
+      v-show="checkedType !== 'TrendSector'"
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
@@ -155,15 +156,17 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-show="enlarged && pageLength">
+  <div class="dataTables_info" v-show="enlarged && pageLength && (checkedType !== 'TrendSector')">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
+  <TrendScoreTable v-show="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
 </div>
 </template>
 
 <script>
 import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
+import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
@@ -189,7 +192,8 @@ export default {
     ElTableInfiniteScroll
   },
   components: {
-    VirtualScroll
+    VirtualScroll,
+    TrendScoreTable
   },
   inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex'],
   data() {
@@ -1005,9 +1009,10 @@ export default {
         ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
+      if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
-      if(this.type === 'related' && this.sourceType !== 'stock_trend') {return columnsMap.get('stockColumns')}
-      if(this.type === 'related' && this.sourceType === 'stock_trend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
+      if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
@@ -1239,8 +1244,7 @@ export default {
       // this.$forceUpdate()
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
-      console.log(row, column, cell, event)
-      if(row.url && !this.type.includes('Seasonality') && ((column.property === 'chart_name' && row.type !== 'stock_trend') || (row.type === 'stock_trend' && column.property === 'market_symbol'))) {
+      if(row.url && !this.type.includes('Seasonality') && ((column.property === 'chart_name' && row.type !== 'trend_reltrend') || (row.type === 'trend_reltrend' && column.property === 'market_symbol'))) {
         let _t = '50%'
         let _l = 0
         let {url} = row
@@ -1260,7 +1264,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'stock_trend') url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'trend_reltrend') url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
@@ -1587,8 +1591,8 @@ export default {
           type: 'SP1500'
         },
         {
-          label: 'S&P 1500 Trend',
-          value: 'sp_1500_trend',
+          label: 'S&P 1500 Stock Trend Score',
+          value: 'sp_1500_trend_reltrend',
           type: 'SPTrend'
         },
         {
@@ -1705,7 +1709,7 @@ export default {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      if(type === 'sp_1500_trend') {
+      if(type === 'sp_1500_trend_reltrend') {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],

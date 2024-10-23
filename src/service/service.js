@@ -1450,6 +1450,20 @@ export function obtainBTV1IndicatorsList() {
 			})
 	})
 }
+export function getSectorTrendScore(url) {
+	const path =`/dev/st_data/sector_trend_score`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* Indicators Page 接口 END */
 
 /** Begin fetch BTV2 fav indicator & symbol list*/
