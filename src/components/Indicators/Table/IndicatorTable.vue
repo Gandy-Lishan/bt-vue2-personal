@@ -71,12 +71,12 @@ export default {
               type: 'stock',
               url: 'sp_1500_complete_list',
             },
-            {
-              label: 'S&P 1500 Trend',
-              value: 'SPTrend',
-              type: 'stock',
-              url: 'sp_1500_trend'
-            }
+            // {
+            //   label: 'S&P 1500 Trend',
+            //   value: 'SPTrend',
+            //   type: 'stock',
+            //   url: 'sp_1500_trend'
+            // }
           ]
         },
         {
