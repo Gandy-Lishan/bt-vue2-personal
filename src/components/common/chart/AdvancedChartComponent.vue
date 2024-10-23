@@ -372,7 +372,7 @@
 		<ModalBox ref="modalBox">
 			<template v-if="modalContent === 'first'">
 				<StrategySigal
-					symbol="AAPL"
+					@error="closeModal"
 				></StrategySigal>
 			</template>
 			<template v-if="modalContent === 'second'">
@@ -500,6 +500,12 @@ export default class AdvancedChartComponent extends Vue {
         modal.open(); // 确保 modal 存在后再调用 open 方法
       }
     }
+	closeModal() {
+		const modal = this.$refs.modalBox as any;
+		if (modal) {
+			modal.close(); // 确保 modal 存在后再调用 close 方法
+		}
+	}
 
 	// initiate lastPrice and grid button
 	initializeToggle(stx: any) {

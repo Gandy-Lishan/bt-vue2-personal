@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { CIQ } from '@/components/common/chart/st-development/js/components'
 import Highcharts from 'highcharts/highstock';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
@@ -13,16 +14,17 @@ import {
 
 export default {
   name: 'StrategySigal',
-  props: {
-    symbol: {
-      type: String,
-      required: true,
-    },
-  },
+  // props: {
+  //   symbol: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       chart: null, // 存储图表实例
       loading: true,
+      symbol: CIQ.stxx.chart.symbol
     };
   },
   watch: {
@@ -40,38 +42,69 @@ export default {
 
   methods: {
     async loadChart() {
+      debugger
       if (this.chart) {
         this.chart.destroy(); // 销毁旧图表
       }
       Exporting(Highcharts);
       ExportData(Highcharts);
-      const signalData = await getSymbolStrategySigal(this.symbol);
-      const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
-      this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
 
-      this.loading = false
+      try {
+        const signalData = await getSymbolStrategySigal(this.symbol);
+        const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
+        this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
+      } catch (error) {
+        console.error(`Error fetching data for symbol: ${this.symbol}`, error);
+        this.$emit('error');  // 向父组件发出 'error' 事件
+      } finally {
+        this.loading = false; // 无论成功或失败都结束 loading 状态
+      }
     },
     plotData(trend_score, EntryDate, ExitDate) {
       // find the start point
       const start = EntryDate[0] < ExitDate[0] ? EntryDate[0] : ExitDate[0]
       trend_score = trend_score.filter(item => moment(item.DT).isAfter(moment(start).subtract(1, 'month')))
       
-      const dataX = trend_score.map(item => new Date(item.DT));
-      const rData = trend_score.map(item => item.Close);
+      //const dataX = trend_score.map(item => new Date(item.DT));
+      const rData = trend_score.map(item => [new Date(item.DT).getTime(), item.Close]);
       const pData = trend_score.map(item => item.trend_score);
 
-      const plotBands = pData.map((value, i) => {
+      const plotBands = rData.map(([timestamp], i) => {
+        // 计算每个交易日的起始和结束时间
+        //const nextTimestamp = rData[i + 1] ? rData[i + 1][0] : timestamp + 24 * 3600 * 1000; // 处理最后一个点
+        const prevTimestamp = rData[i - 1] ? rData[i - 1][0] : timestamp - 24 * 3600 * 1000; // 如果是第一个交易日
+
+        const value = pData[i]; // 对应的 trend_score
         const intensity = Math.round(255 * (value / 100));
         const color = `rgb(${255 - intensity}, ${255 - intensity}, 255)`;
+
         return {
-          from: i - 0.5,
-          to: i + 0.5,
-          color: color,
+          from: prevTimestamp,           // 当前交易日的开始
+          to: timestamp,         // 下一个交易日的开始（或者当前结束）
+          color: color,              // 设置背景颜色
         };
       });
+      // const plotBands = rData.map(([timestamp], i) => {
+      //   // 当前交易日的开始时间
+      //   const middleOfDay = timestamp
+        
+      //   // 当天中间时间段（可以根据需要调整，例如覆盖中午 12:00 ±几个小时）
+      //   const startOfBar = moment(middleOfDay).add(12, 'hours').valueOf();
+      //   const endOfBar = moment(middleOfDay).subtract(12, 'hours').valueOf();
 
-      const buyMarkerData = this.createMarkerData(dataX, rData, EntryDate, 'triangle', 'green');
-      const sellMarkerData = this.createMarkerData(dataX, rData, ExitDate, 'triangle-down', 'red');
+      //   const value = pData[i]; // 对应的 trend_score
+      //   const intensity = Math.round(255 * (value / 100));
+      //   const color = `rgb(${255 - intensity}, ${255 - intensity}, 255)`;
+
+      //   return {
+      //     from: startOfBar,   // 中间位置向前偏移一半
+      //     to: endOfBar,     // 中间位置向后偏移一半
+      //     color: color,                        // 设置背景颜色
+      //   };
+      // });
+
+      const buyMarkerData = this.createMarkerData(rData, EntryDate, 'triangle', 'green');
+      const sellMarkerData = this.createMarkerData(rData, ExitDate, 'triangle-down', 'red');
 
       var basicChartOptions = {
           zoomType: 'x',
@@ -106,7 +139,7 @@ export default {
           },
         },
         title: {
-          text: "Trading Signal for AAPL",
+          text: `Trading Signal for ${this.symbol}`,
           style: {
             fontWeight: 'bold',
             fontFamily: 'Arial',
@@ -115,16 +148,45 @@ export default {
         navigator: {
           enabled: true,
         },
+        // xAxis: {
+        //   categories: dataX.map(date => date.toISOString().split('T')[0]),
+        //   gridLineWidth: 1,
+        //   gridLineDashStyle: 'Dash',
+        //   tickPixelInterval: 1,
+        //   title: {
+        //     text: "Dates",
+        //   },
+        //   plotBands: plotBands,
+        // },
         xAxis: {
-          categories: dataX.map(date => date.toISOString().split('T')[0]),
-          gridLineWidth: 1,
-          gridLineDashStyle: 'Dash',
-          tickPixelInterval: 1,
-          title: {
-            text: "Dates",
-          },
-          plotBands: plotBands,
-        },
+           type: 'datetime',
+           ordinal: false,
+           crosshair: { label: { enabled: false } },
+           labels: {
+             formatter: function() {
+               const range = this.axis.max - this.axis.min;
+
+               // 设置不同时间范围下的格式
+               if (range > 3 * 365 * 24 * 3600 * 1000) {
+                 // 大于 3 年，显示年份
+                 return Highcharts.dateFormat('%Y', this.value);
+               } else if (range > 365 * 24 * 3600 * 1000) {
+                 // 1 - 3 年，显示季度
+                 return Highcharts.dateFormat('%Y %b', this.value);
+               } else if (range > 30 * 24 * 3600 * 1000) {
+                 // 1 - 12 个月，显示月份和天
+                 return Highcharts.dateFormat('%b %d', this.value);
+               } else if (range > 7 * 24 * 3600 * 1000) {
+                 // 7 - 30 天，显示具体日期
+                 return Highcharts.dateFormat('%b %e', this.value);
+               } else {
+                 // 小于 7 天，显示小时和日期
+                 return Highcharts.dateFormat('%b %e, %H:%M', this.value);
+               }
+             }
+           },
+           plotBands: plotBands,
+         },
         yAxis: {
           gridLineDashStyle: 'Dash',
           labels: {
@@ -142,7 +204,29 @@ export default {
           },
         },
         tooltip: {
-          shared: true,
+          shared: false, // 单独显示每个点的 tooltip
+          formatter: function () {
+            const date = Highcharts.dateFormat('%A, %b %e, %Y', this.x);
+            // 获取系列的颜色
+            const color = this.series.color;
+
+            if (this.series.name === 'Buy' || this.series.name === 'Sell') {
+              return `
+                <span style="color: ${color}; font-size: 10px;">●</span>
+                <span style="font-size: 10px;">${this.series.name}</span><br>Date: ${date}<br>Close:
+                <b>${this.y.toFixed(2)}</b>
+              `;
+            } else if (this.series.name === 'Symbol Close') {
+              return `
+                <span style="font-size: 10px;">${date}</span><br>
+                <span style="color: ${color}; font-size: 10px;">●</span>
+                Symbol Close: 
+                <b>${this.y.toFixed(2)}</b>
+              `;
+            } else {
+              return false; // 防止其他系列显示错误的提示框
+            }
+          },
         },
         legend: {
           layout: 'horizontal',
@@ -169,13 +253,13 @@ export default {
       this.chart = Highcharts.chart(this.$refs.strategySignalChartcontainer, options);
       this.addDataSets(rData, pData, buyMarkerData, sellMarkerData);
     },
-    createMarkerData(dataX, rData, markers, symbol, color) {
+    createMarkerData(rData, markers, symbol, color) {
       return markers.map(date => {
-        const index = dataX.findIndex(d => d.getTime() === new Date(date).getTime());
+        const index = rData.findIndex(d => d[0] === new Date(date).getTime());
         if (index !== -1) {
           return {
-            x: index,
-            y: rData[index],
+            x: rData[index][0],
+            y: rData[index][1],
             marker: {
               symbol: symbol,
               enabled: true,
