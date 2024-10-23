@@ -35,26 +35,25 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 
 export default {
  name: 'summaryChart',
- props: {
-    symbol: {
-      type: String,
-      required: true,
-    },
-  },
  data() {
   return {
    resultDf: null,
    loading: true,
+   symbol: CIQ.stxx.chart.symbol
   }
  },
  watch: {
     // 监视 symbol 变化，重新加载图表
     symbol: 'loadChart',
   },
- mounted() {
+ async mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
-   this.renderChart();
+   try {
+    await this.renderChart();
+   } catch (error) {
+    this.$emit('error');  // 向父组件发出 'error' 事件
+   }
  },
  methods: {
    async renderChart() {

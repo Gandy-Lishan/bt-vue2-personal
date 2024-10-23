@@ -376,7 +376,7 @@
 				></StrategySigal>
 			</template>
 			<template v-if="modalContent === 'second'">
-				<SummaryChart symbol="AAPL"></SummaryChart>
+				<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
 			</template>
 		</ModalBox>
 	</cq-context>
@@ -393,7 +393,7 @@ import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // 
 import UploaderVue from './st-development/components/Uploader.vue'
 import ReportsFilter from './st-development/components/ReportsFilter.vue'
 import ModalBox from '@/components/common/modalBox/ModalBox.vue'
-import SummaryChart from '@/components/SummaryChart/_index.vue'
+import SummaryChart from '@/components/common/SummaryChart/index.vue'
 import StrategySigal from '@/components/common/strategySignal/StrategySignal.vue'
 
 @Component({
