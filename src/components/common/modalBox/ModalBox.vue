@@ -49,7 +49,7 @@
 
   .modal-content {
     background: #fff;
-    padding: 24px;
+    padding: 24px 50px;
     border-radius: 16px;
     position: relative;
     max-width: 893px;
@@ -98,14 +98,14 @@
     font-size: 20px;
     cursor: pointer;
 
-    color: #6b7094;
+    color: #6b8494;
     transition: color .2s;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .close-button:hover{
-    color: #642eff;
+    color: #5b9bd1;
   }
   </style>
   

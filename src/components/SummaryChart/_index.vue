@@ -1,5 +1,5 @@
 <template>
-  <div class="perfomance-chart page-content-wrapper">
+  <div v-loading="loading" class="perfomance-chart page-content-wrapper">
    <div id="summaryChart"  style="height: 800px;"></div>
    <div class="table" v-if="resultDf">
     <table class="threshold-table sum-threshold-table">
@@ -37,6 +37,7 @@ export default {
  data() {
   return {
    resultDf: null,
+   loading: true,
   }
  },
  mounted() {
@@ -344,6 +345,7 @@ export default {
        });
      };
      createChart(series)
+     this.loading = false
    },
  }
 }

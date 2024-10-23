@@ -80,17 +80,16 @@
 							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-
-					<cq-info-toggle-dropdown class="lastp-group">
+					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
 						<cq-toggle class="lastP" id="lastP" @click="openModal('first')">
 							<span></span>
-							<cq-tooltip>弹窗1</cq-tooltip>
+							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown class="lastp-group">
+					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
 						<cq-toggle class="lastP" id="lastP" @click="openModal('second')">
 							<span></span>
-							<cq-tooltip>弹窗2</cq-tooltip>
+							<cq-tooltip>Performance Summary</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
 
@@ -372,7 +371,9 @@
 
 		<ModalBox ref="modalBox">
 			<template v-if="modalContent === 'first'">
-				<StrategySigal></StrategySigal>
+				<StrategySigal
+					symbol="AAPL"
+				></StrategySigal>
 			</template>
 			<template v-if="modalContent === 'second'">
 				<SummaryChart></SummaryChart>

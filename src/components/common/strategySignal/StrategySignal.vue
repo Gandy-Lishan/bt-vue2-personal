@@ -1,9 +1,12 @@
 <template>
-  <div ref="chartContainer"></div>
+  <div v-loading="loading" class="strategy-signal--chartcontainer" ref="strategySignalChartcontainer"></div>
 </template>
 
 <script>
-import Highcharts from 'highcharts';
+import Highcharts from 'highcharts/highstock';
+import Exporting from 'highcharts/modules/exporting';
+import ExportData from 'highcharts/modules/export-data';
+import moment from 'moment'
 import {
   getSymbolStrategySigal
 } from '@/service/service'
@@ -16,16 +19,46 @@ export default {
       required: true,
     },
   },
-  async mounted() {
-    const signalData = await getSymbolStrategySigal(symbol);
-    const { trend_score, EntryDate, ExitDate } = signalData.data
-    this.plotData(trend_score, EntryDate, ExitDate);
+  data() {
+    return {
+      chart: null, // 存储图表实例
+      loading: true,
+    };
   },
+  watch: {
+    // 监视 symbol 变化，重新加载图表
+    symbol: 'loadChart',
+  },
+  mounted() {
+    this.loadChart(); // 初次加载图表
+  },
+  beforeDestroy() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+  },
+
   methods: {
+    async loadChart() {
+      if (this.chart) {
+        this.chart.destroy(); // 销毁旧图表
+      }
+      Exporting(Highcharts);
+      ExportData(Highcharts);
+      const signalData = await getSymbolStrategySigal(this.symbol);
+      const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
+      this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
+
+      this.loading = false
+    },
     plotData(trend_score, EntryDate, ExitDate) {
+      // find the start point
+      const start = EntryDate[0] < ExitDate[0] ? EntryDate[0] : ExitDate[0]
+      trend_score = trend_score.filter(item => moment(item.DT).isAfter(moment(start).subtract(1, 'month')))
+      
       const dataX = trend_score.map(item => new Date(item.DT));
-      const rData = trend_score.map(item => new Date(item.Close));
-      const pData = trend_score.map(item => new Date(item.trend_score));
+      const rData = trend_score.map(item => item.Close);
+      const pData = trend_score.map(item => item.trend_score);
 
       const plotBands = pData.map((value, i) => {
         const intensity = Math.round(255 * (value / 100));
@@ -40,13 +73,47 @@ export default {
       const buyMarkerData = this.createMarkerData(dataX, rData, EntryDate, 'triangle', 'green');
       const sellMarkerData = this.createMarkerData(dataX, rData, ExitDate, 'triangle-down', 'red');
 
+      var basicChartOptions = {
+          zoomType: 'x',
+          pinchType: '',
+          style: {
+            "fontFamily": "Open Sans , sans-serif"
+          },
+          animation: false,
+          alignTicks: false,
+          backgroundColor: 'transparent',
+          renderTo: 'charts',
+
+          events: {
+            load: function (event) {
+              var e = event.target.axes[0].getExtremes();
+              this.defaultChartScale = [e.min, e.max];
+              this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 100, 350, 120, 33)
+                  .attr({
+                      'opacity': 0.65
+                  })
+                  .add();
+            },
+          }
+        };
       const options = {
+        exporting: {
+          enabled: true, // 启用导出功能
+          buttons: {
+            contextButton: {
+              menuItems: ['printChart', 'separator', 'downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'],
+            },
+          },
+        },
         title: {
           text: "Trading Signal for AAPL",
           style: {
             fontWeight: 'bold',
             fontFamily: 'Arial',
           },
+        },
+        navigator: {
+          enabled: true,
         },
         xAxis: {
           categories: dataX.map(date => date.toISOString().split('T')[0]),
@@ -84,25 +151,23 @@ export default {
           x: -60,
           y: 0,
           floating: true,
-          backgroundColor: "(Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'",
+          backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
         },
         credits: {
-          enabled: true,
-          href: 'https://sentimentrader.com/',
-          style: {
-            fontSize: '15px',
-          },
-          position: {
-            align: 'right',
-            x: -80,
-            y: -65,
-          },
-          text: 'sentimentrader',
-        },
+           enabled: true,
+           text: "Source: Sentiment",
+           href: 'https://sentimentrader.com',
+           position: {
+             align: 'right',
+             y: -120,
+             x: -80
+           }
+         },
+         chart: basicChartOptions,
       };
 
-      Highcharts.chart(this.$refs.chartContainer, options);
-      this.addDataSets(rData, buyMarkerData, sellMarkerData);
+      this.chart = Highcharts.chart(this.$refs.strategySignalChartcontainer, options);
+      this.addDataSets(rData, pData, buyMarkerData, sellMarkerData);
     },
     createMarkerData(dataX, rData, markers, symbol, color) {
       return markers.map(date => {
@@ -130,18 +195,29 @@ export default {
         return null;
       }).filter(Boolean);
     },
-    addDataSets(rData, buyMarkerData, sellMarkerData) {
-      const chart = Highcharts.charts[0]; // 获取当前图表实例
-      chart.addSeries({
+    addDataSets(rData, pData, buyMarkerData, sellMarkerData) {
+      // this.chart.addSeries({
+      //   name: 'Trend Score',
+      //   data: pData,
+      //   type: 'line',
+      //   color: '#99CCFF',
+      //   yAxis:  0,  // 绑定到唯一的 yAxis
+      //   marker: {
+      //     enabled: false,
+      //   },
+      // });
+      this.chart.addSeries({
         name: 'Symbol Close',
         data: rData,
         type: 'line',
         color: '#01017D',
+        yAxis:  0,  // 绑定到唯一的 yAxis
         marker: {
           enabled: false,
         },
       });
-      chart.addSeries({
+      // debugger
+      this.chart.addSeries({
         name: 'Buy',
         data: buyMarkerData,
         type: 'scatter',
@@ -151,7 +227,7 @@ export default {
           fillColor: 'green',
         },
       });
-      chart.addSeries({
+      this.chart.addSeries({
         name: 'Sell',
         data: sellMarkerData,
         type: 'scatter',
@@ -167,7 +243,7 @@ export default {
 </script>
 
 <style scoped>
-.chartContainer {
+.strategy-signal--chartcontainer {
   width: 100%;
   height: 500px;
 }
