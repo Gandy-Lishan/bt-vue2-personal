@@ -7,7 +7,7 @@
        <tr>
         <th></th>
         <th>Buy & Hold</th>
-        <th>OVTLYR</th>
+        <th>Strategy</th>
        </tr>
       </thead>
       <tbody>
