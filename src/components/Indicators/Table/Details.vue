@@ -77,7 +77,7 @@
 								</div>
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
-            <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related"></Related>
+            <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
           </div>
         </div>
   </div>
@@ -113,7 +113,8 @@ export default {
       Below_Annualized: '',
       Between_Annualized: '',
       return_segments: [],
-      isShowInfoTable: false
+      isShowInfoTable: false,
+      type: ''
     }
   },
   watch: {
@@ -152,6 +153,7 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
+          this.type  = originalData.type
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
           this.return_segments = originalData.return_segments
