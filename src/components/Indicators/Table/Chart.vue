@@ -342,6 +342,7 @@
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data
+        originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
         console.log('originalData', originalData)
         try {
           if(typeof originalData === 'string') {

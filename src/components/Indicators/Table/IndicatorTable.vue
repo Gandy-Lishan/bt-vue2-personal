@@ -27,7 +27,7 @@
 
 <script>
 import Table from "./Table";
-import Chart from "./Test"
+import Chart from "./Chart"
 import SeasonalityChart from "./SeasonalityChart"
 import Description from "./Description";
 import Details from "./Details";
