@@ -22,7 +22,7 @@
       </template>
     </div>
   </div>
-  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated)">
+  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
     <el-row>
       <el-col :span="18">
         <el-row>
@@ -76,6 +76,7 @@
     </el-row>
   </div>
   <virtual-scroll
+      v-show="checkedType !== 'TrendSector'"
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
@@ -136,7 +137,7 @@
               sortable="custom"
             >
             <template slot-scope="scope">
-              <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SPTrend') || (l.value === 'market_symbol' && l.type === 'SPTrend')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
@@ -155,15 +156,17 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-show="enlarged && pageLength">
+  <div class="dataTables_info" v-show="enlarged && pageLength && (checkedType !== 'TrendSector')">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
+  <TrendScoreTable v-show="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
 </div>
 </template>
 
 <script>
 import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
+import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
@@ -182,13 +185,15 @@ export default {
     loading: Boolean,
     firstRow: Object,
     showReport: Boolean,
-    showRelated: Boolean
+    showRelated: Boolean,
+    sourceType: String
   },
   directives: {
     ElTableInfiniteScroll
   },
   components: {
-    VirtualScroll
+    VirtualScroll,
+    TrendScoreTable
   },
   inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex'],
   data() {
@@ -364,46 +369,38 @@ export default {
         ['SPTrendColumns', 
           [
             {
-              key: 'url',
+              key: 'market_symbol',
               label: 'Symbol',
-              value: 'url',
-              allCapLetters: true
+              value: 'market_symbol',
+              type: 'SPTrend',
+              minWidth: '90px'
             },
             {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '180px'
+              type: 'SPTrend',
+              minWidth: '150px'
             },
             {
-              key: 'sector',
-              label: 'Sector',
-              value: 'sector'
-            },
-            {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'trend_score',
+              key: 'trend_last_value',
               label: 'Trend Score',
-              value: 'trend_score'
+              value: 'trend_last_value'
             },
             {
-              key: '5_score_chg',
-              label: '5-Day Score Chg',
-              value: '5_score_chg'
+              key: 'trend_five_day_score_chg',
+              label: 'Trend 5-Day Score Change',
+              value: 'trend_five_day_score_chg'
             },
             {
-              key: 'last_update',
+              key: 'reltrend_last_value',
               label: 'RelTrend Score',
-              value: 'last_update'
+              value: 'reltrend_last_value'
             },
             {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment'
+              key: 'reltrend_five_day_score_chg',
+              label: 'RelTrend 5-Day Score Change',
+              value: 'reltrend_five_day_score_chg'
             }
             ]
         ],
@@ -1012,15 +1009,18 @@ export default {
         ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
+      if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
-      if(this.type === 'related') {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
+      if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
-        if(item.key === 'chart_name') item.minWidth = '200px'
+        if(item.key === 'chart_name' && this.checkedType !== 'SPTrend') item.minWidth = '200px'
         return item
       })
       return columns
@@ -1244,12 +1244,13 @@ export default {
       // this.$forceUpdate()
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
-      if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
+      if(row.url && !this.type.includes('Seasonality') && ((column.property === 'chart_name' && row.type !== 'trend_reltrend') || (row.type === 'trend_reltrend' && column.property === 'market_symbol'))) {
         let _t = '50%'
         let _l = 0
         let {url} = row
         const hoverElement = event.target
         const container = this.$el.querySelector('.virtual-table')
+        console.log('column.realWidth', column.realWidth)
         if(hoverElement && container && column.realWidth) {
           let moveUp = 0
           const containerRect = container.getBoundingClientRect()
@@ -1263,7 +1264,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent') url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'trend_reltrend') url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
@@ -1590,6 +1591,11 @@ export default {
           type: 'SP1500'
         },
         {
+          label: 'S&P 1500 Stock Trend Score',
+          value: 'sp_1500_trend_reltrend',
+          type: 'SPTrend'
+        },
+        {
           label: 'Bond Market Sentiment',
           value: 'bond_complete_list',
           type: 'bond'
@@ -1675,10 +1681,10 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
-      const keysMap = new Map([
+      let keysMap = new Map([
         ['chart_name', 'Name'],
         ['sub_type', 'Group'],
         ['timeframe', 'Time Frame'],
@@ -1702,6 +1708,16 @@ export default {
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
+      }
+      if(type === 'sp_1500_trend_reltrend') {
+        keysMap = new Map([
+        ['market_symbol', 'Symbol'],
+        ['chart_name', 'Name'],
+        ['trend_last_value', 'Trend Score'],
+        ['trend_five_day_score_chg', 'Trend 5-Day Score Change'],
+        ['reltrend_last_value', 'RelTrend Score'],
+        ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change']
+      ])
       }
 
 			const processedData = data.map(item => {

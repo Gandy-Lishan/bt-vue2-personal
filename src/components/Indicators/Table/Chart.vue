@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name, market_symbol} = this.row
+      const {url, pess, opt, chart_name, market_symbol, type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -54,7 +54,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels') return
+            if(url === 'smart_dumb' || url === 'risk_levels' || type === 'trend_reltrend') return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
@@ -79,7 +79,7 @@
       };
  
       const createYAxisConfig = (series, row) => {
-        const {sub_type, source_list, url} = row
+        const {sub_type, source_list, url, type} = row
         const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list'
         // commodity_complete_list
         // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
@@ -142,7 +142,21 @@
       };
 
       const createChart = (series, allKeysName, basicChartOptions, row) => {
+          // 首先获取已经存在的图表
+          console.log('Highcharts.charts', Highcharts.charts)
+          const chart = Highcharts.charts.find(chart => chart.renderTo.id === 'indiChart');
+          if (chart) {
+            chart.series.forEach((s, index) => {
+              if (!s.data || s.data.length === 0) {
+                // 删除 data 为空的 series
+                s.remove(false); // false 不触发重绘
+              }
+            });
+
+            chart.redraw(); // 手动触发重绘
+          }
         console.log('series: ', series);
+        console.log('Highcharts', Highcharts)
         const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
         const minX = Math.min(...allData.map(d => d[0]))
@@ -154,6 +168,7 @@
         if(url === 'smart_dumb') {
           selector = 4
         }
+        if(type === 'trend_reltrend') selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
         Highcharts.stockChart(this.id, {
           rangeSelector: {
@@ -228,7 +243,7 @@
             type: 'datetime',
             crosshair: { label: { enabled: false } },
             ordinal: false,
-            min: minX,
+            // min: minX,
             labels: {format: '{value:%Y}'}
           },
           navigator: {
@@ -318,12 +333,13 @@
       };
  
       try {
-      let {last_value, last_change_type, market_symbol} = this.row;
-      let zoonsData = [];
+      let {last_value, last_change_type, market_symbol, type} = this.row;
+      console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         let originalData = res.data;
+        console.log('originalData', originalData)
         try {
           if(typeof originalData === 'string') {
             originalData = originalData.replace(/NaN/g, 'null')
@@ -355,6 +371,7 @@
               return a.localeCompare(b);
           }
         });
+        console.log('allKeysName', allKeysName)
         if(allKeysName.includes('opt') && allKeysName.includes('pess') && !market_symbol) {
           allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
           allKeysName = allKeysName.concat(['opt', 'pess'])
@@ -377,6 +394,7 @@
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
         }, {});
+        console.log('data', data)
         let series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
           if (last_value !== null && last_value !== undefined) {
@@ -399,7 +417,10 @@
           }
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           console.log('last_value_chart', last_value)
-          if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
+          if((key.includes('_reltrend') || key.includes('_trend')) && type === 'trend_reltrend') {
+            name = key.replace('_reltrend', ' Real Trend')
+            name = name.replace('_trend', ' Trend')
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'

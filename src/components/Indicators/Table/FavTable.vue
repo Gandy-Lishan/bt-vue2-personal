@@ -98,7 +98,8 @@
 					>
 					<template slot-scope="scope">
 						<el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
-						<img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+						<img v-else-if="l.value === 'sentiment' && scope.row['type'] !== 'trend_reltrend'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+						<span v-else-if="l.value === 'sentiment' && scope.row['type'] === 'trend_reltrend'"></span>
 						<span v-else>{{ scope.row[l.value] }}</span>
 					</template>
 					</el-table-column>
@@ -333,6 +334,7 @@ export default {
               etf_social_bond: 'Bond',
               etf_fund_country: 'Country',
               etf_social_country: 'Country',
+              trend_reltrend: 'Stock Real Trend'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
@@ -372,6 +374,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'trend_reltrend') row.url = row.url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
