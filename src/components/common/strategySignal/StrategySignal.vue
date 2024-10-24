@@ -1,5 +1,17 @@
 <template>
-  <div v-loading="loading" class="strategy-signal--chartcontainer" ref="strategySignalChartcontainer"></div>
+  <div style="width: 100%;">
+    <!-- 添加下拉框 -->
+    <div class="strategy-dropdown">
+      <label for="strategy-select">Select Strategy:</label>
+      <select v-model="selectedStrategyIndex" @change="loadChart">
+        <option v-for="(strategy, index) in strategies" :key="index" :value="index">
+          Strategy {{ index + 1 }}
+        </option>
+      </select>
+    </div>
+    <!-- 图表容器 -->
+    <div v-loading="loading" class="strategy-signal--chartcontainer" ref="strategySignalChartcontainer"></div>
+  </div>
 </template>
 
 <script>
@@ -24,12 +36,14 @@ export default {
     return {
       chart: null, // 存储图表实例
       loading: true,
-      symbol: CIQ.stxx.chart.symbol
+      symbol: CIQ.stxx.chart.symbol,
+      strategies: [], // 保存从 API 获取的策略数据
+      selectedStrategyIndex: 0, // 保存选中的策略索引
+      trendScore: [],
     };
   },
   watch: {
-    // 监视 symbol 变化，重新加载图表
-    symbol: 'loadChart',
+    symbol: 'loadChart', // 监视 symbol 变化，重新加载图表
   },
   mounted() {
     this.loadChart(); // 初次加载图表
@@ -48,14 +62,21 @@ export default {
       Exporting(Highcharts);
       ExportData(Highcharts);
 
+      if (this.strategies.length > 0) {
+        this.updateChartWithSelectedStrategy(); // 根据当前选择的策略更新图表
+        this.loading = false;
+        return;
+      }
+
       try {
         const signalData = await getSymbolStrategySigal(this.symbol);
         if(signalData.data.status == 504) {
           this.popUpMsgBox(signalData.data.msg)
           this.$emit('error');  // 向父组件发出 'error' 事件
         }else {
-          const { trend_score, EntryDate, ExitDate } = signalData.data.data[0];
-          this.plotData(JSON.parse(trend_score), EntryDate, ExitDate);
+          this.strategies = signalData.data.data; // 保存所有策略数据
+          this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
+          this.updateChartWithSelectedStrategy();
         }
       } catch (error) {
         console.error(`Error fetching data for symbol: ${this.symbol}`, error);
@@ -64,14 +85,28 @@ export default {
         this.loading = false; // 无论成功或失败都结束 loading 状态
       }
     },
-    plotData(trend_score, EntryDate, ExitDate) {
+    updateChartWithSelectedStrategy() {
+      const selectedStrategy = this.strategies[this.selectedStrategyIndex];
+      const { EntryDate, ExitDate } = selectedStrategy;
+      this.plotData( EntryDate, ExitDate);
+    },
+    plotData( EntryDate, ExitDate) {
       // find the start point
       const start = EntryDate[0] < ExitDate[0] ? EntryDate[0] : ExitDate[0]
-      trend_score = trend_score.filter(item => moment(item.DT).isAfter(moment(start).subtract(1, 'month')))
-      
-      //const dataX = trend_score.map(item => new Date(item.DT));
-      const rData = trend_score.map(item => [new Date(item.DT).getTime(), item.Close]);
-      const pData = trend_score.map(item => item.trend_score);
+
+      this.trendScore = this.trendScore.filter(item => {
+        const itemDate = moment(item.DT);
+        const isAfterStart = itemDate.isAfter(moment(start).subtract(1, 'month'));
+        
+        // // 判断是否为 2024 年 9 月, for Testing Only
+        // const isInSeptember2024 = itemDate.year() === 2024 && itemDate.month() === 8; // month() 返回值从 0 开始，8 代表 9 月
+        
+        return isAfterStart;
+      });
+
+      //const dataX = this.trendScore.map(item => new Date(item.DT));
+      const rData = this.trendScore.map(item => [new Date(item.DT).getTime(), item.Close]);
+      const pData = this.trendScore.map(item => item.trend_score);
 
       const plotBands = rData.map(([timestamp], i) => {
         // 计算每个交易日的起始和结束时间
@@ -334,5 +369,8 @@ export default {
 .strategy-signal--chartcontainer {
   width: 100%;
   height: 500px;
+}
+.strategy-dropdown {
+  margin-bottom: 15px;
 }
 </style>
