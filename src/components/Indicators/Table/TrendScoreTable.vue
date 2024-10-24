@@ -16,13 +16,14 @@
          <th>Relative Score Equal to 0</th>
          <th>Relative Score Above 5</th>
          <th>Relative Score Equal to 10</th>
+         <th v-if="enlarged">Relative Score Equal to 10 in S&P 500</th>
          <th v-if="enlarged">Last Date</th>
         </tr>
        </thead>
        <tbody>
         <template v-for="(ele, index) in data">
          <tr :key="index">
-          <template v-for="(key, keyIndex) in enlarged ? columns.concat(['last_date']) : columns">
+          <template v-for="(key, keyIndex) in enlarged ? columns.concat(['rts_equal_ten_spx', 'last_date']) : columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
             {{ele[key] !== 'Communication Ser' ? ele[key] : 'Communication Service'}}
            </td>
