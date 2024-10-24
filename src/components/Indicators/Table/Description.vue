@@ -61,7 +61,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Stock' && (!checkedType || checkedType === 'SPTrend')">
+        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || checkedType === 'SPTrend')">
           <p>
             <b>Absolute Trend Score</b><br>
             The absolute trend score is derived from a composite of classic trend-following indicators. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
@@ -136,7 +136,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="col-md-3 thumbnail" v-show="!(enlarged === 'Stock' && (!checkedType || checkedType === 'SPTrend'))">
+        <div class="col-md-3 thumbnail" v-show="!(enlarged === 'Stock Trend' && (!checkedType || checkedType === 'SPTrend'))">
         <div style="text-align: center; font-size: 18px; font-weight: 300">
           <span>Optimism/Pessimism Legend</span>
         </div>
