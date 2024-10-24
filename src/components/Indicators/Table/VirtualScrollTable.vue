@@ -401,6 +401,11 @@ export default {
               key: 'reltrend_five_day_score_chg',
               label: 'RelTrend 5-Day Score Change',
               value: 'reltrend_five_day_score_chg'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update'
             }
             ]
         ],
@@ -1716,7 +1721,8 @@ export default {
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', 'Trend 5-Day Score Change'],
         ['reltrend_last_value', 'RelTrend Score'],
-        ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change']
+        ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change'],
+        ['last_update', 'Date']
       ])
       }
 
