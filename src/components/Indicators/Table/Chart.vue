@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name, market_symbol} = this.row
+      const {url, pess, opt, chart_name, market_symbol, type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -54,7 +54,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels') return
+            if(url === 'smart_dumb' || url === 'risk_levels' || type === 'trend_reltrend') return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
@@ -79,7 +79,7 @@
       };
  
       const createYAxisConfig = (series, row) => {
-        const {sub_type, source_list, url} = row
+        const {sub_type, source_list, url, type} = row
         const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list'
         // commodity_complete_list
         // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
@@ -140,12 +140,14 @@
           };
         });
       };
-
       const createChart = (series, allKeysName, basicChartOptions, row) => {
         console.log('series: ', series);
+        console.log('Highcharts', Highcharts)
         const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
-        const minX = Math.min(...allData.map(d => d[0]))
+        const xData = [...allData.map(d => d[0])]
+        console.log('xData', xData)
+        const minX = Math.min(xData)
         const { url, type } = row
         let selector = 5
         if(url === 'risk_levels') {
@@ -154,8 +156,9 @@
         if(url === 'smart_dumb') {
           selector = 4
         }
+        if(type === 'trend_reltrend') selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
-        Highcharts.stockChart(this.id, {
+       Highcharts.stockChart(this.id, {
           rangeSelector: {
             inputEnabled: true,
             inputDateFormat: '%Y/%m/%d',
@@ -225,11 +228,19 @@
           },
           yAxis: yAxisConfig,
           xAxis: {
-            type: 'datetime',
+            type: 'category',
+            tickPixelInterval: 150, 
             crosshair: { label: { enabled: false } },
             ordinal: false,
-            min: minX,
-            labels: {format: '{value:%Y}'}
+            // min: minX,
+            labels: {format: '{value:%Y}'},
+            // labels: {
+            //     formatter: function () {
+            //         return Highcharts.dateFormat('%Y-%m-%d', this.value);  // 手动格式化日期
+            //     }
+            // },
+            tickPositions: null,
+            uniqueNames: false,  // 确保只使用你传入的时间点
           },
           navigator: {
             series: {
@@ -288,7 +299,13 @@
                   enabled: false
                 }
               },
-              showInNavigator: true
+              showInNavigator: true,
+              connectNulls: false, // 禁用连接 null 数据点
+              // dataGrouping: {
+              //  enabled: false  // 确保数据分组被禁用
+              // },
+              pointStart: undefined,  // 确保不会有自动起点
+              pointInterval: undefined  // 确保不会有自动间隔
             }
           },
           series: series.map((s, i) => {
@@ -299,6 +316,7 @@
           if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
           return{
             ...s,
+            keys: ['x', 'y'],  // 明确指定数据的格式
             yAxis: i,
             type: _type,
             color,
@@ -310,20 +328,22 @@
             showInLegend: !isOptPess ? true : false,
             lineWidth: !isOptPess ? 2 : 1,
             dataGrouping: {
-                enabled: false
+                enabled: true
             }
           }}),
           chart: basicChartOptions
-        });
+        })
       };
  
       try {
-      let {last_value, last_change_type, market_symbol} = this.row;
-      let zoonsData = [];
+      let {last_value, last_change_type, market_symbol, type} = this.row;
+      console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
-        let originalData = res.data;
+        let originalData = res.data
+        originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        console.log('originalData', originalData)
         try {
           if(typeof originalData === 'string') {
             originalData = originalData.replace(/NaN/g, 'null')
@@ -355,6 +375,7 @@
               return a.localeCompare(b);
           }
         });
+        console.log('allKeysName', allKeysName)
         if(allKeysName.includes('opt') && allKeysName.includes('pess') && !market_symbol) {
           allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
           allKeysName = allKeysName.concat(['opt', 'pess'])
@@ -377,6 +398,7 @@
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
         }, {});
+        console.log('data', data)
         let series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
           if (last_value !== null && last_value !== undefined) {
@@ -399,7 +421,10 @@
           }
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           console.log('last_value_chart', last_value)
-          if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
+          if((key.includes('_reltrend') || key.includes('_trend')) && type === 'trend_reltrend') {
+            name = key.replace('_reltrend', ' Real Trend')
+            name = name.replace('_trend', ' Trend')
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
