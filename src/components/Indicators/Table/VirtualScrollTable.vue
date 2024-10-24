@@ -1552,7 +1552,7 @@ export default {
         this.filterData = sortedData
         }
 			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type'].indexOf(colName) !== -1){
+			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type', 'market_symbol'].indexOf(colName) !== -1){
         if(sortingOrder === 'ascending') {
           this.filterData.sort((a, b) => {
           const aValue = a[colName] || '';
