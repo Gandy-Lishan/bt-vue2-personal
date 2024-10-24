@@ -140,26 +140,14 @@
           };
         });
       };
-
       const createChart = (series, allKeysName, basicChartOptions, row) => {
-          // 首先获取已经存在的图表
-          console.log('Highcharts.charts', Highcharts.charts)
-          const chart = Highcharts.charts.find(chart => chart.renderTo.id === 'indiChart');
-          if (chart) {
-            chart.series.forEach((s, index) => {
-              if (!s.data || s.data.length === 0) {
-                // 删除 data 为空的 series
-                s.remove(false); // false 不触发重绘
-              }
-            });
-
-            chart.redraw(); // 手动触发重绘
-          }
         console.log('series: ', series);
         console.log('Highcharts', Highcharts)
         const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
-        const minX = Math.min(...allData.map(d => d[0]))
+        const xData = [...allData.map(d => d[0])]
+        console.log('xData', xData)
+        const minX = Math.min(xData)
         const { url, type } = row
         let selector = 5
         if(url === 'risk_levels') {
@@ -170,7 +158,7 @@
         }
         if(type === 'trend_reltrend') selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
-        Highcharts.stockChart(this.id, {
+       Highcharts.stockChart(this.id, {
           rangeSelector: {
             inputEnabled: true,
             inputDateFormat: '%Y/%m/%d',
@@ -240,11 +228,19 @@
           },
           yAxis: yAxisConfig,
           xAxis: {
-            type: 'datetime',
+            type: 'category',
+            tickPixelInterval: 150, 
             crosshair: { label: { enabled: false } },
             ordinal: false,
             // min: minX,
-            labels: {format: '{value:%Y}'}
+            labels: {format: '{value:%Y}'},
+            // labels: {
+            //     formatter: function () {
+            //         return Highcharts.dateFormat('%Y-%m-%d', this.value);  // 手动格式化日期
+            //     }
+            // },
+            tickPositions: null,
+            uniqueNames: false,  // 确保只使用你传入的时间点
           },
           navigator: {
             series: {
@@ -303,7 +299,13 @@
                   enabled: false
                 }
               },
-              showInNavigator: true
+              showInNavigator: true,
+              connectNulls: false, // 禁用连接 null 数据点
+              // dataGrouping: {
+              //  enabled: false  // 确保数据分组被禁用
+              // },
+              pointStart: undefined,  // 确保不会有自动起点
+              pointInterval: undefined  // 确保不会有自动间隔
             }
           },
           series: series.map((s, i) => {
@@ -314,6 +316,7 @@
           if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
           return{
             ...s,
+            keys: ['x', 'y'],  // 明确指定数据的格式
             yAxis: i,
             type: _type,
             color,
@@ -325,11 +328,11 @@
             showInLegend: !isOptPess ? true : false,
             lineWidth: !isOptPess ? 2 : 1,
             dataGrouping: {
-                enabled: false
+                enabled: true
             }
           }}),
           chart: basicChartOptions
-        });
+        })
       };
  
       try {
@@ -338,7 +341,7 @@
       let isRiskMeasure = false
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
-        let originalData = res.data;
+        let originalData = res.data
         console.log('originalData', originalData)
         try {
           if(typeof originalData === 'string') {
