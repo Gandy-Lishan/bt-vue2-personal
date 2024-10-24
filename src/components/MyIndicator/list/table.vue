@@ -209,12 +209,20 @@ export default {
           value: 'indicator spread'
         },
         {
+          label: 'Indicator Addition',
+          value: 'indicator addition'
+        },
+        {
           label: 'Symbol Ratio',
           value: 'symbol ratio'
         },
         {
           label: 'Symbol Spread',
           value: 'symbol spread'
+        },
+        {
+          label: 'Symbol Addition',
+          value: 'symbol addition'
         },
         {
           label: 'Weighed Indicators Combination',
@@ -306,7 +314,7 @@ export default {
     },
     async processRowData(resData) {
       let promise = resData.map(async item => {
-      if (['ratio', 'spread'].includes(item.calculate)) {
+      if (['ratio', 'spread', 'addition'].includes(item.calculate)) {
         const {included, included_url, former, latter, former_url, latter_url, type} = this.getIncludedData(item, this.sentimentList, this.symbolList);
         return {
           ...item,

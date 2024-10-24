@@ -8,17 +8,17 @@ var config = {
     stockDataUrl : "https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/stock_data",
     getAllSymbols : "https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/getAllSymbols",
     /**
-     *    
+     *
      * dev/pair_data: 正式版
      * prod/pair_data: 测试用
      * if(process.env.NODE_ENV == production){ todo }
      */
     pairDataUrl: "https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data",
-    //pairDataUrl: "/dev/st_data/pair_data",
+    // pairDataUrl: "https://bt2api.sentimentrader.com/st_data/pair_data",
     indicatorMetadata:"https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/indicator_metadata",
     username:"sentimentrader_backtest_api",
     password : "TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx",
-    
+
     timestampToTime : function (timestamp) {
         var date = new Date(timestamp );//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
@@ -32,7 +32,7 @@ var config = {
 
     csvFileRead : function(fileName, HASH) {
         const url = `/dev/dev/csvfileread/?fileName=${fileName}&HASH=${HASH}`
-    
+
         return new Promise((resolve, reject) => {
             CIQ.axios.get(url, {withCredentials: true})
                 .then(res => {
@@ -46,7 +46,7 @@ var config = {
     /********************lishan modify start*************************/
     getMyIndicatorData : function(url) {
         const path = `/dev/my_indicator/get_data/?url='${url}'`
-    
+
         return new Promise((resolve, reject) => {
             CIQ.axios.get(path, {withCredentials: true})
                 .then(res => {
