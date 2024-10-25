@@ -1596,7 +1596,7 @@ export default {
           type: 'SP1500'
         },
         {
-          label: 'S&P 1500 Stock Trend Score',
+          label: 'Absolute and Relative Trend Scores',
           value: 'sp_1500_trend_reltrend',
           type: 'SPTrend'
         },
@@ -1724,6 +1724,7 @@ export default {
         ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change'],
         ['last_update', 'Date']
       ])
+      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Date']
       }
 
 			const processedData = data.map(item => {
