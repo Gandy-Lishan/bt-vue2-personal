@@ -61,7 +61,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'SPTrend' || checkedType === 'TrendSector'))">
+        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'SPTrend'))">
           <p>
           This chart shows the distribution of trend scores for various sectors in the S&P 500. The columns represent the proportion of trend scores of 0, over 5, and equal to 10, as well as the proportion of relative trend scores of 0, over 5, and equal to 10. Each row displays the corresponding proportions within its sector. Additionally, there is a column indicating the proportion of stocks with a relative trend score of 10 in each sector relative to the entire S&P 500.
           </p>
@@ -72,6 +72,35 @@
           <p>
           <b>Relative Trend Score</b><br>
           The relative trend score is derived from a composite of classic trend-following indicators based on the ratio between an asset and the S&P 500. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
+          </p>
+        </div>
+        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'TrendSector'))">
+          <p>
+          This chart shows the distribution of trend scores for various sectors in the S&P 500. The columns represent the proportion of trend scores of 0, over 5, and equal to 10, as well as the proportion of relative trend scores of 0, over 5, and equal to 10. Each row displays the corresponding proportions within its sector. Additionally, there is a column indicating the proportion of stocks with a relative trend score of 10 in each sector relative to the entire S&P 500.<p>
+          <b>Absolute Trend Score</b><br>
+          <p>
+          The absolute trend score is derived from a composite of classic trend-following indicators. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
+          </p>
+          <p>
+          <b>Relative Trend Score</b><br>
+          The relative trend score is derived from a composite of classic trend-following indicators based on the ratio between an asset and the S&P 500. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
+          </p>
+          <p>
+          value1=0;<br>
+          <br>
+          <span style="color: blue">if</span> Formula><span style="color: blueviolet;">average</span>(Formula, MA) <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> Formula>=<span style="color: blueviolet;">average</span>(Formula, MA2) <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> Formula>=<span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA) [1] <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA2)> <span style="color: blueviolet;">average</span>(Formula, MA2) [1] <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA3)> <span style="color: blueviolet;">average</span>(Formula, MA3) [1] <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA2) <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
+          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA2)> <span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
+          <br>
+          <span style="color: blue">if</span> Formula <span style="color: blue">crosses above</span> highest (Formula, BrkLength) [1] <span style="color: blue">then</span> channelTrend=1;<br>
+          <span style="color: blue">if</span> Formula <span style="color: blue">crosses below</span> lowest (Formula, BrkLength) [1] <span style="color: blue">then</span> channelTrend=0;<br>
+          value1=value1+channelTrend<br>
           </p>
         </div>
         <div class="des" v-else-if="

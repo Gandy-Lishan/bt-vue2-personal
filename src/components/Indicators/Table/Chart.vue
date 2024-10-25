@@ -99,7 +99,8 @@
 
             console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
           }
-
+          let calculateNum = 1
+          if(type === 'trend_reltrend') calculateNum = 2
           return {
             title: {
               text: !isOptPess ? serie?.name || 'SPY Optix' : '',
@@ -117,8 +118,8 @@
             gridLineWidth: 1,
             opposite: true,
             labels: { enabled: (i === 0 || i === 1), style: {fontSize: '10px'} },
-            min:  (i === series.length - 1) ? minYAxis : null, // Set the calculated min value for the bottom axis
-            max:  (i === series.length - 1) ? maxYAxis : null, // Set the calculated max value for the bottom axis
+            min:  (i === series.length - calculateNum) ? minYAxis : null, // Set the calculated min value for the bottom axis
+            max:  (i === series.length - calculateNum) ? maxYAxis : null, // Set the calculated max value for the bottom axis
             plotLines: (i === series.length - 1) && !isCot ? [
               {
                 value: pess || null,
@@ -232,7 +233,7 @@
             tickPixelInterval: 150, 
             crosshair: { label: { enabled: false } },
             ordinal: false,
-            // min: minX,
+            min: minX,
             labels: {format: '{value:%Y}'},
             // labels: {
             //     formatter: function () {
@@ -284,7 +285,7 @@
              this.points.forEach(point => {
                // Add a colored circle before the series name
                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-               s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y}</b><br>`;
+               s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
              });
              return s;
            }
@@ -311,6 +312,13 @@
           series: series.map((s, i) => {
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+          console.log('type', type)
+          if(type === 'trend_reltrend' && s.name.includes('Trend')) {
+            color = '#2f7ed8'
+          }
+          if(type === 'trend_reltrend' && s.name.includes('Real Trend')) {
+            color = 'rgb(142, 35, 35)'
+          }
           const isOptPess = s.name === 'opt' || s.name === 'pess'
           if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
           if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
@@ -401,7 +409,7 @@
         console.log('data', data)
         let series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
-          if (last_value !== null && last_value !== undefined) {
+          if (!last_value) {
                // 处理 last_value 的值类型
                if (typeof last_value === 'string' && last_value.includes('%'))  last_value = parseFloat(last_value.replace('%', '')) / 100;
               if (typeof last_value === 'string') {
