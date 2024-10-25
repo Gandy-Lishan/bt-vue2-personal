@@ -79,29 +79,24 @@
       };
  
       const createYAxisConfig = (series, row) => {
-        const {sub_type, source_list, url, type} = row
-        const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list'
-        // commodity_complete_list
-        // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
+        const { sub_type, source_list, url } = row;
+        const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list';
+        let sharedYAxisIndex = -1;
+        let minYAxis, maxYAxis;
+
         return series.map((serie, i) => {
-          let minYAxis, maxYAxis;
           const isOptPess = serie?.name === 'opt' || serie?.name === 'pess';
-          
-          // Calculate min and max for the y-axis only for the bottom axis
-          if (i === series.length - 1) {
-            const data = serie.data.map(d => d[1]);
+
+          if (i === 1 || i === 2) {
+            const data = series.slice(1).flatMap(s => s.data.map(d => d[1]));
             const minDataValue = Math.min(...data);
             const maxDataValue = Math.max(...data);
-
-            // Determine the min and max values for the bottom y-axis
             minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
-
-            console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
           }
-          let calculateNum = 1
-          if(type === 'trend_reltrend') calculateNum = 2
+
           return {
+            id: i === 0 ? 'top-axis' : 'bottom-axis',
             title: {
               text: !isOptPess ? serie?.name || 'SPY Optix' : '',
               style: {
@@ -111,22 +106,22 @@
               },
               x: i === 2 ? 10 : 0
             },
-            top: `${i===0?0:35}%`,
-            height: `${i===0?35:60}%`,
+            top: i === 0 ? '0%' : '40%',
+            height: i === 0 ? '35%' : '60%',
             offset: 0,
-            lineWidth: 0, // Remove the right-side y-axis line
+            lineWidth: 0,
             gridLineWidth: 1,
             opposite: true,
-            labels: { enabled: (i === 0 || i === 1), style: {fontSize: '10px'} },
-            min:  (i === series.length - calculateNum) ? minYAxis : null, // Set the calculated min value for the bottom axis
-            max:  (i === series.length - calculateNum) ? maxYAxis : null, // Set the calculated max value for the bottom axis
-            plotLines: (i === series.length - 1) && !isCot ? [
+            labels: { enabled: i === 0 || i === 1, style: { fontSize: '10px' } },
+            min: (i === 1 || i === 2) ? minYAxis : null,
+            max: (i === 1 || i === 2) ? maxYAxis : null,
+            plotLines: i >= 1 && i === series.length - 1 && !isCot ? [
               {
                 value: pess || null,
                 color: 'rgba(0, 128, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${pess || ''}`, style: {fontSize: '10px', color: 'rgba(0, 128, 0, 1)'} },
+                label: { text: `${pess || ''}`, style: { fontSize: '10px', color: 'rgba(0, 128, 0, 1)' } },
                 zIndex: 5
               },
               {
@@ -134,11 +129,24 @@
                 color: 'rgba(255, 0, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${opt || ''}`, style: {fontSize: '10px', color: 'rgba(255, 0, 0, 1)'} },
+                label: { text: `${opt || ''}`, style: { fontSize: '10px', color: 'rgba(255, 0, 0, 1)' } },
                 zIndex: 5
               }
             ] : [],
           };
+        }).map((axisConfig, i) => {
+          if (axisConfig.id === 'bottom-axis') {
+            if (sharedYAxisIndex === -1) {
+              sharedYAxisIndex = i;
+            } else {
+              axisConfig.linkedTo = sharedYAxisIndex;
+            }
+          }
+
+          axisConfig.minPadding = 0.1;
+          axisConfig.maxPadding = 0.1;
+
+          return axisConfig;
         });
       };
       const createChart = (series, allKeysName, basicChartOptions, row) => {

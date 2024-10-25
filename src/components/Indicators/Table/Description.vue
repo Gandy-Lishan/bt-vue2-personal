@@ -61,20 +61,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'SPTrend'))">
-          <p>
-          This chart shows the distribution of trend scores for various sectors in the S&P 500. The columns represent the proportion of trend scores of 0, over 5, and equal to 10, as well as the proportion of relative trend scores of 0, over 5, and equal to 10. Each row displays the corresponding proportions within its sector. Additionally, there is a column indicating the proportion of stocks with a relative trend score of 10 in each sector relative to the entire S&P 500.
-          </p>
-          <p>
-          <b>Absolute Trend Score</b><br>
-          The absolute trend score is derived from a composite of classic trend-following indicators. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
-          </p>
-          <p>
-          <b>Relative Trend Score</b><br>
-          The relative trend score is derived from a composite of classic trend-following indicators based on the ratio between an asset and the S&P 500. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
-          </p>
-        </div>
-        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'TrendSector'))">
+        <div class="des" v-else-if="enlarged === 'Stock Trend' && (!checkedType || (checkedType === 'SPTrend' || checkedType === 'TrendSector'))">
           <p>
           This chart shows the distribution of trend scores for various sectors in the S&P 500. The columns represent the proportion of trend scores of 0, over 5, and equal to 10, as well as the proportion of relative trend scores of 0, over 5, and equal to 10. Each row displays the corresponding proportions within its sector. Additionally, there is a column indicating the proportion of stocks with a relative trend score of 10 in each sector relative to the entire S&P 500.<p>
           <b>Absolute Trend Score</b><br>
