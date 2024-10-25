@@ -1493,7 +1493,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
