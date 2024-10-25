@@ -182,13 +182,13 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'S&P 1500 Stock Trend Score',
+              label: 'Absolute and Relative Trend Scores',
               value: 'SPTrend',
               type: 'SPTrend',
               url: 'sp_1500_trend_reltrend'
             },
             {
-              label: 'Trend Scores for Sector',
+              label: 'S&P 500 Sector Trend Score Summary',
               value: 'TrendSector',
               type: 'SPTrend',
               url: 'sector_trend_score'
