@@ -13,11 +13,11 @@
         :isShowDetails="isShowDetails"
         @updateChart="updateChart"
         @showDetails="showDetails"
-        :style="{ width: '65%', display: !isShowDetails ? 'block' : 'none' }"
+        :style="{ width: '60%', display: !isShowDetails ? 'block' : 'none' }"
         ></Table>
      </template>
-     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" style="width: 65%" @showDetails="showDetails"></Details>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px'}"></Chart>
+     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" :style="{width: !isShowDetails ? '60%' : '50%'}" @showDetails="showDetails"></Details>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '40%' : '50%'}"></Chart>
      <AboutUs></AboutUs>
    </div>
  </div>
@@ -71,7 +71,7 @@ export default {
  },
  methods: {
    updateChart(row) {
-     this.displayRow = row
+    this.displayRow = {...row}
    },
    updateTable(row) {
       const url = row.source_list
@@ -89,6 +89,7 @@ export default {
       }
     },
     showDetails(row, isShowDetails) {
+      this.updateChart(Object.keys(row).length !== 0 ? row : this.displayRow)
       this.isShowDetails = isShowDetails 
     },
     enLargeTable(row) {
@@ -114,9 +115,9 @@ export default {
  flex-wrap: wrap;
  align-items: stretch;
  flex-grow: 1;
- .indicators-chart {
-   width: 35%;
- }
+//  .indicators-chart {
+//    width: 40%;
+//  }
 }
 
 .image-hover {
