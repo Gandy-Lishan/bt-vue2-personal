@@ -117,7 +117,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="this.enlarged">
+          <el-table-column align="center" width="35px" v-if="enlarged && !showRelated">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
@@ -1019,7 +1019,7 @@ export default {
       if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
       if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
-      if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value']
+      if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
@@ -1214,6 +1214,7 @@ export default {
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
+      debugger
       if(this._loading) return
       if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.enlarged = !this.enlarged;this.toggleEnlarge(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {

@@ -623,6 +623,10 @@ export default {
   font-weight: 600;
   font-size: 18px;
   color: #333;
+  text-align: center;
+}
+/deep/ .el-select .el-input__inner {
+  padding-right: 10px;
 }
 .my-indicator-list{
   padding: 20px;

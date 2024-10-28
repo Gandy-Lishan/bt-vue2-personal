@@ -3,7 +3,7 @@
    <div class="description" v-show="enlarged">
      <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members</b></h4>
       <p>
-       Relative to the s&p 500 and measured as a percentage of total sector stocks
+       Relative to the S&P 500 and measured as a percentage of total sector stocks
       </p>
    </div>
     <table class="threshold-table trend-score-table" :class="{'enlarge-table': enlarged}">
@@ -17,7 +17,7 @@
          <th>Relative Score Above 5</th>
          <th>Relative Score Equal to 10</th>
          <th v-if="enlarged">Relative Score Equal to 10 in S&P 500</th>
-         <th v-if="enlarged">Last Date</th>
+         <th v-if="enlarged" width="85px">Last Date</th>
         </tr>
        </thead>
        <tbody>
@@ -25,7 +25,7 @@
          <tr :key="index">
           <template v-for="(key, keyIndex) in enlarged ? columns.concat(['rts_equal_ten_spx', 'last_date']) : columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
-            {{ele[key] !== 'Communication Ser' ? ele[key] : 'Communication Service'}}
+            {{ele[key] !== 'Communication Ser' ? `${ele[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}` : 'Communication Service'}}
            </td>
           </template>
          </tr>

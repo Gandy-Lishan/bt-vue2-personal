@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="height: 800px; background-color: #fff;"></div>
+  <div :id="id" style="width: 100%; height: 800px; background-color: #fff;"></div>
  </template>
  
  <script>

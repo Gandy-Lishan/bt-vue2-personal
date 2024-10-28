@@ -201,7 +201,7 @@
              href: 'https://sentimentrader.com',
              position: {
                  align: 'right',
-                 y:-65,
+                 y:-70,
                  x:-20
              }
          },
