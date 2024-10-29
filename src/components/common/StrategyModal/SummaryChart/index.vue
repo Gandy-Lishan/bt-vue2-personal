@@ -49,6 +49,7 @@ export default {
  async mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
+   console.log('initialize Summary Chart')
    try {
     await this.renderChart();
    } catch (error) {
@@ -58,6 +59,7 @@ export default {
  methods: {
    async renderChart() {
     const signalData = await getSymbolStrategySigal(this.symbol);
+   // const signalData = this.$store.getters.getStrategiesData;
     const resultDf = signalData.data.data.map(item => {
       item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
       item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);

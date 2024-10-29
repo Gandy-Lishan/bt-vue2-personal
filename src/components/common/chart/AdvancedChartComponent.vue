@@ -370,14 +370,27 @@
 		</div>
 
 		<ModalBox ref="modalBox">
-			<template v-if="modalContent === 'first'">
+			<ModalBoxContainer :tabs="tabs">
+				<template #tab1>
+					<StrategySigal
+						@error="closeModal"
+					></StrategySigal>
+				</template>
+				<template #tab2>
+					<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
+				</template>
+				<template #tab3>
+					<TradesTable @error="closeModal"></TradesTable>
+				</template>
+			</ModalBoxContainer>
+			<!-- <template v-if="modalContent === 'first'">
 				<StrategySigal
 					@error="closeModal"
 				></StrategySigal>
 			</template>
 			<template v-if="modalContent === 'second'">
 				<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
-			</template>
+			</template> -->
 		</ModalBox>
 	</cq-context>
 </template>
@@ -393,14 +406,19 @@ import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // 
 import UploaderVue from './st-development/components/Uploader.vue'
 import ReportsFilter from './st-development/components/ReportsFilter.vue'
 import ModalBox from '@/components/common/modalBox/ModalBox.vue'
-import SummaryChart from '@/components/common/SummaryChart/index.vue'
-import StrategySigal from '@/components/common/strategySignal/StrategySignal.vue'
+import ModalBoxContainer from '@/components/common/modalBox/ModalTabContainer.vue'
+// TODO next is to intergrate them into an index entry file
+import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.vue'
+import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
+import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
 
 @Component({
   components: {
     ModalBox,
+	ModalBoxContainer,
 	SummaryChart,
 	StrategySigal,
+	TradesTable,
   },
 })
 export default class AdvancedChartComponent extends Vue {
@@ -416,10 +434,17 @@ export default class AdvancedChartComponent extends Vue {
 	//reportsAreDisplayed: any | undefined
 	routeName: string | null | undefined
 	modalContent: string | null = null
+	tabs: Array<any>
 	
 	constructor() {
 		super()
 		this.modalContent = null, // 用于存储弹窗内容的状态
+		this.tabs = [
+        { label: 'Trading Strategy', name: 'tab1', slotName: 'tab1' },
+        { label: 'Performance Summary', name: 'tab2', slotName: 'tab2' },
+        { label: 'Trading Records', name: 'tab3', slotName: 'tab3' },
+		{ label: 'Description', name: 'tab4', slotName: 'tab4' },
+      ]
 		this.isCollapse = false 
 		this.resizeObserver = null
 		// this.reportsAreDisplayed = {
