@@ -44,6 +44,7 @@
         alignTicks: false,
         backgroundColor: 'transparent',
         renderTo: 'charts',
+        spacingRight: 50,
  
         events: {
           load: function (event) {
@@ -104,7 +105,7 @@
                 fontWeight: 'bold',
                 fontSize: '10px'
               },
-              x: i === 2 ? 10 : 0
+              x: i === 2 ? 45 : 30
             },
             top: i === 0 ? '0%' : '40%',
             height: i === 0 ? '35%' : '60%',
@@ -112,7 +113,7 @@
             lineWidth: 0,
             gridLineWidth: 1,
             opposite: true,
-            labels: { enabled: i === 0 || i === 1, style: { fontSize: '10px' } },
+            labels: { enabled: i === 0 || i === 1, x: 25, style: { fontSize: '10px' } },
             min: (i === 1 || i === 2) ? minYAxis : null,
             max: (i === 1 || i === 2) ? maxYAxis : null,
             plotLines: i >= 1 && i === series.length - 1 && !isCot ? [
