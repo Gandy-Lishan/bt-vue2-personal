@@ -140,7 +140,7 @@
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SPTrend') || (l.value === 'market_symbol' && l.type === 'SPTrend')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
-              <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+              <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
             </el-table-column>
@@ -238,7 +238,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
               key: 'sub_type',
@@ -271,7 +271,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -281,7 +282,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '120px'
             },
             {
               key: 'url',
@@ -317,7 +318,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -327,7 +329,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '180px'
+              minWidth: '140px'
             },
             {
               key: 'url',
@@ -363,7 +365,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -381,7 +384,7 @@ export default {
               label: 'Name',
               value: 'chart_name',
               type: 'SPTrend',
-              minWidth: '150px'
+              minWidth: '130px'
             },
             {
               key: 'trend_last_value',
@@ -416,7 +419,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -447,7 +450,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -457,13 +461,13 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '70px'
             },
             {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '100px'
+              minWidth: '120px'
             },
             {
               key: 'sub_type',
@@ -494,7 +498,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -504,7 +509,7 @@ export default {
               key: 'chart_name',
               label: 'Breadth Measure',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '180px'
             },
             {
               key: 'underlying_name',
@@ -535,7 +540,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -545,7 +551,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'underlying_name',
@@ -582,7 +588,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -592,7 +599,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '170px'
             },
             {
               key: 'sub_type',
@@ -623,7 +630,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -633,7 +641,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '130px'
             },
             {
               key: 'sub_type',
@@ -664,7 +672,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -708,7 +717,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -718,7 +728,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '120px'
             },
             {
               key: 'sub_type',
@@ -746,7 +756,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -797,7 +808,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -838,7 +850,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
           ]
         ],
@@ -879,7 +892,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],

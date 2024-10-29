@@ -95,13 +95,17 @@
             minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
           }
-
+          let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+          if(sub_type === 'trend_reltrend') {
+            if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
+            else if(!serie?.name.includes('Relative') && serie?.name.includes('Trend')) {titleColor = '#2f7ed8'}
+          }
           return {
             id: i === 0 ? 'top-axis' : 'bottom-axis',
             title: {
               text: !isOptPess ? serie?.name || 'SPY Optix' : '',
               style: {
-                color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8'),
+                color: titleColor,
                 fontWeight: 'bold',
                 fontSize: '10px'
               },
@@ -321,12 +325,11 @@
           series: series.map((s, i) => {
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
-          console.log('type', type)
-          if(type === 'trend_reltrend' && s.name.includes('Trend')) {
-            color = '#2f7ed8'
-          }
-          if(type === 'trend_reltrend' && s.name.includes('Real Trend')) {
+          console.log('s.name.', s.name)
+          if(type === 'trend_reltrend' && s.name.includes('Relative')) {
             color = 'rgb(142, 35, 35)'
+          }else if(type === 'trend_reltrend' && !s.name.includes('Relative') && s.name.includes('Trend Score')) {
+            color = '#2f7ed8'
           }
           const isOptPess = s.name === 'opt' || s.name === 'pess'
           if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
@@ -439,8 +442,8 @@
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           console.log('last_value_chart', last_value)
           if((key.includes('_reltrend') || key.includes('_trend')) && type === 'trend_reltrend') {
-            name = key.replace('_reltrend', ' Real Trend')
-            name = name.replace('_trend', ' Trend')
+            name = key.replace('_reltrend', ' Relative Trend Score')
+            name = name.replace('_trend', '  Trend Score')
           }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'

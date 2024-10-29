@@ -99,7 +99,7 @@
 					>
 					<template slot-scope="scope">
 						<el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
-						<img v-else-if="l.value === 'sentiment' && scope.row['type'] !== 'trend_reltrend'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+						<img v-else-if="l.value === 'sentiment' && scope.row['type'] !== 'trend_reltrend'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
 						<span v-else-if="l.value === 'sentiment' && scope.row['type'] === 'trend_reltrend'"></span>
 						<span v-else>{{ scope.row[l.value] }}</span>
 					</template>
@@ -143,7 +143,7 @@ export default {
 						key: 'chart_name',
 						label: 'Name',
 						value: 'chart_name',
-						minWidth: '250px'
+						minWidth: '200px'
 				},
 				{
 						key: 'sub_type',
@@ -173,7 +173,8 @@ export default {
 				{
 						key: 'sentiment',
 						label: 'Sentiment',
-						value: 'sentiment'
+						value: 'sentiment',
+            minWidth: '100px'
 				}
       ],
       virtualList: [],
