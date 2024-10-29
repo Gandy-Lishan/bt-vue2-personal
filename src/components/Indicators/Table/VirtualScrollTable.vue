@@ -117,8 +117,8 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="enlarged && !showRelated">
-            <template slot-scope="scope">
+          <el-table-column align="center" width="35px" v-if="!showRelated">
+            <template slot-scope="scope" v-if="enlarged">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
                 <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
@@ -135,6 +135,7 @@
               :max-width="l.maxWidth"
               :width="l.width"
               sortable="custom"
+              :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
             >
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SPTrend') || (l.value === 'market_symbol' && l.type === 'SPTrend')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
@@ -1931,7 +1932,7 @@ export default {
 	}
   /deep/ tr th.is-leaf.el-table__cell {
     background-color: #ffffff;
-    text-align: left;
+    text-align: center;
     .cell {
       font-weight: 600;
       color: #333;

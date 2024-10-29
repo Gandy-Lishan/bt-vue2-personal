@@ -95,6 +95,7 @@
 						:max-width="l.maxWidth"
 						:width="l.width"
             sortable="custom"
+            :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
 					>
 					<template slot-scope="scope">
 						<el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
@@ -876,7 +877,7 @@ export default {
 	}
   /deep/ tr th.is-leaf.el-table__cell {
     background-color: #ffffff;
-    text-align: left;
+    text-align: center;
     .cell {
       font-weight: 700;
       color: #333;
