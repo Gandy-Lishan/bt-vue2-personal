@@ -160,7 +160,7 @@
   <div class="dataTables_info" v-show="enlarged && pageLength && (checkedType !== 'TrendSector')">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
-  <TrendScoreTable v-show="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
+  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
 </div>
 </template>
 
