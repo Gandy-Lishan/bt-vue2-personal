@@ -46,7 +46,6 @@ export default {
     symbol: 'loadChart', // 监视 symbol 变化，重新加载图表
   },
   mounted() {
-    console.log('initialize Strategy Signals')
     this.loadChart(); // 初次加载图表
   },
   beforeDestroy() {
@@ -76,7 +75,6 @@ export default {
           this.$emit('error');  // 向父组件发出 'error' 事件
         }else {
           this.strategies = signalData.data.data; // 保存所有策略数据
-          this.$store.dispatch('chart/set_strategies_data',this.strategies)
           this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
           this.updateChartWithSelectedStrategy();
         }

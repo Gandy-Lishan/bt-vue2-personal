@@ -1,28 +1,40 @@
 <template>
-  <div v-loading="loading" class="perfomance-chart page-content-wrapper">
-   <div id="summaryChart"  style="height: 750px;"></div>
-   <div class="table" v-if="resultDf">
-    <table class="threshold-table sum-threshold-table">
-      <thead>
-       <tr>
-        <th></th>
-        <th>Buy & Hold</th>
-        <th>Strategy</th>
-       </tr>
-      </thead>
-      <tbody>
-      <template v-for="(key, keyIndex) in Object.keys(resultDf)">
-        <tr :key="keyIndex">
-           <template v-if="key.includes('Symbol ')">
-            <td><b>{{key.replace('Symbol ', '')}}</b></td>
-            <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
-            <td>{{resultDf[key]}}</td>
-           </template>
+  <div style="width: 100%;">
+    <!-- 添加下拉框 -->
+    <div class="strategy-dropdown">
+      <label for="strategy-select">Select Strategy:</label>
+      <select v-model="selectedStrategyIndex" @change="renderChart">
+        <option v-for="(strategy, index) in strategies" :key="index" :value="index">
+          Strategy {{ index + 1 }}
+        </option>
+      </select>
+    </div>
+    <!-- Summary Container -->
+    <div v-loading="loading" class="perfomance-chart page-content-wrapper">
+    <div id="summaryChart"  style="height: 750px;"></div>
+    <div class="table" v-if="resultDf">
+      <table class="threshold-table sum-threshold-table">
+        <thead>
+        <tr>
+          <th></th>
+          <th>Buy & Hold</th>
+          <th>Strategy</th>
         </tr>
-      </template>
-    </tbody>
-     </table>
-   </div>
+        </thead>
+        <tbody>
+        <template v-for="(key, keyIndex) in Object.keys(resultDf)">
+          <tr :key="keyIndex">
+            <template v-if="key.includes('Symbol ')">
+              <td><b>{{key.replace('Symbol ', '')}}</b></td>
+              <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
+              <td>{{resultDf[key]}}</td>
+            </template>
+          </tr>
+        </template>
+      </tbody>
+      </table>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -39,7 +51,9 @@ export default {
   return {
    resultDf: null,
    loading: true,
-   symbol: CIQ.stxx.chart.symbol
+   symbol: CIQ.stxx.chart.symbol,
+   strategies: [], // 保存从 API 获取的策略数据
+   selectedStrategyIndex: 0, // 保存选中的策略索引
   }
  },
  watch: {
@@ -49,7 +63,7 @@ export default {
  async mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
-   console.log('initialize Summary Chart')
+   console.log('initialize Summary Chart!')
    try {
     await this.renderChart();
    } catch (error) {
@@ -58,9 +72,9 @@ export default {
  },
  methods: {
    async renderChart() {
-    const signalData = await getSymbolStrategySigal(this.symbol);
-   // const signalData = this.$store.getters.getStrategiesData;
-    const resultDf = signalData.data.data.map(item => {
+      const signalData = await getSymbolStrategySigal(this.symbol);
+      this.strategies = signalData.data.data
+    const resultDf = this.strategies.map(item => {
       item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
       item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);
       item['EntryDate'] = eval(item['EntryDate'])
@@ -384,5 +398,12 @@ export default {
  #summaryChart {
   // border: 1px solid #ccc;
  }
+}
+.strategy-signal--chartcontainer {
+  width: 100%;
+  height: 500px;
+}
+.strategy-dropdown {
+  margin-bottom: 15px;
 }
 </style>
