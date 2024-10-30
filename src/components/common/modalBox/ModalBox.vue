@@ -49,7 +49,7 @@
 
   .modal-content {
     background: #fff;
-    padding: 24px 50px;
+    padding: 45px 70px 25px 70px;
     border-radius: 16px;
     position: relative;
     max-width: 893px;

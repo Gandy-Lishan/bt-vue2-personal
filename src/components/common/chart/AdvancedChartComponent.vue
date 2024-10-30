@@ -86,12 +86,6 @@
 							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
-						<cq-toggle class="performance-summary" @click="openModal('second')">
-							<span></span>
-							<cq-tooltip>Performance Summary</cq-tooltip>
-						</cq-toggle>
-					</cq-info-toggle-dropdown>
 
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
 					<cq-info-toggle-dropdown>
@@ -382,15 +376,10 @@
 				<template #tab3>
 					<TradesTable @error="closeModal"></TradesTable>
 				</template>
+				<template #tab4>
+					<Description @error="closeModal"></Description>
+				</template>
 			</ModalBoxContainer>
-			<!-- <template v-if="modalContent === 'first'">
-				<StrategySigal
-					@error="closeModal"
-				></StrategySigal>
-			</template>
-			<template v-if="modalContent === 'second'">
-				<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
-			</template> -->
 		</ModalBox>
 	</cq-context>
 </template>
@@ -411,6 +400,7 @@ import ModalBoxContainer from '@/components/common/modalBox/ModalTabContainer.vu
 import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.vue'
 import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
 import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
+import Description from '@/components/common/StrategyModal/Description/index.vue'
 
 @Component({
   components: {
@@ -419,6 +409,7 @@ import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue
 	SummaryChart,
 	StrategySigal,
 	TradesTable,
+	Description,
   },
 })
 export default class AdvancedChartComponent extends Vue {
