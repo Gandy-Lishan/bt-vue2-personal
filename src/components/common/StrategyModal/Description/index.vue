@@ -4,8 +4,8 @@
         <div class="strategy-dropdown">
         <label for="strategy-select">Select Strategy:</label>
         <select v-model="selectedStrategyIndex" @change="loadTable">
-            <option v-for="(strategy, index) in strategies" :key="index" :value="index">
-            Strategy {{ index + 1 }}
+            <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
+              {{strategy.label}}
             </option>
         </select>
         </div>
@@ -31,6 +31,7 @@ export default {
             loading: true,
             symbol: CIQ.stxx.chart.symbol,
             strategies: [],
+            strategiesOptions: [],
             selectedStrategyIndex: 0, // 保存选中的策略索引
             descMap: [
     {
@@ -187,6 +188,7 @@ export default {
                 this.$emit('error');  // 向父组件发出 'error' 事件
                 }else {
                 this.strategies = signalData.data.data; // 保存所有策略数据
+                this.strategiesOptions = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
                 this.updateDesciptionWithSelectedStrategy();
                 }
             } catch (error) {

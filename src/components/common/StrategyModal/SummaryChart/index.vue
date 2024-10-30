@@ -4,8 +4,8 @@
     <div class="strategy-dropdown">
       <label for="strategy-select">Select Strategy:</label>
       <select v-model="selectedStrategyIndex" @change="renderChart">
-        <option v-for="(strategy, index) in strategies" :key="index" :value="index">
-          Strategy {{ index + 1 }}
+        <option v-for="(strategy, index) in strategies" :key="index" :value="strategy.value">
+          {{strategy.label}}
         </option>
       </select>
     </div>
@@ -85,8 +85,8 @@ export default {
  methods: {
    async renderChart() {
     const signalData = await getSymbolStrategySigal(this.symbol);
-    this.strategies = signalData.data.data
-    const resultDf = this.strategies.map(item => {
+    this.strategies = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
+    const resultDf = signalData.data.data.map(item => {
       item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
       item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);
       item['EntryDate'] = eval(item['EntryDate'])
@@ -165,24 +165,25 @@ export default {
          color: '#7f7f7f'
        }
      ]
+     const name = _this.strategies.find(item => item.value == _this.selectedStrategyIndex)?.label
      if(_this.selectedStrategyIndex === 0) {
       series = [
        {
-         name: 'Strategy_1 (%)',
+         name,
          data: date.map((d, i) => [d, data1[i]]),
          color: '#1f77b4'
        },...series]
      }else if(_this.selectedStrategyIndex === 1) {
       series = [
        {
-         name: 'Strategy_2 (%)',
+         name,
          data: date.map((d, i) => [d, data2[i]]),
          color: '#ff7f0e'
        },...series]
      }else if(_this.selectedStrategyIndex === 2) {
       series = [
        {
-         name: 'Strategy_3 (%)',
+         name,
          data: date.map((d, i) => [d, data3[i]]),
          color: '#2ca02c'
        },

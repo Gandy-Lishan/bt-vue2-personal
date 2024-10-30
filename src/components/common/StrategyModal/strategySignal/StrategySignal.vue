@@ -4,8 +4,8 @@
     <div class="strategy-dropdown">
       <label for="strategy-select">Select Strategy:</label>
       <select v-model="selectedStrategyIndex" @change="loadChart">
-        <option v-for="(strategy, index) in strategies" :key="index" :value="index">
-          Strategy {{ index + 1 }}
+        <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
+          {{strategy.label}}
         </option>
       </select>
     </div>
@@ -38,6 +38,7 @@ export default {
       loading: true,
       symbol: CIQ.stxx.chart.symbol,
       strategies: [], // 保存从 API 获取的策略数据
+      strategiesOptions: [],
       selectedStrategyIndex: 0, // 保存选中的策略索引
       trendScore: [],
     };
@@ -75,6 +76,7 @@ export default {
           this.$emit('error');  // 向父组件发出 'error' 事件
         }else {
           this.strategies = signalData.data.data; // 保存所有策略数据
+          this.strategiesOptions = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
           this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
           this.updateChartWithSelectedStrategy();
         }
