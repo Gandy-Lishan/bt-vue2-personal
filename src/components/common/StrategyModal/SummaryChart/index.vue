@@ -11,28 +11,38 @@
     </div>
     <!-- Summary Container -->
     <div v-loading="loading" class="perfomance-chart page-content-wrapper">
-    <div id="summaryChart"  style="height: 750px;"></div>
-    <div class="table" v-if="resultDf">
-      <table class="threshold-table sum-threshold-table">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Buy & Hold</th>
-          <th>Strategy</th>
-        </tr>
-        </thead>
-        <tbody>
-        <template v-for="(key, keyIndex) in Object.keys(resultDf)">
-          <tr :key="keyIndex">
-            <template v-if="key.includes('Symbol ')">
-              <td><b>{{key.replace('Symbol ', '')}}</b></td>
-              <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
-              <td>{{resultDf[key]}}</td>
-            </template>
+    <div id="summaryChart"  style="height: 700px;"></div>
+    <div class="summary-table" v-if="resultDf">
+      <div class="table">
+        <table class="threshold-table sum-threshold-table" style="width: 100%;">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Buy & Hold</th>
+            <th>Strategy</th>
           </tr>
-        </template>
-      </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <template v-for="(key, keyIndex) in Object.keys(resultDf)">
+            <tr :key="keyIndex">
+              <template v-if="key.includes('Symbol ')">
+                <td><b>{{key.replace('Symbol ', '')}}</b></td>
+                <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
+                <td>{{resultDf[key]}}</td>
+              </template>
+            </tr>
+          </template>
+        </tbody>
+        </table>
+      </div>
+      <div class="strategiesDes">
+      <template v-for="(ele, i) in strategiesDes">
+        <h3 :key="i" v-html="ele.Strategy_name"></h3>
+        <div :key="i" v-html="ele.Description"></div>
+        <h3 :key="i">Model's rules</h3>
+        <div :key="i" v-html="ele.Rules"></div>
+      </template>
+      </div>
     </div>
     </div>
   </div>
@@ -44,6 +54,7 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 import { getSymbolStrategySigal } from "@/service/service";
 import { CIQ } from '@/components/common/chart/st-development/js'
+import signal_desc from "./signal_desc.json";
 
 export default {
  name: 'summaryChart',
@@ -54,6 +65,7 @@ export default {
    symbol: CIQ.stxx.chart.symbol,
    strategies: [], // 保存从 API 获取的策略数据
    selectedStrategyIndex: 0, // 保存选中的策略索引
+   strategiesDes: []
   }
  },
  watch: {
@@ -63,7 +75,7 @@ export default {
  async mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
-   console.log('initialize Summary Chart!')
+   console.log('initialize Summary Chart!', 'signal_desc', signal_desc)
    try {
     await this.renderChart();
    } catch (error) {
@@ -72,20 +84,26 @@ export default {
  },
  methods: {
    async renderChart() {
-      const signalData = await getSymbolStrategySigal(this.symbol);
-      this.strategies = signalData.data.data
+    const signalData = await getSymbolStrategySigal(this.symbol);
+    this.strategies = signalData.data.data
     const resultDf = this.strategies.map(item => {
       item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
       item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);
       item['EntryDate'] = eval(item['EntryDate'])
       item['ExitDate'] = eval(item['ExitDate'])
       return item
-     })
-     console.log('resultDf', resultDf)
-     const _this = this
+    })
+    console.log('resultDf', resultDf)
+    this.updateChartWithSelectedStrategy(resultDf)
+     this.loading = false
+   },
+   updateChartWithSelectedStrategy(resultDf) {
+    const _this = this
      _this.$nextTick(() => {
       _this.resultDf = resultDf.map((item,index) => {
-       if(index === 0) return {
+       if(index === _this.selectedStrategyIndex) {
+        _this.strategiesDes = signal_desc.filter(ele => ele.Strategy_name.toLowerCase() === item.Signal.toLowerCase())
+        return {
         ['Symbol Total Trading Days']: item['Symbol Total Trading Days'],
         ['Symbol Buy Signal']: item['Symbol Buy Signals'],
         ['Symbol Avg.Holding Period']: item['Avg.Holding Period'],
@@ -98,7 +116,7 @@ export default {
         ['Benchmark Exposure']: '100%',
         ['Benchmark Signal Return']: item['Benchmark Signal Return'],
         ['Benchmark Max Drawdown']: item['Benchmark Max Drawdown']
-       }
+       }}
       }).filter(ele => ele !== null && ele !== '' && ele !== undefined).shift(0)
 
       console.log(' _this.resultDf',  _this.resultDf)
@@ -119,33 +137,57 @@ export default {
       return result;
     }
     const data = processCumulativeJson(resultDf, ['Date', 'Strategy Cumulative', 'Strategy Cumulative', 'Strategy Cumulative', 'Buy and Hold Cumulative']);
+    console.log('lishan-data', data)
     const date = data[0];
     const benchmark = data[1];
     const data1 = data[2];
     const data2 = data[3];
     const data3 = data[4];
-    const series = [
-       {
-         name: 'Strategy_1 (%)',
-         data: date.map((d, i) => [d, data1[i]]),
-         color: '#1f77b4'
-       },
-       {
-         name: 'Strategy_2 (%)',
-         data: date.map((d, i) => [d, data2[i]]),
-         color: '#ff7f0e'
-       },
-       {
-         name: 'Strategy_3 (%)',
-         data: date.map((d, i) => [d, data3[i]]),
-         color: '#2ca02c'
-       },
+    let series = [
+      //  {
+      //    name: 'Strategy_1 (%)',
+      //    data: date.map((d, i) => [d, data1[i]]),
+      //    color: '#1f77b4'
+      //  },
+      //  {
+      //    name: 'Strategy_2 (%)',
+      //    data: date.map((d, i) => [d, data2[i]]),
+      //    color: '#ff7f0e'
+      //  },
+      //  {
+      //    name: 'Strategy_3 (%)',
+      //    data: date.map((d, i) => [d, data3[i]]),
+      //    color: '#2ca02c'
+      //  },
        {
          name: 'Benchmark (%)',
          data: date.map((d, i) => [d, benchmark[i]]),
          color: '#7f7f7f'
        }
      ]
+     if(_this.selectedStrategyIndex === 0) {
+      series = [
+       {
+         name: 'Strategy_1 (%)',
+         data: date.map((d, i) => [d, data1[i]]),
+         color: '#1f77b4'
+       },...series]
+     }else if(_this.selectedStrategyIndex === 1) {
+      series = [
+       {
+         name: 'Strategy_2 (%)',
+         data: date.map((d, i) => [d, data2[i]]),
+         color: '#ff7f0e'
+       },...series]
+     }else if(_this.selectedStrategyIndex === 2) {
+      series = [
+       {
+         name: 'Strategy_3 (%)',
+         data: date.map((d, i) => [d, data3[i]]),
+         color: '#2ca02c'
+       },
+       ...series]
+     }
 
      const createChart = (series) => {
        console.log('series: ', series);
@@ -381,8 +423,7 @@ export default {
        });
      };
      createChart(series)
-     this.loading = false
-   },
+   }
  }
 }
 </script>
@@ -390,10 +431,9 @@ export default {
 <style lang="less" scoped>
 .perfomance-chart {
  overflow: hidden;
- display: flex;
- justify-content: space-between;
+ display: grid;
+ grid-template-columns: 60% 40%;
  background-color: #fff;
- width: 100%;
  margin-top: 35px;
  #summaryChart {
   // border: 1px solid #ccc;
@@ -405,5 +445,13 @@ export default {
 }
 .strategy-dropdown {
   margin-bottom: 15px;
+}
+.sum-threshold {
+  width: 100%;
+}
+.summary-table {
+  display: grid;
+  flex-direction: column;
+  justify-content: space-between;
 }
 </style>
