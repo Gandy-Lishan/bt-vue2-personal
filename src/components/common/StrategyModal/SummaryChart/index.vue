@@ -129,7 +129,7 @@ export default {
        if(index === _this.selectedStrategyIndex) {
         return {
         ['Symbol Total Trading Days']: item['Symbol Total Trading Days'],
-        ['Symbol Buy Signal']: `${item['Symbol Buy Signals']}%`,
+        ['Symbol Buy Signal']: item['Symbol Buy Signals'],
         ['Symbol Avg.Holding Period']: `${item['Avg.Holding Period']}%`,
         ['Symbol Exposure']: `${item['Symbol Exposure']}%`,
         ['Symbol Signal Return']: `${item['Symbol Signal Return']}%`,
