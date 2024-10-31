@@ -172,6 +172,9 @@
 						stroke-width="60"
 					/>
 				</svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="30" height="30" viewBox="0 0 24 24" v-if="data.categories.includes('Addition')">
+          <path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+        <span class="category-text" v-if="data.categories.includes('Addition') || data.categories == ''">(plus)</span>
         <span class="category-text" v-if="data.categories.includes('Spread') || data.categories == ''">(minus)</span>
         <span class="category-text" v-if="data.categories.includes('Ratio')">(divided by)</span>
         </div>
@@ -435,12 +438,20 @@ export default {
           value: 'Indicator Ratio'
         },
         {
+          label: 'Indicator Addition',
+          value: 'Indicator Addition'
+        },
+        {
           label: 'Symbol Spread',
           value: 'Symbol Spread'
         },
         {
           label: 'Symbol Ratio',
           value: 'Symbol Ratio'
+        },
+        {
+          label: 'Symbol Addition',
+          value: 'Symbol Addition'
         },
         {
           label: 'Weighted Indicator Combination',

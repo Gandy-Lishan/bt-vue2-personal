@@ -599,7 +599,7 @@ input[type="time"] {
 	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
-  text-align: center;
+  /* text-align: center; */
   padding: 0px;
 }
 .indicator-fav-table.el-table .cell {
@@ -607,7 +607,6 @@ input[type="time"] {
 	font-size: 14px;
   color: #333341;
   font-family: "Open Sans",sans-serif;
-  text-align: center;
 }
 .virtual-table.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
   padding: 2px 0px;
@@ -945,19 +944,33 @@ button#checkResBtn {
   .threshold-table th, .threshold-table td {
     padding: 8px;
   }
+  .trend-score-table th, .trend-score-table td {
+    padding: 3px;
+  }
   .threshold-table>thead>tr>th {
     border-bottom: 2px solid #ddd;
     font-weight: 400;
   }
-  .sum-threshold-table>thead>tr>th {
-    border: 1px solid #ddd;
-    font-weight: bold;
+  .trend-score-table>thead>tr>th {
+    font-weight: 800;
+    font-size: 14px;
+    color: #000;
   }
   .threshold-table td {
     border-top: 1px solid #ddd;
   }
-  .sum-threshold-table td{
-    border: 1px solid #ddd;
+  .trend-score-table .bold-td {
+    font-weight: 800;
+    color: #000;
+  }
+  .trend-score-table .odd {
+    background-color: #f6f3f3;
+  }
+  .trend-score-table td {
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #606266;
   }
   .tg .tg-0lax {
     text-align: left;

@@ -12,6 +12,7 @@
         :itemSize="tableInfo['itemSize']"
         :options="tableInfo['options']"
         :type="tableInfo['type']"
+        :sourceType="type"
         :label="tableInfo['label']"
         :tableData="tableData"
         :isOver="isOver"
@@ -40,7 +41,8 @@ export default {
     blog_results: Array,
     related: Array,
     selectedTitle: String,
-    isShowDetails: [Boolean, Object]
+    isShowDetails: [Boolean, Object],
+    type: String
   },
   name: 'Table',
   data() {
@@ -56,6 +58,8 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
+        SPTrend: 'sp_1500_trend_reltrend',
+        TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
         CommoditySeasonality: 'commod_seasonality',
@@ -132,7 +136,6 @@ export default {
     },
     related: {
       handler (arr) {
-        console.log('related', arr)
         if(Array.isArray(arr)) this.showRelated = true
         if(Array.isArray(arr)) {
           this.loading = true
@@ -187,6 +190,7 @@ export default {
                 etf_social_bond: 'Bond',
                 etf_fund_country: 'Country',
                 etf_social_country: 'Country',
+                trend_reltrend: 'Stock Real Trend'
               }
               if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
               if(['last_value', 'last_change'].includes(key)) {
@@ -204,6 +208,7 @@ export default {
           }
           return obj
         })
+        console.log('this.tableData', this.tableData)
         const _this = this
         _this.$nextTick(() => {
           _this.loading = false
@@ -223,7 +228,7 @@ export default {
       let _results
       try {
         const url = this.urlMap[this.optionsChecked]
-        if(!url) {this.loading = false;return}
+        if(!url || url === 'sector_trend_score') {this.loading = false;return}
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
           console.log(url, _results)

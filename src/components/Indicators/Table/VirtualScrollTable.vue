@@ -22,7 +22,7 @@
       </template>
     </div>
   </div>
-  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated)">
+  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
     <el-row>
       <el-col :span="18">
         <el-row>
@@ -76,6 +76,7 @@
     </el-row>
   </div>
   <virtual-scroll
+      v-show="checkedType !== 'TrendSector'"
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
@@ -116,8 +117,8 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="this.enlarged">
-            <template slot-scope="scope">
+          <el-table-column align="center" width="35px" v-if="!showRelated">
+            <template slot-scope="scope" v-if="enlarged">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
                 <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
@@ -134,11 +135,12 @@
               :max-width="l.maxWidth"
               :width="l.width"
               sortable="custom"
+              :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
             >
             <template slot-scope="scope">
-              <el-button class="chart-name-btn" type="text" v-if="l.value === 'chart_name'" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SPTrend') || (l.value === 'market_symbol' && l.type === 'SPTrend')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
-              <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 75px;"/>
+              <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
             </el-table-column>
@@ -155,15 +157,17 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-show="enlarged && pageLength">
+  <div class="dataTables_info" v-show="enlarged && pageLength && (checkedType !== 'TrendSector')">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
+  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
 </div>
 </template>
 
 <script>
 import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
+import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
@@ -182,13 +186,15 @@ export default {
     loading: Boolean,
     firstRow: Object,
     showReport: Boolean,
-    showRelated: Boolean
+    showRelated: Boolean,
+    sourceType: String
   },
   directives: {
     ElTableInfiniteScroll
   },
   components: {
-    VirtualScroll
+    VirtualScroll,
+    TrendScoreTable
   },
   inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex'],
   data() {
@@ -232,7 +238,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '200px'
             },
             {
               key: 'sub_type',
@@ -265,7 +271,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -275,7 +282,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '120px'
             },
             {
               key: 'url',
@@ -311,7 +318,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -321,7 +329,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '180px'
+              minWidth: '140px'
             },
             {
               key: 'url',
@@ -357,7 +365,51 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
+        ['SPTrendColumns', 
+          [
+            {
+              key: 'market_symbol',
+              label: 'Symbol',
+              value: 'market_symbol',
+              type: 'SPTrend',
+              minWidth: '90px'
+            },
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              type: 'SPTrend',
+              minWidth: '130px'
+            },
+            {
+              key: 'trend_last_value',
+              label: 'Trend Score',
+              value: 'trend_last_value'
+            },
+            {
+              key: 'trend_five_day_score_chg',
+              label: 'Trend 5-Day Score Change',
+              value: 'trend_five_day_score_chg'
+            },
+            {
+              key: 'reltrend_last_value',
+              label: 'RelTrend Score',
+              value: 'reltrend_last_value'
+            },
+            {
+              key: 'reltrend_five_day_score_chg',
+              label: 'RelTrend 5-Day Score Change',
+              value: 'reltrend_five_day_score_chg'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update'
             }
             ]
         ],
@@ -367,7 +419,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '150px'
             },
             {
               key: 'sub_type',
@@ -398,7 +450,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -408,13 +461,13 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '70px'
             },
             {
               key: 'underlying_name',
               label: 'Name',
               value: 'underlying_name',
-              minWidth: '100px'
+              minWidth: '120px'
             },
             {
               key: 'sub_type',
@@ -445,7 +498,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -455,7 +509,7 @@ export default {
               key: 'chart_name',
               label: 'Breadth Measure',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '180px'
             },
             {
               key: 'underlying_name',
@@ -486,7 +540,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -496,7 +551,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '100px'
             },
             {
               key: 'underlying_name',
@@ -533,7 +588,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -543,7 +599,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '200px'
+              minWidth: '170px'
             },
             {
               key: 'sub_type',
@@ -574,7 +630,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -584,7 +641,7 @@ export default {
               key: 'chart_name',
               label: 'Symbol',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '130px'
             },
             {
               key: 'sub_type',
@@ -615,7 +672,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -659,7 +717,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -669,7 +728,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '150px'
+              minWidth: '120px'
             },
             {
               key: 'sub_type',
@@ -697,7 +756,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -748,7 +808,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -789,7 +850,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
           ]
         ],
@@ -830,7 +892,8 @@ export default {
             {
               key: 'sentiment',
               label: 'Sentiment',
-              value: 'sentiment'
+              value: 'sentiment',
+              minWidth: '100px'
             }
             ]
         ],
@@ -966,15 +1029,18 @@ export default {
         ],
       ]))
       const columns = columnsMap.get(`${this.checkedType}Columns`)
+      if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
-      if(this.type === 'related') {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
+      if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
-        if(item.key === 'chart_name') item.minWidth = '200px'
+        if(item.key === 'chart_name' && this.checkedType !== 'SPTrend') item.minWidth = '200px'
         return item
       })
       return columns
@@ -1163,6 +1229,7 @@ export default {
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
+      debugger
       if(this._loading) return
       if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.enlarged = !this.enlarged;this.toggleEnlarge(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
@@ -1198,12 +1265,13 @@ export default {
       // this.$forceUpdate()
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
-      if(row.url && !this.type.includes('Seasonality') && column.property === 'chart_name') {
+      if(row.url && !this.type.includes('Seasonality') && ((column.property === 'chart_name' && row.type !== 'trend_reltrend') || (row.type === 'trend_reltrend' && column.property === 'market_symbol'))) {
         let _t = '50%'
         let _l = 0
         let {url} = row
         const hoverElement = event.target
         const container = this.$el.querySelector('.virtual-table')
+        console.log('column.realWidth', column.realWidth)
         if(hoverElement && container && column.realWidth) {
           let moveUp = 0
           const containerRect = container.getBoundingClientRect()
@@ -1217,7 +1285,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent') url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'trend_reltrend') url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
@@ -1441,7 +1509,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
@@ -1505,7 +1573,7 @@ export default {
         this.filterData = sortedData
         }
 			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type'].indexOf(colName) !== -1){
+			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type', 'market_symbol'].indexOf(colName) !== -1){
         if(sortingOrder === 'ascending') {
           this.filterData.sort((a, b) => {
           const aValue = a[colName] || '';
@@ -1542,6 +1610,11 @@ export default {
           label: 'S&P 1500 Stock Sentiment',
           value: 'sp_1500_complete_list',
           type: 'SP1500'
+        },
+        {
+          label: 'Absolute and Relative Trend Scores',
+          value: 'sp_1500_trend_reltrend',
+          type: 'SPTrend'
         },
         {
           label: 'Bond Market Sentiment',
@@ -1629,10 +1702,10 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
-      const keysMap = new Map([
+      let keysMap = new Map([
         ['chart_name', 'Name'],
         ['sub_type', 'Group'],
         ['timeframe', 'Time Frame'],
@@ -1656,6 +1729,18 @@ export default {
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
+      }
+      if(type === 'sp_1500_trend_reltrend') {
+        keysMap = new Map([
+        ['market_symbol', 'Symbol'],
+        ['chart_name', 'Name'],
+        ['trend_last_value', 'Trend Score'],
+        ['trend_five_day_score_chg', 'Trend 5-Day Score Change'],
+        ['reltrend_last_value', 'RelTrend Score'],
+        ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change'],
+        ['last_update', 'Date']
+      ])
+      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Date']
       }
 
 			const processedData = data.map(item => {
@@ -1861,7 +1946,7 @@ export default {
 	}
   /deep/ tr th.is-leaf.el-table__cell {
     background-color: #ffffff;
-    text-align: left;
+    text-align: center;
     .cell {
       font-weight: 600;
       color: #333;

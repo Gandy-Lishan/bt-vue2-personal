@@ -39,6 +39,42 @@
             }
         ) 
     }
+    CIQ.drawCPMMA = function(period) {
+
+			for (var studyInstanceName in CIQ.stxx.layout.studies) {
+				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				if (
+					sd.type == 'ma' && sd.panel == 'chart'
+				) {
+					CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {
+                        Period: period,
+                        Field: sd.inputs.Field,
+                        Offset: 0
+                    })
+                    return
+				}
+                
+			}			
+
+        CIQ.Studies.addStudy(CIQ.stxx, "ma",{
+            Period: period,
+            Field: "Close"
+        });
+    }
+    CIQ.removeCPMMA = function() {
+        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]
+            if (
+                sd.type == 'ma' && sd.panel == 'chart'
+            ) {
+                CIQ.Studies.removeStudy(
+                    CIQ.stxx,
+                    sd
+                )
+            }
+            
+        }			
+    }
     // user's own indicator的 weight indicator加载函数单独设定
     //var symbol
 
@@ -416,7 +452,7 @@
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
            
-        if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio'){
+        if(newData.categories == 'Symbol Spread' || newData.categories == 'Symbol Ratio' || newData.categories == 'Symbol Addition'){
                 // indicator1,包括主symbol和new indicator
                 CIQ.objIndicator = []
                 CIQ.store.commit('form/setComparisonSymbol', {
@@ -468,7 +504,7 @@
                 await getUserOwnIndicatorMatedata(newData.url,extremeLines)
         }
         
-        if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'){
+        if(newData.categories == 'Indicator Spread' || newData.categories == 'Indicator Ratio'|| newData.categories == 'Indicator Addition'){
             // indicator1
             await getUserOwnIndicatorMatedata(newData.indicator1.url,null)
             // indicator2

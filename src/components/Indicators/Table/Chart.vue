@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="height: 800px; background-color: #fff;"></div>
+  <div :id="id" style="width: 100%; height: 800px; background-color: #fff;"></div>
  </template>
  
  <script>
@@ -33,7 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
-      const {url, pess, opt, chart_name, market_symbol} = this.row
+      const {url, pess, opt, chart_name, market_symbol, type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -44,6 +44,7 @@
         alignTicks: false,
         backgroundColor: 'transparent',
         renderTo: 'charts',
+        spacingRight: 50,
  
         events: {
           load: function (event) {
@@ -54,7 +55,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels') return
+            if(url === 'smart_dumb' || url === 'risk_levels' || type === 'trend_reltrend') return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
@@ -79,53 +80,53 @@
       };
  
       const createYAxisConfig = (series, row) => {
-        const {sub_type, source_list, url} = row
-        const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list'
-        // commodity_complete_list
-        // 如果 sub_type = 'cot' 并且 url 以 cot_ 开头, 那么极值是曲线
+        const { sub_type, source_list, url } = row;
+        const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list';
+        let sharedYAxisIndex = -1;
+        let minYAxis, maxYAxis;
+
         return series.map((serie, i) => {
-          let minYAxis, maxYAxis;
           const isOptPess = serie?.name === 'opt' || serie?.name === 'pess';
-          
-          // Calculate min and max for the y-axis only for the bottom axis
-          if (i === series.length - 1) {
-            const data = serie.data.map(d => d[1]);
+
+          if (i === 1 || i === 2) {
+            const data = series.slice(1).flatMap(s => s.data.map(d => d[1]));
             const minDataValue = Math.min(...data);
             const maxDataValue = Math.max(...data);
-
-            // Determine the min and max values for the bottom y-axis
             minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
-
-            console.log(`minYAxis: ${minYAxis}, maxYAxis: ${maxYAxis}`);
           }
-
+          let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+          if(sub_type === 'trend_reltrend') {
+            if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
+            else if(!serie?.name.includes('Relative') && serie?.name.includes('Trend')) {titleColor = '#2f7ed8'}
+          }
           return {
+            id: i === 0 ? 'top-axis' : 'bottom-axis',
             title: {
               text: !isOptPess ? serie?.name || 'SPY Optix' : '',
               style: {
-                color: i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8'),
+                color: titleColor,
                 fontWeight: 'bold',
                 fontSize: '10px'
               },
-              x: i === 2 ? 10 : 0
+              x: i === 2 ? 45 : 30
             },
-            top: `${i===0?0:35}%`,
-            height: `${i===0?35:60}%`,
+            top: i === 0 ? '0%' : '40%',
+            height: i === 0 ? '35%' : '60%',
             offset: 0,
-            lineWidth: 0, // Remove the right-side y-axis line
+            lineWidth: 0,
             gridLineWidth: 1,
             opposite: true,
-            labels: { enabled: (i === 0 || i === 1), style: {fontSize: '10px'} },
-            min:  (i === series.length - 1) ? minYAxis : null, // Set the calculated min value for the bottom axis
-            max:  (i === series.length - 1) ? maxYAxis : null, // Set the calculated max value for the bottom axis
-            plotLines: (i === series.length - 1) && !isCot ? [
+            labels: { enabled: i === 0 || i === 1, x: 25, style: { fontSize: '10px' } },
+            min: (i === 1 || i === 2) ? minYAxis : null,
+            max: (i === 1 || i === 2) ? maxYAxis : null,
+            plotLines: i >= 1 && i === series.length - 1 && !isCot ? [
               {
                 value: pess || null,
                 color: 'rgba(0, 128, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${pess || ''}`, style: {fontSize: '10px', color: 'rgba(0, 128, 0, 1)'} },
+                label: { text: `${pess || ''}`, style: { fontSize: '10px', color: 'rgba(0, 128, 0, 1)' } },
                 zIndex: 5
               },
               {
@@ -133,19 +134,34 @@
                 color: 'rgba(255, 0, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${opt || ''}`, style: {fontSize: '10px', color: 'rgba(255, 0, 0, 1)'} },
+                label: { text: `${opt || ''}`, style: { fontSize: '10px', color: 'rgba(255, 0, 0, 1)' } },
                 zIndex: 5
               }
             ] : [],
           };
+        }).map((axisConfig, i) => {
+          if (axisConfig.id === 'bottom-axis') {
+            if (sharedYAxisIndex === -1) {
+              sharedYAxisIndex = i;
+            } else {
+              axisConfig.linkedTo = sharedYAxisIndex;
+            }
+          }
+
+          axisConfig.minPadding = 0.1;
+          axisConfig.maxPadding = 0.1;
+
+          return axisConfig;
         });
       };
-
       const createChart = (series, allKeysName, basicChartOptions, row) => {
         console.log('series: ', series);
+        console.log('Highcharts', Highcharts)
         const yAxisConfig = createYAxisConfig(series, row);
         const allData = series.flatMap(s => s.data);
-        const minX = Math.min(...allData.map(d => d[0]))
+        const xData = [...allData.map(d => d[0])]
+        console.log('xData', xData)
+        const minX = Math.min(xData)
         const { url, type } = row
         let selector = 5
         if(url === 'risk_levels') {
@@ -154,8 +170,9 @@
         if(url === 'smart_dumb') {
           selector = 4
         }
+        if(type === 'trend_reltrend') selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
-        Highcharts.stockChart(this.id, {
+       Highcharts.stockChart(this.id, {
           rangeSelector: {
             inputEnabled: true,
             inputDateFormat: '%Y/%m/%d',
@@ -225,11 +242,19 @@
           },
           yAxis: yAxisConfig,
           xAxis: {
-            type: 'datetime',
+            type: 'category',
+            tickPixelInterval: 150, 
             crosshair: { label: { enabled: false } },
             ordinal: false,
             min: minX,
-            labels: {format: '{value:%Y}'}
+            labels: {format: '{value:%Y}'},
+            // labels: {
+            //     formatter: function () {
+            //         return Highcharts.dateFormat('%Y-%m-%d', this.value);  // 手动格式化日期
+            //     }
+            // },
+            tickPositions: null,
+            uniqueNames: false,  // 确保只使用你传入的时间点
           },
           navigator: {
             series: {
@@ -273,7 +298,7 @@
              this.points.forEach(point => {
                // Add a colored circle before the series name
                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-               s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y}</b><br>`;
+               s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
              });
              return s;
            }
@@ -288,17 +313,30 @@
                   enabled: false
                 }
               },
-              showInNavigator: true
+              showInNavigator: true,
+              connectNulls: false, // 禁用连接 null 数据点
+              // dataGrouping: {
+              //  enabled: false  // 确保数据分组被禁用
+              // },
+              pointStart: undefined,  // 确保不会有自动起点
+              pointInterval: undefined  // 确保不会有自动间隔
             }
           },
           series: series.map((s, i) => {
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
+          console.log('s.name.', s.name)
+          if(type === 'trend_reltrend' && s.name.includes('Relative')) {
+            color = 'rgb(142, 35, 35)'
+          }else if(type === 'trend_reltrend' && !s.name.includes('Relative') && s.name.includes('Trend Score')) {
+            color = '#2f7ed8'
+          }
           const isOptPess = s.name === 'opt' || s.name === 'pess'
           if(s.name === 'opt') color = 'rgba(255, 0, 0, 1)'
           if(s.name === 'pess') color = 'rgba(0, 128, 0, 1)'
           return{
             ...s,
+            keys: ['x', 'y'],  // 明确指定数据的格式
             yAxis: i,
             type: _type,
             color,
@@ -310,20 +348,22 @@
             showInLegend: !isOptPess ? true : false,
             lineWidth: !isOptPess ? 2 : 1,
             dataGrouping: {
-                enabled: false
+                enabled: true
             }
           }}),
           chart: basicChartOptions
-        });
+        })
       };
  
       try {
-      let {last_value, last_change_type, market_symbol} = this.row;
-      let zoonsData = [];
+      let {last_value, last_change_type, market_symbol, type} = this.row;
+      console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       console.log('this.row', this.row)
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
-        let originalData = res.data;
+        let originalData = res.data
+        originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        console.log('originalData', originalData)
         try {
           if(typeof originalData === 'string') {
             originalData = originalData.replace(/NaN/g, 'null')
@@ -355,6 +395,7 @@
               return a.localeCompare(b);
           }
         });
+        console.log('allKeysName', allKeysName)
         if(allKeysName.includes('opt') && allKeysName.includes('pess') && !market_symbol) {
           allKeysName = allKeysName.filter(keyName => keyName !== 'opt' && keyName !== 'pess')
           allKeysName = allKeysName.concat(['opt', 'pess'])
@@ -377,9 +418,10 @@
           acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
           return acc;
         }, {});
+        console.log('data', data)
         let series = Object.keys(data).map(key => {
           let name = 'SPY Optix'
-          if (last_value !== null && last_value !== undefined) {
+          if (!last_value) {
                // 处理 last_value 的值类型
                if (typeof last_value === 'string' && last_value.includes('%'))  last_value = parseFloat(last_value.replace('%', '')) / 100;
               if (typeof last_value === 'string') {
@@ -399,7 +441,10 @@
           }
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           console.log('last_value_chart', last_value)
-          if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
+          if((key.includes('_reltrend') || key.includes('_trend')) && type === 'trend_reltrend') {
+            name = key.replace('_reltrend', ' Relative Trend Score')
+            name = name.replace('_trend', '  Trend Score')
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'

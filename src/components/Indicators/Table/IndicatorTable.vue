@@ -13,13 +13,13 @@
          :ref="item.refName"
          @updateChart="updateChart" 
          @showDetails="showDetails"
-         :style="{ width: enlargedTable === item.label ? '65%' : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
+         :style="{ width: (enlargedTable === item.label) ? ((checkedType !== 'TrendSector') ? (checkedType !==  'SPTrend' ? '60%' : '50%') : '100%') : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" style="width: 65%" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData"></Chart>
-      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }"></SeasonalityChart>
+      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" :style="{width: (checkedType !== 'SPTrend' && !isShowDetails) ? '60%' : '50%'}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'SPTrend' && !isShowDetails) ? '40%' : '50%' }" @passIndicatorData="passIndicatorData"></Chart>
+      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'SPTrend' && !isShowDetails) ? '40%' : '50%' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
   </div>
@@ -174,6 +174,27 @@ export default {
             },
           ]
         },
+        {
+          label: 'Stock Trend',
+          type: 'SPTrend',
+          refName: 'SPTrendVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Absolute and Relative Trend Scores',
+              value: 'SPTrend',
+              type: 'SPTrend',
+              url: 'sp_1500_trend_reltrend'
+            },
+            {
+              label: 'S&P 500 Sector Trend Score Summary',
+              value: 'TrendSector',
+              type: 'SPTrend',
+              url: 'sector_trend_score'
+            }
+          ]
+        },
         // {
         //   label: 'Most Popular',
         //   type: 'stock',
@@ -225,10 +246,11 @@ export default {
     },
     updateChart(row) {
       console.log('updateChart', row)
-      this.displayRow = row
+      this.displayRow = {...row}
     },
     showDetails(row, isShowDetails, checkedType) {
       console.log('showDetails', row)
+      this.updateChart(Object.keys(row).length !== 0 ? row : this.displayRow)
       this.$nextTick(() => {
         this.isShowDetails = isShowDetails
       })
@@ -299,7 +321,7 @@ export default {
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 35%;
+    width: 40%;
   }
 }
 .showDetailsChart {

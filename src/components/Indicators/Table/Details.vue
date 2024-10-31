@@ -1,7 +1,7 @@
 <template>
   <div class="details">
     <div class="chart-name">
-      <h1>{{title}}<el-button style="margin-left: 5px;" v-if="row && row.type && !row.type.includes('seasonality') && row.url && !['smart_dumb', 'risk_levels'].includes(row.url)" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
+      <h1>{{title}}<el-button style="margin-left: 5px;" v-if="row && row.type && !row.type.includes('seasonality') && !row.type.includes('trend') && row.url && !['smart_dumb', 'risk_levels'].includes(row.url)" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
       <el-button type="text" icon="el-icon-back" @click="$emit('showDetails', {}, false)">Return</el-button>
     </div>
     <ul class="indicator-info">
@@ -77,7 +77,7 @@
 								</div>
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
-            <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related"></Related>
+            <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
           </div>
         </div>
   </div>
@@ -113,7 +113,8 @@ export default {
       Below_Annualized: '',
       Between_Annualized: '',
       return_segments: [],
-      isShowInfoTable: false
+      isShowInfoTable: false,
+      type: ''
     }
   },
   watch: {
@@ -152,6 +153,7 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
+          this.type  = originalData.type
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
           this.return_segments = originalData.return_segments

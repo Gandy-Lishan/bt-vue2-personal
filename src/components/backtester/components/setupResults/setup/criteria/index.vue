@@ -620,14 +620,14 @@ export default {
 					// this.tabIndex = this.editableTabs.length
 					this.tabIndex = 5
 				}
-				if (this.relation == 3 && this.editableTabs.length > 3) {
-					this.popUpMsgBox('Add up to three conditions')
+				if (this.relation == 3 && this.editableTabs.length > 4) {
+					this.popUpMsgBox('Add up to four conditions')
 					this.editableTabs.pop()
 					this.indicatorRadioArr.pop()
 					// this.editableTabsValue = this.editableTabs.length + ''
-					this.editableTabsValue = '3'
+					this.editableTabsValue = '4'
 					// this.tabIndex = this.editableTabs.length
-					this.tabIndex = 3
+					this.tabIndex = 4
 				}
 				if (this.relation == 2) {
 					this.score = this.indicatorRadioArr.length
@@ -875,8 +875,11 @@ export default {
 				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
-				if (this.editableTabs.length === 1) {
+				if (this.editableTabs.length <= 1) {
 					this.handleTabsEdit(null, 'add')
+					for (let i = 0; i < 2 - this.editableTabs.length; i++) {
+						this.handleTabsEdit(null, 'add')
+					}
 					this.editableTabsValue = '1'
 				}
 				if (val == 2) {
