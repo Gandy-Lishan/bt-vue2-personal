@@ -70,7 +70,7 @@ export default {
    strategies: [], // 保存从 API 获取的策略数据
    selectedStrategyIndex: 0,
    strategiesOptions: [],
-   columns: ['Total Trading Days', 'Buy Signal', 'Exposure', 'Signal Return', 'Max Drawdown']
+   columns: ['Total Trading Days', 'Buy Signal', 'Exposure', 'Total Return', 'Max Drawdown']
   }
  },
  watch: {
@@ -132,13 +132,13 @@ export default {
         ['Symbol Buy Signal']: item['Symbol Buy Signals'],
         ['Symbol Avg.Holding Period']: `${item['Avg.Holding Period']}%`,
         ['Symbol Exposure']: `${item['Symbol Exposure']}%`,
-        ['Symbol Signal Return']: `${item['Symbol Signal Return']}%`,
+        ['Symbol Total Return']: `${item['Symbol Signal Return']}%`,
         ['Symbol Max Drawdown']: `${item['Symbol Max Drawdown']}%`,
         ['Benchmark Total Trading Days']: item['Total Trading Days'],
         ['Benchmark Buy Signal']: '',
         ['Benchmark Avg.Holding Period']: '',
         ['Benchmark Exposure']: '100%',
-        ['Benchmark Signal Return']: `${item['Benchmark Signal Return']}%`,
+        ['Benchmark Total Return']: `${item['Benchmark Signal Return']}%`,
         ['Benchmark Max Drawdown']: `${item['Benchmark Max Drawdown']}%`
        }}
       }).filter(ele => ele !== null && ele !== '' && ele !== undefined).shift(0)
