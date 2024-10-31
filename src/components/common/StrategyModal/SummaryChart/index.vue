@@ -129,17 +129,17 @@ export default {
        if(index === _this.selectedStrategyIndex) {
         return {
         ['Symbol Total Trading Days']: item['Symbol Total Trading Days'],
-        ['Symbol Buy Signal']: item['Symbol Buy Signals'],
-        ['Symbol Avg.Holding Period']: item['Avg.Holding Period'],
-        ['Symbol Exposure']: item['Symbol Exposure'],
-        ['Symbol Signal Return']: item['Symbol Signal Return'],
-        ['Symbol Max Drawdown']: item['Symbol Max Drawdown'],
+        ['Symbol Buy Signal']: `${item['Symbol Buy Signals']}%`,
+        ['Symbol Avg.Holding Period']: `${item['Avg.Holding Period']}%`,
+        ['Symbol Exposure']: `${item['Symbol Exposure']}%`,
+        ['Symbol Signal Return']: `${item['Symbol Signal Return']}%`,
+        ['Symbol Max Drawdown']: `${item['Symbol Max Drawdown']}%`,
         ['Benchmark Total Trading Days']: item['Total Trading Days'],
         ['Benchmark Buy Signal']: '',
         ['Benchmark Avg.Holding Period']: '',
         ['Benchmark Exposure']: '100%',
-        ['Benchmark Signal Return']: item['Benchmark Signal Return'],
-        ['Benchmark Max Drawdown']: item['Benchmark Max Drawdown']
+        ['Benchmark Signal Return']: `${item['Benchmark Signal Return']}%`,
+        ['Benchmark Max Drawdown']: `${item['Benchmark Max Drawdown']}%`
        }}
       }).filter(ele => ele !== null && ele !== '' && ele !== undefined).shift(0)
 
@@ -161,14 +161,15 @@ export default {
       return result;
     }
     const data = processCumulativeJson(resultDf, ['Date', 'Strategy Cumulative', 'Strategy Cumulative', 'Strategy Cumulative', 'Buy and Hold Cumulative']);
+    console.log('data', data)
     const date = data[0];
-    const benchmark = data[1];
-    const data1 = data[2];
-    const data2 = data[3];
-    const data3 = data[4];
+    const benchmark = data[4];
+    const data1 = data[1];
+    const data2 = data[2];
+    const data3 = data[3];
     let series = [
        {
-         name: 'Benchmark (%)',
+         name: 'Benchmark',
          data: date.map((d, i) => [d, benchmark[i]]),
          color: '#7f7f7f'
        }
@@ -176,28 +177,28 @@ export default {
      const name = _this.strategiesOptions.find(item => item.value == _this.selectedStrategyIndex)?.label
      if(_this.selectedStrategyIndex === 0) {
       series = [
-      ...series,
        {
          name,
          data: date.map((d, i) => [d, data1[i]]),
          color: '#1f77b4'
-       }]
+       },
+      ...series]
      }else if(_this.selectedStrategyIndex === 1) {
       series = [
-      ...series,
        {
          name,
          data: date.map((d, i) => [d, data2[i]]),
          color: '#ff7f0e'
-       }]
+       },
+      ...series]
      }else if(_this.selectedStrategyIndex === 2) {
       series = [
-      ...series,
        {
          name,
          data: date.map((d, i) => [d, data3[i]]),
          color: '#2ca02c'
-       }
+       },
+      ...series
        ]
      }
 
