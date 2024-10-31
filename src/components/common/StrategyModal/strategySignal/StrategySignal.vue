@@ -86,7 +86,7 @@ export default {
       try {
         const signalData = await getSymbolStrategySigal(this.symbol);
         if(signalData.data.status == 504) {
-          this.popUpMsgBox(signalData.data.msg)
+          this.popUpMsgBox('No relate symbol strategy signal.')
           this.$emit('error');  // 向父组件发出 'error' 事件
         }else {
           this.strategies = signalData.data.data; // 保存所有策略数据
@@ -199,6 +199,7 @@ export default {
           style: {
             fontWeight: 'bold',
             fontFamily: 'Arial',
+            fontSize: '18px',
           },
         },
         navigator: {
@@ -289,7 +290,7 @@ export default {
           verticalAlign: 'top',
           align: 'right',
           x: -60,
-          y: 0,
+          y: 20,
           floating: true,
           backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
         },
