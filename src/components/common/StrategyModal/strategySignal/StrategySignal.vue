@@ -177,7 +177,7 @@ export default {
             load: function (event) {
               var e = event.target.axes[0].getExtremes();
               this.defaultChartScale = [e.min, e.max];
-              this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 80, 350, 120, 30)
+              this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 80, 300, 120, 30)
                   .attr({
                       'opacity': 0.25
                   })
