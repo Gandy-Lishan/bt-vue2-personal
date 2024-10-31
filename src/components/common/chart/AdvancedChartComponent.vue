@@ -80,6 +80,13 @@
 							<cq-tooltip>last price</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
+					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
+						<cq-toggle class="trading-signal" @click="openModal('first')">
+							<span></span>
+							<cq-tooltip>Trading Signal</cq-tooltip>
+						</cq-toggle>
+					</cq-info-toggle-dropdown>
+
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
 					<cq-info-toggle-dropdown>
 						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="visibility:hidden;margin-left:28px">
@@ -355,6 +362,25 @@
 		<!-- last signal marker -->
 		<div id="stxForecast" class="forecast"></div>
 		</div>
+
+		<ModalBox ref="modalBox">
+			<ModalBoxContainer :tabs="tabs">
+				<template #tab1>
+					<StrategySigal
+						@error="closeModal"
+					></StrategySigal>
+				</template>
+				<template #tab2>
+					<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
+				</template>
+				<template #tab3>
+					<TradesTable @error="closeModal"></TradesTable>
+				</template>
+				<template #tab4>
+					<Description @error="closeModal"></Description>
+				</template>
+			</ModalBoxContainer>
+		</ModalBox>
 	</cq-context>
 </template>
 
@@ -368,8 +394,24 @@ import { getCustomConfig, marker } from './resources' // ChartIQ library resourc
 import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
 import UploaderVue from './st-development/components/Uploader.vue'
 import ReportsFilter from './st-development/components/ReportsFilter.vue'
+import ModalBox from '@/components/common/modalBox/ModalBox.vue'
+import ModalBoxContainer from '@/components/common/modalBox/ModalTabContainer.vue'
+// TODO next is to intergrate them into an index entry file
+import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.vue'
+import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
+import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
+import Description from '@/components/common/StrategyModal/Description/index.vue'
 
-@Component({})
+@Component({
+  components: {
+    ModalBox,
+	ModalBoxContainer,
+	SummaryChart,
+	StrategySigal,
+	TradesTable,
+	Description,
+  },
+})
 export default class AdvancedChartComponent extends Vue {
 	
 	@Prop() config: any
@@ -382,9 +424,18 @@ export default class AdvancedChartComponent extends Vue {
 	resizeObserver: any | undefined
 	//reportsAreDisplayed: any | undefined
 	routeName: string | null | undefined
+	modalContent: string | null = null
+	tabs: Array<any>
 	
 	constructor() {
 		super()
+		this.modalContent = null, // 用于存储弹窗内容的状态
+		this.tabs = [
+        { label: 'Trading Strategy', name: 'tab1', slotName: 'tab1' },
+        { label: 'Performance Summary', name: 'tab2', slotName: 'tab2' },
+        { label: 'Trading Records', name: 'tab3', slotName: 'tab3' },
+		{ label: 'Description', name: 'tab4', slotName: 'tab4' },
+      ]
 		this.isCollapse = false 
 		this.resizeObserver = null
 		// this.reportsAreDisplayed = {
@@ -456,6 +507,20 @@ export default class AdvancedChartComponent extends Vue {
 			this.symbolMutationObserver()
 			this.initializeReportsFilter()
 		}, 0)			
+	}
+
+	openModal(contentType: string) {
+      this.modalContent = contentType; // 设置要显示的内容
+	  const modal = this.$refs.modalBox as any;
+      if (modal) {
+        modal.open(); // 确保 modal 存在后再调用 open 方法
+      }
+    }
+	closeModal() {
+		const modal = this.$refs.modalBox as any;
+		if (modal) {
+			modal.close(); // 确保 modal 存在后再调用 close 方法
+		}
 	}
 
 	// initiate lastPrice and grid button

@@ -174,6 +174,7 @@ export default {
 		tradesData: {
 			handler(newValue, _){
 				this.processedTradesData = newValue
+				debugger
 				this.queryInfo.total = newValue.length
 				this.totalTradesNumber = newValue.length
 			},

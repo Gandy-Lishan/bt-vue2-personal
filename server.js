@@ -5,6 +5,7 @@ const compression = require("compression")
 const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
 var history = require('connect-history-api-fallback');
+const Papa = require('papaparse');
 // // algolia search
 // const algoliasearch = require('algoliasearch')
 // const searchClient = algoliasearch(
@@ -66,6 +67,14 @@ app.get('/api/strategiesJSON', (req, res) => {
     });
 });
 
+app.get('/api/indexsList', (req, res) => {
+    fs.readFile( dataPath+'indexsList.json', 'utf8', function (err, data) {
+        res.send(data);
+        //res.end( data );
+    });
+});
+
+
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
 app.use(express.static(path.join(__dirname, 'dist')))
@@ -81,6 +90,30 @@ app.use('/ai', (req, res, next) => {
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     next();
+});
+
+
+app.get('/api/temp_data', (req, res) => {
+    const filePath = path.join(dataPath + `2024-10-14-AAPL.csv`);
+
+    // 修正 fs.readFile 调用，传递 'utf-8' 编码作为第二个参数
+    fs.readFile(filePath, 'utf-8', (err, signalData) => {
+        if (err) {
+            console.error('Error reading CSV file:', err);
+            return res.status(500).send('Error reading CSV file');
+        }
+
+        // 解析 CSV 数据
+        const resultDf = Papa.parse(signalData, {
+            header: true,        // 解析为键值对
+            skipEmptyLines: true, // 跳过空行
+            quoteChar: '"',      // 指定引号
+            delimiter: ',',      // 明确指定分隔符
+        });
+
+        console.log('Parsed data:', Array.isArray(resultDf.data), resultDf.data.length); // 检查解析的数据
+        res.json(resultDf.data);
+    });
 });
 
 
