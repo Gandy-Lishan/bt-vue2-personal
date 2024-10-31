@@ -177,11 +177,11 @@ export default {
             load: function (event) {
               var e = event.target.axes[0].getExtremes();
               this.defaultChartScale = [e.min, e.max];
-              // this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 50, 350, 120, 30)
-              //     .attr({
-              //         'opacity': 0.65
-              //     })
-              //     .add();
+              this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 0, 350, 120, 30)
+                  .attr({
+                      'opacity': 0.25
+                  })
+                  .add();
             },
           }
         };
