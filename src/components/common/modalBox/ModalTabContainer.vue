@@ -9,7 +9,7 @@
           lazy
         >
           <!-- 只有在激活状态下才插入内容 -->
-            <div v-if="activeTab === tab.name">
+            <div v-show="activeTab === tab.name">
             <slot :name="tab.slotName"></slot>
             </div>
         </el-tab-pane>

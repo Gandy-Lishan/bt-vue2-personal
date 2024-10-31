@@ -2,8 +2,8 @@
   <div style="width: 100%;">
     <!-- 添加下拉框 -->
     <div class="strategy-dropdown">
-      <label for="strategy-select">Select Strategy:</label>
-      <select v-model="selectedStrategyIndex" @change="loadChart">
+      <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
+      <select :value="selectedStrategyIndex" @change="loadChart">
         <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
           {{strategy.label}}
         </option>
@@ -20,18 +20,16 @@ import Highcharts from 'highcharts/highstock';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 import moment from 'moment'
+import { mapGetters, mapMutations } from "vuex";
 import {
   getSymbolStrategySigal
 } from '@/service/service'
 
 export default {
   name: 'StrategySigal',
-  // props: {
-  //   symbol: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  props: {
+    strategyIndex: Number
+  },
   data() {
     return {
       chart: null, // 存储图表实例
@@ -39,12 +37,26 @@ export default {
       symbol: CIQ.stxx.chart.symbol,
       strategies: [], // 保存从 API 获取的策略数据
       strategiesOptions: [],
-      selectedStrategyIndex: 0, // 保存选中的策略索引
+      selectedStrategyIndex: 0,
       trendScore: [],
     };
   },
   watch: {
     symbol: 'loadChart', // 监视 symbol 变化，重新加载图表
+    strategyIndex: {
+       handler(val) {
+        if(val != this.selectedStrategyIndex) {
+          this.$nextTick(async () => {
+            this.selectedStrategyIndex = val
+            await this.loadChart()
+          })
+        }
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...mapGetters(['getTradingSignalStrategies'])
   },
   mounted() {
     this.loadChart(); // 初次加载图表
@@ -56,7 +68,9 @@ export default {
   },
 
   methods: {
-    async loadChart() {
+    ...mapMutations('states',['SET_TRADING_SIGNAL_STRATEGY']),
+    async loadChart(e) {
+      if(e?.target?.value) this.$emit('changeStrategyIndex', e?.target?.value || 0)
       if (this.chart) {
         this.chart.destroy(); // 销毁旧图表
       }
@@ -76,6 +90,7 @@ export default {
           this.$emit('error');  // 向父组件发出 'error' 事件
         }else {
           this.strategies = signalData.data.data; // 保存所有策略数据
+          this.SET_TRADING_SIGNAL_STRATEGY(this.strategies)
           this.strategiesOptions = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
           this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
           this.updateChartWithSelectedStrategy();
@@ -374,5 +389,8 @@ export default {
 }
 .strategy-dropdown {
   margin-bottom: 15px;
+}
+select {
+  font-weight: bold !important;
 }
 </style>

@@ -367,17 +367,27 @@
 			<ModalBoxContainer :tabs="tabs">
 				<template #tab1>
 					<StrategySigal
+					:strategyIndex="strategyIndex"
+					@changeStrategyIndex="changeStrategyIndex"
 						@error="closeModal"
 					></StrategySigal>
 				</template>
 				<template #tab2>
-					<SummaryChart symbol="AAPL" @error="closeModal"></SummaryChart>
+					<SummaryChart symbol="AAPL" :strategyIndex="strategyIndex" @changeStrategyIndex="changeStrategyIndex" @error="closeModal"></SummaryChart>
 				</template>
 				<template #tab3>
-					<TradesTable @error="closeModal"></TradesTable>
+					<TradesTable 
+					:strategyIndex="strategyIndex"
+					@error="closeModal" 
+					@changeStrategyIndex="changeStrategyIndex"
+					></TradesTable>
 				</template>
 				<template #tab4>
-					<Description @error="closeModal"></Description>
+					<Description
+					:strategyIndex="strategyIndex"
+					@error="closeModal"
+					@changeStrategyIndex="changeStrategyIndex"
+					></Description>
 				</template>
 			</ModalBoxContainer>
 		</ModalBox>
@@ -426,6 +436,7 @@ export default class AdvancedChartComponent extends Vue {
 	routeName: string | null | undefined
 	modalContent: string | null = null
 	tabs: Array<any>
+	strategyIndex: number
 	
 	constructor() {
 		super()
@@ -434,7 +445,7 @@ export default class AdvancedChartComponent extends Vue {
         { label: 'Trading Strategy', name: 'tab1', slotName: 'tab1' },
         { label: 'Performance Summary', name: 'tab2', slotName: 'tab2' },
         { label: 'Trading Records', name: 'tab3', slotName: 'tab3' },
-		{ label: 'Description', name: 'tab4', slotName: 'tab4' },
+		{ label: 'Strategy Description', name: 'tab4', slotName: 'tab4' },
       ]
 		this.isCollapse = false 
 		this.resizeObserver = null
@@ -443,6 +454,7 @@ export default class AdvancedChartComponent extends Vue {
 		// 	bearish: true,
 		// }
 		this.routeName = this.$route.name
+		this.strategyIndex = 0
 	}
 
 	mounted() {
@@ -521,6 +533,9 @@ export default class AdvancedChartComponent extends Vue {
 		if (modal) {
 			modal.close(); // 确保 modal 存在后再调用 close 方法
 		}
+	}
+	changeStrategyIndex(index: number | string) {
+		this.strategyIndex = Number(index)
 	}
 
 	// initiate lastPrice and grid button

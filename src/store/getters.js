@@ -57,6 +57,7 @@ const getters = {
 	getCssMonthLabel: state => state.chart.cssMonthLabel,
 	getIndicatorPageBtv1List: state => state.chart.indicatorPageBtv1List,
 	getReportArchives: state => state.states.reportArchives,
+	getTradingSignalStrategies: state => state.states.tradingSignalStrategies,
 
 	// user
 	getIsAdmin: state => state.user.is_admin,

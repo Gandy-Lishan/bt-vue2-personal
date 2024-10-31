@@ -16,7 +16,8 @@ const state = {
 	isCreateLoading: false,
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
 	symbolUploadDomActive: false,
-	reportArchives: {}
+	reportArchives: {},
+	tradingSignalStrategies: []
 }
 
 const mutations = {
@@ -59,6 +60,9 @@ const mutations = {
 	},
 	SET_REPORT_ARCHIVES: (state, {service_type, archives}) => {
 		state.reportArchives[service_type] = JSON.stringify(archives)
+	},
+	SET_TRADING_SIGNAL_STRATEGY(state, data) {
+		state.tradingSignalStrategies = data
 	},
 }
 

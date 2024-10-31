@@ -2,46 +2,46 @@
   <div style="width: 100%;">
     <!-- 添加下拉框 -->
     <div class="strategy-dropdown">
-      <label for="strategy-select">Select Strategy:</label>
-      <select v-model="selectedStrategyIndex" @change="renderChart">
-        <option v-for="(strategy, index) in strategies" :key="index" :value="strategy.value">
+      <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
+      <select :value="selectedStrategyIndex" @change="renderChart">
+        <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
           {{strategy.label}}
         </option>
       </select>
     </div>
     <!-- Summary Container -->
     <div v-loading="loading" class="perfomance-chart page-content-wrapper">
-    <div id="summaryChart"  style="height: 700px;"></div>
+    <div id="summaryChart"  style="height: 450px;"></div>
     <div class="summary-table" v-if="resultDf">
       <div class="table">
         <table class="threshold-table sum-threshold-table" style="width: 100%;">
           <thead>
           <tr>
             <th></th>
-            <th>Buy & Hold</th>
-            <th>Strategy</th>
+            <th v-for="(key, keyIndex) in columns" :key="keyIndex" style="text-align: center">
+              <b>{{key}}</b>
+            </th>
           </tr>
           </thead>
           <tbody>
-          <template v-for="(key, keyIndex) in Object.keys(resultDf)">
-            <tr :key="keyIndex">
-              <template v-if="key.includes('Symbol ')">
-                <td><b>{{key.replace('Symbol ', '')}}</b></td>
-                <td>{{resultDf[key.replace('Symbol', 'Benchmark')]}}</td>
-                <td>{{resultDf[key]}}</td>
+            <tr style="text-align: center">
+              <template v-for="(key, keyIndex) in columns">
+                <template>
+                <td v-if="keyIndex === 0" :key="keyIndex" style="text-align: left"><b>Buy & Hold</b></td>
+                <td :key="keyIndex">{{resultDf[`Benchmark ${key}`]}}</td>
+              </template>
               </template>
             </tr>
-          </template>
+            <tr style="text-align: center">
+              <template v-for="(key, keyIndex) in columns">
+                <template>
+                <td v-if="keyIndex === 0" :key="keyIndex" style="text-align: left"><b>Strategy</b></td>
+                <td :key="keyIndex">{{resultDf[`Symbol ${key}`]}}</td>
+              </template>
+              </template>
+            </tr>
         </tbody>
         </table>
-      </div>
-      <div class="strategiesDes">
-      <template v-for="(ele, i) in strategiesDes">
-        <h3 :key="i" v-html="ele.Strategy_name"></h3>
-        <div :key="i" v-html="ele.Description"></div>
-        <h3 :key="i">Model's rules</h3>
-        <div :key="i" v-html="ele.Rules"></div>
-      </template>
       </div>
     </div>
     </div>
@@ -54,23 +54,42 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 import { getSymbolStrategySigal } from "@/service/service";
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { mapGetters } from "vuex";
 import signal_desc from "./signal_desc.json";
 
 export default {
  name: 'summaryChart',
+ props: {
+  strategyIndex: Number
+ },
  data() {
   return {
    resultDf: null,
    loading: true,
    symbol: CIQ.stxx.chart.symbol,
    strategies: [], // 保存从 API 获取的策略数据
-   selectedStrategyIndex: 0, // 保存选中的策略索引
-   strategiesDes: []
+   selectedStrategyIndex: 0,
+   strategiesOptions: [],
+   columns: ['Total Trading Days', 'Buy Signal', 'Exposure', 'Signal Return', 'Max Drawdown']
   }
  },
  watch: {
     // 监视 symbol 变化，重新加载图表
     symbol: 'loadChart',
+    strategyIndex: {
+       handler(val) {
+        if(val != this.selectedStrategyIndex) {
+          this.$nextTick(async () => {
+            this.selectedStrategyIndex = val
+            await this.renderChart()
+          })
+        }
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...mapGetters(['getTradingSignalStrategies'])
   },
  async mounted() {
    Exporting(Highcharts);
@@ -79,20 +98,26 @@ export default {
    try {
     await this.renderChart();
    } catch (error) {
+    console.log(error)
     this.$emit('error');  // 向父组件发出 'error' 事件
    }
  },
  methods: {
-   async renderChart() {
-    const signalData = await getSymbolStrategySigal(this.symbol);
-    this.strategies = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
-    const resultDf = signalData.data.data.map(item => {
-      item['Cumulative Json'] = item['Cumulative Json'].replace(/NaN/g, 'null')
+   async renderChart(e) {
+    if(e?.target?.value) this.$emit('changeStrategyIndex', e?.target?.value || 0)
+    this.strategies = this.getTradingSignalStrategies
+    this.strategiesOptions = this.strategies.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
+    let resultDf = this.strategies
+    try {
+      resultDf = this.strategies.map(item => {
+      item['Cumulative Json'] =  item['Cumulative Json'].replace(/NaN/g, 'null')
       item['Cumulative Json'] = JSON.parse(item['Cumulative Json']);
       item['EntryDate'] = eval(item['EntryDate'])
       item['ExitDate'] = eval(item['ExitDate'])
       return item
     })
+    } catch (error) {
+    }
     console.log('resultDf', resultDf)
     this.updateChartWithSelectedStrategy(resultDf)
      this.loading = false
@@ -102,7 +127,6 @@ export default {
      _this.$nextTick(() => {
       _this.resultDf = resultDf.map((item,index) => {
        if(index === _this.selectedStrategyIndex) {
-        _this.strategiesDes = signal_desc.filter(ele => ele.Strategy_name.toLowerCase() === item.Signal.toLowerCase())
         return {
         ['Symbol Total Trading Days']: item['Symbol Total Trading Days'],
         ['Symbol Buy Signal']: item['Symbol Buy Signals'],
@@ -137,57 +161,44 @@ export default {
       return result;
     }
     const data = processCumulativeJson(resultDf, ['Date', 'Strategy Cumulative', 'Strategy Cumulative', 'Strategy Cumulative', 'Buy and Hold Cumulative']);
-    console.log('lishan-data', data)
     const date = data[0];
     const benchmark = data[1];
     const data1 = data[2];
     const data2 = data[3];
     const data3 = data[4];
     let series = [
-      //  {
-      //    name: 'Strategy_1 (%)',
-      //    data: date.map((d, i) => [d, data1[i]]),
-      //    color: '#1f77b4'
-      //  },
-      //  {
-      //    name: 'Strategy_2 (%)',
-      //    data: date.map((d, i) => [d, data2[i]]),
-      //    color: '#ff7f0e'
-      //  },
-      //  {
-      //    name: 'Strategy_3 (%)',
-      //    data: date.map((d, i) => [d, data3[i]]),
-      //    color: '#2ca02c'
-      //  },
        {
          name: 'Benchmark (%)',
          data: date.map((d, i) => [d, benchmark[i]]),
          color: '#7f7f7f'
        }
      ]
-     const name = _this.strategies.find(item => item.value == _this.selectedStrategyIndex)?.label
+     const name = _this.strategiesOptions.find(item => item.value == _this.selectedStrategyIndex)?.label
      if(_this.selectedStrategyIndex === 0) {
       series = [
+      ...series,
        {
          name,
          data: date.map((d, i) => [d, data1[i]]),
          color: '#1f77b4'
-       },...series]
+       }]
      }else if(_this.selectedStrategyIndex === 1) {
       series = [
+      ...series,
        {
          name,
          data: date.map((d, i) => [d, data2[i]]),
          color: '#ff7f0e'
-       },...series]
+       }]
      }else if(_this.selectedStrategyIndex === 2) {
       series = [
+      ...series,
        {
          name,
          data: date.map((d, i) => [d, data3[i]]),
          color: '#2ca02c'
-       },
-       ...series]
+       }
+       ]
      }
 
      const createChart = (series) => {
@@ -432,27 +443,15 @@ export default {
 <style lang="less" scoped>
 .perfomance-chart {
  overflow: hidden;
- display: grid;
- grid-template-columns: 60% 40%;
  background-color: #fff;
- margin-top: 35px;
  #summaryChart {
   // border: 1px solid #ccc;
  }
 }
-.strategy-signal--chartcontainer {
-  width: 100%;
-  height: 500px;
-}
-.strategy-dropdown {
-  margin-bottom: 15px;
-}
 .sum-threshold {
   width: 100%;
 }
-.summary-table {
-  display: grid;
-  flex-direction: column;
-  justify-content: space-between;
+select {
+  font-weight: bold !important;
 }
 </style>

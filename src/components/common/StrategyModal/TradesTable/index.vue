@@ -2,7 +2,7 @@
     <div style="width: 100%;">
         <!-- 添加下拉框 -->
         <div class="strategy-dropdown">
-        <label for="strategy-select">Select Strategy:</label>
+        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
         <select v-model="selectedStrategyIndex" @change="loadTable">
             <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
                 {{strategy.label}}
@@ -90,12 +90,13 @@
 
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js/components'
-import {
-  getSymbolStrategySigal
-} from '@/service/service'
+import { mapGetters } from "vuex";
 
 export default {
 	name: 'Summary',
+    props: {
+        strategyIndex: Number
+    },
 	data() {
 		return {
             queryInfo: {
@@ -126,17 +127,32 @@ export default {
         //     this.$emit('error');  // 向父组件发出 'error' 事件
         // }
     },
+    watch: {
+        strategyIndex: {
+        handler(val) {
+            if(val != this.selectedStrategyIndex) {
+            this.$nextTick(async () => {
+                this.selectedStrategyIndex = val
+                await this.loadTable()
+            })
+            }
+        },
+        immediate: true
+        }
+    },
     computed: {
-		// Filtered and paginated data to be displayed in the table
-		paginatedData() {
-			return this.processedTradesData.slice(
+        ...mapGetters(['getTradingSignalStrategies']),
+        // Filtered and paginated data to be displayed in the table
+        paginatedData() {
+            return this.processedTradesData.slice(
                 this.queryInfo.size * (this.queryInfo.page - 1),
                 this.queryInfo.page * this.queryInfo.size
             )
-		},
+        },
 	},
 	methods: {
-        async loadTable() {
+        async loadTable(e) {
+            if(e?.target?.value) this.$emit('changeStrategyIndex', e?.target?.value || 0)
             if (this.strategies.length > 0) {
                 this.updateTableWithSelectedStrategy(); // 根据当前选择的策略更新图表
                 this.loading = false;
@@ -144,16 +160,10 @@ export default {
             }
 
             try {
-                const signalData = await getSymbolStrategySigal(this.symbol);
-                if(signalData.data.status == 504) {
-                this.popUpMsgBox(signalData.data.msg)
-                this.$emit('error');  // 向父组件发出 'error' 事件
-                }else {
-                this.strategies = signalData.data.data; // 保存所有策略数据
-                this.strategiesOptions = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
+                this.strategies = this.getTradingSignalStrategies // 保存所有策略数据
+                this.strategiesOptions = this.strategies.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
                 this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
                 this.updateTableWithSelectedStrategy();
-                }
             } catch (error) {
                 console.error(`Error fetching data for symbol: ${this.symbol}`, error);
                 this.$emit('error');  // 向父组件发出 'error' 事件
@@ -207,5 +217,8 @@ export default {
 }
 .trades-table{
     margin-top: 20px;
+}
+select {
+  font-weight: bold !important;
 }
 </style>
