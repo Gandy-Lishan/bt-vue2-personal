@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span" v-show="(!showReport && !showRelated)">
-      <span>{{ label }}</span>
+      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
