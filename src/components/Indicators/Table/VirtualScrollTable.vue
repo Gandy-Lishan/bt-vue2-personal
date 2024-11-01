@@ -128,7 +128,6 @@
           <template v-for="l in columns">
             <el-table-column
               :key="l.label"
-              :label="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -137,8 +136,11 @@
               sortable="custom"
               :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
             >
+            <template #header>
+              <span v-html="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"></span>
+            </template>
             <template slot-scope="scope">
-              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SPTrend') || (l.value === 'market_symbol' && l.type === 'SPTrend')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SP1500Score') || (l.value === 'market_symbol' && l.type === 'SP1500Score')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
@@ -216,7 +218,9 @@ export default {
       timeframeFilter: '',
       indicatorFilter: '',
       searchInput: '',
-      filterData: []
+      filterData: [],
+      hideColumn: true,
+      columnsMap: new Map(),
     }
   },
   computed: {
@@ -231,7 +235,7 @@ export default {
       return this.loading
     },
     columns() {
-      const columnsMap = new Map(([
+      this.columnsMap = new Map(([
         ['stockColumns', 
           [
             {
@@ -266,7 +270,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -370,20 +375,20 @@ export default {
             }
             ]
         ],
-        ['SPTrendColumns', 
+        ['SP1500ScoreColumns', 
           [
             {
               key: 'market_symbol',
               label: 'Symbol',
               value: 'market_symbol',
-              type: 'SPTrend',
+              type: 'SP1500Score',
               minWidth: '90px'
             },
             {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              type: 'SPTrend',
+              type: 'SP1500Score',
               minWidth: '130px'
             },
             {
@@ -394,22 +399,96 @@ export default {
             {
               key: 'trend_five_day_score_chg',
               label: 'Trend 5-Day Score Change',
-              value: 'trend_five_day_score_chg'
+              value: 'trend_five_day_score_chg',
+              minWidth: '90px'
             },
             {
               key: 'reltrend_last_value',
               label: 'RelTrend Score',
-              value: 'reltrend_last_value'
+              value: 'reltrend_last_value',
+              minWidth: '90px'
             },
             {
               key: 'reltrend_five_day_score_chg',
               label: 'RelTrend 5-Day Score Change',
-              value: 'reltrend_five_day_score_chg'
+              value: 'reltrend_five_day_score_chg',
+              minWidth: '90px'
+            },
+            {
+              key: 'close_over_ma1',
+              label: 'Moving Average Trend<br/>(50-Day Average)',
+              value: 'close_over_ma1',
+              hideColumn: true,
+              minWidth: '160px'
+            },
+            {
+              key: 'close_over_ma2',
+              label: 'Moving Average Trend<br/>(100-Day Average)',
+              value: 'close_over_ma2',
+              hideColumn: true,
+              minWidth: '160px'
+            },
+            {
+              key: 'close_over_ma3',
+              label: 'Moving Average Trend<br/>(200-Day Average)',
+              value: 'close_over_ma3',
+              hideColumn: true,
+              minWidth: '145px'
+            },
+            {
+              key: 'ma1_over_ma2',
+              label: 'Moving Average Crossover Trend<br/>(50-Day vs 100-Day)',
+              value: 'ma1_over_ma2',
+              hideColumn: true,
+              minWidth: '160px'
+            },
+            {
+              key: 'ma1_over_ma3',
+              label: 'Moving Average Crossover Trend<br/>(50-Day vs 200-Day)',
+              value: 'ma1_over_ma3',
+              hideColumn: true,
+              minWidth: '160px'
+            },
+            {
+              key: 'ma2_over_ma3',
+              label: 'Moving Average Crossover Trend<br/>(100-Day vs 200-Day)',
+              value: 'ma2_over_ma3',
+              hideColumn: true,
+              minWidth: '160px'
+            },
+            {
+              key: 'ma1_over_ma1p',
+              label: 'Moving Average Slope Trend<br/>(50-Day Average)',
+              value: 'ma1_over_ma1p',
+              hideColumn: true,
+              minWidth: '145px'
+            },
+            {
+              key: 'ma2_over_ma2p',
+              label: 'Moving Average Slope Trend<br/>(100-Day Average)',
+              value: 'ma2_over_ma2p',
+              hideColumn: true,
+              minWidth: '145px'
+            },
+            {
+              key: 'ma3_over_ma3p',
+              label: 'Moving Average Slope Trend<br/>(200-Day Average)',
+              value: 'ma3_over_ma3p',
+              hideColumn: true,
+              minWidth: '145px'
+            },
+            {
+              key: 'channel_trend',
+              label: 'Channel Trend',
+              value: 'channel_trend',
+              hideColumn: true,
+              minWidth: '90px'
             },
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             }
             ]
         ],
@@ -1028,19 +1107,23 @@ export default {
           ]
         ],
       ]))
-      const columns = columnsMap.get(`${this.checkedType}Columns`)
+      const columnsMap = this.columnsMap
+      let _checkedType = this.checkedType
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
+      if(isStockTrend) _checkedType = 'SP1500Score'
+      const columns = columnsMap.get(`${_checkedType}Columns`)
       if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
-      if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
-      if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
+      if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
-      if(this.checkedType === 'SPTrend') simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
+      if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
-        if(item.key === 'chart_name' && this.checkedType !== 'SPTrend') item.minWidth = '200px'
+        if(item.key === 'chart_name' && !isStockTrend) item.minWidth = '200px'
         return item
       })
       return columns
@@ -1509,7 +1592,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
@@ -1612,9 +1695,24 @@ export default {
           type: 'SP1500'
         },
         {
-          label: 'Absolute and Relative Trend Scores',
-          value: 'sp_1500_trend_reltrend',
-          type: 'SPTrend'
+          label: 'S&P 1500 Scores',
+          value: 'sp1500',
+          type: 'SP1500Score'
+        },
+        {
+          label: 'S&P 500 Scores',
+          value: 'spx',
+          type: 'SP500Score'
+        },
+        {
+          label: 'NDX 100 Scores',
+          value: 'ndx',
+          type: 'NDX100Score'
+        },
+        {
+          label: 'Equity ETF Scores',
+          value: 'etf',
+          type: 'equityETFScore'
         },
         {
           label: 'Bond Market Sentiment',
@@ -1730,7 +1828,7 @@ export default {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      if(type === 'sp_1500_trend_reltrend') {
+      if(['sp1500', 'spx', 'etf', 'ndx'].includes(type)) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
@@ -1738,6 +1836,16 @@ export default {
         ['trend_five_day_score_chg', 'Trend 5-Day Score Change'],
         ['reltrend_last_value', 'RelTrend Score'],
         ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change'],
+        ['close_over_ma1', 'Moving Average Trend (50-Day Average)'],
+        ['close_over_ma2', 'Moving Average Trend (100-Day Average)'],
+        ['close_over_ma3', 'Moving Average Trend (200-Day Average)'],
+        ['ma1_over_ma2', 'Moving Average Crossover Trend (50-Day vs 100-Day)'],
+        ['ma1_over_ma3', 'Moving Average Crossover Trend (50-Day vs 200-Day)'],
+        ['ma2_over_ma3', 'Moving Average Crossover Trend (100-Day vs 200-Day)'],
+        ['ma1_over_ma1p', 'Moving Average Slope Trend (50-Day Average)'],
+        ['ma2_over_ma2p', 'Moving Average Slope Trend (100-Day Average)'],
+        ['ma3_over_ma3p', 'Moving Average Slope Trend (200-Day Average)'],
+        ['channel_trend', 'Channel Trend'],
         ['last_update', 'Date']
       ])
       keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Date']
@@ -1853,11 +1961,10 @@ export default {
     // 使用反斜杠转义特殊字符
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    },
+    }
   }
 }
 </script>
-
 <style lang="less" scoped>
 .virtualScroll {
   position: relative;
@@ -1873,6 +1980,9 @@ export default {
   border: 2px solid  #e9e9e9;
   /deep/ .el-button--text {
     color: rgb(31, 119, 180);
+  }
+  /deep/ .el-table--scrollable-x .el-table__body-wrapper {
+    overflow-x: scroll !important;
   }
 }
 
