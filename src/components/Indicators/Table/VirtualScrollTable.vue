@@ -1848,7 +1848,12 @@ export default {
         ['channel_trend', 'Channel Trend'],
         ['last_update', 'Date']
       ])
-      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Date']
+      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 
+      'Moving Average Trend (50-Day Average)', 'Moving Average Trend (100-Day Average)', 'Moving Average Trend (200-Day Average)',
+      'Moving Average Crossover Trend (50-Day vs 100-Day)', 'Moving Average Crossover Trend (50-Day vs 200-Day)',
+      'Moving Average Crossover Trend (100-Day vs 200-Day)', 'Moving Average Slope Trend (50-Day Average)',
+      'Moving Average Slope Trend (100-Day Average)', 'Moving Average Slope Trend (200-Day Average)',
+      'Channel Trend', 'Date']
       }
 
 			const processedData = data.map(item => {
