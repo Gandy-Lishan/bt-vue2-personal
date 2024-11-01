@@ -1088,6 +1088,19 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover > sp
   background-position: -2071px -25px;
 }
 
+.trading-signal span {
+  background-image: url(img/trading-signal.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-position-y: 4px;
+}
+.performance-summary span {
+  background-image: url(img/performance-summary.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-position-y: 3px;
+}
+
 .grid span {
     background-position: -1443px -25px;
 }

@@ -6,7 +6,7 @@
         <slot></slot>
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   export default {
@@ -49,10 +49,10 @@
 
   .modal-content {
     background: #fff;
-    padding: 24px;
+    padding: 45px 70px 25px 70px;
     border-radius: 16px;
     position: relative;
-    max-width: 893;
+    max-width: 893px;
     width: 100%;
     box-shadow: 34px 4px 74px -24px #38327c14;
     display: flex;
@@ -61,6 +61,34 @@
     justify-content: center;
   }
   
+  /* 大屏幕 */
+@media (min-width: 1201px) {
+  .modal-content {
+    max-width: 1000px; /* 大屏幕最大宽度 */
+  }
+}
+
+/* 中等屏幕 */
+@media (max-width: 1200px) {
+  .modal-content {
+    max-width: 800px; 
+  }
+}
+
+/* 小屏幕 */
+@media (max-width: 992px) {
+  .modal-content {
+    max-width: 600px; 
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%; 
+  }
+}
+
   .close-button {
     position: absolute;
     top: 24px;
@@ -70,14 +98,14 @@
     font-size: 20px;
     cursor: pointer;
 
-    color: #6b7094;
+    color: #6b8494;
     transition: color .2s;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .close-button:hover{
-    color: #642eff;
+    color: #5b9bd1;
   }
   </style>
   

@@ -1680,3 +1680,20 @@ if (queryParams) {
 	})
 }
 /* Blog Report END*/
+/**
+ * 
+ * @returns 
+ */
+export function getSymbolStrategySigal(symbol) {
+	let url = `/dev/dev/symbolstrategysigal/?symbol_url=${symbol}&trend=1`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

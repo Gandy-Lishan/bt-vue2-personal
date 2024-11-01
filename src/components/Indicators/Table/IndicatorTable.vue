@@ -13,13 +13,13 @@
          :ref="item.refName"
          @updateChart="updateChart" 
          @showDetails="showDetails"
-         :style="{ width: (enlargedTable === item.label) ? ((checkedType !== 'TrendSector') ? (checkedType !==  'SPTrend' ? '60%' : '50%') : '100%') : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
+         :style="{ width: (enlargedTable === item.label) ? ((checkedType !== 'TrendSector') ? (checkedType !==  'Stock Trend' ? '60%' : '50%') : '100%') : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" :style="{width: (checkedType !== 'SPTrend' && !isShowDetails) ? '60%' : '50%'}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'SPTrend' && !isShowDetails) ? '40%' : '50%' }" @passIndicatorData="passIndicatorData"></Chart>
-      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'SPTrend' && !isShowDetails) ? '40%' : '50%' }"></SeasonalityChart>
+      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :checkedTitle="checkedTitle" :style="{width: (checkedType !== 'Stock Trend' && !isShowDetails) ? '60%' : '50%'}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'Stock Trend' && !isShowDetails) ? '40%' : '50%' }" @passIndicatorData="passIndicatorData"></Chart>
+      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: (checkedType !== 'Stock Trend' && !isShowDetails) ? '40%' : '50%' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
   </div>
@@ -175,22 +175,40 @@ export default {
           ]
         },
         {
-          label: 'Stock Trend',
-          type: 'SPTrend',
-          refName: 'SPTrendVirtualScroll',
+          label: 'Absolute and Relative Trend Scores',
+          type: 'SP1500Score',
+          refName: 'SP1500ScoreVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
             {
-              label: 'Absolute and Relative Trend Scores',
-              value: 'SPTrend',
-              type: 'SPTrend',
-              url: 'sp_1500_trend_reltrend'
+              label: 'S&P 1500 Scores',
+              value: 'SP1500Score',
+              type: 'SP1500Score',
+              url: 'sp1500'
             },
             {
-              label: 'S&P 500 Sector Trend Score Summary',
+              label: 'S&P 500 Scores',
+              value: 'SP500Score',
+              type: 'SP1500Score',
+              url: 'spx'
+            },
+            {
+              label: 'NDX 100 Scores',
+              value: 'NDX100Score',
+              type: 'SP1500Score',
+              url: 'ndx'
+            },
+            {
+              label: 'Equity ETF Scores',
+              value: 'equityETFScore',
+              type: 'SP1500Score',
+              url: 'etf'
+            },
+            {
+              label: 'Sector Summary',
               value: 'TrendSector',
-              type: 'SPTrend',
+              type: 'SP1500Score',
               url: 'sector_trend_score'
             }
           ]
