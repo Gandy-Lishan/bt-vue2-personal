@@ -158,14 +158,14 @@ export default {
             return
           }
         }
-        const {type, groups} = res
+        const {type, groups, sub_type} = res
         let requireUrl = ''
         if(type === 'stock_nasdaq') {
           requireUrl = 'ndx_100_complete_list'
         }else if(type === 'stock_sent') {
           requireUrl = 'sp_1500_complete_list'
-        }else if(type === 'trend_reltrend') {
-          requireUrl = 'sp_1500_trend_reltrend'
+        }else if(groups === 'trend_reltrend') {
+          requireUrl = 'trend_reltrend' // todo lishan
         }else if(type === 'etf_opt') {
           requireUrl = 'etf_breadth'
         }else if(type === 'etf_fund') {

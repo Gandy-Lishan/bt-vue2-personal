@@ -58,7 +58,10 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
-        SPTrend: 'sp_1500_trend_reltrend',
+        SP1500Score: 'sp1500',
+        SP500Score: 'spx',
+        NDX100Score: 'ndx',
+        equityETFScore: 'etf',
         TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
@@ -249,7 +252,7 @@ export default {
       if(this.$refs['virtualScroll'].enlarged) {
         await this.$refs['virtualScroll']._toggleEnlarge()
       }
-    }
+    },
   }
 
 }
