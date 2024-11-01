@@ -1,14 +1,5 @@
 <template>
     <div style="width: 100%;">
-        <!-- 添加下拉框 -->
-        <div class="strategy-dropdown">
-        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
-        <select v-model="selectedStrategyIndex" @change="loadTable">
-            <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-                {{strategy.label}}
-            </option>
-        </select>
-        </div>
         <div class="trades-container history-container">
             <el-table
                 :data="paginatedData"

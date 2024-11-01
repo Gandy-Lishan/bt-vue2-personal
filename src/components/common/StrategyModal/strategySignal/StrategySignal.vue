@@ -1,14 +1,5 @@
 <template>
   <div style="width: 100%;">
-    <!-- 添加下拉框 -->
-    <div class="strategy-dropdown">
-      <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
-      <select :value="selectedStrategyIndex" @change="loadChart">
-        <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-          {{strategy.label}}
-        </option>
-      </select>
-    </div>
     <!-- 图表容器 -->
     <div v-loading="loading" class="strategy-signal--chartcontainer" ref="strategySignalChartcontainer"></div>
   </div>
@@ -92,6 +83,7 @@ export default {
           this.strategies = signalData.data.data; // 保存所有策略数据
           this.SET_TRADING_SIGNAL_STRATEGY(this.strategies)
           this.strategiesOptions = signalData.data.data.map(item => (item.Signal)).map((ele,i) => ({label: ele, value: i}))
+          this.$emit('getStrategiesOptions', this.strategiesOptions)
           this.trendScore = JSON.parse(this.strategies[0].trend_score)  // trendScore只存在第一个Strategy内并且通用, 所以作为唯一变量储存
           this.updateChartWithSelectedStrategy();
         }
@@ -387,11 +379,5 @@ export default {
 .strategy-signal--chartcontainer {
   width: 100%;
   height: 500px;
-}
-.strategy-dropdown {
-  margin-bottom: 15px;
-}
-select {
-  font-weight: bold !important;
 }
 </style>

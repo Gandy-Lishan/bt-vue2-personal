@@ -1,14 +1,5 @@
 <template>
   <div style="width: 100%;">
-    <!-- 添加下拉框 -->
-    <div class="strategy-dropdown">
-      <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
-      <select :value="selectedStrategyIndex" @change="renderChart">
-        <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-          {{strategy.label}}
-        </option>
-      </select>
-    </div>
     <!-- Summary Container -->
     <div v-loading="loading" class="perfomance-chart page-content-wrapper">
     <div id="summaryChart"  style="height: 450px;"></div>
@@ -55,7 +46,6 @@ import ExportData from 'highcharts/modules/export-data';
 import { getSymbolStrategySigal } from "@/service/service";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from "vuex";
-import signal_desc from "./signal_desc.json";
 
 export default {
  name: 'summaryChart',
@@ -94,7 +84,6 @@ export default {
  async mounted() {
    Exporting(Highcharts);
    ExportData(Highcharts);
-   console.log('initialize Summary Chart!', 'signal_desc', signal_desc)
    try {
     await this.renderChart();
    } catch (error) {

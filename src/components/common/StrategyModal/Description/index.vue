@@ -1,14 +1,5 @@
 <template>
     <div style="width: 100%;">
-        <!-- 添加下拉框 -->
-        <div class="strategy-dropdown">
-        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
-        <select v-model="selectedStrategyIndex" @change="loadTable">
-            <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-              {{strategy.label}}
-            </option>
-        </select>
-        </div>
         <div class="description-container">
             <h3>{{descItem.Strategy_name}}</h3>
             <div v-html="descItem.Description" style="font-weight: bold;"></div>
@@ -222,7 +213,6 @@ export default {
 
 <style lang="less" scoped>
 .description-container {
-    margin-top: 3rem;
     margin-bottom: 3rem;
 
     display: flex;

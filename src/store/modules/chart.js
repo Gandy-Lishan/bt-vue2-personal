@@ -769,7 +769,10 @@ get_indicator_page_btv1_list({ commit }) {
 	async fetchIndicatorsPageList({ commit, dispatch, state }, url) {
 		if (!state.indicatorsPageListdata[url]) {
 			try {
-				let response = await obtainIndicatorsList(url);
+				let requestUrl = url
+				// 替换板块的 url
+				if(['spx', 'ndx', 'etf', 'sp1500'].includes(url)) requestUrl = `trend_reltrend?index=${url}`
+				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
 				if(url === 'commod_sentiment_seasonality') {
           const {month, screen_data} = _results
