@@ -1,14 +1,5 @@
 <template>
     <div style="width: 100%;">
-        <!-- 添加下拉框 -->
-        <div class="strategy-dropdown">
-        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">Select Strategy:</label>
-        <select v-model="selectedStrategyIndex" @change="loadTable">
-            <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-              {{strategy.label}}
-            </option>
-        </select>
-        </div>
         <div class="description-container">
             <h3>{{descItem.Strategy_name}}</h3>
             <div v-html="descItem.Description" style="font-weight: bold;"></div>
@@ -151,7 +142,7 @@ export default {
               },
               {
                 "Strategy_name": "Symbol 4-Week High",
-                "Description": "Symbol 4-Week High refers to the highest Symbol Close at which a symbol has traded in the last 4-Week (1 month). <br/>It is a shorter-term technical indicator that gives an idea of a symbol's recent price performance. <br/>Symbols that make new four-week highs are often seen as having positive short-term momentum because they are trading at the highest <br/>price levels of the past month.",
+                "Description": "Symbol 4-Week High refers to the highest Symbol Close at which a symbol has traded in the last 4-Week (1 month). <br/>It is a shorter-term technical indicator that gives an idea of a symbol's recent price performance. <br/>Symbols that make new four-week highs are often seen as having positive short-term momentum because they are trading at the highest price levels of the past month.",
                 "Rules": "1. If the Symbol Close of the symbol reaches its 4-Week high, then BUY.<br/>2. SELL after 21 trading days"
               },
               {
@@ -222,7 +213,6 @@ export default {
 
 <style lang="less" scoped>
 .description-container {
-    margin-top: 3rem;
     margin-bottom: 3rem;
 
     display: flex;

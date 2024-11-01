@@ -362,12 +362,31 @@
 		<!-- last signal marker -->
 		<div id="stxForecast" class="forecast"></div>
 		</div>
-
-		<ModalBox ref="modalBox">
+		<ModalBox ref="modalBox">	
+			<div class="strategy-dropdown" style="float: left;">
+        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">
+					Select Strategy:
+					<el-tooltip effect="dark" placement="top" style="display: inline">
+						<span slot="content">
+							Trading Signal is the outcome of a three-year backtesting process conducted on 26 strategies specifically tailored to a particular symbol,<br/>
+							from which the top three performing strategies were meticulously chosen.<br/>
+							By selecting a strategy, you can delve into more detailed information about how that symbol performed under that specific strategy.<br/>
+							Tip: The background color of the Trading Signal chart changes based on the Trend Score. For more insights into the Trend Score, <a href="https://users.sentimentrader.com/users/trend_reltrend/sp1500/">click here</a>.
+						</span>
+						<i class="iconfont icon-wenhao"></i>
+					</el-tooltip>
+				</label>
+        <select v-model="strategyIndex">
+          <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
+            {{strategy.label}}
+          </option>
+        </select>
+      </div>
 			<ModalBoxContainer :tabs="tabs">
 				<template #tab1>
 					<StrategySigal
 					:strategyIndex="strategyIndex"
+					@getStrategiesOptions="getStrategiesOptions"
 					@changeStrategyIndex="changeStrategyIndex"
 						@error="closeModal"
 					></StrategySigal>
@@ -390,6 +409,7 @@
 					></Description>
 				</template>
 			</ModalBoxContainer>
+			<p style="font-weight: bold;">Disclaimer: Past backtest does not guarantee future results, please be mindful that investing carries inherent risks.</p>
 		</ModalBox>
 	</cq-context>
 </template>
@@ -411,6 +431,7 @@ import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.v
 import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
 import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
 import Description from '@/components/common/StrategyModal/Description/index.vue'
+import { getSymbolStrategySigal } from '@/service/service'
 
 @Component({
   components: {
@@ -426,6 +447,7 @@ export default class AdvancedChartComponent extends Vue {
 	
 	@Prop() config: any
 	@Prop({ type: Function, default: ({}) => {} }) chartInitialized!: Function
+	@Prop() selectedStrategyIndex: any
 
 	@Ref('container') container!: HTMLElement
 
@@ -437,6 +459,7 @@ export default class AdvancedChartComponent extends Vue {
 	modalContent: string | null = null
 	tabs: Array<any>
 	strategyIndex: number
+	strategiesOptions: {label: string, value: number}[]
 	
 	constructor() {
 		super()
@@ -445,7 +468,7 @@ export default class AdvancedChartComponent extends Vue {
         { label: 'Trading Strategy', name: 'tab1', slotName: 'tab1' },
         { label: 'Performance Summary', name: 'tab2', slotName: 'tab2' },
         { label: 'Trading Records', name: 'tab3', slotName: 'tab3' },
-		{ label: 'Strategy Description', name: 'tab4', slotName: 'tab4' },
+				{ label: 'Strategy Description', name: 'tab4', slotName: 'tab4' },
       ]
 		this.isCollapse = false 
 		this.resizeObserver = null
@@ -455,9 +478,10 @@ export default class AdvancedChartComponent extends Vue {
 		// }
 		this.routeName = this.$route.name
 		this.strategyIndex = 0
+		this.strategiesOptions = [{label: '- Select Strategy -', value: 0}]
 	}
 
-	mounted() {
+	async mounted() {
 		const config = this.config || getCustomConfig()
 		
 		const container = this.container
@@ -518,9 +542,10 @@ export default class AdvancedChartComponent extends Vue {
 
 			this.symbolMutationObserver()
 			this.initializeReportsFilter()
-		}, 0)			
-	}
+		}, 0)
 
+		await this.getSymbolStrategyData()
+	}
 	openModal(contentType: string) {
       this.modalContent = contentType; // 设置要显示的内容
 	  const modal = this.$refs.modalBox as any;
@@ -728,6 +753,9 @@ export default class AdvancedChartComponent extends Vue {
 		// 以上述配置开始观察目标节点
 		observer.observe(targetNode, config);
 	}
+	getStrategiesOptions(options: {label: string, value: number}[]) {
+		this.strategiesOptions = options
+	}
 }
 
 /**
@@ -756,3 +784,11 @@ function dialogPortalized(el: Element) {
 	return result
 }
 </script>
+<style lang="less" scoped>
+.strategy-dropdown {
+  margin-bottom: 15px;
+}
+select {
+  font-weight: bold !important;
+}
+</style>
