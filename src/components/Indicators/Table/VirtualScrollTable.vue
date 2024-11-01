@@ -392,6 +392,12 @@ export default {
               minWidth: '130px'
             },
             {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
               key: 'trend_last_value',
               label: 'Trend Score',
               value: 'trend_last_value'
@@ -482,12 +488,6 @@ export default {
               label: 'Channel Trend',
               value: 'channel_trend',
               hideColumn: true,
-              minWidth: '90px'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update',
               minWidth: '90px'
             }
             ]
