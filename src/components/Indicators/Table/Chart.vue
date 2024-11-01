@@ -55,7 +55,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels' || type === 'trend_reltrend') return
+            if(url === 'smart_dumb' || url === 'risk_levels' || type.includes('trend_reltrend')) return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
@@ -96,7 +96,7 @@
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
           }
           let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
-          if(sub_type === 'trend_reltrend') {
+          if(sub_type.includes('trend_reltrend')) {
             if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
             else if(!serie?.name.includes('Relative') && serie?.name.includes('Trend')) {titleColor = '#2f7ed8'}
           }
@@ -170,7 +170,7 @@
         if(url === 'smart_dumb') {
           selector = 4
         }
-        if(type === 'trend_reltrend') selector = 3
+        if(type.includes('trend_reltrend')) selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
        Highcharts.stockChart(this.id, {
           rangeSelector: {
@@ -326,9 +326,9 @@
           const _type = i === 0 || type !== 'mff' ? 'line' : 'column'
           let color = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
           console.log('s.name.', s.name)
-          if(type === 'trend_reltrend' && s.name.includes('Relative')) {
+          if(type.includes('trend_reltrend') && s.name.includes('Relative')) {
             color = 'rgb(142, 35, 35)'
-          }else if(type === 'trend_reltrend' && !s.name.includes('Relative') && s.name.includes('Trend Score')) {
+          }else if(type.includes('trend_reltrend') && !s.name.includes('Relative') && s.name.includes('Trend Score')) {
             color = '#2f7ed8'
           }
           const isOptPess = s.name === 'opt' || s.name === 'pess'
@@ -441,7 +441,7 @@
           }
           else {last_value = data[key].slice(-1)[0][1].toFixed(2)}
           console.log('last_value_chart', last_value)
-          if((key.includes('_reltrend') || key.includes('_trend')) && type === 'trend_reltrend') {
+          if((key.includes('_reltrend') || key.includes('_trend')) && type.includes('trend_reltrend')) {
             name = key.replace('_reltrend', ' Relative Trend Score')
             name = name.replace('_trend', '  Trend Score')
           }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name

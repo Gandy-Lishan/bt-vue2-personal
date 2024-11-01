@@ -175,7 +175,7 @@ export default {
           ]
         },
         {
-          label: 'Stock Trend',
+          label: 'Absolute and Relative Trend Scores',
           type: 'SP1500Score',
           refName: 'SP1500ScoreVirtualScroll',
           itemSize: 50,

@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span" v-show="(!showReport && !showRelated)">
-      <span>{{ label }}</span>
+      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
@@ -392,6 +392,12 @@ export default {
               minWidth: '130px'
             },
             {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
               key: 'trend_last_value',
               label: 'Trend Score',
               value: 'trend_last_value'
@@ -482,12 +488,6 @@ export default {
               label: 'Channel Trend',
               value: 'channel_trend',
               hideColumn: true,
-              minWidth: '90px'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update',
               minWidth: '90px'
             }
             ]
@@ -1848,7 +1848,12 @@ export default {
         ['channel_trend', 'Channel Trend'],
         ['last_update', 'Date']
       ])
-      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Date']
+      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 
+      'Moving Average Trend (50-Day Average)', 'Moving Average Trend (100-Day Average)', 'Moving Average Trend (200-Day Average)',
+      'Moving Average Crossover Trend (50-Day vs 100-Day)', 'Moving Average Crossover Trend (50-Day vs 200-Day)',
+      'Moving Average Crossover Trend (100-Day vs 200-Day)', 'Moving Average Slope Trend (50-Day Average)',
+      'Moving Average Slope Trend (100-Day Average)', 'Moving Average Slope Trend (200-Day Average)',
+      'Channel Trend', 'Date']
       }
 
 			const processedData = data.map(item => {
