@@ -165,7 +165,10 @@ export default {
         }else if(type === 'stock_sent') {
           requireUrl = 'sp_1500_complete_list'
         }else if(groups === 'trend_reltrend') {
-          requireUrl = 'trend_reltrend' // todo lishan
+          const str = sub_type
+          const match = str.match(/(.*?)_trend_reltrend/)
+          const result = match ? match[1] : 'sp1500'
+          requireUrl = result
         }else if(type === 'etf_opt') {
           requireUrl = 'etf_breadth'
         }else if(type === 'etf_fund') {

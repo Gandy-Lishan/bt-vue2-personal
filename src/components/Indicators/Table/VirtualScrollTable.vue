@@ -128,7 +128,6 @@
           <template v-for="l in columns">
             <el-table-column
               :key="l.label"
-              :label="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -137,6 +136,9 @@
               sortable="custom"
               :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
             >
+            <template #header>
+              <span v-html="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"></span>
+            </template>
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SP1500Score') || (l.value === 'market_symbol' && l.type === 'SP1500Score')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
@@ -268,7 +270,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -413,66 +416,66 @@ export default {
             },
             {
               key: 'close_over_ma1',
-              label: 'Moving Average Trend (50-Day Average)',
+              label: 'Moving Average Trend<br/>(50-Day Average)',
               value: 'close_over_ma1',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '160px'
             },
             {
               key: 'close_over_ma2',
-              label: 'Moving Average Trend (100-Day Average)',
+              label: 'Moving Average Trend<br/>(100-Day Average)',
               value: 'close_over_ma2',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '160px'
             },
             {
               key: 'close_over_ma3',
-              label: 'Moving Average Trend (200-Day Average)',
+              label: 'Moving Average Trend<br/>(200-Day Average)',
               value: 'close_over_ma3',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '145px'
             },
             {
               key: 'ma1_over_ma2',
-              label: 'Moving Average Crossover Trend (50-Day vs 100-Day)',
+              label: 'Moving Average Crossover Trend<br/>(50-Day vs 100-Day)',
               value: 'ma1_over_ma2',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '160px'
             },
             {
               key: 'ma1_over_ma3',
-              label: 'Moving Average Crossover Trend (50-Day vs 200-Day)',
+              label: 'Moving Average Crossover Trend<br/>(50-Day vs 200-Day)',
               value: 'ma1_over_ma3',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '160px'
             },
             {
               key: 'ma2_over_ma3',
-              label: 'Moving Average Crossover Trend (100-Day vs 200-Day)',
-              key: 'ma2_over_ma3',
+              label: 'Moving Average Crossover Trend<br/>(100-Day vs 200-Day)',
+              value: 'ma2_over_ma3',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '160px'
             },
             {
               key: 'ma1_over_ma1p',
-              label: 'Moving Average Slope Trend (50-Day Average)',
+              label: 'Moving Average Slope Trend<br/>(50-Day Average)',
               value: 'ma1_over_ma1p',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '145px'
             },
             {
               key: 'ma2_over_ma2p',
-              label: 'Moving Average Slope Trend (100-Day Average)',
+              label: 'Moving Average Slope Trend<br/>(100-Day Average)',
               value: 'ma2_over_ma2p',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '145px'
             },
             {
               key: 'ma3_over_ma3p',
-              label: 'Moving Average Slope Trend (200-Day Average)',
+              label: 'Moving Average Slope Trend<br/>(200-Day Average)',
               value: 'ma3_over_ma3p',
               hideColumn: true,
-              minWidth: '90px'
+              minWidth: '145px'
             },
             {
               key: 'channel_trend',
@@ -1111,8 +1114,8 @@ export default {
       const columns = columnsMap.get(`${_checkedType}Columns`)
       if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
-      if(this.type === 'related' && this.sourceType !== 'trend_reltrend') {return columnsMap.get('stockColumns')}
-      if(this.type === 'related' && this.sourceType === 'trend_reltrend') {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
+      if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
+      if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
