@@ -55,7 +55,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels' || type === 'trend_reltrend') return
+            if(url === 'smart_dumb' || url === 'risk_levels' || type.includes('trend_reltrend')) return
             const chart = this;
             const button = document.createElement('button');
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';

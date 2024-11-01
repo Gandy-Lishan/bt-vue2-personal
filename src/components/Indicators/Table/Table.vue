@@ -193,7 +193,11 @@ export default {
                 etf_social_bond: 'Bond',
                 etf_fund_country: 'Country',
                 etf_social_country: 'Country',
-                trend_reltrend: 'Stock Real Trend'
+                trend_reltrend: 'Trend RelTrend',
+                sp1500_trend_reltrend: 'Trend RelTrend',
+                spx_trend_reltrend: 'Trend RelTrend',
+                ndx_trend_reltrend: 'Trend RelTrend',
+                etf_trend_reltrend: 'Trend RelTrend'
               }
               if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
               if(['last_value', 'last_change'].includes(key)) {
