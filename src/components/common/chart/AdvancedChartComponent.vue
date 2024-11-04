@@ -365,7 +365,7 @@
 		<ModalBox ref="modalBox">
 			<div class="strategy-container">
 				<div class="dropdown">
-					<el-button size="small" @click="showStrategyDescription"><b style="cursor: pointer;">Click here to view Strategy Description</b></el-button>
+					<el-button size="small" @click="showStrategyDescription"><b style="cursor: pointer; font-size: 16px">Click here to view Strategy Description</b></el-button>
 						<div class="strategy-dropdown">
 							<label for="strategy-select" style="margin-right: 15px; font-weight: bold;">
 								Select Strategy:
@@ -379,7 +379,7 @@
 				</div>
 					<div class="centent" v-show="isShowStrategyDescription">
 						<p style="margin-top: 0px; font-weight: bold;text-align: justify;">
-							Trading Signal is the outcome of a three-year backtesting process conducted on 26 strategies specifically tailored to a particular symbol,
+							Trading Signal is the outcome of a three-year backtesting process conducted on 28 strategies specifically tailored to a particular symbol,
 							from which the top three performing strategies were meticulously chosen.<br/>
 							By selecting a strategy, you can delve into more detailed information about how that symbol performed under that specific strategy.<br/>
 							Tip: The background color of the Trading Signal chart changes based on the Trend Score. For more insights into the Trend Score, <a href="https://users.sentimentrader.com/users/trend_reltrend/sp1500/">click here</a>.
