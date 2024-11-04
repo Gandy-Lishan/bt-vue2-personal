@@ -362,26 +362,30 @@
 		<!-- last signal marker -->
 		<div id="stxForecast" class="forecast"></div>
 		</div>
-		<ModalBox ref="modalBox">	
-			<div class="strategy-dropdown" style="float: left;">
-        <label for="strategy-select" style="margin-right: 15px; font-weight: bold;">
-					Select Strategy:
-					<el-tooltip effect="dark" placement="top" style="display: inline">
-						<span slot="content">
-							Trading Signal is the outcome of a three-year backtesting process conducted on 26 strategies specifically tailored to a particular symbol,<br/>
+		<ModalBox ref="modalBox">
+			<div class="strategy-container">
+				<div class="dropdown">
+					<el-button size="small" @click="showStrategyDescription"><b style="cursor: pointer; font-size: 16px">Click here to view Strategy Description</b></el-button>
+						<div class="strategy-dropdown">
+							<label for="strategy-select" style="margin-right: 15px; font-weight: bold;">
+								Select Strategy:
+							</label>
+							<select v-model="strategyIndex">
+								<option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
+									{{strategy.label}}
+								</option>
+							</select>
+						</div>
+				</div>
+					<div class="centent" v-show="isShowStrategyDescription">
+						<p style="margin-top: 0px; font-weight: bold;text-align: justify;">
+							Trading Signal is the outcome of a three-year backtesting process conducted on 28 strategies specifically tailored to a particular symbol,
 							from which the top three performing strategies were meticulously chosen.<br/>
 							By selecting a strategy, you can delve into more detailed information about how that symbol performed under that specific strategy.<br/>
 							Tip: The background color of the Trading Signal chart changes based on the Trend Score. For more insights into the Trend Score, <a href="https://users.sentimentrader.com/users/trend_reltrend/sp1500/">click here</a>.
-						</span>
-						<i class="iconfont icon-wenhao"></i>
-					</el-tooltip>
-				</label>
-        <select v-model="strategyIndex">
-          <option v-for="(strategy, index) in strategiesOptions" :key="index" :value="strategy.value">
-            {{strategy.label}}
-          </option>
-        </select>
-      </div>
+						</p>
+					</div>
+			</div>
 			<ModalBoxContainer :tabs="tabs">
 				<template #tab1>
 					<StrategySigal
@@ -460,6 +464,7 @@ export default class AdvancedChartComponent extends Vue {
 	tabs: Array<any>
 	strategyIndex: number
 	strategiesOptions: {label: string, value: number}[]
+	isShowStrategyDescription: boolean
 	
 	constructor() {
 		super()
@@ -467,7 +472,7 @@ export default class AdvancedChartComponent extends Vue {
 		this.tabs = [
         { label: 'Trading Strategy', name: 'tab1', slotName: 'tab1' },
         { label: 'Performance Summary', name: 'tab2', slotName: 'tab2' },
-        { label: 'Trading Records', name: 'tab3', slotName: 'tab3' },
+        { label: 'Signal Dates', name: 'tab3', slotName: 'tab3' },
 				{ label: 'Strategy Description', name: 'tab4', slotName: 'tab4' },
       ]
 		this.isCollapse = false 
@@ -479,6 +484,7 @@ export default class AdvancedChartComponent extends Vue {
 		this.routeName = this.$route.name
 		this.strategyIndex = 0
 		this.strategiesOptions = [{label: '- Select Strategy -', value: 0}]
+		this.isShowStrategyDescription = false
 	}
 
 	async mounted() {
@@ -550,17 +556,22 @@ export default class AdvancedChartComponent extends Vue {
       this.modalContent = contentType; // 设置要显示的内容
 	  const modal = this.$refs.modalBox as any;
       if (modal) {
+				if(this.isShowStrategyDescription) this.isShowStrategyDescription = false
         modal.open(); // 确保 modal 存在后再调用 open 方法
       }
     }
 	closeModal() {
 		const modal = this.$refs.modalBox as any;
 		if (modal) {
+			if(this.isShowStrategyDescription) this.isShowStrategyDescription = false
 			modal.close(); // 确保 modal 存在后再调用 close 方法
 		}
 	}
 	changeStrategyIndex(index: number | string) {
 		this.strategyIndex = Number(index)
+	}
+	showStrategyDescription() {
+		this.isShowStrategyDescription = !this.isShowStrategyDescription
 	}
 
 	// initiate lastPrice and grid button
@@ -785,10 +796,15 @@ function dialogPortalized(el: Element) {
 }
 </script>
 <style lang="less" scoped>
-.strategy-dropdown {
-  margin-bottom: 15px;
-}
 select {
   font-weight: bold !important;
+}
+.dropdown {
+	box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 30px 70px 0px 70px;
 }
 </style>

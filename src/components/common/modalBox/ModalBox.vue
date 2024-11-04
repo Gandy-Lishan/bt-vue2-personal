@@ -49,7 +49,7 @@
 
   .modal-content {
     background: #fff;
-    padding: 45px 70px 25px 70px;
+    padding: 80px 70px 25px 70px;
     border-radius: 16px;
     position: relative;
     max-width: 893px;
@@ -91,7 +91,8 @@
 
   .close-button {
     position: absolute;
-    top: 24px;
+    z-index: 2000;
+    top: 38px;
     right: 24px;
     border: none;
     background: none;

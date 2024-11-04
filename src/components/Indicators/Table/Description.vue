@@ -6,7 +6,7 @@
           <p class="page-title" v-if="enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore', 'TrendSector'].includes(checkedType))">Click for Indicator Description</p>
           <p class="page-title" v-else>Table Description and Optimism/Pessimism Legend (click to expand)</p>
         </template>
-        <div class="centent">
+        <div class="centent" :class="{tendScore: enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore', 'TrendSector'].includes(checkedType))}">
         <div class="des" v-if="
         !enlarged || (enlarged === 'Stock' && (!checkedType || checkedType === 'stock'))
         || (enlarged === 'Bond & Commodity' && (!checkedType || checkedType === 'bond' || checkedType === 'commodity'))
@@ -62,34 +62,65 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore', 'TrendSector'].includes(checkedType))">
-          <p v-if="checkedType === 'TrendSector'">
-          This chart shows the distribution of trend scores for various sectors in the S&P 500. The columns represent the proportion of trend scores of 0, over 5, and equal to 10, as well as the proportion of relative trend scores of 0, over 5, and equal to 10. Each row displays the corresponding proportions within its sector. Additionally, there is a column indicating the proportion of stocks with a relative trend score of 10 in each sector relative to the entire S&P 500.<p>
-          <b>Absolute Trend Score</b><br>
-          <p>
-          The absolute trend score is derived from a composite of classic trend-following indicators. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
-          </p>
-          <p>
-          <b>Relative Trend Score</b><br>
-          The relative trend score is derived from a composite of classic trend-following indicators based on the ratio between an asset and the S&P 500. The model consists of ten conditions, yielding a score ranging from 0 (worst) to 10 (best).
-          </p>
-          <p>
-          value1=0;<br>
-          <br>
-          <span style="color: blue">if</span> Formula><span style="color: blueviolet;">average</span>(Formula, MA) <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> Formula>=<span style="color: blueviolet;">average</span>(Formula, MA2) <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> Formula>=<span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA) [1] <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA2)> <span style="color: blueviolet;">average</span>(Formula, MA2) [1] <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA3)> <span style="color: blueviolet;">average</span>(Formula, MA3) [1] <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA2) <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA)> <span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
-          <span style="color: blue">if</span> <span style="color: blueviolet;">average</span>(Formula, MA2)> <span style="color: blueviolet;">average</span>(Formula, MA3) <span style="color: blue">then</span> value1=value1+1;<br>
-          <br>
-          <span style="color: blue">if</span> Formula <span style="color: blue">crosses above</span> highest (Formula, BrkLength) [1] <span style="color: blue">then</span> channelTrend=1;<br>
-          <span style="color: blue">if</span> Formula <span style="color: blue">crosses below</span> lowest (Formula, BrkLength) [1] <span style="color: blue">then</span> channelTrend=0;<br>
-          value1=value1+channelTrend<br>
-          </p>
+        <div class="des page-content-wrapper" v-else-if="enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore', 'TrendSector'].includes(checkedType))">
+          <p>The <b>Absolute</b> and <b>Relative Trend Score Indicators</b> use a weight of the evidence framework by aggregating ten trend-following indicators to deliver a comprehensive composite score for trend evaluation. Scores range from 0 (weakest) to 10 (strongest).</p>
+          <p>Although the components and duration parameters remain fixed, the indicators provide investors with flexible options for identifying trading or investing opportunities and controlling risk. Additionally, the composites can serve as a secondary filter for your existing technical or fundamental investment approaches, ensuring your strategies align with current market trends.</p>
+          <ul>
+            <li>The Absolute Trend Score evaluates the strength of an asset’s individual trend</li>
+            <li>The Relative Trend Score gauges the strength of an asset's trend in comparison to the S&P 500, offering a view of its performance against the broader market</li>
+          </ul>
+          <p>Updated daily by 6 PM EST, this dashboard allows users to search and rank stocks, ETFs, and other assets based on trend scores and week-over-week changes. This powerful feature helps you see which assets are strengthening or weakening, supporting more informed investment choices from a single view.</p>
+          <p>With the <b>S&P 500 Sector Trend Scores Summary</b>, users get a comprehensive view of absolute and relative trend scores across sectors, highlighting leading and lagging groups. The table reflects the percentage of stocks in each sector with trend scores in key ranges—0 (weakest), over 5 (above average), and 10 (strongest)—on both an absolute and relative basis. This summary effectively monitors sector trends, offering insights into market leadership.</p>
+          <h3>Composite Trend Model Scoring Methodology</h3>
+          <p>0 (Weakest) to 10 (Strongest)</p>
+          <table class="threshold-table description-table" style="width: 100%">
+            <tr  style="text-align: left">
+              <th style="width: 50%">Trend Score Condition</th>
+              <th style="width: 50%">Relative Trend Score Conditions</th>
+            </tr>
+            <tbody>
+              <tr class="even">
+                <td>Close > 50-Day Average = +1</td>
+                <td>Ratio > 50-Day Average Ratio = +1</td>
+              </tr>
+              <tr>
+                <td>Close > 100-Day Average = +1</td>
+                <td>Ratio > 100-Day Average Ratio = +1</td>
+              </tr>
+              <tr class="even">
+                <td>Close > 200-Day Average = +1</td>
+                <td>Ratio > 200-Day Average Ratio = +1</td>
+              </tr>
+              <tr>
+                <td>50-Day Average Rising = +1</td>
+                <td>50-Day Average Ratio Rising = +1 </td>
+              </tr>
+              <tr class="even">
+                <td>100-Day Average Rising = +1</td>
+                <td>100-Day Average Ratio Rising = +1 </td>
+              </tr>
+              <tr>
+                <td>200-Day Average Rising = +1</td>
+                <td>200-Day Average Ratio Rising = +1 </td>
+              </tr>
+              <tr class="even">
+                <td>50-Day Average > 100-Day Average = +1</td>
+                <td>50-Day Average Ratio > 100-Day Average Ratio = +1</td>
+              </tr>
+              <tr>
+                <td>50-Day Average > 200-Day Average = +1</td>
+                <td>50-Day Average Ratio > 200-Day Average Ratio = +1</td>
+              </tr>
+              <tr class="even">
+                <td>100-Day Average > 200-Day Average = +1</td>
+                <td>100-Day Average Ratio > 200-Day Average Ratio = +1</td>
+              </tr>
+              <tr>
+                <td>Close above 63-Day High +1 until Close Below 63-Day Low</td>
+                <td>Ratio above 63-Day High Ratio +1 until Ratio Below 63-Day Low Ratio</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="des" v-else-if="
         (enlarged === 'ETF' && (!checkedType || checkedType === 'ETFSector'))
@@ -335,10 +366,16 @@ export default {
     display: list-item;
   }
 }
+.tendScore {
+  grid-template-columns: 1fr;
+}
 .col-md-3.thumbnail {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 5px;
   height: 217px;
+}
+table tbody tr.even, table tbody tr.even {
+    background-color: #f6f3f3;
 }
 </style>
