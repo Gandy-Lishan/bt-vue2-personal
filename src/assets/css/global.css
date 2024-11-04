@@ -944,6 +944,9 @@ button#checkResBtn {
   .threshold-table th, .threshold-table td {
     padding: 8px;
   }
+  .threshold-table.description-table th, .threshold-table.description-table td {
+    padding: 0px;
+  }
   .trend-score-table th, .trend-score-table td {
     padding: 3px;
   }
@@ -958,6 +961,9 @@ button#checkResBtn {
   }
   .threshold-table td {
     border-top: 1px solid #ddd;
+  }
+  .threshold-table.description-table td {
+    border-top: none;
   }
   .trend-score-table .bold-td {
     font-weight: 800;
