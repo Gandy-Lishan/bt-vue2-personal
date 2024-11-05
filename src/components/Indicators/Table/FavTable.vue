@@ -235,22 +235,28 @@ export default {
 		async see() {
 			this.loading = true
       await this.get_indicator_page_btv1_list()
-			const fetchData = async (res) => {
-			try {
-					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
-					const dataPromises = responses.map(response => response);
-					const allData = await Promise.all(dataPromises);
-          console.log('allData', allData)
-					const detailData = allData.map(data => data.data);
-					console.log('detailData',detailData)
-          return detailData
-			} catch (error) {
-					console.error('Error:', error);
-					return []
-			} finally {
-				this.loading = false
-			}
-			}
+      const fetchData = async (res) => {
+          try {
+              // 执行所有请求，并使用 Promise.allSettled 等待所有请求完成
+              const responses = await Promise.allSettled(res.map(indi => getIndicatorsRowData(indi.url)));
+              
+              // 筛选出状态为 'fulfilled' 的请求
+              const successfulResponses = responses
+                  .filter(result => result.status === 'fulfilled')
+                  .map(result => result.value);
+
+              // 获取数据
+              const detailData = successfulResponses.map(data => data.data);
+              console.log('detailData', detailData);
+
+              return detailData;
+          } catch (error) {
+              console.error('Error:', error);
+              return [];
+          } finally {
+              this.loading = false;
+          }
+      };
 
 			let resu = []
 											
