@@ -162,7 +162,6 @@ instance.interceptors.response.use(
 				case 410:
 					_this.popUpMsgBox('Backtest is not purchased')
 					break;
-				case 500:
 				case 503:
 					_this.popUpMsgBox('The internal server is busy, please try again later')
 					break;
