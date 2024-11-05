@@ -207,14 +207,12 @@ export default {
 
               }
               if(key === 'last_update') {
-                const datatime = new Date(obj['last_update'])
-                const offset = datatime.getTimezoneOffset() * 60 * 1000
-                const date = new Date(
-                    datatime.setTime(datatime.getTime() + offset)
-                )
-                const Y = date.getFullYear() + '-'
-                const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-'
-                const D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())
+                const datatime = new Date(obj['last_update']);
+
+                // 使用 UTC 方法获取年、月和日，以确保在不同时区显示一致的日期
+                const Y = datatime.getUTCFullYear() + '-';
+                const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
+                const D = datatime.getUTCDate().toString().padStart(2, '0');
                 obj['last_update'] = Y+M+D
               }
               if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){

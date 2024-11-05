@@ -463,15 +463,21 @@
           originalData.forEach(item => {
             const pointColor = item['Color'] ? '#ff0000' : '#000000';
             if (zoonsData.length === 0 || zoonsData[zoonsData.length - 1].color !== pointColor){
-              const datatime = new Date(item['date'])
-              const offset = datatime.getTimezoneOffset() * 60 * 1000
-              const date = new Date(
-                datatime.setTime(datatime.getTime() + offset)
-              )
+              const datatime = new Date(item['date']);
+              // 使用 UTC 时间来确保一致性
+              const utcTimestamp = Date.UTC(
+                  datatime.getUTCFullYear(),
+                  datatime.getUTCMonth(),
+                  datatime.getUTCDate(),
+                  datatime.getUTCHours(),
+                  datatime.getUTCMinutes(),
+                  datatime.getUTCSeconds()
+              );
+
               zoonsData.push({
-              value: date.getTime(),   // 时间点
-              color: pointColor  // 对应的颜色
-            })
+                  value: utcTimestamp,  // 使用 UTC 时间戳
+                  color: pointColor     // 对应的颜色
+              })
             }  // 红色为 false，黑色为 true
             
           })
@@ -479,11 +485,16 @@
         const data = allKeysName.reduce((acc, keyName) => {
           acc[keyName] = originalData.map(entry => {
             const datatime = new Date(entry['date'])
-            const offset = datatime.getTimezoneOffset() * 60 * 1000
-            const date = new Date(
-              datatime.setTime(datatime.getTime() + offset)
-            )
-            return [date.getTime(), entry[keyName]]
+            // 使用 UTC 时间来确保一致性
+            const utcTimestamp = Date.UTC(
+                datatime.getUTCFullYear(),
+                datatime.getUTCMonth(),
+                datatime.getUTCDate(),
+                datatime.getUTCHours(),
+                datatime.getUTCMinutes(),
+                datatime.getUTCSeconds()
+            );
+            return [utcTimestamp, entry[keyName]]
           });
           return acc;
         }, {});
