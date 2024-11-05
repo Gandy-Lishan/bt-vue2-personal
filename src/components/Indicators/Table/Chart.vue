@@ -342,10 +342,10 @@
                           const secondPart = match[2].toLowerCase().trim(); // 转为小写并去掉空格
                           
                           // 根据第二部分是否包含 "trend" 确定返回格式
-                          if (secondPart.includes('trend')) {
-                              return `${firstPart}_trend`;
-                          } else {
+                          if (secondPart.includes('relative')) {
                               return `${firstPart}_reltrend`;
+                          } else {
+                              return `${firstPart}_trend`;
                           }
                       }
                       return null; // 如果没有匹配，返回 null
