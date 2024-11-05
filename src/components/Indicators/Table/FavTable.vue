@@ -120,7 +120,7 @@
 <script>
 import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
-import { capitalizeFirstLetter, unifyNumber, isJson, timestampToTime } from "@/utils"
+import { capitalizeFirstLetter, unifyNumber, isJson } from "@/utils"
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
 import cloneDeep from 'lodash/cloneDeep'
@@ -349,7 +349,17 @@ export default {
 							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
             }
-            if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+            if(key === 'last_update') {
+              const datatime = new Date(obj['last_update'])
+              const offset = datatime.getTimezoneOffset() * 60 * 1000
+              const date = new Date(
+                  datatime.setTime(datatime.getTime() + offset)
+              )
+              const Y = date.getFullYear() + '-'
+              const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-'
+              const D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())
+              obj['last_update'] = Y+M+D
+            }
             obj['loading'] = false
             obj['favorite'] = true
             if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){

@@ -32,7 +32,7 @@
 <script>
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
-import { isJson, capitalizeFirstLetter, unifyNumber, timestampToTime } from '@/utils'
+import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
 
 export default {
   props: {
@@ -206,7 +206,17 @@ export default {
                 if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
               }
-              if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+              if(key === 'last_update') {
+                const datatime = new Date(obj['last_update'])
+                const offset = datatime.getTimezoneOffset() * 60 * 1000
+                const date = new Date(
+                    datatime.setTime(datatime.getTime() + offset)
+                )
+                const Y = date.getFullYear() + '-'
+                const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-'
+                const D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())
+                obj['last_update'] = Y+M+D
+              }
               if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
                 if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
                 // 加 %
