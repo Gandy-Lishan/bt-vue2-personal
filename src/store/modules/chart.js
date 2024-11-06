@@ -11,7 +11,7 @@ import {
 	obtainIndicatorsList,
 	obtainBTV1IndicatorsList
 } from '@/service/service.js'
-import {Toast, capitalizeFirstLetter, isJson, unifyNumber, timestampToTime } from '@/utils'
+import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
 
 const toggleOverlaySymbol = function(displayStyle) {
@@ -886,7 +886,17 @@ get_indicator_page_btv1_list({ commit }) {
 											else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
 											else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
 											else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}}
-									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['last_update'] = timestampToTime(obj[key])
+									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) {
+										const datatime = new Date(obj['last_update'])
+										const offset = datatime.getTimezoneOffset() * 60 * 1000
+										const date = new Date(
+												datatime.setTime(datatime.getTime() + offset)
+										)
+										const Y = date.getFullYear() + '-'
+										const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-'
+										const D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())
+										obj['last_update'] = Y+M+D
+									}
 									if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
 									const isInBtv1List = state.indicatorPageBtv1List.find(item => (item.url === obj['url']))
 									const isInBtv2List = state.favoriteIndicatorList.find(item => (item.url === obj['url']))

@@ -172,7 +172,10 @@ export default {
                 }
 
                 const selectedStrategy = this.strategies[this.selectedStrategyIndex];
-                const { EntryDate, ExitDate } = selectedStrategy;
+                let { EntryDate, ExitDate, Direction } = selectedStrategy;
+                if( selectedStrategy['Show Last'] == false ) {
+                    ExitDate = ExitDate.slice(0, ExitDate.length-1)
+                }
                 this.processedTradesData =  EntryDate.map((entryDate, index) => {
                     const exitDate = ExitDate[index];
                     
@@ -182,10 +185,10 @@ export default {
 
                     return {
                         EntryDate: entryDate,
-                        EntryAction: 'Buy',
+                        EntryAction: Direction=='Long'?'Buy':'Sell',
                         EntryPrice: entryPrice,
                         ExitDate: exitDate,
-                        ExitAction: 'Sell',
+                        ExitAction: exitDate?Direction=='Long'?'Sell':'Buy':'',
                         ExitPrice: exitPrice
                     };
                 });

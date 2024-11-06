@@ -120,7 +120,7 @@
 <script>
 import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
-import { capitalizeFirstLetter, unifyNumber, isJson, timestampToTime } from "@/utils"
+import { capitalizeFirstLetter, unifyNumber, isJson } from "@/utils"
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
 import cloneDeep from 'lodash/cloneDeep'
@@ -235,22 +235,28 @@ export default {
 		async see() {
 			this.loading = true
       await this.get_indicator_page_btv1_list()
-			const fetchData = async (res) => {
-			try {
-					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
-					const dataPromises = responses.map(response => response);
-					const allData = await Promise.all(dataPromises);
-          console.log('allData', allData)
-					const detailData = allData.map(data => data.data);
-					console.log('detailData',detailData)
-          return detailData
-			} catch (error) {
-					console.error('Error:', error);
-					return []
-			} finally {
-				this.loading = false
-			}
-			}
+      const fetchData = async (res) => {
+          try {
+              // 执行所有请求，并使用 Promise.allSettled 等待所有请求完成
+              const responses = await Promise.allSettled(res.map(indi => getIndicatorsRowData(indi.url)));
+              
+              // 筛选出状态为 'fulfilled' 的请求
+              const successfulResponses = responses
+                  .filter(result => result.status === 'fulfilled')
+                  .map(result => result.value);
+
+              // 获取数据
+              const detailData = successfulResponses.map(data => data.data);
+              console.log('detailData', detailData);
+
+              return detailData;
+          } catch (error) {
+              console.error('Error:', error);
+              return [];
+          } finally {
+              this.loading = false;
+          }
+      };
 
 			let resu = []
 											
@@ -349,7 +355,14 @@ export default {
 							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
             }
-            if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+            if(key === 'last_update') {
+              const datatime = new Date(obj['last_update']);
+              // 使用 UTC 方法获取年、月和日，以确保在不同时区显示一致的日期
+              const Y = datatime.getUTCFullYear() + '-';
+              const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
+              const D = datatime.getUTCDate().toString().padStart(2, '0');
+              obj['last_update'] = Y+M+D
+            }
             obj['loading'] = false
             obj['favorite'] = true
             if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
