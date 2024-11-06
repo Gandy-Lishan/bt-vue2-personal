@@ -1435,7 +1435,6 @@ export default {
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
-        if(this.condition !== '') this.condition = ''
       })
       // this.$forceUpdate()
     },
@@ -2142,11 +2141,10 @@ export default {
     async addCondition(type) {
       // this.condition = type
       debugger
-      if(this.condition !== type) this.condition = type
-      else if(this.condition === type && this.condition !== '') this.condition = ''
+      if(this.condition !== type) {this.condition = type}
+      else if(this.condition === type && this.condition !== '') {this.condition = ''}
       console.log('this.condition', this.condition)
       // .el-table--scrollable-x .el-table__body-wrapper
-      console.log('this.$refs', this.$refs.SP1500ScoreVirtualScrollTable.$refs.bodyWrapper)
       const urlMap = {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',

@@ -332,10 +332,10 @@ export default {
     _forceUpdateTable(type, condition) {
       console.log('type, condition', type, condition)
       console.log('updateRefs', this.$refs)
-      this.$nextTick(() => {
+      // this.$nextTick(() => {
         this.$refs['SP1500ScoreVirtualScroll'][0].loadMore(type, null, condition)
         this.$forceUpdate()
-      })
+      // })
     }
   }
 }
