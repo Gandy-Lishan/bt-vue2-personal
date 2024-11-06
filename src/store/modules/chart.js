@@ -333,7 +333,7 @@ const mutations = {
 	},
 	SET_INDICATORS_PAGE_LIST_DATA(state, { url, data }) {
 		if(!url) return
-		state.indicatorsPageListdata[url] = JSON.stringify(data)
+		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(data)
 	}
 }
 
@@ -767,11 +767,12 @@ get_indicator_page_btv1_list({ commit }) {
 		})
 	},
 	async fetchIndicatorsPageList({ commit, dispatch, state }, url) {
+		debugger
 		if (!state.indicatorsPageListdata[url]) {
 			try {
 				let requestUrl = url
 				// 替换板块的 url
-				if(['spx', 'ndx', 'etf', 'sp1500'].includes(url)) requestUrl = `trend_reltrend?index=${url}`
+				if(['spx', 'ndx', 'etf', 'sp1500'].some(subUrl => url.includes(subUrl))) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
 				if(url === 'commod_sentiment_seasonality') {

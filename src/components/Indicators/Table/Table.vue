@@ -24,6 +24,7 @@
         @loadMore="loadMore"
         @updateChart="$emit('updateChart', row)"
         @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
+        @forceUpdateTable="$emit('_forceUpdateTable', type, condition)"
         >
     </VirtualScrollTable>
   </div>
@@ -229,13 +230,14 @@ export default {
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
-    async loadMore (type, isUpdateChart) {
+    async loadMore (type, isUpdateChart, condition) {
       this.optionsChecked = type
       this.loading = true
       let _results
       try {
-        const url = this.urlMap[this.optionsChecked]
+        let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
+        if(condition === 'relative') url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
           console.log(url, _results)
