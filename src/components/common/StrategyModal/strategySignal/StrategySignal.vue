@@ -96,7 +96,10 @@ export default {
     },
     updateChartWithSelectedStrategy() {
       const selectedStrategy = this.strategies[this.selectedStrategyIndex];
-      const { EntryDate, ExitDate } = selectedStrategy;
+      let { EntryDate, ExitDate } = selectedStrategy;
+      if( selectedStrategy['Show Last'] == false ) {
+        ExitDate = ExitDate.slice(0, ExitDate.length-1)
+      }
       this.plotData( EntryDate, ExitDate);
     },
     plotData( EntryDate, ExitDate) {
