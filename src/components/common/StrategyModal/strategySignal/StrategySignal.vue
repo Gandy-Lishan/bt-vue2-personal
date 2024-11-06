@@ -155,9 +155,8 @@ export default {
       //   };
       // });
 
-      const buyMarkerData = this.createMarkerData(rData, Direction=='long'?EntryDate:ExitDate, 'triangle', 'green');
-      const sellMarkerData = this.createMarkerData(rData, Direction=='long'?ExitDate:EntryDate, 'triangle-down', 'red');
-
+      const buyMarkerData = this.createMarkerData(rData, Direction=='Long'?EntryDate:ExitDate, 'triangle', 'green');
+      const sellMarkerData = this.createMarkerData(rData, Direction=='Long'?ExitDate:EntryDate, 'triangle-down', 'red');
       var basicChartOptions = {
           zoomType: 'x',
           pinchType: '',
