@@ -13,6 +13,7 @@
          :ref="item.refName"
          @updateChart="updateChart" 
          @showDetails="showDetails"
+         @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
          :style="{ width: (enlargedTable === item.label) ? ((checkedType !== 'TrendSector') ? (checkedType !==  'Stock Trend' ? '60%' : '50%') : '100%') : '50%', display: ((enlargedTable === item.label || enlargedTable === null) && !isShowDetails) ? 'block' : 'none' }"
          ></Table>
       </template>
@@ -328,6 +329,14 @@ export default {
       link.click();
       document.body.removeChild(link);
     },
+    _forceUpdateTable(type, condition) {
+      console.log('type, condition', type, condition)
+      console.log('updateRefs', this.$refs)
+      this.$nextTick(() => {
+        this.$refs['SP1500ScoreVirtualScroll'][0].loadMore(type, null, condition)
+        this.$forceUpdate()
+      })
+    }
   }
 }
 </script>
@@ -345,4 +354,10 @@ export default {
 .showDetailsChart {
   margin-top: 50px;
 }
+/deep/ .virtualScroll .el-table--scrollable-x .el-table__body-wrapper {
+  overflow-x: scroll !important;
+}
+// /deep/ .el-table__footer-wrapper, /deep/ .el-table__header-wrapper {
+//   width: 100% !important; /* 确保宽度占满父容器 */
+// }
 </style>

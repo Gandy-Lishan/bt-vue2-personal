@@ -120,7 +120,7 @@
 <script>
 import { getIndicatorsRowData } from '@/service/service'
 import { mapGetters, mapActions } from 'vuex'
-import { capitalizeFirstLetter, unifyNumber, isJson, timestampToTime } from "@/utils"
+import { capitalizeFirstLetter, unifyNumber, isJson } from "@/utils"
 const debounce = require('lodash/debounce')
 import VirtualScroll from 'el-table-virtual-scroll'
 import cloneDeep from 'lodash/cloneDeep'
@@ -234,23 +234,33 @@ export default {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList', 'get_indicator_page_btv1_list']),
 		async see() {
 			this.loading = true
+      // 重置过滤条件
+      this.groupsFilter = ''
+      this.timeframeFilter = ''
+      this.searchInput = ''
       await this.get_indicator_page_btv1_list()
-			const fetchData = async (res) => {
-			try {
-					const responses = await Promise.all(res.map(indi => getIndicatorsRowData(indi.url)));
-					const dataPromises = responses.map(response => response);
-					const allData = await Promise.all(dataPromises);
-          console.log('allData', allData)
-					const detailData = allData.map(data => data.data);
-					console.log('detailData',detailData)
-          return detailData
-			} catch (error) {
-					console.error('Error:', error);
-					return []
-			} finally {
-				this.loading = false
-			}
-			}
+      const fetchData = async (res) => {
+          try {
+              // 执行所有请求，并使用 Promise.allSettled 等待所有请求完成
+              const responses = await Promise.allSettled(res.map(indi => getIndicatorsRowData(indi.url)));
+              
+              // 筛选出状态为 'fulfilled' 的请求
+              const successfulResponses = responses
+                  .filter(result => result.status === 'fulfilled')
+                  .map(result => result.value);
+
+              // 获取数据
+              const detailData = successfulResponses.map(data => data.data);
+              console.log('detailData', detailData);
+
+              return detailData;
+          } catch (error) {
+              console.error('Error:', error);
+              return [];
+          } finally {
+              this.loading = false;
+          }
+      };
 
 			let resu = []
 											
@@ -349,7 +359,14 @@ export default {
 							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
             }
-            if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+            if(key === 'last_update') {
+              const datatime = new Date(obj['last_update']);
+              // 使用 UTC 方法获取年、月和日，以确保在不同时区显示一致的日期
+              const Y = datatime.getUTCFullYear() + '-';
+              const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
+              const D = datatime.getUTCDate().toString().padStart(2, '0');
+              obj['last_update'] = Y+M+D
+            }
             obj['loading'] = false
             obj['favorite'] = true
             if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
@@ -363,6 +380,7 @@ export default {
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !row.sub_type.includes('Seasonality') && column.property === 'chart_name') {
+        let url = row.url
         let _t = '50%'
         let _l = 0
         const hoverElement = event.target
@@ -380,8 +398,8 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) row.url = row.url.toLowerCase()
-      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
+      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {
@@ -452,6 +470,9 @@ export default {
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         this.tableData = this.tableData.filter(item => item.url !== scope.row.url)
+        this.groupsFilter = ''
+        this.timeframeFilter = ''
+        this.searchInput = ''
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
         console.log('this.tableData', this.tableData)
       } catch (error) {

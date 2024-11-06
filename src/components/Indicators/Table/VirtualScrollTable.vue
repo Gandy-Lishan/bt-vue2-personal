@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span" v-show="(!showReport && !showRelated)">
-      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}</span>
+      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
@@ -28,6 +28,8 @@
         <el-row>
           <div class="btns">
             <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Condition</el-button>
+            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Condition</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -80,6 +82,7 @@
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
+      :class="{'enlargeStockTrend': enlarged && isStockTrend}"
       key-prop="url"
       class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
@@ -127,7 +130,7 @@
           </el-table-column>
           <template v-for="l in columns">
             <el-table-column
-              :key="l.label"
+              :key="l.value"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -173,6 +176,7 @@ import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
+import Vue from 'vue';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -221,6 +225,8 @@ export default {
       filterData: [],
       hideColumn: true,
       columnsMap: new Map(),
+      condition: '',
+      trendUpdateDate: ''
     }
   },
   computed: {
@@ -382,20 +388,14 @@ export default {
               label: 'Symbol',
               value: 'market_symbol',
               type: 'SP1500Score',
-              minWidth: '90px'
+              minWidth: '80px'
             },
             {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
               type: 'SP1500Score',
-              minWidth: '130px'
-            },
-            {
-              key: 'last_update',
-              label: 'Date',
-              value: 'last_update',
-              minWidth: '90px'
+              minWidth: '100px'
             },
             {
               key: 'trend_last_value',
@@ -404,92 +404,19 @@ export default {
             },
             {
               key: 'trend_five_day_score_chg',
-              label: 'Trend 5-Day Score Change',
-              value: 'trend_five_day_score_chg',
-              minWidth: '90px'
+              label: '5-Day Score Chg',
+              value: 'trend_five_day_score_chg'
             },
             {
               key: 'reltrend_last_value',
-              label: 'RelTrend Score',
-              value: 'reltrend_last_value',
-              minWidth: '90px'
+              label: 'Relative Score',
+              value: 'reltrend_last_value'
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: 'RelTrend 5-Day Score Change',
-              value: 'reltrend_five_day_score_chg',
-              minWidth: '90px'
+              label: '5-Day Score Chg',
+              value: 'reltrend_five_day_score_chg'
             },
-            {
-              key: 'close_over_ma1',
-              label: 'Moving Average Trend<br/>(50-Day Average)',
-              value: 'close_over_ma1',
-              hideColumn: true,
-              minWidth: '160px'
-            },
-            {
-              key: 'close_over_ma2',
-              label: 'Moving Average Trend<br/>(100-Day Average)',
-              value: 'close_over_ma2',
-              hideColumn: true,
-              minWidth: '160px'
-            },
-            {
-              key: 'close_over_ma3',
-              label: 'Moving Average Trend<br/>(200-Day Average)',
-              value: 'close_over_ma3',
-              hideColumn: true,
-              minWidth: '145px'
-            },
-            {
-              key: 'ma1_over_ma2',
-              label: 'Moving Average Crossover Trend<br/>(50-Day vs 100-Day)',
-              value: 'ma1_over_ma2',
-              hideColumn: true,
-              minWidth: '160px'
-            },
-            {
-              key: 'ma1_over_ma3',
-              label: 'Moving Average Crossover Trend<br/>(50-Day vs 200-Day)',
-              value: 'ma1_over_ma3',
-              hideColumn: true,
-              minWidth: '160px'
-            },
-            {
-              key: 'ma2_over_ma3',
-              label: 'Moving Average Crossover Trend<br/>(100-Day vs 200-Day)',
-              value: 'ma2_over_ma3',
-              hideColumn: true,
-              minWidth: '160px'
-            },
-            {
-              key: 'ma1_over_ma1p',
-              label: 'Moving Average Slope Trend<br/>(50-Day Average)',
-              value: 'ma1_over_ma1p',
-              hideColumn: true,
-              minWidth: '145px'
-            },
-            {
-              key: 'ma2_over_ma2p',
-              label: 'Moving Average Slope Trend<br/>(100-Day Average)',
-              value: 'ma2_over_ma2p',
-              hideColumn: true,
-              minWidth: '145px'
-            },
-            {
-              key: 'ma3_over_ma3p',
-              label: 'Moving Average Slope Trend<br/>(200-Day Average)',
-              value: 'ma3_over_ma3p',
-              hideColumn: true,
-              minWidth: '145px'
-            },
-            {
-              key: 'channel_trend',
-              label: 'Channel Trend',
-              value: 'channel_trend',
-              hideColumn: true,
-              minWidth: '90px'
-            }
             ]
         ],
         ['bondColumns', 
@@ -1111,13 +1038,173 @@ export default {
       let _checkedType = this.checkedType
       const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
+      if(isStockTrend && this.condition === 'trend') {
+        const saveColumns = ['market_symbol', 'chart_name']
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
+            {
+              key: 'trend_last_value',
+              label: 'Trend<br/>Score',
+              value: 'trend_last_value'
+            },    
+            {
+              key: 'trend_five_day_score_chg',
+              label: '5-Day<br/>Score Chg',
+              value: 'trend_five_day_score_chg'
+            },
+            {
+              key: 'reltrend_last_value',
+              label: 'Relative<br/>Score',
+              value: 'reltrend_last_value'
+            },
+            {
+              key: 'reltrend_five_day_score_chg',
+              label: '5-Day<br/>Score Chg',
+              value: 'reltrend_five_day_score_chg'
+            },
+           {
+              key: 'close_over_ma1',
+              label: 'Close ><br/>50-Day Avg',
+              value: 'close_over_ma1',
+              minWidth: '120px'
+            },
+            {
+              key: 'close_over_ma2',
+              label: 'Close ><br/>100-Day Avg',
+              value: 'close_over_ma2',
+              minWidth: '120px'
+            },
+            {
+              key: 'close_over_ma3',
+              label: 'Close ><br/>200-Day Avg',
+              value: 'close_over_ma3',
+              minWidth: '120px'
+            },
+            {
+              key: 'ma1_over_ma2',
+              label: '50-Day Avg ><br/>100-Day Avg',
+              value: 'ma1_over_ma2',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma1_over_ma3',
+              label: '50-Day Avg ><br/>200-Day Avg',
+              value: 'ma1_over_ma3',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma2_over_ma3',
+              label: '100-Day Avg ><br/>200-Day Avg',
+              value: 'ma2_over_ma3',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma1_over_ma1p',
+              label: '50-Day<br/>Avg Rising',
+              value: 'ma1_over_ma1p',
+              minWidth: '120px'
+            },
+            {
+              key: 'ma2_over_ma2p',
+              label: '100-Day<br/>Avg Rising',
+              value: 'ma2_over_ma2p',
+              minWidth: '120px'
+            },
+            {
+              key: 'ma3_over_ma3p',
+              label: '200-Day<br/>Avg Rising',
+              value: 'ma3_over_ma3p',
+              minWidth: '120px'
+            },
+            {
+              key: 'channel_trend',
+              label: '63-Day<br/>Breakout Trend',
+              value: 'channel_trend',
+              minWidth: '150px'
+            }
+        ]])
+      }
+      if(isStockTrend && this.condition === 'relative') {
+        const saveColumns = ['market_symbol', 'chart_name']
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
+            {
+              key: 'reltrend_last_value',
+              label: 'Relative<br/>Score',
+              value: 'reltrend_last_value'
+            },
+            {
+              key: 'reltrend_five_day_score_chg',
+              label: '5-Day<br/>Score Chg',
+              value: 'reltrend_five_day_score_chg'
+            },
+            {
+              key: 'close_over_ma1',
+              label: 'Ratio ><br/>50-Day Avg',
+              value: 'close_over_ma1',
+              minWidth: '120px'
+            },
+            {
+              key: 'close_over_ma2',
+              label: 'Ratio ><br/>100-Day Avg',
+              value: 'close_over_ma2',
+              minWidth: '120px'
+            },
+            {
+              key: 'close_over_ma3',
+              label: 'Ratio ><br/>200-Day Avg',
+              value: 'close_over_ma3',
+              minWidth: '120px'
+            },
+            {
+              key: 'ma1_over_ma2',
+              label: '50-Day Avg Ratio ><br/>100-Day Avg Ratio',
+              value: 'ma1_over_ma2',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma1_over_ma3',
+              label: '50-Day Avg Ratio ><br/>200-Day Avg Ratio',
+              value: 'ma1_over_ma3',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma2_over_ma3',
+              label: '100-Day Avg Ratio ><br/>200-Day Avg Ratio',
+              value: 'ma2_over_ma3',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma1_over_ma1p',
+              label: '50-Day Avg<br/>Ratio Rising',
+              value: 'ma1_over_ma1p',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma2_over_ma2p',
+              label: '100-Day Avg<br/>Ratio Rising',
+              value: 'ma2_over_ma2p',
+              minWidth: '150px'
+            },
+            {
+              key: 'ma3_over_ma3p',
+              label: '200-Day Avg<br/>Ratio Rising',
+              value: 'ma3_over_ma3p',
+              minWidth: '150px'
+            },
+            {
+              key: 'channel_trend',
+              label: '63-Day Ratio<br/>Breakout Trend',
+              value: 'channel_trend',
+              minWidth: '150px'
+            }
+        ]])
+      }
       const columns = columnsMap.get(`${_checkedType}Columns`)
       if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
       if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
       if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
-      if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'reltrend_last_value', 'last_update']
+      if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
@@ -1285,6 +1372,9 @@ export default {
         { value: 'RSI > 70', label: 'RSI 14-Day > 70' }
       ]
       return []
+    },
+    isStockTrend() {
+      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
     }
   },
   watch: {
@@ -1304,6 +1394,7 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
+        if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) this.trendUpdateDate = ` (${this.filterData[0].last_update})`
       },
       immediate: true,
       depp: true
@@ -1340,10 +1431,11 @@ export default {
       this.groupsFilter = ''
       this.timeframeFilter = ''
       this.indicatorFilter = ''
-      this.checkedType = item.value; 
+      this.checkedType = item.value;
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
+        if(this.condition !== '') this.condition = ''
       })
       // this.$forceUpdate()
     },
@@ -1828,32 +1920,112 @@ export default {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      if(['sp1500', 'spx', 'etf', 'ndx'].includes(type)) {
+      const isTrendScore = ['sp1500', 'spx', 'etf', 'ndx'].includes(type)
+      if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
         ['trend_last_value', 'Trend Score'],
-        ['trend_five_day_score_chg', 'Trend 5-Day Score Change'],
-        ['reltrend_last_value', 'RelTrend Score'],
-        ['reltrend_five_day_score_chg', 'RelTrend 5-Day Score Change'],
-        ['close_over_ma1', 'Moving Average Trend (50-Day Average)'],
-        ['close_over_ma2', 'Moving Average Trend (100-Day Average)'],
-        ['close_over_ma3', 'Moving Average Trend (200-Day Average)'],
-        ['ma1_over_ma2', 'Moving Average Crossover Trend (50-Day vs 100-Day)'],
-        ['ma1_over_ma3', 'Moving Average Crossover Trend (50-Day vs 200-Day)'],
-        ['ma2_over_ma3', 'Moving Average Crossover Trend (100-Day vs 200-Day)'],
-        ['ma1_over_ma1p', 'Moving Average Slope Trend (50-Day Average)'],
-        ['ma2_over_ma2p', 'Moving Average Slope Trend (100-Day Average)'],
-        ['ma3_over_ma3p', 'Moving Average Slope Trend (200-Day Average)'],
-        ['channel_trend', 'Channel Trend'],
-        ['last_update', 'Date']
+        ['trend_five_day_score_chg', '5-Day Score Chg'],
+        ['reltrend_last_value', 'Relative Score']
+        ['reltrend_five_day_score_chg', '5-Day Score Chg']
       ])
-      keysSort = ['Symbol', 'Name', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 
-      'Moving Average Trend (50-Day Average)', 'Moving Average Trend (100-Day Average)', 'Moving Average Trend (200-Day Average)',
-      'Moving Average Crossover Trend (50-Day vs 100-Day)', 'Moving Average Crossover Trend (50-Day vs 200-Day)',
-      'Moving Average Crossover Trend (100-Day vs 200-Day)', 'Moving Average Slope Trend (50-Day Average)',
-      'Moving Average Slope Trend (100-Day Average)', 'Moving Average Slope Trend (200-Day Average)',
-      'Channel Trend', 'Date']
+      if(this.condition === 'trend') {
+        const resetKeys = [
+            {
+              key: 'close_over_ma1',
+              label: 'Close > 50-Day Avg'
+            },
+            {
+              key: 'close_over_ma2',
+              label: 'Close > 100-Day Avg'
+            },
+            {
+              key: 'close_over_ma3',
+              label: 'Close > 200-Day Avg'
+            },
+            {
+              key: 'ma1_over_ma2',
+              label: '50-Day Avg > 100-Day Avg'
+            },
+            {
+              key: 'ma1_over_ma3',
+              label: '50-Day Avg > 200-Day Avg'
+            },
+            {
+              key: 'ma2_over_ma3',
+              label: '100-Day Avg > 200-Day Avg'
+            },
+            {
+              key: 'ma1_over_ma1p',
+              label: '50-Day Avg Rising'
+            },
+            {
+              key: 'ma2_over_ma2p',
+              label: '100-Day Avg Rising'
+            },
+            {
+              key: 'ma3_over_ma3p',
+              label: '200-Day Avg Rising'
+            },
+            {
+              key: 'channel_trend',
+              label: '63-Day Breakout Trend'
+            }
+        ]
+        resetKeys.forEach(item => {
+          keysMap.set(item.key, item.label)
+        })
+      }else if(this.condition === 'relative') {
+        keysMap.delete('trend_last_value')
+        keysMap.delete('trend_five_day_score_chg')
+        const resetKeys = [
+            {
+              key: 'close_over_ma1',
+              label: 'Ratio > 50-Day Avg'
+            },
+            {
+              key: 'close_over_ma2',
+              label: 'Ratio > 100-Day Avg'
+            },
+            {
+              key: 'close_over_ma3',
+              label: 'Ratio > 200-Day Avg'
+            },
+            {
+              key: 'ma1_over_ma2',
+              label: '50-Day Avg Ratio > 100-Day Avg Ratio'
+            },
+            {
+              key: 'ma1_over_ma3',
+              label: '50-Day Avg Ratio > 200-Day Avg Ratio'
+            },
+            {
+              key: 'ma2_over_ma3',
+              label: '100-Day Avg Ratio > 200-Day Avg Ratio'
+            },
+            {
+              key: 'ma1_over_ma1p',
+              label: '50-Day Avg Ratio Rising'
+            },
+            {
+              key: 'ma2_over_ma2p',
+              label: '100-Day Avg Ratio Rising'
+            },
+            {
+              key: 'ma3_over_ma3p',
+              label: '200-Day Avg Ratio Rising'
+            },
+            {
+              key: 'channel_trend',
+              label: '63-Day Ratio Breakout Trend'
+            }
+        ]
+        resetKeys.forEach(item => {
+          keysMap.set(item.key, item.label)
+        })
+      }
+      keysSort = Array.from(keysMap.values())
       }
 
 			const processedData = data.map(item => {
@@ -1966,6 +2138,46 @@ export default {
     // 使用反斜杠转义特殊字符
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
+    async addCondition(type) {
+      // this.condition = type
+      debugger
+      if(this.condition !== type) this.condition = type
+      else if(this.condition === type && this.condition !== '') this.condition = ''
+      console.log('this.condition', this.condition)
+      // .el-table--scrollable-x .el-table__body-wrapper
+      console.log('this.$refs', this.$refs.SP1500ScoreVirtualScrollTable.$refs.bodyWrapper)
+      const urlMap = {
+        stock: 'stock_complete_list',
+        NASDAQ: 'ndx_100_complete_list',
+        SP1500: 'sp_1500_complete_list',
+        SP1500Score: 'sp1500',
+        SP500Score: 'spx',
+        NDX100Score: 'ndx',
+        equityETFScore: 'etf',
+        TrendSector: 'sector_trend_score',
+        bond: 'bond_complete_list',
+        BondSeasonality: 'bond_seasonality',
+        CommoditySeasonality: 'commod_seasonality',
+        ETFSeasonality: 'etf_seasonality',
+        ETFSector: 'etf_complete_list',
+        ETFSectorBreadth: 'etf_breadth',
+        ETFFundFlow: 'etf_flow',
+        ETFMonthlyFund: 'monthly_fund_flows',
+        ETFShares: 'shares_outstanding',
+        popular: 'most_popular',
+        commodity: 'commodity_complete_list',
+        cssScreen: 'commod_sentiment_seasonality',
+        cstScreen: 'commod_optix_trend',
+        CHMinMax: 'cot_max_min'
+      }
+      let url = urlMap[this.checkedType]
+      if(this.condition === 'relative') url = `${url}&rel_trend=1`
+      debugger
+      this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: ''})
+      await this.$nextTick(async () => {
+        this.$emit('forceUpdateTable', this.checkedType, this.condition)
+      });
     }
   }
 }
@@ -1980,7 +2192,10 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 575px !important
+    height: 575px !important;
+  }
+  /deep/ .el-table__body-wrapper.is-scrolling-left {
+    overflow-x: scroll !important;
   }
   border: 2px solid  #e9e9e9;
   /deep/ .el-button--text {
@@ -1990,7 +2205,18 @@ export default {
     overflow-x: scroll !important;
   }
 }
-
+.enlargeStockTrend {
+  /deep/ .el-loading-mask {
+    height: 700px !important;
+  }
+  /deep/ .el-table {
+    overflow: visible !important;
+  }
+  /deep/ .el-table__body-wrapper {
+    height: 575px !important;
+    width: 100% !important; /* 确保宽度占满父容器 */
+  }
+}
 .header-span {
     display: flex;
     align-items: center;
@@ -2110,7 +2336,7 @@ export default {
 .dataTables_info {
   color: #333;
   font-weight: 500;
-  margin-top: 10px;
+  margin-top: 24px;
 }
 .filter-div {
   padding: 10px 5px;
