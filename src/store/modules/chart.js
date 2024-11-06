@@ -772,7 +772,7 @@ get_indicator_page_btv1_list({ commit }) {
 			try {
 				let requestUrl = url
 				// 替换板块的 url
-				if(['spx', 'ndx', 'etf', 'sp1500'].some(subUrl => url.includes(subUrl))) requestUrl = `trend_reltrend?index=${url}`
+				if(['spx', 'spx&rel_trend=1','ndx', 'ndx&rel_trend=1', 'etf', 'etf&rel_trend=1', 'sp1500', 'sp1500&rel_trend=1'].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
 				if(url === 'commod_sentiment_seasonality') {

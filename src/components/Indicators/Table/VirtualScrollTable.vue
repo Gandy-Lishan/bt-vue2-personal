@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span" v-show="(!showReport && !showRelated)">
-      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}</span>
+      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
@@ -130,7 +130,7 @@
           </el-table-column>
           <template v-for="l in columns">
             <el-table-column
-              :key="l.label"
+              :key="l.value"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -225,7 +225,8 @@ export default {
       filterData: [],
       hideColumn: true,
       columnsMap: new Map(),
-      condition: ''
+      condition: '',
+      trendUpdateDate: ''
     }
   },
   computed: {
@@ -387,14 +388,14 @@ export default {
               label: 'Symbol',
               value: 'market_symbol',
               type: 'SP1500Score',
-              minWidth: '90px'
+              minWidth: '80px'
             },
             {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
               type: 'SP1500Score',
-              minWidth: '130px'
+              minWidth: '100px'
             },
             {
               key: 'trend_last_value',
@@ -404,14 +405,17 @@ export default {
             {
               key: 'trend_five_day_score_chg',
               label: '5-Day Score Chg',
-              value: 'trend_five_day_score_chg',
-              minWidth: '120px'
+              value: 'trend_five_day_score_chg'
+            },
+            {
+              key: 'reltrend_last_value',
+              label: 'Relative Score',
+              value: 'reltrend_last_value'
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: 'Relative Score',
-              value: 'reltrend_five_day_score_chg',
-              minWidth: '100px'
+              label: '5-Day Score Chg',
+              value: 'reltrend_five_day_score_chg'
             },
             ]
         ],
@@ -1045,15 +1049,18 @@ export default {
             {
               key: 'trend_five_day_score_chg',
               label: '5-Day<br/>Score Chg',
-              value: 'trend_five_day_score_chg',
-              minWidth: '120px'
+              value: 'trend_five_day_score_chg'
+            },
+            {
+              key: 'reltrend_last_value',
+              label: 'Relative<br/>Score',
+              value: 'reltrend_last_value'
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: 'Relative<br/>Score',
-              value: 'reltrend_five_day_score_chg',
-              minWidth: '100px'
-            },    
+              label: '5-Day<br/>Score Chg',
+              value: 'reltrend_five_day_score_chg'
+            },
            {
               key: 'close_over_ma1',
               label: 'Close ><br/>50-Day Avg',
@@ -1122,15 +1129,13 @@ export default {
             {
               key: 'reltrend_last_value',
               label: 'Relative<br/>Score',
-              value: 'reltrend_last_value',
-              minWidth: '100px'
+              value: 'reltrend_last_value'
             },
-            // {
-            //   key: 'reltrend_five_day_score_chg',
-            //   label: '5-Day<br/>Score Change',
-            //   value: 'reltrend_five_day_score_chg',
-            //   minWidth: '100px'
-            // },
+            {
+              key: 'reltrend_five_day_score_chg',
+              label: '5-Day<br/>Score Chg',
+              value: 'reltrend_five_day_score_chg'
+            },
             {
               key: 'close_over_ma1',
               label: 'Ratio ><br/>50-Day Avg',
@@ -1389,6 +1394,7 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
+        if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) this.trendUpdateDate = ` (${this.filterData[0].last_update})`
       },
       immediate: true,
       depp: true
@@ -1426,10 +1432,10 @@ export default {
       this.timeframeFilter = ''
       this.indicatorFilter = ''
       this.checkedType = item.value;
-      this.condition = ''
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
         await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
+        if(this.condition !== '') this.condition = ''
       })
       // this.$forceUpdate()
     },
@@ -1922,6 +1928,7 @@ export default {
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score']
+        ['reltrend_five_day_score_chg', '5-Day Score Chg']
       ])
       if(this.condition === 'trend') {
         const resetKeys = [
@@ -2134,9 +2141,9 @@ export default {
     },
     async addCondition(type) {
       // this.condition = type
+      debugger
       if(this.condition !== type) this.condition = type
       else if(this.condition === type && this.condition !== '') this.condition = ''
-      console.log('this.condition', this.condition)
       console.log('this.condition', this.condition)
       // .el-table--scrollable-x .el-table__body-wrapper
       console.log('this.$refs', this.$refs.SP1500ScoreVirtualScrollTable.$refs.bodyWrapper)
