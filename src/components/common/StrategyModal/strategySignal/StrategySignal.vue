@@ -96,17 +96,17 @@ export default {
     },
     updateChartWithSelectedStrategy() {
       const selectedStrategy = this.strategies[this.selectedStrategyIndex];
-      let { EntryDate, ExitDate } = selectedStrategy;
+      let { EntryDate, ExitDate, Direction } = selectedStrategy;
       if( selectedStrategy['Show Last'] == false ) {
         ExitDate = ExitDate.slice(0, ExitDate.length-1)
       }
-      this.plotData( EntryDate, ExitDate);
+      this.plotData( EntryDate, ExitDate, Direction);
     },
-    plotData( EntryDate, ExitDate) {
+    plotData( EntryDate, ExitDate, Direction) {
       // find the start point
       const start = EntryDate[0] < ExitDate[0] ? EntryDate[0] : ExitDate[0]
 
-      this.trendScore = this.trendScore.filter(item => {
+      const filteredTrendScore = this.trendScore.filter(item => {
         const itemDate = moment(item.DT);
         const isAfterStart = itemDate.isAfter(moment(start).subtract(1, 'month'));
         
@@ -116,9 +116,10 @@ export default {
         return isAfterStart;
       });
 
-      //const dataX = this.trendScore.map(item => new Date(item.DT));
-      const rData = this.trendScore.map(item => [new Date(item.DT).getTime(), item.Close]);
-      const pData = this.trendScore.map(item => item.trend_score);
+      //const dataX = filteredTrendScore.map(item => new Date(item.DT));
+      const rData = filteredTrendScore.map(item => [new Date(item.DT).getTime(), item.Close]);
+      debugger
+      const pData = filteredTrendScore.map(item => item.trend_score);
 
       const plotBands = rData.map(([timestamp], i) => {
         // 计算每个交易日的起始和结束时间
@@ -154,8 +155,8 @@ export default {
       //   };
       // });
 
-      const buyMarkerData = this.createMarkerData(rData, EntryDate, 'triangle', 'green');
-      const sellMarkerData = this.createMarkerData(rData, ExitDate, 'triangle-down', 'red');
+      const buyMarkerData = this.createMarkerData(rData, Direction=='long'?EntryDate:ExitDate, 'triangle', 'green');
+      const sellMarkerData = this.createMarkerData(rData, Direction=='long'?ExitDate:EntryDate, 'triangle-down', 'red');
 
       var basicChartOptions = {
           zoomType: 'x',
@@ -237,7 +238,7 @@ export default {
                }
              }
            },
-           plotBands: plotBands,
+          // plotBands: plotBands,
          },
         yAxis: {
           gridLineDashStyle: 'Dash',
