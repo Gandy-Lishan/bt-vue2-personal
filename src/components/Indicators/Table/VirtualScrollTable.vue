@@ -398,18 +398,18 @@ export default {
             },
             {
               key: 'trend_last_value',
-              label: 'Trend<br/>Score',
+              label: 'Trend Score',
               value: 'trend_last_value'
             },
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
+              label: '5-Day Score Chg',
               value: 'trend_five_day_score_chg',
               minWidth: '120px'
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: 'Relative<br/>Score',
+              label: 'Relative Score',
               value: 'reltrend_five_day_score_chg',
               minWidth: '100px'
             },
@@ -1035,8 +1035,26 @@ export default {
       const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && this.condition === 'trend') {
-        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns'), ...[
+        const saveColumns = ['market_symbol', 'chart_name']
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
+              key: 'trend_last_value',
+              label: 'Trend<br/>Score',
+              value: 'trend_last_value'
+            },    
+            {
+              key: 'trend_five_day_score_chg',
+              label: '5-Day<br/>Score Chg',
+              value: 'trend_five_day_score_chg',
+              minWidth: '120px'
+            },
+            {
+              key: 'reltrend_five_day_score_chg',
+              label: 'Relative<br/>Score',
+              value: 'reltrend_five_day_score_chg',
+              minWidth: '100px'
+            },    
+           {
               key: 'close_over_ma1',
               label: 'Close ><br/>50-Day Avg',
               value: 'close_over_ma1',
