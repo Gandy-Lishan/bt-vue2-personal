@@ -234,6 +234,10 @@ export default {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList', 'get_indicator_page_btv1_list']),
 		async see() {
 			this.loading = true
+      // 重置过滤条件
+      this.groupsFilter = ''
+      this.timeframeFilter = ''
+      this.searchInput = ''
       await this.get_indicator_page_btv1_list()
       const fetchData = async (res) => {
           try {
