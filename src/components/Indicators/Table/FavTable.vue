@@ -380,6 +380,7 @@ export default {
     },
     handleCellMouseEnter: debounce(function (row, column, cell, event){
       if(row.url && !row.sub_type.includes('Seasonality') && column.property === 'chart_name') {
+        let url = row.url
         let _t = '50%'
         let _l = 0
         const hoverElement = event.target
@@ -397,8 +398,8 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) row.url = row.url.toLowerCase()
-      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${row.url}_250.png`
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
+      this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
       this.hoverStyle = {
@@ -469,6 +470,9 @@ export default {
         }
         // 改变 table, vueX 中的数据并接口改变 favorite 列表
         this.tableData = this.tableData.filter(item => item.url !== scope.row.url)
+        this.groupsFilter = ''
+        this.timeframeFilter = ''
+        this.searchInput = ''
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
         console.log('this.tableData', this.tableData)
       } catch (error) {
