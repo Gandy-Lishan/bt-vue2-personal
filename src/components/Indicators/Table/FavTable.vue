@@ -350,7 +350,9 @@ export default {
               sp1500_trend_reltrend: 'Trend RelTrend',
               spx_trend_reltrend: 'Trend RelTrend',
               ndx_trend_reltrend: 'Trend RelTrend',
-              etf_trend_reltrend: 'Trend RelTrend',
+              etf_domestic_trend_reltrend: 'Trend RelTrend',
+              etf_foreign_trend_reltrend: 'Trend RelTrend',
+              etf_other_trend_reltrend: 'Trend RelTrend'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {

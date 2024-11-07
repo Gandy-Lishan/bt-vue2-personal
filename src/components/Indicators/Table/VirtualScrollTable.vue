@@ -1394,7 +1394,14 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
-        if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) this.trendUpdateDate = ` (${this.filterData[0].last_update})`
+          if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) {
+            const trendUpdateDate = this.filterData.reduce((latest, item) => {
+            const itemDate = new Date(`${item.last_update}T00:00:00Z`);  // 使用 UTC 时间
+            const latestDate = new Date(`${latest.last_update}T00:00:00Z`);
+            return itemDate > latestDate ? item : latest;
+          })?.last_update
+          this.trendUpdateDate = ` (${trendUpdateDate || this.filterData[0]?.last_update})`
+        }
       },
       immediate: true,
       depp: true
@@ -1929,7 +1936,7 @@ export default {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'etf', 'ndx'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
