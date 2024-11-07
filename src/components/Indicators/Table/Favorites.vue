@@ -12,12 +12,12 @@
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
           @showDetails="showDetails"
-          :style="{ width: '60%', display: !isShowDetails ? 'block' : 'none' }"
+          :style="{ width: '50%', display: !isShowDetails ? 'block' : 'none' }"
         ></FavTable>
       </template>
-      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" :style="{width: !isShowDetails ? '60%' : '50%'}" @showDetails="showDetails"></Details>
-      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '40%' : '50%'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '40%' : '50%'}"></Chart>
+      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" :style="{width: !isShowDetails ? '50%' : '50%'}" @showDetails="showDetails"></Details>
+      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '50%' : '50%'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '50%' : '50%'}"></Chart>
       <AboutUs></AboutUs>
     </div>
   </div>
@@ -65,11 +65,12 @@ import AboutUs from "./AboutUs";
   },
   methods: {
     updateChart(row) {
-      this.displayRow = {...row}
+      // this.displayRow = {...row}
+      this.displayRow = row
       console.log(row)
     },
     showDetails(row, isShowDetails) {
-      this.updateChart(Object.keys(row).length !== 0 ? row : this.displayRow)
+      this.updateChart(Object.keys(row).length !== 0 ? {...row} : this.displayRow)
       this.isShowDetails = isShowDetails
     }
   }
@@ -83,7 +84,7 @@ import AboutUs from "./AboutUs";
   align-items: stretch;
   flex-grow: 1;
   // .indicators-chart {
-  //   width: 40%;
+  //   width: 50%;
   // }
  }
  </style>

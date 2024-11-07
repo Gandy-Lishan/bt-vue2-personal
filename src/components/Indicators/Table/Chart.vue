@@ -275,7 +275,7 @@
             verticalAlign: 'top',
             layout: 'horizontal',
             x: 0,
-            y: 20,
+            y: 40,
             itemStyle: {
               fontSize: '10px' // 字体大小
             },
@@ -287,7 +287,7 @@
             position: {
               align: 'right',
               y: -120,
-              x: -50
+              x: -80
             }
           },
           tooltip: {
@@ -412,6 +412,10 @@
       try {
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
         originalData = res.data
+        if(typeof originalData === 'string') {
+          originalData = originalData.replace(/NaN/g, 'null')
+          originalData = JSON.parse(originalData)
+        }
       } catch (error) {
         if(error.response.status === 404) {
           _this.popUpMsgBox('Data for this indicator is unavailable.')
