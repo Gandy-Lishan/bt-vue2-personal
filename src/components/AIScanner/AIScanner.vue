@@ -18,19 +18,6 @@
 			<div class='header-part1'>
 				<div class="tableLabel">
 					<h4>Daily Picks at the end of today</h4>
-					<el-date-picker
-						v-model="date"
-						class="aiscanner-date"
-						type="daterange"
-						unlink-panels
-						range-separator="to"
-						start-placeholder="Start date"
-						end-placeholder="End date"
-						:picker-options="pickerOptions"
-						@change="selectDate"
-						value-format="yyyy-MM-dd"
-					>
-					</el-date-picker>
 				</div>
 
 				<div class="searchBox">
@@ -43,36 +30,160 @@
 						clearable
 						@clear="handleQuery"
 					>
-						<el-select v-model="searchCategory" slot="prepend" placeholder="Category" @change="handleQuery">
-							<el-option
-								v-for="category in categories"
-								:key="category.value"
-								:label="category.label"
-								:value="category.value"
-							></el-option>
-						</el-select>
+						<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
 					<el-button @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
 					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
-			<!-- 预留一个过滤器的div -->
-			<div class="header-part2">
-				<div class="filterBox">
-					<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
-						>Only Show Profit Target > Stop Loss
-					</el-checkbox>
-					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
-						>Only Show Direction Is Short
-					</el-checkbox> -->
-
-					<label for="radioGroup" class="direction">Direction: </label>
-					<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
-						<el-radio :label='false'>Long</el-radio>
-						<el-radio :label='true'>Short</el-radio>
-					</el-radio-group>
-				</div>
+			<div class="header-part">
+				<el-form
+				ref="Form"
+				:model="data"
+				label-position="top"
+				size="small"
+				:rules="rules"
+				style="margin-top: 10px;"
+				>
+				<el-row type="flex" :gutter="20">
+					<el-col :span="6">
+						<el-form-item label="Date Range:">
+							<el-date-picker
+								v-model="date"
+								class="aiscanner-date"
+								type="daterange"
+								unlink-panels
+								range-separator="to"
+								start-placeholder="Start date"
+								end-placeholder="End date"
+								:picker-options="pickerOptions"
+								@change="selectDate"
+								value-format="yyyy-MM-dd"
+							>
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item
+						prop="risk_control_filter"
+						class="_filterConditionBox"
+						>
+						<template slot="label">
+							<label>
+								Profit Target Range:
+							</label>
+						</template>
+						<div class="_conditionBox">
+						<el-form-item prop="take_profit_condition" label-width="0px">
+								<el-input v-model="data.take_profit_condition" placeholder="Enter number">
+									<template v-slot:append>(%)</template>
+								</el-input>
+						</el-form-item>
+							<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+						<el-form-item prop="take_profit" label-width="0px">
+						<el-input v-model="data.take_profit" placeholder="Enter number">
+							<template v-slot:append>(%)</template>
+						</el-input>
+						</el-form-item>
+						</div>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item
+						prop="risk_control_filter"
+						class="_filterConditionBox"
+						>
+						<template slot="label">
+							<label>
+								Stop Loss Range:
+							</label>
+						</template>
+						<div class="_conditionBox">
+							<el-form-item prop="stop_loss_condition" label-width="0px">
+									<el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+										<template v-slot:append>(%)</template>
+									</el-input>
+							</el-form-item>
+								<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+								<el-form-item prop="stop_loss" label-width="0px">
+								<el-input v-model="data.stop_loss" placeholder="Enter number">
+									<template v-slot:append>(%)</template>
+								</el-input>
+								</el-form-item>
+						</div>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item
+						prop="risk_control_filter"
+						class="_filterConditionBox"
+						>
+						<template slot="label">
+							<label>
+								Time In Market Range:
+							</label>
+						</template>
+						<div class="_conditionBox">
+						<el-form-item prop="time_in_market_condition" label-width="0px">
+								<el-input v-model="data.time_in_market_condition" placeholder="Enter number">
+									<template v-slot:append>(bars)</template>
+								</el-input>
+						</el-form-item>
+							<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+						<el-form-item prop="time_in_market" label-width="0px">
+						<el-input v-model="data.time_in_market" placeholder="Enter bars">
+							<template v-slot:append>(bars)</template>
+						</el-input>
+						</el-form-item>
+						</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row type="flex"  :gutter="20">
+					<el-col :span="6">
+						<el-form-item
+						prop="signals"
+						class="_filterConditionBox"
+						>
+						<template slot="label">
+						<label>
+							Signals Filters:
+						</label>
+						</template>
+							<SelectCheck ref="SelectCheck" :options="options" @selected="selected"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item
+							class="_filterConditionBox"
+						 label="Direction:">
+							<el-select
+								@change="ShowShortChecked"
+								v-model="isShowShortChecked"
+								placeholder="— Select Direction —"
+							>
+								<el-option
+									v-for="item in directionOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label-width="0">
+							<div class="filterBox">
+								<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
+									>Only Show Profit Target > Stop Loss
+								</el-checkbox>
+							</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				</el-form>
 			</div>
 		</div>
 			<Table 
@@ -91,17 +202,28 @@
 <script>
 
 const throttle = require('lodash/throttle')
+const debounce = require('lodash/debounce')
 import { getAIPick } from '@/service/ai'
 import { timestampToTime } from '@/utils'
+import { createPositiveScopeIntegerRule, createTPSLScopeValidateRule } from '@/utils/formValidate'
+import SelectCheck from "./ScannerBacktest/SelectCheck";
 
 import Table from "./Table.vue";
 
 export default {
   name: 'scannerai',
 	components: {
-		Table
+		Table,
+		SelectCheck
 	},
   data() {
+		var validateSignals = (rule, value, callback) => {
+      if(Array.isArray(value) && value.length === 0) {
+        callback(new Error('Please select at least one signal'))
+      }else {
+        callback()
+      }
+    };
     return {
     originData: {},
 	  tableData: {},
@@ -116,7 +238,6 @@ export default {
 	// search bar
 	  searchItem: '', // 搜索关键词
 	  searchCategory: "Symbol", // 存储选择的搜索类别
-	  categories: [{label:'Symbol',value:'Symbol'},{label:'Signal',value:'_Signal'}],
 
 	midTermMap: {
 		'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
@@ -128,8 +249,52 @@ export default {
 	},
 	isPLSChecked: false,
 	isShowShortChecked: false,
-	loading: false
+	loading: false,
+	data: {
+		stop_loss_condition: 6,
+		take_profit_condition: 8,
+		time_in_market_condition: 5,
+		stop_loss: 15,
+		take_profit: 30,
+		time_in_market: 34,
+		signals: ['All']
+	},
+	options: ['All'],
+	directionOptions: [
+		{value: false, label: 'Long'},
+		{value: true, label: 'Short'}
+	],
+	rules: {
+			time_in_market_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'change' }
+			],
+			time_in_market: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
+			],
+			stop_loss_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'change' }
+			],
+			stop_loss: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
+			],
+			take_profit_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'change' }
+			],
+			take_profit: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
+			],
+			signals: [
+				{ validator: validateSignals, trigger: 'blur' },
+				{ validator: validateSignals, trigger: 'change' },
+			]
     }
+  }
   },
   async created(){	
 	// 进入组件时还原筛选条件状态
@@ -161,10 +326,26 @@ export default {
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
 		originData: {
-			handler(newValue, oldValue){
+			async handler(newValue, oldValue){
 				this.tableData = JSON.parse(JSON.stringify(this.originData))
-				this.filterData()
+				this.options = [...Array.from(new Set(this.tableData.content.map(ele => ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+				this.data.signals = ['All']
+        this.$refs['SelectCheck'].optionsAll = true
+				await this.filterData()
+				console.log('this.options', this.options)
 			},
+			deep: true
+		},
+		data: {
+			handler: debounce(async function (newValue, oldValue) {
+				console.log('data change', newValue);
+				
+				const validForm = await this.validForm('Form');
+				if (!validForm) {
+					return;
+				}
+				this.handleQuery();
+			}, 500), // 500ms 的 debounce 时间，可根据需求调整
 			deep: true
 		}
 	},
@@ -177,9 +358,10 @@ export default {
 		return dis
 	},
 
-	handleQuery: throttle(function () { this.filterData() }, 500),
-	filterData(){
-		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.getSearchresult()))
+	handleQuery: throttle(async function () { await this.filterData() }, 1000),
+	async filterData(){
+		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( await this.filterRangeCondition(this.getSearchresult())))
+		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
 	},
 	filterPLSCondition(searchResult){
@@ -190,7 +372,31 @@ export default {
 		}
 		return searchResult
 	},
+	async validForm(formName) {
+		const validateForm = async (formRef) => {
+			return new Promise(resolve => {
+				this.$refs[formRef].validate(valid => {
+					resolve(valid);
+				});
+			});
+		};
+		return await validateForm(formName)
+	},
+	filterRangeCondition(searchResult){
+		const {stop_loss_condition, stop_loss, take_profit_condition, take_profit, time_in_market_condition, time_in_market, signals} = this.data
+		console.log('signals filter', signals)
+		console.log('signals options', this.options)
+		const condition = (signals.length === 1 && signals[0] === 'All')
+		return searchResult
+		.filter(item=>(
+			parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])
+			&& parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])
+			&& parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])
+			&& (condition || signals.includes(item['_Signal']))
+		))
+	},
 	filterShowShortCondition(searchResult){
+		debugger
 		if (this.isShowShortChecked) {
 			// 当checkbox勾选时，返回被筛选过的数据
 			return searchResult
@@ -293,7 +499,11 @@ export default {
 	},
 	toScannerBacktest() {
 		this.$router.push({path: '/scannerai/backtest'})
-	}
+	},
+	selected(signals){
+		console.log('触发了', signals)
+		this.data.signals = Array.from(new Set(signals))
+	},
   }
 };
 </script>
@@ -391,5 +601,20 @@ h4 {
 	text-align: center;
 	color: #606266;
 	font-weight: 600;
+}
+._conditionBox {
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+      margin-bottom: 0px;
+      width: 100%;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+		/deep/ .el-input-group__append, .el-input-group__prepend {
+			padding: 0 5px;
+		}
+}
+._filterConditionBox /deep/ .el-select {
+	width: 100%;
 }
 </style>
