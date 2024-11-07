@@ -1919,7 +1919,7 @@ export default {
         ['last_value', 'Value'],
         ['last_change', 'Change'],
         ['last_update', 'Date'],
-        ['sentiment', 'Sentiment'],
+        ['sentiment', 'Sentiment']
       ])
       if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
@@ -1943,7 +1943,7 @@ export default {
         ['chart_name', 'Name'],
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
-        ['reltrend_last_value', 'Relative Score']
+        ['reltrend_last_value', 'Relative Score'],
         ['reltrend_five_day_score_chg', '5-Day Score Chg']
       ])
       if(this.condition === 'trend') {
