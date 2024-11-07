@@ -1036,7 +1036,7 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && this.condition === 'trend') {
         const saveColumns = ['market_symbol', 'chart_name']
@@ -1374,7 +1374,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
     }
   },
   watch: {
@@ -1801,9 +1801,19 @@ export default {
           type: 'NDX100Score'
         },
         {
-          label: 'Equity ETF Scores',
-          value: 'etf',
-          type: 'equityETFScore'
+          label: 'Domestic ETF',
+          value: 'etf_domestic',
+          type: 'DomesticETFScore'
+        },
+        {
+          label: 'Foreign ETF',
+          value: 'etf_foreign',
+          type: 'ForeignETFScore'
+        },
+        {
+          label: 'Other Assets ETF',
+          value: 'etf_other',
+          type: 'OtherAssetsETFScore'
         },
         {
           label: 'Bond Market Sentiment',
@@ -2152,8 +2162,9 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
-        equityETFScore: 'etf',
-        TrendSector: 'sector_trend_score',
+        DomesticETFScore: 'etf_domestic',
+        ForeignETFScore: 'etf_foreign',
+        OtherAssetsETFScore: 'etf_other',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
         CommoditySeasonality: 'commod_seasonality',

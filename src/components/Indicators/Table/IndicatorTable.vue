@@ -201,10 +201,22 @@ export default {
               url: 'ndx'
             },
             {
-              label: 'Equity ETF Scores',
-              value: 'equityETFScore',
+              label: 'Domestic ETF',
+              value: 'DomesticETFScore',
               type: 'SP1500Score',
-              url: 'etf'
+              url: 'etf_domestic'
+            },
+            {
+              label: 'Foreign ETF',
+              value: 'ForeignETFScore',
+              type: 'SP1500Score',
+              url: 'etf_foreign'
+            },
+            {
+              label: 'Other Assets ETF',
+              value: 'OtherAssetsETFScore',
+              type: 'SP1500Score',
+              url: 'etf_other'
             },
             {
               label: 'Sector Summary',

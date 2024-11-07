@@ -62,7 +62,9 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
-        equityETFScore: 'etf',
+        DomesticETFScore: 'etf_domestic',
+        ForeignETFScore: 'etf_foreign',
+        OtherAssetsETFScore: 'etf_other',
         TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
@@ -245,7 +247,7 @@ export default {
       try {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
-        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(type)
+        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
