@@ -15,7 +15,7 @@ checkedTitle<template>
          @showDetails="showDetails"
          @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
          :style="{ 
-              'width': ((enlargedTable === item.label && checkedType === 'TrendSector') || (enlargedTable !== item.label && item.type === 'SP1500Score')) ? '100%' : '50%', 
+              'width': ((enlargedTable === item.label && checkedType === 'TrendSector')) ? '100%' : '50%', 
               'display': (enlargedTable === item.label || enlargedTable === null) && !isShowDetails ? 'block' : 'none' 
           }"
          ></Table>
