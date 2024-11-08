@@ -1288,6 +1288,7 @@ export function getAllMySymbolsList(page, callback) {
 			axios
 				.get(url + page, {
 					// cache: true
+					withCredentials: true
 				})
 				.then(res => {
 					const data = res.data.results

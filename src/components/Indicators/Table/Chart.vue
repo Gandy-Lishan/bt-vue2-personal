@@ -33,6 +33,7 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
+      const _this = this
       const {url, pess, opt, chart_name, market_symbol, type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
@@ -55,9 +56,10 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels' || type.includes('trend_reltrend')) return
+            if(url === 'smart_dumb' || url === 'risk_levels') return
             const chart = this;
             const button = document.createElement('button');
+            button.id = 'button'
             button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/10}px`;
@@ -68,6 +70,7 @@
             button.style.border = 'unset';
             button.style.width = '220px';
             button.style.background = 'unset';
+            if(type.includes('trend_reltrend')) button.style.display = 'none'
  
             button.onclick = function () {
               window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${url}`, '_blank')
@@ -162,7 +165,7 @@
         const xData = [...allData.map(d => d[0])]
         console.log('xData', xData)
         const minX = Math.min(xData)
-        const { url, type } = row
+        const { url, type, market_symbol } = row
         let selector = 5
         if(url === 'risk_levels') {
           selector = 3
@@ -170,7 +173,7 @@
         if(url === 'smart_dumb') {
           selector = 4
         }
-        if(type.includes('trend_reltrend')) selector = 3
+        if(typeof type === 'string' && type.includes('trend_reltrend')) selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
        Highcharts.stockChart(this.id, {
           rangeSelector: {
@@ -272,10 +275,10 @@
             verticalAlign: 'top',
             layout: 'horizontal',
             x: 0,
-            y: 20,
+            y: 40,
             itemStyle: {
-            fontSize: '10px' // 字体大小
-          },
+              fontSize: '10px' // 字体大小
+            },
           },
           credits: {
             enabled: true,
@@ -284,7 +287,7 @@
             position: {
               align: 'right',
               y: -120,
-              x: -50
+              x: -80
             }
           },
           tooltip: {
@@ -319,7 +322,51 @@
               //  enabled: false  // 确保数据分组被禁用
               // },
               pointStart: undefined,  // 确保不会有自动起点
-              pointInterval: undefined  // 确保不会有自动间隔
+              pointInterval: undefined,  // 确保不会有自动间隔
+              events: {
+                legendItemClick: function (event) {
+                  const allLegendNames = this.chart.legend.allItems.map(item => item.name)
+                  const convertString = (inputString) => {
+                      // 去除多余的空格
+                      inputString = inputString.trim().replace(/\s+/g, ' ');
+
+                      // 使用正则表达式提取主要部分
+                      const regex = /(\w+)\s+(.*?)\s+\(Last\s+=\s+[\d.]+\)/;
+                      const match = inputString.match(regex);
+
+                      if (match) {
+                          // 获取第一部分
+                          const firstPart = match[1];
+                          
+                          // 获取第二部分并处理
+                          const secondPart = match[2].toLowerCase().trim(); // 转为小写并去掉空格
+                          
+                          // 根据第二部分是否包含 "trend" 确定返回格式
+                          if (secondPart.includes('relative')) {
+                              return `${firstPart}_reltrend`;
+                          } else {
+                              return `${firstPart}_trend`;
+                          }
+                      }
+                      return null; // 如果没有匹配，返回 null
+                  }
+                  setTimeout(() => {
+                    const allLegend = this.chart.series.map(item => ({name: item.name, visible: item.visible}))
+                    console.log('chart', allLegend)
+                    const useLegend = allLegend.filter(item => (item.name !== market_symbol && item.visible === true && allLegendNames.includes(item.name)))
+                    const useLen = useLegend.length
+                    const button = this.chart.container.parentNode.querySelector('#button');
+                    console.log('button', button)
+                    if(useLen !== 1) {button.style.display = 'none'; return true}
+                    button.style.display = 'block'
+                    const _url = convertString(useLegend[0]?.name)
+                    button.onclick = function () {
+                      window.open(`/backtester/sr/setup?index=${market_symbol}&indicator=${_url}`, '_blank');
+                    }
+                    return true; // 允许默认图例切换操作
+                  }, 0)
+                }
+              }
             }
           },
           series: series.map((s, i) => {
@@ -359,9 +406,23 @@
       let {last_value, last_change_type, market_symbol, type} = this.row;
       console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
+      let zoonsData = [];
       console.log('this.row', this.row)
+      let originalData
+      try {
         const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
-        let originalData = res.data
+        originalData = res.data
+        if(typeof originalData === 'string') {
+          originalData = originalData.replace(/NaN/g, 'null')
+          originalData = JSON.parse(originalData)
+        }
+      } catch (error) {
+        if(error.response.status === 404) {
+          _this.popUpMsgBox('Data for this indicator is unavailable.')
+          createChart([], [], {}, {});
+          return
+        }
+      }
         originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
         console.log('originalData', originalData)
         try {
@@ -406,16 +467,39 @@
           originalData.forEach(item => {
             const pointColor = item['Color'] ? '#ff0000' : '#000000';
             if (zoonsData.length === 0 || zoonsData[zoonsData.length - 1].color !== pointColor){
+              const datatime = new Date(item['date']);
+              // 使用 UTC 时间来确保一致性
+              const utcTimestamp = Date.UTC(
+                  datatime.getUTCFullYear(),
+                  datatime.getUTCMonth(),
+                  datatime.getUTCDate(),
+                  datatime.getUTCHours(),
+                  datatime.getUTCMinutes(),
+                  datatime.getUTCSeconds()
+              );
+
               zoonsData.push({
-              value: new Date(item['date']).getTime(),   // 时间点
-              color: pointColor  // 对应的颜色
-            })
+                  value: utcTimestamp,  // 使用 UTC 时间戳
+                  color: pointColor     // 对应的颜色
+              })
             }  // 红色为 false，黑色为 true
             
           })
         }
         const data = allKeysName.reduce((acc, keyName) => {
-          acc[keyName] = originalData.map(entry => [new Date(entry['date']).getTime(), entry[keyName]]);
+          acc[keyName] = originalData.map(entry => {
+            const datatime = new Date(entry['date'])
+            // 使用 UTC 时间来确保一致性
+            const utcTimestamp = Date.UTC(
+                datatime.getUTCFullYear(),
+                datatime.getUTCMonth(),
+                datatime.getUTCDate(),
+                datatime.getUTCHours(),
+                datatime.getUTCMinutes(),
+                datatime.getUTCSeconds()
+            );
+            return [utcTimestamp, entry[keyName]]
+          });
           return acc;
         }, {});
         console.log('data', data)

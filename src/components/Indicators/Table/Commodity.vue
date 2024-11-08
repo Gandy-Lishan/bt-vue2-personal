@@ -155,7 +155,7 @@ export default {
   align-items: stretch;
   flex-grow: 1;
   .indicators-chart {
-    width: 40%;
+    width: 50%;
   }
 }
 

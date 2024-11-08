@@ -24,6 +24,7 @@
         @loadMore="loadMore"
         @updateChart="$emit('updateChart', row)"
         @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
+        @forceUpdateTable="$emit('_forceUpdateTable', type, condition)"
         >
     </VirtualScrollTable>
   </div>
@@ -32,7 +33,7 @@
 <script>
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
-import { isJson, capitalizeFirstLetter, unifyNumber, timestampToTime } from '@/utils'
+import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
 
 export default {
   props: {
@@ -61,7 +62,9 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
-        equityETFScore: 'etf',
+        DomesticETFScore: 'etf_domestic',
+        ForeignETFScore: 'etf_foreign',
+        OtherAssetsETFScore: 'etf_other',
         TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
@@ -206,7 +209,15 @@ export default {
                 if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
               }
-              if(key === 'last_update') obj[key] = timestampToTime(obj[key])
+              if(key === 'last_update') {
+                const datatime = new Date(obj['last_update']);
+
+                // 使用 UTC 方法获取年、月和日，以确保在不同时区显示一致的日期
+                const Y = datatime.getUTCFullYear() + '-';
+                const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
+                const D = datatime.getUTCDate().toString().padStart(2, '0');
+                obj['last_update'] = Y+M+D
+              }
               if((key === 'last_value' || key === 'last_change') && (subType === 'stock' || subType === 'Stock')){
                 if(obj[key] !== '' && obj[key] !== null && obj[key] !== 'null') obj[key] =  `${obj[key]}%`
                 // 加 %
@@ -229,13 +240,15 @@ export default {
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
-    async loadMore (type, isUpdateChart) {
+    async loadMore (type, isUpdateChart, condition) {
       this.optionsChecked = type
       this.loading = true
       let _results
       try {
-        const url = this.urlMap[this.optionsChecked]
+        let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
+        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
+        if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
           console.log(url, _results)

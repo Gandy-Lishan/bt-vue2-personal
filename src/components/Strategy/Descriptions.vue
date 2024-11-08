@@ -375,10 +375,19 @@ export default {
 		_backtestStrategy() {
 			debugger
 			if(!this.backtestStrategy) return
-			this.$router.push({
-				name: 'SetUp',
-				params: { data: JSON.stringify(this.backtestStrategy), usedFor: 'showBTForm' }
-			},()=>{})
+					/* 为防止跳转 BT 出现重名, 在这里加上时间戳 */
+					const date = new Date()
+					const year = date.getFullYear();
+					const month = date.getMonth() + 1;
+					const day = date.getDate();
+					const hour = date.getHours();
+					const minute = date.getMinutes();
+					const second = date.getSeconds();
+					this.backtestStrategy.name = `${this.backtestStrategy.name || 'Strategy'} (${year}-${month}-${day} ${hour}:${minute}:${second})`
+					this.$router.push({
+						name: 'SetUp',
+						params: { data: JSON.stringify(this.backtestStrategy), usedFor: 'showBTForm' }
+					},()=>{})
 		}
  	}
 }
