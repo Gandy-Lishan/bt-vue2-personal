@@ -1882,7 +1882,7 @@ export default {
           type: 'ForeignETFScore'
         },
         {
-          label: 'Other Assets ETF',
+          label: 'Other Assets',
           value: 'etf_other',
           type: 'OtherAssetsETFScore'
         },

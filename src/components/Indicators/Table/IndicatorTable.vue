@@ -216,7 +216,7 @@ export default {
               url: 'etf_foreign'
             },
             {
-              label: 'Other Assets ETF',
+              label: 'Other Assets',
               value: 'OtherAssetsETFScore',
               type: 'SP1500Score',
               url: 'etf_other'
