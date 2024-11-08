@@ -183,19 +183,19 @@ export default {
           keyProp: 'url',
           options: [
             {
-              label: 'S&P 1500 Scores',
+              label: 'S&P 1500',
               value: 'SP1500Score',
               type: 'SP1500Score',
               url: 'sp1500'
             },
             {
-              label: 'S&P 500 Scores',
+              label: 'S&P 500',
               value: 'SP500Score',
               type: 'SP1500Score',
               url: 'spx'
             },
             {
-              label: 'NDX 100 Scores',
+              label: 'NDX 100',
               value: 'NDX100Score',
               type: 'SP1500Score',
               url: 'ndx'

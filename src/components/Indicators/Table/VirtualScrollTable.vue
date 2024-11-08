@@ -1051,16 +1051,6 @@ export default {
               label: '5-Day<br/>Score Chg',
               value: 'trend_five_day_score_chg'
             },
-            {
-              key: 'reltrend_last_value',
-              label: 'Relative<br/>Score',
-              value: 'reltrend_last_value'
-            },
-            {
-              key: 'reltrend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
-              value: 'reltrend_five_day_score_chg'
-            },
            {
               key: 'close_over_ma1',
               label: 'Close ><br/>50-Day Avg',
@@ -1793,17 +1783,17 @@ export default {
           type: 'SP1500'
         },
         {
-          label: 'S&P 1500 Scores',
+          label: 'S&P 1500',
           value: 'sp1500',
           type: 'SP1500Score'
         },
         {
-          label: 'S&P 500 Scores',
+          label: 'S&P 500',
           value: 'spx',
           type: 'SP500Score'
         },
         {
-          label: 'NDX 100 Scores',
+          label: 'NDX 100',
           value: 'ndx',
           type: 'NDX100Score'
         },
@@ -1947,6 +1937,8 @@ export default {
         ['reltrend_five_day_score_chg', '5-Day Score Chg']
       ])
       if(this.condition === 'trend') {
+        keysMap.delete('reltrend_last_value')
+        keysMap.delete('reltrend_five_day_score_chg')
         const resetKeys = [
             {
               key: 'close_over_ma1',

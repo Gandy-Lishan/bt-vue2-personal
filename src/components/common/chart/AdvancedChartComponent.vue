@@ -382,7 +382,6 @@
 							Trading Signal is the outcome of a three-year backtesting process conducted on 28 strategies specifically tailored to a particular symbol,
 							from which the top three performing strategies were meticulously chosen.<br/>
 							By selecting a strategy, you can delve into more detailed information about how that symbol performed under that specific strategy.<br/>
-							Tip: The background color of the Trading Signal chart changes based on the Trend Score. For more insights into the Trend Score, <a href="https://users.sentimentrader.com/users/trend_reltrend/sp1500/">click here</a>.
 						</p>
 					</div>
 			</div>
