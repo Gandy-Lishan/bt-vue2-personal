@@ -767,12 +767,18 @@ get_indicator_page_btv1_list({ commit }) {
 		})
 	},
 	async fetchIndicatorsPageList({ commit, dispatch, state }, url) {
-		debugger
 		if (!state.indicatorsPageListdata[url]) {
 			try {
 				let requestUrl = url
 				// 替换板块的 url
-				if(['spx', 'spx&rel_trend=1','ndx', 'ndx&rel_trend=1', 'etf', 'etf&rel_trend=1', 'sp1500', 'sp1500&rel_trend=1'].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
+				if([
+					'sp1500', 'sp1500&rel_trend=1',
+					'spx', 'spx&rel_trend=1',
+					'ndx', 'ndx&rel_trend=1', 
+					'etf_domestic', 'etf_domestic&rel_trend=1',
+					'etf_foreign', 'etf_foreign&rel_trend=1',
+					'etf_other', 'etf_other&rel_trend=1',
+				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
 				if(url === 'commod_sentiment_seasonality') {

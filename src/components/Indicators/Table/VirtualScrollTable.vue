@@ -30,6 +30,7 @@
             <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
+            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Consecutive Trend Conditions</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -324,7 +325,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -371,7 +373,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -451,7 +454,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -499,7 +503,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -541,7 +546,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -589,7 +595,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -631,7 +638,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -673,7 +681,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -718,7 +727,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -757,7 +767,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -809,7 +820,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -851,7 +863,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -893,7 +906,8 @@ export default {
             {
               key: 'last_update',
               label: 'Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'sentiment',
@@ -931,7 +945,8 @@ export default {
             {
               key: 'last_update',
               label: 'Optix Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'AvgReturn',
@@ -969,7 +984,8 @@ export default {
             {
               key: 'last_update',
               label: 'Optix Date',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'close',
@@ -1004,7 +1020,8 @@ export default {
             {
               key: 'last_update',
               label: 'Last Update',
-              value: 'last_update'
+              value: 'last_update',
+              minWidth: '90px'
             },
             {
               key: 'three_year_max',
@@ -1036,9 +1053,33 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
-      if(isStockTrend && this.condition === 'trend') {
+      if(isStockTrend && (!this.condition || !this.enlarged)) {
+        const saveColumns = ['market_symbol', 'chart_name']
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
+          {
+            key: 'trend_last_value',
+            label: 'Trend Score',
+            value: 'trend_last_value'
+          },
+          {
+            key: 'trend_five_day_score_chg',
+            label: '5-Day Score Chg',
+            value: 'trend_five_day_score_chg'
+          },
+          {
+            key: 'reltrend_last_value',
+            label: 'Relative Score',
+            value: 'reltrend_last_value'
+          },
+          {
+            key: 'reltrend_five_day_score_chg',
+            label: '5-Day Score Chg',
+            value: 'reltrend_five_day_score_chg'
+          },
+        ]])
+      }else if(isStockTrend && this.condition === 'trend') {
         const saveColumns = ['market_symbol', 'chart_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
@@ -1050,16 +1091,6 @@ export default {
               key: 'trend_five_day_score_chg',
               label: '5-Day<br/>Score Chg',
               value: 'trend_five_day_score_chg'
-            },
-            {
-              key: 'reltrend_last_value',
-              label: 'Relative<br/>Score',
-              value: 'reltrend_last_value'
-            },
-            {
-              key: 'reltrend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
-              value: 'reltrend_five_day_score_chg'
             },
            {
               key: 'close_over_ma1',
@@ -1122,8 +1153,7 @@ export default {
               minWidth: '150px'
             }
         ]])
-      }
-      if(isStockTrend && this.condition === 'relative') {
+      }else if(isStockTrend && this.condition === 'relative') {
         const saveColumns = ['market_symbol', 'chart_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
@@ -1197,6 +1227,40 @@ export default {
               minWidth: '150px'
             }
         ]])
+      }else if(isStockTrend && this.condition === 'consecutive') {
+        const saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
+            {
+              key: 'trend_count_8_or_more',
+              label: '# Days <br/>>= 8',
+              value: 'trend_count_8_or_more'
+            },
+            {
+              key: 'trend_count_less_8',
+              label: '# Days <br/>< 8',
+              value: 'trend_count_less_8'
+            },
+            {
+              key: 'trend_count_2_or_less',
+              label: '# Days <br/><= 2',
+              value: 'trend_count_2_or_less'
+            },
+            {
+              key: 'reltrend_count_8_or_more',
+              label: '# RelDays <br/>>= 8',
+              value: 'reltrend_count_8_or_more'
+            },
+            {
+              key: 'reltrend_count_less_8',
+              label: '# RelDays <br/>< 8',
+              value: 'reltrend_count_less_8'
+            },
+            {
+              key: 'reltrend_count_2_or_less',
+              label: '# RelDays <br/><= 2',
+              value: 'reltrend_count_2_or_less'
+            }
+        ]])
       }
       const columns = columnsMap.get(`${_checkedType}Columns`)
       if(this.checkedType === 'TrendSector') return []
@@ -1204,7 +1268,7 @@ export default {
       if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
       if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
-      if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg']
+      if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
@@ -1374,7 +1438,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'equityETFScore'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
     }
   },
   watch: {
@@ -1394,7 +1458,14 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
-        if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) this.trendUpdateDate = ` (${this.filterData[0].last_update})`
+          if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) {
+            const trendUpdateDate = this.filterData.reduce((latest, item) => {
+            const itemDate = new Date(`${item.last_update}T00:00:00Z`);  // 使用 UTC 时间
+            const latestDate = new Date(`${latest.last_update}T00:00:00Z`);
+            return itemDate > latestDate ? item : latest;
+          })?.last_update
+          this.trendUpdateDate = ` (${trendUpdateDate || this.filterData[0]?.last_update})`
+        }
       },
       immediate: true,
       depp: true
@@ -1683,7 +1754,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
@@ -1786,24 +1857,34 @@ export default {
           type: 'SP1500'
         },
         {
-          label: 'S&P 1500 Scores',
+          label: 'S&P 1500',
           value: 'sp1500',
           type: 'SP1500Score'
         },
         {
-          label: 'S&P 500 Scores',
+          label: 'S&P 500',
           value: 'spx',
           type: 'SP500Score'
         },
         {
-          label: 'NDX 100 Scores',
+          label: 'NDX 100',
           value: 'ndx',
           type: 'NDX100Score'
         },
         {
-          label: 'Equity ETF Scores',
-          value: 'etf',
-          type: 'equityETFScore'
+          label: 'Domestic ETF',
+          value: 'etf_domestic',
+          type: 'DomesticETFScore'
+        },
+        {
+          label: 'Foreign ETF',
+          value: 'etf_foreign',
+          type: 'ForeignETFScore'
+        },
+        {
+          label: 'Other Assets ETF',
+          value: 'etf_other',
+          type: 'OtherAssetsETFScore'
         },
         {
           label: 'Bond Market Sentiment',
@@ -1919,7 +2000,7 @@ export default {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'etf', 'ndx'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
@@ -1930,6 +2011,8 @@ export default {
         ['reltrend_five_day_score_chg', '5-Day Score Chg']
       ])
       if(this.condition === 'trend') {
+        keysMap.delete('reltrend_last_value')
+        keysMap.delete('reltrend_five_day_score_chg')
         const resetKeys = [
             {
               key: 'close_over_ma1',
@@ -2019,6 +2102,36 @@ export default {
               key: 'channel_trend',
               label: '63-Day Ratio Breakout Trend'
             }
+        ]
+        resetKeys.forEach(item => {
+          keysMap.set(item.key, item.label)
+        })
+      }else if(this.condition === 'consecutive') {
+        const resetKeys = [
+          {
+            key: 'trend_count_8_or_more',
+            label: '# Days >= 8'
+          },
+          {
+            key: 'trend_count_less_8',
+            label: '# Days < 8'
+          },
+          {
+            key: 'trend_count_2_or_less',
+            label: '# Days <= 2'
+          },
+          {
+            key: 'reltrend_count_8_or_more',
+            label: '# RelDays >= 8'
+          },
+          {
+            key: 'reltrend_count_less_8',
+            label: '# RelDays < 8'
+          },
+          {
+            key: 'reltrend_count_2_or_less',
+            label: '# RelDays <= 2'
+          }
         ]
         resetKeys.forEach(item => {
           keysMap.set(item.key, item.label)
@@ -2152,8 +2265,9 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
-        equityETFScore: 'etf',
-        TrendSector: 'sector_trend_score',
+        DomesticETFScore: 'etf_domestic',
+        ForeignETFScore: 'etf_foreign',
+        OtherAssetsETFScore: 'etf_other',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
         CommoditySeasonality: 'commod_seasonality',
@@ -2345,7 +2459,7 @@ export default {
   }
   .btns {
     .el-button{
-      margin-right: 10px;
+      margin: 3px 10px 3px 0px;
     }
   }
   .select-option {
@@ -2354,8 +2468,8 @@ export default {
     justify-content: center;
     background-color: #d9d9d9;
     border-radius: 4px;
-    margin-right: 10px;
     padding: 3px;
+    margin: 3px 10px 3px 0px;
     span {
       font-size: 14px;
       margin-right: 5px

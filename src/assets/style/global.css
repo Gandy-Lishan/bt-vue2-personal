@@ -17,7 +17,12 @@
 .el-form-item__label {
   width: 136px;
 }
-
+.el-form-item__label {
+  width: 136px;
+}
+._filterConditionBox .el-form-item__label {
+  width: auto;
+}
 .exclude_oo .el-form-item label.el-form-item__label {
 	width: auto;
 }
@@ -103,6 +108,9 @@
 .aiscanner-container .el-select .el-input {
   width: 106px;
   /* padding-left: 22px; */
+}
+._filterConditionBox .el-select .el-input{
+  width: 100%;
 }
 .aiscanner-container .scanner-form .el-select .el-input {
   width: 100%;

@@ -50,7 +50,7 @@
         renderTo: 'charts',
         events: {
           load: function (event) {
-            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 400, 120,33)
+            this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 60, 450, 120,33)
                 .attr({
                     'opacity': 0.25
                 })

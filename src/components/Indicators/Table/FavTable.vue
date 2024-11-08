@@ -168,7 +168,8 @@ export default {
 				{
 						key: 'last_update',
 						label: 'Date',
-						value: 'last_update'
+						value: 'last_update',
+            minWidth: '90px'
 				},
 				{
 						key: 'sentiment',
@@ -350,7 +351,9 @@ export default {
               sp1500_trend_reltrend: 'Trend RelTrend',
               spx_trend_reltrend: 'Trend RelTrend',
               ndx_trend_reltrend: 'Trend RelTrend',
-              etf_trend_reltrend: 'Trend RelTrend',
+              etf_domestic_trend_reltrend: 'Trend RelTrend',
+              etf_foreign_trend_reltrend: 'Trend RelTrend',
+              etf_other_trend_reltrend: 'Trend RelTrend'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
@@ -969,8 +972,8 @@ export default {
     justify-content: center;
     background-color: #d9d9d9;
     border-radius: 4px;
-    margin-right: 10px;
     padding: 3px;
+    margin: 3px 10px 3px 3px;
     span {
       font-size: 14px;
       margin-right: 5px
