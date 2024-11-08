@@ -15,9 +15,9 @@
           :style="{ width: '50%', display: !isShowDetails ? 'block' : 'none' }"
         ></FavTable>
       </template>
-      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" :style="{width: !isShowDetails ? '50%' : '50%'}" @showDetails="showDetails"></Details>
-      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '50%' : '50%'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '50%' : '50%'}"></Chart>
+      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" :style="{width: '50%'}" @showDetails="showDetails"></Details>
+      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: '50%'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px', width: '50%'}"></Chart>
       <AboutUs></AboutUs>
     </div>
   </div>
