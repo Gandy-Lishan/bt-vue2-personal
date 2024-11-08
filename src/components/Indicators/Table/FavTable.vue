@@ -168,7 +168,8 @@ export default {
 				{
 						key: 'last_update',
 						label: 'Date',
-						value: 'last_update'
+						value: 'last_update',
+            minWidth: '90px'
 				},
 				{
 						key: 'sentiment',
@@ -971,8 +972,8 @@ export default {
     justify-content: center;
     background-color: #d9d9d9;
     border-radius: 4px;
-    margin-right: 10px;
     padding: 3px;
+    margin: 3px 10px 3px 3px;
     span {
       font-size: 14px;
       margin-right: 5px
