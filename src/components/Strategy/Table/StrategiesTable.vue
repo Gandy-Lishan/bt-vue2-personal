@@ -221,7 +221,7 @@ export default {
 					key: 'update_frequency',
 				},
 				{
-					label: 'YTD until 09/30/24 Return(%)',
+					label: 'YTD until 10/31/24 Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 				},

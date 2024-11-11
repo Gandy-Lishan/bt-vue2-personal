@@ -16,8 +16,8 @@
         :style="{ width: '50%', display: !isShowDetails ? 'block' : 'none' }"
         ></Table>
      </template>
-     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" :style="{width: !isShowDetails ? '50%' : '50%'}" @showDetails="showDetails"></Details>
-     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: !isShowDetails ? '50%' : '50%'}"></Chart>
+     <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Most Popular Charts'" :style="{width: '50%'}" @showDetails="showDetails"></Details>
+     <Chart :id="'popuChart'" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: '50%'}"></Chart>
      <AboutUs></AboutUs>
    </div>
  </div>
