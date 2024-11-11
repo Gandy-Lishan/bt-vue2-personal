@@ -460,8 +460,8 @@ export default {
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			z_score_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(-1, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(-1, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			z_score: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
@@ -621,21 +621,22 @@ export default {
 			expected_return_condition, expected_return,
 			win_rate_condition, win_rate
 		} = this.data
+		console.log('this.data', this.data)
 		console.log('signals filter', signals)
 		console.log('signals options', this.options)
 		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
 		return searchResult
 		.filter(item=>(
-			parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])
-			&& parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])
-			&& parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])
+			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
+			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
+			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
 			&& (condition || signals.includes(item['_Signal']))
-			&& parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])
-			&& parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])
-			&& parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])
-			&& parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])
-			&& parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])
-			&& parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])
+			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
+			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
+			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
+			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
+			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
+			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
 		))
 	},
 	filterShowShortCondition(searchResult){
