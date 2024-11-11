@@ -65,7 +65,7 @@
     </el-form>
     <div class="portfolioCheckedBox">
         <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"
-          >Auto Portfolio<i :class="auto_portfolio ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
+          >Auto Portfolio</a>
         <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
@@ -1041,8 +1041,6 @@ export default {
 
   
 .portfolioCheckedBox {
-  border: #cacaca solid 1px;
-  padding: 0 5px 0 10px;
   border-radius: 4px;
   line-height: 28px;
   border-radius: 4px;
