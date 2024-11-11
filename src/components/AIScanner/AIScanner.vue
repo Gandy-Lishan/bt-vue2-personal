@@ -299,6 +299,31 @@
 									</div>
 								</el-form-item>
 							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Win Rate Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="win_rate_condition" label-width="0px">
+												<el-input v-model="data.win_rate_condition" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="win_rate" label-width="0px">
+											<el-input v-model="data.win_rate" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
 						</el-row>
 						</el-form>
 					</div>
@@ -375,10 +400,10 @@ export default {
 		take_profit_condition: 0,
 		time_in_market_condition: 5,
 		stop_loss: 15,
-		take_profit: 60,
+		take_profit: 20,
 		time_in_market: 21,
 		max_risk_condition: 0,
-		max_risk: 30,
+		max_risk: 50,
 		z_score_condition: -1,
 		z_score: 5,
 		sharpe_ratio_condition: 0,
@@ -387,6 +412,8 @@ export default {
 		std_dev: 10,
 		expected_return_condition: 0,
 		expected_return: 20,
+		win_rate_condition: 55,
+		win_rate: 80,
 		signals: ['All']
 	},
 	options: ['All'],
@@ -413,56 +440,64 @@ export default {
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			stop_loss: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			take_profit_condition: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'blur' },
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			take_profit: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			max_risk_condition: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'blur' },
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			max_risk: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			z_score_condition: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(-1, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'blur' },
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(-1, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			z_score: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			sharpe_ratio_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.sharpe_ratio, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.sharpe_ratio, true, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			sharpe_ratio: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			std_dev_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.std_dev, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.std_dev, true, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			std_dev: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			expected_return_condition: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'blur' },
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			expected_return: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			],
+			win_rate_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			win_rate: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			signals: [
 				{ validator: validateSignals, trigger: 'blur' },
@@ -583,7 +618,8 @@ export default {
 			z_score_condition, z_score,
 			sharpe_ratio_condition, sharpe_ratio,
 			std_dev_condition, std_dev,
-			expected_return_condition, expected_return
+			expected_return_condition, expected_return,
+			win_rate_condition, win_rate
 		} = this.data
 		console.log('signals filter', signals)
 		console.log('signals options', this.options)
@@ -599,6 +635,7 @@ export default {
 			&& parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])
 			&& parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])
 			&& parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])
+			&& parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])
 		))
 	},
 	filterShowShortCondition(searchResult){
