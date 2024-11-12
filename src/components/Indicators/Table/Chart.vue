@@ -49,6 +49,7 @@
  
         events: {
           load: function (event) {
+            let _url = url
             var e = event.target.axes[0].getExtremes();
             this.defaultChartScale = [e.min, e.max];
             this.renderer.image('https://dnpgic06wp5lx.cloudfront.net/sentimentrader.png', 0, 600, 120,33)
@@ -71,9 +72,13 @@
             button.style.width = '220px';
             button.style.background = 'unset';
             // if(type.includes('trend_reltrend')) button.style.display = 'none'
- 
+            if(url === 'smart_dumb') _url = 'model_smart_money'
+            else if(url === 'risk_levels') _url = 'model_risk_stocks_short'
+            else if(type.includes('trend_reltrend')) {
+              _url = url.replace(/(.*?)_trend_reltrend/, "$1_reltrend");
+            }
             button.onclick = function () {
-              window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${url}`, '_blank')
+              window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${_url}`, '_blank')
             };
  
             chart.container.parentNode.style.position = 'relative';
@@ -327,6 +332,7 @@
                 legendItemClick: function (event) {
                   // 只有下面这三种情况才会在 legend 显示隐藏时做处理
                   if(['smart_dumb', 'risk_levels'].includes(url) || type.includes('trend_reltrend')) {
+                    debugger
                     const allLegendNames = this.chart.legend.allItems.map(item => item.name)
                     const convertString = (inputString) => {
                         // 去除多余的空格
@@ -376,6 +382,7 @@
                         return true; // 允许默认图例切换操作
                       }else if(useLegend !== 1) {
                         // 默认取第一个
+                        debugger
                         const useLegend = allLegend.filter(item => (item.name !== _market_symbol && allLegendNames.includes(item.name)))
                         const _url = convertString(useLegend[0]?.name)
                         button.onclick = function () {
