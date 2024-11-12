@@ -69,9 +69,17 @@ const getCoresSymbolDual = (isSymbol2) => {
       if (!queryString) {
         return 2;
       }
-      
-      const value = resultValue.toLowerCase();
-      const url = resultUrl.toLowerCase();
+
+      // 标准化函数：替换空格、下划线等符号，使其统一
+      const standardizeString = (str) => {
+        return str
+          .toLowerCase()            // 转为小写
+          .replace(/[_\s-]+/g, ' '); // 替换下划线、空格、破折号为统一的空格
+      };
+      // 标准化查询词和目标字段
+      const standardizedQuery = standardizeString(query);
+      const standardizedValue = standardizeString(resultValue);
+      const standardizedUrl = standardizeString(resultUrl);
   
       // 正则匹配：将查询字符串转为正则，允许字符间有任意字符
       const fuzzyMatch = (text, query) => {
@@ -82,9 +90,9 @@ const getCoresSymbolDual = (isSymbol2) => {
       // 模糊匹配分数
       let score = 0;
       
-      // 对 value 和 url 使用模糊匹配
-      const valueMatches = fuzzyMatch(value, query);
-      const urlMatches = fuzzyMatch(url, query);
+      // 对标准化后的 value 和 url 使用模糊匹配
+      const valueMatches = fuzzyMatch(standardizedValue, standardizedQuery);
+      const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery);
   
       // 每个匹配增加分数
       score += valueMatches.length * 2;  // 每个匹配加 2 分
