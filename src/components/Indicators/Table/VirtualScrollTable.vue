@@ -30,7 +30,7 @@
             <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
-            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Consecutive Trend Conditions</el-button>
+            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -1502,6 +1502,7 @@ export default {
       this.groupsFilter = ''
       this.timeframeFilter = ''
       this.indicatorFilter = ''
+      this.condition = '' // 清空 condition
       this.checkedType = item.value;
       this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {

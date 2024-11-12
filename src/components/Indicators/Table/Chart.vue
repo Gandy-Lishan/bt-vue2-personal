@@ -56,7 +56,7 @@
                     'opacity': 0.25
                 })
                 .add();
-            if(url === 'smart_dumb' || url === 'risk_levels') return
+            // if(url === 'smart_dumb' || url === 'risk_levels') return
             const chart = this;
             const button = document.createElement('button');
             button.id = 'button'
@@ -70,7 +70,7 @@
             button.style.border = 'unset';
             button.style.width = '220px';
             button.style.background = 'unset';
-            if(type.includes('trend_reltrend')) button.style.display = 'none'
+            // if(type.includes('trend_reltrend')) button.style.display = 'none'
  
             button.onclick = function () {
               window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${url}`, '_blank')
@@ -325,46 +325,66 @@
               pointInterval: undefined,  // 确保不会有自动间隔
               events: {
                 legendItemClick: function (event) {
-                  const allLegendNames = this.chart.legend.allItems.map(item => item.name)
-                  const convertString = (inputString) => {
-                      // 去除多余的空格
-                      inputString = inputString.trim().replace(/\s+/g, ' ');
+                  // 只有下面这三种情况才会在 legend 显示隐藏时做处理
+                  if(['smart_dumb', 'risk_levels'].includes(url) || type.includes('trend_reltrend')) {
+                    const allLegendNames = this.chart.legend.allItems.map(item => item.name)
+                    const convertString = (inputString) => {
+                        // 去除多余的空格
+                        inputString = inputString.trim().replace(/\s+/g, ' ');
+                        // 使用正则表达式提取主要部分
+                        const regex = /(\w+)\s+(.*?)\s+\(Last\s+=\s+[\d.]+\)/;
+                        const match = inputString.match(regex);
 
-                      // 使用正则表达式提取主要部分
-                      const regex = /(\w+)\s+(.*?)\s+\(Last\s+=\s+[\d.]+\)/;
-                      const match = inputString.match(regex);
-
-                      if (match) {
-                          // 获取第一部分
-                          const firstPart = match[1];
-                          
-                          // 获取第二部分并处理
-                          const secondPart = match[2].toLowerCase().trim(); // 转为小写并去掉空格
-                          
-                          // 根据第二部分是否包含 "trend" 确定返回格式
-                          if (secondPart.includes('relative')) {
-                              return `${firstPart}_reltrend`;
-                          } else {
-                              return `${firstPart}_trend`;
-                          }
-                      }
-                      return null; // 如果没有匹配，返回 null
-                  }
-                  setTimeout(() => {
-                    const allLegend = this.chart.series.map(item => ({name: item.name, visible: item.visible}))
-                    console.log('chart', allLegend)
-                    const useLegend = allLegend.filter(item => (item.name !== market_symbol && item.visible === true && allLegendNames.includes(item.name)))
-                    const useLen = useLegend.length
-                    const button = this.chart.container.parentNode.querySelector('#button');
-                    console.log('button', button)
-                    if(useLen !== 1) {button.style.display = 'none'; return true}
-                    button.style.display = 'block'
-                    const _url = convertString(useLegend[0]?.name)
-                    button.onclick = function () {
-                      window.open(`/backtester/sr/setup?index=${market_symbol}&indicator=${_url}`, '_blank');
+                        if (match) {
+                            // 获取第一部分
+                            const firstPart = match[1];
+                            
+                            // 获取第二部分并处理
+                            const secondPart = match[2].toLowerCase().trim(); // 转为小写并去掉空格
+                            
+                            // 根据第二部分是否包含 "trend" 确定返回格式
+                            if (secondPart.includes('relative')) {
+                                return `${firstPart}_reltrend`;
+                            } else if(secondPart.includes('relative') && secondPart.includes('trend') ){
+                                return `${firstPart}_trend`;
+                            } else if(`${match[1]} ${match[2]}` === 'Smart Money') {
+                              return `model_smart_money`
+                            } else if(`${match[1]} ${match[2]}` === 'Dumb Money') {
+                              return `model_dumb_money`
+                            } else if(`${match[1]} ${match[2]}` === 'Short Term Risk Levels') {
+                              return `model_risk_stocks_short`
+                            } else if(`${match[1]} ${match[2]}` === 'Intermediate Term Risk Levels') {
+                              return `model_risk_stocks_medium`
+                            }
+                        }
+                        return null; // 如果没有匹配，返回 null
                     }
-                    return true; // 允许默认图例切换操作
-                  }, 0)
+                    setTimeout(() => {
+                      const _market_symbol = market_symbol || 'SPX'
+                      const allLegend = this.chart.series.map(item => ({name: item.name, visible: item.visible}))
+                      console.log('chart', allLegend)
+                      const useLegend = allLegend.filter(item => (item.name !== _market_symbol  && item.visible === true && allLegendNames.includes(item.name)))
+                      const useLen = useLegend.length
+                      const button = this.chart.container.parentNode.querySelector('#button');
+                      console.log('button', button)
+                      if(useLen === 1) {
+                        button.style.display = 'block'
+                        const _url = convertString(useLegend[0]?.name)
+                        button.onclick = function () {
+                          window.open(`/backtester/sr/setup?index=${_market_symbol}&indicator=${_url}`, '_blank');
+                        }
+                        return true; // 允许默认图例切换操作
+                      }else if(useLegend !== 1) {
+                        // 默认取第一个
+                        const useLegend = allLegend.filter(item => (item.name !== _market_symbol && allLegendNames.includes(item.name)))
+                        const _url = convertString(useLegend[0]?.name)
+                        button.onclick = function () {
+                          window.open(`/backtester/sr/setup?index=${_market_symbol}&indicator=${_url}`, '_blank');
+                        }
+                        return true; // 允许默认图例切换操作
+                      }
+                    }, 0)
+                  }else {return true}
                 }
               }
             }
@@ -538,7 +558,7 @@
             name: `${name}${key.includes('_') && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
-            zones: url === 'risk_measure' ? zoonsData : [],
+            zones: url === 'risk_measure' ? zoonsData : []
           }
         })
         if(isRiskMeasure) {
