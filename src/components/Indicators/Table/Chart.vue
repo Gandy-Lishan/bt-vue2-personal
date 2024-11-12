@@ -75,18 +75,18 @@
             if(url === 'smart_dumb') _url = 'model_smart_money'
             else if(url === 'risk_levels') _url = 'model_risk_stocks_short'
             else if(type.includes('trend_reltrend')) {
-              _url = url.replace(/(.*?)_trend_reltrend/, "$1_reltrend");
+              _url = url.replace(/(.*?)_trend_reltrend/, "$1_trend");
             }
             button.onclick = function () {
               window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${_url}`, '_blank')
             };
- 
+
             chart.container.parentNode.style.position = 'relative';
             chart.container.parentNode.appendChild(button);
           },
         }
       };
- 
+
       const createYAxisConfig = (series, row) => {
         const { sub_type, source_list, url } = row;
         const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list';
