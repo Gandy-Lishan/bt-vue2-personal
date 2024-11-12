@@ -14460,11 +14460,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "BlackRock Inc",
-        "url": "9903115D",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Chesapeake Energy Corp",
         "url": "EXE",
         "updated": "Daily"
@@ -29670,16 +29665,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "BlackRock Inc Trend Score",
-        "url": "9903115D_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "BlackRock Inc RelTrend Score",
-        "url": "9903115D_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Chesapeake Energy Corp Trend Score",
         "url": "EXE_trend",
         "updated": "Daily"
@@ -29997,6 +29982,1361 @@
     {
         "chart_name": "Zoom Video Communications Inc RelTrend Score",
         "url": "ZM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Biotechnology (IBB) Trend Score",
+        "url": "IBB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Biotechnology (IBB) RelTrend Score",
+        "url": "IBB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Consumer Discretionary (XLY) Trend Score",
+        "url": "XLY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Consumer Discretionary (XLY) RelTrend Score",
+        "url": "XLY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Consumer Staples (XLP) Trend Score",
+        "url": "XLP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Consumer Staples (XLP) RelTrend Score",
+        "url": "XLP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy (XLE) Trend Score",
+        "url": "XLE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy (XLE) RelTrend Score",
+        "url": "XLE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials (XLF) Trend Score",
+        "url": "XLF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials (XLF) RelTrend Score",
+        "url": "XLF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Healthcare (XLV) Trend Score",
+        "url": "XLV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Healthcare (XLV) RelTrend Score",
+        "url": "XLV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials (XLI) Trend Score",
+        "url": "XLI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials (XLI) RelTrend Score",
+        "url": "XLI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology (XLK) Trend Score",
+        "url": "XLK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology (XLK) RelTrend Score",
+        "url": "XLK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities (XLU) Trend Score",
+        "url": "XLU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities (XLU) RelTrend Score",
+        "url": "XLU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Basic Materials (XLB) Trend Score",
+        "url": "XLB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Basic Materials (XLB) RelTrend Score",
+        "url": "XLB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Homebuilders (XHB) Trend Score",
+        "url": "XHB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Homebuilders (XHB) RelTrend Score",
+        "url": "XHB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Markets (EEM) Trend Score",
+        "url": "EEM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Markets (EEM) RelTrend Score",
+        "url": "EEM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Metals & Mining (XME) Trend Score",
+        "url": "XME_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Metals & Mining (XME) RelTrend Score",
+        "url": "XME_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oil & Gas (XOP) Trend Score",
+        "url": "XOP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oil & Gas (XOP) RelTrend Score",
+        "url": "XOP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate (IYR) Trend Score",
+        "url": "IYR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate (IYR) RelTrend Score",
+        "url": "IYR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "REITs (VNQ) Trend Score",
+        "url": "VNQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "REITs (VNQ) RelTrend Score",
+        "url": "VNQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Retail (XRT) Trend Score",
+        "url": "XRT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Retail (XRT) RelTrend Score",
+        "url": "XRT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Semiconductors (SMH) Trend Score",
+        "url": "SMH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Semiconductors (SMH) RelTrend Score",
+        "url": "SMH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 ETF (SPY) Trend Score",
+        "url": "SPY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 ETF (SPY) RelTrend Score",
+        "url": "SPY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ 100 ETF (QQQ) Trend Score",
+        "url": "QQQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ 100 ETF (QQQ) RelTrend Score",
+        "url": "QQQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 2000 ETF (IWM) Trend Score",
+        "url": "IWM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 2000 ETF (IWM) RelTrend Score",
+        "url": "IWM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Australia (EWA) Trend Score",
+        "url": "ewa_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Australia (EWA) RelTrend Score",
+        "url": "ewa_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brazil (EWZ) Trend Score",
+        "url": "ewz_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brazil (EWZ) RelTrend Score",
+        "url": "ewz_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canada (EWC) Trend Score",
+        "url": "ewc_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canada (EWC) RelTrend Score",
+        "url": "ewc_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "China (FXI) Trend Score",
+        "url": "fxi_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "China (FXI) RelTrend Score",
+        "url": "fxi_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "France (EWQ) Trend Score",
+        "url": "ewq_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "France (EWQ) RelTrend Score",
+        "url": "ewq_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Germany (EWG) Trend Score",
+        "url": "ewg_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Germany (EWG) RelTrend Score",
+        "url": "ewg_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "India (PIN) Trend Score",
+        "url": "pin_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "India (PIN) RelTrend Score",
+        "url": "pin_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Italy (EWI) Trend Score",
+        "url": "ewi_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Italy (EWI) RelTrend Score",
+        "url": "ewi_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Japan (EWJ) Trend Score",
+        "url": "ewj_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Japan (EWJ) RelTrend Score",
+        "url": "ewj_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mexico (EWW) Trend Score",
+        "url": "eww_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mexico (EWW) RelTrend Score",
+        "url": "eww_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russia (RSX) Trend Score",
+        "url": "rsx_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russia (RSX) RelTrend Score",
+        "url": "rsx_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spain (EWP) Trend Score",
+        "url": "ewp_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spain (EWP) RelTrend Score",
+        "url": "ewp_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Kingdom (EWU) Trend Score",
+        "url": "ewu_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Kingdom (EWU) RelTrend Score",
+        "url": "ewu_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Industrial (DIA) Trend Score",
+        "url": "DIA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Industrial (DIA) RelTrend Score",
+        "url": "DIA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Argentina (ARGT) Trend Score",
+        "url": "ARGT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Argentina (ARGT) RelTrend Score",
+        "url": "ARGT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Austria (EWO) Trend Score",
+        "url": "EWO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Austria (EWO) RelTrend Score",
+        "url": "EWO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Belgium (EWK) Trend Score",
+        "url": "EWK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Belgium (EWK) RelTrend Score",
+        "url": "EWK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chile (ECH) Trend Score",
+        "url": "ECH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chile (ECH) RelTrend Score",
+        "url": "ECH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Colombia (GXG) Trend Score",
+        "url": "GXG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Colombia (GXG) RelTrend Score",
+        "url": "GXG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Egypt (EGPT) Trend Score",
+        "url": "EGPT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Egypt (EGPT) RelTrend Score",
+        "url": "EGPT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Greece (GREK) Trend Score",
+        "url": "GREK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Greece (GREK) RelTrend Score",
+        "url": "GREK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hong Kong (EWH) Trend Score",
+        "url": "EWH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hong Kong (EWH) RelTrend Score",
+        "url": "EWH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Indonesia (IDX) Trend Score",
+        "url": "IDX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Indonesia (IDX) RelTrend Score",
+        "url": "IDX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ireland (EIRL) Trend Score",
+        "url": "EIRL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ireland (EIRL) RelTrend Score",
+        "url": "EIRL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Israel (EIS) Trend Score",
+        "url": "EIS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Israel (EIS) RelTrend Score",
+        "url": "EIS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Malaysia (EWM) Trend Score",
+        "url": "EWM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Malaysia (EWM) RelTrend Score",
+        "url": "EWM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netherlands (EWN) Trend Score",
+        "url": "EWN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netherlands (EWN) RelTrend Score",
+        "url": "EWN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "New Zealand (ENZL) Trend Score",
+        "url": "ENZL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "New Zealand (ENZL) RelTrend Score",
+        "url": "ENZL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nigeria (NGE) Trend Score",
+        "url": "NGE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nigeria (NGE) RelTrend Score",
+        "url": "NGE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Norway (NORW) Trend Score",
+        "url": "NORW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Norway (NORW) RelTrend Score",
+        "url": "NORW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Peru (EPU) Trend Score",
+        "url": "EPU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Peru (EPU) RelTrend Score",
+        "url": "EPU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Philippines (EPHE) Trend Score",
+        "url": "EPHE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Philippines (EPHE) RelTrend Score",
+        "url": "EPHE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Portugal (PGAL) Trend Score",
+        "url": "PGAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Portugal (PGAL) RelTrend Score",
+        "url": "PGAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qatar (QAT) Trend Score",
+        "url": "QAT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qatar (QAT) RelTrend Score",
+        "url": "QAT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Saudi Arabia (KSA) Trend Score",
+        "url": "KSA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Saudi Arabia (KSA) RelTrend Score",
+        "url": "KSA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Singapore (EWS) Trend Score",
+        "url": "EWS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Singapore (EWS) RelTrend Score",
+        "url": "EWS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "South Africa (EZA) Trend Score",
+        "url": "EZA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "South Africa (EZA) RelTrend Score",
+        "url": "EZA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "South Korea (EWY) Trend Score",
+        "url": "EWY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "South Korea (EWY) RelTrend Score",
+        "url": "EWY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sweden (EWD) Trend Score",
+        "url": "EWD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sweden (EWD) RelTrend Score",
+        "url": "EWD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Switzerland (EWL) Trend Score",
+        "url": "EWL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Switzerland (EWL) RelTrend Score",
+        "url": "EWL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taiwan (EWT) Trend Score",
+        "url": "EWT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taiwan (EWT) RelTrend Score",
+        "url": "EWT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Thailand (THD) Trend Score",
+        "url": "THD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Thailand (THD) RelTrend Score",
+        "url": "THD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Turkey (TUR) Trend Score",
+        "url": "TUR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Turkey (TUR) RelTrend Score",
+        "url": "TUR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Arab Emirates (UAE) Trend Score",
+        "url": "UAE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Arab Emirates (UAE) RelTrend Score",
+        "url": "UAE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vietnam (VNM) Trend Score",
+        "url": "VNM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vietnam (VNM) RelTrend Score",
+        "url": "VNM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alerian MLP (AMLP) Trend Score",
+        "url": "AMLP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alerian MLP (AMLP) RelTrend Score",
+        "url": "AMLP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JPM Alerian MLP (AMJ) Trend Score",
+        "url": "AMJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JPM Alerian MLP (AMJ) RelTrend Score",
+        "url": "AMJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pakistan (PAK) Trend Score",
+        "url": "pak_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pakistan (PAK) RelTrend Score",
+        "url": "pak_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "India (INDA) Trend Score",
+        "url": "inda_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "India (INDA) RelTrend Score",
+        "url": "inda_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Poland (EPOL) Trend Score",
+        "url": "epol_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Poland (EPOL) RelTrend Score",
+        "url": "epol_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Indonesia (EIDO) Trend Score",
+        "url": "eido_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Indonesia (EIDO) RelTrend Score",
+        "url": "eido_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MSCI EAFE ETF (EFA) Trend Score",
+        "url": "EFA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MSCI EAFE ETF (EFA) RelTrend Score",
+        "url": "EFA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clean Energy (ICLN) Trend Score",
+        "url": "ICLN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clean Energy (ICLN) RelTrend Score",
+        "url": "ICLN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alternative Harvest (MJ) Trend Score",
+        "url": "MJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alternative Harvest (MJ) RelTrend Score",
+        "url": "MJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Trans Data ETF (BLOK) Trend Score",
+        "url": "BLOK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Trans Data ETF (BLOK) RelTrend Score",
+        "url": "BLOK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Solar (TAN) Trend Score",
+        "url": "TAN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Solar (TAN) RelTrend Score",
+        "url": "TAN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares US Trans (IYT) Trend Score",
+        "url": "IYT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares US Trans (IYT) RelTrend Score",
+        "url": "IYT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P Biotech (XBI) Trend Score",
+        "url": "XBI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P Biotech (XBI) RelTrend Score",
+        "url": "XBI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Online Retail (IBUY) Trend Score",
+        "url": "IBUY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Online Retail (IBUY) RelTrend Score",
+        "url": "IBUY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lithuium & Battery (LIT) Trend Score",
+        "url": "LIT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lithuium & Battery (LIT) RelTrend Score",
+        "url": "LIT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Mkts Internet (EMQQ) Trend Score",
+        "url": "EMQQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Mkts Internet (EMQQ) RelTrend Score",
+        "url": "EMQQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cloud Computing (WCLD) Trend Score",
+        "url": "WCLD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cloud Computing (WCLD) RelTrend Score",
+        "url": "WCLD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "China Internet (KWEB) Trend Score",
+        "url": "KWEB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "China Internet (KWEB) RelTrend Score",
+        "url": "KWEB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Real Estate (XLRE) Trend Score",
+        "url": "XLRE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Real Estate (XLRE) RelTrend Score",
+        "url": "XLRE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services (XLC) Trend Score",
+        "url": "XLC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services (XLC) RelTrend Score",
+        "url": "XLC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regional Banking (KRE) Trend Score",
+        "url": "KRE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regional Banking (KRE) RelTrend Score",
+        "url": "KRE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P Bank (KBE) Trend Score",
+        "url": "KBE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P Bank (KBE) RelTrend Score",
+        "url": "KBE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global Carbon (KRBN) Trend Score",
+        "url": "KRBN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global Carbon (KRBN) RelTrend Score",
+        "url": "KRBN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Home Construction (ITB) Trend Score",
+        "url": "ITB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Home Construction (ITB) RelTrend Score",
+        "url": "ITB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper Miners (COPX) Trend Score",
+        "url": "COPX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper Miners (COPX) RelTrend Score",
+        "url": "COPX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rare Earth/Strategic Metals (REMX) Trend Score",
+        "url": "REMX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rare Earth/Strategic Metals (REMX) RelTrend Score",
+        "url": "REMX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Finland (EFNL) Trend Score",
+        "url": "EFNL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Finland (EFNL) RelTrend Score",
+        "url": "EFNL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Denmark (EDEN) Trend Score",
+        "url": "EDEN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Denmark (EDEN) RelTrend Score",
+        "url": "EDEN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Semiconductor (SOXX) Trend Score",
+        "url": "SOXX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Semiconductor (SOXX) RelTrend Score",
+        "url": "SOXX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Miners (GDX) Trend Score",
+        "url": "GDX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Miners (GDX) RelTrend Score",
+        "url": "GDX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold (GLD) Trend Score",
+        "url": "GLD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold (GLD) RelTrend Score",
+        "url": "GLD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 Equal Weight ETF (RSP) Trend Score",
+        "url": "RSP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 Equal Weight ETF (RSP) RelTrend Score",
+        "url": "RSP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silver (SLV) Trend Score",
+        "url": "SLV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silver (SLV) RelTrend Score",
+        "url": "SLV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Natural Gas (UNG) Trend Score",
+        "url": "UNG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Natural Gas (UNG) RelTrend Score",
+        "url": "UNG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crude Oil (USO) Trend Score",
+        "url": "USO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crude Oil (USO) RelTrend Score",
+        "url": "USO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Comm Srv Trend Score",
+        "url": "RSPC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Comm Srv RelTrend Score",
+        "url": "RSPC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin Trend Score",
+        "url": "XBTUSD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin RelTrend Score",
+        "url": "XBTUSD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Expanded Tech-Software ETF Trend Score",
+        "url": "IGV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Expanded Tech-Software ETF RelTrend Score",
+        "url": "IGV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum Trend Score",
+        "url": "XETUSD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum RelTrend Score",
+        "url": "XETUSD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Commodity Index Trust Trend Score",
+        "url": "GSG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Commodity Index Trust RelTrend Score",
+        "url": "GSG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Discretionary ETF Trend Score",
+        "url": "PSCD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Discretionary ETF RelTrend Score",
+        "url": "PSCD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Industrials Trend Score",
+        "url": "RSPN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Industrials RelTrend Score",
+        "url": "RSPN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Platinum Trend Score",
+        "url": "PPLT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Platinum RelTrend Score",
+        "url": "PPLT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Energy ETF Trend Score",
+        "url": "PSCE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Energy ETF RelTrend Score",
+        "url": "PSCE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper Trend Score",
+        "url": "CPER_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper RelTrend Score",
+        "url": "CPER_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Financials Trend Score",
+        "url": "RSPF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Financials RelTrend Score",
+        "url": "RSPF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Staples Trend Score",
+        "url": "RSPS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Staples RelTrend Score",
+        "url": "RSPS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Technology ETF Trend Score",
+        "url": "PSCT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Technology ETF RelTrend Score",
+        "url": "PSCT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust DJ Internet Trend Score",
+        "url": "FDN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust DJ Internet RelTrend Score",
+        "url": "FDN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Discretionary Trend Score",
+        "url": "RSPD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Discretionary RelTrend Score",
+        "url": "RSPD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Energy Trend Score",
+        "url": "RSPG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Energy RelTrend Score",
+        "url": "RSPG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P 600 ETF Trend Score",
+        "url": "SPSM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P 600 ETF RelTrend Score",
+        "url": "SPSM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Industrials ETF Trend Score",
+        "url": "PSCI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Industrials ETF RelTrend Score",
+        "url": "PSCI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE All World Ex USA Trend Score",
+        "url": "VEU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE All World Ex USA RelTrend Score",
+        "url": "VEU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Vctrs Steel ETF Trend Score",
+        "url": "SLX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Vctrs Steel ETF RelTrend Score",
+        "url": "SLX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Utilities Trend Score",
+        "url": "RSPU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Utilities RelTrend Score",
+        "url": "RSPU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Materials Trend Score",
+        "url": "RSPM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Materials RelTrend Score",
+        "url": "RSPM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Financials ETF Trend Score",
+        "url": "PSCF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Financials ETF RelTrend Score",
+        "url": "PSCF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Commodity Index Tracking Fund Trend Score",
+        "url": "DBC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Commodity Index Tracking Fund RelTrend Score",
+        "url": "DBC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Health Care Trend Score",
+        "url": "RSPH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Health Care RelTrend Score",
+        "url": "RSPH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Health Care ETF Trend Score",
+        "url": "PSCH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Health Care ETF RelTrend Score",
+        "url": "PSCH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MSCI World Ex USA Trend Score",
+        "url": "ACWX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MSCI World Ex USA RelTrend Score",
+        "url": "ACWX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Technology Trend Score",
+        "url": "RSPT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Technology RelTrend Score",
+        "url": "RSPT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Staples ETF Trend Score",
+        "url": "PSCC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Staples ETF RelTrend Score",
+        "url": "PSCC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum ETF Trend Score",
+        "url": "ETHA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum ETF RelTrend Score",
+        "url": "ETHA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Real Estate Trend Score",
+        "url": "RSPR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 EW Real Estate RelTrend Score",
+        "url": "RSPR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P SmCp Utilities and Communications ETF Trend Score",
+        "url": "PSCU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P SmCp Utilities and Communications ETF RelTrend Score",
+        "url": "PSCU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin ETF Trend Score",
+        "url": "IBIT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin ETF RelTrend Score",
+        "url": "IBIT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Materials ETF Trend Score",
+        "url": "PSCM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 600 Materials ETF RelTrend Score",
+        "url": "PSCM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Risk On / Off Overlay",
+        "url": "risk_measure_overlay",
         "updated": "Daily"
     }
 ]
