@@ -30,7 +30,7 @@ const getCoresSymbolDual = (isSymbol2) => {
   return symbolLabel
 }
 
-  const createStateFilter = (queryString) => {
+  const createStateFilter2 = (queryString) => {
     return (state) => {
       const query = queryString.toLowerCase();
       const resultValue = state.value || state.name || state.label || state.model_name;
@@ -53,6 +53,56 @@ const getCoresSymbolDual = (isSymbol2) => {
       return 0; // 不匹配
     };
   }
+
+  const createStateFilter = (queryString) => {
+    return (state) => {
+      const query = queryString.toLowerCase();
+      const resultValue = state.value || state.name || state.label || state.model_name;
+      const resultUrl = state.url || state.symbol;
+
+      // 如果字段为空，返回 0
+      if (!resultValue || !resultUrl) {
+        return 0;
+      }
+  
+      // 如果keyword为空, 全部一致
+      if (!queryString) {
+        return 2;
+      }
+
+      // 标准化函数：替换空格、下划线等符号，使其统一
+      const standardizeString = (str) => {
+        return str
+          .toLowerCase()            // 转为小写
+          .replace(/[_\s-]+/g, ' '); // 替换下划线、空格、破折号为统一的空格
+      };
+      // 标准化查询词和目标字段
+      const standardizedQuery = standardizeString(query);
+      const standardizedValue = standardizeString(resultValue);
+      const standardizedUrl = standardizeString(resultUrl);
+  
+      // 正则匹配：将查询字符串转为正则，允许字符间有任意字符
+      const fuzzyMatch = (text, query) => {
+        const regex = new RegExp(query.split('').join('.*?'), 'g'); // 模糊匹配
+        return [...text.matchAll(regex)];
+      };
+  
+      // 模糊匹配分数
+      let score = 0;
+      
+      // 对标准化后的 value 和 url 使用模糊匹配
+      const valueMatches = fuzzyMatch(standardizedValue, standardizedQuery);
+      const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery);
+  
+      // 每个匹配增加分数
+      score += valueMatches.length * 2;  // 每个匹配加 2 分
+      score += urlMatches.length * 2;    // 每个匹配加 2 分
+
+      // 如果有匹配，返回分数
+      return score;
+    };
+  };
+  
   
   const recoverSymbolOptixUrl = (url) => {
     if(url && url.endsWith('@indicator')){

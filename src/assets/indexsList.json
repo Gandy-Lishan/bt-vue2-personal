@@ -914,5 +914,137 @@
     {
         "symbol": "UTIL",
         "name": "Dow Jones Utility Average (UTIL) "
+    },
+    {
+        "symbol": "RSPC",
+        "name": "Invesco S&P 500 EW Comm Srv"
+    },
+    {
+        "symbol": "IGV",
+        "name": "iShares Expanded Tech-Software ETF"
+    },
+    {
+        "symbol": "PSCD",
+        "name": "Invesco S&P 600 Discretionary ETF"
+    },
+    {
+        "symbol": "RSPN",
+        "name": "Invesco S&P 500 EW Industrials"
+    },
+    {
+        "symbol": "PSCE",
+        "name": "Invesco S&P 600 Energy ETF"
+    },
+    {
+        "symbol": "RSPF",
+        "name": "Invesco S&P 500 EW Financials"
+    },
+    {
+        "symbol": "RSPS",
+        "name": "Invesco S&P 500 EW Staples"
+    },
+    {
+        "symbol": "PSCT",
+        "name": "Invesco S&P 600 Technology ETF"
+    },
+    {
+        "symbol": "RSPD",
+        "name": "Invesco S&P 500 EW Discretionary"
+    },
+    {
+        "symbol": "RSPG",
+        "name": "Invesco S&P 500 EW Energy"
+    },
+    {
+        "symbol": "SPSM",
+        "name": "SPDR S&P 600 ETF"
+    },
+    {
+        "symbol": "PSCI",
+        "name": "Invesco S&P 600 Industrials ETF"
+    },
+    {
+        "symbol": "SLX",
+        "name": "VanEck Vctrs Steel ETF"
+    },
+    {
+        "symbol": "RSPU",
+        "name": "Invesco S&P 500 EW Utilities"
+    },
+    {
+        "symbol": "RSPM",
+        "name": "Invesco S&P 500 EW Materials"
+    },
+    {
+        "symbol": "PSCF",
+        "name": "Invesco S&P 600 Financials ETF"
+    },
+    {
+        "symbol": "RSPH",
+        "name": "Invesco S&P 500 EW Health Care"
+    },
+    {
+        "symbol": "PSCH",
+        "name": "Invesco S&P 600 Health Care ETF"
+    },
+    {
+        "symbol": "RSPT",
+        "name": "Invesco S&P 500 EW Technology"
+    },
+    {
+        "symbol": "PSCC",
+        "name": "Invesco S&P 600 Staples ETF"
+    },
+    {
+        "symbol": "RSPR",
+        "name": "Invesco S&P 500 EW Real Estate"
+    },
+    {
+        "symbol": "PSCU",
+        "name": "Invesco S&P SmCp Utilities and Communications ETF"
+    },
+    {
+        "symbol": "PSCM",
+        "name": "Invesco S&P 600 Materials ETF"
+    },
+    {
+        "symbol": "VEU",
+        "name": "FTSE All World Ex USA"
+    },
+    {
+        "symbol": "ACWX",
+        "name": "MSCI World Ex USA"
+    },
+    {
+        "symbol": "XBTUSD",
+        "name": "Bitcoin"
+    },
+    {
+        "symbol": "XETUSD",
+        "name": "Ethereum"
+    },
+    {
+        "symbol": "GSG",
+        "name": "Commodity Index Trust"
+    },
+    {
+        "symbol": "PPLT",
+        "name": "Platinum"
+    },
+    {
+        "symbol": "CPER",
+        "name": "Copper"
+    },
+    {
+        "symbol": "DBC",
+        "name": "Commodity Index Tracking Fund"
+    },
+    {
+        "symbol": "ETHA",
+        "name": "Ethereum ETF"
+    },
+    {
+        "symbol": "IBIT",
+        "name": "Bitcoin ETF"
     }
 ]

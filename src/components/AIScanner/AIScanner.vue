@@ -37,18 +37,11 @@
 					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
-			<div class="header-part">
-				<el-form
-				ref="Form"
-				:model="data"
-				label-position="top"
-				size="small"
-				:rules="rules"
-				style="margin-top: 10px;"
-				>
-				<el-row type="flex" :gutter="20">
-					<el-col :span="6">
-						<el-form-item label="Date Range:">
+			<!-- 预留一个过滤器的div -->
+			<div class="header-part2">
+				<div class="filterBox _filterConditionBox">
+					<el-row :gutter="20">
+						<el-col :span="6">
 							<el-date-picker
 								v-model="date"
 								class="aiscanner-date"
@@ -62,128 +55,279 @@
 								value-format="yyyy-MM-dd"
 							>
 							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item
-						prop="risk_control_filter"
-						class="_filterConditionBox"
+						</el-col>
+						<el-col :span="6">
+							<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
+								>Only Show Profit Target > Stop Loss
+							</el-checkbox>
+						</el-col>
+						<el-col :span="6">
+							<label for="radioGroup" class="direction">Direction: </label>
+							<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
+								<el-radio :label='false'>Long</el-radio>
+								<el-radio :label='true'>Short</el-radio>
+							</el-radio-group>
+						</el-col>
+					</el-row>
+					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
+						>Only Show Direction Is Short
+					</el-checkbox> -->
+				</div>
+			</div>
+			<div class="header-part">
+				<div class="portfolioCheckedBox">
+					<a @click="isFilter = !isFilter" style="cursor: pointer;"
+						>Filter Criteria<i :class="isFilter ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
+					<div class="des-content" v-show="isFilter">
+						<el-form
+						ref="Form"
+						:model="data"
+						label-position="top"
+						size="small"
+						:rules="rules"
+						style="margin-top: 10px;"
 						>
-						<template slot="label">
-							<label>
-								Profit Target Range:
-							</label>
-						</template>
-						<div class="_conditionBox">
-						<el-form-item prop="take_profit_condition" label-width="0px">
-								<el-input v-model="data.take_profit_condition" placeholder="Enter number">
-									<template v-slot:append>(%)</template>
-								</el-input>
-						</el-form-item>
-							<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-						<el-form-item prop="take_profit" label-width="0px">
-						<el-input v-model="data.take_profit" placeholder="Enter number">
-							<template v-slot:append>(%)</template>
-						</el-input>
-						</el-form-item>
-						</div>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item
-						prop="risk_control_filter"
-						class="_filterConditionBox"
-						>
-						<template slot="label">
-							<label>
-								Stop Loss Range:
-							</label>
-						</template>
-						<div class="_conditionBox">
-							<el-form-item prop="stop_loss_condition" label-width="0px">
-									<el-input v-model="data.stop_loss_condition" placeholder="Enter number">
-										<template v-slot:append>(%)</template>
-									</el-input>
-							</el-form-item>
-								<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-								<el-form-item prop="stop_loss" label-width="0px">
-								<el-input v-model="data.stop_loss" placeholder="Enter number">
+						<el-row type="flex" :gutter="20" justify="center" align="middle">
+							<el-col :span="6">
+								<el-form-item
+								prop="signals"
+								class="_filterConditionBox"
+								>
+								<template slot="label">
+								<label>
+									Signals Filters:
+								</label>
+								</template>
+									<SelectCheck ref="SelectCheck" :options="options" @selected="selected"/>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+								prop="risk_control_filter"
+								class="_filterConditionBox"
+								>
+								<template slot="label">
+									<label>
+										Profit Target Range:
+									</label>
+								</template>
+								<div class="_conditionBox">
+								<el-form-item prop="take_profit_condition" label-width="0px">
+										<el-input v-model="data.take_profit_condition" placeholder="Enter number">
+											<template v-slot:append>(%)</template>
+										</el-input>
+								</el-form-item>
+									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+								<el-form-item prop="take_profit" label-width="0px">
+								<el-input v-model="data.take_profit" placeholder="Enter number">
 									<template v-slot:append>(%)</template>
 								</el-input>
 								</el-form-item>
-						</div>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item
-						prop="risk_control_filter"
-						class="_filterConditionBox"
-						>
-						<template slot="label">
-							<label>
-								Time In Market Range:
-							</label>
-						</template>
-						<div class="_conditionBox">
-						<el-form-item prop="time_in_market_condition" label-width="0px">
-								<el-input v-model="data.time_in_market_condition" placeholder="Enter number">
+								</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+								prop="risk_control_filter"
+								class="_filterConditionBox"
+								>
+								<template slot="label">
+									<label>
+										Stop Loss Range:
+									</label>
+								</template>
+								<div class="_conditionBox">
+									<el-form-item prop="stop_loss_condition" label-width="0px">
+											<el-input v-model="data.stop_loss_condition" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+									</el-form-item>
+										<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+										<el-form-item prop="stop_loss" label-width="0px">
+										<el-input v-model="data.stop_loss" placeholder="Enter number">
+											<template v-slot:append>(%)</template>
+										</el-input>
+										</el-form-item>
+								</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+								prop="risk_control_filter"
+								class="_filterConditionBox"
+								>
+								<template slot="label">
+									<label>
+										Time In Market Range:
+									</label>
+								</template>
+								<div class="_conditionBox">
+								<el-form-item prop="time_in_market_condition" label-width="0px">
+										<el-input v-model="data.time_in_market_condition" placeholder="Enter number">
+											<template v-slot:append>(bars)</template>
+										</el-input>
+								</el-form-item>
+									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+								<el-form-item prop="time_in_market" label-width="0px">
+								<el-input v-model="data.time_in_market" placeholder="Enter bars">
 									<template v-slot:append>(bars)</template>
 								</el-input>
-						</el-form-item>
-							<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
-						<el-form-item prop="time_in_market" label-width="0px">
-						<el-input v-model="data.time_in_market" placeholder="Enter bars">
-							<template v-slot:append>(bars)</template>
-						</el-input>
-						</el-form-item>
-						</div>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row type="flex"  :gutter="20">
-					<el-col :span="6">
-						<el-form-item
-						prop="signals"
-						class="_filterConditionBox"
-						>
-						<template slot="label">
-						<label>
-							Signals Filters:
-						</label>
-						</template>
-							<SelectCheck ref="SelectCheck" :options="options" @selected="selected"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item
-							class="_filterConditionBox"
-						 label="Direction:">
-							<el-select
-								@change="ShowShortChecked"
-								v-model="isShowShortChecked"
-								placeholder="— Select Direction —"
-							>
-								<el-option
-									v-for="item in directionOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								>
-								</el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label-width="0">
-							<div class="filterBox">
-								<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
-									>Only Show Profit Target > Stop Loss
-								</el-checkbox>
-							</div>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				</el-form>
+								</el-form-item>
+								</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row type="flex"  :gutter="20">
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Max Risk Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="max_risk_condition" label-width="0px">
+												<el-input v-model="data.max_risk_condition" placeholder="Enter number">
+													<template v-slot:append>(%)</template>
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="max_risk" label-width="0px">
+											<el-input v-model="data.max_risk" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+											</el-form-item>
+									</div>
+									</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Z-Score Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="z_score_condition" label-width="0px">
+												<el-input v-model="data.z_score_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="z_score" label-width="0px">
+											<el-input v-model="data.z_score" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+									</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Sharpe Ratio Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="sharpe_ratio_condition" label-width="0px">
+												<el-input v-model="data.sharpe_ratio_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="sharpe_ratio" label-width="0px">
+											<el-input v-model="data.sharpe_ratio" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+									</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											STD.DEV Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="std_dev_condition" label-width="0px">
+												<el-input v-model="data.std_dev_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="std_dev" label-width="0px">
+											<el-input v-model="data.std_dev" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Expected Return Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="expected_return_condition" label-width="0px">
+												<el-input v-model="data.expected_return_condition" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="expected_return" label-width="0px">
+											<el-input v-model="data.expected_return" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Win Rate Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="win_rate_condition" label-width="0px">
+												<el-input v-model="data.win_rate_condition" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+												</el-input>
+										</el-form-item>
+											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<el-form-item prop="win_rate" label-width="0px">
+											<el-input v-model="data.win_rate" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						</el-form>
+					</div>
+				</div>
 			</div>
 		</div>
 			<Table 
@@ -250,44 +394,110 @@ export default {
 	isPLSChecked: false,
 	isShowShortChecked: false,
 	loading: false,
+	isFilter: false,
 	data: {
-		stop_loss_condition: 6,
-		take_profit_condition: 8,
+		stop_loss_condition: 2,
+		take_profit_condition: 2,
 		time_in_market_condition: 5,
 		stop_loss: 15,
-		take_profit: 30,
-		time_in_market: 34,
+		take_profit: 20,
+		time_in_market: 21,
+		max_risk_condition: 5,
+		max_risk: 50,
+		z_score_condition: 0,
+		z_score: 10,
+		sharpe_ratio_condition: 0,
+		sharpe_ratio: 2,
+		std_dev_condition: 0,
+		std_dev: 10,
+		expected_return_condition: 0,
+		expected_return: 5,
+		win_rate_condition: 52,
+		win_rate: 80,
 		signals: ['All']
 	},
 	options: ['All'],
+	typeOptions: [
+		{ value: 'stock', label: 'Stock' },
+		{ value: 'etf', label: 'ETF' },
+		{ value: 'stock/etf', label: 'Stock & ETF' },
+	],
 	directionOptions: [
 		{value: false, label: 'Long'},
 		{value: true, label: 'Short'}
 	],
 	rules: {
 			time_in_market_condition: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'change' }
 			],
 			time_in_market: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
 			],
 			stop_loss_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			stop_loss: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			take_profit_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'change' }
 			],
 			take_profit: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, null, true)(rule, value, callback), trigger: 'change' }
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			],
+			max_risk_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			max_risk: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			],
+			z_score_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			z_score: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			sharpe_ratio_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			sharpe_ratio: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			std_dev_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			std_dev: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			expected_return_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			expected_return: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			],
+			win_rate_condition: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'change' }
+			],
+			win_rate: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'change' }
 			],
 			signals: [
 				{ validator: validateSignals, trigger: 'blur' },
@@ -347,6 +557,21 @@ export default {
 				this.handleQuery();
 			}, 500), // 500ms 的 debounce 时间，可根据需求调整
 			deep: true
+		},
+		isFilter: {
+			handler: debounce(async function (newValue, oldValue) {
+				console.log('data change', newValue);
+				if(!newValue) {
+					this.handleQuery()
+					return
+				}else {
+					const validForm = await this.validForm('Form');
+					if (!validForm) {
+						return;
+					}
+					this.handleQuery();
+				}
+			}, 500)
 		}
 	},
   methods: {
@@ -360,7 +585,7 @@ export default {
 
 	handleQuery: throttle(async function () { await this.filterData() }, 1000),
 	async filterData(){
-		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( await this.filterRangeCondition(this.getSearchresult())))
+		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( this.filterRangeCondition(this.getSearchresult())))
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
 	},
@@ -383,16 +608,35 @@ export default {
 		return await validateForm(formName)
 	},
 	filterRangeCondition(searchResult){
-		const {stop_loss_condition, stop_loss, take_profit_condition, take_profit, time_in_market_condition, time_in_market, signals} = this.data
+		debugger
+		if(!this.isFilter) return searchResult
+		const {stop_loss_condition, stop_loss, 
+			take_profit_condition, take_profit, 
+			time_in_market_condition, time_in_market,
+			signals,
+			max_risk_condition, max_risk,
+			z_score_condition, z_score,
+			sharpe_ratio_condition, sharpe_ratio,
+			std_dev_condition, std_dev,
+			expected_return_condition, expected_return,
+			win_rate_condition, win_rate
+		} = this.data
+		console.log('this.data', this.data)
 		console.log('signals filter', signals)
 		console.log('signals options', this.options)
-		const condition = (signals.length === 1 && signals[0] === 'All')
+		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
 		return searchResult
 		.filter(item=>(
-			parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])
-			&& parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])
-			&& parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])
+			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
+			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
+			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
 			&& (condition || signals.includes(item['_Signal']))
+			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
+			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
+			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
+			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
+			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
+			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
 		))
 	},
 	filterShowShortCondition(searchResult){
@@ -617,4 +861,27 @@ h4 {
 ._filterConditionBox /deep/ .el-select {
 	width: 100%;
 }
+.portfolioCheckedBox {
+  border: #cacaca solid 1px;
+  padding: 0 5px 0 10px;
+  border-radius: 4px;
+  line-height: 28px;
+  border-radius: 4px;
+	margin-top: 10px;
+  }
+  .portfolioCheckedBox a {
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    padding: 5px 5px 5px 0px
+  }
+  .portfolioCheckedBox a:hover {
+    color: #5b9bd1;
+  }
+  .des-content {
+    margin-top: 10px;
+  }
 </style>
