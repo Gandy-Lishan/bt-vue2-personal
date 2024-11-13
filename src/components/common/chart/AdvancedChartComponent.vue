@@ -434,7 +434,6 @@ import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.v
 import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
 import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
 import Description from '@/components/common/StrategyModal/Description/index.vue'
-import { getSymbolStrategySigal } from '@/service/service'
 
 @Component({
   components: {
@@ -548,8 +547,6 @@ export default class AdvancedChartComponent extends Vue {
 			this.symbolMutationObserver()
 			this.initializeReportsFilter()
 		}, 0)
-
-		await this.getSymbolStrategyData()
 	}
 	openModal(contentType: string) {
       this.modalContent = contentType; // 设置要显示的内容

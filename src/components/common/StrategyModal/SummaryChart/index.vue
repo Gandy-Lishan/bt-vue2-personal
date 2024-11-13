@@ -43,7 +43,6 @@
 import Highcharts from 'highcharts/highstock';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import { getSymbolStrategySigal } from "@/service/service";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from "vuex";
 
