@@ -97,31 +97,6 @@ const getCoresSymbolDual = (isSymbol2) => {
       // 每个匹配增加分数
       score += valueMatches.length * 2;  // 每个匹配加 2 分
       score += urlMatches.length * 2;    // 每个匹配加 2 分
-  
-      // 根据 query 的部分匹配，调整匹配项的相关性
-      // const adjustForContextualMatch = (text, query) => {
-      //   // 如果 query 是 text 的前缀，则相关性高
-      //   if (text.startsWith(query)) {
-      //     return 3;  // 前缀匹配，分数高
-      //   }
-        
-      //   // 如果 query 是 text 的一部分且出现在较早的位置，给予更高分
-      //   const indexOfQuery = text.indexOf(query);
-      //   if (indexOfQuery !== -1 && indexOfQuery < Math.floor(text.length / 2)) {
-      //     return 2;  // 中间匹配，较高分
-      //   }
-        
-      //   // 如果 query 是 text 的后缀或者出现在文本后半部分，分数低
-      //   if (text.endsWith(query) || indexOfQuery >= Math.floor(text.length / 2)) {
-      //     return 1;  // 后缀匹配，分数低
-      //   }
-
-      //   return 0;  // 没有匹配
-      // };
-
-      // // 调整 value 和 url 的分数
-      // score += adjustForContextualMatch(value, query);
-      // score += adjustForContextualMatch(url, query);
 
       // 如果有匹配，返回分数
       return score;
