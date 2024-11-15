@@ -391,12 +391,19 @@ export default {
               label: 'Symbol',
               value: 'market_symbol',
               type: 'SP1500Score',
-              minWidth: '80px'
+              minWidth: '50px'
             },
             {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
+              type: 'SP1500Score',
+              minWidth: '100px'
+            },
+            {
+              key: 'sector_name',
+              label: 'Sector',
+              value: 'sector_name',
               type: 'SP1500Score',
               minWidth: '100px'
             },
@@ -1056,7 +1063,8 @@ export default {
       const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
-        const saveColumns = ['market_symbol', 'chart_name']
+        let saveColumns = ['market_symbol', 'chart_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
@@ -1080,7 +1088,8 @@ export default {
           },
         ]])
       }else if(isStockTrend && this.condition === 'trend') {
-        const saveColumns = ['market_symbol', 'chart_name']
+        let saveColumns = ['market_symbol', 'chart_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_last_value',
@@ -1154,7 +1163,8 @@ export default {
             }
         ]])
       }else if(isStockTrend && this.condition === 'relative') {
-        const saveColumns = ['market_symbol', 'chart_name']
+        let saveColumns = ['market_symbol', 'chart_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'reltrend_last_value',
@@ -1228,7 +1238,8 @@ export default {
             }
         ]])
       }else if(isStockTrend && this.condition === 'consecutive') {
-        const saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
+        let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_count_8_or_more',
@@ -1819,7 +1830,7 @@ export default {
         this.filterData = sortedData
         }
 			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type', 'market_symbol'].indexOf(colName) !== -1){
+			if(['chart_name','sector_name','groups','timeframe','url', 'underlying_name', 'name', 'sub_type', 'market_symbol'].indexOf(colName) !== -1){
         if(sortingOrder === 'ascending') {
           this.filterData.sort((a, b) => {
           const aValue = a[colName] || '';
@@ -2006,6 +2017,7 @@ export default {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
+        ['sector_name', 'Sector'],
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score'],
@@ -2138,6 +2150,7 @@ export default {
           keysMap.set(item.key, item.label)
         })
       }
+      if(['etf_domestic', 'etf_foreign', 'etf_other'].includes(type)) keysMap.delete('sector_name')
       keysSort = Array.from(keysMap.values())
       }
 
