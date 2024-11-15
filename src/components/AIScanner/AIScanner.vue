@@ -401,7 +401,7 @@ export default {
 		time_in_market_condition: 5,
 		stop_loss: 15,
 		take_profit: 20,
-		time_in_market: 21,
+		time_in_market: 42,
 		max_risk_condition: 5,
 		max_risk: 50,
 		z_score_condition: 0,
