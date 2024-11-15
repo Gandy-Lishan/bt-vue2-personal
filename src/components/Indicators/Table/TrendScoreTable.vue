@@ -11,13 +11,13 @@
        <thead>
         <tr>
          <th width="180px" :class="getSortClass('index_name')" @click="sortTable('index_name')">Index/Sector</th>
-         <th :class="getSortClass('ts_above_zero')" @click="sortTable('ts_above_zero')">Trend Score Equal to 0</th>
-         <th :class="getSortClass('ts_above_five')" @click="sortTable('ts_above_five')">Trend Score Above 5</th>
-         <th :class="getSortClass('ts_equal_ten')" @click="sortTable('ts_equal_ten')">Trend Score Above to 10</th>
-         <th :class="getSortClass('rts_above_zero')" @click="sortTable('rts_above_zero')">Relative Score Equal to 0</th>
-         <th :class="getSortClass('rts_above_five')" @click="sortTable('rts_above_five')">Relative Score Above 5</th>
-         <th :class="getSortClass('rts_equal_ten')" @click="sortTable('rts_equal_ten')">Relative Score Equal to 10</th>
-         <th v-if="enlarged" :class="getSortClass('rts_equal_ten_spx')" @click="sortTable('rts_equal_ten_spx')">Relative Score Equal to 10 in S&P 500</th>
+         <th :class="getSortClass('ts_above_zero')" @click="sortTable('ts_above_zero')">Trend Score >=8</th>
+         <th :class="getSortClass('ts_above_five')" @click="sortTable('ts_above_five')">Trend Score <=2</th>
+         <th :class="getSortClass('ts_equal_ten')" @click="sortTable('ts_equal_ten')">Relative Score >=8</th>
+         <th :class="getSortClass('rts_above_zero')" @click="sortTable('rts_above_zero')">Relative Score <=2</th>
+         <th :class="getSortClass('rts_above_five')" @click="sortTable('rts_above_five')">Trend & Rel Score >=8</th>
+         <th :class="getSortClass('rts_equal_ten')" @click="sortTable('rts_equal_ten')">Trend & Rel Score <=2</th>
+         <th v-if="enlarged" :class="getSortClass('rts_equal_ten_spx')" @click="sortTable('rts_equal_ten_spx')">Relative Score >=8 in S&P 500</th>
          <th v-if="enlarged" width="100px" :class="getSortClass('last_date')" @click="sortTable('last_date')">Last Date</th>
         </tr>
        </thead>
