@@ -104,13 +104,13 @@ export default {
       const _keySort = Array.from(Object.keys(this.data[0]))
       const renameMap = new Map([
         [`index_name`, 'Index/Sector'],
-        [`ts_above_zero`, 'Trend Score Above 0'],
-        [`ts_above_five`, 'Trend Score Above 5'],
-        [`ts_equal_ten`, 'Trend Score Equal to 10'],
-        [`rts_above_zero`, 'Relative Score Above 0'],
-        [`rts_above_five`, 'Relative Score Above 5'],
-        [`rts_equal_ten`, 'Relative Score Equal to 10'],
-        [`rts_equal_ten_spx`, 'Relative Score Equal to 10 in S&P 500'],
+        [`ts_above_zero`, 'Trend Score >=8'],
+        [`ts_above_five`, 'Trend Score <=2'],
+        [`ts_equal_ten`, 'Relative Score >=8'],
+        [`rts_above_zero`, 'Relative Score <=2'],
+        [`rts_above_five`, 'Trend & Rel Score >=8'],
+        [`rts_equal_ten`, 'Trend & Rel Score <=2'],
+        [`rts_equal_ten_spx`, 'Relative Score >=8 in S&P 500'],
         [`last_date`, 'Date']
       ])
       let csvContent = this.data.map(row => _keySort.map(key => `${row[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}`).join(',')).join('\n');
