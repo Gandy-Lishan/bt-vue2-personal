@@ -1046,5 +1046,21 @@
     {
         "symbol": "IBIT",
         "name": "Bitcoin ETF"
+    },
+    {
+        "symbol": "GC1",
+        "name": "Gold Futures (GC1)"
+    },
+    {
+        "symbol": "SI1",
+        "name": "Silver Futures (SI1)"
+    },
+    {
+        "symbol": "CL1",
+        "name": "Crude Oil Futures (CL1)"
+    },
+    {
+        "symbol": "HG1",
+        "name": "Copper Futures (HG1)"
     }
 ]
