@@ -31338,5 +31338,45 @@
         "chart_name": "Risk On / Off Overlay",
         "url": "risk_measure_overlay",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Futures Trend Score",
+        "url": "GC1_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Futures RelTrend Score",
+        "url": "GC1_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silver Futures Trend Score",
+        "url": "SI1_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silver Futures RelTrend Score",
+        "url": "SI1_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crude Oil Futures Trend Score",
+        "url": "CL1_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crude Oil Futures RelTrend Score",
+        "url": "CL1_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper Futures Trend Score",
+        "url": "HG1_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Copper Futures RelTrend Score",
+        "url": "HG1_reltrend",
+        "updated": "Daily"
     }
 ]
