@@ -530,10 +530,10 @@ debugger
 				break;
 			case 'CNDB':
 				// 从当前indicator数据出现那天开始计算
-				let indexCNDA = quotes.findIndex(row=> 
+				let indexCNDB = quotes.findIndex(row=> 
 					field in row &&  getPropertyByString(row,field,subField)!=null
 				)
-				quotes = quotes.slice(indexCNDA)
+				quotes = quotes.slice(indexCNDB)
 				let indicatorCNDB = 0
 				resArr = quotes.map((row, i) => {
 					if (field in row && getPropertyByString(row,field,subField) != null) {

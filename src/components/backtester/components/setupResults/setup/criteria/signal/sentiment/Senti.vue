@@ -616,6 +616,12 @@ export default {
         if([12,13].includes(this.senti.newCondition)){
           _description1 = `${sentiVal} ${ma} ${_newCondition} ${_condition} ${_value}`
           _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+        }else if(this.senti.newCondition == 14){
+          _description1 = `Consecutive Number of Days with ${sentiVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma} ${_period} Above  ${_conditionPeriod} ${_condition} ${_maValue}`
+        }else if(this.senti.newCondition == 15){
+          _description1 = `Consecutive Number of Days with ${sentiVal} Below ${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma} ${_period} Below  ${_conditionPeriod} ${_condition} ${_maValue}`
         }else{
           _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
           _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
@@ -762,8 +768,13 @@ export default {
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(indicator_url)
         let condition
+        let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
         if([12,13].includes(this.senti.newCondition)){
           condition = `${conditionMap.get(this.senti.newCondition).name}`
+        }else if(this.senti.newCondition == 14){
+          condition = `Consecutive Number of Days with ${sentiVal} Above ${this.senti.conditionPeriod}`
+        }else if(this.senti.newCondition == 15){
+          condition = `Consecutive Number of Days with ${sentiVal} Below ${this.senti.conditionPeriod}`
         }else{
           condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Bar)`
         }
