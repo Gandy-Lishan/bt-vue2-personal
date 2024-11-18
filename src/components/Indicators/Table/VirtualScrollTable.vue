@@ -91,6 +91,7 @@
         v-el-table-infinite-scroll="loadMore"
         :ref="`${refName}Table`"
         class="virtual-table"
+        :class="{'otherAssetTable': checkedType === 'OtherAssetsETFScore' && !enlarged}"
         :data="virtualList"
 				empty-text="No data"
         size="mini"
@@ -2340,6 +2341,15 @@ export default {
   }
   /deep/ .el-table__body-wrapper {
     height: 575px !important;
+    width: 100% !important; /* 确保宽度占满父容器 */
+  }
+}
+.otherAssetTable {
+  /deep/.el-table__body-wrapper.is-scrolling-none {
+    height: 231px !important;
+  }
+  /deep/ .el-table__body-wrapper {
+    height: 231px !important;
     width: 100% !important; /* 确保宽度占满父容器 */
   }
 }
