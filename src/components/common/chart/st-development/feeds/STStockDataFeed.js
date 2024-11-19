@@ -149,7 +149,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                                 let timeframeCode = CIQ.objIndicator[i].slice(-1)
                                 freqList.push(timeframeCode=='0'?'Daily':timeframeCode=='1'?'Weekly':'Monthly')
                             }
-                            new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
+                           // new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
                             valid++
                             continue
                         }

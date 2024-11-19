@@ -505,8 +505,54 @@ debugger
 					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
 				}
 				break;
+			case 'CNDA':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDA = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexCNDA)
+				let indicatorCNDA = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) > period) {
+							indicatorCNDA++
+						} else {
+							indicatorCNDA = 0;
+						}
+						return indicatorCNDA;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+				break;
+			case 'CNDB':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDB = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexCNDB)
+				let indicatorCNDB = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) < period) {
+							indicatorCNDB++
+						} else {
+							indicatorCNDB = 0;
+						}
+						return indicatorCNDB;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+			break;
 			default:
-				console.error('no such condition')
+			console.error('no such condition')
 		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
@@ -1123,7 +1169,6 @@ debugger
 			quotes[i]["Result " + sd.name] = result;
 		}
 	};
-
 	CIQ.Studies.calculateNDayRealizedVolatility = function (stx, sd) {
 		var period = sd.inputs.period;
 
@@ -1168,7 +1213,6 @@ debugger
 			quote["Result " + sd.name] = volatilityArr[i];
 		}
 	};
-
 	CIQ.Studies.calculateSQNMarketRegime = function (stx, sd) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
