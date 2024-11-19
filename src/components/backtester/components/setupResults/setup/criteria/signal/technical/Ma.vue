@@ -387,7 +387,7 @@ export default {
 				var objMA = {
 					period: this.tech.ma_period,
 					url: 'ma',
-					type: this.maRadio,
+					type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 					criteria: this.criteria, 
 					index: this.panelIndex
 				}
@@ -755,7 +755,7 @@ export default {
 }
 .condition-container {
 	display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 .el-select {
   margin: 0 5px;
