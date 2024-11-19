@@ -31378,5 +31378,15 @@
         "chart_name": "Copper Futures RelTrend Score",
         "url": "HG1_reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ Composite Trend Score",
+        "url": "COMP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ Composite RelTrend Score",
+        "url": "COMP_reltrend",
+        "updated": "Daily"
     }
 ]
