@@ -796,19 +796,18 @@ export default {
         const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(indicator_url)
-        let condition
-        let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
+        let display
         if([12,13].includes(this.senti.newCondition)){
-          condition = `${conditionMap.get(this.senti.newCondition).name}`
+          display = `${name} ${conditionMap.get(this.senti.newCondition).name}`
         }else if(this.senti.newCondition == 14){
-          condition = `Consecutive Number of Days with ${sentiVal} Above ${this.senti.conditionPeriod}`
+          display = `Consecutive Number of Days with ${name} Above ${this.senti.conditionPeriod}` 
         }else if(this.senti.newCondition == 15){
-          condition = `Consecutive Number of Days with ${sentiVal} Below ${this.senti.conditionPeriod}`
+          display = `Consecutive Number of Days with ${name} Below ${this.senti.conditionPeriod}`
         }else{
-          condition = `${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Bar)`
+          display = `${name} ${conditionMap.get(this.senti.newCondition).name}(${this.senti.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `${name} ${condition}`,
+          display: display,
           Field: field,
           condition: conditionMap.get(this.senti.newCondition).abbr,
           period: this.senti.conditionPeriod

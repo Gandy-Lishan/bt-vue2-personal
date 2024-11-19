@@ -409,19 +409,18 @@ export default {
         ])
 
         const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
-        let condition
-        let symVal = this.symVal ? this.symVal : this.editTechVal
+        let display
         if([12,13].includes(this.sym.newCondition)){
-          condition = `${conditionMap.get(this.sym.newCondition).name}`
-        }else if(this.senti.newCondition == 14){
-          condition = `Consecutive Number of Days with ${symVal} Above ${this.sym.conditionPeriod}`
-        }else if(this.senti.newCondition == 15){
-          condition = `Consecutive Number of Days with ${symVal} Below ${this.sym.conditionPeriod}`
+          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
+        }else if(this.sym.newCondition == 14){
+          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Above ${this.sym.conditionPeriod}`
+        }else if(this.sym.newCondition == 15){
+          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
-          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
+          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `(${symbolLabel})${symbolCond.label} ${condition}`,
+          display: display,
           Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod
