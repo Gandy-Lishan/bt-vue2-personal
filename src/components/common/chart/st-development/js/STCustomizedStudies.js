@@ -238,7 +238,6 @@ if (!CIQ.Studies) {
 			quotes = sd.chart.scrubbed
 		} 
 
-debugger
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式
 		let resArr = []
@@ -437,8 +436,6 @@ debugger
 				resArr = quotes.map((row, i) => {
 					if(field in row &&  getPropertyByString(row,field,subField)!=null){
 						if(i>=period){
-							// 如果分母为0，直接返回0
-							if(getPropertyByString(quotes[i - period],field,subField) == 0) return 0
 							
 							const change = parseFloat((
 								getPropertyByString(row,field,subField) - 
