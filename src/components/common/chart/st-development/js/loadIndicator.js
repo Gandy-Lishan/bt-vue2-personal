@@ -473,7 +473,7 @@
                             if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
                                  // 直接加载，信息都更新再studylibrary
                                  var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
-                                     // Type: CIQ.store.state.chart.activatedMA[i].type,
+                                     Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                      Period: activatedMAObj.period,
                                      display: 'ST MA',
                                  },{ MA: ma_color },{
@@ -482,6 +482,7 @@
                                  })
                              }else{
                                  sd = CIQ.Studies.addStudy(stx, "ST MA",{
+                                     Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                      Period: activatedMAObj.period,
                                      display:"ST MA",
                                      Field: activatedMAObj.url
@@ -553,7 +554,7 @@
                          const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
                          if(activatedMAObj.url == 'ma'){
                              var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
-                                 // Type: CIQ.store.state.chart.activatedMA[i].type,
+                                 Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                  Period: activatedMAObj.period,
                                  display: 'ST MA',
                              },{ MA: ma_color },{
@@ -562,6 +563,7 @@
                              })
                          }else{    
                              var sd = CIQ.Studies.addStudy(stx, "ST MA",{
+                                 Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                  Period: activatedMAObj.period,
                                  display:"ST MA",
                                  Field: activatedMAObj.url
@@ -649,7 +651,7 @@
                          const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
                          if(activatedMAObj.url == 'ma'){
                              var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
-                                 // Type: CIQ.store.state.chart.activatedMA[i].type,
+                                 Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                  Period: activatedMAObj.period,
                                  display: 'ST MA',
                              },{ MA: ma_color },{
@@ -658,6 +660,7 @@
                              })
                          }else{    
                              var sd = CIQ.Studies.addStudy(stx, "ST MA",{
+                                 Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                  Period: activatedMAObj.period,
                                  display:"ST MA",
                                  Field: activatedMAObj.url

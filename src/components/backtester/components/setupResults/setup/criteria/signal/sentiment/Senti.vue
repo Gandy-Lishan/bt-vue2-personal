@@ -107,6 +107,7 @@
 							filterable
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Please select condition"
+              @change="setPeriod(senti.period)"	
 						>
 							<el-option
 								v-for="item in MATypeConditions"
@@ -817,6 +818,7 @@ export default {
 			return display
     },
     setPeriod(val) {
+      debugger
       let _val = val
       // if (!_val) {
       //   _val = 5
@@ -837,7 +839,6 @@ export default {
         }
         result = obj
       }
-      //console.log('setPeriod',result)
       // If the indicator is not loaded when changing to Ma radio, exit
       if (!result || result.url=='') { return }
       for (var studyInstanceName in CIQ.stxx.layout.studies) {
@@ -858,7 +859,8 @@ export default {
       var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',
-        Field: result.url
+        Field: result.url,
+        Type: this.ma_type == 'S' ? 'simple' : 'exponential',
       }, { MA: ma_color }, {
         criteria: this.criteria,
         index: this.panelIndex
@@ -868,6 +870,7 @@ export default {
 
       // keep current MA
       var objMA = {
+        type: this.ma_type == 'S' ? 'simple' : 'exponential',
         period: _val,
         url: result.url,
         criteria: this.criteria,

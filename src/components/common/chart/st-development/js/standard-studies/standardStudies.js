@@ -3575,7 +3575,6 @@ CIQ.Studies.calculateStandardDeviationSample = function (stx, sd) {
  * @memberOf CIQ.Studies
  */
 CIQ.Studies.calculateMovingAverage = function (stx, sd) {
-	
 	if (!sd.chart.dataSet) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
@@ -3775,7 +3774,6 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	}
 	var futureTicks = [];
 	for (i = start; i < quotes.length; i++) {
-		console.log(i, '		', acc)
 		var quote = quotes[i];
 		val = quote[field];
 		if (val && typeof val == "object") val = val[subField];

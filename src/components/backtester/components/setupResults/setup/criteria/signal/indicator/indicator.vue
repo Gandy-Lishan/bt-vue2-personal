@@ -1058,7 +1058,7 @@ export default {
         class: item.class, index: this.panelIndex
       })
 
-      // remove a MA tat already exists in current criteria before loadin
+      // remove current MA attached to an indicator before loadin
       var activatedMAList = CIQ.store.state.chart.activatedMA
       var MAListIndex = activatedMAList.findIndex(
         (ma) =>

@@ -78,7 +78,7 @@ let __st_js_maLayout_ = (_exports) => {
 
     CIQ.setMALayout = function (url, period, type, field, criteria, index) {
         var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-        // remove current MA attached to an indicator
+        // remove a MA tat already exists in current criteria
         var MALayoutListIndex = activatedMALayoutList.findIndex(
             (item) => item.criteria == criteria && item.index == index
         )
@@ -96,7 +96,7 @@ let __st_js_maLayout_ = (_exports) => {
                 criteria: criteria,
                 index: index
             }
-            : {
+            : { //预留给其他ma类型的tech, 目前就一个ma
                 url: url,
                 criteria: criteria,
                 index: index
