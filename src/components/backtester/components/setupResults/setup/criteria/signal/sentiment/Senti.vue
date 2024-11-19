@@ -54,7 +54,7 @@
 					</el-form-item>
 				</div>
         <!-- TODO newCond -->
-				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=15">
+				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
 							@input="calculateNewConditions"
