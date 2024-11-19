@@ -373,7 +373,7 @@ export default {
       ],
       MATypeConditions: [
         { value: 'S', label: 'Simple' },
-        { value: 'M', label: 'Exponential' },
+        { value: 'E', label: 'Exponential' },
       ],
       conditionRadio: 'Indicator Value',
       description: '',
@@ -593,7 +593,7 @@ export default {
           : this.senti.maValue
       let ma_type = this.conditionRadio === 'Indicator Moving Average' ? this.ma_type : ''
       if(ma_type === 'S') ma_type = 'simple'
-      if(ma_type === 'M') ma_type = 'exponential'
+      if(ma_type === 'E') ma_type = 'exponential'
       this.description = `${sentiVal} ${ma_type !== '' ? ma_type + ' ' : ''}${ma} ${period} ${condition} ${value}`
       if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} Moving Average ${period}`
       if (this.isROCLike) {
