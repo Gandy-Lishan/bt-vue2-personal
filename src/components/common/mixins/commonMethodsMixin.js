@@ -620,12 +620,12 @@ export const CommonMethodsMixin = {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					const url = CIQ.stxx.layout.studies[studyInstanceName].type
 					let field
-					if(url && url.indexOf('CREATE') != -1){
-						field = url.split(/CREATE/)[0]
+					if(url && url.indexOf('CREATE') != -1 && url.split(/CREATE/)[0] == signals.indicator){
+						field = signals.indicator
 						fieldName = url
 					}
-					if(url && url.indexOf('HASH') != -1){
-						field = url.split(/HASH/)[0]
+					if(url && url.indexOf('HASH') != -1 && url.split(/HASH/)[0] == signals.indicator){
+						field =signals.indicator
 						fieldName = url
 					}
 					if (
