@@ -592,6 +592,9 @@ export const CommonMethodsMixin = {
 			let indicator_url_with_ma = ''
 			let fieldName = ''
 			let stmaPeriod
+			// if(signals.indicator == 'Crude oil price' && criteria=='entry' && panelIndex == 1){
+			// 	debugger
+			// } 
 
 			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
@@ -622,12 +625,12 @@ export const CommonMethodsMixin = {
 				for (const studyInstanceName in CIQ.stxx.layout.studies) {
 					const url = CIQ.stxx.layout.studies[studyInstanceName].type
 					let field
-					if(url && url.indexOf('CREATE') != -1){
-						field = url.split(/CREATE/)[0]
+					if(url && url.indexOf('CREATE') != -1 && url.split(/CREATE/)[0] == signals.indicator){
+						field = signals.indicator
 						fieldName = url
 					}
-					if(url && url.indexOf('HASH') != -1){
-						field = url.split(/HASH/)[0]
+					if(url && url.indexOf('HASH') != -1 && url.split(/HASH/)[0] == signals.indicator){
+						field = signals.indicator
 						fieldName = url
 					}
 					if (
@@ -1058,7 +1061,6 @@ export const CommonMethodsMixin = {
 			that.reloadData(data, freq, row)
 			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
-
 				that.$router.push({
 					name: 'SetUp',
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }
