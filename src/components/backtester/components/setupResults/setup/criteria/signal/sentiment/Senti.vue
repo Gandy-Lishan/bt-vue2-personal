@@ -223,6 +223,25 @@
 						<el-link type="info" :underline="false" class="ISL-text">Indicator Moving Average </el-link>
 					</el-form-item>
 				</div>
+        <div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="ma_type"
+							filterable
+							:disabled="!(conditionRadio === 'Indicator Value ')"
+							placeholder="Please select condition"
+              @change="setPeriod(senti.period)"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period" size="mini">
 						<el-input
@@ -583,7 +602,7 @@ export default {
         }
 
       }
-      let ma = this.senti.period ? 'moving average' : ''
+      let ma = this.senti.period ? 'Moving Average' : ''
       let period = this.senti.period ? this.senti.period : ''
       let condition = this.conditions[this.senti.condition].label
       let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
@@ -591,11 +610,11 @@ export default {
         this.conditionRadio === 'Indicator Value'
           ? this.senti.value
           : this.senti.maValue
-      let ma_type = this.conditionRadio === 'Indicator Moving Average' ? this.ma_type : ''
-      if(ma_type === 'S') ma_type = 'simple'
-      if(ma_type === 'E') ma_type = 'exponential'
+      let ma_type = (this.conditionRadio === 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') ? this.ma_type : ''
+      if(ma_type === 'S') ma_type = 'Simple'
+      if(ma_type === 'E') ma_type = 'Exponential'
       this.description = `${sentiVal} ${ma_type !== '' ? ma_type + ' ' : ''}${ma} ${period} ${condition} ${value}`
-      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} Moving Average ${period}`
+      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} ${ma_type} Moving Average ${period}`
       if (this.isROCLike) {
         let _newCondition = this.newConditions[this.senti.newCondition].label
         const _condition = this.conditions[this.senti.condition].label
@@ -731,13 +750,15 @@ export default {
         this.senti.comparison = 'SVMA'
         // Ma is loaded when the default radio is switched to moving average radio
         this.setPeriod(this.senti.period)
+        this.ma_type = 'S'
       }
       if(val === 'Indicator Value ') {
         this.senti.comparison = 'SV'
         this.senti.value = ''
         this.senti.newCondition = 3 //  初始化单选框值
         this.ROCLikeChange(this.senti.newCondition)
-        this.setPeriod(this.senti.period)    
+        this.setPeriod(this.senti.period)  
+        this.ma_type = 'S'
       }
     },
     calculateNewConditions() {
@@ -1067,7 +1088,7 @@ export default {
 .ISL-text {
 	cursor: auto;
 	font-size: 12px;
-	margin-right: 5px;
+  width: 146px;
 }
 .ISL-text:hover {
 	color: #909399;
