@@ -1062,5 +1062,9 @@
     {
         "symbol": "HG1",
         "name": "Copper Futures (HG1)"
+    },
+    {
+        "symbol": "IPAY",
+        "name": "Amplify Digital Payments ETF (IPAY)"
     }
 ]

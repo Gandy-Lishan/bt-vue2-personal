@@ -31388,5 +31388,25 @@
         "chart_name": "NASDAQ Composite RelTrend Score",
         "url": "COMP_reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "IPAY Trend Score",
+        "url": "IPAY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IPAY RelTrend Score",
+        "url": "IPAY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ 100 Trend Score",
+        "url": "NDX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ 100 RelTrend Score",
+        "url": "NDX_reltrend",
+        "updated": "Daily"
     }
 ]
