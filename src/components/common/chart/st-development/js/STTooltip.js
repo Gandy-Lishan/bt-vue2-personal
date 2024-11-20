@@ -502,7 +502,6 @@ if (!CIQ.Marker) {
                             if (output && !dupMap[output]) {
                                 const maType = sd.inputs.Type=='exponential'?' EMA':' MA'
                                 let name = `${rocDisplayName(sd.inputs.Field)} ${maType} ${sd.inputs.Period}`
-                                debugger
                                 let symbol = sd.inputs.Field == 'field'?`(${symbolLabel})`:''
                                  fields.push({
                                      member: output,
