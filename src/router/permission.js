@@ -45,6 +45,11 @@ export function setRouterPermission(router) {
 				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			)
 		}
+		// Jason
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcN9CQdnFaRNktBfGsp36QeFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+0vcTpqWZAjLb0iJ6dp18kt5hH2geqpB1exbtw/yYdP2D9/VjibGDdw9DyfjBHRWaVoXd/mPe4WcTSnfnn1EMOqokSbIB1fAssMlGvUkAQdLOvUQfndgipjVbAhMO5rY25foEnSKruuuFKxZAhn+crXFtSbHwb23K5orItqrIwsjsJAiwZM7whCdHxcxB2D17jKrZ/o/ncL+IZRTL15p/klG7WAza/+HkiUsAVfbX+EBm/BD3NhZr437u0/OdtL+oWDDKX8aNxvhCNDS4Me0RFpuGWKFtlBevjOZlqqV08oj23EMUV24p3Njx3/XiRtH4bmziAmq8LE6/MM8L8hMWor'
+		// )
 		/* dean */
 		// Cookies.set(
 		// 	'sentimen_session',
