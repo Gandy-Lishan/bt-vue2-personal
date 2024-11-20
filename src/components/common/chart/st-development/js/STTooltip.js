@@ -500,7 +500,9 @@ if (!CIQ.Marker) {
                      if(sd.type == 'ST MA'){    // stma不需要symbol信息，有独立显示
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
-                                let name = rocDisplayName(sd.inputs.Field) + ' MA' + sd.inputs.Period
+                                const maType = sd.inputs.Type=='exponential'?' EMA':' MA'
+                                let name = `${rocDisplayName(sd.inputs.Field)} ${maType} ${sd.inputs.Period}`
+                                debugger
                                 let symbol = sd.inputs.Field == 'field'?`(${symbolLabel})`:''
                                  fields.push({
                                      member: output,
