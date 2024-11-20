@@ -31341,12 +31341,12 @@
     },
     {
         "chart_name": "Gold Futures Trend Score",
-        "url": "GC1_trend",
+        "url": "GOLD_F_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Gold Futures RelTrend Score",
-        "url": "GC1_reltrend",
+        "url": "GOLD_F_reltrend",
         "updated": "Daily"
     },
     {
@@ -31371,12 +31371,12 @@
     },
     {
         "chart_name": "Copper Futures Trend Score",
-        "url": "HG1_trend",
+        "url": "COPPER_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Copper Futures RelTrend Score",
-        "url": "HG1_reltrend",
+        "url": "COPPER_reltrend",
         "updated": "Daily"
     },
     {
@@ -31390,12 +31390,12 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IPAY Trend Score",
+        "chart_name": "Digital Payments Trend Score",
         "url": "IPAY_trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "IPAY RelTrend Score",
+        "chart_name": "Digital Payments RelTrend Score",
         "url": "IPAY_reltrend",
         "updated": "Daily"
     },
@@ -31407,6 +31407,16 @@
     {
         "chart_name": "NASDAQ 100 RelTrend Score",
         "url": "NDX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Datadog Inc RelTrend Score",
+        "url": "DDOG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Datadog Inc Trend Score",
+        "url": "DDOG_trend",
         "updated": "Daily"
     }
 ]
