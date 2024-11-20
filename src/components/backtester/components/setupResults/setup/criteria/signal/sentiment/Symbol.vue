@@ -343,9 +343,9 @@ export default {
         let _description1
         if([12,13].includes(this.sym.newCondition)){
           _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
-        }else if(this.senti.newCondition == 14){
+        }else if(this.sym.newCondition == 14){
           _description1 = `Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
-        }else if(this.senti.newCondition == 15){
+        }else if(this.sym.newCondition == 15){
           _description1 = `Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
         }else{
           _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
