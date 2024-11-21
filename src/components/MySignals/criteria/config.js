@@ -18,7 +18,7 @@ export function generateConfig(criteriaWithNumber) {
 	const criteriaTitleTPRC = `
   ${
 		criteria === 'exit'
-			? "4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this option can be chosen to trigger the backtest condition.<br />"
+			? "4. Only Use Risk Control: If the 'Risk Control at Exit' is set, this option can be chosen to trigger the signal condition.<br />"
 			: ''
 	}
 `
@@ -26,30 +26,30 @@ export function generateConfig(criteriaWithNumber) {
     criteriaNum,
 		criteria: criteria,
 		criteriaCapFirstL: capFirstL,
-		criteriaTitle: `${capFirstL} Criteria`,
-		criteriaTitleTP: `Set the criteria/criterias which trigger the backtest ${criteria}
+		criteriaTitle: `Signal Criteria`,
+		criteriaTitleTP: `Set the criteria/criterias which trigger the signal ${criteria}
     criteria.<br />
     Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for ${criteria} criteria:<br />
-    1. Single Condition: One condition will trigger the backtest
+    1. Single Condition: One condition will trigger the signal
     condition.<br />
     2. SameBar Multi-Condition: More than one conditions (limit to 5)
-    occurring at the same bar,will trigger the backtest condition.<br>
+    occurring at the same bar,will trigger the signal condition.<br>
     3. TimeOrder Multi-Condition: More than one conditions (limit to 3)
-    occurring within a number of bars,will trigger the backtest
+    occurring within a number of bars,will trigger the signal
     condition.<br />
     ${criteriaTitleTPRC}
     `,
 		scoreTP: `Choose a value to specify how many following conditions will occur
-    at the same bar to trigger the backtest condition.<br />
+    at the same bar to trigger the signal condition.<br />
     if choose score 1, meanning if any one condition of the following
-    conditions occur the backtest condition is met.<br />
+    conditions occur the signal condition is met.<br />
     if choose score 2, meanning if any two of the conditions of the
-    following conditions occur the backtest condition is met.<br />
+    following conditions occur the signal condition is met.<br />
     etc.<br />
     For example:<br />
-    If the backtest condition needs to have a "AND" relation of 2
+    If the signal condition needs to have a "AND" relation of 2
     conditions, set two conditions below and choose score 2.<br />
-    If the backtest condition needs to have a "OR" relation of 2
+    If the signal condition needs to have a "OR" relation of 2
     conditions, set two conditions below and choose score 1.<br />
     etc.<br />`,
 		timeLimitTP: `By default, there is no time period limit. <br/>
@@ -60,16 +60,16 @@ export function generateConfig(criteriaWithNumber) {
     it indicates you can trade.`,
 		periodTP: `Choose a value to specify how many bars within which the
     following conditions will occur in time order to trigger the
-    backtest condition.<br />
+    signal condition.<br />
     if choose period 1, meanning if the following conditions occur at
-    the same bar the backtest condition is met.<br />
+    the same bar the signal condition is met.<br />
     if choose period 2, meanning if the following conditions occur
-    within two bars the backtest condition is met.<br />
+    within two bars the signal condition is met.<br />
     etc.<br />
     For example:<br />
-    If the backtest condition needs to have two consecutive conditions,
+    If the signal condition needs to have two consecutive conditions,
     set two conditions below and choose period 2.<br />
-    If the backtest condition needs to have two conditions occur within
+    If the signal condition needs to have two conditions occur within
     3 bars, set two conditions below and choose period 3.<br />
     etc.<br />`,
 		DOBTP: `Check this option to delay the specified number of bars to

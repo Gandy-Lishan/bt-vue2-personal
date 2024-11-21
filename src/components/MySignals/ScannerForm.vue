@@ -108,7 +108,7 @@ import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
 import { saveMySignalForm, editMySignalForm, getScannerBTList, getMySignalResults, perviewScannerForm } from '@/service/service'
 import Criteria from "./criteria/index";
-import { generateConfig } from '@/components/backtester/components/setupResults/setup/criteria/config'
+import { generateConfig } from './criteria/config'
 import { CIQ } from '@/components/common/chart/st-development/js'
 const throttle = require('lodash/throttle')
 import { mapGetters } from "vuex"
