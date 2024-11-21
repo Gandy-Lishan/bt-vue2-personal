@@ -619,9 +619,11 @@ const actions = {
 			toggleOverlayIndicator('flex');
 			let btvFavIndi = await getBTV1FavIndicator()
 			commit('SET_FAVORITE_INDICATOR_LIST_BTV1', btvFavIndi)
-			await getAllMyIndicatorsList(1,(data)=>{
-				commit('SET_MYINDICATORLIST',data)
-			})
+			// await getAllMyIndicatorsList(1,(data)=>{
+			// 	commit('SET_MYINDICATORLIST',data)
+			// })
+			const res = await getAllMyIndicatorsList()
+			commit('SET_MYINDICATORLIST',res)
 			toggleOverlayIndicator('none');
 			resolve()
 		})

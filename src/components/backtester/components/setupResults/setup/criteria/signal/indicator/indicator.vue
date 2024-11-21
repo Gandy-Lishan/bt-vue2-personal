@@ -749,17 +749,24 @@ export default {
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
-        //this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
-        await getAllMyIndicatorsList(1, (data) => {
-          this.createdIndicatorOptions = data
-          const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-          var results = list.map(item => ({
-              ...item,
-              priority: createStateFilter(queryString)(item),
-            }))
-            .filter(item => item.priority > 0)
-          cb(results.sort((a, b) => b.priority - a.priority))
-        })
+        this.createdIndicatorOptions = await getAllMyIndicatorsList()
+        const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+        var results = list.map(item => ({
+            ...item,
+            priority: createStateFilter(queryString)(item),
+          }))
+          .filter(item => item.priority > 0)
+        cb(results.sort((a, b) => b.priority - a.priority))
+        // await getAllMyIndicatorsList(1, (data) => {
+        //   this.createdIndicatorOptions = data
+        //   const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+        //   var results = list.map(item => ({
+        //       ...item,
+        //       priority: createStateFilter(queryString)(item),
+        //     }))
+        //     .filter(item => item.priority > 0)
+        //   cb(results.sort((a, b) => b.priority - a.priority))
+        // })
       }else{
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
         var results = list.map(item => ({

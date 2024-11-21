@@ -500,6 +500,7 @@
             /********************lishan modify start*************************/
             if(CIQ.isUserIndicator(indicatorList[i]) || CIQ.isOwnIndicator(indicatorList[i])){
                 let res = await searchIndicator(indicatorList[i].split('CREATE')[0]);
+                debugger
                 const ownIndicatorInfo = res?.data?.results[0];
 
             /********************lishan modify end*************************/
