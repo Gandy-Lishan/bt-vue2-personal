@@ -688,6 +688,10 @@ export const CommonMethodsMixin = {
 		  	const field = fieldName ||
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
+			let symbolLabelDisplay = ''
+			if (!(analysis == 'Sentiment' || analysis == 'User')) {
+				symbolLabelDisplay = `(${symbolLabel})`
+			}
 			const name = indicator_url_with_ma
                   ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
@@ -696,7 +700,7 @@ export const CommonMethodsMixin = {
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `(${symbolLabel})${name} ${condition}`,
+					display: `${symbolLabelDisplay}${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
