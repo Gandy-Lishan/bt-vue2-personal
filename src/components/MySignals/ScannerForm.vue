@@ -492,7 +492,7 @@ export default {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 211) this.popUpMsgBox(`The "${_name}" signal is completed successfully`)
+      if(code == 211 || code == 213) this.popUpMsgBox(`The "${_name}" signal is completed successfully`)
       // 运行成或者失败后刷新列表
       this.$emit('refreshBTList')
       this.processTips = ''
@@ -543,7 +543,6 @@ export default {
 
 			await processCriteria('entryChild1', displayData.entry, 'entry');
       console.log('displayData',displayData)
-
 		},
     customColorMethod(percentage) {
       if (percentage < 50) {

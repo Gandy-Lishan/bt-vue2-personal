@@ -227,7 +227,7 @@ export default {
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
             // item.deleteLoading = false
-            item.last_signal_date = item.lastdate
+            item.last_signal_date = item.lastdate === '2099-12-31' ? '' : item.lastdate
             item.description = parseJsonOrString(item.description)
 						return item
 					})
