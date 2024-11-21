@@ -1698,3 +1698,88 @@ export function getSymbolStrategySigal(symbol) {
 			})
 	})
 }
+/* My Signals Start */
+export function getMySignalsList(url) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function saveMySignalForm(data) {
+	const url = '/dev/mysignal_app/mysignal'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function editMySignalForm(data, rowUrl) {
+	const url = `/dev/mysignal_app/mysignal?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getMySignalResults(url) {
+	const path = `/dev/mysignal_app/mysignal/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function deleteMySignal(url) {
+	const path = `/dev/mysignal_app/mysignal?url=${url}`
+	return axios.delete(path)
+}
+/* My Signals End */
+
