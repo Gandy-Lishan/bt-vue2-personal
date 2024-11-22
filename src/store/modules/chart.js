@@ -606,9 +606,11 @@ const actions = {
 	get_mysymbolist({ commit }) {
 		return new Promise(async resolve => {
 			toggleOverlaySymbol('flex');
-			await getAllMySymbolsList(1,(data)=>{
-				commit('SET_MYSYMBOLLIST',data)
-			})
+			// await getAllMySymbolsList(1,(data)=>{
+			// 	commit('SET_MYSYMBOLLIST',data)
+			// })
+			const res = await getAllMySymbolsList()
+			commit('SET_MYSYMBOLLIST',res)
 			toggleOverlaySymbol('none');
 			resolve()
 		})
