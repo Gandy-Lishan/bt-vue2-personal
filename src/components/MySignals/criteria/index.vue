@@ -1370,6 +1370,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	padding: 5px;
+	margin-bottom: 20px;
 }
 .signal-container {
 	display: flex;
@@ -1425,5 +1426,8 @@ export default {
 	padding: 0 5px;
 	border-radius: 0px;
 	margin: 0px;
-} 
+}
+.signal-option-box /deep/ .el-select .el-input__inner {
+	width: 220px;
+}
 </style>

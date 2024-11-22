@@ -150,7 +150,7 @@
                   </el-autocomplete>
                 </div>
 
-                <el-upload
+                <!-- <el-upload
                   class="upload-demo"
                   :action="uploadUrl"
                   :on-preview="_handlePreview"
@@ -181,7 +181,7 @@
                       >View Example Data</el-button
                     >
                   </div>
-                </el-upload>
+                </el-upload> -->
             </el-form-item>
           </div>
         </el-col>
@@ -483,7 +483,6 @@ export default {
 
       Object.assign(this.$data, data)
       this.$refs.siForm.clearValidate()
-      this.$refs.upload.clearFiles()
       this.fileList = []
       this.changeIndicatorChecked('Sentiment Indicator')
     },
@@ -553,7 +552,6 @@ export default {
       this.si.technicalIndicator = ''
       this.si.symbolIndicator = ''
       this.si.userIndicator = ''
-      this.$refs.upload.clearFiles()
       this.fileList = []
     },
     handleIndicatorSelect(data, type) {
@@ -851,160 +849,6 @@ export default {
       }
     },
     async setEditData(newVal) {
-      console.log('indicator 编辑', newVal)
-      debugger
-      try {
-        if (JSON.stringify(newVal) != '{}') {
-          this.clearFormValidate()
-          let index = this.panelIndex
-          let vm = this
-          if (newVal[this.criteria].signals[index].analysis === 'Sentiment') {
-            this.indicatorRadio = 'Sentiment Indicator'
-            this.si.sentimentIndicator =
-              newVal[this.criteria].signals[index].indicator
-            let sentimentList = JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value'))
-
-            let indi = this.si.sentimentIndicator
-            sentimentList.forEach((item) => {
-              if (indi.toUpperCase() == item.value.toUpperCase()) {
-                let obj = {}
-                obj.index = vm.panelIndex
-                obj.url = item.url
-                // Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
-                this.currentSentiUpdated = item.updated
-                vm.$emit('getIndicatorUrl', obj)
-
-                let freqObj = {}
-                freqObj.value = item.updated
-                freqObj.index = vm.panelIndex
-                freqObj.criteria = vm.criteria
-                freqObj.key = `${vm.criteria}_${vm.panelIndex}`
-                vm.setFrequencyArray(freqObj)
-                // vm.setFreqencyLP(freqObj)
-                vm.$emit('getFreqArray', freqObj)
-              }
-            })
-          }
-          // todo 加入symbol analysis
-          if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
-            this.indicatorRadio = 'Symbol OHLCV'
-            this.si.symbolIndicator =
-              newVal[this.criteria].signals[index].indicator
-            let obj = {}
-            obj.index = vm.panelIndex
-            obj.url = this.si.symbolIndicator
-            vm.$emit('getIndicatorUrl', obj)
-          }
-          if (newVal[this.criteria].signals[index].analysis === 'Technical') {
-            debugger
-            vm.indicatorRadio = 'Technical Indicator'
-            vm.si.technicalIndicator = newVal[this.criteria].signals[index].indicator
-
-            let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
-            console.log('techIndicatorResult', techIndicatorResult)
-            if(techIndicatorResult){
-              vm.handleIndicatorSelect(techIndicatorResult, 'tech')
-            }
-          }
-          if (newVal[this.criteria].signals[index].analysis === 'User') {
-            vm.indicatorRadio = "Users' Own Indicator"
-            let userIndicator = newVal[this.criteria].signals[index].indicator
-            vm.si.userIndicator = userIndicator
-            const str =
-              this.$store.state.chart.indicators.formIndicators[this.criteria][
-              this.panelIndex
-              ]
-            const startIndex = str.indexOf('HASH')
-            const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
-
-            const createdStartIndex = str.indexOf('CREATE')
-            const createdEndIndex = createdStartIndex + 7
-            if (startIndex !== -1) {
-              const beforeHash = str.substring(0, startIndex)
-              const afterHash = str.substring(endIndex)
-              const response = await csvFileRead(beforeHash, afterHash)
-              console.log('文件响应', response)
-
-              // 还原文件对象的 raw 属性
-              const obj = {}
-              obj.index = index
-              obj.val = response.data.data.file_id
-              obj.criteriaCF = capitalizeFirstLetter(this.criteria)
-              vm.previewFileID = str
-              vm.$emit('getIndicatorUrl', {
-                index: index,
-                url: response.data.data.file_id
-              })
-              console.log('还原文件对象的 raw 属性', obj)
-              if (this.criteria.startsWith('entry')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-              }
-              if (this.criteria.startsWith('exit')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-              }
-              const res = response.data.data.csv_content
-              let data = []
-              try {
-                data = res.map((item) => ({
-                  Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                  }),
-                  Close: item.indicator_Close
-                }))
-                // 创建 CSV 文件
-                // const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-                // const file = new File([csvData], `${userIndicator}.csv`, { type: 'text/csv' });
-                // this.fileList.splice(-1, 1, file)
-
-                const csvData =
-                  'Date,Close\n' +
-                  data.map((item) => `${item.Date},${item.Close}`).join('\n')
-                const base64Data = btoa(csvData) // 编码为 Base64
-                const rawValue = `data:text/csv;base64,${base64Data}`
-                const file = new File([csvData], `${userIndicator}.csv`, {
-                  type: 'text/csv'
-                })
-                file.raw = rawValue
-                this.fileList.splice(-1, 1, file)
-              } catch (error) {
-                console.log('error', error)
-              }
-            } else if(createdStartIndex !== -1){
-              const beforeHash = str.substring(0, createdStartIndex)
-              const afterHash = str.substring(createdEndIndex)
-
-              // 还原文件对象的 raw 属性
-              const obj = {}
-              obj.index = index
-              obj.val = str
-              obj.criteriaCF = capitalizeFirstLetter(this.criteria)
-              vm.si.userIndicator = beforeHash
-              vm.$emit('getIndicatorUrl', {
-                index: index,
-                url: str
-              })
-              console.log('还原文件对象的 raw 属性', obj)
-              if (this.criteria.startsWith('entry')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-              }
-              if (this.criteria.startsWith('exit')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, obj)
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.error(error)
-        this.$notify({
-          title: 'Failed',
-          message: 'The internal server is busy, please try again later',
-          type: 'error'
-        })
-      }
-    },
-    async setEditData(newVal) {
       console.log('indicator 编辑', newVal);
       try {
         if (JSON.stringify(newVal) !== '{}') {
@@ -1035,52 +879,18 @@ export default {
           };
 
           const handleUser = async (indicator) => {
-            const str = this.$store.state.chart.indicators.formIndicators[this.criteria][index];
-            const startIndex = str.indexOf('HASH');
-            const createdStartIndex = str.indexOf('CREATE');
-
-            if (startIndex !== -1) {
-              const beforeHash = str.substring(0, startIndex);
-              const afterHash = str.substring(startIndex + 4);
-              const response = await csvFileRead(beforeHash, afterHash);
-              console.log('文件响应', response);
-
-              this.$emit('getIndicatorUrl', { index, url: response.data.data.file_id });
-              this.previewFileID = str;
-
-              if (this.criteria.startsWith('entry') || this.criteria.startsWith('exit')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, { index, val: response.data.data.file_id, criteriaCF: capitalizeFirstLetter(this.criteria) });
-              }
-
-              try {
-                const data = response.data.data.csv_content.map(item => ({
-                  Date: formatStandardTime(item.DT).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-                  Close: item.indicator_Close
-                }));
-
-                const csvData = 'Date,Close\n' + data.map(item => `${item.Date},${item.Close}`).join('\n');
-                const base64Data = btoa(csvData);
-                const rawValue = `data:text/csv;base64,${base64Data}`;
-                const file = new File([csvData], `${indicator}.csv`, { type: 'text/csv' });
-                file.raw = rawValue;
-                this.fileList.splice(-1, 1, file);
-              } catch (error) {
-                console.log('error', error);
-              }
-            } else if (createdStartIndex !== -1) {
-              const beforeHash = str.substring(0, createdStartIndex);
-              const afterHash = str.substring(createdStartIndex + 7);
-
-              this.$emit('getIndicatorUrl', { index, url: str });
-
-              if (this.criteria.startsWith('entry') || this.criteria.startsWith('exit')) {
-                this.$store.commit(`form/saveUsersOwnFileHash`, { index, val: str, criteriaCF: capitalizeFirstLetter(this.criteria) });
-              }
-            }
+            debugger
+            let options = []
+            await getAllMyIndicatorsList(1, (options) => {
+              const ele = options.find(item => item.url === indicator)
+              this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele.name || '';
+            })
+            console.log('this.createdIndicatorOptions', options)
+            this.$emit('getIndicatorUrl', { index, url: indicator });
           };
 
-          this.indicatorRadio = `${signal.analysis} Indicator`;
-          this.si[`${signal.analysis.toLowerCase()}Indicator`] = signal.indicator;
+          this.indicatorRadio = `${signal.analysis === 'User' ? 'Users\' Own' : signal.analysis} Indicator`;
+          if(signal.analysis !== 'User') this.si[`${signal.analysis.toLowerCase()}Indicator`] = signal.indicator;
 
           switch (signal.analysis) {
             case 'Sentiment':
@@ -1985,7 +1795,6 @@ export default {
 }
 .userIndicatorBox {
   position: relative;
-  margin-bottom: 113px;
 }
 .upload-demo {
 	display: flex;
