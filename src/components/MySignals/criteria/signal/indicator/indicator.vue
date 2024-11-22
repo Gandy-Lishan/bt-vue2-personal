@@ -365,6 +365,7 @@ export default {
         riskIndicator: '',
         userIndicator: ''
       },
+      userIndicatorUrl: '',
       sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
@@ -561,16 +562,17 @@ export default {
       if(['tech', 'symbol'].includes(type) && updated === undefined) updated = 'Daily'
       if(type === 'symbol') this.si.symbolIndicator = data.label
       if(type === 'user') {
-        const {file_name: indicatorName, file_id: indicatorUrl, updated} = data
-        updated = capitalizeFirstLetter(updated)
+        const {file_name: indicatorName, file_id: indicatorUrl, updated: _updated, url} = data
+        updated = capitalizeFirstLetter(_updated)
         data.value = indicatorName
-        data.url = indicatorUrl
+        data.url = indicatorUrl || url
         if(indicatorUrl.includes('CREATE')) {
           const obj = {
             index: this.panelIndex,
             val: indicatorUrl,
             criteriaCF: capitalizeFirstLetter(this.criteria)
           }
+          this.userIndicatorUrl = url
           if (this.criteria.startsWith('entry')) this.$store.commit(`form/saveUsersOwnFileHash`, obj)
           else if (this.criteria.startsWith('exit')) this.$store.commit(`form/saveUsersOwnFileHash`, obj)
         }
@@ -640,6 +642,7 @@ export default {
       return [{ value: 'Time In Market' }, { value: 'Profit/Loss' }]
     },
     async saveIndicator(index) {
+      debugger
       let checked = true
       let validForm
       let validName = false
@@ -689,7 +692,7 @@ export default {
           let obj = {}
           obj.criteria = this.criteria
           obj.index = index
-          obj.value = this.si.userIndicator
+          obj.value = this.si.userIndicator.includes('HASH') ? this.si.userIndicator : this.userIndicatorUrl
           this.$store.commit('form/getUserValue', obj)
           return checked
         } else {
@@ -762,6 +765,7 @@ export default {
       }
     },
     async saveIndicator(index) {
+      debugger
       let checked = true;
       let validForm = true; // Assume form is valid until proven otherwise
       let validName = false;
@@ -781,6 +785,7 @@ export default {
       };
 
       const commitIndicatorValue = (type, value) => {
+        debugger
         this.$store.commit(`form/get${label}Value`, {
           criteria: this.criteria,
           index: index,
@@ -788,6 +793,7 @@ export default {
         });
       };
       
+
       const checkIndicatorName = (type, value) => {
         switch (type) {
           case 'Senti':
@@ -832,7 +838,9 @@ export default {
         case 'Sentiment Indicator':
           return checkAndCommit('Senti', this.si.sentimentIndicator, true);
         case "Users' Own Indicator":
-          return checkAndCommit('User', this.si.userIndicator, false);
+          debugger
+          const indicator = this.userIndicatorUrl !== '' ? this.userIndicatorUrl : this.si.userIndicator
+          return checkAndCommit('User', indicator, false);
         case 'Technical Indicator':
           return checkAndCommit('Tech', this.si.technicalIndicator, true);
         case 'Symbol OHLCV':
@@ -888,13 +896,14 @@ export default {
             vm.$emit('getIndicatorUrl', obj)
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
+            debugger
             vm.indicatorRadio = 'Technical Indicator'
             vm.si.technicalIndicator = newVal[this.criteria].signals[index].indicator
 
             let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
+            console.log('techIndicatorResult', techIndicatorResult)
             if(techIndicatorResult){
-              let isFromEdit = true
-              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit)
+              vm.handleIndicatorSelect(techIndicatorResult, 'tech')
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
@@ -1021,7 +1030,7 @@ export default {
           const handleTechnical = (indicator) => {
             const techIndicatorResult = CIQ.findBuiltinTechIndicator(indicator, null);
             if (techIndicatorResult) {
-              this.handleTechnicalSelect(techIndicatorResult, true);
+              this.handleIndicatorSelect(techIndicatorResult, 'tech');
             }
           };
 

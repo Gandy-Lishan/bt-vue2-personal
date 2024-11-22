@@ -415,6 +415,7 @@ import elderRayIndexLike from './signal/technical/Elder-Ray-Index-like.vue'
 import alligatorLike from './signal/technical/Alligator-like.vue'
 import linearRegForecastLike from './signal/technical/Linear-RegForecast-like.vue'
 import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
+import { getCustomConfig } from '@/components/common/chart/resources' // ChartIQ library resources
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
@@ -1160,7 +1161,8 @@ export default {
 				}
 			})
 		},
-		setEditPanel(num, data) {
+		async setEditPanel(num, data) {
+			debugger
 			let criteria = this.criteriaNum
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 
@@ -1204,7 +1206,9 @@ export default {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
-					
+					const getBuiltinList = CIQ.store.getters.getBuiltinList
+					const config = getCustomConfig()
+          if(getBuiltinList.length == 0) await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}

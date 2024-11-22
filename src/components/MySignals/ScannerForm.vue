@@ -502,6 +502,12 @@ export default {
       debugger
 			let _this = this
       this.rowUrl = data.url
+      this.data = {
+        ...data,
+        name: data.name,
+        symbol: data.symbol,
+        timeframe: data.timeframe
+      }
       _this.$refs['entryChild1'].clearForm()
       let displayData = {
         ...data,
