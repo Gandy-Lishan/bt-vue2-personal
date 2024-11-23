@@ -46,11 +46,13 @@ export default {
 		CnNotify
 	},
 	async mounted() {
+		console.time("ai timer")
+		console.time("bt timer")
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
 		this.preFetchData()
-
+// debugger
 		console.log('用户权限', getCookieData())
 		const _this = this
 		if(Cookies.get('sentimen_session')){
@@ -183,9 +185,14 @@ export default {
   },
 		fetchCustomList() {
 			console.log('🚗  update custom symbol list and indicator list')
-			this.$store.dispatch('chart/get_mysymbolist')
-			// 包括了fav indicator
-			this.$store.dispatch('chart/get_myindicator')
+			// this.$store.dispatch('chart/get_mysymbolist')
+			// // 包括了fav indicator
+			// this.$store.dispatch('chart/get_myindicator')
+
+			return Promise.all([
+				this.$store.dispatch('chart/get_mysymbolist'),
+				this.$store.dispatch('chart/get_myindicator')
+			]);
 		},
 	beforeDestroy() {
 		clearInterval(this.updateInterval);

@@ -3,9 +3,9 @@ import {
     getAllMySymbolsList,getSymbolCsv,
     getBTV1FavIndicator,getAllMyIndicatorsList,
     getForecastList,
-    getStocksList,
-    getIndexsList,
-    getIndicatorsList,
+    // getStocksList,
+    // getIndexsList,
+    // getIndicatorsList,
     getSymbollistForecast,
 	getFavorite,updateFavorite,
 	obtainIndicatorsList,
@@ -13,6 +13,9 @@ import {
 } from '@/service/service.js'
 import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
+import stocksData from '@/assets/stocksList.json';
+import indexsData from '@/assets/indexsList.json';
+import indicatorsData from '@/assets/indicatorsList.json';
 
 const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
@@ -58,7 +61,7 @@ const state = {
 		extraIndicators: [],
 	},
 	extremeValue: [], //chartiq
-	indicatorsList: [], //chartiq 代替了AllSymbolsList
+	indicatorsList: indicatorsData, //chartiq 代替了AllSymbolsList
 	builtinList: [], //chartiq 包含完整techList
 	maLikeTech: [
 		'ma',
@@ -70,8 +73,8 @@ const state = {
 	activatedMALayout: [], //chartiq
 	activatedTechLayout: [], // dual symbol new feature
 	// indicators look up
-	stocksList: [], //chartiq
-	indexsList: [], //chartiq
+	stocksList: stocksData, //chartiq
+	indexsList: indexsData, //chartiq
 	formateTechnicalList: [], //chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod: {},
 	isBTChartReady: false,
@@ -424,7 +427,7 @@ const actions = {
 				}
 			}else{
 				resolve(list)
-			}
+			}	
 		})
 	},
 	fetch_indexlist({ commit }) {

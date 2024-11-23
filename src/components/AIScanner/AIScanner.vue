@@ -734,6 +734,7 @@ export default {
 		if(!this.date) this.date = [this.curDate,this.curDate]
 		
 		this.loading = false
+		console.timeEnd("ai timer")
 	},
 	selectDate(){
 		this.getAIPick()
