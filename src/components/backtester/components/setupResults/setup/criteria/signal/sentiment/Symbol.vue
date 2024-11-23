@@ -26,7 +26,7 @@
 				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=15">
 					<el-form-item prop="conditionPeriod">
 						<el-input
-							@input="calculateNewConditions"
+							@input="debouncedCalculateNewConditions"
 							v-model="sym.conditionPeriod"
 							placeholder="Condition Period"
 						></el-input>
@@ -63,6 +63,8 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { getCoresSymbolDual } from '@/utils/globalFunc'
+const debounce = require('lodash/debounce')
+
 export default {
   name: 'symbol',
   props: {
@@ -372,6 +374,9 @@ export default {
       this.$store.commit('form/saveDescription', desObj)
 
     },
+    debouncedCalculateNewConditions: debounce(function () {
+      this.calculateNewConditions()
+    }, 500), 
     calculateNewConditions() {
       if (!this.isROCLike) return
 

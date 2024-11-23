@@ -601,42 +601,57 @@ export function getScannerBTList(page, sort, name) {
 			})
 	})
 }
-export function getAllMyIndicatorsList(page, callback) {
-	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=`
+
+export function getAllMyIndicatorsList() {
+	const url = `/dev/my_indicator/get_records/?ordering=-create_date&all=true`
 
 	return new Promise((resolve, reject) => {
-		const allData = []
-
-		function fetchPageData(page) {
-			axios
-				.get(url + page, {
-					// cache: true
-				})
-				.then(res => {
-					const data = res.data.results
-					console.log('响应数据', res)
-					// 将当前页的数据添加到总数据数组中
-					allData.push(...data)
-
-					// 执行回调函数，将当前获取的数据传递给回调函数处理
-					callback(allData)
-
-					if (res.data.next) {
-						// 继续递归请求下一页数据
-						fetchPageData(page + 1)
-					} else {
-						// 所有数据已获取完毕，返回结果
-						resolve(allData)
-					}
-				})
-				.catch(err => {
-					reject(err)
-				})
-		}
-		// 开始递归请求第一页数据
-		fetchPageData(page)
+		axios
+			.get(url)
+			.then(res => {
+				resolve(res.data)
+			})
+			.catch(err => {
+				reject(err)
+			})
 	})
 }
+// export function getAllMyIndicatorsList(page, callback) {
+// 	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=`
+
+// 	return new Promise((resolve, reject) => {
+// 		const allData = []
+
+// 		function fetchPageData(page) {
+// 			axios
+// 				.get(url + page, {
+// 					// cache: true
+// 				})
+// 				.then(res => {
+// 					const data = res.data.results
+// 					console.log('响应数据', res)
+// 					// 将当前页的数据添加到总数据数组中
+// 					allData.push(...data)
+
+// 					// 执行回调函数，将当前获取的数据传递给回调函数处理
+// 					callback(allData)
+
+// 					if (res.data.next) {
+// 						// 继续递归请求下一页数据
+// 						fetchPageData(page + 1)
+// 					} else {
+// 						// 所有数据已获取完毕，返回结果
+// 						resolve(allData)
+// 					}
+// 				})
+// 				.catch(err => {
+// 					reject(err)
+// 				})
+// 		}
+// 		// 开始递归请求第一页数据
+// 		fetchPageData(page)
+// 	})
+// }
 
 export function getMyIndicatorData(url) {
 	const path = `/dev/my_indicator/get_data/?url='${url}'`
@@ -1278,43 +1293,60 @@ export function delPortfolio(url) {
 
 
 /** MySymbol 接口START */
-export function getAllMySymbolsList(page, callback) {
-	const url = `/dev/user_upload/get_upload_files_list/?ordering=-create_date&page=`
+export function getAllMySymbolsList() {
+	const url = `/dev/user_upload/get_upload_files_list/?ordering=-create_date&all=true`
 
 	return new Promise((resolve, reject) => {
-		const allData = []
-
-		function fetchPageData(page) {
-			axios
-				.get(url + page, {
-					// cache: true
-					withCredentials: true
-				})
-				.then(res => {
-					const data = res.data.results
-					console.log('响应数据', res)
-					// 将当前页的数据添加到总数据数组中
-					allData.push(...data)
-
-					// 执行回调函数，将当前获取的数据传递给回调函数处理
-					callback(allData)
-
-					if (res.data.next) {
-						// 继续递归请求下一页数据
-						fetchPageData(page + 1)
-					} else {
-						// 所有数据已获取完毕，返回结果
-						resolve(allData)
-					}
-				})
-				.catch(err => {
-					reject(err)
-				})
-		}
-		// 开始递归请求第一页数据
-		fetchPageData(page)
+		axios
+			.get(url, {
+				// cache: true
+				withCredentials: true
+			})
+			.then(res => {
+				resolve(res.data)
+			})
+			.catch(err => {
+				reject(err)
+			})
 	})
 }
+// export function getAllMySymbolsList(page, callback) {
+// 	const url = `/dev/user_upload/get_upload_files_list/?ordering=-create_date&page=`
+
+// 	return new Promise((resolve, reject) => {
+// 		const allData = []
+
+// 		function fetchPageData(page) {
+// 			axios
+// 				.get(url + page, {
+// 					// cache: true
+// 					withCredentials: true
+// 				})
+// 				.then(res => {
+// 					const data = res.data.results
+// 					console.log('响应数据', res)
+// 					// 将当前页的数据添加到总数据数组中
+// 					allData.push(...data)
+
+// 					// 执行回调函数，将当前获取的数据传递给回调函数处理
+// 					callback(allData)
+
+// 					if (res.data.next) {
+// 						// 继续递归请求下一页数据
+// 						fetchPageData(page + 1)
+// 					} else {
+// 						// 所有数据已获取完毕，返回结果
+// 						resolve(allData)
+// 					}
+// 				})
+// 				.catch(err => {
+// 					reject(err)
+// 				})
+// 		}
+// 		// 开始递归请求第一页数据
+// 		fetchPageData(page)
+// 	})
+// }
 export function symbolCsvFileDelete(fileID) {
 	const url = `/dev/user_upload/symbolcsvfiledelete/?url=${fileID}`
 

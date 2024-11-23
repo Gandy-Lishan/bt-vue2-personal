@@ -81,6 +81,7 @@ quoteFeedSimulator.sendReq = async function(start,end,new_str,freq,cb){
 }
 
 quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,cb){
+    console.timeEnd("bt timer")
     // initEndDate for testing
     this.initEndDate = endDate 
     var oneYear = (24 *60 *60 *1000) * 365

@@ -57,7 +57,7 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
-							@input="calculateNewConditions"
+							@input="debouncedCalculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
@@ -108,7 +108,7 @@
 							filterable
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Please select condition"
-              @change="setPeriod(senti.period)"	
+              @change="debouncedSetPeriod(senti.period)"	
 						>
 							<el-option
 								v-for="item in MATypeConditions"
@@ -123,7 +123,7 @@
 				<div class="conditionInput">
 					<el-form-item prop="period">
 						<el-input
-							@input="setPeriod"
+							@input="debouncedSetPeriod"
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Input Period"
 							v-model="senti.period"
@@ -153,7 +153,7 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="conditionPeriod">
 						<el-input
-							@input="calculateNewConditions"
+							@input="debouncedCalculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
@@ -230,7 +230,7 @@
 							filterable
 							:disabled="!(conditionRadio === 'Indicator Value ')"
 							placeholder="Please select condition"
-              @change="setPeriod(senti.period)"	
+              @change="debouncedSetPeriod(senti.period)"	
 						>
 							<el-option
 								v-for="item in MATypeConditions"
@@ -248,7 +248,7 @@
 							:disabled="!(conditionRadio === 'Indicator Value ')"
 							v-model="senti.period"
 							placeholder="Input Period"
-              @input="setPeriod"
+              @input="debouncedSetPeriod"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -260,6 +260,8 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
+const debounce = require('lodash/debounce')
+
 export default {
   name: 'senti',
   props: {
@@ -761,6 +763,9 @@ export default {
         this.setPeriod(this.senti.period)  
       }
     },
+    debouncedCalculateNewConditions: debounce(function () {
+      this.calculateNewConditions()
+    }, 500), 
     calculateNewConditions() {
       if (!this.isROCLike) return
       let indicator_url = this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex]
@@ -859,8 +864,11 @@ export default {
 			}
 			return display
     },
+    debouncedSetPeriod: debounce(function (val) {
+      this.setPeriod(val)
+    }, 500), 
     setPeriod(val) {
-      debugger
+      console.log('setPeriod', val)
       let _val = val
       // if (!_val) {
       //   _val = 5

@@ -63,7 +63,7 @@
 							<el-input
 								v-model="tech.period"
 								:disabled="!(radio === ' ')"
-								@input="getSCvalue"
+								@input="debouncedGetSCvalue"
 								placeholder="Input Period"
 							></el-input>
 					</el-form-item>
@@ -84,7 +84,7 @@
 								:disabled="!(radio === 'Moving Average')"
 								v-model="tech.ma_period"
 								placeholder="Input Period"
-								@input="getMaPeriodValue"
+								@input="debouncedGetMaPeriodValue"
 							></el-input>
 					</el-form-item>
 				</div>
@@ -119,7 +119,7 @@
 								v-model="tech.maPeriod"
 								:disabled="!(radio === 'Moving Average')"
 								placeholder="Input Period"
-								@input="getMaValue"
+								@input="debouncedGetMaValue"
 							></el-input>
 					</el-form-item>
 				</div>
@@ -197,6 +197,8 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 const throttle = require('lodash/throttle')
+const debounce = require('lodash/debounce')
+
 export default {
 	name: 'ma',
 	props: {
@@ -312,6 +314,15 @@ export default {
 		}
 	},
 	methods: {
+		debouncedGetMaPeriodValue: debounce(function(val) {
+			this.getMaPeriodValue(val)
+		}, 500),
+		debouncedGetSCvalue: debounce(function(val) {
+			this.getSCvalue(val)
+		}, 500),
+		debouncedGetMaValue: debounce(function(val) {
+			this.getMaValue(val)
+		}, 500),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
 			this.$refs.maForm.resetFields()
@@ -627,8 +638,7 @@ export default {
 				this.updateMAPeriod(val, limit)
 		}
 		},
-		getMaValue: throttle(function (val, limit) {
-			
+		getMaValue(val, limit) {
 			this.tech.maPeriod = val
 			for (var studyInstanceName in CIQ.stxx.layout.studies) {
 				var sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -664,7 +674,7 @@ export default {
 					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}
-		}, 500),
+		},
 		saveCondition(index) {
 			let checked = true
 			if (this.isRiskControl) {

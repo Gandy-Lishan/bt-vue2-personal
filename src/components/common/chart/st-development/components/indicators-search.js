@@ -210,6 +210,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
             async filters_data(value,filter,params, closure){
                 console.log('filters_data')
+
                 CIQ.symbols = []
                 if (filter == "ALL"){
                     var loader = document.querySelector(".loaderSearch");
