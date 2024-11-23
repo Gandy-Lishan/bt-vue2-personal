@@ -193,8 +193,8 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
         } 
     } else if (filter == 'MY FAVORITES'){
         var results = []
+        await CIQ.store.dispatch('chart/get_favorite')
         var resu = CIQ.store.getters.getFavoriteSymbolList
-
             try {
                 var listStock = CIQ.store.getters.getStockList.map(_obj=>{
                         var newObj = {}
@@ -214,12 +214,13 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                 var list = [...listStock,...listIndex]
                 
                 resu.forEach(element => {
+                    const matchedItem = list.find(item=>item.url == element)
+                    if(!matchedItem) return;
                     var item = {
                         symbol: element,
-                        name: list.find(item=>item.url == element).name,
+                        name: matchedItem.name,
                         exchDisp: ""
                     }
-                    
                     if (
                         item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
                         item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
@@ -231,7 +232,7 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
                     }         
                 }); 
                // console.log(results)
-            } catch (e) {}
+            } catch (e) {console.error(e)}
             results.sort(SortArray)    
             cb(results);
     } else if (filter == 'CUSTOM SYMBOL') {

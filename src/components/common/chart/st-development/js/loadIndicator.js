@@ -319,11 +319,11 @@
     CIQ.store.commit('form/getBacktestSymbol',symbol)
 
     CIQ.addIndicators({stx:stx},callback)
-
     favBtnContainerToggle()
  }
 	const favBtnContainerToggle = async function() {
 		try{
+            await CIQ.store.dispatch('chart/get_favorite')
 			const favoriteSymbolList = CIQ.store.getters.getFavoriteSymbolList
 			try{
 				var div = document

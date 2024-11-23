@@ -214,12 +214,13 @@ async function initiateList(pathname) {
 		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
 		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 	
-	if (
-		store.getters.getFavoriteIndicatorList.length == 0 ||
-		store.getters.getFavoriteSymbolList.length == 0
-	) {
-		await store.dispatch('chart/get_favorite')
-	}
+	//	改为了获取列表时请求
+	// if (
+	// 	store.getters.getFavoriteIndicatorList.length == 0 ||
+	// 	store.getters.getFavoriteSymbolList.length == 0
+	// ) {
+	// 	await store.dispatch('chart/get_favorite')
+	// }
 
 	if (pathname == 'ActiveStudies' && store.getters.getSymbollistForecast.length == 0){
 		await store.dispatch('chart/get_symbollist_forecast')
