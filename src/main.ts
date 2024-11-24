@@ -44,6 +44,7 @@ import '@algolia/autocomplete-theme-classic';
 import '@/assets/css/searchBar.css';
 import GlobalMixins from "@/components/common/mixins/globalMixins";
 import InstantSearch from 'vue-instantsearch';
+import {resetData} from '@/utils/globalFunc/index';
 
 // 引入自动更新提醒
 import autoUpdate from './auto-update'
@@ -66,6 +67,14 @@ Vue.component('template-placeholder', {
 		return createElement('template', this.$slots.default)
 	}
 })
+
+
+Vue.mixin({
+  beforeDestroy() {
+    resetData(this) // 所有组件销毁时自动重置数据
+  }
+})
+
 
 // 保存整站vuex本地储存初始状态
 window.SITE_CONFIG = {}
