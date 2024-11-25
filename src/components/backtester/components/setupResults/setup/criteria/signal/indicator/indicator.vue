@@ -441,6 +441,12 @@ export default {
     }
   },
   computed: {
+      sentimentIndicatorList() {
+        return this.$store.getters.getIndicatorsList.map(item => ({
+          value: item.chart_name,
+          ...item
+        }));
+      },
     updateFreq() {
       return this.$store.state.form.pairDataFreq
     },
