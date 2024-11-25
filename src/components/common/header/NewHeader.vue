@@ -116,7 +116,7 @@ export default {
             {
               label: 'Daily Report',
               keyPath: '10-7',
-              path: '/MR/archived_reports'
+              path: '/MR/archived_reports/2024'
             },
             {
               label: 'Active Studies',
@@ -182,6 +182,7 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
+      debugger
       console.log(key, keyPath);
       if(key === '9') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
@@ -209,7 +210,7 @@ export default {
         }
       }).filter(value => (value !== undefined && value !== null && value !== ''))
       console.log('keyPathEle',keyPathEle)
-      if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') this.$router.push(keyPathEle[0].path)
+      if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') window.location.href = keyPathEle[0].path
     },
     showLabel(item) {
       const email = getCookieData()?.username
