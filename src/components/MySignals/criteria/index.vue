@@ -2,14 +2,9 @@
   <div>
 	<div class="criteria-box">
 		<div class="signal-option-box">
-			<div class="entry-title-box">
-				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
-				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
-					<span slot="content" v-html="config['criteriaTitleTP']">
-          </span>
-					<i class="iconfont icon-wenhao"></i>
-				</el-tooltip>
-			</div>
+			<!-- <div class="entry-title-box">
+				<p class="criteria-title"></p>
+			</div> -->
 			<div class="signal-container">
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>

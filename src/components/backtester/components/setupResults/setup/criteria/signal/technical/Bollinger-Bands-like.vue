@@ -116,7 +116,7 @@ delay_bars: [String, Number],
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.form.conditionRadio
+					let obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.tech.value
 					CIQ.store.commit('form/setConditionRadio', obj)
 				}
@@ -136,7 +136,7 @@ delay_bars: [String, Number],
 			Object.assign(this.$data, this.$options.data())
 		},
 		getValueSelect(val) {
-			var obj = CIQ.store.state.form.conditionRadio
+			let obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('form/setConditionRadio', obj)
 		},
@@ -271,7 +271,7 @@ delay_bars: [String, Number],
 				this.radio = ' '
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.form.conditionRadio
+					let cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.tech.value
 					CIQ.store.commit('form/setConditionRadio', cr)
 			}

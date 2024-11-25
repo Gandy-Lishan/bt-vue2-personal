@@ -304,7 +304,7 @@ export default {
 		isActived: {
 			handler(newVal) {
 				if (newVal) {
-					var obj = CIQ.store.state.form.conditionRadio
+					let obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('form/setConditionRadio', obj)
 				}
@@ -332,15 +332,15 @@ export default {
 		},
 		updateMAPeriod(val, limit) {
 			// update MA period
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+			for (let studyInstanceName in CIQ.stxx.layout.studies) {
+				let sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
 					sd.type == 'ma' && sd.panel == 'chart' &&
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
 					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
-					var replaceStudy = {
+					let replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
@@ -353,7 +353,7 @@ export default {
 						outputs: { MA:ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
@@ -368,15 +368,15 @@ export default {
 		},
 		setRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.form.conditionRadio
+			let obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('form/setConditionRadio', obj)
 			if (val === 'Moving Average') {
 				// 添加附属ma
 				//this.tech.ma_period = 5
 				this.tech.comparison = 'MA'
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				for (let studyInstanceName in CIQ.stxx.layout.studies) {
+					let sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (
 						sd.type == 'ST MA' && sd.panel == 'chart' &&
 						sd.parameters.criteria == this.criteria &&
@@ -386,7 +386,7 @@ export default {
 					}
 				}
 				const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
-				var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+				let sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
 					Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 					Period: this.tech.ma_period,
 					display: 'ST MA'
@@ -395,17 +395,17 @@ export default {
 					index: this.panelIndex
 				})
 				// keep current MA
-				var objMA = {
+				let objMA = {
 					period: this.tech.ma_period,
 					url: 'ma',
 					type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 					criteria: this.criteria, 
 					index: this.panelIndex
 				}
-				var activatedMAList = this.$store.state.chart.activatedMA
+				let activatedMAList = this.$store.state.chart.activatedMA
 
 				// remove current MA attached to an indicator
-				var MAListIndex = activatedMAList.findIndex(
+				let MAListIndex = activatedMAList.findIndex(
 					(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
 				)
 				if (MAListIndex != -1) {
@@ -419,8 +419,8 @@ export default {
 			}
 			if (val === ' ') {
 				this.tech.comparison = 'SC'
-				for (var studyInstanceName in CIQ.stxx.layout.studies) {
-					var sd = CIQ.stxx.layout.studies[studyInstanceName]
+				for (let studyInstanceName in CIQ.stxx.layout.studies) {
+					let sd = CIQ.stxx.layout.studies[studyInstanceName]
 					if (
 						sd.type == 'ST MA' && sd.panel == 'chart' &&
 						sd.parameters.criteria == this.criteria &&
@@ -430,8 +430,8 @@ export default {
 					}
 				}
 				// remove current MA attached to an indicator
-				var activatedMAList = this.$store.state.chart.activatedMA
-				var MAListIndex = activatedMAList.findIndex(
+				let activatedMAList = this.$store.state.chart.activatedMA
+				let MAListIndex = activatedMAList.findIndex(
 					(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
 				)
 				if (MAListIndex != -1) {
@@ -452,14 +452,14 @@ export default {
 				case 'SL': field = 'Low';break;
 				default: field = 'field'
 			}
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+			for (let studyInstanceName in CIQ.stxx.layout.studies) {
+				let sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
 					sd.type == 'ma' && sd.panel == 'chart' &&
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
+					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
@@ -579,8 +579,8 @@ export default {
 		getMaPeriodValue(val, limit) {
 			
 			this.tech.ma_period = val
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+			for (let studyInstanceName in CIQ.stxx.layout.studies) {
+				let sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
 					sd.type == 'ST MA' && sd.panel == 'chart' &&
 					sd.parameters.criteria == this.criteria &&
@@ -588,7 +588,7 @@ export default {
 				) {
 					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 					// 刷新附属ma
-					var replaceStudy = {
+					let replaceStudy = {
 						name: 'Moving Average ',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
@@ -601,7 +601,7 @@ export default {
 						outputs: { MA: ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
@@ -610,17 +610,17 @@ export default {
 				}
 			}
 			// keep current MA
-			var objMA = { 
+			let objMA = { 
 				period: this.tech.ma_period, 
 				url: 'ma', 
 				type: this.maRadio,
 				criteria: this.criteria, 
 				index: this.panelIndex
 			}
-			var activatedMAList = this.$store.state.chart.activatedMA
+			let activatedMAList = this.$store.state.chart.activatedMA
 
 			// remove current MA attached to an indicator
-			var MAListIndex = activatedMAList.findIndex(
+			let MAListIndex = activatedMAList.findIndex(
 				(item) => item.url == 'ma' && item.criteria == this.criteria && item.index == this.panelIndex
 			)
 			if (MAListIndex != -1) {
@@ -640,15 +640,15 @@ export default {
 		},
 		getMaValue(val, limit) {
 			this.tech.maPeriod = val
-			for (var studyInstanceName in CIQ.stxx.layout.studies) {
-				var sd = CIQ.stxx.layout.studies[studyInstanceName]
+			for (let studyInstanceName in CIQ.stxx.layout.studies) {
+				let sd = CIQ.stxx.layout.studies[studyInstanceName]
 				if (
 					sd.type == 'ma' && sd.panel == 'chart' &&
 					sd.parameters.criteria == this.criteria &&
 					sd.parameters.index == this.panelIndex
 				) {
 					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
-					var replaceStudy = {
+					let replaceStudy = {
 						name: 'Moving Average',
 						overlay: true,
 						calculateFN: CIQ.Studies.calculateMovingAverage,
@@ -661,7 +661,7 @@ export default {
 						outputs: { MA: ma_color },
 					}
 					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					var st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
+					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
 						criteria: this.criteria,
 						index: this.panelIndex
 					})
@@ -747,7 +747,7 @@ export default {
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.form.conditionRadio
+					let cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('form/setConditionRadio', cr)
 			}

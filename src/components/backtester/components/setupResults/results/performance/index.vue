@@ -322,7 +322,7 @@ export default {
       }
     },
     group(data) {
-      var result = []
+      const result = []
 
     // 交易数据分组
       // var groupItem
@@ -345,7 +345,7 @@ export default {
         start: jutils.formatDate(start_date, 'YYYYMMDD'),
         end: jutils.formatDate(end_date, 'YYYYMMDD')
       }
-      for (var date in markerSet) {
+      for (let date in markerSet) {
         let markerSetDate =
           markerSet[date].DT.slice(0, 4) +
           markerSet[date].DT.slice(5, 7) +
@@ -481,7 +481,7 @@ export default {
         backtestHistoryList.forEach((item) => {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
-          for(var i=1;i < defaultTableLabels.length;i++ ){
+          for(let i=1;i < defaultTableLabels.length;i++ ){
             obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
           }
           _backtestHistoryList.push(obj)
@@ -506,7 +506,7 @@ export default {
         TIMHistoryList.forEach((item) => {
           const obj = {}
           obj['Entry Date'] = item['Entry Date']
-          for(var i=1;i < defaultTIMTableLabels.length;i++ ){
+          for(let i=1;i < defaultTIMTableLabels.length;i++ ){
             obj[defaultTIMTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTIMTableLabels[i]]
           }
           _TIMHistoryList.push(obj)

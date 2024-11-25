@@ -647,7 +647,7 @@ export default {
 				}
 				let tabs = this.editableTabs
 				let activeName = this.editableTabsValue
-				var absoluteIndex = ''
+				let absoluteIndex = ''
 				tabs.forEach((tab, index) => {
 					if (tab.name == targetName) {
 						absoluteIndex = index
@@ -695,8 +695,8 @@ export default {
 
 				/**  Begin: 移除indicator附属ma */
 				let removedUrl = CIQ.findBuiltinTechIndicator(this.indicatorValArr[absoluteIndex],null)?.url
-				var activatedMAList = this.$store.state.chart.activatedMA
-				var MAListIndex = activatedMAList.findIndex(
+				let activatedMAList = this.$store.state.chart.activatedMA
+				let MAListIndex = activatedMAList.findIndex(
 				(item) =>
 					item.url == (removedUrl || removedSenti) &&
 					item.criteria == this.criteriaNum &&
@@ -860,7 +860,7 @@ export default {
 				if(!toUpdateChart) return
 				//When only keep the first tab, update the vuex status
 				// 移除senti indicator附属ma
-				var activatedMAList = this.$store.state.chart.activatedMA
+				let activatedMAList = this.$store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter((item)=>
 					item.criteria == this.criteriaNum &&
 					item.index == 0
@@ -929,7 +929,7 @@ export default {
 					//When removing the exit criteria, update the vuex status
 					// 移除senti indicator附属ma
 					const oppositeCriteria = this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum
-					var activatedMAList = this.$store.state.chart.activatedMA
+					let activatedMAList = this.$store.state.chart.activatedMA
 					activatedMAList = activatedMAList.filter((item)=>
 						item.criteria == oppositeCriteria
 					)

@@ -41,6 +41,7 @@
 					:prop="l.value"
 					:key="l.key"
           :sortable="'custom'"
+          :min-width="l.minWidth"
 				  :sort-orders="['ascending', 'descending']"
 				>
 					<template slot-scope="scope">
@@ -165,12 +166,13 @@ export default {
           label: 'Signal',
           value: 'description',
           key: 'description',
-          minWidth: '200px' 
+          minWidth: '150px' 
         },
         {
           label: 'Last Signal Date',
           value: 'last_signal_date',
-          key: 'last_signal_date'
+          key: 'last_signal_date',
+          minWidth: '100px' 
         }
       ],
       tableData: []

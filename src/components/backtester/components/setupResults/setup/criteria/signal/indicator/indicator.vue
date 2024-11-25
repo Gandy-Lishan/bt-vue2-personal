@@ -320,35 +320,35 @@ export default {
     Uploader
   },
   data() {
-    var validateSenti = (rule, value, callback) => {
+    let validateSenti = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Sentiment Indicator') {
         callback(new Error('Please choose sentiment indicator'))
       } else {
         callback()
       }
     }
-    var validateTech = (rule, value, callback) => {
+    let validateTech = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Technical Indicator') {
         callback(new Error('Please choose technical indicator'))
       } else {
         callback()
       }
     }
-    var validateSym = (rule, value, callback) => {
+    let validateSym = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Symbol OHLCV') {
         callback(new Error('Please choose symbol ohlcv'))
       } else {
         callback()
       }
     }
-    var validateRisk = (rule, value, callback) => {
+    let validateRisk = (rule, value, callback) => {
       if (!value && this.indicatorRadio == 'Risk Indicator') {
         callback(new Error('Please choose risk indicator'))
       } else {
         callback()
       }
     }
-    var validateIndicatorName = (rule, value, callback) => {
+    let validateIndicatorName = (rule, value, callback) => {
       const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
       let _value = value.replace(/\s*/g, "")
       if (!_value && this.indicatorRadio == "Users' Own Indicator") {
@@ -478,7 +478,7 @@ export default {
     /** 监听indicators-search,预加载 */
     updateSenti(val) {
       let tabs = this.editableTabs
-      var absoluteIndex = ''
+      let absoluteIndex = ''
       tabs.forEach((tab, index) => {
         if (tab.name == this.editableTabsValue) {
           absoluteIndex = index
@@ -517,9 +517,9 @@ export default {
             url: sentiIndicatorResult.url, index: this.panelIndex
           })
 
-          var activatedMAList = this.$store.state.chart.activatedMA
+          let activatedMAList = this.$store.state.chart.activatedMA
           if (this.criteria.startsWith('entry')) {
-            var MAListIndex = activatedMAList.findIndex(
+            let MAListIndex = activatedMAList.findIndex(
               (item) =>
                 item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
                 item.criteria == this.criteria &&
@@ -535,7 +535,7 @@ export default {
               criteria: this.criteria
             })
           } else {
-            var MAListIndex = activatedMAList.findIndex(
+            let MAListIndex = activatedMAList.findIndex(
               (item) =>
                 item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
                 item.criteria == this.criteria &&
@@ -613,9 +613,9 @@ export default {
             url: indicatorUrl, index: this.panelIndex
           })
 
-          var activatedMAList = this.$store.state.chart.activatedMA
+          let activatedMAList = this.$store.state.chart.activatedMA
           if (this.criteria.startsWith('entry')) {
-            var MAListIndex = activatedMAList.findIndex(
+            let MAListIndex = activatedMAList.findIndex(
               (item) =>
                 item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
                 item.criteria == this.criteria &&
@@ -631,7 +631,7 @@ export default {
               criteria: this.criteria
             })
           } else {
-            var MAListIndex = activatedMAList.findIndex(
+            let MAListIndex = activatedMAList.findIndex(
               (item) =>
                 item.url == this.$store.state.chart.indicators.formIndicators.exit[this.panelIndex] &&
                 item.criteria == this.criteria &&
@@ -737,10 +737,10 @@ export default {
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
-      var list = this.sentimentIndicatorList
+      let list = this.sentimentIndicatorList
       list = list.filter(i => !i.value.includes('Seasonality'))
 
-      var results = list.map(item => ({
+      let results = list.map(item => ({
           ...item,
           priority: createStateFilter(queryString)(item),
         }))
@@ -769,7 +769,7 @@ export default {
         // })
       }else{
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-        var results = list.map(item => ({
+        let results = list.map(item => ({
             ...item,
             priority: createStateFilter(queryString)(item),
           }))
@@ -782,7 +782,7 @@ export default {
     },
     // technical search
     indicatorTechnicalSearch(queryString, cb) {
-      var results = this.$store.getters.getFormateTechnicalList.map(item => ({
+      let results = this.$store.getters.getFormateTechnicalList.map(item => ({
           ...item,
           priority: createStateFilter(queryString)(item),
         }))
@@ -790,9 +790,9 @@ export default {
       cb(results.sort((a, b) => b.priority - a.priority))
     },
     indicatorRiskSearch(queryString, cb) {
-      var riskIndicatorList = this.loadRiskList()
+      let riskIndicatorList = this.loadRiskList()
 
-      var results = riskIndicatorList.map(item => ({
+      let results = riskIndicatorList.map(item => ({
           ...item,
           priority: createStateFilter(queryString)(item),
         }))
@@ -827,8 +827,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -880,8 +880,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -919,8 +919,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -965,8 +965,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -989,8 +989,8 @@ export default {
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
 
       // avoid add indicator redundantly
-      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
+      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
       //   // 当url相同,且都为同一symbol下时，跳过加载       
       //   if (sd.type == item.label && 
       //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
@@ -1019,8 +1019,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -1066,8 +1066,8 @@ export default {
       })
 
       // remove current MA attached to an indicator before loadin
-      var activatedMAList = CIQ.store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = CIQ.store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (ma) =>
           ma.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           ma.criteria == this.criteria &&
@@ -1093,8 +1093,8 @@ export default {
        * symbol2 entry&exit: (Acc -> MACD)  
        */
       // // avoid add indicator redundantly
-      // for (var studyInstanceName in CIQ.stxx.layout.studies) {
-      //   var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
+      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
       //   // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
       //   if (sd.type == item.url && 
       //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
@@ -1127,8 +1127,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -1207,8 +1207,8 @@ export default {
       })
 
       // remove a MA tat already exists in current criteria before loading
-      var activatedMAList = this.$store.state.chart.activatedMA
-      var MAListIndex = activatedMAList.findIndex(
+      let activatedMAList = this.$store.state.chart.activatedMA
+      let MAListIndex = activatedMAList.findIndex(
         (item) =>
           item.url == this.$store.state.chart.indicators.formIndicators[this.criteria][this.panelIndex] &&
           item.criteria == this.criteria &&
@@ -1229,8 +1229,8 @@ export default {
        CIQ.setTechLayout('', this.criteria, this.panelIndex)
        
       // avoid add indicator redundantly
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
-        var sd = CIQ.stxx.layout.studies[studyInstanceName]
+      for (let studyInstanceName in CIQ.stxx.layout.studies) {
+        let sd = CIQ.stxx.layout.studies[studyInstanceName]
         if (sd.type == indicatorUrl) {
           return
         }
