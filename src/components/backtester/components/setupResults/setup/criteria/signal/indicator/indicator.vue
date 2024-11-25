@@ -751,7 +751,7 @@ export default {
       if(this.createdIndicatorOptions.length === 0) {
         this.createdIndicatorOptions = await getAllMyIndicatorsList()
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-        var results = list.map(item => ({
+        let results = list.map(item => ({
             ...item,
             priority: createStateFilter(queryString)(item),
           }))
