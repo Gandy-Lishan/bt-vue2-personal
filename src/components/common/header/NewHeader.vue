@@ -214,7 +214,7 @@ export default {
     showLabel(item) {
       const email = getCookieData()?.username
       const {label} = item
-      if(['Strategy', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators'].includes(label)) {
+      if(['Strategy', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
@@ -226,10 +226,10 @@ export default {
       if(label === 'Portfolio') {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
-      if(label === 'Reports') {
-        const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
-        return allowedReportEmails.includes(email)
-      }
+      // if(label === 'Reports') {
+      //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
+      //   return allowedReportEmails.includes(email)
+      // }
     },
     backHome() {
       this.$router.push('/')
