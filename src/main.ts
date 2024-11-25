@@ -44,7 +44,7 @@ import '@algolia/autocomplete-theme-classic';
 import '@/assets/css/searchBar.css';
 import GlobalMixins from "@/components/common/mixins/globalMixins";
 import InstantSearch from 'vue-instantsearch';
-import {resetData} from '@/utils/globalFunc/index';
+// import {resetData} from '@/utils/globalFunc/index';
 
 // 引入自动更新提醒
 import autoUpdate from './auto-update'
