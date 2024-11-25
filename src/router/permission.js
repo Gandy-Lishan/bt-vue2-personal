@@ -198,7 +198,7 @@ async function initiateList(pathname) {
 	
 	if (
 		store.getters.getRefactoredSentimentList.length == 0 ||
-		store.getters.refactoredSymbolList.length == 0
+		store.getters.getRefactoredSymbolList.length == 0
 	) {
 		// console.time("🚗 initiateList timer")
 		// await store.dispatch('chart/fetch_stocklist')

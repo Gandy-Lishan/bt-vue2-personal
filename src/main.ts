@@ -69,11 +69,11 @@ Vue.component('template-placeholder', {
 })
 
 
-Vue.mixin({
-  beforeDestroy() {
-    resetData(this) // 所有组件销毁时自动重置数据
-  }
-})
+// Vue.mixin({
+//   beforeDestroy() {
+//     resetData(this) // 所有组件销毁时自动重置数据
+//   }
+// })
 
 autoUpdate.start()
 
