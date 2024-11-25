@@ -120,7 +120,7 @@ const state = {
 	refactoredSymbolList: [],
 	indicatorsPageListdata: {},
 	cssMonthLabel: '',
-	indicatorPageBtv1List: null
+	indicatorPageBtv1List: []
 }
 
 const mutations = {
@@ -342,9 +342,12 @@ const mutations = {
 
 const actions = {
 /** Begin manage fav indicator & symbol list */
-	get_favorite({ commit }) {
+	get_favorite({ commit, state }) {
 		return new Promise(async (resolve,reject) => {
 			try{
+				const condition1 = state.favoriteSymbolList && Array.isArray(state.favoriteSymbolList) && state.favoriteSymbolList.length !== 0
+				const condition2 = state.favoriteIndicatorList && Array.isArray(state.favoriteIndicatorList) && state.favoriteIndicatorList.length !== 0
+				if(condition1 && condition2) {resolve();return}
 				const res = await getFavorite()
 				if (res.status === 200 || res.status === 201) {
 					let favoriteSymbolList = [];
@@ -634,8 +637,9 @@ const actions = {
 		})
 	},
 
-get_indicator_page_btv1_list({ commit }) {
+get_indicator_page_btv1_list({ commit, state }) {
 		return new Promise(async resolve => {
+			if(state.indicatorPageBtv1List && Array.isArray(state.indicatorPageBtv1List) && state.indicatorPageBtv1List.length) {resolve();return}
 			let btv1List = await obtainBTV1IndicatorsList()
 			commit('SET_INDICATOR_PAGE_BTV1_LIST', btv1List)
 			resolve()
@@ -793,8 +797,8 @@ get_indicator_page_btv1_list({ commit }) {
           state.cssMonthLabel = `for ${month}`
           _results = isJson(screen_data) ? JSON.parse(screen_data) : []
         }
-        if(!state.indicatorPageBtv1List) await dispatch('get_indicator_page_btv1_list')
-        if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
+        // if(!state.indicatorPageBtv1List.length) await dispatch('get_indicator_page_btv1_list')
+        // if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
         console.log('commod_sentiment_seasonality', _results)
 								_results = _results.map(obj => {
 										for (const key in obj) {

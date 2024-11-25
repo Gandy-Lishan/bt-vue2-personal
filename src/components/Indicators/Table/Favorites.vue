@@ -65,7 +65,6 @@ import AboutUs from "./AboutUs";
   },
   methods: {
     updateChart(row) {
-      // this.displayRow = {...row}
       this.displayRow = row
       console.log(row)
     },

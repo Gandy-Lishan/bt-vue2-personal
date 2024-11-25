@@ -371,7 +371,7 @@ export default {
     LoadingOverlay
   },
   data() {
-    var validateBarsNum = (rule, value, callback) => {
+    let validateBarsNum = (rule, value, callback) => {
         if (value < 3 || value > 252) {
           return callback(new Error('The number of bars should be between 3 and 252, please change your condition.'));
         } else {

@@ -98,11 +98,6 @@ export default {
     })
   },
   watch: {
-    selectedTitle: {
-      handler (title) {
-        if(title === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
-      },
-    },
     blog_results: {
       handler (arr) {
         if(Array.isArray(arr)) this.showReport = true
@@ -241,6 +236,7 @@ export default {
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
     async loadMore (type, isUpdateChart, condition) {
+      debugger
       this.optionsChecked = type
       this.loading = true
       let _results
@@ -259,6 +255,7 @@ export default {
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
       if(isUpdateChart) this.$emit('updateChart', this.firstRow)
+      if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
     async enLargeTable(checked, row) {

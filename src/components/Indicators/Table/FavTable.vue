@@ -210,14 +210,6 @@ export default {
     }
 	},
 	watch: {
-    selectedTitle: {
-      async handler (title) {
-        if(title === 'My Favorites'){
-					await this.see()
-					this.$emit('updateChart', this.tableData[0] || this.filterData[0])
-				}
-      }
-    },
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue) && newValue.length !== 0)this.filterData = newValue
@@ -226,10 +218,11 @@ export default {
       depp: true
     }
   },
-	created() {
+	async created() {
 		console.log('favoritesBTV1List', this.favoritesBtv1List)
 		console.log('indicatorsList', this.indicatorsList)
 		console.log('favoritesBTV2List', this.favoritesBtv2List)
+    await this.see()
 	},
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList', 'get_indicator_page_btv1_list']),
@@ -303,6 +296,7 @@ export default {
       this.groupsOptions = _groups
       this.timeframeOptions = _timeframe
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'my_favorites', data: this.tableData})
+			this.$emit('updateChart', this.tableData[0] || this.filterData[0])
 		},
     processFavoriteData(data) {
       return data.map(obj => {

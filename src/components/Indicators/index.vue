@@ -1,10 +1,17 @@
 <template>
-  <router-view></router-view>
+  <IndicatorPage></IndicatorPage>
 </template>
 
 <script>
+import IndicatorPage from "./Table/index";
 export default {
-  name: 'Indicators'
+  name: 'Indicators',
+  components: {
+    IndicatorPage
+  },
+  beforeDestroy() {
+    this.$store.state.chart.indicatorsPageListdata = {}
+  }
 }
 </script>
 
