@@ -45,6 +45,11 @@ export function setRouterPermission(router) {
 				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			)
 		}
+		// Jason
+		// Cookies.set(
+		// 	'sentimen_session',
+		// 	'IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcN9CQdnFaRNktBfGsp36QeFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+0vcTpqWZAjLb0iJ6dp18kt5hH2geqpB1exbtw/yYdP2D9/VjibGDdw9DyfjBHRWaVoXd/mPe4WcTSnfnn1EMOqokSbIB1fAssMlGvUkAQdLOvUQfndgipjVbAhMO5rY25foEnSKruuuFKxZAhn+crXFtSbHwb23K5orItqrIwsjsJAiwZM7whCdHxcxB2D17jKrZ/o/ncL+IZRTL15p/klG7WAza/+HkiUsAVfbX+EBm/BD3NhZr437u0/OdtL+oWDDKX8aNxvhCNDS4Me0RFpuGWKFtlBevjOZlqqV08oj23EMUV24p3Njx3/XiRtH4bmziAmq8LE6/MM8L8hMWor'
+		// )
 		/* dean */
 		// Cookies.set(
 		// 	'sentimen_session',
@@ -190,14 +195,12 @@ async function initiateCurrentDate() {
 async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
-	if (
-		store.getters.getIndicatorsList.length == 0 ||
-		store.getters.getStockList.length == 0 ||
-		store.getters.getIndexList.length == 0
-	) {
-		await store.dispatch('chart/fetch_stocklist')
-		await store.dispatch('chart/fetch_indexlist')
-		await store.dispatch('chart/fetch_indicatorsList')
+	
+		// console.time("🚗 initiateList timer")
+		// await store.dispatch('chart/fetch_stocklist')
+		// await store.dispatch('chart/fetch_indexlist')
+		// await store.dispatch('chart/fetch_indicatorsList')
+		// console.timeEnd("🚗 initiateList timer")
 
 		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
@@ -205,17 +208,19 @@ async function initiateList(pathname) {
 		const refactoredStocksList = await fetchDataList('getStockList')
 		const refactoredIndexsList = await fetchDataList('getIndexList')
 		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
-      	refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+		// 耗时一秒而且没有排除项
+      	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
 		store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
 		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
 		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-	}
-	if (
-		store.getters.getFavoriteIndicatorList.length == 0 ||
-		store.getters.getFavoriteSymbolList.length == 0
-	) {
-		await store.dispatch('chart/get_favorite')
-	}
+	
+	//	改为了获取列表时请求
+	// if (
+	// 	store.getters.getFavoriteIndicatorList.length == 0 ||
+	// 	store.getters.getFavoriteSymbolList.length == 0
+	// ) {
+	// 	await store.dispatch('chart/get_favorite')
+	// }
 
 	if (pathname == 'ActiveStudies' && store.getters.getSymbollistForecast.length == 0){
 		await store.dispatch('chart/get_symbollist_forecast')

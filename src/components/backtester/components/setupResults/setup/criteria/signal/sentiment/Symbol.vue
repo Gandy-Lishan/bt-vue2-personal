@@ -23,10 +23,10 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=13">
+				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=15">
 					<el-form-item prop="conditionPeriod">
 						<el-input
-							@input="calculateNewConditions"
+							@input="debouncedCalculateNewConditions"
 							v-model="sym.conditionPeriod"
 							placeholder="Condition Period"
 						></el-input>
@@ -63,6 +63,8 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 import { getCoresSymbolDual } from '@/utils/globalFunc'
+const debounce = require('lodash/debounce')
+
 export default {
   name: 'symbol',
   props: {
@@ -144,6 +146,8 @@ export default {
         { value: 11, label: 'Net Change' },
         { value: 12, label: 'All-time High' },
         { value: 13, label: 'All-time Low' },
+        { value: 14, label: 'Consecutive Number of Days Above' },
+        { value: 15, label: 'Consecutive Number of Days Below' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -197,7 +201,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 13
+      this.isROCLike = 5 <= val && val <= 15
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -327,6 +331,12 @@ export default {
           case "All-time Low":
             _newCondition = 'ATL'
             break;
+          case "Consecutive Number of Days Above":
+            _newCondition = 'CNDA'
+            break;
+          case "Consecutive Number of Days Below":
+            _newCondition = 'CNDB'
+            break;
           default:
             break;
         }
@@ -335,6 +345,10 @@ export default {
         let _description1
         if([12,13].includes(this.sym.newCondition)){
           _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
+        }else if(this.sym.newCondition == 14){
+          _description1 = `Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+        }else if(this.sym.newCondition == 15){
+          _description1 = `Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
         }else{
           _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         }
@@ -360,6 +374,9 @@ export default {
       this.$store.commit('form/saveDescription', desObj)
 
     },
+    debouncedCalculateNewConditions: debounce(function () {
+      this.calculateNewConditions()
+    }, 500), 
     calculateNewConditions() {
       if (!this.isROCLike) return
 
@@ -392,17 +409,23 @@ export default {
           [11, { name:'Net Change', abbr: 'NC' }],
           [12, { name:'All-time High', abbr: 'ATH' }],
           [13, { name:'All-time Low', abbr: 'ATL' }],
+          [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
+          [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
         ])
 
         const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
-        let condition
+        let display
         if([12,13].includes(this.sym.newCondition)){
-          condition = `${conditionMap.get(this.sym.newCondition).name}`
+          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
+        }else if(this.sym.newCondition == 14){
+          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Above ${this.sym.conditionPeriod}`
+        }else if(this.sym.newCondition == 15){
+          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
-          condition = `${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
+          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-          display: `(${symbolLabel})${symbolCond.label} ${condition}`,
+          display: display,
           Field: field,
           condition: conditionMap.get(this.sym.newCondition).abbr,
           period: this.sym.conditionPeriod

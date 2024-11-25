@@ -585,11 +585,16 @@ export const CommonMethodsMixin = {
 				[11, { name:'Net Change', abbr: 'NC' }],
 				[12, { name:'All-time High', abbr: 'ATH' }],
 				[13, { name:'All-time Low', abbr: 'ATL' }],
+				[14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
+          		[15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
 			let fieldName = ''
 			let stmaPeriod
+			// if(signals.indicator == 'Crude oil price' && criteria=='entry' && panelIndex == 1){
+			// 	debugger
+			// } 
 
 			if (analysis == 'Sentiment' || analysis == 'User') {
 				let signal = CIQ.findSentiIndicator(indicator)
@@ -773,7 +778,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 13
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 15
 					}
 				return null
 			})	
@@ -1060,7 +1065,6 @@ export const CommonMethodsMixin = {
 			that.reloadData(data, freq, row)
 			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
 				that.$store.commit('form/getRunBacktestData', row)
-
 				that.$router.push({
 					name: 'SetUp',
 					params: { data: JSON.stringify(row), usedFor: 'showBTForm' }

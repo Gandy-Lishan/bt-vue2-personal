@@ -84,20 +84,30 @@ export default {
       this.$emit('selected',this.selectedOptions)
     },
     handleTaskItemChange(item) {
-      // console.log(item)
-      // 这里是取出下标的方法，可以封装写出去
-      Array.prototype.getArrayIndex = function (obj) {
-        for (var i = 0; i < this.length; i++) {
-          if (this[i] === obj) {
-            return i
+      // // console.log(item)
+      // // 这里是取出下标的方法，可以封装写出去
+      // Array.prototype.getArrayIndex = function (obj) {
+      //   for (var i = 0; i < this.length; i++) {
+      //     if (this[i] === obj) {
+      //       return i
+      //     }
+      //   }
+      //   return -1
+      // }
+
+      // 局部函数
+      const getArrayIndex = function (array, obj) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i] === obj) {
+            return i;
           }
         }
-        return -1
-      }
+        return -1;
+      };
       if (!item.check) {
         this.optionsData.forEach((elm, idx) => {
           if (item.value == elm.value) {
-            let index = this.selectedOptions.getArrayIndex(item.value)
+            let index = getArrayIndex(this.selectedOptions, item.value)
             this.selectedOptions.splice(index, 1)
           }
         })
