@@ -536,6 +536,9 @@ export default {
 				this.relation = 1;
 		}
 	},
+	beforeDestroy() {
+    eventBus.$off('userFileSelect', this.userFileSelect);
+	},
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
