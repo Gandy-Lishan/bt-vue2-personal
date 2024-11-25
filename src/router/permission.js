@@ -197,9 +197,8 @@ async function initiateList(pathname) {
 	// 这个数据基本不会变，存起来
 	
 	if (
-		store.getters.getIndicatorsList.length == 0 ||
-		store.getters.getStockList.length == 0 ||
-		store.getters.getIndexList.length == 0
+		store.getters.getRefactoredSentimentList.length == 0 ||
+		store.getters.refactoredSymbolList.length == 0
 	) {
 		// console.time("🚗 initiateList timer")
 		// await store.dispatch('chart/fetch_stocklist')
