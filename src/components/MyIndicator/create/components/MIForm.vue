@@ -563,10 +563,18 @@ export default {
     handleGetMiBenmark() {
       return this.getMiBenmarkState
     },
-    ...mapGetters({
-      sentimentList: 'getRefactoredSentimentList',
-      symbolList: 'getRefactoredSymbolList'
-    })
+    // ...mapGetters({
+    //   sentimentList: 'getRefactoredSentimentList',
+    //   symbolList: 'getRefactoredSymbolList'
+    // })
+    sentimentList() {
+      const data = localStorage.getItem('refactoredSentimentList');
+      return data ? JSON.parse(data) : [];
+    },
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      return data ? JSON.parse(data) : [];
+    }
   },
   watch: {
     handleGetMiBenmark: {
