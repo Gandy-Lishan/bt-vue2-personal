@@ -61,17 +61,27 @@ export default {
     // TrendScoreTable
     // Commodity
   },
-  async created() {
-    await this.get_indicator_page_btv1_list()
-    await this.get_favorite()
-  },
+  // async created() {
+  //   await this.get_indicator_page_btv1_list()
+  //   await this.get_favorite()
+  // },
   beforeDestroy() {
     this.$refs['Indicators'] = null
     this.$refs['Popular'] = null
     this.$refs['Favorites'] = null
   },
+  watch: {
+    // 数据源更新时tableData同时响应,只会在getAIPick时获取originData
+    selectedTitle: {
+      async handler(newValue){
+        if(newValue === 'My Favorites') {
+          await this.get_favorite()
+        }
+      }
+    }
+  },
   methods: {
-    ...mapActions('chart', ['fetchIndicatorsPageList', 'get_indicator_page_btv1_list', 'get_favorite']),
+    ...mapActions('chart', ['fetchIndicatorsPageList', 'get_favorite']),
     async removeIndicatorsFavorites(row, isSyncPopular) {   
       const sourceRefNameMap = new Map([
         [[
