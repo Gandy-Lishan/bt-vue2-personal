@@ -482,11 +482,11 @@ export default {
         name: [
           { required: true, message: 'Enter a name', trigger: 'blur' }
         ],
-        symbol: [
-          // 需要考虑到custom symbol校验
-          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
-          { validator: createVerifyValueInListRule(this.$store.getters.getRefactoredSymbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
-        ],
+        // symbol: [
+        //   // 需要考虑到custom symbol校验
+        //   { validator: createVerifyValueInListRule(this.symbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'blur' },
+        //   { validator: createVerifyValueInListRule(this.symbolList.concat(this.getCustomStocksList()), 'Select a stock', 'Choose a stock from the dropdown'), trigger: 'change' },
+        // ],
         tim: [
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'blur' },
           { validator: createPositiveIntegerRule('time in market', 0), trigger: 'change' }
@@ -522,9 +522,10 @@ export default {
     handleGetBacktestSymbol() {
       return this.getBacktestSymbol
     },
-    ...mapGetters({
-      symbolList: 'getRefactoredSymbolList'
-    })
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      return data ? JSON.parse(data) : [];
+    }
   },
   watch: {
     handleGetBacktestSymbol: {
@@ -601,8 +602,7 @@ export default {
 
       this.resetChart()
     },
-    calculateBarDistance(val) {
-      if(!val) return
+    calculateBarDistance() {
       // 计算区间内Bar Distance
       const start_date = this.data.start_date
       const end_date = this.data.end_date
@@ -804,6 +804,9 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       this.$refs['BacktestForm'].clearValidate()
       const validForm = await this.validForm(['BasicForm', 'PreviewForm'])
+      const list = this.symbolList.concat(this.getCustomStocksList())
+      const inAllowedList = (list.find(ele => ele.url.toLocaleLowerCase() === this.data.symbol.toLocaleLowerCase()))?.label || false
+      if(!inAllowedList) {this.popUpMsgBox('Choose a stock from the dropdown');return}
       if(!validForm) {return}
       console.log('表单是否验证成功', validForm)
       // 处理数据
@@ -845,6 +848,9 @@ export default {
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       const validForm = await this.validForm(['BasicForm', 'PreviewForm', 'BacktestForm']);
       console.log('表单是否验证成功', validForm)
+      const list = this.symbolList.concat(this.getCustomStocksList())
+      const inAllowedList = (list.find(ele => ele.url.toLocaleLowerCase() === this.data.symbol.toLocaleLowerCase()))?.label || false
+      if(!inAllowedList) {this.popUpMsgBox('Choose a stock from the dropdown');return}
       this.processTips = `Tips: Saving your pattern matching parameters...`
       const rowUrl = this.rowUrl
       const name = this.data.name
