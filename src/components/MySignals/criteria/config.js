@@ -26,7 +26,7 @@ export function generateConfig(criteriaWithNumber) {
     criteriaNum,
 		criteria: criteria,
 		criteriaCapFirstL: capFirstL,
-		criteriaTitle: `Signal Criteria`,
+		criteriaTitle: `4. Signal Criteria`,
 		criteriaTitleTP: `Set the criteria/criterias which trigger the signal ${criteria}
     criteria.<br />
     Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for ${criteria} criteria:<br />

@@ -88,22 +88,23 @@
         </Criteria>
       </div>
     </div>
+    <br>
     <el-row :gutter="10" type="flex" class="row-bg" justify="center">
-      <el-col :span="6">
+        <el-col :span="6">
           <el-button type="warning" size="small" @click="resetForm">Clear Form</el-button>
-      </el-col>
-      <el-col :span="6">
+        </el-col>
+        <el-col :span="6">
           <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Save Signal</el-button>
           <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
           </div>
-      </el-col>
+        </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { isJson, timestampToTime, trimTrailingZeros, capitalizeFirstLetter } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter, encodeBase64 } from '@/utils'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
 import { saveMySignalForm, editMySignalForm, getScannerBTList, getMySignalResults, perviewScannerForm } from '@/service/service'
@@ -241,6 +242,8 @@ export default {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
       }
+      // 初始化表单数据
+      _this.$store.commit('form/initialBacktestInfo')
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
       this.percentage = 8
@@ -280,7 +283,8 @@ export default {
     async saveCriteriaData(criteriaRef) {
       debugger
 			const _this = this
-			const tabLength = _this.$refs[criteriaRef].addSignalLength()
+try {
+  const tabLength = _this.$refs[criteriaRef].addSignalLength()
 			for (let index = 0; index < tabLength; index++) {
 				const valid = await _this.$refs[criteriaRef].saveData(index)
 				if (!valid) return false
@@ -289,6 +293,10 @@ export default {
 			_this.$refs[criteriaRef].saveSignalsInMarket()
 			_this.$refs[criteriaRef].saveDelayBar()
 			_this.$refs[criteriaRef].saveRelation()
+} catch (error) {
+  console.error(error);
+  
+}
 			return _this.$refs[criteriaRef].isSameSignal()
 		},
     handleSavedData(criteria) {
@@ -478,23 +486,24 @@ export default {
       try {
         saveRes = await this.saveFormData()
       } catch (error) {
+        console.error(error);
         this.processTips = ''
         this.percentage = 0
       }
-      
+      debugger
      if(!saveRes) {this.processTips = ''; this.percentage = 0; return}
+     console.log('success response', saveRes);
+     
      const code = saveRes.data.code
-     const name = saveRes.data?.data?.name
-     const _name = typeof name === 'string' && name ? name : ''
      if(code === 511) this.popUpMsgBox('Save failed, Please try again')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 411) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 211 || code == 213) this.popUpMsgBox(`The "${_name}" signal is completed successfully`)
+      if(code == 211 || code == 213) this.popUpMsgBox(`The signal is completed successfully`)
       // 运行成或者失败后刷新列表
-      this.$emit('refreshBTList')
+      if((code == 211 || code == 213)) this.$emit('refreshBTList')
       this.processTips = ''
       this.percentage = 0
     },

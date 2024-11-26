@@ -277,23 +277,8 @@ delay_bars: [String, Number],
 			CIQ.store.commit('form/setConditionRadio', obj)
 		},
 		setDesciption(index) {
-			let criteria = ''
-			let direction = ''
 			let commentDes
 			if(index === 0) {
-				if (this.criteria.startsWith('entry')) {
-					criteria = 'E:'
-					direction = this.direction + ':'
-				}
-				if (this.criteria.startsWith('exit')) {
-					criteria = 'X:'
-
-					if (this.direction == 'Long') {
-						direction = 'Close:'
-					} else if (this.direction == 'Short') {
-						direction = 'Cover:'
-					}
-				}
 				let relation = ''
 				let score = ''
 				let period = ''
@@ -302,7 +287,7 @@ delay_bars: [String, Number],
 						relation = "Only Risk;"
 						break;
 					case 1:
-						relation = "Single Condition;"
+						relation = ""
 						break;
 					case 2:
 						relation = "SameBar Multi Condition;"
@@ -317,7 +302,7 @@ delay_bars: [String, Number],
 						break;
 				}
 				let delay_bars = this.delay_bars?'Delay Bars: ' + this.delay_bars + ';':''
-				commentDes = `${criteria} ${direction} ${relation} ${score?score:''} ${period?period:''} ${delay_bars}`
+				commentDes = `${relation ? `${relation} ` : ''}${score?`${score} `:''}${period?`${period} `:''}${delay_bars}`
 				if(this.relation != 1) {
 					let desObj = {}
 					desObj.criteria = this.criteria
@@ -363,7 +348,7 @@ delay_bars: [String, Number],
 			}
 			if(this.relation == 1)  {
 				desObj.description = {
-					'commentDes':commentDes + this.description,
+					'commentDes':this.description,
 					'rocCond':null
 				}
 				desObj.index = 0
@@ -438,7 +423,8 @@ delay_bars: [String, Number],
 }
 .condition-container {
 	display: flex;
-  align-items: center;
+	align-items: center;
+	margin-bottom: 10px;
 }
 .el-select {
   margin: 0 5px;
