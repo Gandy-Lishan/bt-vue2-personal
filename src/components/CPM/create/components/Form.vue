@@ -601,9 +601,12 @@ export default {
 
       this.resetChart()
     },
-    calculateBarDistance() {
+    calculateBarDistance(val) {
+      if(!val) return
       // 计算区间内Bar Distance
-      this.data.bars_num = CIQ.measureBarDistance(this.data.start_date,this.data.end_date)
+      const start_date = this.data.start_date
+      const end_date = this.data.end_date
+      this.data.bars_num = CIQ.measureBarDistance(start_date, end_date)
     },
     generateCPMName() {
       const date = new Date()
