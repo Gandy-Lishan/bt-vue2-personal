@@ -16,9 +16,9 @@
           </div>
         </div>
       </div>
-      <IndicatorTable v-show="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
-      <Popular v-show="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
-      <Favorites v-show="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
+      <IndicatorTable v-if="selectedTitle === 'Indicators'" ref="Indicators"></IndicatorTable>
+      <Popular v-if="selectedTitle === 'Popular'" ref="Popular" :selectedTitle="selectedTitle"></Popular>
+      <Favorites v-if="selectedTitle === 'My Favorites'" ref="Favorites" :selectedTitle="selectedTitle"></Favorites>
       <!-- <TrendScoreTable v-show="selectedTitle === 'Trend Score'"></TrendScoreTable> -->
       <!-- <Commodity v-show="selectedTitle === 'Commodity'" ref="Commodity" :selectedTitle="selectedTitle"></Commodity> -->
     </div>
@@ -61,8 +61,27 @@ export default {
     // TrendScoreTable
     // Commodity
   },
+  // async created() {
+  //   await this.get_indicator_page_btv1_list()
+  //   await this.get_favorite()
+  // },
+  beforeDestroy() {
+    this.$refs['Indicators'] = null
+    this.$refs['Popular'] = null
+    this.$refs['Favorites'] = null
+  },
+  watch: {
+    // 数据源更新时tableData同时响应,只会在getAIPick时获取originData
+    selectedTitle: {
+      async handler(newValue){
+        if(newValue === 'My Favorites') {
+          await this.get_favorite()
+        }
+      }
+    }
+  },
   methods: {
-    ...mapActions('chart', ['fetchIndicatorsPageList']),
+    ...mapActions('chart', ['fetchIndicatorsPageList', 'get_favorite']),
     async removeIndicatorsFavorites(row, isSyncPopular) {   
       const sourceRefNameMap = new Map([
         [[

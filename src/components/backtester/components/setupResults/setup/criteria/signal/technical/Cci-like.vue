@@ -57,7 +57,7 @@ export default {
 		isLimit: Boolean
 	},
 	data() {
-    var validateValue = (rule, value, callback) => {
+    let validateValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {

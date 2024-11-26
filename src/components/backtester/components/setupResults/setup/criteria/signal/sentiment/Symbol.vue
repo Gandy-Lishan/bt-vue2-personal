@@ -82,7 +82,7 @@ export default {
   },
   mixins: [CommonMethodsMixin],
   data() {
-    var validateValue = (rule, value, callback) => {
+    let validateValue = (rule, value, callback) => {
       console.log('symbol OHLCV', value)
       if (value === '') {
         return callback(new Error('Please input value'));
@@ -102,7 +102,7 @@ export default {
         }
       }
     };
-    var validateConditionPeriod = (rule, value, callback) => {
+    let validateConditionPeriod = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -206,7 +206,7 @@ export default {
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
         const fieldName = CIQ.findSymbolIndicator(this.symVal,null).field
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (let studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
             CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
@@ -385,7 +385,7 @@ export default {
         let symbolCond = CIQ.findSymbolIndicator(this.symVal,null)
         const field = symbolCond?symbolCond.field:''
 
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (let studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == field &&
             CIQ.stxx.layout.studies[studyInstanceName].type == 'ST ROCLike' &&

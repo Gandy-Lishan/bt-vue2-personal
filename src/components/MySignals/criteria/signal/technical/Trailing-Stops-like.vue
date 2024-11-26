@@ -105,22 +105,8 @@ export default {
 			Object.assign(this.$data, this.$options.data())
 		},
 		setDesciption(index) {
-			let criteria = ''
-			let direction = ''
 			let commentDes
 			if (index === 0) {
-				if (this.criteria.startsWith('entry')) {
-					criteria = 'E:'
-					direction = this.direction + ':'
-				} else if (this.criteria.startsWith('exit')) {
-					criteria = 'X:'
-
-					if (this.direction == 'Long') {
-						direction = 'Close:'
-					} else if (this.direction == 'Short') {
-						direction = 'Cover:'
-					}
-				}
 				let relation = ''
 				let score = ''
 				let period = ''
@@ -129,7 +115,7 @@ export default {
 						relation = 'Only Risk;'
 						break
 					case 1:
-						relation = 'Single Condition;'
+						relation = ''
 						break
 					case 2:
 						relation = 'SameBar Multi Condition;'
@@ -146,9 +132,9 @@ export default {
 				let delay_bars = this.delay_bars
 					? 'Delay Bars: ' + this.delay_bars + ';'
 					: ''
-				commentDes = `${criteria} ${direction} ${relation} ${
-					score ? score : ''
-				} ${period ? period : ''} ${delay_bars}`
+				commentDes = `${relation ? `${relation} ` : ''}${
+					score ? `${score} ` : ''
+				}${period ? `${period} ` : ''}${delay_bars}`
 				if (this.relation != 1) {
 					let desObj = {}
 					desObj.criteria = this.criteria
@@ -179,7 +165,7 @@ export default {
 				default:
 					break
 			}
-			this.description = `${techVal} ${radio} ${condition} ${this.tech.value}`
+			this.description = `${techVal ? `${techVal} ` : ''}${radio} ${condition} ${this.tech.value}`
 			let desObj = {}
 			desObj.criteria = this.criteria
 			if (this.relation != 1) {
@@ -191,7 +177,7 @@ export default {
 			}
 			if (this.relation == 1) {
 				desObj.description = {
-					'commentDes':commentDes + this.description,
+					'commentDes': this.description,
 					'rocCond':null
 				}
 				desObj.index = 0

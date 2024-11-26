@@ -38,7 +38,6 @@
 				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=13">
 					<el-form-item prop="conditionPeriod" size="small">
 						<el-input
-							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Value')"
 							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
@@ -115,7 +114,6 @@
 				<div class="conditionInput period" v-show="isROCLike">
 					<el-form-item prop="conditionPeriod">
 						<el-input
-							@input="calculateNewConditions"
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							v-model="senti.conditionPeriod"
 							placeholder="Condition Period"
@@ -360,7 +358,6 @@ export default {
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) this.senti.condition = this.senti.newCondition
       
-      if(!limit) this.calculateNewConditions()
     },
     change(e) {
       this.$forceUpdate()
@@ -391,7 +388,7 @@ export default {
             relation = "Only Risk;"
             break;
           case 1:
-            relation = "Single Condition"
+            relation = ""
             break;
           case 2:
             relation = "SameBar Multi Condition;"
@@ -407,7 +404,7 @@ export default {
         }
         let delay_bars = this.delay_bars ? 'Delay Bars: ' + this.delay_bars + ';' : ''
         console.log(score, period, delay_bars)
-        commentDes = `${relation} ${score ? score : ''} ${period ? period : ''} ${delay_bars}`
+        commentDes = `${relation?`${relation} `:''}${score ? `${score} ` : ''}${period ? `${period} ` : ''}${delay_bars}`
 
         if (this.relation != 1) {
           let desObj = {}
@@ -495,7 +492,7 @@ export default {
       }
       if (this.relation == 1) {
         desObj.description = {
-          'commentDes': commentDes + this.description,
+          'commentDes': this.description,
           'rocCond': rocCond
         }
         desObj.index = 0
@@ -517,7 +514,6 @@ export default {
         var activatedMAList = this.$store.state.chart.activatedMA
         this.$store.commit('chart/getMA', activatedMAList)
 
-        this.calculateNewConditions()
       }
       if (val === 'Indicator Moving Average') {
         this.senti.comparison = 'SVMA'
@@ -531,24 +527,6 @@ export default {
         this.ROCLikeChange(this.senti.newCondition)
         this.setPeriod(this.senti.period)    
       }
-    },
-    calculateNewConditions() {
-      if (!this.isROCLike) return
-    },
-    // 处理用户自定义indicator的显示名
-    rocDisplayName(field) {
-			let display
-			let senti = CIQ.findSentiIndicator(null,field)
-			if(CIQ.isOwnIndicator(field)){
-				display = field.split(/CREATE/)[0]
-			}else if(CIQ.isUserIndicator(field)){
-				display = field.split(/HASH/)[0]
-			}else if(senti){
-				display = senti.chart_name
-			}else {
-				display = field
-			}
-			return display
     },
     setPeriod(val) {
       let _val = val
@@ -594,7 +572,6 @@ export default {
 
       this.$store.commit('chart/getMA', activatedMAList)
 
-      this.calculateNewConditions()
     },
 
     saveCondition(index) {

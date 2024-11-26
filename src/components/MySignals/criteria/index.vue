@@ -1,403 +1,402 @@
 <template>
-  <div>
 	<div class="criteria-box">
-		<div class="signal-option-box">
-			<div class="entry-title-box">
-				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
-				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
-					<span slot="content" v-html="config['criteriaTitleTP']">
-          </span>
-					<i class="iconfont icon-wenhao"></i>
-				</el-tooltip>
-			</div>
-			<div class="signal-container">
-				<span class="scoreNote" v-if="relation === 2">
-					<span>Score: </span>
-					<el-tooltip effect="dark" placement="top" style="display: inline">
-						<span slot="content" v-html="config['scoreTP']">
-            </span>
+				<div class="entry-title-box">
+					<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
+					<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
+						<span slot="content" v-html="config['criteriaTitleTP']">
+						</span>
 						<i class="iconfont icon-wenhao"></i>
 					</el-tooltip>
-				</span>
-				<el-input-number
-					v-model="score"
-					:step="1"
-					step-strictly
-					v-if="relation === 2"
-					:min="1"
-					:max="editableTabs.length"
-					size="small"
-				></el-input-number>
-				<span class="scoreNote timeLimitBox" v-if="relation === 3">
-					<div class="excludeBox">
-						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
-							>Use Time Period Limit
-							<el-tooltip effect="dark" placement="top">
-								<span slot="content" v-html="config['timeLimitTP']">
-								</span>
-								<i class="iconfont icon-wenhao"></i>
-							</el-tooltip>
-						</el-checkbox>
-					</div>
-					<div class="period-box" v-if="isUsePeriodLimit">
-						<span>Period: </span>
-						<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
-							<span slot="content" v-html="config['periodTP']">
-							</span>
-							<i class="iconfont icon-wenhao"></i>
+				</div>
+			<div class="criteria-content">
+				<div class="signal-container">
+					<el-select
+						v-model="relation"
+						placeholder="Please select signal"
+						@change="(val) => {changeRelation(val, true)}"
+						size="small"
+					>
+						<el-option
+							v-for="item in signalOptions"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+					<span class="scoreNote" v-if="relation === 2">
+					<div class="score-box">
+							Score: 
+							<el-tooltip effect="dark" placement="top" style="display: inline">
+								<i class="iconfont icon-wenhao" style="margin-right: 5px;"></i>
+								<span slot="content" v-html="config['scoreTP']"></span>
 						</el-tooltip>
 						<el-input-number
-							v-model="signals_in_market"
+							v-model="score"
 							:step="1"
 							step-strictly
-							v-if="relation === 3"
+							v-if="relation === 2"
 							:min="1"
+							:max="editableTabs.length"
 							size="small"
 						></el-input-number>
 					</div>
-				</span>
-				<el-select
-					v-model="relation"
-					placeholder="Please select signal"
-					@change="(val) => {changeRelation(val, true)}"
-					size="small"
-				>
-					<el-option
-						v-for="item in signalOptions"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
-					>
-					</el-option>
-				</el-select>
-			</div>
-		</div>
-		<div :class="{'single': relation == 1, 'risk-control': relation == 0}">
-			<div class="multi-box">
-				<el-tabs
-					v-model="editableTabsValue"
-					type="card"
-					editable
-					@edit="handleTabsEdit"
-				>
-					<el-tab-pane
-						:key="item.name"
-						v-for="(item, index) in editableTabs"
-						:label="item.title"
-						:name="item.name"
-					>
-						<indicator
-							:criteria="config['criteriaNum']"
-							:panelIndex="index"
-							:editableTabs="editableTabs"
-							:editableTabsValue="editableTabsValue"
-							ref="indiChild"
-							:isRiskControl="relation == 0"
-							@getIndicatorUrl="getIndicatorUrl"
-							@getIndicatorVal="getIndicatorVal"
-							@getIndicatorRadio="getIndicatorRadio"
-							@getTechIndiObj="getTechIndiObj"
-							@userUploadFileContent="userUploadFileContent"
-							@getFreqArray="getFreqArray"
-						></indicator>
-						<senti
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:criteria="config['criteriaNum']"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							ref="sentiChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:sentiUrl="indicatorUrlArr[index]"
-							:sentiVal="indicatorValArr[index]"
-							:indicatorRadio="indicatorRadioArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
-						></senti>
-						<symbol-indi
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:criteria="config['criteriaNum']"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							ref="symbolChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:symUrl="indicatorUrlArr[index]"
-							:symVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'symbol' &&
-								indicatorUrlArr[index] !== ''
-							"
-						></symbol-indi>
-						<cci
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'CCI_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="cciChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'CCI_like'
-							"
-						></cci>
-						<macd
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'MACD_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="macdChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'MACD_like'
-							"
-						></macd>
-						<ma
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'MovingAverage_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="maChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'MovingAverage_like'
-							"
-						></ma>
-						<bollinger-bands-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'BollingerBands_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="bollBandsLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'BollingerBands_like'
-							"
-						></bollinger-bands-like>
-						<ehler-fisher-transform-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'EFT_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="EFTLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'EFT_like'
-							"
-						></ehler-fisher-transform-like>
-						<stochastic-momentum-index-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Stochastics_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="stochasticsLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Stochastics_like'
-							"
-						></stochastic-momentum-index-like>
-						<ADX-or-DMS-Like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'ADX_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="ADXLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'ADX_like'
-							"
-						></ADX-or-DMS-Like>
-						<elder-ray-index-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'ERI_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="ERILikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'ERI_like'
-							"
-						></elder-ray-index-like>
-						<alligator-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Aligator_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="aligatorLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Aligator_like'
-							"
-						></alligator-like>
-						<linear-regForecast-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'LRF_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="LRFLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'LRF_like'
-							"
-						></linear-regForecast-like>
-						<trailing-stop-like
-							v-bind="$attrs"
-							:tabLength="indicatorRadioArr.length"
-							:isActived="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Trailingstop_like'
-							"
-							:panelIndex="index"
-							:isRiskControl="relation == 0"
-							:criteria="config['criteriaNum']"
-							ref="trailingStopLikeChild"
-							:relation="relation"
-							:score="score"
-							:delay_bars="delay_bars"
-							:period="signals_in_market"
-							:isLimit="isUsePeriodLimit"
-							:techUrl="indicatorUrlArr[index]"
-							:techVal="indicatorValArr[index]"
-							v-show="
-								indicatorRadioArr[index] === 'technical' &&
-								techIndiObj[index] === 'Trailingstop_like'
-							"
-						></trailing-stop-like>
-						<div class="empty-senti-container" v-show="(indicatorRadioArr[index] === 'technical' && !techIndiObj[index]) || (indicatorRadioArr[index] === 'symbol' &&
-								indicatorUrlArr[index] == '')">
+					</span>
+					<span class="scoreNote timeLimitBox" v-if="relation === 3">
+						<div class="excludeBox">
+						<div class="period-box" v-if="isUsePeriodLimit">
+							<span>Period: </span>
+							<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
+								<span slot="content" v-html="config['periodTP']">
+								</span>
+								<i class="iconfont icon-wenhao"></i>
+							</el-tooltip>
+							<el-input-number
+								v-model="signals_in_market"
+								:step="1"
+								step-strictly
+								v-if="relation === 3"
+								:min="1"
+								size="small"
+							></el-input-number>
 						</div>
-					</el-tab-pane>
-				</el-tabs>
+							<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
+								>Use Time Period Limit
+								<el-tooltip effect="dark" placement="top">
+									<span slot="content" v-html="config['timeLimitTP']">
+									</span>
+									<i class="iconfont icon-wenhao"></i>
+								</el-tooltip>
+							</el-checkbox>
+						</div>
+					</span>
+				</div>
+			<div :class="{'single': relation == 1, 'risk-control': relation == 0}">
+				<div class="multi-box">
+					<el-tabs
+						v-model="editableTabsValue"
+						type="card"
+						editable
+						@edit="handleTabsEdit"
+					>
+						<el-tab-pane
+							:key="item.name"
+							v-for="(item, index) in editableTabs"
+							:label="item.title"
+							:name="item.name"
+						>
+							<indicator
+								:criteria="config['criteriaNum']"
+								:panelIndex="index"
+								:editableTabs="editableTabs"
+								:editableTabsValue="editableTabsValue"
+								ref="indiChild"
+								:isRiskControl="relation == 0"
+								@getIndicatorUrl="getIndicatorUrl"
+								@getIndicatorVal="getIndicatorVal"
+								@getIndicatorRadio="getIndicatorRadio"
+								@getTechIndiObj="getTechIndiObj"
+								@userUploadFileContent="userUploadFileContent"
+								@getFreqArray="getFreqArray"
+							></indicator>
+							<senti
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:criteria="config['criteriaNum']"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								ref="sentiChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:sentiUrl="indicatorUrlArr[index]"
+								:sentiVal="indicatorValArr[index]"
+								:indicatorRadio="indicatorRadioArr[index]"
+								v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
+							></senti>
+							<symbol-indi
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:criteria="config['criteriaNum']"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								ref="symbolChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:symUrl="indicatorUrlArr[index]"
+								:symVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'symbol' &&
+									indicatorUrlArr[index] !== ''
+								"
+							></symbol-indi>
+							<cci
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'CCI_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="cciChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'CCI_like'
+								"
+							></cci>
+							<macd
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'MACD_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="macdChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'MACD_like'
+								"
+							></macd>
+							<ma
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'MovingAverage_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="maChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'MovingAverage_like'
+								"
+							></ma>
+							<bollinger-bands-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'BollingerBands_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="bollBandsLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'BollingerBands_like'
+								"
+							></bollinger-bands-like>
+							<ehler-fisher-transform-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'EFT_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="EFTLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'EFT_like'
+								"
+							></ehler-fisher-transform-like>
+							<stochastic-momentum-index-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Stochastics_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="stochasticsLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Stochastics_like'
+								"
+							></stochastic-momentum-index-like>
+							<ADX-or-DMS-Like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'ADX_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="ADXLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'ADX_like'
+								"
+							></ADX-or-DMS-Like>
+							<elder-ray-index-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'ERI_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="ERILikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'ERI_like'
+								"
+							></elder-ray-index-like>
+							<alligator-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Aligator_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="aligatorLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Aligator_like'
+								"
+							></alligator-like>
+							<linear-regForecast-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'LRF_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="LRFLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'LRF_like'
+								"
+							></linear-regForecast-like>
+							<trailing-stop-like
+								v-bind="$attrs"
+								:tabLength="indicatorRadioArr.length"
+								:isActived="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Trailingstop_like'
+								"
+								:panelIndex="index"
+								:isRiskControl="relation == 0"
+								:criteria="config['criteriaNum']"
+								ref="trailingStopLikeChild"
+								:relation="relation"
+								:score="score"
+								:delay_bars="delay_bars"
+								:period="signals_in_market"
+								:isLimit="isUsePeriodLimit"
+								:techUrl="indicatorUrlArr[index]"
+								:techVal="indicatorValArr[index]"
+								v-show="
+									indicatorRadioArr[index] === 'technical' &&
+									techIndiObj[index] === 'Trailingstop_like'
+								"
+							></trailing-stop-like>
+							<div class="empty-senti-container" v-show="(indicatorRadioArr[index] === 'technical' && !techIndiObj[index]) || (indicatorRadioArr[index] === 'symbol' &&
+									indicatorUrlArr[index] == '')">
+							</div>
+						</el-tab-pane>
+					</el-tabs>
+				</div>
+			</div>
 			</div>
 		</div>
-	</div>
-  </div>
 </template>
 
 <script>
@@ -695,7 +694,6 @@ export default {
 				})
 				
 				// 如果是MA，则移除它的信息和位置
-				CIQ.removeMALayout(removedUrl, this.criteriaNum, absoluteIndex)
 
 				// 移除chartiq对应的extraIndicators
 				let extraIndicators = []
@@ -703,7 +701,6 @@ export default {
 				extraIndicators = extraIndicators.filter(x=>x!=removedSenti)
 				this.$store.commit('chart/getExtraIndicators',extraIndicators)
 
-				CIQ.addIndicators({})
 			}
 		},
 		getIndicatorUrl(obj) {
@@ -849,11 +846,6 @@ export default {
 				this.$store.commit('chart/getMA', activatedMAList)
 				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteriaNum]
 				this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum, list: [indicatorList[0], ...(new Array(4).fill(''))]})
-				
-				// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-				CIQ.keepTheFirstMALayout(this.criteriaNum)
-
-				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
 				if (this.editableTabs.length <= 1) {
@@ -917,11 +909,6 @@ export default {
 					this.$store.commit('chart/getMA', activatedMAList)
 
 					this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum,list:[]})
-
-					// 如果第一个是MA，则只保留第一个选项卡的的信息和位置
-					CIQ.removeExitMALayout()
-
-					CIQ.addIndicators({})
 				}
 			this.$store.commit(`form/clearSignalArr`, {criteria: this.criteriaNum})
 			this.$store.commit('form/saveRelation', {
@@ -946,6 +933,7 @@ export default {
 			}
 		},
 		isSameSignal() {
+			debugger
 			const description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
 			if (isJson(description)) {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
@@ -1314,7 +1302,7 @@ export default {
 	font-weight: bold;
 	margin-right: 5px;
 	display: inline-block;
-	margin: 0;
+	margin: 0 0 10px 0;
 }
 .radioBox .el-form-item {
 	display: flex;
@@ -1365,18 +1353,6 @@ export default {
 // 		font-size: 15px;
 // 	}
 // }
-.signal-option-box {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 5px;
-	margin-bottom: 20px;
-}
-.signal-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 .scoreNote {
 	font-size: 16px;
 	font-weight: 500;
@@ -1385,15 +1361,11 @@ export default {
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
 }
-.signal-option-box {
+.signal-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-}
-.signal-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	margin: 10px 0 30px 0;
 }
 /deep/ .single .multi-box .el-tabs--card > .el-tabs__header {
 		opacity: 0;
@@ -1413,11 +1385,17 @@ export default {
 .timeLimitBox{
 	position: relative;
 }
-.period-box{
-	position: absolute;
-	top: 100%;
-	left: 0;
-	z-index: 10;
+.excludeBox {
+		display: flex;
+		align-items: center;
+}
+.period-box {
+	margin-right: 10px;
+}
+.criteria-content {
+	padding: 5px;
+	border: #ddd solid 1px;
+	border-radius: 4px;
 }
 .el-select-dropdown__item {
 	padding: 0 5px;
@@ -1427,7 +1405,7 @@ export default {
 	border-radius: 0px;
 	margin: 0px;
 }
-.signal-option-box /deep/ .el-select .el-input__inner {
+.signal-container /deep/ .el-select .el-input__inner {
 	width: 220px;
 }
 </style>

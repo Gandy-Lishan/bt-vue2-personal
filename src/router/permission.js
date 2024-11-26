@@ -196,12 +196,15 @@ async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
 	
+	if (
+		!localStorage.getItem('refactoredSentimentList') ||
+		!localStorage.getItem('refactoredConcatList')
+	) {
 		// console.time("🚗 initiateList timer")
 		// await store.dispatch('chart/fetch_stocklist')
 		// await store.dispatch('chart/fetch_indexlist')
 		// await store.dispatch('chart/fetch_indicatorsList')
 		// console.timeEnd("🚗 initiateList timer")
-
 		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
 		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
 		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
@@ -210,10 +213,12 @@ async function initiateList(pathname) {
 		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
 		// 耗时一秒而且没有排除项
       	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
-		store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
-		store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
+		// store.commit('chart/SET_REFACTORED_SENTIMENTLIST',refactoredSentimentList)
+		// store.commit('chart/SET_REFACTORED_SYMBOLLIST',refactoredConcatList)
+		localStorage.setItem('refactoredSentimentList',JSON.stringify(refactoredSentimentList))
+		localStorage.setItem('refactoredConcatList',JSON.stringify(refactoredConcatList))
 		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-	
+	}	
 	//	改为了获取列表时请求
 	// if (
 	// 	store.getters.getFavoriteIndicatorList.length == 0 ||

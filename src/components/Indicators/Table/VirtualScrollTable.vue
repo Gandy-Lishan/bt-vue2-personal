@@ -1,7 +1,7 @@
 <template>
 <div>
   <div>
-    <div class="header-span" v-show="(!showReport && !showRelated)">
+    <div class="header-span" v-if="(!showReport && !showRelated)">
       <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}</span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
@@ -16,13 +16,13 @@
           </svg>
       </el-tooltip>
     </div>
-    <div class="header-span" v-show="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
+    <div class="header-span" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
       </template>
     </div>
   </div>
-  <div class="filter-div" v-show="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
+  <div class="filter-div" v-if="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
     <el-row>
       <el-col :span="18">
         <el-row>
@@ -79,7 +79,7 @@
     </el-row>
   </div>
   <virtual-scroll
-      v-show="checkedType !== 'TrendSector'"
+      v-if="checkedType !== 'TrendSector'"
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
@@ -164,7 +164,7 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-show="enlarged && pageLength && (checkedType !== 'TrendSector')">
+  <div class="dataTables_info" v-if="enlarged && pageLength && (checkedType !== 'TrendSector')">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
   <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
@@ -1509,7 +1509,7 @@ export default {
     async changeOption(item, isUpdateChart) {
       if(this.loading) return
       if(this.options.length === 1) return
-      this.$refs[`${this.refName}Table`].clearSort()
+      // this.$refs[`${this.refName}Table`].clearSort()
       this.searchInput = ''
       this.groupsFilter = ''
       this.timeframeFilter = ''

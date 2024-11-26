@@ -162,7 +162,7 @@ export default {
 			})
 				console.log('计算结果', medianMaxGainArray)
 				this.backtestHistoryList = [...backtestHistoryList, ...medianMaxGainArray]
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
+				let offset = datatime.getTimezoneOffset() * 60 * 1000
 				this.start_date = new Date(
 						datatime.setTime(datatime.getTime() + offset)
 				)
@@ -418,11 +418,11 @@ export default {
 			dataSet = dataSet.filter((_, index) => index % 2 === 0)
 			let returnResults = []
 
-			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data].Date)
+			for (let data in dataSet) {
+				let datatime = new Date(dataSet[data].Date)
 
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				let offset = datatime.getTimezoneOffset() * 60 * 1000
+				let entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
 
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()

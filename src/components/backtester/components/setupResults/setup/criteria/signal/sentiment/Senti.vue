@@ -280,7 +280,7 @@ export default {
   },
   mixins: [CommonMethodsMixin],
   data() {
-    var validateValue = (rule, value, callback) => {
+    let validateValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -299,7 +299,7 @@ export default {
         }
       }
     };
-    var validateConditionPeriod = (rule, value, callback) => {
+    let validateConditionPeriod = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -318,7 +318,7 @@ export default {
         }
       }
     };
-    var validateMaValue = (rule, value, callback) => {
+    let validateMaValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'))
       } else if (isNaN(value)) {
@@ -337,7 +337,7 @@ export default {
         }
       }
     }
-    var validatePeriod = (rule, value, callback) => {
+    let validatePeriod = (rule, value, callback) => {
       if (value === 0 || value === '') {
         return callback(new Error('Please input period'))
       } else if (isNaN(value)) {
@@ -447,7 +447,7 @@ export default {
     sentiUrl: {
       handler(newVal) {
         if (newVal) {
-          var obj = CIQ.store.state.form.conditionRadio
+          let obj = CIQ.store.state.form.conditionRadio
           obj[this.criteria][this.panelIndex] = this.conditionRadio
           CIQ.store.commit('form/setConditionRadio', obj)
           let vm = this
@@ -494,7 +494,7 @@ export default {
         let indicator_url_with_ma = ''
         if (indicator_url) {
           // 如果当前indicator自带ma,indicator_url改为ma_url
-          for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          for (let studyInstanceName in CIQ.stxx.layout.studies) {
             if (
               CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
               CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
@@ -507,7 +507,7 @@ export default {
               }
             }
           }
-          for (var studyInstanceName in CIQ.stxx.layout.studies) {
+          for (let studyInstanceName in CIQ.stxx.layout.studies) {
             if (
               (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url_with_ma ||
                 (CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
@@ -701,7 +701,7 @@ export default {
     },
     getConditionRadio(val) {
       this.clearFormValidate()
-      var obj = CIQ.store.state.form.conditionRadio
+      let obj = CIQ.store.state.form.conditionRadio
       obj[this.criteria][this.panelIndex] = val
       CIQ.store.commit('form/setConditionRadio', obj)
 
@@ -721,7 +721,7 @@ export default {
           result = obj
         }
         // 限制只移除当前ma
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (let studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
@@ -736,9 +736,9 @@ export default {
           }
         }
 
-        var activatedMAList = this.$store.state.chart.activatedMA
+        let activatedMAList = this.$store.state.chart.activatedMA
         // remove current MA attached to an indicator
-        var MAListIndex = activatedMAList.findIndex(
+        let MAListIndex = activatedMAList.findIndex(
           (item) => item.url == result.url && item.criteria == this.criteria && item.index == this.panelIndex
         )
         if (MAListIndex != -1) {
@@ -773,7 +773,7 @@ export default {
       let stmaPeriod
       if (indicator_url) {
         // 如果当前indicator自带ma,indicator_url改为ma_url
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (let studyInstanceName in CIQ.stxx.layout.studies) {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == indicator_url &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
@@ -787,7 +787,7 @@ export default {
             }
           }
         }
-        for (var studyInstanceName in CIQ.stxx.layout.studies) {
+        for (let studyInstanceName in CIQ.stxx.layout.studies) {
           // 定位ROC study,首先field为indicator均线的肯定只有roc, 再就是判断field为indicator而且类型不为均线的study
           if (
             // 因为需要定位特定index和panel的roc，所以要求Field和indicator_url_with_ma全匹配
@@ -891,7 +891,7 @@ export default {
       }
       // If the indicator is not loaded when changing to Ma radio, exit
       if (!result || result.url=='') { return }
-      for (var studyInstanceName in CIQ.stxx.layout.studies) {
+      for (let studyInstanceName in CIQ.stxx.layout.studies) {
         if (
           CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == result.url &&
           CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
@@ -906,7 +906,7 @@ export default {
         }
       }
       const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(this.criteria, this.panelIndex)
-      var sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
+      let sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
         Period: _val,
         display: 'ST MA',
         Field: result.url,
@@ -919,17 +919,17 @@ export default {
       CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 
       // keep current MA
-      var objMA = {
+      let objMA = {
         type: this.ma_type == 'S' ? 'simple' : 'exponential',
         period: _val,
         url: result.url,
         criteria: this.criteria,
         index: this.panelIndex
       }
-      var activatedMAList = this.$store.state.chart.activatedMA
+      let activatedMAList = this.$store.state.chart.activatedMA
 
       // remove current MA attached to an indicator
-      var MAListIndex = activatedMAList.findIndex(
+      let MAListIndex = activatedMAList.findIndex(
         (item) => item.url == result.url && item.criteria == this.criteria && item.index == this.panelIndex
       )
       if (MAListIndex != -1) {

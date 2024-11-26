@@ -51,7 +51,10 @@ export default {
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
-		this.preFetchData()
+		if(!['/indicators'].includes(window.location.pathname)) {
+			this.preFetchData()
+		}
+		
 // debugger
 		console.log('用户权限', getCookieData())
 		const _this = this

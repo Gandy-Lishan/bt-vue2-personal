@@ -1318,10 +1318,10 @@ export default {
       let vm = this
       if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
         vm.loading = true
-        var symbolListTemp = vm.symbolList.map((item, index) => {
+        let symbolListTemp = vm.symbolList.map((item, index) => {
           return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
         })
-        var IndexListTemp = vm.indexList.map((item, index) => {
+        let IndexListTemp = vm.indexList.map((item, index) => {
           return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
         })
         
@@ -1332,21 +1332,21 @@ export default {
       }
       else if (typeof query != 'boolean' && query !== '') {
         vm.loading = true
-        var symbolListTemp = vm.symbolList.map((item, index) => {
+        let symbolListTemp = vm.symbolList.map((item, index) => {
           return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
         }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        var IndexListTemp = vm.indexList.map((item, index) => {
+        let IndexListTemp = vm.indexList.map((item, index) => {
           return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
         }).filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
         })
-        var customStocksListTemp = vm.customStocksList.filter((item) => {
+        let customStocksListTemp = vm.customStocksList.filter((item) => {
           return (
             item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
           )
@@ -1356,7 +1356,7 @@ export default {
         let options = []
         let wholeWord = []
         // keyword全匹配
-        for (var item of list) {
+        for (let item of list) {
           if (
             item.value.toLowerCase() === query.toLowerCase() ||
             item.label.toLowerCase() === query.toLowerCase()
@@ -1452,16 +1452,16 @@ export default {
 				this.$store.commit('form/setComparisonSymbol', {})
 
 				// 移除symbol2的activatedMA
-				var activatedMAList = CIQ.store.state.chart.activatedMA
+				let activatedMAList = CIQ.store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
 				this.$store.commit('chart/getMA', activatedMAList)
 
         // 移除symbol2的activatedTechLayout, activatedMALayout
-        var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
+        let activatedMALayoutList = CIQ.store.state.chart.activatedMALayout
 				activatedMALayoutList = activatedMALayoutList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
 				this.$store.commit('chart/getMALayout', activatedMALayoutList)
 
-        var activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout
+        let activatedTechLayoutList = CIQ.store.state.chart.activatedTechLayout
 				activatedTechLayoutList = activatedTechLayoutList.filter(item=> ['entry2','exit2'].indexOf(item.criteria) == -1)
 				this.$store.commit('chart/getTechLayout', activatedTechLayoutList)
 

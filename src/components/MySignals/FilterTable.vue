@@ -288,29 +288,6 @@ export default {
 			deep: true
 		},
 	},
-	directives: {
-		'hover-popup': {
-			bind(el, binding, vnode) {
-			el.addEventListener('mouseover', () => {
-				// 显示弹窗
-				vnode.context.showPopup(binding.value.item);
-			});
-
-			el.addEventListener('mouseleave', () => {
-				// 隐藏弹窗
-				vnode.context.hidePopup();
-			});
-					const signalArr = 
-					['MA', 'MAGap', 'MACDHist', 'MACDHistGap', 'Hammer followed by a raise', 'Shooting', 'UpTrend Pattern', 'DownTrend Pattern', 'Symbol Close > its\' MA200 and Optix MA5 < 35', 'Symbol Close > its\' MA200 and Optix < 30', 'Optix MA10 < 30 and Optix < 20', 'PriceBreakout', 'HighPoints', 'LowPoints', 'RSI', 
-					'Head and Shoulders Top', 'Head and Shoulders Bottom', 'Double Top', 'Double Bottom', 'Triple Tap', 'Rounding Bottom', 'Ascending Channel', 'Descending Channel',
-					'Symbol All-Time High','Symbol All-Time Low','Symbol 52-Week High','Symbol 52-Week Low','Symbol 4-Week High','Symbol 4-Week Low','Symbol 13-Week High','Symbol 13-Week Low']
-					if (!signalArr.includes(binding.value.item)) {
-				// 隐藏元素
-				el.style.display = 'none';
-			}
-			}
-		}
-	},
 	mounted() {
 		// this.data.content.map((item,index)=>{
 		// 		item['Alloc'] = ''

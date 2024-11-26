@@ -214,9 +214,13 @@ export default {
     DOMChart
   },
   computed: {
-    ...mapGetters({
-      symbolList: 'getRefactoredSymbolList'
-    })
+    // ...mapGetters({
+    //   symbolList: 'getRefactoredSymbolList'
+    // })
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      return data ? JSON.parse(data) : [];
+    }
   },
   watch: {
      data: {

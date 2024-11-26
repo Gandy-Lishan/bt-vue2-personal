@@ -204,14 +204,6 @@ const routes = [
 		name: 'Indicators',
 		component: resolve =>
 			require(['@/components/Indicators/index.vue'], resolve),
-		children: [
-			{
-				path: '',
-				name: 'IndicatorsList',
-				component: resolve =>
-					require(['@/components/Indicators/Table/index.vue'], resolve)
-			}
-		]
 	},
 	{
 		path: '/doc',

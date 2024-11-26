@@ -1,6 +1,8 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { decodeBase64 } from '..'
 // global functions(not like mixin, it can be used for .js)
+// const resetData = (vm) => { 
+//   Object.assign(vm.$data, vm.$options.data()) }
 const getSymbolInfo = (url) => {
     //console.time('🚗Execution Time');
     let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==url)

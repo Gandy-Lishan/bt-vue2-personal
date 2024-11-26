@@ -41,6 +41,8 @@
 					:prop="l.value"
 					:key="l.key"
           :sortable="'custom'"
+          :min-width="l.minWidth"
+          :width="l.width"
 				  :sort-orders="['ascending', 'descending']"
 				>
 					<template slot-scope="scope">
@@ -53,7 +55,7 @@
 					</template>
 				</el-table-column>
 			</template>
-        <el-table-column align="center" width="280px">
+        <el-table-column align="center" width="100px">
               <template slot-scope="scope">
                 <el-row>
                   <el-tooltip
@@ -154,23 +156,26 @@ export default {
         {
           label: 'Symbol',
           value: 'symbol',
-          key: 'symbol'
+          key: 'symbol',
+          width: '110px'
         },
         {
           label: 'Timeframe',
           value: 'timeframe',
-          key: 'timeframe'
+          key: 'timeframe',
+          width: '130px'
         },
         {
           label: 'Signal',
           value: 'description',
           key: 'description',
-          minWidth: '200px' 
+          minWidth: '150px' 
         },
         {
           label: 'Last Signal Date',
           value: 'last_signal_date',
-          key: 'last_signal_date'
+          key: 'last_signal_date',
+          width: '170px'
         }
       ],
       tableData: []
@@ -284,18 +289,26 @@ export default {
       let { prop:colName, order:sortingOrder } = this.currentSort;
       console.log(colName, sortingOrder)
 			// 日期类型排序
-			if(['last_signal_date'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.filterData.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.filterData.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
+      if (['last_signal_date'].indexOf(colName) !== -1) {
+        this.filterData.sort((a, b) => {
+          const dateA = a[colName] ? new Date(a[colName]) : null;
+          const dateB = b[colName] ? new Date(b[colName]) : null;
+
+          // 处理空值，将空值排在最后面
+          if (!dateA && !dateB) return 0; // 两个都为空
+          if (!dateA) return 1; // `a`为空，排在后面
+          if (!dateB) return -1; // `b`为空，排在后面
+
+          // 正常比较日期
+          if (sortingOrder === 'ascending') {
+              return dateA - dateB;
+          } else if (sortingOrder === 'descending') {
+              return dateB - dateA;
+          }
+
+          return 0; // 默认情况下不排序
+        });
+      }
 			// 字符串类型排序
 			if(['name','symbol','timeframe'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){

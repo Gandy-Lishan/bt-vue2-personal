@@ -1,4 +1,4 @@
-checkedTitle<template>
+<template>
   <div class="indicators-container" ref="indiRef">
     <div class="footer-des">
       <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>

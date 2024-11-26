@@ -99,7 +99,7 @@ export default {
     isLimit: Boolean
 	},
 	data() {
-		var validateValueNegative = (rule, value, callback) => {
+		let validateValueNegative = (rule, value, callback) => {
       if (value === ''){
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -118,7 +118,7 @@ export default {
         }
       }
     };
-		var validateValuePositive = (rule, value, callback) => {
+		let validateValuePositive = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value)) {
@@ -165,7 +165,7 @@ export default {
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.form.conditionRadio
+					let obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('form/setConditionRadio', obj)
 				}
@@ -272,7 +272,7 @@ export default {
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.form.conditionRadio
+			let obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('form/setConditionRadio', obj)
 			if (val === '+DI ADX') {
@@ -343,7 +343,7 @@ export default {
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.form.conditionRadio
+					let cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.conditionRadio
 					CIQ.store.commit('form/setConditionRadio', cr)
 					this.clearFormValidate()

@@ -506,7 +506,7 @@ export default {
             this.TIMHistoryList = this.calculateBacktestHistory(this.tradesData, timPeriodArray)
             // 2.1涓紩鍏ュ垎鏋愬笀鐨刏Score妯″潡
             
-            var offset = datatime.getTimezoneOffset() * 60 * 1000
+            let offset = datatime.getTimezoneOffset() * 60 * 1000
             this.start_date = new Date(
                 datatime.setTime(datatime.getTime() + offset)
             )
@@ -709,16 +709,16 @@ export default {
 		},
 		transformDate(arr) {
 			// 创建一个空对象，用于存储处理后的结果
-			var processeArray = []
+			let processeArray = []
 
 			// 遍历原始数组
-			for (var i = 0; i < arr.length; i++) {
-				var currentItem = arr[i]
+			for (let i = 0; i < arr.length; i++) {
+				let currentItem = arr[i]
 
 				// 将当前项拆分成数字和单位
-				var parts = currentItem.split(' ')
-				var value = parseInt(parts[0])
-				var unit = parts[1]
+				let parts = currentItem.split(' ')
+				let value = parseInt(parts[0])
+				let unit = parts[1]
 
 				// 将不同天数的项进行合并，根据比率转换
 				if (unit === 'Days') {
@@ -819,7 +819,7 @@ export default {
 				}
 
 				// 生成新的项
-				var newItem = value + ' ' + unit
+				let newItem = value + ' ' + unit
 
 				// 将新的项添加到 processedObj，使用项作为键名
 				let res
@@ -1040,11 +1040,11 @@ export default {
 			let backtestResult = []
 			let noFound = []
 
-			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data].Date)
+			for (let data in dataSet) {
+				let datatime = new Date(dataSet[data].Date)
 
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				let offset = datatime.getTimezoneOffset() * 60 * 1000
+				let entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
 
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
@@ -1241,7 +1241,7 @@ export default {
 			let period_dict = this.transformZScoreData(periodArray)
 			let quotes = CIQ.stxx.chart.masterData
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
-			for (var i in period_dict) {
+			for (let i in period_dict) {
 				quotes = this.generate_period_data(
 					period_dict[i].timeframe,
 					quotes,
@@ -1255,11 +1255,11 @@ export default {
 			})
 			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
 			let dataTimeList = []
-			for (var data in dataSet) {
+			for (let data in dataSet) {
 				if (dataSet[data].TradeStatus != 'BUY') continue
-				var datatime = new Date(dataSet[data].Date)
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(
+				let datatime = new Date(dataSet[data].Date)
+				let offset = datatime.getTimezoneOffset() * 60 * 1000
+				let entryDate = new Date(
 					datatime.setTime(datatime.getTime() + offset)
 				).getTime()
 				dataTimeList.push(entryDate)
@@ -1281,7 +1281,7 @@ export default {
 				max_loss_list = [],
 				max_gain_list = [],
 				z_score_list = []
-			for (var i in period_dict) {
+			for (let i in period_dict) {
 				let temp_median = this.calculate_median(
 					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)

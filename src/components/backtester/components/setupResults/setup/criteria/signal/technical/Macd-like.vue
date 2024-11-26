@@ -133,7 +133,7 @@ delay_bars: [String, Number],
 		isLimit: Boolean
 	},
 	data() {
-		var validateValue = (rule, value, callback) => {
+		let validateValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value) && value !== 'MACDSL') {
@@ -153,7 +153,7 @@ delay_bars: [String, Number],
         }
       }
     };
-		var validateHistValue = (rule, value, callback) => {
+		let validateHistValue = (rule, value, callback) => {
       if (value === '') {
         return callback(new Error('Please input value'));
       } else if (isNaN(value) && value !== 'MACDSL') {
@@ -206,7 +206,7 @@ delay_bars: [String, Number],
 		isActived: {
 			handler(newVal) {
 				if(newVal){
-					var obj = CIQ.store.state.form.conditionRadio
+					let obj = CIQ.store.state.form.conditionRadio
 					obj[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('form/setConditionRadio', obj)
 				}
@@ -314,7 +314,7 @@ delay_bars: [String, Number],
 		},
 		getConditionRadio(val) {
 			this.clearFormValidate()
-			var obj = CIQ.store.state.form.conditionRadio
+			let obj = CIQ.store.state.form.conditionRadio
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('form/setConditionRadio', obj)
 			switch (val) {
@@ -397,7 +397,7 @@ delay_bars: [String, Number],
 				}
 				this.editTechVal = obj.indicator
 
-					var cr = CIQ.store.state.form.conditionRadio
+					let cr = CIQ.store.state.form.conditionRadio
 					cr[this.criteria][this.panelIndex] = this.radio
 					CIQ.store.commit('form/setConditionRadio', cr)
 			}
