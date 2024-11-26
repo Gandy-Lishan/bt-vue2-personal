@@ -1,4 +1,5 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
+import e from "express";
 let __st_js_generateCsv_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -790,9 +791,18 @@ let __st_js_generateCsv_ = (_exports) => {
          }
  
          //如果是stma roc,则stma,roc, conditionRadio同时满足下面条件，这个判断会先进去，导致bug 
+        //  e.g.
+        //  ‌   ST MA‌ (5,model_smart_dumb_spread,ma,0)       // condtion 1: stma5 
+        //     ‌ST MA‌ (5,model_smart_dumb_spread,ma,0)-2
+        //     ST ROCLike‌ (MA ‌ST MA‌ (5,model_smart_dumb_spread,ma,0)-2,ROC,21,n)    // condtion 2: stma5 with roc21
+        //     model_smart_dumb_spread‌ (13,n)
+
          let findROC = false
          for(var i in ciq_studies){
-             if(ciq_studies[i].type == "ST ROCLike") findROC = true
+             if(ciq_studies[i].type == "ST ROCLike" &&
+                ciq_studies[i].parameters.criteria == criteria &&
+                ciq_studies[i].parameters.index == indexNum 
+             ) findROC = true
          }
          // normal senti indicator with MA Line(the second sentiment indicator condition)
          if(
