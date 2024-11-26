@@ -173,6 +173,7 @@ export default {
   watch: {
     symVal: {
       handler(newVal) {
+        debugger
         if (CIQ.findSymbolIndicator(this.symVal,null)) this.symbolLabel = newVal
       },
       immediate: true,
@@ -213,7 +214,7 @@ export default {
             relation = "Only Risk;"
             break;
           case 1:
-            relation = "Single Condition"
+            relation = ""
             break;
           case 2:
             relation = "SameBar Multi Condition;"
@@ -228,7 +229,7 @@ export default {
             break;
         }
         let delay_bars = this.delay_bars ? 'Delay Bars: ' + this.delay_bars + ';' : ''
-        commentDes = `${relation} ${score ? score : ''} ${period ? period : ''} ${delay_bars}`
+        commentDes = `${relation?`${relation} `:''}${score ? `${score} ` : ''}${period ? `${period} ` : ''}${delay_bars}`
 
         if (this.relation != 1) {
           let desObj = {}
@@ -303,7 +304,7 @@ export default {
       }
       if (this.relation == 1) {
         desObj.description = {
-          'commentDes': commentDes + this.description,
+          'commentDes': this.description,
           'rocCond': rocCond
         }
         desObj.index = 0

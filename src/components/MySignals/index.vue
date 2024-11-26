@@ -9,16 +9,14 @@
         </template>
         <div class="portfolio-des">
           <p>
-          This page provides a highlight of our Strategies. These strategies are based on multiple trading models, each with its own pros/cons. 
-          Some models have larger returns, while others have smaller drawdowns. Some models perform better in trending markets, while others perform better in choppy markets. These models were created to account for individual preferences, risk tolerance, etc. Ultimately, the model that you want to use is up to you.
-        </p>
-        <p>
-          In the table below, a 'yellow' highlight on the row signifies a change in signal.
-        </p>
-        <p>
-          You can now subscribe to receive email notifications when a Strategy updates. Visit the <a href="https://users.sentimentrader.com/users/preferences/">
-          preferences page</a> to subscribe to our Strategies emails.
-        </p>
+            My Signal is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
+          </p>
+          <p>
+            In the table below, when a row is highlighted in “yellow”, it indicates a change in that trading signal.
+          </p>
+          <p>
+            You can now subscribe to our service to receive email notifications when signals are updated. Please visit our Preferences page to subscribe to My Signal's trading signals emails.
+          </p>
         </div>
       </el-collapse-item>
       </el-collapse>

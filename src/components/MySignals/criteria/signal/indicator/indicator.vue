@@ -555,10 +555,9 @@ export default {
       this.fileList = []
     },
     handleIndicatorSelect(data, type) {
-      debugger
       let updated = data.updated
       if(['tech', 'symbol'].includes(type) && updated === undefined) updated = 'Daily'
-      if(type === 'symbol') this.si.symbolIndicator = data.label
+      if(type === 'symbol') {this.si.symbolIndicator = data.label; data.value = data.label}
       if(type === 'user') {
         const {file_name: indicatorName, file_id: indicatorUrl, updated: _updated, url} = data
         updated = capitalizeFirstLetter(_updated)
@@ -888,8 +887,9 @@ export default {
             console.log('this.createdIndicatorOptions', options)
             this.$emit('getIndicatorUrl', { index, url: indicator });
           };
-
-          this.indicatorRadio = `${signal.analysis === 'User' ? 'Users\' Own' : signal.analysis} Indicator`;
+          this.indicatorRadio = `${signal.analysis} Indicator`;
+          if(signal.analysis === 'User')  this.indicatorRadio = `Users\' Own Indicator`;
+          if(signal.analysis === 'Symbol')  this.indicatorRadio = `Symbol OHLCV`;
           if(signal.analysis !== 'User') this.si[`${signal.analysis.toLowerCase()}Indicator`] = signal.indicator;
 
           switch (signal.analysis) {
