@@ -88,7 +88,7 @@
 							filterable
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							placeholder="Please select condition"
-              @change="debouncedSetPeriod(senti.period)"	
+              @change="setPeriod(senti.period)"	
 						>
 							<el-option
 								v-for="item in MATypeConditions"
@@ -207,9 +207,9 @@
 						<el-select
 							v-model="ma_type"
 							filterable
-							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							:disabled="!(conditionRadio === 'Indicator Value ')"
 							placeholder="Please select condition"
-              @change="debouncedSetPeriod(senti.period)"	
+              @change="setPeriod(senti.period)"	
 						>
 							<el-option
 								v-for="item in MATypeConditions"
@@ -237,6 +237,8 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
+const debounce = require('lodash/debounce')
+
 import { mapGetters } from 'vuex'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 export default {
@@ -359,6 +361,8 @@ export default {
         { value: 11, label: 'Net Change' },
         { value: 12, label: 'All-time High' },
         { value: 13, label: 'All-time Low' },
+        { value: 14, label: 'Consecutive Number of Days Above' },
+        { value: 15, label: 'Consecutive Number of Days Below' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -397,7 +401,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 13
+      this.isROCLike = 5 <= val && val <= 15
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) this.senti.condition = this.senti.newCondition
       
@@ -464,9 +468,9 @@ export default {
         }
 
       }
-      let ma = this.senti.period ? 'moving average' : ''
+      let ma = this.senti.period ? 'Moving Average' : ''
       let period = this.senti.period ? this.senti.period : ''
-      let condition = this.conditions[this.senti.condition].label
+      let condition = this.conditions[this.senti.condition]?.label
       let sentiVal = this.sentiVal ? this.sentiVal : this.editSentiVal
       let value =
         this.conditionRadio === 'Indicator Value'
@@ -589,7 +593,7 @@ export default {
         this.setPeriod(this.senti.period)    
       }
     },
-    setPeriod(val) {
+    setPeriod : debounce(function (val) {
       let _val = val
       // if (!_val) {
       //   _val = 5
@@ -634,7 +638,7 @@ export default {
 
       this.$store.commit('chart/getMA', activatedMAList)
 
-    },
+    }, 500),
 
     saveCondition(index) {
       let checked = true
