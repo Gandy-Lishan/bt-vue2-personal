@@ -819,8 +819,9 @@ export default {
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
+        const maType = this.ma_type == 'S' ? ' SMA' : ' EMA'
         const name = indicator_url_with_ma
-                  ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
+                  ? this.rocDisplayName(indicator_url) + maType + stmaPeriod
                   : this.rocDisplayName(indicator_url)
         let display
         if([12,13].includes(this.senti.newCondition)){

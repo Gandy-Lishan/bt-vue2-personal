@@ -692,8 +692,9 @@ export const CommonMethodsMixin = {
 			if (!(analysis == 'Sentiment' || analysis == 'User')) {
 				symbolLabelDisplay = `(${symbolLabel})`
 			}
+			const maType = signals.ma_type == 'S' ? ' SMA' : ' EMA'
 			const name = indicator_url_with_ma
-                  ? this.rocDisplayName(indicator_url) + ' MA' + stmaPeriod
+                  ? this.rocDisplayName(indicator_url) + maType + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Bar)`
 			CIQ.Studies.addStudy(
