@@ -1,6 +1,19 @@
 <template>
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
+      <el-popconfirm
+        confirm-button-text="Continue"
+        cancel-button-text="Cancel"
+        icon="el-icon-info"
+        icon-color="red"
+        v-if="currentPageTab === 'MySignal'"
+        @confirm="runAllMySignals"
+        title="Re-running all signals will update the last signal dates to the most recent.This process might take a while for larger lists. Confirm to continue."
+        >
+        <template #reference>
+          <el-button type="warning" plain size="small" :loading="btnLoading">Run All Signal</el-button>
+        </template>
+      </el-popconfirm>
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
       </el-input>
@@ -129,7 +142,7 @@
 </template>
 
 <script>
-import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal } from '@/service/service'
+import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal, runAllMySignals } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -145,6 +158,7 @@ export default {
       currentSort: {}, // 当前的排序信息
       filterData: [],
       loading: false,
+      btnLoading: false,
       pageSize: 10,
       total: 0,
       tableCol: [
@@ -405,6 +419,20 @@ export default {
 			await deleteMySignal(url)
 			await this.getDataList(null)
 			this.popUpMsgBox('Successfully deleted')
+    },
+    async runAllMySignals() {
+      try {
+        this.btnLoading = true
+        const {data: {code}} = await runAllMySignals()
+        console.log('run all res', code)
+        if(code === 216) this.popUpMsgBox('Signals re-run successfully. Last signal dates are now up to date')
+        this.$emit('refreshBTList')
+      } catch (error) {
+        console.error(error);
+        
+      } finally {
+        this.btnLoading = false
+      }
     }
     },
   }
@@ -444,4 +472,5 @@ export default {
 /deep/ .el-button--mini.is-circle {
   margin: 0 2px;
 }
+
 </style>

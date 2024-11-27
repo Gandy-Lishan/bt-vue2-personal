@@ -1200,15 +1200,15 @@ export default {
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}
-			this.$nextTick(() => {
-				this.setEditData(this.refs)
+			this.$nextTick(async () => {
+				await this.setEditData(this.refs)
 			})
 		},
-		setEditData(data) {
+		async setEditData(data) {
 			let criteria = this.criteriaNum
 			let length = data[criteria].signals.length
 			for (let j = 0; j < length; j++) {
-				this.$refs.indiChild[j].setEditData(data)
+				await this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}
