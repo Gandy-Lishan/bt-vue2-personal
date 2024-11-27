@@ -125,13 +125,13 @@ export default {
       data: {
         name: '',
         timeframe: 'Daily',
-        symbol: 'AAPL',
+        symbol: 'SPY',
       },
       rowUrl: null,
       isPolling: false,
       processTips: '',
       percentage: 0,
-      symbolInfo: {strategy: 'Single', symbol: 'AAPL', symbol2: ''}, 
+      symbolInfo: {strategy: 'Single', symbol: 'SPY', symbol2: ''}, 
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -216,7 +216,7 @@ export default {
         this.data = {
           ...this.data,
           timeframe: 'Daily',
-          symbol: 'AAPL'
+          symbol: 'SPY'
         }
         this.rowUrl = null
         this.processTips = ''
