@@ -81,6 +81,25 @@
 					>
 					</el-radio>
 				</el-form-item>
+        <div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="ma_type"
+							filterable
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							placeholder="Please select condition"
+              @change="debouncedSetPeriod(senti.period)"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 				<div class="conditionInput">
 					<el-form-item prop="period">
 						<el-input
@@ -181,6 +200,25 @@
         <div class="conditionInput">
 					<el-form-item>
 						<el-link type="info" :underline="false" class="ISL-text">Indicator Moving Average </el-link>
+					</el-form-item>
+				</div>
+        <div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="ma_type"
+							filterable
+							:disabled="!(conditionRadio === 'Indicator Moving Average')"
+							placeholder="Please select condition"
+              @change="debouncedSetPeriod(senti.period)"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</div>
 				<div class="conditionInput">
@@ -329,9 +367,14 @@ export default {
         { value: 3, label: 'CrossAbove' },
         { value: 4, label: 'CrossBelow' }
       ],
+      MATypeConditions: [
+        { value: 'S', label: 'Simple' },
+        { value: 'E', label: 'Exponential' },
+      ],
       conditionRadio: 'Indicator Value',
       description: '',
       editSentiVal: '',
+      ma_type: 'S',
       rules: {
         value: [{ validator: validateValue, trigger: 'blur' }],
         conditionPeriod: [{ validator: validateConditionPeriod, trigger: 'blur' }],
@@ -377,6 +420,7 @@ export default {
       let rocCond = {
         'newCondition': this.senti.newCondition,
         'conditionPeriod': this.senti.conditionPeriod,
+        'ma_type': this.ma_type
       }
       let commentDes = ''
       if (index === 0 && this.relation >= 2) {
@@ -428,8 +472,11 @@ export default {
         this.conditionRadio === 'Indicator Value'
           ? this.senti.value
           : this.senti.maValue
-      this.description = `${sentiVal} ${ma} ${period} ${condition} ${value}`
-      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} Moving Average ${period}`
+      let ma_type = (this.conditionRadio === 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') ? this.ma_type : ''
+      if(ma_type === 'S') ma_type = 'Simple'
+      if(ma_type === 'E') ma_type = 'Exponential'
+      this.description = `${sentiVal} ${ma_type !== '' ? ma_type + ' ' : ''}${ma} ${period} ${condition} ${value}`
+      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} ${ma_type?`${ma_type} `:''}Moving Average ${period}`
       if (this.isROCLike) {
         let _newCondition = this.newConditions[this.senti.newCondition].label
         const _condition = this.conditions[this.senti.condition].label
@@ -461,6 +508,12 @@ export default {
           case "All-time Low":
             _newCondition = 'ATL'
             break;
+          case "Consecutive Number of Days Above":
+            _newCondition = 'CNDA'
+            break;
+          case "Consecutive Number of Days Below":
+            _newCondition = 'CNDB'
+            break;
           default:
             break;
         }
@@ -471,11 +524,17 @@ export default {
         
         let _description1,_description2
         if([12,13].includes(this.senti.newCondition)){
-          _description1 = `${sentiVal} ${ma} ${_newCondition} ${_condition} ${_value}`
-          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+          _description1 = `${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_newCondition} ${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+        }else if(this.senti.newCondition == 14){
+          _description1 = `Consecutive Number of Days with ${sentiVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_period} Above  ${_conditionPeriod} ${_condition} ${_maValue}`
+        }else if(this.senti.newCondition == 15){
+          _description1 = `Consecutive Number of Days with ${sentiVal} Below ${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_period} Below  ${_conditionPeriod} ${_condition} ${_maValue}`
         }else{
-          _description1 = `${sentiVal} ${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
-          _description2 = `${sentiVal} ${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+          _description1 = `${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+          _description2 = `${sentiVal} ${ma_type ? `${ma_type} ` : ''}${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
         }
 
         if(this.conditionRadio === 'Indicator Value') {this.description = _description1}
@@ -517,6 +576,7 @@ export default {
       }
       if (val === 'Indicator Moving Average') {
         this.senti.comparison = 'SVMA'
+        this.ma_type = 'S'
         // Ma is loaded when the default radio is switched to moving average radio
         this.setPeriod(this.senti.period)
       }
@@ -525,6 +585,7 @@ export default {
         this.senti.value = ''
         this.senti.newCondition = 3 //  初始化单选框值
         this.ROCLikeChange(this.senti.newCondition)
+        this.ma_type = 'S'
         this.setPeriod(this.senti.period)    
       }
     },
@@ -554,10 +615,11 @@ export default {
       if (!result || result.url=='') { return }
       // keep current MA
       var objMA = {
+        type: this.ma_type == 'S' ? 'simple' : 'exponential',
         period: _val,
         url: result.url,
         criteria: this.criteria,
-        index: this.panelIndex
+        index: this.panelIndex,
       }
       var activatedMAList = this.$store.state.chart.activatedMA
 
@@ -669,6 +731,7 @@ export default {
 
         if(cond && Number(cond.newCondition)){
           this.senti.newCondition =  Number(cond.newCondition)
+          this.ma_type = cond.ma_type || 'S'
         }else{
           this.senti.newCondition = this.senti.condition
         }
