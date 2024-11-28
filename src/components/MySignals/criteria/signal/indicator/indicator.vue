@@ -570,7 +570,7 @@ export default {
         updated = capitalizeFirstLetter(_updated)
         data.value = indicatorName
         data.url = indicatorUrl || url
-        if(indicatorUrl.includes('CREATE')) {
+        if(typeof indicatorUrl === 'string' && indicatorUrl.includes('CREATE')) {
           const obj = {
             index: this.panelIndex,
             val: indicatorUrl,
