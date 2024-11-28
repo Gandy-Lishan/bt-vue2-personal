@@ -158,9 +158,9 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     self.params.driver.exchanges = restoredExchanges;
                     self.results(results);
 
-                    var stClose = self.getElementsByClassName("st-close")
+                    let stClose = self.getElementsByClassName("st-close")
                     if(filter == 'CUSTOM SYMBOL'){
-                        for(var el = 0;el<stClose.length;el++){     
+                        for(let el = 0;el<stClose.length;el++){     
                             const _result = results
                             const _el = el
                             CIQ.UI.stxtap(stClose[el],async ()=>{
@@ -182,7 +182,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 
                 this.params.driver.acceptText(value, filter, null, closure);
             }
-    
             attachDriver(driver) {
                 this.driver = driver;
             }
@@ -566,18 +565,18 @@ let __js_webcomponents_lookup_ = (_exports) => {
 
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
-                for (var i = 0; i < arr.length; i++) {
-                    var item = arr[i];
-                    var nodeText = "";
+                for (let i = 0; i < arr.length; i++) {
+                    let item = arr[i];
+                    let nodeText = "";
                     //console.log(item.display)
-                    for (var j = 0; j < item.display.length; j++) {
+                    for (let j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
                     if(this.currentFilter == 'CUSTOM SYMBOL'){
                         nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
                     }
 
-                    var node = document.createElement("cq-item");
+                    let node = document.createElement("cq-item");
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);

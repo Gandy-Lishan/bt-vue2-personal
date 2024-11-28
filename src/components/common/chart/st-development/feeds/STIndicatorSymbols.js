@@ -290,4 +290,25 @@ CIQ.ChartEngine.Driver.Lookup.ChartIQ.prototype.acceptText = async function (
     } 
     if (loader) loader.hide();  
 };
+
+loadMore(closure) {
+    // let scrollableElement = this.resultList[0]
+    // const currentScrollTop = scrollableElement.scrollTop;
+    // const currentScrollHeight = scrollableElement.scrollHeight;
+    // 根据页码从过滤后的结果中分页
+    console.log('paginated results',this.currentPage, this.searchResults.length)
+    const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+    if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+    // 将分页后的数据传递给 closure
+    closure(paginatedResults);
+
+        // // 恢复滚动位置
+        // setTimeout(() => {
+        //     // 等待 DOM 
+        //     debugger
+        //     if (scrollableElement.scrollHeight !== currentScrollHeight) {
+        //         scrollableElement.scrollTop = currentScrollTop + (scrollableElement.scrollHeight - currentScrollHeight);
+        //     }
+        // }, 0); // 延迟为 0，意味着在当前执行栈完成后执行
+}
 export { CIQ };
