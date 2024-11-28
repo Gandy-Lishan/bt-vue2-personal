@@ -14545,11 +14545,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Dril-Quip Inc",
-        "url": "DRQ",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Haverty Furnitur",
         "url": "HVT",
         "updated": "Daily"
@@ -14557,11 +14552,6 @@
     {
         "chart_name": "Movado Group",
         "url": "MOV",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Us Silica Holdin",
-        "url": "SLCA",
         "updated": "Daily"
     },
     {
@@ -14600,18 +14590,8 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "SunPower Corp",
-        "url": "SPWR",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Enhabit Inc",
         "url": "EHAB",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Chesapeake Energy Corp",
-        "url": "CHK",
         "updated": "Daily"
     },
     {
@@ -20745,16 +20725,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Pnm Resources Trend Score",
-        "url": "PNM_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Pnm Resources RelTrend Score",
-        "url": "PNM_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Pentair Plc Trend Score",
         "url": "PNR_trend",
         "updated": "Daily"
@@ -21792,16 +21762,6 @@
     {
         "chart_name": "Skyworks Solutio RelTrend Score",
         "url": "SWKS_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Southwestrn Engy Trend Score",
-        "url": "SWN_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Southwestrn Engy RelTrend Score",
-        "url": "SWN_reltrend",
         "updated": "Daily"
     },
     {
@@ -29835,16 +29795,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Dril-Quip Inc Trend Score",
-        "url": "DRQ_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Dril-Quip Inc RelTrend Score",
-        "url": "DRQ_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Haverty Furnitur Trend Score",
         "url": "HVT_trend",
         "updated": "Daily"
@@ -29862,16 +29812,6 @@
     {
         "chart_name": "Movado Group RelTrend Score",
         "url": "MOV_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Us Silica Holdin Trend Score",
-        "url": "SLCA_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Us Silica Holdin RelTrend Score",
-        "url": "SLCA_reltrend",
         "updated": "Daily"
     },
     {
@@ -29945,16 +29885,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "SunPower Corp Trend Score",
-        "url": "SPWR_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "SunPower Corp RelTrend Score",
-        "url": "SPWR_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Enhabit Inc Trend Score",
         "url": "EHAB_trend",
         "updated": "Daily"
@@ -29962,16 +29892,6 @@
     {
         "chart_name": "Enhabit Inc RelTrend Score",
         "url": "EHAB_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Chesapeake Energy Corp Trend Score",
-        "url": "CHK_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Chesapeake Energy Corp RelTrend Score",
-        "url": "CHK_reltrend",
         "updated": "Daily"
     },
     {
@@ -31417,6 +31337,36 @@
     {
         "chart_name": "Datadog Inc Trend Score",
         "url": "DDOG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Core S&P Mid-Cap ETF Trend Score",
+        "url": "IJH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Core S&P Mid-Cap ETF RelTrend Score",
+        "url": "IJH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Russell Mid-Cap ETF Trend Score",
+        "url": "IWR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Russell Mid-Cap ETF RelTrend Score",
+        "url": "IWR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P MIDCAP 400 ETF Trust Trend Score",
+        "url": "MDY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P MIDCAP 400 ETF Trust RelTrend Score",
+        "url": "MDY_reltrend",
         "updated": "Daily"
     }
 ]
