@@ -27,9 +27,9 @@ export function generateConfig(criteriaWithNumber) {
 		criteria: criteria,
 		criteriaCapFirstL: capFirstL,
 		criteriaTitle: `4. Signal Criteria`,
-		criteriaTitleTP: `Set the criteria/criterias which trigger the signal ${criteria}
+		criteriaTitleTP: `Set the criteria/criterias which trigger the signal
     criteria.<br />
-    Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for ${criteria} criteria:<br />
+    Choose one of the ${criteria === 'entry' ? 'three' : 'four'} options for signal criteria:<br />
     1. Single Condition: One condition will trigger the signal
     condition.<br />
     2. SameBar Multi-Condition: More than one conditions (limit to 5)
@@ -73,7 +73,7 @@ export function generateConfig(criteriaWithNumber) {
     3 bars, set two conditions below and choose period 3.<br />
     etc.<br />`,
 		DOBTP: `Check this option to delay the specified number of bars to
-    enter when the ${criteria} criteria is met.<br />`
+    enter when the signal criteria is met.<br />`
 	}
 	return config
 }

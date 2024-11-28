@@ -11,7 +11,7 @@
         title="Re-running all signals will update the last signal dates to the most recent.This process might take a while for larger lists. Confirm to continue."
         >
         <template #reference>
-          <el-button type="warning" plain size="small" :loading="btnLoading">Run All Signal</el-button>
+          <el-button type="warning" plain size="small" :loading="btnLoading">Find All Last Signal</el-button>
         </template>
       </el-popconfirm>
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
@@ -68,13 +68,30 @@
 					</template>
 				</el-table-column>
 			</template>
-        <el-table-column align="center" width="100px">
+        <el-table-column align="center" width="130px">
               <template slot-scope="scope">
                 <el-row>
                   <el-tooltip
                     class="item"
                     effect="dark"
-                    content="edit backtest"
+                    content="rerun signal"
+                    placement="bottom-start"
+                    v-if="currentPageTab === 'MySignal'"
+                  >
+                    <el-button
+                      type="warning"
+                      icon="el-icon-video-play"
+                      circle
+                      size="mini"
+                      :loading="scope.row.rerunLoading"
+                      v-if="currentPageTab === 'MySignal'"
+                      @click="rerunSignal(scope.row)"
+                    ></el-button>
+                  </el-tooltip>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="edit signal"
                     placement="bottom-start"
                     v-if="currentPageTab === 'MySignal'"
                   >
@@ -90,7 +107,7 @@
                   <el-tooltip
                     class="item"
                     effect="dark"
-                    content="copy backtest"
+                    content="copy start"
                     placement="bottom-start"
                   >
                     <el-button
@@ -142,7 +159,7 @@
 </template>
 
 <script>
-import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal, runAllMySignals } from '@/service/service'
+import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal, runAllMySignals, editMySignalForm } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -245,7 +262,7 @@ export default {
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
-            // item.deleteLoading = false
+            item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-12-31' ? '' : item.lastdate
             item.description = parseJsonOrString(item.description)
 						return item
@@ -387,6 +404,31 @@ export default {
 				console.error('An error occurred:', error)
 			}
 		},
+    async rerunSignal(data) {
+			try {
+        data.rerunLoading = true
+					// 获取参数并准备复制
+					const params = {
+						...data
+					}
+          const prepareData = this.reassignBTAttributes(params)
+					// 发起复制请求
+					const res = await editMySignalForm(prepareData, data.url)
+          console.log('res', res)
+          const code = res.data.code
+          if(code == 211 || code == 213) {
+            await this.$emit('refreshBTList')
+            this.popUpMsgBox('Signals re-run successfully. Last signal dates are now up to date')
+          }else {
+            this.popUpMsgBox('Failed to re-run signals')
+            
+          }
+          data.rerunLoading = false
+			} catch (error) {
+        data.rerunLoading = false
+				console.error('An error occurred:', error)
+			}
+    },
     reassignBTAttributes(data) {
       debugger
       // use for copy
@@ -441,7 +483,7 @@ export default {
 <style lang="less" scoped>
 .search-box{
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 0px 0px 20px 0px;
   border-bottom: 2px solid #dddddd;
@@ -450,7 +492,7 @@ export default {
   width: 20%;
 }
 .CPM-list-container{
-  padding: 20px 20px 20px 0px;
+  padding: 20px 20px 20px 20px;
 }
 .showDate {
   margin: 5px 0;

@@ -132,6 +132,7 @@ const state = {
 	}, // 控制 results 的 loading 状态
 	backtestZScoreResult: [],
 	comparisonSymbol: {},
+	mySignalTimeframe: 'Daily'
 }
 
 const mutations = {
@@ -285,6 +286,15 @@ const mutations = {
 		freqEntryArray = freqEntryArray.sort(customSort)
 		freqExitArray = freqExitArray.sort(customSort)
 		console.log('Entry 的数组', freqEntryArray)
+
+		const priority = { 'Daily': 1, 'Weekly': 2, 'Monthly': 3 };
+		const getMaxTimeframe = (arr) => {
+				// 过滤掉无效项并排序
+				const validTimeframes = arr.filter(item => priority[item]).sort((a, b) => priority[b] - priority[a]);
+				return validTimeframes.length > 0 ? validTimeframes[0] : null; // 返回最大周期
+		};
+		state.mySignalTimeframe = getMaxTimeframe(freqEntryArray)
+
 		console.log('Exit 的数组', freqExitArray)
 		const maxEntryFreq = freqEntryArray[freqEntryArray.length - 1]
 		const maxExitFreq = freqExitArray[freqExitArray.length - 1]

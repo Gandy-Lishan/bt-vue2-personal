@@ -144,6 +144,8 @@ export default {
         { value: 11, label: 'Net Change' },
         { value: 12, label: 'All-time High' },
         { value: 13, label: 'All-time Low' },
+        { value: 14, label: 'Consecutive Number of Days Above' },
+        { value: 15, label: 'Consecutive Number of Days Below' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -182,7 +184,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 13
+      this.isROCLike = 5 <= val && val <= 15
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -280,6 +282,11 @@ export default {
           case "All-time Low":
             _newCondition = 'ATL'
             break;
+          case "Consecutive Number of Days Above":
+            _newCondition = 'CNDA'
+            break;
+          case "Consecutive Number of Days Below":
+            _newCondition = 'CNDB'
           default:
             break;
         }
@@ -288,9 +295,14 @@ export default {
         let _description1
         if([12,13].includes(this.sym.newCondition)){
           _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
+        }else if(this.sym.newCondition == 14){
+          _description1 = `Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+        }else if(this.sym.newCondition == 15){
+          _description1 = `Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
         }else{
           _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         }
+
         this.description = _description1
       }
       let desObj = {}
