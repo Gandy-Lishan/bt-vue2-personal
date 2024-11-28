@@ -21,13 +21,13 @@
 
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
-					<cq-menu class="ciq-search">
+					<!-- <cq-menu class="ciq-search">
 						<cq-lookup cq-keystroke-claim cq-uppercase v-if="routeName != 'ActiveStudies'"></cq-lookup>
 						<cq-reports-lookup cq-keystroke-claim cq-uppercase v-if="routeName == 'ActiveStudies'"></cq-reports-lookup>
 					</cq-menu>
 					<cq-menu>
 						<div class='symbol-up'></div>
-					</cq-menu>
+					</cq-menu> -->
 					<cq-menu class="ciq-indicators-search">
 						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
 					</cq-menu>
@@ -296,7 +296,7 @@
 						<!-- <cq-chartcontrol-group class="full-screen-show" cq-marker=""></cq-chartcontrol-group> -->
 						<!-- <cq-sentiment-lookup></cq-sentiment-lookup> -->
 
-						<cq-comparison-lookup></cq-comparison-lookup>
+						<!-- <cq-comparison-lookup></cq-comparison-lookup> -->
 
 						<!-- <cq-comparison-favorite></cq-comparison-favorite> -->
 
