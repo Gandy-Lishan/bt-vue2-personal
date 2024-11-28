@@ -1066,5 +1066,17 @@
     {
         "symbol": "IPAY",
         "name": "Amplify Digital Payments ETF (IPAY)"
+    },
+    {
+        "symbol": "MDY",
+        "name": "SPDR S&P MIDCAP 400 ETF Trust (MDY)"
+    },
+    {
+        "symbol": "IJH",
+        "name": "iShares Core S&P Mid-Cap ETF (IJH)"
+    },
+    {
+        "symbol": "IWR",
+        "name": "iShares Russell Mid-Cap ETF (IWR)"
     }
 ]
