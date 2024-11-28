@@ -492,7 +492,7 @@ export default {
   width: 20%;
 }
 .CPM-list-container{
-  padding: 20px 20px 20px 0px;
+  padding: 20px 20px 20px 20px;
 }
 .showDate {
   margin: 5px 0;
