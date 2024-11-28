@@ -31368,5 +31368,35 @@
         "chart_name": "SPDR S&P MIDCAP 400 ETF Trust RelTrend Score",
         "url": "MDY_reltrend",
         "updated": "Daily"
+    },
+            {
+        "chart_name": "IJH Fund Flow",
+        "url": "etf_ijh_flow",
+        "updated": "Daily"
+    },
+        {
+        "chart_name": "IWR Fund Flow",
+        "url": "etf_iwr_flow",
+        "updated": "Daily"
+    },
+        {
+        "chart_name": "MDY Fund Flow",
+        "url": "etf_mdy_flow",
+        "updated": "Daily"
+    },
+        {
+        "chart_name": "IJH Optix",
+        "url": "etf_ijh",
+        "updated": "Daily"
+    },
+        {
+        "chart_name": "IWR Optix",
+        "url": "etf_iwr",
+        "updated": "Daily"
+    },
+        {
+        "chart_name": "MDY Optix",
+        "url": "etf_mdy",
+        "updated": "Daily"
     }
 ]
