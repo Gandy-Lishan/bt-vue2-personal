@@ -216,15 +216,14 @@ export default {
         { value: 'Monthly', label: 'Monthly', disabled: false}
       ]
       const timeframe = this.data.timeframe
+      if(timeframe !== currentTimeframe) this.data.timeframe = currentTimeframe || 'Daily'
       if(currentTimeframe === 'Weekly') {
-        if(timeframe === 'Daily') this.data.timeframe = currentTimeframe
         timeframeOption.forEach(option => {
           if(option.value === 'Weekly' || option.value === 'Monthly') option.disabled = false
           else option.disabled = true
         })
       }
       else if(currentTimeframe === 'Monthly') {
-        if(timeframe === 'Daily') this.data.timeframe = currentTimeframe
         timeframeOption.forEach(option => {
           if(option.value === 'Monthly') option.disabled = false
           else option.disabled = true
