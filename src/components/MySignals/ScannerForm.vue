@@ -177,7 +177,7 @@ export default {
       indexList: 'getIndexList',
     }),
     frequency() {
-			return this.$store.state.form.exitFrequency
+			return this.$store.state.form.mySignalTimeframe
 		},
     // timeframeOption() {
     //   const currentTimeframe = this.$store.state.form.exitFrequency
