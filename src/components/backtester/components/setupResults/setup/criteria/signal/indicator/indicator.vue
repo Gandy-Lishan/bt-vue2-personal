@@ -751,7 +751,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
@@ -762,7 +762,7 @@ export default {
             priority: createStateFilter(queryString)(item),
           }))
           .filter(item => item.priority > 0)
-        cb(results.sort((a, b) => b.priority - a.priority))
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
         // await getAllMyIndicatorsList(1, (data) => {
         //   this.createdIndicatorOptions = data
         //   const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
@@ -780,7 +780,7 @@ export default {
             priority: createStateFilter(queryString)(item),
           }))
           .filter(item => item.priority > 0)
-        cb(results.sort((a, b) => b.priority - a.priority))
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
       }
     },
     changeIndicatorType(type) {
@@ -793,7 +793,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
     },
     indicatorRiskSearch(queryString, cb) {
       let riskIndicatorList = this.loadRiskList()
@@ -803,7 +803,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
     },
     resetIndicator() {
       this.si.sentimentIndicator = ''
