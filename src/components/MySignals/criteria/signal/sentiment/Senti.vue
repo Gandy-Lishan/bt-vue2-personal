@@ -477,8 +477,8 @@ export default {
           ? this.senti.value
           : this.senti.maValue
       let ma_type = (this.conditionRadio === 'Indicator Moving Average' || this.conditionRadio === 'Indicator Value ') ? this.ma_type : ''
-      this.description = `${sentiVal} ${ma_type !== '' ? ma_type : ''}${ma} ${period} ${condition} ${value}`
-      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} ${ma_type?`${ma_type}`:''}MA ${period}`
+      this.description = `${sentiVal} ${ma_type !== '' ? ma_type : ''}${ma}${period} ${condition} ${value}`
+      if(this.conditionRadio == 'Indicator Value ') this.description = `${sentiVal} ${condition} ${ma_type?`${ma_type}`:''}MA${period}`
       if (this.isROCLike) {
         let _newCondition = this.newConditions[this.senti.newCondition].label
         const _condition = this.conditions[this.senti.condition].label
@@ -527,16 +527,16 @@ export default {
         let _description1,_description2
         if([12,13].includes(this.senti.newCondition)){
           _description1 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_newCondition} ${_condition} ${_value}`
-          _description2 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_period} ${_newCondition} ${_condition} ${_maValue}`
+          _description2 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma}${_period} ${_newCondition} ${_condition} ${_maValue}`
         }else if(this.senti.newCondition == 14){
           _description1 = `Consecutive Number of Days with ${sentiVal} Above ${_conditionPeriod} ${_condition} ${_value}`
-          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_period} Above  ${_conditionPeriod} ${_condition} ${_maValue}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma}${_period} Above  ${_conditionPeriod} ${_condition} ${_maValue}`
         }else if(this.senti.newCondition == 15){
           _description1 = `Consecutive Number of Days with ${sentiVal} Below ${_conditionPeriod} ${_condition} ${_value}`
-          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_period} Below  ${_conditionPeriod} ${_condition} ${_maValue}`
+          _description2 = `Consecutive Number of Days with ${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma}${_period} Below  ${_conditionPeriod} ${_condition} ${_maValue}`
         }else{
           _description1 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
-          _description2 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma} ${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
+          _description2 = `${sentiVal} ${ma_type ? `${ma_type}` : ''}${ma}${_period} ${_newCondition}${_conditionPeriod} ${_condition} ${_maValue}`
         }
 
         if(this.conditionRadio === 'Indicator Value') {this.description = _description1}
