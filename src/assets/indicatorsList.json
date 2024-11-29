@@ -31398,5 +31398,70 @@
         "chart_name": "MDY Optix",
         "url": "etf_mdy",
         "updated": "Daily"
+    },
+     {
+        "chart_name": "FT SkyBridge Crypto ETF Trust Trend Score",
+        "url": "CRPT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FT SkyBridge Crypto ETF Trust RelTrend Score",
+        "url": "CRPT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FT SkyBridge Crypto ETF Trust Trend and RelTrend Score",
+        "url": "CRPT_trend_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Expanded Tech Sector ETF Trend Score",
+        "url": "IGM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Expanded Tech Sector ETF RelTrend Score",
+        "url": "IGM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares Expanded Tech Sector ETF Trend and RelTrend Score",
+        "url": "IGM_trend_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRPT Optix",
+        "url": "etf_crpt",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRPT Fund Flow",
+        "url": "etf_crpt_flow",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRPT Outstanding Shares",
+        "url": "etf_crpt_shares",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IGM Optix",
+        "url": "etf_igm",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IGM Fund Flow",
+        "url": "etf_igm_flow",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IGM Seasonality",
+        "url": "seasonality_igm",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IGM Outstanding Shares",
+        "url": "etf_igm_shares",
+        "updated": "Daily"
     }
 ]
