@@ -1,6 +1,9 @@
 <template>
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
+      <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+      </el-input>
       <el-popconfirm
         confirm-button-text="Continue"
         cancel-button-text="Cancel"
@@ -11,12 +14,9 @@
         title="Re-running all signals will update the last signal dates to the most recent.This process might take a while for larger lists. Confirm to continue."
         >
         <template #reference>
-          <el-button type="warning" plain size="small" :loading="btnLoading">Find All Last Signal</el-button>
+          <el-button type="warning" plain :loading="btnLoading" size="small">Find All Last Signal</el-button>
         </template>
       </el-popconfirm>
-      <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
-      </el-input>
     </div>
     <el-table
 			ref="Table"
@@ -416,9 +416,13 @@ export default {
 					const res = await editMySignalForm(prepareData, data.url)
           console.log('res', res)
           const code = res.data.code
+          const _data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
+          const last_signal_date = _data.lastdate //2099-12-31
           if(code == 211 || code == 213) {
             await this.$emit('refreshBTList')
-            this.popUpMsgBox('Signals re-run successfully. Last signal dates are now up to date')
+            let msg = 'Signals re-run successfully. Last signal dates are now up to date'
+            if(last_signal_date === '2099-12-31') msg = 'Signal re-run successful. No last signal date found. Adjust trigger conditions.'
+            this.popUpMsgBox(msg)
           }else {
             this.popUpMsgBox('Failed to re-run signals')
             
@@ -514,5 +518,7 @@ export default {
 /deep/ .el-button--mini.is-circle {
   margin: 0 2px;
 }
-
+/deep/ .el-input--suffix .el-input__inner {
+  margin-left: 0px
+}
 </style>
