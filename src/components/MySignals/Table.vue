@@ -230,12 +230,12 @@ export default {
     }
   },
   methods: {
-    async getDataList(tab) {
+    async getDataList(tab, doNotResetPage = false) {
       // A request that requires writing two lists
       // if(this.currentPageTab === 'MySignal') {
       debugger
 				this.loading = true
-        if(this.currentPage !== 1) this.currentPage = 1
+        if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
         let res = await getMySignalsList(`/dev/mysignal_app/get_mysignal_records${tab === 'Sample' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
@@ -270,6 +270,8 @@ export default {
 					this.tableData = results
           this.filterData = this.tableData
           this.total = this.filterData.length
+          const totalPages = Math.ceil(this.total / this.pageSize)
+          if(this.currentPage > totalPages && doNotResetPage) this.currentPage = totalPages
           this.loading = false
         // }
       }
@@ -463,7 +465,7 @@ export default {
 		},
     async deleteSignals(url) {
 			await deleteMySignal(url)
-			await this.getDataList(null)
+			await this.getDataList(null, true)
 			this.popUpMsgBox('Successfully deleted')
     },
     async runAllMySignals() {
