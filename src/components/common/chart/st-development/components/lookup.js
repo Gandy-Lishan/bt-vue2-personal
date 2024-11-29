@@ -1,7 +1,14 @@
 import {
 	symbolCsvFileDelete,
 } from '@/service/service'
-import {decodeBase64} from '@/utils'
+import {decodeBase64,encodeBase64} from '@/utils'
+import {createStateFilter,getSymbolInfo} from '@/utils/globalFunc'
+
+const collator = new Intl.Collator('en');
+function SortArray(x, y){
+   return collator.compare(x.data.symbol, y.data.symbol);
+}
+
 let __js_webcomponents_lookup_ = (_exports) => {
 
     /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -133,6 +140,11 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 // Will hold references to filter tabs for keyboard navigation
                 this.filterElements = null;
                 this.params = {};
+
+                this.searchResults = [];    //搜索结果
+                this.currentPage = 1;
+                this.pageSize = 20;
+                this.hasMore = true;
             }
     
             /**
@@ -180,7 +192,279 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 var exchanges = this.getAttribute("cq-exchanges");
                 if (exchanges) this.params.driver.exchanges = exchanges.split(",");
                 
-                this.params.driver.acceptText(value, filter, null, closure);
+                // this.params.driver.acceptText(value, filter, null, closure);
+                this.filters_data(value, filter, null, closure)  
+            }
+
+            async filters_data(text,filter,params, closure){
+                var loader = document.querySelector(".loaderLookup");
+                if (loader) loader.show();  
+                if (filter == 'ALL'){
+                    var resultsIndexsList = [];
+                    const indexsList = CIQ.store.getters.getIndexList
+                    let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
+                    for (var i = 0; i < indexsList.length; i++) {
+                        var fields = indexsList[i]; 
+                        var item = {
+                            symbol: fields.symbol,
+                            name: fields.name,
+                            exchDisp: ""
+                        };
+                        concatList.push(item)
+                        resultsIndexsList.push({
+                            display: [item.symbol, item.name, item.exchDisp],
+                            data: item
+                        });
+                    }
+                    var resultsStocksList = [];
+                    const stocksList = CIQ.store.getters.getStockList
+                    for (var i = 0; i < stocksList.length; i++) {
+                        var fields = stocksList[i];
+                        var item = {
+                            symbol: fields.stock,
+                            name: fields.name,
+                            exchDisp: " "
+                        };
+                        concatList.push(item)
+                        resultsStocksList.push({
+                            display: [item.symbol, item.name, item.exchDisp],
+                            data: item
+                        });
+                    }
+            
+                    var resultsCustomSymbolList = [];
+                    const mySymbolList = CIQ.store.getters.getMySymbollist
+                    mySymbolList.forEach(element => {
+                        // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
+                        var item = {
+                            symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
+                            name: element.name,
+                            exchDisp: ""
+                        }
+                        concatList.push(item)
+                        resultsCustomSymbolList.push({
+                            display: [item.name, item.name, item.exchDisp],
+                            data: item
+                        });
+                    }); 
+            
+                    let res
+                    if(text.trim()){
+                        res = concatList.map(item => ({
+                            ...item,
+                            priority: createStateFilter(text)(item),
+                          }))
+                          .filter(item => item.priority > 0)
+                        this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
+                            /** displayName需要考慮到custom symbol url */
+                            const {name,url,type} = getSymbolInfo(item.symbol)
+                            let displayName = url
+                            if(type == 'custom') displayName = name
+                            /** END */
+                            return {
+                                display: [displayName, item.name, item.exchDisp],
+                                data: item
+                            }
+                        })
+                    }else{
+                        resultsIndexsList.sort(SortArray)
+                        resultsStocksList.sort(SortArray)
+                        res = resultsIndexsList.concat(resultsStocksList).concat(resultsCustomSymbolList)
+                        this.searchResults = res;    
+                    } 
+                }
+                else if (filter == 'INDEXES'){
+                        var results = [];
+                        const indexsList = CIQ.store.getters.getIndexList
+                        let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
+                        for (var i = 0; i < indexsList.length; i++) {
+                            var fields = indexsList[i];
+                            var item = {
+                                symbol: fields.symbol,
+                                name: fields.name,
+                                exchDisp: ""
+                            };
+                            concatList.push(item)
+                        }
+                        let res
+                        if(text.trim()){
+                            res = concatList.map(item => ({
+                                ...item,
+                                priority: createStateFilter(text)(item),
+                              }))
+                              .filter(item => item.priority > 0)
+                            this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
+                                return {
+                                    display: [item.symbol, item.name, item.exchDisp],
+                                    data: item
+                                }
+                            })
+                        }else{
+                            res = concatList.map(item=>{
+                                return {
+                                    display: [item.symbol, item.name, item.exchDisp],
+                                    data: item
+                                }
+                            })
+                            this.searchResults = res.sort(SortArray) 
+                        }      
+                }else if (filter == 'STOCKS') {
+                    var results = [];
+                    const stocksList = CIQ.store.getters.getStockList
+                    let concatList = [] // 用於新的搜索過濾方法，無視stock或者index類別
+                    for (var i = 0; i < stocksList.length; i++) {
+                        var fields = stocksList[i];
+                        var item = {
+                            symbol: fields.stock,
+                            name: fields.name,
+                            exchDisp: " "
+                        };
+                        concatList.push(item)
+                    }
+                    let res
+                    if(text.trim()){
+                        res = concatList.map(item => ({
+                            ...item,
+                            priority: createStateFilter(text)(item),
+                          }))
+                          .filter(item => item.priority > 0)
+                        this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
+                            return {
+                                display: [item.symbol, item.name, item.exchDisp],
+                                data: item
+                            }
+                        })
+                    }else{
+                        res = concatList.map(item=>{
+                            return {
+                                display: [item.symbol, item.name, item.exchDisp],
+                                data: item
+                            }
+                        })
+                        this.searchResults = res.sort(SortArray)
+                    } 
+                } else if (filter == 'MY FAVORITES'){
+                    var results = []
+                    await CIQ.store.dispatch('chart/get_favorite')
+                    var resu = CIQ.store.getters.getFavoriteSymbolList
+                        try {
+                            var listStock = CIQ.store.getters.getStockList.map(_obj=>{
+                                    var newObj = {}
+                                    newObj['name'] = _obj.name
+                                    newObj['url'] = _obj.stock
+                                    return newObj
+                                })
+            
+            
+                            var listIndex = CIQ.store.getters.getIndexList.map(_obj=>{
+                                var newObj = {}
+                                newObj['name'] = _obj.name
+                                newObj['url'] = _obj.symbol
+                                return newObj
+                            })
+            
+                            var list = [...listStock,...listIndex]
+                            
+                            resu.forEach(element => {
+                                const matchedItem = list.find(item=>item.url == element)
+                                if(!matchedItem) return;
+                                var item = {
+                                    symbol: element,
+                                    name: matchedItem.name,
+                                    exchDisp: ""
+                                }
+                                if (
+                                    item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                                    item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                                ){
+                                    results.push({
+                                        display: [item.symbol, item.name, item.exchDisp],
+                                        data: item
+                                    });
+                                }         
+                            }); 
+                           // console.log(results)
+                        } catch (e) {console.error(e)}
+                        results.sort(SortArray)    
+                        this.searchResults = results
+                } else if (filter == 'CUSTOM SYMBOL') {
+                    var results = []
+                    const mySymbolList = CIQ.store.getters.getMySymbollist
+                    mySymbolList.forEach(element => {
+                        // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
+                        var item = {
+                            symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
+                            name: element.name,
+                            exchDisp: ""
+                        }
+                        
+                        if (
+                            item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                            item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                        ){
+                            results.push({
+                                display: [item.name, item.name, item.exchDisp],
+                                data: item
+                            });
+                        }
+                    }); 
+                    this.searchResults = results
+                } else if (filter == 'SYMBOLS') {
+                    var results = []
+                    const symbollistForecast = CIQ.store.getters.getSymbollistForecast
+                    let stocksList = CIQ.store.getters.getStockList
+                    let indexsList = CIQ.store.getters.getIndexList
+                    symbollistForecast.forEach(element => {
+                        const stocks = stocksList.find(i=>i.stock.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+                        const indexs = indexsList.find(i=>i.symbol.toUpperCase() == element.market.toUpperCase() || i.name.toUpperCase() == element.market.toUpperCase())
+                        let res = stocks || indexs
+                        if(res){
+                            var item = {
+                                symbol: res.stock || res.symbol,
+                                name: res.name,
+                                exchDisp: "",
+                                market: element.market,
+                            }
+                            
+                            if (
+                                item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
+                                item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
+                            ){
+                                results.push({
+                                    display: [item.symbol, item.name, item.exchDisp],
+                                    data: item
+                                });
+                            }
+                        }else console.log('symbol does not exist in list',element.market)
+            
+                    }); 
+                    this.searchResults = results
+                } 
+                if (loader) loader.hide();  
+
+                this.currentPage = 1;
+                this.hasMore = true;
+                this.loadMore(closure)
+            };
+            loadMore(closure) {
+                // let scrollableElement = this.resultList[0]
+                // const currentScrollTop = scrollableElement.scrollTop;
+                // const currentScrollHeight = scrollableElement.scrollHeight;
+                // 根据页码从过滤后的结果中分页
+                console.log('paginated results',this.currentPage, this.searchResults.length)
+                const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+                if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+                // 将分页后的数据传递给 closure
+                closure(paginatedResults);
+
+                    // // 恢复滚动位置
+                    // setTimeout(() => {
+                    //     // 等待 DOM 
+                    //     debugger
+                    //     if (scrollableElement.scrollHeight !== currentScrollHeight) {
+                    //         scrollableElement.scrollTop = currentScrollTop + (scrollableElement.scrollHeight - currentScrollHeight);
+                    //     }
+                    // }, 0); // 延迟为 0，意味着在当前执行栈完成后执行
             }
             attachDriver(driver) {
                 this.driver = driver;
@@ -293,8 +577,47 @@ let __js_webcomponents_lookup_ = (_exports) => {
                     this.addClaim(this);
                 }
                 self.currentFilter = "ALL" 
+
+                this.resultList[0].addEventListener('scroll', (event)=>self.scrollHandler(event));
             }
-    
+
+            // 监听滚动事件以触发加载更多数据
+            scrollHandler(event) {
+                var self = this;
+                var restoredExchanges = this.params.driver.exchanges;
+                function closure(results) {
+                    self.params.driver.exchanges = restoredExchanges;
+                    self.results(results);
+
+                    let stClose = self.getElementsByClassName("st-close")
+                    if(self.currentFilter == 'CUSTOM SYMBOL'){
+                        for(let el = 0;el<stClose.length;el++){     
+                            const _result = results
+                            const _el = el
+                            CIQ.UI.stxtap(stClose[el],async ()=>{
+                                try {
+                                    let url = decodeBase64(_result[_el].data.symbol.split('||')[1])
+                                    await symbolCsvFileDelete(url)
+
+                                    await CIQ.store.dispatch('chart/get_mysymbolist')
+                                    console.log('删除成功')
+                                } catch (error) {
+                                    console.log('删除失败', error)
+                                }
+                            });       
+                        }               
+                    }
+                }
+                const scrollableElement = event.target;
+
+                // 判断是否接近底部，加载下一页数据
+                if (scrollableElement.scrollHeight - scrollableElement.scrollTop - 10 < scrollableElement.clientHeight) {
+                    // 到达底部，加载下一页数据
+                    if (!this.hasMore) return;
+                    self.currentPage++;
+                    self.loadMore(closure);
+                }
+            };
             isActive() {
                 return this.input[0].value !== "";
             }

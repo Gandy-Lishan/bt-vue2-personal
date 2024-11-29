@@ -507,11 +507,11 @@ let __js_webcomponents_reports_lookup_ = (_exports) => {
 
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
-                for (var i = 0; i < arr.length; i++) {
-                    var item = arr[i];
-                    var nodeText = "";
+                for (let i = 0; i < arr.length; i++) {
+                    let item = arr[i];
+                    let nodeText = "";
                     //console.log(item.display)
-                    for (var j = 0; j < item.display.length; j++) {
+                    for (let j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
 

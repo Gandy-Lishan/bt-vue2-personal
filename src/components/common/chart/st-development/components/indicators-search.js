@@ -144,10 +144,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.params = {};
                 this.currentCategory = 'all'
 
-                // store btvFavIndi and myIndicator list while envoking the search bar
-                // this.btvFavIndi = []
-                // this.myIndicator = []
-
                 this.searchResults = [];    //搜索结果
                 this.currentPage = 1;
                 this.pageSize = 20;
@@ -823,15 +819,14 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         self.input[0].value = "";
                     };
                 }
-                let filters = this.querySelector("cq-indicators-lookup-filters");
-                let allFilters = filters.querySelectorAll("cq-indicators-filter");
-                let currentFilter;
-                allFilters.forEach(function (f) {     
-                     if(f.classList.contains("true")){
-                        currentFilter = f.innerHTML;
-                    }
-                });
-
+                // let filters = this.querySelector("cq-indicators-lookup-filters");
+                // let allFilters = filters.querySelectorAll("cq-indicators-filter");
+                // let currentFilter;
+                // allFilters.forEach(function (f) {     
+                //      if(f.classList.contains("true")){
+                //         currentFilter = f.innerHTML;
+                //     }
+                // });
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
                 for (let i = 0; i < arr.length; i++) {
@@ -841,7 +836,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                     for (let j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
-                    if(currentFilter == 'MY FAVORITES'){
+                    if(this.currentFilter == 'MY FAVORITES'){
                         if(item.display[2]=='Backtest Engine v2.0'){
                             nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
                         }else{

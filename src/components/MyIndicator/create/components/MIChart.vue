@@ -4,11 +4,11 @@
 				<router-link to="/myindicator"><i class="el-icon-arrow-left"></i><span>Back to My Indicators List</span></router-link>
 			</div>
 			<chart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">
-				<!-- <LoadingOverlayChart
+				<LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
 						:progressText="chartLoadingSetting.progressText"
 					>
-				</LoadingOverlayChart>	 -->
+				</LoadingOverlayChart>	
 			</chart>
 		</div>
 </template>
@@ -67,22 +67,22 @@ export default {
 			console.log('chart_data',this.chart_data)
 		},
 		hideComponents() {
-			//let search = document.querySelector(".ciq-search")
+			// let search = document.querySelector(".ciq-search")
 			let indicatorSearch = document.querySelector(".ciq-indicators-search")
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
-			//let footer = document.querySelector('.ciq-footer')
+			// let footer = document.querySelector('.ciq-footer')
 
-			//search.style.visibility = 'hidden'
-			//indicatorSearch.style.visibility = 'hidden'
+			// search.style.visibility = 'hidden'
+			indicatorSearch.style.visibility = 'hidden'
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
 			// footer.style.display = 'none'
 			
 			// hide dual symbol
-			//document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
+			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 		}
 	}
 }
