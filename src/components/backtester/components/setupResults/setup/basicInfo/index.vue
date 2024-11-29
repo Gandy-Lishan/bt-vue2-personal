@@ -1203,10 +1203,10 @@ export default {
       this.timValidErrMsg = createPositiveIntegerValidate(value, 0)
       return this.timValidErrMsg
     },
-    validateExclude(value) {
+    validateExclude: throttle(function (value) {
       this.excludeOOErrMsg = createPositiveIntegerValidate(value, 0)
       return this.excludeOOErrMsg
-    },
+    }, 500),
     generateBTName() {
       const date = new Date()
       const year = date.getFullYear();

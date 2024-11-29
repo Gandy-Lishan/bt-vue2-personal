@@ -90,6 +90,10 @@ export default {
       deep: true, // 启用深度监听，监视对象属性的变化
     },
   },
+  beforeDestroy() {
+    console.log('beforeDestroy lishan')
+    this.$refs['performanceChild'] = null
+	},
   methods: {
     setResultsLoadingSetting(isResultsLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_RESULTS_LOADING', {

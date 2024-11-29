@@ -537,7 +537,25 @@ export default {
 		}
 	},
 	beforeDestroy() {
-    eventBus.$off('userFileSelect', this.userFileSelect);
+   eventBus.$off('userFileSelect', this.userFileSelect);
+			// Reset data for all subcomponents
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				if (this.indicatorRadioArr[i]) {
+					this.$refs.indiChild[i] = null
+					this.$refs.sentiChild[i] = null
+					this.$refs.symbolChild[i] = null
+					this.$refs.maChild[i] = null
+					this.$refs.macdChild[i] = null
+					this.$refs.bollBandsLikeChild[i] = null
+					this.$refs.EFTLikeChild[i] = null
+					this.$refs.stochasticsLikeChild[i] = null
+					this.$refs.ADXLikeChild[i] = null
+					this.$refs.ERILikeChild[i] = null
+					this.$refs.aligatorLikeChild[i] = null
+					this.$refs.LRFLikeChild[i] = null
+					this.$refs.trailingStopLikeChild[i] = null
+				}
+			}
 	},
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
