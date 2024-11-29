@@ -212,7 +212,7 @@ delay_bars: [String, Number],
 					break;
 			}
 			let condition = this.conditions[this.tech.condition].label
-			this.description = `${techVal} ${comparison} ${condition} ${value}`
+			this.description = `${comparison} ${condition} ${techVal} ${value}`
 			let desObj = {}
 			desObj.criteria = this.criteria
 					if(this.relation != 1) {

@@ -91,7 +91,6 @@ export default {
     },
   },
   beforeDestroy() {
-    console.log('beforeDestroy lishan')
     this.$refs['performanceChild'] = null
 	},
   methods: {

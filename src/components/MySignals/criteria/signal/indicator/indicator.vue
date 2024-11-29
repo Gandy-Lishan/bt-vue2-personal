@@ -892,6 +892,7 @@ export default {
             if(this.createdIndicatorOptions.length === 0) options = await getAllMyIndicatorsList()
             const ele = options.find(item => item.url === indicator)
             this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele.name || '';
+            this.$emit('getIndicatorVal', {value: ele.name || '', index: this.panelIndex})
             console.log('this.createdIndicatorOptions', options)
             this.$emit('getIndicatorUrl', { index, url: indicator });
           };
