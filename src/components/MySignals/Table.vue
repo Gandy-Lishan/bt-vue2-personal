@@ -4,7 +4,7 @@
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
-      <el-popconfirm
+      <!-- <el-popconfirm
         confirm-button-text="Continue"
         cancel-button-text="Cancel"
         icon="el-icon-info"
@@ -16,7 +16,7 @@
         <template #reference>
           <el-button type="warning" plain :loading="btnLoading" size="small">Find All Last Signal</el-button>
         </template>
-      </el-popconfirm>
+      </el-popconfirm> -->
     </div>
     <el-table
 			ref="Table"
@@ -71,7 +71,7 @@
         <el-table-column align="center" width="130px">
               <template slot-scope="scope">
                 <el-row>
-                  <el-tooltip
+                  <!-- <el-tooltip
                     class="item"
                     effect="dark"
                     content="rerun signal"
@@ -87,7 +87,7 @@
                       v-if="currentPageTab === 'MySignal'"
                       @click="rerunSignal(scope.row)"
                     ></el-button>
-                  </el-tooltip>
+                  </el-tooltip> -->
                   <el-tooltip
                     class="item"
                     effect="dark"

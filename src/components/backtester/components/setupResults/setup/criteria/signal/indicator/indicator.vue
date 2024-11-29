@@ -56,7 +56,7 @@
 							clearable
 							v-model="si.sentimentIndicator"
 							:fetch-suggestions="indicatorSentimentSearch"
-							placeholder="Input the sentiment indicator"
+							placeholder="Search for the sentiment indicator"
 							@select="handleSentimentSelect"
               @clear="clearSentimentSelect"
 							highlight-first-item
@@ -93,7 +93,7 @@
 							prefix-icon="el-icon-search"
 							v-model="si.technicalIndicator"
 							:fetch-suggestions="indicatorTechnicalSearch"
-							placeholder="Input the technical indicator"
+							placeholder="Search for the technical indicator"
 							@select="handleTechnicalSelect"
               @clear="clearTechnicalSelect"
               :disabled="!isBTChartReady"
@@ -150,7 +150,7 @@
                 class="inline-input"
                 clearable
                 v-model="si.userIndicator"
-                placeholder="Select Users' Own Indicator File."
+                placeholder="Search for my indicator"
                 :fetch-suggestions="indicatorUsersSearch"
                 @select="handleUsersOwnIndicatorSelect"
               :disabled="!isBTChartReady"
@@ -751,7 +751,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
@@ -762,7 +762,7 @@ export default {
             priority: createStateFilter(queryString)(item),
           }))
           .filter(item => item.priority > 0)
-        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
         // await getAllMyIndicatorsList(1, (data) => {
         //   this.createdIndicatorOptions = data
         //   const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
@@ -780,7 +780,7 @@ export default {
             priority: createStateFilter(queryString)(item),
           }))
           .filter(item => item.priority > 0)
-        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
       }
     },
     changeIndicatorType(type) {
@@ -793,7 +793,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     indicatorRiskSearch(queryString, cb) {
       let riskIndicatorList = this.loadRiskList()
@@ -803,7 +803,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 20))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     resetIndicator() {
       this.si.sentimentIndicator = ''

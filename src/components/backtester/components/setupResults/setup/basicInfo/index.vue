@@ -77,7 +77,7 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options.slice(0, 20)"
+                          v-for="item in options.slice(0, 50)"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
@@ -193,7 +193,7 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options.slice(0, 20)"
+                          v-for="item in options.slice(0, 50)"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
