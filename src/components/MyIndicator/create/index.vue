@@ -5,11 +5,11 @@
     </div>
     <div class="form">
       <MIForm :formConfig="formConfig" :formData="formData" ref="MIForm"></MIForm>
-      <!-- <div v-show="isCreateLoading">
+      <div v-show="isCreateLoading">
         <div class="loading">
           <span class="progress-text"><i class="el-icon-loading"></i>{{progressText}}</span>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 

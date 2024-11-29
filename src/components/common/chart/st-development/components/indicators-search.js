@@ -144,9 +144,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.params = {};
                 this.currentCategory = 'all'
 
-                // store btvFavIndi and myIndicator list while envoking the search bar
-                // this.btvFavIndi = []
-                // this.myIndicator = []
+                this.searchResults = [];    //搜索结果
+                this.currentPage = 1;
+                this.pageSize = 20;
+                this.hasMore = true;
             }
     
             /**
@@ -156,15 +157,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
              * @memberof WebComponents.cq-lookup#
              * @since 3.0.0
              */
-            /* 当用户点击button，dropdown下来菜单会来回切换隐藏和现实*/
-            myFunction() {
-                document.getElementById("myDropdown").classList.toggle("show");
-            }
-            /* 当用户选择indicator类别，进行搜索筛选*/
-            selectCategory(e){
-                this.currentCategory = e.node.innerHTML
-                document.getElementById("dropbtn").innerHTML = this.currentCategory
-            }
             acceptText(value, filter) {
                 var self = this;
                 if (!this.params.driver) {
@@ -178,17 +170,16 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 var restoredExchanges = this.params.driver.exchanges;
                 function closure(results) {
                     self.params.driver.exchanges = restoredExchanges;
-                    var results = results
                     self.results(results);
                     
-                    var stClose = self.getElementsByClassName("st-close")
+                    let stClose = self.getElementsByClassName("st-close")
                     if(filter == 'MY FAVORITES'){
-                        for(var el = 0;el<stClose.length;el++){     
-                            var removeFavorite = function(data){
-                                var url = data
+                        for(let el = 0;el<stClose.length;el++){     
+                            let removeFavorite = function(data){
+                                let url = data
                                 const favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
                                 CIQ.UI.stxtap(stClose[el],async ()=>{
-                                    for(var item in favoriteIndicatorList){
+                                    for(let item in favoriteIndicatorList){
                                         if(favoriteIndicatorList[item].url == url){
                                             favoriteIndicatorList.splice(item,1)
                                             await CIQ.store.dispatch('chart/update_favorite', {
@@ -209,11 +200,10 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
             }
 
             async filters_data(value,filter,params, closure){
-                console.log('filters_data')
-
                 CIQ.symbols = []
+
                 if (filter == "ALL"){
-                    var loader = document.querySelector(".loaderSearch");
+                    let loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
                     const list = CIQ.store.getters.getIndicatorsList
                     let resu = list.map(item=>{return {
@@ -233,7 +223,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             return resu.find(item => item.url === url);
                         });
     
-                            var results = []
+                            let results = []
                             const myIndicatorList = CIQ.store.getters.getMyIndicatorList
                             const milist = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
 
@@ -247,7 +237,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                         updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
                                     }
                                 }catch(err){return null}
-                           
+                            
                                 if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
                                     return null;
                                 }
@@ -263,7 +253,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 if (CIQ.symbols.indexOf(item.name) !==-1){
                                     return null;
                                 }
-          
+            
                                 results.push({
                                     display: [item.name, item.updated],
                                     data: item,
@@ -273,13 +263,15 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 return null;
                             }).filter(Boolean); // 过滤掉null值
 
-                            closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
+                            // 保存过滤后的数据（只包含优先级大于0的项）
+                            this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
 
-                        if (loader) loader.hide(); 
+                            // 隐藏加载指示器
+                            if (loader) loader.style.display = 'none';
                 }else if (filter == "MY FAVORITES"){  
-                    var loader = document.querySelector(".loaderSearch");
+                    let loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
-                    var resu = []
+                    let resu = []
                     
                         // btv2 fav
                         resu = CIQ.store.getters.getFavoriteIndicatorList.map(item => ({...item, source:'Backtest Engine v2.0'}))
@@ -295,7 +287,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                             return resu.find(item => item.url === url);
                         });
                         
-                            var results = []
+                            let results = []
                             const myIndicatorList = CIQ.store.getters.getMyIndicatorList     // custom indicator
                             const list = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe, source:'Custom Indicator'}))
                             resu.push(...list)
@@ -320,19 +312,19 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 return null
                             }).filter(Boolean); // 过滤掉null值
 
-                           closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
+                            this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
 
-                           if (loader) loader.hide(); 
+                            if (loader) loader.hide(); 
                 }else if (filter == "MOST POPULAR"){
-                    var loader = document.querySelector(".loaderSearch");
+                    let loader = document.querySelector(".loaderSearch");
                     if (loader) loader.hide();  
 
-                    var results = []
-                    for(var i=0;i<CIQ.store.getters.getIndicatorsList.length;i++){
-                        var fields = CIQ.store.getters.getIndicatorsList[i]
+                    let results = []
+                    for(let i=0;i<CIQ.store.getters.getIndicatorsList.length;i++){
+                        let fields = CIQ.store.getters.getIndicatorsList[i]
                         
                         try{
-                            var item = {
+                            let item = {
                                 name: fields.chart_name,
                                 url: fields.url,
                                 updated: fields.updated,
@@ -367,8 +359,32 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         });
                     }
 
-                    closure(results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority));
-                }             
+                    this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
+                } 
+
+                this.currentPage = 1;
+                this.hasMore = true;
+                this.loadMore(closure)
+            }
+            loadMore(closure) {
+                // let scrollableElement = this.resultList[0]
+                // const currentScrollTop = scrollableElement.scrollTop;
+                // const currentScrollHeight = scrollableElement.scrollHeight;
+                // 根据页码从过滤后的结果中分页
+                console.log('paginated results',this.currentPage, this.searchResults.length)
+                const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+                if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+                // 将分页后的数据传递给 closure
+                closure(paginatedResults);
+
+                    // // 恢复滚动位置
+                    // setTimeout(() => {
+                    //     // 等待 DOM 
+                    //     debugger
+                    //     if (scrollableElement.scrollHeight !== currentScrollHeight) {
+                    //         scrollableElement.scrollTop = currentScrollTop + (scrollableElement.scrollHeight - currentScrollHeight);
+                    //     }
+                    // }, 0); // 延迟为 0，意味着在当前执行栈完成后执行
             }
             attachDriver(driver) {
                 this.driver = driver;
@@ -398,21 +414,6 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
             }
                 
             initialize() {
-                // Close the dropdown menu if the user clicks outside of it
-                window.onclick = function(event) {
-                if (!event.target.matches('.dropbtn')) {
-
-                    var dropdowns = document.getElementsByClassName("dropdown-content");
-                    var i;
-                    for (i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                    }
-                }
-                }
-
                 this.addDefaultMarkup();
                 var node = this.node;
                 this.resultList = node.find("cq-indicators-scroll");
@@ -493,8 +494,50 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 }    
                 
                 self.currentFilter = "ALL"
+
+                this.resultList[0].addEventListener('scroll', (event)=>self.scrollHandler(event));
             }
     
+            // 监听滚动事件以触发加载更多数据
+            scrollHandler(event) {
+                var self = this;
+                var restoredExchanges = this.params.driver.exchanges;
+                function closure(results) {
+                    self.params.driver.exchanges = restoredExchanges;
+                    self.results(results);
+                    
+                    let stClose = self.getElementsByClassName("st-close")
+                    if(self.currentFilter == 'MY FAVORITES'){
+                        for(let el = 0;el<stClose.length;el++){     
+                            let removeFavorite = function(data){
+                                let url = data
+                                const favoriteIndicatorList = CIQ.store.getters.getFavoriteIndicatorList
+                                CIQ.UI.stxtap(stClose[el],async ()=>{
+                                    for(let item in favoriteIndicatorList){
+                                        if(favoriteIndicatorList[item].url == url){
+                                            favoriteIndicatorList.splice(item,1)
+                                            await CIQ.store.dispatch('chart/update_favorite', {
+                                                indicator: JSON.stringify(favoriteIndicatorList),
+                                                symbol: JSON.stringify(CIQ.store.getters.getFavoriteSymbolList)
+                                            })
+                                        }
+                                    }
+                                })     
+                            }
+                            removeFavorite(results[el].data.url)
+                        }               
+                    }
+                }
+                const scrollableElement = event.target;
+
+                // 判断是否接近底部，加载下一页数据
+                if (scrollableElement.scrollHeight - scrollableElement.scrollTop - 10 < scrollableElement.clientHeight) {
+                    // 到达底部，加载下一页数据
+                    if (!this.hasMore) return;
+                    self.currentPage++;
+                    self.loadMore(closure);
+                }
+            };
             isActive() {
                 return this.input[0].value !== "";
             }
@@ -591,15 +634,15 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
 
                             }else{
                                 CIQ.getFavorite().then(data=>{
-                                    var favoriteSymbolList = []
+                                    let favoriteSymbolList = []
                                     try{
                                         favoriteSymbolList = JSON.parse(data.favorite_indicator)
                                     }catch{}
-                                    var resu = favoriteSymbolList
+                                    let resu = favoriteSymbolList
                                     try {
                                         resu.forEach(element => {
                                             if(scrollable[0].firstChild.firstChild.innerHTML == element.name){
-                                                var item = {
+                                                let item = {
                                                     symbol: element.url,
                                                     name: element.name,
                                                     exchDisp: ""
@@ -776,25 +819,24 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         self.input[0].value = "";
                     };
                 }
-                var filters = this.querySelector("cq-indicators-lookup-filters");
-                var allFilters = filters.querySelectorAll("cq-indicators-filter");
-                var currentFilter;
-                allFilters.forEach(function (f) {     
-                     if(f.classList.contains("true")){
-                        currentFilter = f.innerHTML;
-                    }
-                });
-
+                // let filters = this.querySelector("cq-indicators-lookup-filters");
+                // let allFilters = filters.querySelectorAll("cq-indicators-filter");
+                // let currentFilter;
+                // allFilters.forEach(function (f) {     
+                //      if(f.classList.contains("true")){
+                //         currentFilter = f.innerHTML;
+                //     }
+                // });
                 this.resultList = CIQ.UI.$(this.resultList);
                 this.resultList.empty();
-                for (var i = 0; i < arr.length; i++) {
-                    var item = arr[i];
-                    var nodeText = "";
+                for (let i = 0; i < arr.length; i++) {
+                    let item = arr[i];
+                    let nodeText = "";
 
-                    for (var j = 0; j < item.display.length; j++) {
+                    for (let j = 0; j < item.display.length; j++) {
                         nodeText += "<SPAN>" + item.display[j] + "</SPAN>";
                     }
-                    if(currentFilter == 'MY FAVORITES'){
+                    if(this.currentFilter == 'MY FAVORITES'){
                         if(item.display[2]=='Backtest Engine v2.0'){
                             nodeText += "<div class='ciq-icon ciq-close st-close'></div>"
                         }else{
@@ -802,11 +844,11 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                         }
                     }
                     
-                    var node = document.createElement("cq-item");
+                    let node = document.createElement("cq-item");
                     node.innerHTML = nodeText;
                     this.resultList.append(node);
                     node.selectFC = closure(this, item.data);
-                    CIQ.UI.stxtap(node.querySelector("span"), node.selectFC);
+                    CIQ.UI.stxtap(node, node.selectFC);
                 }
                 
                 var scrollable = this.resultList;
@@ -895,12 +937,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.params.driver = driver;
             }
         }
-    //     <div class="dropdown">
-    //     <div stxtap="myFunction()" class="dropbtn" id="dropbtn">all</div>
-    //     <div id="myDropdown" class="dropdown-content">
-    //         <div stxtap="selectCategory()">all</div>
-    //     </div>
-    // </div>
+
         IndicatorsLookup.markup = `
             <cq-indicators-lookup-input cq-no-close>    
                 <input type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" name="symbol" placeholder="Select Sentiment Indicators">
