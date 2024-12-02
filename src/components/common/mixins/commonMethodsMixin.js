@@ -630,7 +630,7 @@ export const CommonMethodsMixin = {
 						fieldName = url
 					}
 					if(url && url.indexOf('HASH') != -1 && url.split(/HASH/)[0] == signals.indicator){
-						field = signals.indicator
+						field =signals.indicator
 						fieldName = url
 					}
 					if (
