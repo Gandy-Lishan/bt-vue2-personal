@@ -691,6 +691,7 @@ export default {
       if(!val) return
           // 预填充 btv2 按钮跳转过来携带的 symbol
           let symbol = sessionStorage.getItem('symbol')
+          if(!symbol) return
           symbol = symbol.replace(/"/g, '')
           this.$store.commit('form/getBacktestSymbol', symbol)
       // 预填充 btv2 按钮跳转过来携带的 indicator

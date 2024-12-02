@@ -1128,6 +1128,7 @@ export default {
         if(!val) return
         // 预填充 btv2 按钮跳转过来携带的 symbol
         let symbol = sessionStorage.getItem('symbol')
+        if(!symbol) return
         await this.remoteMethod(symbol)
         if(!this.options) return
         symbol = this.options[0]?.value

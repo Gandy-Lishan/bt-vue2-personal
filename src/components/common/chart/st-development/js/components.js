@@ -4389,7 +4389,7 @@ class InfoToggleDropdown extends CIQ.UI.ContextTag {
 		this.tooltip = this.querySelector("cq-tooltip");
 		this.toggleEl = this.querySelector("cq-toggle");
 		this.optionsMenu = this.querySelector("cq-menu-dropdown");
-		this.options = Array.from(this.optionsMenu.querySelectorAll("cq-item")); // ciao to NodeList
+		this.options = this.optionsMenu ? Array.from(this.optionsMenu.querySelectorAll("cq-item")) : []; // ciao to NodeList
 
 		let { config: { channels = {} } = {} } = context;
 		if (!channels.headsUp) channels.headsUp = "layout.headsUp";
