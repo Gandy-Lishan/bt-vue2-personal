@@ -184,7 +184,6 @@
 							:disabled="!(conditionRadio === 'Indicator Moving Average')"
 							v-model="senti.maValue"
 							placeholder="Input Value"
-							@input="change($event)"
 						></el-input>
 					</el-form-item>
 				</div>
@@ -528,9 +527,9 @@ export default {
       
       if(!limit) this.calculateNewConditions()
     },
-    change(e) {
-      this.$forceUpdate()
-    },
+    // change(e) {
+    //   this.$forceUpdate()
+    // },
     clearForm() {
       //Object.assign(this.$data, this.$options.data())
       this.$refs.sentiForm.resetFields()
