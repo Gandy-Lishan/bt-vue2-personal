@@ -77,7 +77,7 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options"
+                          v-for="item in options.slice(0, 50)"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
@@ -193,7 +193,7 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options"
+                          v-for="item in options.slice(0, 50)"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
@@ -1128,6 +1128,7 @@ export default {
         if(!val) return
         // 预填充 btv2 按钮跳转过来携带的 symbol
         let symbol = sessionStorage.getItem('symbol')
+        if(!symbol) return
         await this.remoteMethod(symbol)
         if(!this.options) return
         symbol = this.options[0]?.value
@@ -1203,10 +1204,10 @@ export default {
       this.timValidErrMsg = createPositiveIntegerValidate(value, 0)
       return this.timValidErrMsg
     },
-    validateExclude(value) {
+    validateExclude: throttle(function (value) {
       this.excludeOOErrMsg = createPositiveIntegerValidate(value, 0)
       return this.excludeOOErrMsg
-    },
+    }, 500),
     generateBTName() {
       const date = new Date()
       const year = date.getFullYear();

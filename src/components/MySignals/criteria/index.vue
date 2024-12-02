@@ -848,6 +848,12 @@ export default {
 				this.$store.commit(`chart/getCriteriaIndicatorsList`, {criteria: this.criteriaNum, list: [indicatorList[0], ...(new Array(4).fill(''))]})
 			}
 			if (val == 2 || val == 3) {
+					if(this.editableTabs.length > 4 && this.relation == 3) {
+						for (let i = 0; i < this.editableTabs.length-4; i++) {
+						this.handleTabsEdit(this.editableTabsValue, 'remove')
+					}
+						this.popUpMsgBox('Add up to four conditions');
+						return}
 				if (this.editableTabs.length <= 1) {
 					this.handleTabsEdit(null, 'add')
 					for (let i = 0; i < 2 - this.editableTabs.length; i++) {
@@ -1200,15 +1206,15 @@ export default {
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}
-			this.$nextTick(() => {
-				this.setEditData(this.refs)
+			this.$nextTick(async () => {
+				await this.setEditData(this.refs)
 			})
 		},
-		setEditData(data) {
+		async setEditData(data) {
 			let criteria = this.criteriaNum
 			let length = data[criteria].signals.length
 			for (let j = 0; j < length; j++) {
-				this.$refs.indiChild[j].setEditData(data)
+				await this.$refs.indiChild[j].setEditData(data)
 				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
 					this.$refs.sentiChild[j].setEditData(data)
 				}

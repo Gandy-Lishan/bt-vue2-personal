@@ -57,7 +57,7 @@
                   clearable
                   v-model="si.sentimentIndicator"
                   :fetch-suggestions="indicatorSentimentSearch"
-                  placeholder="Input the sentiment indicator"
+                  placeholder="Search for the sentiment indicator"
                   @select="(data) => {handleIndicatorSelect(data, 'senti')}"
                   @clear="() => {handleIndicatorSelect({updated: '', value: '', url: ''}, 'senti')}"
                   highlight-first-item
@@ -86,7 +86,7 @@
                   prefix-icon="el-icon-search"
                   v-model="si.technicalIndicator"
                   :fetch-suggestions="indicatorTechnicalSearch"
-                  placeholder="Input the technical indicator"
+                  placeholder="Search for the technical indicator"
                   @select="(item) => {handleIndicatorSelect(item, 'tech')}"
                   @clear="() => {handleIndicatorSelect({updated: '', value: '', url: '', class: ''}, 'senti')}"
                 ></el-autocomplete>
@@ -142,7 +142,7 @@
                     class="inline-input"
                     clearable
                     v-model="si.userIndicator"
-                    placeholder="Select Users' Own Indicator File."
+                    placeholder="Search for my indicator"
                     :fetch-suggestions="indicatorUsersSearch"
                     @select="(data) => {handleIndicatorSelect(data, 'user')}"
                     @clear="() => {handleIndicatorSelect({updated: '', value: '', url: ''}, 'user')}"
@@ -496,29 +496,36 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
-        //this.createdIndicatorOptions = await getAllMyIndicatorsList(1)
-        await getAllMyIndicatorsList(1, (data) => {
-          this.createdIndicatorOptions = data
-          const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-          var results = list.map(item => ({
-              ...item,
-              priority: createStateFilter(queryString)(item),
-            }))
-            .filter(item => item.priority > 0)
-          cb(results.sort((a, b) => b.priority - a.priority))
-        })
-      }else{
+        this.createdIndicatorOptions = await getAllMyIndicatorsList()
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-        var results = list.map(item => ({
+        let results = list.map(item => ({
             ...item,
             priority: createStateFilter(queryString)(item),
           }))
           .filter(item => item.priority > 0)
-        cb(results.sort((a, b) => b.priority - a.priority))
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
+        // await getAllMyIndicatorsList(1, (data) => {
+        //   this.createdIndicatorOptions = data
+        //   const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+        //   var results = list.map(item => ({
+        //       ...item,
+        //       priority: createStateFilter(queryString)(item),
+        //     }))
+        //     .filter(item => item.priority > 0)
+        //   cb(results.sort((a, b) => b.priority - a.priority))
+        // })
+      }else{
+        const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
+        let results = list.map(item => ({
+            ...item,
+            priority: createStateFilter(queryString)(item),
+          }))
+          .filter(item => item.priority > 0)
+        cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
       }
     },
     changeIndicatorType(type) {
@@ -535,7 +542,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     indicatorRiskSearch(queryString, cb) {
       var riskIndicatorList = this.loadRiskList()
@@ -545,7 +552,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+      cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
     },
     resetIndicator() {
       this.si.sentimentIndicator = ''
@@ -563,7 +570,7 @@ export default {
         updated = capitalizeFirstLetter(_updated)
         data.value = indicatorName
         data.url = indicatorUrl || url
-        if(indicatorUrl.includes('CREATE')) {
+        if(typeof indicatorUrl === 'string' && indicatorUrl.includes('CREATE')) {
           const obj = {
             index: this.panelIndex,
             val: indicatorUrl,
@@ -848,6 +855,7 @@ export default {
       }
     },
     async setEditData(newVal) {
+      debugger
       console.log('indicator 编辑', newVal);
       try {
         if (JSON.stringify(newVal) !== '{}') {
@@ -880,10 +888,11 @@ export default {
           const handleUser = async (indicator) => {
             debugger
             let options = []
-            await getAllMyIndicatorsList(1, (options) => {
-              const ele = options.find(item => item.url === indicator)
-              this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele.name || '';
-            })
+            if(this.createdIndicatorOptions.length !== 0) options = this.createdIndicatorOptions
+            if(this.createdIndicatorOptions.length === 0) options = await getAllMyIndicatorsList()
+            const ele = options.find(item => item.url === indicator)
+            this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele.name || '';
+            this.$emit('getIndicatorVal', {value: ele.name || '', index: this.panelIndex})
             console.log('this.createdIndicatorOptions', options)
             this.$emit('getIndicatorUrl', { index, url: indicator });
           };

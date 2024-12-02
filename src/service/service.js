@@ -1813,5 +1813,19 @@ export function deleteMySignal(url) {
 	const path = `/dev/mysignal_app/mysignal?url=${url}`
 	return axios.delete(path)
 }
+export function runAllMySignals() {
+	const path = `/dev/mysignal_app/run_all_mysignal`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* My Signals End */
 

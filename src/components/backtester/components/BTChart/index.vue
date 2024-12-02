@@ -62,6 +62,7 @@ export default {
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
 		async onChartReady() {
+			this.hideComponents()	
 			this.SET_CHART_READY_STATE(true)
 			// if(!this.$store.state.user.is_admin) {
 			// 	document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
@@ -69,6 +70,10 @@ export default {
 			CIQ.hideCover()
             CIQ.nprogress.done()
 		},
+		hideComponents() {
+			// let studies = document.querySelector(".ciq-studies")
+			// studies.style.visibility = 'hidden'
+		}
 	}
 }
 </script>

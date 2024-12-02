@@ -2,8 +2,21 @@
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
+      <!-- <el-popconfirm
+        confirm-button-text="Continue"
+        cancel-button-text="Cancel"
+        icon="el-icon-info"
+        icon-color="red"
+        v-if="currentPageTab === 'MySignal'"
+        @confirm="runAllMySignals"
+        title="Re-running all signals will update the last signal dates to the most recent.This process might take a while for larger lists. Confirm to continue."
+        >
+        <template #reference>
+          <el-button type="warning" plain :loading="btnLoading" size="small">Find All Last Signal</el-button>
+        </template>
+      </el-popconfirm> -->
     </div>
     <el-table
 			ref="Table"
@@ -55,13 +68,30 @@
 					</template>
 				</el-table-column>
 			</template>
-        <el-table-column align="center" width="100px">
+        <el-table-column align="center" width="130px">
               <template slot-scope="scope">
                 <el-row>
+                  <!-- <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="rerun signal"
+                    placement="bottom-start"
+                    v-if="currentPageTab === 'MySignal'"
+                  >
+                    <el-button
+                      type="warning"
+                      icon="el-icon-video-play"
+                      circle
+                      size="mini"
+                      :loading="scope.row.rerunLoading"
+                      v-if="currentPageTab === 'MySignal'"
+                      @click="rerunSignal(scope.row)"
+                    ></el-button>
+                  </el-tooltip> -->
                   <el-tooltip
                     class="item"
                     effect="dark"
-                    content="edit backtest"
+                    content="edit signal"
                     placement="bottom-start"
                     v-if="currentPageTab === 'MySignal'"
                   >
@@ -77,7 +107,7 @@
                   <el-tooltip
                     class="item"
                     effect="dark"
-                    content="copy backtest"
+                    content="copy start"
                     placement="bottom-start"
                   >
                     <el-button
@@ -129,7 +159,7 @@
 </template>
 
 <script>
-import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal } from '@/service/service'
+import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal, runAllMySignals, editMySignalForm } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -145,6 +175,7 @@ export default {
       currentSort: {}, // 当前的排序信息
       filterData: [],
       loading: false,
+      btnLoading: false,
       pageSize: 10,
       total: 0,
       tableCol: [
@@ -199,12 +230,12 @@ export default {
     }
   },
   methods: {
-    async getDataList(tab) {
+    async getDataList(tab, doNotResetPage = false) {
       // A request that requires writing two lists
       // if(this.currentPageTab === 'MySignal') {
       debugger
 				this.loading = true
-        if(this.currentPage !== 1) this.currentPage = 1
+        if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
         let res = await getMySignalsList(`/dev/mysignal_app/get_mysignal_records${tab === 'Sample' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
@@ -231,7 +262,7 @@ export default {
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
-            // item.deleteLoading = false
+            item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-12-31' ? '' : item.lastdate
             item.description = parseJsonOrString(item.description)
 						return item
@@ -239,6 +270,8 @@ export default {
 					this.tableData = results
           this.filterData = this.tableData
           this.total = this.filterData.length
+          const totalPages = Math.ceil(this.total / this.pageSize)
+          if(this.currentPage > totalPages && doNotResetPage) this.currentPage = totalPages
           this.loading = false
         // }
       }
@@ -373,6 +406,35 @@ export default {
 				console.error('An error occurred:', error)
 			}
 		},
+    async rerunSignal(data) {
+			try {
+        data.rerunLoading = true
+					// 获取参数并准备复制
+					const params = {
+						...data
+					}
+          const prepareData = this.reassignBTAttributes(params)
+					// 发起复制请求
+					const res = await editMySignalForm(prepareData, data.url)
+          console.log('res', res)
+          const code = res.data.code
+          const _data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
+          const last_signal_date = _data.lastdate //2099-12-31
+          if(code == 211 || code == 213) {
+            await this.$emit('refreshBTList')
+            let msg = 'Signals re-run successfully. Last signal dates are now up to date'
+            if(last_signal_date === '2099-12-31') msg = 'Signal re-run successful. No last signal date found. Adjust trigger conditions.'
+            this.popUpMsgBox(msg)
+          }else {
+            this.popUpMsgBox('Failed to re-run signals')
+            
+          }
+          data.rerunLoading = false
+			} catch (error) {
+        data.rerunLoading = false
+				console.error('An error occurred:', error)
+			}
+    },
     reassignBTAttributes(data) {
       debugger
       // use for copy
@@ -403,8 +465,22 @@ export default {
 		},
     async deleteSignals(url) {
 			await deleteMySignal(url)
-			await this.getDataList(null)
+			await this.getDataList(null, true)
 			this.popUpMsgBox('Successfully deleted')
+    },
+    async runAllMySignals() {
+      try {
+        this.btnLoading = true
+        const {data: {code}} = await runAllMySignals()
+        console.log('run all res', code)
+        if(code === 216) this.popUpMsgBox('Signals re-run successfully. Last signal dates are now up to date')
+        this.$emit('refreshBTList')
+      } catch (error) {
+        console.error(error);
+        
+      } finally {
+        this.btnLoading = false
+      }
     }
     },
   }
@@ -413,7 +489,7 @@ export default {
 <style lang="less" scoped>
 .search-box{
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 0px 0px 20px 0px;
   border-bottom: 2px solid #dddddd;
@@ -422,7 +498,7 @@ export default {
   width: 20%;
 }
 .CPM-list-container{
-  padding: 20px 20px 20px 0px;
+  padding: 20px 20px 20px 20px;
 }
 .showDate {
   margin: 5px 0;
@@ -443,5 +519,8 @@ export default {
 }
 /deep/ .el-button--mini.is-circle {
   margin: 0 2px;
+}
+/deep/ .el-input--suffix .el-input__inner {
+  margin-left: 0px
 }
 </style>

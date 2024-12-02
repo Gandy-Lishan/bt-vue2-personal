@@ -34,7 +34,8 @@
             currentPageTab="MySignal"
             ref="SignalsTable"
             @changeSecondTab="changeSecondTab"
-            @displayResultsData="displayResultsData" 
+            @displayResultsData="displayResultsData"
+            @refreshBTList="refreshBTList"
           ></SignalsTable>
           <SignalsTable 
             v-show="activeSecondTab === 'Sample'"

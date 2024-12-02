@@ -46,6 +46,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -67,6 +68,7 @@
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -125,13 +127,13 @@ export default {
       data: {
         name: '',
         timeframe: 'Daily',
-        symbol: 'AAPL',
+        symbol: 'SPY',
       },
       rowUrl: null,
       isPolling: false,
       processTips: '',
       percentage: 0,
-      symbolInfo: {strategy: 'Single', symbol: 'AAPL', symbol2: ''}, 
+      symbolInfo: {strategy: 'Single', symbol: 'SPY', symbol2: ''}, 
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -144,9 +146,9 @@ export default {
         { value: 'stock/etf', label: 'Stock & ETF' },
       ],
       timeframeOption: [
-        { value: 'Daily', label: 'Daily'},
-        { value: 'Weekly', label: 'Weekly'},
-        { value: 'Monthly', label: 'Monthly'}
+        { value: 'Daily', label: 'Daily', disabled: false},
+        { value: 'Weekly', label: 'Weekly', disabled: false},
+        { value: 'Monthly', label: 'Monthly', disabled: false}
       ],
       capitalAllocates: [
         { value: 'Kelly', label: 'Auto Allocation'},
@@ -173,7 +175,24 @@ export default {
     ...mapGetters({
       symbolList: 'getStockList',
       indexList: 'getIndexList',
-    })
+    }),
+    frequency() {
+			return this.$store.state.form.mySignalTimeframe
+		},
+    // timeframeOption() {
+    //   const currentTimeframe = this.$store.state.form.exitFrequency
+    //   console.log('周期', currentTimeframe)
+    //   return this.updateTimeframeOptions(currentTimeframe)
+    // }
+  },
+  watch: {
+    frequency: {
+      handler(newVal, oldVal) {
+        console.log('最大周期 lishan', newVal, oldVal)
+        if(newVal) this.timeframeOption = this.updateTimeframeOptions(newVal)
+      },
+      deep: true
+    }
   },
   mounted() {
     this.setBacktestHistory(6)
@@ -189,6 +208,29 @@ export default {
       const minute = date.getMinutes();
       const second = date.getSeconds();
       this.data.name = `My Signal ${year}-${month}-${day} ${hour}:${minute}:${second}`
+    },
+    updateTimeframeOptions(currentTimeframe) {
+      const timeframeOption = [
+        { value: 'Daily', label: 'Daily', disabled: false},
+        { value: 'Weekly', label: 'Weekly', disabled: false},
+        { value: 'Monthly', label: 'Monthly', disabled: false}
+      ]
+      const timeframe = this.data.timeframe
+      if(currentTimeframe === 'Weekly') {
+        if(timeframe === 'Daily') this.data.timeframe = currentTimeframe
+        timeframeOption.forEach(option => {
+          if(option.value === 'Weekly' || option.value === 'Monthly') option.disabled = false
+          else option.disabled = true
+        })
+      }
+      else if(currentTimeframe === 'Monthly') {
+        if(timeframe === 'Daily' || timeframe === 'Weekly') this.data.timeframe = currentTimeframe
+        timeframeOption.forEach(option => {
+          if(option.value === 'Monthly') option.disabled = false
+          else option.disabled = true
+        })
+      }
+      return [...timeframeOption]
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -216,7 +258,7 @@ export default {
         this.data = {
           ...this.data,
           timeframe: 'Daily',
-          symbol: 'AAPL'
+          symbol: 'SPY'
         }
         this.rowUrl = null
         this.processTips = ''

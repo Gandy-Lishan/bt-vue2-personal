@@ -104,6 +104,12 @@ export default {
   // async created() {
   //   await this.getResultData({ id: 0 })
   // },
+  beforeDestroy() {
+			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo']
+			clearRefs.forEach(refName => {
+				this.$refs[refName] = null
+			});
+	},
   methods: {
     clearForm() {
       Object.assign(this.$data, this.$options.data())

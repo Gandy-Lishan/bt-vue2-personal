@@ -1189,3 +1189,7 @@ button#checkResBtn {
 .virtual-table tr.even {
   background-color: #f6f3f3;
 }
+.el-popconfirm__main {
+  max-width: 300px !important;
+  word-break: break-word;
+}

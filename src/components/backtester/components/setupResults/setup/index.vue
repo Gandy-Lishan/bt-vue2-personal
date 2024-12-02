@@ -199,6 +199,13 @@ export default {
 			next(_this => {_this.routerEnterTag = 2})
 		}
 	},
+	beforeDestroy() {
+			let clearRefs = ['basicInfo', 'entryChild1', 'exitChild1']
+			if(this.strategy === 'Dual') clearRefs = [...clearRefs, 'entryChild2', 'exitChild2']
+			clearRefs.forEach(refName => {
+				this.$refs[refName] = null
+			});
+	},
 	// beforeRouteLeave(to, from, next) {
 	// 	if(from.name == 'SetUp' || from.path == '/backtester/sr/setup') {
 	// 		// 提醒用户表单更改会失效

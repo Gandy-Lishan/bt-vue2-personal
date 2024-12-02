@@ -1079,12 +1079,12 @@
         "symbol": "IWR",
         "name": "iShares Russell Mid-Cap ETF (IWR)"
     },
-        {
+    {
         "symbol": "IGM",
         "name": "iShares Expanded Tech Sector ETF (IGM)"
     },
-        {
+    {
         "symbol": "CRPT",
-        "name": "FT SkyBridge Crypto ETF Trust Trend Score (CRPT)"
+        "name": "FT SkyBridge Crypto ETF Trust (CRPT)"
     }
 ]
