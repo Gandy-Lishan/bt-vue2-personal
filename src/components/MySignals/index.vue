@@ -33,6 +33,7 @@
             v-show="activeSecondTab === 'MySignal'"
             currentPageTab="MySignal"
             ref="SignalsTable"
+            :lastSignalDate="lastSignalDate"
             @changeSecondTab="changeSecondTab"
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
@@ -66,14 +67,12 @@
     </el-collapse>
   </div>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
 import ScannerForm from "./ScannerForm";
 import SignalsTable from "./Table";
 import Trades from "./Trades";
-import { saveMySignalForm } from '@/service/service';
+import { getLastSignalDate } from '@/service/service';
 import { isJson } from "@/utils"
-const XLSX = require('xlsx');
 
 export default {
   name: 'MySignals',
@@ -131,7 +130,8 @@ export default {
           }
         ],
         tableData: []
-      }
+      },
+      lastSignalDate: ''
     }
   },
   components: {
@@ -140,6 +140,8 @@ export default {
     Trades
   },
   async mounted() {
+    // get the signal whose the last signal date is today
+    await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MySignal')
   },
   methods: {
@@ -187,76 +189,6 @@ export default {
       if(val === 'Sample') this.activeSecondTab = 'MySignal'
       this.scrollToTarget('scrollTargetTable')
     },
-    handleDownloadCsv() {
-      const summary = this.$refs.Statistics.handleDownloadCsv()
-      const trade = this.$refs.Trades.handleDownloadCsv()
-      const filterList = this.$refs.filterTable.exportTable()
-      if (
-          !summary.length &&
-          !trade.length &
-          !filterList.length
-      ) {
-        this.popUpMsgBox('No data available for download')
-        return
-      }
-      const dataList = [ 
-        filterList,
-        summary,
-        trade
-      ]
-      const sheetNames = [
-        'Preview Filter List',
-        'Summary',
-        'Trades'
-      ]
-      this.exportDataToCSV(dataList, sheetNames)
-    },
-    exportDataToCSV(dataList, sheetNames) {
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new()
-
-      for (let i = 0; i < dataList.length; i++) {
-        // Convert the data to a worksheet
-        const worksheet = XLSX.utils.json_to_sheet(dataList[i])
-
-        // Add the worksheet to the workbook with the given name
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetNames[i])
-      }
-
-      // Convert the workbook to a binary string
-      const workbookBinaryString = XLSX.write(workbook, {
-        type: 'binary',
-        bookType: 'xlsx'
-      })
-      // Create a Blob from the binary string
-      const blob = new Blob([this.s2ab(workbookBinaryString)], {
-        type: 'application/octet-stream'
-      })
-
-      // Create a download URL for the Blob
-      const url = URL.createObjectURL(blob)
-
-      // Create a link element for downloading the CSV file
-      const link = document.createElement('a')
-      link.style.display = 'none'
-      link.setAttribute('href', url)
-      link.setAttribute('download', 'Results.xlsx')
-      link.innerHTML = 'Download XLSX'
-      // Append the link element to the document body
-      document.body.appendChild(link)
-
-      // Trigger the download
-      link.click()
-    },
-    // Utility function to convert a string to an ArrayBuffer
-    s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xff;
-      }
-      return buf;
-    },
     reassignBTAttributes(data) {
       debugger
       // use for copy
@@ -285,6 +217,17 @@ export default {
       console.log('backtestParams', backtestParams)
       return backtestParams
 		},
+    async getLastSignalDate() {
+      try {
+        const res = await getLastSignalDate()
+        console.log('res', res)
+        const code = res?.data?.code
+        if(code === 217) this.lastSignalDate = res?.data?.data
+      } catch (error) {
+        console.error(error);
+        
+      }
+    }
   }
 }
 </script>

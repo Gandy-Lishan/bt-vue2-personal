@@ -1186,6 +1186,9 @@ button#checkResBtn {
 .virtual-table tr.highlighted {
   background-color: yellow;
 }
+.ScannerBTTable  .el-table__row.highlighted .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: yellow !important;
+}
 .virtual-table tr.even {
   background-color: #f6f3f3;
 }

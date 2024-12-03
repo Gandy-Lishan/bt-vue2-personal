@@ -1827,5 +1827,18 @@ export function runAllMySignals() {
 			})
 	})
 }
-/* My Signals End */
+export function getLastSignalDate() {
+	const path = `/dev/mysignal_app/get_newest_date`
 
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* My Signals End */
