@@ -1036,6 +1036,7 @@ export const CommonMethodsMixin = {
 			myFLSbg.classList.add('activated')
 		},
 		async restoreIndicatorLayoutView(data, freq, row, resData) {
+			console.time('view time')
 			// 跳转 result 去查看回测结果
 			if (this.$store.getters.getIsBacktestRunningFlagState) {
 				this.$store.dispatch('states/set_isBacktestRunning_flag', false)
@@ -1062,6 +1063,7 @@ export const CommonMethodsMixin = {
 			}
 		},
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
+			console.time('edit time')
 			const that = this
 			that.reloadData(data, freq, row)
 			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
