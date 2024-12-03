@@ -4,6 +4,7 @@
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
+      <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
       <!-- <el-popconfirm
         confirm-button-text="Continue"
         cancel-button-text="Cancel"
@@ -28,7 +29,7 @@
 			@sort-change="onSortChange"
       size="small"
 			style="width: 100%; height: 100%; margin: 0 auto;"
-      stripe
+      :row-class-name="tableRowClassName"
 		>
 			<template v-for="(l) in tableCol">
         <el-table-column
@@ -166,7 +167,8 @@ const debounce = require('lodash/debounce')
 export default {
   name: 'SignalsTable',
   props: {
-    currentPageTab: String
+    currentPageTab: String,
+    lastSignalDate: String
   },
   data() {
     return {
@@ -209,7 +211,8 @@ export default {
           width: '170px'
         }
       ],
-      tableData: []
+      tableData: [],
+      isShowLastSignalDate: false
     }
   },
   computed: {
@@ -481,8 +484,12 @@ export default {
       } finally {
         this.btnLoading = false
       }
-    }
     },
+    tableRowClassName({row, rowIndex}) {
+      if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
+      return ''
+		}
+    }
   }
 </script>
 
@@ -522,5 +529,8 @@ export default {
 }
 /deep/ .el-input--suffix .el-input__inner {
   margin-left: 0px
+}
+.el-table /deep/ tr.el-table__row.highlighted{
+  background-color: yellow !important;
 }
 </style>
