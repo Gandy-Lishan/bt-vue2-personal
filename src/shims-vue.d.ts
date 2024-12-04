@@ -14,5 +14,3 @@ declare module 'nprogress'
 
 // 声明 AdvancedChartComponent 模块
 declare module './AdvancedChartComponent.vue'
-
-declare module 'vue-instantsearch'

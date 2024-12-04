@@ -35,22 +35,15 @@ import 'github-markdown-css'
 import { CIQ } from '@/components/common/chart/st-development/js'
 //import { CIQ } from 'chartiq'
 
-// import Algolia
-// import InstantSearch from 'vue-instantsearch';
-// import 'instantsearch.css/themes/algolia-min.css';
-
-// Vue.use(InstantSearch);
 import '@algolia/autocomplete-theme-classic';
 import '@/assets/css/searchBar.css';
 import GlobalMixins from "@/components/common/mixins/globalMixins";
-import InstantSearch from 'vue-instantsearch';
 // import {resetData} from '@/utils/globalFunc/index';
 
 // 引入自动更新提醒
 import autoUpdate from './auto-update'
 
 Vue.use(VueCookies)
-Vue.use(InstantSearch)
 
 Vue.prototype.$qs = qs
 Vue.use(ElementUI, { locale })
