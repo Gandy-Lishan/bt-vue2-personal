@@ -6186,5 +6186,65 @@
     {
         "name": "Zoom Video Communications Inc",
         "stock": "ZM"
+    },
+    {
+        "name": "AppLovin Corp",
+        "stock": "APP"
+    },
+    {
+        "name": "ARM Holdings PLC",
+        "stock": "ARM"
+    },
+    {
+        "name": "Concentra Group Holdings Paren",
+        "stock": "CON"
+    },
+    {
+        "name": "Dream Finders Homes Inc",
+        "stock": "DFH"
+    },
+    {
+        "name": "Penguin Solutions Inc",
+        "stock": "PENG"
+    },
+    {
+        "name": "Flagstar Financial Inc",
+        "stock": "FLG"
+    },
+    {
+        "name": "Flex Ltd",
+        "stock": "FLEX"
+    },
+    {
+        "name": "Chewy Inc",
+        "stock": "CHWY"
+    },
+    {
+        "name": "Crescent Energy Co",
+        "stock": "CRGY"
+    },
+    {
+        "name": "Hims & Hers Health Inc",
+        "stock": "HIMS"
+    },
+    {
+        "name": "Revelyst Inc",
+        "stock": "GEAR"
+    },
+    {
+        "name": "Everus Construction Group Inc",
+        "stock": "ECG"
+    },
+    {
+        "name": "Atlas Energy Solutions Inc",
+        "stock": "AESI"
+    },
+    {
+        "name": "DocuSign Inc",
+        "stock": "DOCU"
+    },
+    {
+        "name": "Shift4 Payments Inc",
+        "stock": "FOUR"
     }
 ]
