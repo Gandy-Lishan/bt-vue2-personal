@@ -1078,7 +1078,7 @@ export const CommonMethodsMixin = {
 				CIQ.nprogress.done()
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
-			//await that.loopCalculateNewConditions(row)	
+			await that.loopCalculateNewConditions(row)	
 		},
 		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)

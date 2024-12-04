@@ -1063,7 +1063,7 @@ export default {
 
         // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
         // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏
-  this.ROCLikeChange(this.senti.newCondition,this.$store.getters.getIsMarkerShownFlagState)
+  //this.ROCLikeChange(this.senti.newCondition,this.$store.getters.getIsMarkerShownFlagState)
   }
     }
   }

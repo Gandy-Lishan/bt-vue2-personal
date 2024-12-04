@@ -361,6 +361,11 @@ const actions = {
 					commit('SET_FAVORITE_INDICATOR_LIST', favoriteIndicatorList)
 					commit('SET_FAVORITE_SYMBOL_LIST', favoriteSymbolList)
 					resolve()
+					// //测试是否不堵塞首屏加载
+					// setTimeout(() => {
+					// 	console.log('获取收藏成功')
+					// 	resolve();
+					//   }, 20000); // 5000 毫秒 = 5 秒
 				}else {
 					// 处理其他状态码
 					console.error(`Unexpected status code: ${res.status}`);
