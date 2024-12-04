@@ -1512,7 +1512,7 @@ export default {
     },
     async validateForm() {
       /* 校验表单字段 */
-      let formValid, riskControlValid, stopLossValid, takeProfitValid, timeInMarketValid, excludeValid, nameValid, setUpValid, nameLookupRes, nameValidPass
+      let formValid, riskControlValid, stopLossValid, takeProfitValid, timeInMarketValid, excludeValid, nameValid, setUpValid, nameLookupRes, nameValidPass, editBacktestID
       let _this = this
       if(!_this.bd.end_date) {
         _this.popUpMsgBox('Please select "End Date"');
@@ -1559,20 +1559,22 @@ export default {
         return false
       }
       /* backtest name 校验 */
+      debugger
       nameLookupRes = await getBacktestName(_this.bd.name)
       const nameList = nameLookupRes.data.results
       if(nameList.length === 0) nameValid = true
         for (let i = 0; i < nameList.length; i++) {
-          if (nameList[i].name == _this.bd.name) {
+          if (nameList[i].name === _this.bd.name) {
             // 重名
+            editBacktestID = nameList[i].id
             nameValid = false
             break
           }
           nameValid = true
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 没名字且新建(strategy) */
-      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) ||
-      (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || 
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && (_this.getterBacktestInfo.old_uuid === editBacktestID)) ||
+      (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && (_this.getterBacktestInfo.old_uuid === editBacktestID)) || 
       (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && !_this.getterBacktestInfo.old_uuid)
       if(!nameValidPass) {
         _this.popUpMsgBox('The backtest name already exists');
