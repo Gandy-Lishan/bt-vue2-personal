@@ -392,7 +392,7 @@ export default {
               label: 'Symbol',
               value: 'market_symbol',
               type: 'SP1500Score',
-              minWidth: '50px'
+              minWidth: '70px'
             },
             {
               key: 'chart_name',
@@ -2272,6 +2272,9 @@ export default {
       if(this.condition !== type) {this.condition = type}
       else if(this.condition === type && this.condition !== '') {this.condition = ''}
       console.log('this.condition', this.condition)
+      // clear filter and sort
+      this.searchInput = ''
+      this.$refs[`${this.refName}Table`].clearSort()
       // .el-table--scrollable-x .el-table__body-wrapper
       const urlMap = {
         stock: 'stock_complete_list',
