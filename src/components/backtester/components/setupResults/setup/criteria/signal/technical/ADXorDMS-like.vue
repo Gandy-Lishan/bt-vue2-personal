@@ -184,13 +184,14 @@ export default {
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$refs.adxForm.resetFields()
+			this.$refs?.adxForm.resetFields()
 		},
 		// Clear form authentication
 		clearFormValidate() {
 			this.$refs.adxForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -283,7 +284,8 @@ export default {
 				this.tech.valuePositive = ''
 			}
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 			if(this.isRiskControl) {
 				return checked = true
@@ -322,6 +324,9 @@ export default {
 				this.$store.commit('form/saveCondition', tech)
 				return checked
 			} else {
+				this.popUpMsgBox(`Please check that the #
+				${this.panelIndex}
+				${this.criteriaNum} panel field is filled in correctly`)
 				checked = false
 				return checked
 			}

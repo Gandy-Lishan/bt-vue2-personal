@@ -28,7 +28,7 @@
 			</div>
 		</el-tab-pane>
     <el-tab-pane label="Symbol(2)" name="second" class="symbol-pane">
-			<div class="criteria-container" v-show="strategy === 'Dual'">
+			<div class="criteria-container" v-if="strategy === 'Dual'">
 				<Criteria
 					class="criteria"
 					ref="entryChild2"
@@ -118,10 +118,18 @@ export default {
 		if (to.path === '/backtester/sr/setup' && (from.path.includes('/backtester'))) {
 			next(async _this => {
 						_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
-						_this.$refs['entryChild1'].clearForm()
-						_this.$refs['exitChild1'].resetForm()
-						_this.$refs['entryChild2'].clearForm()
-						_this.$refs['exitChild2'].resetForm()
+						const refsToClear = [
+							'entryChild1',
+							'exitChild1',
+							'entryChild2',
+							'exitChild2'
+						]
+						refsToClear.forEach(refName => {
+							if (_this.$refs[refName]) {
+									_this.$refs[refName].clearForm();
+							}
+						});
+
 						if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
 							console.log('说明是路由跳转过来携带参数的，用于展示表单数据')
 							// 说明是路由跳转过来携带参数的
@@ -204,7 +212,7 @@ export default {
 			let clearRefs = ['basicInfo', 'entryChild1', 'exitChild1']
 			if(this.strategy === 'Dual') clearRefs = [...clearRefs, 'entryChild2', 'exitChild2']
 			clearRefs.forEach(refName => {
-				this.$refs[refName] = null
+				if(this.$refs[refName]) this.$refs[refName] = null
 			});
 	},
 	// beforeRouteLeave(to, from, next) {
@@ -328,16 +336,16 @@ export default {
 				if(obj.strategy === 'Single') {
 					// 清除第二个
 					['entryChild2', 'exitChild2'].forEach(refName => {
-						this.$refs[refName].clearForm();
+						if(this.$refs[refName]) this.$refs[refName].clearForm();
 					});
 				}
 			})
 		},
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$store.commit('initialBacktestInfo');
+			this.$store.commit('form/initialBacktestInfo');
 			['basicInfo', 'entryChild1', 'exitChild1', 'entryChild2', 'exitChild2'].forEach(refName => {
-				this.$refs[refName].clearForm();
+				if(this.$refs[refName]) this.$refs[refName].clearForm();
 			});
 	
 			// clear form时同时刷新changeStrategy
@@ -412,11 +420,9 @@ export default {
 		},
 		async saveCriteriaData(criteriaRef) {
 			const _this = this
-			const tabLength = _this.$refs[criteriaRef].addSignalLength()
-			for (let index = 0; index < tabLength; index++) {
-				const valid = await _this.$refs[criteriaRef].saveData(index)
-				if (!valid) return false
-			}
+			_this.$refs[criteriaRef].addSignalLength()
+			const valid = await _this.$refs[criteriaRef].saveData()
+			if (!valid) return false
 			_this.$refs[criteriaRef].saveScoreValue()
 			_this.$refs[criteriaRef].saveSignalsInMarket()
 			_this.$refs[criteriaRef].saveDelayBar()
