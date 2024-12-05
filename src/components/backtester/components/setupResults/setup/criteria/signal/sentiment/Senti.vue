@@ -532,7 +532,7 @@ export default {
     // },
     clearForm() {
       //Object.assign(this.$data, this.$options.data())
-      this.$refs.sentiForm.resetFields()
+      this.$refs?.sentiForm.resetFields()
       this.conditionRadio = 'Indicator Value'
       this.periodTemp = ''
     },
@@ -540,7 +540,8 @@ export default {
     clearFormValidate() {
       this.$refs.sentiForm.clearValidate()
     },
-    setDesciption(index) {
+    setDesciption() {
+      let index = this.panelIndex
       debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
@@ -942,7 +943,8 @@ export default {
       this.calculateNewConditions()
     },
 
-    saveCondition(index) {
+    saveCondition() {
+      let index = this.panelIndex
       let checked = true
       let validForm
       if (this.conditionRadio === 'Indicator Value' && !this.isRiskControl) {
@@ -962,6 +964,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }
@@ -983,6 +988,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }
@@ -1010,6 +1018,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }
