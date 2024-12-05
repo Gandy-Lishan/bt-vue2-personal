@@ -1573,7 +1573,7 @@ export default {
           nameValid = true
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 没名字且新建(strategy) */
-      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && (_this.getterBacktestInfo.old_uuid === editBacktestID)) ||
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) ||
       (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || 
       (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && !_this.getterBacktestInfo.old_uuid)
       if(!nameValidPass) {
