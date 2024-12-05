@@ -230,13 +230,14 @@ export default {
     },
     clearForm() {
       Object.assign(this.$data, this.$options.data())
-      this.$refs.symbolForm.resetFields()
+      this.$refs?.symbolForm.resetFields()
     },
     // Clear form authentication
     clearFormValidate() {
       this.$refs.symbolForm.clearValidate()
     },
-    setDesciption(index) {
+    setDesciption() {
+      let index = this.panelIndex
       let rocCond = {
         'newCondition': this.sym.newCondition,
         'conditionPeriod': this.sym.conditionPeriod,
@@ -442,7 +443,8 @@ export default {
         CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
       }
     },
-    saveCondition(index) {
+    saveCondition() {
+      let index = this.panelIndex
       let checked = true
       let validForm
       if (!this.isRiskControl) {
@@ -460,6 +462,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }

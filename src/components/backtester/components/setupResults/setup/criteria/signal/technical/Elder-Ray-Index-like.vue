@@ -163,12 +163,13 @@ delay_bars: [String, Number],
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$refs.eriForm.resetFields()
+			this.$refs?.eriForm.resetFields()
 		},
 		clearFormValidate() {
-			this.$refs.eriForm.clearValidate()
+			this.$refs?.eriForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -256,7 +257,8 @@ delay_bars: [String, Number],
 				this.tech.comparison = 'ERIH2'
 			}
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 			if(this.isRiskControl) {
 				return checked = true
@@ -273,6 +275,9 @@ delay_bars: [String, Number],
 				return checked
 			} else {
 				checked = false
+				this.popUpMsgBox(`Please check that the #
+				${this.panelIndex}
+				${this.criteriaNum} panel field is filled in correctly`)
 				return checked
 			}
 		},

@@ -107,7 +107,7 @@ export default {
   beforeDestroy() {
 			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo']
 			clearRefs.forEach(refName => {
-				this.$refs[refName] = null
+        if(this.$refs[refName]) this.$refs[refName] = null
 			});
 	},
   methods: {
