@@ -484,6 +484,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
+      console.log('limit in rochcange', limit)
       this.isROCLike = 5 <= val && val <= 15
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
@@ -532,7 +533,7 @@ export default {
     // },
     clearForm() {
       //Object.assign(this.$data, this.$options.data())
-      this.$refs.sentiForm.resetFields()
+      this.$refs?.sentiForm.resetFields()
       this.conditionRadio = 'Indicator Value'
       this.periodTemp = ''
     },
@@ -540,7 +541,8 @@ export default {
     clearFormValidate() {
       this.$refs.sentiForm.clearValidate()
     },
-    setDesciption(index) {
+    setDesciption() {
+      let index = this.panelIndex
       debugger
       let rocCond = {
         'newCondition': this.senti.newCondition,
@@ -942,7 +944,8 @@ export default {
       this.calculateNewConditions()
     },
 
-    saveCondition(index) {
+    saveCondition() {
+      let index = this.panelIndex
       let checked = true
       let validForm
       if (this.conditionRadio === 'Indicator Value' && !this.isRiskControl) {
@@ -962,6 +965,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }
@@ -983,6 +989,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }
@@ -1010,6 +1019,9 @@ export default {
           return checked
         } else {
           checked = false
+          this.popUpMsgBox(`Please check that the #
+          ${this.panelIndex}
+          ${this.criteriaNum} panel field is filled in correctly`)
           return checked
         }
       }

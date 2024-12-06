@@ -325,10 +325,10 @@ export default {
 		}, 500),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$refs.maForm.resetFields()
+			this.$refs?.maForm.resetFields()
 		},
 		clearFormValidate() {
-			this.$refs.maForm.clearValidate()
+			this.$refs?.maForm.clearValidate()
 		},
 		updateMAPeriod(val, limit) {
 			// update MA period
@@ -472,7 +472,8 @@ export default {
 				}
 			}
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -675,7 +676,8 @@ export default {
 				}
 			}
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 			if (this.isRiskControl) {
 				return (checked = true)
@@ -697,6 +699,9 @@ export default {
 					return checked
 				} else {
 					checked = false
+					this.popUpMsgBox(`Please check that the #
+					${this.panelIndex}
+					${this.criteriaNum} panel field is filled in correctly`)
 					return checked
 				}
 			} else {
@@ -723,6 +728,9 @@ export default {
 					return checked
 				} else {
 					checked = false
+					this.popUpMsgBox(`Please check that the #
+					${this.panelIndex}
+					${this.criteriaNum} panel field is filled in correctly`)
 					return checked
 				}
 			}

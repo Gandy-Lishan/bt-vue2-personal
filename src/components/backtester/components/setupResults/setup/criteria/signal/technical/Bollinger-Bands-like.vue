@@ -140,7 +140,8 @@ delay_bars: [String, Number],
 			obj[this.criteria][this.panelIndex] = val
 			CIQ.store.commit('form/setConditionRadio', obj)
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -246,18 +247,22 @@ delay_bars: [String, Number],
 			this.$store.commit('form/saveDescription', desObj)
 
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 			if(this.isRiskControl) {
 				return checked = true
 			}
 			if (this.description) {
-				this.setDesciption(index)
+				this.setDesciption()
 			}
 			let tech = JSON.parse(JSON.stringify(this.tech))
 			tech.criteria = this.criteria
 			tech.index = index
 			this.$store.commit('form/saveCondition', tech)
+			if(!checked) this.popUpMsgBox(`Please check that the #
+			${this.panelIndex}
+			${this.criteriaNum} panel field is filled in correctly`)
 			return checked
 		},
 		// Set edited data

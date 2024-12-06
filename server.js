@@ -118,7 +118,7 @@ app.get('/api/temp_data', (req, res) => {
 
 
 if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
-    let url =get_env("api_url",'https://h7r34cgfvh.execute-api.us-east-1.amazonaws.com/')
+    let url =get_env("api_url",'https://devbt2api.sentimentrader.com/')
     app.use('/dev',proxy({
         target:url,
         changeOrigin:true,
@@ -127,7 +127,7 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
         }
     }))
 
-    let url2 = get_env("ai_url",'https://auto-trader-prod.herokuapp.com')
+    let url2 = get_env("ai_url",'https://ai.sentdevsite.com')
     app.use('/ai',proxy({
         target:url2,
         changeOrigin:true,
@@ -137,7 +137,7 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
     }))
 
     // let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
-    let url3= get_env("bt_url",'https://bt2api.sentimentrader.com')
+    let url3= get_env("bt_url",'https://devbt2api.sentimentrader.com/')
     app.use('/bt',proxy({
         target:url3,
         ws: true,
