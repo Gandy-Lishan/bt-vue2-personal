@@ -52,7 +52,7 @@ export default {
 
 		/** pre-fetching and updating the data */
 		if(!['/indicators'].includes(window.location.pathname)) {
-			this.preFetchData()
+			// this.preFetchData()
 		}
 		
 // debugger
