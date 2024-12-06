@@ -13,7 +13,19 @@
             <h4  @click="selectedTitle = 'Research'" :class="{ 'selected': selectedTitle === 'Research' }">Research & Blog Posts</h4>
             <h4  @click="selectedTitle = 'Related'" :class="{ 'selected': selectedTitle === 'Related' }" v-show="isShowRelated">Related Charts</h4>
             <div class="btns">
-              <el-button type="primary" size="mini" @click="$emit('downloadCSV')">Download CSV File</el-button>
+              <el-popover
+                placement="bottom-start"
+                width="200"
+                trigger="hover">
+                <template slot="reference" slot-scope="{}">
+                  <el-button type="primary" size="mini" @click="$emit('downloadCSV')">Download CSV File</el-button>
+                </template>
+                <div>
+                  To prevent abuse of sentimentrader data, we only provide recent 3-6 months data of the indicator. 
+                  If you need access to full history, please contact us 
+                  <a href="mailto:admin@sentimentrader.com" target="_blank">admin@sentimentrader.com</a>.
+                </div>
+              </el-popover>
             </div>
           </div>
           <div>
