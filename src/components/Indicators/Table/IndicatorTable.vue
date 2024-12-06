@@ -38,6 +38,7 @@ import Details from "./Details";
 import AboutUs from "./AboutUs";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
+import moment from "moment";
 
 export default {
   name: 'IndicatorTable',
@@ -322,8 +323,20 @@ export default {
       this.indicatorCSVData = data
       this.indicatorsCSVName = url
     },
+    filterRecentThreeMonths(data, currentDate) {
+      // 使用 moment.js 计算三个月前的日期，确保是那一天的开始
+      const threeMonthsAgo = moment(currentDate).subtract(3, 'months').startOf('day');
+      return data.filter(item => {
+        // 将字符串日期转换为 moment 对象，并比较
+        return moment(item.date, 'YYYY-MM-DD').isAfter(threeMonthsAgo) || moment(item.date, 'YYYY-MM-DD').isSame(threeMonthsAgo, 'day');
+      });
+    },
     downloadCSV() {
-      const data = this.indicatorCSVData
+      let data = this.indicatorCSVData
+      // 当前日期，确保是 UTC 时间
+      const currentDate = new Date(); // 将当前日期转换为 'YYYY-MM-DD' 格式的字符串
+      // 调用函数并传入数据和当前日期
+      data = this.filterRecentThreeMonths(data, currentDate);
       const xlsxName = this.indicatorsCSVName
       if (!data || !data.length) {
         this.popUpMsgBox('No data available for download')
