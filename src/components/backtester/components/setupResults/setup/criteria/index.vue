@@ -1039,6 +1039,7 @@ export default {
 					}
 				}
 				this.$store.commit('form/saveDescription', desObj)
+				return true
 			}
 			for (let index = 0; index < this.indicatorRadioArr.length; index++) {
 				const indi = this.$refs.indiChild[index].saveIndicator(index)
