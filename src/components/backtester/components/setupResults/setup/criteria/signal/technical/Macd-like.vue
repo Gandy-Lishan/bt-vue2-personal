@@ -224,12 +224,13 @@ delay_bars: [String, Number],
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$refs.macdForm.resetFields()
+			this.$refs?.macdForm.resetFields()
 		},
 		clearFormValidate() {
 			this.$refs.macdForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -332,7 +333,8 @@ delay_bars: [String, Number],
 					break
 			}
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 						if(this.isRiskControl) {
 				return checked = true
@@ -342,6 +344,9 @@ delay_bars: [String, Number],
 				this.$refs['macdForm'].validateField(['value'], (errorMsg) => {
 					if (errorMsg) {
 						validForm = false
+						this.popUpMsgBox(`Please check that the #
+						${this.panelIndex}
+						${this.criteriaNum} panel field is filled in correctly`)
 					}
 				})
 			}
@@ -349,6 +354,9 @@ delay_bars: [String, Number],
 				this.$refs['macdForm'].validateField(['histValue'], (errorMsg) => {
 					if (errorMsg) {
 						validForm = false
+						this.popUpMsgBox(`Please check that the #
+						${this.panelIndex}
+						${this.criteriaNum} panel field is filled in correctly`)
 					}
 				})
 			}
@@ -357,7 +365,7 @@ delay_bars: [String, Number],
 				let tech = JSON.parse(JSON.stringify(this.tech))
 
 				if (this.description) {
-					this.setDesciption(index)
+					this.setDesciption()
 				}
 				if (this.radio === 'Indicator Hist') {
 					tech.condition = this.histCondition
@@ -372,6 +380,9 @@ delay_bars: [String, Number],
 				return checked
 			} else {
 				checked = false
+				this.popUpMsgBox(`Please check that the #
+				${this.panelIndex}
+				${this.criteriaNum} panel field is filled in correctly`)
 				return checked
 			}
 		},

@@ -220,12 +220,13 @@ delay_bars: [String, Number],
 	methods: {
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
-			this.$refs.smiForm.resetFields()
+			this.$refs?.smiForm.resetFields()
 		},
 		clearFormValidate() {
 			this.$refs.smiForm.clearValidate()
 		},
-		setDesciption(index) {
+		setDesciption() {
+			let index = this.panelIndex
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -331,7 +332,8 @@ delay_bars: [String, Number],
 					break
 			}
 		},
-		saveCondition(index) {
+		saveCondition() {
+			let index = this.panelIndex
 			let checked = true
 						if(this.isRiskControl) {
 				return checked = true
@@ -342,7 +344,7 @@ delay_bars: [String, Number],
 			})
 			if (validForm) {
 				if (this.description) {
-					this.setDesciption(index)
+					this.setDesciption()
 				}
 				let tech = JSON.parse(JSON.stringify(this.tech))
 				tech.criteria = this.criteria
@@ -355,6 +357,9 @@ delay_bars: [String, Number],
 				return checked
 			} else {
 				checked = false
+				this.popUpMsgBox(`Please check that the #
+				${this.panelIndex}
+				${this.criteriaNum} panel field is filled in correctly`)
 				return checked
 			}
 		},

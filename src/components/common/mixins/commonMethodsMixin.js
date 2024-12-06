@@ -713,8 +713,8 @@ export const CommonMethodsMixin = {
 				}
 			)
 			this.hideDuplicateROC()
-			if(CIQ.store.state.chart.trades.length == 0) return
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+			//if(CIQ.store.state.chart.trades.length == 0) return
+			//CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 		// 处理用户自定义indicator的显示名
 		rocDisplayName(field) {
@@ -1035,7 +1035,18 @@ export const CommonMethodsMixin = {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
 		},
+
+		/**
+		 * 流程：
+		 * 	edit editBacktest -> loopCalculateNewCond -> CalculateNewCond(load roc without loading marker*) -> setup.vue(update form state without calling local calculateNewCond)
+		 *	view viewBacktest ->  loopCalculateNewCond -> CalculateNewCond(load roc without loading marker*) -> result.vue(load markers for all criteria)
+		* @param {*} data 
+		* @param {*} freq 
+		* @param {*} row 
+		* @param {*} resData 
+		*/
 		async restoreIndicatorLayoutView(data, freq, row, resData) {
+			console.time('view time')
 			// 跳转 result 去查看回测结果
 			if (this.$store.getters.getIsBacktestRunningFlagState) {
 				this.$store.dispatch('states/set_isBacktestRunning_flag', false)
@@ -1062,6 +1073,7 @@ export const CommonMethodsMixin = {
 			}
 		},
 		async restoreIndicatorLayoutEdit(data, freq, row, resData) {
+			console.time('edit time')
 			const that = this
 			that.reloadData(data, freq, row)
 			await CIQ.addIndicators({type:'loadFromBacktest'},() => {
@@ -1076,7 +1088,7 @@ export const CommonMethodsMixin = {
 				CIQ.nprogress.done()
 			})
 			// long todo, 這一塊可以之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions
-			//await that.loopCalculateNewConditions(row)	
+			await that.loopCalculateNewConditions(row)	
 		},
 		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)

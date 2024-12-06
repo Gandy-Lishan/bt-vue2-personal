@@ -115,7 +115,7 @@
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							:indicatorRadio="indicatorRadioArr[index]"
-							v-show="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
+							v-if="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
 						></senti>
 						<symbol-indi
 							v-bind="$attrs"
@@ -131,7 +131,7 @@
 							:isLimit="isUsePeriodLimit"
 							:symUrl="indicatorUrlArr[index]"
 							:symVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'symbol' &&
 								indicatorUrlArr[index] !== ''
 							"
@@ -154,7 +154,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'CCI_like'
 							"
@@ -177,7 +177,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MACD_like'
 							"
@@ -200,7 +200,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'MovingAverage_like'
 							"
@@ -223,7 +223,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'BollingerBands_like'
 							"
@@ -246,7 +246,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'EFT_like'
 							"
@@ -269,7 +269,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Stochastics_like'
 							"
@@ -292,7 +292,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ADX_like'
 							"
@@ -315,7 +315,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'ERI_like'
 							"
@@ -338,7 +338,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Aligator_like'
 							"
@@ -361,7 +361,7 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'LRF_like'
 							"
@@ -384,12 +384,12 @@
 							:isLimit="isUsePeriodLimit"
 							:techUrl="indicatorUrlArr[index]"
 							:techVal="indicatorValArr[index]"
-							v-show="
+							v-if="
 								indicatorRadioArr[index] === 'technical' &&
 								techIndiObj[index] === 'Trailingstop_like'
 							"
 						></trailing-stop-like>
-						<div class="empty-senti-container" v-show="(indicatorRadioArr[index] === 'technical' && !techIndiObj[index]) || (indicatorRadioArr[index] === 'symbol' &&
+						<div class="empty-senti-container" v-if="(indicatorRadioArr[index] === 'technical' && !techIndiObj[index]) || (indicatorRadioArr[index] === 'symbol' &&
 								indicatorUrlArr[index] == '')">
 						</div>
 						<div class="delay-bar-box">
@@ -538,24 +538,7 @@ export default {
 	},
 	beforeDestroy() {
    eventBus.$off('userFileSelect', this.userFileSelect);
-			// Reset data for all subcomponents
-			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-				if (this.indicatorRadioArr[i]) {
-					this.$refs.indiChild[i] = null
-					this.$refs.sentiChild[i] = null
-					this.$refs.symbolChild[i] = null
-					this.$refs.maChild[i] = null
-					this.$refs.macdChild[i] = null
-					this.$refs.bollBandsLikeChild[i] = null
-					this.$refs.EFTLikeChild[i] = null
-					this.$refs.stochasticsLikeChild[i] = null
-					this.$refs.ADXLikeChild[i] = null
-					this.$refs.ERILikeChild[i] = null
-					this.$refs.aligatorLikeChild[i] = null
-					this.$refs.LRFLikeChild[i] = null
-					this.$refs.trailingStopLikeChild[i] = null
-				}
-			}
+			this.clearSubComponent()
 	},
 	methods: {
 		...mapMutations('form', ['setFrequencyArray']),
@@ -572,25 +555,62 @@ export default {
 			} else if(this.criteriaNum === 'exit2' && this.symbolInfo.strategy === 'Single'){
 					this.relation = 1;
 			}
+			this.clearSubComponent()
+		},
+		clearSubComponent() {
 			// Reset data for all subcomponents
-			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
-				if (this.indicatorRadioArr[i]) {
-					this.$refs.indiChild[i].clearForm()
-					this.$refs.sentiChild[i].clearForm()
-					this.$refs.symbolChild[i].clearForm()
-					this.$refs.cciChild[i].clearForm()
-					this.$refs.maChild[i].clearForm()
-					this.$refs.macdChild[i].clearForm()
-					this.$refs.bollBandsLikeChild[i].clearForm()
-					this.$refs.EFTLikeChild[i].clearForm()
-					this.$refs.stochasticsLikeChild[i].clearForm()
-					this.$refs.ADXLikeChild[i].clearForm()
-					this.$refs.ERILikeChild[i].clearForm()
-					this.$refs.aligatorLikeChild[i].clearForm()
-					this.$refs.LRFLikeChild[i].clearForm()
-					this.$refs.trailingStopLikeChild[i].clearForm()
-				}
+			this.indicatorRadioArr.forEach((_,i) => {if(this.$refs.indiChild && this.$refs.indiChild[i]) this.$refs.indiChild[i].clearForm()})
+			const [sentimentSymbolRadio, technicalRadio, symbolRadio] = this.classifyIndicatorRadio(this.indicatorRadioArr)
+			sentimentSymbolRadio.forEach((_, i) => {
+				if(this.$refs.sentiChild && this.$refs.sentiChild[i]) this.$refs.sentiChild[i].clearForm()
+			})
+			const [groupedIndicators, categoryMap] = this.classifyTechIndiObj(this.techIndiObj)
+			if(technicalRadio.length) {
+				groupedIndicators.forEach(subArr => {
+					const category = categoryMap[subArr[0]]
+					subArr.forEach((_, i) => {
+						if(this.$refs[category] && this.$refs[category][i])this.$refs[category][i].clearForm(data)
+					})
+				})
 			}
+			symbolRadio.forEach((_, i) => {
+				if(this.$refs.symbolChild && this.$refs.symbolChild[i]) this.$refs.symbolChild[i].clearForm(data)
+			})
+		},
+		classifyIndicatorRadio(indicatorRadioArr) {
+			const sentimentSymbolRadio = indicatorRadioArr.filter(radio => radio === 'sentiment' || radio === 'user')
+			const technicalRadio = indicatorRadioArr.filter(radio => radio === 'technical')
+			const symbolRadio = indicatorRadioArr.filter(radio => radio === 'symbol')
+			return [sentimentSymbolRadio, technicalRadio, symbolRadio]
+		},
+		classifyTechIndiObj(techIndiObj) {
+			const _techIndiObj = techIndiObj.filter(val => val)
+			const groupedIndicators = _techIndiObj.reduce((acc, curr) => {
+					if (curr) { // 过滤掉空字符串
+							const existingGroup = acc.find(group => group.includes(curr));
+							if (existingGroup) {
+									existingGroup.push(curr); // 如果已经存在包含当前元素的组，则添加到该组
+							} else {
+									acc.push([curr]); // 否则创建一个新组
+							}
+					}
+					return acc;
+			}, []);
+			console.log(groupedIndicators);
+			const categoryMap = {
+				'CCI_like': 'cciChild',
+				'MovingAverage_like': 'maChild',
+				'MACD_like': 'macdChild',
+				'EFT_like': 'EFTLikeChild',
+				'ADX_like': 'ADXLikeChild',
+				'Aligator_like': 'aligatorLikeChild',
+				'LRF_like': 'LRFLikeChild',
+				'BollingerBands_like': 'bollBandsLikeChild',
+				'Stochastics_like': 'stochasticsLikeChild',
+				'ERI_like': 'ERILikeChild',
+				'ERTrailingstop_like_like': 'trailingStopLikeChild',
+			}
+			return [groupedIndicators, categoryMap]
 		},
 		showRiskControlOptions(val) {
 			const originalOptions = [
@@ -605,9 +625,6 @@ export default {
 				this.relation = 1;
 				this.changeRelation(this.relation,false);
 			}
-		},
-		resetForm() {
-			/* todolishan */
 		},
 		getTechIndiObj(obj) {
 			this.techIndiObj.splice(obj.index, 1, obj.class)
@@ -989,7 +1006,8 @@ export default {
 			const description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
 			if (isJson(description)) {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
-      }
+   }
+			debugger
 			let sameSignalArr = searchKeys(description)
 			if(this.relation == 3) sameSignalArr = []
 			if(sameSignalArr.length >= 1) {
@@ -1000,206 +1018,56 @@ export default {
 					for (let n = 0; n < sameItem.length; n++) {
 						str += 'Condition' + Number(sameItem[n]) + ' '
 					}
-					this.popUpMsgBox(`The current ${this.criteriaNum} ${str} are the same, please change`)
+					this.popUpMsgBox(`The current ${capitalizeFirstLetter(this.criteriaNum)} ${str} are the same, please change`)
 					return false
         	}
 			}
 			return true
 		},
-		async saveData(index) {
-			let checked = true
+		async saveData() {
 			// Save the selected indicator to vuex
-			let _this = this
-			if (_this.relation == 0) {
+			debugger
+			let indiChecked
+			if (this.relation == 0) {
 				// Save risk description
-				let desObj = {}
-				desObj.criteria = this.criteriaNum
-				desObj.index = 0
-				//desObj.description = _this.$store.state.form.riskDescription
-				desObj.description = {
-					'commentDes':_this.$store.state.form.riskDescription,
-					'rocCond':null
+				let desObj = {
+					index: 0,
+					criteria: this.criteriaNum,
+					description: {
+						'commentDes':this.$store.state.form.riskDescription,
+						'rocCond':null
+					}
 				}
 				this.$store.commit('form/saveDescription', desObj)
-				return (checked = true)
 			}
-
-			let indi = this.$refs.indiChild[index].saveIndicator(index)
-			const indiChecked = await indi
-			if(!indiChecked) return false
-			return indi.then((val) => {
-				if (val) {
-					if (_this.indicatorRadioArr[index] === 'sentiment' || _this.indicatorRadioArr[index] === 'user') {
-						_this.$refs.sentiChild[index].setDesciption(index)
-						let senti = this.$refs.sentiChild[index].saveCondition(index)
-						if (!senti) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = senti)
-					}
-					if (_this.indicatorRadioArr[index] === 'symbol') {
-						_this.$refs.symbolChild[index].setDesciption(index)
-						let symbol = _this.$refs.symbolChild[index].saveCondition(index)
-						if(!symbol) {
-						_this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						} 
-						return (checked = symbol)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'CCI_like'
-					) {
-						this.$refs.cciChild[index].setDesciption(index)
-						let cci = this.$refs.cciChild[index].saveCondition(index)
-						if (!cci) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = cci)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'MACD_like'
-					) {
-						this.$refs.macdChild[index].setDesciption(index)
-						let macd = this.$refs.macdChild[index].saveCondition(index)
-						if (!macd) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = macd)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'MovingAverage_like'
-					) {
-						this.$refs.maChild[index].setDesciption(index)
-						let ma = this.$refs.maChild[index].saveCondition(index)
-						if (!ma) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = ma)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'EFT_like'
-					) {
-						this.$refs.EFTLikeChild[index].setDesciption(index)
-						let eft = this.$refs.EFTLikeChild[index].saveCondition(index)
-						if (!eft) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = eft)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'ADX_like'
-					) {
-						this.$refs.ADXLikeChild[index].setDesciption(index)
-						let adx = this.$refs.ADXLikeChild[index].saveCondition(index)
-						if (!adx) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = adx)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'Aligator_like'
-					) {
-						this.$refs.aligatorLikeChild[index].setDesciption(index)
-						let aligator =
-							this.$refs.aligatorLikeChild[index].saveCondition(index)
-						if (!aligator) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = aligator)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'LRF_like'
-					) {
-						this.$refs.LRFLikeChild[index].setDesciption(index)
-						let lrf = this.$refs.LRFLikeChild[index].saveCondition(index)
-						if (!lrf) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = lrf)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'BollingerBands_like'
-					) {
-						this.$refs.bollBandsLikeChild[index].setDesciption(index)
-						let blb = this.$refs.bollBandsLikeChild[index].saveCondition(index)
-						if (!blb) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = blb)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'Stochastics_like'
-					) {
-						this.$refs.stochasticsLikeChild[index].setDesciption(index)
-						let smi =
-							this.$refs.stochasticsLikeChild[index].saveCondition(index)
-						if (!smi) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = smi)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'ERI_like'
-					) {
-						this.$refs.ERILikeChild[index].setDesciption(index)
-						let eri = this.$refs.ERILikeChild[index].saveCondition(index)
-						if (!eri) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = eri)
-					}
-					if (
-						this.indicatorRadioArr[index] === 'technical' &&
-						this.techIndiObj[index] === 'Trailingstop_like'
-					) {
-						this.$refs.trailingStopLikeChild[index].setDesciption(index)
-						let ts =
-							this.$refs.trailingStopLikeChild[index].saveCondition(index)
-						if (!ts) {
-							this.popUpMsgBox(`Please check that the #
-									${index + 1}
-									${this.criteriaNum} panel field is filled in correctly`)
-						}
-						return (checked = ts)
-					}
-				} else {
-					checked = false
-					return checked
-				}
+			for (let index = 0; index < this.indicatorRadioArr.length; index++) {
+				const indi = this.$refs.indiChild[index].saveIndicator(index)
+				indiChecked = await indi
+				if(!indiChecked) return 
+			}
+			const [sentimentSymbolRadio, technicalRadio, symbolRadio] = this.classifyIndicatorRadio(this.indicatorRadioArr)
+			sentimentSymbolRadio.forEach((_, i) => {
+				this.$refs.sentiChild[i].setDesciption()
+				let senti = this.$refs.sentiChild[i].saveCondition()
+				if (!senti) return
 			})
+			const [groupedIndicators, categoryMap] = this.classifyTechIndiObj(this.techIndiObj)
+			if(technicalRadio.length) {
+				groupedIndicators.forEach(subArr => {
+					const category = categoryMap[subArr[0]]
+					subArr.forEach((_, i) => {
+						this.$refs[category][i].setDesciption()
+						let saveChecked = this.$refs[category][i].saveCondition()
+						if (!saveChecked) return
+					})
+				})
+			}
+			symbolRadio.forEach((_, i) => {
+				this.$refs.symbolChild[i].setDesciption()
+				let saveChecked = this.$refs.symbolChild[i].saveCondition()
+				if (!saveChecked) return
+			})
+			return true
 		},
 		setEditPanel(num, data) {
 			let criteria = this.criteriaNum
@@ -1229,19 +1097,19 @@ export default {
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
-				if (data[criteria].signals[j].analysis === 'User') {
+				else if (data[criteria].signals[j].analysis === 'User') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'user')
 					this.indicatorRadio = 'user'
 					this.techIndiObj[j] = ''
 				}
-				if (data[criteria].signals[j].analysis === 'Symbol') {
+				else if (data[criteria].signals[j].analysis === 'Symbol') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadioArr.splice(j, 1, 'symbol')
 					this.indicatorRadio = 'symbol'
 					this.techIndiObj[j] = ''
 				}
-				if (data[criteria].signals[j].analysis === 'Technical') {
+				else if (data[criteria].signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
@@ -1249,6 +1117,11 @@ export default {
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}
+			console.log('techIndiObj', this.techIndiObj)
+			// 先把 indicatorUrl 设置好 但是唯独 user indicator 没办法设置
+			data[criteria].signals.forEach((signal, i) => {
+				if(signal.analysis !== 'User') this.indicatorUrlArr.splice(i, 1, signal.indicator)
+			})
 			this.$nextTick(() => {
 				this.setEditData(this.refs)
 			})
@@ -1256,50 +1129,24 @@ export default {
 		setEditData(data) {
 			let criteria = this.criteriaNum
 			let length = data[criteria].signals.length
-			for (let j = 0; j < length; j++) {
-				this.$refs.indiChild[j].setEditData(data)
-				if (this.indicatorRadioArr[j] === 'sentiment' || this.indicatorRadioArr[j] === 'user') {
-					this.$refs.sentiChild[j].setEditData(data)
-				}
-				if (this.indicatorRadioArr[j] === 'symbol') {
-					this.$refs.symbolChild[j].setEditData(data)
-				}
-				if (this.indicatorRadioArr[j] === 'technical') {
-					if (this.techIndiObj[j] === 'CCI_like') {
-						this.$refs.cciChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'MovingAverage_like') {
-						this.$refs.maChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'MACD_like') {
-						this.$refs.macdChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'EFT_like') {
-						this.$refs.EFTLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'ADX_like') {
-						this.$refs.ADXLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'Aligator_like') {
-						this.$refs.aligatorLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'LRF_like') {
-						this.$refs.LRFLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'BollingerBands_like') {
-						this.$refs.bollBandsLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'Stochastics_like') {
-						this.$refs.stochasticsLikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'ERI_like') {
-						this.$refs.ERILikeChild[j].setEditData(data)
-					}
-					if (this.techIndiObj[j] === 'Trailingstop_like') {
-						this.$refs.trailingStopLikeChild[j].setEditData(data)
-					}
-				}
+			for (let j = 0; j < length; j++) {this.$refs.indiChild[j].setEditData(data)}
+			// classification radio button
+			const [sentimentSymbolRadio, technicalRadio, symbolRadio] = this.classifyIndicatorRadio(this.indicatorRadioArr)
+			sentimentSymbolRadio.forEach((_, i) => {
+				this.$refs.sentiChild[i].setEditData(data)
+			})
+			const [groupedIndicators, categoryMap] = this.classifyTechIndiObj(this.techIndiObj)
+			if(technicalRadio.length) {
+				groupedIndicators.forEach(subArr => {
+					const category = categoryMap[subArr[0]]
+					subArr.forEach((_, i) => {
+						this.$refs[category][i].setEditData(data)
+					})
+				})
 			}
+			symbolRadio.forEach((_, i) => {
+				this.$refs.symbolChild[i].setEditData(data)
+			})
 		},
 		setRiskEditData(data) {
 			this.relation = 0
