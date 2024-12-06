@@ -60,7 +60,11 @@ export default {
 		const _this = this
 		if(Cookies.get('sentimen_session')){
 			try {
+				
 				const res = await axios.post('/dev/dev/user/', null, { timeout: 50000, withCredentials: true })
+				// // 测试是否不堵塞首屏加载
+				// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+				// await delay(10000);
 				console.log('权限响应', res)
 			} catch (error) {
 				switch (error?.response?.status) {

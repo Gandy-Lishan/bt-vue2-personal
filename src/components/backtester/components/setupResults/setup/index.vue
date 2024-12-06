@@ -142,6 +142,7 @@ export default {
 									symbol2
 							}
 							await _this.displaySetUpForm(backtestEditData)
+							console.timeEnd('edit time')
 						}else {
 							// 说明不是路由跳转，而是从其他界面访问过来的，这个时候读缓存
 							console.log('说明不是路由跳转，而是从其他界面访问过来的，这个时候先用编辑数据没有再读缓存')

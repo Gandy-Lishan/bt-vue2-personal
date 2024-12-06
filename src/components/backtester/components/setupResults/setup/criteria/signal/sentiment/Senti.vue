@@ -484,6 +484,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
+      console.log('limit in rochcange', limit)
       this.isROCLike = 5 <= val && val <= 15
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
