@@ -713,8 +713,8 @@ export const CommonMethodsMixin = {
 				}
 			)
 			this.hideDuplicateROC()
-			if(CIQ.store.state.chart.trades.length == 0) return
-			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+			//if(CIQ.store.state.chart.trades.length == 0) return
+			//CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 		},
 		// 处理用户自定义indicator的显示名
 		rocDisplayName(field) {
@@ -1035,6 +1035,16 @@ export const CommonMethodsMixin = {
 			const myFLSbg = document.querySelector('#myFLSbg')
 			myFLSbg.classList.add('activated')
 		},
+
+		/**
+		 * 流程：
+		 * 	edit editBacktest -> loopCalculateNewCond -> CalculateNewCond(load roc without loading marker*) -> setup.vue(update form state without calling local calculateNewCond)
+		 *	view viewBacktest ->  loopCalculateNewCond -> CalculateNewCond(load roc without loading marker*) -> result.vue(load markers for all criteria)
+		* @param {*} data 
+		* @param {*} freq 
+		* @param {*} row 
+		* @param {*} resData 
+		*/
 		async restoreIndicatorLayoutView(data, freq, row, resData) {
 			console.time('view time')
 			// 跳转 result 去查看回测结果
