@@ -464,7 +464,7 @@
                              CIQ.store.commit("states/envokeBeforeCalculateNewConditions", false)
                          }              
                      }
-                     
+
                      for(var j in CIQ.store.state.chart.activatedMA){       
                         /** 指示Study归属的Symbol */
                         const activatedMAObj = CIQ.store.state.chart.activatedMA[j];                     
@@ -472,8 +472,11 @@
                             const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, j)
                             if(CIQ.store.state.chart.activatedMA[j].url == 'ma'){
                                  // 直接加载，信息都更新再studylibrary
+                                 let type   //这里是存activatedMA时没有把SMA转换成simple, 加的兼容错误版本补丁
+                                 if(['SMA','EMA'].includes(activatedMAObj.type)) type = activatedMAObj.type == 'SMA'?'simple':'exponential'
+                                 
                                  var sd = CIQ.Studies.addStudy(stx, 'ST MA', {
-                                     Type: activatedMAObj.type, //还原stma新加的ma type(sma or ema)
+                                     Type: type ? type : activatedMAObj.type, //还原stma新加的ma type(sma or ema)
                                      Period: activatedMAObj.period,
                                      display: 'ST MA',
                                  },{ MA: ma_color },{

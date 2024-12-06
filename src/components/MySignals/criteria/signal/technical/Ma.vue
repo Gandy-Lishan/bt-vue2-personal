@@ -424,7 +424,7 @@ export default {
 			var objMA = { 
 				period: this.tech.ma_period, 
 				url: 'ma', 
-				type: this.maRadio,
+				type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
 				criteria: this.criteria, 
 				index: this.panelIndex
 			}
