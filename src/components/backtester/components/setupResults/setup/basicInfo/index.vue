@@ -1487,6 +1487,8 @@ export default {
         CIQ.hideCover()
         return true
       }
+      // clear backtest information when the form passes verification
+			this.$store.commit('form/initialBacktestInfo');
       let bd = JSON.parse(JSON.stringify(this.bd))
       this.getTradePrice(bd.trade_price)
       /* 处理数据 */
@@ -1512,6 +1514,7 @@ export default {
     },
     async validateForm() {
       /* 校验表单字段 */
+      debugger
       let formValid, riskControlValid, stopLossValid, takeProfitValid, timeInMarketValid, excludeValid, nameValid, setUpValid, nameLookupRes, nameValidPass, editBacktestID
       let _this = this
       if(!_this.bd.end_date) {
@@ -1573,7 +1576,7 @@ export default {
           nameValid = true
         }
       /* 重名且编辑 没名字是编辑 没名字是新建 没名字且新建(strategy) */
-      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) ||
+      nameValidPass = (!nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && (editBacktestID && _this.getterBacktestInfo.old_uuid === editBacktestID)) ||
       (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && _this.getterBacktestInfo.old_uuid) || 
       (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && !_this.getterBacktestInfo.old_uuid)
       if(!nameValidPass) {

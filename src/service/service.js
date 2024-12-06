@@ -607,7 +607,13 @@ export function getAllMyIndicatorsList() {
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url)
+			.get(url,{
+				headers: {
+				  'Cache-Control': 'no-cache',  // 禁用缓存
+				  'Pragma': 'no-cache',
+				},
+				withCredentials: true
+			  })
 			.then(res => {
 				resolve(res.data)
 			})
@@ -1098,9 +1104,12 @@ export function getBTV1FavIndicator() {
 	return new Promise((resolve, reject) => {
 		axios
 			.get('/bt/my_indicator/get_btv1_favorite_indicators/', {
-				//cache: true,
+				headers: {
+				  'Cache-Control': 'no-cache',  // 禁用缓存
+				  'Pragma': 'no-cache',
+				},
 				withCredentials: true
-			})
+			  })
 			.then(res => {
 				resolve(res)
 			})
@@ -1299,9 +1308,12 @@ export function getAllMySymbolsList() {
 	return new Promise((resolve, reject) => {
 		axios
 			.get(url, {
-				// cache: true
+				headers: {
+				  'Cache-Control': 'no-cache',  // 禁用缓存
+				  'Pragma': 'no-cache',
+				},
 				withCredentials: true
-			})
+			  })
 			.then(res => {
 				resolve(res.data)
 			})

@@ -1313,6 +1313,8 @@ export const CommonMethodsMixin = {
 					let res 
 					try {
 						res = await runBacktest(backtestDataStr)
+						// should update old_uuid
+						if(res.data.id && typeof res.data.id === 'string') _this.$store.form.backtestInfo.old_uuid = res.data.id
 					} catch (error) {
 						if (error.response?.status == 403) {
 							_this.popUpMsgBox('The backtest name already exists')
@@ -1325,7 +1327,7 @@ export const CommonMethodsMixin = {
 					if (res.status != 201) return
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
-					_this.$store.commit('form/initialBacktestInfo')
+					// _this.$store.commit('form/initialBacktestInfo')
 
 					let coverText =
 						'Backtest data upload successful, backtest is in progress, please wait patiently for the results...'
