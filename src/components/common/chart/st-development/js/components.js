@@ -7257,48 +7257,66 @@ class ShowRange extends CIQ.UI.ContextTag {
 	 * @since 5.1.1 timeUnit added
 	 */
 	set(activator, multiplier, base, interval, period, timeUnit) {
-		// only need the timeUnit which is the frequency
-		// change frequency by choosing a timeunit, technical indicator will not call loadchart()
-		var selectedFreq = ''
-		switch(timeUnit){
-			case "month":{
-				selectedFreq = "Monthly"
-				break;
-			}
-			case "week":{
-				selectedFreq = "Weekly"
-				break;
-			}
-			case "day":{
-				selectedFreq = "Daily"
-				break;
-			}
-			default:
-		}
+		// // only need the timeUnit which is the frequency
+		// // change frequency by choosing a timeunit, technical indicator will not call loadchart()
+		// var selectedFreq = ''
+		// switch(timeUnit){
+		// 	case "month":{
+		// 		selectedFreq = "Monthly"
+		// 		break;
+		// 	}
+		// 	case "week":{
+		// 		selectedFreq = "Weekly"
+		// 		break;
+		// 	}
+		// 	case "day":{
+		// 		selectedFreq = "Daily"
+		// 		break;
+		// 	}
+		// 	default:
+		// }
 		
-		CIQ.store.commit('form/getFrequency', selectedFreq)
-		// 回调函数保证先换周期再调整数据跨度同步执行
-		CIQ.addIndicators({},()=>{
-			var self = this;
-			if (self.context.loader) self.context.loader.show();
-			var params = {
-				multiplier: multiplier,
-				base: base
+		// CIQ.store.commit('form/getFrequency', selectedFreq)
+		// // 回调函数保证先换周期再调整数据跨度同步执行
+		// CIQ.addIndicators({},()=>{
+		// 	var self = this;
+		// 	if (self.context.loader) self.context.loader.show();
+		// 	var params = {
+		// 		multiplier: multiplier,
+		// 		base: base
+		// 	};
+		// 	if (interval) {
+		// 		params.periodicity = {
+		// 			interval: interval,
+		// 			period: period ? period : 1,
+		// 			timeUnit: timeUnit,
+		// 		};
+		// 	}
+		
+		// 	self.context.stx.setSpan(params, function () {
+		// 		if (self.context.loader) self.context.loader.hide();
+		// 		CIQ.hideCover()
+		// 		CIQ.nprogress.done()
+		// 	});
+		// })
+
+		var self = this;
+		if (self.context.loader) self.context.loader.show();
+		var params = {
+			multiplier: multiplier,
+			base: base
+		};
+		if (interval) {
+			params.periodicity = {
+				interval: interval,
+				period: period ? period : 1,
+				timeUnit: timeUnit,
 			};
-			if (interval) {
-				params.periodicity = {
-					interval: interval,
-					period: period ? period : 1,
-					timeUnit: timeUnit,
-				};
-			}
-		
-			self.context.stx.setSpan(params, function () {
-				if (self.context.loader) self.context.loader.hide();
-				CIQ.hideCover()
-				CIQ.nprogress.done()
-			});
-		})
+		}
+	
+		self.context.stx.setSpan(params, function () {
+			if (self.context.loader) self.context.loader.hide();
+		});
 	}
 
 	setContext(context) {
