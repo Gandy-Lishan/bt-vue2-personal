@@ -325,8 +325,8 @@ export default {
 				return checked
 			} else {
 				this.popUpMsgBox(`Please check that the #
-				${this.panelIndex}
-				${this.criteriaNum} panel field is filled in correctly`)
+				${this.panelIndex + 1}
+				${this.criteria} panel field is filled in correctly`)
 				checked = false
 				return checked
 			}

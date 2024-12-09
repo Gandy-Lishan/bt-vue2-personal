@@ -700,8 +700,8 @@ export default {
 				} else {
 					checked = false
 					this.popUpMsgBox(`Please check that the #
-					${this.panelIndex}
-					${this.criteriaNum} panel field is filled in correctly`)
+					${this.panelIndex + 1}
+					${this.criteria} panel field is filled in correctly`)
 					return checked
 				}
 			} else {
@@ -729,8 +729,8 @@ export default {
 				} else {
 					checked = false
 					this.popUpMsgBox(`Please check that the #
-					${this.panelIndex}
-					${this.criteriaNum} panel field is filled in correctly`)
+					${this.panelIndex + 1}
+					${this.criteria} panel field is filled in correctly`)
 					return checked
 				}
 			}

@@ -213,8 +213,8 @@ export default {
 			tech.index = index
 			this.$store.commit('form/saveCondition', tech)
 			if(!checked) this.popUpMsgBox(`Please check that the #
-			${this.panelIndex}
-			${this.criteriaNum} panel field is filled in correctly`)
+			${this.panelIndex + 1}
+			${this.criteria} panel field is filled in correctly`)
 			return checked
 		},
 		setEditData(newVal) {
