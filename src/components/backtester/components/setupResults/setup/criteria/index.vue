@@ -1041,33 +1041,35 @@ export default {
 				this.$store.commit('form/saveDescription', desObj)
 				return true
 			}
-			for (let index = 0; index < this.indicatorRadioArr.length; index++) {
-				const indi = this.$refs.indiChild[index].saveIndicator(index)
+			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
+				const indi = this.$refs.indiChild[i].saveIndicator(i)
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}
 			const [sentimentSymbolRadio, technicalRadio, symbolRadio] = this.classifyIndicatorRadio(this.indicatorRadioArr)
-			sentimentSymbolRadio.forEach((_, i) => {
+			for (let i = 0; i < sentimentSymbolRadio.length; i++) {
 				this.$refs.sentiChild[i].setDesciption()
 				let senti = this.$refs.sentiChild[i].saveCondition()
 				if (!senti) return
-			})
+			}
 			const [groupedIndicators, categoryMap] = this.classifyTechIndiObj(this.techIndiObj)
 			if(technicalRadio.length) {
-				groupedIndicators.forEach(subArr => {
+				for (let i = 0; i < groupedIndicators.length; i++) {
+					const subArr = groupedIndicators[i]
 					const category = categoryMap[subArr[0]]
-					subArr.forEach((_, i) => {
+					const techChecked = subArr.find((_, i) => {
 						this.$refs[category][i].setDesciption()
 						let saveChecked = this.$refs[category][i].saveCondition()
-						if (!saveChecked) return
+						if (!saveChecked) return true
 					})
-				})
+					if(techChecked) return
 			}
-			symbolRadio.forEach((_, i) => {
+			}
+			for (let i = 0; i < symbolRadio.length; i++) {
 				this.$refs.symbolChild[i].setDesciption()
 				let saveChecked = this.$refs.symbolChild[i].saveCondition()
 				if (!saveChecked) return
-			})
+			}
 			return true
 		},
 		setEditPanel(num, data) {
