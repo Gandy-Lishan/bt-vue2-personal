@@ -599,16 +599,16 @@ export default {
 			console.log(groupedIndicators);
 			const categoryMap = {
 				'CCI_like': 'cciChild',
-				'MovingAverage_like': 'maChild',
 				'MACD_like': 'macdChild',
 				'EFT_like': 'EFTLikeChild',
-				'ADX_like': 'ADXLikeChild',
-				'Aligator_like': 'aligatorLikeChild',
-				'LRF_like': 'LRFLikeChild',
 				'BollingerBands_like': 'bollBandsLikeChild',
 				'Stochastics_like': 'stochasticsLikeChild',
 				'ERI_like': 'ERILikeChild',
-				'ERTrailingstop_like_like': 'trailingStopLikeChild',
+				'ADX_like': 'ADXLikeChild',
+				'MovingAverage_like': 'maChild',
+				'Aligator_like': 'aligatorLikeChild',
+				'LRF_like': 'LRFLikeChild',
+				'Trailingstop_like': 'trailingStopLikeChild',
 			}
 			return [groupedIndicators, categoryMap]
 		},
