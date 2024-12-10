@@ -107,11 +107,6 @@ const getCoresSymbolDual = (isSymbol2) => {
       const maxMatches = Math.max(valueMatches.length, urlMatches.length);
       // 每个匹配增加分数
       score += maxMatches * 2;  // 每个匹配加 2 分
-      if(score >0) {
-        console.log('queryString',queryString,'score',score)
-        console.log('maxMatches',maxMatches)
-        console.log('****************')
-      }
       
       // 如果有匹配，返回分数
       return score;

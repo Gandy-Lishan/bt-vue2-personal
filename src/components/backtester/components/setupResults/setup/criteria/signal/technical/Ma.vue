@@ -17,7 +17,6 @@
 							size="mini"
 							filterable
 							:disabled="!(radio === ' ')"
-							@change="getRadioSelect"
 							placeholder="Please select condition"
 						>
 							<el-option
@@ -358,7 +357,7 @@ export default {
 						index: this.panelIndex
 					})
 
-					CIQ.store.commit('chart/getMAPeriod', val)
+					//CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
@@ -443,35 +442,35 @@ export default {
 			}
 		},
 		// todo: ma应该随数据源变化而更新
-		getRadioSelect(val) {
-			let field
-			switch(val){
-				case 'SC': field = 'Close';break;
-				case 'SH': field = 'High';break;
-				case 'SO': field = 'Open';break;
-				case 'SL': field = 'Low';break;
-				default: field = 'field'
-			}
-			for (let studyInstanceName in CIQ.stxx.layout.studies) {
-				let sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (
-					sd.type == 'ma' && sd.panel == 'chart' &&
-					sd.parameters.criteria == this.criteria &&
-					sd.parameters.index == this.panelIndex
-				) {
-					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
-						criteria: this.criteria,
-						index: this.panelIndex
-					})
-					// 解决附属ma或者roc漂移问题
-					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-					CIQ.store.commit('chart/getMAPeriod', val)
+		// getRadioSelect(val) {
+		// 	let field
+		// 	switch(val){
+		// 		case 'SC': field = 'Close';break;
+		// 		case 'SH': field = 'High';break;
+		// 		case 'SO': field = 'Open';break;
+		// 		case 'SL': field = 'Low';break;
+		// 		default: field = 'field'
+		// 	}
+		// 	for (let studyInstanceName in CIQ.stxx.layout.studies) {
+		// 		let sd = CIQ.stxx.layout.studies[studyInstanceName]
+		// 		if (
+		// 			sd.type == 'ma' && sd.panel == 'chart' &&
+		// 			sd.parameters.criteria == this.criteria &&
+		// 			sd.parameters.index == this.panelIndex
+		// 		) {
+		// 			let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
+		// 				criteria: this.criteria,
+		// 				index: this.panelIndex
+		// 			})
+		// 			// 解决附属ma或者roc漂移问题
+		// 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+		// 			//CIQ.store.commit('chart/getMAPeriod', val)
 
-					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
-				}
-			}
-		},
+		// 			// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
+      	// 			CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
+		// 		}
+		// 	}
+		// },
 		setDesciption() {
 			let index = this.panelIndex
 			let criteria = ''
@@ -667,7 +666,7 @@ export default {
 						index: this.panelIndex
 					})
 					
-					CIQ.store.commit('chart/getMAPeriod', val)
+					//CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
