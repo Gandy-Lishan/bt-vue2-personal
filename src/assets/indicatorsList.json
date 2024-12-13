@@ -31638,5 +31638,35 @@
         "chart_name": "Sentiment Cycle Composite",
         "url": "sentiment_cycle_composite",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "PLTR Fund Flow",
+        "url": "etf_pltr_flow",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PLTR\u00a0Optix",
+        "url": "etf_pltr",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PLTR Outstanding Shares",
+        "url": "etf_pltr_shares",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Incorporated Inc",
+        "url": "MSTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Incorporated Trend Score",
+        "url": "MSTR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Incorporated RelTrend Score",
+        "url": "MSTR_reltrend",
+        "updated": "Daily"
     }
 ]
