@@ -362,7 +362,7 @@ export default {
 		async runBacktest() {
 			const _this = this
 			const basicErr = await _this.$refs['basicInfo'].saveData()
-			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, ''); return}
+			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, '');_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', {});return}
 			CIQ.addCover()
 			_this.setSetUpLoadingSetting(true, true, 5, 'Saving backtest basic information...')
 			_this.setSetUpLoadingSetting(true, true, 10, 'Saving backtest entry and exit criteria...')
@@ -373,6 +373,7 @@ export default {
 			const checkAndHandleError = (err, errMsg) => {
 				if (!err) {
 					_this.setSetUpLoadingSetting(false, false, 0, errMsg);
+					_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', {});
 					_this.popUpMsgBox(errMsg);
 					CIQ.hideCover();
 					return true;
