@@ -330,6 +330,7 @@
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage)"
 										type="success"
+										:disabled="getIsBacktestRunningFlagState"
 										icon="el-icon-video-play"
 										circle
 										size="mini"
@@ -374,8 +375,10 @@
 									content="edit backtest"
 									placement="bottom-start"
 								>
+								
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage)"
+										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-edit"
 										circle
@@ -449,7 +452,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										:disabled="scope.row.status == 0 || scope.row.status == 3"
+										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										type="warning"
 										icon="el-icon-view"
 										circle
@@ -465,7 +468,7 @@
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && is_admin"
-										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3"
+										:disabled="isOptRuning || scope.row.opted == 1 || scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										type="success"
 										circle
 										size="mini"
@@ -526,6 +529,7 @@ import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixi
 import { copy } from "@/components/common/directives/copyBacktestID"
 import { RefreshBus } from "../EventBus/Bus"
 import Optimize from "@/components/common/optimizeBT/Optimize.vue";
+import { mapGetters } from 'vuex';
 
 export default {
 	name: 'Table',
@@ -581,6 +585,7 @@ export default {
 		isOptRuning() {
 			return this.$refs['OPT'].optimizeState
 		},
+		...mapGetters(['getIsBacktestRunningFlagState']),
 	},
 	watch: {
 		userRole: {

@@ -92,14 +92,22 @@ const getCoresSymbolDual = (isSymbol2) => {
       // 模糊匹配分数
       let score = 0;
       
+            // 完全匹配
+            if (standardizedValue === standardizedQuery || standardizedUrl === standardizedQuery) {
+              score += 5; // 最高优先级
+            }
+            // 前缀匹配
+            else if (standardizedValue.startsWith(standardizedQuery) || standardizedUrl.startsWith(standardizedQuery)) {
+              score += 4; // 次高优先级
+            }
+
       // 对标准化后的 value 和 url 使用模糊匹配
       const valueMatches = fuzzyMatch(standardizedValue, standardizedQuery);
       const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery);
-  
+      const maxMatches = Math.max(valueMatches.length, urlMatches.length);
       // 每个匹配增加分数
-      score += valueMatches.length * 2;  // 每个匹配加 2 分
-      score += urlMatches.length * 2;    // 每个匹配加 2 分
-
+      score += maxMatches * 2;  // 每个匹配加 2 分
+      
       // 如果有匹配，返回分数
       return score;
     };
