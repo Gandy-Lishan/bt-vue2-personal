@@ -64,7 +64,7 @@ export default {
         {
           label: 'Tutorial Videos',
           keyPath: '2',
-          path: '/youtube'
+          path: 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
         },
         {
           label: 'Help',
