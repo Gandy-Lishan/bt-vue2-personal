@@ -67,6 +67,25 @@
 							></el-input>
 					</el-form-item>
 				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === ' ')"
+							placeholder="Please select condition"
+              				@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 			</div>
 			<div class="condition-container">
 				<el-form-item>
@@ -120,6 +139,25 @@
 								placeholder="Input Period"
 								@input="debouncedGetMaValue"
 							></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === 'Moving Average')"
+							placeholder="Please select condition"
+              				@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</div>
 			</div>
@@ -267,8 +305,11 @@ export default {
 				{ value: 3, label: 'CrossAbove' },
 				{ value: 4, label: 'CrossBelow' }
 			],
+			MATypeConditions: [
+				{ value: 'SMA', label: 'Simple' },
+				{ value: 'EMA', label: 'Exponential' },
+			],
 			radio: ' ',
-			maRadio: 'SMA',
 			description: '',
 			editTechVal: '',
 			radioConditions: [
@@ -313,6 +354,14 @@ export default {
 		}
 	},
 	methods: {
+		debouncedUpdateMaType: debounce(function() {
+			if(this.radio === ' ') {
+				this.getSCvalue(this.tech.period)
+			}else {
+				this.getMaPeriodValue(this.tech.ma_period)
+				this.getMaValue(this.tech.maPeriod)
+			}
+		}, 500),
 		debouncedGetMaPeriodValue: debounce(function(val) {
 			this.getMaPeriodValue(val)
 		}, 500),
@@ -346,7 +395,7 @@ export default {
 						inputs: {
 							Period: val,
 							Field: sd.inputs.Field,
-							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+							Type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA:ma_color },
@@ -360,7 +409,7 @@ export default {
 					//CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}			
@@ -386,7 +435,7 @@ export default {
 				}
 				const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
 				let sd = CIQ.Studies.addStudy(CIQ.stxx, 'ST MA', {
-					Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+					Type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 					Period: this.tech.ma_period,
 					display: 'ST MA'
 				},{ MA: ma_color },{
@@ -397,7 +446,7 @@ export default {
 				let objMA = {
 					period: this.tech.ma_period,
 					url: 'ma',
-					type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+					type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 					criteria: this.criteria, 
 					index: this.panelIndex
 				}
@@ -467,12 +516,15 @@ export default {
 		// 			//CIQ.store.commit('chart/getMAPeriod', val)
 
 		// 			// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      	// 			CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
+      	// 			CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
 		// 		}
 		// 	}
 		// },
 		setDesciption() {
 			let index = this.panelIndex
+			let rocCond = {
+				'ma_type': this.tech.ids
+			}
 			let criteria = ''
 			let direction = ''
 			let commentDes
@@ -521,7 +573,7 @@ export default {
 				desObj.criteria = this.criteria
 				desObj.description = {
 					'commentDes':commentDes,
-					'rocCond':null
+					'rocCond':rocCond
 				}
 				desObj.index = index
 				this.$store.commit('form/saveDescription', desObj)}
@@ -556,21 +608,22 @@ export default {
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				this.description = `${comparison} ${ma_period} ${condition} Moving Average ${period}`
+				const maType = this.tech.ids == 'SMA' ? 'Simple' : 'Exponential'
+				this.description = `${comparison} ${ma_period} ${condition} ${maType} Moving Average ${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria
 				if(this.relation != 1) {
 					desObj.description = {
 						'commentDes':this.description,
-						'rocCond':null
+						'rocCond':rocCond
 					}
 					desObj.index = index + 1
 					}
 				if(this.relation == 1) {
 						desObj.description = {
 							'commentDes':commentDes + this.description,
-							'rocCond':null
+							'rocCond':rocCond
 						}
 						desObj.index = 0
 				}
@@ -595,7 +648,7 @@ export default {
 						inputs: {
 							Period: val,
 							Field: 'field',
-							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+							Type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA: ma_color },
@@ -613,7 +666,7 @@ export default {
 			let objMA = { 
 				period: this.tech.ma_period, 
 				url: 'ma', 
-				type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+				type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 				criteria: this.criteria, 
 				index: this.panelIndex
 			}
@@ -655,7 +708,7 @@ export default {
 						inputs: {
 							Period: val,
 							Field: sd.inputs.Field,
-							Type: this.maRadio == 'SMA' ? 'simple' : 'exponential',
+							Type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
 							Offset: 0
 						},
 						outputs: { MA: ma_color },
@@ -669,7 +722,7 @@ export default {
 					//CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.maRadio == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
+      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
 
 					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
@@ -738,10 +791,20 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				
+				// 还原存在cond的ma type
+				let cond
+				if('cond' in newVal[this.criteria]){
+					cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+				}
+
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				this.tech.comparison = obj.comparison
 				if (this.tech.comparison === 'MA') {
+					if(cond){
+						this.tech.ids = cond.ma_type || 'SMA'
+					}
 					this.radio = 'Moving Average'
 					this.tech.ma_period = obj.ma_period
 					this.tech.maPeriod = obj.period
