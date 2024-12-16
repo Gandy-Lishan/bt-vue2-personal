@@ -76,9 +76,9 @@
 			</div>
 			<div class="header-part">
 				<div class="portfolioCheckedBox">
-					<a @click="handleFilter" style="cursor: pointer;"
-						>Filter Criteria<i :class="isShowFilter ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
-					<div class="des-content" v-show="isShowFilter">
+					<a @click="isFilter = !isFilter" style="cursor: pointer;"
+						>Filter Criteria<i :class="isFilter ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
+					<div class="des-content" v-show="isFilter">
 						<el-form
 						ref="Form"
 						:model="data"
@@ -395,7 +395,6 @@ export default {
 	isShowShortChecked: false,
 	loading: false,
 	isFilter: false,
-	isShowFilter: false,
 	data: {
 		stop_loss_condition: 2,
 		take_profit_condition: 2,
@@ -750,10 +749,6 @@ export default {
 		console.log('触发了', signals)
 		this.data.signals = Array.from(new Set(signals))
 	},
-	handleFilter() {
-		this.isShowFilter = !this.isShowFilter
-		this.isFilter = true
-	}
   }
 };
 </script>

@@ -193,12 +193,7 @@ export default {
         return
       }
       if(key === '2') {
-        let path = '/'
-        if (this.$route.path.includes('/backtester')) {
-          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
-        }else if(this.$route.path.includes('myindicator') || this.$route.path.includes('MIList')){
-          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
-        }
+        let path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
         window.open(path, '_blank')
         return
       }
