@@ -884,7 +884,7 @@ class EncodeTI {
 		else if (obj['ids'] == 'ERI') return this.encode_eri(obj)
 		else if (obj['ids'] == 'LRF') return this.encode_lrf(obj)
 		else if (obj['ids'] == 'ADX') return this.encode_adx(obj)
-		else if (obj['ids'] == 'SMA') return this.encode_sma(obj)
+		else if (obj['ids'] == 'SMA' || obj['ids'] == 'EMA') return this.encode_sma(obj)
 		else if (obj['ids'] == 'ALLI') return this.encode_alli(obj)
 		else if (obj['ids'] == 'TLS') return this.encode_tls(obj)
 	}
@@ -1014,11 +1014,12 @@ class EncodeTI {
 
 	encode_sma(obj) {
 		var keys = Object.keys(obj)
+		const maType = obj['ids'] == 'SMA' ? 'SMA' : 'EMA'
 		if (keys.indexOf('ma_period') === -1)
 			return (
 				'TI:' +
 				obj['indicator'] +
-				';IDS:SMA;SC:' +
+				`;IDS:${maType};SC:` +
 				obj['comparison'] +
 				'/' +
 				obj['condition'] +
@@ -1029,7 +1030,7 @@ class EncodeTI {
 			return (
 				'TI:' +
 				obj['indicator'] +
-				';IDS:SMA;SC:' +
+				`;IDS:${maType};SC:` +
 				obj['comparison'] +
 				obj['ma_period'] +
 				'/' +

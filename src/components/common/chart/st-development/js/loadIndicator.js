@@ -404,6 +404,7 @@
                                     criteria: CIQ.store.state.chart.activatedMALayout[j].criteria,
                                     index: CIQ.store.state.chart.activatedMALayout[j].index
                                 })   
+                                debugger
                             }  
                         }
                     }else{
