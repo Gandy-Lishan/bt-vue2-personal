@@ -249,7 +249,7 @@ export default {
           },
           gridLineWidth: 0,
           title: {
-            text: 'Close & Trend Score',
+            text: '',
             style: {
               color: Highcharts.getOptions().colors[1],
             },
