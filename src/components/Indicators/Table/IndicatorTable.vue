@@ -39,6 +39,7 @@ import AboutUs from "./AboutUs";
 import { mapGetters } from 'vuex'
 import { isJson } from '@/utils'
 import moment from "moment";
+import { getIndicatorsDownloadData } from "@/service/service";
 
 export default {
   name: 'IndicatorTable',
@@ -331,13 +332,19 @@ export default {
         return moment(item.date, 'YYYY-MM-DD').isAfter(threeMonthsAgo) || moment(item.date, 'YYYY-MM-DD').isSame(threeMonthsAgo, 'day');
       });
     },
-    downloadCSV() {
-      let data = this.indicatorCSVData
-      // 当前日期，确保是 UTC 时间
-      const currentDate = new Date(); // 将当前日期转换为 'YYYY-MM-DD' 格式的字符串
-      // 调用函数并传入数据和当前日期
-      data = this.filterRecentThreeMonths(data, currentDate);
+    async downloadCSV() {
       const xlsxName = this.indicatorsCSVName
+      let data = this.indicatorCSVData
+      try {
+        const {data:_data} = await getIndicatorsDownloadData(xlsxName)
+        data = _data
+      } catch (error) {
+        console.log('用户无 indicator api 权限', error)
+        // 当前日期，确保是 UTC 时间
+        const currentDate = new Date(); // 将当前日期转换为 'YYYY-MM-DD' 格式的字符串
+        // 调用函数并传入数据和当前日期
+        data = this.filterRecentThreeMonths(data, currentDate);
+      }
       if (!data || !data.length) {
         this.popUpMsgBox('No data available for download')
         return

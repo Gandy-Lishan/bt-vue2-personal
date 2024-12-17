@@ -1480,6 +1480,20 @@ export function getIndicatorsRowData(url) {
 			})
 	})
 }
+export function getIndicatorsDownloadData(url) {
+	const path =`/dev/st_data/download_csv?index=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
 export function obtainBTV1IndicatorsList() {
 
