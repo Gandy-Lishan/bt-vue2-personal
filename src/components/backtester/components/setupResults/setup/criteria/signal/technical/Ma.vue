@@ -4,7 +4,6 @@
 		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 		<el-form :model="tech" :rules="rules" ref="maForm" size="mini">
 			<div class="condition-container">
-				<!-- <div class="conditionSelect"> -->
 					<el-form-item
 							style="display: inline"
 							effect="light"
@@ -29,7 +28,6 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
-				<!-- </div> -->
 				<div class="conditionSelect">
 					<el-form-item
 							style="display: inline"
