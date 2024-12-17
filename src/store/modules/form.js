@@ -250,38 +250,6 @@ const mutations = {
 			const indexB = sortOrder.indexOf(b)
 			return indexA - indexB
 		}
-		const findMaxFreq = (currentFreq, previousFreq) => {
-			let selectedTimeframe = currentFreq
-			let previousTimeframe = previousFreq
-			if (
-				selectedTimeframe !== '' &&
-				selectedTimeframe !== undefined &&
-				selectedTimeframe !== null
-			) {
-				if (selectedTimeframe !== previousTimeframe) {
-					// 根据时间范围的大小进行比较，取周期较大的那个
-					const timeframes = ['Daily', 'Weekly', 'Monthly']
-					const previousIndex = timeframes.indexOf(previousTimeframe)
-					const currentIndex = timeframes.indexOf(selectedTimeframe)
-					// 找到当前的 timeframe, 如果当前的 timeframe 大, 选出的小, 那么就不变
-					const bdTimeframeIndex = timeframes.indexOf(state.backtestInfo.frequency)
-					const largerIndex = Math.max(previousIndex, currentIndex)
-					const _largerIndex = Math.max(largerIndex, bdTimeframeIndex)
-					selectedTimeframe = timeframes[_largerIndex]
-
-					// 更新之前的时间范围为当前选择
-					previousTimeframe = selectedTimeframe
-				}
-			}else {
-				const timeframes = ['Daily', 'Weekly', 'Monthly']
-				const previousIndex = timeframes.indexOf(previousTimeframe)
-				const currentIndex = timeframes.indexOf(selectedTimeframe)
-				const bdTimeframeIndex = timeframes.indexOf(state.backtestInfo.frequency)
-				const _largerIndex = Math.max(previousIndex, currentIndex, bdTimeframeIndex)
-				if(_largerIndex !== -1) previousTimeframe = timeframes[_largerIndex]
-			}
-			return previousTimeframe
-		}
 		const sortOrder = ['Daily', 'Weekly', 'Monthly']
 		freqEntryArray = freqEntryArray.sort(customSort)
 		freqExitArray = freqExitArray.sort(customSort)
@@ -296,18 +264,29 @@ const mutations = {
 		state.mySignalTimeframe = getMaxTimeframe(freqEntryArray)
 
 		console.log('Exit 的数组', freqExitArray)
-		const maxEntryFreq = freqEntryArray[freqEntryArray.length - 1]
-		const maxExitFreq = freqExitArray[freqExitArray.length - 1]
-		const maxFreq = findMaxFreq(maxEntryFreq, maxExitFreq)
+		const maxEntryFreq = freqEntryArray[freqEntryArray.length - 1] || 'Daily'
+		const maxExitFreq = freqExitArray[freqExitArray.length - 1] || 'Daily'
+		const maxFreqArr = [maxEntryFreq, maxExitFreq].sort(customSort)
+		const maxFreq = maxFreqArr[maxFreqArr.length - 1] || 'Daily'
 		if (maxFreq === undefined || maxFreq === null || maxFreq === '') {
 			state.exitFrequency = ''
 			state.backtestInfo.frequency = 'Daily'
 			console.log('最大的周期', state.exitFrequency)
 			return
 		}
-		state.exitFrequency = maxFreq
-		state.backtestInfo.frequency = maxFreq
-		console.log('最大的周期', state.exitFrequency)
+		console.log('面板的最大的周期', maxFreq)
+		const _maxFreqIndex = sortOrder.findIndex(ele => ele === maxFreq)
+		const _currentMaxFreqIndex = sortOrder.findIndex(ele => ele === state.backtestInfo.frequency)
+		if(_maxFreqIndex !== -1 && _currentMaxFreqIndex !== -1) {
+			if(_maxFreqIndex > _currentMaxFreqIndex) {
+				state.exitFrequency = maxFreq
+				state.backtestInfo.frequency = maxFreq
+			}
+		}else {
+			state.exitFrequency = maxFreq
+			state.backtestInfo.frequency = maxFreq
+		}
+		console.log('最后的最大的周期', state.exitFrequency)
 	},
 	getFreqHighPriority(state, val) {
 		state.exitFrequency = val
