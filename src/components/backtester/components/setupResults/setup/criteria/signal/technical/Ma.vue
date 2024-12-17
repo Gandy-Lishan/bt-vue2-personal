@@ -4,30 +4,32 @@
 		<!-- <p class="hint">Hint: To change the indicator settings, right click the indicator in the above chart and select "Edit Setting"</p> -->
 		<el-form :model="tech" :rules="rules" ref="maForm" size="mini">
 			<div class="condition-container">
-				<el-form-item
-						style="display: inline"
-						effect="light"
-						content="Compare with indicator value"
-						placement="bottom"
-						class="indicator-alignment"
-					>
-					<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
-						<el-select
-							v-model="tech.comparison"
-							size="mini"
-							filterable
-							:disabled="!(radio === ' ')"
-							placeholder="Please select condition"
+				<!-- <div class="conditionSelect"> -->
+					<el-form-item
+							style="display: inline"
+							effect="light"
+							content="Compare with indicator value"
+							placement="bottom"
+							class="indicator-alignment conditionSelect"
 						>
-							<el-option
-								v-for="item in radioConditions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
+						<el-radio v-model="radio" label=" " @change="setRadio"></el-radio>
+							<el-select
+								v-model="tech.comparison"
+								size="mini"
+								filterable
+								:disabled="!(radio === ' ')"
+								placeholder="Please select condition"
 							>
-							</el-option>
-						</el-select>
-				</el-form-item>
+								<el-option
+									v-for="item in radioConditions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option>
+							</el-select>
+						</el-form-item>
+				<!-- </div> -->
 				<div class="conditionSelect">
 					<el-form-item
 							style="display: inline"
@@ -826,6 +828,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+
+.indicator-alignment.conditionSelect /deep/ .el-form-item__content{
+	display: flex;
+	align-items: center;
+}
 .ids-container {
 	.el-form-item {
 		display: inline-flex;
