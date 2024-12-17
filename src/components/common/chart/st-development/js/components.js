@@ -2183,7 +2183,8 @@ class Dialog extends CIQ.UI.BaseComponent {
 		}
 
 		var elementStyle = {
-			top: top + "%",
+			// top: top + "%",
+			top: document.querySelector('#chart_box').clientHeight/2 + 'px',	// Position center of the outer chart container
 			left: left + "%",
 			transform: "translate(-50%, -20%)"
 		};

@@ -223,35 +223,35 @@ CIQ.addMarker = function(){
 CIQ.addPrompt = function(){
 	var nodeGreen = document.getElementsByClassName('buy')[0]
 	var nodeRed = document.getElementsByClassName('sell')[0]
-	nodeGreen.style.visibility = "visible"
-	nodeRed.style.visibility = "visible"
+	nodeGreen.style.display = "block"
+	nodeRed.style.display = "block"
 
 	// dual symbol
 	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	if(comparisonSymbol.url){
 		var nodeGreen2 = document.getElementsByClassName('buy_2')[0]
 		var nodeRed2 = document.getElementsByClassName('sell_2')[0]
-		nodeGreen2.style.visibility = "visible"
-		nodeRed2.style.visibility = "visible"
+		nodeGreen2.style.display = "block"
+		nodeRed2.style.display = "block"
 	}
 
 }
 CIQ.removePrompt = function(){
 	for(var node of document.getElementsByClassName('buy')){
-		node.style.visibility = "hidden"
+		node.style.display = "none"
 	}
 	for(var node of document.getElementsByClassName('sell')){
-		node.style.visibility = "hidden"
+		node.style.display = "none"
 	}
 
 	// dual symbol
 	var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	if(comparisonSymbol.url){
 		for(var node of document.getElementsByClassName('buy_2')){
-			node.style.visibility = "hidden"
+			node.style.display = "none"
 		}
 		for(var node of document.getElementsByClassName('sell_2')){
-			node.style.visibility = "hidden"
+			node.style.display = "none"
 		}
 	}
 }
