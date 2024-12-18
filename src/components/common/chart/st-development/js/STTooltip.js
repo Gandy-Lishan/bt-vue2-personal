@@ -497,16 +497,17 @@ if (!CIQ.Marker) {
 
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
-                     if(sd.type == 'ST MA'){    // stma不需要symbol信息，有独立显示
+                     if(sd.type == 'ST MA' || sd.type == 'ma'){    // stma不需要symbol信息，有独立显示
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                 const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
-                                const field = sd.inputs.Field == 'field'? '': rocDisplayName(sd.inputs.Field)
+                                const field = sd.inputs.Field == 'field'? 'Close': rocDisplayName(sd.inputs.Field)
                                 let name = `${field} ${maType}${sd.inputs.Period}`
-                                let symbol = sd.inputs.Field == 'field'?`(${symbolLabel})`:''
+                                let symbol = ['Open','High','Low','Close','Volume'].includes(field) ?`(${symbolLabel})`:''
+
                                  fields.push({
                                      member: output,
-                                     display: `${name}${symbol}`,
+                                     display: `${symbol}${name}`,
                                      panel: panel,
                                      yAxis: yAxis
                                  });
