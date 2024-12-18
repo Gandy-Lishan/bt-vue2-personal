@@ -816,12 +816,12 @@ button#checkResBtn {
     width: auto;
 	}
 	h1, h2, h3, h4, h5, h6 {
-		font-weight: 300;
+		font-weight: 500;
 	}
 	h1 {
-		font-size: 24px;
+		font-size: 28px;
 		color: #697882;
-		font-weight: 400;
+		font-weight: 500;
     margin: 0;
     margin-left: 20px;
     padding: 10px 0;
@@ -839,7 +839,7 @@ button#checkResBtn {
     line-height: 1.25em;
 	}
   h5 {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.25em;
   }
 	li {
@@ -910,6 +910,9 @@ button#checkResBtn {
     border: 0;
     border-top: 1px solid #eee;
     border-bottom: 0;
+  }
+  u {
+    text-decoration: none;
   }
   .indexTable td.tg-0lax.g500 {
     background-color: #9fd3ad;
@@ -1095,7 +1098,7 @@ button#checkResBtn {
     display: inline-block;
     font-size: 18px;
     line-height: 18px;
-    font-weight: 300;
+    font-weight: 500;
   }
   .portlet.light .portlet-body {
     padding-top: 2px;

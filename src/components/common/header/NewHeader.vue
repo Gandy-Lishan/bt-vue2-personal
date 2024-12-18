@@ -131,7 +131,7 @@ export default {
           path: '/indicators'
         },
         {
-          label: 'Strategy',
+          label: 'Strategies',
           keyPath: '3',
           path: '/strategy'
         },
@@ -210,7 +210,7 @@ export default {
     showLabel(item) {
       const email = getCookieData()?.username
       const {label} = item
-      if(['Strategy', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
@@ -303,9 +303,9 @@ export default {
 .el-menu--horizontal>.el-menu-item {
   font-weight: 600;
 }
-.el-submenu /deep/ .el-submenu__title {
-  font-size: 16px;
-}
+// .el-submenu /deep/ .el-submenu__title {
+//   font-size: 16px;
+// }
 .main-nav.top {
   /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
     border: 1px solid #ccc;

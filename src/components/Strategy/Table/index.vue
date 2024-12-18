@@ -5,7 +5,7 @@
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <h2 class="page-title">Strategies (click to expand)</h2><i class="header-icon el-icon-info"></i>
+          <h2 class="page-title">Strategies (click to expand)</h2>
         </template>
         <p>
           This page provides a highlight of our Strategies. These strategies are based on multiple trading models, each with its own pros/cons. 
@@ -23,6 +23,18 @@
 		</div>
     <br>
     <div class="strategy-main">
+      <div class="tagBox">
+        <el-tag
+          v-for="tag in tags"
+          :key="tag.label"
+          :type="tag.type"
+          @click="highlightTag(tag)"
+          :class="{ 'highlighted-tag': tag.value === activatedTag }"
+          effect="plain"
+        >
+          {{ tag.label }}
+        </el-tag>
+      </div>
       <div class="strategy-header">
         <div class="tableHeader">
           <div class="headerSelect">
@@ -41,8 +53,8 @@
         </div>
       </div>
       <br>
-      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
-      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap" :tag="tag"></SummaryTable>
+      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" :highlightedTag="activatedTag" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
+      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap" :tag="activatedTag"></SummaryTable>
     </div>
     </div>
   </div>
@@ -60,18 +72,7 @@ export default {
       selectedTitle: 'Strategies',
       urlToNameMap: [],
       searchKey: '',
-      tag: 'All'
-    }
-  },
-  components: {
-    StrategiesTable,
-    SummaryTable
-  },
-  mounted() {
-    const {selectedTitle, highlightedTag} = LocalStorageUtil.get('strategy_filter_state')
-    this.selectedTitle = selectedTitle || 'Strategies'
-    this.highlightedTag(highlightedTag || 'All')
-    const tags = [
+      tags: [
 				{ type: 'info', label: 'All', value: 'All' },
 				{ type: 'info', label: 'Legacy Index', value: 'Legacy' },
 				{ type: 'info', label: 'Index', value: 'INDEX' },
@@ -79,13 +80,31 @@ export default {
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
 				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
-			]
-    this.$refs['Strategies'].highlightTag(tags.find(tag => tag.value === highlightedTag) || tags[0])
+			],
+			activatedTag: 'All',
+    }
   },
-  beforeDestroy () {
-    // 离开此组件前保存筛选条件状态
-    console.log('离开此组件前保存筛选条件状态', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
-    LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.tag})
+  components: {
+    StrategiesTable,
+    SummaryTable
+  },
+  watch: {
+    selectedTitle: {
+      async handler() {
+        LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag})
+        await this.$refs['Strategies'].mountedRequestList()
+        await this.$refs['Summary'].getDataList()
+      }
+    }
+  },
+  async mounted() {
+    const {selectedTitle, highlightedTag} = LocalStorageUtil.get('strategy_filter_state')
+    this.selectedTitle = selectedTitle || 'Strategies'
+    this.activatedTag = highlightedTag || 'All'
+    await this.$refs['Strategies'].mountedRequestList()
+    await this.$refs['Summary'].getDataList()
+    if(this.selectedTitle === 'Summary') this.highlightedTag(this.activatedTag)
+    else if(this.selectedTitle === 'Strategies') this.$refs['Strategies'].highlightTag(this.activatedTag)
   },
   methods: {
     portfolio() {
@@ -99,9 +118,6 @@ export default {
       this.$refs[this.selectedTitle].handleQuery(this.searchKey)
     },
     highlightedTag(tag) {
-      debugger
-      console.log('tag', tag)
-      this.tag = tag
       this.$refs['Summary'].highlightedTag(tag)
     },
     downloadCSV() {
@@ -130,11 +146,28 @@ export default {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Summary Statistics');
       XLSX.writeFile(wb, 'Summary Statistics.xlsx');
-    }
+    },
+    highlightTag(tag) {
+			this.activatedTag = tag.value
+      this.$refs['Strategies'].highlightTag(tag.value)
+      this.highlightedTag(this.activatedTag)
+      LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag})
+		},
   }
 }
 </script>
 
 <style lang="less" scoped>
 @import "../index.less";
+.searchBox {
+  align-content: flex-end;
+  margin-left: 20px;
+  .el-input-group {
+    width: 300px;
+  }
+  /deep/ .el-input--mini .el-input__inner {
+    height: 30px;
+    line-height: 30px;
+  }
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="StrategiesContent">
-		<div class="tagBox">
+		<!-- <div class="tagBox">
 			<el-tag
 				v-for="tag in tags"
 				:key="tag.label"
@@ -11,7 +11,7 @@
 			>
 				{{ tag.label }}
 			</el-tag>
-		</div>
+		</div> -->
 		<div class="strategiesTable">
 			<el-table
 				ref="Table"
@@ -174,6 +174,9 @@ import { LocalStorageUtil, timestampToTime } from '@/utils'
 
 export default {
 	name: 'StrategiesTable',
+	props: {
+		highlightedTag: String
+	},
 	data() {
 		return {
 			tags: [
@@ -185,7 +188,6 @@ export default {
 				{ type: 'info', label: 'Sector', value: 'Sector' },
 				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
 			],
-			highlightedTag: 'All',
 			loading: false,
 			pageSize: 10, // Default page size
 			currentPage: 1, // Default current page
@@ -196,14 +198,12 @@ export default {
 					label: 'Model Name',
 					value: 'model_name',
 					key: 'model_name',
-					minWidth: '200px',
-					maxWidth: '300px'
+					minWidth: '170px',
 				},
 				{
 					label: 'Time Frame',
 					value: 'type',
-					key: 'type',
-					width: '150px'
+					key: 'type'
 				},
 				{
 					label: 'Current Signal: (e.g., Long, Sell, etc)',
@@ -250,11 +250,15 @@ export default {
 			return this.immutableTableData.slice(startIndex, endIndex)
 		}
 	},
-	async mounted() {
-		if (!this.tableData.length || !this.tableData) await this.getDataList()
-		await this.getStrategyJSON()
-	},
+	// async mounted() {
+	// 	if (!this.tableData.length || !this.tableData) await this.getDataList()
+	// 	await this.getStrategyJSON()
+	// },
 	methods: {
+		async mountedRequestList() {
+			if (!this.tableData.length || !this.tableData) await this.getDataList()
+			await this.getStrategyJSON()
+		},
 		handleSizeChange(size) {
 			this.pageSize = size
 			this.currentPage = 1 // Reset to the first page when the page size changes
@@ -308,18 +312,17 @@ export default {
 			}
 			return true
 		},
-		highlightTag(tag) {
-			
-			this.highlightedTag = tag.value
+		highlightTag(tagValue) {
+			const highlightedTag = tagValue
 			// 重置分页和排序信息
 			this.currentPage = 1
-			if (this.highlightedTag !== 'All' && this.highlightedTag !== 'Favorites') {
+			if (highlightedTag !== 'All' && highlightedTag !== 'Favorites') {
 				this.immutableTableData = this.tableData.filter(
-					(item) => item.category === this.highlightedTag
+					(item) => item.category === highlightedTag
 				)
-			} else if(this.highlightedTag === 'All'){
+			} else if(highlightedTag === 'All'){
 				this.immutableTableData = [...this.tableData]
-			}else if(this.highlightedTag === 'Favorites'){
+			}else if(highlightedTag === 'Favorites'){
 				this.immutableTableData = this.tableData.filter(item => item.favorite == 1)
 			}
 			// 如果有 searchItem, 进一步处理
@@ -330,7 +333,6 @@ export default {
           return regex.test(item.model_name);
         });
 			}
-			this.$emit('highlightedTag', this.highlightedTag)
 		},
 		portfolio() {
 			// 处理跳转的数据
@@ -354,6 +356,7 @@ export default {
 			},()=>{})
 		},
 		async getDataList() {
+			if(this.tableData.length !== 0) return
 			this.loading = true
 			let res = null
 			const page = this.currentPage
