@@ -389,14 +389,14 @@
                                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'))
                                 const inputs = indicatorList[i] == 'ma'
                                     ? {
-                                        display: `(${symbolLabel})${techSymbolName}`,
+                                        //display: `(${symbolLabel})${techSymbolName}`, //可以不用在这里设定，在sttooltip统一设定命名规则了
                                         Type: CIQ.store.state.chart.activatedMALayout[j].type,
                                         Field: CIQ.store.state.chart.activatedMALayout[j].field,
                                         Period: CIQ.store.state.chart.activatedMALayout[j].period,
                                     }
                                     : {
                                         // 目前来说maLikeTech就一个ma
-                                        display: `(${symbolLabel})${techSymbolName}`
+                                        //display: `(${symbolLabel})${techSymbolName}`
                                     }
                                 const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, j)
                                 const outputs = indicatorList[i] == 'ma' ? { MA: ma_color } : null
