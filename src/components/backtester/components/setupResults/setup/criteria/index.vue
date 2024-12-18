@@ -900,8 +900,8 @@ export default {
 				// 移除senti indicator附属ma
 				let activatedMAList = this.$store.state.chart.activatedMA
 				activatedMAList = activatedMAList.filter((item)=>
-					item.criteria == this.criteriaNum &&
-					item.index == 0
+					! (item.criteria == this.criteriaNum &&
+					item.index > 0)
 				)
 				this.$store.commit('chart/getMA', activatedMAList)
 				let indicatorList = this.$store.state.chart.indicators.formIndicators[this.criteriaNum]
