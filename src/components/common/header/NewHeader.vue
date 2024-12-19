@@ -81,49 +81,49 @@ export default {
         {
           label: 'Reports',
           keyPath: '10',
-          path: '/MR/sentimentedge',
-          // subMenu: [
-          //   {
-          //     label: 'SentimentEdge',
-          //     keyPath: '10-1',
-          //     path: '/MR/sentimentedge'
-          //   },
-          //   {
-          //     label: 'ModelEdge',
-          //     keyPath: '10-2',
-          //     path: '/MR/modeledge'
-          //   },
-          //   {
-          //     label: 'Kaeppel\'s Corner',
-          //     keyPath: '10-3',
-          //     path: '/MR/quantedge'
-          //   },
-          //   {
-          //     label: 'TradingEdge',
-          //     keyPath: '10-4',
-          //     path: '/MR/tradingedge'
-          //   },
-          //   {
-          //     label: 'My Favorites',
-          //     keyPath: '10-5',
-          //     path: '/MR/favorites'
-          //   },
-          //   {
-          //     label: 'Archived Studies',
-          //     keyPath: '10-6',
-          //     path: '/MR/archived_studies'
-          //   },
-          //   {
-          //     label: 'Daily Report',
-          //     keyPath: '10-7',
-          //     path: '/MR/archived_reports/2024'
-          //   },
-          //   {
-          //     label: 'Active Studies',
-          //     keyPath: '10-8',
-          //     path: '/MR/active_studies'
-          //   },
-          // ]
+          path: '/MR',
+          subMenu: [
+            {
+              label: 'SentimentEdge',
+              keyPath: '10-1',
+              path: '/MR/sentimentedge'
+            },
+            {
+              label: 'ModelEdge',
+              keyPath: '10-2',
+              path: '/MR/modeledge'
+            },
+            {
+              label: 'Kaeppel\'s Corner',
+              keyPath: '10-3',
+              path: '/MR/quantedge'
+            },
+            {
+              label: 'TradingEdge',
+              keyPath: '10-4',
+              path: '/MR/tradingedge'
+            },
+            {
+              label: 'My Favorites',
+              keyPath: '10-5',
+              path: '/MR/favorites'
+            },
+            {
+              label: 'Archived Studies',
+              keyPath: '10-6',
+              path: '/MR/archived_studies'
+            },
+            {
+              label: 'Daily Report',
+              keyPath: '10-7',
+              path: '/MR/archived_reports/2024'
+            },
+            {
+              label: 'Active Studies',
+              keyPath: '10-8',
+              path: '/MR/active_studies'
+            },
+          ]
         },
         {
           label: 'Indicators',
@@ -206,6 +206,9 @@ export default {
       }).filter(value => (value !== undefined && value !== null && value !== ''))
       console.log('keyPathEle',keyPathEle)
       if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') window.location.href = keyPathEle[0].path
+    },
+    handleClick(e) {
+      console.log('e', e)
     },
     showLabel(item) {
       const email = getCookieData()?.username
