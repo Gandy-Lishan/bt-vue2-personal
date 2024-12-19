@@ -4,7 +4,7 @@
 		<el-collapse class='collape-title'>
 		<el-collapse-item>
 			<template slot="title">
-			Click here to view Smart Stock Scanner Description<i class="header-icon el-icon-info"></i>
+			Smart Stock Scanner (click to expand)
 			</template>
 			<h4>Our Smart Stock Scanner is updated nightly by 11:40 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
 			<div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>
@@ -33,8 +33,6 @@
 						<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
-					<el-button @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
-					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
 			<!-- 预留一个过滤器的div -->
@@ -67,6 +65,12 @@
 								<el-radio :label='false'>Long</el-radio>
 								<el-radio :label='true'>Short</el-radio>
 							</el-radio-group>
+						</el-col>
+						<el-col :span="6">
+							<div class="btns">
+								<el-button @click="exportTable" type="primary" round size="mini"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
+								<el-button @click="toScannerBacktest" type="warning" round size="mini"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+							</div>
 						</el-col>
 					</el-row>
 					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
@@ -711,19 +715,19 @@ export default {
 		AIPickObj['label'] = 'AI Picks at the end of today'
 		AIPickObj['title'] = 'AI Picks at the end of today'
 		AIPickObj['tableCol'] = [
-			{label:'Date',value:'Date'},
-			{label:'Symbol',value:'Symbol'},
-			{label:'Close',value:'Close'},
-			{label:'Trend',value:'Market'},
-			{label:'Direction',value:'Direction'},
-			{label:'Signal',value:'_Signal'},
-			{label:'Win Rate(%)',value:'WinRate'},
-			{label:'Stop Loss(%)',value:'StopLoss'},
-			{label:'Profit Target(%)',value:'ProfitTarget'},
-			{label:'Best Time In Market(Bars)',value:'TimeInMarket'},
+			{label:'Date',value:'Date',labelHtml: 'Date'},
+			{label:'Symbol',value:'Symbol',labelHtml: 'Symbol'},
+			{label:'Close',value:'Close',labelHtml: 'Close'},
+			{label:'Trend',value:'Market',labelHtml: 'Market'},
+			{label:'Direction',value:'Direction',labelHtml: 'Direction', width: '80px'},
+			{label:'Signal',value:'_Signal',labelHtml: 'Signal'},
+			{label:'Win Rate(%)',value:'WinRate',labelHtml: 'Win<br/>Rate(%)'},
+			{label:'Stop Loss(%)',value:'StopLoss',labelHtml: 'Stop<br/>Loss(%)'},
+			{label:'Profit Target(%)',value:'ProfitTarget',labelHtml: 'Profit<br/>Target(%)'},
+			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best Time In<br/>Market(Bars)'},
 			//{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
-			{label:'Expected Return(%)',value:'ExpectedReturn'},
-			{label:'Z-Score',value:'Z_Score'}, // 数据有误，先不显示	
+			{label:'Expected Return(%)',value:'ExpectedReturn',labelHtml: 'Expected<br/>Return(%)'},
+			{label:'Z-Score',value:'Z_Score',labelHtml: 'Z-Score'}, // 数据有误，先不显示	
 		]
 		// 测试
 		//AIPickObj['tableCol'].unshift("Select")
@@ -885,4 +889,8 @@ h4 {
   .des-content {
     margin-top: 10px;
   }
+		.btns {
+			display: flex;
+			justify-content: flex-end;
+		}
 </style>
