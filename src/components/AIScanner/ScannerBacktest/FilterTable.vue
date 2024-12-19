@@ -151,7 +151,6 @@
 							? 'custom'
 							: false
 					"
-					:label="l.label"
 					:prop="l.value"
 					:key="index"
 					:min-width="[
@@ -160,6 +159,9 @@
 							'Expected Return(%)'
 						].indexOf(l.label) !== -1 ? '90' : '80'"
 				>
+				<template #header>
+						<span v-html="l.labelHtml"></span>
+				</template>
 					<template slot-scope="scope">
 						<span class="tableText">
 							{{ `${scope.row[l.value]}${l.label.includes('%') ? '%' : ''}` }}

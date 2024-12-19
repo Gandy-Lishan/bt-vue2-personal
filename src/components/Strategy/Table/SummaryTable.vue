@@ -108,8 +108,7 @@ export default {
           label: 'Model Name',
           value: 'model_name',
           key: 'model_name',
-					minWidth: '250px',
-					maxWidth: '300px'
+					minWidth: '260px',
         },
         {
           label: 'Strategy CAGR',
@@ -186,14 +185,19 @@ export default {
 		},
     handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
+			const strategy_filter_state = LocalStorageUtil.get('strategy_filter_state')
+			LocalStorageUtil.set('strategy_filter_state', {...strategy_filter_state, currentSummaryPage: currentPage})
 		},
     portfolio() {
       console.log('paginatedData', this.paginatedData.filter(item => item.selection))
     },
     async getDataList() {
+			if (this.tableData.length !== 0) return
       this.loading = true
       let res = null
-      const page = this.currentPage
+			debugger
+			const {currentSummaryPage} = LocalStorageUtil.get('strategy_filter_state')
+			const page = currentSummaryPage || 1
 			try {
 				res = await getStrategySummaryList()
         const code = res?.data?.code
@@ -228,6 +232,7 @@ export default {
         this.tableData = []
         this.immutableTableData = data
       } finally {
+				this.currentPage = page
         this.loading = false
 				this.highlightedTag(this.tag)
       }

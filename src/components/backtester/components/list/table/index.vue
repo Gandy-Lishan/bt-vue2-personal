@@ -272,6 +272,9 @@
 				:sort-orders="['ascending', 'descending', item.field]"
 				:width="item.width"
 			>
+			<template #header>
+					<span v-html="item.labelHtml"></span>
+			</template>
 			<template slot-scope="scope">
 					<div class="showDate" v-if="scope.row.strategy !== 'Dual'">
 						<el-button size="mini" type="info" plain
@@ -299,7 +302,6 @@
 			</el-table-column>
 			<el-table-column
 				v-if="['Total Trades', 'Total Return'].includes(item.label)"
-				:label="item.label"
 				:key="item.label"
 				:width="item.width"
 				:prop="item.field"
@@ -311,6 +313,9 @@
 				].includes(item.label) ? 'custom' : false"
 				:sort-orders="['ascending', 'descending', item.field]"
 				>
+			<template #header>
+					<span v-html="item.labelHtml"></span>
+			</template>
 			<template slot-scope="scope">
 				<span v-if="item.label == 'Total Return'">{{scope.row[item.field] != 0 ? `${scope.row[item.field]}%` : scope.row[item.field]}}</span>
 				<span v-else>{{scope.row[item.field]}}</span>
@@ -872,5 +877,8 @@ export default {
 /deep/ .el-button--info.is-plain {
 	font-weight: 600;
 	color: #606266;
+}
+/deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
+	color: #333341;
 }
 </style>

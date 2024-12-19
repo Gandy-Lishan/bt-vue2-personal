@@ -5,7 +5,7 @@
 				<div class="container">
 					<!-- BEGIN PAGE TITLE -->
 					
-				<p class="backText" style="margin: 40px 0px 0px 20px; cursor: pointer;" @click="backToList"><i class="el-icon-arrow-left" style="margin-right: 10px;"></i>Back to Strategy List</p>
+				<p class="backText" style="margin: 40px 0px 0px 20px; cursor: pointer;" @click="backToList"><i class="el-icon-arrow-left" style="margin-right: 5px;"></i>Back to Strategy List</p>
 					<div class="page-title">
 						<h1 v-text="title"></h1>
 					</div>
@@ -394,4 +394,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.backText {
+	color: #525456;
+	font-weight: bold;
+	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
+}
 </style>
