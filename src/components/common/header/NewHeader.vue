@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="no-print">
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -81,49 +81,49 @@ export default {
         {
           label: 'Reports',
           keyPath: '10',
-          path: '/MR',
-          subMenu: [
-            {
-              label: 'SentimentEdge',
-              keyPath: '10-1',
-              path: '/MR/sentimentedge'
-            },
-            {
-              label: 'ModelEdge',
-              keyPath: '10-2',
-              path: '/MR/modeledge'
-            },
-            {
-              label: 'Kaeppel\'s Corner',
-              keyPath: '10-3',
-              path: '/MR/quantedge'
-            },
-            {
-              label: 'TradingEdge',
-              keyPath: '10-4',
-              path: '/MR/tradingedge'
-            },
-            {
-              label: 'My Favorites',
-              keyPath: '10-5',
-              path: '/MR/favorites'
-            },
-            {
-              label: 'Archived Studies',
-              keyPath: '10-6',
-              path: '/MR/archived_studies'
-            },
-            {
-              label: 'Daily Report',
-              keyPath: '10-7',
-              path: '/MR/archived_reports/2024'
-            },
-            {
-              label: 'Active Studies',
-              keyPath: '10-8',
-              path: '/MR/active_studies'
-            },
-          ]
+          path: '/MR/sentimentedge',
+          // subMenu: [
+          //   {
+          //     label: 'SentimentEdge',
+          //     keyPath: '10-1',
+          //     path: '/MR/sentimentedge'
+          //   },
+          //   {
+          //     label: 'ModelEdge',
+          //     keyPath: '10-2',
+          //     path: '/MR/modeledge'
+          //   },
+          //   {
+          //     label: 'Kaeppel\'s Corner',
+          //     keyPath: '10-3',
+          //     path: '/MR/quantedge'
+          //   },
+          //   {
+          //     label: 'TradingEdge',
+          //     keyPath: '10-4',
+          //     path: '/MR/tradingedge'
+          //   },
+          //   {
+          //     label: 'My Favorites',
+          //     keyPath: '10-5',
+          //     path: '/MR/favorites'
+          //   },
+          //   {
+          //     label: 'Archived Studies',
+          //     keyPath: '10-6',
+          //     path: '/MR/archived_studies'
+          //   },
+          //   {
+          //     label: 'Daily Report',
+          //     keyPath: '10-7',
+          //     path: '/MR/archived_reports/2024'
+          //   },
+          //   {
+          //     label: 'Active Studies',
+          //     keyPath: '10-8',
+          //     path: '/MR/active_studies'
+          //   },
+          // ]
         },
         {
           label: 'Indicators',
