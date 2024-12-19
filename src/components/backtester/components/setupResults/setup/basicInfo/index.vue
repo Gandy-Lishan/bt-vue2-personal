@@ -124,7 +124,7 @@
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >Input the percentage value of trading commission. (default:
-                        0.1%)<br
+                        0%)<br
                           /></span>
                           <i class="iconfont icon-wenhao"></i>
                         </el-tooltip>

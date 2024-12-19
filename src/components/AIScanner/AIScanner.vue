@@ -39,7 +39,7 @@
 			<div class="header-part2">
 				<div class="filterBox _filterConditionBox">
 					<el-row :gutter="20">
-						<el-col :span="6">
+						<el-col :span="5">
 							<el-date-picker
 								v-model="date"
 								class="aiscanner-date"
@@ -59,14 +59,14 @@
 								>Only Show Profit Target > Stop Loss
 							</el-checkbox>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="5">
 							<label for="radioGroup" class="direction">Direction: </label>
 							<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
 								<el-radio :label='false'>Long</el-radio>
 								<el-radio :label='true'>Short</el-radio>
 							</el-radio-group>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="8">
 							<div class="btns">
 								<el-button round size="mini" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter Criteria</el-button>
 								<el-button @click="exportTable" type="primary" round size="mini"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
