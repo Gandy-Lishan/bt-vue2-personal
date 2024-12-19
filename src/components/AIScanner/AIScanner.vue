@@ -68,6 +68,7 @@
 						</el-col>
 						<el-col :span="6">
 							<div class="btns">
+								<el-button round size="mini" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter Criteria</el-button>
 								<el-button @click="exportTable" type="primary" round size="mini"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 								<el-button @click="toScannerBacktest" type="warning" round size="mini"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
 							</div>
@@ -78,12 +79,24 @@
 					</el-checkbox> -->
 				</div>
 			</div>
-			<div class="header-part">
-				<div class="portfolioCheckedBox">
-					<a @click="isFilter = !isFilter" style="cursor: pointer;"
-						>Filter Criteria<i :class="isFilter ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
-					<div class="des-content" v-show="isFilter">
-						<el-form
+		</div>
+			<Table 
+				:data="tableData" 
+				:label="tableData.label" 
+				:key="index" 
+				:tableCol="tableData.tableCol" 
+				currTabPage="AIRecommendation" 
+				:loading="loading"
+				ref="tableChild">
+			</Table>
+		</el-card>
+
+		<el-dialog
+				title="Filter Criteria"
+				:show-close="false"
+				:visible.sync="showFilterDialog"
+				width="80%">
+				<el-form
 						ref="Form"
 						:model="data"
 						label-position="top"
@@ -121,7 +134,7 @@
 											<template v-slot:append>(%)</template>
 										</el-input>
 								</el-form-item>
-									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+									<span class="sign"> - </span>
 								<el-form-item prop="take_profit" label-width="0px">
 								<el-input v-model="data.take_profit" placeholder="Enter number">
 									<template v-slot:append>(%)</template>
@@ -146,7 +159,7 @@
 												<template v-slot:append>(%)</template>
 											</el-input>
 									</el-form-item>
-										<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+										<span class="sign"> - </span>
 										<el-form-item prop="stop_loss" label-width="0px">
 										<el-input v-model="data.stop_loss" placeholder="Enter number">
 											<template v-slot:append>(%)</template>
@@ -171,7 +184,7 @@
 											<template v-slot:append>(bars)</template>
 										</el-input>
 								</el-form-item>
-									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+									<span class="sign"> - </span>
 								<el-form-item prop="time_in_market" label-width="0px">
 								<el-input v-model="data.time_in_market" placeholder="Enter bars">
 									<template v-slot:append>(bars)</template>
@@ -198,7 +211,7 @@
 													<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="max_risk" label-width="0px">
 											<el-input v-model="data.max_risk" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -222,7 +235,7 @@
 												<el-input v-model="data.z_score_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="z_score" label-width="0px">
 											<el-input v-model="data.z_score" placeholder="Enter number">
 											</el-input>
@@ -245,7 +258,7 @@
 												<el-input v-model="data.sharpe_ratio_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="sharpe_ratio" label-width="0px">
 											<el-input v-model="data.sharpe_ratio" placeholder="Enter number">
 											</el-input>
@@ -268,7 +281,7 @@
 												<el-input v-model="data.std_dev_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="std_dev" label-width="0px">
 											<el-input v-model="data.std_dev" placeholder="Enter number">
 											</el-input>
@@ -294,7 +307,7 @@
 												<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="expected_return" label-width="0px">
 											<el-input v-model="data.expected_return" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -319,7 +332,7 @@
 												<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="win_rate" label-width="0px">
 											<el-input v-model="data.win_rate" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -329,21 +342,12 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						</el-form>
-					</div>
-				</div>
-			</div>
-		</div>
-			<Table 
-				:data="tableData" 
-				:label="tableData.label" 
-				:key="index" 
-				:tableCol="tableData.tableCol" 
-				currTabPage="AIRecommendation" 
-				:loading="loading"
-				ref="tableChild">
-			</Table>
-		</el-card>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="showFilterDialog = false">cancel</el-button>
+						<el-button type="primary" @click="handleDialogClose">confirm</el-button>
+				</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -398,7 +402,7 @@ export default {
 	isPLSChecked: false,
 	isShowShortChecked: false,
 	loading: false,
-	isFilter: false,
+	showFilterDialog: false,
 	data: {
 		stop_loss_condition: 2,
 		take_profit_condition: 2,
@@ -550,33 +554,6 @@ export default {
 			},
 			deep: true
 		},
-		data: {
-			handler: debounce(async function (newValue, oldValue) {
-				console.log('data change', newValue);
-				
-				const validForm = await this.validForm('Form');
-				if (!validForm) {
-					return;
-				}
-				this.handleQuery();
-			}, 500), // 500ms 的 debounce 时间，可根据需求调整
-			deep: true
-		},
-		isFilter: {
-			handler: debounce(async function (newValue, oldValue) {
-				console.log('data change', newValue);
-				if(!newValue) {
-					this.handleQuery()
-					return
-				}else {
-					const validForm = await this.validForm('Form');
-					if (!validForm) {
-						return;
-					}
-					this.handleQuery();
-				}
-			}, 500)
-		}
 	},
   methods: {
 	scannerBacktest() {
@@ -586,7 +563,12 @@ export default {
 		let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
 		return dis
 	},
-
+	async handleDialogClose() {
+		const validForm = await this.validForm('Form');
+		if (!validForm) return
+		this.showFilterDialog = false
+		this.handleQuery();
+	},
 	handleQuery: throttle(async function () { await this.filterData() }, 1000),
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( this.filterRangeCondition(this.getSearchresult())))
@@ -613,7 +595,7 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
-		if(!this.isFilter) return searchResult
+		if(this.showFilterDialog) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
 			time_in_market_condition, time_in_market,
@@ -892,5 +874,8 @@ h4 {
 		.btns {
 			display: flex;
 			justify-content: flex-end;
+		}
+		.sign {
+			margin: 0 5px;
 		}
 </style>
