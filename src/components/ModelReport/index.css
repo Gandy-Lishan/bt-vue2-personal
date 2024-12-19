@@ -7,7 +7,8 @@ body {
 	color: #3e4d5c; 
 	direction: ltr;
 	background: #fff;
- 	font-weight: 400;
+ font-weight: 400;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 * {
 	box-sizing: border-box;
@@ -22,6 +23,9 @@ h1 {
 }
 h2 {
 	font-size: 27px;
+}
+h4 {
+	font-size: 18px;
 }
 b, strong {
 	font-weight: 700;

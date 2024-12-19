@@ -110,23 +110,20 @@
                       v-for="post in blogPosts"
                       :key="post.url"
                     >
-                      <h1 class="blog-single-head-title">
+                      <!-- <h1 class="blog-single-head-title">
                         <a :href="`/MR/${serviceType}/${post.url}`">
                           {{ post.title }}
                         </a>
-                        <!-- <router-link :to="{ name: 'blogPost', params: { slug: post.url } }">
-                          {{ post.title }}
-                        </router-link> -->
-                      </h1>
-                      <div class="blog-single-head-date">
+                      </h1> -->
+                      <!-- <div class="blog-single-head-date">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                         {{ formatDate(post.post_date) }}
                         <span>
                          | {{post.author}}
                         </span>
-                      </div>
+                      </div> -->
                       <div class="row" style="margin-bottom:10px;">
-                          <article>
+                          <article class="article">
                             <img
                               v-if="post.image"
                               class="thumbnail"
@@ -136,11 +133,25 @@
                               :src="post.image"
                               align="left"
                             />
-                            <span v-if="post.meta_description">
+                            <div class="article-des">
+                              <h1 class="blog-single-head-title">
+                                <a :href="`/MR/${serviceType}/${post.url}`">
+                                  {{ post.title }}
+                                </a>
+                              </h1>
+                              <span v-if="post.meta_description">
                               {{ post.meta_description }}
-                            </span>
-                            <span v-else v-html="truncate(post.post_content, 500)">
-                            </span>
+                              </span>
+                              <span v-else v-html="truncate(post.post_content, 500)">
+                              </span>
+                              <div class="blog-single-head-date">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                {{ formatDate(post.post_date) }}
+                                <span>
+                                | {{post.author}}
+                                </span>
+                              </div>
+                            </div>
                           </article>
                       </div>
                     </div>

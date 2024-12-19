@@ -232,6 +232,13 @@ export default {
 }
 .blog-single-head-date {
  position: relative;
+ margin-top: 10px;
+}
+.article-des {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: space-around;
 }
 .btn>i {
   font-size: 14px;
