@@ -67,6 +67,25 @@
 							></el-input>
 					</el-form-item>
 				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === ' ')"
+							placeholder="Please select condition"
+							@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 			</div>
 			<div class="condition-container">
 				<el-form-item>
@@ -78,7 +97,6 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
-
 							<el-input
 								:disabled="!(radio === 'Moving Average')"
 								v-model="tech.ma_period"
@@ -93,7 +111,7 @@
 								v-model="tech.condition"
 								filterable
 								size="mini"
-								:disabled="!(radio === 'Moving Average')"
+								:disabled="!(radio !== 'Moving Average')"
 								placeholder="Please select condition"
 							>
 								<el-option
@@ -113,13 +131,31 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maPeriod">
-
 							<el-input
 								v-model="tech.maPeriod"
 								:disabled="!(radio === 'Moving Average')"
 								placeholder="Input Period"
 								@input="getMaValue"
 							></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === 'Moving Average')"
+							placeholder="Please select condition"
+							@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</div>
 			</div>
@@ -280,6 +316,10 @@ export default {
 				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }],
 				maPeriod: [{ validator: validateMaPeriodRule, trigger: 'blur' }]
 			},
+			MATypeConditions: [
+				{ value: 'SMA', label: 'Simple' },
+				{ value: 'EMA', label: 'Exponential' },
+			],
 		}
 	},
 	computed: {
@@ -362,7 +402,7 @@ export default {
 				desObj.criteria = this.criteria
 				desObj.description = {
 					'commentDes':commentDes,
-					'rocCond':null
+					'rocCond':{'ma_type': this.tech.ids}
 				}
 				desObj.index = index
 				this.$store.commit('form/saveDescription', desObj)}
@@ -397,21 +437,22 @@ export default {
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				this.description = `${comparison} ${ma_period ? `${ma_period} ` : ''}${condition} Moving Average ${period}`
+				const maType = this.tech.ids == 'SMA' ? 'Simple' : 'Exponential'
+				this.description = `${comparison} ${ma_period ? `${ma_period} ` : ''}${condition} ${maType} Moving Average ${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria
 				if(this.relation != 1) {
 					desObj.description = {
 						'commentDes':this.description,
-						'rocCond':null
+						'rocCond':{'ma_type': this.tech.ids}
 					}
 					desObj.index = index + 1
 					}
 				if(this.relation == 1) {
 						desObj.description = {
 							'commentDes':commentDes + this.description,
-							'rocCond':null
+							'rocCond':{'ma_type': this.tech.ids}
 						}
 						desObj.index = 0
 				}
@@ -510,6 +551,9 @@ export default {
 				this.tech.condition = Number(obj.condition)
 				this.tech.comparison = obj.comparison
 				if (this.tech.comparison === 'MA') {
+					if(cond){
+						this.tech.ids = cond.ma_type || 'SMA'
+					}
 					this.radio = 'Moving Average'
 					this.tech.ma_period = obj.ma_period
 					this.tech.maPeriod = obj.period
