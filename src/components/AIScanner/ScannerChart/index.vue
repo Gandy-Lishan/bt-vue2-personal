@@ -444,7 +444,7 @@ computed: {
 }
 .hint-btn-box{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 	margin: 0 auto;
 	.hint {

@@ -1086,5 +1086,9 @@
     {
         "symbol": "CRPT",
         "name": "FT SkyBridge Crypto ETF Trust (CRPT)"
+    },
+    {
+        "symbol": "FSELX",
+        "name": "Fidelity Select Semiconductors (FSELX)"
     }
 ]
