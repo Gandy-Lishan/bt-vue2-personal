@@ -91,12 +91,13 @@ if (!CIQ.Studies) {
 		);
 
 		for (i = Math.max(longCycle, sd.startFrom); i < quotes.length; i++) {
+			console.log('quotes[i]',quotes[i].futureTick,quotes[i][shortEMA],quotes[i][longEMA])
 			if (
 				quotes[i].futureTick ||
 				quotes[i][shortEMA] === null ||
 				quotes[i][longEMA] === null
 			)
-				break;
+				continue;
 			quotes[i][klinger] = quotes[i][shortEMA] - quotes[i][longEMA];
 		}
 
