@@ -26,9 +26,10 @@
 									@click="handleDownloadCsv"
 									style="display: inline-block"
 									type="primary"
-									size="mini"
+									size="small"
 									icon="el-icon-download"
-									>Export Data</el-button
+									title="Export Data"
+									></el-button
 								>
 							</div>
 						</div>

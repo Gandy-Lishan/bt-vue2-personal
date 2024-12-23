@@ -206,24 +206,27 @@ export default {
                     // 转换日期格式
                     const formatEntryDate = entryData['Date'].replaceAll('-','/')
                     const formatExitDate = exitData['Date'] ? exitData['Date'].replaceAll('-','/') : '';
-                    console.log(`第${i}组数据`, _newValue[i].Return)
-                    console.log(`第${i+1}}组数据`, _newValue[i + 1].Return)
-                    mergedData.push({
-                    'EntryDate': formatEntryDate,
-                    'EntryAction': entryData.TradeStatus.toUpperCase(),
-                    'EntryPrice': entryData.TradePrice,
-                    'EntryIndicator': entryData.Indicator || '',
-                    'ExitDate': formatExitDate,
-                    'ExitAction': exitData.TradeStatus.toUpperCase(),
-                    'ExitPrice': exitData.TradePrice || '',
-                    'TradeReturn': exitData.TradeReturn || '',
-                    'TotalReturn': Number((exitData.Return * 100).toFixed(2)) || '',
-                    'ExitReason': exitData.ExitReason || '',
-                    'MarketCondition': exitData.MarketCondition || ['N\/A'],
-                    'ExitIndicator': exitData.Indicator || '',
-                    'TradeNumber': exitData.trade_number,
-                    'Symbol': exitData.Symbol
-                    });
+                    console.log(`第${i}组数据`, _newValue[i])
+                    if((i + 1) > newValue.length) return
+                    console.log(`第${i+1}}组数据`, _newValue[i + 1])
+                    if(_newValue[i + 1] && exitData.TradeStatus) {
+                        mergedData.push({
+                        'EntryDate': formatEntryDate,
+                        'EntryAction': entryData.TradeStatus.toUpperCase(),
+                        'EntryPrice': entryData.TradePrice,
+                        'EntryIndicator': entryData.Indicator || '',
+                        'ExitDate': formatExitDate,
+                        'ExitAction': exitData.TradeStatus.toUpperCase(),
+                        'ExitPrice': exitData.TradePrice || '',
+                        'TradeReturn': exitData.TradeReturn || '',
+                        'TotalReturn': Number((exitData.Return * 100).toFixed(2)) || '',
+                        'ExitReason': exitData.ExitReason || '',
+                        'MarketCondition': exitData.MarketCondition || ['N\/A'],
+                        'ExitIndicator': exitData.Indicator || '',
+                        'TradeNumber': exitData.trade_number,
+                        'Symbol': exitData.Symbol
+                        });
+                    }
                 }
                 this.processedTradesData = mergedData
                 console.log('mergedData', mergedData)

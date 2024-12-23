@@ -46,10 +46,10 @@
                 @click.stop="() => {handleDownloadCsv()}"
                 style="display: inline-block"
                 type="primary"
-                plain
-                size="mini"
+                size="small"
                 icon="el-icon-download"
-                >Export Data</el-button
+                title="Export Data"
+                ></el-button
               >
           </div>
         </template>

@@ -68,9 +68,9 @@
 						</el-col>
 						<el-col :span="8">
 							<div class="btns">
-								<el-button round size="mini" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter Criteria</el-button>
-								<el-button @click="exportTable" type="primary" round size="mini"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
-								<el-button @click="toScannerBacktest" type="warning" round size="mini"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter Criteria</el-button>
+								<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+								<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
 							</div>
 						</el-col>
 					</el-row>
@@ -93,7 +93,6 @@
 
 		<el-dialog
 				title="Filter Criteria"
-				:show-close="false"
 				:visible.sync="showFilterDialog"
 				width="80%">
 				<el-form
@@ -344,7 +343,7 @@
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="showFilterDialog = false">cancel</el-button>
+					<el-button @click="resetForm">reset</el-button>
 						<el-button type="primary" @click="handleDialogClose">confirm</el-button>
 				</span>
 		</el-dialog>
@@ -713,6 +712,9 @@ export default {
 		]
 		// 测试
 		//AIPickObj['tableCol'].unshift("Select")
+		AIPickContent.sort((a,b) => {
+			return new Date(a['Date']) - new Date(b['Date'])
+		})
 		AIPickObj['content'] = AIPickContent
 		
 		this.originData = AIPickObj
@@ -735,6 +737,9 @@ export default {
 		console.log('触发了', signals)
 		this.data.signals = Array.from(new Set(signals))
 	},
+	resetForm() {
+		this.$refs['Form'].resetFields();
+	}
   }
 };
 </script>
