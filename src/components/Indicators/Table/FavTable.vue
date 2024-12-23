@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span">
-      <span>My Favorites</span>
+      <span>My Favorites<i class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i></span>
     </div>
     <!-- <div class="header-span">
       <template v-for="item in tableInfo['options']">
@@ -12,10 +12,10 @@
   </div>
   <div class="filter-div">
     <el-row>
-      <el-col :span="18">
+      <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+            <!-- <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button> -->
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -41,15 +41,21 @@
           </div>
         </el-row>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="6"> -->
+      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
         <el-input
+          class="search-input"
+          @focus="expandSearch"
+          @blur="collapseSearch"
           @input="handleQuery"
           size="small"
-          placeholder="Search"
+          :placeholder="searchPlaceholder"
           v-model="searchInput"
-          clearable>
-        </el-input>
-      </el-col>
+          clearable
+          :style="inputStyle"
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+      </div>
+      <!-- </el-col> -->
     </el-row>
   </div>
     <virtual-scroll
@@ -194,7 +200,8 @@ export default {
       searchInput: '',
       filterData: [],
       groupsOptions: [],
-      timeframeOptions: []
+      timeframeOptions: [],
+      isExpanded: false, // 控制输入框是否展开
     }
   },
   computed: {
@@ -207,7 +214,20 @@ export default {
     }),
     pageLength() {
       return this.filterData.length || 0
-    }
+    },
+    inputStyle() {
+      return {
+        width: this.isExpanded ? "200px" : "35px",
+        position: "absolute",
+        right: "0", // 根据需要调整位置
+        top: "0px",
+        transition: "width 0.3s ease-in-out",
+      };
+    },
+    searchPlaceholder() {
+      if(this.isExpanded) return 'Search'
+      return ''
+    },
 	},
 	watch: {
     tableData: {
@@ -799,6 +819,14 @@ export default {
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
+    expandSearch() {
+      this.isExpanded = true; // 展开输入框
+    },
+    collapseSearch() {
+      if (!this.searchInput) {
+        this.isExpanded = false; // 收起输入框
+      }
+    },
   }
 }
 </script>
@@ -949,13 +977,16 @@ export default {
   margin-top: 10px;
 }
 .filter-div {
+  position: relative;
   padding: 10px 5px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
+  height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }
   .btns {
+    display: flex;
     .el-button{
       margin-right: 10px;
     }
@@ -972,6 +1003,18 @@ export default {
       font-size: 14px;
       margin-right: 5px
     }
+  }
+}
+/deep/ .search-input {
+  height: 100%;
+  overflow: visible;
+  z-index: 100; /* 保证层级高于其他元素 */
+  &.el-input--suffix .el-input__inner {
+    padding-right: 0px;
+  }
+  .el-input__prefix, .el-input__suffix {
+    height: 32px;
+    line-height: 32px;
   }
 }
 </style>

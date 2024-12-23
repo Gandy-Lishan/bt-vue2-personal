@@ -2,7 +2,10 @@
 <div>
   <div>
     <div class="header-span" v-if="(!showReport && !showRelated)">
-      <span>{{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}</span>
+      <span>
+        {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
+        <i v-show="isMostPopular" class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i>
+      </span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
@@ -18,16 +21,17 @@
     </div>
     <div class="header-span" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
-        <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}</span>
+        <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
+          <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click="downloadCSV" title="Download List"></i>
+        </span>
       </template>
     </div>
   </div>
-  <div class="filter-div" v-if="enlarged && (!showReport && !showRelated && (checkedType !== 'TrendSector'))">
+  <div class="filter-div" v-if="isShowFilter">
     <el-row>
-      <el-col :span="18">
+      <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
             <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
@@ -67,15 +71,21 @@
           </div>
         </el-row>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="4"> -->
+      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
         <el-input
+          class="search-input"
+          @focus="expandSearch"
+          @blur="collapseSearch"
           @input="handleQuery"
           size="small"
-          placeholder="Search"
+          :placeholder="searchPlaceholder"
           v-model="searchInput"
-          clearable>
-        </el-input>
-      </el-col>
+          clearable
+          :style="inputStyle"
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+      </div>
+      <!-- </el-col> -->
     </el-row>
   </div>
   <virtual-scroll
@@ -228,7 +238,8 @@ export default {
       hideColumn: true,
       columnsMap: new Map(),
       condition: '',
-      trendUpdateDate: ''
+      trendUpdateDate: '',
+      isExpanded: false, // 控制输入框是否展开
     }
   },
   computed: {
@@ -1451,6 +1462,22 @@ export default {
     },
     isStockTrend() {
       return ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+    },
+    inputStyle() {
+      return {
+        width: this.isExpanded ? "200px" : "35px",
+        position: "absolute",
+        right: "0", // 根据需要调整位置
+        top: "0px",
+        transition: "width 0.3s ease-in-out",
+      };
+    },
+    searchPlaceholder() {
+      if(this.isExpanded) return 'Search'
+      return ''
+    },
+    isShowFilter() {
+      return this.enlarged && (!this.showReport && !this.showRelated && (this.checkedType !== 'TrendSector'))
     }
   },
   watch: {
@@ -2308,7 +2335,15 @@ export default {
       await this.$nextTick(async () => {
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
-    }
+    },
+    expandSearch() {
+      this.isExpanded = true; // 展开输入框
+    },
+    collapseSearch() {
+      if (!this.searchInput) {
+        this.isExpanded = false; // 收起输入框
+      }
+    },
   }
 }
 </script>
@@ -2478,13 +2513,16 @@ export default {
   margin-top: 24px;
 }
 .filter-div {
+  position: relative;
   padding: 10px 5px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
+  height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }
   .btns {
+    display: flex;
     .el-button{
       margin: 3px 10px 3px 0px;
     }
@@ -2496,11 +2534,24 @@ export default {
     background-color: #d9d9d9;
     border-radius: 4px;
     padding: 3px;
-    margin: 3px 10px 3px 0px;
+    margin: 0px 3px 0px 0px;
     span {
       font-size: 14px;
       margin-right: 5px
     }
+  }
+}
+
+/deep/ .search-input {
+  height: 100%;
+  overflow: visible;
+  z-index: 100; /* 保证层级高于其他元素 */
+  &.el-input--suffix .el-input__inner {
+    padding-right: 0px;
+  }
+  .el-input__prefix, .el-input__suffix {
+    height: 32px;
+    line-height: 32px;
   }
 }
 </style>

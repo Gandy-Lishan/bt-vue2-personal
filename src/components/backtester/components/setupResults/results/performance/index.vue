@@ -10,10 +10,10 @@
           @click="handleDownloadCsv"
           style="display: inline-block"
           type="primary"
-          plain
           size="small"
           icon="el-icon-download"
-          >Export Data</el-button
+          title="Export Data"
+          ></el-button
         >
       </div>
     </div>
@@ -687,5 +687,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
   margin: 0 auto;
+  padding-right: 10px;
 }
 </style>
