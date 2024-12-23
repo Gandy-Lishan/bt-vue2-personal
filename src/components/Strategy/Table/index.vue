@@ -98,7 +98,7 @@ export default {
     }
   },
   async mounted() {
-    const {selectedTitle, highlightedTag} = LocalStorageUtil.get('strategy_filter_state')
+    const { selectedTitle = '', highlightedTag = '' } = LocalStorageUtil.get('strategy_filter_state') || {};
     this.selectedTitle = selectedTitle || 'Strategies'
     this.activatedTag = highlightedTag || 'All'
     await this.$refs['Strategies'].mountedRequestList()
