@@ -4,7 +4,7 @@
      <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members</b></h4>
       <p>
        Relative to the S&P 500 and measured as a percentage of total sector stocks
-       <el-button style="margin-left: 10px;" size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+       <el-button style="margin-left: 10px;" type="primary" size="small" @click="downloadCSV" title="download csv"><i class="el-icon-download"></i></el-button>
       </p>
    </div>
     <table class="threshold-table trend-score-table" :class="{'enlarge-table': enlarged}">
