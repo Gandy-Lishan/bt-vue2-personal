@@ -547,9 +547,14 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				let cond
+				if('cond' in newVal[this.criteria]){
+					cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+				}
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				this.tech.comparison = obj.comparison
+				debugger
 				if (this.tech.comparison === 'MA') {
 					if(cond){
 						this.tech.ids = cond.ma_type || 'SMA'
