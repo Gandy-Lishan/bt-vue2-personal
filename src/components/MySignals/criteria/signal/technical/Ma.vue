@@ -111,7 +111,7 @@
 								v-model="tech.condition"
 								filterable
 								size="mini"
-								:disabled="!(radio !== 'Moving Average')"
+								:disabled="!(radio === 'Moving Average')"
 								placeholder="Please select condition"
 							>
 								<el-option
