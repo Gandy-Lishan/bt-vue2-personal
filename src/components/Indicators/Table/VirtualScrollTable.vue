@@ -271,7 +271,7 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
+              label: 'Time<br>Frame',
               value: 'timeframe'
             },
             {
@@ -316,7 +316,7 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
+              label: 'Time<br>Frame',
               value: 'timeframe'
             },
             {
@@ -364,7 +364,7 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
+              label: 'Time<br>Frame',
               value: 'timeframe'
             },
             {
@@ -421,22 +421,22 @@ export default {
             },
             {
               key: 'trend_last_value',
-              label: 'Trend Score',
+              label: 'Trend<br/>Score',
               value: 'trend_last_value'
             },
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day Score Chg',
+              label: '5-Day Score<br/>Chg',
               value: 'trend_five_day_score_chg'
             },
             {
               key: 'reltrend_last_value',
-              label: 'Relative Score',
+              label: 'Relative<br/>Score',
               value: 'reltrend_last_value'
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day Score Chg',
+              label: '5-Day Score<br/>Chg',
               value: 'reltrend_five_day_score_chg'
             },
             ]
@@ -457,8 +457,8 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
-              value: 'timeframe'
+              label: 'Time<br/>Frame',
+              value: 'timeframe',
             },
             {
               key: 'last_value',
@@ -507,7 +507,8 @@ export default {
             {
               key: 'timeframe',
               label: 'Time Frame',
-              value: 'timeframe'
+              value: 'timeframe',
+              width: '60px'
             },
             {
               key: 'last_value',
@@ -550,7 +551,8 @@ export default {
             {
               key: 'timeframe',
               label: 'Time Frame',
-              value: 'timeframe'
+              value: 'timeframe',
+              width: '60px'
             },
             {
               key: 'last_value',
@@ -599,7 +601,8 @@ export default {
             {
               key: 'timeframe',
               label: 'Time Frame',
-              value: 'timeframe'
+              value: 'timeframe',
+              width: '60px'
             },
             {
               key: 'last_value',
@@ -642,7 +645,8 @@ export default {
             {
               key: 'timeframe',
               label: 'Time Frame',
-              value: 'timeframe'
+              value: 'timeframe',
+              width: '60px'
             },
             {
               key: 'last_value',
@@ -685,7 +689,8 @@ export default {
             {
               key: 'timeframe',
               label: 'Time Frame',
-              value: 'timeframe'
+              value: 'timeframe',
+              width: '60px'
             },
             {
               key: 'last_value',
@@ -733,13 +738,13 @@ export default {
             },
             {
               key: 'win_rate',
-              label: 'Win Rate',
+              label: 'Win<br/>Rate',
               value: 'win_rate',
               addPercentSign: true
             },
             {
               key: 'avg_return',
-              label: 'Avg Return',
+              label: 'Avg<br/>Return',
               value: 'avg_return',
               addPercentSign: true
             },
@@ -773,13 +778,13 @@ export default {
             },
             {
               key: 'win_rate',
-              label: 'Win Rate',
+              label: 'Win<br/>Rate',
               value: 'win_rate',
               addPercentSign: true
             },
             {
               key: 'avg_return',
-              label: 'Avg Return',
+              label: 'Avg<br/>Return',
               value: 'avg_return',
               addPercentSign: true
             },
@@ -819,19 +824,19 @@ export default {
             },
             {
               key: 'win_rate',
-              label: 'Win Rate',
+              label: 'Win<br/>Rate',
               value: 'win_rate',
               addPercentSign: true
             },
             {
               key: 'avg_return',
-              label: 'Avg Return',
+              label: 'Avg<br/>Return',
               value: 'avg_return',
               addPercentSign: true
             },
             {
               key: 'avg_net_return',
-              label: 'Avg Net Return',
+              label: 'Avg Net<br/>Return',
               value: 'avg_net_return',
               minWidth: '100px',
               addPercentSign: true
@@ -866,7 +871,7 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
+              label: 'Time<br>Frame',
               value: 'timeframe'
             },
             {
@@ -909,7 +914,7 @@ export default {
             },
             {
               key: 'timeframe',
-              label: 'Time Frame',
+              label: 'Time<br>Frame',
               value: 'timeframe'
             },
             {
@@ -1080,22 +1085,22 @@ export default {
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
-            label: 'Trend Score',
+            label: 'Trend<br/>Score',
             value: 'trend_last_value'
           },
           {
             key: 'trend_five_day_score_chg',
-            label: '5-Day Score Chg',
+            label: '5-Day<br/>Score Chg',
             value: 'trend_five_day_score_chg'
           },
           {
             key: 'reltrend_last_value',
-            label: 'Relative Score',
+            label: 'Relative<br/>Score',
             value: 'reltrend_last_value'
           },
           {
             key: 'reltrend_five_day_score_chg',
-            label: '5-Day Score Chg',
+            label: '5-Day<br/>Score Chg',
             value: 'reltrend_five_day_score_chg'
           },
         ]])
@@ -1543,8 +1548,8 @@ export default {
       this.indicatorFilter = ''
       this.condition = '' // 清空 condition
       this.checkedType = item.value;
-      this.checkedOption(this.checkedType)
       await this.$nextTick(async () => {
+        this.checkedOption(this.checkedType)
         await this.$emit('loadMore', item.value, isUpdateChart === undefined ? true : isUpdateChart)
       })
       // this.$forceUpdate()

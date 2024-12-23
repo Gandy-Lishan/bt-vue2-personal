@@ -608,8 +608,8 @@ export default {
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				const maType = this.tech.ids == 'SMA' ? 'Simple' : 'Exponential'
-				this.description = `${comparison} ${ma_period} ${condition} ${maType} Moving Average ${period}`
+				const maType = this.tech.ids == 'SMA' ? 'S' : 'E'
+				this.description = `${comparison} ${ma_period} ${condition} ${maType}MA ${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria
