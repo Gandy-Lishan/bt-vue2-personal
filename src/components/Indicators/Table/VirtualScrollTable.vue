@@ -1190,7 +1190,7 @@ export default {
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
+              label: '5-Day<br/> Relative Score Chg',
               value: 'reltrend_five_day_score_chg'
             },
             {
@@ -2054,7 +2054,7 @@ export default {
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score'],
-        ['reltrend_five_day_score_chg', '5-Day Score Chg']
+        ['reltrend_five_day_score_chg', '5-Day Relative Score Chg']
       ])
       if(this.condition === 'trend') {
         keysMap.delete('reltrend_last_value')
@@ -2546,7 +2546,6 @@ export default {
     }
   }
 }
-
 /deep/ .search-input {
   height: 100%;
   overflow: visible;
