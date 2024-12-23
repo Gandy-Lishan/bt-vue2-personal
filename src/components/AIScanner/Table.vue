@@ -122,7 +122,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
-					min-width="90"
+					width="120"
 					:sortable="
 						[
 							'Trend'
@@ -166,7 +166,6 @@
 				</el-table-column>
 				<el-table-column		
 					v-if="l.label == 'Expected Return(%)'"
-					:label="l.label"
 					:prop="l.value"
 					:key="index"
 					min-width="90"
@@ -179,7 +178,7 @@
 					"
 				>
 						<template slot="header">
-							Expected Return(%)
+							<span v-html="l.labelHtml"></span>
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['ExpectedReturn']">
 							</span>
@@ -210,15 +209,17 @@
 							? 'custom'
 							: false
 					"
-					:label="l.label"
 					:prop="l.value"
 					:key="index"
 					:min-width="[
 							'Best Time In Market(Bars)',
 							'Time In Market(Bars)',
 							'Expected Return(%)'
-						].indexOf(l.label) !== -1 ? '90' : '80'"
+						].indexOf(l.label) !== -1 ? '100' : (l.label === 'Direction' ? '90' : '80')"
 				>
+				<template #header>
+						<span v-html="l.labelHtml"></span>
+				</template>
 					<template slot-scope="scope">
 						<p class="tableText">
 							{{ scope.row[l.value] }}

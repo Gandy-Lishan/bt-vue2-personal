@@ -46,18 +46,21 @@ export default {
         },
         {
           label: 'Last Signal Date',
+          labelHtml: 'Last Signal<br/>Date',
           field: 'last_entry_signal_date',
-          width: '150px'
+          width: '1100px'
         },
         {
           label: 'Total Trades',
+          labelHtml: 'Total<br/>Trades',
           field: 'total_trader',
-          width: '125px'
+          width: '90px'
         },
         {
           label: 'Total Return',
+          labelHtml: 'Total<br/>Return',
           field: 'total_return',
-          width: '125px'
+          width: '90px'
         }
       ],
       isExpandAll: true,

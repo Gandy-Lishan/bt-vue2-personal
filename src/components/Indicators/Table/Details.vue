@@ -18,7 +18,7 @@
                 width="200"
                 trigger="hover">
                 <template slot="reference" slot-scope="{}">
-                  <el-button type="primary" size="mini" @click="$emit('downloadCSV')">Download CSV File</el-button>
+                  <el-button type="primary" size="mini" @click="$emit('downloadCSV')"><i class="el-icon-download" title="Download CSV"></i></el-button>
                 </template>
                 <div>
                   To prevent abuse of sentimentrader data, we only provide recent 3-6 months data of the indicator. 

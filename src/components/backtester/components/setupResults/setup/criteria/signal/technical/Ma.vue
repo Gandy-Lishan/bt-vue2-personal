@@ -588,6 +588,7 @@ export default {
 				let conditionRadio =
 					this.radio == ' ' ? this.tech.comparison : this.radio
 				let comparison
+				const maType = this.tech.ids == 'SMA' ? 'S' : 'E'
 				switch (this.tech.comparison) {
 					case 'SC':
 						comparison = 'Symbol Close'
@@ -602,14 +603,13 @@ export default {
 						comparison = 'Symbol Open'
 						break
 					case 'MA':
-						comparison = 'Moving Average'
+						comparison = `${maType}MA`
 						break
 					default:
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				const maType = this.tech.ids == 'SMA' ? 'Simple' : 'Exponential'
-				this.description = `${comparison} ${ma_period} ${condition} ${maType} Moving Average ${period}`
+				this.description = `${comparison}${ma_period} ${condition} ${maType}MA${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria

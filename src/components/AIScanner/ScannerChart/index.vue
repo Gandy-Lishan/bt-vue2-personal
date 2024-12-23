@@ -26,9 +26,10 @@
 									@click="handleDownloadCsv"
 									style="display: inline-block"
 									type="primary"
-									size="mini"
+									size="small"
 									icon="el-icon-download"
-									>Export Data</el-button
+									title="Export Data"
+									></el-button
 								>
 							</div>
 						</div>
@@ -444,7 +445,7 @@ computed: {
 }
 .hint-btn-box{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 	margin: 0 auto;
 	.hint {

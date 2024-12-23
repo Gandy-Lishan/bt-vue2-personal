@@ -182,22 +182,22 @@ export default {
         },
         {
           label: 'Absolute and Relative Trend Scores',
-          type: 'SP1500Score',
+          type: 'SP500Score',
           refName: 'SP1500ScoreVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
             {
-              label: 'S&P 1500',
-              value: 'SP1500Score',
-              type: 'SP1500Score',
-              url: 'sp1500'
-            },
-            {
               label: 'S&P 500',
               value: 'SP500Score',
               type: 'SP1500Score',
               url: 'spx'
+            },
+            {
+              label: 'S&P 1500',
+              value: 'SP1500Score',
+              type: 'SP1500Score',
+              url: 'sp1500'
             },
             {
               label: 'NDX 100',

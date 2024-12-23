@@ -1,34 +1,32 @@
 <template>
   <div class="ModelReport">
-    <div class="container no-print">
-      <div class="strategy-header">
-        <div class="tableHeader">
-          <div class="headerSelect">
-            <a :href="`/MR/sentimentedge`">
-              <h4 @click="selectedTitle = 'sentimentedge'" :class="{ 'selected': selectedTitle === 'sentimentedge' }">SentimentEdge</h4>
-            </a>
-            <a :href="`/MR/modeledge`">
-              <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
-            </a>
-            <a :href="`/MR/quantedge`">
-              <h4 @click="selectedTitle = 'quantedge'" :class="{ 'selected': selectedTitle === 'quantedge' }">Kaeppel's Corner</h4>
-            </a>
-            <a :href="`/MR/tradingedge`">
-              <h4 @click="selectedTitle = 'tradingedge'" :class="{ 'selected': selectedTitle === 'tradingedge' }">TradingEdge</h4>
-            </a>
-            <a :href="`/MR/favorites`">
-              <h4 @click="selectedTitle = 'favorites'" :class="{ 'selected': selectedTitle === 'favorites' }">My Favorites</h4>
-            </a>
-            <a :href="`/MR/archived_studies`">
-              <h4 @click="selectedTitle = 'archived_studies'" :class="{ 'selected': selectedTitle === 'archived_studies' }">Archived Studies</h4>
-            </a>
-            <a :href="generatedLink()">
-              <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report</h4>
-            </a>
-            <a :href="`/MR/active_studies`">
-              <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
-            </a>
-          </div>
+    <div class="strategy-header no-print">
+      <div class="tableHeader">
+        <div class="headerSelect">
+          <a :href="`/MR/sentimentedge`">
+            <h4 @click="selectedTitle = 'sentimentedge'" :class="{ 'selected': selectedTitle === 'sentimentedge' }">SentimentEdge</h4>
+          </a>
+          <a :href="`/MR/modeledge`">
+            <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
+          </a>
+          <a :href="`/MR/quantedge`">
+            <h4 @click="selectedTitle = 'quantedge'" :class="{ 'selected': selectedTitle === 'quantedge' }">Kaeppel's Corner</h4>
+          </a>
+          <a :href="`/MR/tradingedge`">
+            <h4 @click="selectedTitle = 'tradingedge'" :class="{ 'selected': selectedTitle === 'tradingedge' }">TradingEdge</h4>
+          </a>
+          <a :href="`/MR/favorites`">
+            <h4 @click="selectedTitle = 'favorites'" :class="{ 'selected': selectedTitle === 'favorites' }">My Favorites</h4>
+          </a>
+          <a :href="`/MR/archived_studies`">
+            <h4 @click="selectedTitle = 'archived_studies'" :class="{ 'selected': selectedTitle === 'archived_studies' }">Archived Studies</h4>
+          </a>
+          <a :href="generatedLink()">
+            <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report</h4>
+          </a>
+          <a :href="`/MR/active_studies`">
+            <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
+          </a>
         </div>
       </div>
     </div>
@@ -278,13 +276,13 @@ export default {
 	align-items: flex-end;
   justify-content: center;
   background-color: #fff;
-  border-bottom: 1px solid #eee;
+  margin-top: 15px;
 	.tableHeader {
     position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    width: 100%;
+    border-bottom: 1px solid #eee;
 	}
 	.searchBox {
     display: flex;
@@ -299,7 +297,7 @@ export default {
     padding: 10px 0;
     cursor: pointer;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     &:hover{
         color: #1d4ed7;
     }
@@ -330,18 +328,18 @@ export default {
 //   position: relative;
 // }
 @media (min-width: 768px) {
-  .strategy-header.fixed .tableHeader {
-    width: 750px;
+  .tableHeader {
+    width: 100%;
   }
 }
 @media (min-width: 992px) {
-  .strategy-header.fixed .tableHeader {
-    width: 970px;
+  .tableHeader {
+    width: 1100px;
   }
 }
 @media (min-width: 1200px) {
-  .strategy-header.fixed .tableHeader {
-    width: 1170px;
+  .tableHeader{
+    width: 1300px;
   }
 }
 @media print {

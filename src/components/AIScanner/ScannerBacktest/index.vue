@@ -48,10 +48,10 @@
                 @click.stop="() => {handleDownloadCsv()}"
                 style="display: inline-block"
                 type="primary"
-                plain
-                size="mini"
+                size="small"
                 icon="el-icon-download"
-                >Export Data</el-button
+                title="Export Data"
+                ></el-button
               >
           </div>
         </template>
@@ -102,18 +102,18 @@ export default {
         label:'Filter Condition Preview',
         title: 'Filter Condition Preview',
         tableCol: [
-          {label:'Date',value:'Date'},
-          {label:'Symbol',value:'Symbol'},
-          {label:'Close',value:'Close'},
+          {label:'Date',value:'Date',labelHtml:'Date'},
+          {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
+          {label:'Close',value:'Close',labelHtml:'Close'},
           // {label:'Trend',value:'Market'},
-          {label:'Direction',value:'Direction'},
-          {label:'Signal',value:'_Signal'},
-          {label:'Win Rate(%)',value:'WinRate'},
-          {label:'Stop Loss(%)',value:'StopLoss'},
-          {label:'Profit Target(%)',value:'ProfitTarget'},
-          {label:'Best Time In Market(Bars)',value:'TimeInMarket'},
+          {label:'Direction',value:'Direction',labelHtml:'Direction'},
+          {label:'Signal',value:'_Signal',labelHtml:'Signal'},
+          {label:'Win Rate(%)',value:'WinRate',labelHtml:'Win<br/>Rate(%)'},
+          {label:'Stop Loss(%)',value:'StopLoss',labelHtml:'Stop<br/>Loss(%)'},
+          {label:'Profit Target(%)',value:'ProfitTarget',labelHtml: 'Profit<br/>Target(%)'},
+          {label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best Time In<br/>Market(Bars)'},
           //{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
-          {label:'Expected Return(%)',value:'ExpectedReturn'},
+          {label:'Expected Return(%)',value:'ExpectedReturn',labelHtml: 'Expected<br/>Return(%)'},
           // {label:'Z-Score',value:'Z_Score'},
         ]
       },
