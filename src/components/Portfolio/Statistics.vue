@@ -117,7 +117,8 @@
 				type="primary"
 				size="mini"
 				icon="el-icon-download"
-				>Download CSV</el-button>
+				title="download csv"
+				></el-button>
 		</div>
 		<div class="CPM-trades">
 			<el-table

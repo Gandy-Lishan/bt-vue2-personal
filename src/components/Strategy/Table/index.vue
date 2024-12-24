@@ -43,7 +43,7 @@
           </div>
           <div class="btns">
             <!-- <el-button type="primary" size="mini" @click="portfolio">Portfolio</el-button> -->
-            <el-button type="primary" size="mini" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 10px"></i>Download CSV</el-button>
+            <el-button type="primary" size="mini" @click="downloadCSV" title="download csv"><i class="el-icon-download"></i></el-button>
           </div>
         </div>
         <div class="searchBox">

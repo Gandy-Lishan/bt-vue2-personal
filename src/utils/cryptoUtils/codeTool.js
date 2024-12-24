@@ -795,7 +795,7 @@ class EncodeUI {
 	encode(obj) {
 		var keys = Object.keys(obj)
 		if (!this.check(obj)) return false
-		if (obj['period'] == 1)
+		if (obj['comparison'] === 'SV' && obj['value'] !== 'SVMA')
 			return (
 				'UI:' +
 				obj['indicator'] +
@@ -810,7 +810,7 @@ class EncodeUI {
 				'/' +
 				obj['value']
 			)
-		else if (keys.indexOf('period') !== -1)
+		else if (obj['comparison'] === 'SVMA' && obj['value'] !== 'SVMA')
 			return (
 				'UI:' +
 				obj['indicator'] +
@@ -826,6 +826,22 @@ class EncodeUI {
 				'/' +
 				obj['value']
 			)
+		else if (obj['comparison'] === 'SV' && obj['value'] === 'SVMA') 
+				return (
+					'UI:' +
+					obj['indicator'] +
+					';IDS:EO' +
+					obj['extreme_optimism'] +
+					'/EP' +
+					obj['extreme_pessimism'] +
+					';SC:' +
+					obj['comparison'] +
+					'/' +
+					obj['condition'] +
+					'/' +
+					obj['value'] +
+					obj['period']
+				)
 	}
 	check(obj) {
 		var keys = Object.keys(obj)
@@ -1116,16 +1132,30 @@ class Code {
 // console.log(a.decode('Exit:RC;IDS:;SC:PTE20/LSE80/TIM'))
 // console.log(a.decode('Exit:RC;IDS:;SC:PTE20/LSE80/TIM').sc)
 // var tmp = [
-//     {
-//     'analysis': 'Sentiment',
-//     'indicator': 'Smart Money Confidence',
-//     'extreme_optimism': '20',
-//     'extreme_pessimism': '80',
-//     'period': '1',
-//     'condition': '3',
-//     'value': '20',
-// 		'comparison': 'SVMA'
-// },
+// 		{
+// 			"extreme_optimism": 0,
+// 			"extreme_pessimism": 0,
+// 			"comparison": "SV",
+// 			"condition": 3,
+// 			"newCondition": 3,
+// 			"value": "SVMA",
+// 			"conditionPeriod": "21",
+// 			"period": "5",
+// 			"indicator": "SPXT FSELX Ratio",
+// 			"analysis": "User"
+// 		},
+// 		{
+// 			"extreme_optimism": 0,
+// 			"extreme_pessimism": 0,
+// 			"comparison": "SV",
+// 			"condition": 3,
+// 			"newCondition": 3,
+// 			"value": "SVMA",
+// 			"conditionPeriod": "21",
+// 			"period": "5",
+// 			"indicator": "SPXT FSELX Ratio",
+// 			"analysis": "Sentiment"
+// 		}
 // ]
 //{
 //     'analysis': 'Sentiment',
