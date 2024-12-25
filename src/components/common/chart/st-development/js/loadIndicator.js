@@ -11,6 +11,7 @@
     searchIndicator,
     getPairData
   } from '@/service/service'
+import { formatStandardTime } from '@/utils'
 
  let __st_js_loadIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -264,7 +265,7 @@
         for (var i = 0; i < data.length; i++) {
             newQuotes[i] = {};
             
-            newQuotes[i].DT = new Date(data[i].DT)     
+            newQuotes[i].DT = formatStandardTime(data[i].DT)   
             newQuotes[i].Open = data[i].Open;
             newQuotes[i].High = data[i].High;
             newQuotes[i].Low = data[i].Low;
@@ -275,7 +276,7 @@
         for (var i = 0; i < data.length; i++) {
             newQuotes[i] = {};
 
-            newQuotes[i].DT = new Date(data[i].DT)
+            newQuotes[i].DT = formatStandardTime(data[i].DT)
             newQuotes[i].Open = data[i].Close;
             newQuotes[i].High = data[i].Close;
             newQuotes[i].Low = data[i].Close;

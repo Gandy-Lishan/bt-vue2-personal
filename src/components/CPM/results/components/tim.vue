@@ -640,9 +640,11 @@ export default {
 			const field = this.tradePrice
 			let backtestResult = []
 
-			// const testDate = formatStandardTime('1947-04-15')
-			// let tres = chartDataset.findIndex((x) => {
-			// 	return testDate.getTime() == x.DT.getTime()
+			// const testdate = new Date('1947-04-16')
+			// var testoffset = testdate.getTimezoneOffset() * 60 * 1000
+			// var testentryDate = new Date(testdate.getTime() + testoffset)
+			// let testres = chartDataset.findIndex((x) => {
+			// 	return testdate.getTime() == x.DT.getTime()	
 			// })
 			// debugger
 			for (var data in dataSet) {
