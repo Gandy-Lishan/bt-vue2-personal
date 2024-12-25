@@ -594,11 +594,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
-                    var datatime = new Date(data[i].DT)
-                    
-                    var offset = datatime.getTimezoneOffset() * 60 * 1000
-                    
-                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+                    newQuotes[i].DT =  new Date(data[i].DT)
                     
                     newQuotes[i].Open = data[i].Open;
                     newQuotes[i].High = data[i].High;
@@ -648,12 +644,8 @@ quoteFeedSimulator.formatChartData = async function(response){
             }else{
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
-    
-                    var datatime = new Date(data[i].DT)
-    
-                    var offset = datatime.getTimezoneOffset() * 60 * 1000
-                    
-                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+ 
+                    newQuotes[i].DT = new Date(data[i].DT)
         
                     newQuotes[i].Open = data[i].Close;
                     newQuotes[i].High = data[i].Close;

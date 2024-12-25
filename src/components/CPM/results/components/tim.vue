@@ -80,6 +80,7 @@
 
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js/components'
+import { formatStandardTime } from '@/utils'
 
 export default {
   name: 'TIM',
@@ -647,12 +648,13 @@ export default {
 			const field = this.tradePrice
 			let backtestResult = []
 
+			const testDate = formatStandardTime('1947-04-15')
+			let tres = chartDataset.findIndex((x) => {
+				return testDate.getTime() == x.DT.getTime()
+			})
+			debugger
 			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data].Date)
-
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
-
+				var entryDate = formatStandardTime(dataSet[data].Date)
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
 				})
