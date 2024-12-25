@@ -68,7 +68,7 @@
 						</el-col>
 						<el-col :span="8">
 							<div class="btns">
-								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter Criteria</el-button>
+								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
 								<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
 								<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
 							</div>
@@ -343,8 +343,9 @@
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="resetForm">reset</el-button>
-						<el-button type="primary" @click="handleDialogClose">confirm</el-button>
+					<el-button size="mini" type="info" @click="disableFilter">Disable Filter</el-button>
+					<el-button size="mini" @click="resetForm">Reset Filter</el-button>
+						<el-button size="mini" type="primary" @click="handleDialogClose">Apply Filter</el-button>
 				</span>
 		</el-dialog>
 	</div>
@@ -402,6 +403,7 @@ export default {
 	isShowShortChecked: false,
 	loading: false,
 	showFilterDialog: false,
+	disabledFilter: true,
 	data: {
 		stop_loss_condition: 2,
 		take_profit_condition: 2,
@@ -545,9 +547,9 @@ export default {
 		originData: {
 			async handler(newValue, oldValue){
 				this.tableData = JSON.parse(JSON.stringify(this.originData))
-				this.options = [...Array.from(new Set(this.tableData.content.map(ele => ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+				this.options = [...Array.from(new Set(this.tableData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 				this.data.signals = ['All']
-        this.$refs['SelectCheck'].optionsAll = true
+    this.$refs['SelectCheck'].optionsAll = true
 				await this.filterData()
 				console.log('this.options', this.options)
 			},
@@ -565,12 +567,13 @@ export default {
 	async handleDialogClose() {
 		const validForm = await this.validForm('Form');
 		if (!validForm) return
+		this.disabledFilter = false
 		this.showFilterDialog = false
 		this.handleQuery();
 	},
 	handleQuery: throttle(async function () { await this.filterData() }, 1000),
 	async filterData(){
-		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( this.filterRangeCondition(this.getSearchresult())))
+		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
 	},
@@ -594,7 +597,7 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
-		if(this.showFilterDialog) return searchResult
+		if(this.showFilterDialog || this.disabledFilter) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
 			time_in_market_condition, time_in_market,
@@ -615,7 +618,7 @@ export default {
 			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
 			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
 			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& (condition || signals.includes(item['_Signal']))
+			&& (condition || signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
 			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
 			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
 			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
@@ -629,9 +632,9 @@ export default {
 		if (this.isShowShortChecked) {
 			// 当checkbox勾选时，返回被筛选过的数据
 			return searchResult
-					.filter(item=>item["Direction"] == 'Short');
+					.filter(item=>item["Direction"] === 'Short');
 		}
-		return searchResult.filter(item=>item["Direction"] == 'Long');
+		return searchResult.filter(item=>item["Direction"] === 'Long');
 	},
 	getSearchresult(){
 		if(this.searchItem){
@@ -663,7 +666,8 @@ export default {
 	async loadData(marketType){
 		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick()
+			await this.getAIPick()
+			this.filterData()
 		}
 	},
 	async getAIPick(){
@@ -739,6 +743,20 @@ export default {
 	},
 	resetForm() {
 		this.$refs['Form'].resetFields();
+		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+		this.data.signals = ['All']
+		this.$refs['SelectCheck'].optionsAll = true
+		this.disabledFilter = false
+		this.showFilterDialog = false
+		this.handleQuery();
+	},
+	disableFilter() {
+		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+		this.data.signals = ['All']
+		this.$refs['SelectCheck'].optionsAll = true
+		this.disabledFilter = true
+		this.showFilterDialog = false
+		this.handleQuery();
 	}
   }
 };

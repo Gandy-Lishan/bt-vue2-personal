@@ -111,7 +111,7 @@
 								v-model="tech.condition"
 								filterable
 								size="mini"
-								:disabled="!(radio !== 'Moving Average')"
+								:disabled="!(radio === 'Moving Average')"
 								placeholder="Please select condition"
 							>
 								<el-option
@@ -417,6 +417,7 @@ export default {
 				let conditionRadio =
 					this.radio == ' ' ? this.tech.comparison : this.radio
 				let comparison
+				const maType = this.tech.ids == 'SMA' ? 'S' : 'E'
 				switch (this.tech.comparison) {
 					case 'SC':
 						comparison = 'Symbol Close'
@@ -431,14 +432,13 @@ export default {
 						comparison = 'Symbol Open'
 						break
 					case 'MA':
-						comparison = 'Moving Average'
+						comparison = `${maType}MA`
 						break
 					default:
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				const maType = this.tech.ids == 'SMA' ? 'Simple' : 'Exponential'
-				this.description = `${comparison} ${ma_period ? `${ma_period} ` : ''}${condition} ${maType} Moving Average ${period}`
+				this.description = `${comparison}${ma_period ? `${ma_period} ` : ''} ${condition} ${maType}MA${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria
@@ -547,9 +547,14 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				let cond
+				if('cond' in newVal[this.criteria]){
+					cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+				}
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				this.tech.comparison = obj.comparison
+				debugger
 				if (this.tech.comparison === 'MA') {
 					if(cond){
 						this.tech.ids = cond.ma_type || 'SMA'

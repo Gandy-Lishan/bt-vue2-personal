@@ -527,6 +527,9 @@ try {
       let saveRes = null
       try {
         saveRes = await this.saveFormData()
+        debugger
+        const _resData = JSON.parse(saveRes.data.data)
+        this.rowUrl = _resData.url
       } catch (error) {
         console.error(error);
         this.processTips = ''

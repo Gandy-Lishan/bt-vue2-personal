@@ -80,6 +80,9 @@
 								: false
 						"
 					>
+						<template #header>
+							<span v-html="l.label"></span>
+						</template>
 						<template slot-scope="scope">
 							<span class="tableText" v-if="l.value === 'model_name'">
 								<el-button
@@ -201,35 +204,40 @@ export default {
 					minWidth: '170px',
 				},
 				{
-					label: 'Time Frame',
+					label: 'Time<br/>Frame',
 					value: 'type',
-					key: 'type'
+					key: 'type',
+					width: '120px'
 				},
 				{
-					label: 'Current Signal: (e.g., Long, Sell, etc)',
+					label: 'Current Signal:<br/>(e.g., Long, Sell, etc)',
 					value: 'current_state',
 					key: 'current_state',
+					width: '240px'
 				},
 				{
 					label: 'Last Signal Date: (last change in Signal)',
 					value: 'date',
-					key: 'date'
+					key: 'date',
+					width: '120px'
 				},
 				{
-					label: 'Model Update Frequency',
+					label: 'Model Update<br/>Frequency',
 					value: 'update_frequency',
 					key: 'update_frequency',
+					width: '100px'
 				},
 				{
-					label: 'YTD until 11/29/24 Return(%)',
+					label: 'YTD until<br/>11/29/24<br/>Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
+					width: '125px'
 				},
 				{
 					label: 'To BTV3',
 					value: 'btn',
 					key: 'btn',
-					width: '150px'
+					width: '120px'
 				}
 			],
 			tableData: [],

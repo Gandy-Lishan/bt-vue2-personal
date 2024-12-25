@@ -37,6 +37,9 @@
 								: false
 						"
 					>
+					<template #header>
+							<span v-html="l.label"></span>
+					</template>
 						<template slot-scope="scope">
 							<span class="tableText" v-if="l.value === 'model_name'">
 								<el-button type="text" @click="
@@ -63,6 +66,9 @@
 								: false
 						"
 					>
+					<template #header>
+							<span v-html="l.label"></span>
+					</template>
 					<template slot-scope="scope">
 						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
 							{{ scope.row[l.value] }}%
@@ -108,10 +114,10 @@ export default {
           label: 'Model Name',
           value: 'model_name',
           key: 'model_name',
-					minWidth: '260px',
+										minWidth: '180px',
         },
         {
-          label: 'Strategy CAGR',
+          label: 'Strategy<br/>CAGR',
           value: 'CAGR',
           key: 'CAGR'
         },
@@ -121,17 +127,17 @@ export default {
           key: 'benchmark_CAGR'
         },
         {
-          label: 'Max Drawdown',
+          label: 'Max<br/>Drawdown',
           value: 'max_drawdown',
           key: 'max_drawdown'
         },
         {
-          label: 'Net Profit(%)',
+          label: 'Net<br/>Profit(%)',
           value: 'net_profit_pct',
           key: 'net_profit_pct'
         },
         {
-          label: 'Sharpe Ratio',
+          label: 'Sharpe<br/>Ratio',
           value: 'sharp_ratio',
           key: 'sharp_ratio'
         },
@@ -141,22 +147,22 @@ export default {
           key: 'profit_loss_ratio'
         },
         {
-          label: 'Average Win',
+          label: 'Average<br/>Win',
           value: 'average_win',
           key: 'average_win'
         },
         {
-          label: 'Average Loss',
+          label: 'Average<br/>Loss',
           value: 'average_loss',
           key: 'average_loss'
         },
         {
-          label: 'Total Trades',
+          label: 'Total<br/>Trades',
           value: 'total_trades',
           key: 'total_trades'
         },
         {
-          label: 'Win Rate(%)',
+          label: 'Win<br/>Rate(%)',
           value: 'win_rate_pct',
           key: 'win_rate_pct'
         }
@@ -186,7 +192,7 @@ export default {
     handleCurrentChange(currentPage) {
 			this.currentPage = currentPage;
 			const strategy_filter_state = LocalStorageUtil.get('strategy_filter_state')
-			LocalStorageUtil.set('strategy_filter_state', {...strategy_filter_state, currentSummaryPage: currentPage})
+			LocalStorageUtil.set('strategy_filter_state', {...(!strategy_filter_state ? {} : strategy_filter_state) , currentSummaryPage: currentPage})
 		},
     portfolio() {
       console.log('paginatedData', this.paginatedData.filter(item => item.selection))
@@ -196,7 +202,7 @@ export default {
       this.loading = true
       let res = null
 			debugger
-			const {currentSummaryPage} = LocalStorageUtil.get('strategy_filter_state')
+			const {currentSummaryPage=1} = LocalStorageUtil.get('strategy_filter_state')
 			const page = currentSummaryPage || 1
 			try {
 				res = await getStrategySummaryList()
