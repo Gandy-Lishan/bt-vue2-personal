@@ -11,6 +11,7 @@
     searchIndicator,
     getPairData
   } from '@/service/service'
+import { formatStandardTime } from '@/utils'
 
  let __st_js_loadIndicator_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -264,12 +265,7 @@
         for (var i = 0; i < data.length; i++) {
             newQuotes[i] = {};
             
-            var datatime = new Date(data[i].DT)
-            
-            var offset = datatime.getTimezoneOffset() * 60 * 1000
-            
-            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
-            
+            newQuotes[i].DT = formatStandardTime(data[i].DT)   
             newQuotes[i].Open = data[i].Open;
             newQuotes[i].High = data[i].High;
             newQuotes[i].Low = data[i].Low;
@@ -280,12 +276,7 @@
         for (var i = 0; i < data.length; i++) {
             newQuotes[i] = {};
 
-            var datatime = new Date(data[i].DT)
-
-            var offset = datatime.getTimezoneOffset() * 60 * 1000
-            
-            newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
-
+            newQuotes[i].DT = formatStandardTime(data[i].DT)
             newQuotes[i].Open = data[i].Close;
             newQuotes[i].High = data[i].Close;
             newQuotes[i].Low = data[i].Close;
@@ -301,9 +292,7 @@
 
  // endDate为推荐日当天
  CIQ.initiateChart = function(indicatorsList,endDate,callback){
-     var datatime = new Date(endDate)
-     var offset = datatime.getTimezoneOffset() * 60 * 1000
-     const standardEndDate = new Date(datatime.setTime(datatime.getTime() + offset))
+     const standardEndDate = formatStandardTime(endDate)
      CIQ.stxx.loadChart(	{ symbol: CIQ.symbol,startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:standardEndDate, indicator:indicatorsList}, function () {
          // 加载marker前先清空
          //CIQ.hideMarker()

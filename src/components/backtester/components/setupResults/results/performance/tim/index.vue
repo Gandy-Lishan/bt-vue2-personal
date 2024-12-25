@@ -242,6 +242,7 @@
 <script>
 import { setCustomTIM, getCustomTIM } from '@/service/service'
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { formatStandardTime } from '@/utils'
 
 export default {
 	name: 'TIM',
@@ -506,10 +507,7 @@ export default {
             this.TIMHistoryList = this.calculateBacktestHistory(this.tradesData, timPeriodArray)
             // 2.1涓紩鍏ュ垎鏋愬笀鐨刏Score妯″潡
             
-            let offset = datatime.getTimezoneOffset() * 60 * 1000
-            this.start_date = new Date(
-                datatime.setTime(datatime.getTime() + offset)
-            )
+            this.start_date = formatStandardTime(datatime)
             this.activeTIM = 'second'
             this.calculateZScore(this.tradesData, timPeriodArray)
             this.activeTIM = 'first'
@@ -1041,10 +1039,7 @@ export default {
 			let noFound = []
 
 			for (let data in dataSet) {
-				let datatime = new Date(dataSet[data].Date)
-
-				let offset = datatime.getTimezoneOffset() * 60 * 1000
-				let entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				let entryDate = formatStandardTime(dataSet[data].Date)
 
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
@@ -1257,11 +1252,7 @@ export default {
 			let dataTimeList = []
 			for (let data in dataSet) {
 				if (dataSet[data].TradeStatus != 'BUY') continue
-				let datatime = new Date(dataSet[data].Date)
-				let offset = datatime.getTimezoneOffset() * 60 * 1000
-				let entryDate = new Date(
-					datatime.setTime(datatime.getTime() + offset)
-				).getTime()
+				let entryDate = formatStandardTime(dataSet[data].Date).getTime()
 				dataTimeList.push(entryDate)
 			}
 			let used_quotes = quotes.filter(

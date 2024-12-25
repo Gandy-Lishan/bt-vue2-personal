@@ -24,6 +24,7 @@
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
 import { getPropertyByString } from "@/utils/globalFunc"
+import { formatStandardTime } from '@/utils'
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -685,9 +686,7 @@ if (!CIQ.Studies) {
 			var quote = quotes[i];
 			
 			let item = points.find(x=>{
-				var datatime = new Date(x.Date)
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				const standardDate = formatStandardTime(x.Date)
 				return standardDate.getTime()==quote.DT.getTime()
 			})
 			
