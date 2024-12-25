@@ -39,9 +39,13 @@ const trimTrailingZeros = (val) => {
 const formatStandardTime = (date) => {
   var datatime = new Date(date)
   var offset = datatime.getTimezoneOffset() * 60 * 1000
-  return new Date(
-    datatime.setTime(datatime.getTime() + offset)
-  )
+  let returnValue = new Date(datatime.getTime()+offset)
+
+  if(returnValue.getDate() !== datatime.getDate()){
+    const newOffset = offset + 60*60*1000
+    returnValue = new Date(datatime.getTime()+newOffset)
+  }
+  return returnValue
 }
 
 const getQueryVariable = (variable) => {
