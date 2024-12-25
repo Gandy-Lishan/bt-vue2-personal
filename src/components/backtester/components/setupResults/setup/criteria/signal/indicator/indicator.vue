@@ -1532,12 +1532,12 @@ export default {
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {
               if (indi.toUpperCase() == item.value.toUpperCase()) {
-                // let obj = {}
-                // obj.index = vm.panelIndex
-                // obj.url = item.url
+                let obj = {}
+                obj.index = vm.panelIndex
+                obj.url = item.url
                 // Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
                 this.currentSentiUpdated = item.updated
-                // vm.$emit('getIndicatorUrl', obj)
+                vm.$emit('getIndicatorUrl', obj)
 
                 let freqObj = {}
                 freqObj.value = item.updated
@@ -1556,10 +1556,10 @@ export default {
             this.indicatorRadio = 'Symbol OHLCV'
             this.si.symbolIndicator =
               newVal[this.criteria].signals[index].indicator
-            // let obj = {}
-            // obj.index = vm.panelIndex
-            // obj.url = this.si.symbolIndicator
-            // vm.$emit('getIndicatorUrl', obj)
+            let obj = {}
+            obj.index = vm.panelIndex
+            obj.url = this.si.symbolIndicator
+            vm.$emit('getIndicatorUrl', obj)
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
