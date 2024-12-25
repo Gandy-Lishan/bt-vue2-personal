@@ -23,8 +23,8 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<!-- <StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart> -->
-								<newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></newChart>
+								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
+								<!-- <newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></newChart> -->
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
