@@ -446,9 +446,9 @@ export default {
     sentiUrl: {
       handler(newVal) {
         if (newVal) {
-          let obj = CIQ.store.state.form.conditionRadio
-          obj[this.criteria][this.panelIndex] = this.conditionRadio
-          CIQ.store.commit('form/setConditionRadio', obj)
+          // let obj = CIQ.store.state.form.conditionRadio
+          // obj[this.criteria][this.panelIndex] = this.conditionRadio
+          // CIQ.store.commit('form/setConditionRadio', obj)
           let vm = this
           let extremeValue = this.$store.state.chart.extremeValue
           extremeValue.forEach((item) => {
@@ -1072,6 +1072,10 @@ export default {
           this.senti.period = obj.period
           this.senti.value = ''
         }
+
+          let cr = CIQ.store.state.form.conditionRadio
+          cr[this.criteria][this.panelIndex] = this.conditionRadio
+          CIQ.store.commit('form/setConditionRadio', cr)
 
         // long: ROC加载脱离了setup表单渲染的限制，在restoreIndicatorLayoutView外部调用loopCalculateNewConditions
         // 之後用loopCalculateNewConditions代替senti組件内部的CalculateNewConditions,這一塊隱藏

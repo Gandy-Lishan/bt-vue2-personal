@@ -1122,9 +1122,9 @@ export default {
 			}
 			console.log('techIndiObj', this.techIndiObj)
 			// 先把 indicatorUrl 设置好 但是唯独 user indicator 没办法设置
-			data[criteria].signals.forEach((signal, i) => {
-				if(signal.analysis !== 'User') this.indicatorUrlArr.splice(i, 1, signal.indicator)
-			})
+			// data[criteria].signals.forEach((signal, i) => {
+			// 	if(signal.analysis !== 'User') this.indicatorUrlArr.splice(i, 1, signal.indicator)
+			// })
 			this.$nextTick(() => {
 				this.setEditData(this.refs)
 			})
