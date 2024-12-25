@@ -23,7 +23,8 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
+								<!-- <StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart> -->
+								<newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></newChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -127,13 +128,15 @@
 
 <script>
 import StrategyChart from "./Table/StrategyChart";
+import newChart from "./Table/newChart.vue";
 import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
 import { isJson, timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
 	components: {
-		StrategyChart
+		StrategyChart,
+		newChart
 	},
 	data() {
 		return {
@@ -177,7 +180,7 @@ export default {
       console.log('详情', res)
       const code = res?.data?.code
       if(code === 200) {
-				_this.signalDes = res?.data?.data
+								_this.signalDes = res?.data?.data
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
 				let {start_date:_start_date, 
@@ -360,6 +363,7 @@ export default {
 					strat_data: [pairDataDate, pairDataDate2],
 					symbolName
 				}
+				console.log('lishan strat_data', _this.strat_data)
 				})
     }
 			}
