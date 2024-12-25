@@ -19,6 +19,10 @@ export default {
      type: Object,
      required: true,
    },
+   singleModel: {
+    type: String,
+    require: true
+   }
  },
  data() {
    return {
@@ -94,6 +98,7 @@ export default {
  // },
  methods: {
    initializeChart() {
+    const isSingle = this.singleModel === 'False'
      const seriesData = this.data.strat_data.map((lineData, index) => {
       if(!lineData) return null
        const yAxisIndex = index === 0 ? 0 : 1;
@@ -190,9 +195,6 @@ export default {
        title: {
         enabled: false
        },
-       xAxis: {
-         type: "datetime",
-       },
        yAxis: [
          {
            title: { text: this.strategyTitles['spx'] },
@@ -203,11 +205,12 @@ export default {
          opposite: true, // Y 轴在右侧
          },
          {
-          title: { text: this.strategyTitles['spx2'] },
+          title: { text: !isSingle ? '' : this.strategyTitles['spx2'] },
           labels: {
             align: "right", // 标签靠右
           },
          opposite: false, // Y 轴在右侧
+         enabled: !isSingle
         },
        ],
        legend: {
@@ -288,41 +291,6 @@ export default {
               }
             },
           },
-          events: {
-            mouseOver: function () {
-              // 暂时禁用 line 的鼠标跟踪，防止 tooltip 触发
-              try {
-                if(this.chart?.series) {
-                    this.chart.series.forEach(series => {
-                    if (series.initialType === 'line') {
-                      series.update({ enableMouseTracking: false });
-                    }
-                  });
-                }
-                this.chart.tooltip.hide();
-              } catch (error) {
-                console.log('error', error)
-              }
-              // 当 hover 到 scatter（三角形）时，隐藏其他 series 的 tooltip
-            },
-            mouseOut: function () {
-              console.log('mouseOut', this.chart);
-              // 当移出 scatter 时，重新启用 line 的鼠标跟踪和 tooltip
-              try {
-                if(this.chart?.series) {
-                  this.chart.series.forEach(series => {
-                    if (series.initialType === 'line') {
-                      series.update({ enableMouseTracking: true });
-                    }
-                  });
-                }
-                this.chart.tooltip.refresh();
-              } catch (error) {
-                console.log('error', error)
-              }
-              // 重新显示 tooltip
-            }
-          },
           // events: {
           //   mouseOver: function () {
           //    console.log('this.chart?.series', this.chart?.series)
@@ -364,7 +332,6 @@ export default {
           states: {
             hover: {
               enabled: true,  // 线在 hover 时继续保持边框
-              lineWidthPlus: 0,  // hover 时不增加线宽
               borderColor: '#000'  // 确保线的边框颜色为黑色
             }
           },
@@ -388,7 +355,7 @@ export default {
         }
       },
        series,
-     }).filter(ele => ele !== null)
+     })
    },
    destroyChart() {
      if (this.chart) {
