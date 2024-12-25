@@ -154,11 +154,8 @@ export default {
           this.tradesData,
           periodArray
       )
-			console.log('this.backtestHistoryList', this.backtestHistoryList)
-      var offset = datatime.getTimezoneOffset() * 60 * 1000
-      this.start_date = new Date(
-          datatime.setTime(datatime.getTime() + offset)
-      )
+
+      this.start_date = formatStandardTime(datatime)
       this.calculateZScore(this.tradesData, periodArray)
     },
     getAllDefaultTableLabels() {
@@ -549,12 +546,7 @@ export default {
 			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
 			let dataTimeList = []
 			for (var data in dataSet) {
-				// if (dataSet[data].TradeStatus != 'BUY') continue
-				var datatime = new Date(dataSet[data].Date)
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(
-					datatime.setTime(datatime.getTime() + offset)
-				).getTime()
+				var entryDate = formatStandardTime(dataSet[data].Date).getTime()
 				dataTimeList.push(entryDate)
 			}
 			let used_quotes = quotes.filter(
@@ -648,11 +640,11 @@ export default {
 			const field = this.tradePrice
 			let backtestResult = []
 
-			const testDate = formatStandardTime('1947-04-15')
-			let tres = chartDataset.findIndex((x) => {
-				return testDate.getTime() == x.DT.getTime()
-			})
-			debugger
+			// const testDate = formatStandardTime('1947-04-15')
+			// let tres = chartDataset.findIndex((x) => {
+			// 	return testDate.getTime() == x.DT.getTime()
+			// })
+			// debugger
 			for (var data in dataSet) {
 				var entryDate = formatStandardTime(dataSet[data].Date)
 				let res = chartDataset.findIndex((x) => {
