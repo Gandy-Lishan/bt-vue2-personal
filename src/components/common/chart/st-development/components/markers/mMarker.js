@@ -6,6 +6,7 @@
 import { CIQ, markers } from "chartiq/js/standard.js";
 import marker from "./markersSample.js";
 import "./highPerformanceMarkers.js"
+import { formatStandardTime } from '@/utils'
 var _css;
 if (
 	typeof define === "undefined" &&
@@ -112,9 +113,7 @@ MarkersSample.prototype.showmMarker = function () {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
 			
 			// 为了兼容dot的数据源
-			var datatime = new Date(mDataSet[data].DT || mDataSet[data].Date)
-			var offset = datatime.getTimezoneOffset() * 60 * 1000
-			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+			const standardDate = formatStandardTime(mDataSet[data].DT || mDataSet[data].Date)
 			var quote =null
 			var pms, qms;
 			var xPosition =null
@@ -308,9 +307,7 @@ MarkersSample.prototype.showmMarker = function () {
 	/** dual symbol */
 	for (var data in mDataSet2) {
 		//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
-		var datatime = new Date(mDataSet2[data].DT || mDataSet2[data].Date)
-		var offset = datatime.getTimezoneOffset() * 60 * 1000
-		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+		const standardDate = formatStandardTime(mDataSet2[data].DT || mDataSet2[data].Date)
 		var quote =null
 		var pms, qms;
 		var xPosition =null

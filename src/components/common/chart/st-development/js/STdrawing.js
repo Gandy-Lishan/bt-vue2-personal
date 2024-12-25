@@ -1,4 +1,6 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from 'chartiq/js/chartiq.js'
+import { formatStandardTime } from '@/utils'
+import { printConsole } from '@/utils'
 let __st_js_drawing_ = _exports => {
     /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -86,9 +88,11 @@ let __st_js_drawing_ = _exports => {
     
         //create factory for the drawing you want
        quotes.forEach(item => { 
-            var d0 = new Date(item[0])
-            var d1 = new Date(item[1])
-            var offset = d0.getTimezoneOffset() * 60 * 1000
+            var d0 = formatStandardTime(item[0])
+            var d1 = formatStandardTime(item[1])
+            printConsole('**********************')
+            printConsole(d0,d1)
+            printConsole(CIQ.yyyymmddhhmmssmmm(d0),CIQ.yyyymmddhhmmssmmm(d1))
             let drawing = {
                 name: "rectangle",
                 pnl: "chart",
@@ -96,8 +100,8 @@ let __st_js_drawing_ = _exports => {
                 fc: "#7DA6F5",
                 ptrn: "solid",
                 lw: 1.1,
-                d0: CIQ.yyyymmddhhmmssmmm(new Date(d0.setTime(d0.getTime() + offset))),
-                d1: CIQ.yyyymmddhhmmssmmm(new Date(d1.setTime(d1.getTime() + offset))),
+                d0: CIQ.yyyymmddhhmmssmmm(d0),
+                d1: CIQ.yyyymmddhhmmssmmm(d1),
                 tzo0: 300,
                 tzo1: 300,
                 v0: 100000000,
@@ -126,10 +130,7 @@ let __st_js_drawing_ = _exports => {
             // 显示pattern标记
             var newNode;
             //hoverable marker
-            var datatime = new Date(item[1])
-            var offset = datatime.getTimezoneOffset() * 60 * 1000
-            const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
-
+            const standardDate = formatStandardTime(item[1])
             newNode = document.querySelector("#stxEventHover").cloneNode(true);
             newNode.id = null;
             newNode.querySelector(".tooltip").innerHTML = `

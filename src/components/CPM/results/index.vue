@@ -144,7 +144,7 @@ export default {
     prepareData(data) {
       const _this = this
       _this.$nextTick(() => {
-        const datatime = new Date(data.start_date)
+        const datatime = data.start_date
         _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
         _this.$refs['maxMinChild'].prepareData(_this.tradeDate, datatime)
         _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)

@@ -1,4 +1,5 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
+import { formatStandardTime } from '@/utils'
 
 // 一些共用工具函数，可以分离出来
 let __st_js_utils_ = (_exports) => {
@@ -114,20 +115,14 @@ let __st_js_utils_ = (_exports) => {
 
     CIQ.measureBarDistance = function(d1,d2) {
         var quotes = CIQ.stxx.chart.dataSet;
-        var start = new Date(d1)
-        var end = new Date(d2)
-        var offset = start.getTimezoneOffset() * 60 * 1000
-        const standardStartDate = new Date(start.setTime(start.getTime() + offset))
-        const standardEndDate = new Date(end.setTime(end.getTime() + offset))
-
+        const standardStartDate = formatStandardTime(d1)
+        const standardEndDate = formatStandardTime(d2)
         const subQuotes = quotes.filter(item => item.DT.getTime()>=standardStartDate.getTime() && item.DT.getTime()<=standardEndDate.getTime())
         return subQuotes.length
     }
     CIQ.getStartDateByNumberOfBars = function(d2,barDistance) {
         var quotes = CIQ.stxx.chart.dataSet;
-        var end = new Date(d2)
-        var offset = end.getTimezoneOffset() * 60 * 1000
-        var standardEndDate = new Date(end.setTime(end.getTime() + offset))
+        var standardEndDate = formatStandardTime(d2)
         if(standardEndDate.getTime()>quotes[quotes.length-1].DT.getTime()) standardEndDate = quotes[quotes.length-1].DT
         const startDateIndex = quotes.findIndex(item => item.DT.getTime()==standardEndDate.getTime()) - barDistance + 1
         if(startDateIndex < 0) return
