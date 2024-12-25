@@ -20,7 +20,6 @@
 					<el-input disabled v-model="senti.extreme_pessimism"></el-input>
 				</el-form-item>
 			</div>
-      {{conditionRadio}}
 			<div class="condition-container">
 				<el-form-item class="indicator-alignment">
 					<el-radio
