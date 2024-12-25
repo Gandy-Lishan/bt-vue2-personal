@@ -90,9 +90,9 @@ let __st_js_drawing_ = _exports => {
        quotes.forEach(item => { 
             var d0 = formatStandardTime(item[0])
             var d1 = formatStandardTime(item[1])
-            printConsole('**********************')
-            printConsole(d0,d1)
-            printConsole(CIQ.yyyymmddhhmmssmmm(d0),CIQ.yyyymmddhhmmssmmm(d1))
+            // printConsole('**********************')
+            // printConsole(d0,d1)
+            // printConsole(CIQ.yyyymmddhhmmssmmm(d0),CIQ.yyyymmddhhmmssmmm(d1))
             let drawing = {
                 name: "rectangle",
                 pnl: "chart",
@@ -102,8 +102,8 @@ let __st_js_drawing_ = _exports => {
                 lw: 1.1,
                 d0: CIQ.yyyymmddhhmmssmmm(d0),
                 d1: CIQ.yyyymmddhhmmssmmm(d1),
-                tzo0: 300,
-                tzo1: 300,
+                // tzo0: 300,
+                // tzo1: 300,
                 v0: 100000000,
                 v1: -100000000,
             }

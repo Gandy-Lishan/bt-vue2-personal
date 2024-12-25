@@ -40,8 +40,6 @@ const formatStandardTime = (date) => {
   var datatime = new Date(date)
   var offset = datatime.getTimezoneOffset() * 60 * 1000
   let returnValue = new Date(datatime.getTime()+offset)
-  printConsole('################################')
-  printConsole(returnValue,datatime)
   if(returnValue.getDate() !== datatime.getDate()){
     const newOffset = offset + 60*60*1000
     returnValue = new Date(datatime.getTime()+newOffset)
