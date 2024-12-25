@@ -143,6 +143,11 @@ export default {
     // get the signal whose the last signal date is today
     await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MySignal')
+    await this.$refs['SignalsTable'].onSortChange({column: 
+      {sortable: 'custom'},
+      prop: 'last_signal_date',
+      order: 'descending'
+    })
   },
   methods: {
     changeTab(val) {
@@ -152,7 +157,14 @@ export default {
       debugger
       this.activeSecondTab = val
       if(val === 'MySignal') await this.$refs['SignalsTable'].getDataList(val)
-      if(val === 'Sample') await this.$refs['SampleTable'].getDataList(val)
+      if(val === 'Sample') {
+        await this.$refs['SampleTable'].getDataList(val)
+        await this.$refs['SampleTable'].onSortChange({column: 
+          {sortable: 'custom'},
+          prop: 'last_signal_date',
+          order: 'descending'
+        })
+      }
     },
     scrollToTarget(refName, height=-80) {
       this.$nextTick(() => {
