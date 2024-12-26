@@ -122,11 +122,11 @@ export default {
     },
     downloadCSV() {
       // 访问组件示例数据
+      if(this.selectedTitle === 'Summary') {this.downloadSummaryCSV();return}
+      if(this.selectedTitle === 'Strategies') {this.downloadStrategiesCSV();return}
+    },
+    downloadSummaryCSV() {
       const summaryData = this.$refs['Summary'].immutableTableData
-      if (!summaryData.length) {
-        this.popUpMsgBox('No data available for download')
-        return
-      }
 			const processedData = summaryData.map(item => {
 				return {
 					'Model Name': item.model_name,
@@ -146,6 +146,24 @@ export default {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Summary Statistics');
       XLSX.writeFile(wb, 'Summary Statistics.xlsx');
+    },
+    downloadStrategiesCSV() {
+      debugger
+      const strategiesTable = this.$refs['Strategies'].immutableTableData
+      const processedData = strategiesTable.map(item => {
+				return {
+					'Model Name': item.model_name,
+					'Time Frame': item.type,
+					'Current Signal:<br/>(e.g., Long, Sell, etc)': `${item.current_state}`,
+					'Last Signal Date: (last change in Signal)': `${item.date}`,
+					'Model Update Frequency': `${item.update_frequency}`,
+					'YTD until 11/29/24 Return(%)': `${item.YTD_return}%`
+				}
+			})
+			const ws = XLSX.utils.json_to_sheet(processedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Strategies');
+      XLSX.writeFile(wb, 'Strategies.xlsx');
     },
     highlightTag(tag) {
 			this.activatedTag = tag.value
