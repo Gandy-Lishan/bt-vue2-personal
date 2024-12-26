@@ -100,11 +100,11 @@ export default {
       const _row = row[0]
       const url = _row.source_list
       const pRefName = sourceRefNameMap.get(Array.from(sourceRefNameMap.keys()).find(keys => keys.find(key => key === url)))
-      this.$refs[pRefName].updateTable(_row)
+      // this.$refs[pRefName].updateTable({...row, loading: false})
       // 移除收藏的时候同步 most popular 数据
-      const _results = isJson(this.indicatorsListData['most_popular']) ? JSON.parse(this.indicatorsListData['most_popular']) : []
-      const findIndex =_results.findIndex(item => item.url === _row.url)
-      if(findIndex !== -1 && url !== 'most_popular' && isSyncPopular) {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
+      // const _results = isJson(this.indicatorsListData['most_popular']) ? JSON.parse(this.indicatorsListData['most_popular']) : []
+      // const findIndex =_results.findIndex(item => item.url === _row.url)
+      // if(findIndex !== -1 && url !== 'most_popular' && isSyncPopular) {_row.source_list = 'most_popular';this.$refs['Popular'].updateTable(_row)}
     },
     async enLargeTable(source_list, row) {
       if(source_list === 'most_popular') {

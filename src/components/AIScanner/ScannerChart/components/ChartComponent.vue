@@ -54,7 +54,7 @@ export default {
 		this.editStudies(true)
 
     /** 已经在AdvancedChartComponent里了 */
-		// // 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		// // 防止跳转到backtester时保留了Hammer followed by a rise等marker
 		// CIQ.objIndicator = []
 		// this.$store.dispatch('chart/reset_chart_study_state')
 		// this.$store.dispatch('form/reset_chart_config_state')
@@ -266,7 +266,7 @@ export default {
 						CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
 						CIQ.createOneTimeScannerMarkerHighLowLine(this.other.date,this.other._Signal,points)						
 						break;
-					case 'Hammer followed by a raise':
+					case 'Hammer followed by a rise':
 						CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)						
 						break;
 					case 'Shooting Star followed by a fall':
