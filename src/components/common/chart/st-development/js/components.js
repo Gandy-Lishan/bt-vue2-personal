@@ -8135,6 +8135,8 @@ if (!CIQ.Studies) {
 				var inputs = [];
 				for (var i = 0;i < this.helper.inputs.length; i++){
 					if (this.helper.inputs[i].heading != 'Field'){
+						// B2D-587: All-time High / Low  这里应该是没有 period 的
+						if(this.helper.inputs[i].heading == 'period' && ['ATH','ATL'].includes(this.helper.sd.inputs.condition)) continue
 						inputs.push(this.helper.inputs[i])
 					}
 				}

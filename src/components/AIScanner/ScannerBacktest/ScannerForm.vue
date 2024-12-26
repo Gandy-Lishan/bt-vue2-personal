@@ -551,8 +551,8 @@ export default {
           check: true
         },
         {
-          value: 'Hammer followed by a raise',
-          label: 'Hammer followed by a raise',
+          value: 'Hammer followed by a rise',
+          label: 'Hammer followed by a rise',
           check: true
         },
         {
