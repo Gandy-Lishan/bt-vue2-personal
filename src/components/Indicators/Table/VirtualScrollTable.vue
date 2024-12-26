@@ -1723,12 +1723,13 @@ export default {
         }
     },
     async addRow(scope) {
+      debugger
       try {
         if(scope.row.source !== 'Backtest Engine v2.0') {
           this.popUpMsgBox(`This indicator is migrated from user website. Please remove it from <a href="https://users.sentimentrader.com/users/favorites/" target="_blank">your favorites</a>.`)
           return
         }
-        scope.row.loading = true
+        // scope.row.loading = true
         const isFavorite = Boolean(scope.row.favorite) // 看原本的状态
         let flag = false
         if(!flag) {scope.row.favorite = !scope.row.favorite; flag = true}
@@ -1760,35 +1761,24 @@ export default {
         console.log('VirtaulScroll 保存之前的 URL', url) // todo
         this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: this.tableData})
         // 在 Most Popular 去更新对应的表; 不在 Most Popular 去更新 Most Popular
-        if(url !== 'most_popular') {
-          const _url = 'most_popular'
-          const  _popularResults = isJson(this.indicatorsListData[_url]) ? JSON.parse(this.indicatorsListData[_url]) : []
-          const _find = _popularResults.find(ele => ele.url === scope.row.url)
-          if(_find) {
-            _find.source_list = 'most_popular'
-            this.removeIndicatorsFavorites([_find], true)
-          }
-        }
-        else if(url === 'most_popular') {
-          const urlTypes = Array.from(Object.keys(this.indicatorsListData))
-          let sourceTable = urlTypes.map(url => {
-            const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
-              return list.map(item => {
-                if(item.url === scope.row.url) return item
-              }).filter(item => item !== undefined)
-          }).filter(item => item.length > 0).flat()
-          console.log('sourceTable', sourceTable) // [{}]
-          // Filter the dictionary to remove items with the same URL and fav: false
-          sourceTable = sourceTable.filter(item => (item.source_list !== 'most_popular'));
-          sourceTable.forEach(item => {
+        // 遍历出来, 要只要是哪张表
+        const urlTypes = Array.from(Object.keys(this.indicatorsListData))
+        let sourceTable = urlTypes.map(url => {
+          const list = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+            return list.map(item => {
+              if(item.url === scope.row.url) return item
+            }).filter(item => item !== undefined)
+        }).filter(item => item.length > 0).flat()
+        sourceTable = sourceTable.filter(item => item.hasOwnProperty('source_list') && item.source_list !== url);
+        sourceTable.forEach(item => {
             const {url, source_list: _sourceRowUrl} = item
             if(url) {
               const  _results = isJson(this.indicatorsListData[_sourceRowUrl]) ? JSON.parse(this.indicatorsListData[_sourceRowUrl]) : []
-              const find = _results.find(ele => ele.url === url)
-              if(find) this.removeIndicatorsFavorites([find])
-          }
+              const findIndex = _results.findIndex(ele => ele.url === url)
+              if(findIndex !== -1) _results[findIndex] = {..._results[findIndex], favorite: !_results[findIndex].favorite, loading: false}
+              this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: _sourceRowUrl, data: _results})
+            }
           })
-        }
       } catch (error) {
         console.warn('移除收藏夹失败', error)
       } finally {
