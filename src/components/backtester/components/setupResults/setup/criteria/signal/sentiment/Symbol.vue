@@ -23,7 +23,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=15">
+				<div class="conditionInput period" v-show="isROCLike && sym.newCondition!=12 && sym.newCondition!=13">
 					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="debouncedCalculateNewConditions"
