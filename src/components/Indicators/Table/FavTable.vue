@@ -460,6 +460,8 @@ export default {
         // 在收藏夹中但是要移除
         if(index !== -1 && isFavorite) {
           favList.splice(index, 1)
+          // 更新 vuex 的状态
+          this.$store.commit('chart/SET_FAVORITE_INDICATOR_LIST', favList)
           await this.update_indicators_favorite({
             indicator: JSON.stringify(favList),
             symbol: JSON.stringify(this._favoriteSymbolList)
@@ -473,15 +475,19 @@ export default {
               }).filter(item => item !== undefined)
           }).filter(item => item.length > 0).flat()
           console.log('sourceTable', sourceTable) // [{}]
-          sourceTable = sourceTable.filter(item => (item.favorite));
+          sourceTable = sourceTable.filter(item => (item.favorite) && item.hasOwnProperty('source_list'));
           //是否同步 most_popular
-          const isSyncPopular = !sourceTable.find(item => item.source_list === 'most_popular')
+          // const isSyncPopular = sourceTable.find(item => item.source_list === 'most_popular') || false
+          debugger
           sourceTable.forEach(item => {
             const {url, source_list: _sourceRowUrl} = item
             if(url) {
               const  _results = isJson(this.indicatorsListData[_sourceRowUrl]) ? JSON.parse(this.indicatorsListData[_sourceRowUrl]) : []
-              const find = _results.find(ele => ele.url === url)
-              if(find) this.removeIndicatorsFavorites([find], isSyncPopular)
+              const findIndex = _results.findIndex(ele => ele.url === url)
+              if(findIndex !== -1) _results[findIndex] = {..._results[findIndex], favorite: false, loading: false}
+              this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: _sourceRowUrl, data: _results})
+              // console.log('find', find)
+              // if(find) this.removeIndicatorsFavorites([find], isSyncPopular)
             }
           })
         }
@@ -511,6 +517,8 @@ export default {
 					if (index !== -1 && !isAdd) favList.splice(index, 1);
 					if (index === -1 && isAdd) favList.push({url: row.url, name: row.chart_name})
 					if(index !== -1 && isAdd) {this.popUpMsgBox('This indicator already exists in favorites'); this.loading = false; return}
+          // 更新 vuex 的状态
+          this.$store.commit('chart/SET_FAVORITE_INDICATOR_LIST', favList)
 					await this.update_indicators_favorite({
 						indicator: JSON.stringify(favList),
 						symbol: JSON.stringify(this._favoriteSymbolList)

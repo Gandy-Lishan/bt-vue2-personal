@@ -93,7 +93,7 @@
     <br>
     <el-row :gutter="10" type="flex" class="row-bg" justify="center">
         <el-col :span="6">
-          <el-button type="warning" size="small" @click="resetForm">Clear Form</el-button>
+          <el-button type="warning" size="small" @click="resetForm">Reset Form</el-button>
         </el-col>
         <el-col :span="6">
           <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Save Signal</el-button>

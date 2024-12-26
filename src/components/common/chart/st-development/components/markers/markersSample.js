@@ -5,6 +5,7 @@
 //
 import { CIQ, markers } from "chartiq/js/standard.js";
 import EventBus from "@/event-bus";
+import { formatStandardTime } from '@/utils'
 var _css;
 if (
 	typeof define === "undefined" &&
@@ -275,9 +276,7 @@ CIQ.createOneTimeScannerMarkerHighLowLine = function(date,name,pionts){
     // 将 entryTradeDateArr 转换为一个字典（哈希表）
 	let piontsDict = {};
 	for (let i = 0; i < pionts.length; i++) {
-		var datatime = new Date(pionts[i].Date)
-		var offset = datatime.getTimezoneOffset() * 60 * 1000
-		const standardDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime();
+		const standardDate = formatStandardTime(pionts[i].Date)
 		piontsDict[standardDate] = true;
 	}
 	for (var i = 0; i < quotes.length; i++) {
@@ -321,9 +320,7 @@ CIQ.createOneTimeScannerMarkerHammer = function(trades,date,signal){
 	let entryTradeDateDict = {};
 	if(entryTradeDateArr){
 		for (let i = 0; i < entryTradeDateArr.length; i++) {
-			var datatime = new Date(entryTradeDateArr[i]);
-			var offset = datatime.getTimezoneOffset() * 60 * 1000;
-			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset)).getTime();
+			const standardDate = formatStandardTime(entryTradeDateArr[i])
 			entryTradeDateDict[standardDate] = true;
 		}
 	}
@@ -355,9 +352,7 @@ CIQ.createOneTimeScannerMarkerHammer = function(trades,date,signal){
 }
 CIQ.createOneTimeLastSignalMarker = function(date,content,comparisonSymbolUrl){
 	//hoverable marker
-	var datatime = new Date(date)
-	var offset = datatime.getTimezoneOffset() * 60 * 1000
-	const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+	const standardDate = formatStandardTime(date)
 
 
 	let params
@@ -400,9 +395,7 @@ CIQ.createOneTimePatternMarker = function(date,content){
 	var newNode;
 	
 	//hoverable marker
-	var datatime = new Date(date)
-	var offset = datatime.getTimezoneOffset() * 60 * 1000
-	const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+	const standardDate = formatStandardTime(date)
 
 	newNode = document.querySelector("#stxEventHover").cloneNode(true);
 	newNode.id = null;
@@ -448,9 +441,7 @@ CIQ.createForecastMarker = async function(){
 			const {post_date,title,url,author,timeframe} = bullishList[i]
 			var newNode;
 			var post_date_str = post_date.slice(0,10)
-			var datatime = new Date(post_date_str)
-			var offset = datatime.getTimezoneOffset() * 60 * 1000
-			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+			const standardDate = formatStandardTime(post_date_str)
 				newNode = document.querySelector("#stxForecast").cloneNode(true);
 				newNode.id = null;
 				newNode.classList.add('bullish')
@@ -485,9 +476,7 @@ CIQ.createForecastMarker = async function(){
 			const {post_date,title,url,author,timeframe} = bearishList[i]
 			let newNode;
 			var post_date_str = post_date.slice(0,10)
-			var datatime = new Date(post_date_str)
-			var offset = datatime.getTimezoneOffset() * 60 * 1000
-			const standardDate = new Date(datatime.setTime(datatime.getTime() + offset))
+			const standardDate = formatStandardTime(post_date_str)
 				newNode = document.querySelector("#stxForecast").cloneNode(true);
 				newNode.id = null;
 				newNode.classList.add('bearish')

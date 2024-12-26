@@ -23,6 +23,7 @@ import chart from '@/components/common/chart/index.vue'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import jutils from 'jutils-src'
 import { isJson } from '@/utils'
+import { formatStandardTime } from '@/utils'
 import { LoadingOverlayChart } from "@/components/common"
 export default {
 	name: 'TVChartContainer',
@@ -53,7 +54,7 @@ export default {
 		this.editStudies(true)
 
     /** 已经在AdvancedChartComponent里了 */
-		// // 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		// // 防止跳转到backtester时保留了Hammer followed by a rise等marker
 		// CIQ.objIndicator = []
 		// this.$store.dispatch('chart/reset_chart_study_state')
 		// this.$store.dispatch('form/reset_chart_config_state')
@@ -265,7 +266,7 @@ export default {
 						CIQ.Studies.addStudy(CIQ.stxx, this.other['_Signal'],{display:this.other['_Signal']},null,{points:points})
 						CIQ.createOneTimeScannerMarkerHighLowLine(this.other.date,this.other._Signal,points)						
 						break;
-					case 'Hammer followed by a raise':
+					case 'Hammer followed by a rise':
 						CIQ.createOneTimeScannerMarkerHammer(this.other.EntryTradeDate,this.other.date,this.other._Signal)						
 						break;
 					case 'Shooting Star followed by a fall':
@@ -373,10 +374,7 @@ export default {
 			dataSet = dataSet? eval('(' + dataSet + ')') : []
 			let backtestResult = []
 			for (var data in dataSet) {
-				var datatime = new Date(dataSet[data])
-
-				var offset = datatime.getTimezoneOffset() * 60 * 1000
-				var entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				var entryDate = formatStandardTime(dataSet[data])
 
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
@@ -435,17 +433,7 @@ export default {
 			// 解析 JSON 字符串为数组
 			const dateArray = isJson(validJsonString) ? JSON.parse(validJsonString) : []
       if(dateArray.length == 0) return
-      // for (var date in dateArray) {
-      //   var datatime = new Date(date)
-      //   var offset = datatime.getTimezoneOffset() * 60 * 1000
-      //   var entryDate = new Date(
-      //     datatime.setTime(datatime.getTime() + offset)
-      //   ).getTime()
-      //   dataTimeList.push(entryDate)
-      // }
-			// quotes = quotes.filter((x) => {
-      //   return new Date(dateArray[0]) <= new Date(x.DT)
-      // })
+
       let used_quotes = quotes.map(
         (x) => {
 					// 创建一个日期对象

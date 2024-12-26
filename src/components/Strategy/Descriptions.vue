@@ -23,8 +23,8 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
-								<!-- <newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></newChart> -->
+								<!-- <StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart> -->
+								<newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart" :singleModel="singleModel"></newChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -164,7 +164,8 @@ export default {
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
 				backtestStrategy: null,
 				strat_data: {},
-				isShowChart: false
+				isShowChart: false,
+				singleModel: 'False'
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -190,6 +191,7 @@ export default {
 					symbol1,
 					symbol2
 				} = _data
+				_this.singleModel = single_model
 				let pairDataDate2 = null
 				const symbolName = {symbol1, symbol2}
 				debugger
@@ -359,8 +361,10 @@ export default {
 						</ol>
 					`
 				_this.isShowChart = isShowChart
+				const _strat_data = [pairDataDate]
+				if(pairDataDate2 !== null) _strat_data.push(pairDataDate2)
 				_this.strat_data = {
-					strat_data: [pairDataDate, pairDataDate2],
+					strat_data: _strat_data,
 					symbolName
 				}
 				console.log('lishan strat_data', _this.strat_data)

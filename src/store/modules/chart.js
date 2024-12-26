@@ -802,8 +802,8 @@ get_indicator_page_btv1_list({ commit, state }) {
           state.cssMonthLabel = `for ${month}`
           _results = isJson(screen_data) ? JSON.parse(screen_data) : []
         }
-        // if(!state.indicatorPageBtv1List.length) await dispatch('get_indicator_page_btv1_list')
-        // if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
+        if(!state.indicatorPageBtv1List.length) await dispatch('get_indicator_page_btv1_list')
+        if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
         console.log('commod_sentiment_seasonality', _results)
 								_results = _results.map(obj => {
 										for (const key in obj) {

@@ -45,7 +45,7 @@ export default {
       inputVisibility: 'hidden', // 初始化时设置为隐藏
       options: [{
           value: 'MA',
-          label: 'Moving Average'
+          label: 'Simple Moving Average'
         }, {
           value: 'EMA',
           label: 'Exponential Moving Average'

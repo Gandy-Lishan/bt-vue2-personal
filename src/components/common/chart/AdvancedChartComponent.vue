@@ -611,7 +611,7 @@ export default class AdvancedChartComponent extends Vue {
 		}
 		});
 		
-		// 防止跳转到backtester时保留了Hammer followed by a raise等marker
+		// 防止跳转到backtester时保留了Hammer followed by a rise等marker
 		CIQ.objIndicator = []
 		CIQ.store.dispatch('chart/reset_chart_study_state')
 		CIQ.store.dispatch('form/reset_chart_config_state')
