@@ -54,7 +54,7 @@
 					</el-form-item>
 				</div>
         <!-- TODO newCond -->
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=13">
 					<el-form-item prop="conditionPeriod" size="mini">
 						<el-input
 							@input="debouncedCalculateNewConditions"
@@ -64,7 +64,7 @@
 						></el-input>
 					</el-form-item>
 				</div>
-				<div class="conditionSelect" v-show="isROCLike">
+				<div class="conditionSelect" v-show="isROCLike ">
 					<el-form-item size="mini">
 						<el-select
 							:disabled="!(conditionRadio === 'Indicator Value')"
@@ -150,7 +150,7 @@
 						</el-select>
 					</el-form-item>
 				</div>
-				<div class="conditionInput period" v-show="isROCLike">
+				<div class="conditionInput period" v-show="isROCLike && senti.newCondition!=12 && senti.newCondition!=13">
 					<el-form-item prop="conditionPeriod">
 						<el-input
 							@input="debouncedCalculateNewConditions"
