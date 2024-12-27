@@ -154,7 +154,7 @@ export default {
 				return {
 					'Model Name': item.model_name,
 					'Time Frame': item.type,
-					'Current Signal:<br/>(e.g., Long, Sell, etc)': `${item.current_state}`,
+					'Current Signal: (e.g., Long, Sell, etc)': `${item.current_state}`,
 					'Last Signal Date: (last change in Signal)': `${item.date}`,
 					'Model Update Frequency': `${item.update_frequency}`,
 					'YTD until 11/29/24 Return(%)': `${item.YTD_return}%`

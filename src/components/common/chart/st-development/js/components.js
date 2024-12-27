@@ -8121,6 +8121,15 @@ if (!CIQ.Studies) {
 					}
 					this.helper.inputs = inputs;
 				}
+				if(this.helper.name == "Price Osc" || this.helper.name == "PPO"){
+					var inputs = [];
+					for (var i = 0;i < this.helper.inputs.length; i++){
+						if (this.helper.inputs[i].heading != 'Points Or Percent'){
+							inputs.push(this.helper.inputs[i])
+						}
+					}
+					this.helper.inputs = inputs;
+				}
 			}
 			else if(_obj3){
 				var inputs = [];
