@@ -343,7 +343,7 @@
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button size="mini" type="info" @click="disableFilter">Disable Filter</el-button>
+					<el-button size="mini" type="info" @click="disableFilter">Show All</el-button>
 					<el-button size="mini" @click="resetForm">Reset Filter</el-button>
 						<el-button size="mini" type="primary" @click="handleDialogClose">Apply Filter</el-button>
 				</span>
@@ -747,8 +747,8 @@ export default {
 		this.data.signals = ['All']
 		this.$refs['SelectCheck'].optionsAll = true
 		this.disabledFilter = false
-		this.showFilterDialog = false
-		this.handleQuery();
+		// this.showFilterDialog = false
+		// this.handleQuery();
 	},
 	disableFilter() {
 		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
