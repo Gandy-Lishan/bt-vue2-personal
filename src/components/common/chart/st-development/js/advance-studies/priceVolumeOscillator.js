@@ -75,6 +75,44 @@ if (!CIQ.Studies) {
 		}
 	};
 
+	CIQ.Studies.calculatePercentagePricOscillator = function (stx, sd) {
+		var quotes = sd.chart.scrubbed;
+		var short = Number(sd.inputs["Short Cycle"]);
+		var long = Number(sd.inputs["Long Cycle"]);
+		var sl = Number(sd.inputs["Signal Line"]);
+		if (quotes.length < Math.max(short, long) + 1) {
+			sd.error = true;
+			return;
+		}
+		var field = sd.inputs.Field;
+		var maType = sd.inputs["Moving Average Type"];
+		if (!maType) maType = "simple";
+		if (!field || field == "field") field = "Close";
+		if (sd.parameters.isVolume) {
+			field = "Volume";
+			maType = "exponential";
+		}
+		var pts = sd.inputs["Points Or Percent"];
+		if (!pts) pts = "Percent";
+
+		CIQ.Studies.MA(maType, short, field, 0, "_Short MA", stx, sd);
+		CIQ.Studies.MA(maType, long, field, 0, "_Long MA", stx, sd);
+
+		for (var i = Math.max(long, sd.startFrom); i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			var qShMA = quote["_Short MA " + sd.name],
+				qLgMA = quote["_Long MA " + sd.name];
+			if ((qShMA || qShMA === 0) && (qLgMA || qLgMA === 0)) {
+				quote["PPO " + sd.name] = 100 * (qShMA / qLgMA - 1);
+			}
+		}
+
+		CIQ.Studies.MA(maType, sl, "PPO " + sd.name, 0, "Result", stx, sd);
+		console.log(quotes)
+	};
+
+
 	CIQ.Studies.displayRAVI = function (stx, sd, quotes) {
 		var panel = stx.panels[sd.panel],
 			context = sd.getContext(stx);
@@ -178,7 +216,18 @@ if (!CIQ.Studies) {
 				studyOverBoughtValue: { min: 0, step: "0.1" },
 				studyOverSoldValue: { max: 0, step: "0.1" }
 			}
-		}
+		},
+		"PPO": {
+			name: "Percentage Price Oscillator",
+			calculateFN: CIQ.Studies.calculatePercentagePricOscillator,
+			inputs: {
+				Field: "field",
+				"Short Cycle": 12,
+				"Long Cycle": 26,
+				"Signal Line": 9,
+				"Moving Average Type": "ema",
+			}
+		},
 	});
 }
 
