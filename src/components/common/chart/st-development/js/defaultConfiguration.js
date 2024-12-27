@@ -570,6 +570,10 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Price Osc"
 						},
 						{
+							"name": "Percentage Price Oscillator",
+							"url": "PPO"
+						},
+						{
 							"name": "Price Rate of Change",
 							"url": "Price ROC"
 						},
