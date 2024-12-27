@@ -498,7 +498,7 @@ if (!CIQ.Marker) {
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
                      if(sd.type == 'ST MA' || sd.type == 'ma'){    // stma不需要symbol信息，有独立显示
-                        const key = sd.inputs.Field + sd.inputs.Period
+                        const key = sd.inputs.Field + sd.inputs.Period + sd.inputs.Type
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[key]) {
                                 const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
