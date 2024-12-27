@@ -498,8 +498,9 @@ if (!CIQ.Marker) {
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
                      if(sd.type == 'ST MA' || sd.type == 'ma'){    // stma不需要symbol信息，有独立显示
+                        const key = sd.inputs.Field + sd.inputs.Period
                         for (var output in sd.outputMap) {
-                            if (output && !dupMap[output]) {
+                            if (output && !dupMap[key]) {
                                 const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
                                 const field = sd.inputs.Field == 'field'? 'Close': rocDisplayName(sd.inputs.Field)
                                 let name = `${field} ${maType}${sd.inputs.Period}`
@@ -511,7 +512,7 @@ if (!CIQ.Marker) {
                                      panel: panel,
                                      yAxis: yAxis
                                  });
-                                 dupMap[output] = 1;
+                                 dupMap[key] = 1;
                              }
                         }
                      }
@@ -529,6 +530,7 @@ if (!CIQ.Marker) {
                         }
                      }
                      else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                        debugger
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                  fields.push({
