@@ -566,7 +566,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Pos Vol"
 						},
 						{
-							"name": "Price Oscillator",
+							"name": "Point Price Oscillator",
 							"url": "Price Osc"
 						},
 						{
