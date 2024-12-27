@@ -108,7 +108,16 @@ if (!CIQ.Studies) {
 			}
 		}
 
-		CIQ.Studies.MA(maType, sl, "PPO " + sd.name, 0, "Result", stx, sd);
+		CIQ.Studies.MA(maType, sl, "PPO " + sd.name, 0, "Signal", stx, sd);
+
+		for (var i = Math.max(long, sd.startFrom); i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			var signal = quote["Signal " + sd.name];
+			if (!signal && signal !== 0) continue; // don't create histogram before the signal line is valid
+			
+			quote["Result " + sd.name] = quote["PPO " + sd.name] - quote["Signal " + sd.name];
+		}
 		printConsole(quotes)
 	};
 
