@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-
+import { printConsole } from '@/utils'
 
 let __js_advanced_studies_priceVolumeOscillator_ = (_exports) => {
 
@@ -109,7 +109,7 @@ if (!CIQ.Studies) {
 		}
 
 		CIQ.Studies.MA(maType, sl, "PPO " + sd.name, 0, "Result", stx, sd);
-		console.log(quotes)
+		printConsole(quotes)
 	};
 
 
