@@ -343,7 +343,7 @@
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button size="mini" type="info" @click="disableFilter">Show All</el-button>
+					<el-button size="mini" type="info" @click="disableFilter">No Filter</el-button>
 					<el-button size="mini" @click="resetForm">Reset Filter</el-button>
 						<el-button size="mini" type="primary" @click="handleDialogClose">Apply Filter</el-button>
 				</span>
