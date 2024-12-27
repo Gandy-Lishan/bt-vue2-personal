@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-
+import { printConsole } from '@/utils'
 
 let __js_advanced_studies_priceVolumeOscillator_ = (_exports) => {
 
@@ -131,7 +131,7 @@ if (!CIQ.Studies) {
 
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"Price Osc": {
-			name: "Price Oscillator",
+			name: "Point Price Oscillator",
 			calculateFN: CIQ.Studies.calculatePriceOscillator,
 			inputs: {
 				Field: "field",
@@ -139,6 +139,17 @@ if (!CIQ.Studies) {
 				"Long Cycle": 26,
 				"Moving Average Type": "ema",
 				"Points Or Percent": ["Points", "Percent"]
+			}
+		},
+		"PPO": {
+			name: "Percentage Price Oscillator",
+			calculateFN: CIQ.Studies.calculatePriceOscillator,
+			inputs: {
+				Field: "field",
+				"Short Cycle": 12,
+				"Long Cycle": 26,
+				"Moving Average Type": "ema",
+				"Points Or Percent": ["Percent", "Points"]
 			}
 		},
 		"Vol Osc": {
@@ -178,7 +189,7 @@ if (!CIQ.Studies) {
 				studyOverBoughtValue: { min: 0, step: "0.1" },
 				studyOverSoldValue: { max: 0, step: "0.1" }
 			}
-		}
+		},
 	});
 }
 

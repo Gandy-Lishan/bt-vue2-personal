@@ -566,8 +566,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Pos Vol"
 						},
 						{
-							"name": "Price Oscillator",
+							"name": "Point Price Oscillator",
 							"url": "Price Osc"
+						},
+						{
+							"name": "Percentage Price Oscillator",
+							"url": "PPO"
 						},
 						{
 							"name": "Price Rate of Change",
