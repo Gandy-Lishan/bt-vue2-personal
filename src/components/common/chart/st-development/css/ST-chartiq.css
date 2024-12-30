@@ -823,4 +823,8 @@ cq-lookup cq-scroll {
 cq-lookup cq-scroll.ps {
   overflow-y: auto !important;
 }
+cq-indicators-lookup cq-indicators-scroll.ps {
+  overflow-y: auto !important;
+}
+
 /* END 隐藏默认scrollbar防止其与动态滑动加载冲突 */
