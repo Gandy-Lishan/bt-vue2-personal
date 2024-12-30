@@ -39,8 +39,8 @@
 			<div class="header-part2">
 				<div class="filterBox _filterConditionBox">
 					<el-row :gutter="20">
-						<el-col :span="5">
-							<el-date-picker
+						<el-col :span="7">
+							<!-- <el-date-picker
 								v-model="date"
 								class="aiscanner-date"
 								type="daterange"
@@ -52,7 +52,30 @@
 								@change="selectDate"
 								value-format="yyyy-MM-dd"
 							>
+							</el-date-picker> -->
+							<div class="datePicker">
+								<el-date-picker
+								v-model="date"
+								type="date"
+								size="small"
+								@change="selectDate"
+								placeholder="- Start Date -"
+								value-format="yyyy-MM-dd"
+								:picker-options="startPickerOptions"
+							>
 							</el-date-picker>
+								<span class="sign">-</span>
+								<el-date-picker
+									v-model="curDate"
+								@change="selectDate"
+									type="date"
+									size="small"
+									placeholder="- End Date -"
+									value-format="yyyy-MM-dd"
+									:picker-options="endPickerOptions"
+								>
+								</el-date-picker>
+							</div>
 						</el-col>
 						<el-col :span="6">
 							<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
@@ -66,7 +89,7 @@
 								<el-radio :label='true'>Short</el-radio>
 							</el-radio-group>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="6">
 							<div class="btns">
 								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
 								<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
@@ -383,7 +406,7 @@ export default {
 	  
 	//table filter:
 	// date selector
-	  date: [],
+	  date: '',
 	  pickerOptions: {
 		disabledDate: this.disabledDate,
 	  },
@@ -435,6 +458,12 @@ export default {
 		{value: false, label: 'Long'},
 		{value: true, label: 'Short'}
 	],
+	startPickerOptions: {
+		disabledDate: this.handleDisabledStartDate
+	},
+	endPickerOptions: {
+			disabledDate: this.handleDisabledEndDate
+	},
 	rules: {
 			time_in_market_condition: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'blur' },
@@ -518,9 +547,14 @@ export default {
   async created(){	
 	// 进入组件时还原筛选条件状态
 	const state = this.$store.getters.getScannerAIFilterState
-
+		debugger
 	this.curDate = this.$store.state.chart.curDate
-	this.date = state?.date || [this.curDate,this.curDate]
+	if(state.date && Array.isArray(state.date) && state.date.length > 0) {
+		this.date = state.date[0] || this.curDate
+		this.curDate = state.date[1] || this.curDate
+	}else {
+		this.date = this.curDate
+	}
 
 	this.searchItem = state?.searchItem || ''
 	this.searchCategory = state?.searchCategory || 'Symbol'
@@ -530,11 +564,12 @@ export default {
 },
 	beforeDestroy() {
 		// 离开此组件前保存筛选条件状态
+		const date = [this.date, this.curDate] || [this.curDate, this.curDate]
 		this.$store.dispatch('states/set_scannerai_filter_state',{
 			searchItem:this.searchItem,
 			searchCategory:this.searchCategory,
 			isPLSChecked:this.isPLSChecked,
-			date:this.date,
+			date:date,
 		})
 	},
 	computed: {
@@ -557,7 +592,29 @@ export default {
 		},
 	},
   methods: {
-	scannerBacktest() {
+			handleDisabledStartDate(time) {
+			const today = timestampToTime(new Date());
+			const endDay = timestampToTime(new Date(this.curDate));
+			
+			// 添加新限制：日期大于 curDate 或为周末
+			const isDisabled = timestampToTime(time) > endDay || time.getDay() === 0 || time.getDay() === 6;
+			
+			// 如果 endDate 取消选择，则 startDate 可以选择全部
+			if (this.curDate) {
+					return isDisabled;
+			} else {
+					return isDisabled || timestampToTime(time) > today;
+			}
+	},
+
+	handleDisabledEndDate(time) {
+			const today = timestampToTime(new Date());
+			const startDay = timestampToTime(new Date(this.date));
+
+			// 添加新限制：日期大于 curDate 或为周末
+			const isDisabled = timestampToTime(time) > this.curDate || time.getDay() === 0 || time.getDay() === 6;
+
+			return isDisabled || timestampToTime(time) > today || timestampToTime(time) < startDay;
 	},
 	// table filter*********
 	disabledDate(time) {
@@ -672,7 +729,9 @@ export default {
 	},
 	async getAIPick(){
 		this.loading = true
-		let AIPickContent = await getAIPick(this.date || [this.curDate,this.curDate])
+		const date = [this.date, this.curDate] || [this.curDate,this.curDate]
+		if(!date[0] || !date[1]) { this.loading = false;return}
+		let AIPickContent = await getAIPick(date)
 		
 		// let AIPickContentString = JSON.stringify(AIPickContent)
 		// 						.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -723,7 +782,7 @@ export default {
 		
 		this.originData = AIPickObj
 
-		if(!this.date) this.date = [this.curDate,this.curDate]
+		if(!this.date) this.date = this.curDate
 		
 		this.loading = false
 		console.timeEnd("ai timer")
@@ -900,5 +959,10 @@ h4 {
 		}
 		.sign {
 			margin: 0 5px;
+		}
+		.datePicker {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 		}
 </style>

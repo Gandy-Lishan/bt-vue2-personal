@@ -513,6 +513,7 @@ export default {
 					'Stop Loss(%)': item.StopLoss,
 					'Profit Target(%)': item.ProfitTarget,
 					'Best Time In Market(Bars)': item.TimeInMarket,
+					'Expected Return(%)': item.ExpectedReturn,
 					'Z-Score': item.Z_Score,
 					'AVERAGE WIN %': item.AvgWin,
 					'AVERAGE LOSS %': item.AvgLoss,
