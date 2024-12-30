@@ -460,6 +460,7 @@ const mutations = {
 					}
 				]
 			},
+				user_tag: 'client'
 		}
 		state.frequencyArray = new Map()
 	},
