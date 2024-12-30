@@ -117,6 +117,7 @@ export default {
 				isAdmin = true;
 		}
 		this.$store.commit('user/SETUSERROLE', { 'is_admin': isAdmin, 'role': role, 'userID': email || userID });
+		this.$store.commit('form/setBd', { 'user_tag': role});
 		localStorage.setItem('role', role);
 		localStorage.setItem('is_admin', isAdmin);
 
