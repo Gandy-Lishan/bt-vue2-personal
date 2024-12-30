@@ -185,8 +185,8 @@ export default {
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
 				let {start_date:_start_date, 
-					end_date:_end_date, buy_signal:_buy_signal, 
-					sell_signal: _sell_signal, buy_signal_2: _buy_signal_2, 
+					end_date:_end_date, buy_signal_1:_buy_signal, 
+					sell_signal_1: _sell_signal, buy_signal_2: _buy_signal_2, 
 					sell_signal_2: _sell_signal_2, single_model,
 					symbol1,
 					symbol2
@@ -195,10 +195,10 @@ export default {
 				let pairDataDate2 = null
 				const symbolName = {symbol1, symbol2}
 				debugger
-				if(single_model === 'False') {
-					_buy_signal = _data.buy_signal_1
-					_sell_signal = _data.sell_signal_1
-				}
+				// if(single_model === 'False') {
+				// 	_buy_signal = _data.buy_signal_1
+				// 	_sell_signal = _data.sell_signal_1
+				// }
 				const buy_signal = eval(_buy_signal)
 				const sell_signal = eval(_sell_signal)
 				const start_date = timestampToTime(_start_date)

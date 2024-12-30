@@ -75,7 +75,7 @@
           <p>0 (Weakest) to 10 (Strongest)</p>
           <table class="threshold-table description-table" style="width: 100%">
             <tr  style="text-align: left">
-              <th style="width: 50%">Trend Score Condition</th>
+              <th style="width: 50%">Trend Score Conditions</th>
               <th style="width: 50%">Relative Trend Score Conditions</th>
             </tr>
             <tbody>
