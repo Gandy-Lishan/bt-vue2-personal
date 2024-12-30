@@ -352,6 +352,7 @@
                         placeholder="- Select Start Date -"
                         prop="startDate"
                         value-format="yyyy-MM-dd"
+                        :picker-options="startPickerOptions"
                       >
                       </el-date-picker>
                       <el-input v-else disabled v-model="bd.start_date"> </el-input>
@@ -368,6 +369,7 @@
                         type="date"
                         placeholder="- Select End Date -"
                         value-format="yyyy-MM-dd"
+                        :picker-options="endPickerOptions"
                       >
                       </el-date-picker>
                       <el-input v-else disabled v-model="bd.end_date"> </el-input>
@@ -972,7 +974,12 @@ export default {
       isTakeProfit: false,
       isStopLoss: false,
       isTimeInMarket: true,
-
+      startPickerOptions: {
+        disabledDate: this.handleDisabledStartDate
+      },
+      endPickerOptions: {
+        disabledDate: this.handleDisabledEndDate
+      },
       rules: {
         capital: [
           {
@@ -1170,6 +1177,21 @@ export default {
     },
   },
   methods: {
+    handleDisabledStartDate(time) {
+      const today = timestampToTime(new Date())
+      const endDay = timestampToTime(new Date(this.bd.end_date))
+      // 如果endDate取消选择，则startDate可以选择全部
+      if(this.bd.end_date){
+        return timestampToTime(time) >= endDay
+      }else{
+        return (timestampToTime(time) > today)
+      }
+    },
+    handleDisabledEndDate(time) {
+      const today = timestampToTime(new Date())
+      const startDay = timestampToTime(new Date(this.bd.start_date))
+      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+    },
     clearForm() {
       const timeframe = this.bd.frequency
       Object.assign(this.$data, this.$options.data())
