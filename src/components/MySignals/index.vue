@@ -17,6 +17,13 @@
           <p>
             You can now subscribe to our service to receive email notifications when signals are updated. Please visit our Preferences page to subscribe to My Signal's trading signals emails.
           </p>
+          <p>
+            You can subscribe to receive email alerts for my signal by selecting the checkbox below.
+            To subscribe (or unsubscribe) from the My Signal email alerts, check (to subscribe) or uncheck (to unsubscribe).
+          </p>
+          <p>
+            <el-checkbox v-model="checked">My Signal Alerts</el-checkbox>
+          </p>
         </div>
       </el-collapse-item>
       </el-collapse>
@@ -71,7 +78,7 @@
 import ScannerForm from "./ScannerForm";
 import SignalsTable from "./Table";
 import Trades from "./Trades";
-import { getLastSignalDate } from '@/service/service';
+import { getLastSignalDate, getMySignalsSubscribe, changeMySignalsSubscribe } from '@/service/service';
 import { isJson } from "@/utils"
 
 export default {
@@ -131,7 +138,8 @@ export default {
         ],
         tableData: []
       },
-      lastSignalDate: ''
+      lastSignalDate: '',
+      checked: false
     }
   },
   components: {
@@ -139,8 +147,21 @@ export default {
     SignalsTable,
     Trades
   },
+  watch: {
+    checked: {
+      async handler(checked) {
+        const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
+        const code  = res?.code
+        if(code === 218) this.popUpMsgBox('Add Subscribe successfully')
+        else if(code === 220) this.popUpMsgBox('Update subscribe success')
+        else if(code === 518) this.popUpMsgBox('Add Subscribe failed, Error occurred while Updating Subscribe')
+        else if(code === 520) this.popUpMsgBox('Update subscribe failed')
+      }
+    }
+  },
   async mounted() {
     // get the signal whose the last signal date is today
+    await this.getMySignalsSubscribe()
     await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MySignal')
     await this.$refs['SignalsTable'].onSortChange({column: 
@@ -150,6 +171,14 @@ export default {
     })
   },
   methods: {
+    async getMySignalsSubscribe() {
+      const res = await getMySignalsSubscribe()
+      const code  = res?.code
+      if(code == 219) {
+        const my_signals_subscribe = (isJson(res.data) ? JSON.parse(res.data) : res.data).my_signal
+        this.checked = Boolean(Number(my_signals_subscribe))
+      }
+    },
     changeTab(val) {
       this.activeTab = val
     },

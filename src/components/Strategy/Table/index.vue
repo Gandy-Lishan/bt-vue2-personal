@@ -157,7 +157,7 @@ export default {
 					'Current Signal: (e.g., Long, Sell, etc)': `${item.current_state}`,
 					'Last Signal Date: (last change in Signal)': `${item.date}`,
 					'Model Update Frequency': `${item.update_frequency}`,
-					'YTD until 11/29/24 Return(%)': `${item.YTD_return}%`
+					'YTD until 12/31/24 Return(%)': `${item.YTD_return}%`
 				}
 			})
 			const ws = XLSX.utils.json_to_sheet(processedData);

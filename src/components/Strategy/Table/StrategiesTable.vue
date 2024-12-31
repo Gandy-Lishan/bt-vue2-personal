@@ -228,7 +228,7 @@ export default {
 					width: '100px'
 				},
 				{
-					label: 'YTD until<br/>11/29/24<br/>Return(%)',
+					label: 'YTD until<br/>12/31/24<br/>Return(%)',
 					value: 'YTD_return',
 					key: 'YTD_return',
 					width: '125px'
