@@ -116,7 +116,7 @@ export default {
             {
               label: 'Daily Report',
               keyPath: '10-7',
-              path: '/MR/archived_reports/2024'
+              path: '/MR/archived_reports/2025'
             },
             {
               label: 'Active Studies',

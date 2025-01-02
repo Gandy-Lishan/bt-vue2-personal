@@ -133,7 +133,7 @@ export default {
    ],
    previousPage: 1,
    nextPage: 3,
-   reportArchivesTitle: 'Archived Reports for 2024',
+   reportArchivesTitle: 'Archived Reports for 2025',
    dailyReportBlogs: [
     {
       title: 'Daily Report : The Nasdaq quickly falls back into a correction',
