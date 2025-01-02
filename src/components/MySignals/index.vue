@@ -4,7 +4,7 @@
       <el-collapse-item>
         <template slot="title">
           <div class="title">
-            <p>My signal (click to expand)</p><i class="header-icon el-icon-info"></i>
+            <p>My signal (click to expand)</p>
           </div>
         </template>
         <div class="portfolio-des">
@@ -14,16 +14,15 @@
           <p>
             In the table below, when a row is highlighted in “yellow”, it indicates a change in that trading signal.
           </p>
-          <p>
-            You can now subscribe to our service to receive email notifications when signals are updated. Please visit our Preferences page to subscribe to My Signal's trading signals emails.
-          </p>
-          <p>
-            You can subscribe to receive email alerts for my signal by selecting the checkbox below.
-            To subscribe (or unsubscribe) from the My Signal email alerts, check (to subscribe) or uncheck (to unsubscribe).
-          </p>
-          <p>
-            <el-checkbox v-model="checked">My Signal Alerts</el-checkbox>
-          </p>
+          <div class="subscribe-container">
+            <p>
+              <el-checkbox v-model="checked" @change="checkedSignalAlert">My Signal Alerts</el-checkbox>
+            </p>
+            <p>
+              You can subscribe to receive email alerts for my signal by selecting the checkbox above.
+              To subscribe (or unsubscribe) from the My Signal email alerts, check (to subscribe) or uncheck (to unsubscribe).
+            </p>
+          </div>
         </div>
       </el-collapse-item>
       </el-collapse>
@@ -147,18 +146,6 @@ export default {
     SignalsTable,
     Trades
   },
-  watch: {
-    checked: {
-      async handler(checked) {
-        const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
-        const code  = res.data?.code
-        if(code === 218) this.popUpMsgBox('Add Subscribe successfully')
-        else if(code === 220 && checked) this.popUpMsgBox('Add Subscribe successfully')
-        else if(code === 518) this.popUpMsgBox('Add Subscribe failed, Error occurred while Updating Subscribe')
-        else if(code === 520) this.popUpMsgBox('Update subscribe failed')
-      }
-    }
-  },
   async mounted() {
     // get the signal whose the last signal date is today
     await this.getMySignalsSubscribe()
@@ -268,6 +255,14 @@ export default {
         console.error(error);
         
       }
+    },
+    async checkedSignalAlert(checked) {
+      const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
+        const code  = res.data?.code
+        if(code === 220 && checked) this.popUpMsgBox('Add Subscribe successfully')
+        else if(code === 220 && !checked) this.popUpMsgBox('Your subscription has been canceled')
+        else if(code === 518) this.popUpMsgBox('Add Subscribe failed, Error occurred while Updating Subscribe')
+        else if(code === 520) this.popUpMsgBox('Update subscribe failed')
     }
   }
 }
@@ -293,9 +288,12 @@ export default {
   width: 90%;
   padding: 20px;
 }
+/deep/ .el-collapse {
+  margin-bottom: 20px;
+}
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: unset;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   font-size: 18px;
@@ -348,12 +346,19 @@ export default {
 }
 .el-collapse.header .el-collapse-item /deep/ .el-collapse-item__header{
   background-color: #fff;
-  margin-bottom: 20px;
 }
 .portfolio-des {
   padding: 0 20px;
   font-weight: 400;
   font-size: 14px;
   color: #333;
+  p {
+    margin: 0 0 3px 0;
+  }
+}
+.subscribe-container {
+  border: 1px solid #e0e0e0;
+  padding: 10px 20px 10px 20px;
+  border-radius: 5px;
 }
 </style>
