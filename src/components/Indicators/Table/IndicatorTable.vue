@@ -76,6 +76,12 @@ export default {
               value: 'SP1500',
               type: 'stock',
               url: 'sp_1500_complete_list',
+            },
+            {
+              label: 'Russell 3000 Stock Sentiment',
+              value: 'Russell',
+              type: 'stock',
+              url: 'russell_3000_complete_list',
             }
           ]
         },
@@ -204,6 +210,12 @@ export default {
               value: 'NDX100Score',
               type: 'SP1500Score',
               url: 'ndx'
+            },
+            {
+              label: 'Russell 3000',
+              value: 'RussellScore',
+              type: 'SP1500Score',
+              url: 'russell'
             },
             {
               label: 'Domestic ETF',

@@ -59,9 +59,11 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
+        Russell: 'russell_3000_complete_list',
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
+        RussellScore: 'russell',
         DomesticETFScore: 'etf_domestic',
         ForeignETFScore: 'etf_foreign',
         OtherAssetsETFScore: 'etf_other',
@@ -177,6 +179,7 @@ export default {
                 etf_etf: 'Sector',
                 pc_ratio: 'PutCall',
                 stock_sent: 'Stock',
+                stock_russell: 'Russell',
                 equity: 'COT',
                 cot: 'COT',
                 optix: 'Optix',
@@ -195,6 +198,7 @@ export default {
                 sp1500_trend_reltrend: 'Trend',
                 spx_trend_reltrend: 'Trend',
                 ndx_trend_reltrend: 'Trend',
+                russell_trend_reltrend: 'Trend',
                 etf_trend_reltrend: 'Trend',
                 etf_domestic_trend_reltrend: 'Domestic ETF Trend',
                 etf_foreign_trend_reltrend: 'Foreign ETF Trend',
@@ -246,7 +250,7 @@ export default {
       try {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
-        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
+        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []

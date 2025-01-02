@@ -396,6 +396,54 @@ export default {
             }
             ]
         ],
+        ['RussellColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '140px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
         ['SP1500ScoreColumns', 
           [
             {
@@ -1077,11 +1125,11 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
@@ -1106,7 +1154,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'trend') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_last_value',
@@ -1181,7 +1229,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'relative') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'reltrend_last_value',
@@ -1256,7 +1304,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'consecutive') {
         let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_count_8_or_more',
@@ -1466,7 +1514,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
     },
     inputStyle() {
       return {
@@ -1575,7 +1623,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'trend_reltrend') url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'stock_russell' || row.type === 'trend_reltrend') url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
@@ -1664,6 +1712,8 @@ export default {
             requireUrl = 'ndx_100_complete_list'
           }else if(type === 'stock_sent') {
             requireUrl = 'sp_1500_complete_list'
+          }else if(type === 'stock_russell') {
+            requireUrl = 'russell_3000_complete_list'
           }else if(type === 'etf_opt') {
             requireUrl = 'etf_breadth'
           }else if(type === 'etf_fund') {
@@ -1711,6 +1761,7 @@ export default {
         /* 如果匹配不到, 使用下面的规则请求个别表单
         ndx_100_complete_list: type: stock_nasdaq
         sp_1500_complete_list: type: stock_sent
+        russell_3000_complete_list: type: stock_russell
         commodity_complete_list: groups: commod
         etf_breadth: type: etf_opt
         etf_flow: type: etf_fund
@@ -1892,6 +1943,11 @@ export default {
           type: 'SP1500'
         },
         {
+          label: 'Russell 3000 Stock Sentiment',
+          value: 'russell_3000_complete_list',
+          type: 'Russell'
+        },
+        {
           label: 'S&P 1500',
           value: 'sp1500',
           type: 'SP1500Score'
@@ -1905,6 +1961,11 @@ export default {
           label: 'NDX 100',
           value: 'ndx',
           type: 'NDX100Score'
+        },
+        {
+          label: 'Russell 3000',
+          value: 'russell',
+          type: 'RussellScore'
         },
         {
           label: 'Domestic ETF',
@@ -2024,18 +2085,18 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list') {
         // Name 放在 Symbol 前面
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'ndx', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
@@ -2302,9 +2363,11 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
+        Russell: 'russell_3000_complete_list',
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
+        RussellScore: 'russell',
         DomesticETFScore: 'etf_domestic',
         ForeignETFScore: 'etf_foreign',
         OtherAssetsETFScore: 'etf_other',
