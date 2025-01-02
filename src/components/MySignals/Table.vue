@@ -196,7 +196,7 @@ export default {
           label: 'Timeframe',
           value: 'timeframe',
           key: 'timeframe',
-          width: '130px'
+          width: '150px'
         },
         {
           label: 'Signal',
@@ -208,7 +208,7 @@ export default {
           label: 'Last Signal Date',
           value: 'last_signal_date',
           key: 'last_signal_date',
-          width: '170px'
+          width: '190px'
         }
       ],
       tableData: [],

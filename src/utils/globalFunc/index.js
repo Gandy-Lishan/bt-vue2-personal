@@ -94,11 +94,11 @@ const getCoresSymbolDual = (isSymbol2) => {
       
             // 完全匹配
             if (standardizedValue === standardizedQuery || standardizedUrl === standardizedQuery) {
-              score += 5; // 最高优先级
+              score += 10; // 最高优先级
             }
             // 前缀匹配
             else if (standardizedValue.startsWith(standardizedQuery) || standardizedUrl.startsWith(standardizedQuery)) {
-              score += 4; // 次高优先级
+              score += 5; // 次高优先级
             }
 
       // 对标准化后的 value 和 url 使用模糊匹配
