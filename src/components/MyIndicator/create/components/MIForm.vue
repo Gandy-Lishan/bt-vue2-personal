@@ -92,6 +92,7 @@
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
 					<el-autocomplete
+            ref="indicator1"
 						class="inline-input"
 						v-model="data.indicator_1"
 						:fetch-suggestions="querySearch"
@@ -183,6 +184,7 @@
 			<div class="right">
 				<el-form-item v-model="data.indicator_2">
 					<el-autocomplete
+            ref="indicator2"
 						class="inline-input"
 						v-model="data.indicator_2"
 						:fetch-suggestions="querySearch"
@@ -263,6 +265,7 @@
       <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
         <template slot-scope="scope" >
           <el-autocomplete
+            ref="wic"
             v-model="scope.row.indicator"
             size="mini"
             :fetch-suggestions="querySearch"
@@ -323,6 +326,7 @@
       <div class="SLeft">
 				<el-form-item v-model="OHLCVData.symbol">
 					<el-autocomplete
+            ref="ohlcvSymbol"
 						class="inline-input"
 						v-model="OHLCVData.symbol"
 						:fetch-suggestions="querySearch"
@@ -549,6 +553,12 @@ export default {
         { value: 3, obj: { label: 'Symbol Close', field: 'close' } },
         { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
       ],
+
+      // 自定义动态渲染下拉栏
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
     }
   },
   computed: {
@@ -646,7 +656,90 @@ export default {
         },
     }
   },
+  mounted() {
+    this.attachScrollListener()
+  },
+  beforeDestroy() {
+    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
+  },
   methods: {
+    /** START 加载更多数据且保持滚动条位置 */
+    // 绑定滚动事件
+    attachScrollListener(category) {
+      let tab = category
+      if(!category){
+        // 首次加载设初值，不清空绑定的监听器
+        tab = 'Indicator Spread'
+      }else{
+        this.detachScrollListener() // 防止切换tab时重复添加监听器，统一移除
+      }
+
+      const isIndicator = tab.includes('Indicator')
+      const isSymbol = tab.includes('Symbol')
+      const isWIC = tab.includes('WIC')
+      const isOHLCV = tab.includes('OHLCV')
+      let refs // 要监听的下拉框的 ref 名称
+      if (isIndicator || isSymbol) refs = ['indicator1', 'indicator2']
+      if (isWIC) refs = ['wic']
+      if (isOHLCV) refs = ['ohlcvSymbol']
+
+      refs.length != 0 && refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 解绑滚动事件
+    detachScrollListener() {
+      const refs = ['indicator1', 'indicator2', 'wic', 'ohlcvSymbol']; // 要监听的下拉框的 ref 名称
+
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
+        if (inputDropdown) {
+          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 监听滚动事件，触发加载更多
+    handleDropdownScroll(event, inputType) {
+      var self = this;
+      const dropdown = event.target;
+      // 根据传入的 inputType 访问不同的 ref
+      const inputRef = self.$refs[inputType];
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+            debugger
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore((results) => {
+            inputRef.$data.suggestions = results;
+
+            // 恢复滚动位置
+            requestAnimationFrame(() => {
+                dropdown.scrollTop = currentScrollTop;
+            });
+        });
+      }
+    },
+    loadMore(cb) {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      // 将分页后的数据传递给 closure
+      cb(paginatedResults);
+    },
+    /** END 加载更多数据且保持滚动条位置 */
+
     /**
      * 刷新MA状态
      */
@@ -980,7 +1073,11 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+        
+      this.searchResults = results.sort((a, b) => b.priority - a.priority)
+      this.currentPage = 1;
+      this.hasMore = true;
+      this.loadMore(cb)
     },
     getList() {
       const data = this.data
@@ -1062,6 +1159,11 @@ export default {
 
       this.dropdownList = this.getList()
       this.$store.dispatch('chart/set_miFormStateChange',this.data)
+
+      this.$nextTick(() => {
+        this.attachScrollListener(category)
+      })
+
     },
     async handleSelect(item, source) {
       console.log('item', item,source)

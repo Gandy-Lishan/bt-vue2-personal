@@ -182,7 +182,6 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      debugger
       console.log(key, keyPath);
       if(key === '9') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')

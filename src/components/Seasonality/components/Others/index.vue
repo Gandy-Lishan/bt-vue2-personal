@@ -24,6 +24,7 @@
             </label>
           </template>
         <el-autocomplete
+            ref="autocomplete"
 						class="inline-input"
 						v-model="symbol"
 						:fetch-suggestions="querySearch"
@@ -137,40 +138,46 @@ export default {
         end_date:  new Date().getFullYear().toString(),
       },
       dropdownList: [],
-        options: [
-          {label: 'Return by Day of Week', value: 0},
-          {label: 'Return by Month', value: 1},
-          {label: 'Performance by Day of Month', value: 2},
-          {label: 'Performance by Day of Year', value: 3}
-        ],
-        startPickerOptions: {
-          disabledDate: this.handleDisabledStartDate
-        },
-        endPickerOptions: {
-          disabledDate: this.handleDisabledEndDate
-        },
-        symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
-        plotConfiguration: {
-          title: 'Nasdaq Composite Avg Return Month',
-          subtitle: '1971-2011',
-          xAxisTitle: 'Month',
-          customScale: true, // 如果需要自定义刻度
-          formatter: true, // 如果需要自定义数据提示
-          scaleSettings: {
-              positiveColor: '#00B050',
-              negativeColor: '#C0504D',
-              yAxis_1: {
-              tickPositions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-              max: 4,
-              min: -4,
-              format: '{value} %'
-              },
-              yAxis_2: {
-              tickPositions: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-              format: '{value} %'
-              },
-          }
-        },
+      options: [
+        {label: 'Return by Day of Week', value: 0},
+        {label: 'Return by Month', value: 1},
+        {label: 'Performance by Day of Month', value: 2},
+        {label: 'Performance by Day of Year', value: 3}
+      ],
+      startPickerOptions: {
+        disabledDate: this.handleDisabledStartDate
+      },
+      endPickerOptions: {
+        disabledDate: this.handleDisabledEndDate
+      },
+      symbol: process.env.VUE_APP_DEFAULT_SYMBOL,
+      plotConfiguration: {
+        title: 'Nasdaq Composite Avg Return Month',
+        subtitle: '1971-2011',
+        xAxisTitle: 'Month',
+        customScale: true, // 如果需要自定义刻度
+        formatter: true, // 如果需要自定义数据提示
+        scaleSettings: {
+            positiveColor: '#00B050',
+            negativeColor: '#C0504D',
+            yAxis_1: {
+            tickPositions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+            max: 4,
+            min: -4,
+            format: '{value} %'
+            },
+            yAxis_2: {
+            tickPositions: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            format: '{value} %'
+            },
+        }
+      },
+      
+      // 自定义动态渲染下拉栏
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
     }
   },
   components: {
@@ -208,9 +215,74 @@ export default {
   },
   mounted() {
     this.dropdownList = this.symbolList
-    console.log('this.dropdownList', this.dropdownList)
+    
+    this.attachScrollListener()
+  },
+  beforeDestroy() {
+    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
   },
   methods: {
+    /** START 加载更多数据且保持滚动条位置 */
+    // 绑定滚动事件
+    attachScrollListener() {
+      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
+
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 解绑滚动事件
+    detachScrollListener() {
+      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
+
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
+        if (inputDropdown) {
+          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 监听滚动事件，触发加载更多
+    handleDropdownScroll(event, inputType) {
+      var self = this;
+      const dropdown = event.target;
+      // 根据传入的 inputType 访问不同的 ref
+      const inputRef = self.$refs[inputType];
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore((results) => {
+            inputRef.$data.suggestions = results;
+
+            // 恢复滚动位置
+            requestAnimationFrame(() => {
+                dropdown.scrollTop = currentScrollTop;
+            });
+        });
+      }
+    },
+    loadMore(cb) {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      // 将分页后的数据传递给 closure
+      cb(paginatedResults);
+    },
+    /** END 加载更多数据且保持滚动条位置 */
+
     handleDisabledStartDate(time) {
       const end_date = this.data.end_date
       return time.getFullYear() > end_date || time.getFullYear() < 1800;
@@ -228,7 +300,11 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-      cb(results.sort((a, b) => b.priority - a.priority))
+
+      this.searchResults = results.sort((a, b) => b.priority - a.priority)
+      this.currentPage = 1;
+      this.hasMore = true;
+      this.loadMore(cb)
     },
     handleSelect(item) {
       this.data.symbol = item.url
