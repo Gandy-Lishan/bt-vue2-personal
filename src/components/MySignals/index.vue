@@ -19,7 +19,7 @@
               <el-checkbox v-model="checked" @change="checkedSignalAlert">My Signal Alerts</el-checkbox>
             </p>
             <p>
-              You can subscribe to receive email alerts for my signal by selecting the checkbox below.
+              You can subscribe to receive email alerts for my signal by selecting the checkbox above.
               To subscribe (or unsubscribe) from the My Signal email alerts, check (to subscribe) or uncheck (to unsubscribe).
             </p>
           </div>
