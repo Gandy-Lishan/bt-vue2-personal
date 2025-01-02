@@ -15,9 +15,6 @@
             In the table below, when a row is highlighted in “yellow”, it indicates a change in that trading signal.
           </p>
           <p>
-            You can now subscribe to our service to receive email notifications when signals are updated. Please visit our Preferences page to subscribe to My Signal's trading signals emails.
-          </p>
-          <p>
             You can subscribe to receive email alerts for my signal by selecting the checkbox below.
             To subscribe (or unsubscribe) from the My Signal email alerts, check (to subscribe) or uncheck (to unsubscribe).
           </p>
