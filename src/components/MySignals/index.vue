@@ -151,9 +151,9 @@ export default {
     checked: {
       async handler(checked) {
         const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
-        const code  = res?.code
+        const code  = res.data?.code
         if(code === 218) this.popUpMsgBox('Add Subscribe successfully')
-        else if(code === 220) this.popUpMsgBox('Update subscribe success')
+        else if(code === 220 && checked) this.popUpMsgBox('Add Subscribe successfully')
         else if(code === 518) this.popUpMsgBox('Add Subscribe failed, Error occurred while Updating Subscribe')
         else if(code === 520) this.popUpMsgBox('Update subscribe failed')
       }
@@ -173,9 +173,9 @@ export default {
   methods: {
     async getMySignalsSubscribe() {
       const res = await getMySignalsSubscribe()
-      const code  = res?.code
+      const code  = res.data?.code
       if(code == 219) {
-        const my_signals_subscribe = (isJson(res.data) ? JSON.parse(res.data) : res.data).my_signal
+        const my_signals_subscribe = (isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data).my_signal
         this.checked = Boolean(Number(my_signals_subscribe))
       }
     },
