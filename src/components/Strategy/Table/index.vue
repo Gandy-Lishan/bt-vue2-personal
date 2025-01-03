@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="searchBox">
-          <el-input placeholder="Search" v-model="searchKey" size="mini" @keyup.enter.native="handleQuery" clearable @clear="handleQuery">
+          <el-input placeholder="Search" v-model="searchKey" size="mini" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery">
             <i slot="append" class="el-input__icon el-icon-search" style="cursor: pointer;" @click="handleQuery"></i>
           </el-input>
         </div>
@@ -90,8 +90,10 @@ export default {
   },
   watch: {
     selectedTitle: {
-      async handler() {
-        LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag})
+      async handler(val) {
+        if(!val) return
+        const strategy_filter_state = !LocalStorageUtil.get('strategy_filter_state') ? {} : LocalStorageUtil.get('strategy_filter_state')
+        LocalStorageUtil.set('strategy_filter_state', {...strategy_filter_state, selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag})
         await this.$refs['Strategies'].mountedRequestList()
         await this.$refs['Summary'].getDataList()
       }
@@ -115,6 +117,7 @@ export default {
       await this.$refs['Summary'].getDataList()
     },
     handleQuery() {
+      debugger
       this.$refs[this.selectedTitle].handleQuery(this.searchKey)
     },
     highlightedTag(tag) {
@@ -169,7 +172,10 @@ export default {
 			this.activatedTag = tag.value
       this.$refs['Strategies'].highlightTag(tag.value)
       this.highlightedTag(this.activatedTag)
-      LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag})
+      debugger
+      const currentStrategiesPage = this.$refs['Strategies'].currentPage
+      const currentSummaryPage = this.$refs['Summary'].currentPage
+      LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag, currentStrategiesPage, currentSummaryPage})
 		},
   }
 }

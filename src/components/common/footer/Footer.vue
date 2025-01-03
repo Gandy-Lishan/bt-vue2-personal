@@ -1,7 +1,7 @@
 <template>
 	<div class="footer" :class="{'isFixedAtBottom': isFixedAtBottom }" v-if="isVisible">
 		<p>
-			Copyright © 2001 - 2023 Sundial Capital Research, Inc. All rights
+			Copyright © 2001 - {{currentYear}} Sundial Capital Research, Inc. All rights
 			reserved.
 		<span class="footer-link">
 			<el-link href="/doc/disclaimer" type="warning" target="_blank">General Disclaimer</el-link> | 
@@ -66,7 +66,12 @@ export default {
 			}
 			this.isVisible = true
     }
-  }
+  },
+		computed: {
+			currentYear() {
+			return new Date().getFullYear()
+			}
+		}
 }
 </script>
 

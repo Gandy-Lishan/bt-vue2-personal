@@ -202,7 +202,7 @@ export default {
       this.loading = true
       let res = null
 			debugger
-			const {currentSummaryPage=1} = LocalStorageUtil.get('strategy_filter_state')
+			const {currentSummaryPage} = LocalStorageUtil.get('strategy_filter_state') ? LocalStorageUtil.get('strategy_filter_state') : {}
 			const page = currentSummaryPage || 1
 			try {
 				res = await getStrategySummaryList()
