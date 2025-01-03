@@ -707,6 +707,17 @@ export default {
           label: 'Symbol 13-Week Low',
           check: true
         },
+        // trend score
+        {
+          value: 'Trend Score Breakout',
+          label: 'Trend Score Breakout',
+          check: true
+        },
+        {
+          value: 'Trend Score Breakdown',
+          label: 'Trend Score Breakdown',
+          check: true
+        },
       ],
       rules: {
         long_ratio: [
