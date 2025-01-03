@@ -355,6 +355,12 @@ export default {
           case 'Symbol 13-Week Low' :
             CIQ.createOneTimePatternMarker(this.other.date,this.other['_Signal'])
             break;
+          // Trend Score
+          case 'Trend Score Breakout' :
+          case 'Trend Score Breakdown' :
+            await CIQ.getIndicatorMatedata([this.symbolUrl + '_trend'],CIQ.stxx)
+            CIQ.createOneTimePatternMarker(this.other.date,this.other['_Signal'])
+            break;
 					default: 
 				}
 				if(this.other['Category'] != 'MidTermAI'){
