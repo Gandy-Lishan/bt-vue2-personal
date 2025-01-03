@@ -119,7 +119,9 @@ export default {
                         :CIQ.findSentiIndicator(this.symbol + ' Optix',null)  // 不是的话再看是不是列表现存的symbol
                           ?CIQ.findSentiIndicator(this.symbol + ' Optix',null).url  // 是列表现存的symbol，取其url
                           :this.symbol  // 不是列表现存的项，用this.symbol做url
-      
+      if(['Trend Score Breakout','Trend Score Breakdown'].includes(this.other['_Signal'])) {
+        this.symbolUrl = this.symbolUrl + '_trend'
+      }
 			CIQ.initiateChart([this.symbolUrl],this.other['date'],()=>{
 				try{
 					this.hideComponents()
