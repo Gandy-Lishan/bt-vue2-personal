@@ -612,7 +612,7 @@ export default {
 			const startDay = timestampToTime(new Date(this.date));
 
 			// 添加新限制：日期大于 curDate 或为周末
-			const isDisabled = timestampToTime(time) > this.curDate || time.getDay() === 0 || time.getDay() === 6;
+			const isDisabled = time.getDay() === 0 || time.getDay() === 6;
 
 			return isDisabled || timestampToTime(time) > today || timestampToTime(time) < startDay;
 	},
@@ -628,7 +628,7 @@ export default {
 		this.showFilterDialog = false
 		this.handleQuery();
 	},
-	handleQuery: throttle(async function () { await this.filterData() }, 1000),
+	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		console.log('signals', this.tableData.content.map(item => item._Signal))
@@ -686,12 +686,12 @@ export default {
 	},
 	filterShowShortCondition(searchResult){
 		debugger
+		if(!this.isShowShortChecked) return searchResult.filter(item=>item["Direction"] === 'Long');
 		if (this.isShowShortChecked) {
 			// 当checkbox勾选时，返回被筛选过的数据
 			return searchResult
 					.filter(item=>item["Direction"] === 'Short');
 		}
-		return searchResult.filter(item=>item["Direction"] === 'Long');
 	},
 	getSearchresult(){
 		if(this.searchItem){
@@ -787,8 +787,9 @@ export default {
 		this.loading = false
 		console.timeEnd("ai timer")
 	},
-	selectDate(){
-		this.getAIPick()
+	async selectDate(){
+		await this.getAIPick()
+		await this.handleQuery()
 	},
 	exportTable() {
 		this.$refs.tableChild.exportTable()

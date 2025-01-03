@@ -273,6 +273,8 @@ export default {
 		},
 		handleCurrentChange(currentPage) {
 			this.currentPage = currentPage
+			const strategy_filter_state = LocalStorageUtil.get('strategy_filter_state')
+			LocalStorageUtil.set('strategy_filter_state', {...(!strategy_filter_state ? {} : strategy_filter_state) , currentStrategiesPage: currentPage})
 		},
 		handleSelectedFn(selectionvalue, isIndeterminatevalue) {
 			// 点击table头部全选框
@@ -367,7 +369,8 @@ export default {
 			if(this.tableData.length !== 0) return
 			this.loading = true
 			let res = null
-			const page = this.currentPage
+			const {currentStrategiesPage} = LocalStorageUtil.get('strategy_filter_state') ? LocalStorageUtil.get('strategy_filter_state') : {}
+			const page = currentStrategiesPage || 1
 			try {
 				res = await getStrategyList()
 				const code = res?.data?.code
@@ -411,6 +414,7 @@ export default {
 						return regex.test(item.model_name);
 					});
 				}
+				this.currentPage = page
 			}
 			const urlToNameMap = {}
 			for (const item of this.tableData) {
@@ -522,7 +526,7 @@ export default {
 		},
 		handleQuery(searchItem) {
 			this.searchItem = searchItem
-			this.highlightTag({ type: 'info', label: 'All', value: 'All' })
+			this.highlightTag('All')
       if (searchItem) {
         const trimmedStr = searchItem.trim();
         const regex = new RegExp(this.escapeRegExp(trimmedStr), 'i');
@@ -530,7 +534,7 @@ export default {
           return regex.test(item.model_name);
         });
       } else {
-        this.immutableTableData = this.immutableTableData;
+        this.immutableTableData = this.tableData;
       }
 		},
 		// 使用反斜杠转义特殊字符
