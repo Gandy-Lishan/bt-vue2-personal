@@ -360,7 +360,7 @@ export default {
           // Trend Score
           case 'Trend Score Breakout' :
           case 'Trend Score Breakdown' :
-            await CIQ.getIndicatorMatedata([this.symbolUrl + '_trend'],CIQ.stxx)
+            await CIQ.getIndicatorMatedata([this.symbolUrl],CIQ.stxx)
             CIQ.createOneTimePatternMarker(this.other.date,this.other['_Signal'])
             break;
 					default: 
