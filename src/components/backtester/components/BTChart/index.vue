@@ -55,6 +55,12 @@ export default {
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
 	},
+	created() {
+		let backtestID = localStorage.getItem('backtestID')
+		if(backtestID) {
+			this.default_symbol = null
+		}
+	},
 	mounted() {
 		// const chartBox = document.getElementsByClassName('chart_box')[0] 
    		//  if (chartBox) chartBox.style.width = ''
