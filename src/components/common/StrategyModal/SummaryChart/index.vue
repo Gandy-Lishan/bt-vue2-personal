@@ -151,7 +151,7 @@ export default {
     const data = processCumulativeJson(resultDf, ['Date', 'Strategy Cumulative', 'Strategy Cumulative', 'Strategy Cumulative', 'Buy and Hold Cumulative']);
     console.log('data', data)
     const date = data[0];
-    const benchmark = data[4];
+    const benchmark = data[data.length - 1];
     const data1 = data[1];
     const data2 = data[2];
     const data3 = data[3];
