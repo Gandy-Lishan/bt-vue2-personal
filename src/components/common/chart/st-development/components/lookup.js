@@ -702,7 +702,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         if (focused && focused.selectFC) {
                             focused.selectFC.apply(focused, {});
                         } else {
-                            var val = input.value;
+                            //var val = input.value;
+                            var val = this.searchResults[0].data.symbol
                             var toUpperCase =
                                 ["false", "0", null].indexOf(this.getAttribute("cq-uppercase")) ==
                                 -1;

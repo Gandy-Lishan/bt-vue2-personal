@@ -167,6 +167,8 @@ export default {
           requireUrl = 'ndx_100_complete_list'
         }else if(type === 'stock_sent') {
           requireUrl = 'sp_1500_complete_list'
+        }else if(type === 'stock_russell') {
+          requireUrl = 'russell_3000_complete_list'
         }else if(groups === 'trend_reltrend') {
           const str = sub_type
           const match = str.match(/(.*?)_trend_reltrend/)
@@ -219,6 +221,7 @@ export default {
       /* 如果匹配不到, 使用下面的规则请求个别表单
       ndx_100_complete_list: type: stock_nasdaq
       sp_1500_complete_list: type: stock_sent
+      russell_3000_complete_list: type: stock_russell
       commodity_complete_list: groups: commod
       etf_breadth: type: etf_opt
       etf_flow: type: etf_fund
