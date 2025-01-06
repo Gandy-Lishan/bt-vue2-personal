@@ -195,6 +195,19 @@ export default {
        title: {
         enabled: false
        },
+       exporting: {
+        enabled: true,
+        buttons: {
+          contextButton: {
+            menuItems: [
+              'printChart',
+              'downloadPNG',
+              'downloadJPEG',
+              'downloadPDF'
+            ]
+          }
+        }
+       },
        yAxis: [
          {
            title: { text: this.strategyTitles['spx'] },
