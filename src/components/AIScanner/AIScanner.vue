@@ -4,7 +4,7 @@
 		<el-collapse class='collape-title'>
 		<el-collapse-item>
 			<template slot="title">
-			Click here to view Smart Stock Scanner Description<i class="header-icon el-icon-info"></i>
+			Smart Stock Scanner (click to expand)
 			</template>
 			<h4>Our Smart Stock Scanner is updated nightly by 11:40 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
 			<div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>
@@ -33,16 +33,14 @@
 						<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
 						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
 					</el-input>
-					<el-button @click="toScannerBacktest" type="warning" round size="mini" style="float: right; margin: 20px 5px 0px 10px; cursor: pointer;"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
-					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
 				</div>
 			</div>
 			<!-- 预留一个过滤器的div -->
 			<div class="header-part2">
 				<div class="filterBox _filterConditionBox">
 					<el-row :gutter="20">
-						<el-col :span="6">
-							<el-date-picker
+						<el-col :span="7">
+							<!-- <el-date-picker
 								v-model="date"
 								class="aiscanner-date"
 								type="daterange"
@@ -54,19 +52,49 @@
 								@change="selectDate"
 								value-format="yyyy-MM-dd"
 							>
+							</el-date-picker> -->
+							<div class="datePicker">
+								<el-date-picker
+								v-model="date"
+								type="date"
+								size="small"
+								@change="selectDate"
+								placeholder="- Start Date -"
+								value-format="yyyy-MM-dd"
+								:picker-options="startPickerOptions"
+							>
 							</el-date-picker>
+								<span class="sign">-</span>
+								<el-date-picker
+									v-model="curDate"
+								@change="selectDate"
+									type="date"
+									size="small"
+									placeholder="- End Date -"
+									value-format="yyyy-MM-dd"
+									:picker-options="endPickerOptions"
+								>
+								</el-date-picker>
+							</div>
 						</el-col>
 						<el-col :span="6">
 							<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
 								>Only Show Profit Target > Stop Loss
 							</el-checkbox>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="5">
 							<label for="radioGroup" class="direction">Direction: </label>
 							<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
 								<el-radio :label='false'>Long</el-radio>
 								<el-radio :label='true'>Short</el-radio>
 							</el-radio-group>
+						</el-col>
+						<el-col :span="6">
+							<div class="btns">
+								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
+								<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+								<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
+							</div>
 						</el-col>
 					</el-row>
 					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
@@ -74,12 +102,23 @@
 					</el-checkbox> -->
 				</div>
 			</div>
-			<div class="header-part">
-				<div class="portfolioCheckedBox">
-					<a @click="isFilter = !isFilter" style="cursor: pointer;"
-						>Filter Criteria<i :class="isFilter ? 'el-icon-minus' : 'el-icon-plus'"></i></a>
-					<div class="des-content" v-show="isFilter">
-						<el-form
+		</div>
+			<Table 
+				:data="tableData" 
+				:label="tableData.label" 
+				:key="index" 
+				:tableCol="tableData.tableCol" 
+				currTabPage="AIRecommendation" 
+				:loading="loading"
+				ref="tableChild">
+			</Table>
+		</el-card>
+
+		<el-dialog
+				title="Filter Criteria"
+				:visible.sync="showFilterDialog"
+				width="80%">
+				<el-form
 						ref="Form"
 						:model="data"
 						label-position="top"
@@ -117,7 +156,7 @@
 											<template v-slot:append>(%)</template>
 										</el-input>
 								</el-form-item>
-									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+									<span class="sign"> - </span>
 								<el-form-item prop="take_profit" label-width="0px">
 								<el-input v-model="data.take_profit" placeholder="Enter number">
 									<template v-slot:append>(%)</template>
@@ -142,7 +181,7 @@
 												<template v-slot:append>(%)</template>
 											</el-input>
 									</el-form-item>
-										<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+										<span class="sign"> - </span>
 										<el-form-item prop="stop_loss" label-width="0px">
 										<el-input v-model="data.stop_loss" placeholder="Enter number">
 											<template v-slot:append>(%)</template>
@@ -167,7 +206,7 @@
 											<template v-slot:append>(bars)</template>
 										</el-input>
 								</el-form-item>
-									<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+									<span class="sign"> - </span>
 								<el-form-item prop="time_in_market" label-width="0px">
 								<el-input v-model="data.time_in_market" placeholder="Enter bars">
 									<template v-slot:append>(bars)</template>
@@ -194,7 +233,7 @@
 													<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="max_risk" label-width="0px">
 											<el-input v-model="data.max_risk" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -218,7 +257,7 @@
 												<el-input v-model="data.z_score_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="z_score" label-width="0px">
 											<el-input v-model="data.z_score" placeholder="Enter number">
 											</el-input>
@@ -241,7 +280,7 @@
 												<el-input v-model="data.sharpe_ratio_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="sharpe_ratio" label-width="0px">
 											<el-input v-model="data.sharpe_ratio" placeholder="Enter number">
 											</el-input>
@@ -264,7 +303,7 @@
 												<el-input v-model="data.std_dev_condition" placeholder="Enter number">
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="std_dev" label-width="0px">
 											<el-input v-model="data.std_dev" placeholder="Enter number">
 											</el-input>
@@ -290,7 +329,7 @@
 												<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="expected_return" label-width="0px">
 											<el-input v-model="data.expected_return" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -315,7 +354,7 @@
 												<template v-slot:append>(%)</template>
 												</el-input>
 										</el-form-item>
-											<span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+											<span class="sign"> - </span>
 											<el-form-item prop="win_rate" label-width="0px">
 											<el-input v-model="data.win_rate" placeholder="Enter number">
 												<template v-slot:append>(%)</template>
@@ -325,21 +364,13 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						</el-form>
-					</div>
-				</div>
-			</div>
-		</div>
-			<Table 
-				:data="tableData" 
-				:label="tableData.label" 
-				:key="index" 
-				:tableCol="tableData.tableCol" 
-				currTabPage="AIRecommendation" 
-				:loading="loading"
-				ref="tableChild">
-			</Table>
-		</el-card>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button size="mini" type="info" @click="disableFilter">No Filter</el-button>
+					<el-button size="mini" @click="resetForm">Reset Filter</el-button>
+						<el-button size="mini" type="primary" @click="handleDialogClose">Apply Filter</el-button>
+				</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -375,7 +406,7 @@ export default {
 	  
 	//table filter:
 	// date selector
-	  date: [],
+	  date: '',
 	  pickerOptions: {
 		disabledDate: this.disabledDate,
 	  },
@@ -394,7 +425,8 @@ export default {
 	isPLSChecked: false,
 	isShowShortChecked: false,
 	loading: false,
-	isFilter: false,
+	showFilterDialog: false,
+	disabledFilter: true,
 	data: {
 		stop_loss_condition: 2,
 		take_profit_condition: 2,
@@ -426,6 +458,12 @@ export default {
 		{value: false, label: 'Long'},
 		{value: true, label: 'Short'}
 	],
+	startPickerOptions: {
+		disabledDate: this.handleDisabledStartDate
+	},
+	endPickerOptions: {
+			disabledDate: this.handleDisabledEndDate
+	},
 	rules: {
 			time_in_market_condition: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'blur' },
@@ -509,9 +547,14 @@ export default {
   async created(){	
 	// 进入组件时还原筛选条件状态
 	const state = this.$store.getters.getScannerAIFilterState
-
+		debugger
 	this.curDate = this.$store.state.chart.curDate
-	this.date = state?.date || [this.curDate,this.curDate]
+	if(state.date && Array.isArray(state.date) && state.date.length > 0) {
+		this.date = state.date[0] || this.curDate
+		this.curDate = state.date[1] || this.curDate
+	}else {
+		this.date = this.curDate
+	}
 
 	this.searchItem = state?.searchItem || ''
 	this.searchCategory = state?.searchCategory || 'Symbol'
@@ -521,11 +564,12 @@ export default {
 },
 	beforeDestroy() {
 		// 离开此组件前保存筛选条件状态
+		const date = [this.date, this.curDate] || [this.curDate, this.curDate]
 		this.$store.dispatch('states/set_scannerai_filter_state',{
 			searchItem:this.searchItem,
 			searchCategory:this.searchCategory,
 			isPLSChecked:this.isPLSChecked,
-			date:this.date,
+			date:date,
 		})
 	},
 	computed: {
@@ -538,54 +582,55 @@ export default {
 		originData: {
 			async handler(newValue, oldValue){
 				this.tableData = JSON.parse(JSON.stringify(this.originData))
-				this.options = [...Array.from(new Set(this.tableData.content.map(ele => ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+				this.options = [...Array.from(new Set(this.tableData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 				this.data.signals = ['All']
-        this.$refs['SelectCheck'].optionsAll = true
+    this.$refs['SelectCheck'].optionsAll = true
 				await this.filterData()
 				console.log('this.options', this.options)
 			},
 			deep: true
 		},
-		data: {
-			handler: debounce(async function (newValue, oldValue) {
-				console.log('data change', newValue);
-				
-				const validForm = await this.validForm('Form');
-				if (!validForm) {
-					return;
-				}
-				this.handleQuery();
-			}, 500), // 500ms 的 debounce 时间，可根据需求调整
-			deep: true
-		},
-		isFilter: {
-			handler: debounce(async function (newValue, oldValue) {
-				console.log('data change', newValue);
-				if(!newValue) {
-					this.handleQuery()
-					return
-				}else {
-					const validForm = await this.validForm('Form');
-					if (!validForm) {
-						return;
-					}
-					this.handleQuery();
-				}
-			}, 500)
-		}
 	},
   methods: {
-	scannerBacktest() {
+			handleDisabledStartDate(time) {
+			const today = timestampToTime(new Date());
+			const endDay = timestampToTime(new Date(this.curDate));
+			
+			// 添加新限制：日期大于 curDate 或为周末
+			const isDisabled = timestampToTime(time) > endDay || time.getDay() === 0 || time.getDay() === 6;
+			
+			// 如果 endDate 取消选择，则 startDate 可以选择全部
+			if (this.curDate) {
+					return isDisabled;
+			} else {
+					return isDisabled || timestampToTime(time) > today;
+			}
+	},
+
+	handleDisabledEndDate(time) {
+			const today = timestampToTime(new Date());
+			const startDay = timestampToTime(new Date(this.date));
+
+			// 添加新限制：日期大于 curDate 或为周末
+			const isDisabled = time.getDay() === 0 || time.getDay() === 6;
+
+			return isDisabled || timestampToTime(time) > today || timestampToTime(time) < startDay;
 	},
 	// table filter*********
 	disabledDate(time) {
 		let dis = timestampToTime(time) > this.curDate || (time.getDay() === 0 || time.getDay() === 6)
 		return dis
 	},
-
-	handleQuery: throttle(async function () { await this.filterData() }, 1000),
+	async handleDialogClose() {
+		const validForm = await this.validForm('Form');
+		if (!validForm) return
+		this.disabledFilter = false
+		this.showFilterDialog = false
+		this.handleQuery();
+	},
+	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
 	async filterData(){
-		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition( this.filterRangeCondition(this.getSearchresult())))
+		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
 	},
@@ -609,7 +654,7 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
-		if(!this.isFilter) return searchResult
+		if(this.showFilterDialog || this.disabledFilter) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
 			time_in_market_condition, time_in_market,
@@ -630,7 +675,7 @@ export default {
 			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
 			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
 			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& (condition || signals.includes(item['_Signal']))
+			&& (condition || signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
 			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
 			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
 			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
@@ -641,12 +686,12 @@ export default {
 	},
 	filterShowShortCondition(searchResult){
 		debugger
+		if(!this.isShowShortChecked) return searchResult.filter(item=>item["Direction"] === 'Long');
 		if (this.isShowShortChecked) {
 			// 当checkbox勾选时，返回被筛选过的数据
 			return searchResult
-					.filter(item=>item["Direction"] == 'Short');
+					.filter(item=>item["Direction"] === 'Short');
 		}
-		return searchResult.filter(item=>item["Direction"] == 'Long');
 	},
 	getSearchresult(){
 		if(this.searchItem){
@@ -678,12 +723,15 @@ export default {
 	async loadData(marketType){
 		//this.activeIndex = index
 		if(marketType=='US'){
-			this.getAIPick()
+			await this.getAIPick()
+			this.filterData()
 		}
 	},
 	async getAIPick(){
 		this.loading = true
-		let AIPickContent = await getAIPick(this.date || [this.curDate,this.curDate])
+		const date = [this.date, this.curDate] || [this.curDate,this.curDate]
+		if(!date[0] || !date[1]) { this.loading = false;return}
+		let AIPickContent = await getAIPick(date)
 		
 		// let AIPickContentString = JSON.stringify(AIPickContent)
 		// 						.replace(/TimeInMarket/g,'Best Time In Market(Bars)')
@@ -711,33 +759,37 @@ export default {
 		AIPickObj['label'] = 'AI Picks at the end of today'
 		AIPickObj['title'] = 'AI Picks at the end of today'
 		AIPickObj['tableCol'] = [
-			{label:'Date',value:'Date'},
-			{label:'Symbol',value:'Symbol'},
-			{label:'Close',value:'Close'},
-			{label:'Trend',value:'Market'},
-			{label:'Direction',value:'Direction'},
-			{label:'Signal',value:'_Signal'},
-			{label:'Win Rate(%)',value:'WinRate'},
-			{label:'Stop Loss(%)',value:'StopLoss'},
-			{label:'Profit Target(%)',value:'ProfitTarget'},
-			{label:'Best Time In Market(Bars)',value:'TimeInMarket'},
+			{label:'Date',value:'Date',labelHtml: 'Date'},
+			{label:'Symbol',value:'Symbol',labelHtml: 'Symbol'},
+			{label:'Close',value:'Close',labelHtml: 'Close'},
+			{label:'Trend',value:'Market',labelHtml: 'Market'},
+			{label:'Direction',value:'Direction',labelHtml: 'Direction', width: '80px'},
+			{label:'Signal',value:'_Signal',labelHtml: 'Signal'},
+			{label:'Win Rate(%)',value:'WinRate',labelHtml: 'Win<br/>Rate(%)'},
+			{label:'Stop Loss(%)',value:'StopLoss',labelHtml: 'Stop<br/>Loss(%)'},
+			{label:'Profit Target(%)',value:'ProfitTarget',labelHtml: 'Profit<br/>Target(%)'},
+			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best Time In<br/>Market(Bars)'},
 			//{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
-			{label:'Expected Return(%)',value:'ExpectedReturn'},
-			{label:'Z-Score',value:'Z_Score'}, // 数据有误，先不显示	
+			{label:'Expected Return(%)',value:'ExpectedReturn',labelHtml: 'Expected<br/>Return(%)'},
+			{label:'Z-Score',value:'Z_Score',labelHtml: 'Z-Score'}, // 数据有误，先不显示	
 		]
 		// 测试
 		//AIPickObj['tableCol'].unshift("Select")
+		AIPickContent.sort((a,b) => {
+			return new Date(a['Date']) - new Date(b['Date'])
+		})
 		AIPickObj['content'] = AIPickContent
 		
 		this.originData = AIPickObj
 
-		if(!this.date) this.date = [this.curDate,this.curDate]
+		if(!this.date) this.date = this.curDate
 		
 		this.loading = false
 		console.timeEnd("ai timer")
 	},
-	selectDate(){
-		this.getAIPick()
+	async selectDate(){
+		await this.getAIPick()
+		await this.handleQuery()
 	},
 	exportTable() {
 		this.$refs.tableChild.exportTable()
@@ -749,6 +801,23 @@ export default {
 		console.log('触发了', signals)
 		this.data.signals = Array.from(new Set(signals))
 	},
+	resetForm() {
+		this.$refs['Form'].resetFields();
+		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+		this.data.signals = ['All']
+		this.$refs['SelectCheck'].optionsAll = true
+		this.disabledFilter = false
+		// this.showFilterDialog = false
+		// this.handleQuery();
+	},
+	disableFilter() {
+		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
+		this.data.signals = ['All']
+		this.$refs['SelectCheck'].optionsAll = true
+		this.disabledFilter = true
+		this.showFilterDialog = false
+		this.handleQuery();
+	}
   }
 };
 </script>
@@ -885,4 +954,16 @@ h4 {
   .des-content {
     margin-top: 10px;
   }
+		.btns {
+			display: flex;
+			justify-content: flex-end;
+		}
+		.sign {
+			margin: 0 5px;
+		}
+		.datePicker {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
 </style>

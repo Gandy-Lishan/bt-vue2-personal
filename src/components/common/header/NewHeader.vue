@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="no-print">
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -116,7 +116,7 @@ export default {
             {
               label: 'Daily Report',
               keyPath: '10-7',
-              path: '/MR/archived_reports/2024'
+              path: '/MR/archived_reports/2025'
             },
             {
               label: 'Active Studies',
@@ -131,7 +131,7 @@ export default {
           path: '/indicators'
         },
         {
-          label: 'Strategy',
+          label: 'Strategies',
           keyPath: '3',
           path: '/strategy'
         },
@@ -182,7 +182,6 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      debugger
       console.log(key, keyPath);
       if(key === '9') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
@@ -207,10 +206,13 @@ export default {
       console.log('keyPathEle',keyPathEle)
       if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') window.location.href = keyPathEle[0].path
     },
+    handleClick(e) {
+      console.log('e', e)
+    },
     showLabel(item) {
       const email = getCookieData()?.username
       const {label} = item
-      if(['Strategy', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
@@ -303,9 +305,9 @@ export default {
 .el-menu--horizontal>.el-menu-item {
   font-weight: 600;
 }
-.el-submenu /deep/ .el-submenu__title {
-  font-size: 16px;
-}
+// .el-submenu /deep/ .el-submenu__title {
+//   font-size: 16px;
+// }
 .main-nav.top {
   /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
     border: 1px solid #ccc;

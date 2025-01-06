@@ -410,7 +410,9 @@ export default {
       this.$forceUpdate()
     },
     clearForm() {
-      //Object.assign(this.$data, this.$options.data())
+      // Object.assign(this.$data, this.$options.data())
+      this.senti.newCondition = 3
+      this.ROCLikeChange(this.senti.newCondition)
       this.$refs.sentiForm.resetFields()
       this.conditionRadio = 'Indicator Value'
       this.periodTemp = ''

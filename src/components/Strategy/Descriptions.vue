@@ -5,7 +5,7 @@
 				<div class="container">
 					<!-- BEGIN PAGE TITLE -->
 					
-				<p class="backText" style="margin: 40px 0px 0px 20px; cursor: pointer;" @click="backToList"><i class="el-icon-arrow-left" style="margin-right: 10px;"></i>Back to Strategy List</p>
+				<p class="backText" style="margin: 40px 0px 0px 20px; cursor: pointer;" @click="backToList"><i class="el-icon-arrow-left" style="margin-right: 5px;"></i>Back to Strategy List</p>
 					<div class="page-title">
 						<h1 v-text="title"></h1>
 					</div>
@@ -23,7 +23,8 @@
 					<div class="col-md-12">
 						<div class="portlet light">
 							<div col="col-md-12">
-								<StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart>
+								<!-- <StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart> -->
+								<newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart" :singleModel="singleModel"></newChart>
 								<div v-html="convertedHTML"></div>
 								<strong>
 								Use BacktestEdge 2.0 to see more details of this strategy,
@@ -127,13 +128,15 @@
 
 <script>
 import StrategyChart from "./Table/StrategyChart";
+import newChart from "./Table/newChart.vue";
 import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
 import { isJson, timestampToTime } from '@/utils'
 
 export default {
 	name: 'Descriptions',
 	components: {
-		StrategyChart
+		StrategyChart,
+		newChart
 	},
 	data() {
 		return {
@@ -161,7 +164,8 @@ export default {
 				performanceImgArray: ['returns_outfile', 'drawdown_outfile', 'heatmap_outfile', 'annual_returns_outfile'],
 				backtestStrategy: null,
 				strat_data: {},
-				isShowChart: false
+				isShowChart: false,
+				singleModel: 'False'
 		}
 	},
 	beforeRouteEnter(to, from, next) {
@@ -177,23 +181,24 @@ export default {
       console.log('详情', res)
       const code = res?.data?.code
       if(code === 200) {
-				_this.signalDes = res?.data?.data
+								_this.signalDes = res?.data?.data
         const data = res?.data?.data
 				const _data = Array.isArray(data) ? data[0] : null
 				let {start_date:_start_date, 
-					end_date:_end_date, buy_signal:_buy_signal, 
-					sell_signal: _sell_signal, buy_signal_2: _buy_signal_2, 
+					end_date:_end_date, buy_signal_1:_buy_signal, 
+					sell_signal_1: _sell_signal, buy_signal_2: _buy_signal_2, 
 					sell_signal_2: _sell_signal_2, single_model,
 					symbol1,
 					symbol2
 				} = _data
+				_this.singleModel = single_model
 				let pairDataDate2 = null
 				const symbolName = {symbol1, symbol2}
 				debugger
-				if(single_model === 'False') {
-					_buy_signal = _data.buy_signal_1
-					_sell_signal = _data.sell_signal_1
-				}
+				// if(single_model === 'False') {
+				// 	_buy_signal = _data.buy_signal_1
+				// 	_sell_signal = _data.sell_signal_1
+				// }
 				const buy_signal = eval(_buy_signal)
 				const sell_signal = eval(_sell_signal)
 				const start_date = timestampToTime(_start_date)
@@ -356,10 +361,13 @@ export default {
 						</ol>
 					`
 				_this.isShowChart = isShowChart
+				const _strat_data = [pairDataDate]
+				if(pairDataDate2 !== null) _strat_data.push(pairDataDate2)
 				_this.strat_data = {
-					strat_data: [pairDataDate, pairDataDate2],
+					strat_data: _strat_data,
 					symbolName
 				}
+				console.log('lishan strat_data', _this.strat_data)
 				})
     }
 			}
@@ -394,4 +402,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.backText {
+	color: #525456;
+	font-weight: bold;
+	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
+}
 </style>

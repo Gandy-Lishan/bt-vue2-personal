@@ -47,7 +47,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 				extendedHours: false,
 				fullScreen: true,
 				inactivityTimer: true,
-				rangeSlider: true,
+				rangeSlider: false,
 				shortcuts: true,
 				tableView: false,
 				tooltip: true
@@ -566,8 +566,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Pos Vol"
 						},
 						{
-							"name": "Price Oscillator",
+							"name": "Point Price Oscillator",
 							"url": "Price Osc"
+						},
+						{
+							"name": "Percentage Price Oscillator",
+							"url": "PPO"
 						},
 						{
 							"name": "Price Rate of Change",
@@ -864,7 +868,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 			],
 			menuStudiesConfig: { 	// All studies available are by default included in the studies menu
 				excludedStudies: {
-					"Hammer followed by a raise": true,
+					"Hammer followed by a rise": true,
 					"Shooting Star followed by a fall": true,
 					"UpTrend Pattern": true,
 					"DownTrend Pattern": true,

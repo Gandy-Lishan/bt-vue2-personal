@@ -551,8 +551,8 @@ export default {
           check: true
         },
         {
-          value: 'Hammer followed by a raise',
-          label: 'Hammer followed by a raise',
+          value: 'Hammer followed by a rise',
+          label: 'Hammer followed by a rise',
           check: true
         },
         {
@@ -705,6 +705,17 @@ export default {
         {
           value: 'Symbol 13-Week Low',
           label: 'Symbol 13-Week Low',
+          check: true
+        },
+        // trend score
+        {
+          value: 'Trend Score Breakout',
+          label: 'Trend Score Breakout',
+          check: true
+        },
+        {
+          value: 'Trend Score Breakdown',
+          label: 'Trend Score Breakdown',
           check: true
         },
       ],

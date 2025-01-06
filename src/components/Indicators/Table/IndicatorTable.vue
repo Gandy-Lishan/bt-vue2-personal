@@ -76,6 +76,12 @@ export default {
               value: 'SP1500',
               type: 'stock',
               url: 'sp_1500_complete_list',
+            },
+            {
+              label: 'Russell 3000 Stock Sentiment',
+              value: 'Russell',
+              type: 'stock',
+              url: 'russell_3000_complete_list',
             }
           ]
         },
@@ -182,17 +188,11 @@ export default {
         },
         {
           label: 'Absolute and Relative Trend Scores',
-          type: 'SP1500Score',
+          type: 'SP500Score',
           refName: 'SP1500ScoreVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
-            {
-              label: 'S&P 1500',
-              value: 'SP1500Score',
-              type: 'SP1500Score',
-              url: 'sp1500'
-            },
             {
               label: 'S&P 500',
               value: 'SP500Score',
@@ -200,10 +200,22 @@ export default {
               url: 'spx'
             },
             {
+              label: 'S&P 1500',
+              value: 'SP1500Score',
+              type: 'SP1500Score',
+              url: 'sp1500'
+            },
+            {
               label: 'NDX 100',
               value: 'NDX100Score',
               type: 'SP1500Score',
               url: 'ndx'
+            },
+            {
+              label: 'Russell 3000',
+              value: 'RussellScore',
+              type: 'SP1500Score',
+              url: 'russell'
             },
             {
               label: 'Domestic ETF',

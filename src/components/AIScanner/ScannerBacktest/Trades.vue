@@ -16,8 +16,7 @@
 					].includes(l.label)"
 					show-overflow-tooltip
 					:prop="l.value"
-					:label="l.label"
-					:width="l.width"
+					:min-width="l.minWidth"
 					align="center"
 					:key="index"
 					:sortable="
@@ -28,19 +27,25 @@
 							: false
 					"
 					>
-          </el-table-column>
+					<template #header>
+							<span v-html="l.labelHtml"></span>
+					</template>
+     </el-table-column>
 					<el-table-column
 					v-if="l.label == 'Floating Profit %'"
 					show-overflow-tooltip
 					:prop="l.value"
 					:label="l.label"
-					:width="l.width"
+					:min-width="l.minWidth"
 					align="center"
 					:key="index"
 					:sortable="
 					l.label === 'Floating Profit %' ? 'custom' : false
 					"
 					>
+					<template #header>
+							<span v-html="l.labelHtml"></span>
+					</template>
 					<template slot-scope="scope">
 							<span v-if="scope.row.FloatProfit >= 0"
 									>{{ scope.row.FloatProfit }}%</span
@@ -89,72 +94,91 @@ export default {
 			tableCol: [
         {
           label: '#',
+										labelHtml: '#',
           value: 'TradeNumber',
           key: 'TradeNumber',
-					width: '50px'
+										minWidth: '50px'
         },
         {
           label: 'Symbol',
+										labelHtml: 'Symbol',
           value: 'Symbol',
-          key: 'Symbol'
+          key: 'Symbol',
+										minWidth: '105px'
         },
         {
           label: 'Signal',
+										labelHtml: 'Signal',
           value: 'Signal',
-          key: 'Signal'
+          key: 'Signal',
+										minWidth: '120px'
         },
         {
           label: 'Direction',
+										labelHtml: 'Direction',
           value: 'Direction',
           key: 'Direction',
-					width: '100px'
+										minWidth: '90px'
         },
         {
           label: 'Entry Date',
+										labelHtml: 'Entry Date',
           value: 'EntryDate',
-          key: 'EntryDate'
+          key: 'EntryDate',
+										minWidth: '130px'
         },
         {
           label: 'Entry Action',
+										labelHtml: 'Entry<br/>Action',
           value: 'EntryAction',
           key: 'EntryAction',
-					width: '100px'
+										minWidth: '80px'
         },
 				{
           label: 'Entry Price',
+										labelHtml: 'Entry<br/>Price',
           value: 'EntryPrice',
           key: 'EntryPrice',
-					width: '100px'
+										minWidth: '90px'
         },
 				{
           label: 'Exit Date',
+										labelHtml: 'Exit Date',
           value: 'ExitDate',
-          key: 'ExitDate'
+          key: 'ExitDate',
+										minWidth: '120px'
         },
 				{
           label: 'Exit Action',
+										labelHtml: 'Exit Action',
           value: 'ExitAction',
           key: 'ExitAction',
-					width: '100px'
+										minWidth: '90px'
         },
 				{
           label: 'Exit Price',
+										labelHtml: 'Exit<br/>Price',
           value: 'ExitPrice',
           key: 'ExitPrice',
-					width: '90px'
+										minWidth: '90px'
         },
 				{
 					label: 'Shares',
+					labelHtml: 'Shares',
 					value: 'Shares',
-					key: 'Shares'
+					key: 'Shares',
+					minWidth: '90px'
 				},
 				{
           label: 'Floating Profit %',
+										labelHtml: 'Floating<br/>Profit(%)',
           value: 'FloatProfit',
-          key: 'FloatProfit'
+          key: 'FloatProfit',
+										minWidth: '90px'
         },
 				{
           label: 'Exit Reason',
+										labelHtml: 'Exit<br/>Reason',
           value: 'ExitReason',
           key: 'ExitReason'
         }

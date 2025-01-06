@@ -10,10 +10,10 @@
           @click="handleDownloadCsv"
           style="display: inline-block"
           type="primary"
-          plain
           size="small"
           icon="el-icon-download"
-          >Export Data</el-button
+          title="Export Data"
+          ></el-button
         >
       </div>
     </div>
@@ -260,7 +260,7 @@ export default {
                 vm.initalData = initalData
                 this.$nextTick(() => {
                   // 这里访问prepareData，确保子组件内的tradesData已经更新
-                  const datatime = new Date(initalData['basic']['start_date'])
+                  const datatime = initalData['basic']['start_date']
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
                   this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
@@ -687,5 +687,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
   margin: 0 auto;
+  padding-right: 10px;
 }
 </style>

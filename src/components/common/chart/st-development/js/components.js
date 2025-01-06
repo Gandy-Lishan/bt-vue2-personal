@@ -8121,6 +8121,15 @@ if (!CIQ.Studies) {
 					}
 					this.helper.inputs = inputs;
 				}
+				if(this.helper.name == "Price Osc" || this.helper.name == "PPO"){
+					var inputs = [];
+					for (var i = 0;i < this.helper.inputs.length; i++){
+						if (this.helper.inputs[i].heading != 'Points Or Percent'){
+							inputs.push(this.helper.inputs[i])
+						}
+					}
+					this.helper.inputs = inputs;
+				}
 			}
 			else if(_obj3){
 				var inputs = [];
@@ -8135,6 +8144,8 @@ if (!CIQ.Studies) {
 				var inputs = [];
 				for (var i = 0;i < this.helper.inputs.length; i++){
 					if (this.helper.inputs[i].heading != 'Field'){
+						// B2D-587: All-time High / Low  这里应该是没有 period 的
+						if(this.helper.inputs[i].heading == 'period' && ['ATH','ATL'].includes(this.helper.sd.inputs.condition)) continue
 						inputs.push(this.helper.inputs[i])
 					}
 				}
@@ -13352,7 +13363,7 @@ import {__js_webcomponents_lookup_} from "../components/lookup.js"
 import {__js_webcomponents_loader_} from "../components/loader.js"
 import {__js_webcomponents_reports_lookup_} from "../components/reportsLookup.js"
 
-import {__st_addons_standard_tooltip_} from "./STTooltip"
+import {__st_addons_standard_tooltip_} from "./addons/standard/STTooltip.js"
 import {__st_js_mask_} from "./STMask"
 import {__st_js_loadIndicator_} from "./loadIndicator"
 

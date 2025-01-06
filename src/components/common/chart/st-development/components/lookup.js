@@ -447,24 +447,12 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 this.loadMore(closure)
             };
             loadMore(closure) {
-                // let scrollableElement = this.resultList[0]
-                // const currentScrollTop = scrollableElement.scrollTop;
-                // const currentScrollHeight = scrollableElement.scrollHeight;
                 // 根据页码从过滤后的结果中分页
                 console.log('paginated results',this.currentPage, this.searchResults.length)
                 const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
                 if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
                 // 将分页后的数据传递给 closure
                 closure(paginatedResults);
-
-                    // // 恢复滚动位置
-                    // setTimeout(() => {
-                    //     // 等待 DOM 
-                    //     debugger
-                    //     if (scrollableElement.scrollHeight !== currentScrollHeight) {
-                    //         scrollableElement.scrollTop = currentScrollTop + (scrollableElement.scrollHeight - currentScrollHeight);
-                    //     }
-                    // }, 0); // 延迟为 0，意味着在当前执行栈完成后执行
             }
             attachDriver(driver) {
                 this.driver = driver;
@@ -583,6 +571,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
 
             // 监听滚动事件以触发加载更多数据
             scrollHandler(event) {
+                event.stopPropagation(); // 阻止事件冒泡
+
                 var self = this;
                 var restoredExchanges = this.params.driver.exchanges;
                 function closure(results) {
@@ -614,8 +604,18 @@ let __js_webcomponents_lookup_ = (_exports) => {
                 if (scrollableElement.scrollHeight - scrollableElement.scrollTop - 10 < scrollableElement.clientHeight) {
                     // 到达底部，加载下一页数据
                     if (!this.hasMore) return;
+                    
+                    // 记录当前滚动位置
+                    const currentScrollTop = scrollableElement.scrollTop;
                     self.currentPage++;
-                    self.loadMore(closure);
+                    self.loadMore((results) => {
+                        closure(results);
+            
+                        // 恢复滚动位置
+                        requestAnimationFrame(() => {
+                            scrollableElement.scrollTop = currentScrollTop;
+                        });
+                    });
                 }
             };
             isActive() {
@@ -702,7 +702,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         if (focused && focused.selectFC) {
                             focused.selectFC.apply(focused, {});
                         } else {
-                            var val = input.value;
+                            //var val = input.value;
+                            var val = this.searchResults[0].data.symbol
                             var toUpperCase =
                                 ["false", "0", null].indexOf(this.getAttribute("cq-uppercase")) ==
                                 -1;

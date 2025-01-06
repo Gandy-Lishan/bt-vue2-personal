@@ -49,6 +49,7 @@
 
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { formatStandardTime } from '@/utils'
 
 export default {
 	name: 'MaxMin',
@@ -162,10 +163,7 @@ export default {
 			})
 				console.log('计算结果', medianMaxGainArray)
 				this.backtestHistoryList = [...backtestHistoryList, ...medianMaxGainArray]
-				let offset = datatime.getTimezoneOffset() * 60 * 1000
-				this.start_date = new Date(
-						datatime.setTime(datatime.getTime() + offset)
-				)
+				this.start_date = formatStandardTime(datatime)
 		},
 		getAllDefaultTableLabels() {
 			let periodArray = [
@@ -419,10 +417,7 @@ export default {
 			let returnResults = []
 
 			for (let data in dataSet) {
-				let datatime = new Date(dataSet[data].Date)
-
-				let offset = datatime.getTimezoneOffset() * 60 * 1000
-				let entryDate = new Date(datatime.setTime(datatime.getTime() + offset))
+				let entryDate = formatStandardTime(dataSet[data].Date)
 
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()

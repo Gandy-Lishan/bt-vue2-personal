@@ -2,7 +2,7 @@
 <div>
   <div>
     <div class="header-span">
-      <span>My Favorites</span>
+      <span>My Favorites<i class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i></span>
     </div>
     <!-- <div class="header-span">
       <template v-for="item in tableInfo['options']">
@@ -12,10 +12,10 @@
   </div>
   <div class="filter-div">
     <el-row>
-      <el-col :span="18">
+      <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button>
+            <!-- <el-button size="small" @click="downloadCSV"><i class="el-icon-download" style="margin-right: 5px"></i>Download CSV</el-button> -->
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -41,15 +41,21 @@
           </div>
         </el-row>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="6"> -->
+      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
         <el-input
+          class="search-input"
+          @focus="expandSearch"
+          @blur="collapseSearch"
           @input="handleQuery"
           size="small"
-          placeholder="Search"
+          :placeholder="searchPlaceholder"
           v-model="searchInput"
-          clearable>
-        </el-input>
-      </el-col>
+          clearable
+          :style="inputStyle"
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+      </div>
+      <!-- </el-col> -->
     </el-row>
   </div>
     <virtual-scroll
@@ -194,7 +200,8 @@ export default {
       searchInput: '',
       filterData: [],
       groupsOptions: [],
-      timeframeOptions: []
+      timeframeOptions: [],
+      isExpanded: false, // 控制输入框是否展开
     }
   },
   computed: {
@@ -207,7 +214,20 @@ export default {
     }),
     pageLength() {
       return this.filterData.length || 0
-    }
+    },
+    inputStyle() {
+      return {
+        width: this.isExpanded ? "200px" : "35px",
+        position: "absolute",
+        right: "0", // 根据需要调整位置
+        top: "0px",
+        transition: "width 0.3s ease-in-out",
+      };
+    },
+    searchPlaceholder() {
+      if(this.isExpanded) return 'Search'
+      return ''
+    },
 	},
 	watch: {
     tableData: {
@@ -327,6 +347,7 @@ export default {
               etf_etf: 'Sector',
               pc_ratio: 'PutCall',
               stock_sent: 'Stock',
+              stock_russell: 'Russell',
               equity: 'COT',
               cot: 'COT',
               optix: 'Optix',
@@ -345,6 +366,7 @@ export default {
               sp1500_trend_reltrend: 'Trend',
               spx_trend_reltrend: 'Trend',
               ndx_trend_reltrend: 'Trend',
+              russell_trend_reltrend: 'Trend',
               etf_domestic_trend_reltrend: 'Trend',
               etf_foreign_trend_reltrend: 'Trend',
               etf_other_trend_reltrend: 'Trend'
@@ -395,7 +417,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'stock_russell' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'russell_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`
@@ -440,6 +462,8 @@ export default {
         // 在收藏夹中但是要移除
         if(index !== -1 && isFavorite) {
           favList.splice(index, 1)
+          // 更新 vuex 的状态
+          this.$store.commit('chart/SET_FAVORITE_INDICATOR_LIST', favList)
           await this.update_indicators_favorite({
             indicator: JSON.stringify(favList),
             symbol: JSON.stringify(this._favoriteSymbolList)
@@ -453,15 +477,19 @@ export default {
               }).filter(item => item !== undefined)
           }).filter(item => item.length > 0).flat()
           console.log('sourceTable', sourceTable) // [{}]
-          sourceTable = sourceTable.filter(item => (item.favorite));
+          sourceTable = sourceTable.filter(item => (item.favorite) && item.hasOwnProperty('source_list'));
           //是否同步 most_popular
-          const isSyncPopular = !sourceTable.find(item => item.source_list === 'most_popular')
+          // const isSyncPopular = sourceTable.find(item => item.source_list === 'most_popular') || false
+          debugger
           sourceTable.forEach(item => {
             const {url, source_list: _sourceRowUrl} = item
             if(url) {
               const  _results = isJson(this.indicatorsListData[_sourceRowUrl]) ? JSON.parse(this.indicatorsListData[_sourceRowUrl]) : []
-              const find = _results.find(ele => ele.url === url)
-              if(find) this.removeIndicatorsFavorites([find], isSyncPopular)
+              const findIndex = _results.findIndex(ele => ele.url === url)
+              if(findIndex !== -1) _results[findIndex] = {..._results[findIndex], favorite: false, loading: false}
+              this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: _sourceRowUrl, data: _results})
+              // console.log('find', find)
+              // if(find) this.removeIndicatorsFavorites([find], isSyncPopular)
             }
           })
         }
@@ -491,6 +519,8 @@ export default {
 					if (index !== -1 && !isAdd) favList.splice(index, 1);
 					if (index === -1 && isAdd) favList.push({url: row.url, name: row.chart_name})
 					if(index !== -1 && isAdd) {this.popUpMsgBox('This indicator already exists in favorites'); this.loading = false; return}
+          // 更新 vuex 的状态
+          this.$store.commit('chart/SET_FAVORITE_INDICATOR_LIST', favList)
 					await this.update_indicators_favorite({
 						indicator: JSON.stringify(favList),
 						symbol: JSON.stringify(this._favoriteSymbolList)
@@ -597,6 +627,11 @@ export default {
           type: 'SP1500'
         },
         {
+          label: 'Russell 3000 Stock Sentiment',
+          value: 'russell_3000_complete_list',
+          type: 'Russell'
+        },
+        {
           label: 'Bond Market Sentiment',
           value: 'bond_complete_list',
           type: 'bond'
@@ -701,7 +736,7 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || url === 'russell_3000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) keysMap.set('chart_name', 'Symbol')
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
@@ -798,6 +833,14 @@ export default {
     // 使用反斜杠转义特殊字符
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
+    expandSearch() {
+      this.isExpanded = true; // 展开输入框
+    },
+    collapseSearch() {
+      if (!this.searchInput) {
+        this.isExpanded = false; // 收起输入框
+      }
     },
   }
 }
@@ -949,13 +992,16 @@ export default {
   margin-top: 10px;
 }
 .filter-div {
+  position: relative;
   padding: 10px 5px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
+  height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }
   .btns {
+    display: flex;
     .el-button{
       margin-right: 10px;
     }
@@ -972,6 +1018,18 @@ export default {
       font-size: 14px;
       margin-right: 5px
     }
+  }
+}
+/deep/ .search-input {
+  height: 100%;
+  overflow: visible;
+  z-index: 100; /* 保证层级高于其他元素 */
+  &.el-input--suffix .el-input__inner {
+    padding-right: 0px;
+  }
+  .el-input__prefix, .el-input__suffix {
+    height: 32px;
+    line-height: 32px;
   }
 }
 </style>

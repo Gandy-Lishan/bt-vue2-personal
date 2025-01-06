@@ -67,6 +67,25 @@
 							></el-input>
 					</el-form-item>
 				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === ' ')"
+							placeholder="Please select condition"
+							@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</div>
 			</div>
 			<div class="condition-container">
 				<el-form-item>
@@ -78,7 +97,6 @@
 				</el-form-item>
 				<div class="conditionInput">
 					<el-form-item prop="ma_period">
-
 							<el-input
 								:disabled="!(radio === 'Moving Average')"
 								v-model="tech.ma_period"
@@ -113,13 +131,31 @@
 				</div>
 				<div class="conditionInput">
 					<el-form-item prop="maPeriod">
-
 							<el-input
 								v-model="tech.maPeriod"
 								:disabled="!(radio === 'Moving Average')"
 								placeholder="Input Period"
 								@input="getMaValue"
 							></el-input>
+					</el-form-item>
+				</div>
+				<div class="conditionSelect">
+					<el-form-item>
+						<el-select
+							v-model="tech.ids"
+							filterable
+							:disabled="!(radio === 'Moving Average')"
+							placeholder="Please select condition"
+							@change="debouncedUpdateMaType"	
+						>
+							<el-option
+								v-for="item in MATypeConditions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
 					</el-form-item>
 				</div>
 			</div>
@@ -280,6 +316,10 @@ export default {
 				ma_period: [{ validator: validateMaPeriod, trigger: 'blur' }],
 				maPeriod: [{ validator: validateMaPeriodRule, trigger: 'blur' }]
 			},
+			MATypeConditions: [
+				{ value: 'SMA', label: 'Simple' },
+				{ value: 'EMA', label: 'Exponential' },
+			],
 		}
 	},
 	computed: {
@@ -362,7 +402,7 @@ export default {
 				desObj.criteria = this.criteria
 				desObj.description = {
 					'commentDes':commentDes,
-					'rocCond':null
+					'rocCond':{'ma_type': this.tech.ids}
 				}
 				desObj.index = index
 				this.$store.commit('form/saveDescription', desObj)}
@@ -377,6 +417,7 @@ export default {
 				let conditionRadio =
 					this.radio == ' ' ? this.tech.comparison : this.radio
 				let comparison
+				const maType = this.tech.ids == 'SMA' ? 'S' : 'E'
 				switch (this.tech.comparison) {
 					case 'SC':
 						comparison = 'Symbol Close'
@@ -391,27 +432,27 @@ export default {
 						comparison = 'Symbol Open'
 						break
 					case 'MA':
-						comparison = 'Moving Average'
+						comparison = `${maType}MA`
 						break
 					default:
 						break
 				}
 				let condition = this.conditions[this.tech.condition].label
-				this.description = `${comparison} ${ma_period ? `${ma_period} ` : ''}${condition} Moving Average ${period}`
+				this.description = `${comparison}${ma_period ? `${ma_period} ` : ''} ${condition} ${maType}MA${period}`
 
 				let desObj = {}
 				desObj.criteria = this.criteria
 				if(this.relation != 1) {
 					desObj.description = {
 						'commentDes':this.description,
-						'rocCond':null
+						'rocCond':{'ma_type': this.tech.ids}
 					}
 					desObj.index = index + 1
 					}
 				if(this.relation == 1) {
 						desObj.description = {
 							'commentDes':commentDes + this.description,
-							'rocCond':null
+							'rocCond':{'ma_type': this.tech.ids}
 						}
 						desObj.index = 0
 				}
@@ -506,10 +547,18 @@ export default {
 			if (JSON.stringify(newVal) != '{}') {
 				this.clearFormValidate()
 				let obj = newVal[this.criteria].signals[this.panelIndex]
+				let cond
+				if('cond' in newVal[this.criteria]){
+					cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+				}
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)
 				this.tech.comparison = obj.comparison
+				debugger
 				if (this.tech.comparison === 'MA') {
+					if(cond){
+						this.tech.ids = cond.ma_type || 'SMA'
+					}
 					this.radio = 'Moving Average'
 					this.tech.ma_period = obj.ma_period
 					this.tech.maPeriod = obj.period

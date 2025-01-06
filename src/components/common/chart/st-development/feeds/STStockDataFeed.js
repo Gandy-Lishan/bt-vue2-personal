@@ -10,6 +10,7 @@ import LRUCache from 'lru-cache';
 import _this from "@/main";
 import {decodeBase64} from '@/utils'
 import {recoverSymbolOptixUrl,getSymbolInfo} from '@/utils/globalFunc'
+import { formatStandardTime } from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -594,11 +595,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
-                    var datatime = new Date(data[i].DT)
-                    
-                    var offset = datatime.getTimezoneOffset() * 60 * 1000
-                    
-                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+                    newQuotes[i].DT = formatStandardTime(data[i].DT)
                     
                     newQuotes[i].Open = data[i].Open;
                     newQuotes[i].High = data[i].High;
@@ -648,12 +645,8 @@ quoteFeedSimulator.formatChartData = async function(response){
             }else{
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
-    
-                    var datatime = new Date(data[i].DT)
-    
-                    var offset = datatime.getTimezoneOffset() * 60 * 1000
-                    
-                    newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+ 
+                    newQuotes[i].DT = formatStandardTime(data[i].DT)
         
                     newQuotes[i].Open = data[i].Close;
                     newQuotes[i].High = data[i].Close;
