@@ -96,6 +96,7 @@ export default {
     },
     updateChartWithSelectedStrategy() {
       const selectedStrategy = this.strategies[this.selectedStrategyIndex];
+      if(!selectedStrategy) {this.$emit('changeStrategyIndex', 0); return}
       let { EntryDate, ExitDate, Direction } = selectedStrategy;
       if( selectedStrategy['Show Last'] == false ) {
         ExitDate = ExitDate.slice(0, ExitDate.length-1)
