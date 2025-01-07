@@ -383,6 +383,7 @@ export default {
 				)
 
 				if (isDuplicate) {
+          data.copyLoading = false
 					this.popUpMsgBox('The signals has been copied')
 				} else {
 					// 获取参数并准备复制
