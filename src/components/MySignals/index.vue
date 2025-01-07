@@ -31,7 +31,7 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }">My Signals List</p>
-            <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p>
+            <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p> -->
           </div>
         </template>
         <div class="content">
@@ -259,10 +259,10 @@ export default {
     async checkedSignalAlert(checked) {
       const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
         const code  = res.data?.code
-        if(code === 220 && checked) this.popUpMsgBox('Add Subscribe successfully')
-        else if(code === 220 && !checked) this.popUpMsgBox('Your subscription has been canceled')
-        else if(code === 518) this.popUpMsgBox('Add Subscribe failed, Error occurred while Updating Subscribe')
-        else if(code === 520) this.popUpMsgBox('Update subscribe failed')
+        if(code === 220 && checked) this.popUpMsgBox('Signal Email has been subscribed successfully')
+        else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
+        else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
+        else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
     }
   }
 }
