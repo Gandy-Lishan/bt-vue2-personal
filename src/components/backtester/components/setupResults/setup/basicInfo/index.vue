@@ -63,6 +63,7 @@
                     <div class="enterSymbolBox">
                       
                       <el-select
+                        ref="symbolInput"
                         v-model="bd.symbol"
                         id="symbolName"
                         filterable
@@ -77,7 +78,8 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options.slice(0, 50)"
+                          
+                          v-for="item in options"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
@@ -180,6 +182,7 @@
                     </template>
                     <div class="enterSymbolBox">
                       <el-select
+                        ref="benchmarkInput"
                         v-model="bd.benchmark"
                         id="symbolName"
                         filterable
@@ -193,7 +196,7 @@
                         :loading="loading"
                       >
                         <el-option
-                          v-for="item in options.slice(0, 50)"
+                          v-for="item in options"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
@@ -425,6 +428,7 @@
                     <div class="enterSymbolBox">
                       
                       <el-select
+                        ref="symbol2Input"
                         v-model="bd.symbol2"
                         id="symbolName"
                         filterable
@@ -1015,6 +1019,12 @@ export default {
       slValidErrMsg: '',
       timValidErrMsg: '',
       excludeOOErrMsg: '',
+
+      // 自定义动态渲染下拉栏
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
     }
   },
   async created() {
@@ -1024,6 +1034,11 @@ export default {
     this.$emit('IsRiskControl', true)
     // 用于获取 start_date & end_date
     if(this.bd.backtest_period != 22) this.getBTDate()
+
+    this.attachScrollListener()
+  },
+  beforeDestroy() {
+    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
   },
   computed: {
     ...mapGetters({
@@ -1177,6 +1192,68 @@ export default {
     },
   },
   methods: {
+    /** START 加载更多数据且保持滚动条位置 */
+    // 绑定滚动事件
+    attachScrollListener(strategy) {
+      let tab = strategy
+      if(!strategy){
+        // 首次加载设初值，不清空绑定的监听器
+        tab = 'Single'
+      }else{
+        this.detachScrollListener() // 防止切换tab时重复添加监听器，统一移除
+      }
+
+      let refs // 要监听的下拉框的 ref 名称
+      if(tab == 'Single'){
+        refs = ['symbolInput','benchmarkInput'];
+      }
+      else refs = ['symbol2Input','benchmarkInput'];
+
+      refs.length != 0 && refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event));
+        }
+      });
+    },
+    // 解绑滚动事件
+    detachScrollListener() {
+      const refs = ['symbolInput', 'benchmarkInput', 'symbol2Input']; // 要监听的下拉框的 ref 名称
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 监听滚动事件，触发加载更多
+    handleDropdownScroll(event) {
+      var self = this;
+      const dropdown = event.target;
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore()
+      }
+    },
+    loadMore() {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      this.options = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      this.loading = false
+    },
+    /** END 加载更多数据且保持滚动条位置 */
+
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
       const endDay = timestampToTime(new Date(this.bd.end_date))
@@ -1350,8 +1427,12 @@ export default {
         
         vm.getCustomStocksList()
 
-        this.options = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
-        vm.loading = false
+        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
       }
       else if (typeof query != 'boolean' && query !== '') {
         vm.loading = true
@@ -1391,9 +1472,13 @@ export default {
         }
         options.unshift(...wholeWord)
         // 去重
-        this.options = options
-        // 解除遮罩
-        vm.loading = false
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
       } else {
         this.options = []
       }
@@ -1492,6 +1577,10 @@ export default {
 			}else {
         this.getSymbol2(this.bd.symbol2)
 			}
+
+      this.$nextTick(() => {
+        this.attachScrollListener(this.bd.strategy)
+      })
     },
     setSetUpLoadingSetting(isSetupLoading, showProgress, percentage, progressText) {
 			this.$store.commit('form/SET_SETUP_LOADING', {
