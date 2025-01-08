@@ -12,7 +12,10 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l"  :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="160px">										
+									<el-table-column :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="160px">
+										<template slot="header">
+											{{`Dates of ${signalsNumber} Signals`}}
+										</template>			
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
@@ -72,14 +75,15 @@ export default {
 				'12 Months [%]',
 				'Max Gain',
 				'Max Loss'
-			]
+			],
 		}
 	},
 	props: {
 			tradesData: Array,
 			tradePrice: String,
 			rowFrequency: String,
-			direction: String
+			direction: String,
+			signalsNumber: Number
   },
 	methods: {
 		clearData(timeframe) {
