@@ -35,6 +35,7 @@ export function setRouterPermission(router) {
 			const _symbol = market_symbol || 'SPX'
 			symbol = _symbol
 		}
+		if (symbol === 'TEN') symbol = 'ten'	// handle special case
 		if (indicator) sessionStorage.setItem('indicator', indicator)
 		if (symbol) sessionStorage.setItem('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
