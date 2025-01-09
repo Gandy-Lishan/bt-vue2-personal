@@ -299,6 +299,11 @@ const routes = [
 		component: resolve => require(['@/components/MySignals/index.vue'], resolve)
 	},
 	{
+		path: '/my_screen',
+		name: 'MyScreen',
+		component: resolve => require(['@/components/MyScreen/index.vue'], resolve)
+	},
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}
