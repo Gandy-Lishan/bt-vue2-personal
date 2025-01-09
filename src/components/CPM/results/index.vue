@@ -64,6 +64,7 @@
             :tradePrice="tradePrice"
             :rowFrequency="rowFrequency"
             :direction="direction"
+            :signalsNumber="signalsNumber"
           ></MaxMin>
         </div>
       </el-collapse-item>
@@ -94,7 +95,8 @@ export default {
       breadcrumbTitle: 'Back to Correlation Pattern Match List',
       direction: 'Long',
       StartEndDateArray: [],
-      default_symbol: ''
+      default_symbol: '',
+      signalsNumber: 1
     }
   },
   components: {
@@ -143,6 +145,7 @@ export default {
     },
     prepareData(data) {
       const _this = this
+      this.signalsNumber = _this.StartEndDateArray.length
       _this.$nextTick(() => {
         const datatime = data.start_date
         _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)

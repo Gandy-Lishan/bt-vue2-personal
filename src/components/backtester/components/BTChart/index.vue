@@ -56,8 +56,10 @@ export default {
 		},
 	},
 	created() {
-		let backtestID = localStorage.getItem('backtestID')
-		if(backtestID) {
+		const params = this.$route.params	// from strategy link
+		let backtestID = localStorage.getItem('backtestID') // from analyst's backtest link
+		let symbol = sessionStorage.getItem('symbol') // from indicators link
+		if((params.usedFor && params.usedFor === 'showBTForm') || backtestID || symbol) {
 			this.default_symbol = null
 		}
 	},
