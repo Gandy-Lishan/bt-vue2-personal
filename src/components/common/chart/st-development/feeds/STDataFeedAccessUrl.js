@@ -45,8 +45,7 @@ var config = {
     },
     /********************lishan modify start*************************/
     getMyIndicatorData : function(url) {
-        const path = `/dev/my_indicator/get_data/?url='${url}'`
-
+        const path = `/dev/my_indicator/get_data/?url=${url}`
         return new Promise((resolve, reject) => {
             CIQ.axios.get(path, {withCredentials: true})
                 .then(res => {
