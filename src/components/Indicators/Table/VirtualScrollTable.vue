@@ -22,7 +22,7 @@
     <div class="header-span" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
-          <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click="downloadCSV" title="Download List"></i>
+          <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
         </span>
       </template>
     </div>
@@ -2094,6 +2094,7 @@ export default {
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list') {
         // Name 放在 Symbol 前面
+        if(type === 'russell_3000_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
       const isTrendScore = ['sp1500', 'spx', 'ndx', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
