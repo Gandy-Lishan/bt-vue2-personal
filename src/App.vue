@@ -51,8 +51,17 @@ export default {
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
-		if(!['/indicators'].includes(window.location.pathname)) {
+		if(window.location.pathname.includes('/backtester')) {
+			// fetch all custom list
 			this.preFetchData()
+		}
+		else if(
+			window.location.pathname.includes('/myindicator') ||
+			window.location.pathname.includes('/seasonality') ||
+			window.location.pathname.includes('/cpm')
+		) {
+			// fetch symbol list only
+			this.preFetchData(true)
 		}
 		
 // debugger
@@ -150,9 +159,11 @@ export default {
 		// }
 	},
 	methods: {
-		preFetchData() {
-			this.fetchCustomList()
-			this.updateInterval = setInterval(this.fetchCustomList, 300000); // Update every 5 minutes
+		preFetchData(onlySymbol = false) {
+			this.fetchCustomList(onlySymbol)
+			this.updateInterval = setInterval(() => {
+				this.fetchCustomList(onlySymbol);
+			}, 300000); // Update every 5 minutes
 		},
 		changeSvg() {
 			this.isClosed = !this.isClosed
@@ -191,16 +202,20 @@ export default {
 				// })
 			})
   },
-		fetchCustomList() {
+		fetchCustomList(onlySymbol) {
 			console.log('🚗  update custom symbol list and indicator list')
-			// this.$store.dispatch('chart/get_mysymbolist')
-			// // 包括了fav indicator
-			// this.$store.dispatch('chart/get_myindicator')
 
-			return Promise.all([
+			if(onlySymbol) {
+				return Promise.all([
+					this.$store.dispatch('chart/get_mysymbolist'),
+				]);
+			}
+			else {
+				return Promise.all([
 				this.$store.dispatch('chart/get_mysymbolist'),
 				this.$store.dispatch('chart/get_myindicator')
 			]);
+			}
 		},
 	beforeDestroy() {
 		clearInterval(this.updateInterval);

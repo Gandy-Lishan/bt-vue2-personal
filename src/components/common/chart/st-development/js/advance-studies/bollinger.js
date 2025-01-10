@@ -38,15 +38,17 @@ if (!CIQ.Studies) {
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 
-		/** 判断Study用来计算的数据源 */
-		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-		if(sd?.parameters?.isComparison){
-			/**根据criteria动态设定study的Y轴属*******/
-			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-			sd.yAxis = actualXaxis
-			/****************** */
-		}else{
-			sd.yAxis = null
+		if (sd.panel == 'chart') {
+			/** 判断Study用来计算的数据源 */
+			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			if(sd?.parameters?.isComparison){
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+			}else{
+				sd.yAxis = null
+			}
 		}
 
 		CIQ.Studies.MA(
