@@ -161,8 +161,13 @@ export default {
           path: '/cpm'
         },
         {
-          label: 'AI Trading',
+          label: 'My Signal',
           keyPath: '9',
+          path: '/my_signals'
+        },
+        {
+          label: 'AI Trading',
+          keyPath: '10',
           path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
       ],
@@ -183,7 +188,7 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
-      if(key === '9') {
+      if(key === '10') {
         window.open('https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade')
         return
       }
@@ -212,7 +217,7 @@ export default {
     showLabel(item) {
       const email = getCookieData()?.username
       const {label} = item
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'Reports', 'My Signal'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
