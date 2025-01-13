@@ -110,7 +110,7 @@ function getCustomConfig({
 
 	if (typeof restore == 'boolean') config.restore = restore
 
-	// config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
+	config.quoteFeeds[0].behavior.refreshInterval = 0; // disables quotefeed refresh
 	config.onChartReady = onChartReady
 
 	// Select only plugin configurations that needs to be active for this chart
