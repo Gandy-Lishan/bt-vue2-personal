@@ -501,6 +501,22 @@
 										v-copy="scope.row.id"
 									></el-button>
 								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="add to my signal"
+									placement="bottom-start"
+								>
+									<el-button
+										v-if="['History', 'Favorites'].includes(currentPage)"
+										:disabled="getIsBacktestRunningFlagState"
+										type="primary"
+										icon="el-icon-plus"
+										circle
+										size="mini"
+										@click="addBacktestSignal(scope.row)"
+									></el-button>
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
@@ -755,6 +771,11 @@ export default {
       if (order == 'ascending') prop = `-${prop}`
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
+		},
+		addBacktestSignal(row) {
+			// 生成名字并检查有没有重名
+			debugger
+			const {name, strategy, entry, exit} = row
 		}
 	}
 }
