@@ -304,6 +304,11 @@ const routes = [
 		component: resolve => require(['@/components/MyScreen/index.vue'], resolve)
 	},
 	{
+		path: '/dashboard',
+		name: 'Dashboard',
+		component: resolve => require(['@/components/Dashboard/index.vue'], resolve)
+	},
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}
