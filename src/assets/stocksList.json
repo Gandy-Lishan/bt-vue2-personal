@@ -6250,5 +6250,5685 @@
     {
         "name": "MicroStrategy Incorporated Inc",
         "stock": "MSTR"
+    },
+    {
+        "name": "Sportsmans Warehouse Holdings",
+        "stock": "SPWH"
+    },
+    {
+        "name": "Middlefield Banc Corp",
+        "stock": "MBCN"
+    },
+    {
+        "name": "Franklin Covey Co",
+        "stock": "FC"
+    },
+    {
+        "name": "Rapid7 Inc",
+        "stock": "RPD"
+    },
+    {
+        "name": "Globalstar Inc",
+        "stock": "GSAT"
+    },
+    {
+        "name": "Akero Therapeutics Inc",
+        "stock": "AKRO"
+    },
+    {
+        "name": "Clipper Realty Inc",
+        "stock": "CLPR"
+    },
+    {
+        "name": "23andMe Holding Co",
+        "stock": "ME"
+    },
+    {
+        "name": "Inmode Ltd",
+        "stock": "INMD"
+    },
+    {
+        "name": "Dun & Bradstreet Holdings Inc",
+        "stock": "DNB"
+    },
+    {
+        "name": "Poseida Therapeutics Inc",
+        "stock": "PSTX"
+    },
+    {
+        "name": "Nkarta Inc",
+        "stock": "NKTX"
+    },
+    {
+        "name": "Alpine Income Property Trust I",
+        "stock": "PINE"
+    },
+    {
+        "name": "Aveanna Healthcare Holdings In",
+        "stock": "AVAH"
+    },
+    {
+        "name": "Big Lots Inc",
+        "stock": "BIG"
+    },
+    {
+        "name": "Tile Shop Holdings Inc",
+        "stock": "TTSH"
+    },
+    {
+        "name": "Montrose Environmental Group I",
+        "stock": "MEG"
+    },
+    {
+        "name": "American Coastal Insurance Cor",
+        "stock": "ACIC"
+    },
+    {
+        "name": "Astria Therapeutics Inc",
+        "stock": "ATXS"
+    },
+    {
+        "name": "Fennec Pharmaceuticals Inc",
+        "stock": "FENC"
+    },
+    {
+        "name": "Value Line Inc",
+        "stock": "VALU"
+    },
+    {
+        "name": "Butterfly Network Inc",
+        "stock": "BFLY"
+    },
+    {
+        "name": "Forafric Global PLC",
+        "stock": "AFRI"
+    },
+    {
+        "name": "Torrid Holdings Inc",
+        "stock": "CURV"
+    },
+    {
+        "name": "Gorman-Rupp Co/The",
+        "stock": "GRC"
+    },
+    {
+        "name": "MasterCraft Boat Holdings Inc",
+        "stock": "MCFT"
+    },
+    {
+        "name": "Entrada Therapeutics Inc",
+        "stock": "TRDA"
+    },
+    {
+        "name": "Aura Biosciences Inc",
+        "stock": "AURA"
+    },
+    {
+        "name": "AirSculpt Technologies Inc",
+        "stock": "AIRS"
+    },
+    {
+        "name": "Udemy Inc",
+        "stock": "UDMY"
+    },
+    {
+        "name": "Cartesian Therapeutics Inc",
+        "stock": "RNAC"
+    },
+    {
+        "name": "Red Violet Inc",
+        "stock": "RDVT"
+    },
+    {
+        "name": "Business First Bancshares Inc",
+        "stock": "BFST"
+    },
+    {
+        "name": "Snap One Holdings Corp",
+        "stock": "SNPO"
+    },
+    {
+        "name": "Forge Global Holdings Inc",
+        "stock": "FRGE"
+    },
+    {
+        "name": "Altus Power Inc",
+        "stock": "AMPS"
+    },
+    {
+        "name": "QIAGEN NV",
+        "stock": "QGEN"
+    },
+    {
+        "name": "Consensus Cloud Solutions Inc",
+        "stock": "CCSI"
+    },
+    {
+        "name": "New Fortress Energy Inc",
+        "stock": "NFE"
+    },
+    {
+        "name": "Q2 Holdings Inc",
+        "stock": "QTWO"
+    },
+    {
+        "name": "ChargePoint Holdings Inc",
+        "stock": "CHPT"
+    },
+    {
+        "name": "Robinhood Markets Inc",
+        "stock": "HOOD"
+    },
+    {
+        "name": "Outset Medical Inc",
+        "stock": "OM"
+    },
+    {
+        "name": "Guardant Health Inc",
+        "stock": "GH"
+    },
+    {
+        "name": "Kodiak Sciences Inc",
+        "stock": "KOD"
+    },
+    {
+        "name": "HireRight Holdings Corp",
+        "stock": "HRT"
+    },
+    {
+        "name": "AvePoint Inc",
+        "stock": "AVPT"
+    },
+    {
+        "name": "EVgo Inc",
+        "stock": "EVGO"
+    },
+    {
+        "name": "Ameresco Inc",
+        "stock": "AMRC"
+    },
+    {
+        "name": "EverCommerce Inc",
+        "stock": "EVCM"
+    },
+    {
+        "name": "Krispy Kreme Inc",
+        "stock": "DNUT"
+    },
+    {
+        "name": "iTeos Therapeutics Inc",
+        "stock": "ITOS"
+    },
+    {
+        "name": "Inozyme Pharma Inc",
+        "stock": "INZY"
+    },
+    {
+        "name": "Nurix Therapeutics Inc",
+        "stock": "NRIX"
+    },
+    {
+        "name": "Annexon Inc",
+        "stock": "ANNX"
+    },
+    {
+        "name": "Elastic NV",
+        "stock": "ESTC"
+    },
+    {
+        "name": "SWK Holdings Corp",
+        "stock": "SWKH"
+    },
+    {
+        "name": "Modine Manufacturing Co",
+        "stock": "MOD"
+    },
+    {
+        "name": "PowerSchool Holdings Inc",
+        "stock": "PWSC"
+    },
+    {
+        "name": "MeridianLink Inc",
+        "stock": "MLNK"
+    },
+    {
+        "name": "HBT Financial Inc",
+        "stock": "HBT"
+    },
+    {
+        "name": "United Parks & Resorts Inc",
+        "stock": "PRKS"
+    },
+    {
+        "name": "Outlook Therapeutics Inc",
+        "stock": "OTLK"
+    },
+    {
+        "name": "Brown-Forman Corp",
+        "stock": "BF_A"
+    },
+    {
+        "name": "AMMO Inc",
+        "stock": "POWW"
+    },
+    {
+        "name": "ProFrac Holding Corp",
+        "stock": "ACDC"
+    },
+    {
+        "name": "ConnectOne Bancorp Inc",
+        "stock": "CNOB"
+    },
+    {
+        "name": "Sitio Royalties Corp",
+        "stock": "STR"
+    },
+    {
+        "name": "Savara Inc",
+        "stock": "SVRA"
+    },
+    {
+        "name": "EverQuote Inc",
+        "stock": "EVER"
+    },
+    {
+        "name": "Longboard Pharmaceuticals Inc",
+        "stock": "LBPH"
+    },
+    {
+        "name": "Atlanta Braves Holdings Inc",
+        "stock": "BATRK"
+    },
+    {
+        "name": "Atlanta Braves Holdings Inc",
+        "stock": "BATRA"
+    },
+    {
+        "name": "Angel Oak Mortgage REIT Inc",
+        "stock": "AOMR"
+    },
+    {
+        "name": "Verve Therapeutics Inc",
+        "stock": "VERV"
+    },
+    {
+        "name": "Lyell Immunopharma Inc",
+        "stock": "LYEL"
+    },
+    {
+        "name": "Seres Therapeutics Inc",
+        "stock": "MCRB"
+    },
+    {
+        "name": "Tellurian Inc",
+        "stock": "TELL"
+    },
+    {
+        "name": "Apartment Investment and Manag",
+        "stock": "AIV"
+    },
+    {
+        "name": "BrightSpire Capital Inc",
+        "stock": "BRSP"
+    },
+    {
+        "name": "GoHealth Inc",
+        "stock": "GOCO"
+    },
+    {
+        "name": "Skyward Specialty Insurance Gr",
+        "stock": "SKWD"
+    },
+    {
+        "name": "Pioneer Natural Resources Co",
+        "stock": "PXD"
+    },
+    {
+        "name": "Luminar Technologies Inc",
+        "stock": "LAZR"
+    },
+    {
+        "name": "Kiniksa Pharmaceuticals Ltd",
+        "stock": "KNSA"
+    },
+    {
+        "name": "Scholar Rock Holding Corp",
+        "stock": "SRRK"
+    },
+    {
+        "name": "Open Lending Corp",
+        "stock": "LPRO"
+    },
+    {
+        "name": "Tela Bio Inc",
+        "stock": "TELA"
+    },
+    {
+        "name": "Purple Innovation Inc",
+        "stock": "PRPL"
+    },
+    {
+        "name": "FTAI Infrastructure Inc",
+        "stock": "FIP"
+    },
+    {
+        "name": "TechnipFMC PLC",
+        "stock": "FTI"
+    },
+    {
+        "name": "TPG RE Finance Trust Inc",
+        "stock": "TRTX"
+    },
+    {
+        "name": "ORIC Pharmaceuticals Inc",
+        "stock": "ORIC"
+    },
+    {
+        "name": "Tutor Perini Corp",
+        "stock": "TPC"
+    },
+    {
+        "name": "Ranpak Holdings Corp",
+        "stock": "PACK"
+    },
+    {
+        "name": "Ennis Inc",
+        "stock": "EBF"
+    },
+    {
+        "name": "LendingClub Corp",
+        "stock": "LC"
+    },
+    {
+        "name": "Oscar Health Inc",
+        "stock": "OSCR"
+    },
+    {
+        "name": "Savers Value Village Inc",
+        "stock": "SVV"
+    },
+    {
+        "name": "Fidelis Insurance Holdings Ltd",
+        "stock": "FIHL"
+    },
+    {
+        "name": "Encore Energy Corp",
+        "stock": "EU"
+    },
+    {
+        "name": "Blink Charging Co",
+        "stock": "BLNK"
+    },
+    {
+        "name": "Kodiak Gas Services Inc",
+        "stock": "KGS"
+    },
+    {
+        "name": "Alight Inc",
+        "stock": "ALIT"
+    },
+    {
+        "name": "XOMA Corp",
+        "stock": "XOMA"
+    },
+    {
+        "name": "Velocity Financial Inc",
+        "stock": "VEL"
+    },
+    {
+        "name": "Syndax Pharmaceuticals Inc",
+        "stock": "SNDX"
+    },
+    {
+        "name": "Overseas Shipholding Group Inc",
+        "stock": "OSG"
+    },
+    {
+        "name": "Lions Gate Entertainment Corp",
+        "stock": "LGF_B"
+    },
+    {
+        "name": "Snowflake Inc",
+        "stock": "SNOW"
+    },
+    {
+        "name": "Tango Therapeutics Inc",
+        "stock": "TNGX"
+    },
+    {
+        "name": "Denali Therapeutics Inc",
+        "stock": "DNLI"
+    },
+    {
+        "name": "Alector Inc",
+        "stock": "ALEC"
+    },
+    {
+        "name": "Bank of NT Butterfield & Son L",
+        "stock": "NTB"
+    },
+    {
+        "name": "AssetMark Financial Holdings I",
+        "stock": "AMK"
+    },
+    {
+        "name": "Phreesia Inc",
+        "stock": "PHR"
+    },
+    {
+        "name": "Viridian Therapeutics Inc",
+        "stock": "VRDN"
+    },
+    {
+        "name": "Cava Group Inc",
+        "stock": "CAVA"
+    },
+    {
+        "name": "BRT Apartments Corp",
+        "stock": "BRT"
+    },
+    {
+        "name": "Coeur Mining Inc",
+        "stock": "CDE"
+    },
+    {
+        "name": "Advantage Solutions Inc",
+        "stock": "ADV"
+    },
+    {
+        "name": "Equity Commonwealth",
+        "stock": "EQC"
+    },
+    {
+        "name": "Hecla Mining Co",
+        "stock": "HL"
+    },
+    {
+        "name": "HarborOne Bancorp Inc",
+        "stock": "HONE"
+    },
+    {
+        "name": "National Health Investors Inc",
+        "stock": "NHI"
+    },
+    {
+        "name": "PAR Technology Corp",
+        "stock": "PAR"
+    },
+    {
+        "name": "Inspired Entertainment Inc",
+        "stock": "INSE"
+    },
+    {
+        "name": "Century Therapeutics Inc",
+        "stock": "IPSC"
+    },
+    {
+        "name": "Transcontinental Realty Invest",
+        "stock": "TCI"
+    },
+    {
+        "name": "Weis Markets Inc",
+        "stock": "WMK"
+    },
+    {
+        "name": "BayCom Corp",
+        "stock": "BCML"
+    },
+    {
+        "name": "908 Devices Inc",
+        "stock": "MASS"
+    },
+    {
+        "name": "Varonis Systems Inc",
+        "stock": "VRNS"
+    },
+    {
+        "name": "Atrion Corp",
+        "stock": "ATRI"
+    },
+    {
+        "name": "Regional Management Corp",
+        "stock": "RM"
+    },
+    {
+        "name": "XP Inc",
+        "stock": "XP"
+    },
+    {
+        "name": "Twist Bioscience Corp",
+        "stock": "TWST"
+    },
+    {
+        "name": "BOK Financial Corp",
+        "stock": "BOKF"
+    },
+    {
+        "name": "DMC Global Inc",
+        "stock": "BOOM"
+    },
+    {
+        "name": "Popular Inc",
+        "stock": "BPOP"
+    },
+    {
+        "name": "Ardelyx Inc",
+        "stock": "ARDX"
+    },
+    {
+        "name": "Life Time Group Holdings Inc",
+        "stock": "LTH"
+    },
+    {
+        "name": "Lineage Cell Therapeutics Inc",
+        "stock": "LCTX"
+    },
+    {
+        "name": "Performant Financial Corp",
+        "stock": "PFMT"
+    },
+    {
+        "name": "NextDecade Corp",
+        "stock": "NEXT"
+    },
+    {
+        "name": "Globant SA",
+        "stock": "GLOB"
+    },
+    {
+        "name": "Credit Acceptance Corp",
+        "stock": "CACC"
+    },
+    {
+        "name": "Westrock Co",
+        "stock": "WRK"
+    },
+    {
+        "name": "Alta Equipment Group Inc",
+        "stock": "ALTG"
+    },
+    {
+        "name": "Opendoor Technologies Inc",
+        "stock": "OPEN"
+    },
+    {
+        "name": "Workiva Inc",
+        "stock": "WK"
+    },
+    {
+        "name": "Orchid Island Capital Inc",
+        "stock": "ORC"
+    },
+    {
+        "name": "SI-BONE Inc",
+        "stock": "SIBN"
+    },
+    {
+        "name": "Cadiz Inc",
+        "stock": "CDZI"
+    },
+    {
+        "name": "SoFi Technologies Inc",
+        "stock": "SOFI"
+    },
+    {
+        "name": "NewtekOne Inc",
+        "stock": "NEWT"
+    },
+    {
+        "name": "Red Rock Resorts Inc",
+        "stock": "RRR"
+    },
+    {
+        "name": "374Water Inc",
+        "stock": "SCWO"
+    },
+    {
+        "name": "PennyMac Financial Services In",
+        "stock": "PFSI"
+    },
+    {
+        "name": "Vertiv Holdings Co",
+        "stock": "VRT"
+    },
+    {
+        "name": "Trinseo PLC",
+        "stock": "TSE"
+    },
+    {
+        "name": "Babcock & Wilcox Enterprises I",
+        "stock": "BW"
+    },
+    {
+        "name": "Liberty Broadband Corp",
+        "stock": "LBRDK"
+    },
+    {
+        "name": "Liberty Broadband Corp",
+        "stock": "LBRDA"
+    },
+    {
+        "name": "Braze Inc",
+        "stock": "BRZE"
+    },
+    {
+        "name": "IGM Biosciences Inc",
+        "stock": "IGMS"
+    },
+    {
+        "name": "Multiplan Corp",
+        "stock": "MPLN"
+    },
+    {
+        "name": "Ducommun Inc",
+        "stock": "DCO"
+    },
+    {
+        "name": "Ryerson Holding Corp",
+        "stock": "RYI"
+    },
+    {
+        "name": "Pioneer Bancorp Inc/NY",
+        "stock": "PBFS"
+    },
+    {
+        "name": "Mirum Pharmaceuticals Inc",
+        "stock": "MIRM"
+    },
+    {
+        "name": "iHeartMedia Inc",
+        "stock": "IHRT"
+    },
+    {
+        "name": "BRC Inc",
+        "stock": "BRCC"
+    },
+    {
+        "name": "Archer Aviation Inc",
+        "stock": "ACHR"
+    },
+    {
+        "name": "BARK Inc",
+        "stock": "BARK"
+    },
+    {
+        "name": "Donegal Group Inc",
+        "stock": "DGICA"
+    },
+    {
+        "name": "Daily Journal Corp",
+        "stock": "DJCO"
+    },
+    {
+        "name": "Envela Corp",
+        "stock": "ELA"
+    },
+    {
+        "name": "MediaAlpha Inc",
+        "stock": "MAX"
+    },
+    {
+        "name": "Kaman Corp",
+        "stock": "KAMN"
+    },
+    {
+        "name": "UWM Holdings Corp",
+        "stock": "UWMC"
+    },
+    {
+        "name": "TPG Inc",
+        "stock": "TPG"
+    },
+    {
+        "name": "CBL & Associates Properties In",
+        "stock": "CBL"
+    },
+    {
+        "name": "Americold Realty Trust Inc",
+        "stock": "COLD"
+    },
+    {
+        "name": "ONE Group Hospitality Inc/The",
+        "stock": "STKS"
+    },
+    {
+        "name": "Actinium Pharmaceuticals Inc",
+        "stock": "ATNM"
+    },
+    {
+        "name": "Compass Therapeutics Inc",
+        "stock": "CMPX"
+    },
+    {
+        "name": "Erasca Inc",
+        "stock": "ERAS"
+    },
+    {
+        "name": "ACELYRIN Inc",
+        "stock": "SLRN"
+    },
+    {
+        "name": "ADT Inc",
+        "stock": "ADT"
+    },
+    {
+        "name": "CompoSecure Inc",
+        "stock": "CMPO"
+    },
+    {
+        "name": "Albertsons Cos Inc",
+        "stock": "ACI"
+    },
+    {
+        "name": "Anavex Life Sciences Corp",
+        "stock": "AVXL"
+    },
+    {
+        "name": "PetIQ Inc",
+        "stock": "PETQ"
+    },
+    {
+        "name": "Everbridge Inc",
+        "stock": "EVBG"
+    },
+    {
+        "name": "BILL Holdings Inc",
+        "stock": "BILL"
+    },
+    {
+        "name": "Li-Cycle Holdings Corp",
+        "stock": "LICY"
+    },
+    {
+        "name": "Informatica Inc",
+        "stock": "INFA"
+    },
+    {
+        "name": "AZEK Co Inc/The",
+        "stock": "AZEK"
+    },
+    {
+        "name": "Aclaris Therapeutics Inc",
+        "stock": "ACRS"
+    },
+    {
+        "name": "Zentalis Pharmaceuticals Inc",
+        "stock": "ZNTL"
+    },
+    {
+        "name": "OraSure Technologies Inc",
+        "stock": "OSUR"
+    },
+    {
+        "name": "Citius Pharmaceuticals Inc",
+        "stock": "CTXR"
+    },
+    {
+        "name": "FuelCell Energy Inc",
+        "stock": "FCEL"
+    },
+    {
+        "name": "Escalade Inc",
+        "stock": "ESCA"
+    },
+    {
+        "name": "Federal Agricultural Mortgage",
+        "stock": "AGM"
+    },
+    {
+        "name": "First Citizens BancShares Inc/",
+        "stock": "FCNCA"
+    },
+    {
+        "name": "Civista Bancshares Inc",
+        "stock": "CIVB"
+    },
+    {
+        "name": "LivePerson Inc",
+        "stock": "LPSN"
+    },
+    {
+        "name": "First of Long Island Corp/The",
+        "stock": "FLIC"
+    },
+    {
+        "name": "Axogen Inc",
+        "stock": "AXGN"
+    },
+    {
+        "name": "Stratus Properties Inc",
+        "stock": "STRS"
+    },
+    {
+        "name": "Douglas Elliman Inc",
+        "stock": "DOUG"
+    },
+    {
+        "name": "Bright Green Corp",
+        "stock": "BGXX"
+    },
+    {
+        "name": "Nutanix Inc",
+        "stock": "NTNX"
+    },
+    {
+        "name": "FRP Holdings Inc",
+        "stock": "FRPH"
+    },
+    {
+        "name": "Ballys Corp",
+        "stock": "BALY"
+    },
+    {
+        "name": "RAPT Therapeutics Inc",
+        "stock": "RAPT"
+    },
+    {
+        "name": "Perpetua Resources Corp",
+        "stock": "PPTA"
+    },
+    {
+        "name": "CryoPort Inc",
+        "stock": "CYRX"
+    },
+    {
+        "name": "C3.ai Inc",
+        "stock": "AI"
+    },
+    {
+        "name": "AvidXchange Holdings Inc",
+        "stock": "AVDX"
+    },
+    {
+        "name": "Hyster-Yale Materials Handling",
+        "stock": "HY"
+    },
+    {
+        "name": "Gray Television Inc",
+        "stock": "GTN"
+    },
+    {
+        "name": "HubSpot Inc",
+        "stock": "HUBS"
+    },
+    {
+        "name": "JELD-WEN Holding Inc",
+        "stock": "JELD"
+    },
+    {
+        "name": "Humacyte Inc",
+        "stock": "HUMA"
+    },
+    {
+        "name": "Zimvie Inc",
+        "stock": "ZIMV"
+    },
+    {
+        "name": "Rocket Pharmaceuticals Inc",
+        "stock": "RCKT"
+    },
+    {
+        "name": "Evolent Health Inc",
+        "stock": "EVH"
+    },
+    {
+        "name": "Great Southern Bancorp Inc",
+        "stock": "GSBC"
+    },
+    {
+        "name": "Allient Inc",
+        "stock": "ALNT"
+    },
+    {
+        "name": "SunOpta Inc",
+        "stock": "STKL"
+    },
+    {
+        "name": "USCB Financial Holdings Inc",
+        "stock": "USCB"
+    },
+    {
+        "name": "HEICO Corp",
+        "stock": "HEI"
+    },
+    {
+        "name": "Beyond Meat Inc",
+        "stock": "BYND"
+    },
+    {
+        "name": "Cullinan Oncology Inc",
+        "stock": "CGEM"
+    },
+    {
+        "name": "Axsome Therapeutics Inc",
+        "stock": "AXSM"
+    },
+    {
+        "name": "Reynolds Consumer Products Inc",
+        "stock": "REYN"
+    },
+    {
+        "name": "Utz Brands Inc",
+        "stock": "UTZ"
+    },
+    {
+        "name": "Arcutis Biotherapeutics Inc",
+        "stock": "ARQT"
+    },
+    {
+        "name": "Blue Foundry Bancorp",
+        "stock": "BLFY"
+    },
+    {
+        "name": "Hingham Institution For Saving",
+        "stock": "HIFS"
+    },
+    {
+        "name": "Hallador Energy Co",
+        "stock": "HNRG"
+    },
+    {
+        "name": "TriNet Group Inc",
+        "stock": "TNET"
+    },
+    {
+        "name": "Southland Holdings Inc",
+        "stock": "SLND"
+    },
+    {
+        "name": "Arbutus Biopharma Corp",
+        "stock": "ABUS"
+    },
+    {
+        "name": "Sterling Infrastructure Inc",
+        "stock": "STRL"
+    },
+    {
+        "name": "NET Lease Office Properties",
+        "stock": "NLOP"
+    },
+    {
+        "name": "Broadstone Net Lease Inc",
+        "stock": "BNL"
+    },
+    {
+        "name": "Pactiv Evergreen Inc",
+        "stock": "PTVE"
+    },
+    {
+        "name": "ESS Tech Inc",
+        "stock": "GWH"
+    },
+    {
+        "name": "Dyne Therapeutics Inc",
+        "stock": "DYN"
+    },
+    {
+        "name": "Qurate Retail Inc",
+        "stock": "QRTEB"
+    },
+    {
+        "name": "5E Advanced Materials Inc",
+        "stock": "FEAM"
+    },
+    {
+        "name": "Generation Bio Co",
+        "stock": "GBIO"
+    },
+    {
+        "name": "Editas Medicine Inc",
+        "stock": "EDIT"
+    },
+    {
+        "name": "Avidity Biosciences Inc",
+        "stock": "RNA"
+    },
+    {
+        "name": "Vaxcyte Inc",
+        "stock": "PCVX"
+    },
+    {
+        "name": "Ingles Markets Inc",
+        "stock": "IMKTA"
+    },
+    {
+        "name": "Global Water Resources Inc",
+        "stock": "GWRS"
+    },
+    {
+        "name": "Ionis Pharmaceuticals Inc",
+        "stock": "IONS"
+    },
+    {
+        "name": "MBIA Inc",
+        "stock": "MBI"
+    },
+    {
+        "name": "West BanCorp Inc",
+        "stock": "WTBA"
+    },
+    {
+        "name": "American Well Corp",
+        "stock": "AMWL"
+    },
+    {
+        "name": "E2open Parent Holdings Inc",
+        "stock": "ETWO"
+    },
+    {
+        "name": "Manitowoc Co Inc/The",
+        "stock": "MTW"
+    },
+    {
+        "name": "ON24 Inc",
+        "stock": "ONTF"
+    },
+    {
+        "name": "LSI Industries Inc",
+        "stock": "LYTS"
+    },
+    {
+        "name": "Bank First Corp",
+        "stock": "BFC"
+    },
+    {
+        "name": "Markel Group Inc",
+        "stock": "MKL"
+    },
+    {
+        "name": "Expro Group Holdings NV",
+        "stock": "XPRO"
+    },
+    {
+        "name": "Axonics Inc",
+        "stock": "AXNX"
+    },
+    {
+        "name": "Grid Dynamics Holdings Inc",
+        "stock": "GDYN"
+    },
+    {
+        "name": "Innovage Holding Corp",
+        "stock": "INNV"
+    },
+    {
+        "name": "Olo Inc",
+        "stock": "OLO"
+    },
+    {
+        "name": "Danimer Scientific Inc",
+        "stock": "DNMR"
+    },
+    {
+        "name": "PureCycle Technologies Inc",
+        "stock": "PCT"
+    },
+    {
+        "name": "Desktop Metal Inc",
+        "stock": "DM"
+    },
+    {
+        "name": "Patria Investments Ltd",
+        "stock": "PAX"
+    },
+    {
+        "name": "89bio Inc",
+        "stock": "ETNB"
+    },
+    {
+        "name": "Unisys Corp",
+        "stock": "UIS"
+    },
+    {
+        "name": "McGrath RentCorp",
+        "stock": "MGRC"
+    },
+    {
+        "name": "Mitek Systems Inc",
+        "stock": "MITK"
+    },
+    {
+        "name": "Dillards Inc",
+        "stock": "DDS"
+    },
+    {
+        "name": "Avita Medical Inc",
+        "stock": "RCEL"
+    },
+    {
+        "name": "Sweetgreen Inc",
+        "stock": "SG"
+    },
+    {
+        "name": "Sprout Social Inc",
+        "stock": "SPT"
+    },
+    {
+        "name": "Camden National Corp",
+        "stock": "CAC"
+    },
+    {
+        "name": "EVI Industries Inc",
+        "stock": "EVI"
+    },
+    {
+        "name": "Brookfield Business Corp",
+        "stock": "BBUC"
+    },
+    {
+        "name": "Natures Sunshine Products Inc",
+        "stock": "NATR"
+    },
+    {
+        "name": "LanzaTech Global Inc",
+        "stock": "LNZA"
+    },
+    {
+        "name": "James River Group Holdings Ltd",
+        "stock": "JRVR"
+    },
+    {
+        "name": "Forestar Group Inc",
+        "stock": "FOR"
+    },
+    {
+        "name": "Elanco Animal Health Inc",
+        "stock": "ELAN"
+    },
+    {
+        "name": "Newpark Resources Inc",
+        "stock": "NR"
+    },
+    {
+        "name": "Northrim BanCorp Inc",
+        "stock": "NRIM"
+    },
+    {
+        "name": "Napco Security Technologies In",
+        "stock": "NSSC"
+    },
+    {
+        "name": "Immunovant Inc",
+        "stock": "IMVT"
+    },
+    {
+        "name": "Riley Exploration Permian Inc",
+        "stock": "REPX"
+    },
+    {
+        "name": "Orthofix Medical Inc",
+        "stock": "OFIX"
+    },
+    {
+        "name": "Global Medical REIT Inc",
+        "stock": "GMRE"
+    },
+    {
+        "name": "Oil-Dri Corp of America",
+        "stock": "ODC"
+    },
+    {
+        "name": "One Liberty Properties Inc",
+        "stock": "OLP"
+    },
+    {
+        "name": "Cambridge Bancorp",
+        "stock": "CATC"
+    },
+    {
+        "name": "Newmark Group Inc",
+        "stock": "NMRK"
+    },
+    {
+        "name": "Playstudios Inc",
+        "stock": "MYPS"
+    },
+    {
+        "name": "Park-Ohio Holdings Corp",
+        "stock": "PKOH"
+    },
+    {
+        "name": "MiMedx Group Inc",
+        "stock": "MDXG"
+    },
+    {
+        "name": "Community Trust Bancorp Inc",
+        "stock": "CTBI"
+    },
+    {
+        "name": "PrimeEnergy Resources Corp",
+        "stock": "PNRG"
+    },
+    {
+        "name": "PAM Transportation Services In",
+        "stock": "PTSI"
+    },
+    {
+        "name": "Workhorse Group Inc",
+        "stock": "WKHS"
+    },
+    {
+        "name": "Gitlab Inc",
+        "stock": "GTLB"
+    },
+    {
+        "name": "Luxfer Holdings PLC",
+        "stock": "LXFR"
+    },
+    {
+        "name": "Richardson Electronics Ltd/Uni",
+        "stock": "RELL"
+    },
+    {
+        "name": "Core Molding Technologies Inc",
+        "stock": "CMT"
+    },
+    {
+        "name": "Carvana Co",
+        "stock": "CVNA"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty Liv",
+        "stock": "LLYVK"
+    },
+    {
+        "name": "2U Inc",
+        "stock": "TWOU"
+    },
+    {
+        "name": "Emerald Holding Inc",
+        "stock": "EEX"
+    },
+    {
+        "name": "Seaboard Corp",
+        "stock": "SEB"
+    },
+    {
+        "name": "Urban One Inc",
+        "stock": "UONE"
+    },
+    {
+        "name": "Americas Car-Mart Inc/TX",
+        "stock": "CRMT"
+    },
+    {
+        "name": "Security National Financial Co",
+        "stock": "SNFCA"
+    },
+    {
+        "name": "1st Source Corp",
+        "stock": "SRCE"
+    },
+    {
+        "name": "Stock Yards Bancorp Inc",
+        "stock": "SYBT"
+    },
+    {
+        "name": "Brightcove Inc",
+        "stock": "BCOV"
+    },
+    {
+        "name": "LCNB Corp",
+        "stock": "LCNB"
+    },
+    {
+        "name": "Avid Bioservices Inc",
+        "stock": "CDMO"
+    },
+    {
+        "name": "Novagold Resources Inc",
+        "stock": "NG"
+    },
+    {
+        "name": "First Financial Corp/IN",
+        "stock": "THFF"
+    },
+    {
+        "name": "Perella Weinberg Partners",
+        "stock": "PWP"
+    },
+    {
+        "name": "Enterprise Bancorp Inc/MA",
+        "stock": "EBTC"
+    },
+    {
+        "name": "Disc Medicine Inc",
+        "stock": "IRON"
+    },
+    {
+        "name": "Tejon Ranch Co",
+        "stock": "TRC"
+    },
+    {
+        "name": "Home Bancorp Inc",
+        "stock": "HBCP"
+    },
+    {
+        "name": "Zymeworks Inc",
+        "stock": "ZYME"
+    },
+    {
+        "name": "HomeTrust Bancshares Inc",
+        "stock": "HTBI"
+    },
+    {
+        "name": "Transcat Inc",
+        "stock": "TRNS"
+    },
+    {
+        "name": "Sangamo Therapeutics Inc",
+        "stock": "SGMO"
+    },
+    {
+        "name": "HomeStreet Inc",
+        "stock": "HMST"
+    },
+    {
+        "name": "Village Super Market Inc",
+        "stock": "VLGEA"
+    },
+    {
+        "name": "VSE Corp",
+        "stock": "VSEC"
+    },
+    {
+        "name": "Asure Software Inc",
+        "stock": "ASUR"
+    },
+    {
+        "name": "Washington Trust Bancorp Inc",
+        "stock": "WASH"
+    },
+    {
+        "name": "Weyco Group Inc",
+        "stock": "WEYS"
+    },
+    {
+        "name": "Ares Commercial Real Estate Co",
+        "stock": "ACRE"
+    },
+    {
+        "name": "WesBanco Inc",
+        "stock": "WSBC"
+    },
+    {
+        "name": "Farmers National Banc Corp",
+        "stock": "FMNB"
+    },
+    {
+        "name": "Five Star Bancorp",
+        "stock": "FSBC"
+    },
+    {
+        "name": "Cipher Mining Inc",
+        "stock": "CIFR"
+    },
+    {
+        "name": "VAALCO Energy Inc",
+        "stock": "EGY"
+    },
+    {
+        "name": "EyePoint Pharmaceuticals Inc",
+        "stock": "EYPT"
+    },
+    {
+        "name": "Iteris Inc",
+        "stock": "ITI"
+    },
+    {
+        "name": "Funko Inc",
+        "stock": "FNKO"
+    },
+    {
+        "name": "Burke & Herbert Financial Serv",
+        "stock": "BHRB"
+    },
+    {
+        "name": "Ambarella Inc",
+        "stock": "AMBA"
+    },
+    {
+        "name": "Revolve Group Inc",
+        "stock": "RVLV"
+    },
+    {
+        "name": "SKYX Platforms Corp",
+        "stock": "SKYX"
+    },
+    {
+        "name": "Kadant Inc",
+        "stock": "KAI"
+    },
+    {
+        "name": "iRadimed Corp",
+        "stock": "IRMD"
+    },
+    {
+        "name": "Mural Oncology PLC",
+        "stock": "MURA"
+    },
+    {
+        "name": "Consumer Portfolio Services In",
+        "stock": "CPSS"
+    },
+    {
+        "name": "Maui Land & Pineapple Co Inc",
+        "stock": "MLP"
+    },
+    {
+        "name": "Apellis Pharmaceuticals Inc",
+        "stock": "APLS"
+    },
+    {
+        "name": "AngioDynamics Inc",
+        "stock": "ANGO"
+    },
+    {
+        "name": "Virgin Galactic Holdings Inc",
+        "stock": "SPCE"
+    },
+    {
+        "name": "Universal Insurance Holdings I",
+        "stock": "UVE"
+    },
+    {
+        "name": "Ecovyst Inc",
+        "stock": "ECVT"
+    },
+    {
+        "name": "Winmark Corp",
+        "stock": "WINA"
+    },
+    {
+        "name": "NACCO Industries Inc",
+        "stock": "NC"
+    },
+    {
+        "name": "Rocky Brands Inc",
+        "stock": "RCKY"
+    },
+    {
+        "name": "Spirit Airlines Inc",
+        "stock": "SAVE"
+    },
+    {
+        "name": "Unity Software Inc",
+        "stock": "U"
+    },
+    {
+        "name": "Duckhorn Portfolio Inc/The",
+        "stock": "NAPA"
+    },
+    {
+        "name": "i-80 Gold Corp",
+        "stock": "IAUX"
+    },
+    {
+        "name": "CrossFirst Bankshares Inc",
+        "stock": "CFB"
+    },
+    {
+        "name": "Arko Corp",
+        "stock": "ARKO"
+    },
+    {
+        "name": "AerSale Corp",
+        "stock": "ASLE"
+    },
+    {
+        "name": "GoPro Inc",
+        "stock": "GPRO"
+    },
+    {
+        "name": "Brookfield Renewable Corp",
+        "stock": "BEPC"
+    },
+    {
+        "name": "InvenTrust Properties Corp",
+        "stock": "IVT"
+    },
+    {
+        "name": "Potbelly Corp",
+        "stock": "PBPB"
+    },
+    {
+        "name": "SEACOR Marine Holdings Inc",
+        "stock": "SMHI"
+    },
+    {
+        "name": "Bakkt Holdings Inc",
+        "stock": "BKKT"
+    },
+    {
+        "name": "American Equity Investment Lif",
+        "stock": "AEL"
+    },
+    {
+        "name": "Limbach Holdings Inc",
+        "stock": "LMB"
+    },
+    {
+        "name": "Terawulf Inc",
+        "stock": "WULF"
+    },
+    {
+        "name": "CareDx Inc",
+        "stock": "CDNA"
+    },
+    {
+        "name": "ARS Pharmaceuticals Inc",
+        "stock": "SPRY"
+    },
+    {
+        "name": "Seer Inc",
+        "stock": "SEER"
+    },
+    {
+        "name": "Diversified Healthcare Trust",
+        "stock": "DHC"
+    },
+    {
+        "name": "Herc Holdings Inc",
+        "stock": "HRI"
+    },
+    {
+        "name": "Columbia Financial Inc",
+        "stock": "CLBK"
+    },
+    {
+        "name": "Office Properties Income Trust",
+        "stock": "OPI"
+    },
+    {
+        "name": "TriCo Bancshares",
+        "stock": "TCBK"
+    },
+    {
+        "name": "Mid Penn Bancorp Inc",
+        "stock": "MPB"
+    },
+    {
+        "name": "Pennant Group Inc/The",
+        "stock": "PNTG"
+    },
+    {
+        "name": "Nevro Corp",
+        "stock": "NVRO"
+    },
+    {
+        "name": "Barrett Business Services Inc",
+        "stock": "BBSI"
+    },
+    {
+        "name": "German American Bancorp Inc",
+        "stock": "GABC"
+    },
+    {
+        "name": "John Marshall Bancorp Inc",
+        "stock": "JMSB"
+    },
+    {
+        "name": "Rayonier Advanced Materials In",
+        "stock": "RYAM"
+    },
+    {
+        "name": "Aspen Aerogels Inc",
+        "stock": "ASPN"
+    },
+    {
+        "name": "CommScope Holding Co Inc",
+        "stock": "COMM"
+    },
+    {
+        "name": "TPI Composites Inc",
+        "stock": "TPIC"
+    },
+    {
+        "name": "Atea Pharmaceuticals Inc",
+        "stock": "AVIR"
+    },
+    {
+        "name": "P10 Inc",
+        "stock": "PX"
+    },
+    {
+        "name": "Bright Horizons Family Solutio",
+        "stock": "BFAM"
+    },
+    {
+        "name": "Anterix Inc",
+        "stock": "ATEX"
+    },
+    {
+        "name": "Aurora Innovation Inc",
+        "stock": "AUR"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty Liv",
+        "stock": "LLYVA"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty For",
+        "stock": "FWONK"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty For",
+        "stock": "FWONA"
+    },
+    {
+        "name": "Eos Energy Enterprises Inc",
+        "stock": "EOSE"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty Sir",
+        "stock": "LSXMA"
+    },
+    {
+        "name": "Skyline Champion Corp",
+        "stock": "SKY"
+    },
+    {
+        "name": "Liberty Media Corp-Liberty Sir",
+        "stock": "LSXMK"
+    },
+    {
+        "name": "Eventbrite Inc",
+        "stock": "EB"
+    },
+    {
+        "name": "Premier Financial Corp",
+        "stock": "PFC"
+    },
+    {
+        "name": "Montauk Renewables Inc",
+        "stock": "MNTK"
+    },
+    {
+        "name": "Apollo Global Management Inc",
+        "stock": "APO"
+    },
+    {
+        "name": "Innodata Inc",
+        "stock": "INOD"
+    },
+    {
+        "name": "Sage Therapeutics Inc",
+        "stock": "SAGE"
+    },
+    {
+        "name": "Bank7 Corp",
+        "stock": "BSVN"
+    },
+    {
+        "name": "Genesco Inc",
+        "stock": "GCO"
+    },
+    {
+        "name": "CCC Intelligent Solutions Hold",
+        "stock": "CCCS"
+    },
+    {
+        "name": "CNA Financial Corp",
+        "stock": "CNA"
+    },
+    {
+        "name": "NL Industries Inc",
+        "stock": "NL"
+    },
+    {
+        "name": "Claros Mortgage Trust Inc",
+        "stock": "CMTG"
+    },
+    {
+        "name": "Taro Pharmaceutical Industries",
+        "stock": "TARO"
+    },
+    {
+        "name": "Bridgewater Bancshares Inc",
+        "stock": "BWB"
+    },
+    {
+        "name": "NETSTREIT Corp",
+        "stock": "NTST"
+    },
+    {
+        "name": "Silk Road Medical Inc",
+        "stock": "SILK"
+    },
+    {
+        "name": "QCR Holdings Inc",
+        "stock": "QCRH"
+    },
+    {
+        "name": "Coherus Biosciences Inc",
+        "stock": "CHRS"
+    },
+    {
+        "name": "Loop Media Inc",
+        "stock": "LPTV"
+    },
+    {
+        "name": "Summit Financial Group Inc",
+        "stock": "SMMF"
+    },
+    {
+        "name": "Fluence Energy Inc",
+        "stock": "FLNC"
+    },
+    {
+        "name": "API Group Corp",
+        "stock": "APG"
+    },
+    {
+        "name": "Reneo Pharmaceuticals Inc",
+        "stock": "RPHM"
+    },
+    {
+        "name": "Century Casinos Inc",
+        "stock": "CNTY"
+    },
+    {
+        "name": "Presto Automation Inc",
+        "stock": "PRST"
+    },
+    {
+        "name": "SentinelOne Inc",
+        "stock": "S"
+    },
+    {
+        "name": "Stoneridge Inc",
+        "stock": "SRI"
+    },
+    {
+        "name": "First Advantage Corp",
+        "stock": "FA"
+    },
+    {
+        "name": "Old Second Bancorp Inc",
+        "stock": "OSBC"
+    },
+    {
+        "name": "RBB Bancorp",
+        "stock": "RBB"
+    },
+    {
+        "name": "Rithm Capital Corp",
+        "stock": "RITM"
+    },
+    {
+        "name": "Sharecare Inc",
+        "stock": "SHCR"
+    },
+    {
+        "name": "Sun Communities Inc",
+        "stock": "SUI"
+    },
+    {
+        "name": "Traeger Inc",
+        "stock": "COOK"
+    },
+    {
+        "name": "Nuvalent Inc",
+        "stock": "NUVL"
+    },
+    {
+        "name": "Freshpet Inc",
+        "stock": "FRPT"
+    },
+    {
+        "name": "2seventy bio Inc",
+        "stock": "TSVT"
+    },
+    {
+        "name": "Cadre Holdings Inc",
+        "stock": "CDRE"
+    },
+    {
+        "name": "Rallybio Corp",
+        "stock": "RLYB"
+    },
+    {
+        "name": "Southern States Bancshares Inc",
+        "stock": "SSBK"
+    },
+    {
+        "name": "Reservoir Media Inc",
+        "stock": "RSVR"
+    },
+    {
+        "name": "Hippo Holdings Inc",
+        "stock": "HIPO"
+    },
+    {
+        "name": "DigitalBridge Group Inc",
+        "stock": "DBRG"
+    },
+    {
+        "name": "BioCryst Pharmaceuticals Inc",
+        "stock": "BCRX"
+    },
+    {
+        "name": "RGC Resources Inc",
+        "stock": "RGCO"
+    },
+    {
+        "name": "Liberty Latin America Ltd",
+        "stock": "LILA"
+    },
+    {
+        "name": "Liberty Latin America Ltd",
+        "stock": "LILAK"
+    },
+    {
+        "name": "Peoples Bancorp Inc/OH",
+        "stock": "PEBO"
+    },
+    {
+        "name": "Tiptree Inc",
+        "stock": "TIPT"
+    },
+    {
+        "name": "US Silica Holdings Inc",
+        "stock": "SLCA"
+    },
+    {
+        "name": "Lyft Inc",
+        "stock": "LYFT"
+    },
+    {
+        "name": "MeiraGTx Holdings plc",
+        "stock": "MGTX"
+    },
+    {
+        "name": "Pure Cycle Corp",
+        "stock": "PCYO"
+    },
+    {
+        "name": "Ames National Corp",
+        "stock": "ATLO"
+    },
+    {
+        "name": "Artesian Resources Corp",
+        "stock": "ARTNA"
+    },
+    {
+        "name": "CNB Financial Corp/PA",
+        "stock": "CCNE"
+    },
+    {
+        "name": "MacroGenics Inc",
+        "stock": "MGNX"
+    },
+    {
+        "name": "First Community Bankshares Inc",
+        "stock": "FCBC"
+    },
+    {
+        "name": "Plumas Bancorp",
+        "stock": "PLBC"
+    },
+    {
+        "name": "National Bankshares Inc",
+        "stock": "NKSH"
+    },
+    {
+        "name": "Paragon 28 Inc",
+        "stock": "FNA"
+    },
+    {
+        "name": "Harrow Inc",
+        "stock": "HROW"
+    },
+    {
+        "name": "Cogent Biosciences Inc",
+        "stock": "COGT"
+    },
+    {
+        "name": "Capital City Bank Group Inc",
+        "stock": "CCBG"
+    },
+    {
+        "name": "International Seaways Inc",
+        "stock": "INSW"
+    },
+    {
+        "name": "Allovir Inc",
+        "stock": "ALVR"
+    },
+    {
+        "name": "AnaptysBio Inc",
+        "stock": "ANAB"
+    },
+    {
+        "name": "Bank of Marin Bancorp",
+        "stock": "BMRC"
+    },
+    {
+        "name": "SoundHound AI Inc",
+        "stock": "SOUN"
+    },
+    {
+        "name": "Southern Missouri Bancorp Inc",
+        "stock": "SMBC"
+    },
+    {
+        "name": "Sana Biotechnology Inc",
+        "stock": "SANA"
+    },
+    {
+        "name": "Ladder Capital Corp",
+        "stock": "LADR"
+    },
+    {
+        "name": "Asana Inc",
+        "stock": "ASAN"
+    },
+    {
+        "name": "Tillys Inc",
+        "stock": "TLYS"
+    },
+    {
+        "name": "Energy Fuels Inc/Canada",
+        "stock": "UUUU"
+    },
+    {
+        "name": "CXApp Inc",
+        "stock": "CXAI"
+    },
+    {
+        "name": "X4 Pharmaceuticals Inc",
+        "stock": "XFOR"
+    },
+    {
+        "name": "Okta Inc",
+        "stock": "OKTA"
+    },
+    {
+        "name": "Ferguson PLC",
+        "stock": "FERG"
+    },
+    {
+        "name": "AFC Gamma Inc",
+        "stock": "AFCG"
+    },
+    {
+        "name": "Amplitude Inc",
+        "stock": "AMPL"
+    },
+    {
+        "name": "Kura Oncology Inc",
+        "stock": "KURA"
+    },
+    {
+        "name": "Rimini Street Inc",
+        "stock": "RMNI"
+    },
+    {
+        "name": "Zuora Inc",
+        "stock": "ZUO"
+    },
+    {
+        "name": "Miller Industries Inc/TN",
+        "stock": "MLR"
+    },
+    {
+        "name": "Ramaco Resources Inc",
+        "stock": "METCB"
+    },
+    {
+        "name": "Carisma Therapeutics Inc",
+        "stock": "CARM"
+    },
+    {
+        "name": "Revance Therapeutics Inc",
+        "stock": "RVNC"
+    },
+    {
+        "name": "Peapack-Gladstone Financial Co",
+        "stock": "PGC"
+    },
+    {
+        "name": "Kezar Life Sciences Inc",
+        "stock": "KZR"
+    },
+    {
+        "name": "inTEST Corp",
+        "stock": "INTT"
+    },
+    {
+        "name": "I3 Verticals Inc",
+        "stock": "IIIV"
+    },
+    {
+        "name": "Fastly Inc",
+        "stock": "FSLY"
+    },
+    {
+        "name": "REV Group Inc",
+        "stock": "REVG"
+    },
+    {
+        "name": "GCM Grosvenor Inc",
+        "stock": "GCMG"
+    },
+    {
+        "name": "ImmunityBio Inc",
+        "stock": "IBRX"
+    },
+    {
+        "name": "Celldex Therapeutics Inc",
+        "stock": "CLDX"
+    },
+    {
+        "name": "Y-mAbs Therapeutics Inc",
+        "stock": "YMAB"
+    },
+    {
+        "name": "Preformed Line Products Co",
+        "stock": "PLPC"
+    },
+    {
+        "name": "Covenant Logistics Group Inc",
+        "stock": "CVLG"
+    },
+    {
+        "name": "Hudson Technologies Inc",
+        "stock": "HDSN"
+    },
+    {
+        "name": "Sandy Spring Bancorp Inc",
+        "stock": "SASR"
+    },
+    {
+        "name": "Veracyte Inc",
+        "stock": "VCYT"
+    },
+    {
+        "name": "Bar Harbor Bankshares",
+        "stock": "BHB"
+    },
+    {
+        "name": "NVE Corp",
+        "stock": "NVEC"
+    },
+    {
+        "name": "Unity Bancorp Inc",
+        "stock": "UNTY"
+    },
+    {
+        "name": "CBIZ Inc",
+        "stock": "CBZ"
+    },
+    {
+        "name": "Global Industrial Co",
+        "stock": "GIC"
+    },
+    {
+        "name": "Kearny Financial Corp/MD",
+        "stock": "KRNY"
+    },
+    {
+        "name": "ACNB Corp",
+        "stock": "ACNB"
+    },
+    {
+        "name": "Penns Woods Bancorp Inc",
+        "stock": "PWOD"
+    },
+    {
+        "name": "Kforce Inc",
+        "stock": "KFRC"
+    },
+    {
+        "name": "RCI Hospitality Holdings Inc",
+        "stock": "RICK"
+    },
+    {
+        "name": "Northwest Pipe Co",
+        "stock": "NWPX"
+    },
+    {
+        "name": "York Water Co/The",
+        "stock": "YORW"
+    },
+    {
+        "name": "Destination XL Group Inc",
+        "stock": "DXLG"
+    },
+    {
+        "name": "Columbus McKinnon Corp/NY",
+        "stock": "CMCO"
+    },
+    {
+        "name": "Full House Resorts Inc",
+        "stock": "FLL"
+    },
+    {
+        "name": "IDT Corp",
+        "stock": "IDT"
+    },
+    {
+        "name": "Cass Information Systems Inc",
+        "stock": "CASS"
+    },
+    {
+        "name": "KVH Industries Inc",
+        "stock": "KVHI"
+    },
+    {
+        "name": "PDS Biotechnology Corp",
+        "stock": "PDSB"
+    },
+    {
+        "name": "Atkore Inc",
+        "stock": "ATKR"
+    },
+    {
+        "name": "OceanFirst Financial Corp",
+        "stock": "OCFC"
+    },
+    {
+        "name": "Pegasystems Inc",
+        "stock": "PEGA"
+    },
+    {
+        "name": "Cheniere Energy Inc",
+        "stock": "LNG"
+    },
+    {
+        "name": "Citizens & Northern Corp",
+        "stock": "CZNC"
+    },
+    {
+        "name": "Codorus Valley Bancorp Inc",
+        "stock": "CVLY"
+    },
+    {
+        "name": "Vital Farms Inc",
+        "stock": "VITL"
+    },
+    {
+        "name": "Diamond Hill Investment Group",
+        "stock": "DHIL"
+    },
+    {
+        "name": "Biohaven Ltd",
+        "stock": "BHVN"
+    },
+    {
+        "name": "Ardmore Shipping Corp",
+        "stock": "ASC"
+    },
+    {
+        "name": "Rhythm Pharmaceuticals Inc",
+        "stock": "RYTM"
+    },
+    {
+        "name": "Ponce Financial Group Inc",
+        "stock": "PDLB"
+    },
+    {
+        "name": "KORU Medical Systems Inc",
+        "stock": "KRMD"
+    },
+    {
+        "name": "Travere Therapeutics Inc",
+        "stock": "TVTX"
+    },
+    {
+        "name": "Castle Biosciences Inc",
+        "stock": "CSTL"
+    },
+    {
+        "name": "Health Catalyst Inc",
+        "stock": "HCAT"
+    },
+    {
+        "name": "Vor BioPharma Inc",
+        "stock": "VOR"
+    },
+    {
+        "name": "Terns Pharmaceuticals Inc",
+        "stock": "TERN"
+    },
+    {
+        "name": "Prime Medicine Inc",
+        "stock": "PRME"
+    },
+    {
+        "name": "Sunnova Energy International I",
+        "stock": "NOVA"
+    },
+    {
+        "name": "Univest Financial Corp",
+        "stock": "UVSP"
+    },
+    {
+        "name": "Precigen Inc",
+        "stock": "PGEN"
+    },
+    {
+        "name": "Super Group SGHC Ltd",
+        "stock": "SGHC"
+    },
+    {
+        "name": "Credo Technology Group Holding",
+        "stock": "CRDO"
+    },
+    {
+        "name": "Natera Inc",
+        "stock": "NTRA"
+    },
+    {
+        "name": "Flushing Financial Corp",
+        "stock": "FFIC"
+    },
+    {
+        "name": "Alico Inc",
+        "stock": "ALCO"
+    },
+    {
+        "name": "Custom Truck One Source Inc",
+        "stock": "CTOS"
+    },
+    {
+        "name": "Rocket Cos Inc",
+        "stock": "RKT"
+    },
+    {
+        "name": "Oak Valley Bancorp",
+        "stock": "OVLY"
+    },
+    {
+        "name": "First Busey Corp",
+        "stock": "BUSE"
+    },
+    {
+        "name": "Nextdoor Holdings Inc",
+        "stock": "KIND"
+    },
+    {
+        "name": "Summit Therapeutics Inc",
+        "stock": "SMMT"
+    },
+    {
+        "name": "HilleVax Inc",
+        "stock": "HLVX"
+    },
+    {
+        "name": "Rush Street Interactive Inc",
+        "stock": "RSI"
+    },
+    {
+        "name": "Joint Corp/The",
+        "stock": "JYNT"
+    },
+    {
+        "name": "Keros Therapeutics Inc",
+        "stock": "KROS"
+    },
+    {
+        "name": "Velo3D Inc",
+        "stock": "VLD"
+    },
+    {
+        "name": "Coinbase Global Inc",
+        "stock": "COIN"
+    },
+    {
+        "name": "Alkami Technology Inc",
+        "stock": "ALKT"
+    },
+    {
+        "name": "PROCEPT BioRobotics Corp",
+        "stock": "PRCT"
+    },
+    {
+        "name": "Definitive Healthcare Corp",
+        "stock": "DH"
+    },
+    {
+        "name": "Thoughtworks Holding Inc",
+        "stock": "TWKS"
+    },
+    {
+        "name": "Townsquare Media Inc",
+        "stock": "TSQ"
+    },
+    {
+        "name": "Tyra Biosciences Inc",
+        "stock": "TYRA"
+    },
+    {
+        "name": "Evolution Petroleum Corp",
+        "stock": "EPM"
+    },
+    {
+        "name": "GrowGeneration Corp",
+        "stock": "GRWG"
+    },
+    {
+        "name": "WillScot Mobile Mini Holdings",
+        "stock": "WSC"
+    },
+    {
+        "name": "Heartland Financial USA Inc",
+        "stock": "HTLF"
+    },
+    {
+        "name": "Dragonfly Energy Holdings Corp",
+        "stock": "DFLI"
+    },
+    {
+        "name": "Geron Corp",
+        "stock": "GERN"
+    },
+    {
+        "name": "First Bancorp Inc/The",
+        "stock": "FNLC"
+    },
+    {
+        "name": "Willis Lease Finance Corp",
+        "stock": "WLFC"
+    },
+    {
+        "name": "Carriage Services Inc",
+        "stock": "CSV"
+    },
+    {
+        "name": "Anika Therapeutics Inc",
+        "stock": "ANIK"
+    },
+    {
+        "name": "MicroVision Inc",
+        "stock": "MVIS"
+    },
+    {
+        "name": "Cerus Corp",
+        "stock": "CERS"
+    },
+    {
+        "name": "Cambium Networks Corp",
+        "stock": "CMBM"
+    },
+    {
+        "name": "Ocwen Financial Corp",
+        "stock": "OCN"
+    },
+    {
+        "name": "Colony Bankcorp Inc",
+        "stock": "CBAN"
+    },
+    {
+        "name": "Norwood Financial Corp",
+        "stock": "NWFL"
+    },
+    {
+        "name": "Beyond Air Inc",
+        "stock": "XAIR"
+    },
+    {
+        "name": "Trevi Therapeutics Inc",
+        "stock": "TRVI"
+    },
+    {
+        "name": "Community West Bancshares",
+        "stock": "CWBC"
+    },
+    {
+        "name": "Redfin Corp",
+        "stock": "RDFN"
+    },
+    {
+        "name": "Northeast Bank",
+        "stock": "NBN"
+    },
+    {
+        "name": "J Jill Inc",
+        "stock": "JILL"
+    },
+    {
+        "name": "Repay Holdings Corp",
+        "stock": "RPAY"
+    },
+    {
+        "name": "Eastern Bankshares Inc",
+        "stock": "EBC"
+    },
+    {
+        "name": "Sanara Medtech Inc",
+        "stock": "SMTI"
+    },
+    {
+        "name": "First Interstate BancSystem In",
+        "stock": "FIBK"
+    },
+    {
+        "name": "Sierra Bancorp",
+        "stock": "BSRR"
+    },
+    {
+        "name": "Pulmonx Corp",
+        "stock": "LUNG"
+    },
+    {
+        "name": "Smith & Wesson Brands Inc",
+        "stock": "SWBI"
+    },
+    {
+        "name": "Mission Produce Inc",
+        "stock": "AVO"
+    },
+    {
+        "name": "Hackett Group Inc/The",
+        "stock": "HCKT"
+    },
+    {
+        "name": "MaxCyte Inc",
+        "stock": "MXCT"
+    },
+    {
+        "name": "Dole PLC",
+        "stock": "DOLE"
+    },
+    {
+        "name": "RxSight Inc",
+        "stock": "RXST"
+    },
+    {
+        "name": "Omega Therapeutics Inc",
+        "stock": "OMGA"
+    },
+    {
+        "name": "Tenaya Therapeutics Inc",
+        "stock": "TNYA"
+    },
+    {
+        "name": "Immuneering Corp",
+        "stock": "IMRX"
+    },
+    {
+        "name": "Orrstown Financial Services In",
+        "stock": "ORRF"
+    },
+    {
+        "name": "Hooker Furnishings Corp",
+        "stock": "HOFT"
+    },
+    {
+        "name": "Shore Bancshares Inc",
+        "stock": "SHBI"
+    },
+    {
+        "name": "Lakeland Bancorp Inc",
+        "stock": "LBAI"
+    },
+    {
+        "name": "Cantaloupe Inc",
+        "stock": "CTLP"
+    },
+    {
+        "name": "Aehr Test Systems",
+        "stock": "AEHR"
+    },
+    {
+        "name": "Livewire Group Inc",
+        "stock": "LVWR"
+    },
+    {
+        "name": "Piedmont Office Realty Trust I",
+        "stock": "PDM"
+    },
+    {
+        "name": "Chesapeake Energy Corp",
+        "stock": "CHK"
+    },
+    {
+        "name": "Timberland Bancorp Inc/WA",
+        "stock": "TSBK"
+    },
+    {
+        "name": "Casella Waste Systems Inc",
+        "stock": "CWST"
+    },
+    {
+        "name": "Mercantile Bank Corp",
+        "stock": "MBWM"
+    },
+    {
+        "name": "Lazydays Holdings Inc",
+        "stock": "GORV"
+    },
+    {
+        "name": "SIGA Technologies Inc",
+        "stock": "SIGA"
+    },
+    {
+        "name": "Alphatec Holdings Inc",
+        "stock": "ATEC"
+    },
+    {
+        "name": "Ryman Hospitality Properties I",
+        "stock": "RHP"
+    },
+    {
+        "name": "International Game Technology",
+        "stock": "IGT"
+    },
+    {
+        "name": "Ginkgo Bioworks Holdings Inc",
+        "stock": "DNA"
+    },
+    {
+        "name": "C&F Financial Corp",
+        "stock": "CFFI"
+    },
+    {
+        "name": "NuScale Power Corp",
+        "stock": "SMR"
+    },
+    {
+        "name": "Air Transport Services Group I",
+        "stock": "ATSG"
+    },
+    {
+        "name": "Steelcase Inc",
+        "stock": "SCS"
+    },
+    {
+        "name": "Novavax Inc",
+        "stock": "NVAX"
+    },
+    {
+        "name": "Clarus Corp",
+        "stock": "CLAR"
+    },
+    {
+        "name": "Assertio Holdings Inc",
+        "stock": "ASRT"
+    },
+    {
+        "name": "CRA International Inc",
+        "stock": "CRAI"
+    },
+    {
+        "name": "Macatawa Bank Corp",
+        "stock": "MCBC"
+    },
+    {
+        "name": "Bandwidth Inc",
+        "stock": "BAND"
+    },
+    {
+        "name": "Cerevel Therapeutics Holdings",
+        "stock": "CERE"
+    },
+    {
+        "name": "OneSpan Inc",
+        "stock": "OSPN"
+    },
+    {
+        "name": "SP Plus Corp",
+        "stock": "SP"
+    },
+    {
+        "name": "Greene County Bancorp Inc",
+        "stock": "GCBC"
+    },
+    {
+        "name": "OptimizeRx Corp",
+        "stock": "OPRX"
+    },
+    {
+        "name": "Warby Parker Inc",
+        "stock": "WRBY"
+    },
+    {
+        "name": "Eastman Kodak Co",
+        "stock": "KODK"
+    },
+    {
+        "name": "Peoples Financial Services Cor",
+        "stock": "PFIS"
+    },
+    {
+        "name": "Caledonia Mining Corp PLC",
+        "stock": "CMCL"
+    },
+    {
+        "name": "First Community Corp/SC",
+        "stock": "FCCO"
+    },
+    {
+        "name": "Alexanders Inc",
+        "stock": "ALX"
+    },
+    {
+        "name": "Heritage Commerce Corp",
+        "stock": "HTBK"
+    },
+    {
+        "name": "Republic Bancorp Inc/KY",
+        "stock": "RBCAA"
+    },
+    {
+        "name": "Organogenesis Holdings Inc",
+        "stock": "ORGO"
+    },
+    {
+        "name": "Atlanticus Holdings Corp",
+        "stock": "ATLC"
+    },
+    {
+        "name": "Evans Bancorp Inc",
+        "stock": "EVBN"
+    },
+    {
+        "name": "Lemonade Inc",
+        "stock": "LMND"
+    },
+    {
+        "name": "Victory Capital Holdings Inc",
+        "stock": "VCTR"
+    },
+    {
+        "name": "Turnstone Biologics Corp",
+        "stock": "TSBX"
+    },
+    {
+        "name": "Karat Packaging Inc",
+        "stock": "KRT"
+    },
+    {
+        "name": "Vertex Energy Inc",
+        "stock": "VTNR"
+    },
+    {
+        "name": "Metropolitan Bank Holding Corp",
+        "stock": "MCB"
+    },
+    {
+        "name": "Build-A-Bear Workshop Inc",
+        "stock": "BBW"
+    },
+    {
+        "name": "Forum Energy Technologies Inc",
+        "stock": "FET"
+    },
+    {
+        "name": "MRC Global Inc",
+        "stock": "MRC"
+    },
+    {
+        "name": "Quad/Graphics Inc",
+        "stock": "QUAD"
+    },
+    {
+        "name": "agilon health Inc",
+        "stock": "AGL"
+    },
+    {
+        "name": "Arcturus Therapeutics Holdings",
+        "stock": "ARCT"
+    },
+    {
+        "name": "Crinetics Pharmaceuticals Inc",
+        "stock": "CRNX"
+    },
+    {
+        "name": "Ivanhoe Electric Inc / US",
+        "stock": "IE"
+    },
+    {
+        "name": "Coastal Financial Corp/WA",
+        "stock": "CCB"
+    },
+    {
+        "name": "Everi Holdings Inc",
+        "stock": "EVRI"
+    },
+    {
+        "name": "Skillsoft Corp",
+        "stock": "SKIL"
+    },
+    {
+        "name": "SSR Mining Inc",
+        "stock": "SSRM"
+    },
+    {
+        "name": "WideOpenWest Inc",
+        "stock": "WOW"
+    },
+    {
+        "name": "Cannae Holdings Inc",
+        "stock": "CNNE"
+    },
+    {
+        "name": "Financial Institutions Inc",
+        "stock": "FISI"
+    },
+    {
+        "name": "Stitch Fix Inc",
+        "stock": "SFIX"
+    },
+    {
+        "name": "Evolus Inc",
+        "stock": "EOLS"
+    },
+    {
+        "name": "Allbirds Inc",
+        "stock": "BIRD"
+    },
+    {
+        "name": "Southern First Bancshares Inc",
+        "stock": "SFST"
+    },
+    {
+        "name": "NerdWallet Inc",
+        "stock": "NRDS"
+    },
+    {
+        "name": "Immersion Corp",
+        "stock": "IMMR"
+    },
+    {
+        "name": "MidWestOne Financial Group Inc",
+        "stock": "MOFG"
+    },
+    {
+        "name": "OneMain Holdings Inc",
+        "stock": "OMF"
+    },
+    {
+        "name": "Veeva Systems Inc",
+        "stock": "VEEV"
+    },
+    {
+        "name": "Kratos Defense & Security Solu",
+        "stock": "KTOS"
+    },
+    {
+        "name": "Plug Power Inc",
+        "stock": "PLUG"
+    },
+    {
+        "name": "Atara Biotherapeutics Inc",
+        "stock": "ATRA"
+    },
+    {
+        "name": "Lindblad Expeditions Holdings",
+        "stock": "LIND"
+    },
+    {
+        "name": "Star Holdings",
+        "stock": "STHO"
+    },
+    {
+        "name": "Agenus Inc",
+        "stock": "AGEN"
+    },
+    {
+        "name": "W&T Offshore Inc",
+        "stock": "WTI"
+    },
+    {
+        "name": "eGain Corp",
+        "stock": "EGAN"
+    },
+    {
+        "name": "Lightwave Logic Inc",
+        "stock": "LWLG"
+    },
+    {
+        "name": "Conduent Inc",
+        "stock": "CNDT"
+    },
+    {
+        "name": "iRhythm Technologies Inc",
+        "stock": "IRTC"
+    },
+    {
+        "name": "DZS Inc",
+        "stock": "DZSI"
+    },
+    {
+        "name": "Array Technologies Inc",
+        "stock": "ARRY"
+    },
+    {
+        "name": "Royalty Pharma PLC",
+        "stock": "RPRX"
+    },
+    {
+        "name": "Entegris Inc",
+        "stock": "ENTG"
+    },
+    {
+        "name": "Evolv Technologies Holdings In",
+        "stock": "EVLV"
+    },
+    {
+        "name": "First Bancshares Inc/The",
+        "stock": "FBMS"
+    },
+    {
+        "name": "Affirm Holdings Inc",
+        "stock": "AFRM"
+    },
+    {
+        "name": "Enterprise Financial Services",
+        "stock": "EFSC"
+    },
+    {
+        "name": "FS Bancorp Inc",
+        "stock": "FSBW"
+    },
+    {
+        "name": "Digital Turbine Inc",
+        "stock": "APPS"
+    },
+    {
+        "name": "Accolade Inc",
+        "stock": "ACCD"
+    },
+    {
+        "name": "Pagseguro Digital Ltd",
+        "stock": "PAGS"
+    },
+    {
+        "name": "American Realty Investors Inc",
+        "stock": "ARL"
+    },
+    {
+        "name": "Rigel Pharmaceuticals Inc",
+        "stock": "RIGL"
+    },
+    {
+        "name": "Appian Corp",
+        "stock": "APPN"
+    },
+    {
+        "name": "Lexeo Therapeutics Inc",
+        "stock": "LXEO"
+    },
+    {
+        "name": "Lexicon Pharmaceuticals Inc",
+        "stock": "LXRX"
+    },
+    {
+        "name": "Fidelity D&D Bancorp Inc",
+        "stock": "FDBC"
+    },
+    {
+        "name": "Bowman Consulting Group Ltd",
+        "stock": "BWMN"
+    },
+    {
+        "name": "Laureate Education Inc",
+        "stock": "LAUR"
+    },
+    {
+        "name": "QuantumScape Corp",
+        "stock": "QS"
+    },
+    {
+        "name": "Harvard Bioscience Inc",
+        "stock": "HBIO"
+    },
+    {
+        "name": "WaVe Life Sciences Ltd",
+        "stock": "WVE"
+    },
+    {
+        "name": "Cue Biopharma Inc",
+        "stock": "CUE"
+    },
+    {
+        "name": "Aldeyra Therapeutics Inc",
+        "stock": "ALDX"
+    },
+    {
+        "name": "Exact Sciences Corp",
+        "stock": "EXAS"
+    },
+    {
+        "name": "United States Lime & Minerals",
+        "stock": "USLM"
+    },
+    {
+        "name": "1-800-Flowers.com Inc",
+        "stock": "FLWS"
+    },
+    {
+        "name": "Biote Corp",
+        "stock": "BTMD"
+    },
+    {
+        "name": "Intellia Therapeutics Inc",
+        "stock": "NTLA"
+    },
+    {
+        "name": "Recursion Pharmaceuticals Inc",
+        "stock": "RXRX"
+    },
+    {
+        "name": "Akoya Biosciences Inc",
+        "stock": "AKYA"
+    },
+    {
+        "name": "Biomea Fusion Inc",
+        "stock": "BMEA"
+    },
+    {
+        "name": "Sapiens International Corp NV",
+        "stock": "SPNS"
+    },
+    {
+        "name": "PubMatic Inc",
+        "stock": "PUBM"
+    },
+    {
+        "name": "Riot Platforms Inc",
+        "stock": "RIOT"
+    },
+    {
+        "name": "Parke Bancorp Inc",
+        "stock": "PKBK"
+    },
+    {
+        "name": "Cutera Inc",
+        "stock": "CUTR"
+    },
+    {
+        "name": "Olema Pharmaceuticals Inc",
+        "stock": "OLMA"
+    },
+    {
+        "name": "United Homes Group Inc",
+        "stock": "UHG"
+    },
+    {
+        "name": "MannKind Corp",
+        "stock": "MNKD"
+    },
+    {
+        "name": "BlackSky Technology Inc",
+        "stock": "BKSY"
+    },
+    {
+        "name": "Tarsus Pharmaceuticals Inc",
+        "stock": "TARS"
+    },
+    {
+        "name": "Sterling Bancorp Inc/MI",
+        "stock": "SBT"
+    },
+    {
+        "name": "scPharmaceuticals Inc",
+        "stock": "SCPH"
+    },
+    {
+        "name": "Voyager Therapeutics Inc",
+        "stock": "VYGR"
+    },
+    {
+        "name": "Relay Therapeutics Inc",
+        "stock": "RLAY"
+    },
+    {
+        "name": "BCB Bancorp Inc",
+        "stock": "BCBP"
+    },
+    {
+        "name": "Codexis Inc",
+        "stock": "CDXS"
+    },
+    {
+        "name": "Allogene Therapeutics Inc",
+        "stock": "ALLO"
+    },
+    {
+        "name": "Enact Holdings Inc",
+        "stock": "ACT"
+    },
+    {
+        "name": "Vicarious Surgical Inc",
+        "stock": "RBOT"
+    },
+    {
+        "name": "Nelnet Inc",
+        "stock": "NNI"
+    },
+    {
+        "name": "Rush Enterprises Inc",
+        "stock": "RUSHB"
+    },
+    {
+        "name": "Enstar Group Ltd",
+        "stock": "ESGR"
+    },
+    {
+        "name": "Acacia Research Corp",
+        "stock": "ACTG"
+    },
+    {
+        "name": "Gladstone Commercial Corp",
+        "stock": "GOOD"
+    },
+    {
+        "name": "Towne Bank/Portsmouth VA",
+        "stock": "TOWN"
+    },
+    {
+        "name": "ModivCare Inc",
+        "stock": "MODV"
+    },
+    {
+        "name": "Alnylam Pharmaceuticals Inc",
+        "stock": "ALNY"
+    },
+    {
+        "name": "First Merchants Corp",
+        "stock": "FRME"
+    },
+    {
+        "name": "Eagle Pharmaceuticals Inc/DE",
+        "stock": "EGRX"
+    },
+    {
+        "name": "MarketWise Inc",
+        "stock": "MKTW"
+    },
+    {
+        "name": "Cimpress PLC",
+        "stock": "CMPR"
+    },
+    {
+        "name": "ACV Auctions Inc",
+        "stock": "ACVA"
+    },
+    {
+        "name": "RMR Group Inc/The",
+        "stock": "RMR"
+    },
+    {
+        "name": "Kaltura Inc",
+        "stock": "KLTR"
+    },
+    {
+        "name": "Kronos Worldwide Inc",
+        "stock": "KRO"
+    },
+    {
+        "name": "Paycor HCM Inc",
+        "stock": "PYCR"
+    },
+    {
+        "name": "CS Disco Inc",
+        "stock": "LAW"
+    },
+    {
+        "name": "Teladoc Health Inc",
+        "stock": "TDOC"
+    },
+    {
+        "name": "Luna Innovations Inc",
+        "stock": "LUNA"
+    },
+    {
+        "name": "Pliant Therapeutics Inc",
+        "stock": "PLRX"
+    },
+    {
+        "name": "Confluent Inc",
+        "stock": "CFLT"
+    },
+    {
+        "name": "Monte Rosa Therapeutics Inc",
+        "stock": "GLUE"
+    },
+    {
+        "name": "Tactile Systems Technology Inc",
+        "stock": "TCMD"
+    },
+    {
+        "name": "Theravance Biopharma Inc",
+        "stock": "TBPH"
+    },
+    {
+        "name": "Akoustis Technologies Inc",
+        "stock": "AKTS"
+    },
+    {
+        "name": "Janus International Group Inc",
+        "stock": "JBI"
+    },
+    {
+        "name": "Cooper-Standard Holdings Inc",
+        "stock": "CPS"
+    },
+    {
+        "name": "Priority Technology Holdings I",
+        "stock": "PRTH"
+    },
+    {
+        "name": "Gannett Co Inc",
+        "stock": "GCI"
+    },
+    {
+        "name": "Capital Bancorp Inc",
+        "stock": "CBNK"
+    },
+    {
+        "name": "Carter Bankshares Inc",
+        "stock": "CARE"
+    },
+    {
+        "name": "Inhibrx Inc",
+        "stock": "INBX"
+    },
+    {
+        "name": "Turtle Beach Corp",
+        "stock": "HEAR"
+    },
+    {
+        "name": "Equitrans Midstream Corp",
+        "stock": "ETRN"
+    },
+    {
+        "name": "Gritstone bio Inc",
+        "stock": "GRTS"
+    },
+    {
+        "name": "Replimune Group Inc",
+        "stock": "REPL"
+    },
+    {
+        "name": "FibroGen Inc",
+        "stock": "FGEN"
+    },
+    {
+        "name": "Allakos Inc",
+        "stock": "ALLK"
+    },
+    {
+        "name": "Adaptive Biotechnologies Corp",
+        "stock": "ADPT"
+    },
+    {
+        "name": "Morphic Holding Inc",
+        "stock": "MORF"
+    },
+    {
+        "name": "Bridgebio Pharma Inc",
+        "stock": "BBIO"
+    },
+    {
+        "name": "Ocean Biomedical Inc",
+        "stock": "OCEA"
+    },
+    {
+        "name": "Huron Consulting Group Inc",
+        "stock": "HURN"
+    },
+    {
+        "name": "Karyopharm Therapeutics Inc",
+        "stock": "KPTI"
+    },
+    {
+        "name": "First Western Financial Inc",
+        "stock": "MYFW"
+    },
+    {
+        "name": "Radius Recycling Inc",
+        "stock": "RDUS"
+    },
+    {
+        "name": "Origin Materials Inc",
+        "stock": "ORGN"
+    },
+    {
+        "name": "Oil States International Inc",
+        "stock": "OIS"
+    },
+    {
+        "name": "Borr Drilling Ltd",
+        "stock": "BORR"
+    },
+    {
+        "name": "ALX Oncology Holdings Inc",
+        "stock": "ALXO"
+    },
+    {
+        "name": "Amerant Bancorp Inc",
+        "stock": "AMTB"
+    },
+    {
+        "name": "Yext Inc",
+        "stock": "YEXT"
+    },
+    {
+        "name": "Summit Materials Inc",
+        "stock": "SUM"
+    },
+    {
+        "name": "Entravision Communications Cor",
+        "stock": "EVC"
+    },
+    {
+        "name": "Orion SA",
+        "stock": "OEC"
+    },
+    {
+        "name": "Himalaya Shipping Ltd",
+        "stock": "HSHP"
+    },
+    {
+        "name": "Commercial Vehicle Group Inc",
+        "stock": "CVGI"
+    },
+    {
+        "name": "American Software Inc/GA",
+        "stock": "AMSWA"
+    },
+    {
+        "name": "Valhi Inc",
+        "stock": "VHI"
+    },
+    {
+        "name": "Maravai LifeSciences Holdings",
+        "stock": "MRVI"
+    },
+    {
+        "name": "Lazard Inc",
+        "stock": "LAZ"
+    },
+    {
+        "name": "Arvinas Inc",
+        "stock": "ARVN"
+    },
+    {
+        "name": "SunPower Corp",
+        "stock": "SPWR"
+    },
+    {
+        "name": "Beacon Roofing Supply Inc",
+        "stock": "BECN"
+    },
+    {
+        "name": "Beam Therapeutics Inc",
+        "stock": "BEAM"
+    },
+    {
+        "name": "Vishay Precision Group Inc",
+        "stock": "VPG"
+    },
+    {
+        "name": "Ranger Energy Services Inc",
+        "stock": "RNGR"
+    },
+    {
+        "name": "Stagwell Inc",
+        "stock": "STGW"
+    },
+    {
+        "name": "Amplify Energy Corp",
+        "stock": "AMPY"
+    },
+    {
+        "name": "Carrols Restaurant Group Inc",
+        "stock": "TAST"
+    },
+    {
+        "name": "OppFi Inc",
+        "stock": "OPFI"
+    },
+    {
+        "name": "ACM Research Inc",
+        "stock": "ACMR"
+    },
+    {
+        "name": "Cricut Inc",
+        "stock": "CRCT"
+    },
+    {
+        "name": "Vizio Holding Corp",
+        "stock": "VZIO"
+    },
+    {
+        "name": "SEMrush Holdings Inc",
+        "stock": "SEMR"
+    },
+    {
+        "name": "Acushnet Holdings Corp",
+        "stock": "GOLF"
+    },
+    {
+        "name": "Paramount Global",
+        "stock": "PARAA"
+    },
+    {
+        "name": "BioVie Inc",
+        "stock": "BIVI"
+    },
+    {
+        "name": "Ramaco Resources Inc",
+        "stock": "METC"
+    },
+    {
+        "name": "Bentley Systems Inc",
+        "stock": "BSY"
+    },
+    {
+        "name": "Fossil Group Inc",
+        "stock": "FOSL"
+    },
+    {
+        "name": "SoundThinking Inc",
+        "stock": "SSTI"
+    },
+    {
+        "name": "ROBLOX Corp",
+        "stock": "RBLX"
+    },
+    {
+        "name": "Petco Health & Wellness Co Inc",
+        "stock": "WOOF"
+    },
+    {
+        "name": "FTAI Aviation Ltd",
+        "stock": "FTAI"
+    },
+    {
+        "name": "Madrigal Pharmaceuticals Inc",
+        "stock": "MDGL"
+    },
+    {
+        "name": "Johnson Outdoors Inc",
+        "stock": "JOUT"
+    },
+    {
+        "name": "Southern Copper Corp",
+        "stock": "SCCO"
+    },
+    {
+        "name": "BlueLinx Holdings Inc",
+        "stock": "BXC"
+    },
+    {
+        "name": "Third Coast Bancshares Inc",
+        "stock": "TCBX"
+    },
+    {
+        "name": "CareMax Inc",
+        "stock": "CMAX"
+    },
+    {
+        "name": "DraftKings Inc",
+        "stock": "DKNG"
+    },
+    {
+        "name": "ICF International Inc",
+        "stock": "ICFI"
+    },
+    {
+        "name": "Red River Bancshares Inc",
+        "stock": "RRBI"
+    },
+    {
+        "name": "SkyWater Technology Inc",
+        "stock": "SKYT"
+    },
+    {
+        "name": "Sutro Biopharma Inc",
+        "stock": "STRO"
+    },
+    {
+        "name": "Grindr Inc",
+        "stock": "GRND"
+    },
+    {
+        "name": "Redwire Corp",
+        "stock": "RDW"
+    },
+    {
+        "name": "CoreCard Corp",
+        "stock": "CCRD"
+    },
+    {
+        "name": "Empire Petroleum Corp",
+        "stock": "EP"
+    },
+    {
+        "name": "Dakota Gold Corp",
+        "stock": "DC"
+    },
+    {
+        "name": "Coupang Inc",
+        "stock": "CPNG"
+    },
+    {
+        "name": "Zevia PBC",
+        "stock": "ZVIA"
+    },
+    {
+        "name": "Herbalife Ltd",
+        "stock": "HLF"
+    },
+    {
+        "name": "Axis Capital Holdings Ltd",
+        "stock": "AXS"
+    },
+    {
+        "name": "Sphere Entertainment Co",
+        "stock": "SPHR"
+    },
+    {
+        "name": "Couchbase Inc",
+        "stock": "BASE"
+    },
+    {
+        "name": "Matterport Inc",
+        "stock": "MTTR"
+    },
+    {
+        "name": "Universal Logistics Holdings I",
+        "stock": "ULH"
+    },
+    {
+        "name": "Vera Therapeutics Inc",
+        "stock": "VERA"
+    },
+    {
+        "name": "Altimmune Inc",
+        "stock": "ALT"
+    },
+    {
+        "name": "Perimeter Solutions SA",
+        "stock": "PRM"
+    },
+    {
+        "name": "Ideaya Biosciences Inc",
+        "stock": "IDYA"
+    },
+    {
+        "name": "CNH Industrial NV",
+        "stock": "CNHI"
+    },
+    {
+        "name": "Centrus Energy Corp",
+        "stock": "LEU"
+    },
+    {
+        "name": "Legacy Housing Corp",
+        "stock": "LEGH"
+    },
+    {
+        "name": "RingCentral Inc",
+        "stock": "RNG"
+    },
+    {
+        "name": "Accuray Inc",
+        "stock": "ARAY"
+    },
+    {
+        "name": "KalVista Pharmaceuticals Inc",
+        "stock": "KALV"
+    },
+    {
+        "name": "Piedmont Lithium Inc",
+        "stock": "PLL"
+    },
+    {
+        "name": "Nexpoint Real Estate Finance I",
+        "stock": "NREF"
+    },
+    {
+        "name": "Great Lakes Dredge & Dock Corp",
+        "stock": "GLDD"
+    },
+    {
+        "name": "Ocular Therapeutix Inc",
+        "stock": "OCUL"
+    },
+    {
+        "name": "El Pollo Loco Holdings Inc",
+        "stock": "LOCO"
+    },
+    {
+        "name": "V2X Inc",
+        "stock": "VVX"
+    },
+    {
+        "name": "Omega Flex Inc",
+        "stock": "OFLX"
+    },
+    {
+        "name": "White Mountains Insurance Grou",
+        "stock": "WTM"
+    },
+    {
+        "name": "Eyenovia Inc",
+        "stock": "EYEN"
+    },
+    {
+        "name": "TFS Financial Corp",
+        "stock": "TFSL"
+    },
+    {
+        "name": "PagerDuty Inc",
+        "stock": "PD"
+    },
+    {
+        "name": "Cerence Inc",
+        "stock": "CRNC"
+    },
+    {
+        "name": "UroGen Pharma Ltd",
+        "stock": "URGN"
+    },
+    {
+        "name": "Mirion Technologies Inc",
+        "stock": "MIR"
+    },
+    {
+        "name": "Shockwave Medical Inc",
+        "stock": "SWAV"
+    },
+    {
+        "name": "SandRidge Energy Inc",
+        "stock": "SD"
+    },
+    {
+        "name": "Olaplex Holdings Inc",
+        "stock": "OLPX"
+    },
+    {
+        "name": "Huntsman Corp",
+        "stock": "HUN"
+    },
+    {
+        "name": "Ares Management Corp",
+        "stock": "ARES"
+    },
+    {
+        "name": "Shoals Technologies Group Inc",
+        "stock": "SHLS"
+    },
+    {
+        "name": "Neumora Therapeutics Inc",
+        "stock": "NMRA"
+    },
+    {
+        "name": "Avangrid Inc",
+        "stock": "AGR"
+    },
+    {
+        "name": "Granite Point Mortgage Trust I",
+        "stock": "GPMT"
+    },
+    {
+        "name": "Viking Therapeutics Inc",
+        "stock": "VKTX"
+    },
+    {
+        "name": "AtriCure Inc",
+        "stock": "ATRC"
+    },
+    {
+        "name": "BigBear.ai Holdings Inc",
+        "stock": "BBAI"
+    },
+    {
+        "name": "NextNav Inc",
+        "stock": "NN"
+    },
+    {
+        "name": "Tradeweb Markets Inc",
+        "stock": "TW"
+    },
+    {
+        "name": "Community Health Systems Inc",
+        "stock": "CYH"
+    },
+    {
+        "name": "Pinterest Inc",
+        "stock": "PINS"
+    },
+    {
+        "name": "GrafTech International Ltd",
+        "stock": "EAF"
+    },
+    {
+        "name": "Marine Products Corp",
+        "stock": "MPX"
+    },
+    {
+        "name": "Dennys Corp",
+        "stock": "DENN"
+    },
+    {
+        "name": "Vanda Pharmaceuticals Inc",
+        "stock": "VNDA"
+    },
+    {
+        "name": "U-Haul Holding Co",
+        "stock": "UHAL"
+    },
+    {
+        "name": "Aadi Bioscience Inc",
+        "stock": "AADI"
+    },
+    {
+        "name": "Contango ORE Inc",
+        "stock": "CTGO"
+    },
+    {
+        "name": "Inogen Inc",
+        "stock": "INGN"
+    },
+    {
+        "name": "Lucid Group Inc",
+        "stock": "LCID"
+    },
+    {
+        "name": "Microvast Holdings Inc",
+        "stock": "MVST"
+    },
+    {
+        "name": "Xponential Fitness Inc",
+        "stock": "XPOF"
+    },
+    {
+        "name": "Outbrain Inc",
+        "stock": "OB"
+    },
+    {
+        "name": "Caribou Biosciences Inc",
+        "stock": "CRBU"
+    },
+    {
+        "name": "Waterstone Financial Inc",
+        "stock": "WSBF"
+    },
+    {
+        "name": "Leonardo DRS Inc",
+        "stock": "DRS"
+    },
+    {
+        "name": "Westrock Coffee Co",
+        "stock": "WEST"
+    },
+    {
+        "name": "Rackspace Technology Inc",
+        "stock": "RXT"
+    },
+    {
+        "name": "BigCommerce Holdings Inc",
+        "stock": "BIGC"
+    },
+    {
+        "name": "Hyliion Holdings Corp",
+        "stock": "HYLN"
+    },
+    {
+        "name": "SilverBow Resources Inc",
+        "stock": "SBOW"
+    },
+    {
+        "name": "Viant Technology Inc",
+        "stock": "DSP"
+    },
+    {
+        "name": "Turning Point Brands Inc",
+        "stock": "TPB"
+    },
+    {
+        "name": "A-Mark Precious Metals Inc",
+        "stock": "AMRK"
+    },
+    {
+        "name": "UMH Properties Inc",
+        "stock": "UMH"
+    },
+    {
+        "name": "UiPath Inc",
+        "stock": "PATH"
+    },
+    {
+        "name": "CPI Card Group Inc",
+        "stock": "PMTS"
+    },
+    {
+        "name": "Solo Brands Inc",
+        "stock": "DTC"
+    },
+    {
+        "name": "U-Haul Holding Co",
+        "stock": "UHAL_B"
+    },
+    {
+        "name": "Gulfport Energy Corp",
+        "stock": "GPOR"
+    },
+    {
+        "name": "ACCO Brands Corp",
+        "stock": "ACCO"
+    },
+    {
+        "name": "Lands End Inc",
+        "stock": "LE"
+    },
+    {
+        "name": "OrthoPediatrics Corp",
+        "stock": "KIDS"
+    },
+    {
+        "name": "Brookdale Senior Living Inc",
+        "stock": "BKD"
+    },
+    {
+        "name": "Alignment Healthcare Inc",
+        "stock": "ALHC"
+    },
+    {
+        "name": "ThredUp Inc",
+        "stock": "TDUP"
+    },
+    {
+        "name": "Ikena Oncology Inc",
+        "stock": "IKNA"
+    },
+    {
+        "name": "FutureFuel Corp",
+        "stock": "FF"
+    },
+    {
+        "name": "ChoiceOne Financial Services I",
+        "stock": "COFS"
+    },
+    {
+        "name": "Edgewise Therapeutics Inc",
+        "stock": "EWTX"
+    },
+    {
+        "name": "LENZ Therapeutics Inc",
+        "stock": "LENZ"
+    },
+    {
+        "name": "EW Scripps Co/The",
+        "stock": "SSP"
+    },
+    {
+        "name": "OneWater Marine Inc",
+        "stock": "ONEW"
+    },
+    {
+        "name": "Design Therapeutics Inc",
+        "stock": "DSGN"
+    },
+    {
+        "name": "AMC Entertainment Holdings Inc",
+        "stock": "AMC"
+    },
+    {
+        "name": "Primis Financial Corp",
+        "stock": "FRST"
+    },
+    {
+        "name": "Peloton Interactive Inc",
+        "stock": "PTON"
+    },
+    {
+        "name": "Selectquote Inc",
+        "stock": "SLQT"
+    },
+    {
+        "name": "PlayAGS Inc",
+        "stock": "AGS"
+    },
+    {
+        "name": "First Mid Bancshares Inc",
+        "stock": "FMBH"
+    },
+    {
+        "name": "Paramount Group Inc",
+        "stock": "PGRE"
+    },
+    {
+        "name": "H&E Equipment Services Inc",
+        "stock": "HEES"
+    },
+    {
+        "name": "Pulse Biosciences Inc",
+        "stock": "PLSE"
+    },
+    {
+        "name": "Infinera Corp",
+        "stock": "INFN"
+    },
+    {
+        "name": "Atmus Filtration Technologies",
+        "stock": "ATMU"
+    },
+    {
+        "name": "InfuSystem Holdings Inc",
+        "stock": "INFU"
+    },
+    {
+        "name": "Blueprint Medicines Corp",
+        "stock": "BPMC"
+    },
+    {
+        "name": "Lovesac Co/The",
+        "stock": "LOVE"
+    },
+    {
+        "name": "Vivid Seats Inc",
+        "stock": "SEAT"
+    },
+    {
+        "name": "KLX Energy Services Holdings I",
+        "stock": "KLXE"
+    },
+    {
+        "name": "Waldencast plc",
+        "stock": "WALD"
+    },
+    {
+        "name": "Enliven Therapeutics Inc",
+        "stock": "ELVN"
+    },
+    {
+        "name": "Argan Inc",
+        "stock": "AGX"
+    },
+    {
+        "name": "Uranium Energy Corp",
+        "stock": "UEC"
+    },
+    {
+        "name": "Helios Technologies Inc",
+        "stock": "HLIO"
+    },
+    {
+        "name": "Global Business Travel Group I",
+        "stock": "GBTG"
+    },
+    {
+        "name": "4D Molecular Therapeutics Inc",
+        "stock": "FDMT"
+    },
+    {
+        "name": "Zevra Therapeutics Inc",
+        "stock": "ZVRA"
+    },
+    {
+        "name": "Zynex Inc",
+        "stock": "ZYXI"
+    },
+    {
+        "name": "Rivian Automotive Inc",
+        "stock": "RIVN"
+    },
+    {
+        "name": "Expensify Inc",
+        "stock": "EXFY"
+    },
+    {
+        "name": "Marqeta Inc",
+        "stock": "MQ"
+    },
+    {
+        "name": "Nautilus Biotechnology Inc",
+        "stock": "NAUT"
+    },
+    {
+        "name": "Kura Sushi USA Inc",
+        "stock": "KRUS"
+    },
+    {
+        "name": "nCino Inc",
+        "stock": "NCNO"
+    },
+    {
+        "name": "Beyond Inc",
+        "stock": "BYON"
+    },
+    {
+        "name": "Mueller Water Products Inc",
+        "stock": "MWA"
+    },
+    {
+        "name": "Gambling.com Group Ltd",
+        "stock": "GAMB"
+    },
+    {
+        "name": "Cleanspark Inc",
+        "stock": "CLSK"
+    },
+    {
+        "name": "Ovid therapeutics Inc",
+        "stock": "OVID"
+    },
+    {
+        "name": "Amalgamated Financial Corp",
+        "stock": "AMAL"
+    },
+    {
+        "name": "BRP Group Inc",
+        "stock": "BRP"
+    },
+    {
+        "name": "Squarespace Inc",
+        "stock": "SQSP"
+    },
+    {
+        "name": "IES Holdings Inc",
+        "stock": "IESC"
+    },
+    {
+        "name": "HighPeak Energy Inc",
+        "stock": "HPK"
+    },
+    {
+        "name": "Amicus Therapeutics Inc",
+        "stock": "FOLD"
+    },
+    {
+        "name": "AST SpaceMobile Inc",
+        "stock": "ASTS"
+    },
+    {
+        "name": "Urban One Inc",
+        "stock": "UONEK"
+    },
+    {
+        "name": "Fate Therapeutics Inc",
+        "stock": "FATE"
+    },
+    {
+        "name": "Amdocs Ltd",
+        "stock": "DOX"
+    },
+    {
+        "name": "Spirit AeroSystems Holdings In",
+        "stock": "SPR"
+    },
+    {
+        "name": "Willdan Group Inc",
+        "stock": "WLDN"
+    },
+    {
+        "name": "Hawaiian Holdings Inc",
+        "stock": "HA"
+    },
+    {
+        "name": "Information Services Group Inc",
+        "stock": "III"
+    },
+    {
+        "name": "OneSpaWorld Holdings Ltd",
+        "stock": "OSW"
+    },
+    {
+        "name": "Celcuity Inc",
+        "stock": "CELC"
+    },
+    {
+        "name": "Clean Energy Fuels Corp",
+        "stock": "CLNE"
+    },
+    {
+        "name": "Omeros Corp",
+        "stock": "OMER"
+    },
+    {
+        "name": "Kymera Therapeutics Inc",
+        "stock": "KYMR"
+    },
+    {
+        "name": "Nano-X Imaging Ltd",
+        "stock": "NNOX"
+    },
+    {
+        "name": "DHI Group Inc",
+        "stock": "DHX"
+    },
+    {
+        "name": "Birkenstock Holding Plc",
+        "stock": "BIRK"
+    },
+    {
+        "name": "CarParts.com Inc",
+        "stock": "PRTS"
+    },
+    {
+        "name": "Zura Bio Ltd",
+        "stock": "ZURA"
+    },
+    {
+        "name": "Blue Ridge Bankshares Inc",
+        "stock": "BRBS"
+    },
+    {
+        "name": "Zeta Global Holdings Corp",
+        "stock": "ZETA"
+    },
+    {
+        "name": "Vuzix Corp",
+        "stock": "VUZI"
+    },
+    {
+        "name": "Agiliti Inc",
+        "stock": "AGTI"
+    },
+    {
+        "name": "Merrimack Pharmaceuticals Inc",
+        "stock": "MACK"
+    },
+    {
+        "name": "Treace Medical Concepts Inc",
+        "stock": "TMCI"
+    },
+    {
+        "name": "Latham Group Inc",
+        "stock": "SWIM"
+    },
+    {
+        "name": "Empire State Realty Trust Inc",
+        "stock": "ESRT"
+    },
+    {
+        "name": "RE/MAX Holdings Inc",
+        "stock": "RMAX"
+    },
+    {
+        "name": "MainStreet Bancshares Inc",
+        "stock": "MNSB"
+    },
+    {
+        "name": "Pacific Biosciences of Califor",
+        "stock": "PACB"
+    },
+    {
+        "name": "Greenlight Capital Re Ltd",
+        "stock": "GLRE"
+    },
+    {
+        "name": "FLEX LNG Ltd",
+        "stock": "FLNG"
+    },
+    {
+        "name": "First Watch Restaurant Group I",
+        "stock": "FWRG"
+    },
+    {
+        "name": "Aviat Networks Inc",
+        "stock": "AVNW"
+    },
+    {
+        "name": "Clearfield Inc",
+        "stock": "CLFD"
+    },
+    {
+        "name": "Nicolet Bankshares Inc",
+        "stock": "NIC"
+    },
+    {
+        "name": "Ring Energy Inc",
+        "stock": "REI"
+    },
+    {
+        "name": "Chegg Inc",
+        "stock": "CHGG"
+    },
+    {
+        "name": "Genelux Corp",
+        "stock": "GNLX"
+    },
+    {
+        "name": "ESSA Bancorp Inc",
+        "stock": "ESSA"
+    },
+    {
+        "name": "PROS Holdings Inc",
+        "stock": "PRO"
+    },
+    {
+        "name": "Orchestra BioMed Holdings Inc",
+        "stock": "OBIO"
+    },
+    {
+        "name": "SS&C Technologies Holdings Inc",
+        "stock": "SSNC"
+    },
+    {
+        "name": "CG oncology Inc",
+        "stock": "CGON"
+    },
+    {
+        "name": "Benson Hill Inc",
+        "stock": "BHIL"
+    },
+    {
+        "name": "Nuvation Bio Inc",
+        "stock": "NUVB"
+    },
+    {
+        "name": "Silvercrest Asset Management G",
+        "stock": "SAMG"
+    },
+    {
+        "name": "TriMas Corp",
+        "stock": "TRS"
+    },
+    {
+        "name": "Weave Communications Inc",
+        "stock": "WEAV"
+    },
+    {
+        "name": "Instructure Holdings Inc",
+        "stock": "INST"
+    },
+    {
+        "name": "Titan Machinery Inc",
+        "stock": "TITN"
+    },
+    {
+        "name": "Northeast Community Bancorp In",
+        "stock": "NECB"
+    },
+    {
+        "name": "Vaxxinity Inc",
+        "stock": "VAXX"
+    },
+    {
+        "name": "Terran Orbital Corp",
+        "stock": "LLAP"
+    },
+    {
+        "name": "Camping World Holdings Inc",
+        "stock": "CWH"
+    },
+    {
+        "name": "Five9 Inc",
+        "stock": "FIVN"
+    },
+    {
+        "name": "Bowlero Corp",
+        "stock": "BOWL"
+    },
+    {
+        "name": "SiteOne Landscape Supply Inc",
+        "stock": "SITE"
+    },
+    {
+        "name": "Beauty Health Co/The",
+        "stock": "SKIN"
+    },
+    {
+        "name": "Apartment Income REIT Corp",
+        "stock": "AIRC"
+    },
+    {
+        "name": "Equity Bancshares Inc",
+        "stock": "EQBK"
+    },
+    {
+        "name": "Northfield Bancorp Inc",
+        "stock": "NFBK"
+    },
+    {
+        "name": "Block Inc",
+        "stock": "SQ"
+    },
+    {
+        "name": "Energy Vault Holdings Inc",
+        "stock": "NRGV"
+    },
+    {
+        "name": "NioCorp Developments Ltd",
+        "stock": "NB"
+    },
+    {
+        "name": "Energy Recovery Inc",
+        "stock": "ERII"
+    },
+    {
+        "name": "Mistras Group Inc",
+        "stock": "MG"
+    },
+    {
+        "name": "NI Holdings Inc",
+        "stock": "NODK"
+    },
+    {
+        "name": "Alpine Immune Sciences Inc",
+        "stock": "ALPN"
+    },
+    {
+        "name": "Primoris Services Corp",
+        "stock": "PRIM"
+    },
+    {
+        "name": "Mayville Engineering Co Inc",
+        "stock": "MEC"
+    },
+    {
+        "name": "SmartFinancial Inc",
+        "stock": "SMBK"
+    },
+    {
+        "name": "South Plains Financial Inc",
+        "stock": "SPFI"
+    },
+    {
+        "name": "INNOVATE Corp",
+        "stock": "VATE"
+    },
+    {
+        "name": "Pangaea Logistics Solutions Lt",
+        "stock": "PANL"
+    },
+    {
+        "name": "Citizens Financial Services In",
+        "stock": "CZFS"
+    },
+    {
+        "name": "LifeStance Health Group Inc",
+        "stock": "LFST"
+    },
+    {
+        "name": "LPL Financial Holdings Inc",
+        "stock": "LPLA"
+    },
+    {
+        "name": "Quantum-Si Inc",
+        "stock": "QSI"
+    },
+    {
+        "name": "Driven Brands Holdings Inc",
+        "stock": "DRVN"
+    },
+    {
+        "name": "Playtika Holding Corp",
+        "stock": "PLTK"
+    },
+    {
+        "name": "Bumble Inc",
+        "stock": "BMBL"
+    },
+    {
+        "name": "Paysafe Ltd",
+        "stock": "PSFE"
+    },
+    {
+        "name": "Madison Square Garden Entertai",
+        "stock": "MSGE"
+    },
+    {
+        "name": "Chatham Lodging Trust",
+        "stock": "CLDT"
+    },
+    {
+        "name": "Amylyx Pharmaceuticals Inc",
+        "stock": "AMLX"
+    },
+    {
+        "name": "Vigil Neuroscience Inc",
+        "stock": "VIGL"
+    },
+    {
+        "name": "Terreno Realty Corp",
+        "stock": "TRNO"
+    },
+    {
+        "name": "indie Semiconductor Inc",
+        "stock": "INDI"
+    },
+    {
+        "name": "Hawaiian Electric Industries I",
+        "stock": "HE"
+    },
+    {
+        "name": "Optinose Inc",
+        "stock": "OPTN"
+    },
+    {
+        "name": "Douglas Dynamics Inc",
+        "stock": "PLOW"
+    },
+    {
+        "name": "MDC Holdings Inc",
+        "stock": "MDC"
+    },
+    {
+        "name": "Masonite International Corp",
+        "stock": "DOOR"
+    },
+    {
+        "name": "Park Aerospace Corp",
+        "stock": "PKE"
+    },
+    {
+        "name": "Thermon Group Holdings Inc",
+        "stock": "THR"
+    },
+    {
+        "name": "Noodles & Co",
+        "stock": "NDLS"
+    },
+    {
+        "name": "Orion Office REIT Inc",
+        "stock": "ONL"
+    },
+    {
+        "name": "Booz Allen Hamilton Holding Co",
+        "stock": "BAH"
+    },
+    {
+        "name": "Bioxcel Therapeutics Inc",
+        "stock": "BTAI"
+    },
+    {
+        "name": "Zillow Group Inc",
+        "stock": "ZG"
+    },
+    {
+        "name": "Farmers & Merchants Bancorp In",
+        "stock": "FMAO"
+    },
+    {
+        "name": "Tredegar Corp",
+        "stock": "TG"
+    },
+    {
+        "name": "OmniAb Inc",
+        "stock": "OABI"
+    },
+    {
+        "name": "Vera Bradley Inc",
+        "stock": "VRA"
+    },
+    {
+        "name": "Bloom Energy Corp",
+        "stock": "BE"
+    },
+    {
+        "name": "Cassava Sciences Inc",
+        "stock": "SAVA"
+    },
+    {
+        "name": "Aurinia Pharmaceuticals Inc",
+        "stock": "AUPH"
+    },
+    {
+        "name": "Element Solutions Inc",
+        "stock": "ESI"
+    },
+    {
+        "name": "Verint Systems Inc",
+        "stock": "VRNT"
+    },
+    {
+        "name": "American Vanguard Corp",
+        "stock": "AVD"
+    },
+    {
+        "name": "ATN International Inc",
+        "stock": "ATNI"
+    },
+    {
+        "name": "Bel Fuse Inc",
+        "stock": "BELFB"
+    },
+    {
+        "name": "Metrocity Bankshares Inc",
+        "stock": "MCBS"
+    },
+    {
+        "name": "Cato Corp/The",
+        "stock": "CATO"
+    },
+    {
+        "name": "Postal Realty Trust Inc",
+        "stock": "PSTL"
+    },
+    {
+        "name": "Navitas Semiconductor Corp",
+        "stock": "NVTS"
+    },
+    {
+        "name": "RLJ Lodging Trust",
+        "stock": "RLJ"
+    },
+    {
+        "name": "Comtech Telecommunications Cor",
+        "stock": "CMTL"
+    },
+    {
+        "name": "Biglari Holdings Inc",
+        "stock": "BH"
+    },
+    {
+        "name": "Genie Energy Ltd",
+        "stock": "GNE"
+    },
+    {
+        "name": "Ispire Technology Inc",
+        "stock": "ISPR"
+    },
+    {
+        "name": "Procore Technologies Inc",
+        "stock": "PCOR"
+    },
+    {
+        "name": "Ardagh Metal Packaging SA",
+        "stock": "AMBP"
+    },
+    {
+        "name": "PepGen Inc",
+        "stock": "PEPG"
+    },
+    {
+        "name": "Plymouth Industrial REIT Inc",
+        "stock": "PLYM"
+    },
+    {
+        "name": "PMV Pharmaceuticals Inc",
+        "stock": "PMVP"
+    },
+    {
+        "name": "Prelude Therapeutics Inc",
+        "stock": "PRLD"
+    },
+    {
+        "name": "Model N Inc",
+        "stock": "MODN"
+    },
+    {
+        "name": "IonQ Inc",
+        "stock": "IONQ"
+    },
+    {
+        "name": "Bluebird Bio Inc",
+        "stock": "BLUE"
+    },
+    {
+        "name": "Distribution Solutions Group I",
+        "stock": "DSGR"
+    },
+    {
+        "name": "LSB Industries Inc",
+        "stock": "LXU"
+    },
+    {
+        "name": "Methode Electronics Inc",
+        "stock": "MEI"
+    },
+    {
+        "name": "Live Oak Bancshares Inc",
+        "stock": "LOB"
+    },
+    {
+        "name": "Excelerate Energy Inc",
+        "stock": "EE"
+    },
+    {
+        "name": "HF Foods Group Inc",
+        "stock": "HFFG"
+    },
+    {
+        "name": "Bankwell Financial Group Inc",
+        "stock": "BWFG"
+    },
+    {
+        "name": "Radiant Logistics Inc",
+        "stock": "RLGT"
+    },
+    {
+        "name": "Kinetik Holdings Inc",
+        "stock": "KNTK"
+    },
+    {
+        "name": "Duluth Holdings Inc",
+        "stock": "DLTH"
+    },
+    {
+        "name": "Seneca Foods Corp",
+        "stock": "SENEA"
+    },
+    {
+        "name": "Maplebear Inc",
+        "stock": "CART"
+    },
+    {
+        "name": "Crawford & Co",
+        "stock": "CRD_A"
+    },
+    {
+        "name": "nLight Inc",
+        "stock": "LASR"
+    },
+    {
+        "name": "Blade Air Mobility Inc",
+        "stock": "BLDE"
+    },
+    {
+        "name": "CTO Realty Growth Inc",
+        "stock": "CTO"
+    },
+    {
+        "name": "Lennar Corp",
+        "stock": "LEN_B"
+    },
+    {
+        "name": "Blue Bird Corp",
+        "stock": "BLBD"
+    },
+    {
+        "name": "Shyft Group Inc/The",
+        "stock": "SHYF"
+    },
+    {
+        "name": "Marinus Pharmaceuticals Inc",
+        "stock": "MRNS"
+    },
+    {
+        "name": "Limoneira Co",
+        "stock": "LMNR"
+    },
+    {
+        "name": "Banco Latinoamericano de Comer",
+        "stock": "BLX"
+    },
+    {
+        "name": "Janux Therapeutics Inc",
+        "stock": "JANX"
+    },
+    {
+        "name": "TETRA Technologies Inc",
+        "stock": "TTI"
+    },
+    {
+        "name": "HEICO Corp",
+        "stock": "HEI_A"
+    },
+    {
+        "name": "PTC Therapeutics Inc",
+        "stock": "PTCT"
+    },
+    {
+        "name": "VOXX International Corp",
+        "stock": "VOXX"
+    },
+    {
+        "name": "Dynex Capital Inc",
+        "stock": "DX"
+    },
+    {
+        "name": "First Bank/Hamilton NJ",
+        "stock": "FRBA"
+    },
+    {
+        "name": "Encore Wire Corp",
+        "stock": "WIRE"
+    },
+    {
+        "name": "Noble Corp PLC",
+        "stock": "NE"
+    },
+    {
+        "name": "Select Water Solutions Inc",
+        "stock": "WTTR"
+    },
+    {
+        "name": "Primo Water Corp",
+        "stock": "PRMW"
+    },
+    {
+        "name": "Howard Hughes Holdings Inc",
+        "stock": "HHH"
+    },
+    {
+        "name": "OPKO Health Inc",
+        "stock": "OPK"
+    },
+    {
+        "name": "Twilio Inc",
+        "stock": "TWLO"
+    },
+    {
+        "name": "Joby Aviation Inc",
+        "stock": "JOBY"
+    },
+    {
+        "name": "Daktronics Inc",
+        "stock": "DAKT"
+    },
+    {
+        "name": "Granite Ridge Resources Inc",
+        "stock": "GRNT"
+    },
+    {
+        "name": "TrueBlue Inc",
+        "stock": "TBI"
+    },
+    {
+        "name": "Esquire Financial Holdings Inc",
+        "stock": "ESQ"
+    },
+    {
+        "name": "Greif Inc",
+        "stock": "GEF_B"
+    },
+    {
+        "name": "Magnite Inc",
+        "stock": "MGNI"
+    },
+    {
+        "name": "Coursera Inc",
+        "stock": "COUR"
+    },
+    {
+        "name": "Teekay Corp",
+        "stock": "TK"
+    },
+    {
+        "name": "IMAX Corp",
+        "stock": "IMAX"
+    },
+    {
+        "name": "First Foundation Inc",
+        "stock": "FFWM"
+    },
+    {
+        "name": "Lions Gate Entertainment Corp",
+        "stock": "LGF_A"
+    },
+    {
+        "name": "SES AI Corp",
+        "stock": "SES"
+    },
+    {
+        "name": "Verde Clean Fuels Inc",
+        "stock": "VGAS"
+    },
+    {
+        "name": "Nordic American Tankers Ltd",
+        "stock": "NAT"
+    },
+    {
+        "name": "Guaranty Bancshares Inc/TX",
+        "stock": "GNTY"
+    },
+    {
+        "name": "Intevac Inc",
+        "stock": "IVAC"
+    },
+    {
+        "name": "Flywire Corp",
+        "stock": "FLYW"
+    },
+    {
+        "name": "Phathom Pharmaceuticals Inc",
+        "stock": "PHAT"
+    },
+    {
+        "name": "Blue Owl Capital Inc",
+        "stock": "OWL"
+    },
+    {
+        "name": "Cabaletta Bio Inc",
+        "stock": "CABA"
+    },
+    {
+        "name": "ZipRecruiter Inc",
+        "stock": "ZIP"
+    },
+    {
+        "name": "Kingsway Financial Services In",
+        "stock": "KFS"
+    },
+    {
+        "name": "TTEC Holdings Inc",
+        "stock": "TTEC"
+    },
+    {
+        "name": "Construction Partners Inc",
+        "stock": "ROAD"
+    },
+    {
+        "name": "JAKKS Pacific Inc",
+        "stock": "JAKK"
+    },
+    {
+        "name": "MFA Financial Inc",
+        "stock": "MFA"
+    },
+    {
+        "name": "Vimeo Inc",
+        "stock": "VMEO"
+    },
+    {
+        "name": "Forrester Research Inc",
+        "stock": "FORR"
+    },
+    {
+        "name": "Childrens Place Inc/The",
+        "stock": "PLCE"
+    },
+    {
+        "name": "Enovix Corp",
+        "stock": "ENVX"
+    },
+    {
+        "name": "Hillman Solutions Corp",
+        "stock": "HLMN"
+    },
+    {
+        "name": "Solid Power Inc",
+        "stock": "SLDP"
+    },
+    {
+        "name": "Applied Digital Corp",
+        "stock": "APLD"
+    },
+    {
+        "name": "Natural Grocers by Vitamin Cot",
+        "stock": "NGVC"
+    },
+    {
+        "name": "FARO Technologies Inc",
+        "stock": "FARO"
+    },
+    {
+        "name": "PetMed Express Inc",
+        "stock": "PETS"
+    },
+    {
+        "name": "Gevo Inc",
+        "stock": "GEVO"
+    },
+    {
+        "name": "BrightView Holdings Inc",
+        "stock": "BV"
+    },
+    {
+        "name": "Dril-Quip Inc",
+        "stock": "DRQ"
+    },
+    {
+        "name": "SFL Corp Ltd",
+        "stock": "SFL"
+    },
+    {
+        "name": "Kosmos Energy Ltd",
+        "stock": "KOS"
+    },
+    {
+        "name": "ICON PLC",
+        "stock": "ICLR"
+    },
+    {
+        "name": "Surmodics Inc",
+        "stock": "SRDX"
+    },
+    {
+        "name": "Princeton Bancorp Inc",
+        "stock": "BPRN"
+    },
+    {
+        "name": "Berry Corp",
+        "stock": "BRY"
+    },
+    {
+        "name": "DHT Holdings Inc",
+        "stock": "DHT"
+    },
+    {
+        "name": "Tenable Holdings Inc",
+        "stock": "TENB"
+    },
+    {
+        "name": "Sleep Number Corp",
+        "stock": "SNBR"
+    },
+    {
+        "name": "Chimera Investment Corp",
+        "stock": "CIM"
+    },
+    {
+        "name": "Teekay Tankers Ltd",
+        "stock": "TNK"
+    },
+    {
+        "name": "Resources Connection Inc",
+        "stock": "RGP"
+    },
+    {
+        "name": "Safe Bulkers Inc",
+        "stock": "SB"
+    },
+    {
+        "name": "Chicago Atlantic Real Estate F",
+        "stock": "REFI"
+    },
+    {
+        "name": "Invesco Mortgage Capital Inc",
+        "stock": "IVR"
+    },
+    {
+        "name": "Transphorm Inc",
+        "stock": "TGAN"
+    },
+    {
+        "name": "Genco Shipping & Trading Ltd",
+        "stock": "GNK"
+    },
+    {
+        "name": "Scorpio Tankers Inc",
+        "stock": "STNG"
+    },
+    {
+        "name": "Eve Holding Inc",
+        "stock": "EVEX"
+    },
+    {
+        "name": "FVCBankcorp Inc",
+        "stock": "FVCB"
+    },
+    {
+        "name": "Costamare Inc",
+        "stock": "CMRE"
+    },
+    {
+        "name": "Aarons Co Inc/The",
+        "stock": "AAN"
+    },
+    {
+        "name": "NETGEAR Inc",
+        "stock": "NTGR"
+    },
+    {
+        "name": "Braemar Hotels & Resorts Inc",
+        "stock": "BHR"
+    },
+    {
+        "name": "City Office REIT Inc",
+        "stock": "CIO"
+    },
+    {
+        "name": "Universal Technical Institute",
+        "stock": "UTI"
+    },
+    {
+        "name": "Freshworks Inc",
+        "stock": "FRSH"
+    },
+    {
+        "name": "Compass Diversified Holdings",
+        "stock": "CODI"
+    },
+    {
+        "name": "TruBridge Inc",
+        "stock": "TBRG"
+    },
+    {
+        "name": "Origin Bancorp Inc",
+        "stock": "OBK"
+    },
+    {
+        "name": "Liquidia Corp",
+        "stock": "LQDA"
+    },
+    {
+        "name": "Lincoln Educational Services C",
+        "stock": "LINC"
+    },
+    {
+        "name": "Big 5 Sporting Goods Corp",
+        "stock": "BGFV"
+    },
+    {
+        "name": "International Money Express In",
+        "stock": "IMXI"
+    },
+    {
+        "name": "Red Robin Gourmet Burgers Inc",
+        "stock": "RRGB"
+    },
+    {
+        "name": "Spok Holdings Inc",
+        "stock": "SPOK"
+    },
+    {
+        "name": "WW International Inc",
+        "stock": "WW"
+    },
+    {
+        "name": "Upwork Inc",
+        "stock": "UPWK"
+    },
+    {
+        "name": "Farmland Partners Inc",
+        "stock": "FPI"
+    },
+    {
+        "name": "Mersana Therapeutics Inc",
+        "stock": "MRSN"
+    },
+    {
+        "name": "Mondee Holdings Inc",
+        "stock": "MOND"
+    },
+    {
+        "name": "Amneal Pharmaceuticals Inc",
+        "stock": "AMRX"
+    },
+    {
+        "name": "Toast Inc",
+        "stock": "TOST"
+    },
+    {
+        "name": "Wayfair Inc",
+        "stock": "W"
+    },
+    {
+        "name": "European Wax Center Inc",
+        "stock": "EWCZ"
+    },
+    {
+        "name": "10X Genomics Inc",
+        "stock": "TXG"
+    },
+    {
+        "name": "Zumiez Inc",
+        "stock": "ZUMZ"
+    },
+    {
+        "name": "HireQuest Inc",
+        "stock": "HQI"
+    },
+    {
+        "name": "Emergent BioSolutions Inc",
+        "stock": "EBS"
+    },
+    {
+        "name": "iRobot Corp",
+        "stock": "IRBT"
+    },
+    {
+        "name": "Xeris Biopharma Holdings Inc",
+        "stock": "XERS"
+    },
+    {
+        "name": "eHealth Inc",
+        "stock": "EHTH"
+    },
+    {
+        "name": "CorMedix Inc",
+        "stock": "CRMD"
+    },
+    {
+        "name": "Planet Labs PBC",
+        "stock": "PL"
+    },
+    {
+        "name": "Atomera Inc",
+        "stock": "ATOM"
+    },
+    {
+        "name": "Orange County Bancorp Inc",
+        "stock": "OBT"
+    },
+    {
+        "name": "Intrepid Potash Inc",
+        "stock": "IPI"
+    },
+    {
+        "name": "Enanta Pharmaceuticals Inc",
+        "stock": "ENTA"
+    },
+    {
+        "name": "Tucows Inc",
+        "stock": "TCX"
+    },
+    {
+        "name": "Domo Inc",
+        "stock": "DOMO"
+    },
+    {
+        "name": "DocGo Inc",
+        "stock": "DCGO"
+    },
+    {
+        "name": "National Research Corp",
+        "stock": "NRC"
+    },
+    {
+        "name": "BrightSpring Health Services I",
+        "stock": "BTSG"
+    },
+    {
+        "name": "ArriVent Biopharma Inc",
+        "stock": "AVBP"
+    },
+    {
+        "name": "Sinclair Inc",
+        "stock": "SBGI"
+    },
+    {
+        "name": "Eagle Bulk Shipping Inc",
+        "stock": "EGLE"
+    },
+    {
+        "name": "HashiCorp Inc",
+        "stock": "HCP"
+    },
+    {
+        "name": "PCB Bancorp",
+        "stock": "PCB"
+    },
+    {
+        "name": "Paysign Inc",
+        "stock": "PAYS"
+    },
+    {
+        "name": "Semler Scientific Inc",
+        "stock": "SMLR"
+    },
+    {
+        "name": "Independent Bank Corp/MI",
+        "stock": "IBCP"
+    },
+    {
+        "name": "Arrow Financial Corp",
+        "stock": "AROW"
+    },
+    {
+        "name": "Maxeon Solar Technologies Ltd",
+        "stock": "MAXN"
+    },
+    {
+        "name": "Accel Entertainment Inc",
+        "stock": "ACEL"
+    },
+    {
+        "name": "Aeva Technologies Inc",
+        "stock": "AEVA"
+    },
+    {
+        "name": "Hovnanian Enterprises Inc",
+        "stock": "HOV"
+    },
+    {
+        "name": "F&G Annuities & Life Inc",
+        "stock": "FG"
+    },
+    {
+        "name": "Boston Omaha Corp",
+        "stock": "BOC"
+    },
+    {
+        "name": "CompX International Inc",
+        "stock": "CIX"
+    },
+    {
+        "name": "Byline Bancorp Inc",
+        "stock": "BY"
+    },
+    {
+        "name": "IBEX Holdings Ltd",
+        "stock": "IBEX"
+    },
+    {
+        "name": "Roku Inc",
+        "stock": "ROKU"
+    },
+    {
+        "name": "Deciphera Pharmaceuticals Inc",
+        "stock": "DCPH"
+    },
+    {
+        "name": "SmartRent Inc",
+        "stock": "SMRT"
+    },
+    {
+        "name": "Brookfield Infrastructure Corp",
+        "stock": "BIPC"
+    },
+    {
+        "name": "Acrivon Therapeutics Inc",
+        "stock": "ACRV"
+    },
+    {
+        "name": "Foghorn Therapeutics Inc",
+        "stock": "FHTX"
+    },
+    {
+        "name": "Consolidated Water Co Ltd",
+        "stock": "CWCO"
+    },
+    {
+        "name": "AlTi Global Inc",
+        "stock": "ALTI"
+    },
+    {
+        "name": "Mammoth Energy Services Inc",
+        "stock": "TUSK"
+    },
+    {
+        "name": "Golden Ocean Group Ltd",
+        "stock": "GOGL"
+    },
+    {
+        "name": "Constellium SE",
+        "stock": "CSTM"
+    },
+    {
+        "name": "Clarivate PLC",
+        "stock": "CLVT"
+    },
+    {
+        "name": "Jamf Holding Corp",
+        "stock": "JAMF"
+    },
+    {
+        "name": "Golar LNG Ltd",
+        "stock": "GLNG"
+    },
+    {
+        "name": "Enfusion Inc",
+        "stock": "ENFN"
+    },
+    {
+        "name": "Rocket Lab USA Inc",
+        "stock": "RKLB"
+    },
+    {
+        "name": "Allison Transmission Holdings",
+        "stock": "ALSN"
+    },
+    {
+        "name": "AGNC Investment Corp",
+        "stock": "AGNC"
+    },
+    {
+        "name": "Virginia National Bankshares C",
+        "stock": "VABK"
+    },
+    {
+        "name": "Hamilton Insurance Group Ltd",
+        "stock": "HG"
+    },
+    {
+        "name": "Clear Channel Outdoor Holdings",
+        "stock": "CCO"
+    },
+    {
+        "name": "System1 Inc",
+        "stock": "SST"
+    },
+    {
+        "name": "Stoke Therapeutics Inc",
+        "stock": "STOK"
+    },
+    {
+        "name": "Viemed Healthcare Inc",
+        "stock": "VMD"
+    },
+    {
+        "name": "Finance Of America Cos Inc",
+        "stock": "FOA"
+    },
+    {
+        "name": "Cardlytics Inc",
+        "stock": "CDLX"
+    },
+    {
+        "name": "Midland States Bancorp Inc",
+        "stock": "MSBI"
+    },
+    {
+        "name": "Xperi Inc",
+        "stock": "XPER"
+    },
+    {
+        "name": "Nerdy Inc",
+        "stock": "NRDY"
+    },
+    {
+        "name": "Holley Inc",
+        "stock": "HLLY"
+    },
+    {
+        "name": "Beazer Homes USA Inc",
+        "stock": "BZH"
+    },
+    {
+        "name": "Peakstone Realty Trust",
+        "stock": "PKST"
+    },
+    {
+        "name": "Protalix BioTherapeutics Inc",
+        "stock": "PLX"
+    },
+    {
+        "name": "Heron Therapeutics Inc",
+        "stock": "HRTX"
+    },
+    {
+        "name": "Glatfelter Corp",
+        "stock": "GLT"
+    },
+    {
+        "name": "ACADIA Pharmaceuticals Inc",
+        "stock": "ACAD"
+    },
+    {
+        "name": "Kimball Electronics Inc",
+        "stock": "KE"
+    },
+    {
+        "name": "Nathans Famous Inc",
+        "stock": "NATH"
+    },
+    {
+        "name": "Third Harmonic Bio Inc",
+        "stock": "THRD"
+    },
+    {
+        "name": "CECO Environmental Corp",
+        "stock": "CECO"
+    },
+    {
+        "name": "Chemung Financial Corp",
+        "stock": "CHMG"
+    },
+    {
+        "name": "TransUnion",
+        "stock": "TRU"
+    },
+    {
+        "name": "Iovance Biotherapeutics Inc",
+        "stock": "IOVA"
+    },
+    {
+        "name": "Investors Title Co",
+        "stock": "ITIC"
+    },
+    {
+        "name": "Ubiquiti Inc",
+        "stock": "UI"
+    },
+    {
+        "name": "Delek US Holdings Inc",
+        "stock": "DK"
+    },
+    {
+        "name": "Digimarc Corp",
+        "stock": "DMRC"
+    },
+    {
+        "name": "Utah Medical Products Inc",
+        "stock": "UTMD"
+    },
+    {
+        "name": "LendingTree Inc",
+        "stock": "TREE"
+    },
+    {
+        "name": "Compass Inc",
+        "stock": "COMP"
+    },
+    {
+        "name": "Ribbon Communications Inc",
+        "stock": "RBBN"
+    },
+    {
+        "name": "Solaris Oilfield Infrastructur",
+        "stock": "SOI"
+    },
+    {
+        "name": "Prothena Corp PLC",
+        "stock": "PRTA"
+    },
+    {
+        "name": "National Western Life Group In",
+        "stock": "NWLI"
+    },
+    {
+        "name": "Gladstone Land Corp",
+        "stock": "LAND"
+    },
+    {
+        "name": "Frontier Group Holdings Inc",
+        "stock": "ULCC"
+    },
+    {
+        "name": "Surgery Partners Inc",
+        "stock": "SGRY"
+    },
+    {
+        "name": "First Business Financial Servi",
+        "stock": "FBIZ"
+    },
+    {
+        "name": "Spectrum Brands Holdings Inc",
+        "stock": "SPB"
+    },
+    {
+        "name": "Bit Digital Inc",
+        "stock": "BTBT"
+    },
+    {
+        "name": "Maiden Holdings Ltd",
+        "stock": "MHLD"
+    },
+    {
+        "name": "Climb Global Solutions Inc",
+        "stock": "CLMB"
+    },
+    {
+        "name": "Day One Biopharmaceuticals Inc",
+        "stock": "DAWN"
+    },
+    {
+        "name": "Figs Inc",
+        "stock": "FIGS"
+    },
+    {
+        "name": "Spotify Technology SA",
+        "stock": "SPOT"
+    },
+    {
+        "name": "SpringWorks Therapeutics Inc",
+        "stock": "SWTX"
+    },
+    {
+        "name": "Alerus Financial Corp",
+        "stock": "ALRS"
+    },
+    {
+        "name": "Seadrill Ltd",
+        "stock": "SDRL"
+    },
+    {
+        "name": "Quipt Home Medical Corp",
+        "stock": "QIPT"
+    },
+    {
+        "name": "Sight Sciences Inc",
+        "stock": "SGHT"
+    },
+    {
+        "name": "Merchants Bancorp/IN",
+        "stock": "MBIN"
+    },
+    {
+        "name": "Target Hospitality Corp",
+        "stock": "TH"
+    },
+    {
+        "name": "FTC Solar Inc",
+        "stock": "FTCI"
+    },
+    {
+        "name": "Landsea Homes Corp",
+        "stock": "LSEA"
+    },
+    {
+        "name": "Vitesse Energy Inc",
+        "stock": "VTS"
+    },
+    {
+        "name": "fuboTV Inc",
+        "stock": "FUBO"
+    },
+    {
+        "name": "Cloudflare Inc",
+        "stock": "NET"
+    },
+    {
+        "name": "Insmed Inc",
+        "stock": "INSM"
+    },
+    {
+        "name": "Ultragenyx Pharmaceutical Inc",
+        "stock": "RARE"
+    },
+    {
+        "name": "Malibu Boats Inc",
+        "stock": "MBUU"
+    },
+    {
+        "name": "NexPoint Diversified Real Esta",
+        "stock": "NXDT"
+    },
+    {
+        "name": "TrueCar Inc",
+        "stock": "TRUE"
+    },
+    {
+        "name": "Zillow Group Inc",
+        "stock": "Z"
+    },
+    {
+        "name": "Adicet Bio Inc",
+        "stock": "ACET"
+    },
+    {
+        "name": "Arcellx Inc",
+        "stock": "ACLX"
+    },
+    {
+        "name": "Nuvectis Pharma Inc",
+        "stock": "NVCT"
+    },
+    {
+        "name": "Amprius Technologies Inc",
+        "stock": "AMPX"
+    },
+    {
+        "name": "Corebridge Financial Inc",
+        "stock": "CRBG"
+    },
+    {
+        "name": "8x8 Inc",
+        "stock": "EGHT"
+    },
+    {
+        "name": "Sagimet Biosciences Inc",
+        "stock": "SGMT"
+    },
+    {
+        "name": "Apogee Therapeutics Inc",
+        "stock": "APGE"
+    },
+    {
+        "name": "Anywhere Real Estate Inc",
+        "stock": "HOUS"
+    },
+    {
+        "name": "Horizon Bancorp Inc/IN",
+        "stock": "HBNC"
+    },
+    {
+        "name": "Mineralys Therapeutics Inc",
+        "stock": "MLYS"
+    },
+    {
+        "name": "REVOLUTION Medicines Inc",
+        "stock": "RVMD"
+    },
+    {
+        "name": "Gencor Industries Inc",
+        "stock": "GENC"
+    },
+    {
+        "name": "NU Holdings Ltd/Cayman Islands",
+        "stock": "NU"
+    },
+    {
+        "name": "Stem Inc",
+        "stock": "STEM"
+    },
+    {
+        "name": "Cara Therapeutics Inc",
+        "stock": "CARA"
+    },
+    {
+        "name": "Intra-Cellular Therapies Inc",
+        "stock": "ITCI"
+    },
+    {
+        "name": "Aris Water Solutions Inc",
+        "stock": "ARIS"
+    },
+    {
+        "name": "Legalzoom.com Inc",
+        "stock": "LZ"
+    },
+    {
+        "name": "ProKidney Corp",
+        "stock": "PROK"
+    },
+    {
+        "name": "StoneCo Ltd",
+        "stock": "STNE"
+    },
+    {
+        "name": "Smartsheet Inc",
+        "stock": "SMAR"
+    },
+    {
+        "name": "Xometry Inc",
+        "stock": "XMTR"
+    },
+    {
+        "name": "Aerovate Therapeutics Inc",
+        "stock": "AVTE"
+    },
+    {
+        "name": "Integral Ad Science Holding Co",
+        "stock": "IAS"
+    },
+    {
+        "name": "Intapp Inc",
+        "stock": "INTA"
+    },
+    {
+        "name": "Larimar Therapeutics Inc",
+        "stock": "LRMR"
+    },
+    {
+        "name": "CVRx Inc",
+        "stock": "CVRX"
+    },
+    {
+        "name": "Guidewire Software Inc",
+        "stock": "GWRE"
+    },
+    {
+        "name": "Astronics Corp",
+        "stock": "ATRO"
+    },
+    {
+        "name": "ClearPoint Neuro Inc",
+        "stock": "CLPT"
+    },
+    {
+        "name": "Concrete Pumping Holdings Inc",
+        "stock": "BBCP"
+    },
+    {
+        "name": "ContextLogic Inc",
+        "stock": "WISH"
+    },
+    {
+        "name": "Diamond Offshore Drilling Inc",
+        "stock": "DO"
+    },
+    {
+        "name": "BioAtla Inc",
+        "stock": "BCAB"
+    },
+    {
+        "name": "Upstart Holdings Inc",
+        "stock": "UPST"
+    },
+    {
+        "name": "Veritone Inc",
+        "stock": "VERI"
+    },
+    {
+        "name": "Novocure Ltd",
+        "stock": "NVCR"
+    },
+    {
+        "name": "MVB Financial Corp",
+        "stock": "MVBF"
+    },
+    {
+        "name": "Quanterix Corp",
+        "stock": "QTRX"
+    },
+    {
+        "name": "P3 Health Partners Inc",
+        "stock": "PIII"
+    },
+    {
+        "name": "Verrica Pharmaceuticals Inc",
+        "stock": "VRCA"
+    },
+    {
+        "name": "Tronox Holdings PLC",
+        "stock": "TROX"
+    },
+    {
+        "name": "Cargo Therapeutics Inc",
+        "stock": "CRGX"
+    },
+    {
+        "name": "Sterling Check Corp",
+        "stock": "STER"
+    },
+    {
+        "name": "Remitly Global Inc",
+        "stock": "RELY"
+    },
+    {
+        "name": "Rent the Runway Inc",
+        "stock": "RENT"
+    },
+    {
+        "name": "Ooma Inc",
+        "stock": "OOMA"
+    },
+    {
+        "name": "Nikola Corp",
+        "stock": "NKLA"
+    },
+    {
+        "name": "Ventyx Biosciences Inc",
+        "stock": "VTYX"
+    },
+    {
+        "name": "FiscalNote Holdings Inc",
+        "stock": "NOTE"
+    },
+    {
+        "name": "Vita Coco Co Inc/The",
+        "stock": "COCO"
+    },
+    {
+        "name": "Portillos Inc",
+        "stock": "PTLO"
+    },
+    {
+        "name": "Agios Pharmaceuticals Inc",
+        "stock": "AGIO"
     }
 ]
