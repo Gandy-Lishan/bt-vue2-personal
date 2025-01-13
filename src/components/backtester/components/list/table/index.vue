@@ -541,9 +541,11 @@ import {
   getHistoryList,
 	getSampleList,
   getFavoriteList,
-	getAnalystList
+	getAnalystList,
+	saveMySignalForm,
+	searchIndicator
 } from '@/service/service.js'
-import {isJson} from '@/utils'
+import {capitalizeFirstLetter, isJson} from '@/utils'
 import { getSymbolInfo } from '@/utils/globalFunc'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
@@ -551,6 +553,7 @@ import { copy } from "@/components/common/directives/copyBacktestID"
 import { RefreshBus } from "../EventBus/Bus"
 import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 import { mapGetters } from 'vuex';
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 
 export default {
 	name: 'Table',
@@ -772,11 +775,116 @@ export default {
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
 		},
-		addBacktestSignal(row) {
+		async addBacktestSignal(row) {
 			// 生成名字并检查有没有重名
+			const signalCode = new SignalCode()
+			const {strategy, frequency, name, symbol, symbol2} = row
+			const saveSignalsTimes = strategy !== 'Dual' ? 2 : 4
+			const conditions = []
+			for (let i = 0; i < saveSignalsTimes; i++) {
+				const even = Boolean((i % 2) === 0)
+				let criteriaName = (i === 0 && even) ? 'entry' : 'entry2'
+				if(!even) criteriaName = i === 1 ? 'exit' : 'exit2'
+
+					const {relation, signals_in_market, delay_bars, score, signals} = isJson(row[criteriaName]) ? JSON.parse(row[criteriaName]) : row[criteriaName]
+					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
+					const _description = criteria_description.map((item, i) => {
+						if(i === 0) return item.commentDes.replace(/(E|X):.*?[:|;]\s*/, '').replace(/Single Condition\s*/, '')
+						else return item.commentDes
+					})
+					const rocCond = criteria_description.map(item => item.rocCond)
+					// const _signals = await signals.map(async item => {
+					// 	debugger
+					// 	if(typeof item.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code)) {
+					// 		const decode = signalCode.decode(item.code)
+					// 		if(decode.analysis === 'User') {
+					// 			const res = await searchIndicator(decode.indicator)
+					// 			console.log('res', res)
+					// 		}
+					// 	}
+					// 	return ({code: item.code})
+					// })
+					const _signals = []
+					for (const _signalItem of signals) {
+						debugger
+							try {
+									if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
+											const decode = signalCode.decode(_signalItem.code)
+											if(decode.analysis === 'User') {
+												debugger
+												const {data} = await searchIndicator(decode.indicator)
+												const element = data.results.find(ele => ele.name === decode.indicator)
+												if(element) {decode.indicator = element.url}
+												_signals.push({code: signalCode.encode(decode)})
+											}else {_signals.push({code: _signalItem.code})}
+									}
+							} catch (error) {
+									console.error(`Error processing condition: ${condition}`, error);
+							}
+					}
+
+					let _name = `${name} ${symbol} ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i < 2) _name = `${name} ${symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i >= 2) _name = `${name} ${symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
+					let _symbol = symbol
+					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
+					const condition = {
+						...row,
+						symbol: _symbol,
+						name: _name,
+						relation,
+						signals_in_market,
+						delay_bars,
+						score,
+						signals:_signals,
+						subscribe: 0,
+						description: relation === 0 ? [] : _description,
+						timeframe: frequency,
+						cond: relation === 0 ? [] : rocCond
+					}
+					conditions.push(this.reassignBTAttributes(condition))
+			}
+			console.log('conditions', conditions)
+			try {
+    const results = await Promise.all(
+      conditions.map(condition => saveMySignalForm(condition))
+    );
+    console.log('All conditions processed:', results);
+				const _results = results.map(res => {if(res.data.code === 211) return res.data.data}).filter(item => item).length
+				if(_results !== 0) this.popUpMsgBox(`${_results} signals have been successfully added.`)
+				else {this.popUpMsgBox(`${results.length - _results} signals not added: duplicates exist.`)}
+  } catch (error) {
+    console.error('Error processing conditions:', error);
+  }
+		},
+		reassignBTAttributes(data) {
 			debugger
-			const {name, strategy, entry, exit} = row
-		}
+			// use for copy
+			data['cond'] = isJson(data['cond']) ? data['cond'] : JSON.stringify(data['cond'])
+			data['description'] = isJson(data['description']) ? data['description'] : JSON.stringify(data['description'])
+			data['signals'] = isJson(data['signals']) ? data['signals'] : JSON.stringify(data['signals'])
+			const selectedProps = [
+				'name',
+				'symbol',
+				'timeframe',
+				'signals',
+				'score',
+				'signals_in_market',
+				'relation',
+				'start_date',
+				'end_date',
+				'delay_bars',
+				'subscribe',
+				'cond',
+				'description'
+			]
+			let backtestParams = Object.assign(
+				{},
+				...selectedProps.map((prop) => ({ [prop]: data[prop] }))
+			)
+		console.log('backtestParams', backtestParams)
+			return backtestParams
+		},
 	}
 }
 </script>
