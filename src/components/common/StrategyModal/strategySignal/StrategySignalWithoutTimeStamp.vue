@@ -191,7 +191,7 @@
           },
           credits: {
              enabled: true,
-             text: "Source: Sentiment",
+             text: "Source: SentimenTrader",
              href: 'https://sentimentrader.com',
              position: {
                align: 'right',
