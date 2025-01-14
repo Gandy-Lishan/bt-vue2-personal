@@ -822,10 +822,10 @@ export default {
 									console.error(`Error processing condition: ${condition}`, error);
 							}
 					}
-					const isRickControlAtExit = relation == 0 && criteriaName === 'exit'
-					let _name = `${name} ${symbol}${isRickControlAtExit ? '' : ` ${capitalizeFirstLetter(criteriaName)}`}`
-					if(strategy === 'Dual' && i < 2) _name = `${name} ${symbol}(1) ${isRickControlAtExit ? '' : ` ${capitalizeFirstLetter(criteriaName)}`}`
-					if(strategy === 'Dual' && i >= 2) _name = `${name} ${symbol}(2) ${isRickControlAtExit ? '' : ` ${capitalizeFirstLetter(criteriaName)}`}`
+					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
+					let _name = `${name} ${symbol} ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i < 2) _name = `${name} ${symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i >= 2) _name = `${name} ${symbol}(2) ${capitalizeFirstLetter(criteriaName)}}`
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
 					const condition = {
@@ -842,7 +842,7 @@ export default {
 						timeframe: frequency,
 						cond: relation === 0 ? [] : rocCond
 					}
-					conditions.push(this.reassignBTAttributes(condition))
+					if(!isRickControlAtExit) conditions.push(this.reassignBTAttributes(condition))
 			}
 			console.log('conditions', conditions)
 			try {
