@@ -817,7 +817,10 @@ export default {
 												const element = data.results.find(ele => ele.name === decode.indicator)
 												if(element) {decode.indicator = element.url}
 												_signals.push({code: signalCode.encode(decode)})
-											}else {_signals.push({code: _signalItem.code})}
+											}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
+												this.popUpMsgBox('Dual-stock Symbol Ratio is not supported.', 1000)
+											}
+											else {_signals.push({code: _signalItem.code})}
 									}
 							} catch (error) {
 									console.error(`Error processing condition: ${condition}`, error);
@@ -827,8 +830,8 @@ export default {
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
 					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
 					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
 					const condition = {
 						...row,
 						symbol: _symbol,
@@ -843,7 +846,7 @@ export default {
 						timeframe: frequency,
 						cond: relation === 0 ? [] : rocCond
 					}
-					if(!isRickControlAtExit) conditions.push(this.reassignBTAttributes(condition))
+					if(!isRickControlAtExit && _signals.length !== 0) conditions.push(this.reassignBTAttributes(condition))
 			}
 			console.log('conditions', conditions)
 			try {
