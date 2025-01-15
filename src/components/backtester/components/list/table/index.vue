@@ -805,27 +805,30 @@ export default {
 					// 	}
 					// 	return ({code: item.code})
 					// })
-					const _signals = []
-					for (const _signalItem of signals) {
-						debugger
+					let _signals = []
+					for (let index = 0; index < signals.length; index++) {
+						const _signalItem = signals[index];
 							try {
-									if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
-											const decode = signalCode.decode(_signalItem.code)
-											if(decode.analysis === 'User') {
-												debugger
-												const {data} = await searchIndicator(decode.indicator)
-												const element = data.results.find(ele => ele.name === decode.indicator)
-												if(element) {decode.indicator = element.url}
-												_signals.push({code: signalCode.encode(decode)})
-											}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
-												this.popUpMsgBox('Dual-stock Symbol Ratio is not supported.', 1000)
-											}
-											else {_signals.push({code: _signalItem.code})}
-									}
+								if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
+										const decode = signalCode.decode(_signalItem.code)
+										if(decode.analysis === 'User') {
+											debugger
+											const {data} = await searchIndicator(decode.indicator)
+											const element = data.results.find(ele => ele.name === decode.indicator)
+											if(element) {decode.indicator = element.url}
+											_signals.push({code: signalCode.encode(decode)})
+										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
+											this.popUpMsgBox('The \'Symbol Ratio\' for \'Dual Symbol Backtest\' is not supported.')
+											_signals = []
+											return
+										}
+										else {_signals.push({code: _signalItem.code})}
+								}
 							} catch (error) {
-									console.error(`Error processing condition: ${condition}`, error);
+									console.error(`Error processing condition: ${conditions}`, error);
 							}
 					}
+					console.log('_signals', _signals)
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
 					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
@@ -849,9 +852,10 @@ export default {
 					if(!isRickControlAtExit && _signals.length !== 0) conditions.push(this.reassignBTAttributes(condition))
 			}
 			console.log('conditions', conditions)
+			if(conditions.length === 0) return
 			try {
     const results = await Promise.all(
-      conditions.map(condition => saveMySignalForm(condition))
+      conditions.map(_condition => saveMySignalForm(_condition))
     );
     console.log('All conditions processed:', results);
 				const _results = results.map(res => {if(res.data.code === 211) return res.data.data}).filter(item => item).length
