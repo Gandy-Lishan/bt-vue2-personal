@@ -820,7 +820,7 @@ export default {
 										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
 											this.popUpMsgBox('The \'Symbol Ratio\' for \'Dual Symbol Backtest\' is not supported.')
 											_signals = []
-											return
+											break
 										}
 										else {_signals.push({code: _signalItem.code})}
 								}
