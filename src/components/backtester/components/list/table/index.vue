@@ -501,14 +501,15 @@
 										v-copy="scope.row.id"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-tooltip
+								<el-tooltip
 									class="item"
 									effect="dark"
 									content="add to my signal"
 									placement="bottom-start"
+									v-if="isButtonVisible"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage)"
+										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
 										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-plus"
@@ -516,7 +517,7 @@
 										size="mini"
 										@click="addBacktestSignal(scope.row)"
 									></el-button>
-								</el-tooltip> -->
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
@@ -578,7 +579,7 @@ export default {
 			searchItem: '',
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
-			// isButtonVisible: false,
+			isButtonVisible: false,
 			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
 			strategyType: 'Strategy'
 		}
@@ -615,11 +616,11 @@ export default {
 		userRole: {
 			handler(newVal) {
 			// 获取当前的域名
-			// const currentDomain = window.location.hostname;
+			const currentDomain = window.location.hostname;
 			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-			// if ((currentDomain == 'btv2.sentimentrader.com' || currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') && newVal == 'analyst') {
-			// 	this.isButtonVisible = true;
-			// }
+			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost')) {
+				this.isButtonVisible = true;
+			}
 			// if (newVal == 'analyst') {
 			// 	this.isButtonVisible = true;
 			// }
@@ -816,18 +817,21 @@ export default {
 												const element = data.results.find(ele => ele.name === decode.indicator)
 												if(element) {decode.indicator = element.url}
 												_signals.push({code: signalCode.encode(decode)})
-											}else {_signals.push({code: _signalItem.code})}
+											}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
+												this.popUpMsgBox('Dual-stock Symbol Ratio is not supported.', 1000)
+											}
+											else {_signals.push({code: _signalItem.code})}
 									}
 							} catch (error) {
 									console.error(`Error processing condition: ${condition}`, error);
 							}
 					}
-					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
-					let _name = `${name} ${symbol} ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i < 2) _name = `${name} ${symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i >= 2) _name = `${name} ${symbol}(2) ${capitalizeFirstLetter(criteriaName)}}`
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
+					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
+					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
 					const condition = {
 						...row,
 						symbol: _symbol,
@@ -842,7 +846,7 @@ export default {
 						timeframe: frequency,
 						cond: relation === 0 ? [] : rocCond
 					}
-					if(!isRickControlAtExit) conditions.push(this.reassignBTAttributes(condition))
+					if(!isRickControlAtExit && _signals.length !== 0) conditions.push(this.reassignBTAttributes(condition))
 			}
 			console.log('conditions', conditions)
 			try {
