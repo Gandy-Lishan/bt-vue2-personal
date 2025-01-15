@@ -506,9 +506,10 @@
 									effect="dark"
 									content="add to my signal"
 									placement="bottom-start"
+									v-if="isButtonVisible"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage)"
+										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
 										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-plus"
@@ -578,7 +579,7 @@ export default {
 			searchItem: '',
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
-			// isButtonVisible: false,
+			isButtonVisible: false,
 			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
 			strategyType: 'Strategy'
 		}
@@ -615,11 +616,11 @@ export default {
 		userRole: {
 			handler(newVal) {
 			// 获取当前的域名
-			// const currentDomain = window.location.hostname;
+			const currentDomain = window.location.hostname;
 			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-			// if ((currentDomain == 'btv2.sentimentrader.com' || currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') && newVal == 'analyst') {
-			// 	this.isButtonVisible = true;
-			// }
+			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost')) {
+				this.isButtonVisible = true;
+			}
 			// if (newVal == 'analyst') {
 			// 	this.isButtonVisible = true;
 			// }
