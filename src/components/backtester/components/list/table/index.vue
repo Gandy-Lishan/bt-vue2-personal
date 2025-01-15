@@ -823,12 +823,12 @@ export default {
 									console.error(`Error processing condition: ${condition}`, error);
 							}
 					}
-					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
-					let _name = `${name} ${symbol} ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i < 2) _name = `${name} ${symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
-					if(strategy === 'Dual' && i >= 2) _name = `${name} ${symbol}(2) ${capitalizeFirstLetter(criteriaName)}}`
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
+					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
+					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol}(1) ${capitalizeFirstLetter(criteriaName)}`
+					if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
 					const condition = {
 						...row,
 						symbol: _symbol,
