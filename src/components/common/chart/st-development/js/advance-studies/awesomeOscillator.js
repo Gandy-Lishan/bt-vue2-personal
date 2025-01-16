@@ -23,7 +23,6 @@
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 
-/** 无需处理dual symbol */
 let __js_advanced_studies_awesomeOscillator_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -38,13 +37,21 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculateAwesomeOscillator = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		CIQ.Studies.MA("simple", 5, "hl/2", 0, "_MA5", stx, sd);
+		CIQ.Studies.MA("simple", 34, "hl/2", 0, "_MA34", stx, sd);
+
+		if(sd.parameters.isComparison){
+			const field = CIQ.store.getters.getComparisonSymbol.url
+			//filter valid rows
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else {
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < 33) {
 			sd.error = true;
 			return;
 		}
-
-		CIQ.Studies.MA("simple", 5, "hl/2", 0, "_MA5", stx, sd);
-		CIQ.Studies.MA("simple", 34, "hl/2", 0, "_MA34", stx, sd);
 
 		for (var i = Math.max(sd.startFrom, 33); i < quotes.length; i++) {
 			if (!quotes[i]) continue;
