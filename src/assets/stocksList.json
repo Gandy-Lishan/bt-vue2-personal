@@ -11930,5 +11930,1433 @@
     {
         "name": "Agios Pharmaceuticals Inc",
         "stock": "AGIO"
+    },
+    {
+        "name": "CAMP4 Therapeutics Corp",
+        "stock": "CAMP"
+    },
+    {
+        "name": "Ceribell Inc",
+        "stock": "CBLL"
+    },
+    {
+        "name": "Upstream Bio Inc",
+        "stock": "UPB"
+    },
+    {
+        "name": "Net Power Inc",
+        "stock": "NPWR"
+    },
+    {
+        "name": "Avadel Pharmaceuticals PLC",
+        "stock": "AVDL"
+    },
+    {
+        "name": "Bicara Therapeutics Inc",
+        "stock": "BCAX"
+    },
+    {
+        "name": "MBX Biosciences Inc",
+        "stock": "MBX"
+    },
+    {
+        "name": "Zenas Biopharma Inc",
+        "stock": "ZBIO"
+    },
+    {
+        "name": "Caesarstone Ltd",
+        "stock": "CSTE"
+    },
+    {
+        "name": "Candel Therapeutics Inc",
+        "stock": "CADL"
+    },
+    {
+        "name": "XBiotech Inc",
+        "stock": "XBIT"
+    },
+    {
+        "name": "MAC Copper Ltd",
+        "stock": "MTAL"
+    },
+    {
+        "name": "Inmune Bio Inc",
+        "stock": "INMB"
+    },
+    {
+        "name": "Acumen Pharmaceuticals Inc",
+        "stock": "ABOS"
+    },
+    {
+        "name": "MediWound Ltd",
+        "stock": "MDWD"
+    },
+    {
+        "name": "Galectin Therapeutics Inc",
+        "stock": "GALT"
+    },
+    {
+        "name": "Life360 Inc",
+        "stock": "LIF"
+    },
+    {
+        "name": "Offerpad Solutions Inc",
+        "stock": "OPAD"
+    },
+    {
+        "name": "Standardaero Inc",
+        "stock": "SARO"
+    },
+    {
+        "name": "ChromaDex Corp",
+        "stock": "CDXC"
+    },
+    {
+        "name": "Septerna Inc",
+        "stock": "SEPN"
+    },
+    {
+        "name": "Intuitive Machines Inc",
+        "stock": "LUNR"
+    },
+    {
+        "name": "Shattuck Labs Inc",
+        "stock": "STTK"
+    },
+    {
+        "name": "Porch Group Inc",
+        "stock": "PRCH"
+    },
+    {
+        "name": "LiveOne Inc",
+        "stock": "LVO"
+    },
+    {
+        "name": "Spyre Therapeutics Inc",
+        "stock": "SYRE"
+    },
+    {
+        "name": "Bel Fuse Inc",
+        "stock": "BELFA"
+    },
+    {
+        "name": "Werewolf Therapeutics Inc",
+        "stock": "HOWL"
+    },
+    {
+        "name": "Twin Disc Inc",
+        "stock": "TWIN"
+    },
+    {
+        "name": "Astera Labs Inc",
+        "stock": "ALAB"
+    },
+    {
+        "name": "American Superconductor Corp",
+        "stock": "AMSC"
+    },
+    {
+        "name": "GCT Semiconductor Holding Inc",
+        "stock": "GCTS"
+    },
+    {
+        "name": "Black Diamond Therapeutics Inc",
+        "stock": "BDTX"
+    },
+    {
+        "name": "Performant Healthcare Inc",
+        "stock": "PHLT"
+    },
+    {
+        "name": "Liberty Global Ltd",
+        "stock": "LBTYK"
+    },
+    {
+        "name": "Liberty Global Ltd",
+        "stock": "LBTYA"
+    },
+    {
+        "name": "Perspective Therapeutics Inc",
+        "stock": "CATX"
+    },
+    {
+        "name": "First Internet Bancorp",
+        "stock": "INBK"
+    },
+    {
+        "name": "Sky Harbour Group Corp",
+        "stock": "SKYH"
+    },
+    {
+        "name": "Fulcrum Therapeutics Inc",
+        "stock": "FULC"
+    },
+    {
+        "name": "Rapport Therapeutics Inc",
+        "stock": "RAPP"
+    },
+    {
+        "name": "DLH Holdings Corp",
+        "stock": "DLHC"
+    },
+    {
+        "name": "Waystar Holding Corp",
+        "stock": "WAY"
+    },
+    {
+        "name": "Root Inc/OH",
+        "stock": "ROOT"
+    },
+    {
+        "name": "Roadzen Inc",
+        "stock": "RDZN"
+    },
+    {
+        "name": "TScan Therapeutics Inc",
+        "stock": "TCRX"
+    },
+    {
+        "name": "Blend Labs Inc",
+        "stock": "BLND"
+    },
+    {
+        "name": "Verastem Inc",
+        "stock": "VSTM"
+    },
+    {
+        "name": "Clearwater Analytics Holdings",
+        "stock": "CWAN"
+    },
+    {
+        "name": "Climb Bio Inc",
+        "stock": "CLYM"
+    },
+    {
+        "name": "Eastern Co/The",
+        "stock": "EML"
+    },
+    {
+        "name": "Gyre Therapeutics Inc",
+        "stock": "GYRE"
+    },
+    {
+        "name": "Dianthus Therapeutics Inc",
+        "stock": "DNTH"
+    },
+    {
+        "name": "Hamilton Beach Brands Holding",
+        "stock": "HBB"
+    },
+    {
+        "name": "QuickLogic Corp",
+        "stock": "QUIK"
+    },
+    {
+        "name": "L B Foster Co",
+        "stock": "FSTR"
+    },
+    {
+        "name": "Sunrise Realty Trust Inc",
+        "stock": "SUNS"
+    },
+    {
+        "name": "Kyverna Therapeutics Inc",
+        "stock": "KYTX"
+    },
+    {
+        "name": "Wheels Up Experience Inc",
+        "stock": "UP"
+    },
+    {
+        "name": "Heritage Insurance Holdings In",
+        "stock": "HRTG"
+    },
+    {
+        "name": "Pyxis Oncology Inc",
+        "stock": "PYXS"
+    },
+    {
+        "name": "Arteris Inc",
+        "stock": "AIP"
+    },
+    {
+        "name": "GigaCloud Technology Inc",
+        "stock": "GCT"
+    },
+    {
+        "name": "Lifetime Brands Inc",
+        "stock": "LCUT"
+    },
+    {
+        "name": "Lifeway Foods Inc",
+        "stock": "LWAY"
+    },
+    {
+        "name": "Transocean Ltd",
+        "stock": "RIG"
+    },
+    {
+        "name": "Northern Technologies Internat",
+        "stock": "NTIC"
+    },
+    {
+        "name": "Sezzle Inc",
+        "stock": "SEZL"
+    },
+    {
+        "name": "NPK International Inc",
+        "stock": "NPKI"
+    },
+    {
+        "name": "RumbleON Inc",
+        "stock": "RMBL"
+    },
+    {
+        "name": "Peoples Bancorp of North Carol",
+        "stock": "PEBK"
+    },
+    {
+        "name": "PAMT CORP",
+        "stock": "PAMT"
+    },
+    {
+        "name": "FrontView REIT Inc",
+        "stock": "FVR"
+    },
+    {
+        "name": "Prairie Operating Co",
+        "stock": "PROP"
+    },
+    {
+        "name": "NB Bancorp Inc",
+        "stock": "NBBK"
+    },
+    {
+        "name": "Superior Group of Cos Inc",
+        "stock": "SGC"
+    },
+    {
+        "name": "Renovaro Inc",
+        "stock": "RENB"
+    },
+    {
+        "name": "Diversified Energy Co PLC",
+        "stock": "DEC"
+    },
+    {
+        "name": "Taylor Devices Inc",
+        "stock": "TAYD"
+    },
+    {
+        "name": "ADC Therapeutics SA",
+        "stock": "ADCT"
+    },
+    {
+        "name": "CervoMed Inc",
+        "stock": "CRVO"
+    },
+    {
+        "name": "Virco Mfg. Corp",
+        "stock": "VIRC"
+    },
+    {
+        "name": "Vertex Inc",
+        "stock": "VERX"
+    },
+    {
+        "name": "Primo Brands Corp",
+        "stock": "PRMB"
+    },
+    {
+        "name": "LifeMD Inc",
+        "stock": "LFMD"
+    },
+    {
+        "name": "Veru Inc",
+        "stock": "VERU"
+    },
+    {
+        "name": "Byrna Technologies Inc",
+        "stock": "BYRN"
+    },
+    {
+        "name": "Honest Co Inc/The",
+        "stock": "HNST"
+    },
+    {
+        "name": "Puma Biotechnology Inc",
+        "stock": "PBYI"
+    },
+    {
+        "name": "Perma-Fix Environmental Servic",
+        "stock": "PESI"
+    },
+    {
+        "name": "Ultralife Corp",
+        "stock": "ULBI"
+    },
+    {
+        "name": "Freyr Battery Inc",
+        "stock": "FREY"
+    },
+    {
+        "name": "Seven Hills Realty Trust",
+        "stock": "SEVN"
+    },
+    {
+        "name": "Pursuit Attractions and Hospit",
+        "stock": "PRSU"
+    },
+    {
+        "name": "Pagaya Technologies Ltd",
+        "stock": "PGY"
+    },
+    {
+        "name": "Metagenomi Inc",
+        "stock": "MGX"
+    },
+    {
+        "name": "Telomir Pharmaceuticals Inc",
+        "stock": "TELO"
+    },
+    {
+        "name": "SolarMax Technology Inc",
+        "stock": "SMXT"
+    },
+    {
+        "name": "Provident Bancorp Inc",
+        "stock": "PVBC"
+    },
+    {
+        "name": "Ibotta Inc",
+        "stock": "IBTA"
+    },
+    {
+        "name": "Centuri Holdings Inc",
+        "stock": "CTRI"
+    },
+    {
+        "name": "Drilling Tools International C",
+        "stock": "DTI"
+    },
+    {
+        "name": "Cibus Inc",
+        "stock": "CBUS"
+    },
+    {
+        "name": "NN Inc",
+        "stock": "NNBR"
+    },
+    {
+        "name": "Graham Corp",
+        "stock": "GHM"
+    },
+    {
+        "name": "Tourmaline Bio Inc",
+        "stock": "TRML"
+    },
+    {
+        "name": "Talkspace Inc",
+        "stock": "TALK"
+    },
+    {
+        "name": "Moneylion Inc",
+        "stock": "ML"
+    },
+    {
+        "name": "VirTra Inc",
+        "stock": "VTSI"
+    },
+    {
+        "name": "Nektar Therapeutics",
+        "stock": "NKTR"
+    },
+    {
+        "name": "Contineum Therapeutics Inc",
+        "stock": "CTNM"
+    },
+    {
+        "name": "Stereotaxis Inc",
+        "stock": "STXS"
+    },
+    {
+        "name": "Universal Stainless & Alloy Pr",
+        "stock": "USAP"
+    },
+    {
+        "name": "Webtoon Entertainment Inc",
+        "stock": "WBTN"
+    },
+    {
+        "name": "Smith-Midland Corp",
+        "stock": "SMID"
+    },
+    {
+        "name": "Golden Matrix Group Inc",
+        "stock": "GMGI"
+    },
+    {
+        "name": "Inovio Pharmaceuticals Inc",
+        "stock": "INO"
+    },
+    {
+        "name": "Achieve Life Sciences Inc",
+        "stock": "ACHV"
+    },
+    {
+        "name": "Lifecore Biomedical Inc",
+        "stock": "LFCR"
+    },
+    {
+        "name": "Medallion Financial Corp",
+        "stock": "MFIN"
+    },
+    {
+        "name": "Q32 Bio Inc",
+        "stock": "QTTB"
+    },
+    {
+        "name": "Lifezone Metals Ltd",
+        "stock": "LZM"
+    },
+    {
+        "name": "Applied Therapeutics Inc",
+        "stock": "APLT"
+    },
+    {
+        "name": "Rigetti Computing Inc",
+        "stock": "RGTI"
+    },
+    {
+        "name": "Critical Metals Corp",
+        "stock": "CRML"
+    },
+    {
+        "name": "Investar Holding Corp",
+        "stock": "ISTR"
+    },
+    {
+        "name": "Onity Group Inc",
+        "stock": "ONIT"
+    },
+    {
+        "name": "Dutch Bros Inc",
+        "stock": "BROS"
+    },
+    {
+        "name": "Getty Images Holdings Inc",
+        "stock": "GETY"
+    },
+    {
+        "name": "Fibrobiologics Inc",
+        "stock": "FBLG"
+    },
+    {
+        "name": "Sonida Senior Living Inc",
+        "stock": "SNDA"
+    },
+    {
+        "name": "Spire Global Inc",
+        "stock": "SPIR"
+    },
+    {
+        "name": "D-Wave Quantum Inc",
+        "stock": "QBTS"
+    },
+    {
+        "name": "Vacasa Inc",
+        "stock": "VCSA"
+    },
+    {
+        "name": "Airship AI Holdings Inc",
+        "stock": "AISP"
+    },
+    {
+        "name": "Neurogene Inc",
+        "stock": "NGNE"
+    },
+    {
+        "name": "Alumis Inc",
+        "stock": "ALMS"
+    },
+    {
+        "name": "Arhaus Inc",
+        "stock": "ARHS"
+    },
+    {
+        "name": "BKV Corp",
+        "stock": "BKV"
+    },
+    {
+        "name": "Guardian Pharmacy Services Inc",
+        "stock": "GRDN"
+    },
+    {
+        "name": "Strawberry Fields REIT Inc",
+        "stock": "STRW"
+    },
+    {
+        "name": "Solidion Technology Inc",
+        "stock": "STI"
+    },
+    {
+        "name": "Jasper Therapeutics Inc",
+        "stock": "JSPR"
+    },
+    {
+        "name": "Esperion Therapeutics Inc",
+        "stock": "ESPR"
+    },
+    {
+        "name": "Praxis Precision Medicines Inc",
+        "stock": "PRAX"
+    },
+    {
+        "name": "Amer Sports Inc",
+        "stock": "AS"
+    },
+    {
+        "name": "Natural Gas Services Group Inc",
+        "stock": "NGS"
+    },
+    {
+        "name": "Telos Corp",
+        "stock": "TLS"
+    },
+    {
+        "name": "Burford Capital Ltd",
+        "stock": "BUR"
+    },
+    {
+        "name": "Tevogen Bio Holdings Inc",
+        "stock": "TVGN"
+    },
+    {
+        "name": "California BanCorp",
+        "stock": "BCAL"
+    },
+    {
+        "name": "Lineage Inc",
+        "stock": "LINE"
+    },
+    {
+        "name": "Soleno Therapeutics Inc",
+        "stock": "SLNO"
+    },
+    {
+        "name": "CRH PLC",
+        "stock": "CRH"
+    },
+    {
+        "name": "Canoo Inc",
+        "stock": "GOEV"
+    },
+    {
+        "name": "Turtle Beach Corp",
+        "stock": "TBCH"
+    },
+    {
+        "name": "C4 Therapeutics Inc",
+        "stock": "CCCC"
+    },
+    {
+        "name": "Rekor Systems Inc",
+        "stock": "REKR"
+    },
+    {
+        "name": "Standard BioTools Inc",
+        "stock": "LAB"
+    },
+    {
+        "name": "Core Scientific Inc",
+        "stock": "CORZ"
+    },
+    {
+        "name": "Logility Supply Chain Solution",
+        "stock": "LGTY"
+    },
+    {
+        "name": "Dave Inc",
+        "stock": "DAVE"
+    },
+    {
+        "name": "Bridger Aerospace Group Holdin",
+        "stock": "BAER"
+    },
+    {
+        "name": "Sable Offshore Corp",
+        "stock": "SOC"
+    },
+    {
+        "name": "Adverum Biotechnologies Inc",
+        "stock": "ADVM"
+    },
+    {
+        "name": "BioAge Labs Inc",
+        "stock": "BIOA"
+    },
+    {
+        "name": "Lyra Therapeutics Inc",
+        "stock": "LYRA"
+    },
+    {
+        "name": "Akebia Therapeutics Inc",
+        "stock": "AKBA"
+    },
+    {
+        "name": "Applied Optoelectronics Inc",
+        "stock": "AAOI"
+    },
+    {
+        "name": "Elevation Oncology Inc",
+        "stock": "ELEV"
+    },
+    {
+        "name": "Immunome Inc",
+        "stock": "IMNM"
+    },
+    {
+        "name": "RealReal Inc/The",
+        "stock": "REAL"
+    },
+    {
+        "name": "GeneDx Holdings Corp",
+        "stock": "WGS"
+    },
+    {
+        "name": "Absci Corp",
+        "stock": "ABSI"
+    },
+    {
+        "name": "Citi Trends Inc",
+        "stock": "CTRN"
+    },
+    {
+        "name": "Arq Inc",
+        "stock": "ARQ"
+    },
+    {
+        "name": "Trump Media & Technology Group",
+        "stock": "DJT"
+    },
+    {
+        "name": "ASP Isotopes Inc",
+        "stock": "ASPI"
+    },
+    {
+        "name": "Industrial Logistics Propertie",
+        "stock": "ILPT"
+    },
+    {
+        "name": "KinderCare Learning Cos Inc",
+        "stock": "KLC"
+    },
+    {
+        "name": "Alto Neuroscience Inc",
+        "stock": "ANRO"
+    },
+    {
+        "name": "NeuroPace Inc",
+        "stock": "NPCE"
+    },
+    {
+        "name": "SharkNinja Inc",
+        "stock": "SN"
+    },
+    {
+        "name": "Solid Biosciences Inc",
+        "stock": "SLDB"
+    },
+    {
+        "name": "ReposiTrak Inc",
+        "stock": "TRAK"
+    },
+    {
+        "name": "Baldwin Insurance Group Inc/Th",
+        "stock": "BWIN"
+    },
+    {
+        "name": "Despegar.com Corp",
+        "stock": "DESP"
+    },
+    {
+        "name": "National CineMedia Inc",
+        "stock": "NCMI"
+    },
+    {
+        "name": "WNS Holdings Ltd",
+        "stock": "WNS"
+    },
+    {
+        "name": "NANO Nuclear Energy Inc",
+        "stock": "NNE"
+    },
+    {
+        "name": "Powerfleet Inc NJ",
+        "stock": "AIOT"
+    },
+    {
+        "name": "Taysha Gene Therapies Inc",
+        "stock": "TSHA"
+    },
+    {
+        "name": "Diebold Nixdorf Inc",
+        "stock": "DBD"
+    },
+    {
+        "name": "Fractyl Health Inc",
+        "stock": "GUTS"
+    },
+    {
+        "name": "Backblaze Inc",
+        "stock": "BLZE"
+    },
+    {
+        "name": "First Financial Northwest Inc",
+        "stock": "FFNW"
+    },
+    {
+        "name": "AudioEye Inc",
+        "stock": "AEYE"
+    },
+    {
+        "name": "Everspin Technologies Inc",
+        "stock": "MRAM"
+    },
+    {
+        "name": "1stdibs.com Inc",
+        "stock": "DIBS"
+    },
+    {
+        "name": "Bioventus Inc",
+        "stock": "BVS"
+    },
+    {
+        "name": "PACS Group Inc",
+        "stock": "PACS"
+    },
+    {
+        "name": "Aquestive Therapeutics Inc",
+        "stock": "AQST"
+    },
+    {
+        "name": "Seaport Entertainment Group In",
+        "stock": "SEG"
+    },
+    {
+        "name": "Aemetis Inc",
+        "stock": "AMTX"
+    },
+    {
+        "name": "Loar Holdings Inc",
+        "stock": "LOAR"
+    },
+    {
+        "name": "Matrix Service Co",
+        "stock": "MTRX"
+    },
+    {
+        "name": "Proficient Auto Logistics Inc",
+        "stock": "PAL"
+    },
+    {
+        "name": "Silvaco Group Inc",
+        "stock": "SVCO"
+    },
+    {
+        "name": "Skye Bioscience Inc",
+        "stock": "SKYE"
+    },
+    {
+        "name": "Greenwich Lifesciences Inc",
+        "stock": "GLSI"
+    },
+    {
+        "name": "Cardiff Oncology Inc",
+        "stock": "CRDF"
+    },
+    {
+        "name": "Geospace Technologies Corp",
+        "stock": "GEOS"
+    },
+    {
+        "name": "Ardent Health Partners Inc",
+        "stock": "ARDT"
+    },
+    {
+        "name": "LINKBANCORP Inc",
+        "stock": "LNKB"
+    },
+    {
+        "name": "Korro Bio Inc",
+        "stock": "KRRO"
+    },
+    {
+        "name": "AG Mortgage Investment Trust I",
+        "stock": "MITT"
+    },
+    {
+        "name": "Franklin Street Properties Cor",
+        "stock": "FSP"
+    },
+    {
+        "name": "Acadian Asset Management Inc",
+        "stock": "AAMI"
+    },
+    {
+        "name": "Corbus Pharmaceuticals Holding",
+        "stock": "CRBP"
+    },
+    {
+        "name": "Regulus Therapeutics Inc",
+        "stock": "RGLS"
+    },
+    {
+        "name": "aka Brands Holding Corp",
+        "stock": "AKA"
+    },
+    {
+        "name": "Orion Group Holdings Inc",
+        "stock": "ORN"
+    },
+    {
+        "name": "American Public Education Inc",
+        "stock": "APEI"
+    },
+    {
+        "name": "JBT Marel Corp",
+        "stock": "JBTM"
+    },
+    {
+        "name": "Bowhead Specialty Holdings Inc",
+        "stock": "BOW"
+    },
+    {
+        "name": "Ocugen Inc",
+        "stock": "OCGN"
+    },
+    {
+        "name": "Conduit Pharmaceuticals Inc",
+        "stock": "CDT"
+    },
+    {
+        "name": "Ur-Energy Inc",
+        "stock": "URG"
+    },
+    {
+        "name": "Boundless Bio Inc",
+        "stock": "BOLD"
+    },
+    {
+        "name": "Groupon Inc",
+        "stock": "GRPN"
+    },
+    {
+        "name": "Ingram Micro Holding Corp",
+        "stock": "INGM"
+    },
+    {
+        "name": "Atossa Therapeutics Inc",
+        "stock": "ATOS"
+    },
+    {
+        "name": "Quest Resource Holding Corp",
+        "stock": "QRHC"
+    },
+    {
+        "name": "Capricor Therapeutics Inc",
+        "stock": "CAPR"
+    },
+    {
+        "name": "Tecnoglass Inc",
+        "stock": "TGLS"
+    },
+    {
+        "name": "Solaris Energy Infrastructure",
+        "stock": "SEI"
+    },
+    {
+        "name": "Invivyd Inc",
+        "stock": "IVVD"
+    },
+    {
+        "name": "Sera Prognostics Inc",
+        "stock": "SERA"
+    },
+    {
+        "name": "Mamas Creations Inc",
+        "stock": "MAMA"
+    },
+    {
+        "name": "GRAIL Inc",
+        "stock": "GRAL"
+    },
+    {
+        "name": "Mind Medicine MindMed Inc",
+        "stock": "MNMD"
+    },
+    {
+        "name": "WM Technology Inc",
+        "stock": "MAPS"
+    },
+    {
+        "name": "Real Brokerage Inc/The",
+        "stock": "REAX"
+    },
+    {
+        "name": "Hut 8 Corp",
+        "stock": "HUT"
+    },
+    {
+        "name": "Flexsteel Industries Inc",
+        "stock": "FLXS"
+    },
+    {
+        "name": "Ouster Inc",
+        "stock": "OUST"
+    },
+    {
+        "name": "Innovid Corp",
+        "stock": "CTV"
+    },
+    {
+        "name": "American Healthcare REIT Inc",
+        "stock": "AHR"
+    },
+    {
+        "name": "Artiva Biotherapeutics Inc",
+        "stock": "ARTV"
+    },
+    {
+        "name": "Bitcoin",
+        "stock": "crp_BTC"
+    },
+    {
+        "name": "Ethereum",
+        "stock": "crp_ETH"
+    },
+    {
+        "name": "Binance Coin",
+        "stock": "crp_BNB"
+    },
+    {
+        "name": "Ripple",
+        "stock": "crp_XRP"
+    },
+    {
+        "name": "Cardano",
+        "stock": "crp_ADA"
+    },
+    {
+        "name": "Solana",
+        "stock": "crp_SOL"
+    },
+    {
+        "name": "Dogecoin",
+        "stock": "crp_DOGE"
+    },
+    {
+        "name": "Polkadot",
+        "stock": "crp_DOT"
+    },
+    {
+        "name": "Polygon",
+        "stock": "crp_MATIC"
+    },
+    {
+        "name": "TRON",
+        "stock": "crp_TRX"
+    },
+    {
+        "name": "Avalanche",
+        "stock": "crp_AVAX"
+    },
+    {
+        "name": "Chainlink",
+        "stock": "crp_LINK"
+    },
+    {
+        "name": "Stellar",
+        "stock": "crp_XLM"
+    },
+    {
+        "name": "Monero",
+        "stock": "crp_XMR"
+    },
+    {
+        "name": "Algorand",
+        "stock": "crp_ALGO"
+    },
+    {
+        "name": "Internet Computer",
+        "stock": "crp_ICP"
+    },
+    {
+        "name": "Filecoin",
+        "stock": "crp_FIL"
+    },
+    {
+        "name": "Fantom",
+        "stock": "crp_FTM"
+    },
+    {
+        "name": "Near Protocol",
+        "stock": "crp_NEAR"
+    },
+    {
+        "name": "EOS",
+        "stock": "crp_EOS"
+    },
+    {
+        "name": "Hedera",
+        "stock": "crp_HBAR"
+    },
+    {
+        "name": "Flow",
+        "stock": "crp_FLOW"
+    },
+    {
+        "name": "Aave",
+        "stock": "crp_AAVE"
+    },
+    {
+        "name": "Quant",
+        "stock": "crp_QNT"
+    },
+    {
+        "name": "MultiversX (Elrond)",
+        "stock": "crp_EGLD"
+    },
+    {
+        "name": "VeChain",
+        "stock": "crp_VET"
+    },
+    {
+        "name": "Chiliz",
+        "stock": "crp_CHZ"
+    },
+    {
+        "name": "The Sandbox",
+        "stock": "crp_SAND"
+    },
+    {
+        "name": "Theta Network",
+        "stock": "crp_THETA"
+    },
+    {
+        "name": "Tezos",
+        "stock": "crp_XTZ"
+    },
+    {
+        "name": "The Graph",
+        "stock": "crp_GRT"
+    },
+    {
+        "name": "Kava",
+        "stock": "crp_KAVA"
+    },
+    {
+        "name": "Curve DAO Token",
+        "stock": "crp_CRV"
+    },
+    {
+        "name": "Enjin Coin",
+        "stock": "crp_ENJ"
+    },
+    {
+        "name": "Zcash",
+        "stock": "crp_ZEC"
+    },
+    {
+        "name": "Basic Attention Token",
+        "stock": "crp_BAT"
+    },
+    {
+        "name": "Loopring",
+        "stock": "crp_LRC"
+    },
+    {
+        "name": "1inch",
+        "stock": "crp_1INCH"
+    },
+    {
+        "name": "Celsius Network",
+        "stock": "crp_CEL"
+    },
+    {
+        "name": "Oasis Network",
+        "stock": "crp_ROSE"
+    },
+    {
+        "name": "Cronos",
+        "stock": "crp_CRO"
+    },
+    {
+        "name": "Waves",
+        "stock": "crp_WAVES"
+    },
+    {
+        "name": "dYdX",
+        "stock": "crp_DYDX"
+    },
+    {
+        "name": "Gala",
+        "stock": "crp_GALA"
+    },
+    {
+        "name": "Immutable X",
+        "stock": "crp_IMX10603"
+    },
+    {
+        "name": "Mina Protocol",
+        "stock": "crp_MINA"
+    },
+    {
+        "name": "THORChain",
+        "stock": "crp_RUNE"
+    },
+    {
+        "name": "Kusama",
+        "stock": "crp_KSM"
+    },
+    {
+        "name": "Ren",
+        "stock": "crp_REN"
+    },
+    {
+        "name": "UMA",
+        "stock": "crp_UMA"
+    },
+    {
+        "name": "Zilliqa",
+        "stock": "crp_ZIL"
+    },
+    {
+        "name": "Ankr",
+        "stock": "crp_ANKR"
+    },
+    {
+        "name": "Helium",
+        "stock": "crp_HNT"
+    },
+    {
+        "name": "Storj",
+        "stock": "crp_STORJ"
+    },
+    {
+        "name": "ICON",
+        "stock": "crp_ICX"
+    },
+    {
+        "name": "Ontology",
+        "stock": "crp_ONT"
+    },
+    {
+        "name": "Ravencoin",
+        "stock": "crp_RVN"
+    },
+    {
+        "name": "Celer Network",
+        "stock": "crp_CELR"
+    },
+    {
+        "name": "Trust Wallet Token",
+        "stock": "crp_TWT"
+    },
+    {
+        "name": "Secret Network",
+        "stock": "crp_SCRT"
+    },
+    {
+        "name": "SushiSwap",
+        "stock": "crp_SUSHI"
+    },
+    {
+        "name": "SKALE Network",
+        "stock": "crp_SKL"
+    },
+    {
+        "name": "Injective",
+        "stock": "crp_INJ"
+    },
+    {
+        "name": "Bancor",
+        "stock": "crp_BNT"
+    },
+    {
+        "name": "Ocean Protocol",
+        "stock": "crp_OCEAN"
+    },
+    {
+        "name": "Bella Protocol",
+        "stock": "crp_BEL"
+    },
+    {
+        "name": "COTI",
+        "stock": "crp_COTI"
+    },
+    {
+        "name": "Cartesi",
+        "stock": "crp_CTSI"
+    },
+    {
+        "name": "PAX Gold",
+        "stock": "crp_PAXG"
+    },
+    {
+        "name": "Request",
+        "stock": "crp_REQ"
+    },
+    {
+        "name": "Moonbeam",
+        "stock": "crp_GLMR"
+    },
+    {
+        "name": "Moonriver",
+        "stock": "crp_MOVR"
+    },
+    {
+        "name": "Verge",
+        "stock": "crp_XVG"
+    },
+    {
+        "name": "Syscoin",
+        "stock": "crp_SYS"
+    },
+    {
+        "name": "Perpetual Protocol",
+        "stock": "crp_PERP"
+    },
+    {
+        "name": "Akash Network",
+        "stock": "crp_AKT"
+    },
+    {
+        "name": "Klaytn",
+        "stock": "crp_KLAY"
+    },
+    {
+        "name": "Reserve Rights",
+        "stock": "crp_RSR"
+    },
+    {
+        "name": "Ultra",
+        "stock": "crp_UOS"
+    },
+    {
+        "name": "Creditcoin",
+        "stock": "crp_CTC"
+    },
+    {
+        "name": "Grayscale Decentraland",
+        "stock": "crp_MANA"
+    },
+    {
+        "name": "Litecoin",
+        "stock": "crp_LTC"
+    },
+    {
+        "name": "Grayscale Filecoin",
+        "stock": "crp_FILG"
+    },
+    {
+        "name": "Galaxy Digital Holdings",
+        "stock": "crp_BRPHF"
+    },
+    {
+        "name": "Tidal YieldMax ETF",
+        "stock": "crp_MSTY"
+    },
+    {
+        "name": "Grayscale Digital Large Cap",
+        "stock": "crp_GDLC"
+    },
+    {
+        "name": "Grayscale Bitcoin Trust",
+        "stock": "crp_GBTC"
+    },
+    {
+        "name": "Grayscale Ethereum Trust",
+        "stock": "crp_ETHE"
+    },
+    {
+        "name": "Grayscale Stellar",
+        "stock": "crp_GXLM"
+    },
+    {
+        "name": "Grayscale Solana",
+        "stock": "crp_GSOL"
+    },
+    {
+        "name": "Litecoin Trust",
+        "stock": "crp_LTCN"
+    },
+    {
+        "name": "Grayscale Ethereum Classic Trust",
+        "stock": "crp_ETCG"
+    },
+    {
+        "name": "Grayscale Bitcoin Cash Trust",
+        "stock": "crp_BCHG"
+    },
+    {
+        "name": "Grayscale Horizen Trust",
+        "stock": "crp_HZEN"
+    },
+    {
+        "name": "Grayscale Zcash Trust",
+        "stock": "crp_ZCSH"
+    },
+    {
+        "name": "Grayscale Livepeer Trust",
+        "stock": "crp_GLIV"
+    },
+    {
+        "name": "Hut 8 Mining Corp",
+        "stock": "crp_HUT"
+    },
+    {
+        "name": "HIVE Digital Technologies",
+        "stock": "crp_HIVE"
+    },
+    {
+        "name": "Bitfarms Ltd",
+        "stock": "crp_BITF"
+    },
+    {
+        "name": "Core Scientific Inc",
+        "stock": "crp_CORZ"
+    },
+    {
+        "name": "Athena Bitcoin Global",
+        "stock": "crp_ABIT"
+    },
+    {
+        "name": "Riot Platforms Inc",
+        "stock": "crp_RIOT"
+    },
+    {
+        "name": "CleanSpark Inc",
+        "stock": "crp_CLSK"
+    },
+    {
+        "name": "Marathon Digital Holdings",
+        "stock": "crp_MARA"
+    },
+    {
+        "name": "Cipher Mining Inc",
+        "stock": "crp_CIFR"
+    },
+    {
+        "name": "TeraWulf Inc",
+        "stock": "crp_WULF"
+    },
+    {
+        "name": "Coinbase Global Inc",
+        "stock": "crp_COIN"
+    },
+    {
+        "name": "MicroStrategy Inc",
+        "stock": "crp_MSTR"
     }
 ]

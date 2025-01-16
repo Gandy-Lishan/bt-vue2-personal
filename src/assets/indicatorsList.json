@@ -53298,5 +53298,3355 @@
         "chart_name": "Global X Uranium ETF RelTrend Score",
         "url": "URA_reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "CAMP4 Therapeutics Corp",
+        "url": "CAMP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ceribell Inc",
+        "url": "CBLL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Upstream Bio Inc",
+        "url": "UPB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Net Power Inc",
+        "url": "NPWR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avadel Pharmaceuticals PLC",
+        "url": "AVDL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bicara Therapeutics Inc",
+        "url": "BCAX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MBX Biosciences Inc",
+        "url": "MBX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zenas Biopharma Inc",
+        "url": "ZBIO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Caesarstone Ltd",
+        "url": "CSTE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Candel Therapeutics Inc",
+        "url": "CADL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XBiotech Inc",
+        "url": "XBIT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MAC Copper Ltd",
+        "url": "MTAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inmune Bio Inc",
+        "url": "INMB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acumen Pharmaceuticals Inc",
+        "url": "ABOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MediWound Ltd",
+        "url": "MDWD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galectin Therapeutics Inc",
+        "url": "GALT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Life360 Inc",
+        "url": "LIF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Offerpad Solutions Inc",
+        "url": "OPAD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standardaero Inc",
+        "url": "SARO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ChromaDex Corp",
+        "url": "CDXC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Septerna Inc",
+        "url": "SEPN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intuitive Machines Inc",
+        "url": "LUNR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shattuck Labs Inc",
+        "url": "STTK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Porch Group Inc",
+        "url": "PRCH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LiveOne Inc",
+        "url": "LVO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spyre Therapeutics Inc",
+        "url": "SYRE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bel Fuse Inc",
+        "url": "BELFA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Werewolf Therapeutics Inc",
+        "url": "HOWL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Twin Disc Inc",
+        "url": "TWIN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Astera Labs Inc",
+        "url": "ALAB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Superconductor Corp",
+        "url": "AMSC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GCT Semiconductor Holding Inc",
+        "url": "GCTS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Black Diamond Therapeutics Inc",
+        "url": "BDTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Performant Healthcare Inc",
+        "url": "PHLT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd",
+        "url": "LBTYK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd",
+        "url": "LBTYA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perspective Therapeutics Inc",
+        "url": "CATX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Internet Bancorp",
+        "url": "INBK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sky Harbour Group Corp",
+        "url": "SKYH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fulcrum Therapeutics Inc",
+        "url": "FULC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rapport Therapeutics Inc",
+        "url": "RAPP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DLH Holdings Corp",
+        "url": "DLHC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waystar Holding Corp",
+        "url": "WAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Root Inc/OH",
+        "url": "ROOT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Roadzen Inc",
+        "url": "RDZN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TScan Therapeutics Inc",
+        "url": "TCRX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Blend Labs Inc",
+        "url": "BLND",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verastem Inc",
+        "url": "VSTM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clearwater Analytics Holdings",
+        "url": "CWAN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Climb Bio Inc",
+        "url": "CLYM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eastern Co/The",
+        "url": "EML",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gyre Therapeutics Inc",
+        "url": "GYRE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dianthus Therapeutics Inc",
+        "url": "DNTH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hamilton Beach Brands Holding",
+        "url": "HBB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QuickLogic Corp",
+        "url": "QUIK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "L B Foster Co",
+        "url": "FSTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sunrise Realty Trust Inc",
+        "url": "SUNS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kyverna Therapeutics Inc",
+        "url": "KYTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Wheels Up Experience Inc",
+        "url": "UP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Heritage Insurance Holdings In",
+        "url": "HRTG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pyxis Oncology Inc",
+        "url": "PYXS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arteris Inc",
+        "url": "AIP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GigaCloud Technology Inc",
+        "url": "GCT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifetime Brands Inc",
+        "url": "LCUT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifeway Foods Inc",
+        "url": "LWAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Transocean Ltd",
+        "url": "RIG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Northern Technologies Internat",
+        "url": "NTIC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sezzle Inc",
+        "url": "SEZL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NPK International Inc",
+        "url": "NPKI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RumbleON Inc",
+        "url": "RMBL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Peoples Bancorp of North Carol",
+        "url": "PEBK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAMT CORP",
+        "url": "PAMT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FrontView REIT Inc",
+        "url": "FVR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Prairie Operating Co",
+        "url": "PROP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NB Bancorp Inc",
+        "url": "NBBK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Superior Group of Cos Inc",
+        "url": "SGC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renovaro Inc",
+        "url": "RENB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diversified Energy Co PLC",
+        "url": "DEC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taylor Devices Inc",
+        "url": "TAYD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ADC Therapeutics SA",
+        "url": "ADCT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CervoMed Inc",
+        "url": "CRVO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Virco Mfg. Corp",
+        "url": "VIRC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vertex Inc",
+        "url": "VERX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Primo Brands Corp",
+        "url": "PRMB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LifeMD Inc",
+        "url": "LFMD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Veru Inc",
+        "url": "VERU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Byrna Technologies Inc",
+        "url": "BYRN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Honest Co Inc/The",
+        "url": "HNST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Puma Biotechnology Inc",
+        "url": "PBYI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perma-Fix Environmental Servic",
+        "url": "PESI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultralife Corp",
+        "url": "ULBI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Freyr Battery Inc",
+        "url": "FREY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seven Hills Realty Trust",
+        "url": "SEVN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pursuit Attractions and Hospit",
+        "url": "PRSU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pagaya Technologies Ltd",
+        "url": "PGY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Metagenomi Inc",
+        "url": "MGX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telomir Pharmaceuticals Inc",
+        "url": "TELO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SolarMax Technology Inc",
+        "url": "SMXT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Provident Bancorp Inc",
+        "url": "PVBC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ibotta Inc",
+        "url": "IBTA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Centuri Holdings Inc",
+        "url": "CTRI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Drilling Tools International C",
+        "url": "DTI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cibus Inc",
+        "url": "CBUS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NN Inc",
+        "url": "NNBR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Graham Corp",
+        "url": "GHM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tourmaline Bio Inc",
+        "url": "TRML",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talkspace Inc",
+        "url": "TALK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moneylion Inc",
+        "url": "ML",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VirTra Inc",
+        "url": "VTSI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nektar Therapeutics",
+        "url": "NKTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Contineum Therapeutics Inc",
+        "url": "CTNM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stereotaxis Inc",
+        "url": "STXS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Universal Stainless & Alloy Pr",
+        "url": "USAP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Webtoon Entertainment Inc",
+        "url": "WBTN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smith-Midland Corp",
+        "url": "SMID",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Golden Matrix Group Inc",
+        "url": "GMGI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inovio Pharmaceuticals Inc",
+        "url": "INO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Achieve Life Sciences Inc",
+        "url": "ACHV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifecore Biomedical Inc",
+        "url": "LFCR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Medallion Financial Corp",
+        "url": "MFIN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Q32 Bio Inc",
+        "url": "QTTB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifezone Metals Ltd",
+        "url": "LZM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Therapeutics Inc",
+        "url": "APLT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rigetti Computing Inc",
+        "url": "RGTI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Critical Metals Corp",
+        "url": "CRML",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Investar Holding Corp",
+        "url": "ISTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Onity Group Inc",
+        "url": "ONIT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dutch Bros Inc",
+        "url": "BROS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Getty Images Holdings Inc",
+        "url": "GETY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fibrobiologics Inc",
+        "url": "FBLG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sonida Senior Living Inc",
+        "url": "SNDA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spire Global Inc",
+        "url": "SPIR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "D-Wave Quantum Inc",
+        "url": "QBTS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vacasa Inc",
+        "url": "VCSA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Airship AI Holdings Inc",
+        "url": "AISP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neurogene Inc",
+        "url": "NGNE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alumis Inc",
+        "url": "ALMS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arhaus Inc",
+        "url": "ARHS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BKV Corp",
+        "url": "BKV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Guardian Pharmacy Services Inc",
+        "url": "GRDN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strawberry Fields REIT Inc",
+        "url": "STRW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solidion Technology Inc",
+        "url": "STI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Jasper Therapeutics Inc",
+        "url": "JSPR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Esperion Therapeutics Inc",
+        "url": "ESPR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Praxis Precision Medicines Inc",
+        "url": "PRAX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amer Sports Inc",
+        "url": "AS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Natural Gas Services Group Inc",
+        "url": "NGS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telos Corp",
+        "url": "TLS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Burford Capital Ltd",
+        "url": "BUR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tevogen Bio Holdings Inc",
+        "url": "TVGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "California BanCorp",
+        "url": "BCAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lineage Inc",
+        "url": "LINE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Soleno Therapeutics Inc",
+        "url": "SLNO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRH PLC",
+        "url": "CRH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canoo Inc",
+        "url": "GOEV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Turtle Beach Corp",
+        "url": "TBCH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "C4 Therapeutics Inc",
+        "url": "CCCC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rekor Systems Inc",
+        "url": "REKR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standard BioTools Inc",
+        "url": "LAB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc",
+        "url": "CORZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Logility Supply Chain Solution",
+        "url": "LGTY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dave Inc",
+        "url": "DAVE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bridger Aerospace Group Holdin",
+        "url": "BAER",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sable Offshore Corp",
+        "url": "SOC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adverum Biotechnologies Inc",
+        "url": "ADVM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BioAge Labs Inc",
+        "url": "BIOA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lyra Therapeutics Inc",
+        "url": "LYRA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akebia Therapeutics Inc",
+        "url": "AKBA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Optoelectronics Inc",
+        "url": "AAOI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elevation Oncology Inc",
+        "url": "ELEV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immunome Inc",
+        "url": "IMNM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RealReal Inc/The",
+        "url": "REAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GeneDx Holdings Corp",
+        "url": "WGS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Absci Corp",
+        "url": "ABSI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Citi Trends Inc",
+        "url": "CTRN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arq Inc",
+        "url": "ARQ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trump Media & Technology Group",
+        "url": "DJT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASP Isotopes Inc",
+        "url": "ASPI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrial Logistics Propertie",
+        "url": "ILPT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KinderCare Learning Cos Inc",
+        "url": "KLC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alto Neuroscience Inc",
+        "url": "ANRO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NeuroPace Inc",
+        "url": "NPCE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharkNinja Inc",
+        "url": "SN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solid Biosciences Inc",
+        "url": "SLDB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ReposiTrak Inc",
+        "url": "TRAK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baldwin Insurance Group Inc/Th",
+        "url": "BWIN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Despegar.com Corp",
+        "url": "DESP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "National CineMedia Inc",
+        "url": "NCMI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WNS Holdings Ltd",
+        "url": "WNS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NANO Nuclear Energy Inc",
+        "url": "NNE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Powerfleet Inc NJ",
+        "url": "AIOT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taysha Gene Therapies Inc",
+        "url": "TSHA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diebold Nixdorf Inc",
+        "url": "DBD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fractyl Health Inc",
+        "url": "GUTS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Backblaze Inc",
+        "url": "BLZE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Financial Northwest Inc",
+        "url": "FFNW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AudioEye Inc",
+        "url": "AEYE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Everspin Technologies Inc",
+        "url": "MRAM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1stdibs.com Inc",
+        "url": "DIBS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bioventus Inc",
+        "url": "BVS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PACS Group Inc",
+        "url": "PACS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aquestive Therapeutics Inc",
+        "url": "AQST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seaport Entertainment Group In",
+        "url": "SEG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aemetis Inc",
+        "url": "AMTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loar Holdings Inc",
+        "url": "LOAR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Matrix Service Co",
+        "url": "MTRX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Proficient Auto Logistics Inc",
+        "url": "PAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silvaco Group Inc",
+        "url": "SVCO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Skye Bioscience Inc",
+        "url": "SKYE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Greenwich Lifesciences Inc",
+        "url": "GLSI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardiff Oncology Inc",
+        "url": "CRDF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Geospace Technologies Corp",
+        "url": "GEOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ardent Health Partners Inc",
+        "url": "ARDT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LINKBANCORP Inc",
+        "url": "LNKB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Korro Bio Inc",
+        "url": "KRRO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AG Mortgage Investment Trust I",
+        "url": "MITT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Franklin Street Properties Cor",
+        "url": "FSP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acadian Asset Management Inc",
+        "url": "AAMI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corbus Pharmaceuticals Holding",
+        "url": "CRBP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regulus Therapeutics Inc",
+        "url": "RGLS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "aka Brands Holding Corp",
+        "url": "AKA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Orion Group Holdings Inc",
+        "url": "ORN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Public Education Inc",
+        "url": "APEI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JBT Marel Corp",
+        "url": "JBTM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bowhead Specialty Holdings Inc",
+        "url": "BOW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocugen Inc",
+        "url": "OCGN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Conduit Pharmaceuticals Inc",
+        "url": "CDT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ur-Energy Inc",
+        "url": "URG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Boundless Bio Inc",
+        "url": "BOLD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Groupon Inc",
+        "url": "GRPN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ingram Micro Holding Corp",
+        "url": "INGM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Atossa Therapeutics Inc",
+        "url": "ATOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quest Resource Holding Corp",
+        "url": "QRHC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Capricor Therapeutics Inc",
+        "url": "CAPR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tecnoglass Inc",
+        "url": "TGLS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solaris Energy Infrastructure",
+        "url": "SEI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invivyd Inc",
+        "url": "IVVD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sera Prognostics Inc",
+        "url": "SERA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mamas Creations Inc",
+        "url": "MAMA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GRAIL Inc",
+        "url": "GRAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mind Medicine MindMed Inc",
+        "url": "MNMD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WM Technology Inc",
+        "url": "MAPS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Brokerage Inc/The",
+        "url": "REAX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Corp",
+        "url": "HUT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flexsteel Industries Inc",
+        "url": "FLXS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ouster Inc",
+        "url": "OUST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Innovid Corp",
+        "url": "CTV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Healthcare REIT Inc",
+        "url": "AHR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Artiva Biotherapeutics Inc",
+        "url": "ARTV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin",
+        "url": "crp_BTC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum",
+        "url": "crp_ETH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Binance Coin",
+        "url": "crp_BNB",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ripple",
+        "url": "crp_XRP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardano",
+        "url": "crp_ADA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solana",
+        "url": "crp_SOL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dogecoin",
+        "url": "crp_DOGE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polkadot",
+        "url": "crp_DOT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polygon",
+        "url": "crp_MATIC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TRON",
+        "url": "crp_TRX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avalanche",
+        "url": "crp_AVAX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chainlink",
+        "url": "crp_LINK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stellar",
+        "url": "crp_XLM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Monero",
+        "url": "crp_XMR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Algorand",
+        "url": "crp_ALGO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Internet Computer",
+        "url": "crp_ICP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Filecoin",
+        "url": "crp_FIL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fantom",
+        "url": "crp_FTM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Near Protocol",
+        "url": "crp_NEAR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "EOS",
+        "url": "crp_EOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hedera",
+        "url": "crp_HBAR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flow",
+        "url": "crp_FLOW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aave",
+        "url": "crp_AAVE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quant",
+        "url": "crp_QNT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MultiversX (Elrond)",
+        "url": "crp_EGLD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VeChain",
+        "url": "crp_VET",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chiliz",
+        "url": "crp_CHZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Sandbox",
+        "url": "crp_SAND",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Theta Network",
+        "url": "crp_THETA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tezos",
+        "url": "crp_XTZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Graph",
+        "url": "crp_GRT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kava",
+        "url": "crp_KAVA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Curve DAO Token",
+        "url": "crp_CRV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Enjin Coin",
+        "url": "crp_ENJ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zcash",
+        "url": "crp_ZEC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Basic Attention Token",
+        "url": "crp_BAT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loopring",
+        "url": "crp_LRC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1inch",
+        "url": "crp_1INCH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celsius Network",
+        "url": "crp_CEL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oasis Network",
+        "url": "crp_ROSE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cronos",
+        "url": "crp_CRO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waves",
+        "url": "crp_WAVES",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "dYdX",
+        "url": "crp_DYDX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gala",
+        "url": "crp_GALA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immutable X",
+        "url": "crp_IMX10603",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mina Protocol",
+        "url": "crp_MINA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "THORChain",
+        "url": "crp_RUNE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kusama",
+        "url": "crp_KSM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ren",
+        "url": "crp_REN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UMA",
+        "url": "crp_UMA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zilliqa",
+        "url": "crp_ZIL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ankr",
+        "url": "crp_ANKR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Helium",
+        "url": "crp_HNT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Storj",
+        "url": "crp_STORJ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ICON",
+        "url": "crp_ICX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ontology",
+        "url": "crp_ONT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ravencoin",
+        "url": "crp_RVN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celer Network",
+        "url": "crp_CELR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trust Wallet Token",
+        "url": "crp_TWT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Secret Network",
+        "url": "crp_SCRT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SushiSwap",
+        "url": "crp_SUSHI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SKALE Network",
+        "url": "crp_SKL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Injective",
+        "url": "crp_INJ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bancor",
+        "url": "crp_BNT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocean Protocol",
+        "url": "crp_OCEAN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bella Protocol",
+        "url": "crp_BEL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "COTI",
+        "url": "crp_COTI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cartesi",
+        "url": "crp_CTSI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAX Gold",
+        "url": "crp_PAXG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Request",
+        "url": "crp_REQ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonbeam",
+        "url": "crp_GLMR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonriver",
+        "url": "crp_MOVR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verge",
+        "url": "crp_XVG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Syscoin",
+        "url": "crp_SYS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perpetual Protocol",
+        "url": "crp_PERP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akash Network",
+        "url": "crp_AKT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Klaytn",
+        "url": "crp_KLAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Reserve Rights",
+        "url": "crp_RSR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultra",
+        "url": "crp_UOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Creditcoin",
+        "url": "crp_CTC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Decentraland",
+        "url": "crp_MANA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin",
+        "url": "crp_LTC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Filecoin",
+        "url": "crp_FILG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galaxy Digital Holdings",
+        "url": "crp_BRPHF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tidal YieldMax ETF",
+        "url": "crp_MSTY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap",
+        "url": "crp_GDLC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Trust",
+        "url": "crp_GBTC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Trust",
+        "url": "crp_ETHE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Stellar",
+        "url": "crp_GXLM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Solana",
+        "url": "crp_GSOL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin Trust",
+        "url": "crp_LTCN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Classic Trust",
+        "url": "crp_ETCG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Cash Trust",
+        "url": "crp_BCHG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Horizen Trust",
+        "url": "crp_HZEN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Zcash Trust",
+        "url": "crp_ZCSH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Livepeer Trust",
+        "url": "crp_GLIV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Mining Corp",
+        "url": "crp_HUT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HIVE Digital Technologies",
+        "url": "crp_HIVE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitfarms Ltd",
+        "url": "crp_BITF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc",
+        "url": "crp_CORZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Athena Bitcoin Global",
+        "url": "crp_ABIT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Riot Platforms Inc",
+        "url": "crp_RIOT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CleanSpark Inc",
+        "url": "crp_CLSK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marathon Digital Holdings",
+        "url": "crp_MARA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cipher Mining Inc",
+        "url": "crp_CIFR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TeraWulf Inc",
+        "url": "crp_WULF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coinbase Global Inc",
+        "url": "crp_COIN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Inc",
+        "url": "crp_MSTR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin Trend Score",
+        "url": "CRP_BTC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin RelTrend Score",
+        "url": "CRP_BTC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum Trend Score",
+        "url": "CRP_ETH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ethereum RelTrend Score",
+        "url": "CRP_ETH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Binance Coin Trend Score",
+        "url": "CRP_BNB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Binance Coin RelTrend Score",
+        "url": "CRP_BNB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ripple Trend Score",
+        "url": "CRP_XRP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ripple RelTrend Score",
+        "url": "CRP_XRP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardano Trend Score",
+        "url": "CRP_ADA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardano RelTrend Score",
+        "url": "CRP_ADA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solana Trend Score",
+        "url": "CRP_SOL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solana RelTrend Score",
+        "url": "CRP_SOL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dogecoin Trend Score",
+        "url": "CRP_DOGE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dogecoin RelTrend Score",
+        "url": "CRP_DOGE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polkadot Trend Score",
+        "url": "CRP_DOT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polkadot RelTrend Score",
+        "url": "CRP_DOT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polygon Trend Score",
+        "url": "CRP_MATIC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Polygon RelTrend Score",
+        "url": "CRP_MATIC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TRON Trend Score",
+        "url": "CRP_TRX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TRON RelTrend Score",
+        "url": "CRP_TRX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avalanche Trend Score",
+        "url": "CRP_AVAX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avalanche RelTrend Score",
+        "url": "CRP_AVAX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chainlink Trend Score",
+        "url": "CRP_LINK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chainlink RelTrend Score",
+        "url": "CRP_LINK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stellar Trend Score",
+        "url": "CRP_XLM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stellar RelTrend Score",
+        "url": "CRP_XLM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Monero Trend Score",
+        "url": "CRP_XMR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Monero RelTrend Score",
+        "url": "CRP_XMR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Algorand Trend Score",
+        "url": "CRP_ALGO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Algorand RelTrend Score",
+        "url": "CRP_ALGO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Internet Computer Trend Score",
+        "url": "CRP_ICP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Internet Computer RelTrend Score",
+        "url": "CRP_ICP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Filecoin Trend Score",
+        "url": "CRP_FIL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Filecoin RelTrend Score",
+        "url": "CRP_FIL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fantom Trend Score",
+        "url": "CRP_FTM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fantom RelTrend Score",
+        "url": "CRP_FTM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Near Protocol Trend Score",
+        "url": "CRP_NEAR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Near Protocol RelTrend Score",
+        "url": "CRP_NEAR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "EOS Trend Score",
+        "url": "CRP_EOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "EOS RelTrend Score",
+        "url": "CRP_EOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hedera Trend Score",
+        "url": "CRP_HBAR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hedera RelTrend Score",
+        "url": "CRP_HBAR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flow Trend Score",
+        "url": "CRP_FLOW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flow RelTrend Score",
+        "url": "CRP_FLOW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aave Trend Score",
+        "url": "CRP_AAVE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aave RelTrend Score",
+        "url": "CRP_AAVE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quant Trend Score",
+        "url": "CRP_QNT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quant RelTrend Score",
+        "url": "CRP_QNT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MultiversX (Elrond) Trend Score",
+        "url": "CRP_EGLD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MultiversX (Elrond) RelTrend Score",
+        "url": "CRP_EGLD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VeChain Trend Score",
+        "url": "CRP_VET_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VeChain RelTrend Score",
+        "url": "CRP_VET_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chiliz Trend Score",
+        "url": "CRP_CHZ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chiliz RelTrend Score",
+        "url": "CRP_CHZ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Sandbox Trend Score",
+        "url": "CRP_SAND_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Sandbox RelTrend Score",
+        "url": "CRP_SAND_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Theta Network Trend Score",
+        "url": "CRP_THETA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Theta Network RelTrend Score",
+        "url": "CRP_THETA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tezos Trend Score",
+        "url": "CRP_XTZ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tezos RelTrend Score",
+        "url": "CRP_XTZ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Graph Trend Score",
+        "url": "CRP_GRT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "The Graph RelTrend Score",
+        "url": "CRP_GRT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kava Trend Score",
+        "url": "CRP_KAVA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kava RelTrend Score",
+        "url": "CRP_KAVA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Curve DAO Token Trend Score",
+        "url": "CRP_CRV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Curve DAO Token RelTrend Score",
+        "url": "CRP_CRV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Enjin Coin Trend Score",
+        "url": "CRP_ENJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Enjin Coin RelTrend Score",
+        "url": "CRP_ENJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zcash Trend Score",
+        "url": "CRP_ZEC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zcash RelTrend Score",
+        "url": "CRP_ZEC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Basic Attention Token Trend Score",
+        "url": "CRP_BAT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Basic Attention Token RelTrend Score",
+        "url": "CRP_BAT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loopring Trend Score",
+        "url": "CRP_LRC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loopring RelTrend Score",
+        "url": "CRP_LRC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1inch Trend Score",
+        "url": "CRP_1INCH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1inch RelTrend Score",
+        "url": "CRP_1INCH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celsius Network Trend Score",
+        "url": "CRP_CEL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celsius Network RelTrend Score",
+        "url": "CRP_CEL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oasis Network Trend Score",
+        "url": "CRP_ROSE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oasis Network RelTrend Score",
+        "url": "CRP_ROSE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cronos Trend Score",
+        "url": "CRP_CRO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cronos RelTrend Score",
+        "url": "CRP_CRO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waves Trend Score",
+        "url": "CRP_WAVES_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waves RelTrend Score",
+        "url": "CRP_WAVES_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "dYdX Trend Score",
+        "url": "CRP_DYDX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "dYdX RelTrend Score",
+        "url": "CRP_DYDX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gala Trend Score",
+        "url": "CRP_GALA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gala RelTrend Score",
+        "url": "CRP_GALA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immutable X Trend Score",
+        "url": "CRP_IMX10603_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immutable X RelTrend Score",
+        "url": "CRP_IMX10603_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mina Protocol Trend Score",
+        "url": "CRP_MINA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mina Protocol RelTrend Score",
+        "url": "CRP_MINA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "THORChain Trend Score",
+        "url": "CRP_RUNE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "THORChain RelTrend Score",
+        "url": "CRP_RUNE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kusama Trend Score",
+        "url": "CRP_KSM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kusama RelTrend Score",
+        "url": "CRP_KSM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ren Trend Score",
+        "url": "CRP_REN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ren RelTrend Score",
+        "url": "CRP_REN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UMA Trend Score",
+        "url": "CRP_UMA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UMA RelTrend Score",
+        "url": "CRP_UMA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zilliqa Trend Score",
+        "url": "CRP_ZIL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zilliqa RelTrend Score",
+        "url": "CRP_ZIL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ankr Trend Score",
+        "url": "CRP_ANKR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ankr RelTrend Score",
+        "url": "CRP_ANKR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Helium Trend Score",
+        "url": "CRP_HNT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Helium RelTrend Score",
+        "url": "CRP_HNT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Storj Trend Score",
+        "url": "CRP_STORJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Storj RelTrend Score",
+        "url": "CRP_STORJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ICON Trend Score",
+        "url": "CRP_ICX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ICON RelTrend Score",
+        "url": "CRP_ICX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ontology Trend Score",
+        "url": "CRP_ONT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ontology RelTrend Score",
+        "url": "CRP_ONT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ravencoin Trend Score",
+        "url": "CRP_RVN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ravencoin RelTrend Score",
+        "url": "CRP_RVN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celer Network Trend Score",
+        "url": "CRP_CELR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celer Network RelTrend Score",
+        "url": "CRP_CELR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trust Wallet Token Trend Score",
+        "url": "CRP_TWT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trust Wallet Token RelTrend Score",
+        "url": "CRP_TWT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Secret Network Trend Score",
+        "url": "CRP_SCRT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Secret Network RelTrend Score",
+        "url": "CRP_SCRT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SushiSwap Trend Score",
+        "url": "CRP_SUSHI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SushiSwap RelTrend Score",
+        "url": "CRP_SUSHI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SKALE Network Trend Score",
+        "url": "CRP_SKL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SKALE Network RelTrend Score",
+        "url": "CRP_SKL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Injective Trend Score",
+        "url": "CRP_INJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Injective RelTrend Score",
+        "url": "CRP_INJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bancor Trend Score",
+        "url": "CRP_BNT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bancor RelTrend Score",
+        "url": "CRP_BNT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocean Protocol Trend Score",
+        "url": "CRP_OCEAN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocean Protocol RelTrend Score",
+        "url": "CRP_OCEAN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bella Protocol Trend Score",
+        "url": "CRP_BEL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bella Protocol RelTrend Score",
+        "url": "CRP_BEL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "COTI Trend Score",
+        "url": "CRP_COTI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "COTI RelTrend Score",
+        "url": "CRP_COTI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cartesi Trend Score",
+        "url": "CRP_CTSI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cartesi RelTrend Score",
+        "url": "CRP_CTSI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAX Gold Trend Score",
+        "url": "CRP_PAXG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAX Gold RelTrend Score",
+        "url": "CRP_PAXG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Request Trend Score",
+        "url": "CRP_REQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Request RelTrend Score",
+        "url": "CRP_REQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonbeam Trend Score",
+        "url": "CRP_GLMR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonbeam RelTrend Score",
+        "url": "CRP_GLMR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonriver Trend Score",
+        "url": "CRP_MOVR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moonriver RelTrend Score",
+        "url": "CRP_MOVR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verge Trend Score",
+        "url": "CRP_XVG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verge RelTrend Score",
+        "url": "CRP_XVG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Syscoin Trend Score",
+        "url": "CRP_SYS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Syscoin RelTrend Score",
+        "url": "CRP_SYS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perpetual Protocol Trend Score",
+        "url": "CRP_PERP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perpetual Protocol RelTrend Score",
+        "url": "CRP_PERP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akash Network Trend Score",
+        "url": "CRP_AKT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akash Network RelTrend Score",
+        "url": "CRP_AKT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Klaytn Trend Score",
+        "url": "CRP_KLAY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Klaytn RelTrend Score",
+        "url": "CRP_KLAY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Reserve Rights Trend Score",
+        "url": "CRP_RSR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Reserve Rights RelTrend Score",
+        "url": "CRP_RSR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultra Trend Score",
+        "url": "CRP_UOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultra RelTrend Score",
+        "url": "CRP_UOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Creditcoin Trend Score",
+        "url": "CRP_CTC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Creditcoin RelTrend Score",
+        "url": "CRP_CTC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Decentraland Trend Score",
+        "url": "CRP_MANA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Decentraland RelTrend Score",
+        "url": "CRP_MANA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin Trend Score",
+        "url": "CRP_LTC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin RelTrend Score",
+        "url": "CRP_LTC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Filecoin Trend Score",
+        "url": "CRP_FILG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Filecoin RelTrend Score",
+        "url": "CRP_FILG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galaxy Digital Holdings Trend Score",
+        "url": "CRP_BRPHF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galaxy Digital Holdings RelTrend Score",
+        "url": "CRP_BRPHF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tidal YieldMax ETF Trend Score",
+        "url": "CRP_MSTY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tidal YieldMax ETF RelTrend Score",
+        "url": "CRP_MSTY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap Trend Score",
+        "url": "CRP_GDLC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap RelTrend Score",
+        "url": "CRP_GDLC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Trust Trend Score",
+        "url": "CRP_GBTC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Trust RelTrend Score",
+        "url": "CRP_GBTC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Trust Trend Score",
+        "url": "CRP_ETHE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Trust RelTrend Score",
+        "url": "CRP_ETHE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Stellar Trend Score",
+        "url": "CRP_GXLM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Stellar RelTrend Score",
+        "url": "CRP_GXLM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Solana Trend Score",
+        "url": "CRP_GSOL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Solana RelTrend Score",
+        "url": "CRP_GSOL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin Trust Trend Score",
+        "url": "CRP_LTCN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Litecoin Trust RelTrend Score",
+        "url": "CRP_LTCN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Classic Trust Trend Score",
+        "url": "CRP_ETCG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Classic Trust RelTrend Score",
+        "url": "CRP_ETCG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Cash Trust Trend Score",
+        "url": "CRP_BCHG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Bitcoin Cash Trust RelTrend Score",
+        "url": "CRP_BCHG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Horizen Trust Trend Score",
+        "url": "CRP_HZEN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Horizen Trust RelTrend Score",
+        "url": "CRP_HZEN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Zcash Trust Trend Score",
+        "url": "CRP_ZCSH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Zcash Trust RelTrend Score",
+        "url": "CRP_ZCSH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Livepeer Trust Trend Score",
+        "url": "CRP_GLIV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Livepeer Trust RelTrend Score",
+        "url": "CRP_GLIV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Mining Corp Trend Score",
+        "url": "CRP_HUT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Mining Corp RelTrend Score",
+        "url": "CRP_HUT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HIVE Digital Technologies Trend Score",
+        "url": "CRP_HIVE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HIVE Digital Technologies RelTrend Score",
+        "url": "CRP_HIVE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitfarms Ltd Trend Score",
+        "url": "CRP_BITF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitfarms Ltd RelTrend Score",
+        "url": "CRP_BITF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc Trend Score",
+        "url": "CRP_CORZ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc RelTrend Score",
+        "url": "CRP_CORZ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Athena Bitcoin Global Trend Score",
+        "url": "CRP_ABIT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Athena Bitcoin Global RelTrend Score",
+        "url": "CRP_ABIT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Riot Platforms Inc Trend Score",
+        "url": "CRP_RIOT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Riot Platforms Inc RelTrend Score",
+        "url": "CRP_RIOT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CleanSpark Inc Trend Score",
+        "url": "CRP_CLSK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CleanSpark Inc RelTrend Score",
+        "url": "CRP_CLSK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marathon Digital Holdings Trend Score",
+        "url": "CRP_MARA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marathon Digital Holdings RelTrend Score",
+        "url": "CRP_MARA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cipher Mining Inc Trend Score",
+        "url": "CRP_CIFR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cipher Mining Inc RelTrend Score",
+        "url": "CRP_CIFR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TeraWulf Inc Trend Score",
+        "url": "CRP_WULF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TeraWulf Inc RelTrend Score",
+        "url": "CRP_WULF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coinbase Global Inc Trend Score",
+        "url": "CRP_COIN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coinbase Global Inc RelTrend Score",
+        "url": "CRP_COIN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Inc Trend Score",
+        "url": "CRP_MSTR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MicroStrategy Inc RelTrend Score",
+        "url": "CRP_MSTR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitwise 10 Crypto Fund Optix",
+        "url": "etf_BITW",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Mini Trust ETF Optix",
+        "url": "etf_ETH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale ETH Trust Optix",
+        "url": "etf_ETHE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap ETF Optix",
+        "url": "etf_GDLC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strive 500 ETF Optix",
+        "url": "etf_STRV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alpha Architect Tail Risk ETF Optix",
+        "url": "etf_CAOS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Cash Cows ETF Optix",
+        "url": "etf_COWZ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brent Oil ETF Optix",
+        "url": "etf_BNO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Cloud ETF Optix",
+        "url": "etf_CLOU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neuberger Berman Sustainable Equity Fund;A Optix",
+        "url": "etf_FTLS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 Quality ETF Optix",
+        "url": "etf_SPHQ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cambria Yield ETF Optix",
+        "url": "etf_SYLD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Small Cap ETF Optix",
+        "url": "etf_CALF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renaissance IPO ETF Optix",
+        "url": "etf_IPO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Bitcoin Strategy ETF Optix",
+        "url": "etf_BTRN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Third Point Investors Limited Optix",
+        "url": "etf_TPOU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P 400 Mid Cap Growth ETF Optix",
+        "url": "etf_MDYG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Madison Small Cap Fund;A Optix",
+        "url": "etf_MASMX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Intl High Div ETF Optix",
+        "url": "etf_VYMI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Wide Moat ETF Optix",
+        "url": "etf_MOAT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Clean Edge Smart Grid ETF Optix",
+        "url": "etf_GRID",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NXG Cushing Midstream Energy Fund Optix",
+        "url": "etf_SRV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Nasdaq Food ETF Optix",
+        "url": "etf_FTXG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Innovation ETF Optix",
+        "url": "etf_ARKK",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Genomic ETF Optix",
+        "url": "etf_ARKG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X China Consumer ETF Optix",
+        "url": "etf_CHIQ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco MSCI Sustainable ETF Optix",
+        "url": "etf_ERTH",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dave Inc. Trend Score",
+        "url": "DAVE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dave Inc. RelTrend Score",
+        "url": "DAVE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Heritage Insurance Holdings Inc. Trend Score",
+        "url": "HRTG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Heritage Insurance Holdings Inc. RelTrend Score",
+        "url": "HRTG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifecore Biomedical Inc. Trend Score",
+        "url": "LFCR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifecore Biomedical Inc. RelTrend Score",
+        "url": "LFCR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Public Education Inc. Trend Score",
+        "url": "APEI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Public Education Inc. RelTrend Score",
+        "url": "APEI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASP Isotopes Inc. Trend Score",
+        "url": "ASPI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASP Isotopes Inc. RelTrend Score",
+        "url": "ASPI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spire Global Inc. Trend Score",
+        "url": "SPIR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spire Global Inc. RelTrend Score",
+        "url": "SPIR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NN Inc. Trend Score",
+        "url": "NNBR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NN Inc. RelTrend Score",
+        "url": "NNBR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strive 500 ETF Trend Score",
+        "url": "STRV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strive 500 ETF RelTrend Score",
+        "url": "STRV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Cash Cows ETF Trend Score",
+        "url": "COWZ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Cash Cows ETF RelTrend Score",
+        "url": "COWZ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 Quality ETF Trend Score",
+        "url": "SPHQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco S&P 500 Quality ETF RelTrend Score",
+        "url": "SPHQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cambria Yield ETF Trend Score",
+        "url": "SYLD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cambria Yield ETF RelTrend Score",
+        "url": "SYLD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Small Cap ETF Trend Score",
+        "url": "CALF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pacer US Small Cap ETF RelTrend Score",
+        "url": "CALF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renaissance IPO ETF Trend Score",
+        "url": "IPO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renaissance IPO ETF RelTrend Score",
+        "url": "IPO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P 400 Mid Cap Growth ETF Trend Score",
+        "url": "MDYG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR S&P 400 Mid Cap Growth ETF RelTrend Score",
+        "url": "MDYG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Madison Small Cap Fund;A Trend Score",
+        "url": "MASMX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Madison Small Cap Fund;A RelTrend Score",
+        "url": "MASMX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Wide Moat ETF Trend Score",
+        "url": "MOAT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Wide Moat ETF RelTrend Score",
+        "url": "MOAT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Innovation ETF Trend Score",
+        "url": "ARKK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Innovation ETF RelTrend Score",
+        "url": "ARKK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Genomic ETF Trend Score",
+        "url": "ARKG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARK Genomic ETF RelTrend Score",
+        "url": "ARKG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Intl High Div ETF Trend Score",
+        "url": "VYMI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Intl High Div ETF RelTrend Score",
+        "url": "VYMI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X China Consumer ETF Trend Score",
+        "url": "CHIQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X China Consumer ETF RelTrend Score",
+        "url": "CHIQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitwise 10 Crypto Fund Trend Score",
+        "url": "BITW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitwise 10 Crypto Fund RelTrend Score",
+        "url": "BITW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Mini Trust ETF Trend Score",
+        "url": "ETH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Ethereum Mini Trust ETF RelTrend Score",
+        "url": "ETH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale ETH Trust Trend Score",
+        "url": "ETHE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale ETH Trust RelTrend Score",
+        "url": "ETHE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap ETF Trend Score",
+        "url": "GDLC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grayscale Digital Large Cap ETF RelTrend Score",
+        "url": "GDLC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alpha Architect Tail Risk ETF Trend Score",
+        "url": "CAOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alpha Architect Tail Risk ETF RelTrend Score",
+        "url": "CAOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brent Oil ETF Trend Score",
+        "url": "BNO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brent Oil ETF RelTrend Score",
+        "url": "BNO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Cloud ETF Trend Score",
+        "url": "CLOU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Cloud ETF RelTrend Score",
+        "url": "CLOU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neuberger Berman Sustainable Equity Fund;A Trend Score",
+        "url": "FTLS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neuberger Berman Sustainable Equity Fund;A RelTrend Score",
+        "url": "FTLS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Bitcoin Strategy ETF Trend Score",
+        "url": "BTRN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Bitcoin Strategy ETF RelTrend Score",
+        "url": "BTRN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Third Point Investors Limited Trend Score",
+        "url": "TPOU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Third Point Investors Limited RelTrend Score",
+        "url": "TPOU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Clean Edge Smart Grid ETF Trend Score",
+        "url": "GRID_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Clean Edge Smart Grid ETF RelTrend Score",
+        "url": "GRID_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NXG Cushing Midstream Energy Fund Trend Score",
+        "url": "SRV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NXG Cushing Midstream Energy Fund RelTrend Score",
+        "url": "SRV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Nasdaq Food ETF Trend Score",
+        "url": "FTXG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Trust Nasdaq Food ETF RelTrend Score",
+        "url": "FTXG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco MSCI Sustainable ETF Trend Score",
+        "url": "ERTH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco MSCI Sustainable ETF RelTrend Score",
+        "url": "ERTH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ Titanicburg",
+        "url": "jk_nasdaq_titannicburg",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NYSE Titanicburg",
+        "url": "jk_nyse_titannicburg",
+        "updated": "Daily"
     }
 ]

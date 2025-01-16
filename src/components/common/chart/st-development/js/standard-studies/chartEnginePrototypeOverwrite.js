@@ -97,6 +97,7 @@ if (CIQ.ChartEngine) {
 		var _q1;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
 		if(comparisonSymbolUrl){
+			data = chart.masterData
 			var filteredData2 = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
 			for (var i = 0; i < filteredData2.length; i++) {
 				var q = filteredData2[i][comparisonSymbolUrl];
@@ -140,6 +141,9 @@ if (CIQ.ChartEngine) {
 		if (!data) data = chart.dataSet;
 		var d;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// 默认是data(scrumbed)或者chart.dataSet,但是双股票情况下在处理第二个股票hl/2
+		// 时dataSet还为空，所以设为chart.masterData
+		if(comparisonSymbolUrl) data = chart.masterData
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["hl/2"] = (d.High + d.Low) / 2;
@@ -163,6 +167,9 @@ if (CIQ.ChartEngine) {
 		if (!data) data = chart.dataSet;
 		var d;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// 默认是data(scrumbed)或者chart.dataSet,但是双股票情况下在处理第二个股票hl/2
+		// 时dataSet还为空，所以设为chart.masterData
+		if(comparisonSymbolUrl) data = chart.masterData
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["hlc/3"] = (d.High + d.Low + d.Close) / 3;
@@ -186,6 +193,9 @@ if (CIQ.ChartEngine) {
 		if (!data) data = chart.dataSet;
 		var d;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// 默认是data(scrumbed)或者chart.dataSet,但是双股票情况下在处理第二个股票hl/2
+		// 时dataSet还为空，所以设为chart.masterData
+		if(comparisonSymbolUrl) data = chart.masterData
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["hlcc/4"] = (d.High + d.Low + 2 * d.Close) / 4;
@@ -209,6 +219,9 @@ if (CIQ.ChartEngine) {
 		if (!data) data = chart.dataSet;
 		var d;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// 默认是data(scrumbed)或者chart.dataSet,但是双股票情况下在处理第二个股票hl/2
+		// 时dataSet还为空，所以设为chart.masterData
+		if(comparisonSymbolUrl) data = chart.masterData
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["ohlc/4"] = (d.Open + d.High + d.Low + d.Close) / 4;
@@ -223,6 +236,9 @@ if (CIQ.ChartEngine) {
 		if (!data) data = chart.dataSet;
 		var d;
 		const comparisonSymbolUrl = CIQ.store.getters.getComparisonSymbol?.url
+		// 默认是data(scrumbed)或者chart.dataSet,但是双股票情况下在处理第二个股票hl/2
+		// 时dataSet还为空，所以设为chart.masterData
+		if(comparisonSymbolUrl) data = chart.masterData
 		for (var i = 0; i < data.length; ++i) {
 			d = data[i];
 			d["change"] = d.Close / d.iqPrevClose - 1;
