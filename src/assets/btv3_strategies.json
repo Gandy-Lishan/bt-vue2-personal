@@ -12605,5 +12605,319 @@
         ]
       }
     }
+  },
+  {
+    "uuid": "UUID",
+    "dataset": [
+      "./data/VGT.csv",
+      "./data/SPY.csv"
+    ],
+    "name": "Vanguard Technology ETF vs. S&P 500 Relative Ratio Rank System",
+    "symbol": "VGT",
+    "benchmark": "SPX",
+    "strategy": "Dual",
+    "capital": 100000.0,
+    "capital_alloc": 1,
+    "commission": 0,
+    "slippage": 0,
+    "direction": "Long",
+    "frequency": "Daily",
+    "trade_price": 0,
+    "exclude_oo": 0,
+    "market_environment": 0,
+    "index_moving_average_slope": 0,
+    "backtest_period": "22",
+    "start_date": "1998-12-22",
+    "end_date": "2024-12-30",
+    "risk_control": "//",
+    "description": {
+      "Introduction": "",
+      "Rules": ""
+    },
+    "entry_description": [
+      {
+        "commentDes": "E: Long; Single Signal Symbol Ratio RR105 > 99",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      }
+    ],
+    "exit_description": [
+      {
+        "commentDes": "X: Close; Single Signal   Symbol Ratio RR105 < 7",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      }
+    ],
+    "entry2_description": [
+      {
+        "commentDes": "E: Long; Single Signal   Symbol Ratio RR105 < 7",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      }
+    ],
+    "exit2_description": [
+      {
+        "commentDes": "X: Close; Single Signal   Symbol Ratio RR105 < 99",
+        "rocCond": {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      }
+    ],
+    "entry": {
+      "description": "VGT/SPY Ratio RR105 > 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/99"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
+    },
+    "exit": {
+      "description": "VGT/SPY Ratio RR105 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
+    },
+    "symbol2": "SPY",
+    "direction2": "Long",
+    "entry2": {
+      "description": "VGT/SPY Ratio RR105 < 7",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/2/7"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
+    },
+    "exit2": {
+      "description": "VGT/SPY Ratio RR105 > 99",
+      "relation": 1,
+      "score": 1,
+      "delay_bars": 0,
+      "signals_in_market": 1,
+      "signals": [
+        {
+          "code": "SY:Symbol Ratio;IDS:EO0/EP0;SC:SV/0/99"
+        }
+      ],
+      "cond": [
+        {
+          "newCondition": 8,
+          "conditionPeriod": "105"
+        }
+      ]
+    },
+    "indicator_layout": {
+      "savedTechSD": [
+        {
+          "type": "Symbol Ratio",
+          "inputs": {
+            "Field": "Ratio",
+            "overlay": false,
+            "display": "(VGT)Symbol Ratio",
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "isComparison": false,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)"
+        },
+        {
+          "type": "Symbol Ratio",
+          "inputs": {
+            "Field": "Ratio",
+            "overlay": false,
+            "display": "(SPY)Symbol Ratio",
+            "id": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "isComparison": true,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$Symbol Ratio$r001$ (Ratio,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Ratio",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(VGT)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Ratio",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(VGT)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-2"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Ratio",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "entry2",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-3"
+        },
+        {
+          "type": "ST ROCLike",
+          "inputs": {
+            "Field": "Ratio",
+            "condition": "RR",
+            "period": "105",
+            "overlay": false,
+            "display": "(SPY)Range Rank(Ratio, 105)",
+            "id": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
+          },
+          "outputs": {
+            "Result": "auto"
+          },
+          "parameters": {
+            "criteria": "exit2",
+            "index": 0,
+            "showSupLine": 100,
+            "chartName": "chart",
+            "editMode": true
+          },
+          "panel": "$r001$ST ROCLike$r001$ (Ratio,RR,105,n)-4"
+        }
+      ],
+      "activatedMA": [
+        {
+          "period": 21,
+          "url": ""
+        }
+      ],
+      "activatedMALayout": [],
+      "activatedTechLayout": [
+        {
+          "url": "Symbol Ratio",
+          "criteria": "entry",
+          "index": 0,
+          "symbolType": "symbol1"
+        },
+        {
+          "url": "Symbol Ratio",
+          "criteria": "exit",
+          "index": 0,
+          "symbolType": "symbol1"
+        },
+        {
+          "url": "Symbol Ratio",
+          "criteria": "entry2",
+          "index": 0,
+          "symbolType": "symbol2"
+        },
+        {
+          "url": "Symbol Ratio",
+          "criteria": "exit2",
+          "index": 0,
+          "symbolType": "symbol2"
+        }
+      ],
+      "formIndicators": {
+        "entry": [
+          "Symbol Ratio"
+        ],
+        "exit": [
+          "Symbol Ratio"
+        ],
+        "entry2": [
+          "Symbol Ratio"
+        ],
+        "exit2": [
+          "Symbol Ratio"
+        ]
+      }
+    }
   }
 ]

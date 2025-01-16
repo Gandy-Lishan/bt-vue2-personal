@@ -206,7 +206,7 @@ export default {
               url: 'sp1500'
             },
             {
-              label: 'NDX 100',
+              label: 'NDX',
               value: 'NDX100Score',
               type: 'SP1500Score',
               url: 'ndx'

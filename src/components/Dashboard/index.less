@@ -1,0 +1,293 @@
+/* Add any required styles */
+.page-content {
+ background: #fff;
+ padding: 15px 0 15px;
+ clear: both;
+}
+.container {
+ padding-right: 15px;
+ padding-left: 15px;
+ margin-right: auto;
+ margin-left: auto;
+}
+h1, h2, h3, h4, h5, h6 {
+ font-family: "Open Sans", sans-serif;
+ font-weight: 300;
+}
+h4 {
+ font-size: 18px;
+ line-height: 1.25em;
+ line-height: 1.5em;
+}
+b, strong {
+ font-weight: 700;
+}
+a {
+ background: 0 0;
+ text-decoration: none;
+ text-shadow: none;
+ background: 0 0;
+}
+p {
+ margin: 0 0 10px;
+}
+ul, ol {
+ margin-top: 0;
+ margin-bottom: 10px;
+}
+.bg-blue-hoki {
+ border-color: #67809f !important;
+ background-image: none !important;
+ background-color: #67809f !important;
+ color: #fff !important;
+}
+.clearfix:before, .clearfix:after, .dl-horizontal dd:before, .dl-horizontal dd:after, .container:before, .container:after, .container-fluid:before, .container-fluid:after, .row:before, .row:after, .form-horizontal .form-group:before, .form-horizontal .form-group:after, .btn-toolbar:before, .btn-toolbar:after, .btn-group-vertical>.btn-group:before, .btn-group-vertical>.btn-group:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after, .pager:before, .pager:after, .panel-body:before, .panel-body:after, .modal-footer:before, .modal-footer:after {
+  display: table;
+  content: '';
+}
+.nav {
+ padding-left: 0;
+ margin-bottom: 0;
+ list-style: none;
+ > li {
+  > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+  }
+ }
+}
+.nav-tabs {
+ border-bottom: 1px solid #ddd;
+ > li {
+  > a {
+    margin-right: 2px;
+    line-height: 1.43;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+  }
+  .active {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    &:hover, &:focus {
+      color: #555;
+      cursor: default;
+      background-color: #fff;
+      border-bottom-color: transparent;
+    }
+  }
+ }
+}
+.nav-tabs {
+  > li {
+    > a {
+      font-size: 14px;
+    }
+  }
+}
+.nav-pills {
+  > li {
+    > a {
+      font-size: 14px;
+    }
+  }
+}
+.nav-pills, .nav-tabs {
+ margin-bottom: 10px;
+}
+.tabbable-line {
+ .nav {
+  padding-left: 0;
+  list-style: none;
+  > li {
+   > a{
+   position: relative;
+   display: block;
+   padding: 10px 15px;
+   margin-right: 2px;
+   line-height: 1.42857143;
+   border: 1px solid transparent;
+   border-radius: 4px 4px 0 0;
+  }
+ }
+ }
+ > .nav-tabs {
+  border: none;
+  margin: 0;
+  > li{
+   float: left;
+   margin-bottom: -1px;
+   margin-right: 2px;
+   border-bottom: 4px solid transparent;
+   > a{
+    border: 0;
+    margin-right: 0;
+    color: #737373;
+    font-size: 15px;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+   }
+   &.active{
+    border-bottom: 4px solid #1c5271;
+    position: relative;
+    > a {
+      border: 0;
+      color: #333;
+    }
+   }
+  }
+  }
+  > .tab-content {
+    margin-top: -3px;
+    background-color: #fff;
+    border: 0;
+    border-top: 1px solid #eee;
+    padding: 15px 0;
+  }
+}
+.primary-link {
+ color: #65a0d0;
+ font-weight: 600;
+}
+.bold {
+ font-weight: 700 !important;
+}
+.uppercase {
+ text-transform: uppercase !important;
+}
+.row {
+ margin-right: -15px;
+ margin-left: -15px;
+}
+small,.small {
+ font-size: 85%;
+}
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+ position: relative;
+ min-height: 1px;
+ padding-right: 15px;
+ padding-left: 15px;
+}
+.portlet {
+ margin-top: 0;
+ margin-bottom: 25px;
+ padding: 0;
+ border-radius: 4px;
+ .tabbable-line {
+  > .tab-content {
+   margin-top: -3px;
+   background-color: #fff;
+   border: 0;
+   border-top: 1px solid #eee;
+   padding: 15px 0;
+   padding-bottom: 0;
+  }
+ }
+ &.light {
+ padding: 12px 20px 15px 20px;
+ background-color: #fff; 
+ > .portlet-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  min-height: 41px;
+  border-radius: 4px 4px 0 0;
+  padding: 0;
+  padding: 0;
+  min-height: 48px;
+  > .caption{
+   float: left;
+   display: inline-block;
+   font-size: 18px;
+   line-height: 18px;
+   font-weight: 300;
+   padding: 10px 0;
+   color: #666;
+   padding: 10px 0;
+   > .caption-subject {
+    font-size: 16px;
+   }
+  }
+ }
+ > .portlet-body {
+  clear: both;
+ }
+ }
+ > .portlet-title {
+ border-bottom: 1px solid #eee;
+ padding: 0;
+ margin-bottom: 10px;
+ min-height: 41px;
+ border-radius: 4px 4px 0 0;
+}
+}
+.panel-body {
+ font-size: 15px;
+ padding-top: 2px;
+}
+.panel {
+ box-shadow: none !important;
+ border: 1px solid #67809F;
+ margin-bottom: 20px;
+}
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.bg-blue-hoki {
+ border-color: #67809f !important;
+ background-image: none !important;
+ background-color: #67809f !important;
+ color: #fff !important;
+}
+.panel-title {
+ margin-top: 0;
+ margin-bottom: 0;
+ font-size: 16px;
+ color: inherit;
+}
+@media (min-width: 768px) {
+ .container {
+  width: 750px;
+ }
+}
+@media (min-width: 992px) {
+ .container {
+  width: 970px;
+ }
+ .col-md-5 {
+  width: 42%;
+ }
+ .col-md-7 {
+  width: 58%;
+ }
+ .col-md-12 {
+  width: 100%;
+ }
+ .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+  float: left;
+  box-sizing: border-box;
+ }
+}
+@media (min-width: 1200px) {
+ .container {
+  width: 1170px;
+  font-size: 16px;
+  line-height: 1.5em;
+ }
+ .panel-title {
+  font-size: 18px;
+ }
+ h4 {
+  line-height: 1.5em;
+ }
+ .portlet.light>.portlet-title>.caption.caption-md>.caption-subject {
+  font-size: 18px;
+  line-height: 1.25em;
+ }
+}

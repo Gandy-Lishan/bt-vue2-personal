@@ -501,6 +501,23 @@
 										v-copy="scope.row.id"
 									></el-button>
 								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="add to my signal"
+									placement="bottom-start"
+									v-if="isButtonVisible"
+								>
+									<el-button
+										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
+										:disabled="getIsBacktestRunningFlagState"
+										type="primary"
+										icon="el-icon-plus"
+										circle
+										size="mini"
+										@click="addBacktestSignal(scope.row)"
+									></el-button>
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
@@ -525,9 +542,11 @@ import {
   getHistoryList,
 	getSampleList,
   getFavoriteList,
-	getAnalystList
+	getAnalystList,
+	saveMySignalForm,
+	searchIndicator
 } from '@/service/service.js'
-import {isJson} from '@/utils'
+import {capitalizeFirstLetter, isJson} from '@/utils'
 import { getSymbolInfo } from '@/utils/globalFunc'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
@@ -535,6 +554,7 @@ import { copy } from "@/components/common/directives/copyBacktestID"
 import { RefreshBus } from "../EventBus/Bus"
 import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 import { mapGetters } from 'vuex';
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 
 export default {
 	name: 'Table',
@@ -559,7 +579,7 @@ export default {
 			searchItem: '',
      		currentSort: {}, // 当前的排序信息
 			searchItem: '',
-			// isButtonVisible: false,
+			isButtonVisible: false,
 			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
 			strategyType: 'Strategy'
 		}
@@ -596,11 +616,11 @@ export default {
 		userRole: {
 			handler(newVal) {
 			// 获取当前的域名
-			// const currentDomain = window.location.hostname;
+			const currentDomain = window.location.hostname;
 			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-			// if ((currentDomain == 'btv2.sentimentrader.com' || currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') && newVal == 'analyst') {
-			// 	this.isButtonVisible = true;
-			// }
+			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost')) {
+				this.isButtonVisible = true;
+			}
 			// if (newVal == 'analyst') {
 			// 	this.isButtonVisible = true;
 			// }
@@ -755,7 +775,124 @@ export default {
       if (order == 'ascending') prop = `-${prop}`
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
-		}
+		},
+		async addBacktestSignal(row) {
+			// 生成名字并检查有没有重名
+			const signalCode = new SignalCode()
+			const {strategy, frequency, name, symbol, symbol2} = row
+			const saveSignalsTimes = strategy !== 'Dual' ? 2 : 4
+			const conditions = []
+			for (let i = 0; i < saveSignalsTimes; i++) {
+				const even = Boolean((i % 2) === 0)
+				let criteriaName = (i === 0 && even) ? 'entry' : 'entry2'
+				if(!even) criteriaName = i === 1 ? 'exit' : 'exit2'
+
+					const {relation, signals_in_market, delay_bars, score, signals} = isJson(row[criteriaName]) ? JSON.parse(row[criteriaName]) : row[criteriaName]
+					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
+					const _description = criteria_description.map((item, i) => {
+						if(i === 0) return item.commentDes.replace(/(E|X):.*?[:|;]\s*/, '').replace(/Single Condition\s*/, '')
+						else return item.commentDes
+					})
+					const rocCond = criteria_description.map(item => item.rocCond)
+					// const _signals = await signals.map(async item => {
+					// 	debugger
+					// 	if(typeof item.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code)) {
+					// 		const decode = signalCode.decode(item.code)
+					// 		if(decode.analysis === 'User') {
+					// 			const res = await searchIndicator(decode.indicator)
+					// 			console.log('res', res)
+					// 		}
+					// 	}
+					// 	return ({code: item.code})
+					// })
+					let _signals = []
+					for (let index = 0; index < signals.length; index++) {
+						const _signalItem = signals[index];
+							try {
+								if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
+										const decode = signalCode.decode(_signalItem.code)
+										if(decode.analysis === 'User') {
+											debugger
+											const {data} = await searchIndicator(decode.indicator)
+											const element = data.results.find(ele => ele.name === decode.indicator)
+											if(element) {decode.indicator = element.url}
+											_signals.push({code: signalCode.encode(decode)})
+										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
+											this.popUpMsgBox('The \'Symbol Ratio\' for \'Dual Symbol Backtest\' is not supported.')
+											_signals = []
+											return
+										}
+										else {_signals.push({code: _signalItem.code})}
+								}
+							} catch (error) {
+									console.error(`Error processing condition: ${conditions}`, error);
+							}
+					}
+					console.log('_signals', _signals)
+					let _symbol = symbol
+					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
+					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
+					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
+					// if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
+					const condition = {
+						...row,
+						symbol: _symbol,
+						name: _name,
+						relation,
+						signals_in_market,
+						delay_bars,
+						score,
+						signals:_signals,
+						subscribe: 0,
+						description: relation === 0 ? [] : _description,
+						timeframe: frequency,
+						cond: relation === 0 ? [] : rocCond
+					}
+					if(!isRickControlAtExit && _signals.length !== 0) conditions.push(this.reassignBTAttributes(condition))
+			}
+			console.log('conditions', conditions)
+			if(conditions.length === 0) return
+			try {
+    const results = await Promise.all(
+      conditions.map(_condition => saveMySignalForm(_condition))
+    );
+    console.log('All conditions processed:', results);
+				const _results = results.map(res => {if(res.data.code === 211) return res.data.data}).filter(item => item).length
+				if(_results !== 0) this.popUpMsgBox(`${_results} signals have been successfully added.`)
+				else {this.popUpMsgBox(`${results.length - _results} signals not added: duplicates exist.`)}
+  } catch (error) {
+    console.error('Error processing conditions:', error);
+  }
+		},
+		reassignBTAttributes(data) {
+			debugger
+			// use for copy
+			data['cond'] = isJson(data['cond']) ? data['cond'] : JSON.stringify(data['cond'])
+			data['description'] = isJson(data['description']) ? data['description'] : JSON.stringify(data['description'])
+			data['signals'] = isJson(data['signals']) ? data['signals'] : JSON.stringify(data['signals'])
+			const selectedProps = [
+				'name',
+				'symbol',
+				'timeframe',
+				'signals',
+				'score',
+				'signals_in_market',
+				'relation',
+				'start_date',
+				'end_date',
+				'delay_bars',
+				'subscribe',
+				'cond',
+				'description'
+			]
+			let backtestParams = Object.assign(
+				{},
+				...selectedProps.map((prop) => ({ [prop]: data[prop] }))
+			)
+		console.log('backtestParams', backtestParams)
+			return backtestParams
+		},
 	}
 }
 </script>
