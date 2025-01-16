@@ -1958,7 +1958,7 @@ export default {
           type: 'SP500Score'
         },
         {
-          label: 'NDX 100',
+          label: 'NDX',
           value: 'ndx',
           type: 'NDX100Score'
         },

@@ -23,6 +23,8 @@ b, strong {
  font-weight: 700;
 }
 a {
+ background: 0 0;
+ text-decoration: none;
  text-shadow: none;
  background: 0 0;
 }
@@ -47,19 +49,61 @@ ul, ol {
  padding-left: 0;
  margin-bottom: 0;
  list-style: none;
+ > li {
+  > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+  }
+ }
 }
 .nav-tabs {
  border-bottom: 1px solid #ddd;
+ > li {
+  > a {
+    margin-right: 2px;
+    line-height: 1.43;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+  }
+  .active {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    &:hover, &:focus {
+      color: #555;
+      cursor: default;
+      background-color: #fff;
+      border-bottom-color: transparent;
+    }
+  }
+ }
+}
+.nav-tabs {
+  > li {
+    > a {
+      font-size: 14px;
+    }
+  }
+}
+.nav-pills {
+  > li {
+    > a {
+      font-size: 14px;
+    }
+  }
 }
 .nav-pills, .nav-tabs {
  margin-bottom: 10px;
 }
 .tabbable-line {
- &.nav {
+ .nav {
   padding-left: 0;
   list-style: none;
-  &>li {
-   &>a{
+  > li {
+   > a{
    position: relative;
    display: block;
    padding: 10px 15px;
@@ -69,17 +113,16 @@ ul, ol {
    border-radius: 4px 4px 0 0;
   }
  }
- &>.nav-tabs {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+ }
+ > .nav-tabs {
   border: none;
   margin: 0;
-  &>li{
+  > li{
    float: left;
    margin-bottom: -1px;
    margin-right: 2px;
    border-bottom: 4px solid transparent;
-   &>a{
+   > a{
     border: 0;
     margin-right: 0;
     color: #737373;
@@ -91,16 +134,20 @@ ul, ol {
    &.active{
     border-bottom: 4px solid #1c5271;
     position: relative;
+    > a {
+      border: 0;
+      color: #333;
+    }
    }
   }
- }
- &>.tab-content {
-  margin-top: -3px;
-  background-color: #fff;
-  border: 0;
-  border-top: 1px solid #eee;
-  padding: 15px 0;
- }
+  }
+  > .tab-content {
+    margin-top: -3px;
+    background-color: #fff;
+    border: 0;
+    border-top: 1px solid #eee;
+    padding: 15px 0;
+  }
 }
 .primary-link {
  color: #65a0d0;
@@ -131,7 +178,7 @@ small,.small {
  padding: 0;
  border-radius: 4px;
  .tabbable-line {
-  &>.tab-content {
+  > .tab-content {
    margin-top: -3px;
    background-color: #fff;
    border: 0;
@@ -143,10 +190,15 @@ small,.small {
  &.light {
  padding: 12px 20px 15px 20px;
  background-color: #fff; 
- &>.portlet-title {
+ > .portlet-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  min-height: 41px;
+  border-radius: 4px 4px 0 0;
+  padding: 0;
   padding: 0;
   min-height: 48px;
-  &>.caption{
+  > .caption{
    float: left;
    display: inline-block;
    font-size: 18px;
@@ -155,16 +207,16 @@ small,.small {
    padding: 10px 0;
    color: #666;
    padding: 10px 0;
-   &>.caption-subject {
+   > .caption-subject {
     font-size: 16px;
    }
   }
  }
- .portlet-body {
-   padding-top: 2px;
+ > .portlet-body {
+  clear: both;
  }
  }
- &>.portlet-title {
+ > .portlet-title {
  border-bottom: 1px solid #eee;
  padding: 0;
  margin-bottom: 10px;

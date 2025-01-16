@@ -470,6 +470,7 @@ export default {
     async deleteSignals(url) {
 			await deleteMySignal(url)
 			await this.getDataList(null, true)
+      this.searchItem = ''
 			this.popUpMsgBox('Successfully deleted')
     },
     async runAllMySignals() {
