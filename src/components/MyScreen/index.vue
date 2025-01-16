@@ -32,6 +32,7 @@
             ref="SignalsTable"
             :lastSignalDate="lastSignalDate"
             @changeSecondTab="changeSecondTab"
+            @displayFormData="displayFormData"
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
           ></SignalsTable>
@@ -40,6 +41,7 @@
             currentPageTab="Sample"
             ref="SampleTable"
             @changeSecondTab="changeSecondTab"
+            @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
           ></SignalsTable>
         </div>
@@ -64,7 +66,7 @@
       </el-collapse-item>
       <el-collapse-item name="3" class="form">
         <template v-slot:title>
-          <div class="title" ref="scrollTarget">
+          <div class="title" ref="scrollTargetResults">
             <p @click.stop :class="{ secondActive: activeSecondTab == 'results' || '' }">Screen Result List</p>
           </div>
           <div class="downLoadCsvBtn">
@@ -96,7 +98,7 @@ import ScannerForm from "./ScannerForm";
 import SignalsTable from "./Table";
 import FilterTable from "./FilterTable";
 import Trades from "./Trades";
-import { getLastSignalDate, getMySignalsSubscribe, changeMySignalsSubscribe } from '@/service/service';
+import { getLastSignalDate, changeMySignalsSubscribe } from '@/service/service';
 import { isJson } from "@/utils"
 
 export default {
@@ -182,7 +184,6 @@ export default {
   },
   async mounted() {
     // get the signal whose the last signal date is today
-    await this.getMySignalsSubscribe()
     await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MyScreen')
     await this.$refs['SignalsTable'].onSortChange({column: 
@@ -192,14 +193,6 @@ export default {
     })
   },
   methods: {
-    async getMySignalsSubscribe() {
-      const res = await getMySignalsSubscribe()
-      const code  = res.data?.code
-      if(code == 219) {
-        const my_signals_subscribe = (isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data).my_signal
-        this.checked = Boolean(Number(my_signals_subscribe))
-      }
-    },
     changeTab(val) {
       this.activeTab = val
     },
@@ -229,13 +222,47 @@ export default {
         });
     },
     displayResultsData(data) {
+      // this.$refs['ScannerForm'].displayData(data)
+      this.activeSecondTab = 'results'
+      const status = data.status
+      if(status !== 'finish' && status !== 'Finish') {
+        this.scrollToTarget('scrollTarget', -200)
+        this.clearResults()
+        return
+      }
+      this.displayResultList(list)
+      this.scrollToTarget('scrollTargetResults')
+    },
+    displayFormData(data) {
       this.$refs['ScannerForm'].displayData(data)
-      this.scrollToTarget('scrollTarget')
+      this.scrollToTarget('scrollTarget', -200)
+    },
+    displayResultList(content) {
+      if(!content) return
+		  this.loading = true
+      this.$refs.filterTable.handleSizeChange(10)
+      // 把数据处理成所需格式
+       content.forEach(x => {
+        x['Close'] = x['Close'].toFixed(2)
+		  	// x['Alloc'] = (x['Alloc']*100).toFixed(0)
+			  x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
+			  x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
+			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
+			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
+			  x['_Signal'] = x['Signal']
+			  x['TimeInMarket'] = x['TimeInMarket']
+       })
+        this.filterTableData = {
+          ...this.filterTableData,
+          content
+        }
+		    this.loading = false
     },
     clearResults() {
-        this.activeTab = 'filter'
-        this.$refs['Statistics'].displayData({})
-        this.tradesData = []
+      this.filterTableData = {
+        ...this.filterTableData,
+        content: []
+      }
     },
     resetForm() {
       this.$nextTick(() => {
@@ -249,7 +276,7 @@ export default {
       if(val === 'MyScreen') await this.$refs['SignalsTable'].getDataList(val)
       if(val === 'Sample') await this.$refs['SampleTable'].getDataList(val)
       if(val === 'Sample') this.activeTab = 'MyScreen'
-      this.scrollToTarget('scrollTargetTable')
+      // this.scrollToTarget('scrollTargetTable')
     },
     reassignBTAttributes(data) {
       debugger

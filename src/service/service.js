@@ -1902,3 +1902,101 @@ export function changeMySignalsSubscribe(data) {
 	})
 }
 /* My Signals End */
+/* My Screens Start */
+export function getMyScreensList(url) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function saveMyScreenForm(data) {
+	const url = '/dev/myscreen_app/myscreen'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function editMyScreenForm(data, rowUrl) {
+	const url = `/dev/myscreen_app/myscreen?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function deleteMyScreen(url) {
+	const path = `/dev/myscreen_app/myscreen?url=${url}`
+	return axios.delete(path)
+}
+export function getNewestScreenDate() {
+	const path = `/dev/myscreen_app/get_newest_date`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getScreenResults(url) {
+	const path = `/dev/myscreen_app/myscreen?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* My Screens End */
