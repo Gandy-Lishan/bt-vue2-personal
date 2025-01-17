@@ -251,10 +251,6 @@ export default {
     await this.getTableData(this.currentPage)
   },
   computed: {
-    // ...mapGetters({
-    //   sentimentList: 'getRefactoredSentimentList',
-    //   symbolList: 'getRefactoredSymbolList'
-    // }
     sentimentList() {
       const data = localStorage.getItem('refactoredSentimentList');
       return data ? JSON.parse(data) : [];
@@ -319,6 +315,7 @@ export default {
       this.total = listRes.data.count
       this.tableData = await this.processRowData(listRes.data.results)
       this.loading = false
+      debugger
     },
     async processRowData(resData) {
       let promise = resData.map(async item => {
