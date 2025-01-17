@@ -504,7 +504,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="add to my signal"
+									content="Add entry and exit criteria to my signal"
 									placement="bottom-start"
 									v-if="isButtonVisible"
 								>
@@ -782,6 +782,7 @@ export default {
 			const {strategy, frequency, name, symbol, symbol2} = row
 			const saveSignalsTimes = strategy !== 'Dual' ? 2 : 4
 			const conditions = []
+			const reasons = []
 			for (let i = 0; i < saveSignalsTimes; i++) {
 				const even = Boolean((i % 2) === 0)
 				let criteriaName = (i === 0 && even) ? 'entry' : 'entry2'
@@ -818,7 +819,7 @@ export default {
 											if(element) {decode.indicator = element.url}
 											_signals.push({code: signalCode.encode(decode)})
 										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
-											this.popUpMsgBox('The \'Symbol Ratio\' for \'Dual Symbol Backtest\' is not supported.')
+											reasons.push('Dual Symbol Backtest with Symbol Ratio is not supported')
 											_signals = []
 											break
 										}
@@ -832,6 +833,7 @@ export default {
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
 					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
+					if(isRickControlAtExit) reasons.push('Risk exit criteria cannot be added')
 					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
 					// if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
 					// if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
@@ -859,8 +861,13 @@ export default {
     );
     console.log('All conditions processed:', results);
 				const _results = results.map(res => {if(res.data.code === 211) return res.data.data}).filter(item => item).length
+				const _duplicatedResults = results.map(res => {if(res.data.code === 411) return res.data.data}).filter(item => item).length
+				const unsuccess = saveSignalsTimes - _results
+				if(_duplicatedResults !== 0) reasons.push('Already exist')
+				const reasonsSet = Array.from(new Set([...reasons]))
+			console.log('reasonsSet', reasonsSet)
 				if(_results !== 0) this.popUpMsgBox(`${_results} signals have been successfully added.`)
-				else {this.popUpMsgBox(`${results.length - _results} signals not added: duplicates exist.`)}
+				if(unsuccess !== 0){this.popUpMsgBox(`${unsuccess} signals not added: ${_duplicatedResults ===  unsuccess ? 'Already exist' : reasonsSet.join(', ')}.`)}
   } catch (error) {
     console.error('Error processing conditions:', error);
   }
