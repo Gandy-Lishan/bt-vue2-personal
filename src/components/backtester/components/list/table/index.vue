@@ -791,7 +791,10 @@ export default {
 					const {relation, signals_in_market, delay_bars, score, signals} = isJson(row[criteriaName]) ? JSON.parse(row[criteriaName]) : row[criteriaName]
 					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
 					const _description = criteria_description.map((item, i) => {
-						if(i === 0) return item.commentDes.replace(/(E|X):.*?[:|;]\s*/, '').replace(/Single Condition\s*/, '')
+						if(i === 0) return item.commentDes
+							.replace(/(E|X):.*?[;]\s*/, '') // 去掉 E: Long: Single Condition;
+							.replace(/Single Condition\s*/, '') // 去掉 Single Condition
+							.trim(); // 去掉首尾多余空格
 						else return item.commentDes
 					})
 					const rocCond = criteria_description.map(item => item.rocCond)
