@@ -22,34 +22,26 @@
         </el-col>
         <el-col :span="8">
           <el-form-item
-          prop="symbol"
+          prop="category"
           >
           <template slot="label">
             <label>
-              2. Symbol
+              2. Category
             </label>
           </template>
           <el-select
-            v-model="data.symbol"
-            id="symbolName"
-            filterable
-            remote
-            reserve-keyword
-            automatic-dropdown
-            placeholder="Enter Keywords"
-            :remote-method="remoteMethod"
-            @visible-change="remoteMethod"
-            :value-key="'key'"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              :disabled="item.disabled"
+              v-model="data.category"
+              placeholder="— Select type —"
             >
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -106,10 +98,10 @@
 </template>
 
 <script>
-import { isJson, timestampToTime, capitalizeFirstLetter, encodeBase64 } from '@/utils'
+import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import cloneDeep from 'lodash/cloneDeep'
-import { saveMySignalForm, editMySignalForm, getScannerBTList, getMySignalResults, perviewScannerForm } from '@/service/service'
+import { saveMyScreenForm, editMyScreenForm, getScreenResults } from '@/service/service'
 import Criteria from "./criteria/index";
 import { generateConfig } from './criteria/config'
 import { CIQ } from '@/components/common/chart/st-development/js'
@@ -127,39 +119,44 @@ export default {
       data: {
         name: '',
         timeframe: 'Daily',
-        symbol: 'SPY',
+        category: 'SPX',
       },
       rowUrl: null,
       isPolling: false,
       processTips: '',
       percentage: 0,
-      symbolInfo: {strategy: 'Single', symbol: 'SPY', symbol2: ''}, 
+      symbolInfo: {strategy: 'Single', category: 'SPY', symbol2: ''}, 
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
       endPickerOptions: {
         disabledDate: this.handleDisabledEndDate
       },
-      typeOptions: [
-        { value: 'stock', label: 'Stock' },
-        { value: 'etf', label: 'ETF' },
-        { value: 'stock/etf', label: 'Stock & ETF' },
-      ],
       timeframeOption: [
         { value: 'Daily', label: 'Daily', disabled: false},
         { value: 'Weekly', label: 'Weekly', disabled: false},
         { value: 'Monthly', label: 'Monthly', disabled: false}
       ],
-      capitalAllocates: [
-        { value: 'Kelly', label: 'Auto Allocation'},
-        { value: 'manual_input', label: 'Manual Input'}
+      options: [
+        { value: 'Communication Services', label: 'Communication Services', disabled: false},
+        { value: 'Discretionary', label: 'Discretionary', disabled: false},
+        { value: 'Energy', label: 'Energy', disabled: false},
+        { value: 'Financials', label: 'Financials', disabled: false},
+        { value: 'Health Care', label: 'Health Care', disabled: false},
+        { value: 'Industrials', label: 'Industrials', disabled: false},
+        { value: 'Materials', label: 'Materials', disabled: false},
+        { value: 'Real Estate', label: 'Real Estate', disabled: false},
+        { value: 'SPX', label: 'SPX', disabled: false},
+        { value: 'Staples', label: 'Staples', disabled: false},
+        { value: 'Technology', label: 'Technology', disabled: false},
+        { value: 'Utilities', label: 'Utilities', disabled: false}
       ],
       rules: {
         name: [
           { required: true, message: 'Enter a name', trigger: 'blur' },
           { required: true, message: 'Enter a name', trigger: 'change' }
         ],
-        symbol: [
+        category: [
           { required: true, message: 'Select Symbol', trigger: 'blur' },
           { required: true, message: 'Select Symbol', trigger: 'change' }
         ],
@@ -168,7 +165,6 @@ export default {
           { required: true, message: 'Select Timeframe', trigger: 'change' }
         ],
       },
-      options: []
     }
   },
   computed: {
@@ -258,7 +254,7 @@ export default {
         this.data = {
           ...this.data,
           timeframe: 'Daily',
-          symbol: 'SPY'
+          category: 'SPY'
         }
         this.rowUrl = null
         this.processTips = ''
@@ -311,8 +307,8 @@ export default {
       debugger
       if(this.percentage < 99) this.percentage += 8
       let saveRes
-      if(rowUrl) {saveRes = await editMySignalForm(saveData, rowUrl)}
-      else{saveRes = await saveMySignalForm(saveData)}
+      if(rowUrl) {saveRes = await editMyScreenForm(saveData, rowUrl)}
+      else{saveRes = await saveMyScreenForm(saveData)}
       // 这里要发请求拿到状态
       const code = saveRes.data?.code
       const failedConditions = [404, 411, 511, 512, 513, 514]
@@ -320,7 +316,23 @@ export default {
         // 保存失败
         return saveRes
       }
-      return saveRes
+      saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
+      let url = saveRes.data.data?.url
+      this.rowUrl = url
+      let pollingRes = null
+      do {
+        if(this.percentage < 99) this.percentage += 1
+        pollingRes = await getScreenResults(url)
+        const code = pollingRes.data.code
+        if (code == 214) {
+          // const previewCode = previewRes.data?.code
+          // if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
+          return pollingRes
+        }
+        if(code == 401 || code == 403 || code == 404 || code == 407 || this.percentage == 0 || this.processTips === '') return pollingRes
+        // Add a delay here to avoid excessive polling, e.g., using setTimeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      } while (true); // Keep polling indefinitely
     },
     async saveCriteriaData(criteriaRef) {
       debugger
@@ -501,7 +513,7 @@ try {
       }
 			const selectedProps = [
 				'name',
-				'symbol',
+				'category',
 				'timeframe',
 				'signals',
         'score',
@@ -546,9 +558,9 @@ try {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 211 || code == 213) this.popUpMsgBox(`The signal is completed successfully`)
+      if(code == 214 || code == 213) this.popUpMsgBox(`The screen is completed successfully`)
       // 运行成或者失败后刷新列表
-      if((code == 211 || code == 213)) {
+      if((code == 214 || code == 213)) {
         this.$emit('refreshBTList');
         this.$emit('displayResultsData', saveRes.data.data)
       }
@@ -562,7 +574,7 @@ try {
       this.data = {
         ...data,
         name: data.name,
-        symbol: data.symbol,
+        category: data.category,
         timeframe: data.timeframe
       }
       _this.$refs['entryChild1'].clearForm()
@@ -622,74 +634,6 @@ try {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
 		},
-    remoteMethod: throttle(async function(query) {
-      let vm = this
-      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
-        vm.loading = true
-        var symbolListTemp = vm.symbolList.map((item, index) => {
-          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-        })
-        var IndexListTemp = vm.indexList.map((item, index) => {
-          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-        })
-        
-        vm.getCustomStocksList()
-
-        this.options = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
-        vm.loading = false
-      }
-      else if (typeof query != 'boolean' && query !== '') {
-        vm.loading = true
-        var symbolListTemp = vm.symbolList.map((item, index) => {
-          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
-        }).filter((item) => {
-          return (
-            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
-          )
-        })
-        var IndexListTemp = vm.indexList.map((item, index) => {
-          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
-        }).filter((item) => {
-          return (
-            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
-          )
-        })
-        var customStocksListTemp = vm.customStocksList.filter((item) => {
-          return (
-            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
-          )
-        })
-       
-        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp)
-        let options = []
-        let wholeWord = []
-        // keyword全匹配
-        for (var item of list) {
-          if (
-            item.value.toLowerCase() === query.toLowerCase() ||
-            item.label.toLowerCase() === query.toLowerCase()
-          ) {
-            wholeWord.push(item)
-            continue
-          }
-          options.push(item)
-        }
-        options.unshift(...wholeWord)
-        // 去重
-        this.options = options
-        // 解除遮罩
-        vm.loading = false
-      } else {
-        this.options = []
-      }
-    }, 500),
-    getCustomStocksList() {
-      let vm = this
-      vm.customStocksList = vm.$store.getters.getMySymbollist.map((item, index) => {
-        let url = encodeBase64(item.name) + '||' + encodeBase64(item.url)
-        return { value: `${url}`, label: `${item.name}`, name: `${item.name}`, key: `${item.name}_${item.url}_${index}` }
-      })
-    },
   }
 }
 </script>
