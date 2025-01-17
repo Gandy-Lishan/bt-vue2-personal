@@ -993,6 +993,7 @@ export default {
               handleTechnical(signal.indicator);
               break;
             case 'User':
+              this.userIndicatorUrl = signal.indicator
               await handleUser(signal.indicator);
               break;
           }

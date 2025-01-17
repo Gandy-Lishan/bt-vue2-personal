@@ -9,6 +9,7 @@ import {__js_advanced_studies_macd_} from "./advance-studies/macd.js"
 import {__js_advanced_studies_bollinger_} from "./advance-studies/bollinger.js"
 import {__js_advanced_studies_volatilityIndex_} from "./advance-studies/volatilityIndex.js"
 import {__js_advanced_studies_atr_} from "./advance-studies/atr.js"
+import {__js_advanced_studies_awesomeOscillator_} from "./advance-studies/awesomeOscillator.js"
 import {__js_advanced_studies_volumeStudies_} from "./advance-studies/volumeStudies.js"
 import {__js_advanced_studies_swingIndex_} from "./advance-studies/swingIndex.js"
 import {__js_advanced_studies_balanceOfPower_} from "./advance-studies/balanceOfPower.js"
@@ -66,6 +67,7 @@ if (!CIQ.Studies) {
 			__js_advanced_studies_bollinger_,
 			__js_advanced_studies_volatilityIndex_,
 			__js_advanced_studies_atr_,
+			__js_advanced_studies_awesomeOscillator_,
 			__js_advanced_studies_volumeStudies_,
 			__js_advanced_studies_swingIndex_,
 			__js_advanced_studies_balanceOfPower_,

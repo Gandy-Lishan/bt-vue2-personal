@@ -115,8 +115,8 @@ export default {
 			this.editStudies(false)
 
 			this.symbolUrl = CIQ.findSentiIndicator(null,this.symbol) // 先看是不是列表现存的url
-                        ?this.symbol  // 是列表现存的项，用this.symbol做url
-                        :CIQ.findSentiIndicator(this.symbol + ' Optix',null)  // 不是的话再看是不是列表现存的symbol
+                        ?this.symbol  // 是列表现存的项，用this.symbol做url (AAON)
+                        :CIQ.findSentiIndicator(this.symbol + ' Optix',null)  // 不是的话再看是不是列表现存的symbol (AAON Optix)
                           ?CIQ.findSentiIndicator(this.symbol + ' Optix',null).url  // 是列表现存的symbol，取其url
                           :this.symbol  // 不是列表现存的项，用this.symbol做url
       if(['Trend Score Breakout','Trend Score Breakdown'].includes(this.other['_Signal'])) {

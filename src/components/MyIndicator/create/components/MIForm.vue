@@ -573,10 +573,6 @@ export default {
     handleGetMiBenmark() {
       return this.getMiBenmarkState
     },
-    // ...mapGetters({
-    //   sentimentList: 'getRefactoredSentimentList',
-    //   symbolList: 'getRefactoredSymbolList'
-    // })
     sentimentList() {
       const data = localStorage.getItem('refactoredSentimentList');
       return data ? JSON.parse(data) : [];
@@ -946,6 +942,7 @@ export default {
         extreme_pessimism: this.data.extreme_pessimism,
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
+      debugger
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {

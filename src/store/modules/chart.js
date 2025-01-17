@@ -61,7 +61,7 @@ const state = {
 		extraIndicators: [],
 	},
 	extremeValue: [], //chartiq
-	indicatorsList: indicatorsData, //chartiq 代替了AllSymbolsList
+	indicatorsList: [], //chartiq 代替了AllSymbolsList
 	builtinList: [], //chartiq 包含完整techList
 	maLikeTech: [
 		'ma',
@@ -115,9 +115,7 @@ const state = {
 	forecastAuthorList: [],
   	symbollistForecast: [],
 	forecastMarket: 'SPY', //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
-	// 何总写的提供给cpm,myindicator,seasonality的修改后的senti&symbol list
-	refactoredSentimentList: [],
-	refactoredSymbolList: [],
+
 	indicatorsPageListdata: {},
 	cssMonthLabel: '',
 	indicatorPageBtv1List: []
@@ -135,12 +133,6 @@ const mutations = {
 	},
 	SET_SYMBOLLIST_FORECAST(state, list){
 		state.symbollistForecast = list
-	},
-  	SET_REFACTORED_SENTIMENTLIST(state, list){
-		state.refactoredSentimentList = list
-	},
-	SET_REFACTORED_SYMBOLLIST(state, list){
-		state.refactoredSymbolList = list
 	},
 
 
@@ -416,83 +408,53 @@ const actions = {
 
 
 /** Begin fetch resources */
-	fetch_stocklist({ commit }) {
-		return new Promise(async (resolve,reject) => {
-			const list = state.stocksList
-			if(list.length == 0){
-				try{
-					const res = await getStocksList()
-					if (res.status === 200 || res.status === 201) {
-						commit('SET_STOCKLIST', res.data)
-						resolve(res.data)
-					}else {
-						// 处理其他状态码
-						console.error(`Unexpected status code: ${res.status}`);
-						reject(new Error(`Unexpected error, status code: ${res.status}`));
-					}
-				}catch(err){
-					reject(err)
-				}
-			}else{
-				resolve(list)
-			}	
-		})
-	},
-	fetch_indexlist({ commit }) {
-		return new Promise(async (resolve,reject) => {
-			const list = state.indexsList
-			if(list.length == 0){
-				try{
-					const res = await getIndexsList()
-					if (res.status === 200 || res.status === 201) {
-						commit('SET_INDEXLIST', res.data)
-						resolve(res.data)
-					}else {
-						// 处理其他状态码
-						console.error(`Unexpected status code: ${res.status}`);
-						reject(new Error(`Unexpected error, status code: ${res.status}`));
-					}
-				}catch(err){
-					reject(err)
-				}
-			}else{
-				resolve(list)
-			}
-		})
-	},
+	// fetch_stocklist({ commit }) {
+	// 	return new Promise(async (resolve,reject) => {
+	// 		const list = state.stocksList
+	// 		if(list.length == 0){
+	// 			commit('SET_STOCKLIST', stocksData)
+	// 			resolve(stocksData)
+	// 		}else{
+	// 			resolve(list)
+	// 		}	
+	// 	})
+	// },
+	// fetch_indexlist({ commit }) {
+	// 	return new Promise(async (resolve,reject) => {
+	// 		const list = state.indexsList
+	// 		if(list.length == 0){
+	// 			commit('SET_INDEXLIST', indexsData)
+	// 			resolve(indexsData)
+	// 		}else{
+	// 			resolve(list)
+	// 		}
+	// 	})
+	// },
 	fetch_indicatorsList({ commit }) {
 		return new Promise(async (resolve,reject) => {
 			const list = state.indicatorsList
 			if(list.length == 0){
-				try{
-					const res = await getIndicatorsList()
-					if (res.status === 200 || res.status === 201) {
-						let allSymbolsList = uniqueObjectArray(res.data)
-						let newAllSymbolsList = []
-						for (var i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
-							let item = allSymbolsList[i]
-							if (state.stocksList.find(j => j.stock == item.url)) {
-								let newName = item.url + ' Optix'
-								newAllSymbolsList.push({
-									chart_name: newName,
-									url: item.url + '@indicator',
-									updated: item.updated
-								})
-							} else {
-								newAllSymbolsList.push(allSymbolsList[i])
-							}
-						}
-						commit('SET_INDICATORSLIST', newAllSymbolsList)
-						resolve(newAllSymbolsList)
-					}else {
-						// 处理其他状态码
-						console.error(`Unexpected status code: ${res.status}`);
-						reject(new Error(`Unexpected error, status code: ${res.status}`));
-					}
-				}catch(err){
-					reject(err)
+				let allSymbolsList = uniqueObjectArray(indicatorsData)
+				let newAllSymbolsList = [];
+				const stockSet = new Set(state.stocksList.map(j => j.stock));  // 将 stocksList 转为 Set，用于快速查找
+				
+				for (let i = 0; i < allSymbolsList.length; i++) {	// indicatorlist
+				  let item = allSymbolsList[i];
+				  
+				  if (stockSet.has(item.url)) {  // 使用 Set 来进行快速查找
+					let newName = item.url + ' Optix';
+					newAllSymbolsList.push({
+					  chart_name: newName,
+					  url: item.url + '@indicator',
+					  updated: item.updated
+					});
+				  } else {
+					newAllSymbolsList.push(item);
+				  }
 				}
-			}else{
+				commit('SET_INDICATORSLIST', newAllSymbolsList)
+				resolve(newAllSymbolsList)
+			} else{
 				resolve(list)
 			}
 		})
@@ -791,6 +753,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'sp1500', 'sp1500&rel_trend=1',
 					'spx', 'spx&rel_trend=1',
 					'ndx', 'ndx&rel_trend=1', 
+					'crp', 'crp&rel_trend=1', 
 					'russell', 'russell&rel_trend=1', 
 					'etf_domestic', 'etf_domestic&rel_trend=1',
 					'etf_foreign', 'etf_foreign&rel_trend=1',

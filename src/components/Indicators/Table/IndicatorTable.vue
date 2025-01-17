@@ -236,6 +236,12 @@ export default {
               url: 'etf_other'
             },
             {
+              label: 'Crypto',
+              value: 'CRPScore',
+              type: 'SP1500Score',
+              url: 'crp'
+            },
+            {
               label: 'Sector Summary',
               value: 'TrendSector',
               type: 'SP1500Score',

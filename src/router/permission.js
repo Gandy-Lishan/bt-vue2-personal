@@ -196,34 +196,33 @@ async function initiateCurrentDate() {
 async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
-	
-	
-	// if (
-	// 	!localStorage.getItem('refactoredSentimentList') ||
-	// 	!localStorage.getItem('refactoredConcatList')
-	// ) {
-		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
-		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
-		const refactoredStocksList = await fetchDataList('getStockList')
-		const refactoredIndexsList = await fetchDataList('getIndexList')
-		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
-		// 耗时一秒而且没有排除项
-      	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+	console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
+
+	// indicator list内存在symbol + Optix的项（AAON Inc对比AAON Optix）,
+	// 他们需要在此action内处理并url加上@indicator以区别对应symbol list的同名url， 
+	// 和本来就是 index + Optix的项不同(SPY Optix)
+	await CIQ.store.dispatch('chart/fetch_indicatorsList')
+
+	let refactoredSentimentList = await fetchDataList('getIndicatorsList')
+	refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
+	const refactoredStocksList = await fetchDataList('getStockList')
+	const refactoredIndexsList = await fetchDataList('getIndexList')
+	let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
+	// 耗时一秒而且没有排除项
+	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
 
 
-		const storedSentimentList = localStorage.getItem('refactoredSentimentList');
-		const storedConcatList = localStorage.getItem('refactoredConcatList');
-		if (
-			JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
-			JSON.stringify(refactoredConcatList) !== storedConcatList 
-		) {
-			localStorage.setItem('refactoredSentimentList',JSON.stringify(refactoredSentimentList))
-			localStorage.setItem('refactoredConcatList',JSON.stringify(refactoredConcatList))
-		}
+	const storedSentimentList = localStorage.getItem('refactoredSentimentList');
+	const storedConcatList = localStorage.getItem('refactoredConcatList');
+	if (
+		JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
+		JSON.stringify(refactoredConcatList) !== storedConcatList 
+	) {
+		localStorage.setItem('refactoredSentimentList',JSON.stringify(refactoredSentimentList))
+		localStorage.setItem('refactoredConcatList',JSON.stringify(refactoredConcatList))
+	}
 
-		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-	// }	
+	console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");	
 
 	//	改为了获取列表时请求
 	// if (
