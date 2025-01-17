@@ -833,7 +833,7 @@ export default {
 					let _symbol = symbol
 					if(strategy === 'Dual' && i >= 2) _symbol = symbol2
 					const isRickControlAtExit = relation == 0 && criteriaName.startsWith('exit')
-					if(isRickControlAtExit) reasons.push('Risk exit criteria cannot be added')
+					if(isRickControlAtExit) reasons.push('Risk exit criteria are not supported')
 					let _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
 					// if(strategy === 'Dual' && i < 2) _name = `${name} ${_symbol} ${capitalizeFirstLetter(criteriaName)}`
 					// if(strategy === 'Dual' && i >= 2) _name = `${name} ${_symbol}(2) ${capitalizeFirstLetter(criteriaName)}`
@@ -854,7 +854,11 @@ export default {
 					if(!isRickControlAtExit && _signals.length !== 0) conditions.push(this.reassignBTAttributes(condition))
 			}
 			console.log('conditions', conditions)
-			if(conditions.length === 0) return
+			if(conditions.length === 0) {
+				const reasonsSet = Array.from(new Set([...reasons]))
+				if(reasonsSet !== 0) this.popUpMsgBox(`${reasonsSet.join(', ')}`)
+				return
+			}
 			try {
     const results = await Promise.all(
       conditions.map(_condition => saveMySignalForm(_condition))
@@ -866,8 +870,12 @@ export default {
 				if(_duplicatedResults !== 0) reasons.push('Already exist')
 				const reasonsSet = Array.from(new Set([...reasons]))
 			console.log('reasonsSet', reasonsSet)
-				if(_results !== 0) this.popUpMsgBox(`${_results} signals have been successfully added.`)
-				if(unsuccess !== 0){this.popUpMsgBox(`${unsuccess} signals not added: ${_duplicatedResults ===  unsuccess ? 'Already exist' : reasonsSet.join(', ')}.`)}
+			const failMsg = `${unsuccess === 0 ? '' : `${unsuccess} signals not added: ${_duplicatedResults ===  unsuccess ? 'Already exist' : reasonsSet.join(', ')}`}`
+				if(_results !== 0) this.popUpMsgBox(`
+				${_results} signals have been successfully added.<br/>
+			 ${failMsg}
+				`)
+				else {this.popUpMsgBox(`${unsuccess} signals not added: ${_duplicatedResults ===  unsuccess ? 'Already exist' : reasonsSet.join(', ')}.`)}
   } catch (error) {
     console.error('Error processing conditions:', error);
   }
