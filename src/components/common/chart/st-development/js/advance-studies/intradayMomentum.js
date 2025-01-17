@@ -76,6 +76,16 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"Intraday Mtm": {
 			name: "Intraday Momentum Index",
+			seriesFN: function (stx, sd, quotes) {
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+				}
+				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
+				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
+				
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateIntradayMomentum,
 			inputs: { Period: 20 },
 			parameters: {

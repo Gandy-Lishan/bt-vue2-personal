@@ -92,6 +92,16 @@ if (!CIQ.Studies) {
 		"M Flow": {
 			name: "Money Flow Index",
 			range: "0 to 100",
+			seriesFN: function (stx, sd, quotes) {
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+				}
+				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
+				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
+				
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateMoneyFlowIndex,
 			inputs: { Period: 14 },
 			parameters: {

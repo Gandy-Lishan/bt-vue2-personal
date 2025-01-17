@@ -128,7 +128,17 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"W MFI": {
 			name: "Market Facilitation Index",
-			seriesFN: CIQ.Studies.displayMFI,
+			//seriesFN: CIQ.Studies.displayMFI,
+			seriesFN: function (stx, sd, quotes) {
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+				}
+				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
+				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
+				
+				CIQ.Studies.displayMFI(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateMFI,
 			yAxis: { ground: true },
 			range: "0 to max",

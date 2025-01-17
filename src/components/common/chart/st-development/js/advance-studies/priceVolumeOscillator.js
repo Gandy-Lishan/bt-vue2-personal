@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-import { printConsole } from '@/utils'
+import { getPropertyByString } from "@/utils/globalFunc"
 
 let __js_advanced_studies_priceVolumeOscillator_ = (_exports) => {
 
@@ -155,6 +155,16 @@ if (!CIQ.Studies) {
 		"Vol Osc": {
 			name: "Volume Oscillator",
 			calculateFN: CIQ.Studies.calculatePriceOscillator,
+			seriesFN: function (stx, sd, quotes) {
+				var field	// 它是流动的
+				if(sd.parameters.isComparison){
+					field = CIQ.store.getters.getComparisonSymbol.url
+				}
+				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
+				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
+				
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			inputs: {
 				"Short Cycle": 12,
 				"Long Cycle": 26,
