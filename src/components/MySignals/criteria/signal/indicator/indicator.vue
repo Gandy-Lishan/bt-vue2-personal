@@ -976,6 +976,7 @@ export default {
             this.$emit('getIndicatorVal', {value: ele.name || '', index: this.panelIndex})
             console.log('this.createdIndicatorOptions', options)
             this.$emit('getIndicatorUrl', { index, url: indicator });
+            this.userIndicatorUrl = indicator
           };
           this.indicatorRadio = `${signal.analysis} Indicator`;
           if(signal.analysis === 'User')  this.indicatorRadio = `Users\' Own Indicator`;
@@ -993,7 +994,6 @@ export default {
               handleTechnical(signal.indicator);
               break;
             case 'User':
-              this.userIndicatorUrl = signal.indicator
               await handleUser(signal.indicator);
               break;
           }
