@@ -753,6 +753,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'sp1500', 'sp1500&rel_trend=1',
 					'spx', 'spx&rel_trend=1',
 					'ndx', 'ndx&rel_trend=1', 
+					'crp', 'crp&rel_trend=1', 
 					'russell', 'russell&rel_trend=1', 
 					'etf_domestic', 'etf_domestic&rel_trend=1',
 					'etf_foreign', 'etf_foreign&rel_trend=1',

@@ -212,6 +212,12 @@ export default {
               url: 'ndx'
             },
             {
+              label: 'Crypto',
+              value: 'CRPScore',
+              type: 'SP1500Score',
+              url: 'crp'
+            },
+            {
               label: 'Russell 3000',
               value: 'RussellScore',
               type: 'SP1500Score',

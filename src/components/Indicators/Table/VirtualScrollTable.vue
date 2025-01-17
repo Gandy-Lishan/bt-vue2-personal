@@ -1125,11 +1125,11 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
@@ -1154,7 +1154,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'trend') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_last_value',
@@ -1229,7 +1229,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'relative') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'reltrend_last_value',
@@ -1304,7 +1304,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'consecutive') {
         let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_count_8_or_more',
@@ -1514,7 +1514,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
     },
     inputStyle() {
       return {
@@ -1963,6 +1963,11 @@ export default {
           type: 'NDX100Score'
         },
         {
+          label: 'Crypto',
+          value: 'crp',
+          type: 'CRPScore'
+        },
+        {
           label: 'Russell 3000',
           value: 'russell',
           type: 'RussellScore'
@@ -2097,7 +2102,7 @@ export default {
         if(type === 'russell_3000_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'ndx', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp','russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
@@ -2368,6 +2373,7 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
+        CRPScore: 'crp',
         RussellScore: 'russell',
         DomesticETFScore: 'etf_domestic',
         ForeignETFScore: 'etf_foreign',
