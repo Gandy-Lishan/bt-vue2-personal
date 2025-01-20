@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_adx_ = (_exports) => {
@@ -43,6 +43,13 @@ if (!CIQ.Studies) {
 		var smoothing = parseInt(sd.inputs["Smoothing Period"], 10);
 		if (!smoothing && smoothing !== 0) smoothing = period;
 
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
 		if (quotes.length < sd.days + 1) {
 			sd.error = true;
 			return;
@@ -55,8 +62,8 @@ if (!CIQ.Studies) {
 		var quote;
 		for (var i = Math.max(1, sd.startFrom); i < quotes.length; i++) {
 			quote = quotes[i];
-			var plusDM = Math.max(0, quote.High - quotes[i - 1].High);
-			var minusDM = Math.max(0, quotes[i - 1].Low - quote.Low);
+			var plusDM = Math.max(0, getPropertyByString(quote,field,'High') - getPropertyByString(quotes[i - 1],field,'High'));
+			var minusDM = Math.max(0, getPropertyByString(quotes[i - 1],field,'Low') - getPropertyByString(quote,field,'Low'));
 			if (plusDM > minusDM) minusDM = 0;
 			else if (minusDM > plusDM) plusDM = 0;
 			else plusDM = minusDM = 0;
@@ -183,4 +190,5 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_adx_(typeof window !== "undefined" ? window : global);
+
+export {__js_advanced_studies_adx_}

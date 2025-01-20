@@ -1,5 +1,6 @@
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import {__js_advanced_studies_accumulationDistribution_} from "./advance-studies/accumulationDistribution.js"
+import {__js_advanced_studies_adx_} from "./advance-studies/adx.js"
 import {__js_advanced_studies_cci_} from "./advance-studies/cci.js"
 import {__js_advanced_studies_rsi_} from "./advance-studies/rsi.js"
 import {__js_advanced_studies_movingAverages_} from "./advance-studies/movingAverages.js"
@@ -58,6 +59,7 @@ if (!CIQ.Studies) {
 	 */
 		CIQ.activateImports(
 			__js_advanced_studies_accumulationDistribution_,
+			__js_advanced_studies_adx_,
 			__js_advanced_studies_cci_,
 			__js_advanced_studies_rsi_,
 			__js_advanced_studies_movingAverages_,
