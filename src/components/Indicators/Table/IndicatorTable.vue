@@ -212,12 +212,6 @@ export default {
               url: 'ndx'
             },
             {
-              label: 'Crypto',
-              value: 'CRPScore',
-              type: 'SP1500Score',
-              url: 'crp'
-            },
-            {
               label: 'Russell 3000',
               value: 'RussellScore',
               type: 'SP1500Score',
@@ -240,6 +234,12 @@ export default {
               value: 'OtherAssetsETFScore',
               type: 'SP1500Score',
               url: 'etf_other'
+            },
+            {
+              label: 'Crypto',
+              value: 'CRPScore',
+              type: 'SP1500Score',
+              url: 'crp'
             },
             {
               label: 'Sector Summary',

@@ -170,7 +170,7 @@
         const xData = [...allData.map(d => d[0])]
         console.log('xData', xData)
         const minX = Math.min(xData)
-        const { url, type, market_symbol } = row
+        const { url, type, market_symbol, sub_type } = row
         let selector = 5
         if(url === 'risk_levels') {
           selector = 3
@@ -340,7 +340,6 @@
                         // 使用正则表达式提取主要部分
                         const regex = /(\w+)\s+(.*?)\s+\(Last\s+=\s+[\d.]+\)/;
                         const match = inputString.match(regex);
-
                         if (match) {
                             // 获取第一部分
                             const firstPart = match[1];
@@ -351,7 +350,7 @@
                             // 根据第二部分是否包含 "trend" 确定返回格式
                             if (secondPart.includes('relative')) {
                                 return `${firstPart}_reltrend`;
-                            } else if(secondPart.includes('relative') && secondPart.includes('trend') ){
+                            } else if(((secondPart.includes('relative') && secondPart.includes('trend')) || (sub_type === 'crp_trend_reltrend' && secondPart === 'trend score'))){
                                 return `${firstPart}_trend`;
                             } else if(`${match[1]} ${match[2]}` === 'Smart Money') {
                               return `model_smart_money`
@@ -430,7 +429,7 @@
       };
  
       try {
-      let {last_value, last_change_type, market_symbol, type} = this.row;
+      let {last_value, last_change_type, market_symbol, type, sub_type} = this.row;
       console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       let zoonsData = [];
@@ -555,14 +554,14 @@
           if((key.includes('_reltrend') || key.includes('_trend')) && type.includes('trend_reltrend')) {
             name = key.replace('_reltrend', ' Relative Trend Score')
             name = name.replace('_trend', '  Trend Score')
-          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels' && sub_type !== 'crp_trend_reltrend') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
+            name: `${name}${key.includes('_') && (sub_type === 'crp_trend_reltrend' && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
             zones: url === 'risk_measure' ? zoonsData : []

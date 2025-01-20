@@ -506,7 +506,6 @@
 									effect="dark"
 									content="Add entry and exit criteria to my signal"
 									placement="bottom-start"
-									v-if="isButtonVisible"
 								>
 									<el-button
 										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
