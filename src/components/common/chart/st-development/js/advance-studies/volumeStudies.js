@@ -180,13 +180,7 @@ if (!CIQ.Studies) {
 			name: "Negative Volume Index",
 			calculateFN: CIQ.Studies.calculateVolumeIndex,
 			seriesFN: function (stx, sd, quotes) {
-				var field	// 它是流动的
-				if(sd.parameters.isComparison){
-					field = CIQ.store.getters.getComparisonSymbol.url
-				}
-				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
-				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
-				
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 			},
 			inputs: { Period: 255, Field: "field", "Moving Average Type": "ma" },
@@ -196,13 +190,7 @@ if (!CIQ.Studies) {
 			name: "On Balance Volume",
 			calculateFN: CIQ.Studies.calculateOnBalanceVolume,
 			seriesFN: function (stx, sd, quotes) {
-				var field	// 它是流动的
-				if(sd.parameters.isComparison){
-					field = CIQ.store.getters.getComparisonSymbol.url
-				}
-				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
-				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
-				
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 			},
 			inputs: {}
@@ -211,13 +199,7 @@ if (!CIQ.Studies) {
 			name: "Positive Volume Index",
 			calculateFN: CIQ.Studies.calculateVolumeIndex,
 			seriesFN: function (stx, sd, quotes) {
-				var field	// 它是流动的
-				if(sd.parameters.isComparison){
-					field = CIQ.store.getters.getComparisonSymbol.url
-				}
-				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
-				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
-				
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 			},
 			inputs: { Period: 255, Field: "field", "Moving Average Type": "ma" },
@@ -233,13 +215,7 @@ if (!CIQ.Studies) {
 			name: "Trade Volume Index",
 			calculateFN: CIQ.Studies.calculateOnBalanceVolume,
 			seriesFN: function (stx, sd, quotes) {
-				var field	// 它是流动的
-				if(sd.parameters.isComparison){
-					field = CIQ.store.getters.getComparisonSymbol.url
-				}
-				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
-				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
-				
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 			},
 			inputs: { "Min Tick Value": 0.5 }

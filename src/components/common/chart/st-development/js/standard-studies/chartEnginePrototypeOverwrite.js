@@ -346,15 +346,19 @@ if (CIQ.ChartEngine) {
 		this.setPanelHeight(this.panels.chart, chartPanelSize);
 	})
 	
-	// CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
-	// 	if(){
-	// 		chartContainer.style.height =  chartContainer.style.height + newIndicator(200px)
-	// 	}else{
-	// 		是拖拽，chartContainer height已有
-	// 	} 
 
-	// 	this.setPanelHeight();	// 只負責根據chartContainer height分配高度
-	// })
+	CIQ.ChartEngine.prototype.dualSymbolCalculationErrorWatermark = function (
+		stx,
+		sd,
+		quotes
+	) {
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+		}
+		const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
+		if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
+	};
 }
 
 };
