@@ -235,12 +235,12 @@ export default {
               type: 'SP1500Score',
               url: 'etf_other'
             },
-            {
-              label: 'Crypto',
-              value: 'CRPScore',
-              type: 'SP1500Score',
-              url: 'crp'
-            },
+            // {
+            //   label: 'Crypto',
+            //   value: 'CRPScore',
+            //   type: 'SP1500Score',
+            //   url: 'crp'
+            // },
             {
               label: 'Sector Summary',
               value: 'TrendSector',
@@ -249,6 +249,33 @@ export default {
             }
           ]
         },
+        {
+          label: 'Crypto',
+          type: 'CRP',
+          refName: 'CryptoVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Optix',
+              value: 'CRP',
+              type: 'Crypto',
+              url: 'crypt_complete_list'
+            },
+            {
+              label: 'Trend Score',
+              value: 'TSCRP',
+              type: 'Crypto',
+              url: 'crp'
+            },
+            {
+              label: 'Relative Trend Score',
+              value: 'RTSCRP',
+              type: 'Crypto',
+              url: 'crp&rel_trend=1'
+            }
+          ]
+        }
         // {
         //   label: 'Most Popular',
         //   type: 'stock',
