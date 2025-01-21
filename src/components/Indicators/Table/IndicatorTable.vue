@@ -263,7 +263,7 @@ export default {
               url: 'crypt_complete_list'
             },
             {
-              label: 'Trend Score & Relative Trend Score',
+              label: 'Absolute and Relative Trend Scores',
               value: 'TSCRP',
               type: 'Crypto',
               url: 'crp'

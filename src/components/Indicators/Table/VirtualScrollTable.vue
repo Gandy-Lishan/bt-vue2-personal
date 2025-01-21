@@ -2102,7 +2102,7 @@ export default {
           type: 'CRP'
         },
         {
-          label: 'Crypto Trend Score & Relative Trend Score',
+          label: 'Crypto Absolute and Relative Trend Scores',
           value: 'crp',
           type: 'TSCRP'
         },

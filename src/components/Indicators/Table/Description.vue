@@ -3,15 +3,17 @@
     <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <p class="page-title" v-if="enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector'].includes(checkedType))">Click for Indicator Description</p>
+          <p class="page-title" v-if="(enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType))">Click for Indicator Description</p>
           <p class="page-title" v-else>Table Description and Optimism/Pessimism Legend (click to expand)</p>
         </template>
-        <div class="centent" :class="{tendScore: enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector'].includes(checkedType))}">
+        <div class="centent" :class="{tendScore: (enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType))}">
         <div class="des" v-if="
         !enlarged || (enlarged === 'Stock' && (!checkedType || checkedType === 'stock'))
         || (enlarged === 'Bond & Commodity' && (!checkedType || checkedType === 'bond' || checkedType === 'commodity'))
         || (enlarged === 'Seasonality' && (!checkedType || checkedType === 'CommoditySeasonality'))
-        || (enlarged === 'Seasonality' && (checkedType === 'BondSeasonality'))">
+        || (enlarged === 'Seasonality' && (checkedType === 'BondSeasonality'))
+        || (enlarged === 'Crypto' && (checkedType === 'CRP'))
+        ">
           <p>
             The following table shows indicators related to the stock market.  Click any column heading
             to sort the table by that column, and click again to reverse it.  Click the "<b>Sentiment</b>"
@@ -62,7 +64,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des page-content-wrapper" v-else-if="enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector'].includes(checkedType))">
+        <div class="des page-content-wrapper" v-else-if="(enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType))">
           <p>The <b>Absolute</b> and <b>Relative Trend Score Indicators</b> use a weight of the evidence framework by aggregating ten trend-following indicators to deliver a comprehensive composite score for trend evaluation. Scores range from 0 (weakest) to 10 (strongest).</p>
           <p>Although the components and duration parameters remain fixed, the indicators provide investors with flexible options for identifying trading or investing opportunities and controlling risk. Additionally, the composites can serve as a secondary filter for your existing technical or fundamental investment approaches, ensuring your strategies align with current market trends.</p>
           <ul>
@@ -187,7 +189,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="col-md-3 thumbnail" v-show="!(enlarged === 'Absolute and Relative Trend Scores' && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector'].includes(checkedType)))">
+        <div class="col-md-3 thumbnail" v-show="!((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType)))">
         <div style="text-align: center; font-size: 18px; font-weight: 300">
           <span>Optimism/Pessimism Legend</span>
         </div>
