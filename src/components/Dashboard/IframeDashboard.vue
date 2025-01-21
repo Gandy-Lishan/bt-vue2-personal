@@ -21,6 +21,7 @@ export default {
    };
  },
  mounted() {
+  document.domain = 'users.sentimentrader.com'; // 设置为父域
   // document.cookie
  const iframe = document.getElementById('myIframe');
 
