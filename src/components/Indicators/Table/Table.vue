@@ -255,7 +255,7 @@ export default {
       try {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
-        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
+        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []

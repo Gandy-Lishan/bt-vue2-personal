@@ -263,17 +263,17 @@ export default {
               url: 'crypt_complete_list'
             },
             {
-              label: 'Trend Score',
+              label: 'Trend Score & Relative Trend Score',
               value: 'TSCRP',
               type: 'Crypto',
               url: 'crp'
             },
-            {
-              label: 'Relative Trend Score',
-              value: 'RTSCRP',
-              type: 'Crypto',
-              url: 'crp&rel_trend=1'
-            }
+            // {
+            //   label: 'Relative Trend Score',
+            //   value: 'RTSCRP',
+            //   type: 'Crypto',
+            //   url: 'crp&rel_trend=1'
+            // }
           ]
         }
         // {

@@ -32,8 +32,8 @@
       <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button v-if="(isStockTrend || (isCRPTrend && checkedType === 'TSCRP')) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
-            <el-button v-if="(isStockTrend|| (isCRPTrend && checkedType === 'RTSCRP')) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
             <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
@@ -1603,7 +1603,8 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
-          if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) {
+        const isCRP = ['CRP','TSCRP', 'RTSCRP'].includes(this.checkedType)
+          if((this.isStockTrend || isCRP) && Array.isArray(this.filterData) && this.filterData.length) {
             const trendUpdateDate = this.filterData.reduce((latest, item) => {
             const itemDate = new Date(`${item.last_update}T00:00:00Z`);  // 使用 UTC 时间
             const latestDate = new Date(`${latest.last_update}T00:00:00Z`);
@@ -2101,7 +2102,7 @@ export default {
           type: 'CRP'
         },
         {
-          label: 'Crypto Trend Score',
+          label: 'Crypto Trend Score & Relative Trend Score',
           value: 'crp',
           type: 'TSCRP'
         },
@@ -2463,7 +2464,6 @@ export default {
         cstScreen: 'commod_optix_trend',
         CHMinMax: 'cot_max_min',
         TSCRP: 'crp',
-        RTSCRP: 'crp'
       }
       let url = urlMap[this.checkedType]
       if(this.condition === 'relative') url = `${url}&rel_trend=1`
