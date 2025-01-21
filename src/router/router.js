@@ -306,7 +306,7 @@ const routes = [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: resolve => require(['@/components/Dashboard/index.vue'], resolve)
+		component: resolve => require(['@/components/Dashboard/IframeDashboard.vue'], resolve)
 	},
 	{
 		path: '/404',
