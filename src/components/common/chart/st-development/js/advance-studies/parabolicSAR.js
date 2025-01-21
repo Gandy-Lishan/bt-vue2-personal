@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_parabolicSAR_ = (_exports) => {
@@ -39,6 +39,21 @@ if (!CIQ.Studies) {
 } else {
 	CIQ.Studies.calculatePSAR = function (stx, sd) {
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			quotes = sd.chart.scrubbed
+
+			sd.yAxis = null
+		}
 
 		var af = 0;
 		var ep = null;
@@ -66,32 +81,32 @@ if (!CIQ.Studies) {
 			if (quotes[i].futureTick) break;
 			var priorSAR = SAR;
 			if (lasttrend) {
-				if (!ep || ep < quotes[i].High) {
-					ep = quotes[i].High;
+				if (!ep || ep < getPropertyByString(quotes[i],field,'High')) {
+					ep = getPropertyByString(quotes[i],field,'High');
 					af = Math.min(af + step, maxStep);
 				}
 				SAR = priorSAR + af * (ep - priorSAR);
 				var lowestPrior2Lows = Math.min(
-					quotes[Math.max(1, i) - 1].Low,
-					quotes[i].Low
+					getPropertyByString(quotes[Math.max(1, i) - 1],field,'Low'),
+					getPropertyByString(quotes[i],field,'Low')
 				);
-				if (SAR > quotes[i + 1].Low) {
+				if (SAR > getPropertyByString(quotes[i + 1],field,'Low')) {
 					SAR = ep;
 					doReset();
 				} else if (SAR > lowestPrior2Lows) {
 					SAR = lowestPrior2Lows;
 				}
 			} else {
-				if (!ep || ep > quotes[i].Low) {
-					ep = quotes[i].Low;
+				if (!ep || ep > getPropertyByString(quotes[i],field,'Low')) {
+					ep = getPropertyByString(quotes[i],field,'Low');
 					af = Math.min(af + step, maxStep);
 				}
 				SAR = priorSAR + af * (ep - priorSAR);
 				var highestPrior2Highs = Math.max(
-					quotes[Math.max(1, i) - 1].High,
-					quotes[i].High
+					getPropertyByString(quotes[Math.max(1, i) - 1],field,'High'),
+					getPropertyByString(quotes[i],field,'High')
 				);
-				if (SAR < quotes[i + 1].High) {
+				if (SAR < getPropertyByString(quotes[i + 1],field,'High')) {
 					SAR = ep;
 					doReset();
 				} else if (SAR < highestPrior2Highs) {
@@ -99,7 +114,7 @@ if (!CIQ.Studies) {
 				}
 			}
 			quotes[i + 1]["_state " + sd.name] = [af, ep, lasttrend];
-			if (!isNaN(quotes[i].High) || !isNaN(quotes[i].Low)) {
+			if (!isNaN(getPropertyByString(quotes[i],field,'High')) || !isNaN(getPropertyByString(quotes[i],field,'Low'))) {
 				quotes[i + 1]["Result " + sd.name] = SAR;
 			}
 		}
@@ -117,4 +132,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_parabolicSAR_(typeof window !== "undefined" ? window : global);
+export {__js_advanced_studies_parabolicSAR_}
