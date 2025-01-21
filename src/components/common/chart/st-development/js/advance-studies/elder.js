@@ -229,13 +229,7 @@ if (!CIQ.Studies) {
 			name: "Elder Force Index",
 			calculateFN: CIQ.Studies.calculateElderForce,
 			seriesFN: function (stx, sd, quotes) {
-				var field	// 它是流动的
-				if(sd.parameters.isComparison){
-					field = CIQ.store.getters.getComparisonSymbol.url
-				}
-				const hasVolume = getPropertyByString(quotes[quotes.length-1],field,'Volume')
-				if(!hasVolume && hasVolume!= 0) stx.displayErrorAsWatermark(sd.panel, "Not enough data to compute");
-				
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
 				CIQ.Studies.displayElderForce(stx, sd, quotes);
 			},
 			//seriesFN: CIQ.Studies.displayElderForce,

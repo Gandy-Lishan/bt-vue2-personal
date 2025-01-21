@@ -56648,5 +56648,3290 @@
         "chart_name": "NYSE Titanicburg",
         "url": "jk_nyse_titannicburg",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "CAMP4 Therapeutics Corp Trend Score",
+        "url": "CAMP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CAMP4 Therapeutics Corp RelTrend Score",
+        "url": "CAMP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ceribell Inc Trend Score",
+        "url": "CBLL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ceribell Inc RelTrend Score",
+        "url": "CBLL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Upstream Bio Inc Trend Score",
+        "url": "UPB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Upstream Bio Inc RelTrend Score",
+        "url": "UPB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Net Power Inc Trend Score",
+        "url": "NPWR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Net Power Inc RelTrend Score",
+        "url": "NPWR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avadel Pharmaceuticals PLC Trend Score",
+        "url": "AVDL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avadel Pharmaceuticals PLC RelTrend Score",
+        "url": "AVDL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bicara Therapeutics Inc Trend Score",
+        "url": "BCAX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bicara Therapeutics Inc RelTrend Score",
+        "url": "BCAX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MBX Biosciences Inc Trend Score",
+        "url": "MBX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MBX Biosciences Inc RelTrend Score",
+        "url": "MBX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zenas Biopharma Inc Trend Score",
+        "url": "ZBIO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Zenas Biopharma Inc RelTrend Score",
+        "url": "ZBIO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Caesarstone Ltd Trend Score",
+        "url": "CSTE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Caesarstone Ltd RelTrend Score",
+        "url": "CSTE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Candel Therapeutics Inc Trend Score",
+        "url": "CADL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Candel Therapeutics Inc RelTrend Score",
+        "url": "CADL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XBiotech Inc Trend Score",
+        "url": "XBIT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XBiotech Inc RelTrend Score",
+        "url": "XBIT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MAC Copper Ltd Trend Score",
+        "url": "MTAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MAC Copper Ltd RelTrend Score",
+        "url": "MTAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inmune Bio Inc Trend Score",
+        "url": "INMB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inmune Bio Inc RelTrend Score",
+        "url": "INMB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acumen Pharmaceuticals Inc Trend Score",
+        "url": "ABOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acumen Pharmaceuticals Inc RelTrend Score",
+        "url": "ABOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MediWound Ltd Trend Score",
+        "url": "MDWD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MediWound Ltd RelTrend Score",
+        "url": "MDWD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galectin Therapeutics Inc Trend Score",
+        "url": "GALT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galectin Therapeutics Inc RelTrend Score",
+        "url": "GALT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Life360 Inc Trend Score",
+        "url": "LIF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Life360 Inc RelTrend Score",
+        "url": "LIF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Offerpad Solutions Inc Trend Score",
+        "url": "OPAD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Offerpad Solutions Inc RelTrend Score",
+        "url": "OPAD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standardaero Inc Trend Score",
+        "url": "SARO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standardaero Inc RelTrend Score",
+        "url": "SARO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ChromaDex Corp Trend Score",
+        "url": "CDXC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ChromaDex Corp RelTrend Score",
+        "url": "CDXC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Septerna Inc Trend Score",
+        "url": "SEPN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Septerna Inc RelTrend Score",
+        "url": "SEPN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intuitive Machines Inc Trend Score",
+        "url": "LUNR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intuitive Machines Inc RelTrend Score",
+        "url": "LUNR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shattuck Labs Inc Trend Score",
+        "url": "STTK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shattuck Labs Inc RelTrend Score",
+        "url": "STTK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Porch Group Inc Trend Score",
+        "url": "PRCH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Porch Group Inc RelTrend Score",
+        "url": "PRCH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LiveOne Inc Trend Score",
+        "url": "LVO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LiveOne Inc RelTrend Score",
+        "url": "LVO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spyre Therapeutics Inc Trend Score",
+        "url": "SYRE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spyre Therapeutics Inc RelTrend Score",
+        "url": "SYRE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bel Fuse Inc Trend Score",
+        "url": "BELFA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bel Fuse Inc RelTrend Score",
+        "url": "BELFA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Werewolf Therapeutics Inc Trend Score",
+        "url": "HOWL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Werewolf Therapeutics Inc RelTrend Score",
+        "url": "HOWL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Twin Disc Inc Trend Score",
+        "url": "TWIN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Twin Disc Inc RelTrend Score",
+        "url": "TWIN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Astera Labs Inc Trend Score",
+        "url": "ALAB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Astera Labs Inc RelTrend Score",
+        "url": "ALAB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Superconductor Corp Trend Score",
+        "url": "AMSC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Superconductor Corp RelTrend Score",
+        "url": "AMSC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GCT Semiconductor Holding Inc Trend Score",
+        "url": "GCTS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GCT Semiconductor Holding Inc RelTrend Score",
+        "url": "GCTS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Black Diamond Therapeutics Inc Trend Score",
+        "url": "BDTX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Black Diamond Therapeutics Inc RelTrend Score",
+        "url": "BDTX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Performant Healthcare Inc Trend Score",
+        "url": "PHLT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Performant Healthcare Inc RelTrend Score",
+        "url": "PHLT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd Trend Score",
+        "url": "LBTYK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd RelTrend Score",
+        "url": "LBTYK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd Trend Score",
+        "url": "LBTYA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Liberty Global Ltd RelTrend Score",
+        "url": "LBTYA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perspective Therapeutics Inc Trend Score",
+        "url": "CATX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perspective Therapeutics Inc RelTrend Score",
+        "url": "CATX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Internet Bancorp Trend Score",
+        "url": "INBK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Internet Bancorp RelTrend Score",
+        "url": "INBK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sky Harbour Group Corp Trend Score",
+        "url": "SKYH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sky Harbour Group Corp RelTrend Score",
+        "url": "SKYH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fulcrum Therapeutics Inc Trend Score",
+        "url": "FULC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fulcrum Therapeutics Inc RelTrend Score",
+        "url": "FULC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rapport Therapeutics Inc Trend Score",
+        "url": "RAPP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rapport Therapeutics Inc RelTrend Score",
+        "url": "RAPP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DLH Holdings Corp Trend Score",
+        "url": "DLHC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DLH Holdings Corp RelTrend Score",
+        "url": "DLHC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waystar Holding Corp Trend Score",
+        "url": "WAY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Waystar Holding Corp RelTrend Score",
+        "url": "WAY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Root Inc/OH Trend Score",
+        "url": "ROOT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Root Inc/OH RelTrend Score",
+        "url": "ROOT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Roadzen Inc Trend Score",
+        "url": "RDZN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Roadzen Inc RelTrend Score",
+        "url": "RDZN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TScan Therapeutics Inc Trend Score",
+        "url": "TCRX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TScan Therapeutics Inc RelTrend Score",
+        "url": "TCRX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Blend Labs Inc Trend Score",
+        "url": "BLND_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Blend Labs Inc RelTrend Score",
+        "url": "BLND_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verastem Inc Trend Score",
+        "url": "VSTM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Verastem Inc RelTrend Score",
+        "url": "VSTM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clearwater Analytics Holdings Trend Score",
+        "url": "CWAN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clearwater Analytics Holdings RelTrend Score",
+        "url": "CWAN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Climb Bio Inc Trend Score",
+        "url": "CLYM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Climb Bio Inc RelTrend Score",
+        "url": "CLYM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eastern Co/The Trend Score",
+        "url": "EML_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eastern Co/The RelTrend Score",
+        "url": "EML_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gyre Therapeutics Inc Trend Score",
+        "url": "GYRE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gyre Therapeutics Inc RelTrend Score",
+        "url": "GYRE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dianthus Therapeutics Inc Trend Score",
+        "url": "DNTH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dianthus Therapeutics Inc RelTrend Score",
+        "url": "DNTH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hamilton Beach Brands Holding Trend Score",
+        "url": "HBB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hamilton Beach Brands Holding RelTrend Score",
+        "url": "HBB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QuickLogic Corp Trend Score",
+        "url": "QUIK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QuickLogic Corp RelTrend Score",
+        "url": "QUIK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "L B Foster Co Trend Score",
+        "url": "FSTR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "L B Foster Co RelTrend Score",
+        "url": "FSTR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sunrise Realty Trust Inc Trend Score",
+        "url": "SUNS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sunrise Realty Trust Inc RelTrend Score",
+        "url": "SUNS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kyverna Therapeutics Inc Trend Score",
+        "url": "KYTX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kyverna Therapeutics Inc RelTrend Score",
+        "url": "KYTX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Wheels Up Experience Inc Trend Score",
+        "url": "UP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Wheels Up Experience Inc RelTrend Score",
+        "url": "UP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pyxis Oncology Inc Trend Score",
+        "url": "PYXS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pyxis Oncology Inc RelTrend Score",
+        "url": "PYXS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arteris Inc Trend Score",
+        "url": "AIP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arteris Inc RelTrend Score",
+        "url": "AIP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GigaCloud Technology Inc Trend Score",
+        "url": "GCT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GigaCloud Technology Inc RelTrend Score",
+        "url": "GCT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifetime Brands Inc Trend Score",
+        "url": "LCUT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifetime Brands Inc RelTrend Score",
+        "url": "LCUT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifeway Foods Inc Trend Score",
+        "url": "LWAY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifeway Foods Inc RelTrend Score",
+        "url": "LWAY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Transocean Ltd Trend Score",
+        "url": "RIG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Transocean Ltd RelTrend Score",
+        "url": "RIG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Northern Technologies Internat Trend Score",
+        "url": "NTIC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Northern Technologies Internat RelTrend Score",
+        "url": "NTIC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sezzle Inc Trend Score",
+        "url": "SEZL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sezzle Inc RelTrend Score",
+        "url": "SEZL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NPK International Inc Trend Score",
+        "url": "NPKI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NPK International Inc RelTrend Score",
+        "url": "NPKI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RumbleON Inc Trend Score",
+        "url": "RMBL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RumbleON Inc RelTrend Score",
+        "url": "RMBL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Peoples Bancorp of North Carol Trend Score",
+        "url": "PEBK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Peoples Bancorp of North Carol RelTrend Score",
+        "url": "PEBK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAMT CORP Trend Score",
+        "url": "PAMT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PAMT CORP RelTrend Score",
+        "url": "PAMT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FrontView REIT Inc Trend Score",
+        "url": "FVR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FrontView REIT Inc RelTrend Score",
+        "url": "FVR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Prairie Operating Co Trend Score",
+        "url": "PROP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Prairie Operating Co RelTrend Score",
+        "url": "PROP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NB Bancorp Inc Trend Score",
+        "url": "NBBK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NB Bancorp Inc RelTrend Score",
+        "url": "NBBK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Superior Group of Cos Inc Trend Score",
+        "url": "SGC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Superior Group of Cos Inc RelTrend Score",
+        "url": "SGC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renovaro Inc Trend Score",
+        "url": "RENB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Renovaro Inc RelTrend Score",
+        "url": "RENB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diversified Energy Co PLC Trend Score",
+        "url": "DEC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diversified Energy Co PLC RelTrend Score",
+        "url": "DEC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taylor Devices Inc Trend Score",
+        "url": "TAYD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taylor Devices Inc RelTrend Score",
+        "url": "TAYD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ADC Therapeutics SA Trend Score",
+        "url": "ADCT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ADC Therapeutics SA RelTrend Score",
+        "url": "ADCT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CervoMed Inc Trend Score",
+        "url": "CRVO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CervoMed Inc RelTrend Score",
+        "url": "CRVO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Virco Mfg. Corp Trend Score",
+        "url": "VIRC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Virco Mfg. Corp RelTrend Score",
+        "url": "VIRC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vertex Inc Trend Score",
+        "url": "VERX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vertex Inc RelTrend Score",
+        "url": "VERX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Primo Brands Corp Trend Score",
+        "url": "PRMB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Primo Brands Corp RelTrend Score",
+        "url": "PRMB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LifeMD Inc Trend Score",
+        "url": "LFMD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LifeMD Inc RelTrend Score",
+        "url": "LFMD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Veru Inc Trend Score",
+        "url": "VERU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Veru Inc RelTrend Score",
+        "url": "VERU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Byrna Technologies Inc Trend Score",
+        "url": "BYRN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Byrna Technologies Inc RelTrend Score",
+        "url": "BYRN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Honest Co Inc/The Trend Score",
+        "url": "HNST_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Honest Co Inc/The RelTrend Score",
+        "url": "HNST_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Puma Biotechnology Inc Trend Score",
+        "url": "PBYI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Puma Biotechnology Inc RelTrend Score",
+        "url": "PBYI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perma-Fix Environmental Servic Trend Score",
+        "url": "PESI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perma-Fix Environmental Servic RelTrend Score",
+        "url": "PESI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultralife Corp Trend Score",
+        "url": "ULBI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ultralife Corp RelTrend Score",
+        "url": "ULBI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Freyr Battery Inc Trend Score",
+        "url": "FREY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Freyr Battery Inc RelTrend Score",
+        "url": "FREY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seven Hills Realty Trust Trend Score",
+        "url": "SEVN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seven Hills Realty Trust RelTrend Score",
+        "url": "SEVN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pursuit Attractions and Hospit Trend Score",
+        "url": "PRSU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pursuit Attractions and Hospit RelTrend Score",
+        "url": "PRSU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pagaya Technologies Ltd Trend Score",
+        "url": "PGY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pagaya Technologies Ltd RelTrend Score",
+        "url": "PGY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Metagenomi Inc Trend Score",
+        "url": "MGX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Metagenomi Inc RelTrend Score",
+        "url": "MGX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telomir Pharmaceuticals Inc Trend Score",
+        "url": "TELO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telomir Pharmaceuticals Inc RelTrend Score",
+        "url": "TELO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SolarMax Technology Inc Trend Score",
+        "url": "SMXT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SolarMax Technology Inc RelTrend Score",
+        "url": "SMXT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Provident Bancorp Inc Trend Score",
+        "url": "PVBC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Provident Bancorp Inc RelTrend Score",
+        "url": "PVBC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ibotta Inc Trend Score",
+        "url": "IBTA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ibotta Inc RelTrend Score",
+        "url": "IBTA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Centuri Holdings Inc Trend Score",
+        "url": "CTRI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Centuri Holdings Inc RelTrend Score",
+        "url": "CTRI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Drilling Tools International C Trend Score",
+        "url": "DTI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Drilling Tools International C RelTrend Score",
+        "url": "DTI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cibus Inc Trend Score",
+        "url": "CBUS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cibus Inc RelTrend Score",
+        "url": "CBUS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Graham Corp Trend Score",
+        "url": "GHM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Graham Corp RelTrend Score",
+        "url": "GHM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tourmaline Bio Inc Trend Score",
+        "url": "TRML_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tourmaline Bio Inc RelTrend Score",
+        "url": "TRML_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talkspace Inc Trend Score",
+        "url": "TALK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talkspace Inc RelTrend Score",
+        "url": "TALK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moneylion Inc Trend Score",
+        "url": "ML_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Moneylion Inc RelTrend Score",
+        "url": "ML_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VirTra Inc Trend Score",
+        "url": "VTSI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VirTra Inc RelTrend Score",
+        "url": "VTSI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nektar Therapeutics Trend Score",
+        "url": "NKTR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nektar Therapeutics RelTrend Score",
+        "url": "NKTR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Concentra Group Holdings Paren Trend Score",
+        "url": "CON_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Concentra Group Holdings Paren RelTrend Score",
+        "url": "CON_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Contineum Therapeutics Inc Trend Score",
+        "url": "CTNM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Contineum Therapeutics Inc RelTrend Score",
+        "url": "CTNM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stereotaxis Inc Trend Score",
+        "url": "STXS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stereotaxis Inc RelTrend Score",
+        "url": "STXS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Universal Stainless & Alloy Pr Trend Score",
+        "url": "USAP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Universal Stainless & Alloy Pr RelTrend Score",
+        "url": "USAP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Webtoon Entertainment Inc Trend Score",
+        "url": "WBTN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Webtoon Entertainment Inc RelTrend Score",
+        "url": "WBTN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smith-Midland Corp Trend Score",
+        "url": "SMID_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smith-Midland Corp RelTrend Score",
+        "url": "SMID_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Golden Matrix Group Inc Trend Score",
+        "url": "GMGI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Golden Matrix Group Inc RelTrend Score",
+        "url": "GMGI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inovio Pharmaceuticals Inc Trend Score",
+        "url": "INO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inovio Pharmaceuticals Inc RelTrend Score",
+        "url": "INO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Achieve Life Sciences Inc Trend Score",
+        "url": "ACHV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Achieve Life Sciences Inc RelTrend Score",
+        "url": "ACHV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Medallion Financial Corp Trend Score",
+        "url": "MFIN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Medallion Financial Corp RelTrend Score",
+        "url": "MFIN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Q32 Bio Inc Trend Score",
+        "url": "QTTB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Q32 Bio Inc RelTrend Score",
+        "url": "QTTB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifezone Metals Ltd Trend Score",
+        "url": "LZM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifezone Metals Ltd RelTrend Score",
+        "url": "LZM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Therapeutics Inc Trend Score",
+        "url": "APLT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Therapeutics Inc RelTrend Score",
+        "url": "APLT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rigetti Computing Inc Trend Score",
+        "url": "RGTI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rigetti Computing Inc RelTrend Score",
+        "url": "RGTI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Critical Metals Corp Trend Score",
+        "url": "CRML_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Critical Metals Corp RelTrend Score",
+        "url": "CRML_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Investar Holding Corp Trend Score",
+        "url": "ISTR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Investar Holding Corp RelTrend Score",
+        "url": "ISTR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Onity Group Inc Trend Score",
+        "url": "ONIT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Onity Group Inc RelTrend Score",
+        "url": "ONIT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dutch Bros Inc Trend Score",
+        "url": "BROS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dutch Bros Inc RelTrend Score",
+        "url": "BROS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Getty Images Holdings Inc Trend Score",
+        "url": "GETY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Getty Images Holdings Inc RelTrend Score",
+        "url": "GETY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fibrobiologics Inc Trend Score",
+        "url": "FBLG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fibrobiologics Inc RelTrend Score",
+        "url": "FBLG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sonida Senior Living Inc Trend Score",
+        "url": "SNDA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sonida Senior Living Inc RelTrend Score",
+        "url": "SNDA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "D-Wave Quantum Inc Trend Score",
+        "url": "QBTS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "D-Wave Quantum Inc RelTrend Score",
+        "url": "QBTS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vacasa Inc Trend Score",
+        "url": "VCSA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vacasa Inc RelTrend Score",
+        "url": "VCSA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Airship AI Holdings Inc Trend Score",
+        "url": "AISP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Airship AI Holdings Inc RelTrend Score",
+        "url": "AISP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neurogene Inc Trend Score",
+        "url": "NGNE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neurogene Inc RelTrend Score",
+        "url": "NGNE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alumis Inc Trend Score",
+        "url": "ALMS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alumis Inc RelTrend Score",
+        "url": "ALMS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arhaus Inc Trend Score",
+        "url": "ARHS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arhaus Inc RelTrend Score",
+        "url": "ARHS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BKV Corp Trend Score",
+        "url": "BKV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BKV Corp RelTrend Score",
+        "url": "BKV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Guardian Pharmacy Services Inc Trend Score",
+        "url": "GRDN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Guardian Pharmacy Services Inc RelTrend Score",
+        "url": "GRDN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strawberry Fields REIT Inc Trend Score",
+        "url": "STRW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strawberry Fields REIT Inc RelTrend Score",
+        "url": "STRW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solidion Technology Inc Trend Score",
+        "url": "STI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solidion Technology Inc RelTrend Score",
+        "url": "STI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Jasper Therapeutics Inc Trend Score",
+        "url": "JSPR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Jasper Therapeutics Inc RelTrend Score",
+        "url": "JSPR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Esperion Therapeutics Inc Trend Score",
+        "url": "ESPR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Esperion Therapeutics Inc RelTrend Score",
+        "url": "ESPR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Praxis Precision Medicines Inc Trend Score",
+        "url": "PRAX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Praxis Precision Medicines Inc RelTrend Score",
+        "url": "PRAX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amer Sports Inc Trend Score",
+        "url": "AS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amer Sports Inc RelTrend Score",
+        "url": "AS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Natural Gas Services Group Inc Trend Score",
+        "url": "NGS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Natural Gas Services Group Inc RelTrend Score",
+        "url": "NGS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telos Corp Trend Score",
+        "url": "TLS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Telos Corp RelTrend Score",
+        "url": "TLS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Burford Capital Ltd Trend Score",
+        "url": "BUR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Burford Capital Ltd RelTrend Score",
+        "url": "BUR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tevogen Bio Holdings Inc Trend Score",
+        "url": "TVGN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tevogen Bio Holdings Inc RelTrend Score",
+        "url": "TVGN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "California BanCorp Trend Score",
+        "url": "BCAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "California BanCorp RelTrend Score",
+        "url": "BCAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lineage Inc Trend Score",
+        "url": "LINE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lineage Inc RelTrend Score",
+        "url": "LINE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Soleno Therapeutics Inc Trend Score",
+        "url": "SLNO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Soleno Therapeutics Inc RelTrend Score",
+        "url": "SLNO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRH PLC Trend Score",
+        "url": "CRH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRH PLC RelTrend Score",
+        "url": "CRH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canoo Inc Trend Score",
+        "url": "GOEV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canoo Inc RelTrend Score",
+        "url": "GOEV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Turtle Beach Corp Trend Score",
+        "url": "TBCH_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Turtle Beach Corp RelTrend Score",
+        "url": "TBCH_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "C4 Therapeutics Inc Trend Score",
+        "url": "CCCC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "C4 Therapeutics Inc RelTrend Score",
+        "url": "CCCC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rekor Systems Inc Trend Score",
+        "url": "REKR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rekor Systems Inc RelTrend Score",
+        "url": "REKR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standard BioTools Inc Trend Score",
+        "url": "LAB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Standard BioTools Inc RelTrend Score",
+        "url": "LAB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc Trend Score",
+        "url": "CORZ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Core Scientific Inc RelTrend Score",
+        "url": "CORZ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Logility Supply Chain Solution Trend Score",
+        "url": "LGTY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Logility Supply Chain Solution RelTrend Score",
+        "url": "LGTY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bridger Aerospace Group Holdin Trend Score",
+        "url": "BAER_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bridger Aerospace Group Holdin RelTrend Score",
+        "url": "BAER_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sable Offshore Corp Trend Score",
+        "url": "SOC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sable Offshore Corp RelTrend Score",
+        "url": "SOC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adverum Biotechnologies Inc Trend Score",
+        "url": "ADVM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adverum Biotechnologies Inc RelTrend Score",
+        "url": "ADVM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BioAge Labs Inc Trend Score",
+        "url": "BIOA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BioAge Labs Inc RelTrend Score",
+        "url": "BIOA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lyra Therapeutics Inc Trend Score",
+        "url": "LYRA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lyra Therapeutics Inc RelTrend Score",
+        "url": "LYRA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akebia Therapeutics Inc Trend Score",
+        "url": "AKBA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Akebia Therapeutics Inc RelTrend Score",
+        "url": "AKBA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Optoelectronics Inc Trend Score",
+        "url": "AAOI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Applied Optoelectronics Inc RelTrend Score",
+        "url": "AAOI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elevation Oncology Inc Trend Score",
+        "url": "ELEV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elevation Oncology Inc RelTrend Score",
+        "url": "ELEV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immunome Inc Trend Score",
+        "url": "IMNM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immunome Inc RelTrend Score",
+        "url": "IMNM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RealReal Inc/The Trend Score",
+        "url": "REAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RealReal Inc/The RelTrend Score",
+        "url": "REAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GeneDx Holdings Corp Trend Score",
+        "url": "WGS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GeneDx Holdings Corp RelTrend Score",
+        "url": "WGS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Absci Corp Trend Score",
+        "url": "ABSI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Absci Corp RelTrend Score",
+        "url": "ABSI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Citi Trends Inc Trend Score",
+        "url": "CTRN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Citi Trends Inc RelTrend Score",
+        "url": "CTRN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arq Inc Trend Score",
+        "url": "ARQ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arq Inc RelTrend Score",
+        "url": "ARQ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trump Media & Technology Group Trend Score",
+        "url": "DJT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Trump Media & Technology Group RelTrend Score",
+        "url": "DJT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrial Logistics Propertie Trend Score",
+        "url": "ILPT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrial Logistics Propertie RelTrend Score",
+        "url": "ILPT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KinderCare Learning Cos Inc Trend Score",
+        "url": "KLC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KinderCare Learning Cos Inc RelTrend Score",
+        "url": "KLC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alto Neuroscience Inc Trend Score",
+        "url": "ANRO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alto Neuroscience Inc RelTrend Score",
+        "url": "ANRO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NeuroPace Inc Trend Score",
+        "url": "NPCE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NeuroPace Inc RelTrend Score",
+        "url": "NPCE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharkNinja Inc Trend Score",
+        "url": "SN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharkNinja Inc RelTrend Score",
+        "url": "SN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solid Biosciences Inc Trend Score",
+        "url": "SLDB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solid Biosciences Inc RelTrend Score",
+        "url": "SLDB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ReposiTrak Inc Trend Score",
+        "url": "TRAK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ReposiTrak Inc RelTrend Score",
+        "url": "TRAK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baldwin Insurance Group Inc/Th Trend Score",
+        "url": "BWIN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baldwin Insurance Group Inc/Th RelTrend Score",
+        "url": "BWIN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Despegar.com Corp Trend Score",
+        "url": "DESP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Despegar.com Corp RelTrend Score",
+        "url": "DESP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "National CineMedia Inc Trend Score",
+        "url": "NCMI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "National CineMedia Inc RelTrend Score",
+        "url": "NCMI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WNS Holdings Ltd Trend Score",
+        "url": "WNS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WNS Holdings Ltd RelTrend Score",
+        "url": "WNS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NANO Nuclear Energy Inc Trend Score",
+        "url": "NNE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NANO Nuclear Energy Inc RelTrend Score",
+        "url": "NNE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Powerfleet Inc NJ Trend Score",
+        "url": "AIOT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Powerfleet Inc NJ RelTrend Score",
+        "url": "AIOT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taysha Gene Therapies Inc Trend Score",
+        "url": "TSHA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taysha Gene Therapies Inc RelTrend Score",
+        "url": "TSHA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diebold Nixdorf Inc Trend Score",
+        "url": "DBD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Diebold Nixdorf Inc RelTrend Score",
+        "url": "DBD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fractyl Health Inc Trend Score",
+        "url": "GUTS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Fractyl Health Inc RelTrend Score",
+        "url": "GUTS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Backblaze Inc Trend Score",
+        "url": "BLZE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Backblaze Inc RelTrend Score",
+        "url": "BLZE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Financial Northwest Inc Trend Score",
+        "url": "FFNW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Financial Northwest Inc RelTrend Score",
+        "url": "FFNW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AudioEye Inc Trend Score",
+        "url": "AEYE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AudioEye Inc RelTrend Score",
+        "url": "AEYE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Everspin Technologies Inc Trend Score",
+        "url": "MRAM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Everspin Technologies Inc RelTrend Score",
+        "url": "MRAM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1stdibs.com Inc Trend Score",
+        "url": "DIBS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "1stdibs.com Inc RelTrend Score",
+        "url": "DIBS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bioventus Inc Trend Score",
+        "url": "BVS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bioventus Inc RelTrend Score",
+        "url": "BVS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PACS Group Inc Trend Score",
+        "url": "PACS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PACS Group Inc RelTrend Score",
+        "url": "PACS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aquestive Therapeutics Inc Trend Score",
+        "url": "AQST_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aquestive Therapeutics Inc RelTrend Score",
+        "url": "AQST_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seaport Entertainment Group In Trend Score",
+        "url": "SEG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Seaport Entertainment Group In RelTrend Score",
+        "url": "SEG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aemetis Inc Trend Score",
+        "url": "AMTX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aemetis Inc RelTrend Score",
+        "url": "AMTX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loar Holdings Inc Trend Score",
+        "url": "LOAR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Loar Holdings Inc RelTrend Score",
+        "url": "LOAR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Matrix Service Co Trend Score",
+        "url": "MTRX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Matrix Service Co RelTrend Score",
+        "url": "MTRX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Proficient Auto Logistics Inc Trend Score",
+        "url": "PAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Proficient Auto Logistics Inc RelTrend Score",
+        "url": "PAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silvaco Group Inc Trend Score",
+        "url": "SVCO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silvaco Group Inc RelTrend Score",
+        "url": "SVCO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Skye Bioscience Inc Trend Score",
+        "url": "SKYE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Skye Bioscience Inc RelTrend Score",
+        "url": "SKYE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Greenwich Lifesciences Inc Trend Score",
+        "url": "GLSI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Greenwich Lifesciences Inc RelTrend Score",
+        "url": "GLSI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardiff Oncology Inc Trend Score",
+        "url": "CRDF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cardiff Oncology Inc RelTrend Score",
+        "url": "CRDF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Geospace Technologies Corp Trend Score",
+        "url": "GEOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Geospace Technologies Corp RelTrend Score",
+        "url": "GEOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ardent Health Partners Inc Trend Score",
+        "url": "ARDT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ardent Health Partners Inc RelTrend Score",
+        "url": "ARDT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LINKBANCORP Inc Trend Score",
+        "url": "LNKB_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LINKBANCORP Inc RelTrend Score",
+        "url": "LNKB_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Korro Bio Inc Trend Score",
+        "url": "KRRO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Korro Bio Inc RelTrend Score",
+        "url": "KRRO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AG Mortgage Investment Trust I Trend Score",
+        "url": "MITT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AG Mortgage Investment Trust I RelTrend Score",
+        "url": "MITT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Franklin Street Properties Cor Trend Score",
+        "url": "FSP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Franklin Street Properties Cor RelTrend Score",
+        "url": "FSP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acadian Asset Management Inc Trend Score",
+        "url": "AAMI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acadian Asset Management Inc RelTrend Score",
+        "url": "AAMI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corbus Pharmaceuticals Holding Trend Score",
+        "url": "CRBP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corbus Pharmaceuticals Holding RelTrend Score",
+        "url": "CRBP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regulus Therapeutics Inc Trend Score",
+        "url": "RGLS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Regulus Therapeutics Inc RelTrend Score",
+        "url": "RGLS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "aka Brands Holding Corp Trend Score",
+        "url": "AKA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "aka Brands Holding Corp RelTrend Score",
+        "url": "AKA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Orion Group Holdings Inc Trend Score",
+        "url": "ORN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Orion Group Holdings Inc RelTrend Score",
+        "url": "ORN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JBT Marel Corp Trend Score",
+        "url": "JBTM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JBT Marel Corp RelTrend Score",
+        "url": "JBTM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bowhead Specialty Holdings Inc Trend Score",
+        "url": "BOW_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bowhead Specialty Holdings Inc RelTrend Score",
+        "url": "BOW_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocugen Inc Trend Score",
+        "url": "OCGN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ocugen Inc RelTrend Score",
+        "url": "OCGN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Conduit Pharmaceuticals Inc Trend Score",
+        "url": "CDT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Conduit Pharmaceuticals Inc RelTrend Score",
+        "url": "CDT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ur-Energy Inc Trend Score",
+        "url": "URG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ur-Energy Inc RelTrend Score",
+        "url": "URG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Boundless Bio Inc Trend Score",
+        "url": "BOLD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Boundless Bio Inc RelTrend Score",
+        "url": "BOLD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Groupon Inc Trend Score",
+        "url": "GRPN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Groupon Inc RelTrend Score",
+        "url": "GRPN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ingram Micro Holding Corp Trend Score",
+        "url": "INGM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ingram Micro Holding Corp RelTrend Score",
+        "url": "INGM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Atossa Therapeutics Inc Trend Score",
+        "url": "ATOS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Atossa Therapeutics Inc RelTrend Score",
+        "url": "ATOS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quest Resource Holding Corp Trend Score",
+        "url": "QRHC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quest Resource Holding Corp RelTrend Score",
+        "url": "QRHC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Capricor Therapeutics Inc Trend Score",
+        "url": "CAPR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Capricor Therapeutics Inc RelTrend Score",
+        "url": "CAPR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tecnoglass Inc Trend Score",
+        "url": "TGLS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tecnoglass Inc RelTrend Score",
+        "url": "TGLS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solaris Energy Infrastructure Trend Score",
+        "url": "SEI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solaris Energy Infrastructure RelTrend Score",
+        "url": "SEI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invivyd Inc Trend Score",
+        "url": "IVVD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invivyd Inc RelTrend Score",
+        "url": "IVVD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sera Prognostics Inc Trend Score",
+        "url": "SERA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sera Prognostics Inc RelTrend Score",
+        "url": "SERA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mamas Creations Inc Trend Score",
+        "url": "MAMA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mamas Creations Inc RelTrend Score",
+        "url": "MAMA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GRAIL Inc Trend Score",
+        "url": "GRAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GRAIL Inc RelTrend Score",
+        "url": "GRAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mind Medicine MindMed Inc Trend Score",
+        "url": "MNMD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mind Medicine MindMed Inc RelTrend Score",
+        "url": "MNMD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WM Technology Inc Trend Score",
+        "url": "MAPS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WM Technology Inc RelTrend Score",
+        "url": "MAPS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Brokerage Inc/The Trend Score",
+        "url": "REAX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Brokerage Inc/The RelTrend Score",
+        "url": "REAX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Corp Trend Score",
+        "url": "HUT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hut 8 Corp RelTrend Score",
+        "url": "HUT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flexsteel Industries Inc Trend Score",
+        "url": "FLXS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flexsteel Industries Inc RelTrend Score",
+        "url": "FLXS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ouster Inc Trend Score",
+        "url": "OUST_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ouster Inc RelTrend Score",
+        "url": "OUST_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Innovid Corp Trend Score",
+        "url": "CTV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Innovid Corp RelTrend Score",
+        "url": "CTV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Healthcare REIT Inc Trend Score",
+        "url": "AHR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Healthcare REIT Inc RelTrend Score",
+        "url": "AHR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Artiva Biotherapeutics Inc Trend Score",
+        "url": "ARTV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Artiva Biotherapeutics Inc RelTrend Score",
+        "url": "ARTV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASE Technology Holding Co. Ltd.",
+        "url": "ASX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taiwan Semiconductor Manufacturing Company Limited",
+        "url": "TSM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celestica Inc.",
+        "url": "CLS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Constellation Software Inc.",
+        "url": "CNSWF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "monday.com Ltd.",
+        "url": "MNDY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shopify Inc.",
+        "url": "SHOP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NICE Ltd.",
+        "url": "NICE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cellebrite DI Ltd.",
+        "url": "CLBT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QXO Inc.",
+        "url": "QXO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CyberArk Software Ltd.",
+        "url": "CYBR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qifu Technology Inc.",
+        "url": "QFIN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Joint Stock Company Kaspi.kz",
+        "url": "KSPI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adyen N.V.",
+        "url": "ADYEY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Futu Holdings Limited",
+        "url": "FUTU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Supervielle S.A.",
+        "url": "SUPV",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UBS Group AG",
+        "url": "UBS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mitsubishi UFJ Financial Group Inc.",
+        "url": "MUFG",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Barclays PLC",
+        "url": "BCS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intercorp Financial Services Inc.",
+        "url": "IFS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Financiero Galicia S.A.",
+        "url": "GGAL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Banco Macro S.A.",
+        "url": "BMA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Manulife Financial Corporation",
+        "url": "MFC",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Novo Nordisk A/S",
+        "url": "NVO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Teva Pharmaceutical Industries Limited",
+        "url": "TEVA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Garrett Motion Inc.",
+        "url": "GTX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Li Auto Inc.",
+        "url": "LI",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "On Holding AG",
+        "url": "ONON",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Restaurant Brands International Inc.",
+        "url": "QSR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TotalEnergies SE",
+        "url": "TTE",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Petróleo Brasileiro S.A. - Petrobras",
+        "url": "PBR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shell plc",
+        "url": "SHEL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Equinor ASA",
+        "url": "EQNR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BP p.l.c.",
+        "url": "BP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vista Energy S.A.B. de C.V.",
+        "url": "VIST",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navigator Holdings Ltd.",
+        "url": "NVGS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "StealthGas Inc.",
+        "url": "GASS",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TORM plc",
+        "url": "TRMD",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talen Energy Corporation",
+        "url": "TLN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pampa Energía S.A.",
+        "url": "PAM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oklo Inc.",
+        "url": "OKLO",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CEMEX S.A.B. de C.V.",
+        "url": "CX",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sprott Physical Uranium Trust Fund",
+        "url": "SRUUF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rolls-Royce Holdings plc",
+        "url": "RYCEY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cameco Corporation",
+        "url": "CCJ",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Denison Mines Corp.",
+        "url": "DNN",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Unilever PLC",
+        "url": "UL",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coca-Cola FEMSA S.A.B. de C.V.",
+        "url": "KOF",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AerCap Holdings N.V.",
+        "url": "AER",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corporación América Airports S.A.",
+        "url": "CAAP",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "A.P. Møller - Mærsk A/S",
+        "url": "AMKBY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navios Maritime Partners L.P.",
+        "url": "NMM",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Aeroportuario del Sureste S. A. B. de C. V.",
+        "url": "ASR",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RCM Technologies Inc.",
+        "url": "RCMT",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ping An Insurance (Group) Company of China Ltd.",
+        "url": "PNGAY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tencent Holdings Limited",
+        "url": "TCEHY",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alibaba Group Holding Limited",
+        "url": "BABA",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baidu Inc.",
+        "url": "BIDU",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASE Technology Holding Co. Ltd. Trend Score",
+        "url": "ASX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ASE Technology Holding Co. Ltd. RelTrend Score",
+        "url": "ASX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taiwan Semiconductor Manufacturing Company Limited Trend Score",
+        "url": "TSM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taiwan Semiconductor Manufacturing Company Limited RelTrend Score",
+        "url": "TSM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celestica Inc. Trend Score",
+        "url": "CLS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Celestica Inc. RelTrend Score",
+        "url": "CLS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Constellation Software Inc. Trend Score",
+        "url": "CNSWF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Constellation Software Inc. RelTrend Score",
+        "url": "CNSWF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "monday.com Ltd. Trend Score",
+        "url": "MNDY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "monday.com Ltd. RelTrend Score",
+        "url": "MNDY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shopify Inc. Trend Score",
+        "url": "SHOP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shopify Inc. RelTrend Score",
+        "url": "SHOP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NICE Ltd. Trend Score",
+        "url": "NICE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NICE Ltd. RelTrend Score",
+        "url": "NICE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cellebrite DI Ltd. Trend Score",
+        "url": "CLBT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cellebrite DI Ltd. RelTrend Score",
+        "url": "CLBT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QXO Inc. Trend Score",
+        "url": "QXO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QXO Inc. RelTrend Score",
+        "url": "QXO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CyberArk Software Ltd. Trend Score",
+        "url": "CYBR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CyberArk Software Ltd. RelTrend Score",
+        "url": "CYBR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qifu Technology Inc. Trend Score",
+        "url": "QFIN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qifu Technology Inc. RelTrend Score",
+        "url": "QFIN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Joint Stock Company Kaspi.kz Trend Score",
+        "url": "KSPI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Joint Stock Company Kaspi.kz RelTrend Score",
+        "url": "KSPI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adyen N.V. Trend Score",
+        "url": "ADYEY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adyen N.V. RelTrend Score",
+        "url": "ADYEY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Futu Holdings Limited Trend Score",
+        "url": "FUTU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Futu Holdings Limited RelTrend Score",
+        "url": "FUTU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Supervielle S.A. Trend Score",
+        "url": "SUPV_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Supervielle S.A. RelTrend Score",
+        "url": "SUPV_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UBS Group AG Trend Score",
+        "url": "UBS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UBS Group AG RelTrend Score",
+        "url": "UBS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mitsubishi UFJ Financial Group Inc. Trend Score",
+        "url": "MUFG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mitsubishi UFJ Financial Group Inc. RelTrend Score",
+        "url": "MUFG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Barclays PLC Trend Score",
+        "url": "BCS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Barclays PLC RelTrend Score",
+        "url": "BCS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intercorp Financial Services Inc. Trend Score",
+        "url": "IFS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intercorp Financial Services Inc. RelTrend Score",
+        "url": "IFS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Financiero Galicia S.A. Trend Score",
+        "url": "GGAL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Financiero Galicia S.A. RelTrend Score",
+        "url": "GGAL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Banco Macro S.A. Trend Score",
+        "url": "BMA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Banco Macro S.A. RelTrend Score",
+        "url": "BMA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Manulife Financial Corporation Trend Score",
+        "url": "MFC_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Manulife Financial Corporation RelTrend Score",
+        "url": "MFC_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Novo Nordisk A/S Trend Score",
+        "url": "NVO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Novo Nordisk A/S RelTrend Score",
+        "url": "NVO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Teva Pharmaceutical Industries Limited Trend Score",
+        "url": "TEVA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Teva Pharmaceutical Industries Limited RelTrend Score",
+        "url": "TEVA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Garrett Motion Inc. Trend Score",
+        "url": "GTX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Garrett Motion Inc. RelTrend Score",
+        "url": "GTX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Li Auto Inc. Trend Score",
+        "url": "LI_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Li Auto Inc. RelTrend Score",
+        "url": "LI_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "On Holding AG Trend Score",
+        "url": "ONON_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "On Holding AG RelTrend Score",
+        "url": "ONON_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Restaurant Brands International Inc. Trend Score",
+        "url": "QSR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Restaurant Brands International Inc. RelTrend Score",
+        "url": "QSR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TotalEnergies SE Trend Score",
+        "url": "TTE_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TotalEnergies SE RelTrend Score",
+        "url": "TTE_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Petróleo Brasileiro S.A. - Petrobras Trend Score",
+        "url": "PBR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Petróleo Brasileiro S.A. - Petrobras RelTrend Score",
+        "url": "PBR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shell plc Trend Score",
+        "url": "SHEL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shell plc RelTrend Score",
+        "url": "SHEL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Equinor ASA Trend Score",
+        "url": "EQNR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Equinor ASA RelTrend Score",
+        "url": "EQNR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BP p.l.c. Trend Score",
+        "url": "BP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BP p.l.c. RelTrend Score",
+        "url": "BP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vista Energy S.A.B. de C.V. Trend Score",
+        "url": "VIST_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vista Energy S.A.B. de C.V. RelTrend Score",
+        "url": "VIST_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navigator Holdings Ltd. Trend Score",
+        "url": "NVGS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navigator Holdings Ltd. RelTrend Score",
+        "url": "NVGS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "StealthGas Inc. Trend Score",
+        "url": "GASS_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "StealthGas Inc. RelTrend Score",
+        "url": "GASS_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TORM plc Trend Score",
+        "url": "TRMD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TORM plc RelTrend Score",
+        "url": "TRMD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talen Energy Corporation Trend Score",
+        "url": "TLN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Talen Energy Corporation RelTrend Score",
+        "url": "TLN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pampa Energía S.A. Trend Score",
+        "url": "PAM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pampa Energía S.A. RelTrend Score",
+        "url": "PAM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oklo Inc. Trend Score",
+        "url": "OKLO_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oklo Inc. RelTrend Score",
+        "url": "OKLO_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CEMEX S.A.B. de C.V. Trend Score",
+        "url": "CX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CEMEX S.A.B. de C.V. RelTrend Score",
+        "url": "CX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sprott Physical Uranium Trust Fund Trend Score",
+        "url": "SRUUF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sprott Physical Uranium Trust Fund RelTrend Score",
+        "url": "SRUUF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rolls-Royce Holdings plc Trend Score",
+        "url": "RYCEY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rolls-Royce Holdings plc RelTrend Score",
+        "url": "RYCEY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cameco Corporation Trend Score",
+        "url": "CCJ_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cameco Corporation RelTrend Score",
+        "url": "CCJ_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Denison Mines Corp. Trend Score",
+        "url": "DNN_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Denison Mines Corp. RelTrend Score",
+        "url": "DNN_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Unilever PLC Trend Score",
+        "url": "UL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Unilever PLC RelTrend Score",
+        "url": "UL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coca-Cola FEMSA S.A.B. de C.V. Trend Score",
+        "url": "KOF_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Coca-Cola FEMSA S.A.B. de C.V. RelTrend Score",
+        "url": "KOF_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AerCap Holdings N.V. Trend Score",
+        "url": "AER_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AerCap Holdings N.V. RelTrend Score",
+        "url": "AER_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corporación América Airports S.A. Trend Score",
+        "url": "CAAP_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corporación América Airports S.A. RelTrend Score",
+        "url": "CAAP_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "A.P. Møller - Mærsk A/S Trend Score",
+        "url": "AMKBY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "A.P. Møller - Mærsk A/S RelTrend Score",
+        "url": "AMKBY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navios Maritime Partners L.P. Trend Score",
+        "url": "NMM_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Navios Maritime Partners L.P. RelTrend Score",
+        "url": "NMM_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Aeroportuario del Sureste S. A. B. de C. V. Trend Score",
+        "url": "ASR_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Grupo Aeroportuario del Sureste S. A. B. de C. V. RelTrend Score",
+        "url": "ASR_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RCM Technologies Inc. Trend Score",
+        "url": "RCMT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RCM Technologies Inc. RelTrend Score",
+        "url": "RCMT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ping An Insurance (Group) Company of China Ltd. Trend Score",
+        "url": "PNGAY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ping An Insurance (Group) Company of China Ltd. RelTrend Score",
+        "url": "PNGAY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tencent Holdings Limited Trend Score",
+        "url": "TCEHY_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tencent Holdings Limited RelTrend Score",
+        "url": "TCEHY_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alibaba Group Holding Limited Trend Score",
+        "url": "BABA_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alibaba Group Holding Limited RelTrend Score",
+        "url": "BABA_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baidu Inc. Trend Score",
+        "url": "BIDU_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Baidu Inc. RelTrend Score",
+        "url": "BIDU_reltrend",
+        "updated": "Daily"
     }
 ]

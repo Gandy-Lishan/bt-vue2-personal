@@ -561,7 +561,7 @@
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && (sub_type === 'crp_trend_reltrend' && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
+            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
             zones: url === 'risk_measure' ? zoonsData : []

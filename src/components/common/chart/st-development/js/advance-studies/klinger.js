@@ -120,7 +120,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		Klinger: {
 			name: "Klinger Volume Oscillator",
-			seriesFN: CIQ.Studies.displayHistogramWithSeries,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displayHistogramWithSeries(stx, sd, quotes);
+			},
+			//seriesFN: CIQ.Studies.displayHistogramWithSeries,
 			calculateFN: CIQ.Studies.calculateKlinger,
 			inputs: { "Signal Periods": 13, "Short Cycle": 34, "Long Cycle": 55 },
 			outputs: {

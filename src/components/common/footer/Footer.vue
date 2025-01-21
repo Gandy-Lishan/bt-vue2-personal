@@ -58,7 +58,7 @@ export default {
 	},
 	watch: {
     '$route'(to, _) {
-			if(to.path.includes('/doc/guide') || to.path.includes('/indicators') || to.path.includes('/MR')) {this.isVisible = false; return}
+			if(to.path.includes('/doc/guide') || to.path.includes('/indicators') || to.path.includes('/MR') || to.path.includes('/dashboard')) {this.isVisible = false; return}
 			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai') || to.path.includes('/doc/home') || to.path.includes('/cpm') || to.path.includes('/strategy') || to.path.includes('/portfolio') || to.path.includes('/my_signals') || to.path.includes('/my_screen')) {
         this.isFixedAtBottom = false
       }else {

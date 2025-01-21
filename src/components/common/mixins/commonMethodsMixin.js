@@ -1098,17 +1098,6 @@ export const CommonMethodsMixin = {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
 			};
 			const commitSymbol2 = (symbol2) => {
-				// let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==symbol2)
-				// let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==symbol2)
-				// if(!stockName && !indexName){
-				// 	this.$store.commit('form/setComparisonSymbol', {})
-				// 	return
-				// }
-				// this.$store.commit('form/setComparisonSymbol', {
-				// 	name:stockName?stockName.name:indexName.name,
-				// 	url:symbol2,
-				// })
-
 				const {name,url,type} = getSymbolInfo(symbol2)
     			if(type == 'other'){
 					this.$store.commit('form/setComparisonSymbol', {})
