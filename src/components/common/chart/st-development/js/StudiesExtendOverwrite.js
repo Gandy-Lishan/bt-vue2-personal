@@ -1,9 +1,11 @@
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import {__js_advanced_studies_accumulationDistribution_} from "./advance-studies/accumulationDistribution.js"
 import {__js_advanced_studies_adx_} from "./advance-studies/adx.js"
+import {__js_advanced_studies_alligator_} from "./advance-studies/alligator.js"
 import {__js_advanced_studies_cci_} from "./advance-studies/cci.js"
 import {__js_advanced_studies_rsi_} from "./advance-studies/rsi.js"
 import {__js_advanced_studies_movingAverages_} from "./advance-studies/movingAverages.js"
+import {__js_advanced_studies_parabolicSAR_} from "./advance-studies/parabolicSAR.js"
 import {__js_advanced_studies_centerOfGravity_} from "./advance-studies/centerOfGravity.js"
 import {__js_advanced_studies_typicalPrice_} from "./advance-studies/typicalPrice.js"
 import {__js_advanced_studies_macd_} from "./advance-studies/macd.js"
@@ -60,9 +62,11 @@ if (!CIQ.Studies) {
 		CIQ.activateImports(
 			__js_advanced_studies_accumulationDistribution_,
 			__js_advanced_studies_adx_,
+			__js_advanced_studies_alligator_,
 			__js_advanced_studies_cci_,
 			__js_advanced_studies_rsi_,
 			__js_advanced_studies_movingAverages_,
+			__js_advanced_studies_parabolicSAR_,
 			__js_advanced_studies_centerOfGravity_,
 			__js_advanced_studies_typicalPrice_,
 			__js_advanced_studies_macd_,
