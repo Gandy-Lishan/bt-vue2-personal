@@ -2,6 +2,8 @@ import axios from '../axios'
 import { uniqueObjectArray } from '@/utils/formValidate'
 import { transformChangedKey } from '@/utils/globalFunc'
 import * as mqs from 'qs'
+import moment from 'moment';
+
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -2000,3 +2002,55 @@ export function getScreenResults(url) {
 	})
 }
 /* My Screens End */
+
+/** Dashboard Start */
+export async function getSmartDumbSentiment() {
+	// 在配置env之前暂时用NODE_ENV判断url
+	let url = `dev/st_data/smart_dump_sentiment`
+  
+	try {
+	  const response = await axios.get(url);
+	  return response.data;  // Assuming the API response contains a data field
+	} catch (error) {
+	  console.error('Error fetching SmartDumbSentiment info:', error);
+	  throw new Error('Failed to fetch SmartDumbSentiment info');
+	}
+  }
+
+  export async function getPairDataDashboard(
+	symbol, 
+	timeframe,
+	startDate,          // 可选参数
+	endDate,             // 可选参数
+	indicators,   // 可选参数
+  ) {
+	  let url = `dev/st_data/pair_data?symbol=${symbol}&freq=${timeframe}`
+	
+	// if (startDate) {
+	//   url += `&start=${startDate}`;
+	// }
+	// if (endDate) {
+	//   url += `&end=${endDate}`;
+	// }
+  
+	if(indicators) {
+	  for(let i=0; i<indicators.length; i++){
+		url += `&${i==0?'indicator':'indicator_'+(i+1)}=${indicators[i]}`
+	  }
+	}
+  
+	try {
+	  const response = await axios.get(url, { auth: author });
+	  console.log('url: ',url);
+	  if (startDate || endDate) {
+		return response.data.filter(
+		  it => 
+			moment(it.DT).isAfter(moment(startDate)) && moment(it.DT).isBefore(moment(endDate)) 
+		);  
+	  }else return response.data
+	  // Assuming the API response contains a data field
+	} catch (error) {
+	  console.error('Error fetching pair data:', error);
+	  throw new Error('Failed to fetch pair data');
+	}
+  }
