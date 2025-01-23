@@ -60,7 +60,30 @@
                </div>
              </div>
            </div>
-
+           <div v-if="activeTab === 'market'" class="tab-pane active">
+             <div class="row" style="margin: 10px;">
+               <div class="panel" style="border: 1px solid #67809F;">
+                 <div class="panel-heading bg-blue-hoki bg-font-blue-hoki">
+                   <h3 class="panel-title">Market Sentiment Overview</h3>
+                 </div>
+                 <div class="panel-body">
+                  <OverviewTable></OverviewTable>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div v-if="activeTab === 'activeStudies'" class="tab-pane active">
+             <div class="row" style="margin: 10px;">
+               <div class="panel" style="border: 1px solid #67809F;">
+                 <div class="panel-heading bg-blue-hoki bg-font-blue-hoki">
+                   <h3 class="panel-title">Active Studies</h3>
+                 </div>
+                 <div class="panel-body">
+                  <ActiveStudies></ActiveStudies>
+                 </div>
+               </div>
+             </div>
+           </div>
            <!-- Additional tabs rendered similarly -->
 
          </div>
@@ -70,12 +93,18 @@
  </div>
 </template>
 <script>
+import OverviewTable from "./OverviewTable";
+import ActiveStudies from "@/components/ModelReport/ActiveStudies";
 export default {
   data() {
     return {
       activeTab: 'summary', // Default active tab
       date: new Date().toISOString(), // Replace with your actual data
     };
+  },
+  components: {
+    OverviewTable,
+    ActiveStudies
   },
   computed: {
     formattedDate() {
