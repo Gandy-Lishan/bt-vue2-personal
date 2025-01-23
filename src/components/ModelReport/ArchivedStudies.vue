@@ -76,7 +76,7 @@
                 </el-col>
               </el-row>
             </div>
-            <table
+          <table
             id="example"
             class="display compact_active_studies table-active-toolbar dataTable no-footer"
             cellspacing="0"
