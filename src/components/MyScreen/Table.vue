@@ -204,14 +204,12 @@ export default {
         {
           label: 'Category',
           value: 'category',
-          key: 'category',
-          width: '120px'
+          key: 'category'
         },
         {
-          label: 'Timeframe',
-          value: 'timeframe',
-          key: 'timeframe',
-          width: '150px'
+          label: 'Direction',
+          value: 'direction',
+          key: 'direction'
         },
         {
           label: 'Screen',
@@ -220,10 +218,9 @@ export default {
           minWidth: '150px' 
         },
         {
-          label: 'Last Screen Date',
-          value: 'last_signal_date',
-          key: 'last_signal_date',
-          width: '190px'
+          label: 'Signal',
+          value: 'signal',
+          key: 'signal'
         }
       ],
       tableData: [],

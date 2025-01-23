@@ -4,12 +4,12 @@
       <el-collapse-item>
         <template slot="title">
           <div class="title">
-            <p>My Screen (click to expand)</p>
+            <p>Screen (click to expand)</p>
           </div>
         </template>
         <div class="portfolio-des">
           <p>
-            My Screen is a convenient trading signals platform that provides customized trading signals that provides customized trading signals through a variety of conditions to needs of different users.
+            Screen is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
           </p>
           <p>
             In the table below, when a row is highlighted in "yellow", it indicates a change in that trading signal.
@@ -21,8 +21,8 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
-            <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">My Screens List</p>
-            <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeTab == 'Sample' || '' }">Sample Screens List</p>
+            <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">Screens List</p>
+            <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result List</p>
           </div>
         </template>
         <div class="content">
@@ -36,20 +36,26 @@
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
           ></SignalsTable>
-          <SignalsTable 
+          <FilterTable v-show="activeTab == 'Result'" ref="filterTable"
+            :data="filterTableData" 
+            :label="filterTableData.label" 
+            :tableCol="filterTableData.tableCol" 
+            :loading="loading"
+            ></FilterTable>
+          <!-- <SignalsTable 
             v-show="activeTab === 'Sample'"
             currentPageTab="Sample"
             ref="SampleTable"
             @changeSecondTab="changeSecondTab"
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
-          ></SignalsTable>
+          ></SignalsTable> -->
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
-            <p @click.stop>Create New Signal</p>
+            <p @click.stop>Create New Screen</p>
           </div>
         </template>
         <ScannerForm
@@ -64,7 +70,7 @@
          >
         </ScannerForm>
       </el-collapse-item>
-      <el-collapse-item name="3" class="form">
+      <!-- <el-collapse-item name="3" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTargetResults">
             <p @click.stop :class="{ secondActive: activeSecondTab == 'results' || '' }">Screen Result List</p>
@@ -89,7 +95,7 @@
             :loading="loading"
             ></FilterTable>
         </div>
-      </el-collapse-item>
+      </el-collapse-item> -->
     </el-collapse>
   </div>
 </template>
@@ -223,15 +229,16 @@ export default {
     },
     displayResultsData(data) {
       // this.$refs['ScannerForm'].displayData(data)
-      this.activeSecondTab = 'results'
+      this.activeTab = 'Result'
       const status = data.status
       if(status !== 'finish' && status !== 'Finish') {
-        this.scrollToTarget('scrollTarget', -200)
+        // 不移动
+        // this.scrollToTarget('scrollTarget', -200)
         this.clearResults()
         return
       }
       this.displayResultList(list)
-      this.scrollToTarget('scrollTargetResults')
+      this.scrollToTarget('scrollTargetTable', -200)
     },
     displayFormData(data) {
       this.$refs['ScannerForm'].displayData(data)
