@@ -508,7 +508,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites'].includes(currentPage) && isButtonVisible"
+										v-if="['History', 'Favorites'].includes(currentPage)"
 										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-plus"
