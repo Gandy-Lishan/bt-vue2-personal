@@ -8,7 +8,7 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item
           prop="name"
           >
@@ -20,7 +20,7 @@
           <el-input v-model="data.name" placeholder="Enter a name"></el-input>
         </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item
           prop="category"
           >
@@ -44,19 +44,41 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
-              3. Timeframe
+              3. Direction
             </label>
           </template>
           <el-select
-              v-model="data.timeframe"
+              v-model="data.direction"
               placeholder="— Select type —"
             >
               <el-option
-                v-for="item in timeframeOption"
+                v-for="item in directionOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select>
+        </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="timefame">
+            <template slot="label">
+            <label>
+              4. Signal
+            </label>
+          </template>
+          <el-select
+              v-model="data.signal"
+              placeholder="— Select type —"
+            >
+              <el-option
+                v-for="item in signalOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -68,7 +90,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <div class="setup">
+    <!-- <div class="setup">
       <div class="set-up-container">
         <Criteria
           class="criteria"
@@ -81,14 +103,14 @@
         >
         </Criteria>
       </div>
-    </div>
+    </div> -->
     <br>
     <el-row :gutter="10" type="flex" class="row-bg" justify="center">
         <el-col :span="6">
-          <el-button type="warning" size="small" @click="resetForm">Reset Screen</el-button>
+          <el-button type="warning" size="small" @click="resetForm">Reset Form</el-button>
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Signal Screen</el-button>
+          <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Save Screen</el-button>
           <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
           </div>
@@ -118,8 +140,9 @@ export default {
     return {
       data: {
         name: '',
-        timeframe: 'Daily',
-        category: 'SPX',
+        direction: 'Long',
+        category: 'Communication Services',
+        signal: 'MA'
       },
       rowUrl: null,
       isPolling: false,
@@ -132,10 +155,9 @@ export default {
       endPickerOptions: {
         disabledDate: this.handleDisabledEndDate
       },
-      timeframeOption: [
-        { value: 'Daily', label: 'Daily', disabled: false},
-        { value: 'Weekly', label: 'Weekly', disabled: false},
-        { value: 'Monthly', label: 'Monthly', disabled: false}
+      directionOption: [
+        { value: 'Long', label: 'Long', disabled: false},
+        { value: 'Short', label: 'Short', disabled: false}
       ],
       options: [
         { value: 'Communication Services', label: 'Communication Services', disabled: false},
@@ -150,6 +172,196 @@ export default {
         { value: 'Staples', label: 'Staples', disabled: false},
         { value: 'Technology', label: 'Technology', disabled: false},
         { value: 'Utilities', label: 'Utilities', disabled: false}
+      ],
+      signalOptions: [
+        {
+          value: 'MA',
+          label: 'MA',
+          check: true
+        },
+        {
+          value: 'MAGap',
+          label: 'MAGap',
+          check: true
+        },
+        {
+          value: 'MACDHist',
+          label: 'MACDHist',
+          check: true
+        },
+        {
+          value: 'MACDHistGap',
+          label: 'MACDHistGap',
+          check: true
+        },
+        {
+          value: 'Hammer followed by a rise',
+          label: 'Hammer followed by a rise',
+          check: true
+        },
+        {
+          value: 'Shooting Star followed by a fall',
+          label: 'Shooting Star followed by a fall',
+          check: true
+        },
+        {
+          value: 'UpTrend Pattern',
+          label: 'UpTrend Pattern',
+          check: true
+        },
+        {
+          value: 'DownTrend Pattern',
+          label: 'DownTrend Pattern',
+          check: true
+        },
+        {
+          value: 'Optix #1',
+          label: 'Optix #1',
+          check: true
+        },
+        {
+          value: 'Optix #2',
+          label: 'Optix #2',
+          check: true
+        },
+        {
+          value: 'Optix #3',
+          label: 'Optix #3',
+          check: true
+        },
+        {
+          value: 'Optix #4',
+          label: 'Optix #4',
+          check: true
+        },
+        {
+          value: 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
+          label: 'Optix #5',
+          check: true
+        },
+        {
+          value: 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
+          label: 'Optix #6',
+          check: true
+        },
+        {
+          value: 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
+          label: 'Optix #7',
+          check: true
+        },
+        {
+          value: 'PriceBreakout',
+          label: 'PriceBreakout',
+          check: true
+        },
+        {
+          value: 'HighPoints',
+          label: 'HighPoints',
+          check: true
+        },
+        {
+          value: 'LowPoints',
+          label: 'LowPoints',
+          check: true
+        },
+        {
+          value: 'RSI',
+          label: 'RSI',
+          check: true
+        },
+        /** cpm pattern */
+        {
+          value: 'Head and Shoulders Top',
+          label: 'Head and Shoulders Top',
+          check: true
+        },
+        {
+          value: 'Head and Shoulders Bottom',
+          label: 'Head and Shoulders Bottom',
+          check: true
+        },
+        {
+          value: 'Double Top',
+          label: 'Double Top',
+          check: true
+        },
+        {
+          value: 'Double Bottom',
+          label: 'Double Bottom',
+          check: true
+        },
+        {
+          value: 'Triple Tap',
+          label: 'Triple Tap',
+          check: true
+        },
+        {
+          value: 'Rounding Bottom',
+          label: 'Rounding Bottom',
+          check: true
+        },
+        {
+          value: 'Ascending Channel',
+          label: 'Ascending Channel',
+          check: true
+        },
+        {
+          value: 'Descending Channel',
+          label: 'Descending Channel',
+          check: true
+        },
+        /** 8 high-low signals */
+        {
+          value: 'Symbol All-Time High',
+          label: 'Symbol All-Time High',
+          check: true
+        },
+        {
+          value: 'Symbol All-Time Low',
+          label: 'Symbol All-Time Low',
+          check: true
+        },
+        {
+          value: 'Symbol 52-Week High',
+          label: 'Symbol 52-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 52-Week Low',
+          label: 'Symbol 52-Week Low',
+          check: true
+        },
+        {
+          value: 'Symbol 4-Week High',
+          label: 'Symbol 4-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 4-Week Low',
+          label: 'Symbol 4-Week Low',
+          check: true
+        },
+        {
+          value: 'Symbol 13-Week High',
+          label: 'Symbol 13-Week High',
+          check: true
+        },
+        {
+          value: 'Symbol 13-Week Low',
+          label: 'Symbol 13-Week Low',
+          check: true
+        },
+        // trend score
+        {
+          value: 'Trend Score Breakout',
+          label: 'Trend Score Breakout',
+          check: true
+        },
+        {
+          value: 'Trend Score Breakdown',
+          label: 'Trend Score Breakdown',
+          check: true
+        },
       ],
       rules: {
         name: [
@@ -203,7 +415,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `My Signal ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `My Screen ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     updateTimeframeOptions(currentTimeframe) {
       const timeframeOption = [
@@ -280,31 +492,11 @@ export default {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
       }
-      // 初始化表单数据
-      _this.$store.commit('form/initialBacktestInfo')
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
       this.percentage = 8
-      this.$store.commit('form/setBd', this.data)
-
-      const saveAndCheckCriteriaErrors = async (childName) => {
-				const err = await _this.saveCriteriaData(childName);
-				return err;
-			};
-			const checkAndHandleError = (err, errMsg) => {
-				if (!err) {
-					_this.popUpMsgBox(errMsg);
-					return true;
-				}
-				return false;
-			};
-			const entryErr = await saveAndCheckCriteriaErrors('entryChild1')
-			const errMsg = 'Error saving signal criteria...'
-			if (checkAndHandleError(entryErr, errMsg)) return
-			const saveObj = (type) => _this.handleSavedData(type);
-			const entrySaveObj = saveObj('entry');
-			const saveData = _this.reassignBTAttributes(entrySaveObj);
       debugger
+      const saveData = {...this.data}
       if(this.percentage < 99) this.percentage += 8
       let saveRes
       if(rowUrl) {saveRes = await editMyScreenForm(saveData, rowUrl)}

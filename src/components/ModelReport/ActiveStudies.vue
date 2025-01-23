@@ -308,8 +308,25 @@ export default {
   },
  beforeRouteEnter(to, from, next) {
   if (to.path === '/MR/active_studies') {
+    debugger
     next(async _this => {
-      const {data: {active_studies, short_term_bearish, short_term_bullish, med_term_bearish, med_term_bullish, long_term_bearish, long_term_bullish, premium_notes, daily_reports, basic_notes, active_research}} = await getActiveStudies()
+      await _this.fetchActiveStudiesData()
+    })
+  }else {
+    next()
+  }
+  },
+async mounted() {
+  debugger
+  if(this.$route.path === '/dashboard') await this.fetchActiveStudiesData()
+},
+ methods: {
+   subscribeToStudyAlerts() {
+     // 处理订阅逻辑
+   },
+   async fetchActiveStudiesData() {
+    const _this = this
+    const {data: {active_studies, short_term_bearish, short_term_bullish, med_term_bearish, med_term_bullish, long_term_bearish, long_term_bullish, premium_notes, daily_reports, basic_notes, active_research}} = await getActiveStudies()
       _this.forecasts = active_studies.sort((a,b) => {
         return new Date(b['date']) - new Date(a['date'])
       })
@@ -331,14 +348,6 @@ export default {
       _this.medTermBearish = med_term_bearish
       _this.longTermBullish = long_term_bullish
       _this.longTermBearish = long_term_bearish
-    })
-  }else {
-    next()
-  }
-  },
- methods: {
-   subscribeToStudyAlerts() {
-     // 处理订阅逻辑
    },
    unsubscribeFromStudyAlerts() {
      // 处理取消订阅逻辑
