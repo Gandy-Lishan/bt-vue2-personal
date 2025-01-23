@@ -78,31 +78,15 @@
 
 <script>
 export default {
- props: {
-   stocksShortRiskImage: {
-     type: String,
-     required: true,
-   },
-   stocksMediumRiskImage: {
-     type: String,
-     required: true,
-   },
-   bondsRiskImage: {
-     type: String,
-     required: true,
-   },
-   oilRiskImage: {
-     type: String,
-     required: true,
-   },
-   goldRiskImage: {
-     type: String,
-     required: true,
-   },
-   agRiskImage: {
-     type: String,
-     required: true,
-   },
+  data() {
+    return {
+      stocksShortRiskImage: '',
+      stocksMediumRiskImage: '',
+      bondsRiskImage: '',
+      oilRiskImage: '',
+      goldRiskImage: '',
+      agRiskImage: '',
+    }
  },
  methods: {
    getChartUrl(symbol) {
