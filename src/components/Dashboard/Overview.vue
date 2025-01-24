@@ -108,20 +108,19 @@
                             <h3 class="panel-title">Optimism Index (Optix) Heatmap</h3>
                         </div>
                         <div class="panel-body"> 
-                            <div class='col-md-12'>
-                                <p>The Optix Heatmap shows all of our Optimism Index indicators in a heatmap
-                                    format. Optix readings can be seen by hovering over the heatmap.
-                                    Additionally, if you click a lable or box, you'll be taken to that Optix
-                                    chart. To view a larger version of this chart, <a
-                                            href="#"> click here</a>.</p>
-                                <div style="text-align: center; margin-bottom: 5px;">Moving Average:
-                                    <div class="btn-group heatmap-moving-average-buttons" role="group">
-                                    //  TODO overview-data component
-                                    </div>
-                                </div>
-                                <div style="min-width: 500px; width:900px; height: 800px; margin: 0 auto"
-                                    id="HM"></div>
-                            </div>
+                          <Heatmap></Heatmap>
+                        </div>
+                    </div>
+                </div>
+          </div>
+          <div v-if="activeTab === 'phaseTable'" class="tab-pane active">
+            <div class='row' style="margin: 10px;">
+                <div class="panel" style="border: 1px solid #67809F;">
+                        <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
+                            <h3 class="panel-title">Phase Table</h3>
+                        </div>
+                        <div class="panel-body"> 
+                          <PhaseTable></PhaseTable>
                         </div>
                     </div>
                 </div>
@@ -159,13 +158,18 @@ import Charts from './Charts'
 import OverviewTable from "./OverviewTable";
 import ActiveStudies from "@/components/ModelReport/ActiveStudies";
 import DashboardTable from "./DashboardTable";
+import Heatmap from "./Heatmap";
+import PhaseTable from "./PhaseTable";
 export default {
   components: {
     RecentIndicators,
     Charts,
+    ActiveStudies,
     OverviewTable,
     ActiveStudies,
     DashboardTable,
+    Heatmap,
+    PhaseTable
   },
   data() {
     return {
