@@ -80,12 +80,12 @@
 export default {
   data() {
     return {
-      stocksShortRiskImage: '',
-      stocksMediumRiskImage: '',
-      bondsRiskImage: '',
-      oilRiskImage: '',
-      goldRiskImage: '',
-      agRiskImage: '',
+      stocksShortRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
+      stocksMediumRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
+      bondsRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
+      oilRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
+      goldRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
+      agRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
     }
  },
  methods: {
