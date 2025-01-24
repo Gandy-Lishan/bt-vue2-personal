@@ -64,7 +64,7 @@
                 <td>
                   <center>
                     <img 
-                      :src="`/static/img/bull_bear_${forecast.sentiment}.gif`" 
+                      :src="require(`@/assets/bull_bear_${forecast.sentiment}.gif`)"
                       :data-order="forecast.sentiment"
                       :title="forecast.sentiment"
                     />
@@ -122,11 +122,13 @@
   </div>
 </template>
 <script>
+const debounce = require('lodash/debounce')
+
 export default {
   name: 'RecentIndicators',
   data() {
     return {
-      filterData: [
+      forecasts: [
         // Sample data
         {
           date: new Date(),
@@ -135,10 +137,29 @@ export default {
           chart_url: 'chart-url',
           chart_name: 'Chart Name',
           last_value: 100,
-          sentiment: 'bull',
+          sentiment: 3,
         },
+        {
+          date: new Date(),
+          url: 'some-url-2',
+          title: 'Blog Title 2',
+          chart_url: 'chart-url-2',
+          chart_name: 'Chart Name 2',
+          last_value: 50,
+          sentiment: 2,
+        },
+        {
+          date: new Date(),
+          url: 'some-url-3',
+          title: 'Blog Title 3',
+          chart_url: 'chart-url-3',
+          chart_name: 'Chart Name 3',
+          last_value: 50,
+          sentiment: 3,
+        }
         // Add more data as needed
       ],
+      filterData: [],
       start: 1,
       end: 25,
       currentPage: 1,
@@ -163,6 +184,9 @@ export default {
     total() {
       return this.filterData.length
     },
+  },
+  mounted() {
+    this.filterData = this.forecasts
   },
   methods: {
     formatDate(date) {
@@ -225,6 +249,37 @@ export default {
         return 0;
       });
     },
+    handleQuery: debounce(function () { this._filterData() }, 500),
+    _filterData(){
+		  this.filterData = this.getSearchResult()
+      debugger
+      if(this.currentPage != 1) this.currentPage = 1
+    },
+
+    getSearchResult() {
+      if(this.searchInput){
+        // 在搜索之前对搜索关键词进行转义
+        const trimmedStr = this.searchInput.trim()
+        const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+        return this.forecasts.filter(item => {
+            // 获取所有需要匹配的属性
+            const properties = [
+              item['date'],
+              item['title'],
+              item['chart_name'],
+            ];
+          // 检查任意一个属性是否匹配
+          return properties.some(property => regex.test(property));
+        });
+      }else{
+        return this.forecasts
+      }
+    },
+    // 使用反斜杠转义特殊字符
+    escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    },
+
     getPageRange(start, end) {
       let range = [];
       for (let i = start; i <= end; i++) {

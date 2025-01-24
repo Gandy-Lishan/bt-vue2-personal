@@ -142,16 +142,14 @@ export default {
   components: {
     RecentIndicators,
     Charts,
+    OverviewTable,
+    ActiveStudies
   },
   data() {
     return {
       activeTab: 'summary', // Default active tab
       date: new Date().toISOString(), // Replace with your actual data
     };
-  },
-  components: {
-    OverviewTable,
-    ActiveStudies
   },
   computed: {
     formattedDate() {
