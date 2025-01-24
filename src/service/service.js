@@ -2041,7 +2041,6 @@ export async function getSmartDumbSentiment() {
   
 	try {
 	  const response = await axios.get(url, { auth: author });
-	  console.log('url: ',url);
 	//   return response.data
 	  if (startDate || endDate) {
 		return response.data.filter(

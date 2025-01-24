@@ -125,7 +125,20 @@
                     </div>
                 </div>
           </div>
+          <div v-if="activeTab === 'extremes'" class="tab-pane active">
+            <div class='row' style="margin: 10px;">
+                <div class="panel" style="border: 1px solid #67809F;">
+                        <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
+                            <h3 class="panel-title">Extremes</h3>
+                        </div>
+                        <div class="panel-body"> 
+                          <Extremes 
 
+                            ></Extremes>
+                        </div>
+                    </div>
+                </div>
+          </div>
           <div v-if="activeTab === 'pessimism'" class="tab-pane active">
              <DashboardTable 
              :key="activeTab"
@@ -160,6 +173,7 @@ import ActiveStudies from "@/components/ModelReport/ActiveStudies";
 import DashboardTable from "./DashboardTable";
 import Heatmap from "./Heatmap";
 import PhaseTable from "./PhaseTable";
+import Extremes from "./Extremes";
 export default {
   components: {
     RecentIndicators,
@@ -169,7 +183,8 @@ export default {
     ActiveStudies,
     DashboardTable,
     Heatmap,
-    PhaseTable
+    PhaseTable,
+    Extremes
   },
   data() {
     return {
