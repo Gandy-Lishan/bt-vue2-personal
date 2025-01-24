@@ -147,8 +147,8 @@ export default {
     // Handle the selection of a moving average button
     handleMovingAverageClick(index) {
       this.selectedMovingAverageIndex = index;
-      const formattedData = this.formatData(this.heatmapData[index]);
-      console.log('formattedData', formattedData)
+      // const formattedData = this.formatData(this.heatmapData[index]);
+      // console.log('formattedData', formattedData)
       const formattedData = [
         { name: "Market A", link: "marketA", value: 67, colorValue: 5 },  // 调整 colorValue 的值
         { name: "Market B", link: "marketB", value: 4, colorValue: 6 },

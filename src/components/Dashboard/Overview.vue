@@ -113,6 +113,18 @@
                     </div>
                 </div>
           </div>
+          <div v-if="activeTab === 'phaseTable'" class="tab-pane active">
+            <div class='row' style="margin: 10px;">
+                <div class="panel" style="border: 1px solid #67809F;">
+                        <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
+                            <h3 class="panel-title">Phase Table</h3>
+                        </div>
+                        <div class="panel-body"> 
+                          <PhaseTable></PhaseTable>
+                        </div>
+                    </div>
+                </div>
+          </div>
 
          </div>
        </div>
@@ -126,13 +138,15 @@ import Charts from './Charts'
 import OverviewTable from "./OverviewTable";
 import ActiveStudies from "@/components/ModelReport/ActiveStudies";
 import Heatmap from "./Heatmap";
+import PhaseTable from "./PhaseTable";
 export default {
   components: {
     RecentIndicators,
     Charts,
     ActiveStudies,
     OverviewTable,
-    Heatmap
+    Heatmap,
+    PhaseTable
   },
   data() {
     return {
