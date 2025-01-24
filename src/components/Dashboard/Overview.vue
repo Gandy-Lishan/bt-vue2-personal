@@ -127,6 +127,26 @@
                 </div>
           </div>
 
+          <div v-if="activeTab === 'pessimism'" class="tab-pane active">
+             <DashboardTable 
+             :key="activeTab"
+              type="pess"
+              :extreme="overviewData.pess_extreme" 
+              stock_complete_list='#' 
+              :date="overviewData.date"  
+              :len_extreme="overviewData.len_pess"
+             ></DashboardTable>
+          </div>
+          <div v-if="activeTab === 'optimism'" class="tab-pane active">
+             <DashboardTable 
+             :key="activeTab"
+              type="opt"
+              :extreme="overviewData.opt_extreme" 
+              stock_complete_list='#' 
+              :date="overviewData.date"  
+              :len_extreme="overviewData.len_opt"
+             ></DashboardTable>
+          </div>
          </div>
        </div>
      </div>
@@ -138,17 +158,21 @@ import RecentIndicators from './RecentIndicators'
 import Charts from './Charts'
 import OverviewTable from "./OverviewTable";
 import ActiveStudies from "@/components/ModelReport/ActiveStudies";
+import DashboardTable from "./DashboardTable";
 export default {
   components: {
     RecentIndicators,
     Charts,
     OverviewTable,
-    ActiveStudies
+    ActiveStudies,
+    DashboardTable,
   },
   data() {
     return {
       activeTab: 'summary', // Default active tab
       date: new Date().toISOString(), // Replace with your actual data
+
+      overviewData: null,
     };
   },
   computed: {
@@ -156,6 +180,82 @@ export default {
       const dateObj = new Date(this.date);
       return dateObj.toLocaleDateString(); // Format as needed
     },
+  },
+  mounted() {
+    this.overviewData = {
+
+        // pess & opt
+        opt_extreme: [
+          // Sample data
+          {
+            url: 'some-url',
+            underlying_name: 'Indicator 1',
+            group: 'group 1',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 2,
+          },
+          {
+            url: 'some-url-2',
+            underlying_name: 'Indicator 2',
+            group: 'group 2',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 3,
+          },          
+          {
+            url: 'some-url-3',
+            underlying_name: 'Indicator 3',
+            group: 'group 3',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 1,
+          },
+        ], 
+        pess_extreme: [
+          // Sample data
+          {
+            url: 'some-url',
+            underlying_name: 'Indicator 1',
+            group: 'group 1',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 2,
+          },
+          {
+            url: 'some-url-2',
+            underlying_name: 'Indicator 2',
+            group: 'group 2',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 3,
+          },          
+          {
+            url: 'some-url-3',
+            underlying_name: 'Indicator 3',
+            group: 'group 3',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 1,
+          },
+        ], 
+        date: 'January 20, 2025'
+      }
+      this.overviewData['len_opt'] = this.overviewData['opt_extreme'].length
+      this.overviewData['len_pess'] = this.overviewData['pess_extreme'].length
+      
   },
   methods: {
     setActiveTab(tabName) {
