@@ -436,7 +436,7 @@
       console.log('this.row', this.row)
       let originalData
       try {
-        const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
+        const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
         originalData = res.data
         if(typeof originalData === 'string') {
           originalData = originalData.replace(/NaN/g, 'null')
