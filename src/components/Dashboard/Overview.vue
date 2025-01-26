@@ -133,9 +133,39 @@
                         </div>
                         <div class="panel-body"> 
                           <RankCharts></RankCharts>
+          <div v-if="activeTab === 'extremes'" class="tab-pane active">
+            <div class='row' style="margin: 10px;">
+                <div class="panel" style="border: 1px solid #67809F;">
+                        <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
+                            <h3 class="panel-title">Extremes</h3>
+                        </div>
+                        <div class="panel-body"> 
+                          <Extremes 
+
+                            ></Extremes>
                         </div>
                     </div>
                 </div>
+          </div>
+          <div v-if="activeTab === 'pessimism'" class="tab-pane active">
+             <DashboardTable 
+             :key="activeTab"
+              type="pess"
+              :extreme="overviewData.pess_extreme" 
+              stock_complete_list='#' 
+              :date="overviewData.date"  
+              :len_extreme="overviewData.len_pess"
+             ></DashboardTable>
+          </div>
+          <div v-if="activeTab === 'optimism'" class="tab-pane active">
+             <DashboardTable 
+             :key="activeTab"
+              type="opt"
+              :extreme="overviewData.opt_extreme" 
+              stock_complete_list='#' 
+              :date="overviewData.date"  
+              :len_extreme="overviewData.len_opt"
+             ></DashboardTable>
           </div>
          </div>
        </div>
@@ -148,23 +178,30 @@ import RecentIndicators from './RecentIndicators'
 import Charts from './Charts'
 import OverviewTable from "./OverviewTable";
 import ActiveStudies from "@/components/ModelReport/ActiveStudies";
+import DashboardTable from "./DashboardTable";
 import Heatmap from "./Heatmap";
 import PhaseTable from "./PhaseTable";
 import RankCharts from "./RankCharts";
+import Extremes from "./Extremes";
 export default {
   components: {
     RecentIndicators,
     Charts,
     ActiveStudies,
     OverviewTable,
+    ActiveStudies,
+    DashboardTable,
     Heatmap,
     PhaseTable,
-    RankCharts
+    RankCharts,
+    Extremes
   },
   data() {
     return {
       activeTab: 'summary', // Default active tab
       date: new Date().toISOString(), // Replace with your actual data
+
+      overviewData: null,
     };
   },
   computed: {
@@ -172,6 +209,82 @@ export default {
       const dateObj = new Date(this.date);
       return dateObj.toLocaleDateString(); // Format as needed
     },
+  },
+  mounted() {
+    this.overviewData = {
+
+        // pess & opt
+        opt_extreme: [
+          // Sample data
+          {
+            url: 'some-url',
+            underlying_name: 'Indicator 1',
+            group: 'group 1',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 2,
+          },
+          {
+            url: 'some-url-2',
+            underlying_name: 'Indicator 2',
+            group: 'group 2',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 3,
+          },          
+          {
+            url: 'some-url-3',
+            underlying_name: 'Indicator 3',
+            group: 'group 3',
+            timeframe: 'Short',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 1,
+          },
+        ], 
+        pess_extreme: [
+          // Sample data
+          {
+            url: 'some-url',
+            underlying_name: 'Indicator 1',
+            group: 'group 1',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 2,
+          },
+          {
+            url: 'some-url-2',
+            underlying_name: 'Indicator 2',
+            group: 'group 2',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 3,
+          },          
+          {
+            url: 'some-url-3',
+            underlying_name: 'Indicator 3',
+            group: 'group 3',
+            timeframe: 'Long',
+            last_value: '17.00%',
+            last_change: '-22%',
+            last_update: new Date(),
+            sentiment: 1,
+          },
+        ], 
+        date: 'January 20, 2025'
+      }
+      this.overviewData['len_opt'] = this.overviewData['opt_extreme'].length
+      this.overviewData['len_pess'] = this.overviewData['pess_extreme'].length
+      
   },
   methods: {
     setActiveTab(tabName) {
