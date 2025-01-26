@@ -133,6 +133,11 @@
                         </div>
                         <div class="panel-body"> 
                           <RankCharts></RankCharts>
+                        </div>
+                </div>
+            </div>
+          </div>
+          
           <div v-if="activeTab === 'extremes'" class="tab-pane active">
             <div class='row' style="margin: 10px;">
                 <div class="panel" style="border: 1px solid #67809F;">
