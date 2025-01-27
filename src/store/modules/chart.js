@@ -328,7 +328,18 @@ const mutations = {
 	},
 	SET_INDICATORS_PAGE_LIST_DATA(state, { url, data }) {
 		if(!url) return
-		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(data)
+			const removeDuplicates = (data) => {
+				const seen = new Set();
+				return data.filter(item => {
+						if (seen.has(item.url)) {
+							console.log(`重复被过滤的项${url}`, item.url)
+								return false; // 如果 URL 已经出现过，过滤掉该项
+						}
+						seen.add(item.url); // 否则将 URL 添加到 Set 中
+						return true; // 保留该项
+				});
+		}
+		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
 	}
 }
 

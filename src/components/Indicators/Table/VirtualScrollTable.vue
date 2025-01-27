@@ -2494,7 +2494,7 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 575px !important;
+    // height: 575px !important;
   }
   /deep/ .el-table__body-wrapper.is-scrolling-left {
     overflow-x: scroll !important;
@@ -2515,7 +2515,7 @@ export default {
     overflow: visible !important;
   }
   /deep/ .el-table__body-wrapper {
-    height: 575px !important;
+    // height: 575px !important;
     width: 100% !important; /* 确保宽度占满父容器 */
   }
 }
