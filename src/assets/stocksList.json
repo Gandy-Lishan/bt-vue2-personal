@@ -13358,5 +13358,233 @@
     {
         "name": "MicroStrategy Inc",
         "stock": "crp_MSTR"
+    },
+    {
+        "name": "ASE Technology Holding Co. Ltd.",
+        "stock": "ASX"
+    },
+    {
+        "name": "Taiwan Semiconductor Manufacturing Company Limited",
+        "stock": "TSM"
+    },
+    {
+        "name": "Celestica Inc.",
+        "stock": "CLS"
+    },
+    {
+        "name": "Constellation Software Inc.",
+        "stock": "CNSWF"
+    },
+    {
+        "name": "monday.com Ltd.",
+        "stock": "MNDY"
+    },
+    {
+        "name": "Shopify Inc.",
+        "stock": "SHOP"
+    },
+    {
+        "name": "NICE Ltd.",
+        "stock": "NICE"
+    },
+    {
+        "name": "Cellebrite DI Ltd.",
+        "stock": "CLBT"
+    },
+    {
+        "name": "QXO Inc.",
+        "stock": "QXO"
+    },
+    {
+        "name": "CyberArk Software Ltd.",
+        "stock": "CYBR"
+    },
+    {
+        "name": "Qifu Technology Inc.",
+        "stock": "QFIN"
+    },
+    {
+        "name": "Joint Stock Company Kaspi.kz",
+        "stock": "KSPI"
+    },
+    {
+        "name": "Adyen N.V.",
+        "stock": "ADYEY"
+    },
+    {
+        "name": "Futu Holdings Limited",
+        "stock": "FUTU"
+    },
+    {
+        "name": "Grupo Supervielle S.A.",
+        "stock": "SUPV"
+    },
+    {
+        "name": "UBS Group AG",
+        "stock": "UBS"
+    },
+    {
+        "name": "Mitsubishi UFJ Financial Group Inc.",
+        "stock": "MUFG"
+    },
+    {
+        "name": "Barclays PLC",
+        "stock": "BCS"
+    },
+    {
+        "name": "Intercorp Financial Services Inc.",
+        "stock": "IFS"
+    },
+    {
+        "name": "Grupo Financiero Galicia S.A.",
+        "stock": "GGAL"
+    },
+    {
+        "name": "Banco Macro S.A.",
+        "stock": "BMA"
+    },
+    {
+        "name": "Manulife Financial Corporation",
+        "stock": "MFC"
+    },
+    {
+        "name": "Novo Nordisk A/S",
+        "stock": "NVO"
+    },
+    {
+        "name": "Teva Pharmaceutical Industries Limited",
+        "stock": "TEVA"
+    },
+    {
+        "name": "Garrett Motion Inc.",
+        "stock": "GTX"
+    },
+    {
+        "name": "Li Auto Inc.",
+        "stock": "LI"
+    },
+    {
+        "name": "On Holding AG",
+        "stock": "ONON"
+    },
+    {
+        "name": "Restaurant Brands International Inc.",
+        "stock": "QSR"
+    },
+    {
+        "name": "TotalEnergies SE",
+        "stock": "TTE"
+    },
+    {
+        "name": "Petróleo Brasileiro S.A. - Petrobras",
+        "stock": "PBR"
+    },
+    {
+        "name": "Shell plc",
+        "stock": "SHEL"
+    },
+    {
+        "name": "Equinor ASA",
+        "stock": "EQNR"
+    },
+    {
+        "name": "BP p.l.c.",
+        "stock": "BP"
+    },
+    {
+        "name": "Vista Energy S.A.B. de C.V.",
+        "stock": "VIST"
+    },
+    {
+        "name": "Navigator Holdings Ltd.",
+        "stock": "NVGS"
+    },
+    {
+        "name": "StealthGas Inc.",
+        "stock": "GASS"
+    },
+    {
+        "name": "TORM plc",
+        "stock": "TRMD"
+    },
+    {
+        "name": "Talen Energy Corporation",
+        "stock": "TLN"
+    },
+    {
+        "name": "Pampa Energía S.A.",
+        "stock": "PAM"
+    },
+    {
+        "name": "Oklo Inc.",
+        "stock": "OKLO"
+    },
+    {
+        "name": "CEMEX S.A.B. de C.V.",
+        "stock": "CX"
+    },
+    {
+        "name": "Sprott Physical Uranium Trust Fund",
+        "stock": "SRUUF"
+    },
+    {
+        "name": "Rolls-Royce Holdings plc",
+        "stock": "RYCEY"
+    },
+    {
+        "name": "Cameco Corporation",
+        "stock": "CCJ"
+    },
+    {
+        "name": "Denison Mines Corp.",
+        "stock": "DNN"
+    },
+    {
+        "name": "Unilever PLC",
+        "stock": "UL"
+    },
+    {
+        "name": "Coca-Cola FEMSA S.A.B. de C.V.",
+        "stock": "KOF"
+    },
+    {
+        "name": "AerCap Holdings N.V.",
+        "stock": "AER"
+    },
+    {
+        "name": "Corporación América Airports S.A.",
+        "stock": "CAAP"
+    },
+    {
+        "name": "A.P. Møller - Mærsk A/S",
+        "stock": "AMKBY"
+    },
+    {
+        "name": "Navios Maritime Partners L.P.",
+        "stock": "NMM"
+    },
+    {
+        "name": "Grupo Aeroportuario del Sureste S. A. B. de C. V.",
+        "stock": "ASR"
+    },
+    {
+        "name": "RCM Technologies Inc.",
+        "stock": "RCMT"
+    },
+    {
+        "name": "Ping An Insurance (Group) Company of China Ltd.",
+        "stock": "PNGAY"
+    },
+    {
+        "name": "Tencent Holdings Limited",
+        "stock": "TCEHY"
+    },
+    {
+        "name": "Alibaba Group Holding Limited",
+        "stock": "BABA"
+    },
+    {
+        "name": "Baidu Inc.",
+        "stock": "BIDU"
     }
 ]

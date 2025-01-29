@@ -328,7 +328,18 @@ const mutations = {
 	},
 	SET_INDICATORS_PAGE_LIST_DATA(state, { url, data }) {
 		if(!url) return
-		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(data)
+			const removeDuplicates = (data) => {
+				const seen = new Set();
+				return data.filter(item => {
+						if (seen.has(item.url)) {
+							console.log(`重复被过滤的项${url}`, item.url)
+								return false; // 如果 URL 已经出现过，过滤掉该项
+						}
+						seen.add(item.url); // 否则将 URL 添加到 Set 中
+						return true; // 保留该项
+				});
+		}
+		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
 	}
 }
 
@@ -868,10 +879,21 @@ get_indicator_page_btv1_list({ commit, state }) {
 											obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
 										}}}
 									if(['last_value', 'last_change', 'win_rate', 'avg_return', 'z_score', 'avg_net_return', 'AvgReturn'].includes(key)) {
-											if(['last_value', 'last_change'].includes(key)){obj[key] = unifyNumber(obj[key], 4)}
-											else if(key === 'z_score'){obj[key] = obj[key] = unifyNumber(obj[key], 1)}
-											else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){obj[key] = obj[key] = unifyNumber(obj[key], 2)}
-											else if(key === 'avg_return'){obj[key] = obj[key] = unifyNumber(obj[key], 3)}}
+											if(['last_value', 'last_change'].includes(key)){
+												// obj[key] = unifyNumber(obj[key], 4);
+												obj[key] = unifyNumber(obj[key], 2);
+											}
+											else if(key === 'z_score'){
+												// obj[key] = obj[key] = unifyNumber(obj[key], 1)
+												obj[key] = obj[key] = unifyNumber(obj[key], 2)
+											}
+											else if(key === 'win_rate' || key === 'avg_net_return' || key === 'AvgReturn'){
+												obj[key] = obj[key] = unifyNumber(obj[key], 2)
+											}
+											else if(key === 'avg_return'){
+												// obj[key] = obj[key] = unifyNumber(obj[key], 3)}
+												obj[key] = obj[key] = unifyNumber(obj[key], 2)}
+											}
 									if(key === 'last_update' && (url === 'most_popular' || url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) {
 										const datatime = new Date(obj['last_update'])
 										const offset = datatime.getTimezoneOffset() * 60 * 1000

@@ -32,9 +32,9 @@
       <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
-            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
-            <el-button v-if="isStockTrend && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -1122,14 +1122,64 @@ export default {
             }
           ]
         ],
+        ['CRPColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '150px'
+            },
+            {
+              key: 'market_symbol',
+              label: 'Symbol',
+              value: 'market_symbol',
+              minWidth: '100px'
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value',
+              addPercentSign: true
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change',
+              addPercentSign: true,
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score',
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'TSCRP', 'RTSCRP', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
@@ -1154,7 +1204,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'trend') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_last_value',
@@ -1229,7 +1279,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'relative') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'reltrend_last_value',
@@ -1304,7 +1354,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'consecutive') {
         let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_count_8_or_more',
@@ -1516,6 +1566,9 @@ export default {
     isStockTrend() {
       return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
     },
+    isCRPTrend() {
+      return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
+    },
     inputStyle() {
       return {
         width: this.isExpanded ? "200px" : "35px",
@@ -1550,7 +1603,8 @@ export default {
     tableData: {
       handler(newValue) {
         if(Array.isArray(newValue)) this.filterData = newValue
-          if(this.isStockTrend && Array.isArray(this.filterData) && this.filterData.length) {
+        const isCRP = ['CRP','TSCRP', 'RTSCRP'].includes(this.checkedType)
+          if((this.isStockTrend || isCRP) && Array.isArray(this.filterData) && this.filterData.length) {
             const trendUpdateDate = this.filterData.reduce((latest, item) => {
             const itemDate = new Date(`${item.last_update}T00:00:00Z`);  // 使用 UTC 时间
             const latestDate = new Date(`${latest.last_update}T00:00:00Z`);
@@ -1962,11 +2016,11 @@ export default {
           value: 'ndx',
           type: 'NDX100Score'
         },
-        {
-          label: 'Crypto',
-          value: 'crp',
-          type: 'CRPScore'
-        },
+        // {
+        //   label: 'Crypto',
+        //   value: 'crp',
+        //   type: 'CRPScore'
+        // },
         {
           label: 'Russell 3000',
           value: 'russell',
@@ -2042,6 +2096,21 @@ export default {
           value: 'most_popular',
           type: 'popular'
         },
+        {
+          label: 'Crypto Optix',
+          value: 'crypt_complete_list',
+          type: 'CRP'
+        },
+        {
+          label: 'Crypto Absolute and Relative Trend Scores',
+          value: 'crp',
+          type: 'TSCRP'
+        },
+        {
+          label: 'Crypto Relative Trend Score',
+          value: 'crp&rel_trend=1',
+          type: 'RTSCRP'
+        },
         // {
         //   label: 'My Favorites',
         //   value: 'my_favorites',
@@ -2090,29 +2159,30 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list') {
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {
         // Name 放在 Symbol 前面
-        if(type === 'russell_3000_complete_list') keysMap.delete('sub_type');
+        if(type === 'russell_3000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp','russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
-        ['sector_name', 'Sector'],
+        // ['sector_name', 'Sector'],
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score'],
         ['reltrend_five_day_score_chg', '5-Day Relative Score Chg']
       ])
+      if(['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.set('sector_name', 'Sector')
       if(this.condition === 'trend') {
         keysMap.delete('reltrend_last_value')
         keysMap.delete('reltrend_five_day_score_chg')
@@ -2262,6 +2332,7 @@ export default {
         return sortedObj
       }
       const sortedArray = processedData.map(obj => sortObjectKeys(obj))
+      debugger
       const category = checks.find(item => item.value === type)
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
       if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
@@ -2391,7 +2462,8 @@ export default {
         commodity: 'commodity_complete_list',
         cssScreen: 'commod_sentiment_seasonality',
         cstScreen: 'commod_optix_trend',
-        CHMinMax: 'cot_max_min'
+        CHMinMax: 'cot_max_min',
+        TSCRP: 'crp',
       }
       let url = urlMap[this.checkedType]
       if(this.condition === 'relative') url = `${url}&rel_trend=1`
@@ -2422,7 +2494,7 @@ export default {
     width: 10px;
   }
   /deep/.el-table__body-wrapper.is-scrolling-none {
-    height: 575px !important;
+    // height: 575px !important;
   }
   /deep/ .el-table__body-wrapper.is-scrolling-left {
     overflow-x: scroll !important;
@@ -2443,7 +2515,7 @@ export default {
     overflow: visible !important;
   }
   /deep/ .el-table__body-wrapper {
-    height: 575px !important;
+    // height: 575px !important;
     width: 100% !important; /* 确保宽度占满父容器 */
   }
 }

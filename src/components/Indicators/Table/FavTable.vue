@@ -370,12 +370,16 @@ export default {
               russell_trend_reltrend: 'Trend',
               etf_domestic_trend_reltrend: 'Trend',
               etf_foreign_trend_reltrend: 'Trend',
-              etf_other_trend_reltrend: 'Trend'
+              etf_other_trend_reltrend: 'Trend',
+              crp_stock: 'CRP'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
               // 保留特定小数点
-              if(['last_value', 'last_change'].includes(key)) obj[key] = unifyNumber(obj[key], 4)
+              if(['last_value', 'last_change'].includes(key)) {
+                // obj[key] = unifyNumber(obj[key], 4)
+                obj[key] = unifyNumber(obj[key], 2)
+              }
 							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
             }

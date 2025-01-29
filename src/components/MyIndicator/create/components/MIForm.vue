@@ -1001,12 +1001,16 @@ export default {
       let url = null
       if(status == 406) {
         url = res?.data?.data?.url
+        const _name = res?.data?.data?.name
         // 说明这条数据已经存在了,不让我新建,说明用户已经存在相同的组合, 直接请求数据
         const indicatorData = await getMyIndicatorData(url)
         // 暂存
         localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
         // 修改名字为预览名字
         this.data.name = previewName
+        this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();
+        // this.popUpMsgBox(`Duplicate Indicator: ${_name} Exists`)
+        return
       }
       if(status == 201) {
         url = res.data.url

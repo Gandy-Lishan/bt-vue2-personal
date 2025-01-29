@@ -44,6 +44,7 @@ ul, ol {
 .clearfix:before, .clearfix:after, .dl-horizontal dd:before, .dl-horizontal dd:after, .container:before, .container:after, .container-fluid:before, .container-fluid:after, .row:before, .row:after, .form-horizontal .form-group:before, .form-horizontal .form-group:after, .btn-toolbar:before, .btn-toolbar:after, .btn-group-vertical>.btn-group:before, .btn-group-vertical>.btn-group:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after, .pager:before, .pager:after, .panel-body:before, .panel-body:after, .modal-footer:before, .modal-footer:after {
   display: table;
   content: '';
+  clear: both;
 }
 .nav {
  padding-left: 0;
@@ -228,12 +229,14 @@ small,.small {
 .panel-body {
  font-size: 15px;
  padding-top: 2px;
+ padding: 15px;
 }
 .panel {
  box-shadow: none !important;
  border: 1px solid #67809F;
  margin-bottom: 20px;
 }
+
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
@@ -256,6 +259,13 @@ small,.small {
  .container {
   width: 750px;
  }
+ .col-sm-3 {
+  width: 25%;
+  box-sizing: border-box;
+  }
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    float: left;
+  }
 }
 @media (min-width: 992px) {
  .container {
@@ -263,6 +273,9 @@ small,.small {
  }
  .col-md-5 {
   width: 42%;
+ }
+ .col-md-6 {
+  width: 50%;
  }
  .col-md-7 {
   width: 58%;
@@ -291,4 +304,44 @@ small,.small {
   font-size: 18px;
   line-height: 1.25em;
  }
+}
+.thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all .2s ease-in-out;
+}
+.bg-red-pink {
+  border-color: #e08283 !important;
+  background-image: none !important;
+  background-color: #e08283 !important;
+  color: #fff !important;
+}
+.bg-red-thunderbird {
+  border-color: #d91e18 !important;
+  background-image: none !important;
+  background-color: #d91e18 !important;
+  color: #fff !important;
+}
+.bg-green-turquoise {
+  border-color: #36d7b7 !important;
+  background-image: none !important;
+  background-color: #36d7b7 !important;
+  color: #fff !important;
+}
+.bg-green-jungle {
+  border-color: #26c281 !important;
+  background-image: none !important;
+  background-color: #26c281 !important;
+  color: #fff !important;
+}
+#phase-table .phase-table-columns .column-header {
+  margin-top: 5px;
+}
+.col-md-6, .col-md-12 {
+  margin-bottom: 15px
 }

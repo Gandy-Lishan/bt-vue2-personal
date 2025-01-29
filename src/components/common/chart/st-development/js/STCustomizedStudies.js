@@ -682,17 +682,26 @@ if (!CIQ.Studies) {
 		var points = sd.parameters.points
 
 		// 默认study模板
+		const pointsMap = new Map();
+		for (let x of points) {
+		  const standardDate = formatStandardTime(x.Date);
+		  pointsMap.set(standardDate.getTime(), x.PointType);  // 使用 getTime() 作为键存储
+		}
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			
-			let item = points.find(x=>{
-				const standardDate = formatStandardTime(x.Date)
-				return standardDate.getTime()==quote.DT.getTime()
-			})
-			
-			if(item){
-				quote["Result " + sd.name] = item.PointType=='High'?quote.High:quote.Low; // assign to the final field to be used by your display function.
+			const pointType = pointsMap.get(quote.DT.getTime());  // O(1) 查找
+			if (pointType) {
+				quote["Result " + sd.name] = pointType=='High'?quote.High:quote.Low; // assign to the final field to be used by your display function.
 			}
+			// let item = points.find(x=>{
+			// 	const standardDate = formatStandardTime(x.Date)
+			// 	return standardDate.getTime()==quote.DT.getTime()
+			// })
+			
+			// if(item){
+			// 	quote["Result " + sd.name] = item.PointType=='High'?quote.High:quote.Low; // assign to the final field to be used by your display function.
+			// }
 		}
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 

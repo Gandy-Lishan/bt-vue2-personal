@@ -169,6 +169,8 @@ export default {
           requireUrl = 'sp_1500_complete_list'
         }else if(type === 'stock_russell') {
           requireUrl = 'russell_3000_complete_list'
+        }else if(sub_type === 'crp_stock') {
+          requireUrl = 'crypt_complete_list'
         }else if(groups === 'trend_reltrend') {
           const str = sub_type
           const match = str.match(/(.*?)_trend_reltrend/)
