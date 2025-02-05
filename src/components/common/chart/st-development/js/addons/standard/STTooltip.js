@@ -285,23 +285,40 @@ if (!CIQ.Marker) {
      
                  marker.lastBar = stx.chart.dataSegment[bar];
                  var cw = marker.lastBar.candleWidth || stx.layout.candleWidth;
-                 if (
-                     parseInt(getComputedStyle(marker.node).width, 10) +
-                         stx.chart.panel.left +
-                         offset +
-                         cw <
-                     stx.backOutX(CIQ.ChartEngine.crosshairX)
-                 ) {
-                     marker.node.style.left = "auto";
-                     marker.node.style.right =
-                         Math.round(
-                             container.clientWidth - stx.pixelFromBar(bar) + offset
-                         ) + "px";
-                 } else {
-                     marker.node.style.left =
-                         Math.round(stx.pixelFromBar(bar) + offset) + "px";
-                     marker.node.style.right = "auto";
-                 }
+
+                //  if (
+                //      parseInt(getComputedStyle(marker.node).width, 10) +
+                //          stx.chart.panel.left +
+                //          offset +
+                //          cw <
+                //      stx.backOutX(CIQ.ChartEngine.crosshairX)
+                //  ) {
+                //      marker.node.style.left = "auto";
+                //      marker.node.style.right =
+                //          Math.round(
+                //              container.clientWidth - stx.pixelFromBar(bar) + offset
+                //          ) + "px";
+                //  } else {
+                //      marker.node.style.left =
+                //          Math.round(stx.pixelFromBar(bar) + offset) + "px";
+                //      marker.node.style.right = "auto";
+                //  }
+
+                // Overwrite
+                // 新增判断：如果鼠标在图表右半部分，则 tooltip 显示在左侧，否则显示在右侧
+                if (stx.backOutX(CIQ.ChartEngine.crosshairX) > container.clientWidth / 2) {
+                    // 鼠标在右侧：tooltip 显示在左侧
+                    marker.node.style.left = "auto";
+                    marker.node.style.right = 
+                        Math.round(
+                            container.clientWidth - stx.pixelFromBar(bar) + offset +  2*parseInt(getComputedStyle(marker.node).width, 10)
+                        ) + "px";
+                } else {
+                    // 鼠标在左侧：tooltip 显示在右侧
+                    marker.node.style.left = 
+                        Math.round(stx.pixelFromBar(bar) - offset - parseInt(getComputedStyle(marker.node).width, 10)) + "px";
+                    marker.node.style.right = "auto";
+                }
                  var height = parseInt(getComputedStyle(marker.node).height, 10);
                  var top = Math.round(
                      CIQ.ChartEngine.crosshairY - stx.top - height / 2
