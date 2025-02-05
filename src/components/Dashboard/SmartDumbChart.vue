@@ -52,7 +52,7 @@ export default {
       sentimentInfo: {
         smart_money_text: '...',
         dumb_money_text: '...',
-        smart_dumb_returns: '...',
+        smart_dumb_returns: NaN,
         smart_verbiage: '...',
       },
       lineHeight: 195,
