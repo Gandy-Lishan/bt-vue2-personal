@@ -125,6 +125,19 @@
                     </div>
                 </div>
           </div>
+          <div v-if="activeTab === 'ranks'" class="tab-pane active">
+            <div class='row' style="margin: 10px;">
+                <div class="panel" style="border: 1px solid #67809F;">
+                        <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
+                            <h3 class="panel-title">Rank Charts</h3>
+                        </div>
+                        <div class="panel-body"> 
+                          <RankCharts></RankCharts>
+                        </div>
+                </div>
+            </div>
+          </div>
+          
           <div v-if="activeTab === 'extremes'" class="tab-pane active">
             <div class='row' style="margin: 10px;">
                 <div class="panel" style="border: 1px solid #67809F;">
@@ -173,6 +186,7 @@ import ActiveStudies from "@/components/ModelReport/ActiveStudies";
 import DashboardTable from "./DashboardTable";
 import Heatmap from "./Heatmap";
 import PhaseTable from "./PhaseTable";
+import RankCharts from "./RankCharts";
 import Extremes from "./Extremes";
 export default {
   components: {
@@ -184,6 +198,7 @@ export default {
     DashboardTable,
     Heatmap,
     PhaseTable,
+    RankCharts,
     Extremes
   },
   data() {

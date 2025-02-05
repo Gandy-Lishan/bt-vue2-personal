@@ -60,7 +60,7 @@
       },
  };
       try {
-        const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
+        const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
         console.log('res', res.data);
         const originalData = res.data;
         if (originalData.length === 0) return;
