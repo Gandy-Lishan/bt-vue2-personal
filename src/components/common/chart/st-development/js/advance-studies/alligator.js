@@ -203,9 +203,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.displayGator = function (stx, sd, quotes) {
 		var panel = stx.panels[sd.panel],
 			context = sd.getContext(stx);
-		var yAxis = sd.getYAxis(stx);
-		var y = stx.pixelFromPrice(0, panel, yAxis);
+		// var yAxis = sd.getYAxis(stx);
+		// 双股票情况下无法用getYaxis获取正确Y轴
+		var yAxis = panel.yAxis;
 
+		var y = stx.pixelFromPrice(0, panel, yAxis);
 		var myWidth = stx.layout.candleWidth - 2;
 		if (myWidth < 2) myWidth = 1;
 
