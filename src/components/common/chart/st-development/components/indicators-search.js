@@ -330,33 +330,35 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                                 updated: fields.updated,
                                 category: fields.category
                             };
+
+                            
+                            if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
+                                continue;
+                            }
+                            
+                            if(mostPopularItems.items.indexOf(item.url) ===-1){
+                                continue
+                            }
+
+                            if (item.updated.indexOf("Quarterly") !==-1){
+                                continue;
+                            }
+
+                            if (item.name.indexOf("Seasonality") !==-1){
+                                continue;
+                            }
+
+                            if (CIQ.symbols.indexOf(item.name) !==-1){
+                                continue;
+                            }
+
+                            results.push({
+                                display: [item.name, item.updated],
+                                data: item,
+                                priority: createStateFilter(value)(item),
+                            });
                         }catch(err){return}
 
-                        if (this.currentCategory!=='all' && item.category!==this.currentCategory){ 
-                            continue;
-                        }
-                        
-                        if(mostPopularItems.items.indexOf(item.url) ===-1){
-                            continue
-                        }
-
-                        if (item.updated.indexOf("Quarterly") !==-1){
-                            continue;
-                        }
-
-                        if (item.name.indexOf("Seasonality") !==-1){
-                            continue;
-                        }
-
-                        if (CIQ.symbols.indexOf(item.name) !==-1){
-                            continue;
-                        }
-
-                        results.push({
-                            display: [item.name, item.updated],
-                            data: item,
-                            priority: createStateFilter(value)(item),
-                        });
                     }
 
                     this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
