@@ -1,5 +1,6 @@
 import {CIQ} from "chartiq/js/chartiq.js";
 import { getCoresSymbolDual } from '@/utils/globalFunc'
+import { off } from "process";
 
 let __st_addons_standard_tooltip_ = (_exports) => {
 
@@ -306,17 +307,16 @@ if (!CIQ.Marker) {
 
                 // Overwrite
                 // 新增判断：如果鼠标在图表右半部分，则 tooltip 显示在左侧，否则显示在右侧
+                // console.log(stx.backOutX(CIQ.ChartEngine.crosshairX),parseInt(getComputedStyle(marker.node).width, 10))
                 if (stx.backOutX(CIQ.ChartEngine.crosshairX) > container.clientWidth / 2) {
                     // 鼠标在右侧：tooltip 显示在左侧
-                    marker.node.style.left = "auto";
+                    marker.node.style.left = "auto"
                     marker.node.style.right = 
-                        Math.round(
-                            container.clientWidth - stx.pixelFromBar(bar) + offset +  2*parseInt(getComputedStyle(marker.node).width, 10)
-                        ) + "px";
+                        Math.round( container.clientWidth - stx.pixelFromBar(bar) + offset,10) + "px";
                 } else {
                     // 鼠标在左侧：tooltip 显示在右侧
                     marker.node.style.left = 
-                        Math.round(stx.pixelFromBar(bar) - offset - parseInt(getComputedStyle(marker.node).width, 10)) + "px";
+                        Math.round(stx.pixelFromBar(bar) + offset,10) + "px";
                     marker.node.style.right = "auto";
                 }
                  var height = parseInt(getComputedStyle(marker.node).height, 10);
