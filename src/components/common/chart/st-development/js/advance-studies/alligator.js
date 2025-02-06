@@ -92,7 +92,6 @@ if (!CIQ.Studies) {
 				sd
 			);
 		}
-
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if (!quotes[i]) continue;
 			if (sd.type == "Gator") {
@@ -152,6 +151,7 @@ if (!CIQ.Studies) {
 				}
 			}
 		}
+		
 	};
 
 	CIQ.Studies.displayAlligator = function (stx, sd, quotes) {
@@ -203,9 +203,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.displayGator = function (stx, sd, quotes) {
 		var panel = stx.panels[sd.panel],
 			context = sd.getContext(stx);
-		var yAxis = sd.getYAxis(stx);
-		var y = stx.pixelFromPrice(0, panel, yAxis);
+		// var yAxis = sd.getYAxis(stx);
+		// 双股票情况下无法用getYaxis获取正确Y轴
+		var yAxis = panel.yAxis;
 
+		var y = stx.pixelFromPrice(0, panel, yAxis);
 		var myWidth = stx.layout.candleWidth - 2;
 		if (myWidth < 2) myWidth = 1;
 
@@ -236,14 +238,14 @@ if (!CIQ.Studies) {
 					context.fillStyle = downColor;
 				if (quote.candleWidth)
 					myWidth = Math.floor(Math.max(1, quote.candleWidth - 2));
-				context.fillRect(
-					Math.floor(stx.pixelFromBar(i, panel.chart) - myWidth / 2),
-					Math.floor(y),
-					Math.floor(myWidth),
-					Math.floor(
-						stx.pixelFromPrice(quote[sd.name + "_hist" + j], panel, yAxis) - y
-					)
-				);
+					context.fillRect(
+						Math.floor(stx.pixelFromBar(i, panel.chart) - myWidth / 2),
+						Math.floor(y),
+						Math.floor(myWidth),
+						Math.floor(
+							stx.pixelFromPrice(quote[sd.name + "_hist" + j], panel, yAxis) - y
+						)
+					);
 			}
 		}
 		stx.endClip();
