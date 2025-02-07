@@ -1,5 +1,8 @@
 <template>
 	<div class="main-content">
+		<div class="back">
+				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to Smart Stock Scanner List</span></router-link>
+			</div>
 		<Chart
 			v-if="isAsyncDown"
 			:symbol="rowData ? rowData.Symbol : 'AAPL'"
@@ -397,11 +400,11 @@ computed: {
 	//background: $dark_white;
 
 	display: grid;
-	grid-auto-rows: auto 1fr;
+	grid-auto-rows: auto auto 1fr;
 	grid-gap: 20px;
 }
 .chart_box {
-	margin: 50px 50px;
+	// margin: 50px 50px;
 	border-radius: 5px;
 }
 .form-box {
@@ -422,7 +425,7 @@ computed: {
 // mobile
 @media only screen and (max-width: 992px) {
 	.chart_box {
-		margin: 20px 15px;
+		// margin: 20px 15px;
 	}
 	.form-box {
 		margin: 0 50px 15px 15px;
@@ -460,6 +463,23 @@ computed: {
 .history-container {
 	width: 900px;
 	margin: 0 auto;
+}
+
+.back {
+    // position: absolute;
+    // top: 153px;
+    // left: 48px;
+	font-size: 1.1rem;
+	i {
+		font-weight: bold;
+	}
+	a {
+		color: #525456;
+		font-weight: bold;
+		&:hover {
+			color: #5b9bd1;
+		}
+	}
 }
 </style>
 

@@ -288,6 +288,21 @@ export default {
   width: 90%;
   padding: 20px;
 }
+@media (min-width: 768px) {
+  .CPMResults-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .CPMResults-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .CPMResults-container {
+      width: 1170px;
+  }
+}
 /deep/ .el-collapse {
   margin-bottom: 20px;
 }
@@ -361,4 +376,5 @@ export default {
   padding: 10px 20px 10px 20px;
   border-radius: 5px;
 }
+
 </style>

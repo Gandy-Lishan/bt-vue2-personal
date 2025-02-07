@@ -14,5 +14,27 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.aiscanner-container {font-family: "Open Sans",sans-serif;}
+.aiscanner-container {
+	font-family: "Open Sans",sans-serif;
+	padding-top: 30px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+@media (min-width: 768px) {
+  .aiscanner-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .aiscanner-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .aiscanner-container {
+      width: 1170px;
+  }
+}
 </style>

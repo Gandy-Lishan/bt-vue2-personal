@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="strategy-container">
     <div class="strategy-top">
       <el-collapse accordion>
