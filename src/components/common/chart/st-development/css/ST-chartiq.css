@@ -1608,7 +1608,7 @@ cq-lookup-results cq-item span:nth-of-type(1) {
 cq-lookup-results cq-item span:nth-of-type(2) {
   /* Search results Company */
   padding: 0 3px;
-  /* width: 100%; */
+  width: 100%;
 }
 
 cq-lookup-results cq-item span:nth-of-type(3) {
@@ -8763,8 +8763,9 @@ cq-context.full-screen cq-comparison-label:hover cq-marker-label {
 
 
 /*********************************************************************************************************/
-
 /* from original ST-chartiq.css */
+/*********************************************************************************************************/
+
 .mybg{
   /* background-image: url(img/loading-spin.svg);
   background-size: 100px 100px; */
