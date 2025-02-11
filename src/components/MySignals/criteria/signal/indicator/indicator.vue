@@ -298,7 +298,7 @@ import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
-import Uploader from "@/components/common/chart/st-development/components/Uploader"
+import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
 const throttle = require('lodash/throttle')
 import { CIQ } from '@/components/common/chart/st-development/js'

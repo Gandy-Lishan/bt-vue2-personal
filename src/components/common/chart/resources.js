@@ -25,9 +25,9 @@ import 'chartiq/examples/translations/translationSample'
 
 // Event Markers
 // @ts-ignore
-import marker from '@/components/common/chart/st-development/components/markers/markersSample.js'
-import '@/components/common/chart/st-development/components/markers/tradeAnalyticsSample.js'
-import "@/components/common/chart/st-development/components/markers/mMarker.js"
+import marker from '@/components/common/chart/st-development/examples/markers/markersSample.js'
+import '@/components/common/chart/st-development/examples/markers/tradeAnalyticsSample.js'
+import "@/components/common/chart/st-development/examples/markers/mMarker.js"
 import 'chartiq/examples/markers/videoSample'
 
 import 'chartiq/js/extras/svgcharts/piechart.js'
@@ -36,8 +36,8 @@ import 'chartiq/js/extras/svgcharts/piechart.js'
 // import 'chartiq/examples/help/helpContent.js'
 
 // @ts-ignore
-import quoteFeed from '@/components/common/chart/st-development/feeds/STStockDataFeed'
-import "@/components/common/chart/st-development/feeds/STIndicatorSymbols.js"
+import quoteFeed from '@/components/common/chart/st-development/examples/feeds/STStockDataFeed'
+import "@/components/common/chart/st-development/js/webcomponents/reportsLookupDataFilter"
 
 // Uncomment the following for the forecasting simulator (required for the forecasting sample).
 // @ts-ignore

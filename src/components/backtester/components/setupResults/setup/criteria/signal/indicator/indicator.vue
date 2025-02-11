@@ -304,7 +304,7 @@ import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
-import Uploader from "@/components/common/chart/st-development/components/Uploader"
+import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
 const throttle = require('lodash/throttle')
 
 export default {
