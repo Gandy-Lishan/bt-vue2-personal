@@ -13360,6 +13360,7 @@ import {__js_webcomponents_loader_} from "@/components/common/chart/st-developme
 import {__js_webcomponents_reports_lookup_} from "@/components/common/chart/st-development/js/webcomponents/reportsLookup.js"
 
 import {__st_addons_standard_tooltip_} from "@/components/common/chart/st-development/js/addons/standard/tooltip.js"
+import {__st_addons_standard_fullscreen_} from "@/components/common/chart/st-development/js/addons/standard/fullScreen.js"
 import {__st_js_mask_} from "./extensions/mask.js"
 import {__st_js_loadIndicator_} from "./extensions/loadIndicator.js"
 
@@ -13382,6 +13383,7 @@ export {__js_webcomponents_indicatorsScroll_ as indicatorsScrollindicatorsScroll
 export {__js_webcomponents_indicatorsLookup_ as indicatorsLookup};
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
+export {__st_addons_standard_fullscreen_ as fullScreen}
 export {__js_webcomponents_reports_lookup_ as reportsLookup};
 
 // export {__st_js_standard_studies_ as stStudies};
@@ -13464,6 +13466,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 
 
 		__st_addons_standard_tooltip_,
+		__st_addons_standard_fullscreen_,
 		__st_js_mask_,
 		__st_js_loadIndicator_,
 
