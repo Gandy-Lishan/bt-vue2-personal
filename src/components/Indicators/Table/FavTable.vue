@@ -994,7 +994,7 @@ export default {
 .dataTables_info {
   color: #333;
   font-weight: 500;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .filter-div {
   position: relative;

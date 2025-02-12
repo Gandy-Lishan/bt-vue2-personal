@@ -206,6 +206,12 @@ const routes = [
 			require(['@/components/Indicators/index.vue'], resolve),
 	},
 	{
+		path: '/trend_score',
+		name: 'TrendScore',
+		component: resolve =>
+			require(['@/components/Indicators/TrendScore/index.vue'], resolve)
+	},
+	{
 		path: '/doc',
 		component: resolve => require(['@/components/Tutorial/Doc.vue'], resolve),
 		redirect: '/doc/home',

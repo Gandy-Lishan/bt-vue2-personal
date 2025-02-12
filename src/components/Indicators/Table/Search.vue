@@ -100,9 +100,9 @@ export default {
     },
     anchorFromUrlAndValue(url, value) {
       console.log('hehehe', url, value)
-      if((url.includes('trend') || url.includes('reltrend')) && url.includes('trend_reltrend')) {
-        return `<a style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
-      }
+      // if((url.includes('trend') || url.includes('reltrend')) && url.includes('trend_reltrend')) {
+      //   return `<a style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
+      // }
       if((!url.includes('trend') && !url.includes('reltrend'))) return `<a style="width: 515px; background-color: #fff; display: inline-block;">${value}</a>`;
     },
     async performAutocomplete(suggestion, dataset) {
