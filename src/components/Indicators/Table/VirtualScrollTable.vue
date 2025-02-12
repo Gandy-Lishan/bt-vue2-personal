@@ -1,6 +1,7 @@
 <template>
 <div>
   <div>
+    condition{{condition}}
     <div class="header-span" v-if="(!showReport && !showRelated)">
       <span>
         {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
@@ -93,7 +94,7 @@
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
-      :class="{'enlargeStockTrend': enlarged && isStockTrend}"
+      :class="{'enlargeStockTrend': enlarged && isStockTrend, 'trend-condition-table': isStockTrend}"
       key-prop="url"
       class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
@@ -111,7 +112,7 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="(!enlarged && !isStockTrend) ? 300 : 600">
+        :height="(!enlarged && !isStockTrend) ? 300 : (!isStockTrend ? 575 : 600)">
         <!-- <el-table-column> -->
           <!-- <template #header>
             <div class="header-span">
@@ -240,7 +241,8 @@ export default {
       condition: '',
       trendUpdateDate: '',
       isExpanded: false, // 控制输入框是否展开
-      isTrendScorePage: false
+      isTrendScorePage: false,
+      dynamicHeight: '510px'
     }
   },
   computed: {
@@ -478,7 +480,7 @@ export default {
             },
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day Score<br/>Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'trend_five_day_score_chg'
             },
             {
@@ -488,7 +490,7 @@ export default {
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day Score<br/>Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'reltrend_five_day_score_chg'
             },
             ]
@@ -1192,7 +1194,7 @@ export default {
           },
           {
             key: 'trend_five_day_score_chg',
-            label: '5-Day<br/>Score Chg',
+            label: '5-Day<br/>Score<br/>Chg',
             value: 'trend_five_day_score_chg'
           },
           {
@@ -1202,7 +1204,7 @@ export default {
           },
           {
             key: 'reltrend_five_day_score_chg',
-            label: '5-Day<br/>Score Chg',
+            label: '5-Day<br/>Score<br/>Chg',
             value: 'reltrend_five_day_score_chg'
           },
         ]])
@@ -1217,7 +1219,7 @@ export default {
             },    
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'trend_five_day_score_chg'
             },
            {
@@ -1292,7 +1294,7 @@ export default {
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day<br/> Relative Score Chg',
+              label: '5-Day<br/>Relative<br/>Score Chg',
               value: 'reltrend_five_day_score_chg'
             },
             {
@@ -2484,6 +2486,10 @@ export default {
       debugger
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: ''})
       await this.$nextTick(async () => {
+        const element = document.querySelector('.el-table__body-wrapper')
+        console.log('element', element.clientHeight)
+        const height = element.clientHeight
+        this.dynamicHeight = `${height}px`;
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
     },
@@ -2512,6 +2518,9 @@ export default {
   }
   /deep/ .el-table__body-wrapper.is-scrolling-left {
     overflow-x: scroll !important;
+  }
+  /deep/ .el-table__body-wrapper {
+    height: 506px !important;
   }
   border: 2px solid  #e9e9e9;
   /deep/ .el-button--text {
