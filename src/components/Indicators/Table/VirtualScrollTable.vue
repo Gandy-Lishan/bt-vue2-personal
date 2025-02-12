@@ -8,18 +8,18 @@
       </span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
-          <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
+          <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M96 96H64V85.3333H85.3333V64H96V96Z" fill="black"/>
             <path d="M0 96H32V85.3333H10.6667V64H0V96Z" fill="black"/>
             <path d="M0 0H32V10.6667H10.6667V32H0V0Z" fill="black"/>
             <path d="M96 0H64V10.6667H85.3333V32H96V0Z" fill="black"/>
           </svg>
-          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular">
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M32 32H0V21.3333H21.3333V0H32V32ZM32 64H0V74.6667H21.3333V96H32V64ZM96 64H64V96H74.6667V74.6667H96V64ZM64 32H96V21.3333H74.6667V0H64V32Z" fill="black"/>
           </svg>
       </el-tooltip>
     </div>
-    <div class="header-span" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
+    <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
           <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
@@ -27,7 +27,7 @@
       </template>
     </div>
   </div>
-  <div class="filter-div" v-if="isShowFilter">
+  <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
     <el-row>
       <el-col :span="24">
         <el-row>
@@ -111,7 +111,7 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="!enlarged ? 300 : 620">
+        :height="(!enlarged && !isStockTrend) ? 300 : 600">
         <!-- <el-table-column> -->
           <!-- <template #header>
             <div class="header-span">
@@ -133,7 +133,7 @@
             </div>
           </template> -->
           <el-table-column align="center" width="35px" v-if="!showRelated">
-            <template slot-scope="scope" v-if="enlarged">
+            <template slot-scope="scope" v-if="enlarged && !isTrendScorePage">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
                 <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
@@ -174,7 +174,7 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-if="enlarged && pageLength && (checkedType !== 'TrendSector')">
+  <div class="dataTables_info" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
   <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
@@ -240,6 +240,7 @@ export default {
       condition: '',
       trendUpdateDate: '',
       isExpanded: false, // 控制输入框是否展开
+      isTrendScorePage: false
     }
   },
   computed: {
@@ -252,6 +253,9 @@ export default {
     }),
     _loading() {
       return this.loading
+    },
+    virtualTableHight() {
+      return this.enlarged ? 620 : 300
     },
     columns() {
       this.columnsMap = new Map(([
@@ -1617,6 +1621,12 @@ export default {
       depp: true
     }
 	},
+  mounted() {
+    if(this.$route.path === '/trend_score') {
+      this.isTrendScorePage = true
+      this.enlarged = true
+    }
+  },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
@@ -1697,6 +1707,10 @@ export default {
       }
     },
     async updateChart(row) {
+      if(this.isTrendScorePage) {
+        this.$emit("updateChart", row)
+        return
+      }
       if(this.showRelated) {
         await this.clickRelated(row)
         return
@@ -2543,7 +2557,7 @@ export default {
       height: 20px;
     }
     span {
-      display: inline-block;
+      display: flex;
       flex-grow: 1;
       padding: 2px 0;
       text-align: center;
@@ -2551,6 +2565,9 @@ export default {
       font-weight: 700;
       border: 2px solid #d9d9d9;
       padding: 5px 0;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
     .el-icon-full-screen {
       padding: 0px;
@@ -2572,6 +2589,14 @@ export default {
       background-color: #ffffff;
     }
   }
+.header-span-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+  span {
+    padding: 2px;
+  }
+}
 .image-hover {
     position: absolute;
     z-index: 2000;
@@ -2647,7 +2672,7 @@ export default {
 .dataTables_info {
   color: #333;
   font-weight: 500;
-  margin-top: 24px;
+  margin-top: 5px;
 }
 .filter-div {
   position: relative;
@@ -2677,6 +2702,9 @@ export default {
       margin-right: 5px
     }
   }
+}
+.trend-score-filter {
+  padding: 15px 5px 10px 5px;
 }
 /deep/ .search-input {
   height: 100%;

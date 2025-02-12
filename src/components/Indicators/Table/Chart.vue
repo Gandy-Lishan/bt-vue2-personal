@@ -253,7 +253,14 @@
                   'printChart',
                   'downloadPNG',
                   'downloadJPEG',
-                  'downloadPDF'
+                  'downloadPDF',
+                  {
+                    text: 'Export CSV',
+                    onclick: function () {
+                      // 这里调用你指定的函数，执行导出 CSV 的逻辑
+                      _this.$emit('downloadCSV')
+                    }
+                  }
                 ]
               }
             }

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel-group accordion">
+  <div :class="{'trend-score-des': isTrendScorePage, 'panel-group': true, 'accordion': true}">
     <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
@@ -294,14 +294,20 @@ export default {
   },
   data() {
     return {
-      type: 1
+      type: 1,
+      isTrendScorePage: false
     }
   },
   computed: {
     enlarged() {
       return this.enlargedTable
     }
-  }
+  },
+  mounted() {
+    if(this.$route.path === '/trend_score') {
+      this.isTrendScorePage = true
+    }
+  },
 }
 </script>
 <style lang="less" scoped>
@@ -379,5 +385,8 @@ export default {
 }
 table tbody tr.even, table tbody tr.even {
     background-color: #f6f3f3;
+}
+.trend-score-des {
+  margin: 20px 0px 10px 0px;
 }
 </style>
