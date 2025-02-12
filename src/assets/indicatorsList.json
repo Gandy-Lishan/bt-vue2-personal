@@ -12220,11 +12220,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Two Harbors Investment Corp",
-        "url": "TWO",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Unitil Corp.",
         "url": "UTL",
         "updated": "Daily"
@@ -23665,16 +23660,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "FIVE BELOW Trend Score",
-        "url": "FIVE_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "FIVE BELOW RelTrend Score",
-        "url": "FIVE_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "GREENBRIER COS Trend Score",
         "url": "GBX_trend",
         "updated": "Daily"
@@ -26872,16 +26857,6 @@
     {
         "chart_name": "Targa Resources Corp RelTrend Score",
         "url": "TRGP_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Two Harbors Investment Corp Trend Score",
-        "url": "TWO_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Two Harbors Investment Corp RelTrend Score",
-        "url": "TWO_reltrend",
         "updated": "Daily"
     },
     {
@@ -59847,6 +59822,26 @@
     {
         "chart_name": "Euro Stocks 50 (EUROSTOXX) RelTrend Score",
         "url": "EUROSTOXX_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "2-Year Treasury Trend Score",
+        "url": "two_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "2-Year Treasury RelTrend Score",
+        "url": "two_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "5-Year Treasury Trend Score",
+        "url": "five_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "5-Year Treasury RelTrend Score",
+        "url": "five_reltrend",
         "updated": "Daily"
     }
 ]
