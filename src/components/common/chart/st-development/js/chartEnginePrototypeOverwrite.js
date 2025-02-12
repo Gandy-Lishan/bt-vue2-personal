@@ -53,6 +53,9 @@ if (CIQ.ChartEngine) {
 			}
 		}
 	};
+
+	/*********************chartiq-DEV-ONLY-source.js**********************/
+
 	/**
 	 * Calculates the ATR (Average True Range) for the dataSet
 	 * dual symbol version****************
@@ -249,41 +252,6 @@ if (CIQ.ChartEngine) {
 			}
 		}	
 	};
-	// CIQ.ChartEngine.prototype.setPanelHeight = function (
-	// 	panelToModify,
-	// 	requestedHeight
-	// ) {
-	// 	if (!requestedHeight) return;
-	
-	// 	// adjust requested height to accommodate the x-axis if panel is at bottom
-	// 	if (Object.values(this.panels).slice(-1)[0] === panelToModify) {
-	// 		requestedHeight += this.xaxisHeight;
-	// 	}
-	
-	// 	//const { canvasHeight } = this.chart;
-	// 	// const { percent: currentPercent } = panelToModify;
-	// 	// const newPercent = requestedHeight / chartContainerHeight;
-	// 	// const prevRemainingPercent = 1 - currentPercent;
-	// 	// const newRemainingPercent = 1 - newPercent;
-	// 	// const adjustment = prevRemainingPercent / newRemainingPercent;
-		
-	// 	/** 考虑到之前拿不到canvasHeight的尝试 */
-	// 	// const chartContainerHeight = Number(document.querySelector(".chartContainer").style.height.split('px')[0])
-	// 	const clientHeight = document.querySelector(".chartContainer").clientHeight
-	// 	const newPercent = requestedHeight / clientHeight;
-	// 	const newRemainingPercent = 1 - newPercent;
-	// 	const newRemainingPercentForEach = newRemainingPercent / (Object.keys(this.panels).length-1);
-
-	// 	Object.values(this.panels).forEach((panel) => {
-	// 		//panel.percent /= adjustment;
-	// 		panel.percent = newRemainingPercentForEach;
-	// 	});
-
-	// 	panelToModify.percent = newPercent;
-	// 	// console.log(newPercent,'+++',Object.values(this.panels).map(i=>i.percent))
-	// 	this.adjustPanelPositions();
-	// 	this.savePanels();
-	// };
 
 	CIQ.ChartEngine.prototype.setPanelHeight = function (
 		panelToModify,
@@ -311,6 +279,11 @@ if (CIQ.ChartEngine) {
 		this.adjustPanelPositions();
 		this.savePanels();
 	};
+
+	/**
+	 * 不可避免要改变容器的高度考虑到高度随新的指标加入会增加
+	 * 而不是setPanelHeight中之前设定的固定高度前提下分配剩余空间
+	 */
 	CIQ.ChartEngine.prototype.prepend("resizeChart", function () {
 		let chartWrapper = document.querySelector(".chart-wrapper");
 		let chartContainer = document.querySelector(".chartContainer");
@@ -333,26 +306,32 @@ if (CIQ.ChartEngine) {
 		// TODO 考虑优化
 
 		if(CIQ.stxx && CIQ.stxx.fullScreen.fullScreenState){
-			chartWrapper.style.height = '100%'
-			chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
-			chartWrapper.style.resize = 'none'
+			requestAnimationFrame(() => {
+				chartWrapper.style.height = '100%'
+				chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				chartWrapper.style.resize = 'none'
+			})
 		}else{
 			// 正常添加指標時總高度按照680 + number of indicator * n來算， resize時按照resize結果賦值
 			if(!CIQ.isResizing){
-				chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
-				chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				requestAnimationFrame(() => {
+					chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+					chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				})
 			}else{
 				if(!chartWrapper.clientHeight) {
-					chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+					requestAnimationFrame(() => {
+						chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+					})
 				}
-				chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				requestAnimationFrame(() => {
+					chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				})
 			}
 		}
 
 		this.setPanelHeight(this.panels.chart, chartPanelSize);
 	})
-	
-
 	CIQ.ChartEngine.prototype.dualSymbolCalculationErrorWatermark = function (
 		stx,
 		sd,

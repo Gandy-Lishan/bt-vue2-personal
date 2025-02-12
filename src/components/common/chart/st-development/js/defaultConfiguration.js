@@ -47,7 +47,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 				extendedHours: false,
 				fullScreen: true,
 				inactivityTimer: true,
-				rangeSlider: false,
+				rangeSlider: true,
 				shortcuts: true,
 				tableView: false,
 				tooltip: true
