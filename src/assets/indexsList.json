@@ -1094,5 +1094,157 @@
     {
         "symbol": "FSELX",
         "name": "Fidelity Select Semiconductors (FSELX)"
+    },
+    {
+        "symbol": "ive",
+        "name": "iShares S&P 500 Value ETF (IVE)"
+    },
+    {
+        "symbol": "ivw",
+        "name": "iShares S&P 500 Growth ETF (IVW)"
+    },
+    {
+        "symbol": "mags",
+        "name": "Roundhill Magnificent Seven ETF (MAGS)"
+    },
+    {
+        "symbol": "ihe",
+        "name": "iShares Healthcare ETF (IHE)"
+    },
+    {
+        "symbol": "kbwp",
+        "name": "Invesco KBW Property ETF (KBWP)"
+    },
+    {
+        "symbol": "iyz",
+        "name": "iShares U.S. Telecommunications ETF (IYZ)"
+    },
+    {
+        "symbol": "mtum",
+        "name": "iShares Edge MSCI USA Momentum Factor ETF (MTUM)"
+    },
+    {
+        "symbol": "nukz",
+        "name": "Range Nuclear Renaissance ETF (NUKZ)"
+    },
+    {
+        "symbol": "ura",
+        "name": "Global X Uranium ETF (URA)"
+    },
+    {
+        "symbol": "sfyf",
+        "name": "SoFi Social 50 ETF (SFYF)"
+    },
+    {
+        "symbol": "BITW",
+        "name": "Bitwise 10 Crypto Fund (BITW)"
+    },
+    {
+        "symbol": "ETH",
+        "name": "Grayscale Ethereum Mini Trust ETF (ETH)"
+    },
+    {
+        "symbol": "ETHE",
+        "name": "Grayscale ETH Trust ETF (ETHE)"
+    },
+    {
+        "symbol": "GDLC",
+        "name": "Grayscale Digital Large Cap ETF (GDLC)"
+    },
+    {
+        "symbol": "STRV",
+        "name": "Strive 500 ETF (STRV)"
+    },
+    {
+        "symbol": "CAOS",
+        "name": "Alpha Architect Tail Risk ETF (CAOS)"
+    },
+    {
+        "symbol": "COWZ",
+        "name": "Pacer US Cash Cows ETF (COWZ)"
+    },
+    {
+        "symbol": "BNO",
+        "name": "Brent Oil ETF (BNO)"
+    },
+    {
+        "symbol": "CLOU",
+        "name": "Global X Cloud ETF (CLOU)"
+    },
+    {
+        "symbol": "FTLS",
+        "name": "Neuberger Berman Sustainable Equity Fund (FTLS)"
+    },
+    {
+        "symbol": "SPHQ",
+        "name": "Invesco S&P 500 Quality ETF (SPHQ)"
+    },
+    {
+        "symbol": "SYLD",
+        "name": "Cambria Yield ETF (SYLD)"
+    },
+    {
+        "symbol": "CALF",
+        "name": "Pacer US Small Cap ETF (CALF)"
+    },
+    {
+        "symbol": "IPO",
+        "name": "Renaissance IPO ETF (IPO)"
+    },
+    {
+        "symbol": "BTRN",
+        "name": "Global X Bitcoin Strategy ETF (BTRN)"
+    },
+    {
+        "symbol": "MDYG",
+        "name": "SPDR S&P 400 Mid Cap Growth ETF (MDYG)"
+    },
+    {
+        "symbol": "MASMX",
+        "name": "Madison Small Cap Fund (MASMX)"
+    },
+    {
+        "symbol": "VYMI",
+        "name": "Vanguard Intl High Div ETF (VYMI)"
+    },
+    {
+        "symbol": "MOAT",
+        "name": "VanEck Wide Moat ETF (MOAT)"
+    },
+    {
+        "symbol": "GRID",
+        "name": "First Trust Clean Edge Smart Grid ETF (GRID)"
+    },
+    {
+        "symbol": "SRV",
+        "name": "NXG Cushing Midstream Energy Fund (SRV)"
+    },
+    {
+        "symbol": "FTXG",
+        "name": "First Trust Nasdaq Food ETF (FTXG)"
+    },
+    {
+        "symbol": "ARKK",
+        "name": "ARK Innovation ETF (ARKK)"
+    },
+    {
+        "symbol": "ARKG",
+        "name": "ARK Genomic ETF (ARKG)"
+    },
+    {
+        "symbol": "CHIQ",
+        "name": "Global X China Consumer ETF (CHIQ)"
+    },
+    {
+        "symbol": "ERTH",
+        "name": "Invesco MSCI Sustainable ETF (ERTH)"
+    },
+    {
+        "symbol": "FILG",
+        "name": "Grayscale Filecoin Trust"
+    },
+    {
+        "symbol": "GSOL",
+        "name": "Grayscale Solana Trust"
     }
 ]

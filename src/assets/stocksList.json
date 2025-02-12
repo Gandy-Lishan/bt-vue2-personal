@@ -9752,10 +9752,6 @@
         "stock": "IDYA"
     },
     {
-        "name": "CNH Industrial NV",
-        "stock": "CNHI"
-    },
-    {
         "name": "Centrus Energy Corp",
         "stock": "LEU"
     },
@@ -13256,108 +13252,56 @@
         "stock": "crp_LTC"
     },
     {
-        "name": "Grayscale Filecoin",
-        "stock": "crp_FILG"
-    },
-    {
         "name": "Galaxy Digital Holdings",
-        "stock": "crp_BRPHF"
+        "stock": "BRPHF"
     },
     {
         "name": "Tidal YieldMax ETF",
-        "stock": "crp_MSTY"
-    },
-    {
-        "name": "Grayscale Digital Large Cap",
-        "stock": "crp_GDLC"
+        "stock": "MSTY"
     },
     {
         "name": "Grayscale Bitcoin Trust",
-        "stock": "crp_GBTC"
-    },
-    {
-        "name": "Grayscale Ethereum Trust",
-        "stock": "crp_ETHE"
+        "stock": "GBTC"
     },
     {
         "name": "Grayscale Stellar",
-        "stock": "crp_GXLM"
-    },
-    {
-        "name": "Grayscale Solana",
-        "stock": "crp_GSOL"
+        "stock": "GXLM"
     },
     {
         "name": "Litecoin Trust",
-        "stock": "crp_LTCN"
+        "stock": "LTCN"
     },
     {
         "name": "Grayscale Ethereum Classic Trust",
-        "stock": "crp_ETCG"
+        "stock": "ETCG"
     },
     {
         "name": "Grayscale Bitcoin Cash Trust",
-        "stock": "crp_BCHG"
+        "stock": "BCHG"
     },
     {
         "name": "Grayscale Horizen Trust",
-        "stock": "crp_HZEN"
+        "stock": "HZEN"
     },
     {
         "name": "Grayscale Zcash Trust",
-        "stock": "crp_ZCSH"
+        "stock": "ZCSH"
     },
     {
         "name": "Grayscale Livepeer Trust",
-        "stock": "crp_GLIV"
-    },
-    {
-        "name": "Hut 8 Mining Corp",
-        "stock": "crp_HUT"
-    },
-    {
-        "name": "HIVE Digital Technologies",
-        "stock": "crp_HIVE"
+        "stock": "GLIV"
     },
     {
         "name": "Bitfarms Ltd",
-        "stock": "crp_BITF"
-    },
-    {
-        "name": "Core Scientific Inc",
-        "stock": "crp_CORZ"
+        "stock": "BITF"
     },
     {
         "name": "Athena Bitcoin Global",
-        "stock": "crp_ABIT"
+        "stock": "ABIT"
     },
     {
-        "name": "Riot Platforms Inc",
-        "stock": "crp_RIOT"
-    },
-    {
-        "name": "CleanSpark Inc",
-        "stock": "crp_CLSK"
-    },
-    {
-        "name": "Marathon Digital Holdings",
-        "stock": "crp_MARA"
-    },
-    {
-        "name": "Cipher Mining Inc",
-        "stock": "crp_CIFR"
-    },
-    {
-        "name": "TeraWulf Inc",
-        "stock": "crp_WULF"
-    },
-    {
-        "name": "Coinbase Global Inc",
-        "stock": "crp_COIN"
-    },
-    {
-        "name": "MicroStrategy Inc",
-        "stock": "crp_MSTR"
+        "name": "Third Point Investors Limited Optix",
+        "stock": "TPOU"
     },
     {
         "name": "ASE Technology Holding Co. Ltd.",

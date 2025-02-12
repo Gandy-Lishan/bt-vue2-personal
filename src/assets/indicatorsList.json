@@ -31260,16 +31260,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Gold Futures Trend Score",
-        "url": "GOLD_F_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Gold Futures RelTrend Score",
-        "url": "GOLD_F_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Silver Futures Trend Score",
         "url": "SI1_trend",
         "updated": "Daily"
@@ -36042,11 +36032,6 @@
     {
         "chart_name": "Ideaya Biosciences Inc",
         "url": "IDYA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CNH Industrial NV",
-        "url": "CNHI",
         "updated": "Daily"
     },
     {
@@ -47520,16 +47505,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CNH Industrial NV Trend Score",
-        "url": "CNHI_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CNH Industrial NV RelTrend Score",
-        "url": "CNHI_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Centrus Energy Corp Trend Score",
         "url": "LEU_trend",
         "updated": "Daily"
@@ -53165,11 +53140,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Gold Futures Optix",
-        "url": "etf_gold_f",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "SI1 Optix",
         "url": "etf_si1",
         "updated": "Daily"
@@ -54955,133 +54925,78 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Filecoin",
-        "url": "crp_FILG",
+        "chart_name": "Grayscale Filecoin Trust",
+        "url": "etf_FILG",
         "updated": "Daily"
     },
     {
         "chart_name": "Galaxy Digital Holdings",
-        "url": "crp_BRPHF",
+        "url": "BRPHF",
         "updated": "Daily"
     },
     {
         "chart_name": "Tidal YieldMax ETF",
-        "url": "crp_MSTY",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Digital Large Cap",
-        "url": "crp_GDLC",
+        "url": "MSTY",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Trust",
-        "url": "crp_GBTC",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Ethereum Trust",
-        "url": "crp_ETHE",
+        "url": "GBTC",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Stellar",
-        "url": "crp_GXLM",
+        "url": "GXLM",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Solana",
-        "url": "crp_GSOL",
+        "chart_name": "Grayscale Solana Trust",
+        "url": "etf_GSOL",
         "updated": "Daily"
     },
     {
         "chart_name": "Litecoin Trust",
-        "url": "crp_LTCN",
+        "url": "LTCN",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Ethereum Classic Trust",
-        "url": "crp_ETCG",
+        "url": "ETCG",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Cash Trust",
-        "url": "crp_BCHG",
+        "url": "BCHG",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Horizen Trust",
-        "url": "crp_HZEN",
+        "url": "HZEN",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Zcash Trust",
-        "url": "crp_ZCSH",
+        "url": "ZCSH",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Livepeer Trust",
-        "url": "crp_GLIV",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hut 8 Mining Corp",
-        "url": "crp_HUT",
+        "url": "GLIV",
         "updated": "Daily"
     },
     {
         "chart_name": "HIVE Digital Technologies",
-        "url": "crp_HIVE",
+        "url": "etf_HIVE",
         "updated": "Daily"
     },
     {
         "chart_name": "Bitfarms Ltd",
-        "url": "crp_BITF",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Core Scientific Inc",
-        "url": "crp_CORZ",
+        "url": "BITF",
         "updated": "Daily"
     },
     {
         "chart_name": "Athena Bitcoin Global",
-        "url": "crp_ABIT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Riot Platforms Inc",
-        "url": "crp_RIOT",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CleanSpark Inc",
-        "url": "crp_CLSK",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Marathon Digital Holdings",
-        "url": "crp_MARA",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cipher Mining Inc",
-        "url": "crp_CIFR",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "TeraWulf Inc",
-        "url": "crp_WULF",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Coinbase Global Inc",
-        "url": "crp_COIN",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MicroStrategy Inc",
-        "url": "crp_MSTR",
+        "url": "ABIT",
         "updated": "Daily"
     },
     {
@@ -55905,263 +55820,153 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Filecoin Trend Score",
-        "url": "CRP_FILG_trend",
+        "chart_name": "Grayscale Filecoin Trust Trend Score",
+        "url": "FILG_trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Filecoin RelTrend Score",
-        "url": "CRP_FILG_reltrend",
+        "chart_name": "Grayscale Filecoin Trust RelTrend Score",
+        "url": "FILG_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Galaxy Digital Holdings Trend Score",
-        "url": "CRP_BRPHF_trend",
+        "url": "BRPHF_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Galaxy Digital Holdings RelTrend Score",
-        "url": "CRP_BRPHF_reltrend",
+        "url": "BRPHF_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Tidal YieldMax ETF Trend Score",
-        "url": "CRP_MSTY_trend",
+        "url": "MSTY_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Tidal YieldMax ETF RelTrend Score",
-        "url": "CRP_MSTY_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Digital Large Cap Trend Score",
-        "url": "CRP_GDLC_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Digital Large Cap RelTrend Score",
-        "url": "CRP_GDLC_reltrend",
+        "url": "MSTY_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Trust Trend Score",
-        "url": "CRP_GBTC_trend",
+        "url": "GBTC_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Trust RelTrend Score",
-        "url": "CRP_GBTC_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Ethereum Trust Trend Score",
-        "url": "CRP_ETHE_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Ethereum Trust RelTrend Score",
-        "url": "CRP_ETHE_reltrend",
+        "url": "GBTC_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Stellar Trend Score",
-        "url": "CRP_GXLM_trend",
+        "url": "GXLM_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Stellar RelTrend Score",
-        "url": "CRP_GXLM_reltrend",
+        "url": "GXLM_reltrend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Solana Trend Score",
-        "url": "CRP_GSOL_trend",
+        "chart_name": "Grayscale Solana Trust Trend Score",
+        "url": "GSOL_trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Solana RelTrend Score",
-        "url": "CRP_GSOL_reltrend",
+        "chart_name": "Grayscale Solana Trust RelTrend Score",
+        "url": "GSOL_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Litecoin Trust Trend Score",
-        "url": "CRP_LTCN_trend",
+        "url": "LTCN_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Litecoin Trust RelTrend Score",
-        "url": "CRP_LTCN_reltrend",
+        "url": "LTCN_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Ethereum Classic Trust Trend Score",
-        "url": "CRP_ETCG_trend",
+        "url": "ETCG_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Ethereum Classic Trust RelTrend Score",
-        "url": "CRP_ETCG_reltrend",
+        "url": "ETCG_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Cash Trust Trend Score",
-        "url": "CRP_BCHG_trend",
+        "url": "BCHG_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Bitcoin Cash Trust RelTrend Score",
-        "url": "CRP_BCHG_reltrend",
+        "url": "BCHG_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Horizen Trust Trend Score",
-        "url": "CRP_HZEN_trend",
+        "url": "HZEN_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Horizen Trust RelTrend Score",
-        "url": "CRP_HZEN_reltrend",
+        "url": "HZEN_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Zcash Trust Trend Score",
-        "url": "CRP_ZCSH_trend",
+        "url": "ZCSH_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Zcash Trust RelTrend Score",
-        "url": "CRP_ZCSH_reltrend",
+        "url": "ZCSH_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Livepeer Trust Trend Score",
-        "url": "CRP_GLIV_trend",
+        "url": "GLIV_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Grayscale Livepeer Trust RelTrend Score",
-        "url": "CRP_GLIV_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hut 8 Mining Corp Trend Score",
-        "url": "CRP_HUT_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hut 8 Mining Corp RelTrend Score",
-        "url": "CRP_HUT_reltrend",
+        "url": "GLIV_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "HIVE Digital Technologies Trend Score",
-        "url": "CRP_HIVE_trend",
+        "url": "HIVE_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "HIVE Digital Technologies RelTrend Score",
-        "url": "CRP_HIVE_reltrend",
+        "url": "HIVE_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Bitfarms Ltd Trend Score",
-        "url": "CRP_BITF_trend",
+        "url": "BITF_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Bitfarms Ltd RelTrend Score",
-        "url": "CRP_BITF_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Core Scientific Inc Trend Score",
-        "url": "CRP_CORZ_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Core Scientific Inc RelTrend Score",
-        "url": "CRP_CORZ_reltrend",
+        "url": "BITF_reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Athena Bitcoin Global Trend Score",
-        "url": "CRP_ABIT_trend",
+        "url": "ABIT_trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Athena Bitcoin Global RelTrend Score",
-        "url": "CRP_ABIT_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Riot Platforms Inc Trend Score",
-        "url": "CRP_RIOT_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Riot Platforms Inc RelTrend Score",
-        "url": "CRP_RIOT_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CleanSpark Inc Trend Score",
-        "url": "CRP_CLSK_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CleanSpark Inc RelTrend Score",
-        "url": "CRP_CLSK_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Marathon Digital Holdings Trend Score",
-        "url": "CRP_MARA_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Marathon Digital Holdings RelTrend Score",
-        "url": "CRP_MARA_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cipher Mining Inc Trend Score",
-        "url": "CRP_CIFR_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cipher Mining Inc RelTrend Score",
-        "url": "CRP_CIFR_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "TeraWulf Inc Trend Score",
-        "url": "CRP_WULF_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "TeraWulf Inc RelTrend Score",
-        "url": "CRP_WULF_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Coinbase Global Inc Trend Score",
-        "url": "CRP_COIN_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Coinbase Global Inc RelTrend Score",
-        "url": "CRP_COIN_reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MicroStrategy Inc Trend Score",
-        "url": "CRP_MSTR_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MicroStrategy Inc RelTrend Score",
-        "url": "CRP_MSTR_reltrend",
+        "url": "ABIT_reltrend",
         "updated": "Daily"
     },
     {
@@ -56210,7 +56015,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Neuberger Berman Sustainable Equity Fund;A Optix",
+        "chart_name": "Neuberger Berman Sustainable Equity Fund Optix",
         "url": "etf_FTLS",
         "updated": "Daily"
     },
@@ -56241,7 +56046,7 @@
     },
     {
         "chart_name": "Third Point Investors Limited Optix",
-        "url": "etf_TPOU",
+        "url": "TPOU",
         "updated": "Daily"
     },
     {
@@ -56250,7 +56055,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Madison Small Cap Fund;A Optix",
+        "chart_name": "Madison Small Cap Fund Optix",
         "url": "etf_MASMX",
         "updated": "Daily"
     },
@@ -56440,12 +56245,12 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Madison Small Cap Fund;A Trend Score",
+        "chart_name": "Madison Small Cap Fund Trend Score",
         "url": "MASMX_trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Madison Small Cap Fund;A RelTrend Score",
+        "chart_name": "Madison Small Cap Fund RelTrend Score",
         "url": "MASMX_reltrend",
         "updated": "Daily"
     },
@@ -56570,12 +56375,12 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Neuberger Berman Sustainable Equity Fund;A Trend Score",
+        "chart_name": "Neuberger Berman Sustainable Equity Fund Trend Score",
         "url": "FTLS_trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Neuberger Berman Sustainable Equity Fund;A RelTrend Score",
+        "chart_name": "Neuberger Berman Sustainable Equity Fund RelTrend Score",
         "url": "FTLS_reltrend",
         "updated": "Daily"
     },
@@ -59932,6 +59737,116 @@
     {
         "chart_name": "Baidu Inc. RelTrend Score",
         "url": "BIDU_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TNX Range %",
+        "url": "tnx_range_percent",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Market Environment Composite",
+        "url": "market_health_composite",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LEISum",
+        "url": "leisum",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Market Environment Composite Overlay",
+        "url": "market_health_composite_overlay",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "High Yield Corp (HYG) Trend Score",
+        "url": "HYG_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "High Yield Corp (HYG) RelTrend Score",
+        "url": "HYG_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR Bloomberg 1-3 Month T-Bill ETF (BIL) Trend Score",
+        "url": "BIL_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPDR Bloomberg 1-3 Month T-Bill ETF (BIL) RelTrend Score",
+        "url": "BIL_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "30-Year Treasury Trend Score",
+        "url": "thirty_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "30-Year Treasury RelTrend Score",
+        "url": "thirty_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "20-Year Treasuries (TLT) Trend Score",
+        "url": "TLT_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "20-Year Treasuries (TLT) RelTrend Score",
+        "url": "TLT_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Trend Score",
+        "url": "ten_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury RelTrend Score",
+        "url": "ten_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Investment Grade (LQD) Trend Score",
+        "url": "LQD_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Investment Grade (LQD) RelTrend Score",
+        "url": "LQD_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "High Yield Bonds (JNK) Trend Score",
+        "url": "JNK_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "High Yield Bonds (JNK) RelTrend Score",
+        "url": "JNK_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Total Bond (BND) Trend Score",
+        "url": "BND_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Total Bond (BND) RelTrend Score",
+        "url": "BND_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Euro Stocks 50 (EUROSTOXX) Trend Score",
+        "url": "EUROSTOXX_trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Euro Stocks 50 (EUROSTOXX) RelTrend Score",
+        "url": "EUROSTOXX_reltrend",
         "updated": "Daily"
     }
 ]
