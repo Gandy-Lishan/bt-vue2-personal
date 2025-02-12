@@ -118,7 +118,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"Mass Idx": {
 			name: "Mass Index",
-			seriesFN: CIQ.Studies.displayMassIndex,
+			//seriesFN: CIQ.Studies.displayMassIndex,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displayMassIndex(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateMassIndex,
 			inputs: { Period: 25, "Bulge Threshold": 27 },
 			attributes: {

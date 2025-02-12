@@ -2,6 +2,8 @@ import axios from '../axios'
 import { uniqueObjectArray } from '@/utils/formValidate'
 import { transformChangedKey } from '@/utils/globalFunc'
 import * as mqs from 'qs'
+import moment from 'moment';
+
 
 function get_env(name, value) {
 	if (process.env[name] === undefined) {
@@ -401,8 +403,8 @@ export function csvFileDelete(fileID) {
 }
 
 export function getPairData(startDate, endDate, frequency, symbol) {
-	// const url = `https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
-	const url = `https://bt2api.sentimentrader.com/st_data/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
+	const url = `https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
+	// const url = `https://bt2api.sentimentrader.com/st_data/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
 
 	return new Promise((resolve, reject) => {
 		axios
@@ -1902,3 +1904,153 @@ export function changeMySignalsSubscribe(data) {
 	})
 }
 /* My Signals End */
+/* My Screens Start */
+export function getMyScreensList(url) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function saveMyScreenForm(data) {
+	const url = '/dev/myscreen_app/myscreen'
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function editMyScreenForm(data, rowUrl) {
+	const url = `/dev/myscreen_app/myscreen?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function deleteMyScreen(url) {
+	const path = `/dev/myscreen_app/myscreen?url=${url}`
+	return axios.delete(path)
+}
+export function getNewestScreenDate() {
+	const path = `/dev/myscreen_app/get_newest_date`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getScreenResults(url) {
+	const path = `/dev/myscreen_app/myscreen?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* My Screens End */
+
+/** Dashboard Start */
+export async function getSmartDumbSentiment() {
+	// 在配置env之前暂时用NODE_ENV判断url
+	let url = `dev/st_data/smart_dump_sentiment`
+  
+	try {
+	  const response = await axios.get(url);
+	  return response.data;  // Assuming the API response contains a data field
+	} catch (error) {
+	  console.error('Error fetching SmartDumbSentiment info:', error);
+	  throw new Error('Failed to fetch SmartDumbSentiment info');
+	}
+  }
+
+  export async function getPairDataDashboard(
+	symbol, 
+	timeframe,
+	startDate,          // 可选参数
+	endDate,             // 可选参数
+	indicators,   // 可选参数
+  ) {
+	  let url = `dev/st_data/pair_data?symbol=${symbol}&freq=${timeframe}`
+	
+	// if (startDate) {
+	//   url += `&start=${startDate}`;
+	// }
+	// if (endDate) {
+	//   url += `&end=${endDate}`;
+	// }
+  
+	if(indicators) {
+	  for(let i=0; i<indicators.length; i++){
+		url += `&${i==0?'indicator':'indicator_'+(i+1)}=${indicators[i]}`
+	  }
+	}
+  
+	try {
+	  const response = await axios.get(url, { auth: author });
+	//   return response.data
+	  if (startDate || endDate) {
+		return response.data.filter(
+		  it => 
+			moment(it.DT).isAfter(moment(startDate)) && moment(it.DT).isBefore(moment(endDate)) 
+		);  
+	  }else return response.data
+	  // Assuming the API response contains a data field
+	} catch (error) {
+	  console.error('Error fetching pair data:', error);
+	  throw new Error('Failed to fetch pair data');
+	}
+  }

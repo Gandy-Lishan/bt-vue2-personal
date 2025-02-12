@@ -128,7 +128,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"W MFI": {
 			name: "Market Facilitation Index",
-			seriesFN: CIQ.Studies.displayMFI,
+			//seriesFN: CIQ.Studies.displayMFI,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displayMFI(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateMFI,
 			yAxis: { ground: true },
 			range: "0 to max",

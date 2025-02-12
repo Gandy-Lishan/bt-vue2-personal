@@ -21,8 +21,8 @@
 /* eslint-disable no-extra-parens */
 
 
-import { CIQ as _CIQ } from "../../../js/chartiq.js";
-import "../../../js/standard/studies.js";
+import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
+import { getPropertyByString } from "@/utils/globalFunc"
 
 
 let __js_advanced_studies_alligator_ = (_exports) => {
@@ -42,6 +42,21 @@ if (!CIQ.Studies) {
 			L: Number(sd.inputs["Lips Period"])
 		};
 		var quotes = sd.chart.scrubbed;
+
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		
+			/**根据criteria动态设定study的Y轴属*******/
+			var actualXaxis = stx.getYAxisByField(stx.panels['chart'], field);
+			sd.yAxis = actualXaxis
+			/****************** */
+		}else{
+			quotes = sd.chart.scrubbed
+
+			sd.yAxis = null
+		}
 		if (quotes.length < Math.max(periods.J, periods.T, periods.L) + 1) {
 			sd.error = true;
 			return;
@@ -77,7 +92,6 @@ if (!CIQ.Studies) {
 				sd
 			);
 		}
-
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			if (!quotes[i]) continue;
 			if (sd.type == "Gator") {
@@ -104,39 +118,40 @@ if (!CIQ.Studies) {
 				)
 					continue;
 				if (
-					quotes[i - 2].High &&
-					quotes[i - 1].High &&
-					quotes[i].High &&
-					quotes[i + 1].High &&
-					quotes[i + 2].High
+					getPropertyByString(quotes[i - 2],field,'High') &&
+					getPropertyByString(quotes[i - 1],field,'High') &&
+					getPropertyByString(quotes[i],field,'High') &&
+					getPropertyByString(quotes[i + 1],field,'High') &&
+					getPropertyByString(quotes[i + 2],field,'High')
 				) {
 					if (
-						quotes[i].High > quotes[i - 1].High &&
-						quotes[i].High > quotes[i - 2].High &&
-						quotes[i].High > quotes[i + 1].High &&
-						quotes[i].High > quotes[i + 2].High
+						getPropertyByString(quotes[i],field,'High') > getPropertyByString(quotes[i - 1],field,'High') &&
+						getPropertyByString(quotes[i],field,'High') > getPropertyByString(quotes[i - 2],field,'High') &&
+						getPropertyByString(quotes[i],field,'High') > getPropertyByString(quotes[i + 1],field,'High') &&
+						getPropertyByString(quotes[i],field,'High') > getPropertyByString(quotes[i + 2],field,'High')
 					) {
 						quotes[i]["Fractal High " + sd.name] = 1;
 					}
 				}
 				if (
-					quotes[i - 2].Low &&
-					quotes[i - 1].Low &&
-					quotes[i].Low &&
-					quotes[i + 1].Low &&
-					quotes[i + 2].Low
+					getPropertyByString(quotes[i - 2],field,'Low') &&
+					getPropertyByString(quotes[i - 1],field,'Low') &&
+					getPropertyByString(quotes[i],field,'Low') &&
+					getPropertyByString(quotes[i + 1],field,'Low') &&
+					getPropertyByString(quotes[i + 2],field,'Low')
 				) {
 					if (
-						quotes[i].Low < quotes[i - 1].Low &&
-						quotes[i].Low < quotes[i - 2].Low &&
-						quotes[i].Low < quotes[i + 1].Low &&
-						quotes[i].Low < quotes[i + 2].Low
+						getPropertyByString(quotes[i],field,'Low') < getPropertyByString(quotes[i - 1],field,'Low') &&
+						getPropertyByString(quotes[i],field,'Low') < getPropertyByString(quotes[i - 2],field,'Low') &&
+						getPropertyByString(quotes[i],field,'Low') < getPropertyByString(quotes[i + 1],field,'Low') &&
+						getPropertyByString(quotes[i],field,'Low') < getPropertyByString(quotes[i + 2],field,'Low')
 					) {
 						quotes[i]["Fractal Low " + sd.name] = 1;
 					}
 				}
 			}
 		}
+		
 	};
 
 	CIQ.Studies.displayAlligator = function (stx, sd, quotes) {
@@ -188,9 +203,11 @@ if (!CIQ.Studies) {
 	CIQ.Studies.displayGator = function (stx, sd, quotes) {
 		var panel = stx.panels[sd.panel],
 			context = sd.getContext(stx);
-		var yAxis = sd.getYAxis(stx);
-		var y = stx.pixelFromPrice(0, panel, yAxis);
+		// var yAxis = sd.getYAxis(stx);
+		// 双股票情况下无法用getYaxis获取正确Y轴
+		var yAxis = panel.yAxis;
 
+		var y = stx.pixelFromPrice(0, panel, yAxis);
 		var myWidth = stx.layout.candleWidth - 2;
 		if (myWidth < 2) myWidth = 1;
 
@@ -221,14 +238,14 @@ if (!CIQ.Studies) {
 					context.fillStyle = downColor;
 				if (quote.candleWidth)
 					myWidth = Math.floor(Math.max(1, quote.candleWidth - 2));
-				context.fillRect(
-					Math.floor(stx.pixelFromBar(i, panel.chart) - myWidth / 2),
-					Math.floor(y),
-					Math.floor(myWidth),
-					Math.floor(
-						stx.pixelFromPrice(quote[sd.name + "_hist" + j], panel, yAxis) - y
-					)
-				);
+					context.fillRect(
+						Math.floor(stx.pixelFromBar(i, panel.chart) - myWidth / 2),
+						Math.floor(y),
+						Math.floor(myWidth),
+						Math.floor(
+							stx.pixelFromPrice(quote[sd.name + "_hist" + j], panel, yAxis) - y
+						)
+					);
 			}
 		}
 		stx.endClip();
@@ -271,4 +288,4 @@ if (!CIQ.Studies) {
 }
 
 };
-__js_advanced_studies_alligator_(typeof window !== "undefined" ? window : global);
+export { __js_advanced_studies_alligator_ }

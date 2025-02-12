@@ -227,7 +227,7 @@ export default {
 @import 'components/common/chart/st-development/css/normalize.css';
 @import 'components/common/chart/st-development/css/page-defaults.css';
 @import 'components/common/chart/st-development/css/stx-chart.css'; // Chart API
-@import 'components/common/chart/st-development/css/chartiq.css'; // Chart UI
+// @import 'components/common/chart/st-development/css/chartiq.css'; // Chart UI
 @import 'components/common/chart/st-development/css/ST-chartiq.css';
 
 a {

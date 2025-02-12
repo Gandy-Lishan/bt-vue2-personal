@@ -34,7 +34,7 @@
     async renderChart() {
       if(!this.row.url) return;
       const _this = this
-      const {url, pess, opt, chart_name, market_symbol, type} = this.row
+      const {url, pess, opt, chart_name, market_symbol, type, sub_type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -78,7 +78,17 @@
               _url = url.replace(/(.*?)_trend_reltrend/, "$1_trend");
             }
             button.onclick = function () {
-              window.open(`/backtester/sr/setup?index=${market_symbol || 'Unknown'}&indicator=${_url}`, '_blank')
+              let _market_symbol = market_symbol
+              debugger
+              if(sub_type === 'crp_trend_reltrend' || sub_type === 'crypto') {
+                try {
+                  const [startStr, endStr] = _market_symbol.split('_')
+                  _market_symbol = `${startStr.toLocaleLowerCase()}_${endStr}`
+                } catch (error) {
+                  console.log('error', error)
+                }
+              }
+              window.open(`/backtester/sr/setup?index=${_market_symbol || 'Unknown'}&indicator=${_url}`, '_blank')
             };
 
             chart.container.parentNode.style.position = 'relative';
@@ -170,7 +180,7 @@
         const xData = [...allData.map(d => d[0])]
         console.log('xData', xData)
         const minX = Math.min(xData)
-        const { url, type, market_symbol } = row
+        const { url, type, market_symbol, sub_type } = row
         let selector = 5
         if(url === 'risk_levels') {
           selector = 3
@@ -340,7 +350,6 @@
                         // 使用正则表达式提取主要部分
                         const regex = /(\w+)\s+(.*?)\s+\(Last\s+=\s+[\d.]+\)/;
                         const match = inputString.match(regex);
-
                         if (match) {
                             // 获取第一部分
                             const firstPart = match[1];
@@ -351,7 +360,7 @@
                             // 根据第二部分是否包含 "trend" 确定返回格式
                             if (secondPart.includes('relative')) {
                                 return `${firstPart}_reltrend`;
-                            } else if(secondPart.includes('relative') && secondPart.includes('trend') ){
+                            } else if(((secondPart.includes('relative') && secondPart.includes('trend')) || ((sub_type === 'crp_trend_reltrend' || sub_type === 'crypto') && secondPart === 'trend score'))){
                                 return `${firstPart}_trend`;
                             } else if(`${match[1]} ${match[2]}` === 'Smart Money') {
                               return `model_smart_money`
@@ -366,7 +375,8 @@
                         return null; // 如果没有匹配，返回 null
                     }
                     setTimeout(() => {
-                      const _market_symbol = market_symbol || 'SPX'
+                      let _market_symbol = market_symbol || 'SPX'
+                      debugger
                       const allLegend = this.chart.series.map(item => ({name: item.name, visible: item.visible}))
                       console.log('chart', allLegend)
                       const useLegend = allLegend.filter(item => (item.name !== _market_symbol  && item.visible === true && allLegendNames.includes(item.name)))
@@ -377,6 +387,14 @@
                         button.style.display = 'block'
                         const _url = convertString(useLegend[0]?.name)
                         button.onclick = function () {
+                          if(sub_type === 'crp_trend_reltrend' || sub_type === 'crypto') {
+                            try {
+                              const [startStr, endStr] = _market_symbol.split('_')
+                              _market_symbol = `${startStr.toLocaleLowerCase()}_${endStr}`
+                            } catch (error) {
+                              console.log('error', error)
+                            }
+                          }
                           window.open(`/backtester/sr/setup?index=${_market_symbol}&indicator=${_url}`, '_blank');
                         }
                         return true; // 允许默认图例切换操作
@@ -386,6 +404,14 @@
                         const useLegend = allLegend.filter(item => (item.name !== _market_symbol && allLegendNames.includes(item.name)))
                         const _url = convertString(useLegend[0]?.name)
                         button.onclick = function () {
+                          if(sub_type === 'crp_trend_reltrend' || sub_type === 'crypto') {
+                            try {
+                              const [startStr, endStr] =  _market_symbol.split('_')
+                              _market_symbol = `${startStr.toLocaleLowerCase()}_${endStr}`
+                            } catch (error) {
+                              console.log('error', error)
+                            }
+                          }
                           window.open(`/backtester/sr/setup?index=${_market_symbol}&indicator=${_url}`, '_blank');
                         }
                         return true; // 允许默认图例切换操作
@@ -430,14 +456,14 @@
       };
  
       try {
-      let {last_value, last_change_type, market_symbol, type} = this.row;
+      let {last_value, last_change_type, market_symbol, type, sub_type} = this.row;
       console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       let zoonsData = [];
       console.log('this.row', this.row)
       let originalData
       try {
-        const res = await axios.get(`/dev/st_data/get_data?index=${url || 'etf_spy'}`);
+        const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
         originalData = res.data
         if(typeof originalData === 'string') {
           originalData = originalData.replace(/NaN/g, 'null')
@@ -555,14 +581,14 @@
           if((key.includes('_reltrend') || key.includes('_trend')) && type.includes('trend_reltrend')) {
             name = key.replace('_reltrend', ' Relative Trend Score')
             name = name.replace('_trend', '  Trend Score')
-          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels') name = chart_name
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels' && sub_type !== 'crp_trend_reltrend') name = chart_name
           else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
+            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock' || sub_type === 'crypto') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
             zones: url === 'risk_measure' ? zoonsData : []

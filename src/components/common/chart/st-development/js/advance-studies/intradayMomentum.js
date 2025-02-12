@@ -76,6 +76,10 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"Intraday Mtm": {
 			name: "Intraday Momentum Index",
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateIntradayMomentum,
 			inputs: { Period: 20 },
 			parameters: {

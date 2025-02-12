@@ -121,6 +121,21 @@
                     ></el-button>
                   </el-tooltip>
                   <el-tooltip
+									class="item"
+									effect="dark"
+									content="view backtest results"
+									placement="bottom-start"
+								>
+									<el-button
+										type="warning"
+										icon="el-icon-view"
+										circle
+										size="mini"
+                    :loading="scope.row.viewLoading"
+										@click="viewResults(scope.row)"
+									></el-button>
+								</el-tooltip>
+                  <el-tooltip
                     class="item"
                     effect="dark"
                     content="delete signal"
@@ -160,7 +175,7 @@
 </template>
 
 <script>
-import { delScannerBT, getMySignalsList, saveMySignalForm, deleteMySignal, runAllMySignals, editMySignalForm } from '@/service/service'
+import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -189,14 +204,12 @@ export default {
         {
           label: 'Category',
           value: 'category',
-          key: 'category',
-          width: '110px'
+          key: 'category'
         },
         {
-          label: 'Timeframe',
-          value: 'timeframe',
-          key: 'timeframe',
-          width: '150px'
+          label: 'Direction',
+          value: 'direction',
+          key: 'direction'
         },
         {
           label: 'Screen',
@@ -205,10 +218,9 @@ export default {
           minWidth: '150px' 
         },
         {
-          label: 'Last Screen Date',
-          value: 'last_signal_date',
-          key: 'last_signal_date',
-          width: '190px'
+          label: 'Signal',
+          value: 'signal',
+          key: 'signal'
         }
       ],
       tableData: [],
@@ -239,7 +251,7 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMySignalsList(`/dev/mysignal_app/get_mysignal_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMyScreensList(`dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
         const parseJsonOrString = (value) => {
@@ -266,7 +278,7 @@ export default {
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
             item.rerunLoading = false
-            item.last_signal_date = item.lastdate === '2099-12-31' ? '' : item.lastdate
+            item.last_signal_date = item.lastdate === '2099-01-01' ? '' : item.lastdate
             item.description = parseJsonOrString(item.description)
 						return item
 					})
@@ -355,19 +367,11 @@ export default {
 				}
 			}
 		},
-    async deleteSCBT(row) {
-      const { url } = row
-      const _this = this
-      row.deleteLoading = true
-			const res = await delScannerBT(url)
-      const code = res.data.code
-      if(code == 204) _this.popUpMsgBox('Successfully deleted')
-      if(code == 403) _this.popUpMsgBox("Sorry, deleted item doesn't exist. Refresh the list")
-      if(code == 404) {_this.popUpMsgBox('Delete failed')}
-			row.deleteLoading = false
-			await _this.getDataList(null)
-    },
     async handleRowClick(row) {
+      this.$emit('displayFormData', row)
+    },
+    viewResults(row) {
+      this.$emit('displayFormData', row)
       this.$emit('displayResultsData', row)
     },
     async copySignals(data) {
@@ -393,7 +397,7 @@ export default {
 					}
           const prepareData = this.reassignBTAttributes(params)
 					// 发起复制请求
-					const res = await saveMySignalForm(prepareData)
+					const res = await saveMyScreenForm(prepareData)
           console.log('res', res)
           const code = res.data.code
           if(code == 211) {
@@ -419,7 +423,7 @@ export default {
 					}
           const prepareData = this.reassignBTAttributes(params)
 					// 发起复制请求
-					const res = await editMySignalForm(prepareData, data.url)
+					const res = await editMyScreenForm(prepareData, data.url)
           console.log('res', res)
           const code = res.data.code
           const _data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
@@ -468,28 +472,17 @@ export default {
       return backtestParams
 		},
     async deleteSignals(url) {
-			await deleteMySignal(url)
+			await deleteMyScreen(url)
 			await this.getDataList(null, true)
 			this.popUpMsgBox('Successfully deleted')
-    },
-    async runAllMySignals() {
-      try {
-        this.btnLoading = true
-        const {data: {code}} = await runAllMySignals()
-        console.log('run all res', code)
-        if(code === 216) this.popUpMsgBox('Screens re-run successfully. Last signal dates are now up to date')
-        this.$emit('refreshBTList')
-      } catch (error) {
-        console.error(error);
-        
-      } finally {
-        this.btnLoading = false
-      }
     },
     tableRowClassName({row, rowIndex}) {
       if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
       return ''
-		}
+		},
+    viewResults(row) {
+
+    },
     }
   }
 </script>

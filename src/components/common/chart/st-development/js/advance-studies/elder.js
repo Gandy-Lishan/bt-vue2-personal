@@ -228,7 +228,11 @@ if (!CIQ.Studies) {
 		"Elder Force": {
 			name: "Elder Force Index",
 			calculateFN: CIQ.Studies.calculateElderForce,
-			seriesFN: CIQ.Studies.displayElderForce,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displayElderForce(stx, sd, quotes);
+			},
+			//seriesFN: CIQ.Studies.displayElderForce,
 			inputs: { Period: 13 }
 		},
 		"Elder Ray": {

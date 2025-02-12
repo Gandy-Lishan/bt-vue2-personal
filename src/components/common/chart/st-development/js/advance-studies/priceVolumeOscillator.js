@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
-import { printConsole } from '@/utils'
+import { getPropertyByString } from "@/utils/globalFunc"
 
 let __js_advanced_studies_priceVolumeOscillator_ = (_exports) => {
 
@@ -155,6 +155,10 @@ if (!CIQ.Studies) {
 		"Vol Osc": {
 			name: "Volume Oscillator",
 			calculateFN: CIQ.Studies.calculatePriceOscillator,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			inputs: {
 				"Short Cycle": 12,
 				"Long Cycle": 26,

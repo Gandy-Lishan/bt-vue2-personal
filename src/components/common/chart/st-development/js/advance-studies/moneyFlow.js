@@ -92,6 +92,10 @@ if (!CIQ.Studies) {
 		"M Flow": {
 			name: "Money Flow Index",
 			range: "0 to 100",
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateMoneyFlowIndex,
 			inputs: { Period: 14 },
 			parameters: {

@@ -366,15 +366,20 @@ export default {
               sp1500_trend_reltrend: 'Trend',
               spx_trend_reltrend: 'Trend',
               ndx_trend_reltrend: 'Trend',
+              crp_trend_reltrend: 'Trend',
               russell_trend_reltrend: 'Trend',
               etf_domestic_trend_reltrend: 'Trend',
               etf_foreign_trend_reltrend: 'Trend',
-              etf_other_trend_reltrend: 'Trend'
+              etf_other_trend_reltrend: 'Trend',
+              crp_stock: 'CRP'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
               // 保留特定小数点
-              if(['last_value', 'last_change'].includes(key)) obj[key] = unifyNumber(obj[key], 4)
+              if(['last_value', 'last_change'].includes(key)) {
+                // obj[key] = unifyNumber(obj[key], 4)
+                obj[key] = unifyNumber(obj[key], 2)
+              }
 							if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
             }
@@ -417,7 +422,7 @@ export default {
         }
       this.showImg = true
       this.hoveredChartName = row?.chart_name || ''
-      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'stock_russell' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'russell_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
+      if(row.type === 'stock_nasdaq' || row.type === 'stock_sent' || row.type === 'stock_russell' || ['trend_reltrend', 'spx_trend_reltrend', 'ndx_trend_reltrend', 'crp_trend_reltrend','russell_trend_reltrend', 'sp1500_trend_reltrend'].includes(row.type)) url = url.toLowerCase()
       this.hoveredImage = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`
       // if(this.enlarged) {_t=`${_t}px`;_r=`10%`}
       _t=`${_t}px`;_l=`${column.realWidth}px`

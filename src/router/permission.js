@@ -45,6 +45,7 @@ export function setRouterPermission(router) {
 				'sentimen_session',
 				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			)
+			Cookies.set('session', '.eJxtUU1rHTEM_CuLzy_g77X3DxQKvQVyKGWRLTkx2fW-2t7SR8h_r9u-9NSL0MDMaCS9sTVVai9sSbA1urA1I1uY9lZwy5VT0aOPwUoNxgvLrTU8CotGzJjmhOBmJZGEMGTVLJUMo-DsnA0ueWOtAjLeeaNT1Dx5CLOdufckKKg4cw2Ca6cGT-sQNIlZCUyGjSBXqjsUKp0tvZ4jGsRIra0b_aBtZLxW2vO5PyB0eLgR1O02ZLHVtPbjlcqgOKNSIqE4QkQLajROqzHTSEWBBEaSDiUOHf285go9H2UdhsSWNzb9vsQT4WWScvoMZZJcmomLRc6LVtOnL4_s_cLaGRpbvrL9QNoIn2mYQW4RSqF6x99PKP3ej_T11l9yeR7g_zsEiK-d2ociF8wR-vHh1ivgkN9RGxfKO_3zvx61p2PLxx_87cLORvXvVwU3zrP3X1H6m6c.GnCOgg.hp6scmyz2zBsrUcB86-XSFT-01g')
 		}
 		// Jason
 		// Cookies.set(
@@ -196,34 +197,33 @@ async function initiateCurrentDate() {
 async function initiateList(pathname) {
 	// at the very first beginning, replace all stock name in AllSymbolList with stock name + 'optix'
 	// 这个数据基本不会变，存起来
-	
-	
-	// if (
-	// 	!localStorage.getItem('refactoredSentimentList') ||
-	// 	!localStorage.getItem('refactoredConcatList')
-	// ) {
-		console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-		let refactoredSentimentList = await fetchDataList('getIndicatorsList')
-		refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
-		const refactoredStocksList = await fetchDataList('getStockList')
-		const refactoredIndexsList = await fetchDataList('getIndexList')
-		let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
-		// 耗时一秒而且没有排除项
-      	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
+	console.time("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
+
+	// indicator list内存在symbol + Optix的项（AAON Inc对比AAON Optix）,
+	// 他们需要在此action内处理并url加上@indicator以区别对应symbol list的同名url， 
+	// 和本来就是 index + Optix的项不同(SPY Optix)
+	await CIQ.store.dispatch('chart/fetch_indicatorsList')
+
+	let refactoredSentimentList = await fetchDataList('getIndicatorsList')
+	refactoredSentimentList = refactoredSentimentList.filter(item => item !== null && item !== undefined && item !== '');
+	const refactoredStocksList = await fetchDataList('getStockList')
+	const refactoredIndexsList = await fetchDataList('getIndexList')
+	let refactoredConcatList = refactoredStocksList.concat(refactoredIndexsList)
+	// 耗时一秒而且没有排除项
+	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
 
 
-		const storedSentimentList = localStorage.getItem('refactoredSentimentList');
-		const storedConcatList = localStorage.getItem('refactoredConcatList');
-		if (
-			JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
-			JSON.stringify(refactoredConcatList) !== storedConcatList 
-		) {
-			localStorage.setItem('refactoredSentimentList',JSON.stringify(refactoredSentimentList))
-			localStorage.setItem('refactoredConcatList',JSON.stringify(refactoredConcatList))
-		}
+	const storedSentimentList = localStorage.getItem('refactoredSentimentList');
+	const storedConcatList = localStorage.getItem('refactoredConcatList');
+	if (
+		JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
+		JSON.stringify(refactoredConcatList) !== storedConcatList 
+	) {
+		localStorage.setItem('refactoredSentimentList',JSON.stringify(refactoredSentimentList))
+		localStorage.setItem('refactoredConcatList',JSON.stringify(refactoredConcatList))
+	}
 
-		console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");
-	// }	
+	console.timeEnd("🚗 prepare sentiment list for cpm,myidnicator,seasonality");	
 
 	//	改为了获取列表时请求
 	// if (

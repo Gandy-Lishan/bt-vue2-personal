@@ -63,6 +63,7 @@ export default {
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
+        CRPScore: 'crp',
         RussellScore: 'russell',
         DomesticETFScore: 'etf_domestic',
         ForeignETFScore: 'etf_foreign',
@@ -81,7 +82,10 @@ export default {
         commodity: 'commodity_complete_list',
         cssScreen: 'commod_sentiment_seasonality',
         cstScreen: 'commod_optix_trend',
-        CHMinMax: 'cot_max_min'
+        CHMinMax: 'cot_max_min',
+        CRP: 'crypt_complete_list',
+        TSCRP: 'crp',
+        RTSCRP: 'crp&rel_trend=1',
       },
       firstRow: {},
       blog_results_length: 0,
@@ -203,11 +207,15 @@ export default {
                 etf_domestic_trend_reltrend: 'Domestic ETF Trend',
                 etf_foreign_trend_reltrend: 'Foreign ETF Trend',
                 etf_other_trend_reltrend: 'Other Assets ETF Trend',
+                crp_stock: 'CRP'
               }
               if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
               if(['last_value', 'last_change'].includes(key)) {
                 // 保留特定小数点
-                if(['last_value', 'last_change'].includes(key)) obj[key] = unifyNumber(obj[key], 4)
+                if(['last_value', 'last_change'].includes(key)) {
+                  // obj[key] = unifyNumber(obj[key], 4)
+                  obj[key] = unifyNumber(obj[key], 2)
+                }
                 if((key === 'last_value' || key === 'last_change') && obj['last_change_type'] === 'percent') obj[key] = `${obj[key]}%`
 
               }
@@ -250,7 +258,7 @@ export default {
       try {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
-        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(type)
+        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []

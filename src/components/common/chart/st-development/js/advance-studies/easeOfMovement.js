@@ -77,6 +77,10 @@ if (!CIQ.Studies) {
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		EOM: {
 			name: "Ease of Movement",
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			calculateFN: CIQ.Studies.calculateEaseOfMovement,
 			inputs: { Period: 14, "Moving Average Type": "ma" }
 		}
