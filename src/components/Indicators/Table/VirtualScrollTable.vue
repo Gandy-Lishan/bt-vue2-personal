@@ -1,7 +1,6 @@
 <template>
 <div>
   <div>
-    condition{{condition}}
     <div class="header-span" v-if="(!showReport && !showRelated)">
       <span>
         {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
