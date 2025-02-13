@@ -74,7 +74,7 @@
             </label>
           </template>
           <el-select
-              v-model="data.signal"
+              v-model="data.signals"
               placeholder="— Select type —"
             >
               <el-option
@@ -142,7 +142,7 @@ export default {
         name: '',
         direction: 'Long',
         category: 'Communication Services',
-        signal: 'MA'
+        signals: 'MA'
       },
       rowUrl: null,
       isPolling: false,
@@ -496,7 +496,7 @@ export default {
       const rowUrl = this.rowUrl
       this.percentage = 8
       debugger
-      const saveData = {...this.data}
+      const saveData = {...this.data, description: JSON.stringify([])}
       if(this.percentage < 99) this.percentage += 8
       let saveRes
       if(rowUrl) {saveRes = await editMyScreenForm(saveData, rowUrl)}
@@ -509,22 +509,10 @@ export default {
         return saveRes
       }
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
+      saveRes.data.data.data = isJson(saveRes.data.data.data)?JSON.parse(saveRes.data.data.data):saveRes.data.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
-      let pollingRes = null
-      do {
-        if(this.percentage < 99) this.percentage += 1
-        pollingRes = await getScreenResults(url)
-        const code = pollingRes.data.code
-        if (code == 214) {
-          // const previewCode = previewRes.data?.code
-          // if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
-          return pollingRes
-        }
-        if(code == 401 || code == 403 || code == 404 || code == 407 || this.percentage == 0 || this.processTips === '') return pollingRes
-        // Add a delay here to avoid excessive polling, e.g., using setTimeout
-        await new Promise(resolve => setTimeout(resolve, 1500));
-      } while (true); // Keep polling indefinitely
+      return saveRes
     },
     async saveCriteriaData(criteriaRef) {
       debugger
@@ -732,7 +720,7 @@ try {
       try {
         saveRes = await this.saveFormData()
         debugger
-        const _resData = JSON.parse(saveRes.data.data)
+        const _resData = saveRes.data.data
         this.rowUrl = _resData.url
       } catch (error) {
         console.error(error);
@@ -750,11 +738,15 @@ try {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 214 || code == 213) this.popUpMsgBox(`The screen is completed successfully`)
+      if(code == 214 || code == 213 || code === 211) {
+        this.popUpMsgBox(`The screen is completed successfully`)
+        this.$emit('refreshBTList');
+        this.$emit('displayResultsData', saveRes.data.data.data)
+      }
       // 运行成或者失败后刷新列表
       if((code == 214 || code == 213)) {
         this.$emit('refreshBTList');
-        this.$emit('displayResultsData', saveRes.data.data)
+        this.$emit('displayResultsData', saveRes.data.data.data)
       }
       this.processTips = ''
       this.percentage = 0
@@ -810,6 +802,13 @@ try {
 
 			await processCriteria('entryChild1', displayData.entry, 'entry');
       console.log('displayData',displayData)
+		},
+    displayData(data) {
+      debugger
+      this.rowUrl = data.url
+      this.data = {
+        ...data
+      }
 		},
     customColorMethod(percentage) {
       if (percentage < 50) {

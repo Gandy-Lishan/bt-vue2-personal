@@ -123,7 +123,7 @@
                   <el-tooltip
 									class="item"
 									effect="dark"
-									content="view backtest results"
+									content="view screen results"
 									placement="bottom-start"
 								>
 									<el-button
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm } from '@/service/service'
+import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm, getScreenResults } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -219,8 +219,8 @@ export default {
         },
         {
           label: 'Signal',
-          value: 'signal',
-          key: 'signal'
+          value: 'signals',
+          key: 'signals'
         }
       ],
       tableData: [],
@@ -251,7 +251,7 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMyScreensList(`dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
         const parseJsonOrString = (value) => {
@@ -368,7 +368,8 @@ export default {
 			}
 		},
     async handleRowClick(row) {
-      this.$emit('displayFormData', row)
+      this.$emit('displayFormData', row, true)
+      this.$emit('displayResultsData', [])
     },
     viewResults(row) {
       this.$emit('displayFormData', row)
@@ -480,8 +481,15 @@ export default {
       if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
       return ''
 		},
-    viewResults(row) {
-
+    async viewResults(row) {
+      debugger
+      const {url} = row
+      const res = await getScreenResults(url)
+      res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
+      const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
+      console.log('data', data)
+      this.$emit('displayResultsData', data)
+      this.$emit('displayFormData', row, false)
     },
     }
   }

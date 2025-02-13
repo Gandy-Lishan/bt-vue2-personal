@@ -1,9 +1,9 @@
 <template>
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
-    <p class="filterTableDes">
+    <!-- <p class="filterTableDes">
 					After applying the filters, click the <span class="strongSpan">“Signal Screen”</span> button. The system will automatically identify potential entry and exit signals for stock trading based on the selected indicators and criteria.
-    </p>
+    </p> -->
 		<el-table
 			ref="tableREF"
 			class="ScannerBTTable"
@@ -32,7 +32,7 @@
 					"
 				>
 					<template slot-scope="scope">
-     {{ scope.row[l.value] }}
+     {{ scope.row[l.value] || '' }}
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -54,7 +54,7 @@
 				>
 					<template slot-scope="scope">
 						<span class="tableText">
-							{{ `${scope.row[l.value]}${l.label.includes('%') ? '%' : ''}` }}
+							{{ `${scope.row[l.value] || ''}${l.label.includes('%') ? '%' : ''}` }}
 						</span>
 					</template>
 				</el-table-column>
