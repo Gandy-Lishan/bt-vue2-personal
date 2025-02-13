@@ -56290,16 +56290,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Ethereum Mini Trust ETF Trend Score",
-        "url": "ETH_trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Grayscale Ethereum Mini Trust ETF RelTrend Score",
-        "url": "ETH_reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Grayscale ETH Trust Trend Score",
         "url": "ETHE_trend",
         "updated": "Daily"
