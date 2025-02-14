@@ -87,7 +87,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
          *             "data": {
          *                 "symbol": "KW",
          *                 "name": "Kennedy - Wilson Holdings Inc",
-         *                 "exchDisp ": "NYSE"
+         *                 "typeDisp ": "NYSE"
          *             }
          *         },
          *         {
@@ -95,7 +95,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
          *             "data": {
          *                 "symbol": "RWR",
          *                 "name": "SPDR Series Trust - SPDR DJ Wilshire REIT ETF",
-         *                 "exchDisp": "NYSEArca"
+         *                 "typeDisp": "NYSEArca"
          *             }
          *         }
          *     ];
@@ -208,11 +208,12 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.symbol,
                             name: fields.name,
-                            exchDisp: ""
+                            typeDisp: "",
+                            inceptionDisp: "",
                         };
                         concatList.push(item)
                         resultsIndexsList.push({
-                            display: [item.symbol, item.name, item.exchDisp],
+                            display: [item.symbol, item.name],
                             data: item
                         });
                     }
@@ -223,11 +224,11 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.stock,
                             name: fields.name,
-                            exchDisp: " "
+                            typeDisp: " "
                         };
                         concatList.push(item)
                         resultsStocksList.push({
-                            display: [item.symbol, item.name, item.exchDisp],
+                            display: [item.symbol, item.name],
                             data: item
                         });
                     }
@@ -239,11 +240,11 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                             name: element.name,
-                            exchDisp: ""
+                            typeDisp: ""
                         }
                         concatList.push(item)
                         resultsCustomSymbolList.push({
-                            display: [item.name, item.name, item.exchDisp],
+                            display: [item.name, item.name],
                             data: item
                         });
                     }); 
@@ -262,7 +263,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             if(type == 'custom') displayName = name
                             /** END */
                             return {
-                                display: [displayName, item.name, item.exchDisp],
+                                display: [displayName, item.name],
                                 data: item
                             }
                         })
@@ -282,7 +283,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             var item = {
                                 symbol: fields.symbol,
                                 name: fields.name,
-                                exchDisp: ""
+                                typeDisp: ""
                             };
                             concatList.push(item)
                         }
@@ -295,14 +296,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                               .filter(item => item.priority > 0)
                             this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
                                 return {
-                                    display: [item.symbol, item.name, item.exchDisp],
+                                    display: [item.symbol, item.name],
                                     data: item
                                 }
                             })
                         }else{
                             res = concatList.map(item=>{
                                 return {
-                                    display: [item.symbol, item.name, item.exchDisp],
+                                    display: [item.symbol, item.name],
                                     data: item
                                 }
                             })
@@ -317,7 +318,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.stock,
                             name: fields.name,
-                            exchDisp: " "
+                            typeDisp: " "
                         };
                         concatList.push(item)
                     }
@@ -330,14 +331,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                           .filter(item => item.priority > 0)
                         this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
                             return {
-                                display: [item.symbol, item.name, item.exchDisp],
+                                display: [item.symbol, item.name],
                                 data: item
                             }
                         })
                     }else{
                         res = concatList.map(item=>{
                             return {
-                                display: [item.symbol, item.name, item.exchDisp],
+                                display: [item.symbol, item.name],
                                 data: item
                             }
                         })
@@ -371,14 +372,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                 var item = {
                                     symbol: element,
                                     name: matchedItem.name,
-                                    exchDisp: ""
+                                    typeDisp: ""
                                 }
                                 if (
                                     item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
                                     item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
                                 ){
                                     results.push({
-                                        display: [item.symbol, item.name, item.exchDisp],
+                                        display: [item.symbol, item.name],
                                         data: item
                                     });
                                 }         
@@ -395,7 +396,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                             name: element.name,
-                            exchDisp: ""
+                            typeDisp: ""
                         }
                         
                         if (
@@ -403,7 +404,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
                         ){
                             results.push({
-                                display: [item.name, item.name, item.exchDisp],
+                                display: [item.name, item.name],
                                 data: item
                             });
                         }
@@ -422,7 +423,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             var item = {
                                 symbol: res.stock || res.symbol,
                                 name: res.name,
-                                exchDisp: "",
+                                typeDisp: "",
                                 market: element.market,
                             }
                             
@@ -431,7 +432,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                 item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
                             ){
                                 results.push({
-                                    display: [item.symbol, item.name, item.exchDisp],
+                                    display: [item.symbol, item.name],
                                     data: item
                                 });
                             }

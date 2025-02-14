@@ -85,6 +85,10 @@ if (!CIQ.Studies) {
 		Twiggs: {
 			name: "Twiggs Money Flow",
 			calculateFN: CIQ.Studies.calculateTwiggsMoneyFlow,
+			seriesFN: function (stx, sd, quotes) {
+				stx.dualSymbolCalculationErrorWatermark(stx, sd, quotes)
+				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
+			},
 			inputs: { Period: 21 }
 		}
 	});
