@@ -465,14 +465,15 @@ export default {
     resetForm() {
         this.data = {
           ...this.data,
-          timeframe: 'Daily',
-          category: 'SPY'
+          direction: 'Long',
+          category: 'Communication Services',
+          signals: 'MA'
         }
         this.rowUrl = null
         this.processTips = ''
         this.percentage = 0
         this.generateCPMName()
-        this.$refs['entryChild1'].clearForm()
+        // this.$refs['entryChild1'].clearForm()
     },
     async validForm(formName) {
       const validateForm = async (formRef) => {
