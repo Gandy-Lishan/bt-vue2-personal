@@ -168,7 +168,7 @@ export default {
         { value: 'Industrials', label: 'Industrials', disabled: false},
         { value: 'Materials', label: 'Materials', disabled: false},
         { value: 'Real Estate', label: 'Real Estate', disabled: false},
-        { value: 'SPX', label: 'SPX', disabled: false},
+        { value: 'S&P 500', label: 'S&P 500', disabled: false},
         { value: 'Staples', label: 'Staples', disabled: false},
         { value: 'Technology', label: 'Technology', disabled: false},
         { value: 'Utilities', label: 'Utilities', disabled: false}
