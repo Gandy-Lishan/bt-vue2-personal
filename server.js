@@ -48,13 +48,13 @@ app.get('/api/indicatorsList', (req, res) => {
     // }).then(() => res.send(hits));
  });
 app.get('/api/stocksList', (req, res) => {
-    fs.readFile( dataPath+'stocksList.json', 'utf8', function (err, data) {
+    fs.readFile( dataPath+'stocks_list.json', 'utf8', function (err, data) {
         res.send(data);
         //res.end( data );
     });
 });
 app.get('/api/indexsList', (req, res) => {
-    fs.readFile( dataPath+'indexsList.json', 'utf8', function (err, data) {
+    fs.readFile( dataPath+'indexes_list.json', 'utf8', function (err, data) {
         res.send(data);
         //res.end( data );
     });

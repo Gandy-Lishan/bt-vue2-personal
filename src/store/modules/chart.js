@@ -13,8 +13,8 @@ import {
 } from '@/service/service.js'
 import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
-import stocksData from '@/assets/stocksList.json';
-import indexsData from '@/assets/indexsList.json';
+import stocksData from '@/assets/stocks_list.json';
+import indexsData from '@/assets/indexes_list.json';
 import indicatorsData from '@/assets/indicatorsList.json';
 
 const toggleOverlaySymbol = function(displayStyle) {
