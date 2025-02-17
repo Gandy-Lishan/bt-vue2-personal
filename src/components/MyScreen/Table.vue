@@ -48,6 +48,30 @@
             </template>
 					</template>
 				</el-table-column>
+			<el-table-column		
+					v-else-if="l.label == 'Signal'"
+					:label="l.label"
+					:prop="l.value"
+					:key="l.key"
+          :min-width="l.minWidth"
+					:sortable="
+						[
+							'Signal'
+						].indexOf(l.label) !== -1
+							? 'custom'
+							: false
+					"
+				>
+					<template slot-scope="scope">
+						<!-- {{ scope.row.Signal }} -->
+						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
+						<el-tooltip effect="dark" placement="top" style="display: inline">
+							<span slot="content" v-html="textContent[scope.row[l.value]]">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+						</el-tooltip>
+					</template>
+				</el-table-column>
         <el-table-column
           v-else
           align="center"
@@ -123,7 +147,7 @@
                   <el-tooltip
 									class="item"
 									effect="dark"
-									content="view backtest results"
+									content="view screen results"
 									placement="bottom-start"
 								>
 									<el-button
@@ -175,7 +199,7 @@
 </template>
 
 <script>
-import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm } from '@/service/service'
+import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm, getScreenResults } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
 const debounce = require('lodash/debounce')
 
@@ -211,20 +235,75 @@ export default {
           value: 'direction',
           key: 'direction'
         },
-        {
-          label: 'Screen',
-          value: 'description',
-          key: 'description',
-          minWidth: '150px' 
-        },
+        // {
+        //   label: 'Screen',
+        //   value: 'description',
+        //   key: 'description',
+        //   minWidth: '150px' 
+        // },
         {
           label: 'Signal',
-          value: 'signal',
-          key: 'signal'
+          value: 'signals',
+          key: 'signals'
         }
       ],
       tableData: [],
-      isShowLastSignalDate: false
+      isShowLastSignalDate: false,
+      textContent: {
+					'MA':"This strategy utilizes the crossover of closing prices and moving averages as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MAGap':"This strategy determines trading signals by comparing the difference between the moving average of the current day and the previous day.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MACDHist':"This strategy uses the crossover signals of the MACD histogram as trading signals.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'MACDHistGap':"This strategy determines trading signals by comparing the difference between the MACDHist and the previous day's value.<br/>It can further specify the direction of trades and operating rules,<br/>such as determining long signals after a golden cross and short signals after a death cross.",
+					'Hammer followed by a rise':"If the previous day's candlestick shows a long lower shadow,<br/>indicating support at the bottom,<br/>a long signal is generated when the price rises above a certain threshold after the opening.",
+					'Shooting Star followed by a fall':"If the previous day's candlestick shows a long upper shadow,<br/>indicating resistance at the top,<br/>a short signal is generated when the price falls below a certain threshold after the opening.",
+					'UpTrend Pattern':"When the price surpasses the upward trendline connecting the peak points of an uptrend,<br/>it indicates a potential future rise and generates a long signal.",
+					'DownTrend Pattern':"When the price falls below the downward trendline connecting the trough points of a downtrend,<br/>it indicates a potential future decline and generates a short signal.",
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':"stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
+					'Optix #1':"stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35.",
+					'Symbol Close > its\' MA200 and Optix < 30':"stocks that are above their 200-day moving average with an Optix less than 30.",
+					'Optix #2':"stocks that are above their 200-day moving average with an Optix less than 30.",
+					'Optix #4':"stocks that Optix crossbelow 0.5.",
+					'Optix #5': 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
+					'Optix #6': 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
+					'Optix #7': 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
+					'Optix MA10 < 30 and Optix < 20':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'Optix #3':"Optix indicators with a 10-day moving average less than 30 and that day's Optix value is less than 20.",
+					'Optix #5':'stocks that are above their 200-day moving average with an Optix 5-day moving average less than 35 then above 43.',
+					'Optix #6':'stocks that are above their 200-day moving average with an Optix 10-day moving average less than 35 then above 43.',
+					'Optix #7':'stocks that are above their 200-day moving average with an Optix less than 30 then above 43.',
+					'Price Breakout':"When the closing price of a stock ranks above 0 in relation to the closing prices of the past 21 trading days, <br/>a golden cross occurs, indicating an upward breakout and generating a long signal. <br/>This suggests that the stock's price has entered a breakout phase and is likely to continue rising.",
+					'High Points':"When the highest price of a stock ranks above 100 in relation to the highest prices of the<br/> past 13 trading days (higher stock prices correspond to higher rankings), <br/>it forms a 13-day new high and generates a long signal. This indicates that <br/>the stock is experiencing a positive breakthrough and is in an upward trend.",
+					'Low Points':"When the lowest price of a stock ranks below 0 in relation to the lowest prices of the past 13 trading days, <br/>it forms a 13-day new low and generates a short signal. <br/>This indicates that the stock is in a downtrend and can be shorted.",
+					'RSI':"When the RSI indicator forms a golden cross above 40, it suggests that the indicator is about to<br/>recover from an oversold state to the midpoint, indicating a potential long signal. <br/>RSI can reflect whether a stock is in an overbought or oversold condition <br />but should be used in conjunction with the trend analysis.",
+					'Head and Shoulders Top': 'The stock price rises from the left shoulder to a peak, falls back to the support level, <br/>then rises higher to form a head, and then falls back to the support level again. Afterwards, the price rises to the height of the left shoulder <br/>to form the right shoulder, followed by a significant decline, breaking through the bottom of the pattern and continuing to decline. <br/>Head and shoulders tops are typical bear market signals.',
+					'Head and Shoulders Bottom': 'Usually formed after a sharp market decline, indicating a market reversal. The pattern consists of the left shoulder, <br/>head, right shoulder, and neckline. The middle valley (head) is the deepest, while <br/>the front and back valleys (left and right shoulders) are shallower and almost symmetrical, forming <br/>a head and shoulders bottom shape.',
+					'Double Top': 'Composed of two similar high points, shaped like the letter "M". The formation of a <br/>double top pattern is a reversal signal, indicating that prices will fall.',
+					'Double Bottom': "Also known as a W bottom, formed when the low points of a stock price's two consecutive <br/>declines are roughly the same. It is a bullish reversal pattern.",
+					'Triple Tap': 'Triple Tap refers to a scenario where stocks or other assets exhibit repeated bounces off <br/>the support line (the lower boundary of the price range). This pattern is often seen <br/>as a positive signal that stock prices are experiencing strong buying support near the support line.  <br/>By observing this pattern, investors may perceive the support line as an important price level that <br/>may have a positive impact on prices and may be a suitable buying opportunity.',
+					'Rounding Bottom': `Rounding bottom is a chart pattern that's used in technical analysis. It's identified by <br/>a series of price movements that graphically form the shape of a "U". Rounding bottoms <br/>are found at the end of extended downward trends and signify a reversal in long-term price movements.`,
+					'Ascending Channel': "Ascending channel is the price action contained between upward sloping parallel lines. <br/>Higher highs and higher lows characterize this price pattern. Before traders take a short position <br/>when price breaks below the lower channel line of an ascending channel, they should look <br/>for other signs that show weakness in the pattern.",
+					'Descending Channel': "Descending channel is a chart pattern that indicates a downward trend in a security's price. <br/>Visually, a descending channel angles downward, from a high point to a lower point. The idea behind the descending channel <br/>is that once established, it may signify a continuation of lower high and low prices. Once the trendlines are solid and extended, <br/>traders can get a sense of points of price support and resistance.",
+					'Trend': 'Closing price above the 252-day moving average is considered as Uptrend.<br/>Closing price below the 252-day moving average is considered as Downtrend.<br/>The whole backtest period is considered as ALL.',
+					'ExpectedReturn': 'ExpectedReturn = (WinRate * ProfitTarget - (100.0 - WinRate) * StopLoss) / 100.0',
+					'Symbol All Time High': 'Symbol All-Time High is the highest closing price a symbol has reached in its trading history. <br/>Symbols that hit all-time high are often viewed as positive indicators, as it shows that investor <br/>confidence and demand for the symbol is continuing to grow.',
+					'Symbol All Time Low': 'Symbol All-Time Low refers to the lowest closing price the symbol has ever traded at over its entire history. <br/>It indicates the symbol has lost significant value compared to its past performance. Investors <br/>view all-time low as a sign of deep trouble.',
+					'Symbol 52 Weeks High': 'Symbol 52-Week High is the highest closing price at which a symbol has traded in the last 52 weeks (1 year). <br/>A symbol hitting a new 52-week high is often seen as a positive technical indicator that the symbol <br/>is gaining momentum and is in an uptrend.',
+					'Symbol 52 Weeks Low': 'Symbol 52-Week Low is the lowest closing price at which a symbol has traded in the past 52 weeks (1 year). <br/>Symbols trading at or near 52-week lows are generally considered to be in a downtrend or under significant <br/>selling pressure. 52-week lows can trigger technical sell signals and further downward momentum as investors try to cut their losses.',
+					'Symbol 4 Weeks High': "Symbol 4-Week High refers to the highest closing price at which a symbol has traded in the last 4 weeks (1 month). <br/>It is a shorter-term technical indicator that gives an idea of a symbol's recent price performance. <br/>Symbols that make new four-week highs are often seen as having positive short-term momentum because they are trading <br/>at the highest price levels of the past month.",
+					'Symbol 4 Weeks Low': "Symbol 4-Week Low is the lowest closing price at which a symbol has traded in the past 4 weeks (1 month). Tracking whether <br/>a symbol is near its 4-week low gives an idea of how weak the symbol's recent price has been compared <br/>to the past month. Symbols trading at or near 4-week lows are usually considered to be under short-term selling pressure <br/>or in a recent downtrend.",
+					'Symbol 13 Weeks High': 'Symbol 13-Week High is the highest closing price at which a symbol has traded in the past 13 weeks (3 months). <br/>Symbols that make new 13-week high are often seen as having positive medium-term momentum because they are <br/>trading at their highest levels of the past quarter. A new 13-week high can be a bullish signal that <br/>a symbol is in an uptrend.',
+					'Symbol 13 Weeks Low': "Symbol 13-Week Low refers to the lowest closing price a symbol has traded at over the past 13 weeks (3 months). <br/>Symbols trading at or near their 13-week lows are often seen as being in a medium-term downtrend or under selling <br/>pressure. The 13-week low gives a longer-term view on a symbol's recent price weakness. Hitting a new 13-week <br/>low can be a bearish signal, suggesting the symbol is in a downward trend.",
+					'Trend Score Breakout': "When a stock's Trend Score rises above 7, it indicates a strong positive market trend. This score aggregates ten trend-following indicators, with values ranging from 0 (weakest) to 10 (strongest).",
+					'Trend Score Breakdown': "When a stock's Trend Score falls below 3, it indicates a weak market trend. This score aggregates ten trend-following indicators, with values ranging from 0 (weakest) to 10 (strongest).",
+				},
+				midTermMap: {
+					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
+					'Symbol Close > its\' MA200 and Optix < 30':'Optix #2',
+					'Optix MA10 < 30 and Optix < 20':'Optix #3',
+					'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35':'Optix #5',
+					'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35':'Optix #6',
+					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7'
+				},
     }
   },
   computed: {
@@ -251,7 +330,7 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMyScreensList(`dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
         const parseJsonOrString = (value) => {
@@ -368,7 +447,8 @@ export default {
 			}
 		},
     async handleRowClick(row) {
-      this.$emit('displayFormData', row)
+      this.$emit('displayFormData', row, true)
+      this.$emit('displayResultsData', [])
     },
     viewResults(row) {
       this.$emit('displayFormData', row)
@@ -480,8 +560,15 @@ export default {
       if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
       return ''
 		},
-    viewResults(row) {
-
+    async viewResults(row) {
+      debugger
+      const {url} = row
+      const res = await getScreenResults(url)
+      res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
+      const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
+      console.log('data', data)
+      this.$emit('displayResultsData', data)
+      this.$emit('displayFormData', row, false)
     },
     }
   }

@@ -1812,6 +1812,7 @@ export default {
             obj.index = this.panelIndex
             obj.val = response.data.file_id
             obj.criteriaCF = capitalizeFirstLetter(this.criteria)
+            obj.previewFileID = self.previewFileID
             if (self.criteria.startsWith('entry')) {
               self.$store.commit(`form/saveUsersOwnFileHash`, obj)
             }
@@ -1951,6 +1952,7 @@ export default {
 
       CIQ.addCover('Parsing the file....')
       CIQ.nprogress.start()
+      debugger
       const str = this.previewFileID
       const page = this.previewPage.page
       const startIndex = str.indexOf('HASH')
@@ -2518,6 +2520,7 @@ export default {
       const obj = {}
       obj.index = index
       obj.val = response.data.data.file_id
+      this.previewFileID = response.data.data.file_id
       obj.criteriaCF = capitalizeFirstLetter(this.criteria)
       this.$emit('getIndicatorUrl', {
         index: index,

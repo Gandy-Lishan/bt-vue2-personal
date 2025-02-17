@@ -173,7 +173,7 @@ export default {
         tableCol: [
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           {label:'Name',value:'Name',labelHtml:'Name'},
-          {label:'Optix Date',value:'Optix Date',labelHtml:'Optix Date'},
+          {label:'Optix Date',value:'Date',labelHtml:'Optix Date'},
           {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
           {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
@@ -190,13 +190,12 @@ export default {
   },
   async mounted() {
     // get the signal whose the last signal date is today
-    await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MyScreen')
-    await this.$refs['SignalsTable'].onSortChange({column: 
-      {sortable: 'custom'},
-      prop: 'last_signal_date',
-      order: 'descending'
-    })
+    // await this.$refs['SignalsTable'].onSortChange({column: 
+    //   {sortable: 'custom'},
+    //   prop: 'last_signal_date',
+    //   order: 'descending'
+    // })
   },
   methods: {
     changeTab(val) {
@@ -230,39 +229,39 @@ export default {
     displayResultsData(data) {
       // this.$refs['ScannerForm'].displayData(data)
       this.activeTab = 'Result'
-      const status = data.status
-      if(status !== 'finish' && status !== 'Finish') {
-        // 不移动
-        // this.scrollToTarget('scrollTarget', -200)
+      const results = Array.isArray(data) && data.length !== 0
+      if(!results) {
         this.clearResults()
         return
       }
-      this.displayResultList(list)
-      this.scrollToTarget('scrollTargetTable', -200)
+      this.displayResultList(data)
+      // this.scrollToTarget('scrollTargetTable', -200)
     },
-    displayFormData(data) {
+    displayFormData(data, isScroll) {
       this.$refs['ScannerForm'].displayData(data)
-      this.scrollToTarget('scrollTarget', -200)
+      if(isScroll) this.scrollToTarget('scrollTarget', -200)
     },
     displayResultList(content) {
       if(!content) return
 		  this.loading = true
-      this.$refs.filterTable.handleSizeChange(10)
+      // this.$refs.filterTable.handleSizeChange(10)
       // 把数据处理成所需格式
-       content.forEach(x => {
-        x['Close'] = x['Close'].toFixed(2)
+      //  content.forEach(x => {
+        // x['Close'] = x['Close'].toFixed(2)
 		  	// x['Alloc'] = (x['Alloc']*100).toFixed(0)
-			  x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
-			  x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
-			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
-			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
-			  x['_Signal'] = x['Signal']
-			  x['TimeInMarket'] = x['TimeInMarket']
-       })
+			  // x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
+			  // x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
+			  // x['WinRate'] = Number(x['WinRate']).toFixed(2)
+			  // x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
+			  // x['_Signal'] = x['Signal']
+			  // x['TimeInMarket'] = x['TimeInMarket']
+      //  })
+      this.$nextTick(() => {
         this.filterTableData = {
           ...this.filterTableData,
-          content
+          content: content
         }
+      })
 		    this.loading = false
     },
     clearResults() {
@@ -331,7 +330,7 @@ export default {
         else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
         else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
         else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
-    }
+    },
   }
 }
 </script>
