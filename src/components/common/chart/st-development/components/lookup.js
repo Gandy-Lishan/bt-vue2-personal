@@ -87,7 +87,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
          *             "data": {
          *                 "symbol": "KW",
          *                 "name": "Kennedy - Wilson Holdings Inc",
-         *                 "typeDisp ": "NYSE"
+         *                 "category ": "NYSE"
          *             }
          *         },
          *         {
@@ -95,7 +95,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
          *             "data": {
          *                 "symbol": "RWR",
          *                 "name": "SPDR Series Trust - SPDR DJ Wilshire REIT ETF",
-         *                 "typeDisp": "NYSEArca"
+         *                 "category": "NYSEArca"
          *             }
          *         }
          *     ];
@@ -208,12 +208,12 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.symbol,
                             name: fields.name,
-                            typeDisp: "",
-                            inceptionDisp: "",
+                            category: fields.category,
+                            inception: fields.inception,
                         };
                         concatList.push(item)
                         resultsIndexsList.push({
-                            display: [item.symbol, item.name],
+                            display: [item.symbol, item.name, item.category, item.inception],
                             data: item
                         });
                     }
@@ -224,15 +224,15 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.stock,
                             name: fields.name,
-                            typeDisp: " "
+                            category: fields.category,
+                            inception: fields.inception,
                         };
                         concatList.push(item)
                         resultsStocksList.push({
-                            display: [item.symbol, item.name],
+                            display: [item.symbol, item.name, item.category, item.inception],
                             data: item
                         });
                     }
-            
                     var resultsCustomSymbolList = [];
                     const mySymbolList = CIQ.store.getters.getMySymbollist
                     mySymbolList.forEach(element => {
@@ -240,7 +240,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                             name: element.name,
-                            typeDisp: ""
+                            category: ""
                         }
                         concatList.push(item)
                         resultsCustomSymbolList.push({
@@ -283,7 +283,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             var item = {
                                 symbol: fields.symbol,
                                 name: fields.name,
-                                typeDisp: ""
+                                category: fields.category,
+                                inception: fields.inception,
                             };
                             concatList.push(item)
                         }
@@ -296,14 +297,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                               .filter(item => item.priority > 0)
                             this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
                                 return {
-                                    display: [item.symbol, item.name],
+                                    display: [item.symbol, item.name, item.category, item.inception],
                                     data: item
                                 }
                             })
                         }else{
                             res = concatList.map(item=>{
                                 return {
-                                    display: [item.symbol, item.name],
+                                    display: [item.symbol, item.name, item.category, item.inception],
                                     data: item
                                 }
                             })
@@ -318,7 +319,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: fields.stock,
                             name: fields.name,
-                            typeDisp: " "
+                            category: fields.category,
+                            inception: fields.inception,
                         };
                         concatList.push(item)
                     }
@@ -331,14 +333,14 @@ let __js_webcomponents_lookup_ = (_exports) => {
                           .filter(item => item.priority > 0)
                         this.searchResults = res.sort((a, b) => b.priority - a.priority).map(item=>{
                             return {
-                                display: [item.symbol, item.name],
+                                display: [item.symbol, item.name, item.category, item.inception],
                                 data: item
                             }
                         })
                     }else{
                         res = concatList.map(item=>{
                             return {
-                                display: [item.symbol, item.name],
+                                display: [item.symbol, item.name, item.category, item.inception],
                                 data: item
                             }
                         })
@@ -353,6 +355,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                     var newObj = {}
                                     newObj['name'] = _obj.name
                                     newObj['url'] = _obj.stock
+                                    newObj['category'] = _obj.category
+                                    newObj['inception'] = _obj.inception
                                     return newObj
                                 })
             
@@ -361,6 +365,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                 var newObj = {}
                                 newObj['name'] = _obj.name
                                 newObj['url'] = _obj.symbol
+                                newObj['category'] = _obj.category
+                                newObj['inception'] = _obj.inception
                                 return newObj
                             })
             
@@ -372,14 +378,15 @@ let __js_webcomponents_lookup_ = (_exports) => {
                                 var item = {
                                     symbol: element,
                                     name: matchedItem.name,
-                                    typeDisp: ""
+                                    category: matchedItem.category,
+                                    inception: matchedItem.inception,
                                 }
                                 if (
                                     item.symbol.toUpperCase().indexOf(text.toUpperCase()) !== -1 ||
                                     item.name.toUpperCase().indexOf(text.toUpperCase()) !== -1
                                 ){
                                     results.push({
-                                        display: [item.symbol, item.name],
+                                        display: [item.symbol, item.name, item.category, item.inception],
                                         data: item
                                     });
                                 }         
@@ -396,7 +403,6 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         var item = {
                             symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                             name: element.name,
-                            typeDisp: ""
                         }
                         
                         if (
@@ -423,7 +429,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             var item = {
                                 symbol: res.stock || res.symbol,
                                 name: res.name,
-                                typeDisp: "",
+                                category: "",
                                 market: element.market,
                             }
                             
