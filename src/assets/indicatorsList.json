@@ -31375,7 +31375,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IGM Optix",
+        "chart_name": "IGM Optix",
         "url": "etf_igm",
         "updated": "Daily"
     },
@@ -31607,11 +31607,6 @@
     {
         "chart_name": "PLTR Fund Flow",
         "url": "etf_pltr_flow",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "PLTR Optix",
-        "url": "etf_pltr",
         "updated": "Daily"
     },
     {
@@ -52930,7 +52925,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "KBWP Optix",
+        "chart_name": "KBWP Optix",
         "url": "etf_kbwp",
         "updated": "Daily"
     },
@@ -53060,7 +53055,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCI Optix",
+        "chart_name": "PSCI Optix",
         "url": "etf_psci",
         "updated": "Daily"
     },
@@ -53085,7 +53080,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "ACWX Optix",
+        "chart_name": "ACWX Optix",
         "url": "etf_acwx",
         "updated": "Daily"
     },
@@ -53100,7 +53095,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCU Optix",
+        "chart_name": "PSCU Optix",
         "url": "etf_pscu",
         "updated": "Daily"
     },
@@ -53130,7 +53125,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "COMP Optix",
+        "chart_name": "COMP Optix",
         "url": "etf_comp",
         "updated": "Daily"
     },
@@ -53140,7 +53135,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "NDX Optix",
+        "chart_name": "NDX Optix",
         "url": "etf_ndx",
         "updated": "Daily"
     },
@@ -54961,7 +54956,7 @@
     },
     {
         "chart_name": "HIVE Digital Technologies",
-        "url": "etf_HIVE",
+        "url": "HIVE",
         "updated": "Daily"
     },
     {
@@ -55945,137 +55940,137 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Bitwise 10 Crypto Fund Optix",
+        "chart_name": "BITW Optix",
         "url": "etf_BITW",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Ethereum Mini Trust ETF Optix",
+        "chart_name": "ETH Optix",
         "url": "etf_ETH",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale ETH Trust Optix",
+        "chart_name": "ETHE Optix",
         "url": "etf_ETHE",
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Digital Large Cap ETF Optix",
+        "chart_name": "GDLC Optix",
         "url": "etf_GDLC",
         "updated": "Daily"
     },
     {
-        "chart_name": "Strive 500 ETF Optix",
+        "chart_name": "STRV Optix",
         "url": "etf_STRV",
         "updated": "Daily"
     },
     {
-        "chart_name": "Alpha Architect Tail Risk ETF Optix",
+        "chart_name": "CAOS Optix",
         "url": "etf_CAOS",
         "updated": "Daily"
     },
     {
-        "chart_name": "Pacer US Cash Cows ETF Optix",
+        "chart_name": "COWZ Optix",
         "url": "etf_COWZ",
         "updated": "Daily"
     },
     {
-        "chart_name": "Brent Oil ETF Optix",
+        "chart_name": "BNO Optix",
         "url": "etf_BNO",
         "updated": "Daily"
     },
     {
-        "chart_name": "Global X Cloud ETF Optix",
+        "chart_name": "CLOU Optix",
         "url": "etf_CLOU",
         "updated": "Daily"
     },
     {
-        "chart_name": "Neuberger Berman Sustainable Equity Fund Optix",
+        "chart_name": "FTLS Optix",
         "url": "etf_FTLS",
         "updated": "Daily"
     },
     {
-        "chart_name": "Invesco S&P 500 Quality ETF Optix",
+        "chart_name": "SPHQ Optix",
         "url": "etf_SPHQ",
         "updated": "Daily"
     },
     {
-        "chart_name": "Cambria Yield ETF Optix",
+        "chart_name": "SYLD Optix",
         "url": "etf_SYLD",
         "updated": "Daily"
     },
     {
-        "chart_name": "Pacer US Small Cap ETF Optix",
+        "chart_name": "CALF Optix",
         "url": "etf_CALF",
         "updated": "Daily"
     },
     {
-        "chart_name": "Renaissance IPO ETF Optix",
+        "chart_name": "IPO Optix",
         "url": "etf_IPO",
         "updated": "Daily"
     },
     {
-        "chart_name": "Global X Bitcoin Strategy ETF Optix",
+        "chart_name": "BTRN Optix",
         "url": "etf_BTRN",
         "updated": "Daily"
     },
     {
-        "chart_name": "Third Point Investors Limited Optix",
+        "chart_name": "Third Point Investors Limited",
         "url": "TPOU",
         "updated": "Daily"
     },
     {
-        "chart_name": "SPDR S&P 400 Mid Cap Growth ETF Optix",
+        "chart_name": "MDYG Optix",
         "url": "etf_MDYG",
         "updated": "Daily"
     },
     {
-        "chart_name": "Madison Small Cap Fund Optix",
+        "chart_name": "MASMX Optix",
         "url": "etf_MASMX",
         "updated": "Daily"
     },
     {
-        "chart_name": "Vanguard Intl High Div ETF Optix",
+        "chart_name": "VYMI Optix",
         "url": "etf_VYMI",
         "updated": "Daily"
     },
     {
-        "chart_name": "VanEck Wide Moat ETF Optix",
+        "chart_name": "MOAT Optix",
         "url": "etf_MOAT",
         "updated": "Daily"
     },
     {
-        "chart_name": "First Trust Clean Edge Smart Grid ETF Optix",
+        "chart_name": "GRID Optix",
         "url": "etf_GRID",
         "updated": "Daily"
     },
     {
-        "chart_name": "NXG Cushing Midstream Energy Fund Optix",
+        "chart_name": "SRV Optix",
         "url": "etf_SRV",
         "updated": "Daily"
     },
     {
-        "chart_name": "First Trust Nasdaq Food ETF Optix",
+        "chart_name": "FTXG Optix",
         "url": "etf_FTXG",
         "updated": "Daily"
     },
     {
-        "chart_name": "ARK Innovation ETF Optix",
+        "chart_name": "ARKK Optix",
         "url": "etf_ARKK",
         "updated": "Daily"
     },
     {
-        "chart_name": "ARK Genomic ETF Optix",
+        "chart_name": "ARKG Optix",
         "url": "etf_ARKG",
         "updated": "Daily"
     },
     {
-        "chart_name": "Global X China Consumer ETF Optix",
+        "chart_name": "CHIQ Optix",
         "url": "etf_CHIQ",
         "updated": "Daily"
     },
     {
-        "chart_name": "Invesco MSCI Sustainable ETF Optix",
+        "chart_name": "ERTH Optix",
         "url": "etf_ERTH",
         "updated": "Daily"
     },
@@ -59832,6 +59827,21 @@
     {
         "chart_name": "5-Year Treasury RelTrend Score",
         "url": "five_reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "January Model",
+        "url": "january_model",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "January Model Signal",
+        "url": "january_model_signal",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX 1-Year Sharp Ratio 6-Month SMA",
+        "url": "spx_sharpe_6_month_ma",
         "updated": "Daily"
     }
 ]
