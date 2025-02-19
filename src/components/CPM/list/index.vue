@@ -21,7 +21,27 @@ export default {
 <style lang="less" scoped>
 .my-indicator-list-container {
   min-height: 74vh;
-  margin: 50px 50px 0px 50px;
+  // margin: 50px 50px 0px 50px;
   background-color: #ffffff;
+  padding-top: 50px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+@media (min-width: 768px) {
+  .my-indicator-list-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .my-indicator-list-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .my-indicator-list-container {
+      width: 1170px;
+  }
 }
 </style>

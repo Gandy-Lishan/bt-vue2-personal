@@ -267,6 +267,7 @@ a:hover{
 }
 .home-container {
 	margin: 0 auto;
+	background-color: #fff;
 	//flex-grow: 1; /* 让内容占据剩余的空间，推动 footer 到底部 */
 }
 @media (min-width: 375px) and (max-width: 767px) {
