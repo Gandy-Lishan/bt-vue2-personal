@@ -177,7 +177,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 			quoteFeeds: [
 				{
 					quoteFeed: resources.quoteFeed,
-					behavior: { refreshInterval: 1*60*60*1, bufferSize: 200},
+					behavior: { refreshInterval: 0, bufferSize: 200},
 					// filter: () => {}
 				}
 			],
