@@ -178,7 +178,7 @@ export default {
       { value: 'Trend Score CrossBelow 3', label: 'Trend Score CrossBelow 3' },
       { value: 'Hammer followed by a rise', label: 'Hammer followed by a rise' },
       { value: 'Shooting Star followed by a fall', label: 'Shooting Star followed by a fall' },
-      { value: 'RSI CrossAbove 4', label: 'RSI CrossAbove 4' },
+      { value: 'RSI CrossAbove 40', label: 'RSI CrossAbove 40' },
       { value: 'RSI CrossBelow 75', label: 'RSI CrossBelow 75' },
       { value: 'Symbol Close CrossAbove SMA20', label: 'Symbol Close CrossAbove SMA20' },
       { value: 'Symbol Close CrossBelow SMA20', label: 'Symbol Close CrossBelow SMA20' },
