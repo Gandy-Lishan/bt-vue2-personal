@@ -20,10 +20,10 @@
             cellspacing="0" width="100%">
             <thead>
               <tr>
-                <th :class="getSortClass('underlying_name')" @click="sortTable('underlying_name')" tabindex="0" aria-controls="example"
+                <th :class="getSortClass('chart_name')" @click="sortTable('chart_name')" tabindex="0" aria-controls="example"
                   rowspan="1" colspan="1" aria-sort="descending" aria-label="Date: activate to sort column ascending"
                   >Name</th>
-                <th :class="getSortClass('group')" @click="sortTable('group')" tabindex="0" aria-controls="example"
+                <th :class="getSortClass('sub_type')" @click="sortTable('sub_type')" tabindex="0" aria-controls="example"
                   rowspan="1" colspan="1" aria-label="Study Title: activate to sort column ascending"
                   >Group</th>
                 <th :class="getSortClass('timeframe')" @click="sortTable('timeframe')" tabindex="0" aria-controls="example"
@@ -47,12 +47,12 @@
               <tr v-for="(forecast, index) in paginatedData" :key="index">
                 <td>
                   <a :href="postLink(forecast)" target="_blank" class="item-name primary-link">
-                    {{ forecast.underlying_name }}
+                    {{ forecast.chart_name }}
                   </a>
                 </td>
 
                 <td>
-                  <center>{{ forecast.group }}</center>
+                  <center>{{ forecast.sub_type }}</center>
                 </td>
 
                 <td>
@@ -261,8 +261,8 @@ export default {
         return this.extreme.filter(item => {
             // 获取所有需要匹配的属性
             const properties = [
-              item['underlying_name'],
-              item['group'],
+              item['chart_name'],
+              item['sub_type'],
               item['timeframe'],
             ];
           // 检查任意一个属性是否匹配

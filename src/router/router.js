@@ -175,6 +175,12 @@ const routes = [
 				name: 'CPMResults',
 				component: resolve =>
 					require(['@/components/CPM/results/index.vue'], resolve)
+			},
+			{
+				path: 'symbol',
+				name: 'SymbolCorrelation',
+				component: resolve =>
+					require(['@/components/CPM/SymbolCorrelation.vue'], resolve)
 			}
 		]
 	},

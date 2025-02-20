@@ -78,15 +78,35 @@
 
 <script>
 export default {
+  props: {
+    dashBoardData: {
+      type: Object,
+      required: true,
+    }
+  },
   data() {
     return {
-      stocksShortRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
-      stocksMediumRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
-      bondsRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
-      oilRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
-      goldRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
-      agRiskImage: 'model_risk_stocks_short_01_13_2025_6ebcd8c7-b3ac-4db2-9438-11730ca677b6.jpg',
     }
+ },
+ computed: {
+  stocksShortRiskImage() {
+    return this.dashBoardData.stocks_short_risk_image
+  },
+  stocksMediumRiskImage() {
+    return this.dashBoardData.stocks_medium_risk_image
+  },
+  bondsRiskImage() {
+    return this.dashBoardData.bonds_risk_image
+  },
+  oilRiskImage() {
+    return this.dashBoardData.oil_risk_image
+  },
+  goldRiskImage() {
+    return this.dashBoardData.gold_risk_image
+  },
+  agRiskImage() {
+    return this.dashBoardData.ag_risk_image
+  }
  },
  methods: {
    getChartUrl(symbol) {

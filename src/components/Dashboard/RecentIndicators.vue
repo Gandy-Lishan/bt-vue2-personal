@@ -64,7 +64,7 @@
                 <td>
                   <center>
                     <img 
-                      :src="require(`@/assets/bull_bear_${forecast.sentiment}.gif`)"
+                      :src="`https://users.sentimentrader.com/static/img/bull_bear_${forecast.sentiment}.gif`"
                       :data-order="forecast.sentiment"
                       :title="forecast.sentiment"
                     />
@@ -128,37 +128,6 @@ export default {
   name: 'RecentIndicators',
   data() {
     return {
-      forecasts: [
-        // Sample data
-        {
-          date: new Date(),
-          url: 'some-url',
-          title: 'Blog Title',
-          chart_url: 'chart-url',
-          chart_name: 'Chart Name',
-          last_value: 100,
-          sentiment: 3,
-        },
-        {
-          date: new Date(),
-          url: 'some-url-2',
-          title: 'Blog Title 2',
-          chart_url: 'chart-url-2',
-          chart_name: 'Chart Name 2',
-          last_value: 50,
-          sentiment: 2,
-        },
-        {
-          date: new Date(),
-          url: 'some-url-3',
-          title: 'Blog Title 3',
-          chart_url: 'chart-url-3',
-          chart_name: 'Chart Name 3',
-          last_value: 50,
-          sentiment: 3,
-        }
-        // Add more data as needed
-      ],
       filterData: [],
       start: 1,
       end: 25,
@@ -168,6 +137,12 @@ export default {
       currentSortDirection: '',
       searchInput: '',
     };
+  },
+  props: {
+    forecasts: {
+      type: Array,
+      required: true,
+    }
   },
   computed: {
     totalPages() {
@@ -185,9 +160,15 @@ export default {
       return this.filterData.length
     },
   },
-  mounted() {
-    this.filterData = this.forecasts
-  },
+  watch: {
+		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
+		forecasts: {
+			async handler(newValue, oldValue){
+        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+			},
+			deep: true
+		},
+	},
   methods: {
     formatDate(date) {
       // Formatting the date to 'Month Day, Year' format (like 'January 01, 2025')
