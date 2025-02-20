@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="3. Start Date" prop="start_date">
+          <el-form-item label="2. Start Date" prop="start_date">
             <el-date-picker
               v-model="data.start_date"
               type="date"
@@ -20,7 +20,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item prop="end_date" label="4. End Date">
+          <el-form-item prop="end_date" label="3. End Date">
               <el-date-picker
                 v-model="data.end_date"
                 type="date"
@@ -32,14 +32,27 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="5. Age" prop="age">
-            <el-input v-model.number="data.age"></el-input>
+          <el-button type="warning" @click="resetForm('ruleForm')" size="small">Clear Form</el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24">
+        <el-col :span="16">
+          <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
+            <div class="ticker-select">
+              <el-autocomplete
+                v-model="comparison_ticker"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="Please input"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </div>
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-button type="primary" @click="submitForm('ruleForm')" size="small">View Correlation</el-button>
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">Submit</el-button>
-        <el-button @click="resetForm('ruleForm')">Reset</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -128,6 +141,24 @@ export default {
   /deep/ .el-form-item__label {
     font-weight: 600;
     color: #333;
+    width: 100%;
   }
+  /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 100%;
+  }
+  /deep/ .el-input__inner {
+    margin: 0px;
+  }
+  /deep/ .el-button--warning {
+    width: 100%;
+    margin-top: 40px;
+  }
+  /deep/ .el-button--primary {
+    width: 100%;
+    margin-top: 40px;
+  }
+  // .ticker-select {
+  //   border: 1px solid #DCDFE6;
+  // }
 }
 </style>

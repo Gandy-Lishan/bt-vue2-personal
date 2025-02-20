@@ -2061,7 +2061,7 @@ export async function getSmartDumbSentiment() {
 		
 			return new Promise((resolve, reject) => {
 				axios
-					.get(path)
+					.get(path, { withCredentials: true, retry: null })
 					.then(res => {
 						resolve(res)
 					})
