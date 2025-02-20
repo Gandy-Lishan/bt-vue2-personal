@@ -175,6 +175,11 @@ export default {
           keyPath: '12',
           path: '/trend_score'
         },
+        {
+          label: 'My Screen',
+          keyPath: '13',
+          path: '/my_screen'
+        },
       ],
       activeIndex: '1',
     }
@@ -228,7 +233,7 @@ export default {
       if(label === 'Smart Stock Scanner') {
         return (getTokenRole() == 2 && getTokenRole() != 'None')
       }
-      if(label === 'AI Trading') {
+      if(label === 'AI Trading' || label === 'My Screen') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {

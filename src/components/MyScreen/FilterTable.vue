@@ -269,7 +269,7 @@ export default {
 				}
 			}
 			// 字符串类型排序
-			if(['Market','_Signal','Direction'].indexOf(colName) !== -1){
+			if(['Market','signals','Direction', 'Symbol'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
