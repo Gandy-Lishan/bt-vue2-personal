@@ -172,12 +172,12 @@ export default {
         title: 'Filter Condition Preview',
         tableCol: [
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
-          {label:'Name',value:'Name',labelHtml:'Name'},
-          {label:'Optix Date',value:'Date',labelHtml:'Optix Date'},
-          {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
-          {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
-          {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
-          {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
+          // {label:'Name',value:'Name',labelHtml:'Name'},
+          // {label:'Optix Date',value:'Date',labelHtml:'Optix Date'},
+          // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
+          // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
+          // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
+          // {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
         ]
       },
     }
@@ -228,12 +228,13 @@ export default {
     },
     displayResultsData(data) {
       // this.$refs['ScannerForm'].displayData(data)
-      this.activeTab = 'Result'
       const results = Array.isArray(data) && data.length !== 0
       if(!results) {
+        this.popUpMsgBox(`No results found. Adjust the parameters and save again.`)
         this.clearResults()
         return
       }
+      this.activeTab = 'Result'
       this.displayResultList(data)
       // this.scrollToTarget('scrollTargetTable', -200)
     },

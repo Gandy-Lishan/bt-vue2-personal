@@ -413,10 +413,11 @@ export default {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
     async applySort() {
+      debugger
       let { prop:colName, order:sortingOrder } = this.currentSort;
       console.log(colName, sortingOrder)
 			// 日期类型排序
-      if (['last_signal_date'].indexOf(colName) !== -1) {
+      if (['Date'].indexOf(colName) !== -1) {
         this.filterData.sort((a, b) => {
           const dateA = a[colName] ? new Date(a[colName]) : null;
           const dateB = b[colName] ? new Date(b[colName]) : null;
@@ -437,7 +438,7 @@ export default {
         });
       }
 			// 字符串类型排序
-			if(['name','symbol','timeframe'].indexOf(colName) !== -1){
+			if(['name','Symbol','timeframe', 'signals', 'last_signal_date', 'direction', 'category'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
@@ -446,14 +447,6 @@ export default {
 				}
 			}
 		},
-    async handleRowClick(row) {
-      this.$emit('displayFormData', row, true)
-      this.$emit('displayResultsData', [])
-    },
-    viewResults(row) {
-      this.$emit('displayFormData', row)
-      this.$emit('displayResultsData', row)
-    },
     async copySignals(data) {
       debugger
       const _this = this
@@ -473,15 +466,15 @@ export default {
 					// 获取参数并准备复制
 					const params = {
 						...data,
-						name: copyName
+						name: copyName,
+            description: JSON.stringify([])
 					}
-          const prepareData = this.reassignBTAttributes(params)
+          // const prepareData = this.reassignBTAttributes(params)
 					// 发起复制请求
-					const res = await saveMyScreenForm(prepareData)
+					const res = await saveMyScreenForm(params)
           console.log('res', res)
           const code = res.data.code
           if(code == 211) {
-            await _this.$emit('changeSecondTab', 'MyScreen')
             this.popUpMsgBox('Copy successfully')
           }else if(code == 411) {
             this.popUpMsgBox('The signal has been copied')
@@ -569,6 +562,15 @@ export default {
       console.log('data', data)
       this.$emit('displayResultsData', data)
       this.$emit('displayFormData', row, false)
+    },
+    
+    async handleRowClick(row) {
+      const {url} = row
+      const res = await getScreenResults(url)
+      res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
+      const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
+      this.$emit('displayResultsData', data)
+      this.$emit('displayFormData', row, true)
     },
     }
   }
