@@ -424,4 +424,19 @@ export default {
     margin: 0 0 3px 0;
   }
 }
+@media (min-width: 768px) {
+  .CPMResults-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .CPMResults-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .CPMResults-container {
+      width: 1170px;
+  }
+}
 </style>
