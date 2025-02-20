@@ -11,6 +11,7 @@ import _this from "@/main";
 import {decodeBase64} from '@/utils'
 import {recoverSymbolOptixUrl,getSymbolInfo} from '@/utils/globalFunc'
 import { formatStandardTime } from '@/utils'
+import { printConsole } from '@/utils'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -384,17 +385,18 @@ quoteFeedSimulator.fetchUpdateData = function (symbol, startDate, params,cb){
        "&start="+start + 
        "&freq=" + freq;
 
-   // console.log("update: ",queryUrl);
+    // disable quotefeed update
+    printConsole("update: ");
 
-    this.sendAjax(queryUrl,function(status, response){
-        if (status == 200){
-            var newQuotes = quoteFeedSimulator.formatChartData(response);
+    // this.sendAjax(queryUrl,function(status, response){
+    //     if (status == 200){
+    //         var newQuotes = quoteFeedSimulator.formatChartData(response);
             
-            cb({quotes:newQuotes});
-        }else{
-            cb({error:response ? response:status});
-        }    
-    });
+    //         cb({quotes:newQuotes});
+    //     }else{
+    //         cb({error:response ? response:status});
+    //     }    
+    // });
 };
 
 quoteFeedSimulator.fetchPaginationData = function(symbol, suggestedStartDate, endDate, params,cb){
