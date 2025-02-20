@@ -65,11 +65,11 @@
 					<template slot-scope="scope">
 						<!-- {{ scope.row.Signal }} -->
 						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
-						<el-tooltip effect="dark" placement="top" style="display: inline">
+						<!-- <el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent[scope.row[l.value]]">
 							</span>
 							<i class="iconfont icon-wenhao"></i>
-						</el-tooltip>
+						</el-tooltip> -->
 					</template>
 				</el-table-column>
         <el-table-column

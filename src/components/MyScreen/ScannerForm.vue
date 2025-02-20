@@ -142,7 +142,7 @@ export default {
         name: '',
         direction: 'Long',
         category: 'Communication Services',
-        signals: 'MA'
+        signals: 'Trend Score CrossAbove 7'
       },
       rowUrl: null,
       isPolling: false,
@@ -174,194 +174,44 @@ export default {
         { value: 'Utilities', label: 'Utilities', disabled: false}
       ],
       signalOptions: [
-        {
-          value: 'MA',
-          label: 'MA',
-          check: true
-        },
-        {
-          value: 'MAGap',
-          label: 'MAGap',
-          check: true
-        },
-        {
-          value: 'MACDHist',
-          label: 'MACDHist',
-          check: true
-        },
-        {
-          value: 'MACDHistGap',
-          label: 'MACDHistGap',
-          check: true
-        },
-        {
-          value: 'Hammer followed by a rise',
-          label: 'Hammer followed by a rise',
-          check: true
-        },
-        {
-          value: 'Shooting Star followed by a fall',
-          label: 'Shooting Star followed by a fall',
-          check: true
-        },
-        {
-          value: 'UpTrend Pattern',
-          label: 'UpTrend Pattern',
-          check: true
-        },
-        {
-          value: 'DownTrend Pattern',
-          label: 'DownTrend Pattern',
-          check: true
-        },
-        {
-          value: 'Optix #1',
-          label: 'Optix #1',
-          check: true
-        },
-        {
-          value: 'Optix #2',
-          label: 'Optix #2',
-          check: true
-        },
-        {
-          value: 'Optix #3',
-          label: 'Optix #3',
-          check: true
-        },
-        {
-          value: 'Optix #4',
-          label: 'Optix #4',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
-          label: 'Optix #5',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
-          label: 'Optix #6',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
-          label: 'Optix #7',
-          check: true
-        },
-        {
-          value: 'PriceBreakout',
-          label: 'PriceBreakout',
-          check: true
-        },
-        {
-          value: 'HighPoints',
-          label: 'HighPoints',
-          check: true
-        },
-        {
-          value: 'LowPoints',
-          label: 'LowPoints',
-          check: true
-        },
-        {
-          value: 'RSI',
-          label: 'RSI',
-          check: true
-        },
-        /** cpm pattern */
-        {
-          value: 'Head and Shoulders Top',
-          label: 'Head and Shoulders Top',
-          check: true
-        },
-        {
-          value: 'Head and Shoulders Bottom',
-          label: 'Head and Shoulders Bottom',
-          check: true
-        },
-        {
-          value: 'Double Top',
-          label: 'Double Top',
-          check: true
-        },
-        {
-          value: 'Double Bottom',
-          label: 'Double Bottom',
-          check: true
-        },
-        {
-          value: 'Triple Tap',
-          label: 'Triple Tap',
-          check: true
-        },
-        {
-          value: 'Rounding Bottom',
-          label: 'Rounding Bottom',
-          check: true
-        },
-        {
-          value: 'Ascending Channel',
-          label: 'Ascending Channel',
-          check: true
-        },
-        {
-          value: 'Descending Channel',
-          label: 'Descending Channel',
-          check: true
-        },
-        /** 8 high-low signals */
-        {
-          value: 'Symbol All-Time High',
-          label: 'Symbol All-Time High',
-          check: true
-        },
-        {
-          value: 'Symbol All-Time Low',
-          label: 'Symbol All-Time Low',
-          check: true
-        },
-        {
-          value: 'Symbol 52-Week High',
-          label: 'Symbol 52-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 52-Week Low',
-          label: 'Symbol 52-Week Low',
-          check: true
-        },
-        {
-          value: 'Symbol 4-Week High',
-          label: 'Symbol 4-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 4-Week Low',
-          label: 'Symbol 4-Week Low',
-          check: true
-        },
-        {
-          value: 'Symbol 13-Week High',
-          label: 'Symbol 13-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 13-Week Low',
-          label: 'Symbol 13-Week Low',
-          check: true
-        },
-        // trend score
-        {
-          value: 'Trend Score Breakout',
-          label: 'Trend Score Breakout',
-          check: true
-        },
-        {
-          value: 'Trend Score Breakdown',
-          label: 'Trend Score Breakdown',
-          check: true
-        },
+      { value: 'Trend Score CrossAbove 7', label: 'Trend Score CrossAbove 7' },
+      { value: 'Trend Score CrossBelow 3', label: 'Trend Score CrossBelow 3' },
+      { value: 'Hammer followed by a rise', label: 'Hammer followed by a rise' },
+      { value: 'Shooting Star followed by a fall', label: 'Shooting Star followed by a fall' },
+      { value: 'RSI CrossAbove 4', label: 'RSI CrossAbove 4' },
+      { value: 'RSI CrossBelow 75', label: 'RSI CrossBelow 75' },
+      { value: 'Symbol Close CrossAbove SMA20', label: 'Symbol Close CrossAbove SMA20' },
+      { value: 'Symbol Close CrossBelow SMA20', label: 'Symbol Close CrossBelow SMA20' },
+      { value: 'SMA20 Gap CrossAbove 0', label: 'SMA20 Gap CrossAbove 0' },
+      { value: 'SMA20 Gap CrossBelow 0', label: 'SMA20 Gap CrossBelow 0' },
+      { value: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35' },
+      { value: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35' },
+      { value: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30', label: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30' },
+      { value: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35' },
+      { value: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65', label: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65' },
+      { value: 'Symbol Close > its\' SMA200 and Optix < 30', label: 'Symbol Close > its\' SMA200 and Optix < 30' },
+      { value: 'Symbol Close < its\' SMA200 and Optix > 70', label: 'Symbol Close < its\' SMA200 and Optix > 70' },
+      { value: 'Optix SMA10 < 30 and Optix < 20', label: 'Optix SMA10 < 30 and Optix < 20' },
+      { value: 'Optix SMA10 > 70 and Optix > 80', label: 'Optix SMA10 > 70 and Optix > 80' },
+      { value: 'Optix < 0.5', label: 'Optix < 0.5' },
+      { value: 'Optix > 99.5', label: 'Optix > 99.5' },
+      { value: 'Symbol High OPR13 CrossAbove 100', label: 'Symbol High OPR13 CrossAbove 100' },
+      { value: 'Symbol 4 Weeks High', label: 'Symbol 4 Weeks High' },
+      { value: 'Symbol 4 Weeks Low', label: 'Symbol 4 Weeks Low' },
+      { value: 'Symbol 13 Weeks High', label: 'Symbol 13 Weeks High' },
+      { value: 'Symbol 13 Weeks Low', label: 'Symbol 13 Weeks Low' },
+      { value: 'Symbol 52 Weeks High', label: 'Symbol 52 Weeks High' },
+      { value: 'Symbol 52 Weeks Low', label: 'Symbol 52 Weeks Low' },
+      { value: 'Symbol All Time High', label: 'Symbol All Time High' },
+      { value: 'Symbol All Time Low', label: 'Symbol All Time Low' },
+      { value: 'Head and Shoulders Top', label: 'Head and Shoulders Top' },
+      { value: 'Head and Shoulders Bottom', label: 'Head and Shoulders Bottom' },
+      { value: 'Double Top', label: 'Double Top' },
+      { value: 'Double Bottom', label: 'Double Bottom' },
+      { value: 'Triple Tap', label: 'Triple Tap' },
+      { value: 'Rounding Bottom', label: 'Rounding Bottom' },
+      { value: 'Ascending Channel', label: 'Ascending Channel' },
+      { value: 'Descending Channel', label: 'Descending Channel' }
       ],
       rules: {
         name: [
@@ -467,7 +317,7 @@ export default {
           ...this.data,
           direction: 'Long',
           category: 'Communication Services',
-          signals: 'MA'
+          signals: 'Trend Score CrossAbove 7'
         }
         this.rowUrl = null
         this.processTips = ''
