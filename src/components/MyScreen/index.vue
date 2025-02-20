@@ -173,7 +173,7 @@ export default {
         tableCol: [
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           // {label:'Name',value:'Name',labelHtml:'Name'},
-          // {label:'Optix Date',value:'Date',labelHtml:'Optix Date'},
+          {label:'Date',value:'Date',labelHtml:'Date'},
           // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
           // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},

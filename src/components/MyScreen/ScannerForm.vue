@@ -142,7 +142,7 @@ export default {
         name: '',
         direction: 'Long',
         category: 'Communication Services',
-        signals: 'Trend Score CrossAbove 7'
+        signals: ''
       },
       rowUrl: null,
       isPolling: false,
@@ -171,47 +171,8 @@ export default {
         { value: 'S&P 500', label: 'S&P 500', disabled: false},
         { value: 'Staples', label: 'Staples', disabled: false},
         { value: 'Technology', label: 'Technology', disabled: false},
-        { value: 'Utilities', label: 'Utilities', disabled: false}
-      ],
-      signalOptions: [
-      { value: 'Trend Score CrossAbove 7', label: 'Trend Score CrossAbove 7' },
-      { value: 'Trend Score CrossBelow 3', label: 'Trend Score CrossBelow 3' },
-      { value: 'Hammer followed by a rise', label: 'Hammer followed by a rise' },
-      { value: 'Shooting Star followed by a fall', label: 'Shooting Star followed by a fall' },
-      { value: 'RSI CrossAbove 40', label: 'RSI CrossAbove 40' },
-      { value: 'RSI CrossBelow 75', label: 'RSI CrossBelow 75' },
-      { value: 'Symbol Close CrossAbove SMA20', label: 'Symbol Close CrossAbove SMA20' },
-      { value: 'Symbol Close CrossBelow SMA20', label: 'Symbol Close CrossBelow SMA20' },
-      { value: 'SMA20 Gap CrossAbove 0', label: 'SMA20 Gap CrossAbove 0' },
-      { value: 'SMA20 Gap CrossBelow 0', label: 'SMA20 Gap CrossBelow 0' },
-      { value: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35' },
-      { value: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35' },
-      { value: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30', label: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30' },
-      { value: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35' },
-      { value: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65', label: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65' },
-      { value: 'Symbol Close > its\' SMA200 and Optix < 30', label: 'Symbol Close > its\' SMA200 and Optix < 30' },
-      { value: 'Symbol Close < its\' SMA200 and Optix > 70', label: 'Symbol Close < its\' SMA200 and Optix > 70' },
-      { value: 'Optix SMA10 < 30 and Optix < 20', label: 'Optix SMA10 < 30 and Optix < 20' },
-      { value: 'Optix SMA10 > 70 and Optix > 80', label: 'Optix SMA10 > 70 and Optix > 80' },
-      { value: 'Optix < 0.5', label: 'Optix < 0.5' },
-      { value: 'Optix > 99.5', label: 'Optix > 99.5' },
-      { value: 'Symbol High OPR13 CrossAbove 100', label: 'Symbol High OPR13 CrossAbove 100' },
-      { value: 'Symbol 4 Weeks High', label: 'Symbol 4 Weeks High' },
-      { value: 'Symbol 4 Weeks Low', label: 'Symbol 4 Weeks Low' },
-      { value: 'Symbol 13 Weeks High', label: 'Symbol 13 Weeks High' },
-      { value: 'Symbol 13 Weeks Low', label: 'Symbol 13 Weeks Low' },
-      { value: 'Symbol 52 Weeks High', label: 'Symbol 52 Weeks High' },
-      { value: 'Symbol 52 Weeks Low', label: 'Symbol 52 Weeks Low' },
-      { value: 'Symbol All Time High', label: 'Symbol All Time High' },
-      { value: 'Symbol All Time Low', label: 'Symbol All Time Low' },
-      { value: 'Head and Shoulders Top', label: 'Head and Shoulders Top' },
-      { value: 'Head and Shoulders Bottom', label: 'Head and Shoulders Bottom' },
-      { value: 'Double Top', label: 'Double Top' },
-      { value: 'Double Bottom', label: 'Double Bottom' },
-      { value: 'Triple Tap', label: 'Triple Tap' },
-      { value: 'Rounding Bottom', label: 'Rounding Bottom' },
-      { value: 'Ascending Channel', label: 'Ascending Channel' },
-      { value: 'Descending Channel', label: 'Descending Channel' }
+        { value: 'Utilities', label: 'Utilities', disabled: false},
+        { value: 'NDX', label: 'NDX', disabled: false}
       ],
       rules: {
         name: [
@@ -237,11 +198,54 @@ export default {
     frequency() {
 			return this.$store.state.form.mySignalTimeframe
 		},
-    // timeframeOption() {
-    //   const currentTimeframe = this.$store.state.form.exitFrequency
-    //   console.log('周期', currentTimeframe)
-    //   return this.updateTimeframeOptions(currentTimeframe)
-    // }
+    signalOptions() {
+      if(this.data.direction === 'Short') return [
+        { value: 'Trend Score CrossBelow 3', label: 'Trend Score CrossBelow 3' },
+        { value: 'Shooting Star followed by a fall', label: 'Shooting Star followed by a fall' },
+        { value: 'RSI CrossBelow 75', label: 'RSI CrossBelow 75' },
+        { value: 'Symbol Close CrossBelow SMA20', label: 'Symbol Close CrossBelow SMA20' },
+        { value: 'SMA20 Gap CrossBelow 0', label: 'SMA20 Gap CrossBelow 0' },
+        { value: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65', label: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65' },
+        { value: 'Symbol Close < its\' SMA200 and Optix > 70', label: 'Symbol Close < its\' SMA200 and Optix > 70' },
+        { value: 'Optix SMA10 > 70 and Optix > 80', label: 'Optix SMA10 > 70 and Optix > 80' },
+        { value: 'Optix > 99.5', label: 'Optix > 99.5' },
+        { value: 'Symbol Low OPR13 CrossBelow 0', label: 'Symbol Low OPR13 CrossBelow 0' },
+        { value: 'Symbol 4 Weeks Low', label: 'Symbol 4 Weeks Low' },
+        { value: 'Symbol 13 Weeks Low', label: 'Symbol 13 Weeks Low' },
+        { value: 'Symbol 52 Weeks Low', label: 'Symbol 52 Weeks Low' },
+        { value: 'Symbol All Time Low', label: 'Symbol All Time Low' },
+        { value: 'Head and Shoulders Top', label: 'Head and Shoulders Top' },
+        { value: 'Double Top', label: 'Double Top' },
+        { value: 'Ascending Channel', label: 'Ascending Channel' }
+      ]
+      return [
+        { value: 'Trend Score CrossAbove 7', label: 'Trend Score CrossAbove 7' },
+        { value: 'Hammer followed by a rise', label: 'Hammer followed by a rise' },
+        { value: 'RSI CrossAbove 40', label: 'RSI CrossAbove 40' },
+        { value: 'Symbol Close CrossAbove SMA20', label: 'Symbol Close CrossAbove SMA20' },
+        { value: 'SMA20 Gap CrossAbove 0', label: 'SMA20 Gap CrossAbove 0' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30', label: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix < 30', label: 'Symbol Close > its\' SMA200 and Optix < 30' },
+        { value: 'Optix SMA10 < 30 and Optix < 20', label: 'Optix SMA10 < 30 and Optix < 20' },
+        { value: 'Optix < 0.5', label: 'Optix < 0.5' },
+        { value: 'Symbol High OPR13 CrossAbove 100', label: 'Symbol High OPR13 CrossAbove 100' },
+        { value: 'Symbol 4 Weeks High', label: 'Symbol 4 Weeks High' },
+        { value: 'Symbol 13 Weeks High', label: 'Symbol 13 Weeks High' },
+        { value: 'Symbol 52 Weeks High', label: 'Symbol 52 Weeks High' },
+        { value: 'Symbol All Time High', label: 'Symbol All Time High' },
+        { value: 'Head and Shoulders Bottom', label: 'Head and Shoulders Bottom' },
+        { value: 'Double Bottom', label: 'Double Bottom' },
+        { value: 'Triple Tap', label: 'Triple Tap' },
+        { value: 'Rounding Bottom', label: 'Rounding Bottom' },
+        { value: 'Descending Channel', label: 'Descending Channel' }
+      ]
+    },
+    _direction() {
+      return this.data.direction
+    }
   },
   watch: {
     frequency: {
@@ -250,6 +254,13 @@ export default {
         if(newVal) this.timeframeOption = this.updateTimeframeOptions(newVal)
       },
       deep: true
+    },
+    _direction: {
+      handler(newVal) {
+        if(newVal === 'Short') this.data.signals = 'Trend Score CrossBelow 3'
+        if(newVal === 'Long' || !newVal) this.data.signals = 'Trend Score CrossAbove 7'
+      },
+      immediate: true
     }
   },
   mounted() {
