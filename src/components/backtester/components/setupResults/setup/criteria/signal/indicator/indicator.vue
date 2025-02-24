@@ -1741,6 +1741,7 @@ export default {
       }
     },
     uploadFile(file) {
+      debugger
       console.log('文件上传', file)
       const self = this
       let suffix = ''
@@ -1754,6 +1755,7 @@ export default {
       }
       const name = file.name.replace(`.${suffix}`, '')
       const fileName = name.replace(/\s*/g, "")
+      this.si.userIndicator = fileName
       formData.append('name', fileName)
       formData.append('hash', file.hash)
       formData.append('suffix', suffix)
