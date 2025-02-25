@@ -23,16 +23,18 @@ export default {
 	watch: {
 		selectedTitle: {
 			async handler(newValue, _){
-				if(newValue === 'Symbol') this.$router.push({path: '/cpm/symbol'})
+				if(newValue === 'Symbol' && !this.$route.path.includes('/cpm/symbol')) this.$router.push({path: '/cpm/symbol'})
+				if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm'})
 			},
 			deep: true
-		}
-	},
-	mounted() {
-		if(this.$route.path.includes('symbol')) this.selectedTitle = 'Symbol'
-		else {
-			this.selectedTitle = 'CPM'
-		}
+		},
+    '$route'(to, _) {
+			if (to.path.includes('/cpm/symbol')) {
+				this.selectedTitle = 'Symbol'
+			} else {
+        this.selectedTitle = 'CPM'
+			}
+    },
 	},
 	methods: {
 
@@ -42,6 +44,7 @@ export default {
 
 <style lang="less" scoped>
 .cpm-container {
+  margin: 0 auto;
 	font-family: "Open Sans",sans-serif;
 	.strategy-header {
     display: flex;
@@ -53,7 +56,7 @@ export default {
       align-items: flex-end;
       width: 100%;
       border-bottom: 2px solid #e9e9e9;
-			padding: 30px 50px 0px 50px;
+			padding: 30px 0px 0px 0px;
     }
     .searchBox {
       align-content: flex-end;
@@ -88,11 +91,11 @@ export default {
       }
     }
 	// padding-top: 50px;
-	padding-right: 15px;
-	padding-left: 15px;
 	margin-right: auto;
 	margin-left: auto;
 }
+}
+
 @media (min-width: 768px) {
   .cpm-container {
       width: 750px;

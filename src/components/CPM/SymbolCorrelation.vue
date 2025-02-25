@@ -106,7 +106,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" @click="submitForm('Form')" size="small">View Correlation</el-button>
+          <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
         </el-col>
       </el-row>
       <el-form-item>
@@ -143,6 +143,7 @@ export default {
         stock_comparison: [],
         symbol: '',
         dropdownList: [],
+        btnLoading: false,
         startPickerOptions: {
           disabledDate: this.handleDisabledStartDate
         },
@@ -300,6 +301,7 @@ export default {
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
       if([400, 401, 404, 403, 406, 407].includes(code)) this.btnLoading = false
+      this.btnLoading = false
     },
       resetForm(formName) {
         this.$refs[formName].clearValidate()
@@ -423,7 +425,7 @@ export default {
             position: {
               align: 'right',
               y: -120,
-              x: -80
+              x: -90
             }
           },
           legend: {
@@ -539,6 +541,7 @@ export default {
 
 <style lang="less" scoped>
 .symbol-correlation-form {
+  margin-top: 30px;
   /deep/ .el-form-item__label {
     font-weight: 600;
     color: #333;
