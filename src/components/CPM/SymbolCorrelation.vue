@@ -4,7 +4,32 @@
       <el-row :gutter="24">
         <el-col :span="8">
           <el-form-item label="1. Designated Ticker" prop="benchmark">
-            <el-input v-model="data.benchmark" autocomplete="off"></el-input>
+            <el-autocomplete
+                ref="autocomplete"
+                class="inline-input"
+                v-model="data.benchmark"
+                :fetch-suggestions="querySearch"
+                placeholder="Select Ticker"
+                clearable
+                @select="
+                  (item) => {
+                    getBenchMark(item)
+                  }
+                "
+              >
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <!-- 使用 scoped slot 自定义选项 -->
+                <template slot-scope="{ item }">
+                  <div class="custom-option">
+                    <span class="symbol-label">{{
+                      item.url
+                    }}</span>
+                    <span class="symbol-url">{{
+                      item.label
+                    }}</span>
+                  </div>
+                </template>
+              </el-autocomplete>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -40,30 +65,31 @@
           <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
             <div class="ticker-select">
               <el-autocomplete
-            ref="autocomplete"
-						class="inline-input"
-						v-model="symbol"
-						:fetch-suggestions="querySearch"
-						placeholder="Select Ticker"
-						@select="
-							(item) => {
-								getSymbol(item)
-							}
-						"
-					>
-						<i slot="prefix" class="el-input__icon el-icon-search"></i>
-            <!-- 使用 scoped slot 自定义选项 -->
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="symbol-label">{{
-									item.url
-								}}</span>
-								<span class="symbol-url">{{
-									item.label
-								}}</span>
-							</div>
-						</template>
-					</el-autocomplete>
+                ref="autocomplete"
+                class="inline-input"
+                v-model="symbol"
+                :fetch-suggestions="querySearch"
+                placeholder="Select Ticker"
+                clearable
+                @select="
+                  (item) => {
+                    getSymbol(item)
+                  }
+                "
+              >
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <!-- 使用 scoped slot 自定义选项 -->
+                <template slot-scope="{ item }">
+                  <div class="custom-option">
+                    <span class="symbol-label">{{
+                      item.url
+                    }}</span>
+                    <span class="symbol-url">{{
+                      item.label
+                    }}</span>
+                  </div>
+                </template>
+              </el-autocomplete>
           <div class="tickerTag">
             <el-tag
             :key="tag"
@@ -86,6 +112,9 @@
       <el-form-item>
       </el-form-item>
     </el-form>
+    <div class="symbol-correlation-chart">
+      <div id="chart-container" style="height: 600px;"></div>
+    </div>
   </div>
 </template>
 
@@ -93,50 +122,18 @@
 import {createStateFilter} from '@/utils/globalFunc'
 import { timestampToTime } from '@/utils'
 import { saveSymbolCorrelation } from "@/service/service";
+import Highcharts from 'highcharts/highstock';
+ import 'highcharts/indicators/indicators';
+ import 'highcharts/indicators/bollinger-bands';
 
 export default {
   name: 'SymbolCorrelation',
   data() {
-      var checkAge = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('Please input the age'));
-        }
-        setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('Please input digits'));
-          } else {
-            if (value < 18) {
-              callback(new Error('Age must be greater than 18'));
-            } else {
-              callback();
-            }
-          }
-        }, 1000);
-      };
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('Please input the password'));
-        } else {
-          if (this.data.checkPass !== '') {
-            this.$refs.Form.validateField('checkPass');
-          }
-          callback();
-        }
-      };
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('Please input the password again'));
-        } else if (value !== this.data.pass) {
-          callback(new Error('Two inputs don\'t match!'));
-        } else {
-          callback();
-        }
-      };
       return {
         data: {
           start_date: '',
           end_date: '',
-          benchmark: '',
+          benchmark: 'AAPL',
         },
         // 自定义动态渲染下拉栏
         searchResults: [],
@@ -145,6 +142,7 @@ export default {
         hasMore: true, // 是否还有更多数据
         stock_comparison: [],
         symbol: '',
+        dropdownList: [],
         startPickerOptions: {
           disabledDate: this.handleDisabledStartDate
         },
@@ -152,8 +150,20 @@ export default {
           disabledDate: this.handleDisabledEndDate
         },
         rules: {
+          benchmark: [
+            { required: true, message: 'Enter a designated ticker', trigger: 'blur' },
+            { required: true, message: 'Enter a designated ticker', trigger: 'change' }
+          ],
+          start_date: [
+            { required: true, message: 'Select start date', trigger: 'blur' },
+            { required: true, message: 'Select start date', trigger: 'change' }
+          ],
+          end_date: [
+            { required: true, message: 'Select end date', trigger: 'blur' },
+            { required: true, message: 'Select end date', trigger: 'change' }
+          ]
         }
-      };
+      }
     },
     computed: {
       symbolList() {
@@ -162,8 +172,9 @@ export default {
       }
     },
     mounted() {
+      this.dropdownList = this.symbolList
       this.attachScrollListener()
-      this.setDate(1)
+      this.setDate(52)
     },
     methods: {
       setDate(val) {
@@ -197,6 +208,41 @@ export default {
           inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
         }
       });
+    },
+    handleDropdownScroll(event, inputType) {
+      var self = this;
+      const dropdown = event.target;
+      // 根据传入的 inputType 访问不同的 ref
+      const inputRef = self.$refs[inputType];
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore((results) => {
+            inputRef.$data.suggestions = results;
+
+            // 恢复滚动位置
+            requestAnimationFrame(() => {
+                dropdown.scrollTop = currentScrollTop;
+            });
+        });
+      }
+    },
+    loadMore(cb) {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      // 将分页后的数据传递给 closure
+      cb(paginatedResults);
     },
     async validForm(formName) {
       const validateForm = async (formRef) => {
@@ -238,25 +284,36 @@ export default {
      const _name = typeof name === 'string' && name ? name : ''
      if(code == 203 && this.processTips) this.popUpMsgBox(`The "${_name}" backtest is running. You can wait or click the "+" button to create a new backtest`)
      if(code == 401) this.popUpMsgBox('Calculate error')
-     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
+     if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('View failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
       if(code == 407) this.popUpMsgBox('Empty backtest list. Please adjust "Filter Criteria" and run again')
-      if(code == 200) {
-        this.popUpMsgBox(`The "${_name}" is completed successfully`)
+      if(code !== 211) this.popUpMsgBox('No results found. Adjust the parameters and view again.')
+      if(code == 211) {
+        this.popUpMsgBox(`Completed successfully`)
+        const chartData =  saveRes.data?.data
+        // 这里要开始画图
+        const {corr_matrix, corr_roll} = chartData
+        this.renderChart(corr_roll)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
       if([400, 401, 404, 403, 406, 407].includes(code)) this.btnLoading = false
     },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        this.$refs[formName].clearValidate()
+        this.setDate(52)
       },
       getSymbol(ticker) {
         console.log('ticker', ticker)
+        this.symbol = ticker.url
         // 往标签数组里面推送
+        if(this.stock_comparison.length >= 5) {this.popUpMsgBox(`You can only select up to 5 tickers`);return};
         this.stock_comparison.push(ticker.url);
+      },
+      getBenchMark(ticker) {
+        this.data.benchmark = ticker.url
       },
       querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
@@ -285,6 +342,197 @@ export default {
     handleClose(tag) {
       this.stock_comparison.splice(this.stock_comparison.indexOf(tag), 1)
     },
+    renderChart(data) {
+      // 提取所有的字段名，排除 "Date" 字段
+      const fieldNames = Object.keys(data[0]).filter(field => field !== "Date");
+
+      // 动态构建所需格式的数组
+      const seriesData = fieldNames.map(field => ({
+        name: field,
+        data: data.map(item => {
+          const datatime = new Date(item['Date'])
+          // 使用 UTC 时间来确保一致性
+          const utcTimestamp = Date.UTC(
+            datatime.getUTCFullYear(),
+            datatime.getUTCMonth(),
+            datatime.getUTCDate(),
+            datatime.getUTCHours(),
+            datatime.getUTCMinutes(),
+            datatime.getUTCSeconds()
+          );
+          return [utcTimestamp, item[field]]
+        }),
+        marker: {
+          enabled: false
+        }
+      }));
+      // 随机生成每条线的颜色
+      // const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+      // 配置 Highcharts 图表
+      const basicChartOptions = {
+        zoomType: 'x',
+        pinchType: '',
+        style: {
+          "fontFamily": "Open Sans , sans-serif"
+        },
+        animation: false,
+        alignTicks: false,
+        backgroundColor: 'transparent',
+        renderTo: 'charts',
+        spacingRight: 50,
+      }
+      Highcharts.stockChart("chart-container", { // 使用 stockChart 类型
+          chart: basicChartOptions,
+          plotOptions: {
+            series: {
+              states: {
+                hover: {
+                  enabled: false
+                },
+                inactive: {
+                  enabled: false
+                }
+              },
+              showInNavigator: true,
+              connectNulls: false, // 禁用连接 null 数据点
+              pointStart: undefined,  // 确保不会有自动起点
+              pointInterval: undefined,  // 确保不会有自动间隔
+            }
+          },
+          tooltip: {
+            xDateFormat: '%m-%d-%Y',
+            followTouchMove: true,
+            shared: true,
+            useHTML: true,
+            crosshairs: true,
+            formatter: function () {
+              let s = `${Highcharts.dateFormat('%m-%d-%Y', this.x)}<br>`;
+              this.points.forEach(point => {
+                // Add a colored circle before the series name
+                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
+                s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
+              });
+              return s;
+            }
+          },
+          credits: {
+            enabled: true,
+            text: "Source: SentimenTrader",
+            href: 'https://sentimentrader.com',
+            position: {
+              align: 'right',
+              y: -120,
+              x: -80
+            }
+          },
+          legend: {
+            enabled: true,
+            align: 'center',
+            verticalAlign: 'top',
+            layout: 'horizontal',
+            x: 0,
+            y: 40,
+            itemStyle: {
+              fontSize: '10px' // 字体大小
+            },
+          },
+          title: {
+            text: "Rolling Correlations"
+          },
+          xAxis: {
+           type: 'datetime',
+           ordinal: false,
+           crosshair: { label: { enabled: false } },
+          tickPositions: null,
+          uniqueNames: false, // 确保只使用你传入的时间点
+           labels: {
+             formatter: function() {
+               const range = this.axis.max - this.axis.min;
+
+               // 设置不同时间范围下的格式
+               if (range > 3 * 365 * 24 * 3600 * 1000) {
+                 // 大于 3 年，显示年份
+                 return Highcharts.dateFormat('%Y', this.value);
+               } else if (range > 365 * 24 * 3600 * 1000) {
+                 // 1 - 3 年，显示季度
+                 return Highcharts.dateFormat('%Y %b', this.value);
+               } else if (range > 30 * 24 * 3600 * 1000) {
+                 // 1 - 12 个月，显示月份和天
+                 return Highcharts.dateFormat('%b %d', this.value);
+               } else if (range > 7 * 24 * 3600 * 1000) {
+                 // 7 - 30 天，显示具体日期
+                 return Highcharts.dateFormat('%b %e', this.value);
+               } else {
+                 // 小于 7 天，显示小时和日期
+                 return Highcharts.dateFormat('%b %e, %H:%M', this.value);
+               }
+             }
+           },
+          // plotBands: plotBands,
+         },
+          yAxis: {
+            title: {
+              text: "Correlation"
+            },
+            min: -1,
+            max: 1
+          },
+          rangeSelector: {
+            inputEnabled: true,
+            inputDateFormat: '%Y/%m/%d',
+            inputEditDateFormat: '%Y/%m%d',
+            buttons: [
+              { type: 'month', count: 3, text: '3m' },
+              { type: 'month', count: 6, text: '6m' },
+              { type: 'ytd', text: 'YTD' },
+              { type: 'year', count: 1, text: '1y' },
+              { type: 'year', count: 3, text: '3y' },
+              { type: 'year', count: 5, text: '5y' },
+              { type: 'year', count: 10, text: '10y' },
+              { type: 'year', count: 15, text: '15y' },
+              { type: 'year', count: 20, text: '20y' },
+              { type: 'all', text: 'All' }
+            ],
+            selected: 5 // Sets the default selected button (4 corresponds to '1y')
+          },
+          exporting: {
+            enabled: true,
+            buttons: {
+              contextButton: {
+                menuItems: [
+                  'printChart',
+                  'downloadPNG',
+                  'downloadJPEG',
+                  'downloadPDF'
+                ] 
+              }
+            }
+          },
+          navigator: {
+            enabled: true,
+            series: {
+              color: '#2f7ed8'  // Set the color to match the bottom series
+            },
+            xAxis: {
+              type: 'datetime', // 设置为 datetime 类型
+              crosshair: { label: { enabled: false } },
+              ordinal: false,
+              labels: { format: '{value:%Y}' },
+              tickPositions: null,
+              uniqueNames: false, // 确保只使用你传入的时间点
+            }
+          },
+          series: seriesData.map(series => ({
+            ...series,
+            type: 'line',
+            tooltip: {
+              valueSuffix: " correlation"
+            }
+          }))
+        });
+
+    }
     }
 }
 </script>
