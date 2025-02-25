@@ -59,6 +59,8 @@
 						:key="l.key"
 						show-overflow-tooltip
 						:width="l.width"
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
 						v-if="['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)"
             :sortable="
 							['CAGR', 'benchmark_CAGR', 'max_drawdown', 'net_profit_pct', 'profit_loss_ratio', 'average_win', 'average_loss', 'win_rate_pct'].includes(l.value)
@@ -111,10 +113,10 @@ export default {
       searchKey: '',
       tableCol: [
         {
-          label: 'Model Name',
+          label: 'Model<br/>Name',
           value: 'model_name',
           key: 'model_name',
-										minWidth: '180px',
+										minWidth: '130px',
         },
         {
           label: 'Strategy<br/>CAGR',
@@ -122,14 +124,16 @@ export default {
           key: 'CAGR'
         },
         {
-          label: 'Benchmark CAGR',
+          label: 'Benchmark<br/>CAGR',
           value: 'benchmark_CAGR',
-          key: 'benchmark_CAGR'
+          key: 'benchmark_CAGR',
+										minWidth: '90px'
         },
         {
           label: 'Max<br/>Drawdown',
           value: 'max_drawdown',
-          key: 'max_drawdown'
+          key: 'max_drawdown',
+										minWidth: '85px'
         },
         {
           label: 'Net<br/>Profit(%)',
@@ -142,9 +146,10 @@ export default {
           key: 'sharp_ratio'
         },
         {
-          label: 'Profit/Loss Ratio',
+          label: 'Profit/Loss<br/>Ratio',
           value: 'profit_loss_ratio',
-          key: 'profit_loss_ratio'
+          key: 'profit_loss_ratio',
+										minWidth: '90px'
         },
         {
           label: 'Average<br/>Win',

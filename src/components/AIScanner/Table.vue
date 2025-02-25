@@ -15,7 +15,7 @@
 			style="width: 100%; height: 100%"
 			border
 		>
-			<el-table-column type="expand">
+			<el-table-column type="expand" width="20px">
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<!-- <el-form-item label="Description">

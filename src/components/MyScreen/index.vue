@@ -173,7 +173,7 @@ export default {
         tableCol: [
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           // {label:'Name',value:'Name',labelHtml:'Name'},
-          // {label:'Optix Date',value:'Date',labelHtml:'Optix Date'},
+          {label:'Date',value:'Date',labelHtml:'Date'},
           // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
           // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
@@ -422,6 +422,21 @@ export default {
   color: #333;
   p {
     margin: 0 0 3px 0;
+  }
+}
+@media (min-width: 768px) {
+  .CPMResults-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .CPMResults-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .CPMResults-container {
+      width: 1170px;
   }
 }
 </style>

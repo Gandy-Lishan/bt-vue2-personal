@@ -31,7 +31,11 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }">My Signals List</p>
+            <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" size="mini" type="text">
+              <span>View Video Tutorial</span>
+            </el-button>
             <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p> -->
+             
           </div>
         </template>
         <div class="content">
@@ -263,7 +267,11 @@ export default {
         else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
         else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
         else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
-    }
+    },
+  	jumpToTutoiral(){
+      const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxN3rtpZLoyR4lYVrR66BpGH'
+      window.open(path, '_blank')
+	  },
   }
 }
 </script>
@@ -287,6 +295,21 @@ export default {
   margin: 5px auto auto auto;
   width: 90%;
   padding: 20px;
+}
+@media (min-width: 768px) {
+  .CPMResults-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .CPMResults-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .CPMResults-container {
+      width: 1170px;
+  }
 }
 /deep/ .el-collapse {
   margin-bottom: 20px;
@@ -361,4 +384,8 @@ export default {
   padding: 10px 20px 10px 20px;
   border-radius: 5px;
 }
+.tutorial {
+  position: absolute;
+  right: 30px;
+} 
 </style>
