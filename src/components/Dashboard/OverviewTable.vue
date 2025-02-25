@@ -29,7 +29,7 @@
              <td class="tg-7btt" colspan="3">Optimism</td>
            </tr>
 
-           <tr v-for="(row, index) in marketOverviewData" :key="index">
+           <tr v-for="(row, index) in market_overview_data" :key="index">
              <td class="tg-c3ow">
                <a :href="getChartUrl(row.symbol)">
                  {{ row.chart_name === 'Intermediate Term Optimism Index (Optix)' ? 'S&P 500' : row.chart_name }}
@@ -62,26 +62,14 @@
 
 <script>
 export default {
+  props: {
+    market_overview_data: {
+      type: Array,
+      require: true
+    }
+  },
  data() {
    return {
-     // 模拟 market_overview_data 数据结构
-     marketOverviewData: [
-       {
-         chart_name: 'S&P 500',
-         symbol: 'SPX',
-         date: '2021-12-31',
-         close: 3750.85,
-         closeSentiment: 3,
-       },
-       {
-         chart_name: 'Intermediate Term Optimism Index (Optix)',
-         symbol: 'SPX',
-         date: '2021-12-31',
-         close: 3750.85,
-         closeSentiment: 7,
-       },
-       // 更多数据...
-     ],
    };
  },
  methods: {
