@@ -32,19 +32,29 @@
               </el-autocomplete>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
           <el-form-item label="2. Start Date" prop="start_date">
-            <el-date-picker
+            <!-- <el-date-picker
               v-model="data.start_date"
               type="date"
               placeholder="- Select Start Date -"
               value-format="yyyy-MM-dd"
               :picker-options="startPickerOptions"
             >
+            </el-date-picker> -->
+            <el-date-picker
+              v-model="dateRange"
+              type="daterange"
+              align="right"
+              unlink-panels
+              range-separator="to"
+              start-placeholder="Start Date"
+              end-placeholder="End Date"
+              :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <!-- <el-col :span="4">
           <el-form-item prop="end_date" label="3. End Date">
               <el-date-picker
                 v-model="data.end_date"
@@ -55,7 +65,7 @@
               >
               </el-date-picker>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="8">
           <el-button type="warning" @click="resetForm('Form')" size="small">Clear Form</el-button>
         </el-col>
@@ -143,7 +153,46 @@ export default {
         stock_comparison: [],
         symbol: '',
         dropdownList: [],
+        dateRange: [],
         btnLoading: false,
+        pickerOptions: {
+          shortcuts: [
+            {
+              text: 'YTD 1',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date(new Date().getFullYear(), 0); // 今年年初
+                console.log('start end', [start, end])
+                this.dateRange = [startDate, endDate]
+                picker.$emit('pick', [start, end]);
+              }
+            },
+            {
+              text: 'YTD 2',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date(new Date().getFullYear() - 1, 0); // 去年年初
+                picker.$emit('pick', [start, end]);
+              }
+            },
+            {
+              text: 'YTD 3',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date(new Date().getFullYear() - 2, 0); // 前年年初
+                picker.$emit('pick', [start, end]);
+              }
+            },
+            {
+              text: 'YTD 5',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date(new Date().getFullYear() - 4, 0); // 四年前年初
+                picker.$emit('pick', [start, end]);
+              }
+            }
+          ],
+        },
         startPickerOptions: {
           disabledDate: this.handleDisabledStartDate
         },
@@ -175,15 +224,16 @@ export default {
     mounted() {
       this.dropdownList = this.symbolList
       this.attachScrollListener()
-      this.setDate(52)
+      this.setDate(5)
     },
     methods: {
       setDate(val) {
         this.data.end_date = timestampToTime(new Date());
         const endDate = new Date(this.data.end_date);
         const startDate = new Date(endDate);
-        startDate.setMonth(startDate.getMonth() - val)
+        startDate.setFullYear(startDate.getFullYear() - val)
         this.data.start_date = timestampToTime(startDate);
+        this.dateRange = [startDate, endDate]
       },
       handleDisabledStartDate(time) {
         const today = timestampToTime(new Date())
@@ -196,8 +246,9 @@ export default {
         }
       },
       handleDisabledEndDate(time) {
+        const [start_date, end_date] = this.dateRange
         const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(this.data.start_date))
+        const startDay = timestampToTime(new Date(start_date))
         return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
     attachScrollListener() {
@@ -304,12 +355,18 @@ export default {
       this.btnLoading = false
     },
       resetForm(formName) {
+        this.data = {
+          start_date: '',
+          end_date: '',
+          benchmark: ''
+        }
+        this.stock_comparison = []
         this.$refs[formName].clearValidate()
-        this.setDate(52)
+        this.setDate(5)
       },
       getSymbol(ticker) {
         console.log('ticker', ticker)
-        this.symbol = ticker.url
+        this.symbol = ''
         // 往标签数组里面推送
         if(this.stock_comparison.length >= 5) {this.popUpMsgBox(`You can only select up to 5 tickers`);return};
         this.stock_comparison.push(ticker.url);
