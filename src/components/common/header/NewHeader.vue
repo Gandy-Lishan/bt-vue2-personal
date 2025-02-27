@@ -156,7 +156,7 @@ export default {
           path: '/seasonality'
         },
         {
-          label: 'Correlation Pattern Match',
+          label: 'Correlation',
           keyPath: '8',
           path: '/cpm'
         },
@@ -228,7 +228,7 @@ export default {
       const email = getCookieData()?.username
       const access_level = getCookieData()?.access_level
       const {label} = item
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'My Signal', 'Trend Score'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
