@@ -33,7 +33,7 @@
 		>
 			<template v-for="(l) in tableCol">
         <el-table-column
-          v-if="l.key === 'description'"
+          v-if="l.label === 'Signal'"
           align="center"
 					:label="l.label"
 					:prop="l.value"
@@ -46,30 +46,6 @@
                 <p :key="index">{{item}}</p>
               </template>
             </template>
-					</template>
-				</el-table-column>
-			<el-table-column		
-					v-else-if="l.label == 'Signal'"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          :min-width="l.minWidth"
-					:sortable="
-						[
-							'Signal'
-						].indexOf(l.label) !== -1
-							? 'custom'
-							: false
-					"
-				>
-					<template slot-scope="scope">
-						<!-- {{ scope.row.Signal }} -->
-						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
-						<!-- <el-tooltip effect="dark" placement="top" style="display: inline">
-							<span slot="content" v-html="textContent[scope.row[l.value]]">
-							</span>
-							<i class="iconfont icon-wenhao"></i>
-						</el-tooltip> -->
 					</template>
 				</el-table-column>
         <el-table-column
@@ -243,8 +219,8 @@ export default {
         // },
         {
           label: 'Signal',
-          value: 'signals',
-          key: 'signals'
+          value: 'description',
+          key: 'description'
         }
       ],
       tableData: [],
@@ -330,35 +306,19 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'System' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
-        const parseJsonOrString = (value) => {
-          if (typeof value === 'string') {
-              try {
-                  return JSON.parse(value);
-              } catch (error) {
-                  return [{
-                      commentDes: value,
-                      rocCond: {
-                        newCondition: 3,
-                        conditionPeriod: 5
-                      }
-                  }];
-              }
-          }
-          return value;
-				};
         if(status === 200) {
 					results = results.map(item => {
             // item.status = capitalizeFirstLetter(item.status)
             // item.period = [item.start_date, item.end_date]
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
+            item.description = isJson(item.description) ? JSON.parse(item.description) : item.description
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
             item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-01-01' ? '' : item.lastdate
-            item.description = parseJsonOrString(item.description)
 						return item
 					})
 					this.tableData = results
@@ -475,10 +435,10 @@ export default {
           console.log('res', res)
           const code = res.data.code
           if(code == 211) {
+            if(this.currentPageTab === 'System') await _this.$emit('changeSecondTab', 'MyScreen')
             this.popUpMsgBox('Copy successfully')
           }else if(code == 411) {
             this.popUpMsgBox('The signal has been copied')
-            
           }
           data.copyLoading = false
 				}

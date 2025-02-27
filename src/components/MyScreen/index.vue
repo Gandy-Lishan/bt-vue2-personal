@@ -23,6 +23,7 @@
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">Screens List</p>
             <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result List</p>
+            <p @click.stop="() => {changeSecondTab('System')}" :class="{ secondActive: activeTab == 'System' || '' }">System Screen List</p>
           </div>
         </template>
         <div class="content">
@@ -42,14 +43,14 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             ></FilterTable>
-          <!-- <SignalsTable 
-            v-show="activeTab === 'Sample'"
-            currentPageTab="Sample"
-            ref="SampleTable"
+          <SignalsTable 
+            v-show="activeTab === 'System'"
+            currentPageTab="System"
+            ref="SystemTable"
             @changeSecondTab="changeSecondTab"
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
-          ></SignalsTable> -->
+          ></SignalsTable>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
@@ -212,6 +213,9 @@ export default {
           prop: 'last_signal_date',
           order: 'descending'
         })
+      }
+      if(val === 'System') {
+        await this.$refs['SystemTable'].getDataList(val)
       }
     },
     scrollToTarget(refName, height=-80) {

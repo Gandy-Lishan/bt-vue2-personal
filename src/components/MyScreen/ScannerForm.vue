@@ -8,7 +8,7 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item
           prop="name"
           >
@@ -20,7 +20,7 @@
           <el-input v-model="data.name" placeholder="Enter a name"></el-input>
         </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item
           prop="category"
           >
@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
@@ -66,7 +66,10 @@
             </el-select>
         </el-form-item>
         </el-col>
-        <el-col :span="6">
+      </el-row>
+      <div class="signals-div">
+      <el-row :gutter="10">
+        <el-col :span="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
@@ -74,11 +77,11 @@
             </label>
           </template>
           <el-select
-              v-model="data.signals"
+              v-model="data.relation"
               placeholder="— Select type —"
             >
               <el-option
-                v-for="item in signalOptions"
+                v-for="item in relationsOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -89,6 +92,155 @@
         </el-form-item>
         </el-col>
       </el-row>
+      <div v-if="data.relation == 0">
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.value"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+              <!-- <el-input
+                v-model="data.value"
+						></el-input> -->
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+      <div v-else-if="(data.score !== 0)">
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-input
+                v-model="data.value2"
+                placeholder="Input Value"
+						></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal2"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition2"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-input
+                v-model="data.value3"
+                placeholder="Input Value"
+						></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
     </el-form>
     <!-- <div class="setup">
       <div class="set-up-container">
@@ -141,8 +293,15 @@ export default {
       data: {
         name: '',
         direction: 'Long',
-        category: 'Communication Services',
-        signals: ''
+        category: 'Technology',
+        relation: 0,
+        signal: 'TrendScore',
+        signal2: 'Change',
+        condition: 0,
+        condition2: 0,
+        value: 'Close',
+        value2: '',
+        value3: ''
       },
       rowUrl: null,
       isPolling: false,
@@ -159,6 +318,11 @@ export default {
         { value: 'Long', label: 'Long', disabled: false},
         { value: 'Short', label: 'Short', disabled: false}
       ],
+      conditionOptions: [
+        { value: 0, label: '>' },
+        { value: 1, label: '=' },
+        { value: 2, label: '<' }
+      ],
       options: [
         { value: 'Communication Services', label: 'Communication Services', disabled: false},
         { value: 'Discretionary', label: 'Discretionary', disabled: false},
@@ -173,6 +337,36 @@ export default {
         { value: 'Technology', label: 'Technology', disabled: false},
         { value: 'Utilities', label: 'Utilities', disabled: false},
         { value: 'NDX', label: 'NDX', disabled: false}
+      ],
+      relationsOption: [
+      { value: 0, label: 'Only', disabled: false},
+      { value: 1, label: 'And', disabled: false},
+      { value: 2, label: 'Or', disabled: false}
+      ],
+      signalOptions: [
+        { label: 'Trend Score', value: 'TrendScore' },
+        { label: 'Symbol Close', value: 'Close' },
+        { label: 'Change', value: 'Change' },
+        { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200' },
+        { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100' },
+        { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50' },
+        { label: 'Symbol Close 20-Day Moving Average', value: 'SMA20' },
+        { label: 'Symbol Close 10-Day Moving Average', value: 'SMA10' },
+        { label: 'Symbol Close 5-Day Moving Average', value: 'SMA5' },
+        { label: 'Symbol Optix 50-Day Moving Average', value: 'Optix50' },
+        { label: 'Symbol Optix 20-Day Moving Average', value: 'Optix20' },
+        { label: 'Symbol Optix 10-Day Moving Average', value: 'Optix10' },
+        { label: 'Symbol Optix 5-Day Moving Average', value: 'Optix5' },
+        { label: 'Symbol Optix', value: 'Optix' },
+        { label: 'Relative Strength Index (RSI)', value: 'RSI' },
+        { label: 'Symbol Close All Time High', value: 'SATH' },
+        { label: 'Symbol Close All Time Low', value: 'SATL' },
+        { label: 'Symbol Close 52-Week High', value: 'S52WH' },
+        { label: 'Symbol Close 52-Week Low', value: 'S52WL' },
+        { label: 'Symbol Close 13-Week High', value: 'S13WH' },
+        { label: 'Symbol Close 13-Week Low', value: 'S13WL' },
+        { label: 'Symbol Close 4-Week High', value: 'S4WH' },
+        { label: 'Symbol Close 4-Week Low', value: 'S4WL' }
       ],
       rules: {
         name: [
@@ -325,10 +519,17 @@ export default {
     },
     resetForm() {
         this.data = {
-          ...this.data,
+          name: '',
           direction: 'Long',
-          category: 'Communication Services',
-          signals: 'Trend Score CrossAbove 7'
+          category: 'Technology',
+          relation: 0,
+          signal: 'TrendScore',
+          signal2: 'Change',
+          condition: 0,
+          condition2: 0,
+          value: 'Close',
+          value2: '',
+          value3: ''
         }
         this.rowUrl = null
         this.processTips = ''
@@ -348,7 +549,6 @@ export default {
     },
     async saveFormData() {
       debugger
-      const _this = this
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
@@ -356,13 +556,46 @@ export default {
       }
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
+      const {signal,signal2, relation, condition, condition2, value, value2, value3 } = this.data
+      let signals = null
+      let description = null
       this.percentage = 8
       debugger
-      const saveData = {...this.data, description: JSON.stringify([])}
+      if(relation === 0) {
+        signals = [{signal, condition, value }]
+        const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
+        description = [`${signal} ${_condition} ${value}`]
+      }else {
+        signals = [{signal, condition, value: value2}, {signal: signal2, condition: condition2, value: value3}]
+        const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
+        const _condition2 = this.conditionOptions.find(ele => ele.value === condition2)?.label
+        description = [`${signal} ${_condition} ${value2}`, `${signal2} ${_condition2} ${value3}`]
+      }
+      const saveData = {...this.data,
+        relation: this.data.relation,
+        score: relation === 1 ? 2 : 1,
+        signals: JSON.stringify(signals),
+        start_date: '2005-01-01',
+        end_date: '2050-01-01',
+        description: JSON.stringify(description)
+      }
+      const remainProperties = (obj, properties) => {
+        debugger
+          const newObj = {}
+          properties.forEach(property => {
+            if (obj.hasOwnProperty(property)) {
+              newObj[property] = obj[property]
+            }
+          })
+          return newObj
+      }
+      // 要删除的属性列表
+      const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+      const _saveData = remainProperties(saveData, propertiesToRemain)
       if(this.percentage < 99) this.percentage += 8
       let saveRes
-      if(rowUrl) {saveRes = await editMyScreenForm(saveData, rowUrl)}
-      else{saveRes = await saveMyScreenForm(saveData)}
+      if(rowUrl) {saveRes = await editMyScreenForm(_saveData, rowUrl)}
+      else{saveRes = await saveMyScreenForm(_saveData)}
       // 这里要发请求拿到状态
       const code = saveRes.data?.code
       const failedConditions = [404, 411, 511, 512, 513, 514]
@@ -668,8 +901,19 @@ try {
     displayData(data) {
       debugger
       this.rowUrl = data.url
+      const {relation} = data
+      const _data = {}
+      const signals = isJson(data.signals) ? JSON.parse(data.signals) : data.signals
+      signals.forEach((ele, index) => {
+        const suffix = index === 0 ? '' : (index + 1)
+        _data[`signal${suffix}`] = ele.signal,
+        _data[`condition${suffix}`] = ele.condition
+        if(relation === 0) _data.value = ele.value
+        else _data[`value${(suffix === '' ? 1 : suffix) + 1}`] = ele.value
+      })
       this.data = {
-        ...data
+        ...data,
+        ..._data
       }
 		},
     customColorMethod(percentage) {
@@ -760,4 +1004,9 @@ try {
     height: 100%;
   }
 }
+.signals-div {
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
+    padding: 10px;
+  }
 </style>
