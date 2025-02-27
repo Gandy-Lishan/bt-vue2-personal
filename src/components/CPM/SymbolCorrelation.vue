@@ -33,7 +33,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="2. Start Date" prop="start_date">
             <!-- <el-date-picker
               v-model="data.start_date"
               type="date"
@@ -42,6 +41,7 @@
               :picker-options="startPickerOptions"
             >
             </el-date-picker> -->
+            <el-form-item label="2. Date Range" prop="dateRange">
             <el-date-picker
               v-model="dateRange"
               type="daterange"
@@ -50,7 +50,8 @@
               range-separator="to"
               start-placeholder="Start Date"
               end-placeholder="End Date"
-              :picker-options="pickerOptions">
+              :picker-options="pickerOptions"
+              @change="handleDateChange">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -163,7 +164,6 @@ export default {
                 const end = new Date();
                 const start = new Date(new Date().getFullYear(), 0); // 今年年初
                 console.log('start end', [start, end])
-                this.dateRange = [startDate, endDate]
                 picker.$emit('pick', [start, end]);
               }
             },
@@ -211,7 +211,7 @@ export default {
           end_date: [
             { required: true, message: 'Select end date', trigger: 'blur' },
             { required: true, message: 'Select end date', trigger: 'change' }
-          ]
+          ],
         }
       }
     },
@@ -227,6 +227,28 @@ export default {
       this.setDate(5)
     },
     methods: {
+      validateDateRange(value) {
+      if ((value && value.length === 2)) {
+        if(!Array.isArray(value)) callback(); // 校验成功
+        const startDate = new Date(value[0]);
+        const endDate = new Date(value[1]);
+
+        // 计算日期差（单位：毫秒）
+        const diffTime = endDate - startDate;
+
+        // 转换为月差，假设一个月有30天
+        const diffMonths = diffTime / (1000 * 3600 * 24 * 30);
+
+        // 如果时间差小于3个月，则返回错误
+        if (diffMonths < 3) {
+          this.popUpMsgBox('The date range must be at least 3 months')
+        } else {
+          return true
+        }
+      } else {
+        this.popUpMsgBox('Please select a date range')
+      }
+     },
       setDate(val) {
         this.data.end_date = timestampToTime(new Date());
         const endDate = new Date(this.data.end_date);
@@ -308,6 +330,8 @@ export default {
     },
     async saveFormData() {
       if(this.stock_comparison.length === 0) {this.popUpMsgBox('Please select at least one ticker');return}
+      const validate = this.validateDateRange(this.dateRange)
+      if(!validate) return
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
@@ -591,7 +615,25 @@ export default {
           }))
         });
 
-    }
+    },
+    handleDateChange() {
+      if (this.dateRange && this.dateRange.length === 2) {
+        const startDate = new Date(this.dateRange[0]);
+        const endDate = new Date(this.dateRange[1]);
+
+        // 计算两个日期之间的时间差（毫秒）
+        const diffTime = endDate - startDate;
+
+        // 将毫秒差转换为月数，假设一个月有30天
+        const diffMonths = diffTime / (1000 * 3600 * 24 * 30); 
+
+        // 如果时间差小于3个月，给出提示并清空日期选择
+        if (diffMonths < 3) {
+          this.popUpMsgBox('The date range must be at least 3 months.');
+          this.dateRange = []; // 清空日期选择
+        }
+      }
+    },
     }
 }
 </script>
