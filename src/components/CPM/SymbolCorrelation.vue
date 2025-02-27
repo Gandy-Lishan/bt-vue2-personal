@@ -159,35 +159,38 @@ export default {
         pickerOptions: {
           shortcuts: [
             {
-              text: 'YTD 1',
+              text: '1 Year',
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date().getFullYear(), 0); // 今年年初
-                console.log('start end', [start, end])
+                const start = new Date();
+                start.setFullYear(start.getFullYear() - 1); // 过去1年
                 picker.$emit('pick', [start, end]);
               }
             },
             {
-              text: 'YTD 2',
+              text: '2 Years',
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date().getFullYear() - 1, 0); // 去年年初
+                const start = new Date();
+                start.setFullYear(start.getFullYear() - 2); // 过去2年
                 picker.$emit('pick', [start, end]);
               }
             },
             {
-              text: 'YTD 3',
+              text: '3 Years',
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date().getFullYear() - 2, 0); // 前年年初
+                const start = new Date();
+                start.setFullYear(start.getFullYear() - 3); // 过去3年
                 picker.$emit('pick', [start, end]);
               }
             },
             {
-              text: 'YTD 5',
+              text: '5 Years',
               onClick(picker) {
                 const end = new Date();
-                const start = new Date(new Date().getFullYear() - 4, 0); // 四年前年初
+                const start = new Date();
+                start.setFullYear(start.getFullYear() - 5); // 过去5年
                 picker.$emit('pick', [start, end]);
               }
             }
