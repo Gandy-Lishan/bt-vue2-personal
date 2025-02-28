@@ -130,6 +130,7 @@
 				</el-form-item>
 				<CheckInput
 					:config="MA1CheckInputConfig"
+          :categories="data.categories"
           :isDisabled="data.indicator_1==''"
 					ref="ma1Form"
           @manageMAStudies="manageMAStudies"
@@ -223,6 +224,7 @@
 				<CheckInput
 					:config="MA2CheckInputConfig"
           :isDisabled="data.indicator_2==''"
+          :categories="data.categories"
 					ref="ma2Form"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
@@ -234,6 +236,7 @@
 		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<CheckInput
 				:config="EOCheckInputConfig"
+        :categories="data.categories"
 				ref="EOForm"
         @handleExtremeLineChange="handleExtremeLineChange"
 				@saveData="saveSubData"
@@ -241,6 +244,7 @@
 			<div></div>
 			<CheckInput
 				:config="EPCheckInputConfig"
+        :categories="data.categories"
 				ref="EPForm"
         @handleExtremeLineChange="handleExtremeLineChange"
 				@saveData="saveSubData"
@@ -376,6 +380,7 @@
         </el-form-item>
 				<CheckInput
 					:config="MAOHLCVCheckInputConfig"
+          :categories="data.categories"
           :isDisabled="OHLCVData.condition==''"
 					ref="maohlcvForm"
           @manageMAStudies="manageMAStudies"
@@ -468,7 +473,7 @@ export default {
       ],
       MA1CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average value',
+        placeholder: 'Please Input',
         checked: false,
         field: 'ma1',
         value: '',
@@ -476,7 +481,7 @@ export default {
       },
       MA2CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average value',
+        placeholder: 'Please Input',
         checked: false,
         field: 'ma2',
         value: '',
@@ -484,16 +489,16 @@ export default {
       },
       EOCheckInputConfig: {
         label: 'Extreme Optimism',
-        placeholder: 'Please input the extreme optimism value',
-        checked: true,
+        placeholder: 'Please Input',
+        checked: false,
         field: 'extreme_optimism',
         value: '',
         type: 'CheckInput'
       },
       EPCheckInputConfig: {
         label: 'Extreme Pessimism',
-        placeholder: 'Please input the extreme pessimism value',
-        checked: true,
+        placeholder: 'Please Input',
+        checked: false,
         field: 'extreme_pessimism',
         value: '',
         type: 'CheckInput'
@@ -812,6 +817,7 @@ export default {
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async saveIndicator() {
+      debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
       const rowUrl = this.rowUrl
@@ -844,7 +850,7 @@ export default {
       }else{
         calculate = this.data.categories.split(' ')[1].toLowerCase()
       }
-
+debugger
       const commonData = {
         name: this.data.name,
         indicator_1: recoverSymbolOptixUrl(this.data.indicator_1_url),
@@ -857,6 +863,11 @@ export default {
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase(), // combine_type : indicator or symbol,
         benchmark: CIQ.stxx.chart.symbol
       };
+      if(this.data.categories.includes('Symbol')) {
+        debugger
+        const {symbol_ma1, symbol_ma2, shift_ma1, shift_ma2} = this.data
+        commonData.next_process = `sh${shift_ma1}_${symbol_ma1}|sh${shift_ma2}_${symbol_ma2}`
+      }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {
@@ -943,6 +954,10 @@ export default {
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
       debugger
+      if(this.data.categories.includes('Symbol')) {
+        const {symbol_ma1, symbol_ma2, shift_ma1, shift_ma2} = this.data
+        commonData.next_process = `sh${shift_ma1}_${symbol_ma1}|sh${shift_ma2}_${symbol_ma2}`
+      }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {
@@ -1064,6 +1079,7 @@ export default {
 
     },
     saveSubData(field, value) {
+      debugger
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
     querySearch(queryString, cb) {
@@ -1315,7 +1331,41 @@ export default {
             checked: (item.key === 'ma' ? (value.split('_')[item.index] != '1') : (value != '0')),
           };
         });
+        const extractValues = (str) => {
+          const parts = str.split('|');
 
+          const left = parts[0];  // sh5_c
+          const right = parts[1]; // sh3_o
+
+          const leftRegex = /(\d+)([a-zA-Z])/; // 提取数字和字母
+          const rightRegex = /(\d+)([a-zA-Z])/; // 同上
+
+          const leftMatch = left.match(leftRegex); // 匹配左边部分
+          const rightMatch = right.match(rightRegex); // 匹配右边部分
+
+          if (leftMatch && rightMatch) {
+            return {
+              shift_ma1: leftMatch[1] || '', // 提取数字部分
+              symbol_ma1: leftMatch[2] || 'c',   // 提取字符部分
+              shift_ma2: rightMatch[1] || '', // 提取右边数字部分
+              symbol_ma2: rightMatch[2] || 'o'    // 提取右边字符部分
+            };
+          } else {
+            return null; // 如果没有匹配到
+          }
+        }
+
+
+        if(data.categories.includes('Symbol')) {
+          const next_process = data.next_process
+          if(next_process) {
+           const result = extractValues(next_process)
+           if(result !== null) {
+            this.$refs['ma1Form'].displayData({shift: shift_ma1, symbol: symbol_ma1})
+            this.$refs['ma2Form'].displayData({shift: shift_ma2, symbol: symbol_ma2})
+           }
+          }
+        }
         //覆盖checkbox初始化配置
         this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
         this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
