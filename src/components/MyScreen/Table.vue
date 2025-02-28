@@ -39,6 +39,7 @@
 					:prop="l.value"
 					:key="l.key"
           :min-width="l.minWidth"
+          :max-width="l.maxWidth"
 				>
 					<template slot-scope="scope">
             <template  v-if="Array.isArray(scope.row.description)">
@@ -56,6 +57,7 @@
 					:key="l.key"
           :sortable="'custom'"
           :min-width="l.minWidth"
+          :max-width="l.maxWidth"
           :width="l.width"
 				  :sort-orders="['ascending', 'descending']"
 				>
@@ -199,17 +201,20 @@ export default {
         {
           label: 'Name',
           value: 'name',
-          key: 'name'
+          key: 'name',
+          maxWidth: '150px'
         },
         {
           label: 'Category',
           value: 'category',
-          key: 'category'
+          key: 'category',
+          width: '130px'
         },
         {
           label: 'Direction',
           value: 'direction',
-          key: 'direction'
+          key: 'direction',
+          width: '120px'
         },
         // {
         //   label: 'Screen',

@@ -172,9 +172,9 @@ export default {
         label:'Filter Condition Preview',
         title: 'Filter Condition Preview',
         tableCol: [
+          {label:'Date',value:'Date',labelHtml:'Date'},
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           // {label:'Name',value:'Name',labelHtml:'Name'},
-          {label:'Date',value:'Date',labelHtml:'Date'},
           // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
           // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
@@ -261,9 +261,18 @@ export default {
 			  // x['_Signal'] = x['Signal']
 			  // x['TimeInMarket'] = x['TimeInMarket']
       //  })
+      // 更新 tableCol
+      const columns = Array.from(Object.keys(content[0])).map(column => {
+        return {
+          label: column,
+          value: column,
+          labelHtml: column
+        }
+      })
       this.$nextTick(() => {
         this.filterTableData = {
           ...this.filterTableData,
+          tableCol: columns,
           content: content
         }
       })

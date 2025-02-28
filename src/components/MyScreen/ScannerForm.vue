@@ -73,9 +73,80 @@
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
-              4. Signal
+              4. Screen Criteria
             </label>
           </template>
+          <!-- <el-select
+              v-model="data.relation"
+              placeholder="— Select type —"
+            >
+              <el-option
+                v-for="item in relationsOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select> -->
+        </el-form-item>
+        </el-col>
+      </el-row>
+      <div v-if="data.relation == 0">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal"
+                  placeholder="— Select —"
+                    @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="value" label-width="0">
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value"
+                  :fetch-suggestions="querySearch"
+                  placeholder="-Select or Input Value-"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value')}"
+                ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+          <el-form-item prop="timefame" label-width="0">
           <el-select
               v-model="data.relation"
               placeholder="— Select type —"
@@ -90,73 +161,23 @@
               </el-option>
             </el-select>
         </el-form-item>
-        </el-col>
-      </el-row>
-      <div v-if="data.relation == 0">
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item prop="signal" label-width="0">
-              <el-select
-                  v-model="data.signal"
-                  placeholder="— Select —"
-                >
-                  <el-option
-                    v-for="item in signalOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  >
-                  </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item prop="condition" label-width="0">
-              <el-select
-                  v-model="data.condition"
-                  placeholder="— Select —"
-                >
-                  <el-option
-                    v-for="item in conditionOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  >
-                  </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="signal" label-width="0">
-              <el-select
-                  v-model="data.value"
-                  placeholder="— Select —"
-                >
-                  <el-option
-                    v-for="item in signalOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  >
-                  </el-option>
-                </el-select>
-              <!-- <el-input
-                v-model="data.value"
-						></el-input> -->
-            </el-form-item>
           </el-col>
         </el-row>
       </div>
       <div v-else-if="(data.score !== 0)">
-        <el-row :gutter="10">
-          <el-col :span="8">
+        <el-row :gutter="10" type="flex" justify="center" align="middle">
+          <el-col :span="20">
+            <el-row :gutter="10">
+          <el-col :span="10">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal"
                   placeholder="— Select —"
+                  @change="
+                    () => {
+                      handleSignalSelect('2')
+                    }
+                  "
                 >
                   <el-option
                     v-for="item in signalOptions"
@@ -186,21 +207,30 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item prop="signal" label-width="0">
-              <el-input
-                v-model="data.value2"
-                placeholder="Input Value"
-						></el-input>
+          <el-col :span="10">
+            <el-form-item prop="value2" label-width="0">
+              <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value2"
+                  :fetch-suggestions="querySearch2"
+                  placeholder="-Select or Input Value-"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value2')}"
+                ></el-autocomplete>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+         <el-row :gutter="10">
+          <el-col :span="10">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal2"
                   placeholder="— Select —"
+                  @change="
+                    () => {
+                      handleSignalSelect('3')
+                    }
+                  "
                 >
                   <el-option
                     v-for="item in signalOptions"
@@ -230,13 +260,36 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item prop="signal" label-width="0">
-              <el-input
-                v-model="data.value3"
-                placeholder="Input Value"
-						></el-input>
+          <el-col :span="10">
+            <el-form-item prop="value3" label-width="0">
+              <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value3"
+                  :fetch-suggestions="querySearch3"
+                  placeholder="-Select or Input Value-"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value3')}"
+                ></el-autocomplete>
             </el-form-item>
+          </el-col>
+        </el-row>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="timefame" label-width="0">
+          <el-select
+              v-model="data.relation"
+              placeholder="— Select type —"
+            >
+              <el-option
+                v-for="item in relationsOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select>
+        </el-form-item>
           </el-col>
         </el-row>
       </div>
@@ -299,7 +352,8 @@ export default {
         signal2: 'Change',
         condition: 0,
         condition2: 0,
-        value: 'Close',
+        // value: 'Symbol Close',
+        value: '',
         value2: '',
         value3: ''
       },
@@ -344,29 +398,29 @@ export default {
       { value: 2, label: 'Or', disabled: false}
       ],
       signalOptions: [
-        { label: 'Trend Score', value: 'TrendScore' },
-        { label: 'Symbol Close', value: 'Close' },
-        { label: 'Change', value: 'Change' },
-        { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200' },
-        { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100' },
-        { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50' },
-        { label: 'Symbol Close 20-Day Moving Average', value: 'SMA20' },
-        { label: 'Symbol Close 10-Day Moving Average', value: 'SMA10' },
-        { label: 'Symbol Close 5-Day Moving Average', value: 'SMA5' },
-        { label: 'Symbol Optix 50-Day Moving Average', value: 'Optix50' },
-        { label: 'Symbol Optix 20-Day Moving Average', value: 'Optix20' },
-        { label: 'Symbol Optix 10-Day Moving Average', value: 'Optix10' },
-        { label: 'Symbol Optix 5-Day Moving Average', value: 'Optix5' },
-        { label: 'Symbol Optix', value: 'Optix' },
-        { label: 'Relative Strength Index (RSI)', value: 'RSI' },
-        { label: 'Symbol Close All Time High', value: 'SATH' },
-        { label: 'Symbol Close All Time Low', value: 'SATL' },
-        { label: 'Symbol Close 52-Week High', value: 'S52WH' },
-        { label: 'Symbol Close 52-Week Low', value: 'S52WL' },
-        { label: 'Symbol Close 13-Week High', value: 'S13WH' },
-        { label: 'Symbol Close 13-Week Low', value: 'S13WL' },
-        { label: 'Symbol Close 4-Week High', value: 'S4WH' },
-        { label: 'Symbol Close 4-Week Low', value: 'S4WL' }
+        { label: 'Trend Score', value: 'TrendScore', type: 'Optix' },
+        { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
+        { label: 'Change', value: 'Change', type: 'Optix' },
+        { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200', type: 'Symbol' },
+        { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100', type: 'Symbol' },
+        { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50', type: 'Symbol' },
+        { label: 'Symbol Close 20-Day Moving Average', value: 'SMA20', type: 'Symbol' },
+        { label: 'Symbol Close 10-Day Moving Average', value: 'SMA10', type: 'Symbol' },
+        { label: 'Symbol Close 5-Day Moving Average', value: 'SMA5', type: 'Symbol' },
+        { label: 'Symbol Optix 50-Day Moving Average', value: 'Optix50', type: 'Optix'},
+        { label: 'Symbol Optix 20-Day Moving Average', value: 'Optix20', type: 'Optix' },
+        { label: 'Symbol Optix 10-Day Moving Average', value: 'Optix10', type: 'Optix' },
+        { label: 'Symbol Optix 5-Day Moving Average', value: 'Optix5', type: 'Optix' },
+        { label: 'Symbol Optix', value: 'Optix', type: 'Optix', type: 'Optix' },
+        { label: 'Relative Strength Index (RSI)', value: 'RSI', type: 'Optix' },
+        { label: 'Symbol Close All Time High', value: 'SATH', type: 'Symbol' },
+        { label: 'Symbol Close All Time Low', value: 'SATL', type: 'Symbol' },
+        { label: 'Symbol Close 52-Week High', value: 'S52WH', type: 'Symbol' },
+        { label: 'Symbol Close 52-Week Low', value: 'S52WL', type: 'Symbol' },
+        { label: 'Symbol Close 13-Week High', value: 'S13WH', type: 'Symbol' },
+        { label: 'Symbol Close 13-Week Low', value: 'S13WL', type: 'Symbol' },
+        { label: 'Symbol Close 4-Week High', value: 'S4WH', type: 'Symbol' },
+        { label: 'Symbol Close 4-Week Low', value: 'S4WL', type: 'Symbol' }
       ],
       rules: {
         name: [
@@ -380,6 +434,42 @@ export default {
         timeframe: [
           { required: true, message: 'Select Timeframe', trigger: 'blur' },
           { required: true, message: 'Select Timeframe', trigger: 'change' }
+        ],
+        value: [
+          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
+        ],
+        value2: [
+          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
+        ],
+        value3: [
+          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
         ],
       },
     }
@@ -462,6 +552,33 @@ export default {
     this.generateCPMName()
   },
   methods: {
+    // 手动触发表单验证
+    handleBlur(value) {
+      debugger
+      this.$refs['Form'].validateField(value);
+    },
+    validateValue(rule, value, callback) {
+      debugger
+      // 判断是否从下拉框中选择了值
+      const {field} = rule
+      let signalName = ''
+      if(field === 'value' || field === 'value2') signalName = 'signal'
+      else if(field === 'value3') signalName = 'signal2'
+      const suggestions = this.loadAll(this.data[signalName])
+      const isInsideList = suggestions.find(ele => ele.value === value)?.value || ''
+      if (isInsideList) {
+        // 选择了列表中的值，校验通过
+        callback();
+      } else {
+        // 不是列表中的值，检查是否是两位小数
+        const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/;
+        if (!regex.test(value)) {
+          callback(new Error('Numeric input (up to two decimals) or select from the dropdown'));
+        } else {
+          callback(); // 校验通过
+        }
+      }
+    },
     generateCPMName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -527,7 +644,7 @@ export default {
           signal2: 'Change',
           condition: 0,
           condition2: 0,
-          value: 'Close',
+          value: 'Symbol Close',
           value2: '',
           value3: ''
         }
@@ -562,14 +679,20 @@ export default {
       this.percentage = 8
       debugger
       if(relation === 0) {
-        signals = [{signal, condition, value }]
+        const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
+        signals = [{signal, condition, value: _value }]
         const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
-        description = [`${signal} ${_condition} ${value}`]
+        const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
+        description = [`${signalLabel} ${_condition} ${value}`]
       }else {
-        signals = [{signal, condition, value: value2}, {signal: signal2, condition: condition2, value: value3}]
+        const _value2 = this.signalOptions.find(ele => ele.label === value2)?.value || value2
+        const _value3 = this.signalOptions.find(ele => ele.label === value3)?.value || value3
+        signals = [{signal, condition, value: _value2}, {signal: signal2, condition: condition2, value: _value3}]
         const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
         const _condition2 = this.conditionOptions.find(ele => ele.value === condition2)?.label
-        description = [`${signal} ${_condition} ${value2}`, `${signal2} ${_condition2} ${value3}`]
+        const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
+        const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
+        description = [`${signalLabel} ${_condition} ${value2}`, `${signalLabel2} ${_condition2} ${value3}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
@@ -908,8 +1031,9 @@ try {
         const suffix = index === 0 ? '' : (index + 1)
         _data[`signal${suffix}`] = ele.signal,
         _data[`condition${suffix}`] = ele.condition
-        if(relation === 0) _data.value = ele.value
-        else _data[`value${(suffix === '' ? 1 : suffix) + 1}`] = ele.value
+        const value = this.signalOptions.find(l => l.value === ele.value)?.label
+        if(relation === 0) _data.value = value
+        else _data[`value${(suffix === '' ? 1 : suffix) + 1}`] = value
       })
       this.data = {
         ...data,
@@ -931,6 +1055,58 @@ try {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
 		},
+    querySearch(queryString, cb) {
+      debugger
+        const list = this.loadAll(this.data.signal);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      querySearch2(queryString, cb) {
+        const list = this.loadAll(this.data.signal);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      querySearch3(queryString, cb) {
+        const list = this.loadAll(this.data.signal2);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (ele) => {
+          return (ele.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll(value) {
+      debugger
+        // 这里要根据 Signal 显示不同的可选项
+        const type = this.signalOptions.find(ele => ele.value === value)?.type || ''
+        const signalOptions = this.signalOptions.map(item => ({
+          label: item.value,
+          value: item.label,
+          type: item.type
+        }));
+        if(type) return signalOptions.filter(ele => ele.type === type && ele.label !== value)
+        return signalOptions
+      },
+      handleSelect(item) {
+        // 选择的时候要清空 type 不一样的 value
+        const {value, value2, value3} = this.data
+        console.log('value', value, 'value2', value2, 'value3', value3)
+        console.log(item);
+      },
+      handleSignalSelect(number) {
+        let signalNum = ''
+        if(number === '' || number === '2') signalNum = ''
+        else if(number === '3') signalNum = '2'
+        const signalType = this.signalOptions.find(ele => ele.value === this.data[`signal${signalNum}`])?.type
+        const valueType = this.signalOptions.find(ele => ele.label === this.data[`value${number}`])?.type
+        console.log('signalType', signalType)
+        console.log('valueType', valueType)
+        if(signalType && valueType && signalType !== valueType) this.data[`value${number}`] = ''
+      }
   }
 }
 </script>
@@ -1009,4 +1185,7 @@ try {
     border-radius: 4px;
     padding: 10px;
   }
+/deep/ .el-autocomplete {
+  width: 100%
+}
 </style>
