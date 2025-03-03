@@ -2662,9 +2662,9 @@ export default {
   margin-top: 5px;
 }
 .search-input {
-  width: 60%;
+  width: 218px;
   margin: 5px 0px 2px 0px;
-  float: right;
+  float: left;
 }
 .filter-div {
   position: relative;
