@@ -29,6 +29,19 @@
   </div>
   <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
     <el-row>
+      <div class="search-input">
+        <el-input
+          class="search-input"
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i>
+       </el-input>
+      </div>
+    </el-row>
+    <el-row>
       <el-col :span="24">
         <el-row>
           <div class="btns">
@@ -72,19 +85,6 @@
         </el-row>
       </el-col>
       <!-- <el-col :span="4"> -->
-      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
-        <el-input
-          class="search-input"
-          @focus="expandSearch"
-          @blur="collapseSearch"
-          @input="handleQuery"
-          size="small"
-          :placeholder="searchPlaceholder"
-          v-model="searchInput"
-          clearable
-          :style="inputStyle"
-        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
       <!-- </el-col> -->
     </el-row>
   </div>
@@ -1574,19 +1574,6 @@ export default {
     isCRPTrend() {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
     },
-    inputStyle() {
-      return {
-        width: this.isExpanded ? "200px" : "35px",
-        position: "absolute",
-        right: "0", // 根据需要调整位置
-        top: "0px",
-        transition: "width 0.3s ease-in-out",
-      };
-    },
-    searchPlaceholder() {
-      if(this.isExpanded) return 'Search'
-      return ''
-    },
     isShowFilter() {
       return this.enlarged && (!this.showReport && !this.showRelated && (this.checkedType !== 'TrendSector'))
     }
@@ -2491,15 +2478,7 @@ export default {
         this.dynamicHeight = `${height}px`;
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
-    },
-    expandSearch() {
-      this.isExpanded = true; // 展开输入框
-    },
-    collapseSearch() {
-      if (!this.searchInput) {
-        this.isExpanded = false; // 收起输入框
-      }
-    },
+    }
   }
 }
 </script>
@@ -2682,16 +2661,22 @@ export default {
   font-weight: 500;
   margin-top: 5px;
 }
+.search-input {
+  width: 60%;
+  margin: 5px 0px 2px 0px;
+  float: right;
+}
 .filter-div {
   position: relative;
-  padding: 10px 5px;
+  padding: 0px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
-  height: 35px;
+  // height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }
   .btns {
+    margin-bottom: 5px;
     display: flex;
     .el-button{
       margin: 3px 10px 3px 0px;
@@ -2710,9 +2695,6 @@ export default {
       margin-right: 5px
     }
   }
-}
-.trend-score-filter {
-  padding: 15px 5px 10px 5px;
 }
 /deep/ .search-input {
   height: 100%;
