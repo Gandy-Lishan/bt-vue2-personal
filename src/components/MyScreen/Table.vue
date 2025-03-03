@@ -420,33 +420,48 @@ export default {
 				const copyName = `${data.name}(copy)`
 
 				// 检查是否已经存在同名的 signals
-				const isDuplicate = this.tableData.some(
-					item => item.name === copyName
-				)
+				// const isDuplicate = this.tableData.some(
+				// 	item => item.name === copyName
+				// )
 
-				if (isDuplicate) {
-          data.copyLoading = false
-					this.popUpMsgBox('The signals has been copied')
-				} else {
+				// if (isDuplicate) {
+        //   data.copyLoading = false
+				// 	this.popUpMsgBox('The signals has been copied')
+				// } else {
+          const {description} = data
+          const _description = isJson(description) ? JSON.stringify(description) : description
 					// 获取参数并准备复制
 					const params = {
 						...data,
 						name: copyName,
-            description: JSON.stringify([])
+            description: _description || JSON.stringify([])
 					}
+          const remainProperties = (obj, properties) => {
+            debugger
+              const newObj = {}
+              properties.forEach(property => {
+                if (obj.hasOwnProperty(property)) {
+                  newObj[property] = obj[property]
+                }
+              })
+              return newObj
+          }
+          // 要删除的属性列表
+          const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+          const saveData = remainProperties(params, propertiesToRemain)
           // const prepareData = this.reassignBTAttributes(params)
 					// 发起复制请求
-					const res = await saveMyScreenForm(params)
+					const res = await saveMyScreenForm(saveData)
           console.log('res', res)
           const code = res.data.code
           if(code == 211) {
             if(this.currentPageTab === 'System') await _this.$emit('changeSecondTab', 'MyScreen')
             this.popUpMsgBox('Copy successfully')
           }else if(code == 411) {
-            this.popUpMsgBox('The signal has been copied')
+            this.popUpMsgBox('The screen has been copied')
           }
           data.copyLoading = false
-				}
+				// }
 			} catch (error) {
         data.copyLoading = false
 				console.error('An error occurred:', error)
