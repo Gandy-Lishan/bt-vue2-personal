@@ -34,7 +34,7 @@
 			<template v-for="(l) in tableCol">
         <el-table-column
           v-if="l.label === 'Signal'"
-          align="center"
+          align="left"
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
@@ -43,9 +43,11 @@
 				>
 					<template slot-scope="scope">
             <template  v-if="Array.isArray(scope.row.description)">
-              <template v-for="(item, index) in scope.row.description">
-                <p :key="index">{{item}}</p>
-              </template>
+              <div class="description">
+                <template v-for="(item, index) in scope.row.description">
+                  <p :key="index">{{item}}</p>
+                </template>
+              </div>
             </template>
 					</template>
 				</el-table-column>
@@ -596,5 +598,12 @@ export default {
 }
 .el-table /deep/ tr.el-table__row.highlighted{
   background-color: yellow !important;
+}
+.description {
+  display: flex;
+  flex-direction: column;
+  p {
+    text-align: left
+  }
 }
 </style>

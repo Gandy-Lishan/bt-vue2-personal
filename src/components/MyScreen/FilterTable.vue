@@ -1,9 +1,9 @@
 <template>
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
-    <!-- <p class="filterTableDes">
-					After applying the filters, click the <span class="strongSpan">“Signal Screen”</span> button. The system will automatically identify potential entry and exit signals for stock trading based on the selected indicators and criteria.
-    </p> -->
+    <p class="filterTableDes">
+					{{signalDes}}
+    </p>
 		<el-table
 			ref="tableREF"
 			class="ScannerBTTable"
@@ -37,17 +37,7 @@
 				</el-table-column>
 				<el-table-column
 					v-if="l.label != 'Symbol'"
-					:sortable="
-						[
-							'Optix Date',
-							'Optix Value',
-							'Optix 5-Day MA',
-							'Closing Price',
-							'Closing Price 200-Day MA',
-						].indexOf(l.label) !== -1
-							? 'custom'
-							: false
-					"
+					:sortable="'custom'"
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
@@ -80,6 +70,7 @@ export default {
 		data: Object,
 		tableCol :Array,
 		loading: Boolean,
+		signalDes: String
 	},
 	data() {
 		return {
@@ -153,7 +144,7 @@ export default {
 					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7'
 				},
 				pageSize: 10, // Default page size
-      	currentPage: 1, // Default current page
+    currentPage: 1, // Default current page
 
 		}
 	},
@@ -218,67 +209,42 @@ export default {
 			
 			this.calculateAlloc()
 		},
-		changeTableSort(column){
-			var sortingOrder = column.order
-			var colName = column.prop
-			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _b - _a
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _a - _b
-					})
-				}else{
-				}
-			}
-			// 数字类型排序
-			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
-				}
-			}
-			// 日期类型排序
-			if(['Date'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
-			// 字符串类型排序
-			if(['Market','signals','Direction', 'Symbol'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else{
-				}
-			}
-		},
+		changeTableSort(column) {
+				const sortingOrder = column.order; // 排序方向
+				const colName = column.prop; // 当前排序的列名
+				
+				this.data.content.sort((a, b) => {
+						let valA = a[colName];
+						let valB = b[colName];
 
+						// 处理 null 或 undefined，确保不会报错
+						if (valA == null) valA = '';
+						if (valB == null) valB = '';
+
+						// 1. **尝试转换为数字排序**
+						const numA = parseFloat(valA);
+						const numB = parseFloat(valB);
+						const isNumA = !isNaN(numA) && typeof numA !== 'boolean';
+						const isNumB = !isNaN(numB) && typeof numB !== 'boolean';
+
+						if (isNumA && isNumB) {
+								return sortingOrder === 'ascending' ? numA - numB : numB - numA;
+						}
+
+						// 2. **尝试解析 YYYY-MM-DD 日期**
+						const dateA = Date.parse(valA);
+						const dateB = Date.parse(valB);
+
+						if (!isNaN(dateA) && !isNaN(dateB)) {
+								return sortingOrder === 'ascending' ? dateA - dateB : dateB - dateA;
+						}
+
+						// 3. **字符串排序**
+						return sortingOrder === 'ascending'
+								? valA.toString().localeCompare(valB.toString(), 'en', { sensitivity: 'base' })
+								: valB.toString().localeCompare(valA.toString(), 'en', { sensitivity: 'base' });
+				});
+		},
 		scrollListner(){
 			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
 			
