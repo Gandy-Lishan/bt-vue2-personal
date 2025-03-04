@@ -33,12 +33,13 @@
 		>
 			<template v-for="(l) in tableCol">
         <el-table-column
-          v-if="l.key === 'description'"
+          v-if="l.label === 'Signal'"
           align="center"
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
           :min-width="l.minWidth"
+          :max-width="l.maxWidth"
 				>
 					<template slot-scope="scope">
             <template  v-if="Array.isArray(scope.row.description)">
@@ -46,30 +47,6 @@
                 <p :key="index">{{item}}</p>
               </template>
             </template>
-					</template>
-				</el-table-column>
-			<el-table-column		
-					v-else-if="l.label == 'Signal'"
-					:label="l.label"
-					:prop="l.value"
-					:key="l.key"
-          :min-width="l.minWidth"
-					:sortable="
-						[
-							'Signal'
-						].indexOf(l.label) !== -1
-							? 'custom'
-							: false
-					"
-				>
-					<template slot-scope="scope">
-						<!-- {{ scope.row.Signal }} -->
-						<span>{{midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]}}</span>
-						<!-- <el-tooltip effect="dark" placement="top" style="display: inline">
-							<span slot="content" v-html="textContent[scope.row[l.value]]">
-							</span>
-							<i class="iconfont icon-wenhao"></i>
-						</el-tooltip> -->
 					</template>
 				</el-table-column>
         <el-table-column
@@ -80,6 +57,7 @@
 					:key="l.key"
           :sortable="'custom'"
           :min-width="l.minWidth"
+          :max-width="l.maxWidth"
           :width="l.width"
 				  :sort-orders="['ascending', 'descending']"
 				>
@@ -223,17 +201,20 @@ export default {
         {
           label: 'Name',
           value: 'name',
-          key: 'name'
+          key: 'name',
+          maxWidth: '150px'
         },
         {
           label: 'Category',
           value: 'category',
-          key: 'category'
+          key: 'category',
+          width: '130px'
         },
         {
           label: 'Direction',
           value: 'direction',
-          key: 'direction'
+          key: 'direction',
+          width: '120px'
         },
         // {
         //   label: 'Screen',
@@ -243,8 +224,8 @@ export default {
         // },
         {
           label: 'Signal',
-          value: 'signals',
-          key: 'signals'
+          value: 'description',
+          key: 'description'
         }
       ],
       tableData: [],
@@ -330,35 +311,19 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'System' ? '?sample=1' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
-        const parseJsonOrString = (value) => {
-          if (typeof value === 'string') {
-              try {
-                  return JSON.parse(value);
-              } catch (error) {
-                  return [{
-                      commentDes: value,
-                      rocCond: {
-                        newCondition: 3,
-                        conditionPeriod: 5
-                      }
-                  }];
-              }
-          }
-          return value;
-				};
         if(status === 200) {
 					results = results.map(item => {
             // item.status = capitalizeFirstLetter(item.status)
             // item.period = [item.start_date, item.end_date]
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
+            item.description = isJson(item.description) ? JSON.parse(item.description) : item.description
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
             item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-01-01' ? '' : item.lastdate
-            item.description = parseJsonOrString(item.description)
 						return item
 					})
 					this.tableData = results
@@ -386,6 +351,7 @@ export default {
       await this.applySort()
     },
     handleQuery: debounce(function() {
+      debugger
       if (this.currentPage !== 1) this.currentPage = 1;
       const trimmedStr = this.searchItem.trim();
       if(trimmedStr === '') {this.filterData = this.tableData; this.total = this.filterData.length; return}
@@ -455,33 +421,48 @@ export default {
 				const copyName = `${data.name}(copy)`
 
 				// 检查是否已经存在同名的 signals
-				const isDuplicate = this.tableData.some(
-					item => item.name === copyName
-				)
+				// const isDuplicate = this.tableData.some(
+				// 	item => item.name === copyName
+				// )
 
-				if (isDuplicate) {
-          data.copyLoading = false
-					this.popUpMsgBox('The signals has been copied')
-				} else {
+				// if (isDuplicate) {
+        //   data.copyLoading = false
+				// 	this.popUpMsgBox('The signals has been copied')
+				// } else {
+          const {description} = data
+          const _description = isJson(description) ? JSON.stringify(description) : description
 					// 获取参数并准备复制
 					const params = {
 						...data,
 						name: copyName,
-            description: JSON.stringify([])
+            description: _description || JSON.stringify([])
 					}
+          const remainProperties = (obj, properties) => {
+            debugger
+              const newObj = {}
+              properties.forEach(property => {
+                if (obj.hasOwnProperty(property)) {
+                  newObj[property] = obj[property]
+                }
+              })
+              return newObj
+          }
+          // 要删除的属性列表
+          const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+          const saveData = remainProperties(params, propertiesToRemain)
           // const prepareData = this.reassignBTAttributes(params)
 					// 发起复制请求
-					const res = await saveMyScreenForm(params)
+					const res = await saveMyScreenForm(saveData)
           console.log('res', res)
           const code = res.data.code
           if(code == 211) {
+            if(this.currentPageTab === 'System') await _this.$emit('changeSecondTab', 'MyScreen')
             this.popUpMsgBox('Copy successfully')
           }else if(code == 411) {
-            this.popUpMsgBox('The signal has been copied')
-            
+            this.popUpMsgBox('The screen has been copied')
           }
           data.copyLoading = false
-				}
+				// }
 			} catch (error) {
         data.copyLoading = false
 				console.error('An error occurred:', error)

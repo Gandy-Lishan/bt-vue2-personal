@@ -129,6 +129,7 @@
 					</el-autocomplete>
 				</el-form-item>
 				<CheckInput
+          :categories="data.categories"
 					:config="MA1CheckInputConfig"
           :isDisabled="data.indicator_1==''"
 					ref="ma1Form"
@@ -221,10 +222,18 @@
 					</el-autocomplete>
 				</el-form-item>
 				<CheckInput
+          :categories="data.categories"
 					:config="MA2CheckInputConfig"
           :isDisabled="data.indicator_2==''"
 					ref="ma2Form"
           @manageMAStudies="manageMAStudies"
+					@saveData="saveSubData"
+				></CheckInput>
+        <CheckInput
+          :categories="data.categories"
+					:config="ShiftCheckInputConfig"
+          :isDisabled="data.indicator_2==''"
+					ref="shiftForm"
 					@saveData="saveSubData"
 				></CheckInput>
 			</div>
@@ -474,6 +483,14 @@ export default {
         value: '',
         type: 'SelectInput'
       },
+      ShiftCheckInputConfig: {
+        label: 'Shift',
+        placeholder: 'Please input',
+        checked: false,
+        field: 'shift',
+        value: '',
+        type: 'CheckInput'
+      },
       MA2CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the moving average value',
@@ -485,7 +502,7 @@ export default {
       EOCheckInputConfig: {
         label: 'Extreme Optimism',
         placeholder: 'Please input the extreme optimism value',
-        checked: true,
+        checked: false,
         field: 'extreme_optimism',
         value: '',
         type: 'CheckInput'
@@ -493,7 +510,7 @@ export default {
       EPCheckInputConfig: {
         label: 'Extreme Pessimism',
         placeholder: 'Please input the extreme pessimism value',
-        checked: true,
+        checked: false,
         field: 'extreme_pessimism',
         value: '',
         type: 'CheckInput'
@@ -507,7 +524,6 @@ export default {
         indicator_2_url: '',
         time_frame: 'daily'
       },
-      loading: false,
       weightData: [
         {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
       ],
@@ -635,6 +651,7 @@ export default {
     'data.categories': {
         handler (newV, oldV) {
           if(
+            newV &&
             !(newV.includes('Indicator') && oldV.includes('Indicator')) &&
             !(newV.includes('Symbol') && oldV.includes('Symbol'))
           ){
@@ -643,7 +660,7 @@ export default {
             // this.userSelectedTimeFrame = 'daily'
             
             // 大类切换时也需要重置ma和EP/EO
-            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm']
             for (const formRef of formsToSave) {
               // 从WIC到其他选项时组件不存在，需要判断
               this.$refs[formRef]?.clearForm()
@@ -831,7 +848,7 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
@@ -857,6 +874,11 @@ export default {
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase(), // combine_type : indicator or symbol,
         benchmark: CIQ.stxx.chart.symbol
       };
+      if(this.data.categories.includes('Symbol')) {
+        debugger
+        const {symbol_ma1, symbol_ma2, shift} = this.data
+        commonData.next_process = `sh5_${symbol_ma1}|sh${shift}_${symbol_ma2}`
+      }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {
@@ -914,7 +936,7 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
@@ -942,7 +964,11 @@ export default {
         extreme_pessimism: this.data.extreme_pessimism,
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
-      debugger
+      if(this.data.categories.includes('Symbol')) {
+        debugger
+        const {symbol_ma1, symbol_ma2, shift} = this.data
+        commonData.next_process = `sh5_${symbol_ma1}|sh${shift}_${symbol_ma2}`
+      }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {
@@ -1096,6 +1122,11 @@ export default {
       }
     },
     changeCategories(category) {
+      const formsToSave = ['ma1Form','ma2Form','shiftForm']
+      for (const formRef of formsToSave) {
+        // 从WIC到其他选项时组件不存在，需要判断
+        this.$refs[formRef]?.changeCategories(category)
+      }
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1300,34 +1331,88 @@ export default {
         //覆盖checkbox初始化配置
         this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
         debugger
-      }else {  //其他类型
+      }else {
+        const extractValues = (str) => {
+          const parts = str.split('|');
+
+          const left = parts[0];  // sh5_c
+          const right = parts[1]; // sh10_o
+
+          const regex = /(\d+)_([a-zA-Z])/; // 修正的正则
+
+          const leftMatch = left.match(regex); // 匹配左边部分
+          const rightMatch = right.match(regex); // 匹配右边部分
+
+          if (leftMatch && rightMatch) {
+            return {
+              shift_ma1: leftMatch[1] || '',   // 提取左侧数字部分
+              symbol_ma1: leftMatch[2] || 'c', // 提取左侧字母部分
+              shift_ma2: rightMatch[1] || '',  // 提取右侧数字部分
+              symbol_ma2: rightMatch[2] || 'o' // 提取右侧字母部分
+            };
+          } else {
+            return null; // 如果没有匹配到
+          }
+        };
+        //其他类型
         const configMap = [
           { key: 'ma', index: 0 },
           { key: 'ma', index: 1 },
           { key: 'upper_extreme_value' },
           { key: 'lower_extreme_value' },
+          { key: 'shift' }
         ];
-
         configMap.forEach(item => {
           const value = data[item.key];
+          const index = item.index
+          let _value = null
+          let checked = false
+          if(item.key === 'ma') {
+            _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '') 
+            checked = (value.split('_')[item.index] != '1')
+            if(data.categories.includes('Symbol')) {
+            if(data.next_process) {
+              debugger
+              const result = extractValues(data.next_process)
+              if(result !== null) {
+                const symbol = result[`symbol_ma${index + 1}`] || 'c'
+                _value = symbol
+                checked = symbol != 'c'
+              }
+            }
+          }
+          }else if(item.key === 'shift') {
+            if(data.categories.includes('Symbol')) {
+            if(data.next_process) {
+                const result = extractValues(data.next_process)
+                if(result !== null) {
+                  const shift = result[`shift_ma2`] || 0
+                  _value = shift
+                  checked = shift != 0
+                }
+              }
+            }
+          }else {
+            _value = (value != '0' ? value : '')
+            checked = value != '0'
+          }
           item.config = {
-            value: (item.key === 'ma' ? (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '') : (value != '0' ? value : '')),
-            checked: (item.key === 'ma' ? (value.split('_')[item.index] != '1') : (value != '0')),
+            value: _value,
+            checked: checked,
           };
         });
-
         //覆盖checkbox初始化配置
         this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
         this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
         this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
         this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
+        this.ShiftCheckInputConfig = { ...this.ShiftCheckInputConfig, ...configMap[4].config };
       }
 
       //获取合并后的新indicator数据
       // const indicatorData = await getMyIndicatorData(data.url)
       // console.log('indicatorData res', indicatorData.data.data)
       // 需要在 chartIQ 中显示出创建的 indicator
-      
     },
     tableRowClassName({row, rowIndex}) {
 			if (rowIndex%2 === 1) {

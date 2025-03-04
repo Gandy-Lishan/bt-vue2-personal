@@ -23,6 +23,7 @@
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">Screens List</p>
             <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result List</p>
+            <p @click.stop="() => {changeSecondTab('System')}" :class="{ secondActive: activeTab == 'System' || '' }">System Screen List</p>
           </div>
         </template>
         <div class="content">
@@ -42,14 +43,14 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             ></FilterTable>
-          <!-- <SignalsTable 
-            v-show="activeTab === 'Sample'"
-            currentPageTab="Sample"
-            ref="SampleTable"
+          <SignalsTable 
+            v-show="activeTab === 'System'"
+            currentPageTab="System"
+            ref="SystemTable"
             @changeSecondTab="changeSecondTab"
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
-          ></SignalsTable> -->
+          ></SignalsTable>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
@@ -105,7 +106,7 @@ import SignalsTable from "./Table";
 import FilterTable from "./FilterTable";
 import Trades from "./Trades";
 import { getLastSignalDate, changeMySignalsSubscribe } from '@/service/service';
-import { isJson } from "@/utils"
+import { isJson, trimTrailingZeros } from "@/utils"
 
 export default {
   name: 'MySignals',
@@ -171,9 +172,9 @@ export default {
         label:'Filter Condition Preview',
         title: 'Filter Condition Preview',
         tableCol: [
+          {label:'Date',value:'Date',labelHtml:'Date'},
           {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           // {label:'Name',value:'Name',labelHtml:'Name'},
-          {label:'Date',value:'Date',labelHtml:'Date'},
           // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
           // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
@@ -212,6 +213,9 @@ export default {
           prop: 'last_signal_date',
           order: 'descending'
         })
+      }
+      if(val === 'System') {
+        await this.$refs['SystemTable'].getDataList(val)
       }
     },
     scrollToTarget(refName, height=-80) {
@@ -257,10 +261,36 @@ export default {
 			  // x['_Signal'] = x['Signal']
 			  // x['TimeInMarket'] = x['TimeInMarket']
       //  })
+      // 更新 tableCol
+      const columns = Array.from(Object.keys(content[0])).map(column => {
+        return {
+          label: column,
+          value: column,
+          labelHtml: column
+        }
+      })
+      const formatNumbers = (content) => {
+        return content.map(item => {
+          // 遍历对象的所有属性
+          Object.keys(item).forEach(key => {
+            const value = item[key];
+
+            if (!isNaN(value) && typeof value !== 'boolean' && value !== null) {
+              const num = parseFloat(value);
+              if (!isNaN(num)) {
+                item[key] = trimTrailingZeros(num.toFixed(2)); // 保留两位小数
+              }
+            }
+          });
+          return item;
+        });
+      };
+      const _content = formatNumbers(content)
       this.$nextTick(() => {
         this.filterTableData = {
           ...this.filterTableData,
-          content: content
+          tableCol: columns,
+          content: _content
         }
       })
 		    this.loading = false

@@ -23,11 +23,6 @@ export default {
   min-height: 74vh;
   // margin: 50px 50px 0px 50px;
   background-color: #ffffff;
-  padding-top: 50px;
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
 }
 @media (min-width: 768px) {
   .my-indicator-list-container {

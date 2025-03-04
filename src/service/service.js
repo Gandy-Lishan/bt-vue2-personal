@@ -2054,3 +2054,40 @@ export async function getSmartDumbSentiment() {
 	  throw new Error('Failed to fetch pair data');
 	}
   }
+
+	export async function getDashboardData() {
+		// 在配置env之前暂时用NODE_ENV判断url
+		let path = `dev/st_data/dashboard`
+		
+			return new Promise((resolve, reject) => {
+				axios
+					.get(path, { withCredentials: true, retry: null })
+					.then(res => {
+						resolve(res)
+					})
+					.catch(err => {
+						reject(err)
+					})
+			})
+	}
+
+	export function saveSymbolCorrelation(data) {
+		const url = `/dev/symbol_corr_app/symbol_corr/`
+		const headers = {
+			'Content-Type': 'application/json'
+		}
+		const formData = new FormData()
+		for (const [key, value] of Object.entries(data)) {
+			formData.append(key, value);
+		}
+		return new Promise((resolve, reject) => {
+			axios
+				.post(url, formData, { headers, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}

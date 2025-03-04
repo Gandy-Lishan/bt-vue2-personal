@@ -144,10 +144,11 @@ export const createEOEPValidate = (value) => {
 	}
 	return ''
 }
-export const createPositiveIntegerValidate = (value, minVal) => {
+export const createPositiveIntegerValidate = (value, minVal, canBeEqual) => {
 	// 给 Time In Market 和 exclude 用
 	const pattern = /^\d+$/
-	const isPositiveInteger = isNaN(value) || value <= minVal || !pattern.test(value)
+	let isPositiveInteger = isNaN(value) || value <= minVal || !pattern.test(value)
+	if(canBeEqual) isPositiveInteger = isNaN(value) || value < minVal || !pattern.test(value)
 	if (isPositiveInteger && minVal === 0) {
 		return `Enter positive integers only.`
 	}

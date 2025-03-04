@@ -54,7 +54,7 @@
 				>
 					<template slot-scope="scope">
 						<span class="tableText">
-							{{ `${scope.row[l.value] || ''}${l.label.includes('%') ? '%' : ''}` }}
+							{{ `${scope.row[l.value]}${l.label.includes('%') ? '%' : ''}` }}
 						</span>
 					</template>
 				</el-table-column>

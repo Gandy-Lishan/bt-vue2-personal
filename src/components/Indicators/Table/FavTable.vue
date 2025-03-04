@@ -12,6 +12,19 @@
   </div>
   <div class="filter-div">
     <el-row>
+      <div class="search-input">
+        <el-input
+          class="search-input"
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i>
+       </el-input>
+      </div>
+    </el-row>
+    <el-row>
       <el-col :span="24">
         <el-row>
           <div class="btns">
@@ -42,19 +55,6 @@
         </el-row>
       </el-col>
       <!-- <el-col :span="6"> -->
-      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
-        <el-input
-          class="search-input"
-          @focus="expandSearch"
-          @blur="collapseSearch"
-          @input="handleQuery"
-          size="small"
-          :placeholder="searchPlaceholder"
-          v-model="searchInput"
-          clearable
-          :style="inputStyle"
-        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
       <!-- </el-col> -->
     </el-row>
   </div>
@@ -996,12 +996,17 @@ export default {
   font-weight: 500;
   margin-top: 5px;
 }
+.search-input {
+  width: 218px;
+  margin: 2px 0px 0px 0px;
+  float: left;
+}
 .filter-div {
   position: relative;
-  padding: 10px 5px;
+  padding: 0px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
-  height: 35px;
+  // height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }

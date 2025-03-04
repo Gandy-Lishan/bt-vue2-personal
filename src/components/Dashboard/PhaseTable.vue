@@ -29,7 +29,7 @@
                <tbody>
                  <!-- Empty row for spacing -->
                  <tr><td>&nbsp;</td><td></td></tr>
-                 <tr v-for="(phaseSymbol, i) in phaseTableData[index]" :key="i">
+                 <tr v-for="(phaseSymbol, i) in phase_table_data[index]" :key="i">
                    <td :class="{'phase-grey': phaseSymbol[0]}">
                      <a :href="`/user/charts/${phaseSymbol[1]}`">
                        {{ phaseSymbol[3] }}
@@ -49,6 +49,12 @@
 
 <script>
 export default {
+  props: {
+    phase_table_data: {
+      type: Array,
+      require: true
+    }
+  },
  data() {
    return {
      phaseTableHeaders: [
@@ -57,43 +63,6 @@ export default {
        ["bg-red-thunderbird", "PHASE 3", "Extremely High Optimism", "Watch for blow-off moves, reversals and a move into Phase 4"],
        ["bg-red-pink", "PHASE 4", "Falling but not Low Optimism", "Watch for falling prices and a possible move into Phase 1"],
      ],
-     phaseTableData: [
-       [
-         [true, "marketA", "67", "Market A"],
-         [false, "marketB", "4", "Market B"],
-         [true, "marketC", "7", "Market C"],
-         [false, "marketD", "2", "Market D"],
-         [false, "marketE", "6", "Market E"],
-       ],
-       [
-         [false, "marketA", "2", "Market A"],
-         [true, "marketB", "3", "Market B"],
-         [false, "marketC", "5", "Market C"],
-         [false, "marketD", "4", "Market D"],
-         [true, "marketE", "7", "Market E"],
-       ],
-       [
-         [true, "marketA", "1", "Market A"],
-         [false, "marketB", "2", "Market B"],
-         [true, "marketC", "4", "Market C"],
-         [false, "marketD", "5", "Market D"],
-         [false, "marketE", "6", "Market E"],
-       ],
-       [
-         [true, "marketA", "3", "Market A"],
-         [true, "marketB", "1", "Market B"],
-         [false, "marketC", "7", "Market C"],
-         [true, "marketD", "4", "Market D"],
-         [false, "marketE", "6", "Market E"],
-       ],
-       [
-         [false, "marketA", "5", "Market A"],
-         [true, "marketB", "6", "Market B"],
-         [false, "marketC", "2", "Market C"],
-         [true, "marketD", "3", "Market D"],
-         [true, "marketE", "7", "Market E"],
-       ]
-     ]
    };
  },
 };
