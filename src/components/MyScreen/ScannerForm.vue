@@ -175,7 +175,7 @@
                   placeholder="— Select —"
                   @change="
                     () => {
-                      handleSignalSelect('2')
+                      handleSignalSelect('')
                     }
                   "
                 >
@@ -208,14 +208,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item prop="value2" label-width="0">
+            <el-form-item prop="value" label-width="0">
               <el-autocomplete
                   class="inline-input"
-                  v-model="data.value2"
-                  :fetch-suggestions="querySearch2"
+                  v-model="data.value"
+                  :fetch-suggestions="querySearch"
                   placeholder="-Select or Input Value-"
                   @select="handleSelect"
-                  @blur="() => {handleBlur('value2')}"
+                  @blur="() => {handleBlur('value')}"
                 ></el-autocomplete>
             </el-form-item>
           </el-col>
@@ -228,7 +228,7 @@
                   placeholder="— Select —"
                   @change="
                     () => {
-                      handleSignalSelect('3')
+                      handleSignalSelect('2')
                     }
                   "
                 >
@@ -261,14 +261,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item prop="value3" label-width="0">
+            <el-form-item prop="value2" label-width="0">
               <el-autocomplete
                   class="inline-input"
-                  v-model="data.value3"
-                  :fetch-suggestions="querySearch3"
+                  v-model="data.value2"
+                  :fetch-suggestions="querySearch2"
                   placeholder="-Select or Input Value-"
                   @select="handleSelect"
-                  @blur="() => {handleBlur('value3')}"
+                  @blur="() => {handleBlur('value2')}"
                 ></el-autocomplete>
             </el-form-item>
           </el-col>
@@ -355,7 +355,7 @@ export default {
         // value: 'Symbol Close',
         value: '',
         value2: '',
-        value3: ''
+        // value3: ''
       },
       rowUrl: null,
       isPolling: false,
@@ -562,8 +562,8 @@ export default {
       // 判断是否从下拉框中选择了值
       const {field} = rule
       let signalName = ''
-      if(field === 'value' || field === 'value2') signalName = 'signal'
-      else if(field === 'value3') signalName = 'signal2'
+      if(field === 'value') signalName = 'signal'
+      else if(field === 'value2') signalName = 'signal2'
       const suggestions = this.loadAll(this.data[signalName])
       const isInsideList = suggestions.find(ele => ele.value === value)?.value || ''
       if (isInsideList) {
@@ -673,7 +673,7 @@ export default {
       }
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
-      const {signal,signal2, relation, condition, condition2, value, value2, value3 } = this.data
+      const {signal,signal2, relation, condition, condition2, value, value2 } = this.data
       let signals = null
       let description = null
       this.percentage = 8
@@ -685,14 +685,14 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         description = [`${signalLabel} ${_condition} ${value}`]
       }else {
+        const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
         const _value2 = this.signalOptions.find(ele => ele.label === value2)?.value || value2
-        const _value3 = this.signalOptions.find(ele => ele.label === value3)?.value || value3
-        signals = [{signal, condition, value: _value2}, {signal: signal2, condition: condition2, value: _value3}]
+        signals = [{signal, condition, value: _value}, {signal: signal2, condition: condition2, value: _value2}]
         const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
         const _condition2 = this.conditionOptions.find(ele => ele.value === condition2)?.label
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
-        description = [`${signalLabel} ${_condition} ${value2}`, `${signalLabel2} ${_condition2} ${value3}`]
+        description = [`${signalLabel} ${_condition} ${value}`, `${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
@@ -1028,12 +1028,11 @@ try {
       const _data = {}
       const signals = isJson(data.signals) ? JSON.parse(data.signals) : data.signals
       signals.forEach((ele, index) => {
-        const suffix = index === 0 ? '' : (index + 1)
+        const suffix = (index === 0) ? '' : (index + 1)
         _data[`signal${suffix}`] = ele.signal,
         _data[`condition${suffix}`] = ele.condition
-        const value = this.signalOptions.find(l => l.value === ele.value)?.label
-        if(relation === 0) _data.value = value
-        else _data[`value${(suffix === '' ? 1 : suffix) + 1}`] = value
+        const value = this.signalOptions.find(l => l.value === ele.value)?.label || ele.value
+        _data[`value${suffix}`] = value
       })
       this.data = {
         ...data,
@@ -1063,7 +1062,8 @@ try {
         cb(results);
       },
       querySearch2(queryString, cb) {
-        const list = this.loadAll(this.data.signal);
+        debugger
+        const list = this.loadAll(this.data.signal2);
         const results = queryString ? list.filter(this.createFilter(queryString)) : list;
         // 调用 callback 返回建议列表的数据
         cb(results);
@@ -1098,9 +1098,7 @@ try {
         console.log(item);
       },
       handleSignalSelect(number) {
-        let signalNum = ''
-        if(number === '' || number === '2') signalNum = ''
-        else if(number === '3') signalNum = '2'
+        let signalNum = number
         const signalType = this.signalOptions.find(ele => ele.value === this.data[`signal${signalNum}`])?.type
         const valueType = this.signalOptions.find(ele => ele.label === this.data[`value${number}`])?.type
         console.log('signalType', signalType)

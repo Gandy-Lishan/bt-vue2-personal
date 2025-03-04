@@ -351,6 +351,7 @@ export default {
       await this.applySort()
     },
     handleQuery: debounce(function() {
+      debugger
       if (this.currentPage !== 1) this.currentPage = 1;
       const trimmedStr = this.searchItem.trim();
       if(trimmedStr === '') {this.filterData = this.tableData; this.total = this.filterData.length; return}

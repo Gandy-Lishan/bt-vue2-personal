@@ -106,7 +106,7 @@ import SignalsTable from "./Table";
 import FilterTable from "./FilterTable";
 import Trades from "./Trades";
 import { getLastSignalDate, changeMySignalsSubscribe } from '@/service/service';
-import { isJson } from "@/utils"
+import { isJson, trimTrailingZeros } from "@/utils"
 
 export default {
   name: 'MySignals',
@@ -269,11 +269,28 @@ export default {
           labelHtml: column
         }
       })
+      const formatNumbers = (content) => {
+        return content.map(item => {
+          // 遍历对象的所有属性
+          Object.keys(item).forEach(key => {
+            const value = item[key];
+
+            if (!isNaN(value) && typeof value !== 'boolean' && value !== null) {
+              const num = parseFloat(value);
+              if (!isNaN(num)) {
+                item[key] = trimTrailingZeros(num.toFixed(2)); // 保留两位小数
+              }
+            }
+          });
+          return item;
+        });
+      };
+      const _content = formatNumbers(content)
       this.$nextTick(() => {
         this.filterTableData = {
           ...this.filterTableData,
           tableCol: columns,
-          content: content
+          content: _content
         }
       })
 		    this.loading = false
