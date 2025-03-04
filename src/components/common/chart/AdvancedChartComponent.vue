@@ -685,6 +685,7 @@ export default class AdvancedChartComponent extends Vue {
 			//console.log('mousedown',isResizing)
 		});
 
+		
 		// 監聽 mouseup 事件
 		ele.addEventListener('mouseup', (e) => {
 			setTimeout(() => {
