@@ -59,6 +59,9 @@
 			<el-tab-pane label="Major Sectors" name="five" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Indexes Info')">
         <IndexesInfo ref="IndexesInfo" :IndexesInfo="IndexesInfo" :rowFrequency="rowFrequency"></IndexesInfo>
       </el-tab-pane>
+      <el-tab-pane label="Other Assert" name="six" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Other Assert')">
+        <OtherAssert ref="OtherAssert" :OtherAssert="OtherAssert" :rowFrequency="rowFrequency"></OtherAssert>
+      </el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -72,6 +75,7 @@ import Trades from './trades'
 import TIM from './tim'
 import MaxMin from './MaxMin'
 import IndexesInfo from "./IndexesInfo"
+import OtherAssert from "./OtherAssert"
 import { getSymbolInfo } from '@/utils/globalFunc'
 const XLSX = require('xlsx');
 
@@ -85,7 +89,8 @@ export default {
     Trades,
     TIM,
     MaxMin,
-    IndexesInfo
+    IndexesInfo,
+    OtherAssert
   },
   data() {
     return {
@@ -96,6 +101,7 @@ export default {
       editBacktestID: null,
       rowFrequency: 'Daily',
       IndexesInfo: [],
+      OtherAssert: {},
       initalData: {},
       showLastSignalMarker1: '',
       showLastSignalMarker2: ''
@@ -105,7 +111,7 @@ export default {
   //   await this.getResultData({ id: 0 })
   // },
   beforeDestroy() {
-			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo']
+			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo', 'OtherAssert']
 			clearRefs.forEach(refName => {
         if(this.$refs[refName]) this.$refs[refName] = null
 			});
@@ -223,6 +229,7 @@ export default {
                 initalData['Returns Heatmap File URL']
               data.CAGR = initalData['CAGR']
               vm.tableData = []
+              vm.OtherAssert = initalData['Other Assert']
               if (initalData['Trades']) {
                 // 鏈変氦鏄撴墠濉〃鍗
                 vm.tableData.push(data)
@@ -252,7 +259,6 @@ export default {
                 } catch (error) {
                   console.log(error)
                 }
-                
                 vm.tradesData = initalData['Trades']
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
@@ -263,7 +269,9 @@ export default {
                   const datatime = initalData['basic']['start_date']
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
+                  debugger
                   this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
+                  this.$refs.OtherAssert.prepareData(initalData['Other Assert'] || {})
                 });
               }
               // ------------------------------ end -----------------------------------
@@ -377,14 +385,19 @@ export default {
 			return type === 'custom' ? name : symbol;
 		},
     handleDownloadCsv() {
+      debugger
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
-      let medianReturn, consistency
+      let medianReturn, consistency, OtherAssert
       try {
         if(this.$refs.IndexesInfo) {
         const {_medianReturn, _consistency} = this.$refs.IndexesInfo.exportData()
         medianReturn = _medianReturn
         consistency = _consistency
+        }
+        if(this.$refs.OtherAssert) {
+            const sheetData = this.$refs.OtherAssert.exportData()
+            OtherAssert = sheetData
         }
       } catch (error) {
         console.log(error)
@@ -577,6 +590,10 @@ export default {
           return obj
         })
         dataList = [...dataList, medianReturn, consistency]
+      }
+      if(Object.prototype.hasOwnProperty.call(this.initalData, 'Other Assert')) {
+        sheetNames = [...sheetNames, 'Other Assert']
+        dataList = [...dataList, OtherAssert]
       }
       this.exportDataToCSV(dataList, sheetNames)
     },

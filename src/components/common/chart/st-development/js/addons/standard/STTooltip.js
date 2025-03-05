@@ -547,7 +547,6 @@ if (!CIQ.Marker) {
                         }
                      }
                      else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
-                        debugger
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                  fields.push({
