@@ -263,7 +263,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             if(type == 'custom') displayName = name
                             /** END */
                             return {
-                                display: [displayName, item.name],
+                                display: [displayName, item.name, item.category, item.inception],
                                 data: item
                             }
                         })
