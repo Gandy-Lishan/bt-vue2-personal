@@ -64,6 +64,7 @@ import BlogTags from "./BlogTags";
 import ReportArchives from "./ReportArchives";
 import ActiveStudies from "./ActiveStudies";
 import ArchivedStudies from "./ArchivedStudies";
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import { getBlogReportList, getBlogReportInfo } from "@/service/service";
 
 export default {
@@ -187,6 +188,18 @@ export default {
     }
   },
   mounted() {
+    debugger
+    const access_level = getCookieData()?.access_level
+		const dataliteUser = access_level.some(item => item.includes('datalite'))
+		const currentRoute = this.$route.path.includes('/MR')
+		if(dataliteUser && currentRoute) {
+			const errorMsg401 = 'Reports'
+      this.$store.commit('states/setErrorMessage404', {
+            status: 410,
+            message: `${errorMsg401}`
+      })
+      this.$router.push('/404')
+    }
     window.addEventListener('scroll', this.handleScroll);
   },
   beforeDestroy() {

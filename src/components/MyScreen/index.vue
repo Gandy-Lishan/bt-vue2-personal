@@ -42,6 +42,7 @@
             :label="filterTableData.label" 
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
+            :signalDes="signalDes"
             ></FilterTable>
           <SignalsTable 
             v-show="activeTab === 'System'"
@@ -181,6 +182,7 @@ export default {
           // {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
         ]
       },
+      signalDes: ''
     }
   },
   components: {
@@ -231,6 +233,7 @@ export default {
         });
     },
     displayResultsData(data) {
+      debugger
       // this.$refs['ScannerForm'].displayData(data)
       const results = Array.isArray(data) && data.length !== 0
       if(!results) {
@@ -243,6 +246,7 @@ export default {
       // this.scrollToTarget('scrollTargetTable', -200)
     },
     displayFormData(data, isScroll) {
+      this.signalDes = Array.isArray(data.description) ? data.description.join(' ') : ''
       this.$refs['ScannerForm'].displayData(data)
       if(isScroll) this.scrollToTarget('scrollTarget', -200)
     },

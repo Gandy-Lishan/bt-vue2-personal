@@ -692,7 +692,8 @@ export default {
         const _condition2 = this.conditionOptions.find(ele => ele.value === condition2)?.label
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
-        description = [`${signalLabel} ${_condition} ${value}`, `${signalLabel2} ${_condition2} ${value2}`]
+        const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
+        description = [`Relation: ${relationLabel};`,`1. ${signalLabel} ${_condition} ${value};`, `2. ${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
