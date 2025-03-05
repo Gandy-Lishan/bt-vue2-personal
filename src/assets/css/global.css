@@ -1010,6 +1010,15 @@ button#checkResBtn {
     color: #333;
     background-color: #fff;
   }
+  .shadow-row td {
+    background-color: #f2efef;
+  }
+  .tg td.asset-td {
+    padding: 0px 5px;
+  }
+  .tg td.align-center {
+    text-align: center;
+  }
   .indexTable td, .indexTable th {
     font-weight: 600;
     font-size: 16px;
