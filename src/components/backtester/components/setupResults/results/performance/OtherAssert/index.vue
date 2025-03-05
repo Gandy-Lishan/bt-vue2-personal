@@ -164,14 +164,7 @@ exportData() {
   const otherAssert = this.OtherAssert;
   let sheetData = [];
 
-  // 1️⃣ 添加表头
-  const headerRow = { "Index or Asset": "Index or Asset" };
-  this.defaultTableLabels.forEach(label => {
-    headerRow[label] = label;
-  });
-  sheetData.push(headerRow); // 先添加表头
-
-  // 2️⃣ 遍历 `otherAssert`，按照格式构建 Excel 数据
+  // 直接遍历数据，避免重复的表头
   Object.entries(otherAssert).forEach(([assetName, data]) => {
     // **资产名称单独占一行**
     const assetRow = { "Index or Asset": assetName };
