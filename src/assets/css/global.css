@@ -1013,8 +1013,14 @@ button#checkResBtn {
   .shadow-row td {
     background-color: #f2efef;
   }
+  td.header-row {
+    padding: 0px 5px;
+  }
   .tg td.asset-td {
     padding: 0px 5px;
+  }
+  td.negative-value {
+    color: #dd3a13;
   }
   .tg td.align-center {
     text-align: center;
