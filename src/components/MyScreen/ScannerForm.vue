@@ -400,7 +400,7 @@ export default {
       signalOptions: [
         { label: 'Trend Score', value: 'TrendScore', type: 'Optix' },
         { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
-        { label: 'Change', value: 'Change', type: 'Optix' },
+        { label: 'Daily Return', value: 'Change', type: 'Optix' },
         { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200', type: 'Symbol' },
         { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100', type: 'Symbol' },
         { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50', type: 'Symbol' },
@@ -693,7 +693,7 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
-        description = [`Relation: ${relationLabel};`,`1. ${signalLabel} ${_condition} ${value};`, `2. ${signalLabel2} ${_condition2} ${value2}`]
+        description = [`1. ${signalLabel} ${_condition} ${value} ${relationLabel};`, `2. ${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,

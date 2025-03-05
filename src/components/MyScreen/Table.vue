@@ -431,13 +431,13 @@ export default {
         //   data.copyLoading = false
 				// 	this.popUpMsgBox('The signals has been copied')
 				// } else {
-          const {description} = data
-          const _description = isJson(description) ? JSON.stringify(description) : description
+          const {description, signals} = data
 					// 获取参数并准备复制
 					const params = {
 						...data,
 						name: copyName,
-            description: _description || JSON.stringify([])
+            description: JSON.stringify(description) || JSON.stringify([]),
+            signals: JSON.stringify(signals)
 					}
           const remainProperties = (obj, properties) => {
             debugger
@@ -459,6 +459,7 @@ export default {
           const code = res.data.code
           if(code == 211) {
             if(this.currentPageTab === 'System') await _this.$emit('changeSecondTab', 'MyScreen')
+            if(this.currentPageTab === 'MyScreen') await _this.getDataList()
             this.popUpMsgBox('Copy successfully')
           }else if(code == 411) {
             this.popUpMsgBox('The screen has been copied')

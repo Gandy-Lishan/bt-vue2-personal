@@ -246,7 +246,7 @@ export default {
       // this.scrollToTarget('scrollTargetTable', -200)
     },
     displayFormData(data, isScroll) {
-      this.signalDes = Array.isArray(data.description) ? data.description.join(' ') : ''
+      this.signalDes = Array.isArray(data.description) ? `${data.description.join(' ')}.` : ''
       this.$refs['ScannerForm'].displayData(data)
       if(isScroll) this.scrollToTarget('scrollTarget', -200)
     },
