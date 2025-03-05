@@ -35,16 +35,16 @@ data() {
  return {
   headerKeyMap: {
   'Index or Asset': 'Index or Asset',
-  '1 Week Later': `1 Week<br/>Later`,
-  '2 Weeks Later': '2 Weeks<br/>Later',
-  '1 Month Later': '1 Month<br/>Later',
-  '2 Months Later': '2 Months<br/>Later',
-  '3 Months Later': '3 Months<br/>Later',
-  '6 Months Later': '6 Months<br/>Later',
-  '9 Months Later': '9 Months<br/>Later',
-  '1 Year Later': '1 Year<br/>Later',
-  '2 Years Later': '2 Years<br/>Later',
-  '3 Years Later': '3 Years<br/>Later',
+  '1 Week Later': `1 Week<br/>Later(%)`,
+  '2 Weeks Later': '2 Weeks<br/>Later(%)',
+  '1 Month Later': '1 Month<br/>Later(%)',
+  '2 Months Later': '2 Months<br/>Later(%)',
+  '3 Months Later': '3 Months<br/>Later(%)',
+  '6 Months Later': '6 Months<br/>Later(%)',
+  '9 Months Later': '9 Months<br/>Later(%)',
+  '1 Year Later': '1 Year<br/>Later(%)',
+  '2 Years Later': '2 Years<br/>Later(%)',
+  '3 Years Later': '3 Years<br/>Later(%)',
   },
   defaultTableLabels: [
   '1 Week Later',
@@ -117,11 +117,21 @@ data() {
   let rowIndex = 0; // 追踪当前行数，确保阴影交替
 
   Object.entries(otherAssert).forEach(([assetName, data]) => {
-    // 1️⃣ 创建资产名称占一行
+    // 1️⃣ **在每个大类前空出一行**
+    const emptyRow = document.createElement("tr");
+    const emptyCell = document.createElement("td");
+    emptyCell.colSpan = 11; // 让它占满整行
+    emptyCell.innerHTML = "&nbsp;"; // 空格
+    emptyCell.classList.add("header-row");
+    emptyRow.appendChild(emptyCell);
+    tableBody.appendChild(emptyRow);
+
+    // 2️⃣ **创建资产名称占一行**
     const assetRow = document.createElement("tr");
     const assetCell = document.createElement("td");
     assetCell.innerHTML = `<strong>${assetName}</strong>`;
-    assetCell.colSpan = 11; // 让它占满整行
+    assetCell.classList.add("header-row");
+    assetCell.colSpan = 11;
     assetRow.appendChild(assetCell);
 
     // **添加阴影到偶数行**
@@ -132,13 +142,13 @@ data() {
     tableBody.appendChild(assetRow);
     rowIndex++; // 计数 +1
 
-    // 2️⃣ 创建 % Positive, Mean, Median 行
+    // 3️⃣ **创建 % Positive, Mean, Median 行**
     Object.entries(data).forEach(([metric, values]) => {
       const row = document.createElement("tr");
 
-      // 第一列：只显示指标名称
+      // 第一列：指标名称
       const metricCell = document.createElement("td");
-      metricCell.classList.add("asset-td");
+      metricCell.classList.add("align-center", "asset-td");
       metricCell.innerHTML = metric;
       row.appendChild(metricCell);
 
@@ -146,6 +156,12 @@ data() {
       for (let i = 0; i < this.defaultTableLabels.length; i++) {
         const cell = document.createElement("td");
         cell.classList.add("align-center", "bold-text", "asset-td");
+
+        // **如果值是负数，添加 `negative-value` 类**
+        if (values[i] !== undefined && values[i] < 0) {
+          cell.classList.add("negative-value");
+        }
+
         cell.innerHTML = values[i] !== undefined ? values[i] : '-';
         row.appendChild(cell);
       }

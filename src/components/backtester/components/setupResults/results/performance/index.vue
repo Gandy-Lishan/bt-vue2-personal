@@ -229,7 +229,23 @@ export default {
                 initalData['Returns Heatmap File URL']
               data.CAGR = initalData['CAGR']
               vm.tableData = []
-              vm.OtherAssert = initalData['Other Assert']
+              const OtherAssert = initalData['Other Assert']
+              if(OtherAssert) {
+                const addPercentageSign = (otherAssert) => {
+                  // 遍历所有资产
+                  Object.entries(otherAssert).forEach(([assetName, data]) => {
+                    // 遍历每个资产的指标
+                    Object.entries(data).forEach(([metric, values]) => {
+                      if (metric === '% Positive') {
+                        // 在 '% Positive' 的数值后面加上 '%'
+                        data[metric] = values.map(value => `${value}%`);
+                      }
+                    });
+                  });
+                  return otherAssert; // 返回修改后的数据
+                }
+                vm.OtherAssert = addPercentageSign(OtherAssert);
+              }
               if (initalData['Trades']) {
                 // 鏈変氦鏄撴墠濉〃鍗
                 vm.tableData.push(data)
