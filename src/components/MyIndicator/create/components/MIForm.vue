@@ -117,8 +117,8 @@
 								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
 									item.label
 								}}</span>
-								<span v-if="item.type === 'Symbol'" class="type-label"
-									>Symbol</span
+								<span v-if="item.category" class="type-label"
+									>{{item.category}}</span
 								>
 								<span v-if="item.type === 'Indicator'" class="type-label"
 									><span class="updated-label">{{item.updated}}</span>
@@ -132,6 +132,7 @@
           :categories="data.categories"
 					:config="MA1CheckInputConfig"
           :isDisabled="data.indicator_1==''"
+          :indicator_1_category="indicator_1_category"
 					ref="ma1Form"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
@@ -210,8 +211,8 @@
 								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
 									item.label
 								}}</span>
-								<span v-if="item.type === 'Symbol'" class="type-label"
-									>Symbol</span
+								<span v-if="item.category" class="type-label"
+									>{{item.category}}</span
 								>
 								<span v-if="item.type === 'Indicator'" class="type-label"
 									><span class="updated-label">{{item.updated}}</span>
@@ -225,6 +226,7 @@
           :categories="data.categories"
 					:config="MA2CheckInputConfig"
           :isDisabled="data.indicator_2==''"
+          :indicator_2_category="indicator_2_category"
 					ref="ma2Form"
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
@@ -418,7 +420,7 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator, getSymbollistForecast } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
@@ -575,6 +577,8 @@ export default {
       currentPage: 1,
       pageSize: 20,
       hasMore: true, // 是否还有更多数据
+      indicator_1_category: '',
+      indicator_2_category: '',
     }
   },
   computed: {
@@ -596,6 +600,9 @@ export default {
     symbolList() {
       const data = localStorage.getItem('refactoredConcatList');
       return data ? JSON.parse(data) : [];
+    },
+    symbollistForecast() {
+      return this.$store.getters.getSymbollistForecast
     }
   },
   watch: {
@@ -829,6 +836,7 @@ export default {
       // this.$store.commit('SET_CREACT_LOADING', false)
     },
     async saveIndicator() {
+      debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
       const rowUrl = this.rowUrl
@@ -876,7 +884,8 @@ export default {
       };
       if(this.data.categories.includes('Symbol')) {
         debugger
-        const {symbol_ma1, symbol_ma2, shift} = this.data
+        let {symbol_ma1, symbol_ma2, shift} = this.data
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         commonData.next_process = `sh5_${symbol_ma1}|sh${shift}_${symbol_ma2}`
       }
       if(this.data.categories == 'WIC') {
@@ -966,8 +975,9 @@ export default {
       };
       if(this.data.categories.includes('Symbol')) {
         debugger
-        const {symbol_ma1, symbol_ma2, shift} = this.data
-        commonData.next_process = `sh5_${symbol_ma1}|sh${shift}_${symbol_ma2}`
+        let {symbol_ma1, symbol_ma2, shift} = this.data
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
+        commonData.next_process = `sh5_${symbol_ma1}|sh${shift || 0}_${symbol_ma2}`
       }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
@@ -1092,7 +1102,7 @@ export default {
     saveSubData(field, value) {
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
-    querySearch(queryString, cb) {
+    async querySearch(queryString, cb) {
       if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
       var results = dropdownList.map(item => ({
@@ -1122,11 +1132,6 @@ export default {
       }
     },
     changeCategories(category) {
-      const formsToSave = ['ma1Form','ma2Form','shiftForm']
-      for (const formRef of formsToSave) {
-        // 从WIC到其他选项时组件不存在，需要判断
-        this.$refs[formRef]?.changeCategories(category)
-      }
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1198,6 +1203,7 @@ export default {
 
     },
     async handleSelect(item, source) {
+      debugger
       console.log('item', item,source)
       const type = item.type
 
@@ -1210,6 +1216,7 @@ export default {
       const selectSymbol = (item) => {
         this.data[source] = item.url
         this.data[`${source}_url`] = item.url
+        this[`${source}_category`] = item.category || null
       }
 
 
@@ -1369,12 +1376,13 @@ export default {
           let checked = false
           if(item.key === 'ma') {
             _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '') 
-            checked = (value.split('_')[item.index] != '1')
+            const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
+            checked = (valueFromStr != '1')
             if(data.categories.includes('Symbol')) {
             if(data.next_process) {
               debugger
               const result = extractValues(data.next_process)
-              if(result !== null) {
+              if(result !== null && (result[`shift_ma${index+1}`] != 0 && result[`symbol_ma${index+1}`] !== 'c')) {
                 const symbol = result[`symbol_ma${index + 1}`] || 'c'
                 _value = symbol
                 checked = symbol != 'c'
@@ -1435,6 +1443,7 @@ export default {
       const childFormValid = formsToValid.some((formRef) => {
         return this.$refs[formRef]?.validateForm() == false
       })
+      console.log('表单校验 childFormValid', childFormValid)
       if(childFormValid) return false
       if(!formValid) return formValid
       // 按照选项校验 indicator 是否在允许范围

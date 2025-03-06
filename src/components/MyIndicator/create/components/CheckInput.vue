@@ -39,7 +39,9 @@ export default {
       required: true,
     },
     isDisabled: Boolean,
-    categories: String
+    categories: String,
+    indicator_1_category: String,
+    indicator_2_category: String,
   },
   data() {
     return {
@@ -62,7 +64,11 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
+      debugger
       const isSymbol = this.categories.includes('Symbol')
+      let category
+      if(this.config.field === 'ma1') category = this.indicator_1_category
+      else if(this.config.field === 'ma2') category = this.indicator_2_category
       const options = [
         {
           value: 'o',
@@ -85,6 +91,16 @@ export default {
           isSymbol: true
         },
         {
+          value: 'roc',
+          label: 'ROC',
+          isSymbol: true
+        },
+        {
+          value: 'amplify',
+          label: 'Amplify',
+          isSymbol: true
+        },
+        {
           value: 'MA',
           label: 'Simple Moving Average'
         }, {
@@ -92,7 +108,30 @@ export default {
           label: 'Exponential Moving Average'
         }
       ]
-
+      if(category && !['ETF', 'Stock'].includes(category)) {
+        const options = [
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'ROC',
+          isSymbol: true
+        },
+        {
+          value: 'MA',
+          label: 'Simple Moving Average'
+        }, {
+          value: 'EMA',
+          label: 'Exponential Moving Average'
+        }
+        ]
+        const isInList = options.find(ele => ele.value === this.MAType)
+        if(!isInList) this.MAType = options[0].value
+        return options
+      }
       if(isSymbol) return options
       return  options.filter(ele => ele.isSymbol !== true) 
     },
@@ -103,15 +142,29 @@ export default {
   watch: {
     showInput(newValue) {
       debugger
-      if (newValue && ((!this.isSymbol && this.isMAOption && this.config['label'] === 'Moving Average') || (this.isSymbol && this.config['label'] === 'Shift') || this.isEOEP)) {
+      const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType)
+      const isShift = this.config['label'] === 'Shift'
+      if(newValue && (isShowInput || isShift || this.isEOEP)) {
         this.inputVisibility = 'visible';
-      } else {
+      }else {
+        this.errMsg = ''
+        if(isShift) this.errMsg = ''
         this.inputVisibility = 'hidden';
       }
       if(this.config.type == 'SelectInput' && this.isMAOption){
         this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }
+    },
+    MAType(newValue) {
+      const isShowInput = ['EMA', 'MA', 'roc'].includes(newValue)
+      const isShift = this.config['label'] === 'Shift'
+      if(isShowInput) this.inputVisibility = 'visible';
+      else {
+        this.inputVisibility = 'hidden';
+        this.errMsg = ''
+        if(isShift) this.shiftErrMsg = ''
       }
     },
     _config: {
@@ -121,22 +174,25 @@ export default {
         debugger
         const {field, value} = newValue
         this.showInput = newValue.checked
-        if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'v'].includes(value)) {
-          this.MAType = newValue.value
+        const _value = value.replace(/\d+/g, "")
+        if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(_value)) {
+          this.MAType = _value
         }
         this.value = newValue.value
         if(typeof newValue.value === 'string' && newValue.value.includes('e'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'EMA'}
+        if(typeof newValue.value === 'string' && newValue.value.includes('roc'))  {this.value =  newValue.value.toString().replace(/roc$/, ''); this.MAType = 'roc'}
       },
       deep: true, // 启用深度监听，监视对象属性的变化
       immediate: true,
     },
     categories(newValue) {
+      debugger
       if(this.isEditState) return
-      const isChecked = ['o', 'h', 'l', 'c'].includes(this.MAType)
+      const isChecked = ['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(this.MAType)
       const isSymbol = newValue.includes('Symbol')
       if(isSymbol && !isChecked && this.config.field === 'ma1') this.MAType = 'c'
       if(isSymbol && !isChecked && this.config.field === 'ma2') this.MAType = 'o'
-      if(!isSymbol && (['o', 'h', 'l', 'c', 'v'].includes(this.MAType))) this.MAType = 'MA'
+      if(!isSymbol && (['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(this.MAType))) this.MAType = 'MA'
       if(!isSymbol && this.config['label'] === 'Shift' && this.inputVisibility === 'visible') {
         this.inputVisibility = 'hidden'
         this.showInput = false
@@ -151,32 +207,38 @@ export default {
       this.MAType = 'MA'
     },
     saveData() {
+      debugger
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
-        let value = this.value
+        let value = this.showInput ? this.value : 1
+        const dontSaveMaValue = ['o', 'h', 'l', 'c', 'amplify'].includes(this.MAType)
         if(!this.showInput) value = 1
         if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
+        if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
+        if(this.showInput && this.MAType == 'amplify') value = `amplify`
+        if(this.showInput && dontSaveMaValue) value = 1
 
-        if(this.isSymbol && !this.isMAOption && this.config['label'] === 'Moving Average') {
-          let defaultValue = 'c'
-          this.$emit('saveData', `symbol_${this.config.field}`, this.MAType || defaultValue)
+        if(!this.isMAOption && this.config['label'] === 'Moving Average') {
+          let value = this.showInput ? this.MAType : 'c'
+          this.$emit('saveData', `symbol_${this.config.field}`, value)
         }
-        this.$emit('saveData', this.config.field, value || 1)
+        this.$emit('saveData', this.config.field, value)
       } else if(this.config.field === 'extreme_optimism' || this.config.field === 'extreme_pessimism') {
-        let value = this.value
+        let value = this.showInput ? this.value : 0
         if(!this.showInput) value = 0
-        this.$emit('saveData', this.config.field, value || 0)
+        this.$emit('saveData', this.config.field, value)
       }else if(this.config.field === 'shift') {
-        if(this.isSymbol && this.showInput)  this.$emit('saveData', `shift`, this.value || 0)
+        let value = (this.showInput && this.isSymbol) ? this.value : 0
+        this.$emit('saveData', `shift`, value)
       }
     },
     handleSelect(val) {
       this.MAType = val
-      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && this.isMAOption) this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput: debounce(function (val) {
-      if(this.config.type == 'SelectInput'){
+      if(this.config.type == 'SelectInput' && this.isMAOption){
         this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
-      }else {
+      }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
     }, 500),
