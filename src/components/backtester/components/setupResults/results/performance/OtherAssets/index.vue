@@ -35,25 +35,25 @@ data() {
  return {
   headerKeyMap: {
   'Index or Asset': 'Index or Asset',
-  '1 Week Later': `1 Week<br/>Later(%)`,
-  '2 Weeks Later': '2 Weeks<br/>Later(%)',
-  '1 Month Later': '1 Month<br/>Later(%)',
-  '2 Months Later': '2 Months<br/>Later(%)',
-  '3 Months Later': '3 Months<br/>Later(%)',
-  '6 Months Later': '6 Months<br/>Later(%)',
-  '9 Months Later': '9 Months<br/>Later(%)',
-  '1 Year Later': '1 Year<br/>Later(%)',
-  '2 Years Later': '2 Years<br/>Later(%)',
-  '3 Years Later': '3 Years<br/>Later(%)',
+  '1 Week Later(%)': `1 Week<br/>Later(%)`,
+  '2 Weeks Later(%)': '2 Weeks<br/>Later(%)',
+  '1 Month Later(%)': '1 Month<br/>Later(%)',
+  '2 Months Later(%)': '2 Months<br/>Later(%)',
+  '3 Months Later(%)': '3 Months<br/>Later(%)',
+  '6 Months Later(%)': '6 Months<br/>Later(%)',
+  '9 Months Later(%)': '9 Months<br/>Later(%)',
+  '1 Year Later(%)': '1 Year<br/>Later(%)',
+  '2 Years Later(%)': '2 Years<br/>Later(%)',
+  '3 Years Later(%)': '3 Years<br/>Later(%)',
   },
   defaultTableLabels: [
-  '1 Week Later',
-  '2 Weeks Later',
-  '1 Month Later',
-  '2 Months Later',
-  '3 Months Later',
-  '6 Months Later',
-  '1 Year Later'
+  '1 Week Later(%)',
+  '2 Weeks Later(%)',
+  '1 Month Later(%)',
+  '2 Months Later(%)',
+  '3 Months Later(%)',
+  '6 Months Later(%)',
+  '1 Year Later(%)'
   ],
   medianReturn: [],
   consistency: [],
@@ -65,46 +65,46 @@ data() {
   switch (frequency) {
    case 'Daily':
     this.defaultTableLabels = [
-     '1 Week Later',
-     '2 Weeks Later',
-     '1 Month Later',
-     '2 Months Later',
-     '3 Months Later',
-     '6 Months Later',
-     '1 Year Later'
+     '1 Week Later(%)',
+     '2 Weeks Later(%)',
+     '1 Month Later(%)',
+     '2 Months Later(%)',
+     '3 Months Later(%)',
+     '6 Months Later(%)',
+     '1 Year Later(%)'
     ]
     break
    case 'Weekly':
      this.defaultTableLabels = [
-     '1 Week Later',
-     '2 Weeks Later',
-     '1 Month Later',
-     '2 Months Later',
-     '3 Months Later',
-     '6 Months Later',
-     '1 Year Later'
+     '1 Week Later(%)',
+     '2 Weeks Later(%)',
+     '1 Month Later(%)',
+     '2 Months Later(%)',
+     '3 Months Later(%)',
+     '6 Months Later(%)',
+     '1 Year Later(%)'
     ]
     break
    case 'Monthly':
     this.defaultTableLabels = [
-     '1 Month Later',
-     '3 Months Later',
-     '6 Months Later',
-     '9 Months Later',
-     '1 Year Later',
-     '2 Years Later',
-     '3 Years Later'
+     '1 Month Later(%)',
+     '3 Months Later(%)',
+     '6 Months Later(%)',
+     '9 Months Later(%)',
+     '1 Year Later(%)',
+     '2 Years Later(%)',
+     '3 Years Later(%)'
     ]
     break
    default:
        this.defaultTableLabels = [
-     '1 Week Later',
-     '2 Weeks Later',
-     '1 Month Later',
-     '2 Months Later',
-     '3 Months Later',
-     '6 Months Later',
-     '1 Year Later'
+     '1 Week Later(%)',
+     '2 Weeks Later(%)',
+     '1 Month Later(%)',
+     '2 Months Later(%)',
+     '3 Months Later(%)',
+     '6 Months Later(%)',
+     '1 Year Later(%)'
     ]
     break
   }
