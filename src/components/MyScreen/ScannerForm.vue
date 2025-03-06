@@ -398,9 +398,9 @@ export default {
       { value: 2, label: 'Or', disabled: false}
       ],
       signalOptions: [
-        { label: 'Trend Score', value: 'TrendScore', type: 'Optix' },
+        { label: 'Trend Score', value: 'TrendScore', onlyInput: true },
         { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
-        { label: 'Daily Return', value: 'Change', type: 'Optix' },
+        { label: 'Daily Return', value: 'Change', onlyInput: true },
         { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200', type: 'Symbol' },
         { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100', type: 'Symbol' },
         { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50', type: 'Symbol' },
@@ -412,7 +412,7 @@ export default {
         { label: 'Symbol Optix 10-Day Moving Average', value: 'Optix10', type: 'Optix' },
         { label: 'Symbol Optix 5-Day Moving Average', value: 'Optix5', type: 'Optix' },
         { label: 'Symbol Optix', value: 'Optix', type: 'Optix', type: 'Optix' },
-        { label: 'Relative Strength Index (RSI)', value: 'RSI', type: 'Optix' },
+        { label: 'Relative Strength Index (RSI)', value: 'RSI', onlyInput: true },
         { label: 'Symbol Close All Time High', value: 'SATH', type: 'Symbol' },
         { label: 'Symbol Close All Time Low', value: 'SATL', type: 'Symbol' },
         { label: 'Symbol Close 52-Week High', value: 'S52WH', type: 'Symbol' },
@@ -565,8 +565,11 @@ export default {
       if(field === 'value') signalName = 'signal'
       else if(field === 'value2') signalName = 'signal2'
       const suggestions = this.loadAll(this.data[signalName])
-      const isInsideList = suggestions.find(ele => ele.value === value)?.value || ''
-      if (isInsideList) {
+      const isInsideList = suggestions.find(ele => ele.value === value)?.value
+      const onlyInput = this.signalOptions.find(ele => ele.label === value)?.onlyInput || false
+      if(onlyInput) {
+        callback('Numeric input (up to two decimals)');
+      } else if (isInsideList) {
         // 选择了列表中的值，校验通过
         callback();
       } else {
@@ -1092,12 +1095,15 @@ try {
       loadAll(value) {
       debugger
         // 这里要根据 Signal 显示不同的可选项
+        const onlyInput = this.signalOptions.find(ele => ele.value === value)?.onlyInput || false
+        if(onlyInput) return []
         const type = this.signalOptions.find(ele => ele.value === value)?.type || ''
         const signalOptions = this.signalOptions.map(item => ({
           label: item.value,
           value: item.label,
           type: item.type
         }));
+        debugger
         if(type) return signalOptions.filter(ele => ele.type === type && ele.label !== value)
         return signalOptions
       },
