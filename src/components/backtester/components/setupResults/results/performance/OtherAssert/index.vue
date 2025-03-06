@@ -115,18 +115,22 @@ data() {
   tableBody.innerHTML = ''; // 清空现有数据
 
   let rowIndex = 0; // 追踪当前行数，确保阴影交替
+  let isFirstAsset = true; // 标记是否是第一个大类
 
   Object.entries(otherAssert).forEach(([assetName, data]) => {
-    // 1️⃣ **在每个大类前空出一行**
-    const emptyRow = document.createElement("tr");
-    const emptyCell = document.createElement("td");
-    emptyCell.colSpan = 11; // 让它占满整行
-    emptyCell.innerHTML = "&nbsp;"; // 空格
-    emptyCell.classList.add("header-row");
-    emptyRow.appendChild(emptyCell);
-    tableBody.appendChild(emptyRow);
+    // **在每个大类前空出一行（但第一个大类不需要）**
+    if (!isFirstAsset) {
+      const emptyRow = document.createElement("tr");
+      const emptyCell = document.createElement("td");
+      emptyCell.colSpan = 11; // 让它占满整行
+      emptyCell.innerHTML = "&nbsp;"; // 空格
+      emptyCell.classList.add("header-row");
+      emptyRow.appendChild(emptyCell);
+      tableBody.appendChild(emptyRow);
+    }
+    isFirstAsset = false; // 之后的 assetName 都需要空行
 
-    // 2️⃣ **创建资产名称占一行**
+    // **创建资产名称占一行**
     const assetRow = document.createElement("tr");
     const assetCell = document.createElement("td");
     assetCell.innerHTML = `<strong>${assetName}</strong>`;
@@ -142,7 +146,7 @@ data() {
     tableBody.appendChild(assetRow);
     rowIndex++; // 计数 +1
 
-    // 3️⃣ **创建 % Positive, Mean, Median 行**
+    // **创建 % Positive, Mean, Median 行**
     Object.entries(data).forEach(([metric, values]) => {
       const row = document.createElement("tr");
 
