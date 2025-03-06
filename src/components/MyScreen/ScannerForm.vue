@@ -693,7 +693,7 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
-        description = [`1. ${signalLabel} ${_condition} ${value} ${relationLabel};`, `2. ${signalLabel2} ${_condition2} ${value2}`]
+        description = [`1. ${signalLabel} ${_condition} ${value} ${relationLabel}`, `2. ${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
@@ -713,6 +713,7 @@ export default {
           })
           return newObj
       }
+      const _description = Array.isArray(description) ? `${description.join(' ')}.` : ''
       // 要删除的属性列表
       const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
       const _saveData = remainProperties(saveData, propertiesToRemain)
@@ -725,13 +726,13 @@ export default {
       const failedConditions = [404, 411, 511, 512, 513, 514]
       if(failedConditions.includes(Number(code))) {
         // 保存失败
-        return saveRes
+        return [saveRes, _description]
       }
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       saveRes.data.data.data = isJson(saveRes.data.data.data)?JSON.parse(saveRes.data.data.data):saveRes.data.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
-      return saveRes
+      return [saveRes, _description]
     },
     async saveCriteriaData(criteriaRef) {
       debugger
@@ -936,10 +937,13 @@ try {
       debugger
      this.percentage = 5
       let saveRes = null
+      let signalDes = null
       try {
-        saveRes = await this.saveFormData()
+        const [_saveRes, _description] = await this.saveFormData()
+        saveRes = _saveRes
+        signalDes = _description
         debugger
-        const _resData = saveRes.data.data
+        const _resData = _saveRes.data.data
         this.rowUrl = _resData.url
       } catch (error) {
         console.error(error);
@@ -960,7 +964,12 @@ try {
       if(code == 214 || code == 213 || code === 211) {
         this.popUpMsgBox(`The screen is completed successfully`)
         this.$emit('refreshBTList');
+        debugger
         this.$emit('displayResultsData', saveRes.data.data.data)
+        const date = saveRes.data.data.data[0].Date
+        signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
+        this.$emit('displayDes', signalDes)
+        this.$emit('scrollToTarget', 'scrollTopTarget')
       }
       // 运行成或者失败后刷新列表
       if((code == 214 || code == 213)) {

@@ -1228,3 +1228,6 @@ button#checkResBtn {
   max-width: 300px !important;
   word-break: break-word;
 }
+.el-pagination .el-select .el-input .el-input__inner {
+  margin: 0px;
+}

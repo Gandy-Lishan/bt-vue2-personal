@@ -3,7 +3,7 @@
       <el-collapse accordion  class="header">
       <el-collapse-item>
         <template slot="title">
-          <div class="title">
+          <div class="title" ref="scrollTopTarget">
             <p>Screen (click to expand)</p>
           </div>
         </template>
@@ -36,6 +36,7 @@
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
+            @displayDes="displayDes"
           ></SignalsTable>
           <FilterTable v-show="activeTab == 'Result'" ref="filterTable"
             :data="filterTableData" 
@@ -51,6 +52,7 @@
             @changeSecondTab="changeSecondTab"
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
+            @displayDes="displayDes"
           ></SignalsTable>
         </div>
       </el-collapse-item>
@@ -69,6 +71,7 @@
          @scrollToTarget="scrollToTarget" 
          @clearResults="clearResults"
          @displayResultsData="displayResultsData"
+         @displayDes="displayDes"
          >
         </ScannerForm>
       </el-collapse-item>
@@ -246,11 +249,12 @@ export default {
       // this.scrollToTarget('scrollTargetTable', -200)
     },
     displayFormData(data, isScroll) {
-      this.signalDes = Array.isArray(data.description) ? `${data.description.join(' ')}.` : ''
+      debugger
       this.$refs['ScannerForm'].displayData(data)
       if(isScroll) this.scrollToTarget('scrollTarget', -200)
     },
     displayResultList(content) {
+      debugger
       if(!content) return
 		  this.loading = true
       // this.$refs.filterTable.handleSizeChange(10)
@@ -366,6 +370,9 @@ export default {
         else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
         else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
     },
+    displayDes(des) {
+      this.signalDes = des
+    }
   }
 }
 </script>

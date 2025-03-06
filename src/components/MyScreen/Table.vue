@@ -544,7 +544,11 @@ export default {
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
       console.log('data', data)
-      this.$emit('displayResultsData', data)
+      const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
+      const date = data[0].Date
+      const _signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
+      this.$emit('displayDes', _signalDes)
+      this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, false)
     },
     
@@ -569,7 +573,7 @@ export default {
   border-bottom: 2px solid #dddddd;
 }
 .el-input-group{
-  width: 20%;
+  width: 40%;
 }
 .CPM-list-container{
   padding: 20px 20px 20px 20px;

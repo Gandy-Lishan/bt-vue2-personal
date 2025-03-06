@@ -1,8 +1,7 @@
 <template>
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
-    <p class="filterTableDes">
-					{{signalDes}}
+    <p class="filterTableDes"  v-html="signalDes">
     </p>
 		<el-table
 			ref="tableREF"
@@ -36,7 +35,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-					v-if="l.label != 'Symbol'"
+					v-else-if="l.label != 'Date'"
 					:sortable="'custom'"
 					:label="l.label"
 					:prop="l.value"
@@ -355,5 +354,8 @@ export default {
   /deep/ .el-form-item__label {
     width: 200px;
   }
+}
+.el-pagination .el-select .el-input .el-input__inner {
+  margin: 0px
 }
 </style>
