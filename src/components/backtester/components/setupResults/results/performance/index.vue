@@ -60,7 +60,7 @@
         <IndexesInfo ref="IndexesInfo" :IndexesInfo="IndexesInfo" :rowFrequency="rowFrequency"></IndexesInfo>
       </el-tab-pane>
       <el-tab-pane label="Other Assert" name="six" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Other Assert')">
-        <OtherAssert ref="OtherAssert" :OtherAssert="OtherAssert" :rowFrequency="rowFrequency"></OtherAssert>
+        <OtherAssets ref="OtherAssets" :OtherAssets="OtherAssets" :rowFrequency="rowFrequency"></OtherAssets>
       </el-tab-pane>
 		</el-tabs>
 	</div>
@@ -75,7 +75,7 @@ import Trades from './trades'
 import TIM from './tim'
 import MaxMin from './MaxMin'
 import IndexesInfo from "./IndexesInfo"
-import OtherAssert from "./OtherAssert"
+import OtherAssets from "./OtherAssets"
 import { getSymbolInfo } from '@/utils/globalFunc'
 const XLSX = require('xlsx');
 
@@ -90,7 +90,7 @@ export default {
     TIM,
     MaxMin,
     IndexesInfo,
-    OtherAssert
+    OtherAssets
   },
   data() {
     return {
@@ -101,7 +101,7 @@ export default {
       editBacktestID: null,
       rowFrequency: 'Daily',
       IndexesInfo: [],
-      OtherAssert: {},
+      OtherAssets: {},
       initalData: {},
       showLastSignalMarker1: '',
       showLastSignalMarker2: ''
@@ -111,7 +111,7 @@ export default {
   //   await this.getResultData({ id: 0 })
   // },
   beforeDestroy() {
-			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo', 'OtherAssert']
+			let clearRefs = ['timChild', 'maxMinChild', 'IndexesInfo', 'OtherAssets']
 			clearRefs.forEach(refName => {
         if(this.$refs[refName]) this.$refs[refName] = null
 			});
@@ -229,11 +229,11 @@ export default {
                 initalData['Returns Heatmap File URL']
               data.CAGR = initalData['CAGR']
               vm.tableData = []
-              const OtherAssert = initalData['Other Assert']
-              if(OtherAssert) {
-                const addPercentageSign = (otherAssert) => {
+              const OtherAssets = initalData['Other Assert']
+              if(OtherAssets) {
+                const addPercentageSign = (otherAsset) => {
                   // 遍历所有资产
-                  Object.entries(otherAssert).forEach(([assetName, data]) => {
+                  Object.entries(otherAsset).forEach(([assetName, data]) => {
                     // 遍历每个资产的指标
                     Object.entries(data).forEach(([metric, values]) => {
                       if (metric === '% Positive') {
@@ -242,9 +242,9 @@ export default {
                       }
                     });
                   });
-                  return otherAssert; // 返回修改后的数据
+                  return otherAsset; // 返回修改后的数据
                 }
-                vm.OtherAssert = addPercentageSign(OtherAssert);
+                vm.OtherAssets = addPercentageSign(OtherAssets);
               }
               if (initalData['Trades']) {
                 // 鏈変氦鏄撴墠濉〃鍗
@@ -287,7 +287,7 @@ export default {
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
                   debugger
                   this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
-                  this.$refs.OtherAssert.prepareData(initalData['Other Assert'] || {})
+                  this.$refs.OtherAssets.prepareData(initalData['Other Assert'] || {})
                 });
               }
               // ------------------------------ end -----------------------------------
@@ -404,16 +404,16 @@ export default {
       debugger
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
-      let medianReturn, consistency, OtherAssert
+      let medianReturn, consistency, OtherAssets
       try {
         if(this.$refs.IndexesInfo) {
         const {_medianReturn, _consistency} = this.$refs.IndexesInfo.exportData()
         medianReturn = _medianReturn
         consistency = _consistency
         }
-        if(this.$refs.OtherAssert) {
-            const sheetData = this.$refs.OtherAssert.exportData()
-            OtherAssert = sheetData
+        if(this.$refs.OtherAssets) {
+            const sheetData = this.$refs.OtherAssets.exportData()
+            OtherAssets = sheetData
         }
       } catch (error) {
         console.log(error)
@@ -609,7 +609,7 @@ export default {
       }
       if(Object.prototype.hasOwnProperty.call(this.initalData, 'Other Assert')) {
         sheetNames = [...sheetNames, 'Other Assert']
-        dataList = [...dataList, OtherAssert]
+        dataList = [...dataList, OtherAssets]
       }
       this.exportDataToCSV(dataList, sheetNames)
     },

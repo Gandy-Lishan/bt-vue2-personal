@@ -26,9 +26,9 @@
 
 <script>
 export default {
- name: 'OtherAssert',
+ name: 'OtherAssets',
  props: {
-  OtherAssert: Object,
+  OtherAssets: Object,
   rowFrequency: String
  },
 data() {
@@ -60,7 +60,7 @@ data() {
  }
 },
  methods: {
-  prepareData(OtherAssert) {
+  prepareData(OtherAssets) {
   const frequency = this.rowFrequency
   switch (frequency) {
    case 'Daily':
@@ -108,16 +108,16 @@ data() {
     ]
     break
   }
-  this.generateTable(OtherAssert)
+  this.generateTable(OtherAssets)
   },
-  generateTable(otherAssert) {
+  generateTable(OtherAssets) {
   const tableBody = document.getElementById("table-body");
   tableBody.innerHTML = ''; // 清空现有数据
 
   let rowIndex = 0; // 追踪当前行数，确保阴影交替
   let isFirstAsset = true; // 标记是否是第一个大类
 
-  Object.entries(otherAssert).forEach(([assetName, data]) => {
+  Object.entries(OtherAssets).forEach(([assetName, data]) => {
     // **在每个大类前空出一行（但第一个大类不需要）**
     if (!isFirstAsset) {
       const emptyRow = document.createElement("tr");
@@ -181,11 +181,11 @@ data() {
   });
 },
 exportData() {
-  const otherAssert = this.OtherAssert;
+  const OtherAssets = this.OtherAssets;
   let sheetData = [];
 
   // 直接遍历数据，避免重复的表头
-  Object.entries(otherAssert).forEach(([assetName, data]) => {
+  Object.entries(OtherAssets).forEach(([assetName, data]) => {
     // **资产名称单独占一行**
     const assetRow = { "Index or Asset": assetName };
     this.defaultTableLabels.forEach(label => {
