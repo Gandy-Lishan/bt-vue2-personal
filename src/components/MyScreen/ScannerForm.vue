@@ -139,7 +139,6 @@
                   class="inline-input"
                   v-model="data.value"
                   :fetch-suggestions="querySearch"
-                  placeholder="-Select or Input Value-"
                   @select="handleSelect"
                   @blur="() => {handleBlur('value')}"
                 ></el-autocomplete>
@@ -213,7 +212,6 @@
                   class="inline-input"
                   v-model="data.value"
                   :fetch-suggestions="querySearch"
-                  placeholder="-Select or Input Value-"
                   @select="handleSelect"
                   @blur="() => {handleBlur('value')}"
                 ></el-autocomplete>
@@ -266,7 +264,6 @@
                   class="inline-input"
                   v-model="data.value2"
                   :fetch-suggestions="querySearch2"
-                  placeholder="-Select or Input Value-"
                   @select="handleSelect"
                   @blur="() => {handleBlur('value2')}"
                 ></el-autocomplete>
@@ -436,8 +433,8 @@ export default {
           { required: true, message: 'Select Timeframe', trigger: 'change' }
         ],
         value: [
-          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
-          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'change' },
           {
             validator: this.validateValue,
             trigger: 'blur'
@@ -448,8 +445,8 @@ export default {
           }
         ],
         value2: [
-          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
-          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'change' },
           {
             validator: this.validateValue,
             trigger: 'blur'
@@ -567,7 +564,11 @@ export default {
       const suggestions = this.loadAll(this.data[signalName])
       const isInsideList = suggestions.find(ele => ele.value === value)?.value
       const onlyInput = this.signalOptions.find(ele => ele.label === value)?.onlyInput || false
-      if(onlyInput) {
+      if((suggestions.length === 0 && !this.data[field]) ||
+       (!isInsideList && this.data[field] && isNaN(this.data[field]) && suggestions.length === 0)
+      ) {
+        callback('Numeric Input (up to two decimals)');
+      }else if(onlyInput) {
         callback('Numeric input (up to two decimals)');
       } else if (isInsideList) {
         // 选择了列表中的值，校验通过
@@ -696,7 +697,7 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
-        description = [`1. ${signalLabel} ${_condition} ${value} ${relationLabel}`, `2. ${signalLabel2} ${_condition2} ${value2}`]
+        description = [`${signalLabel} ${_condition} ${value} <b>${relationLabel}</b>`, `${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
@@ -969,10 +970,12 @@ try {
         this.$emit('refreshBTList');
         debugger
         this.$emit('displayResultsData', saveRes.data.data.data)
-        const date = saveRes.data.data.data[0].Date
-        signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
-        this.$emit('displayDes', signalDes)
-        this.$emit('scrollToTarget', 'scrollTopTarget')
+        if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
+          const date = saveRes.data.data.data[0].Date
+          signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
+          this.$emit('displayDes', signalDes)
+          this.$emit('scrollToTarget', 'scrollTopTarget')
+        }
       }
       // 运行成或者失败后刷新列表
       if((code == 214 || code == 213)) {

@@ -45,7 +45,7 @@
             <template  v-if="Array.isArray(scope.row.description)">
               <div class="description">
                 <template v-for="(item, index) in scope.row.description">
-                  <p :key="index">{{item}}</p>
+                  <p :key="index"><span v-html="item"></span></p>
                 </template>
               </div>
             </template>
