@@ -45,7 +45,7 @@ export default {
  },
  data() {
   return {
-    dashBoardData: {}
+    dashBoardData: {},
   }
  },
  async mounted() {
@@ -101,7 +101,6 @@ export default {
     this.dashBoardData = parseData
     const heatmap_data = JSON.parse(parseData.heatmap_data)
     console.log('heatmap_data', heatmap_data)
-
    }
  }
 };

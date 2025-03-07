@@ -29,7 +29,7 @@
                <tbody>
                  <!-- Empty row for spacing -->
                  <tr><td>&nbsp;</td><td></td></tr>
-                 <tr v-for="(phaseSymbol, i) in phase_table_data[index]" :key="i">
+                 <tr v-for="(phaseSymbol, i) in phase_table_data[index + 1]" :key="i">
                    <td :class="{'phase-grey': phaseSymbol[0]}">
                      <a :href="`/user/charts/${phaseSymbol[1]}`">
                        {{ phaseSymbol[3] }}
@@ -65,6 +65,9 @@ export default {
      ],
    };
  },
+ mounted() {
+  console.log('phase_table_data', this.phase_table_data)
+ }
 };
 </script>
 

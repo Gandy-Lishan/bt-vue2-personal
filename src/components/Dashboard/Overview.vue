@@ -50,16 +50,17 @@
                    <p>The range for the Short-Term and Intermediate-Term indicators is 0 (Maximum Pessimism) to 100 (Maximum Optimism).</p>
                    <div class="col-md-6">
                      <h4>Short-Term Indicators</h4>
-                     <chart 
+                     <!-- <chart 
                         v-for="(chartData, index) in [shortIndicatorsChart]" 
                         :key="index"
                         :chartClass="chartData.chartClass"
                         :dataName="chartData.dataName"
-                        :middleValue="chartData.middleValue" />
+                        :middleValue="chartData.middleValue" /> -->
+                        <NewD3Chart chartClass="short_indicators" :data="dashBoardData.short_indicators_data" :dataUrl="dashBoardData.short_indicators" :middleValue="50" />
                     </div>
                    <div class="col-md-6">
                      <h4>Intermediate-Term Indicators</h4>
-                      <svg class="int_indicators" width="435" height="200"><g transform="translate(40,0)"><g><text class="values" y="8" x="120" dy=".35em" style="text-anchor: end;">Optix</text></g><g><text class="values" y="27" x="120" dy=".35em" style="text-anchor: end;">Volatility</text></g><g><text class="values" y="46" x="120" dy=".35em" style="text-anchor: end;">Options</text></g><g><text class="values" y="65" x="120" dy=".35em" style="text-anchor: end;">Breadth</text></g><g><text class="values" y="84" x="120" dy=".35em" style="text-anchor: end;">Surveys</text></g><g><text class="values" y="103" x="120" dy=".35em" style="text-anchor: end;">COT</text></g><g><text class="values" y="122" x="120" dy=".35em" style="text-anchor: end;">Hedging</text></g><g><text class="values" y="141" x="120" dy=".35em" style="text-anchor: end;">Cash</text></g><g><text class="values" y="160" x="120" dy=".35em" style="text-anchor: end;">Insiders</text></g><g><text class="values" y="179" x="120" dy=".35em" style="text-anchor: end;">Rydex</text></g><text class="values" y="8" x="269.8" dy=".35em" style="text-anchor: start;">54</text><text class="values" y="27" x="296.2" dy=".35em" style="text-anchor: start;">76</text><text class="values" y="46" x="285.4" dy=".35em" style="text-anchor: start;">67</text><text class="values" y="65" x="272.2" dy=".35em" style="text-anchor: start;">56</text><text class="values" y="84" x="245.40000000000003" dy=".35em" style="text-anchor: end;">42</text><text class="values" y="103" x="232.2" dy=".35em" style="text-anchor: end;">31</text><text class="values" y="122" x="239.4" dy=".35em" style="text-anchor: end;">37</text><text class="values" y="141" x="296.2" dy=".35em" style="text-anchor: start;">76</text><text class="values" y="160" x="322.6" dy=".35em" style="text-anchor: start;">98</text><text class="values" y="179" x="322.6" dy=".35em" style="text-anchor: start;">98</text><line x1="260" y1="5" x2="260" y2="175" stroke-width="0.5" stroke="#d9d9d9"></line><rect fill="#da8a8a" y="0" x="260" width="4.800000000000011" height="13"></rect><rect fill="#da8a8a" y="19" x="260" width="31.19999999999999" height="13"></rect><rect fill="#da8a8a" y="38" x="260" width="20.399999999999977" height="13"></rect><rect fill="#da8a8a" y="57" x="260" width="7.199999999999989" height="13"></rect><rect fill="#63be7b" y="76" x="250.40000000000003" width="9.599999999999966" height="13"></rect><rect fill="#63be7b" y="95" x="237.2" width="22.80000000000001" height="13"></rect><rect fill="#63be7b" y="114" x="244.4" width="15.599999999999994" height="13"></rect><rect fill="#da8a8a" y="133" x="260" width="31.19999999999999" height="13"></rect><rect fill="#da8a8a" y="152" x="260" width="57.60000000000002" height="13"></rect><rect fill="#da8a8a" y="171" x="260" width="57.60000000000002" height="13"></rect></g></svg>
+                     <NewD3Chart chartClass="int_indicators" :data="dashBoardData.int_indicators_data" :dataUrl="dashBoardData.int_indicators" :middleValue="50" />
                    </div>
                  </div>
                </div>
@@ -113,7 +114,7 @@
                             <h3 class="panel-title">Optimism Index (Optix) Heatmap</h3>
                         </div>
                         <div class="panel-body"> 
-                          <Heatmap></Heatmap>
+                          <Heatmap :heatmap_data="dashBoardData.heatmap_data"></Heatmap>
                         </div>
                     </div>
                 </div>
@@ -137,7 +138,7 @@
                             <h3 class="panel-title">Rank Charts</h3>
                         </div>
                         <div class="panel-body"> 
-                          <RankCharts></RankCharts>
+                          <RankCharts :dashBoardData="dashBoardData"></RankCharts>
                         </div>
                 </div>
             </div>
@@ -150,7 +151,7 @@
                             <h3 class="panel-title">Extremes</h3>
                         </div>
                         <div class="panel-body"> 
-                          <Extremes></Extremes>
+                          <Extremes :dashBoardData="dashBoardData"></Extremes>
                         </div>
                     </div>
                 </div>
@@ -192,6 +193,7 @@ import PhaseTable from "./PhaseTable";
 import RankCharts from "./RankCharts";
 import Extremes from "./Extremes";
 import D3Chart from "./D3Chart";
+import NewD3Chart from "./NewD3Chart";
 
 export default {
   components: {
@@ -205,7 +207,8 @@ export default {
     PhaseTable,
     RankCharts,
     Extremes,
-    D3Chart
+    D3Chart,
+    NewD3Chart
   },
   props: {
   dashBoardData: {

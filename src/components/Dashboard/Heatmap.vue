@@ -21,24 +21,34 @@
    <div id="HM" style="min-width: 750px; height: 800px; margin: 0 auto"></div>
  </div>
 </template>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script>
 import Highcharts from 'highcharts';
 import HighchartsTreemap from 'highcharts/modules/treemap';
+import { isJson } from "@/utils";
 
 // Ensure the Highcharts Treemap module is loaded
 HighchartsTreemap(Highcharts);
 
 export default {
+  props: {
+    heatmap_data: String
+  },
   data() {
     return {
-      heatmapData: [], // This will hold formatted data for Highcharts
       movingAverages: [0, 3, 5, 10, 20, 50, 100, 200],
       selectedMovingAverageIndex: 0, // Default to the first moving average
     };
   },
+  computed: {
+    _heatmap_data() {
+      return JSON.parse(this.heatmap_data)
+    }
+  },
   methods: {
     // Format the heatmap data
     formatData(data) {
+      debugger
       const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
       return data.map(item => ({
         name: item[0],
@@ -51,6 +61,17 @@ export default {
     
     // Create the Highcharts heatmap
     createHeatMap(data) {
+      console.log('data', data)
+      const chartContainer = document.getElementById("HM");
+      if (!chartContainer) {
+        console.error("❌ Highcharts 容器 #HM 未找到");
+        return;
+      }
+      if (!data || data.length === 0) {
+        console.error("❌ Heatmap 数据为空");
+        return;
+      }
+      console.log("✅ Highcharts 容器已找到，准备渲染图表...");
       const baseUrl = "/users/charts/";
 
       Highcharts.chart('HM', {
@@ -73,8 +94,8 @@ export default {
             [0.8, '#F75D59'], // 极端乐观（红色）
             [0.9, '#FF0000']  // 非常乐观（红色）
           ],
-          min: 0,  // 设置最小值
-          max: 10, // 设置最大值
+          min: 1,  // 设置最小值
+          max: 7, // 设置最大值
           tickInterval: 1,
           labels: {
             step: 6,
@@ -108,8 +129,11 @@ export default {
             point: {
               events: {
                 click() {
-                  const href = baseUrl + this.options.link;
-                  window.open(href, "_self");
+                  if (!this.options.link) {
+                    console.warn("❌ 缺少 link，无法跳转");
+                    return;
+                  }
+                  window.open(baseUrl + this.options.link, "_self");
                 },
                 mouseOver(e) {
                   const x = e.target.plotX;
@@ -132,12 +156,16 @@ export default {
                 }
               }
             }
+          },
+          treemap: {
+            turboThreshold: 1800 // 设置更高的限制，比如 5000
           }
         },
         series: [{
           type: 'treemap',
           layoutAlgorithm: 'squarified',
           data: data,
+          colorKey: "colorValue", 
           dataLabels: { enabled: true, shadow: false }
         }],
         title: { text: 'Optimism Index Heatmap' }
@@ -147,44 +175,23 @@ export default {
     // Handle the selection of a moving average button
     handleMovingAverageClick(index) {
       this.selectedMovingAverageIndex = index;
-      // const formattedData = this.formatData(this.heatmapData[index]);
-      // console.log('formattedData', formattedData)
-      const formattedData = [
-        { name: "Market A", link: "marketA", value: 67, colorValue: 5 },  // 调整 colorValue 的值
-        { name: "Market B", link: "marketB", value: 4, colorValue: 6 },
-        { name: "Market C", link: "marketC", value: 7, colorValue: 3 },
-        { name: "Market D", link: "marketD", value: 2, colorValue: 2 },
-        { name: "Market E", link: "marketE", value: 6, colorValue: 4 }
-      ];
+      debugger
+      const formattedData = this.formatData(this._heatmap_data[index]);
       this.createHeatMap(formattedData);
     },
 
     // Initialize the component with data
     initializeHeatMap() {
       // Make sure heatmap data is available
-      if (this.heatmapData && this.heatmapData.length > 0) {
-        const formattedData = this.formatData(this.heatmapData[0]);
+      console.log('_heatmap_data', this._heatmap_data)
+      if (this._heatmap_data && this._heatmap_data.length > 0) {
+        const formattedData = this.formatData(this._heatmap_data[0]);
+        console.log('formattedData', formattedData)
         this.createHeatMap(formattedData);
       }
     }
   },
   mounted() {
-   console.log('heatmap')
-   const heatmapData = [
-    {
-     name: 'A',
-     value: 67,
-     colorValue: 0.2
-    }
-];
-this.heatmapData = heatmapData
-// 假数据解释:
-// "Market" (字符串): 市场名称
-// "marketX" (字符串): 用于跳转的链接或唯一标识符
-// "X" (数字): 市场的得分值，用于决定热力图的颜色 (1-7)
-// "Y" (数字): 用于热力图的颜色数值，这里表示一个值的颜色偏移
-    // Initialize the heatmap with the data passed from the server (e.g., Django template)
-    // this.heatmapData = window.heatmap_data || [];
     this.initializeHeatMap();
   }
 };
