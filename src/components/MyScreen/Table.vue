@@ -45,7 +45,7 @@
             <template  v-if="Array.isArray(scope.row.description)">
               <div class="description">
                 <template v-for="(item, index) in scope.row.description">
-                  <p :key="index"><span v-html="item"></span></p>
+                  <p :key="index"><span v-if="scope.row.description.length > 1">{{index + 1}}. </span><span v-html="item"></span></p>
                 </template>
               </div>
             </template>
@@ -546,7 +546,7 @@ export default {
       console.log('data', data)
       const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
       const date = data[0].Date
-      const _signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
+      const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
       this.$emit('displayDes', _signalDes)
       this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, false)

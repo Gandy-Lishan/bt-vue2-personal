@@ -248,7 +248,7 @@
                   placeholder="— Select —"
                 >
                   <el-option
-                    v-for="item in conditionOptions"
+                    v-for="item in conditionOptions2"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -370,6 +370,11 @@ export default {
         { value: 'Short', label: 'Short', disabled: false}
       ],
       conditionOptions: [
+        { value: 0, label: '>' },
+        { value: 1, label: '=' },
+        { value: 2, label: '<' }
+      ],
+      conditionOptions2: [
         { value: 0, label: '>' },
         { value: 1, label: '=' },
         { value: 2, label: '<' }
@@ -542,7 +547,38 @@ export default {
         if(newVal === 'Long' || !newVal) this.data.signals = 'Trend Score CrossAbove 7'
       },
       immediate: true
-    }
+    },
+    // data: {
+    //   handler(newVal) {
+    //     debugger
+    //     const {signal, signal2, value, value2} = newVal
+    //   if(signal.includes('WH') || value.includes('High')) {
+    //     this.data.condition = 1
+    //     this.conditionOptions =  [
+    //     { value: 1, label: '=' }
+    //     ]
+    //     return
+    //   }
+    //   if(signal2.includes('WL') || value2.includes('High')) {
+    //     this.data.condition2 = 1
+    //     this.conditionOptions2 =  [
+    //     { value: 1, label: '=' }
+    //     ]
+    //     return
+    //   }
+    //   this.conditionOptions  = [
+    //     { value: 0, label: '>' },
+    //     { value: 1, label: '=' },
+    //     { value: 2, label: '<' }
+    //   ]
+    //   this.conditionOptions2  = [
+    //     { value: 0, label: '>' },
+    //     { value: 1, label: '=' },
+    //     { value: 2, label: '<' }
+    //   ]
+    //   },
+    //   deep: true
+    // }
   },
   mounted() {
     this.setBacktestHistory(6)
@@ -648,7 +684,7 @@ export default {
           signal2: 'Change',
           condition: 0,
           condition2: 0,
-          value: 'Symbol Close',
+          value: '',
           value2: '',
           value3: ''
         }
@@ -673,7 +709,7 @@ export default {
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
-        return
+        return [null, null]
       }
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
@@ -697,7 +733,7 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
-        description = [`${signalLabel} ${_condition} ${value} <b>${relationLabel}</b>`, `${signalLabel2} ${_condition2} ${value2}`]
+        description = [`${signalLabel} ${_condition} ${value}&nbsp;&nbsp;<b>${relationLabel}</b>&nbsp;&nbsp;`, `${signalLabel2} ${_condition2} ${value2}`]
       }
       const saveData = {...this.data,
         relation: this.data.relation,
@@ -972,7 +1008,7 @@ try {
         this.$emit('displayResultsData', saveRes.data.data.data)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
           const date = saveRes.data.data.data[0].Date
-          signalDes = `<strong>Date: ${date}</strong> ${signalDes}`
+          signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
           this.$emit('displayDes', signalDes)
           this.$emit('scrollToTarget', 'scrollTopTarget')
         }
