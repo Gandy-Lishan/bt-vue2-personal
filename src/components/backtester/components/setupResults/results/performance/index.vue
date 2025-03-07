@@ -59,7 +59,7 @@
 			<el-tab-pane label="Major Sectors" name="five" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Indexes Info')">
         <IndexesInfo ref="IndexesInfo" :IndexesInfo="IndexesInfo" :rowFrequency="rowFrequency"></IndexesInfo>
       </el-tab-pane>
-      <el-tab-pane label="Other Assets" name="six" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Other Assert')">
+      <el-tab-pane label="Major Indexes" name="six" v-if="Object.prototype.hasOwnProperty.call(initalData, 'Other Assert')">
         <OtherAssets ref="OtherAssets" :OtherAssets="OtherAssets" :rowFrequency="rowFrequency"></OtherAssets>
       </el-tab-pane>
 		</el-tabs>
@@ -608,7 +608,7 @@ export default {
         dataList = [...dataList, medianReturn, consistency]
       }
       if(Object.prototype.hasOwnProperty.call(this.initalData, 'Other Assert')) {
-        sheetNames = [...sheetNames, 'Other Assets']
+        sheetNames = [...sheetNames, 'Major Indexes']
         dataList = [...dataList, OtherAssets]
       }
       this.exportDataToCSV(dataList, sheetNames)
