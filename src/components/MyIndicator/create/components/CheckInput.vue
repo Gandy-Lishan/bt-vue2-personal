@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && (isSymbol || isEOEP)" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && (isSymbol || isEOEP || isShift)" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -15,11 +15,12 @@
       size="mini"
       v-model="value"
       @input="handleInput"
+      :disabled="isDisabled"
       :placeholder="config.placeholder"
       :style="{ visibility: inputVisibility }"
       @blur="validateValue(value)"
     ></el-input>
-    <div class="error-message">
+    <div class="error-message" :style="{ visibility: inputVisibility }" >
       <span v-if="config['field'] === 'shift'">{{ shiftErrMsg }}</span>
       <span v-else>{{ errMsg }}</span>
     </div>
@@ -45,9 +46,9 @@ export default {
   },
   data() {
     return {
-      value: 5,
+      value: '',
       showInput: false,
-      inputVisibility: 'hidden', // 初始化时设置为隐藏
+      // inputVisibility: 'hidden', // 初始化时设置为隐藏
       MAType: 'MA',
       errMsg: '',
       shiftErrMsg: ''
@@ -92,14 +93,19 @@ export default {
         },
         {
           value: 'roc',
-          label: 'ROC',
+          label: 'Rate Of Change',
           isSymbol: true
         },
         {
-          value: 'amplify',
-          label: 'Amplify',
+          value: 'amplitude',
+          label: 'Amplitude',
           isSymbol: true
         },
+        // {
+        //   value: 'amplify',
+        //   label: 'Amplify',
+        //   isSymbol: true
+        // },
         {
           value: 'MA',
           label: 'Simple Moving Average'
@@ -117,7 +123,7 @@ export default {
         },
         {
           value: 'roc',
-          label: 'ROC',
+          label: 'Rate Of Change',
           isSymbol: true
         },
         {
@@ -137,36 +143,37 @@ export default {
     },
     isEOEP() {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
+    },
+    inputVisibility() {
+      const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType)
+      const isShift = this.config['label'] === 'Shift'
+      const isEOEP = this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'
+      if(isShowInput || isShift || isEOEP) return 'visible'
+      return 'hidden'
+    },
+    isShift() {
+      return this.config.field == "shift"
     }
   },
   watch: {
     showInput(newValue) {
-      debugger
-      const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType)
-      const isShift = this.config['label'] === 'Shift'
-      if(newValue && (isShowInput || isShift || this.isEOEP)) {
-        this.inputVisibility = 'visible';
-      }else {
-        this.errMsg = ''
-        if(isShift) this.errMsg = ''
-        this.inputVisibility = 'hidden';
-      }
+      this.validateValue()
       if(this.config.type == 'SelectInput' && this.isMAOption){
         this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
     },
-    MAType(newValue) {
-      const isShowInput = ['EMA', 'MA', 'roc'].includes(newValue)
-      const isShift = this.config['label'] === 'Shift'
-      if(isShowInput) this.inputVisibility = 'visible';
-      else {
-        this.inputVisibility = 'hidden';
-        this.errMsg = ''
-        if(isShift) this.shiftErrMsg = ''
-      }
-    },
+    // MAType(newValue) {
+    //   const isShowInput = ['EMA', 'MA', 'roc'].includes(newValue)
+    //   const isShift = this.config['label'] === 'Shift'
+    //   if(isShowInput) this.inputVisibility = 'visible';
+    //   else {
+    //     this.inputVisibility = 'hidden';
+    //     this.errMsg = ''
+    //     if(isShift) this.shiftErrMsg = ''
+    //   }
+    // },
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
@@ -174,9 +181,13 @@ export default {
         debugger
         const {field, value} = newValue
         this.showInput = newValue.checked
-        const _value = value.replace(/\d+/g, "")
-        if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(_value)) {
-          this.MAType = _value
+        try {
+          const _value = value.replace(/\d+/g, "")
+          if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify'].includes(_value)) {
+            this.MAType = _value
+          }else {this.MAType = 'MA'}
+        } catch (error) {
+          
         }
         this.value = newValue.value
         if(typeof newValue.value === 'string' && newValue.value.includes('e'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'EMA'}
@@ -185,35 +196,35 @@ export default {
       deep: true, // 启用深度监听，监视对象属性的变化
       immediate: true,
     },
-    categories(newValue) {
-      debugger
-      if(this.isEditState) return
-      const isChecked = ['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(this.MAType)
-      const isSymbol = newValue.includes('Symbol')
-      if(isSymbol && !isChecked && this.config.field === 'ma1') this.MAType = 'c'
-      if(isSymbol && !isChecked && this.config.field === 'ma2') this.MAType = 'o'
-      if(!isSymbol && (['o', 'h', 'l', 'c', 'roc', 'amplify'].includes(this.MAType))) this.MAType = 'MA'
-      if(!isSymbol && this.config['label'] === 'Shift' && this.inputVisibility === 'visible') {
-        this.inputVisibility = 'hidden'
-        this.showInput = false
-      }
-    }
+    // categories(newValue) {
+    //   debugger
+    //   if(this.isEditState) return
+    //   // const isChecked = ['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(this.MAType)
+    //   const isSymbol = newValue.includes('Symbol')
+    //   if(isSymbol && (this.config.field === 'ma1' || this.config.field === 'ma2')) this.MAType = 'c'
+    //   if(!isSymbol && (['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(this.MAType))) this.MAType = 'MA'
+    //   if(!isSymbol && this.config['label'] === 'Shift' && this.inputVisibility === 'visible') {
+    //     this.inputVisibility = 'hidden'
+    //     this.showInput = false
+    //   }
+    // }
   },
   methods: {
     clearForm() {
       this.showInput = false
       this.value = 5
-      this.inputVisibility = 'hidden'
+      // this.inputVisibility = 'hidden'
       this.MAType = 'MA'
     },
     saveData() {
       debugger
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
         let value = this.showInput ? this.value : 1
-        const dontSaveMaValue = ['o', 'h', 'l', 'c', 'amplify'].includes(this.MAType)
+        const dontSaveMaValue = ['o', 'h', 'l', 'c', 'amplitude', 'amplify'].includes(this.MAType)
         if(!this.showInput) value = 1
         if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
         if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
+        if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
         if(this.showInput && this.MAType == 'amplify') value = `amplify`
         if(this.showInput && dontSaveMaValue) value = 1
 
@@ -266,15 +277,20 @@ export default {
       const value = this.value
       if(_config.label == "Extreme Optimism") {
         // 限制小数点后两位
-        this.errMsg = createEOEPValidate(value)
+        if(!this.showInput) {this.errMsg = ''}
+        else this.errMsg = createEOEPValidate(value)
       }else if(_config.label == "Extreme Pessimism") {
-        this.errMsg = createEOEPValidate(value)
+        if(!this.showInput) {this.errMsg = ''}
+        else this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
-        this.errMsg = createPositiveIntegerValidate(value, 1)
+        if(!this.showInput) {this.errMsg = ''}
+        else this.errMsg = createPositiveIntegerValidate(value, 1)
       }else if(_config.field == "ma2") {
-        this.errMsg = createPositiveIntegerValidate(value, 1)
+        if(!this.showInput) {this.errMsg = ''}
+        else this.errMsg = createPositiveIntegerValidate(value, 1)
       }else if(_config.field == "shift") {
-        this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)
+        if(!this.showInput) {this.shiftErrMsg = ''}
+        else this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)
       }
       console.log('errMsg', this.errMsg)
       console.log('shiftErrMsg', this.shiftErrMsg)

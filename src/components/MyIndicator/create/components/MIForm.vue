@@ -885,8 +885,8 @@ export default {
       if(this.data.categories.includes('Symbol')) {
         debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
-        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
-        commonData.next_process = `sh5_${symbol_ma1}|sh${shift}_${symbol_ma2}`
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude') symbol_ma2 = 'c'
+        commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
       }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
@@ -976,8 +976,8 @@ export default {
       if(this.data.categories.includes('Symbol')) {
         debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
-        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
-        commonData.next_process = `sh5_${symbol_ma1}|sh${shift || 0}_${symbol_ma2}`
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude') symbol_ma2 = 'c'
+        commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
       }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
@@ -1306,6 +1306,7 @@ export default {
       },
     async displayData(data) {
       debugger
+      console.log('data', data)
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former_url;
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter_url;
@@ -1370,15 +1371,16 @@ export default {
           { key: 'shift' }
         ];
         configMap.forEach(item => {
+          debugger
           const value = data[item.key];
           const index = item.index
           let _value = null
           let checked = false
           if(item.key === 'ma') {
-            _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '') 
+            _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
             checked = (valueFromStr != '1')
-            if(data.categories.includes('Symbol')) {
+            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
             if(data.next_process) {
               debugger
               const result = extractValues(data.next_process)
@@ -1401,8 +1403,8 @@ export default {
               }
             }
           }else {
-            _value = (value != '0' ? value : '')
-            checked = value != '0'
+            _value = (value ? value : '')
+            checked = Boolean(value)
           }
           item.config = {
             value: _value,

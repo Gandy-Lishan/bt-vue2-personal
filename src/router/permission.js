@@ -41,11 +41,16 @@ export function setRouterPermission(router) {
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
+			// hao@sentimentrader
+			const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			// daniel@sentimentrader.com
+			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdEMzpmhxCv6gNShtTcDmbal9HogiBIRYhxP9M5JqBxhvRAoCi9fuRYJjeTsdb0VjwkMB27XTL0g1I3dW7w5v9XL6qlKrueeGC0Uli9jUq0AK3hz2XcFQbELMaMVR3TpMWSl4OV46kBaEQ2+X15NdZRq9pBUXsik/FD8n+xznUaxs3rtxKFbWFMbK9jCJEzgPrUiEHWHKBM5MlWrFsdG08U4TE+l7hXmVyAsAMMv03AduZoAdot4ilWWHEdg3Fzj4Bpeb4MJv9j3/w8hSd47J4Pfupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6hncazwRWKGcmprbtmXVye7J9mNxarng0OJsRRSvDEF8/H719MKJbl9GknLd5DZxGl9HogiBIRYhxP9M5JqBxhrAZERQfwQ5uPEnPN5jrE78M0Y+6xdHCfexMWtmR0Z1r"
 			Cookies.set(
 				'sentimen_session',
-				'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+				_userCookies
+				
 			)
-			Cookies.set('session', '.eJxtUU1rHTEM_CuLzy_g77X3DxQKvQVyKGWRLTkx2fW-2t7SR8h_r9u-9NSL0MDMaCS9sTVVai9sSbA1urA1I1uY9lZwy5VT0aOPwUoNxgvLrTU8CotGzJjmhOBmJZGEMGTVLJUMo-DsnA0ueWOtAjLeeaNT1Dx5CLOdufckKKg4cw2Ca6cGT-sQNIlZCUyGjSBXqjsUKp0tvZ4jGsRIra0b_aBtZLxW2vO5PyB0eLgR1O02ZLHVtPbjlcqgOKNSIqE4QkQLajROqzHTSEWBBEaSDiUOHf285go9H2UdhsSWNzb9vsQT4WWScvoMZZJcmomLRc6LVtOnL4_s_cLaGRpbvrL9QNoIn2mYQW4RSqF6x99PKP3ej_T11l9yeR7g_zsEiK-d2ociF8wR-vHh1ivgkN9RGxfKO_3zvx61p2PLxx_87cLORvXvVwU3zrP3X1H6m6c.GnCOgg.hp6scmyz2zBsrUcB86-XSFT-01g')
+			Cookies.set('session', _userCookies)
 		}
 		// Jason
 		// Cookies.set(
@@ -239,15 +244,17 @@ async function initiateList(pathname) {
 }
 
 async function fetchDataList(source) {
+	debugger
 	const dataList = store.getters[source]
 	const sourceMap = {
-		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol' },
-		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol' },
+		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol', category:  'category'},
+		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol', category:  'category' },
 		getIndicatorsList: {
 			labelField: 'chart_name',
 			urlField: 'url',
 			updateField: 'updated',
-			type: 'Indicator'
+			type: 'Indicator',
+			category:  'category'
 		}
 	}
 
@@ -269,6 +276,7 @@ async function fetchDataList(source) {
 			// 	return obj
 			// }
 			// 不需要限制 timeframe 为 Daily
+			if(item.category) obj.category = item.category
 			if(item.updated) {
 				obj.updated = item.updated
 				return obj

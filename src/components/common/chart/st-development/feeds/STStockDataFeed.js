@@ -745,6 +745,11 @@ quoteFeedSimulator.formatChartData = async function(response){
                         setTimeout(() => {
                             window.location.reload();
                             }, 2000); // 2000毫秒 = 3秒
+                    }else if(res.data.code === 401) {
+                        _this.popUpMsgBox('AEX Index not support ohlcv calculation')
+                        setTimeout(() => {
+                            window.location.reload();
+                            }, 2000); // 2000毫秒 = 3秒
                     }
                     datafeed = res.data.data;
                     // 暂存
