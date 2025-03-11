@@ -174,6 +174,7 @@
 <script>
 import { getStrategyList, getStrategiesJSON, addStrategyFavorites, moveStrategyFavorites } from '@/service/service'
 import { LocalStorageUtil, timestampToTime } from '@/utils'
+import moment from 'moment';
 
 export default {
 	name: 'StrategiesTable',
@@ -196,50 +197,7 @@ export default {
 			currentPage: 1, // Default current page
 			total: 0,
 			searchItem: '',
-			tableCol: [
-				{
-					label: 'Model Name',
-					value: 'model_name',
-					key: 'model_name',
-					minWidth: '170px',
-				},
-				{
-					label: 'Time<br/>Frame',
-					value: 'type',
-					key: 'type',
-					width: '120px'
-				},
-				{
-					label: 'Current Signal:<br/>(e.g., Long, Sell, etc)',
-					value: 'current_state',
-					key: 'current_state',
-					width: '240px'
-				},
-				{
-					label: 'Last Signal Date: (last change in Signal)',
-					value: 'date',
-					key: 'date',
-					width: '120px'
-				},
-				{
-					label: 'Model Update<br/>Frequency',
-					value: 'update_frequency',
-					key: 'update_frequency',
-					width: '100px'
-				},
-				{
-					label: 'YTD until<br/>01/31/25<br/>Return(%)',
-					value: 'YTD_return',
-					key: 'YTD_return',
-					width: '125px'
-				},
-				{
-					label: 'To BTV3',
-					value: 'btn',
-					key: 'btn',
-					width: '120px'
-				}
-			],
+			tableCol: [],
 			tableData: [],
 			immutableTableData: [],
 			currentSort: {}, // 当前的排序信息
@@ -258,10 +216,60 @@ export default {
 			return this.immutableTableData.slice(startIndex, endIndex)
 		}
 	},
-	// async mounted() {
-	// 	if (!this.tableData.length || !this.tableData) await this.getDataList()
-	// 	await this.getStrategyJSON()
-	// },
+	async mounted() {
+		// if (!this.tableData.length || !this.tableData) await this.getDataList()
+		// await this.getStrategyJSON()
+
+// 计算上个月的最后一天（使用本地时间）
+const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('MM/DD/YY');
+
+this.tableCol = [
+  {
+    label: 'Model Name',
+    value: 'model_name',
+    key: 'model_name',
+    minWidth: '170px',
+  },
+  {
+    label: 'Time<br/>Frame',
+    value: 'type',
+    key: 'type',
+    width: '120px'
+  },
+  {
+    label: 'Current Signal:<br/>(e.g., Long, Sell, etc)',
+    value: 'current_state',
+    key: 'current_state',
+    width: '240px'
+  },
+  {
+    label: 'Last Signal Date: (last change in Signal)',
+    value: 'date',
+    key: 'date',
+    width: '120px'
+  },
+  {
+    label: 'Model Update<br/>Frequency',
+    value: 'update_frequency',
+    key: 'update_frequency',
+    width: '100px'
+  },
+  {
+    label: `YTD until<br/>${lastMonthEnd}<br/>Return(%)`, // 动态更新日期
+    value: 'YTD_return',
+    key: 'YTD_return',
+    width: '125px'
+  },
+  {
+    label: 'To BTV3',
+    value: 'btn',
+    key: 'btn',
+    width: '120px'
+  }
+];
+
+	console.log(`✅ 计算出的上个月最后一天: ${lastMonthEnd}`);
+	},
 	methods: {
 		async mountedRequestList() {
 			if (!this.tableData.length || !this.tableData) await this.getDataList()
@@ -587,7 +595,9 @@ export default {
 					const hour = date.getHours();
 					const minute = date.getMinutes();
 					const second = date.getSeconds();
+					const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
 					matchStrategy.name = `${matchStrategy.name} (${year}-${month}-${day} ${hour}:${minute}:${second})`
+					matchStrategy.end_date = lastMonthEnd
 					this.$store.commit('form/getRunBacktestData', matchStrategy)
 
 					this.$router.push({
