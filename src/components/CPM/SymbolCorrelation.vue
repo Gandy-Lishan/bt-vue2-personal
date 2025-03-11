@@ -33,15 +33,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-            <!-- <el-date-picker
-              v-model="data.start_date"
-              type="date"
-              placeholder="- Select Start Date -"
-              value-format="yyyy-MM-dd"
-              :picker-options="startPickerOptions"
-            >
-            </el-date-picker> -->
-            <el-form-item label="2. Date Range" prop="dateRange">
+            <!-- <el-form-item label="2. Date Range" prop="dateRange">
             <el-date-picker
               v-model="dateRange"
               type="daterange"
@@ -53,10 +45,37 @@
               :picker-options="pickerOptions"
               @change="handleDateChange">
             </el-date-picker>
+          </el-form-item> -->
+          <el-form-item prop="cpm_period" label="2. Date Range" class="dateRange">
+            <el-select
+              @change="setPeriod(cpm_period)"
+              v-model="cpm_period"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
-        </el-col>
-        <!-- <el-col :span="4">
-          <el-form-item prop="end_date" label="3. End Date">
+        <el-row :gutter="20">
+          <div :class="{hidePicker: cpm_period !== 'custom', 'picker-container': true}">
+            <el-col :span="12">
+          <el-form-item prop="start_date" label="" class="dateSelect">
+            <el-date-picker
+              v-model="data.start_date"
+              type="date"
+              placeholder="- Select Start Date -"
+              value-format="yyyy-MM-dd"
+              :picker-options="startPickerOptions"
+            >
+            </el-date-picker>
+          </el-form-item>
+         </el-col>
+         <el-col :span="12">
+          <el-form-item prop="end_date" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.end_date"
                 type="date"
@@ -66,13 +85,28 @@
               >
               </el-date-picker>
           </el-form-item>
-        </el-col> -->
+         </el-col>
+          </div>
+        </el-row>
+        </el-col>
         <el-col :span="8">
-          <el-button type="warning" @click="resetForm('Form')" size="small">Clear Form</el-button>
+          <el-form-item prop="cpm_period" label="3. Time Frame" class="dateRange">
+            <el-select
+              v-model="data.roll_window"
+            >
+              <el-option
+                v-for="item in rollWindowOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="24">
-        <el-col :span="16">
+        <el-col :span="24">
           <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
             <div class="ticker-select">
               <el-autocomplete
@@ -116,9 +150,16 @@
             </div>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="24" type="flex" justify="center">
+        <el-col :span="8"></el-col>
+        <el-col :span="8">
+          <el-button type="warning" @click="resetForm('Form')" size="small">Clear Form</el-button>
+        </el-col>
         <el-col :span="8">
           <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
         </el-col>
+        <el-col :span="8"></el-col>
       </el-row>
       <el-form-item>
       </el-form-item>
@@ -145,6 +186,7 @@ export default {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
+          roll_window: 5
         },
         // 自定义动态渲染下拉栏
         searchResults: [],
@@ -156,6 +198,43 @@ export default {
         dropdownList: [],
         dateRange: [],
         btnLoading: false,
+        cpm_period: 1,
+        options: [
+        {
+          value: 1,
+          label: '1 Year'
+        },
+        {
+          value:  2,
+          label: '2 Year'
+        },
+        {
+          value: 3,
+          label: '3 Year'
+        },
+        {
+          value: 5,
+          label: '5 Year'
+        },
+        {
+          value: 'custom',
+          label: 'Custom...'
+        }
+      ],
+      rollWindowOptions: [
+        {
+          value: 5,
+          label: 'Short'
+        },
+        {
+          value: 21,
+          label: 'Medium'
+        },
+        {
+          value: 63,
+          label: 'Long'
+        },
+      ],
         pickerOptions: {
           shortcuts: [
             {
@@ -227,7 +306,7 @@ export default {
     mounted() {
       this.dropdownList = this.symbolList
       this.attachScrollListener()
-      this.setDate(5)
+      this.setPeriod(this.cpm_period)
     },
     methods: {
       validateDateRange(value) {
@@ -252,14 +331,6 @@ export default {
         this.popUpMsgBox('Please select a date range')
       }
      },
-      setDate(val) {
-        this.data.end_date = timestampToTime(new Date());
-        const endDate = new Date(this.data.end_date);
-        const startDate = new Date(endDate);
-        startDate.setFullYear(startDate.getFullYear() - val)
-        this.data.start_date = timestampToTime(startDate);
-        this.dateRange = [startDate, endDate]
-      },
       handleDisabledStartDate(time) {
         const today = timestampToTime(new Date())
         const endDay = timestampToTime(new Date(this.data.end_date))
@@ -271,9 +342,8 @@ export default {
         }
       },
       handleDisabledEndDate(time) {
-        const [start_date, end_date] = this.dateRange
         const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(start_date))
+        const startDay = timestampToTime(new Date(this.data.start_date))
         return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
     attachScrollListener() {
@@ -333,8 +403,8 @@ export default {
     },
     async saveFormData() {
       if(this.stock_comparison.length === 0) {this.popUpMsgBox('Please select at least one ticker');return}
-      const validate = this.validateDateRange(this.dateRange)
-      if(!validate) return
+      // const validate = this.validateDateRange(this.dateRange)
+      // if(!validate) return
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
@@ -396,6 +466,8 @@ export default {
         this.symbol = ''
         // 往标签数组里面推送
         if(this.stock_comparison.length >= 5) {this.popUpMsgBox(`You can only select up to 5 tickers`);return};
+        const tickerUrl = ticker.url
+        if(this.stock_comparison.includes(tickerUrl)) {this.popUpMsgBox(`Duplicate tickers detected`);return}
         this.stock_comparison.push(ticker.url);
       },
       getBenchMark(ticker) {
@@ -637,6 +709,25 @@ export default {
         }
       }
     },
+    setPeriod(period) {
+      const end_date = timestampToTime(new Date())
+      this.data.end_date = end_date
+      if(period !== 'custom') {
+        debugger
+        const str = end_date.split('-')
+        str[0] = Number(str[0]) - this.cpm_period + ''
+        const start_date = str.join('-')
+        const isLeapYearFeb29 = (date) => {
+          const year = date.getFullYear();
+          return ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0))
+        }
+        if (!isLeapYearFeb29(new Date(start_date)) && (new Date(start_date).getMonth() === 1 && new Date(start_date).getDate() === 29 )) {
+          this.data.start_date = timestampToTime(new Date(start_date).setDate(new Date(start_date).getDate() + 1))
+          return
+        }
+        this.data.start_date = start_date
+      }
+    }
     }
 }
 </script>
@@ -715,5 +806,22 @@ background-color: #fff;
   border: 1px solid #5b9bd1;
   font-weight: bold;
 }
+}
+/deep/ .el-select {
+  width: 100%;
+}
+.el-form-item.dateRange.el-form-item--feedback.el-form-item--small {
+  margin-bottom: 5px;
+}
+.el-form-item.dateSelect.el-form-item--feedback.is-success.is-required.el-form-item--small {
+  margin-bottom: 0px;
+}
+.picker-container {
+  // display: none;
+  // visibility: visible;
+}
+.hidePicker {
+  visibility: hidden;
+  // display: block;
 }
 </style>
