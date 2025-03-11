@@ -480,7 +480,7 @@ export default {
       ],
       MA1CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average value',
+        placeholder: 'Please input the moving average period',
         checked: false,
         field: 'ma1',
         value: '',
@@ -496,7 +496,7 @@ export default {
       },
       MA2CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average value',
+        placeholder: 'Please input the moving average period',
         checked: false,
         field: 'ma2',
         value: '',
@@ -892,7 +892,8 @@ export default {
       if(this.data.categories.includes('Symbol')) {
         debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
-        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude') symbol_ma2 = 'c'
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
+        if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
         commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
       }
       if(this.data.categories == 'WIC') {
@@ -983,7 +984,8 @@ export default {
       if(this.data.categories.includes('Symbol')) {
         debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
-        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude') symbol_ma2 = 'c'
+        if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
+        if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
         commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
       }
       if(this.data.categories == 'WIC') {

@@ -98,7 +98,7 @@ export default {
           isSymbol: true
         },
         {
-          value: 'amplitude',
+          value: 'amplify',
           label: 'Amplitude',
           isSymbol: true
         },
@@ -287,10 +287,10 @@ export default {
         if(!this.showInput) {this.errMsg = ''}
         else this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
-        if(!this.showInput) {this.errMsg = ''}
+        if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 1)
       }else if(_config.field == "ma2") {
-        if(!this.showInput) {this.errMsg = ''}
+        if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 1)
       }else if(_config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}

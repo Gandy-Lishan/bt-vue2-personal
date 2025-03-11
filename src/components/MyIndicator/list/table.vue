@@ -460,7 +460,7 @@ export default {
         },
         {
           value: 'amplify',
-          label: 'Amplify',
+          label: 'Amplitude',
           isSymbol: true
         },
         {
