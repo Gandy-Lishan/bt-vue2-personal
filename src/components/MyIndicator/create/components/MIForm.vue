@@ -235,6 +235,7 @@
           :categories="data.categories"
 					:config="ShiftCheckInputConfig"
           :isDisabled="data.indicator_2==''"
+          :showShiftInput="showShiftInput"
 					ref="shiftForm"
 					@saveData="saveSubData"
 				></CheckInput>
@@ -603,7 +604,13 @@ export default {
     },
     symbollistForecast() {
       return this.$store.getters.getSymbollistForecast
-    }
+    },
+    showShiftInput() {
+      // 两个 url 存在并且相等时
+      const {indicator_1_url, indicator_2_url} = this.data
+      const condition = (indicator_1_url !== '' && indicator_2_url !== '') && indicator_1_url === indicator_2_url
+      return condition
+     }
   },
   watch: {
     handleGetMiBenmark: {

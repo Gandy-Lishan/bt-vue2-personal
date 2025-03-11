@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && (isSymbol || isEOEP || isShift)" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -21,7 +21,7 @@
       @blur="validateValue(value)"
     ></el-input>
     <div class="error-message" :style="{ visibility: inputVisibility }" >
-      <span v-if="config['field'] === 'shift'">{{ shiftErrMsg }}</span>
+      <span v-if="config['field'] === 'shift' && showShiftInput">{{ shiftErrMsg }}</span>
       <span v-else>{{ errMsg }}</span>
     </div>
     </div>
@@ -43,6 +43,7 @@ export default {
     categories: String,
     indicator_1_category: String,
     indicator_2_category: String,
+    showShiftInput: Boolean
   },
   data() {
     return {
@@ -145,8 +146,9 @@ export default {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
     },
     inputVisibility() {
-      const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType)
-      const isShift = this.config['label'] === 'Shift'
+      const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType) && this.config['label'] !== 'Shift'
+      debugger
+      const isShift = this.config['label'] === 'Shift' && this.showShiftInput && this.isSymbol
       const isEOEP = this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'
       if(isShowInput || isShift || isEOEP) return 'visible'
       return 'hidden'
@@ -185,7 +187,8 @@ export default {
           const _value = value.replace(/\d+/g, "")
           if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify'].includes(_value)) {
             this.MAType = _value
-          }else {this.MAType = 'MA'}
+          }
+          else{this.MAType = 'MA'}
         } catch (error) {
           
         }
@@ -212,7 +215,7 @@ export default {
   methods: {
     clearForm() {
       this.showInput = false
-      this.value = 5
+      this.value = ''
       // this.inputVisibility = 'hidden'
       this.MAType = 'MA'
     },
@@ -238,7 +241,7 @@ export default {
         if(!this.showInput) value = 0
         this.$emit('saveData', this.config.field, value)
       }else if(this.config.field === 'shift') {
-        let value = (this.showInput && this.isSymbol) ? this.value : 0
+        let value = (this.showInput && this.isSymbol && this.inputVisibility === 'visible') ? this.value : 0
         this.$emit('saveData', `shift`, value)
       }
     },
@@ -252,10 +255,11 @@ export default {
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
+      this.validateValue()
     }, 500),
     validateForm() {
       if(this.showInput) {
-        if(this.isSymbol && this.config['field'] == 'shift') {
+        if(this.isSymbol && (this.config['field'] == 'shift' && this.showShiftInput)) {
           this.validateShiftValue(this.value)
           if(this.shiftErrMsg) {
             this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
@@ -288,7 +292,7 @@ export default {
       }else if(_config.field == "ma2") {
         if(!this.showInput) {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 1)
-      }else if(_config.field == "shift") {
+      }else if(_config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}
         else this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)
       }

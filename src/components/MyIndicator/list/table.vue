@@ -489,7 +489,7 @@ export default {
               if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
               if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
-              _maValues[index] = (value && value != '1') ? `Moving Average ${value}` : ''
+              _maValues[index] = (value && value != '1') ? `Simple Moving Average ${value}` : ''
               if(index === 1) _maValues[index] = `${_maValues[index]}${(symbol_ma2 && symbol_ma2 != 0 && !isNaN(symbol_ma2)) ? `${typeAttribute === 'symbol' ? `Shift ${symbol_ma2}` : ''}` : ''}`
             }
           }
