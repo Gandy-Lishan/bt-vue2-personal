@@ -111,7 +111,7 @@ export default {
 				)
 				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of 1 Signals' && item != 'Max Gain' && item != 'Max Loss')
 				
-				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': '# of Times > -5%'}, {'Dates of 1 Signals': '# of Times > -10%' }]
+				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': 'Max. Gain'}, {'Dates of 1 Signals': 'Max. Loss'}, {'Dates of 1 Signals': '# of Times > -5%'}, {'Dates of 1 Signals': '# of Times > -10%' }]
 				defaultTableLabels.forEach(label => {
 					medianMaxGainArray.forEach(ele => {
 						if(ele['Dates of 1 Signals'] === 'Median') {
@@ -162,6 +162,20 @@ export default {
 							const lenMaxGain = ''
 							const lenMaxLoss = maxLossValues.filter(num => parseFloat(num) < -10).length
 							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
+					}else if(ele['Dates of 1 Signals'] === 'Max. Gain') {
+							// 计算 Max Gain 最大值
+							debugger
+							const monthData = backtestHistoryList.map(entry => entry[label])
+							const maxLossValues = monthData.map(entry => entry["Max Gain"])
+							// 求出数组中的最大值
+							const max = maxLossValues.reduce((a, b) => Math.max(a, b), -Infinity);
+							ele[label] = {"Max Gain": max, "Max Loss": ''}
+					}else if(ele['Dates of 1 Signals'] === 'Max. Loss') {
+							// 计算 Max Loss 最大值
+							const monthData = backtestHistoryList.map(entry => entry[label])
+							const maxLossValues = monthData.map(entry => entry["Max Loss"])
+							const min = maxLossValues.reduce((a, b) => Math.min(a, b), Infinity);
+							ele[label] = {"Max Gain": '', "Max Loss": min}
 					}
 				})
 			})
