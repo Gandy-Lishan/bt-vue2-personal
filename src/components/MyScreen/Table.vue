@@ -543,7 +543,8 @@ export default {
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
-      console.log('data', data)
+      const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
       const date = data[0].Date
       const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
@@ -557,6 +558,12 @@ export default {
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
+      const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
+      const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
+      const date = data[0].Date
+      const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
+      this.$emit('displayDes', _signalDes)
       this.$emit('displayResultsData', data)
       this.$emit('displayFormData', row, true)
     },

@@ -48,6 +48,27 @@
 					</template>
 				</el-table-column>
 			</template>
+		<el-table-column
+			width="100px"
+			v-if="showBTBtn"
+		>
+		<template slot-scope="scope">
+			<el-tooltip
+					class="item"
+					effect="dark"
+					content="Go to Backtest"
+					placement="bottom-start"
+				>
+				<el-button
+					round
+					size="mini"
+					type="primary"
+					icon="el-icon-right"
+					@click="goToBacktest(scope.row)"
+				></el-button>
+			</el-tooltip>
+		</template>
+		</el-table-column>
 		</el-table>
 		<el-pagination
 		@size-change="handleSizeChange"
@@ -62,6 +83,9 @@
 </template>
 
 <script>
+import moment from 'moment';
+import { CIQ } from '@/components/common/chart/st-development/js/components'
+import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
 
 export default {
 	name: 'FilterTable',
@@ -69,7 +93,8 @@ export default {
 		data: Object,
 		tableCol :Array,
 		loading: Boolean,
-		signalDes: String
+		signalDes: String,
+		jumpBacktestData: Object
 	},
 	data() {
 		return {
@@ -155,6 +180,9 @@ export default {
 			// 当checkbox未勾选时，返回原始数据
 			return this.data.content?.slice(startIndex, endIndex);
 		},
+		showBTBtn() {
+			return  (Object.keys(this.jumpBacktestData).length !== 0)
+		}
 	},
 	watch: {
 		checkboxGroupState: {
@@ -315,6 +343,114 @@ export default {
 				}
 			})
 			return processedData
+		},
+		async initiateTechList() {
+			const config = defaultConfig()
+			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
+		},
+		async goToBacktest(row) {
+			if(Object.keys(this.jumpBacktestData) === 0) return
+			const {Name, Symbol} = row
+			await this.initiateTechList()
+			console.log('go to backtest row', row)
+			console.log('go to backtest', this.jumpBacktestData)
+			const jumpBacktestData = this.jumpBacktestData
+			const extractSIContent = (str) => {
+					const match = str.match(/(SI|TI|SY):([^;]*)/);
+					return match ? match[2] : null;
+			}
+			const replaceContent = (str, newValue) => {
+					return str.replace(/(SI|TI|SY):[^;]+/, `$1:${newValue}`);
+			}
+
+			const findSignal = (item, index) => {
+				const code = item.code.replace("replace_name", Name)
+				const name = extractSIContent(code)
+				const isSentimentIndicator = code.includes('SI:')
+				const isTrendScore = code.includes('Trend Score')
+				const isOptix = code.includes('Optix')
+				let url = null
+				if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
+				else if(isSentimentIndicator && isOptix) url = `${Symbol}_optix`
+				debugger
+				let signal = CIQ.findSentiIndicator(null, url)
+				if (!signal) {
+					signal = CIQ.findBuiltinTechIndicator(name, null)
+				}
+				// 在 symbol indicator list内检索url
+				if (!signal) {
+					if (CIQ.findSymbolIndicator(name, null)) {
+						return item
+					}
+				}
+				return signal
+			}
+
+			let _signal = null
+			_signal = jumpBacktestData.entry.signals.map(findSignal)
+			console.log('_signal', _signal)
+
+			// const signals = jumpBacktestData.entry.signals.map(item => {
+			// 	item.code = item.code.replace("replace_name", Name)
+			// 	console.log('item.code', item.code )
+			// 	const name = extractSIContent(item.code)
+			// 	console.log('name', name )
+			// 	let result = CIQ.findSentiIndicator(name)
+			// 	console.log('result', result)
+			// 	return item
+			// })
+			const signals = jumpBacktestData.entry.signals.map((item,index) => {
+					item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
+					return item
+			})
+			console.log('signals', signals)
+			jumpBacktestData.entry.signals = signals
+			jumpBacktestData.symbol = Symbol
+			const date = new Date()
+			const year = date.getFullYear();
+			const month = date.getMonth() + 1;
+			const day = date.getDate();
+			const hour = date.getHours();
+			const minute = date.getMinutes();
+			const second = date.getSeconds();
+			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
+			jumpBacktestData.name = `My Screen (${year}-${month}-${day} ${hour}:${minute}:${second})`
+			jumpBacktestData.end_date = lastMonthEnd
+			jumpBacktestData.uuid = "UUID"
+			jumpBacktestData.strategy = "Single"
+			jumpBacktestData.commission = 0
+			jumpBacktestData.slippage = 0
+			jumpBacktestData.trade_price = 0
+			jumpBacktestData.exit = {
+				score:1,
+				signals_in_market:1,
+				relation:0,
+				delay_bars:0,
+				signals:[{code:"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999"}],
+				cond:[null]
+			}
+			jumpBacktestData.indicator_layout = {
+			savedTechSD: [],
+			activatedMA: [{
+					period: 21,
+					url: ""
+			}],
+			activatedMALayout: [],
+			activatedTechLayout: [],
+			formIndicators: {
+					// entry: ["model_stem"],
+					entry: _signal.map(item => (item.url)),
+					exit: [""]
+			}
+		}
+		jumpBacktestData.risk_control = '//21'
+			
+			this.$store.commit('form/getRunBacktestData', jumpBacktestData)
+
+			this.$router.push({
+					name: 'SetUp',
+					params: { data: JSON.stringify(jumpBacktestData), usedFor: 'showBTForm' }
+			},()=>{})
 		}
 	}
 };

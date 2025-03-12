@@ -162,7 +162,7 @@ export default {
 			});
 		} 
 		/** 只用来管理进入路由时的状态，加载函数都放置在chartiq onReady的回调 */
-		else if(to.path === '/backtester/sr/setup' && from.path.includes('/strategy')){
+		else if(to.path === '/backtester/sr/setup' && (from.path.includes('/strategy') ||from.path.includes('/my_screen'))){
 			// next(async _this => {
 			// if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
 			// 		const { data } = to.params

@@ -37,6 +37,7 @@
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
             @displayDes="displayDes"
+            @saveJumpBacktestData="saveJumpBacktestData"
           ></SignalsTable>
           <FilterTable v-show="activeTab == 'Result'" ref="filterTable"
             :data="filterTableData" 
@@ -44,6 +45,7 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             :signalDes="signalDes"
+            :jumpBacktestData="jumpBacktestData"
             ></FilterTable>
           <SignalsTable 
             v-show="activeTab === 'System'"
@@ -53,6 +55,7 @@
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
             @displayDes="displayDes"
+            @saveJumpBacktestData="saveJumpBacktestData"
           ></SignalsTable>
         </div>
       </el-collapse-item>
@@ -72,6 +75,7 @@
          @clearResults="clearResults"
          @displayResultsData="displayResultsData"
          @displayDes="displayDes"
+         @saveJumpBacktestData="saveJumpBacktestData"
          >
         </ScannerForm>
       </el-collapse-item>
@@ -185,7 +189,8 @@ export default {
           // {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
         ]
       },
-      signalDes: ''
+      signalDes: '',
+      jumpBacktestData: {}
     }
   },
   components: {
@@ -372,6 +377,9 @@ export default {
     },
     displayDes(des) {
       this.signalDes = des
+    },
+    saveJumpBacktestData(data) {
+      this.jumpBacktestData = data
     }
   }
 }

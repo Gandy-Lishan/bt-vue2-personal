@@ -1005,7 +1005,9 @@ try {
         this.popUpMsgBox(`The screen is completed successfully`)
         this.$emit('refreshBTList');
         debugger
+        const entry_template = saveRes.data.data.entry_template
         this.$emit('displayResultsData', saveRes.data.data.data)
+        if(entry_template)  this.$emit('savesaveJumpBacktestData', entry_template)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
           const date = saveRes.data.data.data[0].Date
           signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
