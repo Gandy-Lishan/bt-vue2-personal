@@ -223,12 +223,13 @@ export default {
       debugger
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
         let value = this.showInput ? this.value : 1
-        const dontSaveMaValue = ['o', 'h', 'l', 'c', 'amplitude', 'amplify'].includes(this.MAType)
+        const dontSaveMaValue = ['o', 'h', 'l', 'c'].includes(this.MAType)
         if(!this.showInput) value = 1
-        if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
-        if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
-        if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
-        if(this.showInput && this.MAType == 'amplify') value = `amplify`
+        else if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
+        else if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
+        else if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
+        else if(this.showInput && this.MAType == 'amplify') value = `amplify`
+        else if(this.showInput && this.MAType == 'MA') value = this.value
         if(this.showInput && dontSaveMaValue) value = 1
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {

@@ -244,7 +244,6 @@ async function initiateList(pathname) {
 }
 
 async function fetchDataList(source) {
-	debugger
 	const dataList = store.getters[source]
 	const sourceMap = {
 		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol', category:  'category'},

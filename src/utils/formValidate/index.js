@@ -108,7 +108,6 @@ export const createTPSLValidateRule = (minVal) => {
 }
 export const createTPSLScopeValidateRule = (minVal, maxVal, canBeEqual, canBeEqualZero, canBeNegative) => {
 	return (_, value, callback) => {
-		debugger
 		// 给 Stop Loss 和 Take Profit 用
 		let pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
 		let isLessThanMin = Number(value) <= Number(minVal)
