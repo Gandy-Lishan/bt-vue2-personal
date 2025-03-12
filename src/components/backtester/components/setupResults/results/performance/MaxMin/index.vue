@@ -174,8 +174,8 @@ export default {
 							// 计算 Max Loss 最大值
 							const monthData = backtestHistoryList.map(entry => entry[label])
 							const maxLossValues = monthData.map(entry => entry["Max Loss"])
-							const max = maxLossValues.reduce((a, b) => Math.max(a, b), -Infinity);
-							ele[label] = {"Max Gain": '', "Max Loss": max}
+							const min = maxLossValues.reduce((a, b) => Math.min(a, b), Infinity);
+							ele[label] = {"Max Gain": '', "Max Loss": min}
 					}
 				})
 			})
