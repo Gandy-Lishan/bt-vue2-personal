@@ -252,7 +252,7 @@ this.tableCol = [
     label: 'Model Update<br/>Frequency',
     value: 'update_frequency',
     key: 'update_frequency',
-    width: '100px'
+    width: '120px'
   },
   {
     label: `YTD until<br/>${lastMonthEnd}<br/>Return(%)`, // 动态更新日期
