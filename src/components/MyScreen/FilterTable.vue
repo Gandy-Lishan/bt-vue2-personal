@@ -368,28 +368,30 @@ export default {
 
 			const findSignal = (item, index) => {
 				const isSymbolOHLCV = item.code.includes('SY:')
+				const isTechnicalIndicator = item.code.includes('TI:')
 				let code
-				if(!isSymbolOHLCV) {
+				if(!isSymbolOHLCV && !isTechnicalIndicator) {
 					if(item.code.includes('replace_name')) code = item.code.replace("replace_name", Name)
 					else if(item.code.includes('replace_symbol')) code = item.code.replace("replace_symbol", Symbol)
 				}
 				const name = extractSIContent(code || item.code)
 				let url = ''
-				if(isSymbolOHLCV) url = name
-				if(!isSymbolOHLCV) {
+				let signal = null
+				if(isSymbolOHLCV && isTechnicalIndicator) url = name
+				if(!isSymbolOHLCV && !isTechnicalIndicator) {
 					const isSentimentIndicator = code.includes('SI:')
 					const isTrendScore = code.includes('Trend Score')
 					const isOptix = code.includes('Optix')
 					if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
 					else if(isSentimentIndicator && isOptix) url = `${Symbol}@indicator` // ADP
+					signal = CIQ.findSentiIndicator(null, url)
+					if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
 				}
-				let signal = CIQ.findSentiIndicator(null, url)
-				if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
-				if (!signal && !isSymbolOHLCV) {
+				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {
 					signal = CIQ.findBuiltinTechIndicator(name, null)
 				}
 				// 在 symbol indicator list内检索url
-				if (!signal) {
+				if (!signal && isSymbolOHLCV) {
 					const find = CIQ.findSymbolIndicator(name, null)
 					console.log('find', find)
 					if (find) {
@@ -414,7 +416,8 @@ export default {
 			// })
 			const signals = jumpBacktestData.entry.signals.map((item,index) => {
 					const isSymbolOHLCV = item.code.includes('SY:')
-					if(!isSymbolOHLCV) item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
+					const isTechnicalIndicator = item.code.includes('TI:')
+					if(!isSymbolOHLCV && !isTechnicalIndicator) item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
 					return item
 			})
 			console.log('signals', signals)
@@ -462,12 +465,6 @@ export default {
 			this.$store.commit('form/getRunBacktestData', jumpBacktestData)
 			console.log('jumpBacktestData', jumpBacktestData)
 
-			// const routeData = this.$router.resolve({
-			// 		name: 'SetUp',
-			// 		params: { data: JSON.stringify(jumpBacktestData), usedFor: 'showBTForm' }
-			// });
-
-			// window.open(routeData.href, '_blank');
 			LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
 			window.open('/backtester/sr/setup', '_blank');
 		}
