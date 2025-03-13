@@ -115,6 +115,7 @@ export default {
 		}
 	},
 	beforeRouteEnter(to, from, next) {
+		const jumpBacktestData = LocalStorageUtil.get('jumpBacktestData')
 		if (to.path === '/backtester/sr/setup' && (from.path.includes('/backtester'))) {
 			next(async _this => {
 						_this.setSetUpLoadingSetting(true, false, 0, 'Loading...')
@@ -162,7 +163,7 @@ export default {
 			});
 		} 
 		/** 只用来管理进入路由时的状态，加载函数都放置在chartiq onReady的回调 */
-		else if(to.path === '/backtester/sr/setup' && (from.path.includes('/strategy') ||from.path.includes('/my_screen'))){
+		else if(to.path === '/backtester/sr/setup' && (from.path.includes('/strategy'))){
 			// next(async _this => {
 			// if(to.params.usedFor && to.params.usedFor === 'showBTForm'){
 			// 		const { data } = to.params
@@ -187,7 +188,10 @@ export default {
 			// }
 			// })
 			next(_this => {_this.routerEnterTag = 1})
-		} else{
+		} else if(jumpBacktestData && typeof jumpBacktestData === 'object' && Object.keys(jumpBacktestData) !== 0) {
+				next(_this => {_this.routerEnterTag = 1})
+		}
+		else {
 			// next(async _this => {
 			// 		// 如果跳转携带 backtestID 则填充
 			// 		const backtestID = LocalStorageUtil.get('backtestID')
@@ -273,8 +277,11 @@ export default {
 		if(!val) return
 		if(this.routerEnterTag == 1){
 			const params = this.$route.params
-			if(params.usedFor && params.usedFor === 'showBTForm'){
-					const { data } = params
+			const jumpBacktestData = LocalStorageUtil.get('jumpBacktestData')
+			const fromScreen = jumpBacktestData && typeof jumpBacktestData === 'object' && Object.keys(jumpBacktestData) !== 0
+			if((params.usedFor && params.usedFor === 'showBTForm') || (fromScreen)){
+					let data = params.data
+					if(fromScreen) data = jumpBacktestData
 					
 					const backtestEditData = isJson(data) ? JSON.parse(data.replaceAll('$r001$', '\u200c')) : data
 					const {strategy, symbol, symbol2} = backtestEditData
@@ -288,6 +295,7 @@ export default {
 
 					this.editBacktest(backtestEditData)
 					await this.displaySetUpForm(backtestEditData)
+					LocalStorageUtil.remove('jumpBacktestData')
 			}
 		}
 		else if(this.routerEnterTag == 2){

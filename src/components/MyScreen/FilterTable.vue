@@ -86,6 +86,8 @@
 import moment from 'moment';
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
+import { LocalStorageUtil } from '@/utils'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
 	name: 'FilterTable',
@@ -349,12 +351,13 @@ export default {
 			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
 		},
 		async goToBacktest(row) {
+			console.log('this.jumpBacktestData', this.jumpBacktestData)
 			if(Object.keys(this.jumpBacktestData) === 0) return
 			const {Name, Symbol} = row
 			await this.initiateTechList()
 			console.log('go to backtest row', row)
 			console.log('go to backtest', this.jumpBacktestData)
-			const jumpBacktestData = this.jumpBacktestData
+			const jumpBacktestData = cloneDeep(this.jumpBacktestData)
 			const extractSIContent = (str) => {
 					const match = str.match(/(SI|TI|SY):([^;]*)/);
 					return match ? match[2] : null;
@@ -364,23 +367,33 @@ export default {
 			}
 
 			const findSignal = (item, index) => {
-				const code = item.code.replace("replace_name", Name)
-				const name = extractSIContent(code)
-				const isSentimentIndicator = code.includes('SI:')
-				const isTrendScore = code.includes('Trend Score')
-				const isOptix = code.includes('Optix')
-				let url = null
-				if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
-				else if(isSentimentIndicator && isOptix) url = `${Symbol}_optix`
-				debugger
+				const isSymbolOHLCV = item.code.includes('SY:')
+				let code
+				if(!isSymbolOHLCV) {
+					if(item.code.includes('replace_name')) code = item.code.replace("replace_name", Name)
+					else if(item.code.includes('replace_symbol')) code = item.code.replace("replace_symbol", Symbol)
+				}
+				const name = extractSIContent(code || item.code)
+				let url = ''
+				if(isSymbolOHLCV) url = name
+				if(!isSymbolOHLCV) {
+					const isSentimentIndicator = code.includes('SI:')
+					const isTrendScore = code.includes('Trend Score')
+					const isOptix = code.includes('Optix')
+					if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
+					else if(isSentimentIndicator && isOptix) url = `${Symbol}@indicator` // ADP
+				}
 				let signal = CIQ.findSentiIndicator(null, url)
-				if (!signal) {
+				if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
+				if (!signal && !isSymbolOHLCV) {
 					signal = CIQ.findBuiltinTechIndicator(name, null)
 				}
 				// 在 symbol indicator list内检索url
 				if (!signal) {
-					if (CIQ.findSymbolIndicator(name, null)) {
-						return item
+					const find = CIQ.findSymbolIndicator(name, null)
+					console.log('find', find)
+					if (find) {
+						signal =  find
 					}
 				}
 				return signal
@@ -400,7 +413,8 @@ export default {
 			// 	return item
 			// })
 			const signals = jumpBacktestData.entry.signals.map((item,index) => {
-					item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
+					const isSymbolOHLCV = item.code.includes('SY:')
+					if(!isSymbolOHLCV) item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
 					return item
 			})
 			console.log('signals', signals)
@@ -438,19 +452,24 @@ export default {
 			activatedMALayout: [],
 			activatedTechLayout: [],
 			formIndicators: {
-					// entry: ["model_stem"],
-					entry: _signal.map(item => (item.url)),
+					// entry: ["model_stem"]
+					entry: _signal.map(item => (item.url || item.label)),
 					exit: [""]
 			}
 		}
 		jumpBacktestData.risk_control = '//21'
 			
 			this.$store.commit('form/getRunBacktestData', jumpBacktestData)
+			console.log('jumpBacktestData', jumpBacktestData)
 
-			this.$router.push({
-					name: 'SetUp',
-					params: { data: JSON.stringify(jumpBacktestData), usedFor: 'showBTForm' }
-			},()=>{})
+			// const routeData = this.$router.resolve({
+			// 		name: 'SetUp',
+			// 		params: { data: JSON.stringify(jumpBacktestData), usedFor: 'showBTForm' }
+			// });
+
+			// window.open(routeData.href, '_blank');
+			LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
+			window.open('/backtester/sr/setup', '_blank');
 		}
 	}
 };

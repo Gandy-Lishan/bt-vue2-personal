@@ -61,13 +61,13 @@
             </el-select>
           </el-form-item>
         <el-row :gutter="20">
-          <div :class="{hidePicker: cpm_period !== 'custom', 'picker-container': true}">
+          <div :class="{hidePicker: cpm_period !== 'custom', 'picker-container': true}" v-if="cpm_period === 'custom'">
             <el-col :span="12">
           <el-form-item prop="start_date" label="" class="dateSelect">
             <el-date-picker
               v-model="data.start_date"
               type="date"
-              placeholder="- Select Start Date -"
+              placeholder="Select Start Date"
               value-format="yyyy-MM-dd"
               :picker-options="startPickerOptions"
             >
@@ -79,7 +79,7 @@
               <el-date-picker
                 v-model="data.end_date"
                 type="date"
-                placeholder="- Select End Date -"
+                placeholder="Select End Date"
                 value-format="yyyy-MM-dd"
                 :picker-options="endPickerOptions"
               >
@@ -87,6 +87,7 @@
           </el-form-item>
          </el-col>
           </div>
+          <div v-else style="height: 50px;"></div>
         </el-row>
         </el-col>
         <el-col :span="8">
@@ -198,7 +199,7 @@ export default {
         dropdownList: [],
         dateRange: [],
         btnLoading: false,
-        cpm_period: 1,
+        cpm_period: 'all',
         options: [
         {
           value: 1,
@@ -215,6 +216,10 @@ export default {
         {
           value: 5,
           label: '5 Year'
+        },
+        {
+          value: 'all',
+          label: 'All History...'
         },
         {
           value: 'custom',
@@ -399,7 +404,8 @@ export default {
           });
         });
       };
-      return await validateForm(formName)
+
+      return await validateForm(formName);
     },
     async saveFormData() {
       if(this.stock_comparison.length === 0) {this.popUpMsgBox('Please select at least one ticker');return}
@@ -413,6 +419,10 @@ export default {
       const saveData = {
         ...this.data,
         stock_comparison: JSON.stringify(this.stock_comparison)
+      }
+      if(this.cpm_period === 'all') {
+        saveData.start_date = '1800-10-01'
+        saveData.end_date = timestampToTime(new Date())
       }
       return await saveSymbolCorrelation(saveData)
     },
@@ -455,11 +465,12 @@ export default {
         this.data = {
           start_date: '',
           end_date: '',
-          benchmark: ''
+          benchmark: 'AAPL',
+          roll_window: 5
         }
+        this.cpm_period = 'all'
         this.stock_comparison = []
         this.$refs[formName].clearValidate()
-        this.setDate(5)
       },
       getSymbol(ticker) {
         console.log('ticker', ticker)
@@ -725,7 +736,8 @@ export default {
           this.data.start_date = timestampToTime(new Date(start_date).setDate(new Date(start_date).getDate() + 1))
           return
         }
-        this.data.start_date = start_date
+        if(period !==  'all') this.data.start_date = start_date
+        else if(period ===  'all') this.data.start_date = ''
       }
     }
     }
@@ -817,11 +829,11 @@ background-color: #fff;
   margin-bottom: 0px;
 }
 .picker-container {
-  // display: none;
+  // display: block;
   // visibility: visible;
 }
 .hidePicker {
   visibility: hidden;
-  // display: block;
+  // display: none;
 }
 </style>

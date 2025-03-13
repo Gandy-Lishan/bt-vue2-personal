@@ -343,7 +343,7 @@ export default {
       data: {
         name: '',
         direction: 'Long',
-        category: 'Technology',
+        category: 'S&P 500',
         relation: 0,
         signal: 'TrendScore',
         signal2: 'Change',
@@ -380,19 +380,19 @@ export default {
         { value: 2, label: '<' }
       ],
       options: [
-        { value: 'Communication Services', label: 'Communication Services', disabled: false},
-        { value: 'Discretionary', label: 'Discretionary', disabled: false},
-        { value: 'Energy', label: 'Energy', disabled: false},
-        { value: 'Financials', label: 'Financials', disabled: false},
-        { value: 'Health Care', label: 'Health Care', disabled: false},
-        { value: 'Industrials', label: 'Industrials', disabled: false},
-        { value: 'Materials', label: 'Materials', disabled: false},
-        { value: 'Real Estate', label: 'Real Estate', disabled: false},
         { value: 'S&P 500', label: 'S&P 500', disabled: false},
-        { value: 'Staples', label: 'Staples', disabled: false},
-        { value: 'Technology', label: 'Technology', disabled: false},
-        { value: 'Utilities', label: 'Utilities', disabled: false},
-        { value: 'NDX', label: 'NDX', disabled: false}
+        { value: 'NDX', label: 'NDX', disabled: false},
+        { "value": "Energy", "label": "Energy", "disabled": false },
+        { "value": "Staples", "label": "Staples", "disabled": false },
+        { "value": "Utilities", "label": "Utilities", "disabled": false },
+        { "value": "Materials", "label": "Materials", "disabled": false },
+        { "value": "Industrials", "label": "Industrials", "disabled": false },
+        { "value": "Financials", "label": "Financials", "disabled": false },
+        { "value": "Real Estate", "label": "Real Estate", "disabled": false },
+        { "value": "Technology", "label": "Technology", "disabled": false },
+        { "value": "Health Care", "label": "Health Care", "disabled": false },
+        { "value": "Discretionary", "label": "Discretionary", "disabled": false },
+        { "value": "Communication Services", "label": "Communication Services", "disabled": false }
       ],
       relationsOption: [
       { value: 0, label: 'Only', disabled: false},
@@ -678,7 +678,7 @@ export default {
         this.data = {
           name: '',
           direction: 'Long',
-          category: 'Technology',
+          category: 'S&P 500',
           relation: 0,
           signal: 'TrendScore',
           signal2: 'Change',
@@ -1007,7 +1007,7 @@ try {
         debugger
         const entry_template = saveRes.data.data.entry_template
         this.$emit('displayResultsData', saveRes.data.data.data)
-        if(entry_template)  this.$emit('savesaveJumpBacktestData', entry_template)
+        if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
           const date = saveRes.data.data.data[0].Date
           signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`

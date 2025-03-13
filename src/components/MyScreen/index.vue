@@ -180,8 +180,8 @@ export default {
         label:'Filter Condition Preview',
         title: 'Filter Condition Preview',
         tableCol: [
-          {label:'Date',value:'Date',labelHtml:'Date'},
-          {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
+          // {label:'Date',value:'Date',labelHtml:'Date'},
+          // {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
           // {label:'Name',value:'Name',labelHtml:'Name'},
           // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
           // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
