@@ -365,6 +365,12 @@ export default {
 			const replaceContent = (str, newValue) => {
 					return str.replace(/(SI|TI|SY):[^;]+/, `$1:${newValue}`);
 			}
+			const extractLastNumber = (str) => {
+    const match = str.match(/(\d+)(?!.*\d)/);
+    return match ? parseInt(match[0], 10) : null;
+			}
+			const activatedMALayout = []
+			const activatedMA = [{period: 21, url: ''}]
 
 			const findSignal = (item, index) => {
 				const isSymbolOHLCV = item.code.includes('SY:')
@@ -389,6 +395,22 @@ export default {
 				}
 				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {
 					signal = CIQ.findBuiltinTechIndicator(name, null)
+					activatedMALayout.push({
+						criteria: 'entry',
+						field: 'Close',
+						index,
+						period: extractLastNumber(item.code) || '',
+						type: 'simple',
+						url: signal?.url
+					})
+					activatedMA.push({
+						criteria: 'entry',
+						field: 'Close',
+						index,
+						period: extractLastNumber(item.code) || '',
+						type: 'simple',
+						url: signal?.url
+					})
 				}
 				// 在 symbol indicator list内检索url
 				if (!signal && isSymbolOHLCV) {
@@ -448,14 +470,11 @@ export default {
 			}
 			jumpBacktestData.indicator_layout = {
 			savedTechSD: [],
-			activatedMA: [{
-					period: 21,
-					url: ""
-			}],
-			activatedMALayout: [],
+			activatedMA,
+			activatedMALayout,
 			activatedTechLayout: [],
 			formIndicators: {
-					// entry: ["model_stem"]
+					// entry: ["ma"]
 					entry: _signal.map(item => (item.url || item.label)),
 					exit: [""]
 			}
