@@ -139,12 +139,12 @@ export default {
               type: 'ETF',
               url: 'etf_complete_list'
             },
-            {
-              label: 'ETF Sector Breadth',
-              value: 'ETFSectorBreadth',
-              type: 'ETF',
-              url: 'etf_breadth'
-            },
+            // {
+            //   label: 'ETF Sector Breadth',
+            //   value: 'ETFSectorBreadth',
+            //   type: 'ETF',
+            //   url: 'etf_breadth'
+            // },
             {
               label: 'Most Active ETF Fund Flow',
               value: 'ETFFundFlow',
@@ -190,6 +190,33 @@ export default {
               type: 'seasonality',
               url: 'bond_seasonality'
             },
+          ]
+        },
+        {
+          label: 'Breath',
+          type: 'ETFSectorBreadth',
+          refName: 'BreathVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'ETF Sector Breadth',
+              value: 'ETFSectorBreadth',
+              type: 'Breath',
+              url: 'etf_breadth'
+            },
+            {
+              label: 'Country Data Breadth',
+              value: 'CountryDataBreadth',
+              type: 'Breath',
+              url: 'country_complete_list'
+            },
+            {
+              label: 'Crypto Data Breadth',
+              value: 'CryptoDataBreadth',
+              type: 'Breath',
+              url: 'crypto_breadth_complete_list'
+            }
           ]
         },
         // {
@@ -255,33 +282,6 @@ export default {
         //     }
         //   ]
         // },
-        // {
-        //   label: 'Crypto',
-        //   type: 'CRP',
-        //   refName: 'CryptoVirtualScroll',
-        //   itemSize: 50,
-        //   keyProp: 'url',
-        //   options: [
-        //     {
-        //       label: 'Optix',
-        //       value: 'CRP',
-        //       type: 'Crypto',
-        //       url: 'crypt_complete_list'
-        //     },
-        //     {
-        //       label: 'Absolute and Relative Trend Scores',
-        //       value: 'TSCRP',
-        //       type: 'Crypto',
-        //       url: 'crp'
-        //     },
-        //     {
-        //       label: 'Relative Trend Score',
-        //       value: 'RTSCRP',
-        //       type: 'Crypto',
-        //       url: 'crp&rel_trend=1'
-        //     }
-        //   ]
-        // }
         // {
         //   label: 'Most Popular',
         //   type: 'stock',

@@ -371,7 +371,9 @@ export default {
               etf_domestic_trend_reltrend: 'Trend',
               etf_foreign_trend_reltrend: 'Trend',
               etf_other_trend_reltrend: 'Trend',
-              crp_stock: 'CRP'
+              crp_stock: 'CRP',
+              country_complete_list: 'Country Breadth',
+              crypto_breadth_complete_list: 'Crypto Breadth'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
@@ -657,6 +659,16 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
+          label: 'Country Data Breadth',
+          value: 'country_complete_list',
+          type: 'CountryDataBreadth'
+        },
+        {
+          label: 'Crypto Data Breadth',
+          value: 'crypto_breadth_complete_list',
+          type: 'CryptoDataBreadth'
+        },
+        {
           label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
@@ -737,7 +749,7 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth') keysMap.set('chart_name', 'Breadth Measure')
+      if(type === 'etf_breadth' || type === 'country_complete_list' || type === 'crypto_breadth_complete_list') keysMap.set('chart_name', 'Breadth Measure')
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')

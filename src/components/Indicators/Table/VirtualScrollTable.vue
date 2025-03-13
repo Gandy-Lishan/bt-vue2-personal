@@ -631,6 +631,92 @@ export default {
             }
             ]
         ],
+        ['CountryDataBreadthColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Breadth Measure',
+              value: 'chart_name',
+              minWidth: '180px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Sub Type',
+              value: 'underlying_name',
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe',
+              width: '60px'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+          ]
+        ],
+        ['CryptoDataBreadthColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Breadth Measure',
+              value: 'chart_name',
+              minWidth: '180px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Sub Type',
+              value: 'underlying_name',
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe',
+              width: '60px'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+          ]
+        ],
         ['ETFFundFlowColumns', 
           [
             {
@@ -2157,7 +2243,7 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      if(type === 'etf_breadth' || type === 'country_complete_list' || type === 'crypto_breadth_complete_list') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
@@ -2457,6 +2543,8 @@ export default {
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',
         ETFSectorBreadth: 'etf_breadth',
+        CountryDataBreadth: 'country_complete_list',
+        CryptoDataBreadth: 'crypto_breadth_complete_list',
         ETFFundFlow: 'etf_flow',
         ETFMonthlyFund: 'monthly_fund_flows',
         ETFShares: 'shares_outstanding',
