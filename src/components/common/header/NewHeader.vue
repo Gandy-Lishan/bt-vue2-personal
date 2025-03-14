@@ -180,6 +180,11 @@ export default {
           keyPath: '13',
           path: '/my_screen'
         },
+        {
+          label: 'Dashboard',
+          keyPath: '14',
+          path: '/dashboard'
+        },
       ],
       activeIndex: '1',
     }
@@ -234,7 +239,7 @@ export default {
       if(label === 'Smart Stock Scanner') {
         return (getTokenRole() == 2 && getTokenRole() != 'None')
       }
-      if(label === 'AI Trading' || label === 'My Screen') {
+      if(label === 'AI Trading' || label === 'My Screen' || label === 'Dashboard') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {
