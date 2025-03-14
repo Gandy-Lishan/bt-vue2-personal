@@ -343,6 +343,8 @@ export default {
               etf_social: 'Social',
               etf_commod: 'Commodity',
               etf_breadth: 'Sector Breadth',
+              country_breadth: 'Country Breadth',
+              crypto_breadth: 'Crypto Breadth',
               etf_country: 'Country',
               etf_etf: 'Sector',
               pc_ratio: 'PutCall',
@@ -372,8 +374,6 @@ export default {
               etf_foreign_trend_reltrend: 'Trend',
               etf_other_trend_reltrend: 'Trend',
               crp_stock: 'CRP',
-              country_complete_list: 'Country Breadth',
-              crypto_breadth_complete_list: 'Crypto Breadth'
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
@@ -660,13 +660,13 @@ export default {
         },
         {
           label: 'Country Data Breadth',
-          value: 'country_complete_list',
-          type: 'CountryDataBreadth'
+          value: 'country_breadth',
+          type: 'GlobalIndexBreadth'
         },
         {
           label: 'Crypto Data Breadth',
-          value: 'crypto_breadth_complete_list',
-          type: 'CryptoDataBreadth'
+          value: 'crypto_breadth',
+          type: 'CryptoCurrencyBreadth'
         },
         {
           label: 'Most Active ETF Fund Flow',
@@ -749,7 +749,7 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth' || type === 'country_complete_list' || type === 'crypto_breadth_complete_list') keysMap.set('chart_name', 'Breadth Measure')
+      if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') keysMap.set('chart_name', 'Breadth Measure')
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')

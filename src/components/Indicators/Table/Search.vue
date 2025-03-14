@@ -171,6 +171,10 @@ export default {
           requireUrl = 'russell_3000_complete_list'
         }else if(sub_type === 'crp_stock') {
           requireUrl = 'crypt_complete_list'
+        }else if(sub_type === 'all_country_breadth'){
+          requireUrl = 'country_breadth'
+        }else if(sub_type === 'crp_breadth') {
+          requireUrl = 'crypto_breadth'
         }else if(groups === 'trend_reltrend') {
           const str = sub_type
           const match = str.match(/(.*?)_trend_reltrend/)
@@ -226,6 +230,8 @@ export default {
       russell_3000_complete_list: type: stock_russell
       commodity_complete_list: groups: commod
       etf_breadth: type: etf_opt
+      country_breadth: sub_type: all_country_breadth
+      crypto_breadth: sub_type: crp_breadth
       etf_flow: type: etf_fund
       monthly_fund_flows： type: mff
       shares_outstanding: type: shares

@@ -631,7 +631,7 @@ export default {
             }
             ]
         ],
-        ['CountryDataBreadthColumns', 
+        ['GlobalIndexBreadthColumns', 
           [
             {
               key: 'chart_name',
@@ -642,7 +642,7 @@ export default {
             {
               key: 'sub_type',
               label: 'Sub Type',
-              value: 'underlying_name',
+              value: 'sub_type',
             },
             {
               key: 'timeframe',
@@ -674,7 +674,7 @@ export default {
             }
           ]
         ],
-        ['CryptoDataBreadthColumns', 
+        ['CryptoCurrencyBreadthColumns', 
           [
             {
               key: 'chart_name',
@@ -685,7 +685,7 @@ export default {
             {
               key: 'sub_type',
               label: 'Sub Type',
-              value: 'underlying_name',
+              value: 'sub_type',
             },
             {
               key: 'timeframe',
@@ -1848,7 +1848,7 @@ export default {
               return
             }
           }
-          const {type, groups} = res
+          const {type, groups, sub_type} = res
           let requireUrl = ''
           if(type === 'stock_nasdaq') {
             requireUrl = 'ndx_100_complete_list'
@@ -1878,6 +1878,10 @@ export default {
             url = 'commod_seasonality'
           }else if(groups === 'stocks') {
             requireUrl = 'stock_complete_list'
+          }else if(sub_type === 'all_country_breadth') {
+            requireUrl = 'country_breadth'
+          }else if(sub_type === 'crp_breadth') {
+            requireUrl = 'crypto_breadth'
           }
           if(!requireUrl) return
           await this.fetchIndicatorsPageList(requireUrl)
@@ -1906,6 +1910,8 @@ export default {
         russell_3000_complete_list: type: stock_russell
         commodity_complete_list: groups: commod
         etf_breadth: type: etf_opt
+        country_breadth: sub_type: all_country_breadth
+        crypto_breadth: sub_type: crp_breadth
         etf_flow: type: etf_fund
         monthly_fund_flows： type: mff
         shares_outstanding: type: shares
@@ -2150,6 +2156,16 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
+          label: 'Global Index Breadth',
+          value: 'country_breadth',
+          type: 'GlobalIndexBreadth'
+        },
+        {
+          label: 'Crypto Currency Breadth',
+          value: 'crypto_breadth',
+          type: 'CryptoCurrencyBreadth'
+        },
+        {
           label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
@@ -2243,7 +2259,7 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth' || type === 'country_complete_list' || type === 'crypto_breadth_complete_list') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
@@ -2543,8 +2559,8 @@ export default {
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',
         ETFSectorBreadth: 'etf_breadth',
-        CountryDataBreadth: 'country_complete_list',
-        CryptoDataBreadth: 'crypto_breadth_complete_list',
+        GlobalIndexBreadth: 'country_breadth',
+        CryptoCurrencyBreadth: 'crypto_breadth',
         ETFFundFlow: 'etf_flow',
         ETFMonthlyFund: 'monthly_fund_flows',
         ETFShares: 'shares_outstanding',

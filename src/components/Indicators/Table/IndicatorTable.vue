@@ -193,29 +193,29 @@ export default {
           ]
         },
         {
-          label: 'Breath',
+          label: 'Breadth',
           type: 'ETFSectorBreadth',
-          refName: 'BreathVirtualScroll',
+          refName: 'BreadthVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
             {
               label: 'ETF Sector Breadth',
               value: 'ETFSectorBreadth',
-              type: 'Breath',
+              type: 'Breadth',
               url: 'etf_breadth'
             },
             {
-              label: 'Country Data Breadth',
-              value: 'CountryDataBreadth',
-              type: 'Breath',
-              url: 'country_complete_list'
+              label: 'Global Index Breadth',
+              value: 'GlobalIndexBreadth',
+              type: 'Breadth',
+              url: 'country_breadth'
             },
             {
-              label: 'Crypto Data Breadth',
-              value: 'CryptoDataBreadth',
-              type: 'Breath',
-              url: 'crypto_breadth_complete_list'
+              label: 'Crypto Currency Breadth',
+              value: 'CryptoCurrencyBreadth',
+              type: 'Breadth',
+              url: 'crypto_breadth'
             }
           ]
         },

@@ -86,7 +86,7 @@ export default {
       const sourceRefNameMap = new Map([
         [[
           'stock_complete_list', 'ndx_100_complete_list', 'sp_1500_complete_list', 'russell_3000_complete_list',
-          'bond_complete_list', 'etf_complete_list', 'etf_breadth', 'country_complete_list', 'crypto_breadth_complete_list', 'etf_flow',
+          'bond_complete_list', 'etf_complete_list', 'etf_breadth', 'country_breadth', 'crypto_breadth', 'etf_flow',
           'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality',
           'bond_seasonality', 'etf_seasonality', 'commodity_complete_list'
         ],'Indicators'],

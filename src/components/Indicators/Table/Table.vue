@@ -86,8 +86,8 @@ export default {
         TSCRP: 'crp',
         RTSCRP: 'crp&rel_trend=1',
         ETFSectorBreadth: 'etf_breadth',
-        CountryDataBreadth: 'country_complete_list',
-        CryptoDataBreadth: 'crypto_breadth_complete_list'
+        GlobalIndexBreadth: 'country_breadth',
+        CryptoCurrencyBreadth: 'crypto_breadth'
       },
       firstRow: {},
       blog_results_length: 0,
@@ -181,8 +181,8 @@ export default {
                 etf_social: 'Social',
                 etf_commod: 'Commodity',
                 etf_breadth: 'Sector Breadth',
-                country_complete_list: 'Country Data Breadth',
-                crypto_breadth_complete_list: 'Crypto Data Breadth',
+                country_breadth: 'Country Breadth',
+                crypto_breadth: 'Crypto Breadth',
                 etf_country: 'Country',
                 etf_etf: 'Sector',
                 pc_ratio: 'PutCall',
