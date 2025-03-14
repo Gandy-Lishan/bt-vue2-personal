@@ -366,7 +366,7 @@ export default {
   font-family: "Open Sans",sans-serif;
 }
 .default-table-class {
-  width: 1200px;
+  // width: 1200px;
 }
 /deep/ th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
   font-weight: 600;
