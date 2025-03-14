@@ -165,6 +165,27 @@
       <el-form-item>
       </el-form-item>
     </el-form>
+    <div class="correlation-table ScannerBTTable" v-show="showCorrMatrix">
+      <h2 style="margin-bottom: 0px" v-text="corrMatrixText"></h2>
+      <div class="dateRangeText"><span v-html="correlationDateRange"></span></div>
+      <el-table
+      header-align="center"
+      :data="corr_matrix"
+    >
+			<template v-for="(l, index) in columns">
+        <el-table-column
+        	:label="l.label"
+					:prop="l.value"
+          :key="index"
+          align="center"
+        >
+        <template slot-scope="scope">
+          {{ scope.row[l.value] == '1' ?  '-' : (scope.row[l.value] || '')}}
+        </template>
+      </el-table-column>
+        </template>
+      </el-table>
+    </div>
     <div class="symbol-correlation-chart">
       <div id="chart-container" style="height: 600px;"></div>
     </div>
@@ -178,6 +199,7 @@ import { saveSymbolCorrelation } from "@/service/service";
 import Highcharts from 'highcharts/highstock';
  import 'highcharts/indicators/indicators';
  import 'highcharts/indicators/bollinger-bands';
+import moment from 'moment';
 
 export default {
   name: 'SymbolCorrelation',
@@ -200,6 +222,10 @@ export default {
         dateRange: [],
         btnLoading: false,
         cpm_period: 'all',
+        correlationDateRange: '',
+        corrMatrixText: '',
+        corr_matrix: [],
+        columns: [],
         options: [
         {
           value: 1,
@@ -306,6 +332,9 @@ export default {
       symbolList() {
         const data = localStorage.getItem('refactoredConcatList');
         return data ? JSON.parse(data) : [];
+      },
+      showCorrMatrix() {
+        return Array.isArray(this.corr_matrix) && this.corr_matrix.length !== 0
       }
     },
     mounted() {
@@ -455,6 +484,27 @@ export default {
         const chartData =  saveRes.data?.data
         // 这里要开始画图
         const {corr_matrix, corr_roll} = chartData
+        if(Array.isArray(corr_matrix)) {
+          const formatDate = (dateStr) => {
+            return moment.parseZone(dateStr).format('MMM D, YYYY');
+          }
+          let {start_date, end_date, benchmark} = this.data
+          const {cpm_period} = this
+          if(cpm_period === 'all') this.correlationDateRange = `Until ${formatDate(end_date)}`
+          else this.correlationDateRange = `${formatDate(start_date)} - ${formatDate(end_date)}`
+          this.corrMatrixText = `Correlation Matrix | ${benchmark}`
+          const columns = Array.from(Object.keys(corr_matrix[0])).map(column => {
+            let columnLabel = column
+            if(column === 'index') columnLabel = 'Ticker'
+            return {
+              label: columnLabel,
+              value: column,
+              labelHtml: column
+            }
+          })
+          this.columns = columns
+          this.corr_matrix = corr_matrix
+        }
         this.renderChart(corr_roll)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
@@ -607,7 +657,12 @@ export default {
             },
           },
           title: {
-            text: "Rolling Correlations"
+            text: "Rolling Correlations",
+            style: {
+                fontSize: '18px',    // 字体大小
+                fontWeight: 'bold',  // 字体加粗
+                fontFamily: 'Arial, sans-serif' // 字体类型
+            }
           },
           xAxis: {
            type: 'datetime',
@@ -835,5 +890,16 @@ background-color: #fff;
 .hidePicker {
   visibility: hidden;
   // display: none;
+}
+.correlation-table {
+  margin-bottom: 30px
+}
+.symbol-correlation{
+  color: #333341;
+}
+.dateRangeText {
+  font-size: 14px;
+  font-weight: 400;
+  color: grey
 }
 </style>
