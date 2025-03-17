@@ -70,6 +70,17 @@
               </el-option>
             </el-select>
             </div>
+            <div class="select-option" v-show="Array.isArray(_subTypeOptions) && _subTypeOptions.length !== 0">
+              <span>Sub Type</span>
+              <el-select v-model="subTypeFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
+              <el-option
+                v-for="item in _subTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
             <div class="select-option" v-show="Array.isArray(indicatorOptions) && indicatorOptions.length !== 0">
               <span>Indicator</span>
               <el-select v-model="indicatorFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
@@ -188,7 +199,6 @@ import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
-import Vue from 'vue';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -205,7 +215,9 @@ export default {
     firstRow: Object,
     showReport: Boolean,
     showRelated: Boolean,
-    sourceType: String
+    sourceType: String,
+    subTypeOptions: Array,
+    breadthIndicatorsOption: Array
   },
   directives: {
     ElTableInfiniteScroll
@@ -233,6 +245,7 @@ export default {
       groupsFilter: '',
       timeframeFilter: '',
       indicatorFilter: '',
+      subTypeFilter: '',
       searchInput: '',
       filterData: [],
       hideColumn: true,
@@ -1652,6 +1665,13 @@ export default {
         { value: 'RSI < 30', label: 'RSI 14-Day < 30' },
         { value: 'RSI > 70', label: 'RSI 14-Day > 70' }
       ]
+      if(this.checkedType === 'GlobalIndexBreadth' || this.checkedType === 'CryptoCurrencyBreadth') {
+        return this.breadthIndicatorsOption
+      }
+      return []
+    },
+    _subTypeOptions() {
+      if(this.checkedType === 'GlobalIndexBreadth') return this.subTypeOptions
       return []
     },
     isStockTrend() {
@@ -2246,7 +2266,7 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
       let keysMap = new Map([
@@ -2259,7 +2279,10 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
+      debugger
       if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      if(type === 'etf_breadth') {keysMap.delete('sub_type')}
+      if(type === 'country_breadth' || type === 'crypto_breadth') {keysMap.delete('underlying_name'), keysMap.set('sub_type', 'Sub Type')}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
@@ -2460,7 +2483,7 @@ export default {
     },
     handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
     _filterData(){
-		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
+		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.filterSubType(this.getSearchResult()))))
       console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
     },
     filterGroups(searchResult){
@@ -2503,6 +2526,30 @@ export default {
     return searchResult;
   }
 },
+  filterSubType(searchResult) {
+    if (this.subTypeFilter) {
+      // 将过滤条件转换为小写，并将其拆分成关键字数组
+      const filterKeywords = this.subTypeFilter.toLowerCase().split('').filter(item => item);
+      console.log('filterKeywords', filterKeywords);
+      
+      return searchResult.filter(item => {
+        const subType = item["sub_type"].toLowerCase();
+        
+        // 检查关键字是否按顺序出现在 subType 中
+        let currentIndex = 0;
+        for (const keyword of filterKeywords) {
+          currentIndex = subType.indexOf(keyword, currentIndex);
+          if (currentIndex === -1) {
+            return false; // 如果某个关键字未找到，则过滤掉该项
+          }
+          currentIndex++; // 移动到下一个字符的位置
+        }
+        return true; // 所有关键字都按顺序找到
+      });
+    } else {
+      return searchResult;
+    }
+  },
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
