@@ -22,7 +22,7 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">Screens List</p>
-            <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result List</p>
+            <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result</p>
             <p @click.stop="() => {changeSecondTab('System')}" :class="{ secondActive: activeTab == 'System' || '' }">System Screen List</p>
           </div>
         </template>

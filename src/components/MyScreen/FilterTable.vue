@@ -1,8 +1,20 @@
 <template>
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
-    <p class="filterTableDes"  v-html="signalDes">
+			<div class="des-container">
+				<p class="filterTableDes"  v-html="signalDes">
     </p>
+					<el-button
+						v-if="signalDes !== ''"
+							@click.stop="() => {downloadCSV()}"
+							style="display: inline-block"
+							type="primary"
+							size="small"
+							icon="el-icon-download"
+							title="Download CSV"
+							></el-button
+					>
+			</div>
 		<el-table
 			ref="tableREF"
 			class="ScannerBTTable"
@@ -486,7 +498,24 @@ export default {
 
 			LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
 			window.open('/backtester/sr/setup', '_blank');
-		}
+		},
+		async downloadCSV() {
+     const xlsxName = 'Screen Result'
+     let data = this.data.content
+     const _keySort = Array.from( Object.keys(data[0])).filter(item => item !== 'Date')
+     let csvContent = data.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
+     csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+     const link = document.createElement("a");
+     const url = URL.createObjectURL(blob);
+     link.setAttribute("href", url);
+     link.setAttribute("download", `${xlsxName}.csv`);
+     link.style.visibility = 'hidden';
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+   },
 	}
 };
 </script>
@@ -506,11 +535,16 @@ export default {
 .el-table /deep/ thead .iconfont{
 	color: #606266;
 }
+.des-container {
+	border-bottom: 2px solid #dddddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 20px;
+}
 .filterTableDes {
-  padding: 0px 0px 20px 0px;
   margin: 0px;
   font-size: 16px;
-  border-bottom: 2px solid #dddddd;
   .strongSpan {
     font-weight: 500;
   }
@@ -528,5 +562,8 @@ export default {
 }
 .el-pagination .el-select .el-input .el-input__inner {
   margin: 0px
+}
+.des-container {
+	display: flex;
 }
 </style>
