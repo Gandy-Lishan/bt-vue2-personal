@@ -55,7 +55,7 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
-            <p @click.stop>Create New Screen</p>
+            <p>Create New Screen</p>
           </div>
         </template>
         <ScannerForm

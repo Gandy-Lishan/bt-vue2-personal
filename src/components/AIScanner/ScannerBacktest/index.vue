@@ -7,7 +7,7 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop>Scanner Backtest List</p>
+            <p>Scanner Backtest List</p>
           </div>
         </template>
         <div class="content">
@@ -17,7 +17,7 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="formTarget">
-            <p @click.stop>Filter Criteria</p>
+            <p>Filter Criteria</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Scanner Backtest" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
