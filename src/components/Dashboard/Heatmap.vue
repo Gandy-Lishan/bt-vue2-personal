@@ -50,11 +50,22 @@ export default {
     formatData(data) {
       debugger
       const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
+      // 颜色映射规则
+      const getColor = (colorValue) => {
+        if (colorValue <= 0) return '#41A317'; // 极端悲观（绿色）
+        if (colorValue <= 2) return '#89C35C'; // 较强的悲观（浅绿色）
+        if (colorValue <= 3) return '#99C68E'; // 中等的悲观（淡绿）
+        if (colorValue <= 5) return '#FFF8DC'; // 中立
+        if (colorValue <= 7) return '#E18B6B'; // 较强的乐观（橙色）
+        if (colorValue <= 8) return '#F75D59'; // 极端乐观（红色）
+        return '#FF0000'; // 非常乐观（红色）
+      };
+
       return data.map(item => ({
         name: item[0],
         link: item[1],
         value: item[2],
-        colorValue: item[3],
+        color: getColor(item[3]),
         thumbnail: thumbnailBase + item[1] + '_250.png',
       }));
     },
@@ -165,7 +176,7 @@ export default {
           type: 'treemap',
           layoutAlgorithm: 'squarified',
           data: data,
-          colorKey: "colorValue", 
+          // colorKey: "colorValue", 
           dataLabels: { enabled: true, shadow: false }
         }],
         title: { text: 'Optimism Index Heatmap' }

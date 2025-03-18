@@ -11,29 +11,33 @@
 
 
                         </p>
-                        <div class="table-loading">
-                                <span>Retrieving Chart Data</span>
-                                <i class="fa fa-cog fa-spin"></i>
-                        </div>
-                        <div class='col-md-12'>
+                        <div class='col-md-12' v-if="Array.isArray(data) && data.length !== 0">
                             <div class='row'>
 
                                 <div class='col-md-6'>
-                                    <div id='model_score_int' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div>
+                                    <SummaryChart :chart="data[0]"></SummaryChart>
+                                    <!-- <div id='model_score_int' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div> -->
                                 </div>
                                 <div class='col-md-6'>
-                                    <div id='model_score_bonds' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div>
+                                    <SummaryChart :chart="data[1]"></SummaryChart>
                                 </div>
                             
                             </div>
                             <div class='row'>
                                     <div class='col-md-6'>
-                                            <div id='po_gold' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div>
+                                            <!-- <div id='po_gold' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div> -->
+                                            <SummaryChart :chart="data[2]"></SummaryChart>
                                         </div>
                                         <div class='col-md-6'>
-                                            <div id='po_crude' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div>
+                                            <!-- <div id='po_crude' class='watermark' style="width:100%; min-width:400px; max-width:500px; margin: 0 auto"></div> -->
+                                            <SummaryChart :chart="data[3]"></SummaryChart>
                                         </div>
                             </div>
+                        </div>
+
+                        <div class="table-loading" v-else>
+                                <span>Retrieving Chart Data</span>
+                                <i class="fa fa-cog fa-spin"></i>
                         </div>
                       
                  
@@ -44,11 +48,32 @@
 </div>
 </template>
 <script>
+import SummaryChart from "./SummaryChart";
 export default {
   name: 'Charts',
+  props: {
+    dashboard_spotlight_data: {
+        type: Object,
+        required: true,
+    }
+  },
+  components: {
+    SummaryChart
+  },
   data() {
     return {
+        data: []
     };
+  },
+  watch: {
+    dashboard_spotlight_data: {
+        handler(value) {
+            if(Object.keys(value) !== 0) {
+                console.log('lishan', this.dashboard_spotlight_data.data)
+                this.data = this.dashboard_spotlight_data.data
+            }
+        }
+    }
   },
 };
 </script>

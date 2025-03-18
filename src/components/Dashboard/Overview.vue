@@ -66,7 +66,7 @@
                </div>
              </div>
              <RecentIndicators :forecasts="dashBoardData.forecasts"></RecentIndicators>
-             <Charts></Charts>
+             <Charts :dashboard_spotlight_data="dashBoardData.dashboard_spotlight_data"></Charts>
            </div>
            <div v-if="activeTab === 'market'" class="tab-pane active">
              <div class="row" style="margin: 10px;">
