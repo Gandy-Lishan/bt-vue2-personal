@@ -781,8 +781,8 @@ export default {
           { validator: validateCapitalRule, trigger: 'change' }
         ],
         daily_limit: [
-          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'blur' },
-          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5), trigger: 'change' }
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'blur' },
+          { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'change' }
         ],
         signals: [
           { validator: validateSignals, trigger: 'blur' },
