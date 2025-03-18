@@ -26,7 +26,7 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop>Portfolio List</p>
+            <p>Portfolio List</p>
           </div>
         </template>
         <div class="content">
@@ -36,7 +36,7 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="formTarget">
-            <p @click.stop>Create new Portfolio</p>
+            <p>Create new Portfolio</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Portfolio" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>

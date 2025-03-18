@@ -30,8 +30,8 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
-            <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }">My Signals List</p>
-            <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" size="mini" type="text">
+            <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }" title="Refresh List">My Signals List</p>
+            <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
               <span>View Video Tutorial</span>
             </el-button>
             <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p> -->
@@ -60,7 +60,7 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="scrollTarget">
-            <p @click.stop>Create New Signal</p>
+            <p>Create New Signal</p>
           </div>
         </template>
         <ScannerForm

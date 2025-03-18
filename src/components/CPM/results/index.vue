@@ -7,7 +7,7 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p @click.stop>Correlation Pattern Match Parameters</p>
+            <p>Correlation Pattern Match Parameters</p>
             <p>
               <el-tooltip class="item" effect="dark" content="Create New Correlation Backtest Pattern" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
