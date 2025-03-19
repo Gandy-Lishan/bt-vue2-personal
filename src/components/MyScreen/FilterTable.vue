@@ -480,13 +480,24 @@ export default {
 				signals:[{code:"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999"}],
 				cond:[null]
 			}
+			const activatedTechLayout = []
+			jumpBacktestData.entry.signals.map((item, index) => {
+				const isTechnicalIndicator = item.code.includes('TI:')
+				if(isTechnicalIndicator) {
+					if(_signal[index].url) activatedTechLayout.push({
+						url: _signal[index].url,
+						criteria: "entry",
+						index: index + 1,
+						symbolType: "symbol1"
+					})
+				}
+			})
 			jumpBacktestData.indicator_layout = {
 			savedTechSD: [],
 			activatedMA,
 			activatedMALayout,
-			activatedTechLayout: [],
+			activatedTechLayout,
 			formIndicators: {
-					// entry: ["ma"]
 					entry: _signal.map(item => (item.url || item.label)),
 					exit: [""]
 			}
