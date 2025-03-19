@@ -546,8 +546,9 @@ export default {
       const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
-      const date = data[0].Date
-      const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
+      let date = ''
+      if(data.length !== 0) date = `<strong>Date: ${data[0].Date}</strong>&nbsp;&nbsp;`
+      const _signalDes = `${date}${signalDes}`
       this.$emit('displayDes', _signalDes)
       this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, false)

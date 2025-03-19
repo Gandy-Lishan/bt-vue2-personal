@@ -62,7 +62,7 @@
 			</template>
 		<el-table-column
 			width="100px"
-			v-if="showBTBtn"
+			v-if="showBTBtn && tableCol.length !== 0"
 		>
 		<template slot-scope="scope">
 			<el-tooltip
