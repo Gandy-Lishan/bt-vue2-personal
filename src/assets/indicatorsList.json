@@ -59838,5 +59838,1230 @@
         "chart_name": "SPX 1-Year Sharp Ratio 6-Month SMA",
         "url": "spx_sharpe_6_month_ma",
         "updated": "Daily"
+    },
+     {
+        "chart_name": "% Of All Countries Above 10-Day Moving Average",
+        "url": "breadth_all_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Above 50-Day Moving Average",
+        "url": "breadth_all_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Above 100-Day Moving Average",
+        "url": "breadth_all_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Above 200-Day Moving Average",
+        "url": "breadth_all_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Rising 10-Day Moving Average",
+        "url": "breadth_all_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Rising 50-Day Moving Average",
+        "url": "breadth_all_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Rising 100-Day Moving Average",
+        "url": "breadth_all_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Rising 200-Day Moving Average",
+        "url": "breadth_all_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_all_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_all_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_all_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_all_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Positive 126-Day Rate Of Change",
+        "url": "breadth_all_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Positive 252-Day Rate Of Change",
+        "url": "breadth_all_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_all_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Up 10% Or More From A 252-Day Low",
+        "url": "breadth_all_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Up 20% Or More From A 252-Day Low",
+        "url": "breadth_all_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Up 30% Or More From A 252-Day Low",
+        "url": "breadth_all_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Up 40% Or More From A 252-Day Low",
+        "url": "breadth_all_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 21-Day High",
+        "url": "breadth_all_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 21-Day Low",
+        "url": "breadth_all_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 63-Day High",
+        "url": "breadth_all_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 63-Day Low",
+        "url": "breadth_all_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 126-Day High",
+        "url": "breadth_all_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 126-Day Low",
+        "url": "breadth_all_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 252-Day High",
+        "url": "breadth_all_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Closing At A 252-Day Low",
+        "url": "breadth_all_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Within 5% Of A 252-Day High",
+        "url": "breadth_all_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Within 5% Of A 252-Day Low",
+        "url": "breadth_all_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_all_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_all_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_all_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_all_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_all_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of All Countries With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_all_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Above 10-Day Moving Average",
+        "url": "breadth_dm_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Above 50-Day Moving Average",
+        "url": "breadth_dm_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Above 100-Day Moving Average",
+        "url": "breadth_dm_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Above 200-Day Moving Average",
+        "url": "breadth_dm_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Rising 10-Day Moving Average",
+        "url": "breadth_dm_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Rising 50-Day Moving Average",
+        "url": "breadth_dm_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Rising 100-Day Moving Average",
+        "url": "breadth_dm_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Rising 200-Day Moving Average",
+        "url": "breadth_dm_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_dm_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_dm_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_dm_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_dm_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Positive 126-Day Rate Of Change",
+        "url": "breadth_dm_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Positive 252-Day Rate Of Change",
+        "url": "breadth_dm_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_dm_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Up 10% Or More From A 252-Day Low",
+        "url": "breadth_dm_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Up 20% Or More From A 252-Day Low",
+        "url": "breadth_dm_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Up 30% Or More From A 252-Day Low",
+        "url": "breadth_dm_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Up 40% Or More From A 252-Day Low",
+        "url": "breadth_dm_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 21-Day High",
+        "url": "breadth_dm_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 21-Day Low",
+        "url": "breadth_dm_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 63-Day High",
+        "url": "breadth_dm_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 63-Day Low",
+        "url": "breadth_dm_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 126-Day High",
+        "url": "breadth_dm_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 126-Day Low",
+        "url": "breadth_dm_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 252-Day High",
+        "url": "breadth_dm_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Closing At A 252-Day Low",
+        "url": "breadth_dm_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Within 5% Of A 252-Day High",
+        "url": "breadth_dm_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Within 5% Of A 252-Day Low",
+        "url": "breadth_dm_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_dm_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_dm_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_dm_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_dm_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_dm_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Developed Markets With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_dm_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Above 10-Day Moving Average",
+        "url": "breadth_em_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Above 50-Day Moving Average",
+        "url": "breadth_em_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Above 100-Day Moving Average",
+        "url": "breadth_em_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Above 200-Day Moving Average",
+        "url": "breadth_em_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Rising 10-Day Moving Average",
+        "url": "breadth_em_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Rising 50-Day Moving Average",
+        "url": "breadth_em_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Rising 100-Day Moving Average",
+        "url": "breadth_em_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Rising 200-Day Moving Average",
+        "url": "breadth_em_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_em_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_em_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_em_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_em_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Positive 126-Day Rate Of Change",
+        "url": "breadth_em_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Positive 252-Day Rate Of Change",
+        "url": "breadth_em_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_em_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Up 10% Or More From A 252-Day Low",
+        "url": "breadth_em_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Up 20% Or More From A 252-Day Low",
+        "url": "breadth_em_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Up 30% Or More From A 252-Day Low",
+        "url": "breadth_em_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Up 40% Or More From A 252-Day Low",
+        "url": "breadth_em_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 21-Day High",
+        "url": "breadth_em_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 21-Day Low",
+        "url": "breadth_em_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 63-Day High",
+        "url": "breadth_em_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 63-Day Low",
+        "url": "breadth_em_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 126-Day High",
+        "url": "breadth_em_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 126-Day Low",
+        "url": "breadth_em_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 252-Day High",
+        "url": "breadth_em_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Closing At A 252-Day Low",
+        "url": "breadth_em_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Within 5% Of A 252-Day High",
+        "url": "breadth_em_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Within 5% Of A 252-Day Low",
+        "url": "breadth_em_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_em_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_em_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_em_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_em_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_em_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Emerging Markets With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_em_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Above 10-Day Moving Average",
+        "url": "breadth_asia_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Above 50-Day Moving Average",
+        "url": "breadth_asia_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Above 100-Day Moving Average",
+        "url": "breadth_asia_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Above 200-Day Moving Average",
+        "url": "breadth_asia_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Rising 10-Day Moving Average",
+        "url": "breadth_asia_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Rising 50-Day Moving Average",
+        "url": "breadth_asia_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Rising 100-Day Moving Average",
+        "url": "breadth_asia_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Rising 200-Day Moving Average",
+        "url": "breadth_asia_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_asia_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_asia_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_asia_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_asia_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Positive 126-Day Rate Of Change",
+        "url": "breadth_asia_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Positive 252-Day Rate Of Change",
+        "url": "breadth_asia_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_asia_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Up 10% Or More From A 252-Day Low",
+        "url": "breadth_asia_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Up 20% Or More From A 252-Day Low",
+        "url": "breadth_asia_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Up 30% Or More From A 252-Day Low",
+        "url": "breadth_asia_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Up 40% Or More From A 252-Day Low",
+        "url": "breadth_asia_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 21-Day High",
+        "url": "breadth_asia_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 21-Day Low",
+        "url": "breadth_asia_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 63-Day High",
+        "url": "breadth_asia_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 63-Day Low",
+        "url": "breadth_asia_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 126-Day High",
+        "url": "breadth_asia_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 126-Day Low",
+        "url": "breadth_asia_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 252-Day High",
+        "url": "breadth_asia_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Closing At A 252-Day Low",
+        "url": "breadth_asia_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Within 5% Of A 252-Day High",
+        "url": "breadth_asia_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Within 5% Of A 252-Day Low",
+        "url": "breadth_asia_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_asia_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_asia_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_asia_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_asia_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_asia_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Asia Pacific With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_asia_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Above 10-Day Moving Average",
+        "url": "breadth_eu_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Above 50-Day Moving Average",
+        "url": "breadth_eu_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Above 100-Day Moving Average",
+        "url": "breadth_eu_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Above 200-Day Moving Average",
+        "url": "breadth_eu_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Rising 10-Day Moving Average",
+        "url": "breadth_eu_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Rising 50-Day Moving Average",
+        "url": "breadth_eu_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Rising 100-Day Moving Average",
+        "url": "breadth_eu_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Rising 200-Day Moving Average",
+        "url": "breadth_eu_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_eu_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_eu_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_eu_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_eu_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Positive 126-Day Rate Of Change",
+        "url": "breadth_eu_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Positive 252-Day Rate Of Change",
+        "url": "breadth_eu_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_eu_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Up 10% Or More From A 252-Day Low",
+        "url": "breadth_eu_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Up 20% Or More From A 252-Day Low",
+        "url": "breadth_eu_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Up 30% Or More From A 252-Day Low",
+        "url": "breadth_eu_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Up 40% Or More From A 252-Day Low",
+        "url": "breadth_eu_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 21-Day High",
+        "url": "breadth_eu_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 21-Day Low",
+        "url": "breadth_eu_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 63-Day High",
+        "url": "breadth_eu_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 63-Day Low",
+        "url": "breadth_eu_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 126-Day High",
+        "url": "breadth_eu_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 126-Day Low",
+        "url": "breadth_eu_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 252-Day High",
+        "url": "breadth_eu_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Closing At A 252-Day Low",
+        "url": "breadth_eu_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Within 5% Of A 252-Day High",
+        "url": "breadth_eu_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Within 5% Of A 252-Day Low",
+        "url": "breadth_eu_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_eu_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_eu_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_eu_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_eu_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_eu_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Europe With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_eu_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Above 10-Day Moving Average",
+        "url": "breadth_sa_country_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Above 50-Day Moving Average",
+        "url": "breadth_sa_country_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Above 100-Day Moving Average",
+        "url": "breadth_sa_country_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Above 200-Day Moving Average",
+        "url": "breadth_sa_country_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Rising 10-Day Moving Average",
+        "url": "breadth_sa_country_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Rising 50-Day Moving Average",
+        "url": "breadth_sa_country_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Rising 100-Day Moving Average",
+        "url": "breadth_sa_country_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Rising 200-Day Moving Average",
+        "url": "breadth_sa_country_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_sa_country_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_sa_country_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_sa_country_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_sa_country_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Positive 126-Day Rate Of Change",
+        "url": "breadth_sa_country_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Positive 252-Day Rate Of Change",
+        "url": "breadth_sa_country_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_sa_country_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Up 10% Or More From A 252-Day Low",
+        "url": "breadth_sa_country_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Up 20% Or More From A 252-Day Low",
+        "url": "breadth_sa_country_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Up 30% Or More From A 252-Day Low",
+        "url": "breadth_sa_country_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Up 40% Or More From A 252-Day Low",
+        "url": "breadth_sa_country_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 21-Day High",
+        "url": "breadth_sa_country_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 21-Day Low",
+        "url": "breadth_sa_country_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 63-Day High",
+        "url": "breadth_sa_country_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 63-Day Low",
+        "url": "breadth_sa_country_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 126-Day High",
+        "url": "breadth_sa_country_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 126-Day Low",
+        "url": "breadth_sa_country_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 252-Day High",
+        "url": "breadth_sa_country_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Closing At A 252-Day Low",
+        "url": "breadth_sa_country_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Within 5% Of A 252-Day High",
+        "url": "breadth_sa_country_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Within 5% Of A 252-Day Low",
+        "url": "breadth_sa_country_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Outperforming The U.S. Over A Rolling 21-Day Period",
+        "url": "breadth_sa_country_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Outperforming The U.S. Over A Rolling 63-Day Period",
+        "url": "breadth_sa_country_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Outperforming The U.S. Over A Rolling 126-Day Period",
+        "url": "breadth_sa_country_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America Outperforming The U.S. Over A Rolling 252-Day Period",
+        "url": "breadth_sa_country_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_sa_country_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of South America With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_sa_country_rsi_below30",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Above 10-Day Moving Average",
+        "url": "breadth_all_crypto_above_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Above 50-Day Moving Average",
+        "url": "breadth_all_crypto_above_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Above 100-Day Moving Average",
+        "url": "breadth_all_crypto_above_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Above 200-Day Moving Average",
+        "url": "breadth_all_crypto_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Rising 10-Day Moving Average",
+        "url": "breadth_all_crypto_rising_10ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Rising 50-Day Moving Average",
+        "url": "breadth_all_crypto_rising_50ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Rising 100-Day Moving Average",
+        "url": "breadth_all_crypto_rising_100ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Rising 200-Day Moving Average",
+        "url": "breadth_all_crypto_rising_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With 50-Day Moving Average Above 200-Day Moving Average",
+        "url": "breadth_all_crypto_50ma_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies More Than 5% Above Their 200-Day Moving Average",
+        "url": "breadth_all_crypto_5pct_above_200ma",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Down 10% Or More From A Rolling 252-Day High",
+        "url": "breadth_all_crypto_10pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Down 20% Or More From A Rolling 252-Day High",
+        "url": "breadth_all_crypto_20pct_below_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Positive 126-Day Rate Of Change",
+        "url": "breadth_all_crypto_positive_126d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Positive 252-Day Rate Of Change",
+        "url": "breadth_all_crypto_positive_252d_roc",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A 10-Day Rate Of Change Of -10% Or Greater",
+        "url": "breadth_all_crypto_10d_roc_below_10pct",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Up 10% Or More From A 252-Day Low",
+        "url": "breadth_all_crypto_10pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Up 20% Or More From A 252-Day Low",
+        "url": "breadth_all_crypto_20pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Up 30% Or More From A 252-Day Low",
+        "url": "breadth_all_crypto_30pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Up 40% Or More From A 252-Day Low",
+        "url": "breadth_all_crypto_40pct_above_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 21-Day High",
+        "url": "breadth_all_crypto_at_21d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 21-Day Low",
+        "url": "breadth_all_crypto_at_21d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 63-Day High",
+        "url": "breadth_all_crypto_at_63d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 63-Day Low",
+        "url": "breadth_all_crypto_at_63d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 126-Day High",
+        "url": "breadth_all_crypto_at_126d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 126-Day Low",
+        "url": "breadth_all_crypto_at_126d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 252-Day High",
+        "url": "breadth_all_crypto_at_252d_high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Closing At A 252-Day Low",
+        "url": "breadth_all_crypto_at_252d_low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Within 5% Of A 252-Day High",
+        "url": "breadth_all_crypto_within_5pct_252high",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Within 5% Of A 252-Day Low",
+        "url": "breadth_all_crypto_within_5pct_252low",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Outperforming The Bitcoin Over A Rolling 21-Day Period",
+        "url": "breadth_all_crypto_outperform_us_21d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Outperforming The Bitcoin Over A Rolling 63-Day Period",
+        "url": "breadth_all_crypto_outperform_us_63d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Outperforming The Bitcoin Over A Rolling 126-Day Period",
+        "url": "breadth_all_crypto_outperform_us_126d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies Outperforming The Bitcoin Over A Rolling 252-Day Period",
+        "url": "breadth_all_crypto_outperform_us_252d",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Relative Strength Index (Rsi) > 70",
+        "url": "breadth_all_crypto_rsi_above70",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Relative Strength Index (Rsi) < 30",
+        "url": "breadth_all_crypto_rsi_below30",
+        "updated": "Daily"
     }
 ]
