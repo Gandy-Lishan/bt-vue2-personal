@@ -293,7 +293,7 @@ export default {
 					this.$store.state.form.favoriteBacktestRowData.id = backtestEditData.id
 					backtestEditData.user_tag = 'client'
 
-					this.editBacktest(backtestEditData)
+					await this.editBacktest(backtestEditData)
 					await this.displaySetUpForm(backtestEditData)
 					LocalStorageUtil.remove('jumpBacktestData')
 			}
@@ -311,7 +311,7 @@ export default {
 				res.data.uuid = null
 				res.data.id = null
 
-				this.editBacktest(res.data)
+				await this.editBacktest(res.data)
 				await this.displaySetUpForm(res.data)
 				LocalStorageUtil.remove('backtestID')
 			}else {

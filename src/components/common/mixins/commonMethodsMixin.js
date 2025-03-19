@@ -54,7 +54,7 @@ export const CommonMethodsMixin = {
 					: data.indicator_layout
 			this.restoreIndicatorLayoutView(parsedData, data.frequency, data, data)
 		},
-		editBacktest(data) {
+		async editBacktest(data) {
 			CIQ.addCover('Fetching backtest information...')
 			this.loading = true
 			const currentPage = this.currentPage
@@ -77,7 +77,7 @@ export const CommonMethodsMixin = {
 				typeof data.indicator_layout === 'string'
 					? JSON.parse(data.indicator_layout.replaceAll('$r001$', '\u200c'))
 					: data.indicator_layout
-			this.restoreIndicatorLayoutEdit(parsedData, data.frequency, data, data)
+			await this.restoreIndicatorLayoutEdit(parsedData, data.frequency, data, data)
 		},
 		async copyBacktest(data) {
 			try {
