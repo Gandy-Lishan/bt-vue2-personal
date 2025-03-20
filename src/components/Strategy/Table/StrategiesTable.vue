@@ -373,8 +373,8 @@ this.tableCol = [
 				params: { data: JSON.stringify(_portfolioList), usedFor: 'SetPortfolio' }
 			},()=>{})
 		},
-		async getDataList() {
-			if(this.tableData.length !== 0) return
+		async getDataList(favoriteRefresh) {
+			if(this.tableData.length !== 0 && !favoriteRefresh) return
 			this.loading = true
 			let res = null
 			const {currentStrategiesPage} = LocalStorageUtil.get('strategy_filter_state') ? LocalStorageUtil.get('strategy_filter_state') : {}
@@ -608,17 +608,18 @@ this.tableCol = [
 			console.log('matchStrategy', matchStrategy)
 		},
 		async addToFavorites(scope) {
+			debugger
 			const { url } = scope
 			const res = await addStrategyFavorites({url})
 			const code = res?.data?.code
-			if(code == 200) {await this.getDataList();this.popUpMsgBox('Successfully added to favorites')}
+			if(code == 200) {await this.getDataList(true);scope.favorite = !scope.favorite;this.popUpMsgBox('Successfully added to favorites')}
 			if(code == 400) {this.popUpMsgBox('Failed to add favorites')}
 		},
 		async moveToFavorites(scope) {
 			const { url } = scope
 			const res = await moveStrategyFavorites(url)
 			const code = res?.data?.code
-			if(code == 200) {await this.getDataList();this.popUpMsgBox('Removed from favorites')}
+			if(code == 200) {await this.getDataList(true);scope.favorite = !scope.favorite;this.popUpMsgBox('Removed from favorites')}
 			if(code == 400) {this.popUpMsgBox('Failed to move favorites')}
 		},
 		tableRowClassName({row, rowIndex}) {
