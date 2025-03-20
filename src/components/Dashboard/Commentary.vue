@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import { isJson } from '@/utils';
+
 export default {
  props: {
   dashBoardData: {
@@ -97,7 +99,8 @@ export default {
     return this.dashBoardData.LC_Length
   },
   latest_commentary() {
-    return this.dashBoardData.latest_commentary.map(ele => {
+    const latest_commentary = isJson(this.dashBoardData.latest_commentary) ? JSON.parse(this.dashBoardData.latest_commentary) : this.dashBoardData.latest_commentary
+    return latest_commentary.map(ele => {
       if(typeof ele.post_date === "string") ele.post_date = ele.post_date.replace(/T/g, " ")
       return ele
     })

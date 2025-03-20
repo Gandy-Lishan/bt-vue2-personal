@@ -65,7 +65,7 @@
                  </div>
                </div>
              </div>
-             <RecentIndicators :forecasts="dashBoardData.forecasts"></RecentIndicators>
+             <RecentIndicators :forecasts="dashBoardData.blogs_and_charts"></RecentIndicators>
              <Charts :dashboard_spotlight_data="dashBoardData.dashboard_spotlight_data"></Charts>
            </div>
            <div v-if="activeTab === 'market'" class="tab-pane active">
@@ -92,20 +92,6 @@
                </div>
              </div>
            </div>
-           <!-- Additional tabs rendered similarly -->
-          <div v-if="activeTab === 'market'" class="tab-pane active">
-            <div class='row' style="margin: 10px;">
-              <div class="panel" style="border: 1px solid #67809F;">
-                  <div class="panel-heading  bg-blue-hoki bg-font-blue-hoki">
-                      <h3 class="panel-title">Market Sentiment Overview</h3>
-                  </div>
-                  <div class="panel-body"> 
-                      //  TODO overview-data component
-                     
-                  </div>
-              </div>
-            </div>
-          </div>
 
           <div v-if="activeTab === 'heatmap'" class="tab-pane active">
             <div class='row' style="margin: 10px;">

@@ -164,7 +164,12 @@ export default {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
 		forecasts: {
 			async handler(newValue, oldValue){
-        if(Array.isArray(newValue) && newValue.length !== 0) this.filterData = newValue
+        if(Array.isArray(newValue) && newValue.length !== 0) {
+          this.filterData = JSON.parse(JSON.stringify(newValue))
+          this.currentSortColumn = 'date'
+          this.currentSortDirection = 'descending'
+          this.sortTable('date')
+        }
 			},
 			deep: true
 		},
