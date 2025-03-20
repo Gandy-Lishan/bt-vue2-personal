@@ -794,9 +794,15 @@ export default {
 				
 				// 还原存在cond的ma type
 				let cond
-				if('cond' in newVal[this.criteria]){
-					cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
-				}
+        if('cond' in newVal[this.criteria]){
+          const conLength = newVal[this.criteria].cond.length
+          const signalLength = newVal[this.criteria].signals.length
+          if(conLength === signalLength && this.relation >= 2) {
+            cond = newVal[this.criteria].cond[this.panelIndex]
+          }else {
+            cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          }
+        }
 
 				this.tech.ids = obj.ids
 				this.tech.condition = Number(obj.condition)

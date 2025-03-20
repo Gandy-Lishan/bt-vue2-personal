@@ -108,7 +108,8 @@ export default {
 		tableCol :Array,
 		loading: Boolean,
 		signalDes: String,
-		jumpBacktestData: Object
+		jumpBacktestData: Object,
+		currentRow: Object
 	},
 	data() {
 		return {
@@ -366,6 +367,7 @@ export default {
 			console.log('this.jumpBacktestData', this.jumpBacktestData)
 			if(Object.keys(this.jumpBacktestData) === 0) return
 			const {Name, Symbol} = row
+			const {name} = this.currentRow
 			await this.initiateTechList()
 			console.log('go to backtest row', row)
 			console.log('go to backtest', this.jumpBacktestData)
@@ -465,13 +467,14 @@ export default {
 			const minute = date.getMinutes();
 			const second = date.getSeconds();
 			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-			jumpBacktestData.name = `My Screen (${year}-${month}-${day} ${hour}:${minute}:${second})`
+			jumpBacktestData.name = `${name || 'My Screen'} with ${Symbol} (${year}-${month}-${day} ${hour}:${minute}:${second})`
 			jumpBacktestData.end_date = lastMonthEnd
 			jumpBacktestData.uuid = "UUID"
 			jumpBacktestData.strategy = "Single"
 			jumpBacktestData.commission = 0
 			jumpBacktestData.slippage = 0
 			jumpBacktestData.trade_price = 0
+			jumpBacktestData.source = 'My Screen'
 			jumpBacktestData.exit = {
 				score:1,
 				signals_in_market:1,
@@ -513,6 +516,10 @@ export default {
 		async downloadCSV() {
      const xlsxName = 'Screen Result'
      let data = this.data.content
+		 if(data.length === 0) {
+			this.popUpMsgBox('No data available for download')
+			return
+		 }
      const _keySort = Array.from( Object.keys(data[0])).filter(item => item !== 'Date')
      let csvContent = data.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
      csvContent = `${_keySort.join(',')}\n${csvContent}`;

@@ -756,7 +756,9 @@ export default {
 
 			const processCriteria = async (childRef, criteria, childName) => {
 				displayData[childName] = parseJsonIfNeeded(criteria);
-				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				// 在此之前 signals 有可能已经被解过码了
+				const isProcessSignals = displayData[childName]['signals'].some(signal => (!signal || !signal.code))
+				if(!isProcessSignals) displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
 				await this.transformOldName(displayData, childName);
 				setEditPanel(childRef, displayData[childName], childName);
 			};
@@ -769,8 +771,9 @@ export default {
 
 			const processExit = async (childRef, exitData, childName) => {
 				displayData[childName] = parseJsonIfNeeded(exitData);
-				displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
-				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)) {
+				const isProcessSignals = displayData[childName]['signals'].some(signal => (!signal || !signal.code))
+				if(!isProcessSignals)  displayData[childName]['signals'] = processSignals(displayData[childName]['signals']);
+				if (displayData[childName]['signals'].length === 0 || displayData[childName]['signals'].includes(undefined)|| displayData[childName]['signals'].includes(null)) {
 					displayData[childName]['signals'] = [{ code: '' }];
 					_this.$nextTick(() => {
 						_this.$refs[childRef].setRiskEditData(displayData);

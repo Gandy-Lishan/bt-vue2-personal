@@ -46,6 +46,7 @@
             :loading="loading"
             :signalDes="signalDes"
             :jumpBacktestData="jumpBacktestData"
+            :currentRow="currentRow"
             ></FilterTable>
           <SignalsTable 
             v-show="activeTab === 'System'"
@@ -190,7 +191,8 @@ export default {
         ]
       },
       signalDes: '',
-      jumpBacktestData: {}
+      jumpBacktestData: {},
+      currentRow: {}
     }
   },
   components: {
@@ -240,8 +242,9 @@ export default {
           });
         });
     },
-    displayResultsData(data) {
+    displayResultsData(data, row={}) {
       debugger
+      this.currentRow = row
       // this.$refs['ScannerForm'].displayData(data)
       const results = Array.isArray(data) && data.length !== 0
       if(!results) {

@@ -565,7 +565,7 @@ export default {
       const date = data[0].Date
       const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
       this.$emit('displayDes', _signalDes)
-      this.$emit('displayResultsData', data)
+      this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, true)
     },
     }

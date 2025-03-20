@@ -1037,7 +1037,13 @@ export default {
         // handle unexist property for old backtesters
         let cond
         if('cond' in newVal[this.criteria]){
-          cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          const conLength = newVal[this.criteria].cond.length
+          const signalLength = newVal[this.criteria].signals.length
+          if(conLength === signalLength && this.relation >= 2) {
+            cond = newVal[this.criteria].cond[this.panelIndex]
+          }else {
+            cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          }
         }
         
         this.senti.extreme_optimism = obj.extreme_optimism

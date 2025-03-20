@@ -1383,10 +1383,13 @@ export const CommonMethodsMixin = {
 			const indicatorList = this.$store.getters.getIndicatorsList
 			const stockList = this.$store.getters.getStockList
 			data[criteria].signals.forEach(signal => {
-				const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
-				const matchStockList = stockList.find(item=>item.name == signal.indicator)
-				if(matchIndicatorsList && matchStockList){
-					signal.indicator = matchIndicatorsList.url + ' Optix'
+				if(!signal) {console.log('No Signal')}
+				else {
+					const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
+					const matchStockList = stockList.find(item=>item.name == signal.indicator)
+					if(matchIndicatorsList && matchStockList){
+						signal.indicator = matchIndicatorsList.url + ' Optix'
+					}
 				}
 			  })
 		}
