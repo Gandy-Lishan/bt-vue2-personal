@@ -147,7 +147,7 @@
              :key="activeTab"
               type="pess"
               :extreme="dashBoardData.pess_extreme" 
-              stock_complete_list='#' 
+              stock_complete_list='/indicators?enlarge=stock' 
               :date="dashBoardData.date"  
               :len_extreme="dashBoardData.len_pess"
              ></DashboardTable>
@@ -157,7 +157,7 @@
              :key="activeTab"
               type="opt"
               :extreme="dashBoardData.opt_extreme" 
-              stock_complete_list='#' 
+              stock_complete_list='/indicators?enlarge=stock' 
               :date="dashBoardData.date"  
               :len_extreme="dashBoardData.len_opt"
              ></DashboardTable>

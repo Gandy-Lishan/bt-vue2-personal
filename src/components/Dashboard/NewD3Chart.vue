@@ -1,6 +1,13 @@
 <template>
  <div class="chart-container">
    <svg :class="chartClass" ref="chartSvg"></svg>
+  <!-- 图片弹出框 -->
+  <div 
+      v-if="showImage"
+      :style="imageStyle"
+      class="hover-image">
+      <img :src="imageSrc" alt="Image" />
+    </div>
  </div>
 </template>
 
@@ -27,6 +34,18 @@ export default {
  },
  data() {
    return {
+    showImage: false,
+    imageSrc: "",
+    imageStyle: {
+      position: "fixed",
+      top: "0px",
+      left: "0px",
+      border: "1px solid #ddd",
+      background: "white",
+      boxShadow: "2px 2px 10px rgba(0,0,0,0.2)",
+      padding: "5px",
+      display: "none",
+    }
    };
  },
  watch: {
@@ -79,6 +98,7 @@ export default {
      }
    },
    renderChart() {
+    console.log('lishan this.chartData', this.chartData)
      if (!this.chartData.length) return;
 
      // 清空 SVG
@@ -114,7 +134,8 @@ export default {
        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
      // 指标名称
-     svg.selectAll(".bar-label")
+     if(['short_indicators', 'int_indicators'].includes(this.chartClass)) {
+      svg.selectAll(".bar-label")
        .data(this.chartData)
        .enter()
        .append("text")
@@ -124,6 +145,19 @@ export default {
        .style("text-anchor", "end")
        .attr("dy", ".35em")
        .text(d => d.name);
+     }else {
+      svg.selectAll(".bar-label")
+       .data(this.chartData)
+       .enter()
+       .append("text")
+       .attr("class", "bar-label")
+       .attr("y", d => x(d.name))
+       .attr("x", 120)
+       .style("text-anchor", "end")
+       .attr("dy", ".35em")
+       .text(d => d.name);
+     }
+
 
      // 数值
      svg.selectAll(".value-text")
@@ -160,7 +194,18 @@ export default {
    },
    debouncedResize() {
      this.renderChart();
-   }
+   },
+   showHoverImage(event, url) {
+    console.log('lishan event url', url)
+      this.imageSrc = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`;
+      this.imageStyle.top = event.clientY + 10 + "px";
+      this.imageStyle.left = event.clientX + 10 + "px";
+      this.showImage = true;
+    },
+    hideHoverImage() {
+      this.showImage = false;
+    }
+
  }
 };
 </script>
@@ -184,5 +229,18 @@ export default {
 .bar {
  stroke: #fff;
  stroke-width: 0.5px;
+}
+.hover-image {
+  position: fixed;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hover-image img {
+  max-width: 150px;
+  max-height: 150px;
 }
 </style>
