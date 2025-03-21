@@ -20,11 +20,7 @@
 /*************************************************************************************************************************/
 /* eslint-disable no-extra-parens */
 
-//import store from '../../../src/store/store.ts'
 import {CIQ} from "./componentUI.js";
-import {config} from "../feeds/STDataFeedAccessUrl.js"
-import axios from "axios"
-
 
 let __js_webcomponents_abstractMarker_ = (_exports) => {
 
@@ -13353,40 +13349,43 @@ if (!Scroll) {
 };
 
 // customized features
-import {__js_webcomponents_studyContext_} from '../components/studyContext.js'
-import {__js_webcomponents_studyContextDefault_} from '../components/studyContextDefault.js'
-import {__js_webcomponents_studyContextMyindicator} from '../components/studyContextMyindicator.js'
-import {__js_webcomponents_DescriptionContext_} from "../components/descriptionDialog.js"
-import {__js_webcomponents_indicatorsLookup_} from "../components/indicators-search.js"
-import {__js_webcomponents_indicatorsScroll_} from "../components/indicators-scroll.js"
-import {__js_webcomponents_lookup_} from "../components/lookup.js"
-import {__js_webcomponents_loader_} from "../components/loader.js"
-import {__js_webcomponents_reports_lookup_} from "../components/reportsLookup.js"
+import {__js_webcomponents_studyContext_} from '@/components/common/chart/st-development/js/webcomponents/studyContext.js'
+import {__js_webcomponents_studyContextDefault_} from '@/components/common/chart/st-development/js/webcomponents/studyContextDefault.js'
+import {__js_webcomponents_studyContextMyindicator} from '@/components/common/chart/st-development/js/webcomponents/studyContextMyindicator.js'
+import {__js_webcomponents_DescriptionContext_} from "@/components/common/chart/st-development/js/webcomponents/descriptionDialog.js"
+import {__js_webcomponents_indicatorsLookup_} from "@/components/common/chart/st-development/js/webcomponents/indicators-search.js"
+import {__js_webcomponents_indicatorsScroll_} from "@/components/common/chart/st-development/js/webcomponents/indicators-scroll.js"
+import {__js_webcomponents_lookup_} from "@/components/common/chart/st-development/js/webcomponents/lookup.js"
+import {__js_webcomponents_loader_} from "@/components/common/chart/st-development/js/webcomponents/loader.js"
+import {__js_webcomponents_reports_lookup_} from "@/components/common/chart/st-development/js/webcomponents/reportsLookup.js"
 
-import {__st_addons_standard_tooltip_} from "./addons/standard/STTooltip.js"
-import {__st_js_mask_} from "./STMask"
-import {__st_js_loadIndicator_} from "./loadIndicator"
+import {__st_addons_standard_tooltip_} from "@/components/common/chart/st-development/js/addons/standard/tooltip.js"
+import {__st_addons_standard_fullscreen_} from "@/components/common/chart/st-development/js/addons/standard/fullScreen.js"
+import {__st_addons_standard_rangeslider_} from "@/components/common/chart/st-development/js/addons/standard/rangeSlider.js"
+import {__st_js_mask_} from "./extensions/mask.js"
+import {__st_js_loadIndicator_} from "./extensions/loadIndicator.js"
 
-import {__st_js_standard_studies_} from "./standard-studies/standardStudies"
-import {__js_standard_studies_medianPrice_} from "./standard-studies/standardMedianPrice.js"
-import {__js_standard_studies_momentum_} from "./standard-studies/standardMomentum.js"
-import {__js_st_studies_customized_} from "./STCustomizedStudies"
+import {__st_js_standard_studies_} from "./standard/studies.js"
+import {__js_standard_studies_medianPrice_} from "@/components/common/chart/st-development/js/standard/studies/standardMedianPrice.js"
+import {__js_standard_studies_momentum_} from "@/components/common/chart/st-development/js/standard/studies/standardMomentum.js"
+import {__js_st_studies_customized_} from "@/components/common/chart/st-development/js/standard/studies/customizedStudies.js"
 
-import {__st_js_chartengine_prototype_overwrite_} from "./standard-studies/chartEnginePrototypeOverwrite.js"
-import {__st_js_indicatorType_} from "./indicatorType"
-import {__st_js_generateCsv_} from "./generateCsv"
-import {__st_js_utils_} from "./utils"
-import {__st_js_maLayout_} from "./maLayout"
-import {__st_js_userownIndicator_} from "./userownIndicator"
-import {__st_js_drawing_} from "./STdrawing"
-
-// import {__st_js_advanced_studies_accumulationDistribution_} from "./advance-studies/accumulationDistribution.js"
+import {__st_js_chartengine_prototype_overwrite_} from "@/components/common/chart/st-development/js/chartEnginePrototypeOverwrite.js"
+import {__st_js_indicatorType_} from "./extensions/indicatorType.js"
+import {__st_js_generateCsv_} from "./extensions/generateCsv.js"
+import {__st_js_utils_} from "./extensions/utils.js"
+import {__st_js_maLayout_} from "./extensions/maLayout.js"
+import {__st_js_myindicator_chart_control_} from "./extensions/myIndicatorChartControl.js"
+import {__st_js_cpm_chart_control_} from "./extensions/cpmChartControl.js"
+import {__st_js_marker_drawer_} from "@/components/common/chart/st-development/examples/markers/markerDrawer.js"
 
 let _exports = {CIQ};
 export {__js_webcomponents_indicatorsScroll_ as indicatorsScrollindicatorsScroll};
 export {__js_webcomponents_indicatorsLookup_ as indicatorsLookup};
 export {__js_webcomponents_DescriptionContext_ as DescriptionContext}
 export {__st_addons_standard_tooltip_ as tooltip}
+export {__st_addons_standard_fullscreen_ as fullScreen}
+export {__st_addons_standard_rangeslider_ as rangeSlider}
 export {__js_webcomponents_reports_lookup_ as reportsLookup};
 
 // export {__st_js_standard_studies_ as stStudies};
@@ -13469,6 +13468,8 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 
 
 		__st_addons_standard_tooltip_,
+		__st_addons_standard_fullscreen_,
+		__st_addons_standard_rangeslider_,
 		__st_js_mask_,
 		__st_js_loadIndicator_,
 
@@ -13482,8 +13483,9 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_generateCsv_,
 		__st_js_utils_,
 		__st_js_maLayout_,
-		__st_js_userownIndicator_,
-		__st_js_drawing_,
+		__st_js_myindicator_chart_control_,
+		__st_js_cpm_chart_control_,
+		__st_js_marker_drawer_,
 
 		
 		

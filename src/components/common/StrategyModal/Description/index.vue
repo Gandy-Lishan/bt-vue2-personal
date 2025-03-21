@@ -161,7 +161,11 @@ export default {
                 "Rules": "1. If the Symbol Close of the symbol reaches its 13-Week low, then SELL.<br/>2. BUY after 21 trading days."
               }
             ],
-            descItem: null,
+            descItem: {
+                "Strategy_name": "...",
+                "Description": "...",
+                "Rules": "..."
+            },
 		}
 	},
   watch: {
