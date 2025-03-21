@@ -95,9 +95,12 @@ export default {
    },
    async getDashboardData() {
     let {data} = await getDashboardData()
-    data = data.replace(/NaN/g, 'null')
-    const parseData =  JSON.parse(data)
+    const parseData =  data
     console.log('dashBoardData', parseData)
+    this.dashBoardData.forecasts = isJson(this.dashBoardData.forecasts) ? JSON.parse(this.dashBoardData.forecasts) : this.dashBoardData.forecasts
+    const blogs_and_charts = isJson(this.dashBoardData.blogs_and_charts) ? JSON.parse(this.dashBoardData.blogs_and_charts) : this.dashBoardData.blogs_and_charts
+    this.dashBoardData.blogs_and_charts = blogs_and_charts
+    this.dashBoardData.dashboard_spotlight_data = isJson(this.dashBoardData.dashboard_spotlight_data) ? JSON.parse(this.dashBoardData.dashboard_spotlight_data) : this.dashBoardData.dashboard_spotlight_data
     this.dashBoardData = parseData
     const heatmap_data = JSON.parse(parseData.heatmap_data)
     console.log('heatmap_data', heatmap_data)

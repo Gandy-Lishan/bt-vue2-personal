@@ -476,7 +476,16 @@ export default {
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
-        let cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+        let cond = null
+        if('cond' in newVal[this.criteria]){
+          const conLength = newVal[this.criteria].cond.length
+          const signalLength = newVal[this.criteria].signals.length
+          if(conLength === signalLength && this.relation >= 2) {
+            cond = newVal[this.criteria].cond[this.panelIndex]
+          }else {
+            cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          }
+        }
         this.sym.condition = Number(obj.condition)
         this.sym.value = obj.value
         this.sym.comparison = obj.comparison

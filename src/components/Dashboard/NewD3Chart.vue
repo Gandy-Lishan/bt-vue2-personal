@@ -91,7 +91,7 @@ export default {
 
      const margin = { top: 0, right: 75, bottom: 0, left: 40 };
      const width = max_width - margin.left - margin.right;
-     const height = this.chartData.length * 20 - margin.top - margin.bottom;
+     const height = this.chartData.length * 22 - margin.top - margin.bottom;
 
      // x 和 y 轴
      const x = d3.scaleBand()

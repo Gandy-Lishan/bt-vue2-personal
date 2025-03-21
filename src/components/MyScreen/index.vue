@@ -46,6 +46,7 @@
             :loading="loading"
             :signalDes="signalDes"
             :jumpBacktestData="jumpBacktestData"
+            :currentRow="currentRow"
             ></FilterTable>
           <SignalsTable 
             v-show="activeTab === 'System'"
@@ -190,7 +191,8 @@ export default {
         ]
       },
       signalDes: '',
-      jumpBacktestData: {}
+      jumpBacktestData: {},
+      currentRow: {}
     }
   },
   components: {
@@ -240,14 +242,15 @@ export default {
           });
         });
     },
-    displayResultsData(data) {
+    displayResultsData(data, row={}) {
       debugger
+      this.currentRow = row
       // this.$refs['ScannerForm'].displayData(data)
       const results = Array.isArray(data) && data.length !== 0
       if(!results) {
         this.popUpMsgBox(`No results found. Adjust the parameters and save again.`)
-        this.clearResults()
-        return
+        // this.clearResults()
+        // return
       }
       this.activeTab = 'Result'
       this.displayResultList(data)
@@ -261,6 +264,13 @@ export default {
     displayResultList(content) {
       debugger
       if(!content) return
+      if(Array.isArray(content) && content.length === 0) {
+        this.filterTableData = {
+          tableCol: [],
+          content: []
+        }
+        return
+      }
 		  this.loading = true
       // this.$refs.filterTable.handleSizeChange(10)
       // 把数据处理成所需格式
