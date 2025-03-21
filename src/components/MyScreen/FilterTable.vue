@@ -383,6 +383,10 @@ export default {
     const match = str.match(/(\d+)(?!.*\d)/);
     return match ? parseInt(match[0], 10) : null;
 			}
+			const extractThirdLastNumber = (str) => {
+				const matches = str.match(/\d+/g);  // 匹配所有数字
+				return matches && matches.length >= 3 ? parseInt(matches[matches.length - 3], 10) : null;
+			};
 			const activatedMALayout = []
 			const activatedMA = [{period: 21, url: ''}]
 
@@ -398,7 +402,7 @@ export default {
 				let url = ''
 				let signal = null
 				if(isSymbolOHLCV && isTechnicalIndicator) url = name
-				if(!isSymbolOHLCV && !isTechnicalIndicator) {
+				if(!isSymbolOHLCV && !isTechnicalIndicator) {	// case: sentiment indicator
 					const isSentimentIndicator = code.includes('SI:')
 					const isTrendScore = code.includes('Trend Score')
 					const isOptix = code.includes('Optix')
@@ -406,8 +410,17 @@ export default {
 					else if(isSentimentIndicator && isOptix) url = `${Symbol}@indicator` // ADP
 					signal = CIQ.findSentiIndicator(null, url)
 					if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
+
+					activatedMA.push({
+						criteria: 'entry',
+						field: 'Close',
+						index,
+						period: extractThirdLastNumber(item.code) || '',
+						type: 'simple',
+						url: signal?.url
+					})
 				}
-				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {
+				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {	// case: technical indicator
 					signal = CIQ.findBuiltinTechIndicator(name, null)
 					activatedMALayout.push({
 						criteria: 'entry',
@@ -427,7 +440,7 @@ export default {
 					})
 				}
 				// 在 symbol indicator list内检索url
-				if (!signal && isSymbolOHLCV) {
+				if (!signal && isSymbolOHLCV) {	// case: symbol ohlcv
 					const find = CIQ.findSymbolIndicator(name, null)
 					console.log('find', find)
 					if (find) {
