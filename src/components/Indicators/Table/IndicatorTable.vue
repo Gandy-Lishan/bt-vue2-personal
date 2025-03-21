@@ -319,6 +319,14 @@ export default {
       indicatorsListData: 'getIndicatorsPageListData'
     })
   },
+  mounted() {
+    if(this.$route.fullPath.includes('?enlarge=stock')) {
+      this.$nextTick(() => {
+        this.enLargeTable = 'Stock Market Indicators & Optix'
+        this.checkedType = 'stock'
+      })
+    }
+  },
   methods: {
     toggleEnlarge(label) {
       console.log('toggleEnlarge', label)

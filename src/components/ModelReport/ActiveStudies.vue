@@ -247,7 +247,7 @@
     </div>
    </div>
   </div>
-  <AboutUs></AboutUs> 
+  <AboutUs v-show="!hideFooter"></AboutUs> 
  </div>
 </template>
 
@@ -289,6 +289,7 @@ export default {
     marketOptions: [],
     timeframeOptions: [],
     searchInput: '',
+    hideFooter: false
   }
  },
  computed: {
@@ -318,7 +319,11 @@ export default {
   },
 async mounted() {
   debugger
-  if(this.$route.path === '/dashboard') await this.fetchActiveStudiesData()
+  if(this.$route.path === '/dashboard') {
+    //隐藏掉 page-footer
+    this.hideFooter = true
+    await this.fetchActiveStudiesData()
+  }
 },
  methods: {
    subscribeToStudyAlerts() {

@@ -290,7 +290,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart || isTrendScore) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || isTrendScore || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
