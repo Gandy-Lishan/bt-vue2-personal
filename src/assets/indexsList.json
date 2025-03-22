@@ -1254,5 +1254,9 @@
     {
         "symbol": "MXLA",
         "name": "South America (MXLA)"
+    },
+        {
+        "symbol": "CRP_BTC",
+        "name": "Bitcoin"
     }
 ]
