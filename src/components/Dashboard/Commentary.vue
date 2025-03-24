@@ -10,8 +10,8 @@
            </h4>
          </div>
          <div class="panel-body">
-           <template v-if="dashboardType === 'grandfathered'">
-             <template v-for="(row, index) in latestCommentary">
+           <template v-if="dashboard_type === 'grandfathered'">
+             <template v-for="(row, index) in latest_commentary">
               <div :key="index">
                <a
                  class="item-name primary-link"
@@ -20,7 +20,7 @@
                  {{ row.title }}
                </a>
                <br />
-               <em><small>Published: {{ row.postDate }}</small></em>
+               <em><small>Published: {{ row.post_date }}</small></em>
                <br />
                <p>
                  {{ getContent(row) }}
@@ -29,9 +29,28 @@
              </template>
            </template>
 
-           <template v-else-if="dashboardType === 'indicatoredge'">
+           <template v-else-if="dashboard_type === 'indicatoredge'">
+            <template v-if="htop_webinar_exist">
+              <template v-for="(row, index) in htop_webinar">
+                <div :key="index">
+                 <a
+                   class="item-name primary-link"
+                   :href="getWebinarUrl(row)"
+                   target="_blank"
+                 >
+                   {{ row.title }}
+                 </a>
+                 <br />
+                 <em><small>Published: {{ row.post_date }}</small></em>
+                 <br />
+                 <p>
+                   {{ getContent(row) }}
+                 </p>
+                </div>
+               </template>
+            </template>
              <template v-if="LC_Length > 0">
-               <template v-for="(row, index) in latestCommentary">
+               <template v-for="(row, index) in latest_commentary">
                 <div :key="index">
                  <a
                    class="item-name primary-link"
@@ -40,7 +59,7 @@
                    {{ row.title }}
                  </a>
                  <br />
-                 <em><small>Published: {{ row.postDate }}</small></em>
+                 <em><small>Published: {{ row.post_date }}</small></em>
                  <br />
                  <p>
                    {{ getContent(row) }}
@@ -65,50 +84,70 @@
 </template>
 
 <script>
+import { isJson, timestampToTime } from '@/utils';
+import moment from "moment";
+
 export default {
  props: {
-   dashboardType: {
-     type: String,
-     required: true,
-   },
-   // latestCommentary: {
-   //   type: Array,
-   //   default: () => [],
-   // },
-   LC_Length: {
-     type: Number,
-     default: 0,
-   },
+  dashBoardData: {
+    type: Object,
+    required: true,
+  }
  },
  data() {
-  latestCommentary: [
-   {
-    title: 'Register for Jan 15 Exclusive Monthly Client Webinar and Access Dec 11 Webinar Recording',
-    postDate: '2022-02-20'
-   }
-  ]
  },
  computed: {
+  LC_Length() {
+    return this.dashBoardData.LC_Length
+  },
+  latest_commentary() {
+    const latest_commentary = isJson(this.dashBoardData.latest_commentary) ? JSON.parse(this.dashBoardData.latest_commentary) : this.dashBoardData.latest_commentary
+    return latest_commentary.map(ele => {
+      if(ele.post_date) {
+        const formattedDate = moment.utc(ele.post_date).format('YYYY-MM-DD');
+        ele.post_date = formattedDate
+      }
+      return ele
+    })
+  },
+  htop_webinar() {
+    return this.dashBoardData.htop_webinar
+  },
+  htop_webinar_exist() {
+    return Array.isArray(this.htop_webinar) && this.htop_webinar.length !== 0
+  },
+  dashboard_type() {
+    console.log('this.dashBoardData.dashboard_type;', this.dashBoardData.dashboard_type)
+     return this.dashBoardData.dashboard_type;
+   },
    getPanelTitle() {
-     if (this.dashboardType === "grandfathered" || this.dashboardType === "indicatoredge") {
+     if (this.dashBoardData.dashboard_type === "grandfathered" || this.dashBoardData.dashboard_type === "indicatoredge") {
        return "Latest Commentary";
      }
      return "Other Services Available";
    },
  },
+ watch: {
+  latest_commentary(value) {
+    console.log('lishan latest_commentary', value)
+  }
+ },
  methods: {
    getBlogUrl(row) {
      if (
-       this.dashboardType === "indicatoredge" &&
+       this.dashboard_type === "indicatoredge" &&
        ["Jason Goepfert", "Dean Christians", "Jay Kaeppel"].includes(row.author)
      ) {
-       return `/user/blog_post/${row.url}`;
+       return `/MR/${row.user_level}/${row.url}`;
      }
-     return `/public/blog_post/${row.url}`;
+     return `/MR/blog/${row.url}`;
+   },
+   getWebinarUrl(row) {
+    return `https://users.sentimentrader.com/users/htop_webinar/${row.date}`
    },
    getContent(row) {
-     if (row.metaDescription && row.metaDescription.trim() !== "") {
-       return row.metaDescription;
+     if (row.meta_description && row.meta_description.trim() !== "") {
+       return row.meta_description;
      }
      return row.content ? row.content.substring(0, 100) : "No content available";
    },

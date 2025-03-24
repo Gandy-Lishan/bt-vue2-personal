@@ -1,4 +1,7 @@
 /* Add any required styles */
+.dashboard {
+  font-weight: 400;
+}
 .page-content {
  background: #fff;
  padding: 15px 0 15px;
@@ -13,6 +16,10 @@
 h1, h2, h3, h4, h5, h6 {
  font-family: "Open Sans", sans-serif;
  font-weight: 300;
+}
+h4, .h4, h5, .h5, h6, .h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 h4 {
  font-size: 18px;
@@ -344,4 +351,33 @@ small,.small {
 }
 .col-md-6, .col-md-12 {
   margin-bottom: 15px
+}
+.btn {
+  border-width: 0;
+  padding: 7px 14px;
+  font-size: 14px;
+  outline: 0 !important;
+  background-image: none !important;
+  filter: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+.grey-cascade.btn {
+  color: #fff;
+  background-color: #95a5a6;
+  border-color: "";
+}
+.grey-cascade.active {
+  background-color: #74898a;
+}
+.btn-group, .btn-group-vertical {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }

@@ -8,12 +8,12 @@
 
      <div class="col-md-6">
        <h4>Sectors Ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="sector_chart"></svg>
+       <NewD3Chart chartClass="sector_chart" :data="dashBoardData.sector_chart_data" :dataUrl="dashBoardData.sector_chart" :middleValue="50" />
      </div>
 
      <div class="col-md-6">
        <h4>Sectors Ranked by Lowest-Highest Money Flow</h4>
-       <svg class="sector_flow_chart"></svg>
+       <NewD3Chart chartClass="sector_flow_chart" :data="dashBoardData.sector_flow_chart_data" :dataUrl="dashBoardData.sector_flow_chart" :middleValue="50" />
      </div>
 
      <div class="col-md-12">
@@ -22,12 +22,12 @@
 
      <div class="col-md-6">
        <h4>Sectors Ranked by Oversold - Overbought Breadth</h4>
-       <svg class="sector_breadth_chart"></svg>
+       <NewD3Chart chartClass="sector_breadth_chart" :data="dashBoardData.sector_breadth_chart_data" :dataUrl="dashBoardData.sector_breadth_chart" :middleValue="50" />
      </div>
 
      <div class="col-md-6">
        <h4>Bonds Ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="bond_bar"></svg>
+       <NewD3Chart chartClass="bond_bar" :data="dashBoardData.bond_bar_data" :dataUrl="dashBoardData.bond_bar" :middleValue="50" />
      </div>
 
      <div class="col-md-12">
@@ -36,12 +36,12 @@
 
      <div class="col-md-6">
        <h4>Countries ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="country_chart"></svg>
+       <NewD3Chart chartClass="country_chart" :data="dashBoardData.country_chart_data" :dataUrl="dashBoardData.country_chart" :middleValue="50" />
      </div>
 
      <div class="col-md-6">
        <h4>Countries ranked by Lowest-Highest Money Flow</h4>
-       <svg class="country_flow_chart"></svg>
+       <NewD3Chart chartClass="country_flow_chart" :data="dashBoardData.country_flow_chart_data" :dataUrl="dashBoardData.country_flow_chart" :middleValue="50" />
      </div>
 
      <div class="col-md-12">
@@ -50,12 +50,12 @@
 
      <div class="col-md-6">
        <h4>Commodities Ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="commods"></svg>
+       <NewD3Chart chartClass="commods" :data="dashBoardData.commods_data" :dataUrl="dashBoardData.commods" :middleValue="50" />
      </div>
 
      <div class="col-md-6">
        <h4>Currencies Ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="currency"></svg>
+       <NewD3Chart chartClass="currency" :data="dashBoardData.currency_data" :dataUrl="dashBoardData.currency" :middleValue="50" />
      </div>
 
      <div class="col-md-12">
@@ -64,13 +64,24 @@
 
      <div class="col-md-6">
        <h4>Stocks Ranked by Lowest-Highest Optimism Index</h4>
-       <svg class="stock_chart"></svg>
+       <NewD3Chart chartClass="stock_chart" :data="dashBoardData.stock_chart_data" :dataUrl="dashBoardData.stock_chart" :middleValue="50" />
      </div>
  </div>
 </template>
 
 <script>
+import NewD3Chart from "./NewD3Chart";
+
 export default {
+props: {
+  dashBoardData: {
+    type: Object,
+    required: true,
+  }
+ },
+  components: {
+    NewD3Chart
+  },
  mounted() {
    // Initialize chart rendering
    this.renderCharts();

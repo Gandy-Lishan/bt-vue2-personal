@@ -6,37 +6,17 @@
 import Highcharts from 'highcharts/highstock';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-
+import { isJson } from '@/utils'
 Exporting(Highcharts);
 ExportData(Highcharts);
 
 export default {
   name: 'ExtremeIndicatorsChart',
+  props: {
+    dashBoardData: Object
+  },
   data() {
     return {
-      chart_data: {
-        data: [],
-        title: '',
-        pess: '',
-        opt: '',
-        model: '',
-        market: '',
-        opt_message: '',
-        pess_message: '',
-        chart_type: '',
-        smart_signal_title: '',
-        dumb_signal_title: '',
-        dumb_enabled: '',
-        timeframe_selected: '',
-        rangeSelector_enabled: '',
-        navigator_enabled: '',
-        opt_color: '',
-        pess_color: '',
-        data_extreme: '',
-        seasonality: '',
-        seasonality_day_of_year_data: '',
-        seasonality_month_of_year_data: ''
-      },
       extreme_sets: {
         spx: [],
         pess: [],
@@ -63,6 +43,13 @@ export default {
         opt: '%'
       }
     };
+  },
+  computed: {
+    chart_data() {
+      const {data_extreme} = this.dashBoardData
+      this.dashBoardData.data_extreme = isJson(data_extreme) ? JSON.parse(data_extreme) : data_extreme
+      return this.dashBoardData
+    },
   },
   mounted() {
     //if (this.chart_data.data_extreme) {

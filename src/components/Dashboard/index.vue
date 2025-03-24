@@ -9,17 +9,17 @@
       <!-- Commentary and Charts -->
       <div class="row">
         <div class="col-md-5">
-          <Commentary />
+          <Commentary :dashBoardData="dashBoardData"/>
         </div>
         <div class="col-md-7">
           <SmartDumbChart />
-          <MarketOverview />
+          <MarketOverview :dashBoardData="dashBoardData"/>
         </div>
       </div>
 
       <!-- Overview Section -->
       <div class="row">
-        <Overview />
+        <Overview :dashBoardData="dashBoardData"/>
       </div>
     </div>
  </div>
@@ -31,6 +31,8 @@ import Commentary from "./Commentary.vue";
 import SmartDumbChart from "./SmartDumbChart.vue";
 import MarketOverview from "./MarketOverview.vue";
 import Overview from "./Overview.vue";
+import { getDashboardData } from "@/service/service";
+import { isJson } from "@/utils";
 
 export default {
  name: 'Dashboard',
@@ -41,8 +43,14 @@ export default {
   MarketOverview,
   Overview
  },
- mounted() {
+ data() {
+  return {
+    dashBoardData: {},
+  }
+ },
+ async mounted() {
    // Equivalent to $(document).ready
+   await this.getDashboardData()
    this.initializeChartPopups();
  },
  methods: {
@@ -84,6 +92,18 @@ export default {
          console.log("Popup logic triggered for:", element, offsetX, offsetY);
        });
      });
+   },
+   async getDashboardData() {
+    let {data} = await getDashboardData()
+    const parseData =  data
+    console.log('dashBoardData', parseData)
+    this.dashBoardData.forecasts = isJson(this.dashBoardData.forecasts) ? JSON.parse(this.dashBoardData.forecasts) : this.dashBoardData.forecasts
+    const blogs_and_charts = isJson(this.dashBoardData.blogs_and_charts) ? JSON.parse(this.dashBoardData.blogs_and_charts) : this.dashBoardData.blogs_and_charts
+    this.dashBoardData.blogs_and_charts = blogs_and_charts
+    this.dashBoardData.dashboard_spotlight_data = isJson(this.dashBoardData.dashboard_spotlight_data) ? JSON.parse(this.dashBoardData.dashboard_spotlight_data) : this.dashBoardData.dashboard_spotlight_data
+    this.dashBoardData = parseData
+    const heatmap_data = JSON.parse(parseData.heatmap_data)
+    console.log('heatmap_data', heatmap_data)
    }
  }
 };

@@ -2004,6 +2004,21 @@ export function getScreenResults(url) {
 /* My Screens End */
 
 /** Dashboard Start */
+export async function getDashboardData() {
+	// 在配置env之前暂时用NODE_ENV判断url
+	let path = `dev/st_data/dashboard`
+	
+		return new Promise((resolve, reject) => {
+			axios
+				.get(path, { withCredentials: true, retry: null })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+}
 export async function getSmartDumbSentiment() {
 	// 在配置env之前暂时用NODE_ENV判断url
 	let url = `dev/st_data/smart_dump_sentiment`
