@@ -162,11 +162,11 @@ data() {
         cell.classList.add("align-center", "bold-text", "asset-td");
 
         // **如果值是负数，添加 `negative-value` 类**
-        if ((values[i] !== undefined && values[i] !== null) && values[i] < 0) {
+        if ((values[i] !== undefined && values[i] !== null && values[i] !== NaN) && values[i] < 0) {
           cell.classList.add("negative-value");
         }
 
-        cell.innerHTML = (values[i] !== undefined && values[i] !== null) ? values[i] : '-';
+        cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN) ? values[i] : '-';
         row.appendChild(cell);
       }
 
@@ -199,7 +199,7 @@ exportData() {
 
       // 填充数据，确保列数对齐
       for (let i = 0; i < this.defaultTableLabels.length; i++) {
-        row[this.defaultTableLabels[i]] = values[i] !== undefined ? values[i] : "-";
+        row[this.defaultTableLabels[i]] = (values[i] !== undefined && values[i] !== null && values[i] !== NaN  && values[i] !== 'NaN') ? values[i] : "-";
       }
 
       sheetData.push(row);
