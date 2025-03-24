@@ -5,8 +5,8 @@ import { decodeBase64 } from '..'
 //   Object.assign(vm.$data, vm.$options.data()) }
 const getSymbolInfo = (url) => {
     //console.time('🚗Execution Time');
-    let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==url || x.stock.toLowerCase()==url.toLowerCase())
-    let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==url || x.symbol.toLowerCase()==url.toLowerCase())
+    let stockName = CIQ.store.getters.getStockList.find(x=>x.stock==url || x.stock.toLowerCase()==url?.toLowerCase())
+    let indexName = CIQ.store.getters.getIndexList.find(x=>x.symbol==url || x.symbol.toLowerCase()==url?.toLowerCase())
     //console.timeEnd('🚗Execution Time');
     if (stockName) {
         return {name: stockName?.name, url: url, type:'stock'}
