@@ -240,7 +240,9 @@ export default {
                     Object.entries(data).forEach(([metric, values]) => {
                       if (metric === '% Positive') {
                         // 在 '% Positive' 的数值后面加上 '%'
-                        data[metric] = values.map(value => `${(value !== null && value !== undefined && value !== '') ? `${value}%` : '-'}`);
+                        data[metric] = values.map(value => `${(value !== null && value !== undefined && value !== '' && value !== NaN  && value !== 'NaN') ? `${value}%` : '-'}`);
+                      }else {
+                        data[metric] = values.map(value => `${(value !== null && value !== undefined && value !== '' && value !== NaN  && value !== 'NaN') ? `${value}` : '-'}`);
                       }
                     });
                   });
