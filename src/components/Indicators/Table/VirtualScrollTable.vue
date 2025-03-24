@@ -1720,6 +1720,13 @@ export default {
       this.isTrendScorePage = true
       this.enlarged = true
     }
+    if(this.$route.fullPath.includes('?enlarge=stock') && this.refName === 'stockVirtualScroll') {
+      this.$nextTick(() => {
+        this.checkedType = 'stock'
+        this.enlarged = true
+        this.toggleEnlarge('Stock Market Indicators & Optix');
+      })
+    }
   },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
@@ -1801,6 +1808,7 @@ export default {
       }
     },
     async updateChart(row) {
+      debugger
       if(this.isTrendScorePage) {
         this.$emit("updateChart", row)
         return

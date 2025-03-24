@@ -209,7 +209,7 @@ export default {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
-          roll_window: 5
+          roll_window: 21
         },
         // 自定义动态渲染下拉栏
         searchResults: [],
@@ -254,15 +254,15 @@ export default {
       ],
       rollWindowOptions: [
         {
-          value: 5,
+          value: 21,
           label: 'Short'
         },
         {
-          value: 21,
+          value: 63,
           label: 'Medium'
         },
         {
-          value: 63,
+          value: 126,
           label: 'Long'
         },
       ],
@@ -516,7 +516,7 @@ export default {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
-          roll_window: 5
+          roll_window: 21
         }
         this.cpm_period = 'all'
         this.stock_comparison = []

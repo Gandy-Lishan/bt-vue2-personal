@@ -3,8 +3,10 @@
   <p>The Optix Heatmap shows all of our Optimism Index indicators in a heatmap
    format. Optix readings can be seen by hovering over the heatmap.
    Additionally, if you click a lable or box, you'll be taken to that Optix
-   chart. To view a larger version of this chart, <a
-           href="#"> click here</a>.</p>
+   chart.
+    <!-- To view a larger version of this chart, <a
+           href="#"> click here</a>. -->
+          </p>
    <p>Moving Average:</p>
    <div class="btn-group heatmap-moving-average-buttons" role="group">
      <button
@@ -52,12 +54,13 @@ export default {
       const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
       // 颜色映射规则
       const getColor = (colorValue) => {
-        if (colorValue <= 0) return '#41A317'; // 极端悲观（绿色）
-        if (colorValue <= 2) return '#89C35C'; // 较强的悲观（浅绿色）
-        if (colorValue <= 3) return '#99C68E'; // 中等的悲观（淡绿）
-        if (colorValue <= 5) return '#FFF8DC'; // 中立
-        if (colorValue <= 7) return '#E18B6B'; // 较强的乐观（橙色）
-        if (colorValue <= 8) return '#F75D59'; // 极端乐观（红色）
+        const _colorValue = (colorValue - 1) / (7 - 1)
+        if (_colorValue <= 0) return '#41A317'; // 极端悲观（绿色）
+        if (_colorValue <= 0.2) return '#89C35C'; // 较强的悲观（浅绿色）
+        if (_colorValue <= 0.3) return '#99C68E'; // 中等的悲观（淡绿）
+        if (_colorValue <= 0.5) return '#FFF8DC'; // 中立
+        if (_colorValue <= 0.7) return '#E18B6B'; // 较强的乐观（橙色）
+        if (_colorValue <= 0.8) return '#F75D59'; // 极端乐观（红色）
         return '#FF0000'; // 非常乐观（红色）
       };
 
@@ -156,7 +159,7 @@ export default {
                   if (pos_top < window.innerHeight / 2) pos_top += 270;
                   const html = `
                     <div class="chart-thumb" style="position: fixed; max-width: 400px; min-width: 400px; top: ${pos_top}px; left: ${pos_left}px; z-index: 1000;">
-                      <img src="${this.options.thumbnail}" style="width: 100%; display: none;" onload="$(this).css({'border': '1px solid #c2c2c2', 'box-shadow': '2px 2px 4px #595959'}).show();" />
+                      <img src="${this.options.thumbnail}" style="width: 100%; display: block;" onload="$(this).css({'border': '1px solid #c2c2c2', 'box-shadow': '2px 2px 4px #595959'}).show();" />
                     </div>
                   `;
                   document.body.insertAdjacentHTML('afterbegin', html);

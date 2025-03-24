@@ -187,7 +187,7 @@ export default {
     return `https://sentimentrader.com/blog/${item.url}`;
    },
    chartLink(item) {
-    return `https://sentimentrader.com/blog/${item.chart_url}`;
+    return `/backtester/sr/setup?index=${item.market_symbol || 'Unknown'}&indicator=${item.chart_url}`
    },
     goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {

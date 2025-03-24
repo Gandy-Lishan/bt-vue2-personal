@@ -72,9 +72,8 @@ export default {
          labels: { align: "left" }
        },
        title: {
-         useHTML: true,
-         // text: `<a href="/users/charts/${chart.symbol}"><font color="black">${chart.title}</font></a>`
-         text: `${chart.title}`,
+         useHtml: true,
+         text: `<a href="/backtester/sr/setup?index=Unknown&indicator=${chart.symbol}"><font color="black">${chart.title}</font></a>`,
          style: {
           fontWeight: 400
          }

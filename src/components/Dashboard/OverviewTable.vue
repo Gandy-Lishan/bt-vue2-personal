@@ -75,7 +75,7 @@ export default {
  methods: {
    // 返回图表的链接
    getChartUrl(symbol) {
-     return `/charts/${symbol}`;
+     return `/backtester/sr/setup?index=Unknown&indicator=${symbol}`
    },
    // 返回图片的 URL
    getImageUrl() {

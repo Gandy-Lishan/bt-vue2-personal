@@ -10,7 +10,7 @@
          style="display:inline;float:right; margin-left:75px; margin-top:-5px;"
          method="get"
        >
-         <button type="submit" class="btn grey-cascade">View larger chart</button>
+         <button type="submit" class="btn grey-cascade" @click="JumpToBacktest">View larger chart</button>
        </form>
      </div>
    </div>
@@ -38,6 +38,7 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 import { getSmartDumbSentiment, getPairDataDashboard } from '@/service/service'
 import moment from 'moment';
+import { LocalStorageUtil } from '@/utils'
 
 Exporting(Highcharts);
 ExportData(Highcharts);
@@ -79,8 +80,67 @@ export default {
       });
  },
  methods: {
-   getChartUrl(symbol) {
-     return `/user/charts?symbol=${symbol}`;
+   getChartUrl(indicator) {
+     return `/backtester/sr/setup?index=${'Unknown'}&indicator=${indicator}`
+   },
+   JumpToBacktest() {
+    // 携带两个 indicator 和 一个 symbol
+    const symbol = 'SPX'
+    const indicator1 = 'model_dumb_money'
+    const indicator2 = 'model_smart_money'
+    const jumpBacktestData = {}
+    jumpBacktestData.symbol = symbol
+    const date = new Date()
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+    const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
+    jumpBacktestData.name = `${symbol} (${year}-${month}-${day} ${hour}:${minute}:${second})`
+    jumpBacktestData.end_date = lastMonthEnd
+    jumpBacktestData.start_date = '1800-10-01'
+    jumpBacktestData.uuid = "UUID"
+    jumpBacktestData.strategy = "Single"
+    jumpBacktestData.commission = 0
+    jumpBacktestData.slippage = 0
+    jumpBacktestData.trade_price = 0
+    jumpBacktestData.entry = {
+      score:1,
+      signals_in_market:1,
+      relation:2,
+      delay_bars:0,
+      signals:[
+        {code:"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/"},
+        {code:"SI:Dumb Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/"},
+      ],
+      cond:[
+        {newCondition:3,conditionPeriod:"21",ma_type:"S"},
+        {newCondition:3,conditionPeriod:"21",ma_type:"S"},
+        {newCondition:3,conditionPeriod:"21",ma_type:"S"}
+      ]
+    }
+    jumpBacktestData.exit = {
+      score:1,
+      signals_in_market:1,
+      relation:0,
+      delay_bars:0,
+      signals:[{code:"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999"}],
+      cond:[null]
+    }
+    jumpBacktestData.indicator_layout = {
+      savedTechSD:[],
+        activatedMA:[
+          {period:21,url:""}
+        ],
+        activatedMALayout:[],
+        activatedTechLayout:[],
+        formIndicators:{entry:["model_smart_money", "model_dumb_money"],exit:[""]}
+     }
+		jumpBacktestData.risk_control = '//21'
+    LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
+    window.open('/backtester/sr/setup', '_blank');
    },
     setupChart() {
       Highcharts.chart(this.$refs.chartContainer, {

@@ -195,7 +195,7 @@ export default {
       }).format(new Date(date));
     },
     postLink(item) {
-    return `https://sentimentrader.com/blog/${item.url}`;
+    return  `/backtester/sr/setup?index=${'Unknown'}&indicator=${item.url}`
    },
    chartLink(item) {
     return `https://sentimentrader.com/blog/${item.chart_url}`;
