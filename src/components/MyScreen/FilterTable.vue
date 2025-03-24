@@ -401,6 +401,7 @@ export default {
 				const name = extractSIContent(code || item.code)
 				let url = ''
 				let signal = null
+				debugger
 				if(isSymbolOHLCV && isTechnicalIndicator) url = name
 				if(!isSymbolOHLCV && !isTechnicalIndicator) {	// case: sentiment indicator
 					const isSentimentIndicator = code.includes('SI:')
@@ -503,7 +504,16 @@ export default {
 					if(_signal[index].url) activatedTechLayout.push({
 						url: _signal[index].url,
 						criteria: "entry",
-						index: index + 1,
+						index: index,
+						symbolType: "symbol1"
+					})
+				}
+				const isSymbolOHLCV = item.code.includes('SY:')
+				if(isSymbolOHLCV) {
+					if(_signal[index].label) activatedTechLayout.push({
+						url: _signal[index].label,
+						criteria: "entry",
+						index: index,
 						symbolType: "symbol1"
 					})
 				}
