@@ -2091,3 +2091,16 @@ export async function getSmartDumbSentiment() {
 				})
 		})
 	}
+	export function getAssetCorrelation(data) {
+		const url = `/dev/st_data/widgets?chart_name=AssetCorr`
+		return new Promise((resolve, reject) => {
+			axios
+				.get(url, { cache: true, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}
