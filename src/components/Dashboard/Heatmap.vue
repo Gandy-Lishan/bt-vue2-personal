@@ -7,19 +7,21 @@
     <!-- To view a larger version of this chart, <a
            href="#"> click here</a>. -->
           </p>
-   <p>Moving Average:</p>
-   <div class="btn-group heatmap-moving-average-buttons" role="group">
-     <button
-       v-for="(averageDays, index) in movingAverages"
-       :key="index"
-       type="button"
-       class="btn grey-cascade"
-       :class="{ active: index === selectedMovingAverageIndex }"
-       @click="handleMovingAverageClick(index)"
-     >
-       <i class="fa fa-check"></i> {{ averageDays }} Days
-     </button>
-   </div>
+    <div style="text-align: center; margin-bottom: 20px;">
+      Moving Average:
+      <div class="btn-group heatmap-moving-average-buttons" role="group">
+        <button
+          v-for="(averageDays, index) in movingAverages"
+          :key="index"
+          type="button"
+          class="btn grey-cascade"
+          :class="{ active: index === selectedMovingAverageIndex }"
+          @click="handleMovingAverageClick(index)"
+        >
+          <i class="fa fa-check"></i> {{ averageDays }} Days
+        </button>
+      </div>
+    </div>
    <div id="HM" style="min-width: 750px; height: 800px; margin: 0 auto"></div>
  </div>
 </template>
@@ -27,7 +29,6 @@
 <script>
 import Highcharts from 'highcharts';
 import HighchartsTreemap from 'highcharts/modules/treemap';
-import { isJson } from "@/utils";
 
 // Ensure the Highcharts Treemap module is loaded
 HighchartsTreemap(Highcharts);
@@ -210,9 +211,8 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .heatmap-moving-average-buttons {
-  margin-bottom: 20px;
 }
 
 .heatmap-moving-average-buttons .btn {
@@ -228,4 +228,5 @@ export default {
   width: 100%;
   display: none;
 }
+@import "./index.less";
 </style>

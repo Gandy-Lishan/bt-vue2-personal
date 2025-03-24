@@ -20,7 +20,7 @@
                  {{ row.title }}
                </a>
                <br />
-               <em><small>Published: {{ row.date }}</small></em>
+               <em><small>Published: {{ row.post_date }}</small></em>
                <br />
                <p>
                  {{ getContent(row) }}
@@ -83,7 +83,8 @@
 </template>
 
 <script>
-import { isJson } from '@/utils';
+import { isJson, timestampToTime } from '@/utils';
+import moment from "moment";
 
 export default {
  props: {
@@ -101,7 +102,10 @@ export default {
   latest_commentary() {
     const latest_commentary = isJson(this.dashBoardData.latest_commentary) ? JSON.parse(this.dashBoardData.latest_commentary) : this.dashBoardData.latest_commentary
     return latest_commentary.map(ele => {
-      if(typeof ele.post_date === "string") ele.post_date = ele.post_date.replace(/T/g, " ")
+      if(ele.post_date) {
+        const formattedDate = moment.utc(ele.post_date).format('YYYY-MM-DD');
+        ele.post_date = formattedDate
+      }
       return ele
     })
   },
@@ -112,6 +116,7 @@ export default {
     return Array.isArray(this.htop_webinar) && this.htop_webinar.length !== 0
   },
   dashboard_type() {
+    console.log('this.dashBoardData.dashboard_type;', this.dashBoardData.dashboard_type)
      return this.dashBoardData.dashboard_type;
    },
    getPanelTitle() {
@@ -120,6 +125,11 @@ export default {
      }
      return "Other Services Available";
    },
+ },
+ watch: {
+  latest_commentary(value) {
+    console.log('lishan latest_commentary', value)
+  }
  },
  methods: {
    getBlogUrl(row) {
@@ -132,7 +142,7 @@ export default {
      return `/MR/blog/${row.url}`;
    },
    getWebinarUrl(row) {
-    return `/htop_webinar/${row.date}`;
+    return `https://users.sentimentrader.com/users/htop_webinar/${row.date}`
    },
    getContent(row) {
      if (row.meta_description && row.meta_description.trim() !== "") {
