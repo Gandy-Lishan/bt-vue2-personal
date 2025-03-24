@@ -158,7 +158,9 @@ export default {
 
             if (res.status == 200) {
               if (typeof res.data == 'string') {
-                initalData = JSON.parse(res.data)
+                // 将 NaN 替换为 null
+                const validJsonString = res.data.replace(/NaN/g, 'null');
+                initalData = JSON.parse(validJsonString)
               } else {
                 if(typeof res.data == 'string') {initalData = res.data.replace(/NaN/g, 'null'); initalData = JSON.parse(initalData)}
                 initalData = res.data
@@ -238,7 +240,7 @@ export default {
                     Object.entries(data).forEach(([metric, values]) => {
                       if (metric === '% Positive') {
                         // 在 '% Positive' 的数值后面加上 '%'
-                        data[metric] = values.map(value => `${value}%`);
+                        data[metric] = values.map(value => `${(value !== null && value !== undefined && value !== '') ? `${value}%` : '-'}`);
                       }
                     });
                   });
