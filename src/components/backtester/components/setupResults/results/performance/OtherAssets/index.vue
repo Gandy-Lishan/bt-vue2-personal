@@ -162,11 +162,11 @@ data() {
         cell.classList.add("align-center", "bold-text", "asset-td");
 
         // **如果值是负数，添加 `negative-value` 类**
-        if (values[i] !== undefined && values[i] < 0) {
+        if ((values[i] !== undefined && values[i] !== null) && values[i] < 0) {
           cell.classList.add("negative-value");
         }
 
-        cell.innerHTML = values[i] !== undefined ? values[i] : '-';
+        cell.innerHTML = (values[i] !== undefined && values[i] !== null) ? values[i] : '-';
         row.appendChild(cell);
       }
 
