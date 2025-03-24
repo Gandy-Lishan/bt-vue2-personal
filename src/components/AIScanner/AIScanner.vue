@@ -21,7 +21,10 @@
 				</div>
 
 				<div class="searchBox">
-					<h6>Today's pick will be completed by 11:40pm US Eastern Time .</h6>
+					<el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+							<span>View Video Tutorial</span>
+					</el-button>
+					<h6 class="h6-text">Today's pick will be completed by 11:40pm US Eastern Time .</h6>
 					<el-input 
 						placeholder="" 
 						v-model="searchItem" 
@@ -817,7 +820,11 @@ export default {
 		this.disabledFilter = true
 		this.showFilterDialog = false
 		this.handleQuery();
-	}
+	},
+	jumpToTutoiral(){
+			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
+			window.open(path, '_blank')
+	},
   }
 };
 </script>
@@ -965,5 +972,8 @@ h4 {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+		}
+		.h6-text {
+			margin-top: 0px;
 		}
 </style>
