@@ -110,7 +110,7 @@ export default {
  },
  methods: {
    getChartUrl(symbol) {
-     return `/user/charts?symbol=${symbol}`;
+     return `/backtester/sr/setup?index=${'Unknown'}&indicator=${symbol}`
    },
  },
 };
