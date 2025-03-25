@@ -136,7 +136,8 @@ export default {
    getBlogUrl(row) {
      if (
        this.dashboard_type === "indicatoredge" &&
-       ["Jason Goepfert", "Dean Christians", "Jay Kaeppel"].includes(row.author)
+       ["Jason Goepfert", "Dean Christians", "Jay Kaeppel"].includes(row.author) &&
+       ['sentimentedge', 'modeledge', 'quantedge', 'tradingedge'].includes(row.user_level)
      ) {
        return `/MR/${row.user_level}/${row.url}`;
      }
