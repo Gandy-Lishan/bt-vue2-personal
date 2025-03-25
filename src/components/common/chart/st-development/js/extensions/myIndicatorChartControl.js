@@ -520,15 +520,29 @@
                 newData.categories
             )  
         }else {
-            let ma_parse_list = newData.ma.split('_')
-            const ma1_index = ma_parse_list[0].indexOf('e')
-            const ma1_type = ma1_index == -1 ? 'MA' : 'EMA'
-            const ma1_value = ma1_index == -1 ? ma_parse_list[0] : ma_parse_list[0].slice(0,ma1_index)
+            // e.g. 12_30roc_1
+            let parts = newData.ma.split('_')
+            // 解析类型和数值
+            const getTypeAndValue = (val) => {
+                const numMatch = val.match(/^\d+/); // 提取开头的数字
+                const typeMatch = val.replace(/^\d+/, ""); // 去掉开头数字，获取类型部分
+
+                let type = "unknown";
+                if (!typeMatch) type = "MA"; // 如果仅是数字，则为 ma
+                else if (/e/i.test(typeMatch)) type = "EMA";
+                else if (/roc/i.test(typeMatch)) type = "roc";
+                else if (/amplify/i.test(typeMatch)) type = "amplify";
+                else if (/amplitude/i.test(typeMatch)) type = "amplitude";
+
+                return { type, value: numMatch ? numMatch[0] : null };
+            };
+            const ma1_type = getTypeAndValue(parts[0]).type;
+            const ma1_value = getTypeAndValue(parts[0]).value;
             const ma1_showInput = ma1_value != '1'
-            const ma2_index = ma_parse_list[1].indexOf('e')
-            const ma2_type = ma2_index == -1 ? 'MA' : 'EMA'
-            const ma2_value = ma2_index == -1 ? ma_parse_list[1] : ma_parse_list[1].slice(0,ma2_index)
+            const ma2_type = getTypeAndValue(parts[1]).type;
+            const ma2_value = getTypeAndValue(parts[1]).value;
             const ma2_showInput = ma2_value != '1'
+
             let fieldName1 = 'field',fieldName2 = 'field'
             if(newData.categories.includes('Symbol')){ // symbol
             }else{        
@@ -536,6 +550,7 @@
                 fieldName2 = newData.indicator2.url
             }
         
+            if(['EMA','MA'].includes(ma1_type)){
                 // ma1
                 CIQ.addOwnIndicatorMAStudy(
                     ma1_value,
@@ -546,6 +561,23 @@
                     ma1_showInput,
                     newData.categories
                 )
+            } else if(ma1_type == 'roc') {
+                CIQ.addOwnIndicatorROCStudy(
+                    ma1_value,
+                    fieldName1,
+                    'entry1',
+                    0,
+                    ma1_showInput,
+                ) 
+            } else if(ma1_type == 'amplitude' || ma1_type == 'amplify') {
+                CIQ.addOwnIndicatorAmplitudeStudy(
+                    'entry1',
+                    0,
+                    ma1_showInput,
+                ) 
+            }
+
+            if(['EMA','MA'].includes(ma2_type)){
                 // ma2
                 CIQ.addOwnIndicatorMAStudy(
                     ma2_value,
@@ -558,6 +590,21 @@
                     ma2_showInput,
                     newData.categories
                 )
+            } else if(ma2_type == 'roc') {
+                CIQ.addOwnIndicatorROCStudy(
+                    ma2_value,
+                    fieldName2,
+                    newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
+                    1,
+                    ma2_showInput,
+                ) 
+            } else if(ma2_type == 'amplitude' || ma2_type == 'amplify') {
+                CIQ.addOwnIndicatorAmplitudeStudy(
+                    newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
+                    1,
+                    ma2_showInput,
+                ) 
+            }
         }
 
     }
@@ -677,7 +724,7 @@
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
                 let sd = CIQ.stxx.layout.studies[studyInstanceName]
                 if (
-                    ['ma','ST MA'].includes(sd.type)
+                    ['ma','ST MA','ST ROCLike'].includes(sd.type)
                     && sd.parameters.index == index
                 ) {
                 // 直接判断是否为st ma
@@ -704,7 +751,7 @@
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
                 let sd = CIQ.stxx.layout.studies[studyInstanceName]
                 if (
-                    ['ma','ST MA'].includes(sd.type)
+                    ['ma','ST MA','ST ROCLike'].includes(sd.type)
                     && sd.parameters.index == index
                 ) {
                 // 直接判断是否为st ma
@@ -764,6 +811,91 @@
             CIQ.hideCover()
             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
         })
+    }
+
+    CIQ.addOwnIndicatorROCStudy = function(value,field,criteria,index,showInput) {
+        // 更新ma前移除当前index的旧ma
+        for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+            let sd = CIQ.stxx.layout.studies[studyInstanceName]
+            if (
+                sd.parameters.index == index
+            ) {
+            // 直接判断是否为st ma
+            CIQ.Studies.removeStudy(
+                CIQ.stxx,
+                sd
+            )
+            }
+        }
+
+        const conditionMap = new Map([
+            [5, { name: 'Rate Of Change', abbr: 'ROC' }],
+            [6, { name: '% of Previous Range', abbr: 'OPR' }],
+            [7, { name: 'MA Ratio', abbr: 'MA' }],
+            [8, { name: 'Range Rank', abbr: 'RR' }],
+            [9, { name: 'DrawDown %', abbr: 'DD' }],
+            [10, { name:'DrawUp %', abbr: 'DU' }],
+            [11, { name:'Net Change', abbr: 'NC' }],
+            [12, { name:'All-time High', abbr: 'ATH' }],
+            [13, { name:'All-time Low', abbr: 'ATL' }],
+            [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
+            [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
+        ])
+
+        // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
+        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
+        const newCondition = 5
+        let display
+        if([12,13].includes(newCondition)){
+          display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}`
+        }else if(newCondition == 14){
+          display = `Consecutive Number of Days with (${symbolLabel})Symbol Close Above ${value}`
+        }else if(newCondition == 15){
+          display = `Consecutive Number of Days with (${symbolLabel})Symbol Close Below ${value}`
+        }else{
+          display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}(${value}-Bar)`
+        }
+        
+        if(!showInput || !field) return
+
+        CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+            display: display,
+            Field: field,
+            condition: conditionMap.get(newCondition).abbr,
+            period: value,
+        }, null,{ 
+            criteria: criteria, 
+            index: index 
+        }) 
+    }
+
+    CIQ.addOwnIndicatorAmplitudeStudy = function(criteria,index,showInput) {
+        // 更新ma前移除当前index的旧ma
+        for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+            let sd = CIQ.stxx.layout.studies[studyInstanceName]
+            if (
+                sd.parameters.index == index
+            ) {
+            // 直接判断是否为st ma
+            CIQ.Studies.removeStudy(
+                CIQ.stxx,
+                sd
+            )
+            }
+        }
+
+        // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
+        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
+        let display = `(${symbolLabel}) Amplitude`
+
+        if(!showInput) return
+
+        CIQ.Studies.addStudy(CIQ.stxx, 'Amplitude', {
+            display: display,
+        }, null,{ 
+            criteria: criteria, 
+            index: index 
+        }) 
     }
 
     // 预留：layout management

@@ -66,7 +66,7 @@ export default {
         this.inputVisibility = 'hidden';
       }
       if(this.config.type == 'SelectInput'){
-        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+        this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else{
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
@@ -103,11 +103,11 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
-      this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput(val) {
       if(this.config.type == 'SelectInput'){
-        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+        this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else {
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }

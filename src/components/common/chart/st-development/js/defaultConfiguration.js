@@ -717,6 +717,10 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"name": "SQN Market Regime",
 							"url": "SQN Market Regime"
 						},
+						{
+							"name": "Amplitude",
+							"url": "Amplitude"
+						},
 					]
 				},
 				{

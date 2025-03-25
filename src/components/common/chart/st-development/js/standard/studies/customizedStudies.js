@@ -1257,6 +1257,32 @@ if (!CIQ.Studies) {
 		}
 	};
 
+	CIQ.Studies.calculateAmplitude = function (stx, sd) {
+		// todo: 考虑从这里开始都替换成scrubbed
+		var quotes = sd.chart.scrubbed;
+		var field	// 它是流动的
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			var lastBar = quote
+			if(i >= 1) lastBar = quotes[i-1]
+
+			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
+			
+			quote["Result " + sd.name] = parseFloat((
+				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(lastBar,field,"Low")) 
+				/ getPropertyByString(lastBar,field,"Close")
+			).toFixed(4));
+		}
+	};
+
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"MAGap": {
@@ -1508,6 +1534,11 @@ if (!CIQ.Studies) {
 			outputs: {
 				"Result": "auto",
 			},
+        },
+		"Amplitude": {
+            name: "Amplitude",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateAmplitude,
         },
 	});
 
