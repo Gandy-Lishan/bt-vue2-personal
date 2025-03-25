@@ -289,10 +289,10 @@ export default {
         else this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
         if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
-        else this.errMsg = createPositiveIntegerValidate(value, 1)
+        else this.errMsg = createPositiveIntegerValidate(value, 0)
       }else if(_config.field == "ma2") {
         if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
-        else this.errMsg = createPositiveIntegerValidate(value, 1)
+        else this.errMsg = createPositiveIntegerValidate(value, 0)
       }else if(_config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}
         else this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)

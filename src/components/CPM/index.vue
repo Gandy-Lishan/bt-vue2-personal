@@ -5,6 +5,7 @@
 				<div class="headerSelect">
 					<h4  @click="selectedTitle = 'CPM'" :class="{ 'selected': selectedTitle === 'CPM' }">Correlation Pattern Match</h4>
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
+					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
 				</div>
 			</div>
 		</div>
@@ -23,19 +24,29 @@ export default {
 	watch: {
 		selectedTitle: {
 			async handler(newValue, _){
-				if(newValue === 'Symbol' && !this.$route.path.includes('/cpm/symbol')) this.$router.push({path: '/cpm/symbol'})
-				if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm'})
+        debugger
+				if(newValue === 'Symbol' && (!this.$route.path.includes('/cpm/symbol'))) this.$router.push({path: '/cpm/symbol'})
+				else if(newValue === 'Asset' && (!this.$route.path.includes('/cpm/asset'))) this.$router.push({path: '/cpm/asset'})
+				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm'})
 			},
 			deep: true
 		},
     '$route'(to, _) {
-			if (to.path.includes('/cpm/symbol')) {
+      debugger
+			if (to.fullPath.includes('/cpm/symbol')) {
 				this.selectedTitle = 'Symbol'
-			} else {
+			}else if (to.fullPath.includes('/cpm/asset')) {
+				this.selectedTitle = 'Asset'
+			}else {
         this.selectedTitle = 'CPM'
 			}
     },
 	},
+  mounted() {
+    if(this.$route.fullPath.includes('/cpm/symbol')) {this.selectedTitle = 'Symbol'}
+    else if(this.$route.fullPath.includes('/cpm/asset')) {this.selectedTitle = 'Asset'}
+    else {this.selectedTitle = 'CPM'}
+  },
 	methods: {
 
 	}

@@ -185,7 +185,7 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div class="dataTables_info" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
+  <div :class="{'dataTables_info': true, 'dataTables__trendscore_info': isStockTrend}" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
   <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
@@ -2866,5 +2866,8 @@ export default {
     height: 32px;
     line-height: 32px;
   }
+}
+.dataTables__trendscore_info {
+  margin-top: 20px;
 }
 </style>
