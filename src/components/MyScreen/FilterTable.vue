@@ -412,33 +412,37 @@ export default {
 					signal = CIQ.findSentiIndicator(null, url)
 					if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
 
-					activatedMA.push({
-						criteria: 'entry',
-						field: 'Close',
-						index,
-						period: extractThirdLastNumber(item.code) || '',
-						type: 'simple',
-						url: signal?.url
-					})
+					if(code.includes('SVMA')){	//如果是svma的话一是不需要加载stma,二是extractThirdLastNumber也不适用这个编码
+						activatedMA.push({
+							criteria: 'entry',
+							field: 'Close',
+							index,
+							period: extractThirdLastNumber(item.code) || '',
+							type: 'simple',
+							url: signal?.url
+						})
+					}
 				}
-				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {	// case: technical indicator
+				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {	// case: technical indicator （MA only）
 					signal = CIQ.findBuiltinTechIndicator(name, null)
-					activatedMALayout.push({
+					if(signal.url == 'ma'){
+						activatedMALayout.push({
 						criteria: 'entry',
 						field: 'Close',
 						index,
 						period: extractLastNumber(item.code) || '',
 						type: 'simple',
 						url: signal?.url
-					})
-					activatedMA.push({
-						criteria: 'entry',
-						field: 'Close',
-						index,
-						period: extractLastNumber(item.code) || '',
-						type: 'simple',
-						url: signal?.url
-					})
+						})
+						activatedMA.push({
+							criteria: 'entry',
+							field: 'Close',
+							index,
+							period: extractThirdLastNumber(item.code) || '',
+							type: 'simple',
+							url: signal?.url
+						})
+					}
 				}
 				// 在 symbol indicator list内检索url
 				if (!signal && isSymbolOHLCV) {	// case: symbol ohlcv
@@ -501,7 +505,8 @@ export default {
 			jumpBacktestData.entry.signals.map((item, index) => {
 				const isTechnicalIndicator = item.code.includes('TI:')
 				if(isTechnicalIndicator) {
-					if(_signal[index].url) activatedTechLayout.push({
+					// MA信息只存在activeMALayout内
+					if(_signal[index].url && _signal[index].url!='ma') activatedTechLayout.push({
 						url: _signal[index].url,
 						criteria: "entry",
 						index: index,
