@@ -201,7 +201,7 @@ export default {
     line-height: 30px;
   }
 }
-/deep/ .el-button {
+.tutorial /deep/ .el-button {
   padding: 0px;
 }
 .tutorial {
