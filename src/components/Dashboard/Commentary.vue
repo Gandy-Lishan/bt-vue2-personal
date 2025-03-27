@@ -144,7 +144,7 @@ export default {
      return `/MR/blog/${row.url}`;
    },
    getWebinarUrl(row) {
-    return `https://users.sentimentrader.com/users/htop_webinar/${row.date}`
+    return `/dashboard/htop_webinar/${row.date}`
    },
    getContent(row) {
      if (row.meta_description && row.meta_description.trim() !== "") {

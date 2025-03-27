@@ -325,6 +325,12 @@ const routes = [
 				name: 'LargeHeatmap',
 				component: resolve =>
 					require(['@/components/Dashboard/LargeHeatmap.vue'], resolve)
+			},
+			{
+				path: 'htop_webinar',  // 相对路径，不是'/board/phase_table'
+				name: 'Webinar',
+				component: resolve =>
+					require(['@/components/Dashboard/Webinar.vue'], resolve)
 			}
 		]
 	},
