@@ -181,7 +181,7 @@
         console.log('xData', xData)
         const minX = Math.min(xData)
         const { url, type, market_symbol, sub_type } = row
-        let selector = 5
+        let selector = 4
         if(url === 'risk_levels') {
           selector = 3
         }
