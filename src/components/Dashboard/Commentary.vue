@@ -144,6 +144,7 @@ export default {
      return `/MR/blog/${row.url}`;
    },
    getWebinarUrl(row) {
+    return `/dashboard/htop_webinar`
     return `/dashboard/htop_webinar/${row.date}`
    },
    getContent(row) {
