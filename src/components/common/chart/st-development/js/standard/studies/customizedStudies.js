@@ -1600,6 +1600,16 @@ if (!CIQ.Studies) {
 				"Result": "auto",
 			},
         },
+		"N-Day High": {
+            name: "N-Day High",
+			inputs: { Period: 21, },
+            calculateFN: CIQ.Studies.calculateHighOverN,
+        },
+		"N-Day Low": {
+            name: "N-Day Low",
+			inputs: { Period: 21, },
+            calculateFN: CIQ.Studies.calculateLowOverN,
+        },
 	});
 
 
