@@ -324,7 +324,27 @@ const routes = [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: resolve => require(['@/components/Dashboard/index.vue'], resolve)
+		component: resolve => require(['@/components/Dashboard/ViewIndex.vue'], resolve),
+		children: [
+			{
+				path: '',  // 相对路径，不是'/'
+				name: 'Dashboard',
+				component: resolve =>
+					require(['@/components/Dashboard/index.vue'], resolve)
+			},
+			{
+				path: 'phase_table',  // 相对路径，不是'/board/phase_table'
+				name: 'LargePhaseTable',
+				component: resolve =>
+					require(['@/components/Dashboard/LargePhaseTable.vue'], resolve)
+			},
+			{
+				path: 'heatmap',  // 相对路径，不是'/board/phase_table'
+				name: 'LargeHeatmap',
+				component: resolve =>
+					require(['@/components/Dashboard/LargeHeatmap.vue'], resolve)
+			}
+		]
 	},
 	{
 		path: '/404',
