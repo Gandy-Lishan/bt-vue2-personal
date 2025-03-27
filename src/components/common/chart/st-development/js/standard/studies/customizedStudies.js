@@ -1257,6 +1257,71 @@ if (!CIQ.Studies) {
 		}
 	};
 
+	CIQ.Studies.calculateHighOverN = function (stx, sd) {
+		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		let indicator
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i+1>=period){
+				if (!quotes[i]) continue;
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				indicator = Math.max(...(quotes.slice(sliceStart, sliceEnd).map(
+					row => getPropertyByString(row,field,subField)
+				)))
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+	CIQ.Studies.calculateLowOverN = function (stx, sd) {
+		var quotes = sd.chart.scrubbed;
+		var field = sd.inputs.Field;
+		var period = sd.inputs.Period;
+		if (!field || field == "field") field = "Close";
+		/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
+		var subField = field
+
+		if(sd.parameters.isComparison){
+			field = CIQ.store.getters.getComparisonSymbol.url
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			quotes = sd.chart.scrubbed
+		}
+		if (quotes.length < sd.days + 1) {
+			sd.error = true;
+			return;
+		}
+
+		let indicator
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			if(i+1>=period){
+				if (!quotes[i]) continue;
+				const sliceStart = i + 1 - period
+				const sliceEnd = i + 1
+				indicator = Math.min(...(quotes.slice(sliceStart, sliceEnd).map(
+					row => getPropertyByString(row,field,subField)
+				)))
+			}
+			quotes[i]["Result " + sd.name] = indicator;
+		}
+	};
+
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"MAGap": {
@@ -1508,6 +1573,16 @@ if (!CIQ.Studies) {
 			outputs: {
 				"Result": "auto",
 			},
+        },
+		"N-Day High": {
+            name: "N-Day High",
+			inputs: { Period: 21, },
+            calculateFN: CIQ.Studies.calculateHighOverN,
+        },
+		"N-Day Low": {
+            name: "N-Day Low",
+			inputs: { Period: 21, },
+            calculateFN: CIQ.Studies.calculateLowOverN,
         },
 	});
 
