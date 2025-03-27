@@ -1,7 +1,12 @@
 <template>
  <div>
-  <!-- <p>To view a larger version of this chart, <a
-   href="#"> click here</a>.</p> -->
+  <div class="page-title" v-show="large">
+    <h1 style="padding: 15px 0 15px;">
+      Phase Table
+    </h1>
+  </div>
+  <p v-show="!large">To view a larger version of this chart, <a
+   href="/dashboard/phase_table"> click here</a>.</p>
    <div class="col-md-12">
      <h4>About the Phase Table</h4>
      <p>The Phase Table shows sentiment regimes for major assets and ETFs. It is based on the level and trend of the Optimism Index for each market. Generally, markets with low and/or rising optimism (Phases 1 and 2) have the best chance for price gains. Markets with high and/or declining optimism (Phases 3 and 4) have a lower probability.</p>
@@ -61,7 +66,8 @@ export default {
     phase_table_data: {
       type: Array,
       require: true
-    }
+    },
+    large: Boolean
   },
  data() {
    return {
@@ -72,7 +78,7 @@ export default {
        ["bg-red-pink", "PHASE 4", "Falling but not Low Optimism", "Watch for falling prices and a possible move into Phase 1"],
      ],
      hoveredImageUrl: "", // 悬浮时的图片 URL
-    imagePosition: { top: 0, left: 0 } // 图片位置
+     imagePosition: { top: 0, left: 0 } // 图片位置
    };
  },
  methods: {

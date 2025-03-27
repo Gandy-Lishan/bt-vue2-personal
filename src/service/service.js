@@ -2057,7 +2057,7 @@ export async function getSmartDumbSentiment() {
 
 	export async function getDashboardData() {
 		// 在配置env之前暂时用NODE_ENV判断url
-		let path = `dev/st_data/dashboard`
+		let path = `/dev/st_data/dashboard`
 		
 			return new Promise((resolve, reject) => {
 				axios

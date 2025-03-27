@@ -582,7 +582,6 @@ table.dataTable.display tbody tr:first-child td {
   font-size: 22px;
   font-weight: 400;
   margin: 0;
-  margin-left: 20px;
 }
 
 h4 {
