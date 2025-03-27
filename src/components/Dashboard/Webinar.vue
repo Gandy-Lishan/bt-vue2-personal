@@ -21,11 +21,13 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+               <AboutUs></AboutUs>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <AboutUs></AboutUs>
   </div>
 </template>
 <script>
