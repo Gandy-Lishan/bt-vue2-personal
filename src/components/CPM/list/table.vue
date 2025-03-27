@@ -1,5 +1,10 @@
 <template>
   <div class="CPM-list-container">
+    <div class="tutorial-box">
+      <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+        <span>View Video Tutorial</span>
+      </el-button>
+    </div>
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create Correlation Pattern Match</el-button>
       <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery">
@@ -378,7 +383,11 @@ export default {
     async handleQuery() {
       if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
-    }
+    },
+    jumpToTutoiral(){
+        const path = 'https://youtu.be/KtvmNOPBrCk'
+        window.open(path, '_blank')
+    },
     },
   }
 </script>
@@ -388,7 +397,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0px;
+  padding: 0px 0px 16px 0px;
 }
 .el-input-group{
   width: 40%;
@@ -446,5 +455,14 @@ export default {
 }
 /deep/ .el-button--info {
   color: #606266;
+}
+.showDate {
+  /deep/ .el-button--mini, .el-button--mini.is-round {
+    padding: 5px 0;
+  }
+}
+.tutorial-box {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
