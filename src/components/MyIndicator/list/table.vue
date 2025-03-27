@@ -1,10 +1,15 @@
 <template>
   <div class="my-indicator-list">
+    <div class="tutorial-box">
+      <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+        <span>View Video Tutorial</span>
+      </el-button>
+    </div>
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create New Indicator</el-button>
-      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
+      <el-input size="small" placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" 					clearable
 					@clear="handleQuery">
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+        <el-button size="small" slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
     </div>
     <el-table
@@ -583,6 +588,10 @@ export default {
           this.currentPage = 1;
         }
       },
+      jumpToTutoiral(){
+        const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        window.open(path, '_blank')
+	    },
   }
 }
 </script>
@@ -592,7 +601,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0px;
+  padding: 0px 0px 16px 0px;
 }
 .el-input-group{
   width: 40%;
@@ -646,5 +655,9 @@ export default {
 }
 /deep/ .el-button {
 	font-weight: 600;
+}
+.tutorial-box {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

@@ -184,9 +184,11 @@ export default {
       this.updateDynamicClass();
 			if (to.path.includes('/backtester') || to.name == 'Backtests') {
 				this.isVisible = true
-			} else if(to.path.includes('/myindicator') || to.name ==  'MIList') {
-				this.isVisible = true
-			} else {
+			} 
+			// else if(to.path.includes('/myindicator') || to.name ==  'MIList') {
+			// 	this.isVisible = true
+			// }
+			 else {
 				this.isVisible = false
 			}
 
