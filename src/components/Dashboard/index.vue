@@ -96,6 +96,7 @@ export default {
    async getDashboardData() {
     let {data} = await getDashboardData()
     const parseData =  data
+    this.dashBoardData = data
     console.log('dashBoardData', parseData)
     this.dashBoardData.forecasts = isJson(this.dashBoardData.forecasts) ? JSON.parse(this.dashBoardData.forecasts) : this.dashBoardData.forecasts
     const blogs_and_charts = isJson(this.dashBoardData.blogs_and_charts) ? JSON.parse(this.dashBoardData.blogs_and_charts) : this.dashBoardData.blogs_and_charts
@@ -104,6 +105,101 @@ export default {
     this.dashBoardData = parseData
     const heatmap_data = JSON.parse(parseData.heatmap_data)
     console.log('heatmap_data', heatmap_data)
+    if(this.dashBoardData.pess_extreme && this.dashBoardData.opt_extreme) {
+      this.dashBoardData.pess_extreme = this.dashBoardData.pess_extreme.map(obj => {
+        if (obj['sub_type'] === 'vol') {
+          obj['sub_type'] = 'Volatility';
+        } else if (obj['sub_type'] === 'stock_sent') {
+          obj['sub_type'] = 'Stock Sentiment';
+        } else if (obj['sub_type'] === 'pc_ratio') {
+          obj['sub_type'] = 'PutCall';
+        }else if (['equity', 'cot'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'COT';
+        } else if (['etf_index', 'etf_social_index'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Index';
+        } else if (['etf_etf', 'etf_social_sector', 'etf_sector', 'mff_sector'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Sector';
+        } else if (['etf_bond', 'etf_social_bond', 'mff_bond'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Bond';
+        } else if (['etf_commod', 'etf_social_commod', 'mff_commod'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Commodity';
+        } else if (obj['sub_type'] === 'etf_breadth') {
+          obj['sub_type'] = 'Sector Breadth';
+        } else if (['etf_country', 'etf_social_country'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Country';
+        } else if (obj['sub_type'] === 'etf_social') {
+          obj['sub_type'] = 'Social';
+        } else if (obj['sub_type'] === 'seasonality') {
+          obj['sub_type'] = 'Seasonality';
+        } else if (obj['sub_type'] === 'optix') {
+          obj['sub_type'] = 'Optix';
+        } else if (obj['sub_type'] === 'model') {
+          obj['sub_type'] = 'Model';
+        } else if (obj['sub_type'] === 'more') {
+          obj['sub_type'] = 'More';
+        } else if (obj['sub_type'] === 'rydex') {
+          obj['sub_type'] = 'Rydex';
+        } else if (obj['sub_type'] === 'mff_stocks') {
+          obj['sub_type'] = 'Stocks';
+        } else if (obj['sub_type'].startsWith('etf_fund_')) {
+          obj['sub_type'] = obj['sub_type'].split('_')[2].charAt(0).toUpperCase() + obj['sub_type'].split('_')[2].slice(1); // Capitalize the 3rd part
+        } else {
+          obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
+        }
+        if(obj['last_change_type'] === 'percent') {
+          if(obj['last_change'] !== '' && obj['last_change'] !== null && obj['last_change'] !== 'null') obj['last_change'] =  `${obj['last_change']}%`
+          if(obj['last_value'] !== '' && obj['last_value'] !== null && obj['last_value'] !== 'null') obj['last_value'] =  `${obj['last_value']}%`
+        }
+        return obj
+      })
+      this.dashBoardData.opt_extreme = this.dashBoardData.opt_extreme.map(obj => {
+        if (obj['sub_type'] === 'vol') {
+          obj['sub_type'] = 'Volatility';
+        } else if (obj['sub_type'] === 'stock_sent') {
+          obj['sub_type'] = 'Stock Sentiment';
+        } else if (obj['sub_type'] === 'pc_ratio') {
+          obj['sub_type'] = 'PutCall';
+        }else if (['equity', 'cot'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'COT';
+        } else if (['etf_index', 'etf_social_index'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Index';
+        } else if (['etf_etf', 'etf_social_sector', 'etf_sector', 'mff_sector'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Sector';
+        } else if (['etf_bond', 'etf_social_bond', 'mff_bond'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Bond';
+        } else if (['etf_commod', 'etf_social_commod', 'mff_commod'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Commodity';
+        } else if (obj['sub_type'] === 'etf_breadth') {
+          obj['sub_type'] = 'Sector Breadth';
+        } else if (['etf_country', 'etf_social_country'].includes(obj['sub_type'])) {
+          obj['sub_type'] = 'Country';
+        } else if (obj['sub_type'] === 'etf_social') {
+          obj['sub_type'] = 'Social';
+        } else if (obj['sub_type'] === 'seasonality') {
+          obj['sub_type'] = 'Seasonality';
+        } else if (obj['sub_type'] === 'optix') {
+          obj['sub_type'] = 'Optix';
+        } else if (obj['sub_type'] === 'model') {
+          obj['sub_type'] = 'Model';
+        } else if (obj['sub_type'] === 'more') {
+          obj['sub_type'] = 'More';
+        } else if (obj['sub_type'] === 'rydex') {
+          obj['sub_type'] = 'Rydex';
+        } else if (obj['sub_type'] === 'mff_stocks') {
+          obj['sub_type'] = 'Stocks';
+        } else if (obj['sub_type'].startsWith('etf_fund_')) {
+          obj['sub_type'] = obj['sub_type'].split('_')[2].charAt(0).toUpperCase() + obj['sub_type'].split('_')[2].slice(1); // Capitalize the 3rd part
+        } else {
+          obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
+        }
+        if(obj['last_change_type'] === 'percent') {
+          if(obj['last_change'] !== '' && obj['last_change'] !== null && obj['last_change'] !== 'null') obj['last_change'] =  `${obj['last_change']}%`
+          if(obj['last_value'] !== '' && obj['last_value'] !== null && obj['last_value'] !== 'null') obj['last_value'] =  `${obj['last_value']}%`
+        }
+        return obj
+      })
+    }
+    
    }
  }
 };

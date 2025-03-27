@@ -1,11 +1,16 @@
 <template>
  <div class="col-md-12">
+  <div class="page-title" v-show="large">
+    <h1 style="padding: 15px 0 15px;">
+      Optix Heatmap
+    </h1>
+  </div>
   <p>The Optix Heatmap shows all of our Optimism Index indicators in a heatmap
    format. Optix readings can be seen by hovering over the heatmap.
    Additionally, if you click a lable or box, you'll be taken to that Optix
    chart.
-    <!-- To view a larger version of this chart, <a
-           href="#"> click here</a>. -->
+   <span v-show="!large">To view a larger version of this chart, <a
+    href="/dashboard/heatmap"> click here</a>.</span>
           </p>
     <div style="text-align: center; margin-bottom: 20px;">
       Moving Average:
@@ -29,13 +34,15 @@
 <script>
 import Highcharts from 'highcharts';
 import HighchartsTreemap from 'highcharts/modules/treemap';
+import { isJson } from "@/utils";
 
 // Ensure the Highcharts Treemap module is loaded
 HighchartsTreemap(Highcharts);
 
 export default {
   props: {
-    heatmap_data: String
+    heatmap_data: String,
+    large: Boolean
   },
   data() {
     return {
@@ -45,7 +52,7 @@ export default {
   },
   computed: {
     _heatmap_data() {
-      return JSON.parse(this.heatmap_data)
+      return isJson(this.heatmap_data) ? JSON.parse(this.heatmap_data) : this.heatmap_data
     }
   },
   methods: {
@@ -207,7 +214,9 @@ export default {
     }
   },
   mounted() {
-    this.initializeHeatMap();
+    this.$nextTick(() => {
+      this.initializeHeatMap();
+    })
   }
 };
 </script>

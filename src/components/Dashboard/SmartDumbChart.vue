@@ -6,9 +6,8 @@
          Smart Money / Dumb Money Confidence
        </span>
        <form
-         :action="getChartUrl('smart_dumb')"
-         style="display:inline;float:right; margin-left:75px; margin-top:-5px;"
-         method="get"
+        @submit.prevent
+        style="display:inline;float:right; margin-left:75px; margin-top:-5px;"
        >
          <button type="submit" class="btn grey-cascade" @click="JumpToBacktest">View larger chart</button>
        </form>
@@ -49,7 +48,7 @@ export default {
       chartData: null,
       title: "Smart Money / Dumb Money Confidence",
       id: "dumb_money_chart",
-      legendTitle: ["Dumb Money","Smart Money"],
+      legendTitle: ["Smart Money", "Dumb Money"],
       sentimentInfo: {
         smart_money_text: '...',
         dumb_money_text: '...',
@@ -65,8 +64,8 @@ export default {
     const symbol = 'SPX'
     const startDate = moment.utc().subtract(Number(1), 'years').format('YYYY-MM-DD')
     this.chartData = await getPairDataDashboard(symbol,'daily',startDate,undefined,['model_dumb_money','model_smart_money']);
-    this.lastSmart = this.chartData[this.chartData.length-1]['indicator2_Close']
-    this.lastDumb = this.chartData[this.chartData.length-1]['indicator_Close']
+    this.lastSmart = this.chartData[this.chartData.length-1]['indicator_Close']
+    this.lastDumb = this.chartData[this.chartData.length-1]['indicator2_Close']
     this.legendTitle[0] = this.legendTitle[0] + " (Last = " + this.lastDumb + ")"
     this.legendTitle[1] = this.legendTitle[1] + " (Last = " + this.lastSmart + ")"
     this.sentimentInfo = await getSmartDumbSentiment()
@@ -147,6 +146,9 @@ export default {
         chart: {
           height: 500,
         },
+        credits: {
+          enabled: false
+        },
         rangeSelector: {
           selected: 1,
         },
@@ -189,7 +191,7 @@ export default {
             title: {
               text: `<div style="text-align: center;">
                       <span style="display: block; color: #0284C7;">${this.legendTitle[0]}</span>
-                      <span style="display: block; color: #b40000">${this.legendTitle[1]}</span>
+                      <span style="display: block; color: #b40000;">${this.legendTitle[1]}</span>
                     </div>`,
               useHTML: true, // 使用 HTML 格式
               // align: 'low', // 位置靠下
@@ -233,7 +235,7 @@ export default {
           },
           {
             name: this.legendTitle[0],
-            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator_Close]),
+            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator2_Close]),
             tooltip: {
               valueDecimals: 2
             },
@@ -242,7 +244,7 @@ export default {
           },
           {
             name: this.legendTitle[1],
-            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator2_Close]),
+            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator_Close]),
             tooltip: {
               valueDecimals: 2
             },

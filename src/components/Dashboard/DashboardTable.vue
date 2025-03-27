@@ -31,13 +31,13 @@
                   Time Frame</th>
                 <th :class="getSortClass('last_value')" @click="sortTable('last_value')" tabindex="0"
                   aria-controls="example" rowspan="1" colspan="1"
-                  aria-label="last_value: activate to sort column ascending"">Value</th>
+                  aria-label="last_value: activate to sort column ascending">Value</th>
                 <th :class="getSortClass('last_change')" @click="sortTable('last_change')" tabindex="0"
                   aria-controls="example" rowspan="1" colspan="1"
-                  aria-label="last_value: activate to sort column ascending"">Change</th>
+                  aria-label="last_value: activate to sort column ascending">Change</th>
                 <th :class="getSortClass('last_update')" @click="sortTable('last_update')" tabindex="0"
                   aria-controls="example" rowspan="1" colspan="1"
-                  aria-label="last_value: activate to sort column ascending"">Date</th>
+                  aria-label="last_value: activate to sort column ascending">Date</th>
                 <th :class="getSortClass('sentiment')" @click="sortTable('sentiment')" tabindex="0" aria-controls="example"
                   rowspan="1" colspan="1" aria-label="sentiment: activate to sort column ascending" style="width: 71px;">
                   Sentiment</th>
@@ -45,7 +45,11 @@
             </thead>
             <tbody>
               <tr v-for="(forecast, index) in paginatedData" :key="index">
-                <td>
+                <td class="hover-container"
+                @mouseover="showImage($event, forecast.url)"
+                @mouseleave="hideImage"
+                @mousemove="updatePosition($event)"
+                >
                   <a :href="postLink(forecast)" target="_blank" class="item-name primary-link">
                     {{ forecast.chart_name }}
                   </a>
@@ -68,7 +72,7 @@
                 </td>
 
                 <td>
-                  <center>{{ formatDate(forecast.last_update) }}</center>
+                  <center>{{ forecast.last_update }}</center>
                 </td>
 
                 <td>
@@ -126,8 +130,11 @@
           </div>
         </div>
       </div>
-
-
+      <!-- 图片弹出框 -->
+      <div v-if="hoveredImageUrl" class="hover-image" 
+        :style="{ top: imagePosition.top + 'px', left: imagePosition.left + 'px' }">
+        <img :src="hoveredImageUrl" alt="Indicator Image">
+      </div>
     </div>
   </div>
 </template>
@@ -163,6 +170,8 @@ export default {
       currentSortColumn: '',
       currentSortDirection: '',
       searchInput: '',
+      imagePosition: { top: 0, left: 0 }, // 图片位置,
+      hoveredImageUrl: ''
     };
   },
   computed: {
@@ -183,7 +192,6 @@ export default {
   },
   mounted() {
     this.filterData = this.extreme
-    console.log('mounted: ',this.type)
   },
   methods: {
     formatDate(date) {
@@ -283,6 +291,19 @@ export default {
         range.push(i);
       }
       return range;
+    },
+    getImageUrl(chartName) {
+      return `https://d1wrgh3h32hjn2.cloudfront.net/${chartName}_250.png`; // 根据 `chart_name` 生成图片路径
+    },
+    showImage(event, url) {
+      this.hoveredImageUrl = `https://d1wrgh3h32hjn2.cloudfront.net/${url}_250.png`; // 生成图片 URL
+      this.imagePosition = { 
+        top: event.clientY + 30, // 鼠标位置 +10 像素，防止遮挡
+        left: event.clientX + 10
+      };
+    },
+    hideImage() {
+      this.hoveredImageUrl = ''
     }
   },
 };
@@ -561,7 +582,6 @@ table.dataTable.display tbody tr:first-child td {
   font-size: 22px;
   font-weight: 400;
   margin: 0;
-  margin-left: 20px;
 }
 
 h4 {
@@ -643,5 +663,14 @@ h4 {
   position: relative;
   flex-wrap: wrap;
   height: auto;
+}
+.hover-image {
+  position: fixed;
+  z-index: 1000;
+}
+
+.hover-image img {
+  max-width: 300px; /* 控制图片大小 */
+  max-height: 300px;
 }
 </style>
