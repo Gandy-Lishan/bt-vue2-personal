@@ -204,4 +204,7 @@ export default {
 /deep/ .el-button {
   padding: 0px;
 }
+.tutorial {
+  float: right;
+}
 </style>
