@@ -2070,22 +2070,6 @@ export async function getSmartDumbSentiment() {
 	}
   }
 
-	export async function getDashboardData() {
-		// 在配置env之前暂时用NODE_ENV判断url
-		let path = `/dev/st_data/dashboard`
-		
-			return new Promise((resolve, reject) => {
-				axios
-					.get(path, { withCredentials: true, retry: null })
-					.then(res => {
-						resolve(res)
-					})
-					.catch(err => {
-						reject(err)
-					})
-			})
-	}
-
 	export function saveSymbolCorrelation(data) {
 		const url = `/dev/symbol_corr_app/symbol_corr/`
 		const headers = {
