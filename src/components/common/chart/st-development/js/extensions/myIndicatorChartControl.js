@@ -7,6 +7,9 @@
  import { uniqueObjectArray } from '@/utils/formValidate'
  import {capitalizeFirstLetter} from '@/utils'
  import { recoverSymbolOptixUrl,getCoresSymbolDual } from "@/utils/globalFunc";
+ import {
+    getPairData
+  } from '@/service/service'
 
  /** 独立出的myIndicator对于chartiq的控制函数，考虑到它并没有很依赖loadIndicator.js */
 
@@ -277,23 +280,29 @@
                             symbol: CIQ.stxx.chart.symbol,
                             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
                             endDate:new Date(),
-                        },()=>{
+                        },async ()=>{
+                            var start = config.timestampToTime(CIQ.initialDate.start)
+                            var end = config.timestampToTime(CIQ.initialDate.end)
+                            const res = await getPairData( start, end, 'daily', newData.indicator2.url)
+                            let _data = formatData(res.data)
+                            CIQ.stxx.addSeries(newData.indicator2.url, {
+                                display:newData.indicator2.name, 
+                                data:_data,
+                                isComparison: false, 
+                                color: "#368DF0",
+                                permanent: true,
+                                //panel:newData.indicator2.url,
+                                // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+                                yAxis:{ 
+                                    position:"left",
+                                    textStyle:"#FFBE00"
+                                },
+                                //shareYAxis: true
+                            },()=>{});
+
                             CIQ.hideCover()
                             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
                         })
-                        CIQ.stxx.addSeries(newData.indicator2.url, {
-                            display:newData.indicator2.name, 
-                            isComparison: false, 
-                            color: "#368DF0",
-                            permanent: true,
-                            //panel:newData.indicator2.url,
-                            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                            yAxis:{ 
-                                position:"left",
-                                textStyle:"#FFBE00"
-                            },
-                            //shareYAxis: true
-                        },()=>{});
                 }
                 resolve()
             }
@@ -360,6 +369,51 @@
             }      
         })
     }
+
+    const formatData = function(data) {
+        if(data == null){
+            data = []
+        }
+        
+        var newQuotes = [];
+        if('High' in data[0]){
+            for (var i = 0; i < data.length; i++) {
+                newQuotes[i] = {};
+                
+                var datatime = new Date(data[i].DT)
+                
+                var offset = datatime.getTimezoneOffset() * 60 * 1000
+                
+                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+                
+                newQuotes[i].Open = data[i].Open;
+                newQuotes[i].High = data[i].High;
+                newQuotes[i].Low = data[i].Low;
+                newQuotes[i].Close = data[i].Close;
+                newQuotes[i].Volume = data[i].Volume;  
+            } 
+        }else{
+            for (var i = 0; i < data.length; i++) {
+                newQuotes[i] = {};
+    
+                var datatime = new Date(data[i].DT)
+    
+                var offset = datatime.getTimezoneOffset() * 60 * 1000
+                
+                newQuotes[i].DT = new Date(datatime.setTime(datatime.getTime() + offset));
+    
+                newQuotes[i].Open = data[i].Close;
+                newQuotes[i].High = data[i].Close;
+                newQuotes[i].Low = data[i].Close;
+                newQuotes[i].Close = data[i].Close;
+                
+                if(data[i].Volume){
+                    newQuotes[i].Volume = data[i].Volume
+                }
+            }
+        }
+        return newQuotes
+     }
 
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
