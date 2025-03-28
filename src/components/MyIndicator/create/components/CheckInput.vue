@@ -66,7 +66,6 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
-      debugger
       const isSymbol = this.categories.includes('Symbol')
       let category
       if(this.config.field === 'ma1') category = this.indicator_1_category
@@ -147,7 +146,6 @@ export default {
     },
     inputVisibility() {
       const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType) && this.config['label'] !== 'Shift'
-      debugger
       const isShift = this.config['label'] === 'Shift' && this.showShiftInput && this.isSymbol
       const isEOEP = this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'
       if(isShowInput || isShift || isEOEP) return 'visible'
@@ -160,8 +158,8 @@ export default {
   watch: {
     showInput(newValue) {
       this.validateValue()
-      if(this.config.type == 'SelectInput' && this.isMAOption){
-        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
+        this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
@@ -180,7 +178,6 @@ export default {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
         console.log('newValue', newValue)
-        debugger
         const {field, value} = newValue
         this.showInput = newValue.checked
         try {
@@ -195,12 +192,13 @@ export default {
         this.value = newValue.value
         if(typeof newValue.value === 'string' && newValue.value.includes('e'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'EMA'}
         if(typeof newValue.value === 'string' && newValue.value.includes('roc'))  {this.value =  newValue.value.toString().replace(/roc$/, ''); this.MAType = 'roc'}
+        if(typeof newValue.value === 'string' && newValue.value.includes('amplify'))  {this.value =  newValue.value.toString().replace(/amplify$/, ''); this.MAType = 'amplify'}
+        if(typeof newValue.value === 'string' && newValue.value.includes('amplitude'))  {this.value =  newValue.value.toString().replace(/amplitude$/, ''); this.MAType = 'amplitude'}
       },
       deep: true, // 启用深度监听，监视对象属性的变化
       immediate: true,
     },
     // categories(newValue) {
-    //   debugger
     //   if(this.isEditState) return
     //   // const isChecked = ['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(this.MAType)
     //   const isSymbol = newValue.includes('Symbol')
@@ -220,7 +218,6 @@ export default {
       this.MAType = 'MA'
     },
     saveData() {
-      debugger
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
         let value = this.showInput ? this.value : 1
         const dontSaveMaValue = ['o', 'h', 'l', 'c'].includes(this.MAType)
@@ -248,11 +245,13 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
-      if(this.config.type == 'SelectInput' && this.isMAOption) this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.MAType=='roc') this.config.placeholder='Please input the Rate of Change period'
+      else this.config.placeholder='Please input the moving average period'
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput: debounce(function (val) {
-      if(this.config.type == 'SelectInput' && this.isMAOption){
-        this.$emit('manageMAStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
+        this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }
@@ -278,7 +277,6 @@ export default {
     },
     validateValue() {
       const _config = this._config
-      debugger
       const value = this.value
       if(_config.label == "Extreme Optimism") {
         // 限制小数点后两位

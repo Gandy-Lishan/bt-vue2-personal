@@ -134,7 +134,7 @@
           :isDisabled="data.indicator_1==''"
           :indicator_1_category="indicator_1_category"
 					ref="ma1Form"
-          @manageMAStudies="manageMAStudies"
+          @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
 				></CheckInput>
 			</div>
@@ -228,7 +228,7 @@
           :isDisabled="data.indicator_2==''"
           :indicator_2_category="indicator_2_category"
 					ref="ma2Form"
-          @manageMAStudies="manageMAStudies"
+          @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
 				></CheckInput>
 		<!--
@@ -392,7 +392,7 @@
 					:config="MAOHLCVCheckInputConfig"
           :isDisabled="OHLCVData.condition==''"
 					ref="maohlcvForm"
-          @manageMAStudies="manageMAStudies"
+          @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
 				></CheckInput>
       </div>
@@ -654,7 +654,7 @@ export default {
           this.OHLCVData.symbol = newVal
           
           const checkInputRef = 'maohlcvForm'
-      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
         }
        
       },
@@ -773,8 +773,8 @@ export default {
      * 刷新MA状态
      */
     refreshMAState() {
-      this.manageMAStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
-      this.manageMAStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+      this.manageMICondStudies(this.$refs['ma1Form'].value,this.$refs['ma1Form'].MAType,'ma1',this.$refs['ma1Form'].showInput)
+      this.manageMICondStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
     },
     async changeTimeFrame(item) {
       this.userSelectedTimeFrame = item
@@ -793,7 +793,7 @@ export default {
     handleExtremeLineChange(value,field) {
       CIQ.editOwnIndicatorExtremeLines(value,field)
     },
-    manageMAStudies(value,type,field,showInput) {
+    manageMICondStudies(value,type,field,showInput) {
       let fieldName = 'field'
       let criteria
       if(this.data.categories == 'OHLCV'){
@@ -812,8 +812,8 @@ export default {
         // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
         criteria = 'entry1'
       }
-
-      CIQ.addOwnIndicatorMAStudy(
+      if(['EMA','MA'].includes(type)) {
+        CIQ.addOwnIndicatorMAStudy(
         value,
         type,
         fieldName,
@@ -822,6 +822,23 @@ export default {
         showInput,
         this.data.categories
         ) 
+      }
+      if(type == 'roc') {
+        CIQ.addOwnIndicatorROCStudy(
+        value,
+        fieldName,
+        criteria,
+        field == 'ma1'?0:1,
+        showInput,
+        ) 
+      }
+      if(type == 'amplitude' || type == 'amplify') {
+        CIQ.addOwnIndicatorAmplitudeStudy(
+          criteria,
+          field == 'ma1'?0:1,
+          showInput,
+        ) 
+      }
     },
     async submitForm() {
      const saveRes = await this.saveIndicator()
@@ -1264,7 +1281,7 @@ export default {
 
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
-      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
+      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
     },
     findMaxFreq() {
       let frequencyArray = []
@@ -1316,8 +1333,6 @@ export default {
         return maxTimeframe;
       },
     async displayData(data) {
-      debugger
-      console.log('data', data)
       this.data.categories = data.mul_indicator && data.indicator_weight ? 'WIC' : data.categories;
       this.data.indicator_1 = data.mul_indicator && data.indicator_weight ? '' : data.former_url;
       this.data.indicator_2 = data.mul_indicator && data.indicator_weight ? '' : data.latter_url;
@@ -1349,7 +1364,6 @@ export default {
 
         //覆盖checkbox初始化配置
         this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
-        debugger
       }else {
         const extractValues = (str) => {
           const parts = str.split('|');
@@ -1392,16 +1406,16 @@ export default {
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
             checked = (valueFromStr != '1')
             if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
-            if(data.next_process) {
-              debugger
-              const result = extractValues(data.next_process)
-              if(result !== null && (result[`shift_ma${index+1}`] != 0 && result[`symbol_ma${index+1}`] !== 'c')) {
-                const symbol = result[`symbol_ma${index + 1}`] || 'c'
-                _value = symbol
-                checked = symbol != 'c'
+              if(data.next_process) {
+                debugger
+                const result = extractValues(data.next_process)
+                if(result !== null && (result[`shift_ma${index+1}`] != 0 && result[`symbol_ma${index+1}`] !== 'c')) {
+                  const symbol = result[`symbol_ma${index + 1}`] || 'c'
+                  _value = symbol
+                  checked = symbol != 'c'
+                }
               }
             }
-          }
           }else if(item.key === 'shift') {
             if(data.categories.includes('Symbol')) {
             if(data.next_process) {
@@ -1568,13 +1582,13 @@ export default {
       })
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = 'maohlcvForm'
-      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
     },
     handleSymbolSelect(item) {
       this.OHLCVData.condition = item.label
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = 'maohlcvForm'
-      this.manageMAStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
     }
   }
 }

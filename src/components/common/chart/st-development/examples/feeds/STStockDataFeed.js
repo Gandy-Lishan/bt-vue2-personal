@@ -149,7 +149,8 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                         /********************lishan modify end*************************/  
                             // ownIndicator根据url的最后一位决定timeframe
                             if(CIQ.isOwnIndicator(CIQ.objIndicator[i])){
-                                let timeframeCode = CIQ.objIndicator[i].slice(-1)
+                                // 加入了myindicator shift相关的编码，修改对应逻辑，兼容无-sh的情况
+                                let timeframeCode = CIQ.objIndicator[i].split('-sh')[0].slice(-1)
                                 freqList.push(timeframeCode=='0'?'Daily':timeframeCode=='1'?'Weekly':'Monthly')
                             }
                            // new_str += `${valid==0?'&indicator=':`&indicator_${valid+1}=`}`+recoverSymbolOptixUrl(CIQ.objIndicator[i]);
