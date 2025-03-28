@@ -100,6 +100,7 @@ import { CIQ } from '@/components/common/chart/st-development/js/components'
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
 import { LocalStorageUtil } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 
 export default {
 	name: 'FilterTable',
@@ -379,29 +380,26 @@ export default {
 			const replaceContent = (str, newValue) => {
 					return str.replace(/(SI|TI|SY):[^;]+/, `$1:${newValue}`);
 			}
-			const extractLastNumber = (str) => {
-    const match = str.match(/(\d+)(?!.*\d)/);
-    return match ? parseInt(match[0], 10) : null;
-			}
-			const extractThirdLastNumber = (str) => {
-				const matches = str.match(/\d+/g);  // 匹配所有数字
-				return matches && matches.length >= 3 ? parseInt(matches[matches.length - 3], 10) : null;
-			};
+
 			const activatedMALayout = []
 			const activatedMA = [{period: 21, url: ''}]
 
 			const findSignal = (item, index) => {
 				const isSymbolOHLCV = item.code.includes('SY:')
 				const isTechnicalIndicator = item.code.includes('TI:')
-				let code
+				let code = item.code
 				if(!isSymbolOHLCV && !isTechnicalIndicator) {
 					if(item.code.includes('replace_name')) code = item.code.replace("replace_name", Name)
 					else if(item.code.includes('replace_symbol')) code = item.code.replace("replace_symbol", Symbol)
 				}
-				const name = extractSIContent(code || item.code)
+
+				let signalCode = new SignalCode();
+				let {indicator, comparison, period} = signalCode.decode(code)
+
+				const name = indicator
 				let url = ''
 				let signal = null
-				debugger
+
 				if(isSymbolOHLCV && isTechnicalIndicator) url = name
 				if(!isSymbolOHLCV && !isTechnicalIndicator) {	// case: sentiment indicator
 					const isSentimentIndicator = code.includes('SI:')
@@ -412,12 +410,12 @@ export default {
 					signal = CIQ.findSentiIndicator(null, url)
 					if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
 
-					if(code.includes('SVMA')){	//如果是svma的话一是不需要加载stma,二是extractThirdLastNumber也不适用这个编码
+					if(code.includes('SVMA')){	//如果不是svma的话不需要加载stma
 						activatedMA.push({
 							criteria: 'entry',
 							field: 'Close',
 							index,
-							period: extractThirdLastNumber(item.code) || '',
+							period: period || '',
 							type: 'simple',
 							url: signal?.url
 						})
@@ -427,21 +425,23 @@ export default {
 					signal = CIQ.findBuiltinTechIndicator(name, null)
 					if(signal.url == 'ma'){
 						activatedMALayout.push({
-						criteria: 'entry',
-						field: 'Close',
-						index,
-						period: extractLastNumber(item.code) || '',
-						type: 'simple',
-						url: signal?.url
-						})
-						activatedMA.push({
 							criteria: 'entry',
 							field: 'Close',
 							index,
-							period: extractThirdLastNumber(item.code) || '',
+							period: period || '',
 							type: 'simple',
 							url: signal?.url
 						})
+						if(comparison == 'MA') {
+							activatedMA.push({
+								criteria: 'entry',
+								field: 'Close',
+								index,
+								period: period || '',
+								type: 'simple',
+								url: signal?.url
+							})
+						}
 					}
 				}
 				// 在 symbol indicator list内检索url
