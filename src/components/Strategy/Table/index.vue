@@ -34,6 +34,9 @@
         >
           {{ tag.label }}
         </el-tag>
+        <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+          <span>View Video Tutorial</span>
+        </el-button>
       </div>
       <div class="strategy-header">
         <div class="tableHeader">
@@ -177,6 +180,10 @@ export default {
       const currentSummaryPage = this.$refs['Summary'].currentPage
       LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag, currentStrategiesPage, currentSummaryPage})
 		},
+    jumpToTutoiral(){
+			const path = 'https://youtu.be/9cDF1w0mHGQ'
+			window.open(path, '_blank')
+    },
   }
 }
 </script>
@@ -193,5 +200,11 @@ export default {
     height: 30px;
     line-height: 30px;
   }
+}
+.tutorial /deep/ .el-button {
+  padding: 0px;
+}
+.tutorial {
+  float: right;
 }
 </style>

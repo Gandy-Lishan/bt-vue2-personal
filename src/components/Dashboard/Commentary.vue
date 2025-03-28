@@ -40,7 +40,7 @@
                    {{ row.title }}
                  </a>
                  <br />
-                 <em><small>Published: {{ row.post_date }}</small></em>
+                 <em><small>Published: {{ row.date }}</small></em>
                  <br />
                  <p>
                    {{ getContent(row) }}
@@ -143,6 +143,7 @@ export default {
      return `/MR/blog/${row.url}`;
    },
    getWebinarUrl(row) {
+    return `/dashboard/htop_webinar`
     return `/dashboard/htop_webinar/${row.date}`
    },
    getContent(row) {

@@ -9,7 +9,7 @@
                 <div v-for="(row, index) in latestPosts" :key="index">
                   <h2 v-html="row.title"></h2>
                   <div class="blog-single-head-date">
-                    <i class="icon-calendar font-bluesteel"></i>
+                    <i class="fa fa-calendar" aria-hidden="true" style="margin-right: 5px;"></i>
                     <span v-html="row.date"></span>
                   </div>
                   <hr />
@@ -21,6 +21,9 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+               <AboutUs></AboutUs>
+            </div>
           </div>
         </div>
       </div>
@@ -29,12 +32,16 @@
 </template>
 <script>
 import { getDashboardData } from "@/service/service";
+import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 export default {
   name: 'Webinar',
   // props: {
   //   latestPosts: Array
   // },
+  components: {
+    AboutUs
+  },
   data() {
     return {
       dashBoardData: {}
@@ -42,7 +49,7 @@ export default {
   },
   computed: {
     latestPosts() {
-      return this.dashBoardData.latestPosts || []
+      return this.dashBoardData.htop_webinar || []
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -59,3 +66,8 @@ export default {
  },
 };
 </script>
+
+<style lang="less" scoped>
+@import "./index.less";
+/* Add any custom styles if needed */
+</style>
