@@ -11,9 +11,6 @@
           <p>
             Screen is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
           </p>
-          <p>
-            In the table below, when a row is highlighted in "yellow", it indicates a change in that trading signal.
-          </p>
         </div>
       </el-collapse-item>
       </el-collapse>
