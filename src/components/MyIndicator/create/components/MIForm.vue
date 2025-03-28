@@ -231,7 +231,8 @@
           @manageMAStudies="manageMAStudies"
 					@saveData="saveSubData"
 				></CheckInput>
-        <CheckInput
+		<!--
+      <CheckInput
           :categories="data.categories"
 					:config="ShiftCheckInputConfig"
           :isDisabled="data.indicator_2==''"
@@ -239,6 +240,7 @@
 					ref="shiftForm"
 					@saveData="saveSubData"
 				></CheckInput>
+      -->
 			</div>
 		</div>
 

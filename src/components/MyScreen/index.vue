@@ -4,12 +4,12 @@
       <el-collapse-item>
         <template slot="title">
           <div class="title" ref="scrollTopTarget">
-            <p>Screen (click to expand)</p>
+            <p>My Screen (click to expand)</p>
           </div>
         </template>
         <div class="portfolio-des">
           <p>
-            Screen is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
+            My Screen is a powerful screening tool that allows users to select specific signal criteria, quickly identify constituent stocks in designated sectors/indexes that meet these conditions, and provides detailed related information. 
           </p>
           <p>
             In the table below, when a row is highlighted in "yellow", it indicates a change in that trading signal.
