@@ -791,7 +791,7 @@
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
                 let sd = CIQ.stxx.layout.studies[studyInstanceName]
                 if (
-                    ['ma','ST MA','ST ROCLike'].includes(sd.type)
+                    ['ma','ST MA','ST ROCLike','Amplitude','Amplify'].includes(sd.type)
                     && sd.parameters.index == index
                 ) {
                 // 直接判断是否为st ma
@@ -818,7 +818,7 @@
             for (var studyInstanceName in CIQ.stxx.layout?.studies) {
                 let sd = CIQ.stxx.layout.studies[studyInstanceName]
                 if (
-                    ['ma','ST MA','ST ROCLike'].includes(sd.type)
+                    ['ma','ST MA','ST ROCLike','Amplitude','Amplify'].includes(sd.type)
                     && sd.parameters.index == index
                 ) {
                 // 直接判断是否为st ma
