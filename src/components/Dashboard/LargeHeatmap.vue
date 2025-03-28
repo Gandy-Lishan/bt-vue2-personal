@@ -1,17 +1,24 @@
 <template>
-  <div class="container">
-    <Heatmap :heatmap_data="heatmap_data" ref="HeatMap" large="true"></Heatmap>
+  <div>
+    <div class="container">
+      <Heatmap :heatmap_data="heatmap_data" ref="HeatMap" large="true"></Heatmap>
+    </div>
+    <div class="row">
+      <AboutUs></AboutUs>
+    </div>
   </div>
 </template>
 
 <script>
 import Heatmap from "./Heatmap";
 import { getDashboardData } from "@/service/service";
+import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 export default {
   name: 'LargeHeatmap',
   components: {
-    Heatmap
+    Heatmap,
+    AboutUs
   },
   data() {
     return {
