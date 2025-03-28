@@ -363,6 +363,8 @@ export default {
         { value: 13, label: 'All-time Low' },
         { value: 14, label: 'Consecutive Number of Days Above' },
         { value: 15, label: 'Consecutive Number of Days Below' },
+        { value: 16, label: 'N-Day High' },
+        { value: 17, label: 'N-Day Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -401,7 +403,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 15
+      this.isROCLike = 5 <= val && val <= 17
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) this.senti.condition = this.senti.newCondition
       
@@ -517,6 +519,12 @@ export default {
             break;
           case "Consecutive Number of Days Below":
             _newCondition = 'CNDB'
+            break;
+          case "N-Day High":
+            _newCondition = 'NH'
+            break;
+          case "N-Day Low":
+            _newCondition = 'NL'
             break;
           default:
             break;

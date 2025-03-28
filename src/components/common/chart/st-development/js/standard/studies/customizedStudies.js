@@ -549,6 +549,32 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
 				} 
 			break;
+			case 'NH':
+				// NH
+				// 从当前indicator数据出现那天开始计算
+				let indexNH = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNH) 
+				const maxCloseArrNH = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				resArr = maxCloseArrNH
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
+			case 'NL':
+				// NL
+				// 从当前indicator数据出现那天开始计算
+				let indexNL = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNL) 
+				const maxCloseArrNL = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				resArr = maxCloseArrNL
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
 			default:
 			console.error('no such condition')
 		}
@@ -1573,16 +1599,6 @@ if (!CIQ.Studies) {
 			outputs: {
 				"Result": "auto",
 			},
-        },
-		"N-Day High": {
-            name: "N-Day High",
-			inputs: { Period: 21, },
-            calculateFN: CIQ.Studies.calculateHighOverN,
-        },
-		"N-Day Low": {
-            name: "N-Day Low",
-			inputs: { Period: 21, },
-            calculateFN: CIQ.Studies.calculateLowOverN,
         },
 	});
 

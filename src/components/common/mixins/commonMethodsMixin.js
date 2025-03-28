@@ -587,6 +587,8 @@ export const CommonMethodsMixin = {
 				[13, { name:'All-time Low', abbr: 'ATL' }],
 				[14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           		[15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
+				[16, { name:'N-Day High', abbr: 'NH' }],
+				[17, { name:'N-Day Low', abbr: 'NL' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
@@ -779,7 +781,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 15
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 17
 					}
 				return null
 			})	
