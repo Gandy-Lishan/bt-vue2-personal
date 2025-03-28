@@ -374,7 +374,7 @@
         if(data == null){
             data = []
         }
-        
+        //const barOffset = -5
         var newQuotes = [];
         if('High' in data[0]){
             for (var i = 0; i < data.length; i++) {
@@ -391,6 +391,19 @@
                 newQuotes[i].Low = data[i].Low;
                 newQuotes[i].Close = data[i].Close;
                 newQuotes[i].Volume = data[i].Volume;  
+
+                // let shiftedIndex = i + barOffset; // 计算新的索引位置
+
+                // if (shiftedIndex >= 0 && shiftedIndex < data.length) { // 确保索引在范围内
+                //     newQuotes.push({
+                //         DT: new Date(new Date(data[shiftedIndex].DT).getTime() + new Date(data[shiftedIndex].DT).getTimezoneOffset() * 60 * 1000),
+                //         Open: data[shiftedIndex].Open,
+                //         High: data[shiftedIndex].High,
+                //         Low: data[shiftedIndex].Low,
+                //         Close: data[shiftedIndex].Close,
+                //         Volume: data[shiftedIndex].Volume
+                //     });
+                // } 
             } 
         }else{
             for (var i = 0; i < data.length; i++) {
