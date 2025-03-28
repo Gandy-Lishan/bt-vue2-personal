@@ -326,8 +326,8 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "http://10.131.9.217:8000",
-				// target: 'https://devbt2api.sentimentrader.com/',
-				target: "https://bt2api.sentimentrader.com",
+				target: 'https://devbt2api.sentimentrader.com/',
+				//target: "https://bt2api.sentimentrader.com",
 				ws:true,
 				changeOrigin: true,
 				pathRewrite: {
