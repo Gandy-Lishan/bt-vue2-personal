@@ -11,9 +11,6 @@
           <p>
             My Screen is a powerful screening tool that allows users to select specific signal criteria, quickly identify constituent stocks in designated sectors/indexes that meet these conditions, and provides detailed related information. 
           </p>
-          <p>
-            In the table below, when a row is highlighted in "yellow", it indicates a change in that trading signal.
-          </p>
         </div>
       </el-collapse-item>
       </el-collapse>
