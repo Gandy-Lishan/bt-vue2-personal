@@ -116,16 +116,16 @@ export default {
       ]
       if(category && !['ETF', 'Stock'].includes(category)) {
         const options = [
-        {
-          value: 'c',
-          label: 'Symbol Close',
-          isSymbol: true
-        },
-        {
-          value: 'roc',
-          label: 'Rate Of Change',
-          isSymbol: true
-        },
+        // {
+        //   value: 'c',
+        //   label: 'Symbol Close',
+        //   isSymbol: true
+        // },
+        // {
+        //   value: 'roc',
+        //   label: 'Rate Of Change',
+        //   isSymbol: true
+        // },
         {
           value: 'MA',
           label: 'Simple Moving Average'
