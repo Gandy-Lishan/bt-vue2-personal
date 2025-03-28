@@ -21,6 +21,7 @@
       <div class="row">
         <Overview :dashBoardData="dashBoardData"/>
       </div>
+      <AboutUs></AboutUs>
     </div>
  </div>
 </template>
@@ -33,6 +34,7 @@ import MarketOverview from "./MarketOverview.vue";
 import Overview from "./Overview.vue";
 import { getDashboardData } from "@/service/service";
 import { isJson } from "@/utils";
+import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 export default {
  name: 'Dashboard',
@@ -41,7 +43,8 @@ export default {
   Commentary,
   SmartDumbChart,
   MarketOverview,
-  Overview
+  Overview,
+  AboutUs
  },
  data() {
   return {
