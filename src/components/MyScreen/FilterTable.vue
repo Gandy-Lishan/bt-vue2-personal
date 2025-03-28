@@ -1,9 +1,20 @@
 <template>
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
-    <p class="filterTableDes">
-					After applying the filters, click the <span class="strongSpan">“Signal Screen”</span> button. The system will automatically identify potential entry and exit signals for stock trading based on the selected indicators and criteria.
+			<div class="des-container">
+				<p class="filterTableDes"  v-html="signalDes">
     </p>
+					<el-button
+						v-if="signalDes !== ''"
+							@click.stop="() => {downloadCSV()}"
+							style="display: inline-block"
+							type="primary"
+							size="small"
+							icon="el-icon-download"
+							title="Download CSV"
+							></el-button
+					>
+			</div>
 		<el-table
 			ref="tableREF"
 			class="ScannerBTTable"
@@ -32,22 +43,12 @@
 					"
 				>
 					<template slot-scope="scope">
-     {{ scope.row[l.value] }}
+     {{ scope.row[l.value] || '' }}
 					</template>
 				</el-table-column>
 				<el-table-column
-					v-if="l.label != 'Symbol'"
-					:sortable="
-						[
-							'Optix Date',
-							'Optix Value',
-							'Optix 5-Day MA',
-							'Closing Price',
-							'Closing Price 200-Day MA',
-						].indexOf(l.label) !== -1
-							? 'custom'
-							: false
-					"
+					v-else-if="l.label != 'Date'"
+					:sortable="'custom'"
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
@@ -59,6 +60,27 @@
 					</template>
 				</el-table-column>
 			</template>
+		<el-table-column
+			width="100px"
+			v-if="showBTBtn && tableCol.length !== 0"
+		>
+		<template slot-scope="scope">
+			<el-tooltip
+					class="item"
+					effect="dark"
+					content="Go to Backtest"
+					placement="bottom-start"
+				>
+				<el-button
+					round
+					size="mini"
+					type="primary"
+					icon="el-icon-right"
+					@click="goToBacktest(scope.row)"
+				></el-button>
+			</el-tooltip>
+		</template>
+		</el-table-column>
 		</el-table>
 		<el-pagination
 		@size-change="handleSizeChange"
@@ -73,6 +95,12 @@
 </template>
 
 <script>
+import moment from 'moment';
+import { CIQ } from '@/components/common/chart/st-development/js/components'
+import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
+import { LocalStorageUtil } from '@/utils'
+import cloneDeep from 'lodash/cloneDeep'
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 
 export default {
 	name: 'FilterTable',
@@ -80,6 +108,9 @@ export default {
 		data: Object,
 		tableCol :Array,
 		loading: Boolean,
+		signalDes: String,
+		jumpBacktestData: Object,
+		currentRow: Object
 	},
 	data() {
 		return {
@@ -153,7 +184,7 @@ export default {
 					'Symbol Close > its\' MA200 and Optix > 43 After Below 30':'Optix #7'
 				},
 				pageSize: 10, // Default page size
-      	currentPage: 1, // Default current page
+    currentPage: 1, // Default current page
 
 		}
 	},
@@ -165,6 +196,9 @@ export default {
 			// 当checkbox未勾选时，返回原始数据
 			return this.data.content?.slice(startIndex, endIndex);
 		},
+		showBTBtn() {
+			return  (Object.keys(this.jumpBacktestData).length !== 0)
+		}
 	},
 	watch: {
 		checkboxGroupState: {
@@ -218,67 +252,42 @@ export default {
 			
 			this.calculateAlloc()
 		},
-		changeTableSort(column){
-			var sortingOrder = column.order
-			var colName = column.prop
-			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _b - _a
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _a - _b
-					})
-				}else{
-				}
-			}
-			// 数字类型排序
-			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
-				}
-			}
-			// 日期类型排序
-			if(['Date'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
-			// 字符串类型排序
-			if(['Market','_Signal','Direction'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else{
-				}
-			}
-		},
+		changeTableSort(column) {
+				const sortingOrder = column.order; // 排序方向
+				const colName = column.prop; // 当前排序的列名
+				
+				this.data.content.sort((a, b) => {
+						let valA = a[colName];
+						let valB = b[colName];
 
+						// 处理 null 或 undefined，确保不会报错
+						if (valA == null) valA = '';
+						if (valB == null) valB = '';
+
+						// 1. **尝试转换为数字排序**
+						const numA = parseFloat(valA);
+						const numB = parseFloat(valB);
+						const isNumA = !isNaN(numA) && typeof numA !== 'boolean';
+						const isNumB = !isNaN(numB) && typeof numB !== 'boolean';
+
+						if (isNumA && isNumB) {
+								return sortingOrder === 'ascending' ? numA - numB : numB - numA;
+						}
+
+						// 2. **尝试解析 YYYY-MM-DD 日期**
+						const dateA = Date.parse(valA);
+						const dateB = Date.parse(valB);
+
+						if (!isNaN(dateA) && !isNaN(dateB)) {
+								return sortingOrder === 'ascending' ? dateA - dateB : dateB - dateA;
+						}
+
+						// 3. **字符串排序**
+						return sortingOrder === 'ascending'
+								? valA.toString().localeCompare(valB.toString(), 'en', { sensitivity: 'base' })
+								: valB.toString().localeCompare(valA.toString(), 'en', { sensitivity: 'base' });
+				});
+		},
 		scrollListner(){
 			var outDiv = document.getElementsByClassName('el-table__body-wrapper');  
 			
@@ -350,7 +359,209 @@ export default {
 				}
 			})
 			return processedData
+		},
+		async initiateTechList() {
+			const config = defaultConfig()
+			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
+		},
+		async goToBacktest(row) {
+			console.log('this.jumpBacktestData', this.jumpBacktestData)
+			if(Object.keys(this.jumpBacktestData) === 0) return
+			const {Name, Symbol} = row
+			const {name} = this.currentRow
+			await this.initiateTechList()
+			console.log('go to backtest row', row)
+			console.log('go to backtest', this.jumpBacktestData)
+			const jumpBacktestData = cloneDeep(this.jumpBacktestData)
+			const extractSIContent = (str) => {
+					const match = str.match(/(SI|TI|SY):([^;]*)/);
+					return match ? match[2] : null;
+			}
+			const replaceContent = (str, newValue) => {
+					return str.replace(/(SI|TI|SY):[^;]+/, `$1:${newValue}`);
+			}
+
+			const activatedMALayout = []
+			const activatedMA = [{period: 21, url: ''}]
+
+			const findSignal = (item, index) => {
+				const isSymbolOHLCV = item.code.includes('SY:')
+				const isTechnicalIndicator = item.code.includes('TI:')
+				let code = item.code
+				if(!isSymbolOHLCV && !isTechnicalIndicator) {
+					if(item.code.includes('replace_name')) code = item.code.replace("replace_name", Name)
+					else if(item.code.includes('replace_symbol')) code = item.code.replace("replace_symbol", Symbol)
+				}
+
+				let signalCode = new SignalCode();
+				let {indicator, comparison, period} = signalCode.decode(code)
+
+				const name = indicator
+				let url = ''
+				let signal = null
+
+				if(isSymbolOHLCV && isTechnicalIndicator) url = name
+				if(!isSymbolOHLCV && !isTechnicalIndicator) {	// case: sentiment indicator
+					const isSentimentIndicator = code.includes('SI:')
+					const isTrendScore = code.includes('Trend Score')
+					const isOptix = code.includes('Optix')
+					if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
+					else if(isSentimentIndicator && isOptix) url = `${Symbol}@indicator` // ADP
+					signal = CIQ.findSentiIndicator(null, url)
+					if(url.includes('@indicator') && !signal) signal = CIQ.findSentiIndicator(null, Symbol)
+
+					if(code.includes('SVMA')){	//如果不是svma的话不需要加载stma
+						activatedMA.push({
+							criteria: 'entry',
+							field: 'Close',
+							index,
+							period: period || '',
+							type: 'simple',
+							url: signal?.url
+						})
+					}
+				}
+				if (!signal && !isSymbolOHLCV && isTechnicalIndicator) {	// case: technical indicator （MA only）
+					signal = CIQ.findBuiltinTechIndicator(name, null)
+					if(signal.url == 'ma'){
+						activatedMALayout.push({
+							criteria: 'entry',
+							field: 'Close',
+							index,
+							period: period || '',
+							type: 'simple',
+							url: signal?.url
+						})
+						if(comparison == 'MA') {
+							activatedMA.push({
+								criteria: 'entry',
+								field: 'Close',
+								index,
+								period: period || '',
+								type: 'simple',
+								url: signal?.url
+							})
+						}
+					}
+				}
+				// 在 symbol indicator list内检索url
+				if (!signal && isSymbolOHLCV) {	// case: symbol ohlcv
+					const find = CIQ.findSymbolIndicator(name, null)
+					console.log('find', find)
+					if (find) {
+						signal =  find
+					}
+				}
+				return signal
+			}
+
+			let _signal = null
+			_signal = jumpBacktestData.entry.signals.map(findSignal)
+			console.log('_signal', _signal)
+
+			// const signals = jumpBacktestData.entry.signals.map(item => {
+			// 	item.code = item.code.replace("replace_name", Name)
+			// 	console.log('item.code', item.code )
+			// 	const name = extractSIContent(item.code)
+			// 	console.log('name', name )
+			// 	let result = CIQ.findSentiIndicator(name)
+			// 	console.log('result', result)
+			// 	return item
+			// })
+			const signals = jumpBacktestData.entry.signals.map((item,index) => {
+					const isSymbolOHLCV = item.code.includes('SY:')
+					const isTechnicalIndicator = item.code.includes('TI:')
+					if(!isSymbolOHLCV && !isTechnicalIndicator) item.code = replaceContent(item.code, _signal[index].chart_name || _signal[index].value)
+					return item
+			})
+			console.log('signals', signals)
+			jumpBacktestData.entry.signals = signals
+			jumpBacktestData.symbol = Symbol
+			const date = new Date()
+			const year = date.getFullYear();
+			const month = date.getMonth() + 1;
+			const day = date.getDate();
+			const hour = date.getHours();
+			const minute = date.getMinutes();
+			const second = date.getSeconds();
+			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
+			jumpBacktestData.name = `${name || 'My Screen'} with ${Symbol} (${year}-${month}-${day} ${hour}:${minute}:${second})`
+			jumpBacktestData.end_date = lastMonthEnd
+			jumpBacktestData.uuid = "UUID"
+			jumpBacktestData.strategy = "Single"
+			jumpBacktestData.commission = 0
+			jumpBacktestData.slippage = 0
+			jumpBacktestData.trade_price = 0
+			jumpBacktestData.source = 'My Screen'
+			jumpBacktestData.exit = {
+				score:1,
+				signals_in_market:1,
+				relation:0,
+				delay_bars:0,
+				signals:[{code:"SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999"}],
+				cond:[null]
+			}
+			const activatedTechLayout = []
+			jumpBacktestData.entry.signals.map((item, index) => {
+				const isTechnicalIndicator = item.code.includes('TI:')
+				if(isTechnicalIndicator) {
+					// MA信息只存在activeMALayout内
+					if(_signal[index].url && _signal[index].url!='ma') activatedTechLayout.push({
+						url: _signal[index].url,
+						criteria: "entry",
+						index: index,
+						symbolType: "symbol1"
+					})
+				}
+				const isSymbolOHLCV = item.code.includes('SY:')
+				if(isSymbolOHLCV) {
+					if(_signal[index].label) activatedTechLayout.push({
+						url: _signal[index].label,
+						criteria: "entry",
+						index: index,
+						symbolType: "symbol1"
+					})
+				}
+			})
+			jumpBacktestData.indicator_layout = {
+			savedTechSD: [],
+			activatedMA,
+			activatedMALayout,
+			activatedTechLayout,
+			formIndicators: {
+					entry: _signal.map(item => (item.url || item.label)),
+					exit: [""]
+			}
 		}
+		jumpBacktestData.risk_control = '//21'
+			
+			this.$store.commit('form/getRunBacktestData', jumpBacktestData)
+			console.log('jumpBacktestData', jumpBacktestData)
+
+			LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
+			window.open('/backtester/sr/setup', '_blank');
+		},
+		async downloadCSV() {
+     const xlsxName = 'Screen Result'
+     let data = this.data.content
+		 if(data.length === 0) {
+			this.popUpMsgBox('No data available for download')
+			return
+		 }
+     const _keySort = Array.from( Object.keys(data[0])).filter(item => item !== 'Date')
+     let csvContent = data.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
+     csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+     const link = document.createElement("a");
+     const url = URL.createObjectURL(blob);
+     link.setAttribute("href", url);
+     link.setAttribute("download", `${xlsxName}.csv`);
+     link.style.visibility = 'hidden';
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+   },
 	}
 };
 </script>
@@ -370,11 +581,16 @@ export default {
 .el-table /deep/ thead .iconfont{
 	color: #606266;
 }
+.des-container {
+	border-bottom: 2px solid #dddddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 20px;
+}
 .filterTableDes {
-  padding: 0px 0px 20px 0px;
   margin: 0px;
   font-size: 16px;
-  border-bottom: 2px solid #dddddd;
   .strongSpan {
     font-weight: 500;
   }
@@ -389,5 +605,11 @@ export default {
   /deep/ .el-form-item__label {
     width: 200px;
   }
+}
+.el-pagination .el-select .el-input .el-input__inner {
+  margin: 0px
+}
+.des-container {
+	display: flex;
 }
 </style>

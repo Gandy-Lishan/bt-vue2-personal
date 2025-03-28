@@ -142,7 +142,7 @@ export default {
 }
 
 .chart {
-  background-color: #f0f0f0; /* 图表部分的样式 */
+  // background-color: #f0f0f0; /* 图表部分的样式 */
   margin: 20px;
 }
 

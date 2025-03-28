@@ -407,13 +407,107 @@ export default {
       const latter = indicator_2 || symbol_2;
       const former_url = indicator_1 || symbol_1_url;
       const latter_url = indicator_2 || symbol_2_url;
+      const extractValues = (str) => {
+        if(!str) return null
+        const parts = str.split('|');
+
+        const left = parts[0];  // sh5_c
+        const right = parts[1]; // sh10_o
+
+        const regex = /(\d+)_([a-zA-Z])/; // 修正的正则
+
+        const leftMatch = left.match(regex); // 匹配左边部分
+        const rightMatch = right.match(regex); // 匹配右边部分
+
+        if (leftMatch && rightMatch) {
+          return {
+            shift_ma1: leftMatch[1] || '',   // 提取左侧数字部分
+            symbol_ma1: leftMatch[2] || 'c', // 提取左侧字母部分
+            shift_ma2: rightMatch[1] || '',  // 提取右侧数字部分
+            symbol_ma2: rightMatch[2] || 'o' // 提取右侧字母部分
+          };
+        } else {
+          return null; // 如果没有匹配到
+        }
+      };
+      const next_process = item.next_process || ''
+      const next_process_result = extractValues(next_process)
+      const options = [
+        {
+          value: 'o',
+          label: 'Symbol Open',
+          isSymbol: true
+        },
+        {
+          value: 'h',
+          label: 'Symbol High',
+          isSymbol: true
+        },
+        {
+          value: 'l',
+          label: 'Symbol Low',
+          isSymbol: true
+        },
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'Rate Of Change',
+          isSymbol: true
+        },
+        {
+          value: 'amplitude',
+          label: 'Amplitude',
+          isSymbol: true
+        },
+        {
+          value: 'amplify',
+          label: 'Amplitude',
+          isSymbol: true
+        },
+        {
+          value: 'e',
+          label: 'Exponential Moving Average',
+          isSymbol: true
+        }
+      ]
+      const {shift_ma1, symbol_ma1, shift_ma2, symbol_ma2} = next_process_result || {}
       const maList = item.ma.split('_');
-      const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
-      const ma2 = maList[1] !== '1' ? ` Moving Average ${maList[1].includes('e') ? maList[1].toString().replace(/e$/, '') : maList[1]}` : '';
+      const specialMAValues = ['amplify', 'amplitude', 'roc', 'e']
+      let _maValues = []
+      // specialMAValues.forEach(ele => {
+        maList.forEach((value, index) => {
+          if(index < 2) {
+            if(specialMAValues.some(keyword => value.includes(keyword))) {
+              const deleteNum = value.replace(/^\d+/, '');
+              const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
+              const replaceStr = value.replace(/\D+/g, '')
+              if(value != '1' && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
+              else _maValues[index] = label || ''
+              if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
+            }else if(symbol_ma1 && symbol_ma2 && (symbol_ma1 !== 'c' || symbol_ma2 !== 'c')) {
+              const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
+              const label2 = options.find(item => item.value === symbol_ma2)?.label || ''
+              if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
+              if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
+            }else {
+              _maValues[index] = (value && value != '1') ? `Simple Moving Average ${value}` : ''
+              if(index === 1) _maValues[index] = `${_maValues[index]}${(symbol_ma2 && symbol_ma2 != 0 && !isNaN(symbol_ma2)) ? `${typeAttribute === 'symbol' ? `Shift ${symbol_ma2}` : ''}` : ''}`
+            }
+          }
+        })
+      // })
+      console.log('_maValues', _maValues)
+      debugger
+      const ma1 = _maValues[0] || ''
+      const ma2 = _maValues[1] || ''
 
       return {
         included: [`${former}${ma1}`, `${latter}${ma2}`],
-        included_url: [`${former_url}${ma1}`, `${latter_url}${ma2}`],
+        included_url: [`${former_url} ${ma1}`, `${latter_url} ${ma2}`],
         former,
         latter,
         former_url,

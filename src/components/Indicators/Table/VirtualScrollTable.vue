@@ -8,18 +8,18 @@
       </span>
       <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
         <!-- <i class="el-icon-full-screen" ></i> -->
-          <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular">
+          <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M96 96H64V85.3333H85.3333V64H96V96Z" fill="black"/>
             <path d="M0 96H32V85.3333H10.6667V64H0V96Z" fill="black"/>
             <path d="M0 0H32V10.6667H10.6667V32H0V0Z" fill="black"/>
             <path d="M96 0H64V10.6667H85.3333V32H96V0Z" fill="black"/>
           </svg>
-          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular">
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M32 32H0V21.3333H21.3333V0H32V32ZM32 64H0V74.6667H21.3333V96H32V64ZM96 64H64V96H74.6667V74.6667H96V64ZM64 32H96V21.3333H74.6667V0H64V32Z" fill="black"/>
           </svg>
       </el-tooltip>
     </div>
-    <div class="header-span" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
+    <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
           <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
@@ -27,7 +27,20 @@
       </template>
     </div>
   </div>
-  <div class="filter-div" v-if="isShowFilter">
+  <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
+    <el-row>
+      <div class="search-input">
+        <el-input
+          class="search-input"
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i>
+       </el-input>
+      </div>
+    </el-row>
     <el-row>
       <el-col :span="24">
         <el-row>
@@ -57,6 +70,17 @@
               </el-option>
             </el-select>
             </div>
+            <div class="select-option" v-show="Array.isArray(_subTypeOptions) && _subTypeOptions.length !== 0">
+              <span>Sub Type</span>
+              <el-select v-model="subTypeFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
+              <el-option
+                v-for="item in _subTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </div>
             <div class="select-option" v-show="Array.isArray(indicatorOptions) && indicatorOptions.length !== 0">
               <span>Indicator</span>
               <el-select v-model="indicatorFilter" size="mini" placeholder="Please Select" label="Test"  @change="handleQuery">
@@ -72,19 +96,6 @@
         </el-row>
       </el-col>
       <!-- <el-col :span="4"> -->
-      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
-        <el-input
-          class="search-input"
-          @focus="expandSearch"
-          @blur="collapseSearch"
-          @input="handleQuery"
-          size="small"
-          :placeholder="searchPlaceholder"
-          v-model="searchInput"
-          clearable
-          :style="inputStyle"
-        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
       <!-- </el-col> -->
     </el-row>
   </div>
@@ -93,7 +104,7 @@
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
-      :class="{'enlargeStockTrend': enlarged && isStockTrend}"
+      :class="{'enlargeStockTrend': enlarged && isStockTrend, 'trend-condition-table': isStockTrend}"
       key-prop="url"
       class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
@@ -111,7 +122,7 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="!enlarged ? 300 : 620">
+        :height="(!enlarged && !isStockTrend) ? 300 : (!isStockTrend ? 575 : 600)">
         <!-- <el-table-column> -->
           <!-- <template #header>
             <div class="header-span">
@@ -133,7 +144,7 @@
             </div>
           </template> -->
           <el-table-column align="center" width="35px" v-if="!showRelated">
-            <template slot-scope="scope" v-if="enlarged">
+            <template slot-scope="scope" v-if="enlarged && !isTrendScorePage">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
                 <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
@@ -188,7 +199,6 @@ import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
-import Vue from 'vue';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -205,7 +215,9 @@ export default {
     firstRow: Object,
     showReport: Boolean,
     showRelated: Boolean,
-    sourceType: String
+    sourceType: String,
+    subTypeOptions: Array,
+    breadthIndicatorsOption: Array
   },
   directives: {
     ElTableInfiniteScroll
@@ -233,6 +245,7 @@ export default {
       groupsFilter: '',
       timeframeFilter: '',
       indicatorFilter: '',
+      subTypeFilter: '',
       searchInput: '',
       filterData: [],
       hideColumn: true,
@@ -240,6 +253,8 @@ export default {
       condition: '',
       trendUpdateDate: '',
       isExpanded: false, // 控制输入框是否展开
+      isTrendScorePage: false,
+      dynamicHeight: '510px'
     }
   },
   computed: {
@@ -252,6 +267,9 @@ export default {
     }),
     _loading() {
       return this.loading
+    },
+    virtualTableHight() {
+      return this.enlarged ? 620 : 300
     },
     columns() {
       this.columnsMap = new Map(([
@@ -474,7 +492,7 @@ export default {
             },
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day Score<br/>Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'trend_five_day_score_chg'
             },
             {
@@ -484,7 +502,7 @@ export default {
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day Score<br/>Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'reltrend_five_day_score_chg'
             },
             ]
@@ -625,6 +643,92 @@ export default {
               minWidth: '100px'
             }
             ]
+        ],
+        ['GlobalIndexBreadthColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Breadth Measure',
+              value: 'chart_name',
+              minWidth: '180px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Sub Type',
+              value: 'sub_type',
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe',
+              width: '60px'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+          ]
+        ],
+        ['CryptoCurrencyBreadthColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Breadth Measure',
+              value: 'chart_name',
+              minWidth: '180px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Sub Type',
+              value: 'sub_type',
+            },
+            {
+              key: 'timeframe',
+              label: 'Time Frame',
+              value: 'timeframe',
+              width: '60px'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+          ]
         ],
         ['ETFFundFlowColumns', 
           [
@@ -1188,7 +1292,7 @@ export default {
           },
           {
             key: 'trend_five_day_score_chg',
-            label: '5-Day<br/>Score Chg',
+            label: '5-Day<br/>Score<br/>Chg',
             value: 'trend_five_day_score_chg'
           },
           {
@@ -1198,7 +1302,7 @@ export default {
           },
           {
             key: 'reltrend_five_day_score_chg',
-            label: '5-Day<br/>Score Chg',
+            label: '5-Day<br/>Score<br/>Chg',
             value: 'reltrend_five_day_score_chg'
           },
         ]])
@@ -1213,7 +1317,7 @@ export default {
             },    
             {
               key: 'trend_five_day_score_chg',
-              label: '5-Day<br/>Score Chg',
+              label: '5-Day<br/>Score<br/>Chg',
               value: 'trend_five_day_score_chg'
             },
            {
@@ -1288,7 +1392,7 @@ export default {
             },
             {
               key: 'reltrend_five_day_score_chg',
-              label: '5-Day<br/> Relative Score Chg',
+              label: '5-Day<br/>Relative<br/>Score Chg',
               value: 'reltrend_five_day_score_chg'
             },
             {
@@ -1561,6 +1665,13 @@ export default {
         { value: 'RSI < 30', label: 'RSI 14-Day < 30' },
         { value: 'RSI > 70', label: 'RSI 14-Day > 70' }
       ]
+      if(this.checkedType === 'GlobalIndexBreadth' || this.checkedType === 'CryptoCurrencyBreadth') {
+        return this.breadthIndicatorsOption
+      }
+      return []
+    },
+    _subTypeOptions() {
+      if(this.checkedType === 'GlobalIndexBreadth') return this.subTypeOptions
       return []
     },
     isStockTrend() {
@@ -1568,19 +1679,6 @@ export default {
     },
     isCRPTrend() {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
-    },
-    inputStyle() {
-      return {
-        width: this.isExpanded ? "200px" : "35px",
-        position: "absolute",
-        right: "0", // 根据需要调整位置
-        top: "0px",
-        transition: "width 0.3s ease-in-out",
-      };
-    },
-    searchPlaceholder() {
-      if(this.isExpanded) return 'Search'
-      return ''
     },
     isShowFilter() {
       return this.enlarged && (!this.showReport && !this.showRelated && (this.checkedType !== 'TrendSector'))
@@ -1617,6 +1715,19 @@ export default {
       depp: true
     }
 	},
+  mounted() {
+    if(this.$route.path === '/trend_score') {
+      this.isTrendScorePage = true
+      this.enlarged = true
+    }
+    if(this.$route.fullPath.includes('?enlarge=stock') && this.refName === 'stockVirtualScroll') {
+      this.$nextTick(() => {
+        this.checkedType = 'stock'
+        this.enlarged = true
+        this.toggleEnlarge('Stock Market Indicators & Optix');
+      })
+    }
+  },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
     async _toggleEnlarge(checked, row) {
@@ -1697,6 +1808,11 @@ export default {
       }
     },
     async updateChart(row) {
+      debugger
+      if(this.isTrendScorePage) {
+        this.$emit("updateChart", row)
+        return
+      }
       if(this.showRelated) {
         await this.clickRelated(row)
         return
@@ -1760,7 +1876,7 @@ export default {
               return
             }
           }
-          const {type, groups} = res
+          const {type, groups, sub_type} = res
           let requireUrl = ''
           if(type === 'stock_nasdaq') {
             requireUrl = 'ndx_100_complete_list'
@@ -1790,6 +1906,10 @@ export default {
             url = 'commod_seasonality'
           }else if(groups === 'stocks') {
             requireUrl = 'stock_complete_list'
+          }else if(sub_type === 'all_country_breadth') {
+            requireUrl = 'country_breadth'
+          }else if(sub_type === 'crp_breadth') {
+            requireUrl = 'crypto_breadth'
           }
           if(!requireUrl) return
           await this.fetchIndicatorsPageList(requireUrl)
@@ -1818,6 +1938,8 @@ export default {
         russell_3000_complete_list: type: stock_russell
         commodity_complete_list: groups: commod
         etf_breadth: type: etf_opt
+        country_breadth: sub_type: all_country_breadth
+        crypto_breadth: sub_type: crp_breadth
         etf_flow: type: etf_fund
         monthly_fund_flows： type: mff
         shares_outstanding: type: shares
@@ -2062,6 +2184,16 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
+          label: 'Global Index Breadth',
+          value: 'country_breadth',
+          type: 'GlobalIndexBreadth'
+        },
+        {
+          label: 'Crypto Currency Breadth',
+          value: 'crypto_breadth',
+          type: 'CryptoCurrencyBreadth'
+        },
+        {
           label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
@@ -2142,7 +2274,7 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
       let keysMap = new Map([
@@ -2155,7 +2287,10 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      debugger
+      if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
+      if(type === 'etf_breadth') {keysMap.delete('sub_type')}
+      if(type === 'country_breadth' || type === 'crypto_breadth') {keysMap.delete('underlying_name'), keysMap.set('sub_type', 'Sub Type')}
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
@@ -2356,7 +2491,7 @@ export default {
     },
     handleQuery: debounce(function () { this._filterData(); this.handleCellMouseLeave()}, 500),
     _filterData(){
-		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult())))
+		  this.filterData = this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.filterSubType(this.getSearchResult()))))
       console.log('this.filterData', this.filterGroups(this.filterTimeFrame(this.filterIndicator(this.getSearchResult()))))
     },
     filterGroups(searchResult){
@@ -2399,6 +2534,30 @@ export default {
     return searchResult;
   }
 },
+  filterSubType(searchResult) {
+    if (this.subTypeFilter) {
+      // 将过滤条件转换为小写，并将其拆分成关键字数组
+      const filterKeywords = this.subTypeFilter.toLowerCase().split('').filter(item => item);
+      console.log('filterKeywords', filterKeywords);
+      
+      return searchResult.filter(item => {
+        const subType = item["sub_type"].toLowerCase();
+        
+        // 检查关键字是否按顺序出现在 subType 中
+        let currentIndex = 0;
+        for (const keyword of filterKeywords) {
+          currentIndex = subType.indexOf(keyword, currentIndex);
+          if (currentIndex === -1) {
+            return false; // 如果某个关键字未找到，则过滤掉该项
+          }
+          currentIndex++; // 移动到下一个字符的位置
+        }
+        return true; // 所有关键字都按顺序找到
+      });
+    } else {
+      return searchResult;
+    }
+  },
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
@@ -2455,6 +2614,8 @@ export default {
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',
         ETFSectorBreadth: 'etf_breadth',
+        GlobalIndexBreadth: 'country_breadth',
+        CryptoCurrencyBreadth: 'crypto_breadth',
         ETFFundFlow: 'etf_flow',
         ETFMonthlyFund: 'monthly_fund_flows',
         ETFShares: 'shares_outstanding',
@@ -2470,17 +2631,13 @@ export default {
       debugger
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: ''})
       await this.$nextTick(async () => {
+        const element = document.querySelector('.el-table__body-wrapper')
+        console.log('element', element.clientHeight)
+        const height = element.clientHeight
+        this.dynamicHeight = `${height}px`;
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
-    },
-    expandSearch() {
-      this.isExpanded = true; // 展开输入框
-    },
-    collapseSearch() {
-      if (!this.searchInput) {
-        this.isExpanded = false; // 收起输入框
-      }
-    },
+    }
   }
 }
 </script>
@@ -2498,6 +2655,9 @@ export default {
   }
   /deep/ .el-table__body-wrapper.is-scrolling-left {
     overflow-x: scroll !important;
+  }
+  /deep/ .el-table__body-wrapper {
+    height: 506px !important;
   }
   border: 2px solid  #e9e9e9;
   /deep/ .el-button--text {
@@ -2543,7 +2703,7 @@ export default {
       height: 20px;
     }
     span {
-      display: inline-block;
+      display: flex;
       flex-grow: 1;
       padding: 2px 0;
       text-align: center;
@@ -2551,6 +2711,9 @@ export default {
       font-weight: 700;
       border: 2px solid #d9d9d9;
       padding: 5px 0;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
     .el-icon-full-screen {
       padding: 0px;
@@ -2572,6 +2735,14 @@ export default {
       background-color: #ffffff;
     }
   }
+.header-span-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+  span {
+    padding: 2px;
+  }
+}
 .image-hover {
     position: absolute;
     z-index: 2000;
@@ -2647,18 +2818,24 @@ export default {
 .dataTables_info {
   color: #333;
   font-weight: 500;
-  margin-top: 24px;
+  margin-top: 5px;
+}
+.search-input {
+  width: 218px;
+  margin: 5px 0px 2px 0px;
+  float: left;
 }
 .filter-div {
   position: relative;
-  padding: 10px 5px;
+  padding: 0px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
-  height: 35px;
+  // height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }
   .btns {
+    margin-bottom: 5px;
     display: flex;
     .el-button{
       margin: 3px 10px 3px 0px;

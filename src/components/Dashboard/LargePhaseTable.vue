@@ -1,6 +1,11 @@
 <template>
-  <div class="container">
-    <PhaseTable :phase_table_data="dashBoardData.phase_table_data" large="true"></PhaseTable>
+  <div>
+    <div class="container">
+      <PhaseTable :phase_table_data="dashBoardData.phase_table_data" large="true"></PhaseTable>
+    </div>
+    <div class="row">
+      <AboutUs></AboutUs>
+    </div>
   </div>
 </template>
 
@@ -8,11 +13,13 @@
 import PhaseTable from "./PhaseTable";
 import { getDashboardData } from "@/service/service";
 import { isJson } from "@/utils";
+import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 export default {
   name: 'LargePhaseTable',
   components: {
-    PhaseTable
+    PhaseTable,
+    AboutUs
   },
 
   data() {

@@ -215,7 +215,7 @@ export default {
 				}
 			}
 			// 字符串类型排序
-			if(['Symbol','Signal','ExitReason', 'Direction'].indexOf(colName) !== -1){
+			if(['Symbol','signals','Signal','ExitReason', 'Direction'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.processedTradesData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){

@@ -47,7 +47,7 @@ import {CIQ} from "chartiq/js/chartiq.js";
 				extendedHours: false,
 				fullScreen: true,
 				inactivityTimer: true,
-				rangeSlider: false,
+				rangeSlider: true,
 				shortcuts: true,
 				tableView: false,
 				tooltip: true
@@ -849,7 +849,15 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "Time Series Forecast",
 							"url": "Time Fcst"
-						}
+						},
+						{
+							"name": "N-Day High",
+							"url": "N-Day High"
+						},
+						{
+							"name": "N-Day Low",
+							"url": "N-Day Low"
+						},
 					]
 				},
 				{

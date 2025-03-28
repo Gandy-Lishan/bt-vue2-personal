@@ -148,6 +148,8 @@ export default {
         { value: 13, label: 'All-time Low' },
         { value: 14, label: 'Consecutive Number of Days Above' },
         { value: 15, label: 'Consecutive Number of Days Below' },
+        { value: 16, label: 'N-Day High' },
+        { value: 17, label: 'N-Day Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -201,7 +203,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 15
+      this.isROCLike = 5 <= val && val <= 17
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.sym.condition = this.sym.newCondition
@@ -338,6 +340,12 @@ export default {
           case "Consecutive Number of Days Below":
             _newCondition = 'CNDB'
             break;
+          case "N-Day High":
+            _newCondition = 'NH'
+            break;
+          case "N-Day Low":
+            _newCondition = 'NL'
+            break;
           default:
             break;
         }
@@ -412,6 +420,8 @@ export default {
           [13, { name:'All-time Low', abbr: 'ATL' }],
           [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
+          [16, { name:'N-Day High', abbr: 'NH' }],
+          [17, { name:'N-Day Low', abbr: 'NL' }],
         ])
 
         const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
@@ -476,7 +486,16 @@ export default {
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
-        let cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+        let cond = null
+        if('cond' in newVal[this.criteria]){
+          const conLength = newVal[this.criteria].cond.length
+          const signalLength = newVal[this.criteria].signals.length
+          if(conLength === signalLength && this.relation >= 2) {
+            cond = newVal[this.criteria].cond[this.panelIndex]
+          }else {
+            cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          }
+        }
         this.sym.condition = Number(obj.condition)
         this.sym.value = obj.value
         this.sym.comparison = obj.comparison

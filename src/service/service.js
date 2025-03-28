@@ -2102,4 +2102,5 @@ export async function getSmartDumbSentiment() {
 					reject(err)
 				})
 		})
+
 	}

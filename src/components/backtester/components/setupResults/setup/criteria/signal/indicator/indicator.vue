@@ -304,7 +304,7 @@ import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
-import Uploader from "@/components/common/chart/st-development/components/Uploader"
+import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
 const throttle = require('lodash/throttle')
 
 export default {
@@ -1741,6 +1741,7 @@ export default {
       }
     },
     uploadFile(file) {
+      debugger
       console.log('文件上传', file)
       const self = this
       let suffix = ''
@@ -1754,6 +1755,7 @@ export default {
       }
       const name = file.name.replace(`.${suffix}`, '')
       const fileName = name.replace(/\s*/g, "")
+      this.si.userIndicator = fileName
       formData.append('name', fileName)
       formData.append('hash', file.hash)
       formData.append('suffix', suffix)
@@ -1812,6 +1814,7 @@ export default {
             obj.index = this.panelIndex
             obj.val = response.data.file_id
             obj.criteriaCF = capitalizeFirstLetter(this.criteria)
+            obj.previewFileID = self.previewFileID
             if (self.criteria.startsWith('entry')) {
               self.$store.commit(`form/saveUsersOwnFileHash`, obj)
             }
@@ -1951,6 +1954,7 @@ export default {
 
       CIQ.addCover('Parsing the file....')
       CIQ.nprogress.start()
+      debugger
       const str = this.previewFileID
       const page = this.previewPage.page
       const startIndex = str.indexOf('HASH')
@@ -2518,6 +2522,7 @@ export default {
       const obj = {}
       obj.index = index
       obj.val = response.data.data.file_id
+      this.previewFileID = response.data.data.file_id
       obj.criteriaCF = capitalizeFirstLetter(this.criteria)
       this.$emit('getIndicatorUrl', {
         index: index,

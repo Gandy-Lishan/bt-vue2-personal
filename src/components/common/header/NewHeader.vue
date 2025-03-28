@@ -156,7 +156,7 @@ export default {
           path: '/seasonality'
         },
         {
-          label: 'Correlation Pattern Match',
+          label: 'Correlation',
           keyPath: '8',
           path: '/cpm'
         },
@@ -169,6 +169,21 @@ export default {
           label: 'AI Trading',
           keyPath: '10',
           path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
+        },
+        {
+          label: 'Trend Score',
+          keyPath: '12',
+          path: '/trend_score'
+        },
+        {
+          label: 'My Screen',
+          keyPath: '13',
+          path: '/my_screen'
+        },
+        {
+          label: 'Dashboard',
+          keyPath: '14',
+          path: '/dashboard'
         },
       ],
       activeIndex: '1',
@@ -218,13 +233,13 @@ export default {
       const email = getCookieData()?.username
       const access_level = getCookieData()?.access_level
       const {label} = item
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation Pattern Match', 'Indicators', 'My Signal', 'Trend Score'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
         return (getTokenRole() == 2 && getTokenRole() != 'None')
       }
-      if(label === 'AI Trading') {
+      if(label === 'AI Trading' || label === 'My Screen' || label === 'Dashboard') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {

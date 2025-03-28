@@ -21,6 +21,8 @@
         :cssMonthLabel="cssMonthLabel"
         :showReport="showReport"
         :showRelated="showRelated"
+        :subTypeOptions="subTypeOptions"
+        :breadthIndicatorsOption="breadthIndicatorsOption"
         @loadMore="loadMore"
         @updateChart="$emit('updateChart', row)"
         @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
@@ -74,7 +76,6 @@ export default {
         CommoditySeasonality: 'commod_seasonality',
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',
-        ETFSectorBreadth: 'etf_breadth',
         ETFFundFlow: 'etf_flow',
         ETFMonthlyFund: 'monthly_fund_flows',
         ETFShares: 'shares_outstanding',
@@ -86,11 +87,16 @@ export default {
         CRP: 'crypt_complete_list',
         TSCRP: 'crp',
         RTSCRP: 'crp&rel_trend=1',
+        ETFSectorBreadth: 'etf_breadth',
+        GlobalIndexBreadth: 'country_breadth',
+        CryptoCurrencyBreadth: 'crypto_breadth'
       },
       firstRow: {},
       blog_results_length: 0,
       showReport: false,
-      showRelated: false
+      showRelated: false,
+      subTypeOptions: [],
+      breadthIndicatorsOption: []
     }
   },
   components: {
@@ -179,6 +185,8 @@ export default {
                 etf_social: 'Social',
                 etf_commod: 'Commodity',
                 etf_breadth: 'Sector Breadth',
+                country_breadth: 'Country Breadth',
+                crypto_breadth: 'Crypto Breadth',
                 etf_country: 'Country',
                 etf_etf: 'Sector',
                 pc_ratio: 'PutCall',
@@ -252,16 +260,29 @@ export default {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
     async loadMore (type, isUpdateChart, condition) {
       debugger
+      const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
       this.optionsChecked = type
       this.loading = true
       let _results
       try {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
-        const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        if(type === 'GlobalIndexBreadth') {
+          if(Array.isArray(_results) && _results.length !== 0) {
+            const results = Array.from(new Set([..._results.map(item => (item.sub_type))]))
+            this.subTypeOptions = [{value: '', label: '----'},...results.map(item => ({value: item, label: item}))]
+          }
+        }else this.subTypeOptions = []
+        if(type === 'GlobalIndexBreadth' || type === 'CryptoCurrencyBreadth') {
+          if(Array.isArray(_results) && _results.length !== 0) {
+            const chartNames = Array.from(new Set([..._results.map(item => (item.chart_name))]))
+            const subTypes = Array.from(new Set([..._results.map(item => (item.sub_type))]))
+            this.breadthIndicatorsOption = this.extractFilters(chartNames, subTypes)
+          }
+        }else this.breadthIndicatorsOption = []
           console.log(url, _results)
       } catch (error) {
         console.log('error', error)
@@ -269,7 +290,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || isTrendScore || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
@@ -282,6 +303,17 @@ export default {
         await this.$refs['virtualScroll']._toggleEnlarge()
       }
     },
+    extractFilters(chartNames, subTypes) {
+      let filters = new Set();
+
+      chartNames.forEach(name => {
+          // 移除开头的 "% Of " 和 sub_type 相关的部分
+          let cleanedName = name.replace(/^% Of (All Countries|Asia Pacific|Developed Markets|Emerging Markets|Europe|South America|Cryptocurrencies) /, '').trim();
+          filters.add(cleanedName);
+      });
+
+      return [{ value: '', label: '----' },...Array.from(filters).sort().map(item => ({value: item, label: item}))] // 转换为数组并排序
+    }
   }
 
 }

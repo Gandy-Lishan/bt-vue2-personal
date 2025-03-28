@@ -424,9 +424,9 @@ import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 // import jutils from 'jutils-src'
 import { getCustomConfig, marker } from './resources' // ChartIQ library resources
-import { extendOverwrite } from './st-development/js/StudiesExtendOverwrite' // dual symbol new feature
-import UploaderVue from './st-development/components/Uploader.vue'
-import ReportsFilter from './st-development/components/ReportsFilter.vue'
+import { extendOverwrite } from './st-development/js/extensions/StudiesExtendOverwrite' // dual symbol new feature
+import UploaderVue from '@/components/common/chart/st-development/js/webcomponents/Uploader.vue'
+import ReportsFilter from '@/components/common/chart/st-development/js/webcomponents/ReportsFilter.vue'
 import ModalBox from '@/components/common/modalBox/ModalBox.vue'
 import ModalBoxContainer from '@/components/common/modalBox/ModalTabContainer.vue'
 // TODO next is to intergrate them into an index entry file
@@ -636,7 +636,7 @@ export default class AdvancedChartComponent extends Vue {
 		return uiContext
 	}
 	
-	// 统一复写默认Study(已存在的，不然则在STMovingAverages中配置)配置
+	// 统一复写默认Study(已存在的，不然则在STMovingAverages(已弃用)中配置)配置
 	overrideStudyDef() {
 		extendOverwrite()
 	}
@@ -685,6 +685,7 @@ export default class AdvancedChartComponent extends Vue {
 			//console.log('mousedown',isResizing)
 		});
 
+		
 		// 監聽 mouseup 事件
 		ele.addEventListener('mouseup', (e) => {
 			setTimeout(() => {

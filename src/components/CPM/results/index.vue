@@ -443,13 +443,13 @@ export default {
     margin-top: 50px;
   }
   .chart {
-    width: 90%;
+    width: 100%;
     background-color: #ffffff;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
   .form {
-    width: 90%;
+    width: 100%;
   }
 }
 /deep/ .el-collapse-item__header {

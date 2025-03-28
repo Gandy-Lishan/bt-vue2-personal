@@ -1049,7 +1049,6 @@ button#checkResBtn {
     vertical-align: middle;
   }
 	.container {
-			width: 1200px;
 			padding-right: 15px;
 			padding-left: 15px;
 			margin-right: auto;
@@ -1075,6 +1074,21 @@ button#checkResBtn {
 				clear: both;
 			}
 	}
+  @media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+  }
+  @media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+  }
 .portlet .note.note-info {
   background-color: #eee;
   border-color: #666;
@@ -1213,4 +1227,7 @@ button#checkResBtn {
 .el-popconfirm__main {
   max-width: 300px !important;
   word-break: break-word;
+}
+.el-pagination .el-select .el-input .el-input__inner {
+  margin: 0px;
 }

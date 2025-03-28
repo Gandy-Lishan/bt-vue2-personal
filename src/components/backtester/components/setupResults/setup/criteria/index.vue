@@ -1175,20 +1175,30 @@ export default {
 		},
 		async userUploadFileContent(data) {
 			let _this = this
-			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
-			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
-			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
-			const oppositeCriteria = capitalizeFirstLetter(_this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum)
-			const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][data.index]
-			console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
-			if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)
+			debugger
+			const indiRefs = _this.$refs.indiChild.length
+			for (let index = 0; index < indiRefs; index++) {
+				// await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
+				// await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
+				// await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
+				const oppositeCriteria = capitalizeFirstLetter(_this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum)
+				const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][index]
+				console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
+				if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)
+			}
 		},
 		async userFileSelect(data) {
 			let _this = this
-			if(_this.indicatorRadioArr[data.index] !== 'user') return
-			await _this.$refs.indiChild[data.index].changeIndicatorChecked("Users' Own Indicator")
-			await _this.$refs.indiChild[data.index].handleUsersOwnIndicatorSelect(data.val.data)
-			await _this.$refs.indiChild[data.index].autoFillUserIndicator(data.val.data)
+			debugger
+			console.log('emit 出发了几次')
+			if(data.val.criteria === this.criteriaNum) return
+			const indiRefs = _this.$refs.indiChild.length
+			for (let index = 0; index < indiRefs; index++) {
+				if(_this.indicatorRadioArr[index] !== 'user') return
+				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
+				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
+				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
+			}
 		},
 		
 	}

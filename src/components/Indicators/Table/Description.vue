@@ -1,5 +1,5 @@
 <template>
-  <div class="panel-group accordion">
+  <div :class="{'trend-score-des': isTrendScorePage, 'panel-group': true, 'accordion': true}">
     <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
@@ -161,7 +161,7 @@
                      and then select the columns you wish to sort by.</p>
                </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'ETF' && (checkedType === 'ETFSectorBreadth' || checkedType === 'ETFFundFlow')">
+        <div class="des" v-else-if="(enlarged === 'ETF' && (checkedType === 'ETFSectorBreadth' || checkedType === 'ETFFundFlow')) || enlarged === 'Breadth' && (checkedType === 'ETFSectorBreadth')">
           <p>The following table shows the Fund Flow for the most active exchange-traded
               funds (ETFs).  Click any column heading to sort the table by that column, and
               click again to reverse it.  Click the "excess"   icon to sort the table by
@@ -182,6 +182,15 @@
               ETFs showing the most pessimism (the most outflows); click again to sort it
               by ETFs with the most inflows.  Click the Ticker symbol to pull up an
               interactive chart for that fund.
+          </p>
+          <div class="note note-info">
+            <p>You can sort the table below by a single column or by multiple columns. To sort by one column, just
+              click the column name. To sort by multiple columns, press and hold the "Shift" key on your keyboard
+              and then select the columns you wish to sort by.</p>
+          </div>
+        </div>
+        <div class="des" v-else-if="enlarged === 'Breadth' && (checkedType === 'GlobalIndexBreadth' || checkedType === 'CryptoCurrencyBreadth')">
+          <p>This table tracks various international breadth indicators in real-time covering six economic regions (All Countries, Developed Markets, Emerging Markets, Asia Pacific, Europe, South America), revealing trend strength, price momentum and market sentiment for assets in different countries or regions.
           </p>
           <div class="note note-info">
             <p>You can sort the table below by a single column or by multiple columns. To sort by one column, just
@@ -294,14 +303,20 @@ export default {
   },
   data() {
     return {
-      type: 1
+      type: 1,
+      isTrendScorePage: false
     }
   },
   computed: {
     enlarged() {
       return this.enlargedTable
     }
-  }
+  },
+  mounted() {
+    if(this.$route.path === '/trend_score') {
+      this.isTrendScorePage = true
+    }
+  },
 }
 </script>
 <style lang="less" scoped>
@@ -379,5 +394,8 @@ export default {
 }
 table tbody tr.even, table tbody tr.even {
     background-color: #f6f3f3;
+}
+.trend-score-des {
+  margin: 20px 0px 10px 0px;
 }
 </style>

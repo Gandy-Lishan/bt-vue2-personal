@@ -3,9 +3,6 @@
 	<!-- <div class=''>
 		<el-button></el-button> -->
 		<div class="chart_box" id="chart_box">
-			<div class="back">
-				<router-link to="/scannerai"><i class="el-icon-arrow-left"></i><span>Back to Smart Stock Scanner List</span></router-link>
-			</div>
 			<chart :onChartReady="onChartReady" width="100%" height="100%">
         <LoadingOverlayChart
 						:isLoading="chartLoadingSetting.isChartLoading"
@@ -1245,23 +1242,7 @@ export default {
 	//height: calc(100vh - 80px);
 	height: 100%;
 }
-.back {
-    position: absolute;
-    top: 153px;
-    left: 48px;
-	font-size: 1.1rem;
-	i {
-		font-weight: bold;
-	}
-	a {
-		color: #525456;
-		font-weight: bold;
-		&:hover {
-			color: #5b9bd1;
-		}
-	}
-}
 #chart_box {
-	margin-top: 80px
+	// margin-top: 80px
 }
 </style>

@@ -3,7 +3,7 @@
       <el-collapse accordion  class="header">
       <el-collapse-item>
         <template slot="title">
-          <div class="title">
+          <div class="title" ref="scrollTopTarget">
             <p>Screen (click to expand)</p>
           </div>
         </template>
@@ -22,7 +22,8 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MyScreen')}" :class="{ secondActive: activeTab == 'MyScreen' || '' }">Screens List</p>
-            <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result List</p>
+            <p @click.stop="() => {changeSecondTab('Result')}" :class="{ secondActive: activeTab == 'Result' || '' }">Screen Result</p>
+            <p @click.stop="() => {changeSecondTab('System')}" :class="{ secondActive: activeTab == 'System' || '' }">System Screen List</p>
           </div>
         </template>
         <div class="content">
@@ -35,21 +36,28 @@
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
+            @displayDes="displayDes"
+            @saveJumpBacktestData="saveJumpBacktestData"
           ></SignalsTable>
           <FilterTable v-show="activeTab == 'Result'" ref="filterTable"
             :data="filterTableData" 
             :label="filterTableData.label" 
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
+            :signalDes="signalDes"
+            :jumpBacktestData="jumpBacktestData"
+            :currentRow="currentRow"
             ></FilterTable>
-          <!-- <SignalsTable 
-            v-show="activeTab === 'Sample'"
-            currentPageTab="Sample"
-            ref="SampleTable"
+          <SignalsTable 
+            v-show="activeTab === 'System'"
+            currentPageTab="System"
+            ref="SystemTable"
             @changeSecondTab="changeSecondTab"
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
-          ></SignalsTable> -->
+            @displayDes="displayDes"
+            @saveJumpBacktestData="saveJumpBacktestData"
+          ></SignalsTable>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
@@ -67,6 +75,8 @@
          @scrollToTarget="scrollToTarget" 
          @clearResults="clearResults"
          @displayResultsData="displayResultsData"
+         @displayDes="displayDes"
+         @saveJumpBacktestData="saveJumpBacktestData"
          >
         </ScannerForm>
       </el-collapse-item>
@@ -105,7 +115,7 @@ import SignalsTable from "./Table";
 import FilterTable from "./FilterTable";
 import Trades from "./Trades";
 import { getLastSignalDate, changeMySignalsSubscribe } from '@/service/service';
-import { isJson } from "@/utils"
+import { isJson, trimTrailingZeros } from "@/utils"
 
 export default {
   name: 'MySignals',
@@ -171,15 +181,18 @@ export default {
         label:'Filter Condition Preview',
         title: 'Filter Condition Preview',
         tableCol: [
-          {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
-          {label:'Name',value:'Name',labelHtml:'Name'},
-          {label:'Optix Date',value:'Optix Date',labelHtml:'Optix Date'},
-          {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
-          {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
-          {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
-          {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
+          // {label:'Date',value:'Date',labelHtml:'Date'},
+          // {label:'Symbol',value:'Symbol',labelHtml:'Symbol'},
+          // {label:'Name',value:'Name',labelHtml:'Name'},
+          // {label:'Optix Value',value:'Optix Value',labelHtml:'Optix Value'},
+          // {label:'Optix 5-Day MA',value:'Optix 5-Day MA',labelHtml:'Optix 5-Day MA'},
+          // {label:'Closing Price',value:'Closing Price',labelHtml:'Closing Price'},
+          // {label:'Closing Price 200-Day MA',value:'Closing Price 200-Day MA',labelHtml:'Closing Price 200-Day MA)'}
         ]
       },
+      signalDes: '',
+      jumpBacktestData: {},
+      currentRow: {}
     }
   },
   components: {
@@ -190,13 +203,12 @@ export default {
   },
   async mounted() {
     // get the signal whose the last signal date is today
-    await this.getLastSignalDate()
     await this.$refs['SignalsTable'].getDataList('MyScreen')
-    await this.$refs['SignalsTable'].onSortChange({column: 
-      {sortable: 'custom'},
-      prop: 'last_signal_date',
-      order: 'descending'
-    })
+    // await this.$refs['SignalsTable'].onSortChange({column: 
+    //   {sortable: 'custom'},
+    //   prop: 'last_signal_date',
+    //   order: 'descending'
+    // })
   },
   methods: {
     changeTab(val) {
@@ -214,6 +226,9 @@ export default {
           order: 'descending'
         })
       }
+      if(val === 'System') {
+        await this.$refs['SystemTable'].getDataList(val)
+      }
     },
     scrollToTarget(refName, height=-80) {
       this.$nextTick(() => {
@@ -227,42 +242,80 @@ export default {
           });
         });
     },
-    displayResultsData(data) {
+    displayResultsData(data, row={}) {
+      debugger
+      this.currentRow = row
       // this.$refs['ScannerForm'].displayData(data)
-      this.activeTab = 'Result'
-      const status = data.status
-      if(status !== 'finish' && status !== 'Finish') {
-        // 不移动
-        // this.scrollToTarget('scrollTarget', -200)
-        this.clearResults()
-        return
+      const results = Array.isArray(data) && data.length !== 0
+      if(!results) {
+        this.popUpMsgBox(`No results found. Adjust the parameters and save again.`)
+        // this.clearResults()
+        // return
       }
-      this.displayResultList(list)
-      this.scrollToTarget('scrollTargetTable', -200)
+      this.activeTab = 'Result'
+      this.displayResultList(data)
+      // this.scrollToTarget('scrollTargetTable', -200)
     },
-    displayFormData(data) {
+    displayFormData(data, isScroll) {
+      debugger
       this.$refs['ScannerForm'].displayData(data)
-      this.scrollToTarget('scrollTarget', -200)
+      if(isScroll) this.scrollToTarget('scrollTarget', -200)
     },
     displayResultList(content) {
+      debugger
       if(!content) return
+      if(Array.isArray(content) && content.length === 0) {
+        this.filterTableData = {
+          tableCol: [],
+          content: []
+        }
+        return
+      }
 		  this.loading = true
-      this.$refs.filterTable.handleSizeChange(10)
+      // this.$refs.filterTable.handleSizeChange(10)
       // 把数据处理成所需格式
-       content.forEach(x => {
-        x['Close'] = x['Close'].toFixed(2)
+      //  content.forEach(x => {
+        // x['Close'] = x['Close'].toFixed(2)
 		  	// x['Alloc'] = (x['Alloc']*100).toFixed(0)
-			  x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
-			  x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
-			  x['WinRate'] = Number(x['WinRate']).toFixed(2)
-			  x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
-			  x['_Signal'] = x['Signal']
-			  x['TimeInMarket'] = x['TimeInMarket']
-       })
+			  // x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
+			  // x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
+			  // x['WinRate'] = Number(x['WinRate']).toFixed(2)
+			  // x['ExpectedReturn'] = Number(x['Expected Return(%)']).toFixed(2)
+			  // x['_Signal'] = x['Signal']
+			  // x['TimeInMarket'] = x['TimeInMarket']
+      //  })
+      // 更新 tableCol
+      const columns = Array.from(Object.keys(content[0])).map(column => {
+        return {
+          label: column,
+          value: column,
+          labelHtml: column
+        }
+      })
+      const formatNumbers = (content) => {
+        return content.map(item => {
+          // 遍历对象的所有属性
+          Object.keys(item).forEach(key => {
+            const value = item[key];
+
+            if (!isNaN(value) && typeof value !== 'boolean' && value !== null) {
+              const num = parseFloat(value);
+              if (!isNaN(num)) {
+                item[key] = trimTrailingZeros(num.toFixed(2)); // 保留两位小数
+              }
+            }
+          });
+          return item;
+        });
+      };
+      const _content = formatNumbers(content)
+      this.$nextTick(() => {
         this.filterTableData = {
           ...this.filterTableData,
-          content
+          tableCol: columns,
+          content: _content
         }
+      })
 		    this.loading = false
     },
     clearResults() {
@@ -331,6 +384,12 @@ export default {
         else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
         else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
         else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
+    },
+    displayDes(des) {
+      this.signalDes = des
+    },
+    saveJumpBacktestData(data) {
+      this.jumpBacktestData = data
     }
   }
 }
@@ -422,6 +481,21 @@ export default {
   color: #333;
   p {
     margin: 0 0 3px 0;
+  }
+}
+@media (min-width: 768px) {
+  .CPMResults-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .CPMResults-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .CPMResults-container {
+      width: 1170px;
   }
 }
 </style>

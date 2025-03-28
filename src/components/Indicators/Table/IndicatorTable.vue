@@ -22,7 +22,7 @@
       </template>
       <!-- 点击之后详情页放在这里 -->
       <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :style="{ width: '50%' }" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData"></Chart>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
       <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
@@ -53,7 +53,7 @@ export default {
     return {
       tableInfoList: [
         {
-          label: 'Stock',
+          label: 'Stock Market Indicators & Optix',
           type: 'stock',
           refName: 'stockVirtualScroll',
           itemSize: 50,
@@ -82,7 +82,13 @@ export default {
               value: 'Russell',
               type: 'stock',
               url: 'russell_3000_complete_list',
-            }
+            },
+            {
+              label: 'Crypto Optix',
+              value: 'CRP',
+              type: 'Crypto',
+              url: 'crypt_complete_list'
+            },
           ]
         },
         {
@@ -133,12 +139,12 @@ export default {
               type: 'ETF',
               url: 'etf_complete_list'
             },
-            {
-              label: 'ETF Sector Breadth',
-              value: 'ETFSectorBreadth',
-              type: 'ETF',
-              url: 'etf_breadth'
-            },
+            // {
+            //   label: 'ETF Sector Breadth',
+            //   value: 'ETFSectorBreadth',
+            //   type: 'ETF',
+            //   url: 'etf_breadth'
+            // },
             {
               label: 'Most Active ETF Fund Flow',
               value: 'ETFFundFlow',
@@ -187,95 +193,95 @@ export default {
           ]
         },
         {
-          label: 'Absolute and Relative Trend Scores',
-          type: 'SP500Score',
-          refName: 'SP1500ScoreVirtualScroll',
+          label: 'Breadth',
+          type: 'ETFSectorBreadth',
+          refName: 'BreadthVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
             {
-              label: 'S&P 500',
-              value: 'SP500Score',
-              type: 'SP1500Score',
-              url: 'spx'
+              label: 'ETF Sector Breadth',
+              value: 'ETFSectorBreadth',
+              type: 'Breadth',
+              url: 'etf_breadth'
             },
             {
-              label: 'S&P 1500',
-              value: 'SP1500Score',
-              type: 'SP1500Score',
-              url: 'sp1500'
+              label: 'Global Index Breadth',
+              value: 'GlobalIndexBreadth',
+              type: 'Breadth',
+              url: 'country_breadth'
             },
             {
-              label: 'NDX',
-              value: 'NDX100Score',
-              type: 'SP1500Score',
-              url: 'ndx'
-            },
-            {
-              label: 'Russell 3000',
-              value: 'RussellScore',
-              type: 'SP1500Score',
-              url: 'russell'
-            },
-            {
-              label: 'Domestic ETF',
-              value: 'DomesticETFScore',
-              type: 'SP1500Score',
-              url: 'etf_domestic'
-            },
-            {
-              label: 'Foreign ETF',
-              value: 'ForeignETFScore',
-              type: 'SP1500Score',
-              url: 'etf_foreign'
-            },
-            {
-              label: 'Other Assets',
-              value: 'OtherAssetsETFScore',
-              type: 'SP1500Score',
-              url: 'etf_other'
-            },
-            // {
-            //   label: 'Crypto',
-            //   value: 'CRPScore',
-            //   type: 'SP1500Score',
-            //   url: 'crp'
-            // },
-            {
-              label: 'Sector Summary',
-              value: 'TrendSector',
-              type: 'SP1500Score',
-              url: 'sector_trend_score'
+              label: 'Crypto Currency Breadth',
+              value: 'CryptoCurrencyBreadth',
+              type: 'Breadth',
+              url: 'crypto_breadth'
             }
           ]
         },
-        {
-          label: 'Crypto',
-          type: 'CRP',
-          refName: 'CryptoVirtualScroll',
-          itemSize: 50,
-          keyProp: 'url',
-          options: [
-            {
-              label: 'Optix',
-              value: 'CRP',
-              type: 'Crypto',
-              url: 'crypt_complete_list'
-            },
-            {
-              label: 'Absolute and Relative Trend Scores',
-              value: 'TSCRP',
-              type: 'Crypto',
-              url: 'crp'
-            },
-            // {
-            //   label: 'Relative Trend Score',
-            //   value: 'RTSCRP',
-            //   type: 'Crypto',
-            //   url: 'crp&rel_trend=1'
-            // }
-          ]
-        }
+        // {
+        //   label: 'Absolute and Relative Trend Scores',
+        //   type: 'SP500Score',
+        //   refName: 'SP1500ScoreVirtualScroll',
+        //   itemSize: 50,
+        //   keyProp: 'url',
+        //   options: [
+        //     {
+        //       label: 'S&P 500',
+        //       value: 'SP500Score',
+        //       type: 'SP1500Score',
+        //       url: 'spx'
+        //     },
+        //     {
+        //       label: 'S&P 1500',
+        //       value: 'SP1500Score',
+        //       type: 'SP1500Score',
+        //       url: 'sp1500'
+        //     },
+        //     {
+        //       label: 'NDX',
+        //       value: 'NDX100Score',
+        //       type: 'SP1500Score',
+        //       url: 'ndx'
+        //     },
+        //     {
+        //       label: 'Russell 3000',
+        //       value: 'RussellScore',
+        //       type: 'SP1500Score',
+        //       url: 'russell'
+        //     },
+        //     {
+        //       label: 'Domestic ETF',
+        //       value: 'DomesticETFScore',
+        //       type: 'SP1500Score',
+        //       url: 'etf_domestic'
+        //     },
+        //     {
+        //       label: 'Foreign ETF',
+        //       value: 'ForeignETFScore',
+        //       type: 'SP1500Score',
+        //       url: 'etf_foreign'
+        //     },
+        //     {
+        //       label: 'Other Assets',
+        //       value: 'OtherAssetsETFScore',
+        //       type: 'SP1500Score',
+        //       url: 'etf_other'
+        //     },
+        //     {
+        //       label: 'Crypto',
+        //       value: 'CRPScore',
+        //       type: 'SP1500Score',
+        //       url: 'crp'
+        //     },
+        //     {
+        //       label: 'Sector Summary',
+        //       value: 'TrendSector',
+        //       type: 'SP1500Score',
+        //       url: 'sector_trend_score'
+        //     }
+        //   ]
+        // },
         // {
         //   label: 'Most Popular',
         //   type: 'stock',
@@ -312,6 +318,14 @@ export default {
     ...mapGetters({
       indicatorsListData: 'getIndicatorsPageListData'
     })
+  },
+  mounted() {
+    if(this.$route.fullPath.includes('?enlarge=stock')) {
+      this.$nextTick(() => {
+        this.enLargeTable = 'Stock Market Indicators & Optix'
+        this.checkedType = 'stock'
+      })
+    }
   },
   methods: {
     toggleEnlarge(label) {

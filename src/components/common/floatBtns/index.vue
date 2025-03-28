@@ -180,7 +180,7 @@ export default {
     }
   },
 	watch: {
-    '$route'(to, _) {
+   '$route'(to, _) {
       this.updateDynamicClass();
 			if (to.path.includes('/backtester') || to.name == 'Backtests') {
 				this.isVisible = true

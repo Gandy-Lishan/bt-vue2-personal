@@ -175,6 +175,18 @@ const routes = [
 				name: 'CPMResults',
 				component: resolve =>
 					require(['@/components/CPM/results/index.vue'], resolve)
+			},
+			{
+				path: 'symbol',
+				name: 'SymbolCorrelation',
+				component: resolve =>
+					require(['@/components/CPM/SymbolCorrelation.vue'], resolve)
+			},
+			{
+				path: 'asset',
+				name: 'AssetCorrelation',
+				component: resolve =>
+					require(['@/components/CPM/AssetCorrelation.vue'], resolve)
 			}
 		]
 	},
@@ -204,6 +216,12 @@ const routes = [
 		name: 'Indicators',
 		component: resolve =>
 			require(['@/components/Indicators/index.vue'], resolve),
+	},
+	{
+		path: '/trend_score',
+		name: 'TrendScore',
+		component: resolve =>
+			require(['@/components/Indicators/TrendScore/index.vue'], resolve)
 	},
 	{
 		path: '/doc',

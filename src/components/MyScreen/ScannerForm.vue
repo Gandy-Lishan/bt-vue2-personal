@@ -8,7 +8,7 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item
           prop="name"
           >
@@ -20,7 +20,7 @@
           <el-input v-model="data.name" placeholder="Enter a name"></el-input>
         </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item
           prop="category"
           >
@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
@@ -66,19 +66,92 @@
             </el-select>
         </el-form-item>
         </el-col>
-        <el-col :span="6">
+      </el-row>
+      <div class="signals-div">
+      <el-row :gutter="10">
+        <el-col :span="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
-              4. Signal
+              4. Screen Criteria
             </label>
           </template>
-          <el-select
-              v-model="data.signal"
+          <!-- <el-select
+              v-model="data.relation"
               placeholder="— Select type —"
             >
               <el-option
-                v-for="item in signalOptions"
+                v-for="item in relationsOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select> -->
+        </el-form-item>
+        </el-col>
+      </el-row>
+      <div v-if="data.relation == 0">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal"
+                  placeholder="— Select —"
+                    @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="value" label-width="0">
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value"
+                  :fetch-suggestions="querySearch"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value')}"
+                ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+          <el-form-item prop="timefame" label-width="0">
+          <el-select
+              v-model="data.relation"
+              placeholder="— Select type —"
+            >
+              <el-option
+                v-for="item in relationsOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -87,8 +160,137 @@
               </el-option>
             </el-select>
         </el-form-item>
-        </el-col>
-      </el-row>
+          </el-col>
+        </el-row>
+      </div>
+      <div v-else-if="(data.score !== 0)">
+        <el-row :gutter="10" type="flex" justify="center" align="middle">
+          <el-col :span="20">
+            <el-row :gutter="10">
+          <el-col :span="10">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal"
+                  placeholder="— Select —"
+                  @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item prop="value" label-width="0">
+              <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value"
+                  :fetch-suggestions="querySearch"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value')}"
+                ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+        </el-row>
+         <el-row :gutter="10">
+          <el-col :span="10">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.signal2"
+                  placeholder="— Select —"
+                  @change="
+                    () => {
+                      handleSignalSelect('2')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in signalOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="condition" label-width="0">
+              <el-select
+                  v-model="data.condition2"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in conditionOptions2"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item prop="value2" label-width="0">
+              <el-autocomplete
+                  class="inline-input"
+                  v-model="data.value2"
+                  :fetch-suggestions="querySearch2"
+                  @select="handleSelect"
+                  @blur="() => {handleBlur('value2')}"
+                ></el-autocomplete>
+            </el-form-item>
+          </el-col>
+        </el-row>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item prop="timefame" label-width="0">
+          <el-select
+              v-model="data.relation"
+              placeholder="— Select type —"
+            >
+              <el-option
+                v-for="item in relationsOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              >
+              </el-option>
+            </el-select>
+        </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
     </el-form>
     <!-- <div class="setup">
       <div class="set-up-container">
@@ -141,8 +343,16 @@ export default {
       data: {
         name: '',
         direction: 'Long',
-        category: 'Communication Services',
-        signal: 'MA'
+        category: 'S&P 500',
+        relation: 0,
+        signal: 'TrendScore',
+        signal2: 'Change',
+        condition: 0,
+        condition2: 0,
+        // value: 'Symbol Close',
+        value: '',
+        value2: '',
+        // value3: ''
       },
       rowUrl: null,
       isPolling: false,
@@ -159,209 +369,60 @@ export default {
         { value: 'Long', label: 'Long', disabled: false},
         { value: 'Short', label: 'Short', disabled: false}
       ],
+      conditionOptions: [
+        { value: 0, label: '>' },
+        { value: 1, label: '=' },
+        { value: 2, label: '<' }
+      ],
+      conditionOptions2: [
+        { value: 0, label: '>' },
+        { value: 1, label: '=' },
+        { value: 2, label: '<' }
+      ],
       options: [
-        { value: 'Communication Services', label: 'Communication Services', disabled: false},
-        { value: 'Discretionary', label: 'Discretionary', disabled: false},
-        { value: 'Energy', label: 'Energy', disabled: false},
-        { value: 'Financials', label: 'Financials', disabled: false},
-        { value: 'Health Care', label: 'Health Care', disabled: false},
-        { value: 'Industrials', label: 'Industrials', disabled: false},
-        { value: 'Materials', label: 'Materials', disabled: false},
-        { value: 'Real Estate', label: 'Real Estate', disabled: false},
-        { value: 'SPX', label: 'SPX', disabled: false},
-        { value: 'Staples', label: 'Staples', disabled: false},
-        { value: 'Technology', label: 'Technology', disabled: false},
-        { value: 'Utilities', label: 'Utilities', disabled: false}
+        { value: 'S&P 500', label: 'S&P 500', disabled: false},
+        { value: 'NDX', label: 'NDX', disabled: false},
+        { "value": "Energy", "label": "Energy", "disabled": false },
+        { "value": "Staples", "label": "Staples", "disabled": false },
+        { "value": "Utilities", "label": "Utilities", "disabled": false },
+        { "value": "Materials", "label": "Materials", "disabled": false },
+        { "value": "Industrials", "label": "Industrials", "disabled": false },
+        { "value": "Financials", "label": "Financials", "disabled": false },
+        { "value": "Real Estate", "label": "Real Estate", "disabled": false },
+        { "value": "Technology", "label": "Technology", "disabled": false },
+        { "value": "Health Care", "label": "Health Care", "disabled": false },
+        { "value": "Discretionary", "label": "Discretionary", "disabled": false },
+        { "value": "Communication Services", "label": "Communication Services", "disabled": false }
+      ],
+      relationsOption: [
+      { value: 0, label: 'Only', disabled: false},
+      { value: 1, label: 'And', disabled: false},
+      { value: 2, label: 'Or', disabled: false}
       ],
       signalOptions: [
-        {
-          value: 'MA',
-          label: 'MA',
-          check: true
-        },
-        {
-          value: 'MAGap',
-          label: 'MAGap',
-          check: true
-        },
-        {
-          value: 'MACDHist',
-          label: 'MACDHist',
-          check: true
-        },
-        {
-          value: 'MACDHistGap',
-          label: 'MACDHistGap',
-          check: true
-        },
-        {
-          value: 'Hammer followed by a rise',
-          label: 'Hammer followed by a rise',
-          check: true
-        },
-        {
-          value: 'Shooting Star followed by a fall',
-          label: 'Shooting Star followed by a fall',
-          check: true
-        },
-        {
-          value: 'UpTrend Pattern',
-          label: 'UpTrend Pattern',
-          check: true
-        },
-        {
-          value: 'DownTrend Pattern',
-          label: 'DownTrend Pattern',
-          check: true
-        },
-        {
-          value: 'Optix #1',
-          label: 'Optix #1',
-          check: true
-        },
-        {
-          value: 'Optix #2',
-          label: 'Optix #2',
-          check: true
-        },
-        {
-          value: 'Optix #3',
-          label: 'Optix #3',
-          check: true
-        },
-        {
-          value: 'Optix #4',
-          label: 'Optix #4',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix MA5 > 43 After Below 35',
-          label: 'Optix #5',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix MA10 > 43 After Below 35',
-          label: 'Optix #6',
-          check: true
-        },
-        {
-          value: 'Symbol Close > its\' MA200 and Optix > 43 After Below 30',
-          label: 'Optix #7',
-          check: true
-        },
-        {
-          value: 'PriceBreakout',
-          label: 'PriceBreakout',
-          check: true
-        },
-        {
-          value: 'HighPoints',
-          label: 'HighPoints',
-          check: true
-        },
-        {
-          value: 'LowPoints',
-          label: 'LowPoints',
-          check: true
-        },
-        {
-          value: 'RSI',
-          label: 'RSI',
-          check: true
-        },
-        /** cpm pattern */
-        {
-          value: 'Head and Shoulders Top',
-          label: 'Head and Shoulders Top',
-          check: true
-        },
-        {
-          value: 'Head and Shoulders Bottom',
-          label: 'Head and Shoulders Bottom',
-          check: true
-        },
-        {
-          value: 'Double Top',
-          label: 'Double Top',
-          check: true
-        },
-        {
-          value: 'Double Bottom',
-          label: 'Double Bottom',
-          check: true
-        },
-        {
-          value: 'Triple Tap',
-          label: 'Triple Tap',
-          check: true
-        },
-        {
-          value: 'Rounding Bottom',
-          label: 'Rounding Bottom',
-          check: true
-        },
-        {
-          value: 'Ascending Channel',
-          label: 'Ascending Channel',
-          check: true
-        },
-        {
-          value: 'Descending Channel',
-          label: 'Descending Channel',
-          check: true
-        },
-        /** 8 high-low signals */
-        {
-          value: 'Symbol All-Time High',
-          label: 'Symbol All-Time High',
-          check: true
-        },
-        {
-          value: 'Symbol All-Time Low',
-          label: 'Symbol All-Time Low',
-          check: true
-        },
-        {
-          value: 'Symbol 52-Week High',
-          label: 'Symbol 52-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 52-Week Low',
-          label: 'Symbol 52-Week Low',
-          check: true
-        },
-        {
-          value: 'Symbol 4-Week High',
-          label: 'Symbol 4-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 4-Week Low',
-          label: 'Symbol 4-Week Low',
-          check: true
-        },
-        {
-          value: 'Symbol 13-Week High',
-          label: 'Symbol 13-Week High',
-          check: true
-        },
-        {
-          value: 'Symbol 13-Week Low',
-          label: 'Symbol 13-Week Low',
-          check: true
-        },
-        // trend score
-        {
-          value: 'Trend Score Breakout',
-          label: 'Trend Score Breakout',
-          check: true
-        },
-        {
-          value: 'Trend Score Breakdown',
-          label: 'Trend Score Breakdown',
-          check: true
-        },
+        { label: 'Trend Score', value: 'TrendScore', onlyInput: true },
+        { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
+        { label: 'Daily Return', value: 'Change', onlyInput: true },
+        { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200', type: 'Symbol' },
+        { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100', type: 'Symbol' },
+        { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50', type: 'Symbol' },
+        { label: 'Symbol Close 20-Day Moving Average', value: 'SMA20', type: 'Symbol' },
+        { label: 'Symbol Close 10-Day Moving Average', value: 'SMA10', type: 'Symbol' },
+        { label: 'Symbol Close 5-Day Moving Average', value: 'SMA5', type: 'Symbol' },
+        { label: 'Symbol Optix 50-Day Moving Average', value: 'Optix50', type: 'Optix'},
+        { label: 'Symbol Optix 20-Day Moving Average', value: 'Optix20', type: 'Optix' },
+        { label: 'Symbol Optix 10-Day Moving Average', value: 'Optix10', type: 'Optix' },
+        { label: 'Symbol Optix 5-Day Moving Average', value: 'Optix5', type: 'Optix' },
+        { label: 'Symbol Optix', value: 'Optix', type: 'Optix', type: 'Optix' },
+        { label: 'Relative Strength Index (RSI)', value: 'RSI', onlyInput: true },
+        { label: 'Symbol Close All Time High', value: 'SATH', type: 'Symbol' },
+        { label: 'Symbol Close All Time Low', value: 'SATL', type: 'Symbol' },
+        { label: 'Symbol Close 52-Week High', value: 'S52WH', type: 'Symbol' },
+        { label: 'Symbol Close 52-Week Low', value: 'S52WL', type: 'Symbol' },
+        { label: 'Symbol Close 13-Week High', value: 'S13WH', type: 'Symbol' },
+        { label: 'Symbol Close 13-Week Low', value: 'S13WL', type: 'Symbol' },
+        { label: 'Symbol Close 4-Week High', value: 'S4WH', type: 'Symbol' },
+        { label: 'Symbol Close 4-Week Low', value: 'S4WL', type: 'Symbol' }
       ],
       rules: {
         name: [
@@ -376,6 +437,42 @@ export default {
           { required: true, message: 'Select Timeframe', trigger: 'blur' },
           { required: true, message: 'Select Timeframe', trigger: 'change' }
         ],
+        value: [
+          // { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
+        ],
+        value2: [
+          // { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          // { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
+        ],
+        value3: [
+          { required: true, message: 'Select or Enter Value', trigger: 'blur' },
+          { required: true, message: 'Select or Enter Value', trigger: 'change' },
+          {
+            validator: this.validateValue,
+            trigger: 'blur'
+          },
+          {
+            validator: this.validateValue,
+            trigger: 'change'
+          }
+        ],
       },
     }
   },
@@ -387,11 +484,54 @@ export default {
     frequency() {
 			return this.$store.state.form.mySignalTimeframe
 		},
-    // timeframeOption() {
-    //   const currentTimeframe = this.$store.state.form.exitFrequency
-    //   console.log('周期', currentTimeframe)
-    //   return this.updateTimeframeOptions(currentTimeframe)
-    // }
+    signalOptions() {
+      if(this.data.direction === 'Short') return [
+        { value: 'Trend Score CrossBelow 3', label: 'Trend Score CrossBelow 3' },
+        { value: 'Shooting Star followed by a fall', label: 'Shooting Star followed by a fall' },
+        { value: 'RSI CrossBelow 75', label: 'RSI CrossBelow 75' },
+        { value: 'Symbol Close CrossBelow SMA20', label: 'Symbol Close CrossBelow SMA20' },
+        { value: 'SMA20 Gap CrossBelow 0', label: 'SMA20 Gap CrossBelow 0' },
+        { value: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65', label: 'Symbol Close < its\' SMA200 and Optix SMA5 > 65' },
+        { value: 'Symbol Close < its\' SMA200 and Optix > 70', label: 'Symbol Close < its\' SMA200 and Optix > 70' },
+        { value: 'Optix SMA10 > 70 and Optix > 80', label: 'Optix SMA10 > 70 and Optix > 80' },
+        { value: 'Optix > 99.5', label: 'Optix > 99.5' },
+        { value: 'Symbol Low OPR13 CrossBelow 0', label: 'Symbol Low OPR13 CrossBelow 0' },
+        { value: 'Symbol 4 Weeks Low', label: 'Symbol 4 Weeks Low' },
+        { value: 'Symbol 13 Weeks Low', label: 'Symbol 13 Weeks Low' },
+        { value: 'Symbol 52 Weeks Low', label: 'Symbol 52 Weeks Low' },
+        { value: 'Symbol All Time Low', label: 'Symbol All Time Low' },
+        { value: 'Head and Shoulders Top', label: 'Head and Shoulders Top' },
+        { value: 'Double Top', label: 'Double Top' },
+        { value: 'Ascending Channel', label: 'Ascending Channel' }
+      ]
+      return [
+        { value: 'Trend Score CrossAbove 7', label: 'Trend Score CrossAbove 7' },
+        { value: 'Hammer followed by a rise', label: 'Hammer followed by a rise' },
+        { value: 'RSI CrossAbove 40', label: 'RSI CrossAbove 40' },
+        { value: 'Symbol Close CrossAbove SMA20', label: 'Symbol Close CrossAbove SMA20' },
+        { value: 'SMA20 Gap CrossAbove 0', label: 'SMA20 Gap CrossAbove 0' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 > 43 After Below 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35', label: 'Symbol Close > its\' SMA200 and Optix SMA10 > 43 After Below 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30', label: 'Symbol Close > its\' SMA200 and Optix > 43 After Below 30' },
+        { value: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35', label: 'Symbol Close > its\' SMA200 and Optix SMA5 < 35' },
+        { value: 'Symbol Close > its\' SMA200 and Optix < 30', label: 'Symbol Close > its\' SMA200 and Optix < 30' },
+        { value: 'Optix SMA10 < 30 and Optix < 20', label: 'Optix SMA10 < 30 and Optix < 20' },
+        { value: 'Optix < 0.5', label: 'Optix < 0.5' },
+        { value: 'Symbol High OPR13 CrossAbove 100', label: 'Symbol High OPR13 CrossAbove 100' },
+        { value: 'Symbol 4 Weeks High', label: 'Symbol 4 Weeks High' },
+        { value: 'Symbol 13 Weeks High', label: 'Symbol 13 Weeks High' },
+        { value: 'Symbol 52 Weeks High', label: 'Symbol 52 Weeks High' },
+        { value: 'Symbol All Time High', label: 'Symbol All Time High' },
+        { value: 'Head and Shoulders Bottom', label: 'Head and Shoulders Bottom' },
+        { value: 'Double Bottom', label: 'Double Bottom' },
+        { value: 'Triple Tap', label: 'Triple Tap' },
+        { value: 'Rounding Bottom', label: 'Rounding Bottom' },
+        { value: 'Descending Channel', label: 'Descending Channel' }
+      ]
+    },
+    _direction() {
+      return this.data.direction
+    }
   },
   watch: {
     frequency: {
@@ -400,13 +540,85 @@ export default {
         if(newVal) this.timeframeOption = this.updateTimeframeOptions(newVal)
       },
       deep: true
-    }
+    },
+    _direction: {
+      handler(newVal) {
+        if(newVal === 'Short') this.data.signals = 'Trend Score CrossBelow 3'
+        if(newVal === 'Long' || !newVal) this.data.signals = 'Trend Score CrossAbove 7'
+      },
+      immediate: true
+    },
+    // data: {
+    //   handler(newVal) {
+    //     debugger
+    //     const {signal, signal2, value, value2} = newVal
+    //   if(signal.includes('WH') || value.includes('High')) {
+    //     this.data.condition = 1
+    //     this.conditionOptions =  [
+    //     { value: 1, label: '=' }
+    //     ]
+    //     return
+    //   }
+    //   if(signal2.includes('WL') || value2.includes('High')) {
+    //     this.data.condition2 = 1
+    //     this.conditionOptions2 =  [
+    //     { value: 1, label: '=' }
+    //     ]
+    //     return
+    //   }
+    //   this.conditionOptions  = [
+    //     { value: 0, label: '>' },
+    //     { value: 1, label: '=' },
+    //     { value: 2, label: '<' }
+    //   ]
+    //   this.conditionOptions2  = [
+    //     { value: 0, label: '>' },
+    //     { value: 1, label: '=' },
+    //     { value: 2, label: '<' }
+    //   ]
+    //   },
+    //   deep: true
+    // }
   },
   mounted() {
     this.setBacktestHistory(6)
     this.generateCPMName()
   },
   methods: {
+    // 手动触发表单验证
+    handleBlur(value) {
+      debugger
+      this.$refs['Form'].validateField(value);
+    },
+    validateValue(rule, value, callback) {
+      debugger
+      // 判断是否从下拉框中选择了值
+      const {field} = rule
+      let signalName = ''
+      if(field === 'value') signalName = 'signal'
+      else if(field === 'value2') signalName = 'signal2'
+      const suggestions = this.loadAll(this.data[signalName])
+      const isInsideList = suggestions.find(ele => ele.value === value)?.value
+      const onlyInput = this.signalOptions.find(ele => ele.label === value)?.onlyInput || false
+      if((suggestions.length === 0 && !this.data[field]) ||
+       (!isInsideList && this.data[field] && isNaN(this.data[field]) && suggestions.length === 0)
+      ) {
+        callback('Numeric Input (up to two decimals)');
+      }else if(onlyInput) {
+        callback('Numeric input (up to two decimals)');
+      } else if (isInsideList) {
+        // 选择了列表中的值，校验通过
+        callback();
+      } else {
+        // 不是列表中的值，检查是否是两位小数
+        const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/;
+        if (!regex.test(value)) {
+          callback(new Error('Numeric input (up to two decimals) or select from the dropdown'));
+        } else {
+          callback(); // 校验通过
+        }
+      }
+    },
     generateCPMName() {
       const date = new Date()
       const year = date.getFullYear();
@@ -464,15 +676,23 @@ export default {
     },
     resetForm() {
         this.data = {
-          ...this.data,
-          timeframe: 'Daily',
-          category: 'SPY'
+          name: '',
+          direction: 'Long',
+          category: 'S&P 500',
+          relation: 0,
+          signal: 'TrendScore',
+          signal2: 'Change',
+          condition: 0,
+          condition2: 0,
+          value: '',
+          value2: '',
+          value3: ''
         }
         this.rowUrl = null
         this.processTips = ''
         this.percentage = 0
         this.generateCPMName()
-        this.$refs['entryChild1'].clearForm()
+        // this.$refs['entryChild1'].clearForm()
     },
     async validForm(formName) {
       const validateForm = async (formRef) => {
@@ -486,45 +706,73 @@ export default {
     },
     async saveFormData() {
       debugger
-      const _this = this
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
-        return
+        return [null, null]
       }
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
+      const {signal,signal2, relation, condition, condition2, value, value2 } = this.data
+      let signals = null
+      let description = null
       this.percentage = 8
       debugger
-      const saveData = {...this.data}
+      if(relation === 0) {
+        const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
+        signals = [{signal, condition, value: _value }]
+        const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
+        const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
+        description = [`${signalLabel} ${_condition} ${value}`]
+      }else {
+        const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
+        const _value2 = this.signalOptions.find(ele => ele.label === value2)?.value || value2
+        signals = [{signal, condition, value: _value}, {signal: signal2, condition: condition2, value: _value2}]
+        const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
+        const _condition2 = this.conditionOptions.find(ele => ele.value === condition2)?.label
+        const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
+        const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
+        const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
+        description = [`${signalLabel} ${_condition} ${value}&nbsp;&nbsp;<b>${relationLabel}</b>&nbsp;&nbsp;`, `${signalLabel2} ${_condition2} ${value2}`]
+      }
+      const saveData = {...this.data,
+        relation: this.data.relation,
+        score: relation === 1 ? 2 : 1,
+        signals: JSON.stringify(signals),
+        start_date: '2005-01-01',
+        end_date: '2050-01-01',
+        description: JSON.stringify(description)
+      }
+      const remainProperties = (obj, properties) => {
+        debugger
+          const newObj = {}
+          properties.forEach(property => {
+            if (obj.hasOwnProperty(property)) {
+              newObj[property] = obj[property]
+            }
+          })
+          return newObj
+      }
+      const _description = Array.isArray(description) ? `${description.join(' ')}.` : ''
+      // 要删除的属性列表
+      const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+      const _saveData = remainProperties(saveData, propertiesToRemain)
       if(this.percentage < 99) this.percentage += 8
       let saveRes
-      if(rowUrl) {saveRes = await editMyScreenForm(saveData, rowUrl)}
-      else{saveRes = await saveMyScreenForm(saveData)}
+      if(rowUrl) {saveRes = await editMyScreenForm(_saveData, rowUrl)}
+      else{saveRes = await saveMyScreenForm(_saveData)}
       // 这里要发请求拿到状态
       const code = saveRes.data?.code
       const failedConditions = [404, 411, 511, 512, 513, 514]
       if(failedConditions.includes(Number(code))) {
         // 保存失败
-        return saveRes
+        return [saveRes, _description]
       }
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
+      saveRes.data.data.data = isJson(saveRes.data.data.data)?JSON.parse(saveRes.data.data.data):saveRes.data.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
-      let pollingRes = null
-      do {
-        if(this.percentage < 99) this.percentage += 1
-        pollingRes = await getScreenResults(url)
-        const code = pollingRes.data.code
-        if (code == 214) {
-          // const previewCode = previewRes.data?.code
-          // if(previewCode == 200) pollingRes['TRADE LIST'] = previewRes.data.data
-          return pollingRes
-        }
-        if(code == 401 || code == 403 || code == 404 || code == 407 || this.percentage == 0 || this.processTips === '') return pollingRes
-        // Add a delay here to avoid excessive polling, e.g., using setTimeout
-        await new Promise(resolve => setTimeout(resolve, 1500));
-      } while (true); // Keep polling indefinitely
+      return [saveRes, _description]
     },
     async saveCriteriaData(criteriaRef) {
       debugger
@@ -729,10 +977,13 @@ try {
       debugger
      this.percentage = 5
       let saveRes = null
+      let signalDes = null
       try {
-        saveRes = await this.saveFormData()
+        const [_saveRes, _description] = await this.saveFormData()
+        saveRes = _saveRes
+        signalDes = _description
         debugger
-        const _resData = JSON.parse(saveRes.data.data)
+        const _resData = _saveRes.data.data
         this.rowUrl = _resData.url
       } catch (error) {
         console.error(error);
@@ -750,11 +1001,24 @@ try {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 214 || code == 213) this.popUpMsgBox(`The screen is completed successfully`)
+      if(code == 214 || code == 213 || code === 211) {
+        this.popUpMsgBox(`The screen is completed successfully`)
+        this.$emit('refreshBTList');
+        debugger
+        const entry_template = saveRes.data.data.entry_template
+        this.$emit('displayResultsData', saveRes.data.data.data)
+        if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
+        if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
+          const date = saveRes.data.data.data[0].Date
+          signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
+          this.$emit('displayDes', signalDes)
+          this.$emit('scrollToTarget', 'scrollTopTarget')
+        }
+      }
       // 运行成或者失败后刷新列表
       if((code == 214 || code == 213)) {
         this.$emit('refreshBTList');
-        this.$emit('displayResultsData', saveRes.data.data)
+        this.$emit('displayResultsData', saveRes.data.data.data)
       }
       this.processTips = ''
       this.percentage = 0
@@ -811,6 +1075,24 @@ try {
 			await processCriteria('entryChild1', displayData.entry, 'entry');
       console.log('displayData',displayData)
 		},
+    displayData(data) {
+      debugger
+      this.rowUrl = data.url
+      const {relation} = data
+      const _data = {}
+      const signals = isJson(data.signals) ? JSON.parse(data.signals) : data.signals
+      signals.forEach((ele, index) => {
+        const suffix = (index === 0) ? '' : (index + 1)
+        _data[`signal${suffix}`] = ele.signal,
+        _data[`condition${suffix}`] = ele.condition
+        const value = this.signalOptions.find(l => l.value === ele.value)?.label || ele.value
+        _data[`value${suffix}`] = value
+      })
+      this.data = {
+        ...data,
+        ..._data
+      }
+		},
     customColorMethod(percentage) {
       if (percentage < 50) {
         return '#66ace5'
@@ -826,6 +1108,60 @@ try {
 			// 传入 entry 和 exit 的配置
 			return generateConfig(criteria)
 		},
+    querySearch(queryString, cb) {
+      debugger
+        const list = this.loadAll(this.data.signal);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      querySearch2(queryString, cb) {
+        debugger
+        const list = this.loadAll(this.data.signal2);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      querySearch3(queryString, cb) {
+        const list = this.loadAll(this.data.signal2);
+        const results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (ele) => {
+          return (ele.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll(value) {
+      debugger
+        // 这里要根据 Signal 显示不同的可选项
+        const onlyInput = this.signalOptions.find(ele => ele.value === value)?.onlyInput || false
+        if(onlyInput) return []
+        const type = this.signalOptions.find(ele => ele.value === value)?.type || ''
+        const signalOptions = this.signalOptions.map(item => ({
+          label: item.value,
+          value: item.label,
+          type: item.type
+        }));
+        debugger
+        if(type) return signalOptions.filter(ele => ele.type === type && ele.label !== value)
+        return signalOptions
+      },
+      handleSelect(item) {
+        // 选择的时候要清空 type 不一样的 value
+        const {value, value2, value3} = this.data
+        console.log('value', value, 'value2', value2, 'value3', value3)
+        console.log(item);
+      },
+      handleSignalSelect(number) {
+        let signalNum = number
+        const signalType = this.signalOptions.find(ele => ele.value === this.data[`signal${signalNum}`])?.type
+        const valueType = this.signalOptions.find(ele => ele.label === this.data[`value${number}`])?.type
+        console.log('signalType', signalType)
+        console.log('valueType', valueType)
+        if(signalType && valueType && signalType !== valueType) this.data[`value${number}`] = ''
+      }
   }
 }
 </script>
@@ -898,5 +1234,13 @@ try {
   /deep/ .el-progress {
     height: 100%;
   }
+}
+.signals-div {
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
+    padding: 10px;
+  }
+/deep/ .el-autocomplete {
+  width: 100%
 }
 </style>

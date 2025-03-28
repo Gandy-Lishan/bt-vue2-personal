@@ -7,7 +7,7 @@
     </div>
     <div class="search-box">
       <el-button type="primary" round @click="handleCreate">Create Correlation Pattern Match</el-button>
-      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery">
+      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
     </div>
@@ -440,7 +440,7 @@ export default {
   margin: 5px 0;
 }
 .showDate .el-button--info.is-plain {
-  width: 130px;
+  width: 120px;
 }
 .el-tag--plain.el-tag--success {
   color: #289F6D;

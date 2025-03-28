@@ -12,6 +12,19 @@
   </div>
   <div class="filter-div">
     <el-row>
+      <div class="search-input">
+        <el-input
+          class="search-input"
+          @input="handleQuery"
+          size="small"
+          placeholder="Search"
+          v-model="searchInput"
+          clearable
+        ><i slot="prefix" class="el-input__icon el-icon-search"></i>
+       </el-input>
+      </div>
+    </el-row>
+    <el-row>
       <el-col :span="24">
         <el-row>
           <div class="btns">
@@ -42,19 +55,6 @@
         </el-row>
       </el-col>
       <!-- <el-col :span="6"> -->
-      <div class="search-wrapper" tabindex="0" @click.stop="expandSearch" @blur.stop="collapseSearch">
-        <el-input
-          class="search-input"
-          @focus="expandSearch"
-          @blur="collapseSearch"
-          @input="handleQuery"
-          size="small"
-          :placeholder="searchPlaceholder"
-          v-model="searchInput"
-          clearable
-          :style="inputStyle"
-        ><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
       <!-- </el-col> -->
     </el-row>
   </div>
@@ -343,6 +343,8 @@ export default {
               etf_social: 'Social',
               etf_commod: 'Commodity',
               etf_breadth: 'Sector Breadth',
+              country_breadth: 'Country Breadth',
+              crypto_breadth: 'Crypto Breadth',
               etf_country: 'Country',
               etf_etf: 'Sector',
               pc_ratio: 'PutCall',
@@ -371,7 +373,7 @@ export default {
               etf_domestic_trend_reltrend: 'Trend',
               etf_foreign_trend_reltrend: 'Trend',
               etf_other_trend_reltrend: 'Trend',
-              crp_stock: 'CRP'
+              crp_stock: 'CRP',
             }
             if(key === 'sub_type') obj[key] = capitalizeFirstLetter(subTypeMapping[obj[key]] || obj[key])
             if(['last_value', 'last_change'].includes(key)) {
@@ -657,6 +659,16 @@ export default {
           type: 'ETFSectorBreadth'
         },
         {
+          label: 'Country Data Breadth',
+          value: 'country_breadth',
+          type: 'GlobalIndexBreadth'
+        },
+        {
+          label: 'Crypto Data Breadth',
+          value: 'crypto_breadth',
+          type: 'CryptoCurrencyBreadth'
+        },
+        {
           label: 'Most Active ETF Fund Flow',
           value: 'etf_flow',
           type: 'ETFFundFlow'
@@ -737,7 +749,7 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      if(type === 'etf_breadth') keysMap.set('chart_name', 'Breadth Measure')
+      if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') keysMap.set('chart_name', 'Breadth Measure')
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
@@ -994,14 +1006,19 @@ export default {
 .dataTables_info {
   color: #333;
   font-weight: 500;
-  margin-top: 10px;
+  margin-top: 5px;
+}
+.search-input {
+  width: 218px;
+  margin: 2px 0px 0px 0px;
+  float: left;
 }
 .filter-div {
   position: relative;
-  padding: 10px 5px;
+  padding: 0px;
   border-left: 2px solid #d9d9d9;
   border-right: 2px solid #d9d9d9;
-  height: 35px;
+  // height: 35px;
   /deep/ .el-input__inner {
     margin-left: 0px;
   }

@@ -383,6 +383,8 @@ export default {
         { value: 13, label: 'All-time Low' },
         { value: 14, label: 'Consecutive Number of Days Above' },
         { value: 15, label: 'Consecutive Number of Days Below' },
+        { value: 16, label: 'N-Day High' },
+        { value: 17, label: 'N-Day Low' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -485,7 +487,7 @@ export default {
   methods: {
     ROCLikeChange(val,limit) {
       console.log('limit in rochcange', limit)
-      this.isROCLike = 5 <= val && val <= 15
+      this.isROCLike = 5 <= val && val <= 17
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -655,6 +657,12 @@ export default {
           case "Consecutive Number of Days Below":
             _newCondition = 'CNDB'
             break;
+          case "N-Day High":
+            _newCondition = 'NH'
+            break;
+          case "N-Day Low":
+            _newCondition = 'NL'
+            break;
           default:
             break;
         }
@@ -817,6 +825,8 @@ export default {
           [13, { name:'All-time Low', abbr: 'ATL' }],
           [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
+          [16, { name:'N-Day High', abbr: 'NH' }],
+          [17, { name:'N-Day Low', abbr: 'NL' }],
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
@@ -1037,7 +1047,13 @@ export default {
         // handle unexist property for old backtesters
         let cond
         if('cond' in newVal[this.criteria]){
-          cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          const conLength = newVal[this.criteria].cond.length
+          const signalLength = newVal[this.criteria].signals.length
+          if(conLength === signalLength && this.relation >= 2) {
+            cond = newVal[this.criteria].cond[this.panelIndex]
+          }else {
+            cond = newVal[this.criteria].cond[(this.relation == 2 || this.relation == 3) ? this.panelIndex + 1 : this.panelIndex]
+          }
         }
         
         this.senti.extreme_optimism = obj.extreme_optimism

@@ -49,8 +49,11 @@ export default {
 
 <style lang="less" scoped>
 .seasonality-container{
-	margin: 50px;
-	padding: 20px;
+	padding-top: 50px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
 	background-color: #ffffff;
 	font-family: "Open Sans",sans-serif;
 	.seasonality-top{
@@ -70,5 +73,20 @@ export default {
 }
 .el-tabs {
 	padding: 0
+}
+@media (min-width: 768px) {
+  .seasonality-container {
+      width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .seasonality-container {
+      width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .seasonality-container {
+      width: 1170px;
+  }
 }
 </style>

@@ -54,7 +54,7 @@ export const CommonMethodsMixin = {
 					: data.indicator_layout
 			this.restoreIndicatorLayoutView(parsedData, data.frequency, data, data)
 		},
-		editBacktest(data) {
+		async editBacktest(data) {
 			CIQ.addCover('Fetching backtest information...')
 			this.loading = true
 			const currentPage = this.currentPage
@@ -77,7 +77,7 @@ export const CommonMethodsMixin = {
 				typeof data.indicator_layout === 'string'
 					? JSON.parse(data.indicator_layout.replaceAll('$r001$', '\u200c'))
 					: data.indicator_layout
-			this.restoreIndicatorLayoutEdit(parsedData, data.frequency, data, data)
+			await this.restoreIndicatorLayoutEdit(parsedData, data.frequency, data, data)
 		},
 		async copyBacktest(data) {
 			try {
@@ -587,6 +587,8 @@ export const CommonMethodsMixin = {
 				[13, { name:'All-time Low', abbr: 'ATL' }],
 				[14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           		[15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
+				[16, { name:'N-Day High', abbr: 'NH' }],
+				[17, { name:'N-Day Low', abbr: 'NL' }],
 			])
 			let indicator_url = ''
 			let indicator_url_with_ma = ''
@@ -779,7 +781,7 @@ export const CommonMethodsMixin = {
 				if (item)
 					return {
 						...item,
-						isROCLike: 5 <= item.newCondition && item.newCondition <= 15
+						isROCLike: 5 <= item.newCondition && item.newCondition <= 17
 					}
 				return null
 			})	
@@ -1383,10 +1385,13 @@ export const CommonMethodsMixin = {
 			const indicatorList = this.$store.getters.getIndicatorsList
 			const stockList = this.$store.getters.getStockList
 			data[criteria].signals.forEach(signal => {
-				const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
-				const matchStockList = stockList.find(item=>item.name == signal.indicator)
-				if(matchIndicatorsList && matchStockList){
-					signal.indicator = matchIndicatorsList.url + ' Optix'
+				if(!signal) {console.log('No Signal')}
+				else {
+					const matchIndicatorsList = indicatorList.find(item=>item.chart_name == signal.indicator)
+					const matchStockList = stockList.find(item=>item.name == signal.indicator)
+					if(matchIndicatorsList && matchStockList){
+						signal.indicator = matchIndicatorsList.url + ' Optix'
+					}
 				}
 			  })
 		}
