@@ -28,6 +28,56 @@
       </div>
     </div>
    <div id="HM" style="min-width: 750px; height: 800px; margin: 0 auto"></div>
+   <div class="chart-container">
+        <svg width="100%" height="100" viewBox="0 0 320 100">
+            <!-- 定义6个独立的渐变 -->
+            <defs>
+                <!-- 悲观侧渐变 -->
+                <linearGradient id="block1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#48a51e" />
+                    <stop offset="100%" stop-color="#79bc4e" />
+                </linearGradient>
+                <linearGradient id="block2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8ac361" />
+                    <stop offset="100%" stop-color="#a2ca95" />
+                </linearGradient>
+                <linearGradient id="block3" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#c3dbae" />
+                    <stop offset="100%" stop-color="#f9f5d7" />
+                </linearGradient>
+                
+                <!-- 乐观侧渐变 -->
+                <linearGradient id="block4" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#fdedd1" />
+                    <stop offset="100%" stop-color="#eaaa8b" />
+                </linearGradient>
+                <linearGradient id="block5" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#e49776" />
+                    <stop offset="100%" stop-color="#f9524d" />
+                </linearGradient>
+                <linearGradient id="block6" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#fc3c37" />
+                    <stop offset="100%" stop-color="#ff0000" />
+                </linearGradient>
+            </defs>
+            
+            <!-- 6个独立色块，每个使用不同渐变 -->
+            <rect x="20" y="10" width="48" height="20" fill="url(#block1)" rx="0" ry="0" />
+            <rect x="70" y="10" width="48" height="20" fill="url(#block2)" rx="0" ry="0" />
+            <rect x="120" y="10" width="48" height="20" fill="url(#block3)" rx="0" ry="0" />
+            
+            <rect x="170" y="10" width="48" height="20" fill="url(#block4)" rx="0" ry="0" />
+            <rect x="220" y="10" width="48" height="20" fill="url(#block5)" rx="0" ry="0" />
+            <rect x="270" y="10" width="48" height="20" fill="url(#block6)" rx="0" ry="0" />
+            
+            <!-- 分隔线 -->
+            <!-- <line x1="160" y1="10" x2="160" y2="50" stroke="#333" stroke-width="1.5" /> -->
+            
+            <!-- 下方标签 -->
+            <text class="label" x="80" y="50">Extreme Pessimism</text>
+            <text class="label" x="260" y="50">Extreme Optimism</text>
+        </svg>
+    </div>
  </div>
 </template>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -236,6 +286,14 @@ export default {
 .chart-thumb img {
   width: 100%;
   display: none;
+}
+.chart-container {
+  margin: 0 auto;
+}
+.label {
+  font-size: 12px;
+  font-weight: bold;
+  text-anchor: middle;
 }
 @import "./index.less";
 </style>
