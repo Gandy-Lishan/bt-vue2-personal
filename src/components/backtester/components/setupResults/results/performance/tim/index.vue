@@ -1310,20 +1310,18 @@ export default {
 					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)
 				let temp_mean = this.calculate_mean(
-					quotes.map((obj) => obj[period_dict[i].timeframe])
+					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)
+				const sqrt_length = used_quotes.map((obj) => obj[period_dict[i].timeframe]).filter(e => !isNaN(e)).length
 				z_score_list.push(
 					parseFloat(
 						(
 							(temp_median - temp_mean) /
-							(temp_std / Math.sqrt(used_quotes.length))
+							(temp_std / Math.sqrt(sqrt_length))
 						).toFixed(1)
 					)
 				)
 			}
-			console.log('used_quotes', used_quotes)
-			console.log('period_dict', period_dict)
-			console.log('positive_list', positive_list)
 			const res = period_dict.map((val, i) => ({
 				Period: val['timeframe'],
 				Median: median_list[i],
@@ -1408,6 +1406,9 @@ export default {
 			return parseFloat(this.calculate_mean(return_series).toFixed(2))
 		},
 		calculate_mean(arr) {
+			arr = arr.filter(function (x) {
+					return !isNaN(x) // 鍓旈櫎NaN鍊約
+			})
 			if (arr.length == 0) return NaN
 			return arr.reduce((a, b) => a + b) / arr.length
 		},

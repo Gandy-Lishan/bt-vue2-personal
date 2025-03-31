@@ -79,6 +79,11 @@ export default {
           ]
         },
         {
+          label: 'Dashboard',
+          keyPath: '14',
+          path: '/dashboard'
+        },
+        {
           label: 'Reports',
           keyPath: '10',
           path: '/MR',
@@ -180,11 +185,6 @@ export default {
           keyPath: '13',
           path: '/my_screen'
         },
-        {
-          label: 'Dashboard',
-          keyPath: '14',
-          path: '/dashboard'
-        },
       ],
       activeIndex: '1',
     }
@@ -233,13 +233,13 @@ export default {
       const email = getCookieData()?.username
       const access_level = getCookieData()?.access_level
       const {label} = item
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score', 'My Screen', 'Dashboard'].includes(label)) {
         return (getTokenRole() != 0 && getTokenRole() != 'None')
       }
       if(label === 'Smart Stock Scanner') {
         return (getTokenRole() == 2 && getTokenRole() != 'None')
       }
-      if(label === 'AI Trading' || label === 'My Screen' || label === 'Dashboard') {
+      if(label === 'AI Trading') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {
