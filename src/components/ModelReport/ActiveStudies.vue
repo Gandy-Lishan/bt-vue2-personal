@@ -249,85 +249,20 @@
    </div>
    <AboutUs v-show="!hideFooter"></AboutUs> 
   </div>
-</template>
-
-<script>
-import AboutUs from "@/components/Indicators/Table/AboutUs";
-import ChartReports from "@/components/Reports/index.vue";
-import PreviousNextPage from './component/PreviousNextPage'; // 假设你有这个分页组件
-const debounce = require('lodash/debounce')
-import { getActiveStudies } from "@/service/service";
-
-export default {
-  components: {
-    AboutUs,
-    PreviousNextPage,
-    ChartReports
-  },
- data() {
-  return {
-    title: 'Active Studies',
-    showStudySubForm: false,
-    premium: false,
-    userSubActiveStudy: false,
-    shortTermBullish: 0,
-    shortTermBearish: 0,
-    medTermBullish: 0,
-    medTermBearish: 0,
-    longTermBullish: 0,
-    longTermBearish: 0,
-    forecasts: [],
-    filterData: [],
-    start: 1,
-    end: 25,
-    currentPage: 1,
-    perPage: 25,
-    currentSortColumn: '',
-    currentSortDirection: '',
-    marketFilter: '',
-    timeframeFilter: '',
-    marketOptions: [],
-    timeframeOptions: [],
-    searchInput: '',
-    hideFooter: false
-  }
- },
- computed: {
-    totalPages() {
-      return Math.ceil(this.filterData.length / this.perPage)
-    },
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.perPage;
-      const end = start + this.perPage;
-      this.start = start + 1
-      this.end = end
-      return this.filterData.slice(start, end); 
-    },
-    total() {
-      return this.filterData.length
-    }
-  },
- beforeRouteEnter(to, from, next) {
-  if (to.path === '/MR/active_studies') {
-    debugger
-    next(async _this => {
-      await _this.fetchActiveStudiesData()
-    })
-  }else {
-    next()
-  }
-  },
-async mounted() {
-  debugger
-  if(this.$route.path === '/dashboard') {
-    //隐藏掉 page-footer
-    this.hideFooter = true
-    await this.fetchActiveStudiesData()
-  }
-},
- methods: {
-   subscribeToStudyAlerts() {
-     // 处理订阅逻辑
+ </template>
+ 
+ <script>
+ import AboutUs from "@/components/Indicators/Table/AboutUs";
+ import ChartReports from "@/components/Reports/index.vue";
+ import PreviousNextPage from './component/PreviousNextPage'; // 假设你有这个分页组件
+ const debounce = require('lodash/debounce')
+ import { getActiveStudies } from "@/service/service";
+ 
+ export default {
+   components: {
+     AboutUs,
+     PreviousNextPage,
+     ChartReports
    },
   data() {
    return {
@@ -532,8 +467,7 @@ async mounted() {
       return range;
     }
   }
- }
-};
+ };
  </script>
  
  <style scoped>
