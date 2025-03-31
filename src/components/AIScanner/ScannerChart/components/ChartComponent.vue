@@ -509,7 +509,7 @@ export default {
           used_quotes.map((obj) => obj[period_dict[i].timeframe])
         )
         let temp_mean = this.calculate_mean(
-          quotes.map((obj) => obj[period_dict[i].timeframe])
+          used_quotes.map((obj) => obj[period_dict[i].timeframe])
         )
         z_score_list.push(
           parseFloat(
@@ -622,9 +622,11 @@ export default {
       let return_series = arr.map((x) => (x > 0 ? 1 : 0))
       return parseFloat(this.calculate_mean(return_series).toFixed(2))
     },
-		calculate_mean(arr) {
-      if (arr.length == 0) return NaN
-      return arr.reduce((a, b) => a + b) / arr.length
+    calculate_mean(arr) {
+      console.log('计算 calculate_mean', arr);
+      const filteredArr = arr.filter(v => (!isNaN(v) && v !== ''));
+      if (filteredArr.length === 0) return NaN;
+      return filteredArr.reduce((a, b) => a + b) / filteredArr.length;
     },
 		calculate_median(arr) {
       arr = arr.filter((n) => !isNaN(n))
