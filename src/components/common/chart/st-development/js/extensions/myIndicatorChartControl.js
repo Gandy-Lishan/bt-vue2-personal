@@ -280,28 +280,8 @@
                             symbol: CIQ.stxx.chart.symbol,
                             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
                             endDate:new Date(),
-                        },async ()=>{
-                            var start = config.timestampToTime(CIQ.initialDate.start)
-                            var end = config.timestampToTime(CIQ.initialDate.end)
-                            const res = await getPairData( start, end, 'daily', newData.indicator2.url)
-                            let _data = formatData(res.data)
-                            CIQ.stxx.addSeries(newData.indicator2.url, {
-                                display:newData.indicator2.name, 
-                                data:_data,
-                                isComparison: false, 
-                                color: "#368DF0",
-                                permanent: true,
-                                //panel:newData.indicator2.url,
-                                // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
-                                yAxis:{ 
-                                    position:"left",
-                                    textStyle:"#FFBE00"
-                                },
-                                //shareYAxis: true
-                            },()=>{});
-
-                            CIQ.hideCover()
-                            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                        },()=>{
+                            loadSeries(newData.indicator2.name,newData.indicator2.url)
                         })
                 }
                 resolve()
@@ -428,6 +408,30 @@
         return newQuotes
      }
 
+    const loadSeries = async function(name,url) {
+        var start = config.timestampToTime(CIQ.initialDate.start)
+        var end = config.timestampToTime(CIQ.initialDate.end)
+        const res = await getPairData( start, end, 'daily', url)
+        let _data = formatData(res.data)
+        CIQ.stxx.addSeries(url, {
+            display:name, 
+            data:_data,
+            isComparison: false, 
+            color: "#368DF0",
+            permanent: true,
+            //panel:url,
+            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.
+            yAxis:{ 
+                position:"left",
+                textStyle:"#FFBE00"
+            },
+            //shareYAxis: true
+        },()=>{});
+
+        CIQ.hideCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+    }
+
     // 预览生成的新indicator
     CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
                 //编辑时对内容修改或者preview应该移除生成的indicator
@@ -435,7 +439,13 @@
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                     if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
                 }
-        addSingleIndicator(indicatorList,indicator,symbol,extremeLines);
+
+        addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
+            var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+            if(comparisonSymbol.url) {
+                loadSeries(comparisonSymbol.name,comparisonSymbol.url)
+            }
+        });
     }
 
     // 从列表进入后还原new indicator的设定和新的indicator
