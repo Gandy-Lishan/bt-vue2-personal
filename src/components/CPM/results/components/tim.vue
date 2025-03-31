@@ -463,6 +463,9 @@ export default {
 			return parseFloat(this.calculate_mean(return_series).toFixed(2))
 		},
 		calculate_mean(arr) {
+			arr = arr.filter(function (x) {
+					return !isNaN(x) // 鍓旈櫎NaN鍊約
+			})
 			if (arr.length == 0) return NaN
 			return arr.reduce((a, b) => a + b) / arr.length
 		},
@@ -605,13 +608,14 @@ export default {
 					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)
 				let temp_mean = this.calculate_mean(
-					quotes.map((obj) => obj[period_dict[i].timeframe])
+					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)
+				const sqrt_length = used_quotes.map((obj) => obj[period_dict[i].timeframe]).filter(e => !isNaN(e)).length
 				z_score_list.push(
 					parseFloat(
 						(
 							(temp_median - temp_mean) /
-							(temp_std / Math.sqrt(used_quotes.length))
+							(temp_std / Math.sqrt(sqrt_length))
 						).toFixed(1)
 					)
 				)
