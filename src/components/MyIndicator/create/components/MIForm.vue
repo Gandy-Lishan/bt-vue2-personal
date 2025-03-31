@@ -1072,7 +1072,7 @@ export default {
         this.data.name = previewName
         this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();
         // this.popUpMsgBox(`Duplicate Indicator: ${_name} Exists`)
-        return
+        //return
       }
       if(status == 201) {
         url = res.data.url
