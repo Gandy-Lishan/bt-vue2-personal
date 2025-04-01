@@ -14,11 +14,13 @@
       </tr>
     </tbody>
   </table>
+  <p v-show="date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period 01/01/2008 to {{date}}.</strong></p>
   </div>
 </template>
 
 <script>
 import { getAssetCorrelation } from "@/service/service";
+import moment from "moment";
 
 export default {
   name: 'AssetCorrelation',
@@ -33,7 +35,8 @@ export default {
         'Daily Standard Deviation',
         'Monthly Standard Deviation',
         'Annualized Standard Deviation'
-      ]
+      ],
+      date: ''
     }
   },
   async mounted() {
@@ -48,9 +51,10 @@ export default {
           key => !this.fixedColumns.includes(key) && !this.additionalFixedColumns.includes(key)
       );
       // 按照接口返回的顺序排列动态列名
+      this.date = moment.utc(this.data[0].last_updated).format('MM/DD/YYYY')
       const orderedDynamicColumns = Object.keys(this.data[0]).filter(
           key => dynamicColumns.includes(key)
-      );
+      ).filter(ele => ele !== 'last_updated')
       // 合并列名：固定列 + 动态列 + 额外固定列
       return [...this.fixedColumns, ...orderedDynamicColumns, ...this.additionalFixedColumns];
     }
