@@ -136,6 +136,11 @@ export default {
           path: '/indicators'
         },
         {
+          label: 'Trend Score',
+          keyPath: '12',
+          path: '/trend_score'
+        },
+        {
           label: 'Strategies',
           keyPath: '3',
           path: '/strategy'
@@ -151,11 +156,6 @@ export default {
           path: '/scannerai'
         },
         {
-          label: 'My Indicator',
-          keyPath: '6',
-          path: '/myindicator'
-        },
-        {
           label: 'Seasonality',
           keyPath: '7',
           path: '/seasonality'
@@ -166,24 +166,24 @@ export default {
           path: '/cpm'
         },
         {
+          label: 'My Indicator',
+          keyPath: '6',
+          path: '/myindicator'
+        },
+        {
           label: 'My Signal',
           keyPath: '9',
           path: '/my_signals'
         },
         {
-          label: 'AI Trading',
-          keyPath: '10',
-          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
-        },
-        {
-          label: 'Trend Score',
-          keyPath: '12',
-          path: '/trend_score'
-        },
-        {
           label: 'My Screen',
           keyPath: '13',
           path: '/my_screen'
+        },
+        {
+          label: 'AI Trading',
+          keyPath: '10',
+          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
       ],
       activeIndex: '1',
