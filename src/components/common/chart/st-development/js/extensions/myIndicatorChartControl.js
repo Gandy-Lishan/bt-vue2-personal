@@ -439,7 +439,7 @@
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                     if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
                 }
-
+                debugger
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
             var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
             if(comparisonSymbol.url) {
