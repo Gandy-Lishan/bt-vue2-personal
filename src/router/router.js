@@ -1,5 +1,5 @@
 const routes = [
-	{ path: '/', redirect: '/dashboard' },
+	{ path: '/', redirect: '/backtester' },
 	{
 		path: '/backtester',
 		name: 'Backtester',
