@@ -105,6 +105,7 @@ if (CIQ.ChartEngine) {
 			var filteredData2 = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
 			for (var i = 0; i < filteredData2.length; i++) {
 				var q = filteredData2[i][comparisonSymbolUrl];
+				if (!q) continue;
 				_q1 = i ? filteredData2[i - 1][comparisonSymbolUrl] : state._q1;
 				if (!_q1) continue;
 				var trueRange = Math.max(

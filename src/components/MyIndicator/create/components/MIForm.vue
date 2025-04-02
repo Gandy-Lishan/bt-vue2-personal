@@ -237,6 +237,7 @@
           :isDisabled="data.indicator_2==''"
           :showShiftInput="showShiftInput"
 					ref="shiftForm"
+          @handleShiftChange="handleShiftChange"
 					@saveData="saveSubData"
 				></CheckInput>
 			</div>
@@ -623,14 +624,6 @@ export default {
           // todo
 
           await this.$store.dispatch('chart/set_miFormStateRefresh')
-          /* old version */
-          // let _data = JSON.parse(JSON.stringify(this.data))
-          // _data.indicator_1 = ''
-          // _data.indicator_2 = ''
-          // _data.indicator_1_url  = ''
-          // _data.indicator_2_url = ''
-          // await this.$store.dispatch('chart/set_miFormStateChange',_data)
-          // await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
           this.refreshMAState()
         }
@@ -639,6 +632,7 @@ export default {
           this.data.indicator_1_url = newVal
 
           this.refreshMAState()
+          this.handleShiftChange(this.$refs['shiftForm'].value)
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
@@ -812,22 +806,22 @@ export default {
       }
       if(['EMA','MA'].includes(type)) {
         CIQ.addOwnIndicatorMAStudy(
-        value,
-        type,
-        fieldName,
-        criteria,
-        field == 'ma1'?0:1,
-        showInput,
-        this.data.categories
+          value,
+          type,
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          showInput,
+          this.data.categories
         ) 
       }
       if(type == 'roc') {
         CIQ.addOwnIndicatorROCStudy(
-        value,
-        fieldName,
-        criteria,
-        field == 'ma1'?0:1,
-        showInput,
+          value,
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          showInput,
         ) 
       }
       if(type == 'amplitude' || type == 'amplify') {
@@ -835,6 +829,15 @@ export default {
           criteria,
           field == 'ma1'?0:1,
           showInput,
+        ) 
+      }
+    },
+    handleShiftChange(val) {
+      if(this.data.indicator_1_url == this.data.indicator_2_url) {
+        // shift变更时同步shift状态到vuex
+        this.$store.commit('chart/SET_MI_SHIFT',val)
+        CIQ.addOwnIndicatorShift(
+          Number(val)
         ) 
       }
     },
@@ -907,7 +910,6 @@ export default {
         benchmark: CIQ.stxx.chart.symbol
       };
       if(this.data.categories.includes('Symbol')) {
-        debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
         if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
@@ -999,7 +1001,6 @@ export default {
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
       if(this.data.categories.includes('Symbol')) {
-        debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
         if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
