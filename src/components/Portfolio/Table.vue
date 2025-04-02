@@ -1,8 +1,8 @@
 <template>
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
-      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" size="small">
-        <el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
+      <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
+        <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
     </div>
     <el-table
@@ -446,13 +446,16 @@ export default {
 <style lang="less" scoped>
 .search-box{
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 0px 0px 20px 0px;
   border-bottom: 2px solid #dddddd;
+  /deep/ .el-input--suffix .el-input__inner {
+    margin-left: 0px
+  }
 }
 .el-input-group{
-  width: 20%;
+  width: 40%;
 }
 .CPM-list-container{
   padding: 20px 20px 20px 0px;
