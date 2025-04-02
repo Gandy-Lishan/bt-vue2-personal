@@ -125,7 +125,7 @@ export function setRouterPermission(router) {
 				getQueryVariable('backtestID') ||
 				(getQueryVariable('index') && getQueryVariable('indicator'))
 			) {
-				window.location.href = location.origin
+				window.location.href = `${location.origin}${location.pathname}`
 			}
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环

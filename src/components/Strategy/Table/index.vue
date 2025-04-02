@@ -38,7 +38,7 @@
           <span>View Video Tutorial</span>
         </el-button>
       </div>
-      <div class="strategy-header">
+      <div class="strategy-header" v-show="activatedTag !== 'Portfolio'">
         <div class="tableHeader">
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Strategies'" :class="{ 'selected': selectedTitle === 'Strategies' }">Strategies</h4>
@@ -56,8 +56,9 @@
         </div>
       </div>
       <br>
-      <StrategiesTable v-show="selectedTitle === 'Strategies'" ref="Strategies" :highlightedTag="activatedTag" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
-      <SummaryTable v-show="selectedTitle === 'Summary'" ref="Summary" :urlToNameMap="urlToNameMap" :tag="activatedTag"></SummaryTable>
+      <StrategiesTable v-show="selectedTitle === 'Strategies' && activatedTag !== 'Portfolio'" ref="Strategies" :highlightedTag="activatedTag" @getUrlToNameMap="getUrlToNameMap" @highlightedTag="highlightedTag"></StrategiesTable>
+      <SummaryTable v-show="selectedTitle === 'Summary' && activatedTag !== 'Portfolio'" ref="Summary" :urlToNameMap="urlToNameMap" :tag="activatedTag"></SummaryTable>
+      <Portfolio v-show="activatedTag === 'Portfolio'"></Portfolio>
     </div>
     </div>
   </div>
@@ -65,6 +66,7 @@
 <script>
 import StrategiesTable from "./StrategiesTable";
 import SummaryTable from "./SummaryTable";
+import Portfolio from "@/components/Portfolio"
 import { LocalStorageUtil } from "@/utils";
 const XLSX = require('xlsx');
 
@@ -82,14 +84,16 @@ export default {
 				{ type: 'info', label: 'Bond', value: 'Bond' },
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
-				{ type: 'info', label: 'My Favorites', value: 'Favorites' }
+				{ type: 'info', label: 'My Favorites', value: 'Favorites' },
+				{ type: 'info', label: 'My Strategies Combination', value: 'Portfolio' }
 			],
 			activatedTag: 'All',
     }
   },
   components: {
     StrategiesTable,
-    SummaryTable
+    SummaryTable,
+    Portfolio
   },
   watch: {
     selectedTitle: {
@@ -173,6 +177,7 @@ export default {
     },
     highlightTag(tag) {
 			this.activatedTag = tag.value
+      if(tag.value === 'Portfolio') return
       this.$refs['Strategies'].highlightTag(tag.value)
       this.highlightedTag(this.activatedTag)
       debugger

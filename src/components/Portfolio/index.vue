@@ -253,9 +253,9 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  margin: 50px auto auto auto;
-  width: 80%;
-  padding: 20px;
+  // margin: 50px auto auto auto;
+  // width: 80%;
+  // padding: 20px;
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
