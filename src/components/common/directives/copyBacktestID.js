@@ -16,7 +16,7 @@ export const copy = {
       textarea.style.position = 'absolute'
       textarea.style.left = '-9999px'
       // 将要 copy 的值赋给 textarea 标签的 value 属性
-      const copyValue = `${location.origin}?backtestID=${el.$value}`
+      const copyValue = `${location.origin}/backtester/sr/setup?backtestID=${el.$value}`
       textarea.value = copyValue
       // 将 textarea 插入到 body 中
       document.body.appendChild(textarea)
