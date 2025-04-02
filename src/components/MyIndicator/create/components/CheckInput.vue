@@ -254,6 +254,8 @@ export default {
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.config.type === 'CheckInput'){
+        this.$emit('handleShiftChange',Number(this.value))
       }
       this.validateValue()
     }, 500),

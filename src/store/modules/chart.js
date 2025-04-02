@@ -90,6 +90,7 @@ const state = {
 
 	// 以下管理user's own indicator chartiq 状态
 	/*********** START */
+	miFormShift: 0,
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
@@ -340,7 +341,10 @@ const mutations = {
 				});
 		}
 		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
-	}
+	},
+	SET_MI_SHIFT(state, val) {
+		state.miFormShift = val
+	},
 }
 
 const actions = {
