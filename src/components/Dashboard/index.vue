@@ -14,6 +14,7 @@
         <div class="col-md-7">
           <SmartDumbChart />
           <MarketOverview :dashBoardData="dashBoardData"/>
+          <SPXMostRelevantIndicators :data="mostRelevantIndicatorsData" />
         </div>
       </div>
 
@@ -32,9 +33,10 @@ import Commentary from "./Commentary.vue";
 import SmartDumbChart from "./SmartDumbChart.vue";
 import MarketOverview from "./MarketOverview.vue";
 import Overview from "./Overview.vue";
-import { getDashboardData } from "@/service/service";
-import { isJson } from "@/utils";
+import { getDashboardData, getSPXMostRelevantIndicators } from "@/service/service";
+import { isJson, trimTrailingZeros } from "@/utils";
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
+import SPXMostRelevantIndicators from "./SPXMostRelevantIndicators.vue"
 
 export default {
  name: 'Dashboard',
@@ -44,16 +46,26 @@ export default {
   SmartDumbChart,
   MarketOverview,
   Overview,
-  AboutUs
+  AboutUs,
+  SPXMostRelevantIndicators
  },
  data() {
   return {
     dashBoardData: {},
+    mostRelevantIndicatorsData: []
   }
  },
  async mounted() {
    // Equivalent to $(document).ready
    await this.getDashboardData()
+   let {data} = await getSPXMostRelevantIndicators()
+   data = data.map(item => {
+    item.latest_value = item.latest_value.toFixed(2)
+    item.corr_kendall = item.corr_kendall.toFixed(2)
+    return item
+
+   })
+   this.mostRelevantIndicatorsData = data
    this.initializeChartPopups();
  },
  methods: {
