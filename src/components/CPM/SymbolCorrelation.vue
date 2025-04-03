@@ -253,17 +253,37 @@ export default {
         }
       ],
       rollWindowOptions: [
+        // {
+        //   value: 21,
+        //   label: 'Short'
+        // },
+        // {
+        //   value: 63,
+        //   label: 'Medium'
+        // },
+        // {
+        //   value: 126,
+        //   label: 'Long'
+        // },
         {
           value: 21,
-          label: 'Short'
+          label: '21 Bars'
+        },
+        {
+          value: 42,
+          label: '42 Bars'
         },
         {
           value: 63,
-          label: 'Medium'
+          label: '63 Bars'
         },
         {
           value: 126,
-          label: 'Long'
+          label: '126 Bars'
+        },
+        {
+          value: 252,
+          label: '252 Bars'
         },
       ],
         pickerOptions: {
