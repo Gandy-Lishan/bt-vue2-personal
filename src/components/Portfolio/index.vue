@@ -255,6 +255,7 @@ export default {
   grid-gap: 20px;
   // margin: 50px auto auto auto;
   // width: 80%;
+  width: 100%;
   // padding: 20px;
 }
 /deep/ .el-collapse-item__header {

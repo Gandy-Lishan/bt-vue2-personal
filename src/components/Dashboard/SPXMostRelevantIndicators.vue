@@ -1,26 +1,35 @@
 <template>
- <div class="page-content-wrapper asset-correlation">
-  <div class="table-title">
-   <h4>S&P 500 Most Relevant Indicators </h4>
-   <i class="updateDateText">Update Date: {{date}}</i>
-  </div>
- <table>
-   <thead>
-     <tr>
-         <th v-for="col in columns" :key="col">{{ colLabel[col] }}</th>
-     </tr>
-   </thead>
-   <tbody>
-     <tr v-for="(row, index) in data" :key="index" :class="{ stripe: index % 2 === 0 }">
-         <td v-for="col in columns" :key="col">
-          <a v-if="col === 'chart_name'" :href="getLink(row)" target="_blank" class="item-name primary-link">
-           {{ row[col] }}
-           </a>
-           <span v-else>{{ row[col] }}</span>
-         </td>
-     </tr>
-   </tbody>
- </table>
+  <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
+   <div class="portlet-title">
+     <div class="caption caption-md">
+       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most Relevant Indicators - 
+        <i class="updateDateText">Update Date: {{date}}</i>
+       </span>
+     </div>
+   </div>
+   <div class="portlet-body">
+     <div class="row">
+       <div class="col-md-6">
+        <table>
+          <thead>
+            <tr>
+                <th v-for="col in columns" :key="col">{{ colLabel[col] }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in data" :key="index" :class="{ stripe: index % 2 === 0 }">
+                <td v-for="col in columns" :key="col">
+                 <a v-if="col === 'chart_name'" :href="getLink(row)" target="_blank" class="item-name primary-link">
+                  {{ row[col] }}
+                  </a>
+                  <span v-else>{{ row[col] }}</span>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+       </div>
+     </div>
+   </div>
  </div>
 </template>
 
@@ -97,5 +106,5 @@ export default {
     font-size: 14px
 }
  }
-
+ @import "./index.less";
 </style>
