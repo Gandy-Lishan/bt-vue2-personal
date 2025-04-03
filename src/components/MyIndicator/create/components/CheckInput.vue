@@ -179,7 +179,6 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
-        console.log('newValue', newValue)
         const {field, value} = newValue
         this.showInput = newValue.checked
         try {
@@ -247,8 +246,6 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
-      if(this.MAType=='roc') this.config.placeholder='Please input the Rate of Change period'
-      else this.config.placeholder='Please input the moving average period'
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput: debounce(function (val) {

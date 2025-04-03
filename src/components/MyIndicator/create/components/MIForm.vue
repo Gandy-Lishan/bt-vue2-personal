@@ -481,7 +481,7 @@ export default {
       ],
       MA1CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average period',
+        placeholder: 'Please input the period',
         checked: false,
         field: 'ma1',
         value: '',
@@ -497,7 +497,7 @@ export default {
       },
       MA2CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average period',
+        placeholder: 'Please input the period',
         checked: false,
         field: 'ma2',
         value: '',
