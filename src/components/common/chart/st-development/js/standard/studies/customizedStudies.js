@@ -581,12 +581,10 @@ if (!CIQ.Studies) {
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			quote[sd.inputs.display] = resArr[i];
-			// quote['supLine'] = showSupLine;
 		}
 
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
-		// sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		
@@ -1353,7 +1351,7 @@ if (!CIQ.Studies) {
 		// todo: 考虑从这里开始都替换成scrubbed
 		var quotes = sd.chart.scrubbed;
 		var field	// 它是流动的
-		if(sd.parameters.isComparison){
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
@@ -1402,7 +1400,6 @@ if (!CIQ.Studies) {
 			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
-			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Result: "auto" },
         },
 		"Symbol Open": {

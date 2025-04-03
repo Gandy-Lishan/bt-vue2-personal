@@ -970,7 +970,7 @@
         }else{
           display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}(${value}-Bar)`
         }
-        
+        if(symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
         if(!showInput || !field) return
 
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
