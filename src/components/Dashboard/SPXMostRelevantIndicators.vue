@@ -2,7 +2,12 @@
   <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
    <div class="portlet-title relevant-portlet-title">
      <div class="caption caption-md">
-       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most Correlated Indicators for 63 Days
+       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most correlated Indicators
+        <el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
+          <span slot="content" v-html="titleTooltips">
+          </span>
+          <i class="iconfont icon-wenhao"></i>
+         </el-tooltip>
        </span>
      </div>
    </div>
@@ -47,7 +52,8 @@ export default {
       chart_name: 'Name',
       corr_kendall: 'Correlation',
       latest_value: 'Value'
-     }
+     },
+     titleTooltips: 'Displays the 5 indicators with the highest correlation to the S&P 500\'s daily returns, based on data from the last three months. <br/>This helps identify factors strongly associated with current S&P 500 price movements.'
    }
  },
  async mounted() {
