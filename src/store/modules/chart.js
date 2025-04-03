@@ -90,7 +90,7 @@ const state = {
 
 	// 以下管理user's own indicator chartiq 状态
 	/*********** START */
-	miFormShift: 0,
+	miFormShift: {},
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
@@ -342,8 +342,8 @@ const mutations = {
 		}
 		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
 	},
-	SET_MI_SHIFT(state, val) {
-		state.miFormShift = val
+	SET_MI_SHIFT(state, obj) {
+		state.miFormShift = obj
 	},
 }
 
@@ -628,6 +628,12 @@ get_indicator_page_btv1_list({ commit, state }) {
 		})
 	},
 /** Begin MyIndicator page*/
+	set_mi_shift({ commit }, val ) {
+		return new Promise(resolve => {
+			commit('SET_MI_SHIFT', val)
+			resolve()
+		})
+	},
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {

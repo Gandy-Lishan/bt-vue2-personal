@@ -250,24 +250,9 @@
             if(newData.categories.includes('Symbol')){
                 // 如果左侧发生变动
                 if(oldData.indicator1.url != newData.indicator1.url){
-                    // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
-                    // if(newData.indicator1.url == newData.indicator2.url) {
-                    //     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
-                    //     if(series) CIQ.stxx.removeSeries(series);
-                    // }
-
                     CIQ.objIndicator = []
-                    CIQ.stxx.loadChart({
-                        symbol: newData.indicator1.url,
-                        startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
-                        endDate:new Date(),
-                    },()=>{
-                        const offset = newData.indicator1.url == newData.indicator2.url ? CIQ.store.getters.getMiFormShift : 0
-                        CIQ.addOwnIndicatorShift(offset)
 
-                        CIQ.hideCover()
-                        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
-                    })
+
                 }
                 // 如果右侧发生变动
                 if(oldData.indicator2.url != newData.indicator2.url){
@@ -276,18 +261,66 @@
                         url:newData.indicator2.url,
                     })
 
-                    CIQ.stxx.loadChart({    // 需要刷新一次，因为可能会修改timeframe
-                        symbol: CIQ.stxx.chart.symbol,
-                        startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
-                        endDate:new Date(),
-                    },()=>{
-                        // TODO
-                        const offset = newData.indicator1.url == newData.indicator2.url ? CIQ.store.getters.getMiFormShift : 0
-                        CIQ.addOwnIndicatorShift(offset)
-                    })
                 }
+
+                var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+                if(series) CIQ.stxx.removeSeries(series);
+                CIQ.stxx.loadChart({
+                    symbol: newData.indicator1.url || CIQ.stxx.chart.symbol,
+                    startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+                    endDate:new Date(),
+                },()=>{
+                    const miFormShift = CIQ.store.getters.getMiFormShift
+                    const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
+                    loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
+
+                    CIQ.hideCover()
+                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                })
                 resolve()
             }
+
+            // if(newData.categories.includes('Symbol')){
+            //     // 如果左侧发生变动
+            //     if(oldData.indicator1.url != newData.indicator1.url){
+            //         // 刷新当前symbol序列,如果操作后另一个框存在了同样的symbol就跳过加载（ [A,AAON]->[A,A] or [A,null]->[A,A]）
+            //         // if(newData.indicator1.url == newData.indicator2.url) {
+            //         //     var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+            //         //     if(series) CIQ.stxx.removeSeries(series);
+            //         // }
+
+            //         CIQ.objIndicator = []
+            //         CIQ.stxx.loadChart({
+            //             symbol: newData.indicator1.url,
+            //             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+            //             endDate:new Date(),
+            //         },()=>{
+            //             CIQ.hideCover()
+            //             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            //         })
+            //     }
+            //     // 如果右侧发生变动
+            //     if(oldData.indicator2.url != newData.indicator2.url){
+            //         CIQ.store.commit('form/setComparisonSymbol', {
+            //             name:newData.indicator2.name,
+            //             url:newData.indicator2.url,
+            //         })
+
+            //         // 刷新当前symbol序列
+            //         var series = CIQ.stxx.chart.series[oldData.indicator2.url];
+            //         if(series) CIQ.stxx.removeSeries(series);
+            //             CIQ.stxx.loadChart({    // 需要刷新一次，因为可能会修改timeframe
+            //                 symbol: CIQ.stxx.chart.symbol,
+            //                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+            //                 endDate:new Date(),
+            //             },()=>{
+            //                 // TODO
+            //                 const offset = newData.indicator1.url == newData.indicator2.url ? CIQ.store.getters.getMiFormShift : 0
+            //                 loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
+            //             })
+            //     }
+            //     resolve()
+            // }
             
             if(newData.categories.includes('Indicator')){
                 if(oldData.indicator1.url != newData.indicator1.url){
@@ -363,12 +396,12 @@
 
                 if (shiftedIndex >= 0 && shiftedIndex < data.length) { // 确保索引在范围内
                     newQuotes.push({
-                        DT: new Date(new Date(data[i].DT).getTime() + new Date(data[i].DT).getTimezoneOffset() * 60 * 1000),
-                        Open: data[shiftedIndex].Open,
-                        High: data[shiftedIndex].High,
-                        Low: data[shiftedIndex].Low,
-                        Close: data[shiftedIndex].Close,
-                        Volume: data[shiftedIndex].Volume
+                        DT: new Date(new Date(data[shiftedIndex].DT).getTime() + new Date(data[shiftedIndex].DT).getTimezoneOffset() * 60 * 1000),
+                        Open: data[i].Open,
+                        High: data[i].High,
+                        Low: data[i].Low,
+                        Close: data[i].Close,
+                        Volume: data[i].Volume
                     });
                 }
             } 
@@ -378,11 +411,11 @@
 
                 if (shiftedIndex >= 0 && shiftedIndex < data.length) { // 确保索引在范围内
                     newQuotes.push({
-                        DT: new Date(new Date(data[i].DT).getTime() + new Date(data[i].DT).getTimezoneOffset() * 60 * 1000),
-                        Open: data[shiftedIndex].Close,
-                        High: data[shiftedIndex].Close,
-                        Low: data[shiftedIndex].Close,
-                        Close: data[shiftedIndex].Close,
+                        DT: new Date(new Date(data[shiftedIndex].DT).getTime() + new Date(data[shiftedIndex].DT).getTimezoneOffset() * 60 * 1000),
+                        Open: data[i].Close,
+                        High: data[i].Close,
+                        Low: data[i].Close,
+                        Close: data[i].Close,
                     });
                 }
                 
@@ -429,7 +462,7 @@
                 }
 
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
-            CIQ.addOwnIndicatorShift(CIQ.store.getters.getMiFormShift)
+            CIQ.addOwnIndicatorShift()
         });
     }
 
@@ -496,7 +529,7 @@
                         if(result !== null) {
                             offset = Number(result[`shift_ma2`]) || 0
                             // display form时还原shift值到vuex
-                            CIQ.store.commit('chart/SET_MI_SHIFT',offset)
+                            CIQ.store.dispatch('chart/set_mi_shift',{'showInput': !!offset, 'value':  offset})
                         }
                     }
                     loadSeries(newData.indicator2.name,newData.indicator2.url,offset,()=>{
@@ -980,15 +1013,17 @@
         }) 
     }
 
-    CIQ.addOwnIndicatorShift = function(offset) {
+    // already got shift info in vuex
+    CIQ.addOwnIndicatorShift = function() {
         var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
         if(comparisonSymbol.url) {
             // 刷新当前symbol序列
             var series = CIQ.stxx.chart.series[comparisonSymbol.url];
             
             if(series) CIQ.stxx.removeSeries(series);
-        
-            loadSeries(comparisonSymbol.name,comparisonSymbol.url,offset)
+
+            const miShift = CIQ.store.getters.getMiFormShift
+            loadSeries(comparisonSymbol.name,comparisonSymbol.url,miShift.showInput ? miShift.value : 0)
         }
     }
 

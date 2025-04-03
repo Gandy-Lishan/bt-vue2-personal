@@ -832,13 +832,11 @@ export default {
         ) 
       }
     },
-    handleShiftChange(val) {
+    async handleShiftChange(val,showInput) {
       if(this.data.indicator_1_url == this.data.indicator_2_url) {
         // shift变更时同步shift状态到vuex
-        this.$store.commit('chart/SET_MI_SHIFT',val)
-        CIQ.addOwnIndicatorShift(
-          Number(val)
-        ) 
+        await this.$store.dispatch('chart/set_mi_shift',{'showInput': showInput, 'value':  Number(val)})
+        CIQ.addOwnIndicatorShift() 
       }
     },
     async submitForm() {

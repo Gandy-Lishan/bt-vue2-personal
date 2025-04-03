@@ -162,6 +162,8 @@ export default {
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.config.type === 'CheckInput'){
+        this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }
     },
     // MAType(newValue) {
@@ -255,7 +257,7 @@ export default {
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
       }else if(this.config.type === 'CheckInput'){
-        this.$emit('handleShiftChange',Number(this.value))
+        this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }
       this.validateValue()
     }, 500),
