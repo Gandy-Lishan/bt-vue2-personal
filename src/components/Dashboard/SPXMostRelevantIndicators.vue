@@ -1,15 +1,13 @@
 <template>
   <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
-   <div class="portlet-title">
+   <div class="portlet-title relevant-portlet-title">
      <div class="caption caption-md">
-       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most Relevant Indicators - 
-        <i class="updateDateText">Update Date: {{date}}</i>
+       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most Correlated Indicators for 63 Days
        </span>
      </div>
    </div>
    <div class="portlet-body">
      <div class="row">
-       <div class="col-md-6">
         <table>
           <thead>
             <tr>
@@ -27,7 +25,7 @@
             </tr>
           </tbody>
         </table>
-       </div>
+        <i class="updateDateText">Update Date: {{date}}</i>
      </div>
    </div>
  </div>
@@ -73,6 +71,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "./index.less";
  table {
    width: 100%;
    border-collapse: collapse;
@@ -90,21 +89,10 @@ export default {
  .stripe {
    background-color: #f9f9f9;
  }
- .table-title {
-  display: flex;
-  border-bottom: 2px solid #eee;
-  position: relative;
-  font-size: 18px;
-  line-height: 18px;
-  font-weight: 600;
-  color: #666;
-  padding: 10px 0;
-  i.updateDateText {
-    position: absolute;
-    right: 0px;
-    bottom: 5px;
-    font-size: 14px
-}
- }
- @import "./index.less";
+ i.updateDateText {
+    // position: absolute;
+    font-size: 12px;
+    float: right;
+    // bottom: 0px;
+  }
 </style>
