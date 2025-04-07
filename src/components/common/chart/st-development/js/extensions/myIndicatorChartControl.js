@@ -272,7 +272,7 @@
                 },()=>{
                     const miFormShift = CIQ.store.getters.getMiFormShift
                     const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
-                    loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
+                    if(newData.indicator2.name) loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
 
                     CIQ.hideCover()
                     CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)

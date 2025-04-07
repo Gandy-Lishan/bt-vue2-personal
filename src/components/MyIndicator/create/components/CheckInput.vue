@@ -66,7 +66,7 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
-      const isSymbol = this.categories.includes('Symbol')
+      const isSymbol = this.categories?.includes('Symbol')
       let category
       if(this.config.field === 'ma1') category = this.indicator_1_category
       else if(this.config.field === 'ma2') category = this.indicator_2_category
