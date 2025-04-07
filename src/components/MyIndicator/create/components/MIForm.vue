@@ -831,6 +831,13 @@ export default {
           showInput,
         ) 
       }
+
+      if(['o','h','l','c'].includes(type)) {
+        CIQ.addSymbolOHLCVStudy(
+          criteria,
+          field == 'ma1'?0:1,
+        )
+      }
     },
     async handleShiftChange(val,showInput) {
       if(this.data.indicator_1_url == this.data.indicator_2_url) {
