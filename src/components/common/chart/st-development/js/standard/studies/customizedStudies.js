@@ -1367,7 +1367,7 @@ if (!CIQ.Studies) {
 			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
 			
 			quote["Result " + sd.name] = parseFloat((
-				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(lastBar,field,"Low")) 
+				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(quote,field,"Low")) 
 				/ getPropertyByString(lastBar,field,"Close")
 			).toFixed(4));
 		}

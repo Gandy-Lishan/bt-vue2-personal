@@ -273,9 +273,10 @@
                     const miFormShift = CIQ.store.getters.getMiFormShift
                     const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
                     if(newData.indicator2.name) loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
-
-                    CIQ.hideCover()
-                    CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                    else {
+                        CIQ.hideCover()
+                        CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+                    }
                 })
                 resolve()
             }
@@ -881,11 +882,13 @@
             const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
             if(!showInput || !field) return
 
+            let display = `(${symbolLabel})Moving Average`
+            if(symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
                     Type: type == 'MA' ? 'simple' : 'exponential',
                     Field: field,
                     Period: value,
-                    display: `(${symbolLabel})Moving Average`, //无需显示
+                    display: display, //无需显示
                 }, 
                 { MA: ma_color },
                 { criteria: criteria, index: index },
@@ -970,7 +973,8 @@
         }else{
           display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}(${value}-Bar)`
         }
-        if(symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
+        const miShift = CIQ.store.getters.getMiFormShift
+        if(miShift.showInput && symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
         if(!showInput || !field) return
 
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
