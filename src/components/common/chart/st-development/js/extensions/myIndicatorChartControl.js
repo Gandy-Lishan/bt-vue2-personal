@@ -624,7 +624,7 @@
         if(newData.categories == 'OHLCV'){
             const ma_type = newData.ma.includes('e') ? 'EMA' : 'MA'
             const ma_value = newData.ma.includes('e') ? newData.ma.split('e')[0] : newData.ma
-            const ma_showInput = ma_value != '1'
+            const ma_showInput = ma_value != '0'
 
             CIQ.addOwnIndicatorMAStudy(
                 ma_value,
@@ -654,10 +654,10 @@
             };
             const ma1_type = getTypeAndValue(parts[0]).type;
             const ma1_value = getTypeAndValue(parts[0]).value;
-            const ma1_showInput = ma1_value != '1'
+            const ma1_showInput = ma1_value != '0'
             const ma2_type = getTypeAndValue(parts[1]).type;
             const ma2_value = getTypeAndValue(parts[1]).value;
-            const ma2_showInput = ma2_value != '1'
+            const ma2_showInput = ma2_value != '0'
 
             let fieldName1 = 'field',fieldName2 = 'field'
             if(newData.categories.includes('Symbol')){ // symbol
@@ -834,6 +834,7 @@
     }
 
     CIQ.addOwnIndicatorMAStudy = function(value,type,field,criteria,index,showInput,categories) {
+        if(!value) return
         const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, 0)
         if(categories.includes('Indicator')){
             // 更新ma前移除当前index的旧ma
@@ -932,6 +933,7 @@
     }
 
     CIQ.addOwnIndicatorROCStudy = function(value,field,criteria,index,showInput) {
+        if(!value) return
         // 更新ma前移除当前index的旧ma
         for (var studyInstanceName in CIQ.stxx.layout?.studies) {
             let sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -1028,6 +1030,22 @@
 
             const miShift = CIQ.store.getters.getMiFormShift
             loadSeries(comparisonSymbol.name,comparisonSymbol.url,miShift.showInput ? miShift.value : 0)
+        }
+    }
+
+    CIQ.addSymbolOHLCVStudy = function(criteria,index) {
+        // 只是移除对应位置的study
+        for (var studyInstanceName in CIQ.stxx.layout?.studies) {
+            let sd = CIQ.stxx.layout.studies[studyInstanceName]
+            if (
+                sd.parameters.index == index
+            ) {
+            // 直接判断是否为st ma
+            CIQ.Studies.removeStudy(
+                CIQ.stxx,
+                sd
+            )
+            }
         }
     }
 

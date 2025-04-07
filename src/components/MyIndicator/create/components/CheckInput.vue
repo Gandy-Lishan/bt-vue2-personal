@@ -246,7 +246,7 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType))) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput: debounce(function (val) {
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
