@@ -139,7 +139,7 @@ export default {
         return options
       }
       if(isSymbol) return options
-      return  options.filter(ele => ele.isSymbol !== true) 
+      return  options.filter(ele => ele.isSymbol !== true)
     },
     isEOEP() {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
