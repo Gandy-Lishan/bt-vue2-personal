@@ -220,15 +220,15 @@ export default {
     },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
-        let value = this.showInput ? this.value : 1
+        let value = this.showInput ? this.value : 0
         const dontSaveMaValue = ['o', 'h', 'l', 'c'].includes(this.MAType)
-        if(!this.showInput) value = 1
+        if(!this.showInput) value = 0
         else if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
         else if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
         else if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
         else if(this.showInput && this.MAType == 'amplify') value = `amplify`
         else if(this.showInput && this.MAType == 'MA') value = this.value
-        if(this.showInput && dontSaveMaValue) value = 1
+        if(this.showInput && dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {
           let value = this.showInput ? this.MAType : 'c'
@@ -260,15 +260,7 @@ export default {
     }, 500),
     validateForm() {
       if(this.showInput) {
-        if(this.isSymbol && (this.config['field'] == 'shift' && this.showShiftInput)) {
-          this.validateShiftValue(this.value)
-          if(this.shiftErrMsg) {
-            this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
-            return false
-          }
-        }else {
-          this.validateValue(this.value)
-        }
+        this.validateValue(this.value)
         if(this.errMsg) {
           this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
           return false;
@@ -292,7 +284,7 @@ export default {
       }else if(_config.field == "ma2") {
         if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 0)
-      }else if(_config.field == "shift" && this.showShiftInput) {
+      }else if(this.isSymbol && _config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}
         else this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)
       }

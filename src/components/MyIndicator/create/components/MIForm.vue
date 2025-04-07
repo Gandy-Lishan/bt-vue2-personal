@@ -1355,7 +1355,7 @@ export default {
           const value = data[item.key];
           item.config = {
             value: value,
-            checked: value != '1',
+            checked: value != 0,
           };
         });
 
@@ -1399,9 +1399,9 @@ export default {
           let _value = null
           let checked = false
           if(item.key === 'ma') {
-            _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '')
+            _value = (value.split('_')[item.index] != 0 ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
-            checked = (valueFromStr != '1')
+            checked = (valueFromStr != 0)
             if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
               if(data.next_process) {
                 debugger
