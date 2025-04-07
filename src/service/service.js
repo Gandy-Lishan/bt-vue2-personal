@@ -2004,21 +2004,6 @@ export function getScreenResults(url) {
 /* My Screens End */
 
 /** Dashboard Start */
-export async function getDashboardData() {
-	// 在配置env之前暂时用NODE_ENV判断url
-	let path = `/dev/st_data/dashboard`
-	
-		return new Promise((resolve, reject) => {
-			axios
-				.get(path, { withCredentials: true, retry: null })
-				.then(res => {
-					resolve(res)
-				})
-				.catch(err => {
-					reject(err)
-				})
-		})
-}
 export async function getSmartDumbSentiment() {
 	// 在配置env之前暂时用NODE_ENV判断url
 	let url = `dev/st_data/smart_dump_sentiment`
@@ -2070,6 +2055,22 @@ export async function getSmartDumbSentiment() {
 	}
   }
 
+	export async function getDashboardData() {
+		// 在配置env之前暂时用NODE_ENV判断url
+		let path = `/dev/st_data/dashboard`
+		
+			return new Promise((resolve, reject) => {
+				axios
+					.get(path, { withCredentials: true, retry: null })
+					.then(res => {
+						resolve(res)
+					})
+					.catch(err => {
+						reject(err)
+					})
+			})
+	}
+
 	export function saveSymbolCorrelation(data) {
 		const url = `/dev/symbol_corr_app/symbol_corr/`
 		const headers = {
@@ -2102,5 +2103,39 @@ export async function getSmartDumbSentiment() {
 					reject(err)
 				})
 		})
+	}
 
+	export function postAssetCorrelation(data) {
+		const url = `/dev/symbol_corr_app/asset_corr`
+		const headers = {
+			'Content-Type': 'application/json'
+		}
+		const formData = new FormData()
+		for (const [key, value] of Object.entries(data)) {
+			formData.append(key, value);
+		}
+		return new Promise((resolve, reject) => {
+			axios
+				.post(url, formData, { headers, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}
+
+	export function getSPXMostRelevantIndicators () {
+		const url = `/dev/st_data/widgets?chart_name=MostRelevantIndicators`
+		return new Promise((resolve, reject) => {
+			axios
+				.get(url, { cache: true, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
 	}

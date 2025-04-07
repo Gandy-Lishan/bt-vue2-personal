@@ -1,6 +1,30 @@
 <template>
   <div class="page-content-wrapper asset-correlation">
-  <table>
+  <!-- <p v-show="date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period 01/01/2008 to {{date}}.</strong></p> -->
+  <p v-show="datePicks.end_date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period
+     <el-date-picker
+        v-model="datePicks.start_date"
+        type="date"
+        placeholder="Select Start Date"
+        size="small"
+        value-format="yyyy-MM-dd"
+        :picker-options="startPickerOptions"
+      >
+      </el-date-picker> 
+      to 
+      <el-date-picker
+        v-model="datePicks.end_date"
+        type="date"
+        size="small"
+        placeholder="Select End Date"
+        value-format="yyyy-MM-dd"
+        :picker-options="endPickerOptions"
+      >
+      </el-date-picker>
+      </strong>
+      <el-button @click="selectDate" type="primary" size="small" style="margin-left: 10px" :loading="loading">View Results</el-button>
+    </p>
+  <table class="asset-table">
     <thead>
       <tr>
           <th v-for="col in columns" :key="col" :width="col === 'Name' ? '180px' : 'auto'">{{ col }}</th>
@@ -14,13 +38,13 @@
       </tr>
     </tbody>
   </table>
-  <p v-show="date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period 01/01/2008 to {{date}}.</strong></p>
   </div>
 </template>
 
 <script>
-import { getAssetCorrelation } from "@/service/service";
+import { getAssetCorrelation, postAssetCorrelation } from "@/service/service";
 import moment from "moment";
+import { timestampToTime } from '@/utils'
 
 export default {
   name: 'AssetCorrelation',
@@ -36,9 +60,26 @@ export default {
         'Monthly Standard Deviation',
         'Annualized Standard Deviation'
       ],
-      date: ''
+      datePicks: {
+        start_date: '2008-01-01',
+        end_date: '',
+      },
+      startPickerOptions: {
+        disabledDate: this.handleDisabledStartDate
+      },
+      endPickerOptions: {
+        disabledDate: this.handleDisabledEndDate
+      },
+      loading: false
     }
   },
+  watch: {
+		datePicks: {
+			handler(newVal) {
+			},
+			deep: true
+		},
+	},
   async mounted() {
     const {data} = await getAssetCorrelation()
     this.data = data || []
@@ -51,7 +92,7 @@ export default {
           key => !this.fixedColumns.includes(key) && !this.additionalFixedColumns.includes(key)
       );
       // 按照接口返回的顺序排列动态列名
-      this.date = moment.utc(this.data[0].last_updated).format('MM/DD/YYYY')
+      this.datePicks.end_date = moment.utc(this.data[0].last_updated).format('YYYY-MM-DD')
       const orderedDynamicColumns = Object.keys(this.data[0]).filter(
           key => dynamicColumns.includes(key)
       ).filter(ele => ele !== 'last_updated')
@@ -60,21 +101,21 @@ export default {
     }
   },
   methods: {
-    // getCellStyle(row, col) {
-    //   // 固定列和额外固定列不需要颜色渐变
-    //   if (this.fixedColumns.includes(col) || this.additionalFixedColumns.includes(col)) {
-    //       return {};
-    //   }
-    //   // 动态列的值在 0 到 1 之间，进行颜色渐变
-    //   const value = row[col];
-    //   if (typeof value === 'number' && value >= 0 && value <= 1) {
-    //       const color = Math.floor(value * 255);
-    //       return {
-    //           backgroundColor: `rgb(${255 - color}, ${255 - color}, 255)`
-    //       };
-    //   }
-    //   return {};
-    // },
+    handleDisabledStartDate(time) {
+      const today = timestampToTime(new Date())
+      const endDay = timestampToTime(new Date(this.datePicks.end_date))
+      // 如果endDate取消选择，则startDate可以选择全部
+      if(this.datePicks.end_date){
+        return timestampToTime(time) >= endDay
+      }else{
+        return (timestampToTime(time) > today)
+      }
+    },
+    handleDisabledEndDate(time) {
+      const today = timestampToTime(new Date())
+      const startDay = timestampToTime(new Date(this.datePicks.start_date))
+      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+    },
     getCellStyle(row, col) {
         // 固定列和额外固定列不应用颜色渐变
         if (this.fixedColumns.includes(col) || this.additionalFixedColumns.includes(col)) {
@@ -100,6 +141,20 @@ export default {
         }
         // 零值：白色
         return { backgroundColor: '#ffffff' };
+    },
+    async selectDate() {
+      const {start_date, end_date} = this.datePicks
+      if(!start_date || !end_date ) return
+      this.loading = true
+      const {data:{code, data}} = await postAssetCorrelation({start_date,end_date})
+      console.log('data', data)
+      debugger
+      if(code == 211 && data) {
+        this.data = data?.corr_info || []
+        this.loading = false
+        return
+      }
+      this.loading = false
     }
   }
 }
@@ -122,5 +177,11 @@ export default {
   }
   .stripe {
     background-color: #f9f9f9;
+  }
+  .asset-table {
+    border-top: 2px solid #eee;
+  }
+  /deep/ .el-input--prefix .el-input__inner {
+    margin: 0px
   }
 </style>
