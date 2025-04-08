@@ -1413,7 +1413,7 @@ export default {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)
-                if(result !== null && (result[`shift_ma${index+1}`] != 0 && result[`symbol_ma${index+1}`] !== 'c')) {
+                if(result !== null && (result[`symbol_ma${index+1}`] !== 'c')) {
                   const symbol = result[`symbol_ma${index + 1}`] || 'c'
                   _value = symbol
                   checked = symbol != 'c'
