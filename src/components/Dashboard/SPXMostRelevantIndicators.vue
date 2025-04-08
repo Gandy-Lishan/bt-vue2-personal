@@ -2,7 +2,7 @@
   <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
    <div class="portlet-title relevant-portlet-title">
      <div class="caption caption-md">
-       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most correlated Indicators for 63 Days
+       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Most correlated Indicators for last 3 months
         <el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
           <span slot="content" v-html="titleTooltips">
           </span>
