@@ -2,6 +2,13 @@
   <div class="page-content-wrapper asset-correlation">
   <!-- <p v-show="date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period 01/01/2008 to {{date}}.</strong></p> -->
   <p v-show="datePicks.end_date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period
+    <el-tooltip effect="dark" placement="top">
+      <span slot="content">
+        The analysis begins in January 2008, <br/>
+        corresponding to the start of available data for the iShares MSCI EAFE Small-Cap ETF (SCZ).
+      </span>
+      <i class="iconfont icon-wenhao" style="margin-right: 5px"></i>
+    </el-tooltip>
      <el-date-picker
         v-model="datePicks.start_date"
         type="date"
@@ -22,7 +29,16 @@
       >
       </el-date-picker>
       </strong>
-      <el-button @click="selectDate" type="primary" size="small" style="margin-left: 10px" :loading="loading">View Results</el-button>
+      <el-button @click="selectDate" type="warning" size="small" style="margin-left: 10px" :loading="loading">View Results</el-button>
+      <el-button
+        @click.stop="() => {downloadCSV()}"
+        style="display: inline-block"
+        type="primary"
+        size="small"
+        icon="el-icon-download"
+        title="Export Data"
+        class="download-btn"
+        ></el-button>
     </p>
   <table class="asset-table">
     <thead>
@@ -104,11 +120,19 @@ export default {
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
       const endDay = timestampToTime(new Date(this.datePicks.end_date))
-      // 如果endDate取消选择，则startDate可以选择全部
-      if(this.datePicks.end_date){
+      const minDate = timestampToTime(new Date('2007-12-31'))
+
+      // 禁用 2008 年 1 月 1 日之前的日期（可以选 2008-01-01）
+      if (time < new Date(minDate)) {
+        return true
+      }
+
+      // 如果 endDate 已选，startDate 不可大于等于 endDate
+      if (this.datePicks.end_date) {
         return timestampToTime(time) >= endDay
-      }else{
-        return (timestampToTime(time) > today)
+      } else {
+        // 如果 endDate 未选，startDate 不可大于今天
+        return timestampToTime(time) > today
       }
     },
     handleDisabledEndDate(time) {
@@ -163,6 +187,26 @@ export default {
         return
       }
       this.loading = false
+    },
+    downloadCSV() {
+      if(!this.data.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const xlsxName = 'Asset Correlation'
+      const _keySort = this.columns
+      let csvContent = this.data.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${xlsxName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   }
 }
@@ -191,5 +235,8 @@ export default {
   }
   /deep/ .el-input--prefix .el-input__inner {
     margin: 0px
+  }
+  .download-btn {
+    float: right
   }
 </style>
