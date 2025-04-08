@@ -5,6 +5,9 @@
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
       <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
+      <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+        <span>View Video Tutorial</span>
+      </el-button>
       <!-- <el-popconfirm
         confirm-button-text="Continue"
         cancel-button-text="Cancel"
@@ -567,6 +570,10 @@ export default {
       this.$emit('displayDes', _signalDes)
       this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, true)
+    },
+    jumpToTutoiral(){
+        const path = 'https://youtu.be/7q-11S4y8xI'
+        window.open(path, '_blank')
     },
     }
   }
