@@ -145,6 +145,14 @@ export default {
     async selectDate() {
       const {start_date, end_date} = this.datePicks
       if(!start_date || !end_date ) return
+      const start = moment(start_date)
+      const end = moment(end_date)
+
+      // 判断是否小于 3 个月
+      if (end.diff(start, 'months', true) < 3) {
+			  this.popUpMsgBox('Please select a longer time period (minimum three months).')
+        return
+      }
       this.loading = true
       const {data:{code, data}} = await postAssetCorrelation({start_date,end_date})
       console.log('data', data)
