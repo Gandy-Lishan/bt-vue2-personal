@@ -144,7 +144,7 @@ export default {
         return;
       }
       console.log("✅ Highcharts 容器已找到，准备渲染图表...");
-      const baseUrl = "/users/charts/";
+      const baseUrl = "/backtester/sr/setup";
 
       Highcharts.chart('HM', {
         credits: {
@@ -205,7 +205,7 @@ export default {
                     console.warn("❌ 缺少 link，无法跳转");
                     return;
                   }
-                  window.open(baseUrl + this.options.link, "_self");
+                  window.open(baseUrl + `?index=${'Unknown'}&indicator=${this.options.link}`, "_self");
                 },
                 mouseOver(e) {
                   const x = e.target.plotX;
