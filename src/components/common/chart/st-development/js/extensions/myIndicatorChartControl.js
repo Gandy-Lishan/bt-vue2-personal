@@ -271,6 +271,7 @@
                     endDate:new Date(),
                 },()=>{
                     const miFormShift = CIQ.store.getters.getMiFormShift
+                    // 当同时满足shift被勾选且symbol1存在并与symbol2一致，则计算偏移
                     const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
                     if(newData.indicator2.name) loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
                     else {
@@ -455,7 +456,7 @@
     }
 
     // 预览生成的新indicator
-    CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
+    CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines,category){
                 //编辑时对内容修改或者preview应该移除生成的indicator
                 for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
@@ -463,7 +464,17 @@
                 }
 
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
-            CIQ.addOwnIndicatorShift()
+            // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
+            if(category.includes('Symbol')) {
+                if(indicatorList[0] == indicatorList[1]) {
+                    const miFormShift = CIQ.store.getters.getMiFormShift
+                    // offset仅供显示
+                    const offset = miFormShift.showInput ? miFormShift.value : 0
+                    CIQ.addOwnIndicatorShift(offset)
+                }else {
+                    CIQ.addOwnIndicatorShift(0)
+                }
+            }
         });
     }
 
@@ -987,8 +998,7 @@
         }) 
     }
 
-    // already got shift info in vuex
-    CIQ.addOwnIndicatorShift = function() {
+    CIQ.addOwnIndicatorShift = function(value) {
         var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
         if(comparisonSymbol.url) {
             // 刷新当前symbol序列
@@ -996,8 +1006,7 @@
             
             if(series) CIQ.stxx.removeSeries(series);
 
-            const miShift = CIQ.store.getters.getMiFormShift
-            loadSeries(comparisonSymbol.name,comparisonSymbol.url,miShift.showInput ? miShift.value : 0)
+            loadSeries(comparisonSymbol.name,comparisonSymbol.url,value)
         }
     }
 

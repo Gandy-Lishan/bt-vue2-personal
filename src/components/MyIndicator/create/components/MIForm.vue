@@ -846,11 +846,10 @@ export default {
 
         // shift变更时同步shift状态到vuex
         await this.$store.dispatch('chart/set_mi_shift',{'showInput': showInput, 'value':  Number(val)})
-        if(showInput) CIQ.addOwnIndicatorShift() 
-        else {
-          this.$store.commit('states/SET_MI_CREATE_LOADING', false);
-          CIQ.hideCover();
-        }
+
+        // offset仅供显示
+        const offset = showInput ? Number(val) : 0
+        CIQ.addOwnIndicatorShift(offset) 
       }
     },
     async submitForm() {
@@ -1113,7 +1112,8 @@ export default {
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           this.data.indicator_1_url,
-          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism},
+          this.data.categories
         )
       }else if(this.data.categories.includes('Indicator')){
         CIQ.previewUserOwnIndicator(
