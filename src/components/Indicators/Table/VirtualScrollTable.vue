@@ -48,6 +48,7 @@
             <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
             <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
             <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -185,7 +186,7 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
-  <div :class="{'dataTables_info': true, 'dataTables__trendscore_info': isStockTrend}" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
+  <div :class="{'dataTables_info': true, 'dataTables__trendscore_info': isStockTrend, 'trend-score-range-rank': condition === 'rangeRank'}" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
   <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
@@ -1491,6 +1492,41 @@ export default {
               value: 'reltrend_count_2_or_less'
             }
         ]])
+      }else if(isStockTrend && this.condition === 'rangeRank') {
+        let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
+          {
+            key: 'rsr_rank10',
+            label: 'Relative Strength Ratio<br/>Range Rank 10-Day',
+            value: 'rsr_rank10'
+          },
+          {
+            key: 'rsr_rank21',
+            label: 'Relative Strength Ratio<br/>Range Rank 21-Day',
+            value: 'rsr_rank21'
+          },
+          {
+            key: 'rsr_rank42',
+            label: 'Relative Strength Ratio<br/>Range Rank 42-Day',
+            value: 'rsr_rank42'
+          },
+          {
+            key: 'rsr_rank63',
+            label: 'Relative Strength Ratio<br/>Range Rank 63-Day',
+            value: 'rsr_rank63'
+          },
+          {
+            key: 'rsr_rank84',
+            label: 'Relative Strength Ratio<br/>Range Rank 84-Day',
+            value: 'rsr_rank84'
+          },
+          {
+            key: 'rsr_rank126',
+            label: 'Relative Strength Ratio<br/>Range Rank 126-Day',
+            value: 'rsr_rank126'
+          }
+        ]])
       }
       const columns = columnsMap.get(`${_checkedType}Columns`)
       if(this.checkedType === 'TrendSector') return []
@@ -2444,6 +2480,36 @@ export default {
         resetKeys.forEach(item => {
           keysMap.set(item.key, item.label)
         })
+      }else if(this.condition === 'rangeRank') {
+        const resetKeys = [
+          {
+            key: 'rsr_rank10',
+            label: 'Relative Strength Ratio Range Rank 10-Day'
+          },
+          {
+            key: 'rsr_rank21',
+            label: 'Relative Strength Ratio Range Rank 21-Day'
+          },
+          {
+            key: 'rsr_rank42',
+            label: 'Relative Strength Ratio Range Rank 42-Day'
+          },
+          {
+            key: 'rsr_rank63',
+            label: 'Relative Strength Ratio Range Rank 63-Day'
+          },
+          {
+            key: 'rsr_rank84',
+            label: 'Relative Strength Ratio Range Rank 84-Day'
+          },
+          {
+            key: 'rsr_rank126',
+            label: 'Relative Strength Ratio Range Rank 126-Day'
+          }
+        ]
+        resetKeys.forEach(item => {
+          keysMap.set(item.key, item.label)
+        })
       }
       if(['etf_domestic', 'etf_foreign', 'etf_other'].includes(type)) keysMap.delete('sector_name')
       keysSort = Array.from(keysMap.values())
@@ -2837,6 +2903,7 @@ export default {
   .btns {
     margin-bottom: 5px;
     display: flex;
+    flex-wrap: wrap;
     .el-button{
       margin: 3px 10px 3px 0px;
     }
@@ -2869,5 +2936,8 @@ export default {
 }
 .dataTables__trendscore_info {
   margin-top: 20px;
+}
+.trend-score-range-rank {
+  margin-top: 75px;
 }
 </style>
