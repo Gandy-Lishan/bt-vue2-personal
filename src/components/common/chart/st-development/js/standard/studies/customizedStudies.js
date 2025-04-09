@@ -23,7 +23,7 @@
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
-import { getPropertyByString } from "@/utils/globalFunc"
+import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
 
 let __js_st_studies_customized_ = (_exports) => {
@@ -238,6 +238,20 @@ if (!CIQ.Studies) {
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
+
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+        	let display = `(${symbolLabel})Symbol Close Rate Of Change(${period}-Bar)`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!miShift.showInput) sd.inputs.display = `${display} `
+		}
 
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式

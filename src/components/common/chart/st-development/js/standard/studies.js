@@ -22,7 +22,7 @@
 
 
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
-import { getPropertyByString } from "@/utils/globalFunc"
+import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 
 
 
@@ -3630,6 +3630,21 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		quotes = sd.chart.scrubbed
 	}
 	/********************************* */
+
+	/** myIndicator 区分shift前后的指标 */
+	if(window.location.pathname.includes('/myindicator')) {
+		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+		let display = `(${symbolLabel})Moving Average`
+		const miShift = CIQ.store.getters.getMiFormShift
+		// 左侧ma
+		if(!sd.parameters.criteria.endsWith('2')) {
+			sd.inputs.display = display
+		}
+		else if(miShift.showInput) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+		// myindicator情况下显示带空格的display以区分左侧的ma
+		else if(!miShift.showInput) sd.inputs.display = `${display} `
+	}
+
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i,

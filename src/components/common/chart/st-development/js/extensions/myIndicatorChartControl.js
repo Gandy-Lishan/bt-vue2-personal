@@ -434,7 +434,7 @@
         const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, url)
         let _data = formatData(res.data,barOffset)
         CIQ.stxx.addSeries(url, {
-            display:name, 
+            display:`${name}${barOffset ? `(shift-${barOffset})` : ``}`, 
             data:_data,
             isComparison: false, 
             color: "#368DF0",
@@ -880,16 +880,12 @@
             }
 
             // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-            const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
             if(!showInput || !field) return
 
-            let display = `(${symbolLabel})Moving Average`
-            if(symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
             CIQ.Studies.addStudy(CIQ.stxx, 'ma', {
                     Type: type == 'MA' ? 'simple' : 'exponential',
                     Field: field,
                     Period: value,
-                    display: display, //无需显示
                 }, 
                 { MA: ma_color },
                 { criteria: criteria, index: index },
@@ -948,41 +944,13 @@
             }
         }
 
-        const conditionMap = new Map([
-            [5, { name: 'Rate Of Change', abbr: 'ROC' }],
-            [6, { name: '% of Previous Range', abbr: 'OPR' }],
-            [7, { name: 'MA Ratio', abbr: 'MA' }],
-            [8, { name: 'Range Rank', abbr: 'RR' }],
-            [9, { name: 'DrawDown %', abbr: 'DD' }],
-            [10, { name:'DrawUp %', abbr: 'DU' }],
-            [11, { name:'Net Change', abbr: 'NC' }],
-            [12, { name:'All-time High', abbr: 'ATH' }],
-            [13, { name:'All-time Low', abbr: 'ATL' }],
-            [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
-            [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
-        ])
-
         // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
-        const newCondition = 5
-        let display
-        if([12,13].includes(newCondition)){
-          display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}`
-        }else if(newCondition == 14){
-          display = `Consecutive Number of Days with (${symbolLabel})Symbol Close Above ${value}`
-        }else if(newCondition == 15){
-          display = `Consecutive Number of Days with (${symbolLabel})Symbol Close Below ${value}`
-        }else{
-          display = `(${symbolLabel})Symbol Close ${conditionMap.get(newCondition).name}(${value}-Bar)`
-        }
-        const miShift = CIQ.store.getters.getMiFormShift
-        if(miShift.showInput && symbolLabel ==  CIQ.stxx.chart.symbol && criteria.endsWith(2)) display = `${display}(shifted)`
+
         if(!showInput || !field) return
 
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
-            display: display,
             Field: field,
-            condition: conditionMap.get(newCondition).abbr,
+            condition: 'ROC',
             period: value,
         }, null,{ 
             criteria: criteria, 
