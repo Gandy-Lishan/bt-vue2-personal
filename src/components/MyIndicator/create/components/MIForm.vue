@@ -841,9 +841,16 @@ export default {
     },
     async handleShiftChange(val,showInput) {
       if(this.data.indicator_1_url == this.data.indicator_2_url) {
+        CIQ.addCover()
+        this.$store.commit('states/SET_MI_CREATE_LOADING', true)
+
         // shift变更时同步shift状态到vuex
         await this.$store.dispatch('chart/set_mi_shift',{'showInput': showInput, 'value':  Number(val)})
-        CIQ.addOwnIndicatorShift() 
+        if(showInput) CIQ.addOwnIndicatorShift() 
+        else {
+          this.$store.commit('states/SET_MI_CREATE_LOADING', false);
+          CIQ.hideCover();
+        }
       }
     },
     async submitForm() {
