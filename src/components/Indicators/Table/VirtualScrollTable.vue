@@ -48,7 +48,7 @@
             <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
             <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
             <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
-            <!-- <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button> -->
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
