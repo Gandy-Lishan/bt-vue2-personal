@@ -10,6 +10,12 @@
         :value="item.value">
       </el-option>
     </el-select>
+    <el-tooltip effect="dark" placement="top" v-if="MAType == 'amplitude' || MAType=='amplify'">
+      <span slot="content">
+        Measures intraday price volatility as the percentage difference </br>between today's high and low prices relative to the previous closing price
+      </span>
+      <i class="iconfont icon-wenhao"></i>
+    </el-tooltip>
     <div :class="{ 'input-box': true, 'shift-input': config['label'] === 'Shift' }">
       <el-input
       size="mini"
@@ -25,6 +31,12 @@
       <span v-else>{{ errMsg }}</span>
     </div>
     </div>
+    <el-tooltip effect="dark" placement="top" v-if="config['label'] === 'Shift'" style="margin-left: 5px;">
+      <span slot="content">
+        Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), </br>aligning historical data with current dates for time-based comparisons
+      </span>
+      <i class="iconfont icon-wenhao"></i>
+    </el-tooltip>
   </div>
 </template>
 
