@@ -31,7 +31,7 @@
       <span v-else>{{ errMsg }}</span>
     </div>
     </div>
-    <el-tooltip effect="dark" placement="top" v-if="config['label'] === 'Shift'" style="margin-left: 5px;">
+    <el-tooltip effect="dark" placement="top" v-if="(isShift && showShiftInput) && config['label'] === 'Shift'" style="margin-left: 5px;">
       <span slot="content">
         Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), </br>aligning historical data with current dates for time-based comparisons
       </span>
