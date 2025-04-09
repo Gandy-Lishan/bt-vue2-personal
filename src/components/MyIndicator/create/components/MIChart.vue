@@ -72,6 +72,7 @@ export default {
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
+			let clearChartBtn = document.querySelector('.reload')
 			// let footer = document.querySelector('.ciq-footer')
 
 			// search.style.visibility = 'hidden'
@@ -79,6 +80,7 @@ export default {
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
+			clearChartBtn.style.display = 'none'
 			// footer.style.display = 'none'
 			
 			// hide dual symbol
