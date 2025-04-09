@@ -272,7 +272,7 @@
                 },()=>{
                     const miFormShift = CIQ.store.getters.getMiFormShift
                     // 当同时满足shift被勾选且symbol1存在并与symbol2一致，则计算偏移
-                    const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
+                    const offset = (miFormShift.showInput && miFormShift.display) ? miFormShift.value : 0
                     if(newData.indicator2.name) loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
                     else {
                         CIQ.hideCover()
@@ -466,14 +466,10 @@
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
             // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
             if(category.includes('Symbol')) {
-                if(indicatorList[0] == indicatorList[1]) {
-                    const miFormShift = CIQ.store.getters.getMiFormShift
-                    // offset仅供显示
-                    const offset = miFormShift.showInput ? miFormShift.value : 0
-                    CIQ.addOwnIndicatorShift(offset)
-                }else {
-                    CIQ.addOwnIndicatorShift(0)
-                }
+                const miFormShift = CIQ.store.getters.getMiFormShift
+                // offset仅供显示
+                const offset = (miFormShift.showInput && miFormShift.display) ? miFormShift.value : 0
+                CIQ.addOwnIndicatorShift(offset)
             }
         });
     }
@@ -541,7 +537,7 @@
                         if(result !== null) {
                             offset = Number(result[`shift_ma2`]) || 0
                             // display form时还原shift值到vuex
-                            CIQ.store.dispatch('chart/set_mi_shift',{'showInput': !!offset, 'value':  offset})
+                            CIQ.store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': !!offset, 'value':  offset})
                         }
                     }
                     loadSeries(newData.indicator2.name,newData.indicator2.url,offset,()=>{

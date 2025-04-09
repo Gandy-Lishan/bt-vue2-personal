@@ -3640,9 +3640,9 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		if(!sd.parameters.criteria.endsWith('2')) {
 			sd.inputs.display = display
 		}
-		else if(miShift.showInput) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+		else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
 		// myindicator情况下显示带空格的display以区分左侧的ma
-		else if(!miShift.showInput) sd.inputs.display = `${display} `
+		else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
 	}
 
 	var offset = parseInt(sd.inputs.Offset, 10);

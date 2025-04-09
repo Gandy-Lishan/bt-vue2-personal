@@ -845,7 +845,7 @@ export default {
         this.$store.commit('states/SET_MI_CREATE_LOADING', true)
 
         // shift变更时同步shift状态到vuex
-        await this.$store.dispatch('chart/set_mi_shift',{'showInput': showInput, 'value':  Number(val)})
+        await this.$store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': showInput, 'value':  Number(val)})
 
         // offset仅供显示
         const offset = showInput ? Number(val) : 0
@@ -1256,6 +1256,12 @@ export default {
         this.data[source] = item.url
         this.data[`${source}_url`] = item.url
         this[`${source}_category`] = item.category || null
+
+        this.$store.dispatch('chart/set_mi_shift',{
+          'display': this.data.indicator_1_url == this.data.indicator_2_url, 
+          'showInput': this.$refs['shiftForm'].showInput, 
+          'value':  Number(this.$refs['shiftForm'].value)
+        })
       }
 
 
