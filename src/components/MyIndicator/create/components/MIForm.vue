@@ -76,6 +76,7 @@
 					v-model="data.time_frame"
 					placeholder="Please choose the timeframe"
 					@change="changeTimeFrame"
+          ref="timeframe"
 				>
 					<el-option
 						v-for="item in timeFrameOptions"
@@ -845,12 +846,11 @@ export default {
         this.$store.commit('states/SET_MI_CREATE_LOADING', true)
 
         // shift变更时同步shift状态到vuex
-        await this.$store.dispatch('chart/set_mi_shift',{'showInput': showInput, 'value':  Number(val)})
-        if(showInput) CIQ.addOwnIndicatorShift() 
-        else {
-          this.$store.commit('states/SET_MI_CREATE_LOADING', false);
-          CIQ.hideCover();
-        }
+        await this.$store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': showInput, 'value':  Number(val)})
+
+        // offset仅供显示
+        const offset = showInput ? Number(val) : 0
+        CIQ.addOwnIndicatorShift(offset) 
       }
     },
     async submitForm() {
@@ -1113,7 +1113,8 @@ export default {
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           this.data.indicator_1_url,
-          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism},
+          this.data.categories
         )
       }else if(this.data.categories.includes('Indicator')){
         CIQ.previewUserOwnIndicator(
@@ -1171,6 +1172,8 @@ export default {
       }
     },
     changeCategories(category) {
+      this.resetTimeframeDisplayState()
+
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1241,6 +1244,13 @@ export default {
       })
 
     },
+    resetTimeframeDisplayState() {
+      const list = this.$refs.timeframe?.popperElm;
+      var nodeSetup = list.getElementsByTagName('li')
+      for(var i = 0;i < nodeSetup.length;i++){            
+        nodeSetup[i].setAttribute('tf','enabled')
+      }
+    },
     async handleSelect(item, source) {
       debugger
       console.log('item', item,source)
@@ -1256,6 +1266,12 @@ export default {
         this.data[source] = item.url
         this.data[`${source}_url`] = item.url
         this[`${source}_category`] = item.category || null
+
+        this.$store.dispatch('chart/set_mi_shift',{
+          'display': this.data.indicator_1_url == this.data.indicator_2_url, 
+          'showInput': this.$refs['shiftForm'].showInput, 
+          'value':  Number(this.$refs['shiftForm'].value)
+        })
       }
 
 

@@ -271,7 +271,8 @@
                     endDate:new Date(),
                 },()=>{
                     const miFormShift = CIQ.store.getters.getMiFormShift
-                    const offset = (miFormShift.showInput && newData.indicator1.url == newData.indicator2.url) ? miFormShift.value : 0
+                    // 当同时满足shift被勾选且symbol1存在并与symbol2一致，则计算偏移
+                    const offset = (miFormShift.showInput && miFormShift.display) ? miFormShift.value : 0
                     if(newData.indicator2.name) loadSeries(newData.indicator2.name,newData.indicator2.url,offset)
                     else {
                         CIQ.hideCover()
@@ -455,7 +456,7 @@
     }
 
     // 预览生成的新indicator
-    CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines){
+    CIQ.previewUserOwnIndicator = function(indicatorList,indicator,symbol,extremeLines,category){
                 //编辑时对内容修改或者preview应该移除生成的indicator
                 for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
@@ -463,7 +464,13 @@
                 }
 
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
-            CIQ.addOwnIndicatorShift()
+            // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
+            if(category?.includes('Symbol')) {
+                const miFormShift = CIQ.store.getters.getMiFormShift
+                // offset仅供显示
+                const offset = (miFormShift.showInput && miFormShift.display) ? miFormShift.value : 0
+                CIQ.addOwnIndicatorShift(offset)
+            }
         });
     }
 
@@ -530,7 +537,7 @@
                         if(result !== null) {
                             offset = Number(result[`shift_ma2`]) || 0
                             // display form时还原shift值到vuex
-                            CIQ.store.dispatch('chart/set_mi_shift',{'showInput': !!offset, 'value':  offset})
+                            CIQ.store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': !!offset, 'value':  offset})
                         }
                     }
                     loadSeries(newData.indicator2.name,newData.indicator2.url,offset,()=>{
@@ -987,8 +994,7 @@
         }) 
     }
 
-    // already got shift info in vuex
-    CIQ.addOwnIndicatorShift = function() {
+    CIQ.addOwnIndicatorShift = function(value) {
         var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
         if(comparisonSymbol.url) {
             // 刷新当前symbol序列
@@ -996,8 +1002,7 @@
             
             if(series) CIQ.stxx.removeSeries(series);
 
-            const miShift = CIQ.store.getters.getMiFormShift
-            loadSeries(comparisonSymbol.name,comparisonSymbol.url,miShift.showInput ? miShift.value : 0)
+            loadSeries(comparisonSymbol.name,comparisonSymbol.url,value)
         }
     }
 

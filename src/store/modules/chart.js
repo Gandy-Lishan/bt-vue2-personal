@@ -90,7 +90,7 @@ const state = {
 
 	// 以下管理user's own indicator chartiq 状态
 	/*********** START */
-	miFormShift: {'showInput': false, 'value':  0},
+	miFormShift: {'display':false, 'showInput': false, 'value':  0},
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
@@ -642,7 +642,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 				indicator_2: '',indicator_2_url:'',
 			})
 			commit('miFormWeightedListChange', [])
-			commit('SET_MI_SHIFT', {'showInput': false, 'value':  0})
+			commit('SET_MI_SHIFT', {'display':false, 'showInput': false, 'value':  0})
 			resolve()
 		})
 	},
