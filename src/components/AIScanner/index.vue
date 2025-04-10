@@ -37,6 +37,11 @@ export default {
       width: 1170px;
   }
 }
+@media (min-width: 1440px) {
+  .aiscanner-container {
+      width: 1664px;
+  }
+}
 /deep/ .el-table th.el-table__cell>.cell {
 	padding-left: 0px;
 	padding-right: 0px;
