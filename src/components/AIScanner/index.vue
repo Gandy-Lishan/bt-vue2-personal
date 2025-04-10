@@ -37,7 +37,7 @@ export default {
       width: 1170px;
   }
 }
-@media (min-width: 1440px) {
+@media (min-width: 1921px) {
   .aiscanner-container {
       width: 1664px;
   }
