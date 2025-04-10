@@ -465,7 +465,7 @@
 
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
             // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
-            if(category.includes('Symbol')) {
+            if(category?.includes('Symbol')) {
                 const miFormShift = CIQ.store.getters.getMiFormShift
                 // offset仅供显示
                 const offset = (miFormShift.showInput && miFormShift.display) ? miFormShift.value : 0

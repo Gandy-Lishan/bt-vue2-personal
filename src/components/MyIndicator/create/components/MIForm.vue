@@ -76,6 +76,7 @@
 					v-model="data.time_frame"
 					placeholder="Please choose the timeframe"
 					@change="changeTimeFrame"
+          ref="timeframe"
 				>
 					<el-option
 						v-for="item in timeFrameOptions"
@@ -1171,6 +1172,8 @@ export default {
       }
     },
     changeCategories(category) {
+      this.resetTimeframeDisplayState()
+
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1240,6 +1243,13 @@ export default {
         this.attachScrollListener(category)
       })
 
+    },
+    resetTimeframeDisplayState() {
+      const list = this.$refs.timeframe?.popperElm;
+      var nodeSetup = list.getElementsByTagName('li')
+      for(var i = 0;i < nodeSetup.length;i++){            
+        nodeSetup[i].setAttribute('tf','enabled')
+      }
     },
     async handleSelect(item, source) {
       debugger
