@@ -246,8 +246,8 @@ async function initiateList(pathname) {
 async function fetchDataList(source) {
 	const dataList = store.getters[source]
 	const sourceMap = {
-		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol', category:  'category'},
-		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol', category:  'category' },
+		getIndexList: { labelField: 'name', urlField: 'symbol', type: 'Symbol', category:  'category', inception: 'inception'},
+		getStockList: { labelField: 'name', urlField: 'stock', type: 'Symbol', category:  'category', inception: 'inception'},
 		getIndicatorsList: {
 			labelField: 'chart_name',
 			urlField: 'url',
@@ -256,7 +256,6 @@ async function fetchDataList(source) {
 			category:  'category'
 		}
 	}
-
 	if (dataList.length !== 0 || !dataList) {
 		const { labelField, urlField, type } = sourceMap[source]
 		// return dataList.map((item) => ({
@@ -276,6 +275,7 @@ async function fetchDataList(source) {
 			// }
 			// 不需要限制 timeframe 为 Daily
 			if(item.category) obj.category = item.category
+			if(item.inception) obj.inception = item.inception
 			if(item.updated) {
 				obj.updated = item.updated
 				return obj

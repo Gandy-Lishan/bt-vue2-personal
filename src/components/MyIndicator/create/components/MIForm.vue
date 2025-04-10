@@ -108,10 +108,10 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -121,9 +121,10 @@
 								<span v-if="item.category" class="type-label"
 									>{{item.category}}</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -202,10 +203,10 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -215,9 +216,10 @@
 								<span v-if="item.category" class="type-label"
 									>{{item.category}}</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -293,10 +295,10 @@
             <!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -306,11 +308,12 @@
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+                <span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
-							</div>
+              </div>
 						</template>
           </el-autocomplete>
         </template>
@@ -355,7 +358,7 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label">{{
+								<span class="item-label symbol">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -364,6 +367,10 @@
 								}}</span>
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
+								>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -1087,6 +1094,10 @@ export default {
         // this.popUpMsgBox(`Duplicate Indicator: ${_name} Exists`)
         //return
       }
+      if(status == 405) {
+        this.popUpMsgBox('No data available for this symbol')
+        this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();
+      }
       if(status == 201) {
         url = res.data.url
         const indicatorData = await getMyIndicatorData(url)
@@ -1493,7 +1504,7 @@ export default {
           return false
         }
       })
-      const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+      const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
       const childFormValid = formsToValid.some((formRef) => {
         return this.$refs[formRef]?.validateForm() == false
       })
@@ -1719,14 +1730,62 @@ h4 {
 /* 自定义样式 */
 .custom-option {
 	display: flex;
-	align-items: center; /* 垂直居中对齐 */
-	justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+  white-space: normal;
+  span {
+    flex: 1;
+    line-height: 1.5em;
+    margin: 0px;
+    padding: 0.5em 0;
+  }
+  .item-label {
+    color: #333333;
+    font-weight: bold;
+    padding-right: 10px;
+    padding-left: 20px;
+    white-space: nowrap;
+  }
+  .item-label {
+    &.indicator {
+      flex: 0 0 320px;
+    }
+    &.symbol {
+      flex: 0 0 80px;
+    }
+  }
+  .symbol-label {
+    flex: 0 0 200px;
+    padding: 0 3px;
+    width: 100%;
+  }
+  .type-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e1f9ec;
+    color: #076932;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.675rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-right: 20px;
+  }
+  .inception-label {
+    flex: 1;
+    color: #333333;
+    font-size: 10px;
+    min-width: 40px;
+    text-align: right;
+    padding: 0 3px;
+    white-space: nowrap;
+    padding-right: 20px;
+  }
 }
 
-.type-label {
-	font-size: 12px;
-	color: #999999;
-}
+
 .updated-label{
   font-size: 12px;
   font-weight: 600;
