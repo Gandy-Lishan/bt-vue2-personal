@@ -519,9 +519,9 @@ export default {
           }
           let {start_date, end_date, benchmark} = this.data
           if(Array.isArray(corr_roll) && corr_roll.length !== 0) {
-            start_date = moment.utc(corr_roll[0].Date).format('YYYY-MM-DD')
-            end_date = moment.utc(corr_roll[corr_roll.length - 1].Date).format('YYYY-MM-DD')
-          }
+             start_date = moment.utc(corr_roll[0].Date).format('YYYY-MM-DD')
+             end_date = moment.utc(corr_roll[corr_roll.length - 1].Date).format('YYYY-MM-DD')
+           }
           const {cpm_period} = this
           if(cpm_period === 'all') this.correlationDateRange = `Until ${formatDate(end_date)}`
           else this.correlationDateRange = `${formatDate(start_date)} - ${formatDate(end_date)}`
