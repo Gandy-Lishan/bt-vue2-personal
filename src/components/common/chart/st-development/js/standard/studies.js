@@ -3634,7 +3634,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	/** myIndicator 区分shift前后的指标 */
 	if(window.location.pathname.includes('/myindicator')) {
 		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-		let display = `(${symbolLabel})Moving Average`
+		let display = `(${symbolLabel})Simple Moving Average`
 		const miShift = CIQ.store.getters.getMiFormShift
 		// 左侧ma
 		if(!sd.parameters.criteria.endsWith('2')) {
@@ -3769,6 +3769,20 @@ CIQ.Studies.calculateMovingAverageExponential = function (stx, sd) {
 	}
 	/********************************* */
 	
+	/** myIndicator 区分shift前后的指标 */
+	if(window.location.pathname.includes('/myindicator')) {
+		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+		let display = `(${symbolLabel})Exponential Moving Average`
+		const miShift = CIQ.store.getters.getMiFormShift
+		// 左侧ma
+		if(!sd.parameters.criteria.endsWith('2')) {
+			sd.inputs.display = display
+		}
+		else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+		// myindicator情况下显示带空格的display以区分左侧的ma
+		else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
+	}
+
 	var offset = parseInt(sd.inputs.Offset, 10);
 	if (isNaN(offset)) offset = 0;
 	var i, val;

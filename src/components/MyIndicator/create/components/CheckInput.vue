@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isSymbol && isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -31,7 +31,7 @@
       <span v-else>{{ errMsg }}</span>
     </div>
     </div>
-    <el-tooltip effect="dark" placement="top" v-if="(isShift && showShiftInput) && config['label'] === 'Shift'" style="margin-left: 5px;">
+    <el-tooltip effect="dark" placement="top" v-if="(isSymbol && isShift && showShiftInput) && config['label'] === 'Shift'" style="margin-left: 5px;">
       <span slot="content">
         Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), </br>aligning historical data with current dates for time-based comparisons
       </span>
@@ -274,6 +274,10 @@ export default {
       if(this.showInput) {
         this.validateValue(this.value)
         if(this.errMsg) {
+          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
+          return false;
+        }
+        if(this.shiftErrMsg) {
           this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
           return false;
         }
