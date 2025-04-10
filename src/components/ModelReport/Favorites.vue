@@ -148,7 +148,7 @@
                    </div>
                  </div>
 
-                 <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
+                 <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" :startDate="start_date" :endDate="end_date" />
                </div>
              </div>
            </div>
@@ -194,10 +194,14 @@ export default {
  if ((isPathSubstring(['/MR/favorites'], to.path))) {
    next(async _this => {
      const page = to.params.page || ''
+     const start_date = to.query.start_date
+     const end_date = to.query.end_date
      debugger
+     if(start_date) _this.start_date = start_date
+     if(end_date) _this.end_date = end_date
      const {data: {results, count, previous, next}} = await getMRFavoritesList({
-      start_date: _this.start_date,
-      end_date: _this.end_date,
+      start_date: start_date || _this.start_date,
+      end_date: end_date || _this.end_date,
       page: !page ? _this.currentPage : page
      })
      const getPageValue = (url) => {
