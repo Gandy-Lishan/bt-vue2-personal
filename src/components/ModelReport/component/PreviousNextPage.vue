@@ -5,7 +5,7 @@
      v-if="currentPage > 1" 
      class="btn grey-cascade" 
      style="align-self:center" 
-     :href="`/MR/${requestedType}/${currentPage - 1}`"
+     :href="getPageLink(requestedType, currentPage - 1)"
    >
      Previous
    </a>
@@ -15,7 +15,7 @@
      <a 
        v-if="currentPage > 5" 
        class="btn grey-cascade" 
-       :href="`/MR/${requestedType}`"
+        :href="getPageLink(requestedType)"
      >
        1
      </a>
@@ -28,7 +28,7 @@
           v-if="pageNum > 0 && pageNum != currentPage"
           :key="pageNum" 
           class="btn grey-cascade" 
-          :href="`/MR/${requestedType}/${pageNum}`"
+          :href="getPageLink(requestedType, pageNum)"
         >
           {{ pageNum }}
         </a>
@@ -43,7 +43,7 @@
         v-if="pageNum <= total"
         :key="pageNum" 
         class="btn grey-cascade" 
-        :href="`/MR/${requestedType}/${pageNum}`"
+        :href="getPageLink(requestedType, pageNum)"
         >
           {{ pageNum }}
         </a>
@@ -53,7 +53,7 @@
      <a 
        v-if="currentPage < total - 4"
        class="btn grey-cascade" 
-       :href="`/MR/${requestedType}/${total}`"
+       :href="getPageLink(requestedType, total)"
      >
        {{ total }}
      </a>
@@ -64,7 +64,7 @@
      v-if="nextPage" 
      class="btn grey-cascade" 
      style="float:right;align-self:center" 
-     :href="`/MR/${this.requestedType}/${nextPage}`"
+     :href="getPageLink(this.requestedType, nextPage)"
    >
      Next
    </a>
@@ -94,7 +94,15 @@ export default {
    serviceType: {
      type: String,
      required: true
-   }
+   },
+   startDate: {
+     type: [String, Object],
+     required: true
+   },
+   endDate: {
+     type: [String, Object],
+     required: true
+   },
  },
  computed: {
    requestedType() {
@@ -102,6 +110,12 @@ export default {
     else if(this.serviceType.toLowerCase() === 'quantedge') return 'archives/quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'archives/modeledge';
     else return this.serviceType.toLowerCase();
+   },
+   start_date() {
+    return this.startDate || ''
+   },
+   end_date() {
+    return this.endDate || ''
    }
  },
  methods: {
@@ -111,6 +125,15 @@ export default {
        range.push(i);
      }
      return range;
+   },
+   getPageLink(type, page = '') {
+    let query = []
+
+    if (this.start_date) query.push(`start_date=${this.start_date}`)
+    if (this.end_date) query.push(`end_date=${this.end_date}`)
+    const queryString = query.length ? `?${query.join('&')}` : ''
+
+    return `/MR/${type}/${page}${queryString}`;
    }
  }
 };
