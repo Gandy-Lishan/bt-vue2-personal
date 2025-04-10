@@ -157,7 +157,7 @@
                     </div>
                   </div>
 
-                  <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" />
+                  <PreviousNextPage :previousPage="previousPage" :currentPage="currentPage" :nextPage="nextPage" :total="total" :serviceType="serviceType" :startDate="start_date" :endDate="end_date" />
                 </div>
               </div>
             </div>
@@ -209,6 +209,8 @@ export default {
   if (to.path.includes('/MR/archives') && ['sentimentedge', 'quantedge', 'modeledge','tradingedge'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
+      const start_date = to.query.start_date
+      const end_date = to.query.end_date
       const page = to.params.page || ''
       if(serviceType === 'sentimentedge') {
         _this.title = `SentimentEdge Archives${page ?  ` - Page ${page}`: ''}`
@@ -224,10 +226,12 @@ export default {
         _this.serviceType = 'tradingedge'
       }
       debugger
+      if(start_date) _this.start_date = start_date
+      if(end_date) _this.end_date = end_date
       const {data: {results, count, previous, next}} = await getBlogReportList({
         user_level: serviceType,
-        start_date: _this.start_date,
-        end_date: _this.end_date,
+        start_date: start_date || _this.start_date,
+        end_date: end_date || _this.end_date,
         page: !page ? _this.currentPage : page
       })
 
