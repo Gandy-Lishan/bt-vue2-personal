@@ -118,9 +118,9 @@ export default {
   },
   methods: {
     handleDisabledStartDate(time) {
-      const today = timestampToTime(new Date())
-      const endDay = timestampToTime(new Date(this.datePicks.end_date))
-      const minDate = timestampToTime(new Date('2007-12-31'))
+      const today = moment.utc().format('YYYY-MM-DD')
+      const endDay = moment.utc().format(this.datePicks.end_date)
+      const minDate = moment.utc().format('2007-12-31')
 
       // 禁用 2008 年 1 月 1 日之前的日期（可以选 2008-01-01）
       if (time < new Date(minDate)) {
@@ -136,8 +136,8 @@ export default {
       }
     },
     handleDisabledEndDate(time) {
-      const today = timestampToTime(new Date())
-      const startDay = timestampToTime(new Date(this.datePicks.start_date))
+      const today = moment.utc().format('YYYY-MM-DD')
+      const startDay = moment.utc(this.datePicks.start_date).format('YYYY-MM-DD')
       return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
     },
     getCellStyle(row, col) {
