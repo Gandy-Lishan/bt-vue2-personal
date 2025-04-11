@@ -481,6 +481,11 @@ export default {
       let saveRes = null
       try {
         saveRes = await this.saveFormData()
+        let {start_date, end_date, benchmark} = this.data
+        if(this.cpm_period === 'all') {
+          start_date = '1800-10-01'
+          end_date = timestampToTime(new Date())
+        }
         console.log('saveRes', saveRes)
       } catch (error) {
         this.btnLoading = false
@@ -510,9 +515,9 @@ export default {
           }
           let {start_date, end_date, benchmark} = this.data
           if(Array.isArray(corr_roll) && corr_roll.length !== 0) {
-             start_date = moment.utc(corr_roll[0].Date).format('YYYY-MM-DD')
-             end_date = moment.utc(corr_roll[corr_roll.length - 1].Date).format('YYYY-MM-DD')
-           }
+            start_date = moment.utc(corr_roll[0].Date).format('YYYY-MM-DD')
+            end_date = moment.utc(corr_roll[corr_roll.length - 1].Date).format('YYYY-MM-DD')
+          }
           const {cpm_period} = this
           if(cpm_period === 'all') this.correlationDateRange = `Until ${formatDate(end_date)}`
           else this.correlationDateRange = `${formatDate(start_date)} - ${formatDate(end_date)}`
@@ -585,201 +590,244 @@ export default {
     handleClose(tag) {
       this.stock_comparison.splice(this.stock_comparison.indexOf(tag), 1)
     },
-    renderChart(data) {
-      // 提取所有的字段名，排除 "Date" 字段
-      const fieldNames = Object.keys(data[0]).filter(field => field !== "Date");
+    renderChart(correlationData) {
+      const priceData = correlationData.map(item => ({Date: item.Date, Price: item.stock_price}))
 
-      // 动态构建所需格式的数组
-      const seriesData = fieldNames.map(field => ({
-        name: field,
-        data: data.map(item => {
-          const datatime = new Date(item['Date'])
-          // 使用 UTC 时间来确保一致性
-          const utcTimestamp = Date.UTC(
-            datatime.getUTCFullYear(),
-            datatime.getUTCMonth(),
-            datatime.getUTCDate(),
-            datatime.getUTCHours(),
-            datatime.getUTCMinutes(),
-            datatime.getUTCSeconds()
-          );
-          return [utcTimestamp, item[field]]
+      // 1. 构造股价线（主图）
+      const priceSeries = {
+        name: this.data.benchmark,
+        data: priceData.map(item => {
+          const utcTimestamp = moment.utc(item['Date']).valueOf();
+          return [utcTimestamp, item['Price']];
         }),
-        marker: {
-          enabled: false
-        }
-      }));
-      // 随机生成每条线的颜色
-      // const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        yAxis: 0, // 绑定到第一个 Y 轴（主图）
+        type: 'line',
+        tooltip: {
+          valueDecimals: 2,
+          valuePrefix: '$'
+        },
+        color: '#000000',
+        marker: { enabled: false },
+        lineWidth: 2, 
+        zIndex: 4,
+        enableMouseTracking: true,
+        states: {
+          hover: {
+            opacity: 1,
+            lineWidthPlus: 1,
+            borderColor: '#000',
+          },
+          inactive: {
+            opacity: 0.8,
+          },
+        },
+      };
 
-      // 配置 Highcharts 图表
+      // 2. 构造相关性线（副图）
+      const fieldNames = Object.keys(correlationData[0]).filter(field => field !== "Date" && field !== 'stock_price');
+      const correlationSeries = fieldNames.map(field => ({
+        name: field,
+        data: correlationData.map(item => {
+          const utcTimestamp = moment.utc(item['Date']).valueOf();
+          return [utcTimestamp, item[field]];
+        }),
+        yAxis: 1, // 绑定到第二个 Y 轴（副图）
+        type: 'line',
+        tooltip: {
+          valueSuffix: " correlation",
+          shared: true
+        },
+        lineWidth: 2,
+        marker: { enabled: false },
+        enableMouseTracking: true,
+        states: {
+          hover: {
+            opacity: 1,
+            lineWidthPlus: 1,
+            borderColor: '#000',
+          },
+          inactive: {
+            opacity: 0.8,
+          },
+        },
+      }));
+
+      // 3. 渲染 Highcharts
       const basicChartOptions = {
         zoomType: 'x',
-        pinchType: '',
         style: {
-          "fontFamily": "Open Sans , sans-serif"
+          fontFamily: "Open Sans, sans-serif"
         },
         animation: false,
-        alignTicks: false,
         backgroundColor: 'transparent',
         renderTo: 'charts',
-        spacingRight: 50,
-      }
-      Highcharts.stockChart("chart-container", { // 使用 stockChart 类型
-          chart: basicChartOptions,
-          plotOptions: {
-            series: {
-              states: {
-                hover: {
-                  enabled: false
-                },
-                inactive: {
-                  enabled: false
-                }
-              },
-              showInNavigator: true,
-              connectNulls: false, // 禁用连接 null 数据点
-              pointStart: undefined,  // 确保不会有自动起点
-              pointInterval: undefined,  // 确保不会有自动间隔
-            }
-          },
-          tooltip: {
-            xDateFormat: '%m-%d-%Y',
-            followTouchMove: true,
-            shared: true,
-            useHTML: true,
-            crosshairs: true,
-            formatter: function () {
-              let s = `${Highcharts.dateFormat('%m-%d-%Y', this.x)}<br>`;
-              this.points.forEach(point => {
-                // Add a colored circle before the series name
-                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-                s += `${colorSpan}<span>${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
-              });
-              return s;
-            }
-          },
-          credits: {
-            enabled: true,
-            text: "Source: SentimenTrader",
-            href: 'https://sentimentrader.com',
-            position: {
-              align: 'right',
-              y: -120,
-              x: -90
-            }
-          },
-          legend: {
-            enabled: true,
-            align: 'center',
-            verticalAlign: 'top',
-            layout: 'horizontal',
-            x: 0,
-            y: 40,
-            itemStyle: {
-              fontSize: '10px' // 字体大小
-            },
-          },
-          title: {
-            text: "Rolling Correlations",
-            style: {
-                fontSize: '18px',    // 字体大小
-                fontWeight: 'bold',  // 字体加粗
-                fontFamily: 'Arial, sans-serif' // 字体类型
-            }
-          },
-          xAxis: {
-           type: 'datetime',
-           ordinal: false,
-           crosshair: { label: { enabled: false } },
-          tickPositions: null,
-          uniqueNames: false, // 确保只使用你传入的时间点
-           labels: {
-             formatter: function() {
-               const range = this.axis.max - this.axis.min;
+        spacingRight: 50
+      };
 
-               // 设置不同时间范围下的格式
-               if (range > 3 * 365 * 24 * 3600 * 1000) {
-                 // 大于 3 年，显示年份
-                 return Highcharts.dateFormat('%Y', this.value);
-               } else if (range > 365 * 24 * 3600 * 1000) {
-                 // 1 - 3 年，显示季度
-                 return Highcharts.dateFormat('%Y %b', this.value);
-               } else if (range > 30 * 24 * 3600 * 1000) {
-                 // 1 - 12 个月，显示月份和天
-                 return Highcharts.dateFormat('%b %d', this.value);
-               } else if (range > 7 * 24 * 3600 * 1000) {
-                 // 7 - 30 天，显示具体日期
-                 return Highcharts.dateFormat('%b %e', this.value);
-               } else {
-                 // 小于 7 天，显示小时和日期
-                 return Highcharts.dateFormat('%b %e, %H:%M', this.value);
-               }
-             }
-           },
-          // plotBands: plotBands,
-         },
-          yAxis: {
-            title: {
-              text: "Correlation"
+      Highcharts.stockChart("chart-container", {
+        chart: basicChartOptions,
+        plotOptions: {
+          series: {
+            states: {
+              hover: {
+                enabled: true
+              },
+              inactive: {
+                enabled: false
+              }
             },
-            min: -1,
-            max: 1
+            showInNavigator: true,
+            connectNulls: false,
+            pointStart: undefined,
+            pointInterval: undefined
           },
-          rangeSelector: {
-            inputEnabled: true,
-            inputDateFormat: '%Y/%m/%d',
-            inputEditDateFormat: '%Y/%m%d',
-            buttons: [
-              { type: 'month', count: 3, text: '3m' },
-              { type: 'month', count: 6, text: '6m' },
-              { type: 'ytd', text: 'YTD' },
-              { type: 'year', count: 1, text: '1y' },
-              { type: 'year', count: 3, text: '3y' },
-              { type: 'year', count: 5, text: '5y' },
-              { type: 'year', count: 10, text: '10y' },
-              { type: 'year', count: 15, text: '15y' },
-              { type: 'year', count: 20, text: '20y' },
-              { type: 'all', text: 'All' }
-            ],
-            selected: 5 // Sets the default selected button (4 corresponds to '1y')
-          },
-          exporting: {
-            enabled: true,
-            buttons: {
-              contextButton: {
-                menuItems: [
-                  'printChart',
-                  'downloadPNG',
-                  'downloadJPEG',
-                  'downloadPDF'
-                ] 
+          line: {
+            lineWidth: 2,  // 设置线的宽度
+            states: {
+              hover: {
+                enabled: true,  // 线在 hover 时继续保持边框
+                lineWidthPlus: 0,  // hover 时不增加线宽
+                borderColor: '#000'  // 确保线的边框颜色为黑色
               }
             }
+          }
+        },
+        tooltip: {
+          xDateFormat: '%m-%d-%Y',
+          followTouchMove: true,
+          shared: true,
+          useHTML: true,
+          crosshairs: true,
+          formatter: function () {
+            let s = `<span style="font-weight: 400">${Highcharts.dateFormat('%m-%d-%Y', this.x)}</span><br>`;
+            this.points.forEach(point => {
+              const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
+              s += `${colorSpan}<span style="font-weight: 400">${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
+            });
+            return s;
+          }
+        },
+        credits: {
+          enabled: true,
+          text: "Source: SentimenTrader",
+          href: 'https://sentimentrader.com',
+          position: {
+            align: 'right',
+            y: -120,
+            x: -90
+          }
+        },
+        legend: {
+          enabled: true,
+          align: 'center',
+          verticalAlign: 'top',
+          layout: 'horizontal',
+          x: 0,
+          y: 40,
+          itemStyle: {
+            fontSize: '12px'
+          }
+        },
+        title: {
+          text: "Rolling Correlations",
+          style: {
+            fontSize: '18px',
+            fontWeight: 'bold',
+            fontFamily: 'Arial, sans-serif'
+          }
+        },
+        xAxis: {
+          type: 'datetime',
+          ordinal: false,
+          crosshair: { label: { enabled: false } },
+          tickPositions: null,
+          uniqueNames: false,
+          labels: {
+            formatter: function () {
+              const range = this.axis.max - this.axis.min;
+              if (range > 3 * 365 * 24 * 3600 * 1000) return Highcharts.dateFormat('%Y', this.value);
+              if (range > 365 * 24 * 3600 * 1000) return Highcharts.dateFormat('%Y %b', this.value);
+              if (range > 30 * 24 * 3600 * 1000) return Highcharts.dateFormat('%b %d', this.value);
+              if (range > 7 * 24 * 3600 * 1000) return Highcharts.dateFormat('%b %e', this.value);
+              return Highcharts.dateFormat('%b %e, %H:%M', this.value);
+            }
           },
-          navigator: {
-            enabled: true,
-            series: {
-              color: '#2f7ed8'  // Set the color to match the bottom series
+          maxPadding: 0.10  // 👉 在右边增加 5% 的 padding 空间
+        },
+        yAxis: [
+          {
+            title: { text: this.data.benchmark, style: {fontWeight: 600} },
+            opposite: true, // 主轴在左边
+            height: '60%',
+            lineWidth: 0,
+            labels: {
+              align: 'right', // 👈 放最右边
+              x: 0,
+              style: {
+                fontWeight: 500
+              }
             },
-            xAxis: {
-              type: 'datetime', // 设置为 datetime 类型
-              crosshair: { label: { enabled: false } },
-              ordinal: false,
-              labels: { format: '{value:%Y}' },
-              tickPositions: null,
-              uniqueNames: false, // 确保只使用你传入的时间点
-            }
+            tickPosition: 'outside', // 👈 可选：刻度线向外
+            offset: 30
           },
-          series: seriesData.map(series => ({
-            ...series,
-            type: 'line',
-            tooltip: {
-              valueSuffix: " correlation"
+          {
+            title: { text: "Correlation", style: {fontWeight: 600} },
+            top: '65%',
+            height: '35%',
+            offset: 0,
+            lineWidth: 0,
+            min: -1,
+            max: 1,
+            labels: {
+              align: 'right', // 👈 放最右边
+              x: 0,
+              style: {
+                fontWeight: 500
+              }
+            },
+            tickPosition: 'outside', // 👈 可选：刻度线向外
+            offset: 30
+          }
+        ],
+        rangeSelector: {
+          inputEnabled: true,
+          inputDateFormat: '%Y/%m/%d',
+          inputEditDateFormat: '%Y/%m%d',
+          buttons: [
+            { type: 'month', count: 3, text: '3m' },
+            { type: 'month', count: 6, text: '6m' },
+            { type: 'ytd', text: 'YTD' },
+            { type: 'year', count: 1, text: '1y' },
+            { type: 'year', count: 3, text: '3y' },
+            { type: 'year', count: 5, text: '5y' },
+            { type: 'year', count: 10, text: '10y' },
+            { type: 'year', count: 15, text: '15y' },
+            { type: 'year', count: 20, text: '20y' },
+            { type: 'all', text: 'All' }
+          ],
+          selected: 5
+        },
+        exporting: {
+          enabled: true,
+          buttons: {
+            contextButton: {
+              menuItems: ['printChart', 'downloadPNG', 'downloadJPEG', 'downloadPDF']
             }
-          }))
-        });
-
+          }
+        },
+        navigator: {
+          enabled: true,
+          xAxis: {
+            type: 'datetime',
+            crosshair: { label: { enabled: false } },
+            ordinal: false,
+            labels: { format: '{value:%Y}' },
+            tickPositions: null,
+            uniqueNames: false
+          }
+        },
+        series: [priceSeries, ...correlationSeries]
+      });
     },
     handleDateChange() {
       if (this.dateRange && this.dateRange.length === 2) {
