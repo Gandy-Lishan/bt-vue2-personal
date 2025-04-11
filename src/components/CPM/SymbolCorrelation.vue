@@ -479,7 +479,6 @@ export default {
       debugger
       this.btnLoading = true
       let saveRes = null
-      let symbolData = null
       try {
         saveRes = await this.saveFormData()
         let {start_date, end_date, benchmark} = this.data
@@ -487,9 +486,6 @@ export default {
           start_date = '1800-10-01'
           end_date = timestampToTime(new Date())
         }
-        const {data} = await getPairData(start_date, end_date, 'Daily', benchmark)
-        symbolData = data
-        console.log('symbolData', symbolData)
         console.log('saveRes', saveRes)
       } catch (error) {
         this.btnLoading = false
@@ -538,7 +534,7 @@ export default {
           this.columns = columns
           this.corr_matrix = corr_matrix
         }
-        this.renderChart(symbolData, corr_roll)
+        this.renderChart(corr_roll)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
       if([400, 401, 404, 403, 406, 407].includes(code)) this.btnLoading = false
@@ -594,19 +590,16 @@ export default {
     handleClose(tag) {
       this.stock_comparison.splice(this.stock_comparison.indexOf(tag), 1)
     },
-    renderChart(priceData, correlationData) {
-      // 先生成 correlationData 中的 UTC 时间戳集合
-      const correlationTimestamps = new Set(
-        correlationData.map(item => moment.utc(item['Date']).valueOf())
-      );
+    renderChart(correlationData) {
+      const priceData = correlationData.map(item => ({Date: item.Date, Price: item.stock_price}))
 
       // 1. 构造股价线（主图）
       const priceSeries = {
         name: this.data.benchmark,
         data: priceData.map(item => {
-          const utcTimestamp = moment.utc(item['DT']).valueOf();
-          return [utcTimestamp, item['Close']];
-        }).filter(([timestamp]) => correlationTimestamps.has(timestamp)),
+          const utcTimestamp = moment.utc(item['Date']).valueOf();
+          return [utcTimestamp, item['Price']];
+        }),
         yAxis: 0, // 绑定到第一个 Y 轴（主图）
         type: 'line',
         tooltip: {
@@ -631,7 +624,7 @@ export default {
       };
 
       // 2. 构造相关性线（副图）
-      const fieldNames = Object.keys(correlationData[0]).filter(field => field !== "Date");
+      const fieldNames = Object.keys(correlationData[0]).filter(field => field !== "Date" && field !== 'stock_price');
       const correlationSeries = fieldNames.map(field => ({
         name: field,
         data: correlationData.map(item => {
