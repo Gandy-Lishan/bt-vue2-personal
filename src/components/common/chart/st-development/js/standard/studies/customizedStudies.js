@@ -242,7 +242,7 @@ if (!CIQ.Studies) {
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-        	let display = `(${symbolLabel})Symbol Close Rate Of Change(${period}-Bar)`
+        	let display = `(${symbolLabel}) Symbol Close Rate Of Change(${period}-Bar)`
 			const miShift = CIQ.store.getters.getMiFormShift
 			// 左侧ma
 			if(!sd.parameters.criteria.endsWith('2')) {
@@ -1372,6 +1372,20 @@ if (!CIQ.Studies) {
 			quotes = sd.chart.scrubbed
 		}
 
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+			let display = `(${symbolLabel}) Amplitude`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
+		}
+
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			if (!quote) continue;
@@ -1380,11 +1394,14 @@ if (!CIQ.Studies) {
 
 			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
 			
-			quote["Result " + sd.name] = parseFloat((
+			quote[sd.inputs.display] = parseFloat((
 				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(quote,field,"Low")) 
 				/ getPropertyByString(lastBar,field,"Close")
 			).toFixed(4));
 		}
+
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
 	};
 
 	/** 注册自定义Study */
@@ -1652,6 +1669,7 @@ if (!CIQ.Studies) {
             name: "Amplitude",
 			inputs: {},
             calculateFN: CIQ.Studies.calculateAmplitude,
+			outputs: { Result: "auto" },
         },
 	});
 

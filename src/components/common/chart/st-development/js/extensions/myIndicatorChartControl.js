@@ -981,13 +981,10 @@
         }
 
         // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
-        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
-        let display = `(${symbolLabel}) Amplitude`
 
         if(!showInput) return
 
         CIQ.Studies.addStudy(CIQ.stxx, 'Amplitude', {
-            display: display,
         }, null,{ 
             criteria: criteria, 
             index: index 

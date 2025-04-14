@@ -567,7 +567,7 @@ if (!CIQ.Marker) {
                              }
                         }
                      }
-                     else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                     else if(sd.type == 'ST ROCLike' || sd.type == 'Amplitude'){ // roc自带symbol信息
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                  fields.push({

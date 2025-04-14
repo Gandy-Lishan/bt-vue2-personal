@@ -3634,7 +3634,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	/** myIndicator 区分shift前后的指标 */
 	if(window.location.pathname.includes('/myindicator')) {
 		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-		let display = `(${symbolLabel})Simple Moving Average`
+		let display = `(${symbolLabel}) Simple Moving Average`
 		const miShift = CIQ.store.getters.getMiFormShift
 		// 左侧ma
 		if(!sd.parameters.criteria.endsWith('2')) {
