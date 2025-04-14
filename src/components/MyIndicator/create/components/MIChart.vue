@@ -85,6 +85,9 @@ export default {
 			
 			// hide dual symbol
 			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
+
+			let filters = document.querySelector("cq-lookup-filters");
+			filters.querySelectorAll("cq-filter")[4].style.display = 'none'
 		}
 	}
 }
