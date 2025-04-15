@@ -4,7 +4,7 @@
 		<el-collapse class='collape-title'>
 		<el-collapse-item>
 			<template slot="title">
-			Smart Stock Scanner (click to expand)
+			<h2 class="page-title">Smart Stock Scanner (click to expand)</h2>
 			</template>
 			<h4>Our Smart Stock Scanner is updated nightly by 11:40 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
 			<div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>
@@ -976,4 +976,8 @@ h4 {
 		.h6-text {
 			margin-top: 0px;
 		}
+/deep/ .el-collapse-item__content {
+	font-size: 16px;
+	font-weight: 400;
+}
 </style>

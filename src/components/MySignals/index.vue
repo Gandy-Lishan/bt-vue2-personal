@@ -3,9 +3,7 @@
       <el-collapse accordion  class="header">
       <el-collapse-item>
         <template slot="title">
-          <div class="title">
-            <p>My signal (click to expand)</p>
-          </div>
+            <h2 class="title">My signal (click to expand)</h2>
         </template>
         <div class="portfolio-des">
           <p>
@@ -316,7 +314,6 @@ export default {
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
-  border-bottom: unset;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   font-size: 18px;
@@ -330,7 +327,12 @@ export default {
   align-items: center;
   font-size: 18px;
   font-weight: 300;
-  color: #666;
+  color: #303133;
+}
+h2.title {
+  font-size: 1.3rem;
+  color: #303133;
+  font-weight: bold;
 }
 .title p {
   padding: 0 20px;
@@ -351,11 +353,6 @@ export default {
   background-color: inherit;
   margin-bottom: 20px;
 }
-/deep/ .el-collapse {
-  border-top: unset;
-  border-bottom: unset;
-}
-
 .downLoadCsvBtn {
 	position: absolute;
 	right: 90px;
