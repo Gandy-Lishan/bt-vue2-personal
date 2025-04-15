@@ -779,10 +779,14 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'russell', 'russell&rel_trend=1', 
 					'etf_domestic', 'etf_domestic&rel_trend=1',
 					'etf_foreign', 'etf_foreign&rel_trend=1',
-					'etf_other', 'etf_other&rel_trend=1',
+					'etf_other', 'etf_other&rel_trend=1'
 				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
+				if(url.includes('sector_trend_reltrend')) {
+					_results = response.data?.data || []
+					_results = isJson(_results) ? JSON.parse(_results) : _results
+				}
 				if(url === 'commod_sentiment_seasonality') {
           const {month, screen_data} = _results
           state.cssMonthLabel = `for ${month}`

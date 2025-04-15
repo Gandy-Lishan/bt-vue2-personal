@@ -1280,11 +1280,11 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'TSCRP', 'RTSCRP', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'TSCRP', 'RTSCRP', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'SectorTrendRelTrend'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'trend_last_value',
@@ -1309,7 +1309,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'trend') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'SectorTrendRelTrend'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_last_value',
@@ -1384,7 +1384,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'relative') {
         let saveColumns = ['market_symbol', 'chart_name']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'SectorTrendRelTrend'].includes(this.checkedType)) saveColumns = [...saveColumns, 'sector_name']
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'reltrend_last_value',
@@ -1459,7 +1459,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'consecutive') {
         let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'SectorTrendRelTrend'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
             {
               key: 'trend_count_8_or_more',
@@ -1494,7 +1494,7 @@ export default {
         ]])
       }else if(isStockTrend && this.condition === 'rangeRank') {
         let saveColumns = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg','reltrend_last_value', 'reltrend_five_day_score_chg']
-        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
+        if(['SP1500Score', 'SP500Score', 'NDX100Score', 'RussellScore', 'SectorTrendRelTrend'].includes(this.checkedType)) saveColumns.splice(1, 0, 'sector_name')
         columnsMap.set('SP1500ScoreColumns', [...columnsMap.get('SP1500ScoreColumns').filter(item => saveColumns.includes(item.key)), ...[
           {
             key: 'rsr_rank10',
@@ -1529,6 +1529,7 @@ export default {
         ]])
       }
       const columns = columnsMap.get(`${_checkedType}Columns`)
+      console.log('_checkedType',  _checkedType)
       if(this.checkedType === 'TrendSector') return []
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
       if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
@@ -1711,7 +1712,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend'].includes(this.checkedType)
     },
     isCRPTrend() {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
@@ -1761,6 +1762,14 @@ export default {
         this.checkedType = 'stock'
         this.enlarged = true
         this.toggleEnlarge('Stock Market Indicators & Optix');
+      })
+    }
+    if(this.$route.fullPath.includes('sector_trend_score') && this.refName === 'SectorTrendRelTrendVirtualScroll') {
+      this.isTrendScorePage = true
+      this.$nextTick(() => {
+        this.checkedType = 'SectorTrendRelTrend'
+        this.enlarged = true
+        this.toggleEnlarge('Sector Trend RelTrend');
       })
     }
   },
@@ -2279,11 +2288,11 @@ export default {
           value: 'crp&rel_trend=1',
           type: 'RTSCRP'
         },
-        // {
-        //   label: 'My Favorites',
-        //   value: 'my_favorites',
-        //   type: 'favorite'
-        // }
+        {
+          label: this.options[0]?.label || 'Sector Trend RelTrend',
+          value: 'sector_trend_reltrend',
+          type: 'SectorTrendRelTrend'
+        }
       ]
       const type = checks.find(item => item.type === this.checkedType)?.value
       if(!type) return
@@ -2342,7 +2351,7 @@ export default {
         if(type === 'russell_3000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other', 'sector_trend_reltrend'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
@@ -2691,9 +2700,11 @@ export default {
         cstScreen: 'commod_optix_trend',
         CHMinMax: 'cot_max_min',
         TSCRP: 'crp',
+        SectorTrendRelTrend: 'sector_trend_reltrend'
       }
       let url = urlMap[this.checkedType]
       if(this.condition === 'relative') url = `${url}&rel_trend=1`
+      if(url = 'sector_trend_reltrend' && this.$route.query.index) url = `sector_trend_reltrend?index=${this.$route.query.index}${this.condition === 'relative' ? `&rel_trend=1` : ''}`
       debugger
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: ''})
       await this.$nextTick(async () => {
