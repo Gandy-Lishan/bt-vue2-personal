@@ -8,15 +8,7 @@
         </template>
         <div class="portfolio-des">
           <p>
-          This page provides a highlight of our Strategies. These strategies are based on multiple trading models, each with its own pros/cons. 
-          Some models have larger returns, while others have smaller drawdowns. Some models perform better in trending markets, while others perform better in choppy markets. These models were created to account for individual preferences, risk tolerance, etc. Ultimately, the model that you want to use is up to you.
-        </p>
-        <p>
-          In the table below, a 'yellow' highlight on the row signifies a change in signal.
-        </p>
-        <p>
-          You can now subscribe to receive email notifications when a Strategy updates. Visit the <a href="https://users.sentimentrader.com/users/preferences/">
-          preferences page</a> to subscribe to our Strategies emails.
+            Design, build, and analyze your custom investment portfolios. Select from various available strategies, assign specific weights to control allocation, and define your desired simulation period (start date, end date) along with the initial capital. Execute the simulation by clicking 'Run Portfolio'. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the portfolio.
         </p>
         </div>
       </el-collapse-item>
@@ -282,11 +274,11 @@ export default {
   align-items: center;
   font-size: 18px;
   font-weight: 300;
-  color: #666;
+  color: #333;
   flex-wrap: wrap;
 }
 .title p {
-  padding: 0 5px;
+  padding: 0 20px;
   margin: 0;
 }
 .title p:hover {
@@ -310,7 +302,8 @@ export default {
 }
 .page-title {
   margin: 0;
-  padding: 0 5px 0 5px;
+  padding: 0 5px 0 20px;
+  color: #333;
 }
 .portfolio-des {
   padding: 0 20px;
