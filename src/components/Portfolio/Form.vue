@@ -64,8 +64,19 @@
         </el-row>
     </el-form>
     <div class="portfolioCheckedBox">
-        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"
-          >Auto Portfolio</a>
+        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;">
+          Auto Portfolio
+        <el-tooltip effect="dark" placement="top">
+          <span slot="content">
+            Define your ideal investment profile by setting target ranges for key performance metrics:<br>
+              Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return%), Win Rate (%), and Max Drawdown (%).<br>
+              Click "Find Matching Portfolios" and the system will recommend strategy combinations that meet your criteria.<br>
+              Select your preferred portfolio from the recommendations, and its constituent strategies will automatically populate<br>
+               the Strategy Allocation list below for further customization or simulation.
+          </span>
+          <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
+        </el-tooltip>
+        </a>
         <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
@@ -79,7 +90,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label>
-                      <el-checkbox v-model="portfolioFormData.CAGRChecked" label="Return">GAGR</el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.CAGRChecked" label="Return">CAGR</el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -151,7 +162,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label for="max_drow_down_checkbox">
-                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drow Down" id="max_drow_down_checkbox"></el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max DrowDown" id="max_drow_down_checkbox"></el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -173,7 +184,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Found Portfolio</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Portfolios</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -1048,9 +1059,7 @@ export default {
   .portfolioCheckedBox a {
     font-weight: 600;
     display: flex;
-    justify-content: center;
     align-items: center;
-    justify-content: space-between;
     font-size: 18px;
     padding: 5px 5px 5px 0px
   }
