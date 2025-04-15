@@ -3,8 +3,8 @@
       <el-collapse accordion  class="header">
       <el-collapse-item>
         <template slot="title">
-          <div class="title" ref="scrollTopTarget">
-            <p>My Screen (click to expand)</p>
+          <div ref="scrollTopTarget">
+            <h2 class="page-title">My Screen (click to expand)</h2>
           </div>
         </template>
         <div class="portfolio-des">
@@ -417,12 +417,11 @@ export default {
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
-  border-bottom: unset;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   font-size: 18px;
   font-weight: 300;
-  color: #666;
+  color: #303133;
   position: relative;
 }
 .title {
@@ -431,14 +430,21 @@ export default {
   align-items: center;
   font-size: 18px;
   font-weight: 300;
-  color: #666;
+  color: #303133;
+}
+.title h2 {
+  padding: 0;
+  margin: 0;
 }
 .title p {
   padding: 0 20px;
-  margin: 0;
 }
-.title p:hover {
+.title h2:hover, .title p:hover {
   color: #428bca;
+}
+h2.page-title {
+  font-size: 1.3rem;
+  color: #303133;
 }
 .secondActive {
   background-color: #fff;
@@ -451,10 +457,6 @@ export default {
 .chart {
   background-color: inherit;
   margin-bottom: 20px;
-}
-/deep/ .el-collapse {
-  border-top: unset;
-  border-bottom: unset;
 }
 
 .downLoadCsvBtn {
@@ -472,9 +474,9 @@ export default {
   background-color: #fff;
 }
 .portfolio-des {
-  padding: 0 20px;
+  padding: 0px;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   p {
     margin: 0 0 3px 0;
