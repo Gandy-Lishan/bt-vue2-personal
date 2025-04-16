@@ -2139,3 +2139,17 @@ export async function getSmartDumbSentiment() {
 				})
 		})
 	}
+	export function getSectorTrendRelTrend(url, index) {
+		let path = `/dev/st_data/${url}?index=${index}`
+	
+		return new Promise((resolve, reject) => {
+			axios
+				.get(path, { withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}

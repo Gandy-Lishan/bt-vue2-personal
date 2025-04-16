@@ -57,7 +57,7 @@ export default {
    return {
      tableInfoList: [
        {
-         label: 'Sector Trend RelTrend',
+         label: 'Selected Sector/Index',
          type: 'SectorTrendRelTrend',
          refName: 'SectorTrendRelTrendVirtualScroll',
          itemSize: 25,
@@ -102,7 +102,6 @@ export default {
     next(async _this => {
      // 发送请求
      const {data: {Title, data}} = await getSectorTrendRelTrend('sector_trend_reltrend', index)
-     JSON.parse(data)
      const _data = isJson(data) ? JSON.parse(data) : data
      _this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url: 'sector_trend_reltrend', data: _data})
      console.log('Title',Title)
@@ -120,14 +119,6 @@ export default {
       next();
     }
   },
- mounted() {
-  if(this.$route.fullPath.includes('?enlarge=stock')) {
-      this.$nextTick(() => {
-        this.enLargeTable = 'Stock Market Indicators & Optix'
-        this.checkedType = 'stock'
-      })
-    }
- },
  methods: {
    toggleEnlarge(label) {
      console.log('toggleEnlarge', label)
