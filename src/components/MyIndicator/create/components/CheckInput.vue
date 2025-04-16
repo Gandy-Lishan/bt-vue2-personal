@@ -83,36 +83,36 @@ export default {
       if(this.config.field === 'ma1') category = this.indicator_1_category
       else if(this.config.field === 'ma2') category = this.indicator_2_category
       const options = [
-        // {
-        //   value: 'o',
-        //   label: 'Symbol Open',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'h',
-        //   label: 'Symbol High',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'l',
-        //   label: 'Symbol Low',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'c',
-        //   label: 'Symbol Close',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'roc',
-        //   label: 'Rate Of Change',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'amplify',
-        //   label: 'Amplitude',
-        //   isSymbol: true
-        // },
+        {
+          value: 'o',
+          label: 'Symbol Open',
+          isSymbol: true
+        },
+        {
+          value: 'h',
+          label: 'Symbol High',
+          isSymbol: true
+        },
+        {
+          value: 'l',
+          label: 'Symbol Low',
+          isSymbol: true
+        },
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'Rate Of Change',
+          isSymbol: true
+        },
+        {
+          value: 'amplify',
+          label: 'Amplitude',
+          isSymbol: true
+        },
         // {
         //   value: 'amplify',
         //   label: 'Amplify',
@@ -128,16 +128,16 @@ export default {
       ]
       if(category && !['ETF', 'Stock'].includes(category)) {
         const options = [
-        // {
-        //   value: 'c',
-        //   label: 'Symbol Close',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'roc',
-        //   label: 'Rate Of Change',
-        //   isSymbol: true
-        // },
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'Rate Of Change',
+          isSymbol: true
+        },
         {
           value: 'MA',
           label: 'Simple Moving Average'

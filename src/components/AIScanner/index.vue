@@ -42,7 +42,6 @@ export default {
       width: 1664px;
   }
 }
-
 /deep/ .el-table th.el-table__cell>.cell {
 	padding-left: 0px;
 	padding-right: 0px;

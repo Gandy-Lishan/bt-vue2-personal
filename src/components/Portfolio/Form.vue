@@ -288,7 +288,7 @@
     </el-row>
     <br>
     </div>
-    <el-dialog title="Strategy Combinations" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+    <el-dialog title="Title" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
       <el-table
         :data="autoPortfolioData"
         stripe
@@ -705,8 +705,6 @@ export default {
         console.log('data', data)
         this.dialogTableVisible = true
         this.autoPortfolioData = data
-      }else if(code == 204) {
-        this.popUpMsgBox('No Results Found')
       }
       this.findPortfolioLoading = false
     },
