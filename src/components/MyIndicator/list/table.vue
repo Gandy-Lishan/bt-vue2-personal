@@ -485,7 +485,7 @@ export default {
               const deleteNum = value.replace(/^\d+/, '');
               const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
               const replaceStr = value.replace(/\D+/g, '')
-              if(value != '1' && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
+              if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
               else _maValues[index] = label || ''
               if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
             }else if(symbol_ma1 && symbol_ma2 && (symbol_ma1 !== 'c' || symbol_ma2 !== 'c')) {
@@ -494,7 +494,7 @@ export default {
               if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
               if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
-              _maValues[index] = (value && value != '1') ? `Simple Moving Average ${value}` : ''
+              _maValues[index] = (value && value != 0) ? `Simple Moving Average ${value}` : ''
               if(index === 1) _maValues[index] = `${_maValues[index]}${(symbol_ma2 && symbol_ma2 != 0 && !isNaN(symbol_ma2)) ? `${typeAttribute === 'symbol' ? `Shift ${symbol_ma2}` : ''}` : ''}`
             }
           }

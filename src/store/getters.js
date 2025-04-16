@@ -41,6 +41,8 @@ const getters = {
 	getFavoriteIndicatorList: state => state.chart.favoriteIndicatorList,
 	getFavoriteSymbolList: state => state.chart.favoriteSymbolList,
 
+	getMiFormShift: state => state.chart.miFormShift,
+
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
 	getScannerAIFlagState: state => state.states.scannerai_flag,

@@ -195,7 +195,7 @@
 <script>
 import {createStateFilter} from '@/utils/globalFunc'
 import { timestampToTime } from '@/utils'
-import { saveSymbolCorrelation } from "@/service/service";
+import { saveSymbolCorrelation, getPairData } from "@/service/service";
 import Highcharts from 'highcharts/highstock';
  import 'highcharts/indicators/indicators';
  import 'highcharts/indicators/bollinger-bands';

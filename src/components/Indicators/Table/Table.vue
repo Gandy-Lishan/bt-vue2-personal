@@ -89,7 +89,8 @@ export default {
         RTSCRP: 'crp&rel_trend=1',
         ETFSectorBreadth: 'etf_breadth',
         GlobalIndexBreadth: 'country_breadth',
-        CryptoCurrencyBreadth: 'crypto_breadth'
+        CryptoCurrencyBreadth: 'crypto_breadth',
+        SectorTrendRelTrend: 'sector_trend_reltrend'
       },
       firstRow: {},
       blog_results_length: 0,
@@ -268,6 +269,7 @@ export default {
         let url = this.urlMap[this.optionsChecked]
         if(!url || url === 'sector_trend_score') {this.loading = false;return}
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
+        if(type === 'SectorTrendRelTrend' && this.$route.query.index) url = `sector_trend_reltrend?index=${this.$route.query.index}${condition === 'relative' ? `&rel_trend=1` : ''}`
         await this.fetchIndicatorsPageList(url)
         _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
         if(type === 'GlobalIndexBreadth') {
@@ -290,7 +292,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart || isTrendScore || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll')) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || isTrendScore || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },

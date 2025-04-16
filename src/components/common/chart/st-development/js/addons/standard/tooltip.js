@@ -515,22 +515,43 @@ if (!CIQ.Marker) {
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
                      if(sd.type == 'ST MA' || sd.type == 'ma'){    // stma不需要symbol信息，有独立显示
-                        const key = sd.inputs.Field + sd.inputs.Period + sd.inputs.Type
-                        for (var output in sd.outputMap) {
-                            if (output && !dupMap[key]) {
-                                const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
-                                const field = sd.inputs.Field == 'field'? 'Close': rocDisplayName(sd.inputs.Field)
-                                let name = `${field} ${maType}${sd.inputs.Period}`
-                                let symbol = ['Open','High','Low','Close','Volume'].includes(field) ?`(${symbolLabel})`:''
-
-                                 fields.push({
-                                     member: output,
-                                     display: `${symbol}${name}`,
-                                     panel: panel,
-                                     yAxis: yAxis
-                                 });
-                                 dupMap[key] = 1;
-                             }
+                        // miIndicator独立设定ma的display name显示，考虑到有偏移量这一设定
+                        const miShift = CIQ.store.getters.getMiFormShift
+                        if(miShift.showInput && miShift.display && sd.parameters.criteria.endsWith(2)) {
+                            for (var output in sd.outputMap) {
+                                if (output && !dupMap[output]) {
+                                    const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
+                                    const field = sd.inputs.Field == 'field'? 'Close': rocDisplayName(sd.inputs.Field)
+                                    name = `${field} ${maType}${sd.inputs.Period}(shift-${miShift.value || 0})`
+                                    let symbol = ['Open','High','Low','Close','Volume'].includes(field) ?`(${symbolLabel})`:''
+    
+                                     fields.push({
+                                         member: output,
+                                         display: `${symbol}${name}`,
+                                         panel: panel,
+                                         yAxis: yAxis
+                                     });
+                                     dupMap[output] = 1;
+                                 }
+                            }
+                        } else {
+                            const key = sd.inputs.Field + sd.inputs.Period + sd.inputs.Type
+                            for (var output in sd.outputMap) {
+                                if (output && !dupMap[key]) {
+                                    const maType = sd.inputs.Type=='exponential'?' EMA':' SMA'
+                                    const field = sd.inputs.Field == 'field'? 'Close': rocDisplayName(sd.inputs.Field)
+                                    let name = `${field} ${maType}${sd.inputs.Period}`
+                                    let symbol = ['Open','High','Low','Close','Volume'].includes(field) ?`(${symbolLabel})`:''
+    
+                                     fields.push({
+                                         member: output,
+                                         display: `${symbol}${name}`,
+                                         panel: panel,
+                                         yAxis: yAxis
+                                     });
+                                     dupMap[key] = 1;
+                                 }
+                            }
                         }
                      }
                      else if(CIQ.findSymbolIndicator(sd.type,null)){
@@ -546,7 +567,7 @@ if (!CIQ.Marker) {
                              }
                         }
                      }
-                     else if(sd.type == 'ST ROCLike'){ // roc自带symbol信息
+                     else if(sd.type == 'ST ROCLike' || sd.type == 'Amplitude'){ // roc自带symbol信息
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {
                                  fields.push({

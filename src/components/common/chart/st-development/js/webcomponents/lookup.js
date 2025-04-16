@@ -234,20 +234,23 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         });
                     }
                     var resultsCustomSymbolList = [];
-                    const mySymbolList = CIQ.store.getters.getMySymbollist
-                    mySymbolList.forEach(element => {
-                        // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
-                        var item = {
-                            symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
-                            name: element.name,
-                            category: ""
-                        }
-                        concatList.push(item)
-                        resultsCustomSymbolList.push({
-                            display: [item.name, item.name],
-                            data: item
-                        });
-                    }); 
+
+                    if(!window.location.pathname.includes('/myindicator')) {
+                        const mySymbolList = CIQ.store.getters.getMySymbollist
+                        mySymbolList.forEach(element => {
+                            // 把name和url拼接在一起，這樣在用戶訪問到此symbol時不用再去請求一次列表
+                            var item = {
+                                symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
+                                name: element.name,
+                                category: ""
+                            }
+                            concatList.push(item)
+                            resultsCustomSymbolList.push({
+                                display: [item.name, item.name],
+                                data: item
+                            });
+                        }); 
+                    }
             
                     let res
                     if(text.trim()){

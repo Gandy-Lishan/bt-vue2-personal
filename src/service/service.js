@@ -403,8 +403,8 @@ export function csvFileDelete(fileID) {
 }
 
 export function getPairData(startDate, endDate, frequency, symbol) {
-	const url = `https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
-	// const url = `https://bt2api.sentimentrader.com/st_data/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
+	// const url = `https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
+	const url = `https://bt2api.sentimentrader.com/st_data/pair_data?symbol=${symbol}&start=${startDate}&end=${endDate}&freq=${frequency}`
 
 	return new Promise((resolve, reject) => {
 		axios
@@ -2131,6 +2131,20 @@ export async function getSmartDumbSentiment() {
 		return new Promise((resolve, reject) => {
 			axios
 				.get(url, { cache: true, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}
+	export function getSectorTrendRelTrend(url, index) {
+		let path = `/dev/st_data/${url}?index=${index}`
+	
+		return new Promise((resolve, reject) => {
+			axios
+				.get(path, { withCredentials: true })
 				.then(res => {
 					resolve(res)
 				})

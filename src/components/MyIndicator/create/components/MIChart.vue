@@ -72,6 +72,7 @@ export default {
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
+			let clearChartBtn = document.querySelector('.reload')
 			// let footer = document.querySelector('.ciq-footer')
 
 			// search.style.visibility = 'hidden'
@@ -79,10 +80,14 @@ export default {
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
+			clearChartBtn.style.display = 'none'
 			// footer.style.display = 'none'
 			
 			// hide dual symbol
 			document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
+
+			let filters = document.querySelector("cq-lookup-filters");
+			filters.querySelectorAll("cq-filter")[4].style.display = 'none'
 		}
 	}
 }

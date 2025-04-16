@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isSymbol && isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -10,6 +10,12 @@
         :value="item.value">
       </el-option>
     </el-select>
+    <el-tooltip effect="dark" placement="top" v-if="MAType == 'amplitude' || MAType=='amplify'">
+      <span slot="content">
+        Measures intraday price volatility as the percentage difference </br>between today's high and low prices relative to the previous closing price
+      </span>
+      <i class="iconfont icon-wenhao"></i>
+    </el-tooltip>
     <div :class="{ 'input-box': true, 'shift-input': config['label'] === 'Shift' }">
       <el-input
       size="mini"
@@ -25,6 +31,12 @@
       <span v-else>{{ errMsg }}</span>
     </div>
     </div>
+    <el-tooltip effect="dark" placement="top" v-if="(isSymbol && isShift && showShiftInput) && config['label'] === 'Shift'" style="margin-left: 5px;">
+      <span slot="content">
+        Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), </br>aligning historical data with current dates for time-based comparisons
+      </span>
+      <i class="iconfont icon-wenhao"></i>
+    </el-tooltip>
   </div>
 </template>
 
@@ -66,41 +78,41 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
-      const isSymbol = this.categories.includes('Symbol')
+      const isSymbol = this.categories?.includes('Symbol')
       let category
       if(this.config.field === 'ma1') category = this.indicator_1_category
       else if(this.config.field === 'ma2') category = this.indicator_2_category
       const options = [
-        // {
-        //   value: 'o',
-        //   label: 'Symbol Open',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'h',
-        //   label: 'Symbol High',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'l',
-        //   label: 'Symbol Low',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'c',
-        //   label: 'Symbol Close',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'roc',
-        //   label: 'Rate Of Change',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'amplify',
-        //   label: 'Amplitude',
-        //   isSymbol: true
-        // },
+        {
+          value: 'o',
+          label: 'Symbol Open',
+          isSymbol: true
+        },
+        {
+          value: 'h',
+          label: 'Symbol High',
+          isSymbol: true
+        },
+        {
+          value: 'l',
+          label: 'Symbol Low',
+          isSymbol: true
+        },
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'Rate Of Change',
+          isSymbol: true
+        },
+        {
+          value: 'amplify',
+          label: 'Amplitude',
+          isSymbol: true
+        },
         // {
         //   value: 'amplify',
         //   label: 'Amplify',
@@ -116,16 +128,16 @@ export default {
       ]
       if(category && !['ETF', 'Stock'].includes(category)) {
         const options = [
-        // {
-        //   value: 'c',
-        //   label: 'Symbol Close',
-        //   isSymbol: true
-        // },
-        // {
-        //   value: 'roc',
-        //   label: 'Rate Of Change',
-        //   isSymbol: true
-        // },
+        {
+          value: 'c',
+          label: 'Symbol Close',
+          isSymbol: true
+        },
+        {
+          value: 'roc',
+          label: 'Rate Of Change',
+          isSymbol: true
+        },
         {
           value: 'MA',
           label: 'Simple Moving Average'
@@ -162,6 +174,8 @@ export default {
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.config.type === 'CheckInput'){
+        this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }
     },
     // MAType(newValue) {
@@ -177,7 +191,6 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
-        console.log('newValue', newValue)
         const {field, value} = newValue
         this.showInput = newValue.checked
         try {
@@ -219,15 +232,15 @@ export default {
     },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
-        let value = this.showInput ? this.value : 1
+        let value = this.showInput ? this.value : 0
         const dontSaveMaValue = ['o', 'h', 'l', 'c'].includes(this.MAType)
-        if(!this.showInput) value = 1
+        if(!this.showInput) value = 0
         else if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
         else if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
         else if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
         else if(this.showInput && this.MAType == 'amplify') value = `amplify`
         else if(this.showInput && this.MAType == 'MA') value = this.value
-        if(this.showInput && dontSaveMaValue) value = 1
+        if(this.showInput && dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {
           let value = this.showInput ? this.MAType : 'c'
@@ -245,30 +258,26 @@ export default {
     },
     handleSelect(val) {
       this.MAType = val
-      if(this.MAType=='roc') this.config.placeholder='Please input the Rate of Change period'
-      else this.config.placeholder='Please input the moving average period'
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType))) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
     },
     handleInput: debounce(function (val) {
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.config.type === 'CheckInput'){
+        this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }
       this.validateValue()
     }, 500),
     validateForm() {
       if(this.showInput) {
-        if(this.isSymbol && (this.config['field'] == 'shift' && this.showShiftInput)) {
-          this.validateShiftValue(this.value)
-          if(this.shiftErrMsg) {
-            this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
-            return false
-          }
-        }else {
-          this.validateValue(this.value)
-        }
+        this.validateValue(this.value)
         if(this.errMsg) {
+          this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
+          return false;
+        }
+        if(this.shiftErrMsg) {
           this.popUpMsgBox('Kindly ensure that the form fields are filled correctly.');
           return false;
         }
@@ -291,7 +300,7 @@ export default {
       }else if(_config.field == "ma2") {
         if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 0)
-      }else if(_config.field == "shift" && this.showShiftInput) {
+      }else if(this.isSymbol && _config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}
         else this.shiftErrMsg = createPositiveIntegerValidate(value, 0, true)
       }

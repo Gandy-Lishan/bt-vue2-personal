@@ -384,5 +384,5 @@ h2.title {
 .tutorial {
   position: absolute;
   right: 30px;
-}
+} 
 </style>

@@ -59,7 +59,7 @@ export default {
 	flex-direction: column;
   
 	position: absolute;
-	z-index: 2000;
+	z-index: 9999;
 	margin: 0;
 	top: 0;
 	right: 0;

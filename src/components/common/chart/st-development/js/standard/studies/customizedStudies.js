@@ -23,7 +23,7 @@
 
 import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
-import { getPropertyByString } from "@/utils/globalFunc"
+import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
 
 let __js_st_studies_customized_ = (_exports) => {
@@ -238,6 +238,20 @@ if (!CIQ.Studies) {
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
+
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+        	let display = `(${symbolLabel}) Symbol Close Rate Of Change(${period}-Bar)`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
+		}
 
 		// 下面为计算 ROC, ROR, MAR 的具体公式。
 		// 使用中公式
@@ -581,12 +595,10 @@ if (!CIQ.Studies) {
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			var quote = quotes[i];
 			quote[sd.inputs.display] = resArr[i];
-			// quote['supLine'] = showSupLine;
 		}
 
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
-		// sd.outputMap['supLine'] = "supLine";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
 		
@@ -1353,11 +1365,25 @@ if (!CIQ.Studies) {
 		// todo: 考虑从这里开始都替换成scrubbed
 		var quotes = sd.chart.scrubbed;
 		var field	// 它是流动的
-		if(sd.parameters.isComparison){
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
 			quotes = sd.chart.scrubbed
+		}
+
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+			let display = `(${symbolLabel}) Amplitude`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
 		}
 
 		for (var i = sd.startFrom; i < quotes.length; i++) {
@@ -1368,11 +1394,14 @@ if (!CIQ.Studies) {
 
 			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
 			
-			quote["Result " + sd.name] = parseFloat((
-				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(lastBar,field,"Low")) 
+			quote[sd.inputs.display] = parseFloat((
+				100 * (getPropertyByString(quote,field,"High") - getPropertyByString(quote,field,"Low")) 
 				/ getPropertyByString(lastBar,field,"Close")
 			).toFixed(4));
 		}
+
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
 	};
 
 	/** 注册自定义Study */
@@ -1402,7 +1431,6 @@ if (!CIQ.Studies) {
 			},
             calculateFN: CIQ.Studies.calculateSTROCLike,
             inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
-			// outputs: { Line: "auto",supLine:'#9a9a9a' },
 			outputs: { Result: "auto" },
         },
 		"Symbol Open": {
@@ -1641,6 +1669,7 @@ if (!CIQ.Studies) {
             name: "Amplitude",
 			inputs: {},
             calculateFN: CIQ.Studies.calculateAmplitude,
+			outputs: { Result: "auto" },
         },
 	});
 

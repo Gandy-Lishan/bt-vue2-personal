@@ -4,11 +4,11 @@
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <p class="page-title">Portfolio (click to expand)</p><i class="header-icon el-icon-info"></i>
+          <p class="page-title">Combination (click to expand)</p><i class="header-icon el-icon-info"></i>
         </template>
         <div class="portfolio-des">
           <p>
-            Design, build, and analyze your custom investment portfolios. Select from various available strategies, assign specific weights to control allocation, and define your desired simulation period (start date, end date) along with the initial capital. Execute the simulation by clicking 'Run Portfolio'. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the portfolio.
+            Design, build, and analyze your custom investment combinations. Select from various available strategies, assign specific weights to control allocation, and define your desired simulation period (start date, end date) along with the initial capital. Execute the simulation by clicking 'Run Combination'. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the combination.
         </p>
         </div>
       </el-collapse-item>
@@ -18,7 +18,7 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p>Portfolio List</p>
+            <p>Combination List</p>
           </div>
         </template>
         <div class="content">
@@ -28,9 +28,9 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="formTarget">
-            <p>Create new Portfolio</p>
+            <p>Create new Combination</p>
             <p>
-              <el-tooltip class="item" effect="dark" content="Create New Portfolio" placement="bottom-start">
+              <el-tooltip class="item" effect="dark" content="Create New Combination" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
               </el-tooltip>
             </p>
@@ -185,7 +185,7 @@ export default {
         this.clearResults()
         return
       }
-      if(!statistics || !strategy_details) {this.popUpMessage('Portfolio is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
+      if(!statistics || !strategy_details) {this.popUpMessage('Combination is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
       this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
@@ -245,9 +245,10 @@ export default {
   display: grid;
   grid-template-rows: 1fr auto;
   grid-gap: 20px;
-  margin: 50px auto auto auto;
-  width: 80%;
-  padding: 20px;
+  // margin: 50px auto auto auto;
+  // width: 80%;
+  width: 100%;
+  // padding: 20px;
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;

@@ -136,6 +136,9 @@ export const createTPSLValidate = (minVal, value) => {
 	return ''
 }
 export const createEOEPValidate = (value) => {
+	if (!value) {
+		return 'Enter an integer number.'
+	}
 	// 只验证小数点后两位
 	const pattern = /^-?(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/;
 	const isMatched = !pattern.test(value) && value != 0

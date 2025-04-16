@@ -76,6 +76,7 @@
 					v-model="data.time_frame"
 					placeholder="Please choose the timeframe"
 					@change="changeTimeFrame"
+          ref="timeframe"
 				>
 					<el-option
 						v-for="item in timeFrameOptions"
@@ -107,10 +108,10 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -120,9 +121,10 @@
 								<span v-if="item.category" class="type-label"
 									>{{item.category}}</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -201,10 +203,10 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -214,9 +216,10 @@
 								<span v-if="item.category" class="type-label"
 									>{{item.category}}</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -231,16 +234,15 @@
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
 				></CheckInput>
-		<!--
-      <CheckInput
+        <CheckInput
           :categories="data.categories"
 					:config="ShiftCheckInputConfig"
           :isDisabled="data.indicator_2==''"
           :showShiftInput="showShiftInput"
 					ref="shiftForm"
+          @handleShiftChange="handleShiftChange"
 					@saveData="saveSubData"
 				></CheckInput>
-      -->
 			</div>
 		</div>
 
@@ -293,10 +295,10 @@
             <!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label" v-if="item.type === 'Indicator'">{{
+								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
 									item.label
 								}}</span>
-								<span class="item-label" v-else-if="item.type === 'Symbol'">{{
+								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -306,11 +308,12 @@
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
 								>
-								<span v-if="item.type === 'Indicator'" class="type-label"
-									><span class="updated-label">{{item.updated}}</span>
-                  Indicator</span
+                <span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
-							</div>
+              </div>
 						</template>
           </el-autocomplete>
         </template>
@@ -355,7 +358,7 @@
 						<!-- 使用 scoped slot 自定义选项 -->
 						<template slot-scope="{ item }">
 							<div class="custom-option">
-								<span class="item-label">{{
+								<span class="item-label symbol">{{
 									item.url
 								}}</span>
 								<!-- 在选项后面添加标识 -->
@@ -364,6 +367,10 @@
 								}}</span>
 								<span v-if="item.type === 'Symbol'" class="type-label"
 									>Symbol</span
+								>
+                <span v-if="item.type === 'Symbol'" class="inception-label">{{
+									item.inception
+								}}</span
 								>
 							</div>
 						</template>
@@ -482,7 +489,7 @@ export default {
       ],
       MA1CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average period',
+        placeholder: 'Please input the period',
         checked: false,
         field: 'ma1',
         value: '',
@@ -498,7 +505,7 @@ export default {
       },
       MA2CheckInputConfig: {
         label: 'Moving Average',
-        placeholder: 'Please input the moving average period',
+        placeholder: 'Please input the period',
         checked: false,
         field: 'ma2',
         value: '',
@@ -625,14 +632,6 @@ export default {
           // todo
 
           await this.$store.dispatch('chart/set_miFormStateRefresh')
-          /* old version */
-          // let _data = JSON.parse(JSON.stringify(this.data))
-          // _data.indicator_1 = ''
-          // _data.indicator_2 = ''
-          // _data.indicator_1_url  = ''
-          // _data.indicator_2_url = ''
-          // await this.$store.dispatch('chart/set_miFormStateChange',_data)
-          // await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
           this.refreshMAState()
         }
@@ -641,6 +640,7 @@ export default {
           this.data.indicator_1_url = newVal
 
           this.refreshMAState()
+          this.handleShiftChange(this.$refs['shiftForm'].value)
         }
         if(this.data.categories.includes('WIC')){  
          const _index = this.weightData.findIndex(item=>item.type=='Symbol')
@@ -676,8 +676,7 @@ export default {
             // this.userSelectedTimeFrame = 'daily'
             
             // 大类切换时也需要重置ma和EP/EO
-            // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm']
-            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
+            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm']
             for (const formRef of formsToSave) {
               // 从WIC到其他选项时组件不存在，需要判断
               this.$refs[formRef]?.clearForm()
@@ -815,22 +814,22 @@ export default {
       }
       if(['EMA','MA'].includes(type)) {
         CIQ.addOwnIndicatorMAStudy(
-        value,
-        type,
-        fieldName,
-        criteria,
-        field == 'ma1'?0:1,
-        showInput,
-        this.data.categories
+          value,
+          type,
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          showInput,
+          this.data.categories
         ) 
       }
       if(type == 'roc') {
         CIQ.addOwnIndicatorROCStudy(
-        value,
-        fieldName,
-        criteria,
-        field == 'ma1'?0:1,
-        showInput,
+          value,
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          showInput,
         ) 
       }
       if(type == 'amplitude' || type == 'amplify') {
@@ -839,6 +838,26 @@ export default {
           field == 'ma1'?0:1,
           showInput,
         ) 
+      }
+
+      if(['o','h','l','c'].includes(type)) {
+        CIQ.addSymbolOHLCVStudy(
+          criteria,
+          field == 'ma1'?0:1,
+        )
+      }
+    },
+    async handleShiftChange(val,showInput) {
+      if(this.data.indicator_1_url == this.data.indicator_2_url) {
+        CIQ.addCover()
+        this.$store.commit('states/SET_MI_CREATE_LOADING', true)
+
+        // shift变更时同步shift状态到vuex
+        await this.$store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': showInput, 'value':  Number(val)})
+
+        // offset仅供显示
+        const offset = showInput ? Number(val) : 0
+        CIQ.addOwnIndicatorShift(offset) 
       }
     },
     async submitForm() {
@@ -883,8 +902,7 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
@@ -911,7 +929,6 @@ export default {
         benchmark: CIQ.stxx.chart.symbol
       };
       if(this.data.categories.includes('Symbol')) {
-        debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
         if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
@@ -974,8 +991,7 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
@@ -1004,7 +1020,6 @@ export default {
         combine_type: this.data.categories.substring(0, this.data.categories.indexOf(" ")).toLowerCase() // combine_type : indicator or symbol
       };
       if(this.data.categories.includes('Symbol')) {
-        debugger
         let {symbol_ma1, symbol_ma2, shift} = this.data
         if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
@@ -1079,6 +1094,10 @@ export default {
         // this.popUpMsgBox(`Duplicate Indicator: ${_name} Exists`)
         //return
       }
+      if(status == 405) {
+        this.popUpMsgBox('No data available for this symbol')
+        this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();
+      }
       if(status == 201) {
         url = res.data.url
         const indicatorData = await getMyIndicatorData(url)
@@ -1105,7 +1124,8 @@ export default {
           [this.data.indicator_1_url,this.data.indicator_2_url,this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           this.data.indicator_1_url,
-          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism}
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism},
+          this.data.categories
         )
       }else if(this.data.categories.includes('Indicator')){
         CIQ.previewUserOwnIndicator(
@@ -1163,6 +1183,8 @@ export default {
       }
     },
     changeCategories(category) {
+      this.resetTimeframeDisplayState()
+
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1233,6 +1255,13 @@ export default {
       })
 
     },
+    resetTimeframeDisplayState() {
+      const list = this.$refs.timeframe?.popperElm;
+      var nodeSetup = list.getElementsByTagName('li')
+      for(var i = 0;i < nodeSetup.length;i++){            
+        nodeSetup[i].setAttribute('tf','enabled')
+      }
+    },
     async handleSelect(item, source) {
       debugger
       console.log('item', item,source)
@@ -1248,6 +1277,12 @@ export default {
         this.data[source] = item.url
         this.data[`${source}_url`] = item.url
         this[`${source}_category`] = item.category || null
+
+        this.$store.dispatch('chart/set_mi_shift',{
+          'display': this.data.indicator_1_url == this.data.indicator_2_url, 
+          'showInput': this.$refs['shiftForm'].showInput, 
+          'value':  Number(this.$refs['shiftForm'].value)
+        })
       }
 
 
@@ -1361,7 +1396,7 @@ export default {
           const value = data[item.key];
           item.config = {
             value: value,
-            checked: value != '1',
+            checked: value != 0,
           };
         });
 
@@ -1405,14 +1440,14 @@ export default {
           let _value = null
           let checked = false
           if(item.key === 'ma') {
-            _value = (value.split('_')[item.index] != '1' ? value.split('_')[item.index] : '')
+            _value = (value.split('_')[item.index] != 0 ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
-            checked = (valueFromStr != '1')
+            checked = (valueFromStr != 0)
             if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)
-                if(result !== null && (result[`shift_ma${index+1}`] != 0 && result[`symbol_ma${index+1}`] !== 'c')) {
+                if(result !== null && (result[`symbol_ma${index+1}`] !== 'c')) {
                   const symbol = result[`symbol_ma${index + 1}`] || 'c'
                   _value = symbol
                   checked = symbol != 'c'
@@ -1469,7 +1504,7 @@ export default {
           return false
         }
       })
-      const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
+      const formsToValid = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
       const childFormValid = formsToValid.some((formRef) => {
         return this.$refs[formRef]?.validateForm() == false
       })
@@ -1695,14 +1730,62 @@ h4 {
 /* 自定义样式 */
 .custom-option {
 	display: flex;
-	align-items: center; /* 垂直居中对齐 */
-	justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+  white-space: normal;
+  span {
+    flex: 1;
+    line-height: 1.5em;
+    margin: 0px;
+    padding: 0.5em 0;
+  }
+  .item-label {
+    color: #333333;
+    font-weight: bold;
+    padding-right: 10px;
+    padding-left: 20px;
+    white-space: nowrap;
+  }
+  .item-label {
+    &.indicator {
+      flex: 0 0 320px;
+    }
+    &.symbol {
+      flex: 0 0 80px;
+    }
+  }
+  .symbol-label {
+    flex: 0 0 200px;
+    padding: 0 3px;
+    width: 100%;
+  }
+  .type-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e1f9ec;
+    color: #076932;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.675rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-right: 20px;
+  }
+  .inception-label {
+    flex: 1;
+    color: #333333;
+    font-size: 10px;
+    min-width: 40px;
+    text-align: right;
+    padding: 0 3px;
+    white-space: nowrap;
+    padding-right: 20px;
+  }
 }
 
-.type-label {
-	font-size: 12px;
-	color: #999999;
-}
+
 .updated-label{
   font-size: 12px;
   font-weight: 600;

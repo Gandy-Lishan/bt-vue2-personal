@@ -90,6 +90,7 @@ const state = {
 
 	// 以下管理user's own indicator chartiq 状态
 	/*********** START */
+	miFormShift: {'display':false, 'showInput': false, 'value':  0},
 	miFormCategories: 'Indicator Spread',
 	miFormCategoriesIndicator1:{name:'',url:''},
 	miFormCategoriesIndicator2:{name:'',url:''},
@@ -340,7 +341,10 @@ const mutations = {
 				});
 		}
 		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
-	}
+	},
+	SET_MI_SHIFT(state, obj) {
+		state.miFormShift = obj
+	},
 }
 
 const actions = {
@@ -624,6 +628,12 @@ get_indicator_page_btv1_list({ commit, state }) {
 		})
 	},
 /** Begin MyIndicator page*/
+	set_mi_shift({ commit }, val ) {
+		return new Promise(resolve => {
+			commit('SET_MI_SHIFT', val)
+			resolve()
+		})
+	},
 	reset_miFormState({ commit }, val) {
 		return new Promise(resolve => {
 			commit('miFormStateChange', {
@@ -632,6 +642,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 				indicator_2: '',indicator_2_url:'',
 			})
 			commit('miFormWeightedListChange', [])
+			commit('SET_MI_SHIFT', {'display':false, 'showInput': false, 'value':  0})
 			resolve()
 		})
 	},
@@ -768,10 +779,14 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'russell', 'russell&rel_trend=1', 
 					'etf_domestic', 'etf_domestic&rel_trend=1',
 					'etf_foreign', 'etf_foreign&rel_trend=1',
-					'etf_other', 'etf_other&rel_trend=1',
+					'etf_other', 'etf_other&rel_trend=1'
 				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
+				if(url.includes('sector_trend_reltrend')) {
+					_results = response.data?.data || []
+					_results = isJson(_results) ? JSON.parse(_results) : _results
+				}
 				if(url === 'commod_sentiment_seasonality') {
           const {month, screen_data} = _results
           state.cssMonthLabel = `for ${month}`

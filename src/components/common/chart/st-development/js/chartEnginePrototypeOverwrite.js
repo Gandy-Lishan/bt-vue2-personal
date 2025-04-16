@@ -105,6 +105,7 @@ if (CIQ.ChartEngine) {
 			var filteredData2 = data.filter(item => item.hasOwnProperty(comparisonSymbolUrl))
 			for (var i = 0; i < filteredData2.length; i++) {
 				var q = filteredData2[i][comparisonSymbolUrl];
+				if (!q) continue;
 				_q1 = i ? filteredData2[i - 1][comparisonSymbolUrl] : state._q1;
 				if (!_q1) continue;
 				var trueRange = Math.max(
@@ -305,27 +306,33 @@ if (CIQ.ChartEngine) {
 		let chartPanelSize = window.location.pathname=='/reports'?window.innerHeight - 260:680
 		// TODO 考虑优化
 
+		// 由于chart wrapper高度由代码控制，rangeSlider的高度也应该在显示时被考虑进去
+		let rangeSliderOffSet = 0
+		if(CIQ.stxx?.layout?.rangeSlider) {
+			rangeSliderOffSet = 60
+			//document.querySelector(".stx_chart_controls").style.bottom = '-111px'		
+		}
 		if(CIQ.stxx && CIQ.stxx.fullScreen.fullScreenState){
 			requestAnimationFrame(() => {
 				chartWrapper.style.height = '100%'
-				chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+				chartContainer.style.height = (chartWrapper.clientHeight - 110 - rangeSliderOffSet) + "px";
 				chartWrapper.style.resize = 'none'
 			})
 		}else{
 			// 正常添加指標時總高度按照680 + number of indicator * n來算， resize時按照resize結果賦值
 			if(!CIQ.isResizing){
 				requestAnimationFrame(() => {
-					chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
-					chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+					chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize + rangeSliderOffSet) + "px";	
+					chartContainer.style.height = (chartWrapper.clientHeight - 110 - rangeSliderOffSet) + "px";
 				})
 			}else{
 				if(!chartWrapper.clientHeight) {
 					requestAnimationFrame(() => {
-						chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize) + "px";	
+						chartWrapper.style.height = (chartPanelSize + 110 + studiesPanelsSize + rangeSliderOffSet) + "px";	
 					})
 				}
 				requestAnimationFrame(() => {
-					chartContainer.style.height = (chartWrapper.clientHeight - 110) + "px";
+					chartContainer.style.height = (chartWrapper.clientHeight - 110 - rangeSliderOffSet) + "px";
 				})
 			}
 		}

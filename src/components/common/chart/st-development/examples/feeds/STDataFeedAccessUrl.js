@@ -15,7 +15,8 @@ var config = {
      */
     // pairDataUrl: "https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data",
     pairDataUrl: "https://bt2api.sentimentrader.com/st_data/pair_data",
-    indicatorMetadata:"https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/indicator_metadata",
+    indicatorMetadata:"https://bt2api.sentimentrader.com/st_data/indicator_metadata",
+    //indicatorMetadata:"https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/indicator_metadata",
     username:"sentimentrader_backtest_api",
     password : "TAZcbpTmQVAJW4GW3ZMQA1su0ynjqJJsYo6vfkapx",
 
