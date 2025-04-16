@@ -36,6 +36,7 @@
                  <a
                    class="item-name primary-link"
                    :href="getWebinarUrl(row)"
+                   target="_blank"
                  >
                    {{ row.title }}
                  </a>

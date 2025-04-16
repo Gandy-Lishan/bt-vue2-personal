@@ -234,7 +234,8 @@
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
 				></CheckInput>
-        <CheckInput
+		<!--
+      <CheckInput
           :categories="data.categories"
 					:config="ShiftCheckInputConfig"
           :isDisabled="data.indicator_2==''"
@@ -243,6 +244,7 @@
           @handleShiftChange="handleShiftChange"
 					@saveData="saveSubData"
 				></CheckInput>
+      -->
 			</div>
 		</div>
 
@@ -676,7 +678,8 @@ export default {
             // this.userSelectedTimeFrame = 'daily'
             
             // 大类切换时也需要重置ma和EP/EO
-            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm']
+            // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm']
+            const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm']
             for (const formRef of formsToSave) {
               // 从WIC到其他选项时组件不存在，需要判断
               this.$refs[formRef]?.clearForm()
@@ -902,7 +905,8 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
+        // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }
@@ -991,7 +995,8 @@ export default {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else{
-        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
+        // const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
+        const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
         }

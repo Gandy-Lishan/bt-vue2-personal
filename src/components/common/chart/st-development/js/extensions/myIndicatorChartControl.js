@@ -260,7 +260,6 @@
                         name:newData.indicator2.name,
                         url:newData.indicator2.url,
                     })
-
                 }
 
                 var series = CIQ.stxx.chart.series[oldData.indicator2.url];
