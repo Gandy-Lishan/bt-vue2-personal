@@ -126,30 +126,30 @@ export default {
           label: 'Exponential Moving Average'
         }
       ]
-      if(category && !['ETF', 'Stock'].includes(category)) {
-        const options = [
-        {
-          value: 'c',
-          label: 'Symbol Close',
-          isSymbol: true
-        },
-        {
-          value: 'roc',
-          label: 'Rate Of Change',
-          isSymbol: true
-        },
-        {
-          value: 'MA',
-          label: 'Simple Moving Average'
-        }, {
-          value: 'EMA',
-          label: 'Exponential Moving Average'
-        }
-        ]
-        const isInList = options.find(ele => ele.value === this.MAType)
-        if(!isInList) this.MAType = options[0].value
-        return options
-      }
+      // if(category && !['ETF', 'Stock'].includes(category)) {
+      //   const options = [
+      //   {
+      //     value: 'c',
+      //     label: 'Symbol Close',
+      //     isSymbol: true
+      //   },
+      //   {
+      //     value: 'roc',
+      //     label: 'Rate Of Change',
+      //     isSymbol: true
+      //   },
+      //   {
+      //     value: 'MA',
+      //     label: 'Simple Moving Average'
+      //   }, {
+      //     value: 'EMA',
+      //     label: 'Exponential Moving Average'
+      //   }
+      //   ]
+      //   const isInList = options.find(ele => ele.value === this.MAType)
+      //   if(!isInList) this.MAType = options[0].value
+      //   return options
+      // }
       if(isSymbol) return options
       return  options.filter(ele => ele.isSymbol !== true)
     },
