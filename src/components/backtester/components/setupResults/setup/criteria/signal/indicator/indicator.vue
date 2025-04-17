@@ -693,7 +693,7 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
+    async isBTChartReady(val) {
       if(!val) return
           // 预填充 btv2 按钮跳转过来携带的 symbol
           let symbol = sessionStorage.getItem('symbol')
@@ -709,7 +709,7 @@ export default {
       ele = {...ele, value: ele.chart_name}
       if(this.criteria.startsWith('entry')) {
         this.si.sentimentIndicator = ele.value;
-        this.handleSentimentSelect(ele)
+        await this.handleSentimentSelect(ele)
       }
       sessionStorage.removeItem('indicator')
     }
@@ -935,7 +935,7 @@ export default {
       // lishn 判断需要小龙写
       CIQ.addIndicators({})
     },
-    handleSentimentSelect(item) {
+    async handleSentimentSelect(item) {
       // 限制同屏显示个数
       if(maxNumOfStudy()) return
 
@@ -976,9 +976,9 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
-       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
-      CIQ.addIndicators({})
+       await CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+       await CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
+       await CIQ.addIndicators({})
     },
     clearSymbolSelect() {
       let freqObj = {}
