@@ -694,7 +694,7 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
+    async isBTChartReady(val) {
       if(!val) return
           // 预填充 btv2 按钮跳转过来携带的 symbol
           // let symbol = sessionStorage.getItem('symbol')
