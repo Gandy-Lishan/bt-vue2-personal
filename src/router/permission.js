@@ -124,7 +124,8 @@ export function setRouterPermission(router) {
 				getQueryVariable('userid') ||
 				getQueryVariable('backtestID')
 			) {
-				window.location.href = `${location.origin}${location.pathname}`
+				if(getQueryVariable('backtestID') && !location.pathname.includes('backtester')) window.location.href = `${location.origin}/backtester/sr/setup${location.pathname}`
+				else window.location.href = `${location.origin}${location.pathname}`
 			}
 			let _index = getQueryVariable('index') || ''
 			let _indicator = getQueryVariable('indicator') || ''
