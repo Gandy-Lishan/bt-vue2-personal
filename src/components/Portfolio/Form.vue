@@ -162,7 +162,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label for="max_drow_down_checkbox">
-                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drowdown" id="max_drow_down_checkbox"></el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drawdown" id="max_drow_down_checkbox"></el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
