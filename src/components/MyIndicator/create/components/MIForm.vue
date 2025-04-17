@@ -92,43 +92,12 @@
 		<div class="MI-form-middle" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
-					<el-autocomplete
-            ref="indicator1"
-						class="inline-input"
-						v-model="data.indicator_1"
-						:fetch-suggestions="querySearch"
-						placeholder="Please select indicator or symbol from the dropdown menu"
-						@select="
-							(item) => {
-								handleSelect(item, 'indicator_1')
-							}
-						"
-					>
-						<i slot="prefix" class="el-input__icon el-icon-search"></i>
-						<!-- 使用 scoped slot 自定义选项 -->
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
-									item.label
-								}}</span>
-								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
-									item.url
-								}}</span>
-								<!-- 在选项后面添加标识 -->
-								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
-									item.label
-								}}</span>
-								<span v-if="item.category" class="type-label"
-									>{{item.category}}</span
-								>
-								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
-                <span v-if="item.type === 'Symbol'" class="inception-label">{{
-									item.inception
-								}}</span
-								>
-							</div>
-						</template>
-					</el-autocomplete>
+          <SearchAutocomplete
+            v-model="data.indicator_1"
+            @query="querySearch"
+            @select="item => handleSelect(item, 'indicator_1')"
+            placeholder="Please select indicator or symbol from the dropdown menu"
+          />
 				</el-form-item>
 				<CheckInput
           :categories="data.categories"
@@ -187,43 +156,12 @@
 			</div>
 			<div class="right">
 				<el-form-item v-model="data.indicator_2">
-					<el-autocomplete
-            ref="indicator2"
-						class="inline-input"
-						v-model="data.indicator_2"
-						:fetch-suggestions="querySearch"
-						placeholder="Please select indicator or symbol from the dropdown menu"
-						@select="
-							(item) => {
-								handleSelect(item, 'indicator_2')
-							}
-						"
-					>
-						<i slot="prefix" class="el-input__icon el-icon-search"></i>
-						<!-- 使用 scoped slot 自定义选项 -->
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
-									item.label
-								}}</span>
-								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
-									item.url
-								}}</span>
-								<!-- 在选项后面添加标识 -->
-								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
-									item.label
-								}}</span>
-								<span v-if="item.category" class="type-label"
-									>{{item.category}}</span
-								>
-								<span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
-                <span v-if="item.type === 'Symbol'" class="inception-label">{{
-									item.inception
-								}}</span
-								>
-							</div>
-						</template>
-					</el-autocomplete>
+          <SearchAutocomplete
+            v-model="data.indicator_2"
+            @query="querySearch"
+            @select="item => handleSelect(item, 'indicator_2')"
+            placeholder="Please select indicator or symbol from the dropdown menu"
+          />
 				</el-form-item>
 				<CheckInput
           :categories="data.categories"
@@ -280,42 +218,13 @@
       </el-table-column>
       <el-table-column label="Indicator" header-align="center" align="center" prop="indicator">
         <template slot-scope="scope" >
-          <el-autocomplete
-            ref="wic"
+          <SearchAutocomplete
             v-model="scope.row.indicator"
+            @query="querySearch"
+            @select="item => handleRowSelect(item, scope.row)"
+            placeholder="Please select indicator or symbol from the dropdown menu"
             size="mini"
-            :fetch-suggestions="querySearch"
-            @select="
-							(item) => {
-								handleRowSelect(item, scope.row)
-							}
-						"
-            >
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-            <!-- 使用 scoped slot 自定义选项 -->
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="item-label indicator" v-if="item.type === 'Indicator'">{{
-									item.label
-								}}</span>
-								<span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{
-									item.url
-								}}</span>
-								<!-- 在选项后面添加标识 -->
-								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
-									item.label
-								}}</span>
-								<span v-if="item.type === 'Symbol'" class="type-label"
-									>Symbol</span
-								>
-                <span v-if="item.type === 'Indicator'" class="updated-label">{{item.updated}}</span>
-                <span v-if="item.type === 'Symbol'" class="inception-label">{{
-									item.inception
-								}}</span
-								>
-              </div>
-						</template>
-          </el-autocomplete>
+          />
         </template>
       </el-table-column>
       <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="150px">
@@ -342,39 +251,12 @@
       v-if="data.categories == 'OHLCV'">
       <div class="SLeft">
 				<el-form-item v-model="OHLCVData.symbol">
-					<el-autocomplete
-            ref="ohlcvSymbol"
-						class="inline-input"
-						v-model="OHLCVData.symbol"
-						:fetch-suggestions="querySearch"
-						placeholder="Please select symbol from the dropdown menu"
-						@select="
-							(item) => {
-								changeSymbol(item)
-							}
-						"
-					>
-						<i slot="prefix" class="el-input__icon el-icon-search"></i>
-						<!-- 使用 scoped slot 自定义选项 -->
-						<template slot-scope="{ item }">
-							<div class="custom-option">
-								<span class="item-label symbol">{{
-									item.url
-								}}</span>
-								<!-- 在选项后面添加标识 -->
-								<span v-if="item.type === 'Symbol'" class="symbol-label">{{
-									item.label
-								}}</span>
-								<span v-if="item.type === 'Symbol'" class="type-label"
-									>Symbol</span
-								>
-                <span v-if="item.type === 'Symbol'" class="inception-label">{{
-									item.inception
-								}}</span
-								>
-							</div>
-						</template>
-					</el-autocomplete>
+          <SearchAutocomplete
+            v-model="OHLCVData.symbol"
+            @query="querySearch"
+            @select="item => changeSymbol(item)"
+            placeholder="Please select symbol from the dropdown menu"
+          />
 				</el-form-item>
       </div>
       <div class="SRight">
@@ -434,7 +316,7 @@ import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators,
 import {  validatePercentageRule } from "@/utils/formValidate"
 import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
-import { LoadingOverlay } from "@/components/common"
+import { LoadingOverlay,SearchAutocomplete } from "@/components/common"
 import { mapGetters } from "vuex"
 import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
 
@@ -446,7 +328,8 @@ export default {
   },
   components: {
     CheckInput,
-    LoadingOverlay
+    LoadingOverlay,
+    SearchAutocomplete
   },
   data() {
     return {
@@ -582,11 +465,6 @@ export default {
         { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
       ],
 
-      // 自定义动态渲染下拉栏
-      searchResults: [],
-      currentPage: 1,
-      pageSize: 20,
-      hasMore: true, // 是否还有更多数据
       indicator_1_category: '',
       indicator_2_category: '',
     }
@@ -685,90 +563,7 @@ export default {
         },
     }
   },
-  mounted() {
-    this.attachScrollListener()
-  },
-  beforeDestroy() {
-    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
-  },
   methods: {
-    /** START 加载更多数据且保持滚动条位置 */
-    // 绑定滚动事件
-    attachScrollListener(category) {
-      let tab = category
-      if(!category){
-        // 首次加载设初值，不清空绑定的监听器
-        tab = 'Indicator Spread'
-      }else{
-        this.detachScrollListener() // 防止切换tab时重复添加监听器，统一移除
-      }
-
-      const isIndicator = tab.includes('Indicator')
-      const isSymbol = tab.includes('Symbol')
-      const isWIC = tab.includes('WIC')
-      const isOHLCV = tab.includes('OHLCV')
-      let refs // 要监听的下拉框的 ref 名称
-      if (isIndicator || isSymbol) refs = ['indicator1', 'indicator2']
-      if (isWIC) refs = ['wic']
-      if (isOHLCV) refs = ['ohlcvSymbol']
-
-      refs.length != 0 && refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 解绑滚动事件
-    detachScrollListener() {
-      const refs = ['indicator1', 'indicator2', 'wic', 'ohlcvSymbol']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 监听滚动事件，触发加载更多
-    handleDropdownScroll(event, inputType) {
-      var self = this;
-      const dropdown = event.target;
-      // 根据传入的 inputType 访问不同的 ref
-      const inputRef = self.$refs[inputType];
-
-      if (
-        dropdown.scrollHeight - dropdown.scrollTop - 10 <
-        dropdown.clientHeight
-      ) {
-            debugger
-        // 判断是否有更多数据
-        if (!this.hasMore) return;
-
-        // 记录滚动位置
-        const currentScrollTop = dropdown.scrollTop;
-
-        self.currentPage++;
-        self.loadMore((results) => {
-            inputRef.$data.suggestions = results;
-
-            // 恢复滚动位置
-            requestAnimationFrame(() => {
-                dropdown.scrollTop = currentScrollTop;
-            });
-        });
-      }
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
-    },
-    /** END 加载更多数据且保持滚动条位置 */
-
     /**
      * 刷新MA状态
      */
@@ -1153,7 +948,7 @@ export default {
     saveSubData(field, value) {
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
-    async querySearch(queryString, cb) {
+    async querySearch(queryString, callback) {
       if(!this.dropdownList || !this.dropdownList.length) {this.dropdownList = this.getList()}
       var dropdownList = this.dropdownList
       var results = dropdownList.map(item => ({
@@ -1162,10 +957,7 @@ export default {
         }))
         .filter(item => item.priority > 0)
         
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
+      callback(results.sort((a, b) => b.priority - a.priority))
     },
     getList() {
       const data = this.data

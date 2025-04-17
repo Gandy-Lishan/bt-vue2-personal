@@ -44,9 +44,19 @@
           <!-- 使用 scoped slot 自定义选项 -->
           <template slot-scope="{ item }">
             <div class="custom-option">
+              <span class="item-label symbol">{{
+									item.url
+								}}</span>
               <span class="symbol-label">{{
                 item.type == 'Custom' ? item.label : item.url
               }}</span>
+              <span class="type-label"
+                >{{item.category}}</span
+              >
+              <span class="inception-label">{{
+                item.inception
+              }}</span
+              >
             </div>
           </template>
         </el-autocomplete>
@@ -1057,12 +1067,7 @@ export default {
 	align-items: center; /* 垂直居中对齐 */
 	justify-content: space-between;
 }
-.updated-label{
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 10px;
-  text-align: center;
-}
+
 .el-select.el-select--mini {
   width: 100%;
 }
