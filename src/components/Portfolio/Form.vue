@@ -162,7 +162,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label for="max_drow_down_checkbox">
-                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max DrowDown" id="max_drow_down_checkbox"></el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drawdown" id="max_drow_down_checkbox"></el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -706,7 +706,7 @@ export default {
         this.dialogTableVisible = true
         this.autoPortfolioData = data
       }else if(code == 204) {
-        
+        this.popUpMsgBox('No Results Found')
       }
       this.findPortfolioLoading = false
     },
