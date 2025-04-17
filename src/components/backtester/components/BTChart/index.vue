@@ -23,11 +23,11 @@
 
 <script>
 import BTChart from "@/components/common/chart/index.vue"
-import { LocalStorageUtil } from '@/utils'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
 import { LoadingOverlayChart } from "@/components/common"
-import { seeParams} from '@/service/service'
+import { seeParams, getIndicatorsRowData} from '@/service/service'
+import { getQueryVariable, LocalStorageUtil } from '@/utils'
 
 export default {
   name: 'BTHeader',
@@ -55,10 +55,23 @@ export default {
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
 	},
-	created() {
+	async created() {
 		const params = this.$route.params	// from strategy link
 		let backtestID = localStorage.getItem('backtestID') // from analyst's backtest link
-		let symbol = sessionStorage.getItem('symbol') // from indicators link
+		// let symbol = sessionStorage.getItem('symbol') // from indicators link
+		// 从 url 中取出来
+		let symbol = getQueryVariable('index') || ''
+		let indicator = getQueryVariable('indicator') || ''
+		let storeSymbol = this.$store.state.chart.JumpToBTSymbol || ''
+		if (symbol === 'Unknown' && !storeSymbol){
+			const rowData = await getIndicatorsRowData(indicator)
+   const {market_symbol} = rowData?.data
+			const _symbol = market_symbol || 'SPX'
+			symbol = _symbol
+		}else if(storeSymbol) {
+			symbol = storeSymbol
+		}
+		if (symbol === 'TEN') symbol = 'ten'
 		if((params.usedFor && params.usedFor === 'showBTForm') || backtestID || symbol) {
 			this.default_symbol = null
 		}
