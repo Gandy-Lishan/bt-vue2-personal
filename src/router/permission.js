@@ -27,17 +27,17 @@ export function setRouterPermission(router) {
 		const backtestID = getQueryVariable('backtestID')
 		if (backtestID) localStorage.setItem('backtestID', backtestID)
 		// 当跳转携带 indicator 和 symbol 时，填充
-		const indicator = getQueryVariable('indicator')
-		let symbol = getQueryVariable('index')
-		if (symbol === 'Unknown'){
-			const rowData = await getIndicatorsRowData(indicator)
-      const {market_symbol} = rowData?.data
-			const _symbol = market_symbol || 'SPX'
-			symbol = _symbol
-		}
-		if (symbol === 'TEN') symbol = 'ten'	// handle special case
-		if (indicator) sessionStorage.setItem('indicator', indicator)
-		if (symbol) sessionStorage.setItem('symbol', symbol)
+		// const indicator = getQueryVariable('indicator')
+		// let symbol = getQueryVariable('index')
+		// if (symbol === 'Unknown'){
+		// 	const rowData = await getIndicatorsRowData(indicator)
+  //     const {market_symbol} = rowData?.data
+		// 	const _symbol = market_symbol || 'SPX'
+		// 	symbol = _symbol
+		// }
+		// if (symbol === 'TEN') symbol = 'ten'	// handle special case
+		// if (indicator) sessionStorage.setItem('indicator', indicator)
+		// if (symbol) sessionStorage.setItem('symbol', symbol)
 		// 当有 sentimen_session 或 devbt2Userid 时才能发请求
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
@@ -122,10 +122,20 @@ export function setRouterPermission(router) {
 			//set 10 sec as default,However, some time-consuming requests are processed separately
 			if (
 				getQueryVariable('userid') ||
-				getQueryVariable('backtestID') ||
-				(getQueryVariable('index') && getQueryVariable('indicator'))
+				getQueryVariable('backtestID')
 			) {
 				window.location.href = `${location.origin}${location.pathname}`
+			}
+			let _index = getQueryVariable('index') || ''
+			let _indicator = getQueryVariable('indicator') || ''
+			if(_index && _indicator) {
+					if (_index === 'Unknown'){
+						const rowData = await getIndicatorsRowData(_indicator)
+						const {market_symbol} = rowData?.data
+						_index = market_symbol || 'SPX'
+					}
+					if (_index === 'TEN') _index = 'ten'	// handle special case
+					store.commit('chart/SET_JUMP_TO_BT_SYMBOL', _index)
 			}
 			if (to.path == '/404') {
 				// todo 再加一层scannerAI或者backtester权限判断，用于在404页面跳转回网站，或者防止网站跳到404又无限循环
