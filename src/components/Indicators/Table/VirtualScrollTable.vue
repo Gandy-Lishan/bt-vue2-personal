@@ -477,14 +477,14 @@ export default {
               label: 'Name',
               value: 'chart_name',
               type: 'SP1500Score',
-              minWidth: '100px'
+              minWidth: '140px'
             },
             {
               key: 'sector_name',
               label: 'Sector',
               value: 'sector_name',
               type: 'SP1500Score',
-              minWidth: '100px'
+              minWidth: '150px'
             },
             {
               key: 'trend_last_value',
@@ -2061,7 +2061,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less', 'rsr_rank10', 'rsr_rank21', 'rsr_rank42', 'rsr_rank63', 'rsr_rank84', 'rsr_rank126'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
