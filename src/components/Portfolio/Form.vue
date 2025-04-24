@@ -162,7 +162,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label for="max_drow_down_checkbox">
-                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max DrowDown" id="max_drow_down_checkbox"></el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drawdown" id="max_drow_down_checkbox"></el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -288,7 +288,7 @@
     </el-row>
     <br>
     </div>
-    <el-dialog title="Title" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+    <el-dialog title="Strategy Combinations" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
       <el-table
         :data="autoPortfolioData"
         stripe
@@ -705,6 +705,8 @@ export default {
         console.log('data', data)
         this.dialogTableVisible = true
         this.autoPortfolioData = data
+      }else if(code == 204) {
+        this.popUpMsgBox('No Results Found')
       }
       this.findPortfolioLoading = false
     },

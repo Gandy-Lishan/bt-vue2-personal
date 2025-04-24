@@ -294,11 +294,12 @@ import {
   csvFileRead,
   getPairData,
   csvFilePagingRead,
-  getAllMyIndicatorsList
+  getAllMyIndicatorsList,
+  getIndicatorsRowData
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter} from '@/utils'
+import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
 import {createStateFilter,maxNumOfStudy,getSymbolInfo} from '@/utils/globalFunc'
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
@@ -693,15 +694,26 @@ export default {
         }
       }
     },
-    isBTChartReady(val) {
+    async isBTChartReady(val) {
       if(!val) return
           // 预填充 btv2 按钮跳转过来携带的 symbol
-          let symbol = sessionStorage.getItem('symbol')
+          // let symbol = sessionStorage.getItem('symbol')
+		      let symbol = getQueryVariable('index') || ''
+		      let indicator = getQueryVariable('indicator')
+          let storeSymbol = this.$store.state.chart.JumpToBTSymbol || ''
+          if (symbol === 'Unknown' && !storeSymbol){
+            const rowData = await getIndicatorsRowData(indicator)
+            const {market_symbol} = rowData?.data
+            const _symbol = market_symbol || 'SPX'
+            symbol = _symbol
+          }else if(storeSymbol) {
+            symbol = storeSymbol
+          }
+          if (symbol === 'TEN') symbol = 'ten'
           if(!symbol) return
           symbol = symbol.replace(/"/g, '')
           this.$store.commit('form/getBacktestSymbol', symbol)
       // 预填充 btv2 按钮跳转过来携带的 indicator
-			let indicator = sessionStorage.getItem('indicator')
       if(!indicator) return
       indicator = indicator.replace(/"/g, '')
       let ele = CIQ.findSentiIndicator(null, indicator)
@@ -711,7 +723,7 @@ export default {
         this.si.sentimentIndicator = ele.value;
         this.handleSentimentSelect(ele)
       }
-      sessionStorage.removeItem('indicator')
+      // sessionStorage.removeItem('indicator')
     }
   },
   mounted() {
@@ -978,7 +990,7 @@ export default {
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
        CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
-      CIQ.addIndicators({})
+       CIQ.addIndicators({})
     },
     clearSymbolSelect() {
       let freqObj = {}

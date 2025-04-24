@@ -3,29 +3,18 @@
     <div class="strategy-header no-print">
       <div class="tableHeader">
         <div class="headerSelect">
-          <a :href="`/MR/sentimentedge`">
-            <h4 @click="selectedTitle = 'sentimentedge'" :class="{ 'selected': selectedTitle === 'sentimentedge' }">SentimentEdge</h4>
-          </a>
-          <a :href="`/MR/modeledge`">
-            <h4 @click="selectedTitle = 'modeledge'" :class="{ 'selected': selectedTitle === 'modeledge' }">ModelEdge</h4>
-          </a>
-          <a :href="`/MR/quantedge`">
-            <h4 @click="selectedTitle = 'quantedge'" :class="{ 'selected': selectedTitle === 'quantedge' }">Kaeppel's Corner</h4>
-          </a>
-          <a :href="`/MR/tradingedge`">
-            <h4 @click="selectedTitle = 'tradingedge'" :class="{ 'selected': selectedTitle === 'tradingedge' }">TradingEdge</h4>
-          </a>
-          <a :href="`/MR/favorites`">
-            <h4 @click="selectedTitle = 'favorites'" :class="{ 'selected': selectedTitle === 'favorites' }">My Favorites</h4>
-          </a>
-          <a :href="`/MR/archived_studies`">
-            <h4 @click="selectedTitle = 'archived_studies'" :class="{ 'selected': selectedTitle === 'archived_studies' }">Archived Studies</h4>
-          </a>
-          <a :href="generatedLink()">
-            <h4 :class="{ 'selected': selectedTitle === 'archived_reports' }">Daily Report</h4>
-          </a>
-          <a :href="`/MR/active_studies`">
-            <h4 @click="selectedTitle = 'active_studies'" :class="{ 'selected': selectedTitle === 'active_studies' }">Active Studies</h4>
+          <a
+            v-for="(item, index) in navItems"
+            :key="item.value"
+            :href="item.link"
+            :style="{ marginRight: navItems.length <= 5 ? '10px' : '0' }"
+          >
+            <h4
+              @click="handleClick(item)"
+              :class="{ selected: selectedTitle === item.value }"
+            >
+              {{ item.label }}
+            </h4>
           </a>
         </div>
       </div>
@@ -167,6 +156,16 @@ export default {
     archivesStudies: 'Archived Studies',
     selectedTitle: 'sentimentedge',
     currentYear: (new Date()).getFullYear(),
+    navItems: [
+      { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
+      { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
+      { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
+      { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
+      { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
+      { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
+      { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
+      { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' }
+    ]
   }
  },
  watch: {
@@ -190,15 +189,14 @@ export default {
   mounted() {
     debugger
     const access_level = getCookieData()?.access_level
-		const dataliteUser = access_level.some(item => item.includes('datalite'))
-		const currentRoute = this.$route.path.includes('/MR')
-		if(dataliteUser && currentRoute) {
-			const errorMsg401 = 'Reports'
-      this.$store.commit('states/setErrorMessage404', {
-            status: 410,
-            message: `${errorMsg401}`
-      })
-      this.$router.push('/404')
+		const coreliteUser = access_level.some(item => item.includes('corelite'))
+		const reportsUser = access_level.some(item => item.includes('reports'))
+		if(coreliteUser || reportsUser) {
+      this.navItems = [
+        { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
+        { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
+        { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' }
+      ]
     }
     window.addEventListener('scroll', this.handleScroll);
   },
@@ -276,6 +274,17 @@ export default {
       } else {
         return `/MR/archived_reports/${this.currentYear}`;
       }
+    },
+    generatedMRLink() {
+      // 自定义生成 Daily Report 的链接
+      return '/MR/daily_report';
+    },
+    handleClick(item) {
+      this.selectedTitle = item.value;
+      // 对于 Daily Report 特殊处理
+      if (item.value === 'archived_reports') {
+        item.link = this.generatedMRLink();
+      }
     }
   }
 }
@@ -321,7 +330,6 @@ export default {
 	}
 	.headerSelect {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     a {
