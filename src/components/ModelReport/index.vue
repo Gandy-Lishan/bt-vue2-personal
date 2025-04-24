@@ -277,7 +277,14 @@ export default {
     },
     generatedMRLink() {
       // 自定义生成 Daily Report 的链接
-      return '/MR/daily_report';
+      const path = this.$route.path
+      if(path.includes('/MR/blog/daily_report')) {
+        const year = path.match(/(\d{4})$/)[0]
+        this.selectedTitle = 'archived_reports'
+        return `/MR/archived_reports/${year}`
+      }else {
+        return `/MR/archived_reports/${this.currentYear}`
+      }
     },
     handleClick(item) {
       this.selectedTitle = item.value;
