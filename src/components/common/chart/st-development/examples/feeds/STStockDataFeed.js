@@ -619,7 +619,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                             newQuotes[i][indicatorKey] = null;
                             continue;
                         }
-                        var str = sentiIndex==0?'indicator_Close':`indicator${Number(j)+sentiIndex}_Close`; 
+                        var str = sentiIndex==0?'indicator_Close':`indicator${sentiIndex+1}_Close`; 
                         sentiIndex++
 
                         // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过

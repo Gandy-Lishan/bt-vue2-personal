@@ -119,7 +119,8 @@ const state = {
 
 	indicatorsPageListdata: {},
 	cssMonthLabel: '',
-	indicatorPageBtv1List: []
+	indicatorPageBtv1List: [],
+	JumpToBTSymbol: ''
 }
 
 const mutations = {
@@ -345,6 +346,9 @@ const mutations = {
 	SET_MI_SHIFT(state, obj) {
 		state.miFormShift = obj
 	},
+	SET_JUMP_TO_BT_SYMBOL(state, index) {
+		state.JumpToBTSymbol = index
+	}
 }
 
 const actions = {
