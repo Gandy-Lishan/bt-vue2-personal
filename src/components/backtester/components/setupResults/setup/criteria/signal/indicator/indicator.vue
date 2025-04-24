@@ -49,7 +49,13 @@
               </label>
             </template>
             <div class="selectBox">
-              <el-autocomplete
+              <SearchAutocomplete
+                v-model="si.sentimentIndicator"
+                @query="indicatorSentimentSearch"
+                @select="item => handleSentimentSelect(item)"
+                placeholder="Search for the sentiment indicator"
+              />
+              <!-- <el-autocomplete
               ref="sentiInput"
 							prefix-icon="el-icon-search"
 							class="inline-input"
@@ -61,14 +67,7 @@
               @clear="clearSentimentSelect"
 							highlight-first-item
               :disabled="!isBTChartReady"
-						></el-autocomplete>
-            <!-- <searchBar
-              :id_name="'autocomplete-' + criteria + '-' + panelIndex"
-              placeholder="Input the sentiment indicator"
-              :index="['indicatorList']"
-              @select="handleSentimentSelect"
-              display="chart_name"
-            /> -->
+						></el-autocomplete> -->
             </div>
         </el-form-item>
       </div>
@@ -305,6 +304,7 @@ import { mapMutations,mapGetters } from 'vuex'
 
 import searchBar from "@/components/common/searchBar"
 import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
+import { SearchAutocomplete } from "@/components/common"
 const throttle = require('lodash/throttle')
 
 export default {
@@ -317,7 +317,8 @@ export default {
   },
   components: {
     searchBar,
-    Uploader
+    Uploader,
+    SearchAutocomplete
   },
   data() {
     let validateSenti = (rule, value, callback) => {
@@ -438,12 +439,6 @@ export default {
         {value: "Users' Own Indicator", label: "Users' Own Indicator"},
       ],
       createdIndicatorOptions: [],
-
-      // 自定义动态渲染下拉栏
-      searchResults: [],
-      currentPage: 1,
-      pageSize: 20,
-      hasMore: true, // 是否还有更多数据
     }
   },
   computed: {
@@ -714,74 +709,7 @@ export default {
       sessionStorage.removeItem('indicator')
     }
   },
-  mounted() {
-    this.attachScrollListener()
-  },
-  beforeDestroy() {
-    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
-  },
   methods: {
-    /** START 加载更多数据且保持滚动条位置 */
-    // 绑定滚动事件
-    attachScrollListener() {
-      const refs = ['sentiInput', 'techInput']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 解绑滚动事件
-    detachScrollListener() {
-      const refs = ['sentiInput', 'techInput']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 监听滚动事件，触发加载更多
-    handleDropdownScroll(event, inputType) {
-      var self = this;
-      const dropdown = event.target;
-      // 根据传入的 inputType 访问不同的 ref
-      const inputRef = self.$refs[inputType];
-
-      if (
-        dropdown.scrollHeight - dropdown.scrollTop - 10 <
-        dropdown.clientHeight
-      ) {
-        // 判断是否有更多数据
-        if (!this.hasMore) return;
-
-        // 记录滚动位置
-        const currentScrollTop = dropdown.scrollTop;
-
-        self.currentPage++;
-        self.loadMore((results) => {
-            inputRef.$data.suggestions = results;
-
-            // 恢复滚动位置
-            requestAnimationFrame(() => {
-                dropdown.scrollTop = currentScrollTop;
-            });
-        });
-      }
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
-    },
-    /** END 加载更多数据且保持滚动条位置 */
-
     /** disable enter while naming a custom symbol */
 		onEnter(event) {
       event.preventDefault();
@@ -826,10 +754,7 @@ export default {
         }))
         .filter(item => item.priority > 0)
 
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
+        cb(results.sort((a, b) => b.priority - a.priority))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {

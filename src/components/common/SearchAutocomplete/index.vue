@@ -10,13 +10,14 @@
     >
       <i slot="prefix" class="el-input__icon el-icon-search"></i>
       <template slot-scope="{ item }">
+        <!-- 用是否存在update来判断为indicator还是symbol,加入兼容措施， -->
         <div class="custom-option">
-          <span class="item-label indicator" v-if="item.type === 'Indicator'">{{ item.label }}</span>
-          <span class="item-label symbol" v-else-if="item.type === 'Symbol'">{{ item.url }}</span>
-          <span v-if="item.type === 'Symbol'" class="symbol-label">{{ item.label }}</span>
+          <span class="item-label indicator" v-if="item.updated">{{ item.label || item.value }}</span>
+          <span class="item-label symbol" v-else-if="!item.updated">{{ item.url }}</span>
+          <span v-if="!item.updated" class="symbol-label">{{ item.label }}</span>
           <span v-if="item.category" class="type-label">{{ item.category }}</span>
-          <span v-if="item.type === 'Indicator'" class="updated-label">{{ item.updated }}</span>
-          <span v-if="item.type === 'Symbol'" class="inception-label">{{ item.inception }}</span>
+          <span v-if="item.updated" class="updated-label">{{ item.updated }}</span>
+          <span v-if="!item.updated" class="inception-label">{{ item.inception }}</span>
         </div>
       </template>
     </el-autocomplete>
