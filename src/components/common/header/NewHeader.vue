@@ -196,8 +196,13 @@ export default {
       console.log('path', path)
       const nav = this.navs.find(ele => path.includes(ele.path))
       console.log('nav', nav)
+      if(path.includes('/sector_trend_score')) {this.activeIndex = '12'; return}
       if(nav && !nav.subMenu && (nav.label !== 'AI Trading' && nav.label !== 'Tutorial Videos')) this.activeIndex = nav.keyPath
-      if(nav && nav.subMenu) this.activeIndex = nav.subMenu.find(ele => path.includes(ele.path)).keyPath
+      if(nav && nav.subMenu) {
+        const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
+        if(navSubPath) this.activeIndex =navSubPath
+        if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
+      }
     }
   },
   created() {
