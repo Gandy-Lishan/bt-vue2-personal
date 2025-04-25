@@ -576,11 +576,11 @@ const actions = {
 						}])
 						resolve(csvContent)
 					}else if (res.data.status === 401) {
-						Toast('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds',2000)
+						Toast('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds',10000)
 						setTimeout(() => {
 							window.location.reload();
 						}, 2000); // 2000毫秒 = 3秒
-						reject(new Error('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds'));
+						reject(new Error('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds'));
 					} else {
 						// 处理其他状态码
 						console.error(`Unexpected status code: ${res.data.status}`);
