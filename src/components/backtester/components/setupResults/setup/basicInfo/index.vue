@@ -1681,6 +1681,12 @@ export default {
       // 首次创建, 或者点击按钮跳转过来
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag)
+      if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
+        // 没有分析师权限
+        delete _this.bd.analystID
+        delete _this.bd.id
+        delete _this.bd.old_uuid
+      }
       // 编辑, 但是没有权限
       if(!isClient && !isAdmin) {
         _this.popUpMsgBox('Permission denied');
