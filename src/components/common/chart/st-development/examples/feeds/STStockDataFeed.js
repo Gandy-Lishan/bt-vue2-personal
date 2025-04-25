@@ -751,21 +751,42 @@ quoteFeedSimulator.formatChartData = async function(response){
                 const [_, url] = indicator.split(/CREATE/);
                 let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
                 if(!datafeed){
-                    
+                    let validData = null;
+                    try {
                     const res = await config.getMyIndicatorData(url);
-                    if(res.data.code == 404) {
+                    if (res.data.data && Array.isArray(res.data.data)) {
+                        validData = res;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
+                    }
+                    } catch (error) {
+                        console.error('Error fetching getMyIndicatorData:', error);
+                    }
+
+                    if (!validData) {
+                    try {
+                        const analystRes = await config.getAnalystMyIndicatorData({url});
+                        if (analystRes.data.data && Array.isArray(analystRes.data.data)) {
+                            validData = analystRes;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
+                        }
+                    } catch (error) {
+                        console.error('Error fetching getAnalystMyIndicatorData:', error);
+                    }
+                    }
+
+
+                    if(validData.data.code == 404) {
                         _this.popUpMsgBox('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds', 10000)
                         setTimeout(() => {
                             window.location.reload();
                             }, 5000); // 5000毫秒 = 6秒
                         if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
-                    }else if(res.data.code === 401) {
-                        _this.popUpMsgBox(res.data.msg || '')
+                    }else if(validData.data.code === 401) {
+                        _this.popUpMsgBox(validData.data.msg || '')
                         setTimeout(() => {
                             window.location.reload();
-                            }, 2000); // 2000毫秒 = 3秒
+                        }, 2000); // 2000毫秒 = 3秒
+                        if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
                     }
-                    datafeed = res.data.data;
+                    datafeed = validData.data.data;
                     if(!datafeed) return
                     // 暂存
                     localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
