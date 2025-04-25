@@ -12,7 +12,7 @@
          <div class="panel-body">
            <template v-if="dashboard_type === 'grandfathered'">
              <template v-for="(row, index) in latest_commentary">
-              <div :key="index">
+              <div :key="index" v-if="!hideReportLink">
                <a
                  class="item-name primary-link"
                  :href="getBlogUrl(row)"
@@ -50,7 +50,7 @@
             </template>
              <template v-if="LC_Length > 0">
                <template v-for="(row, index) in latest_commentary">
-                <div :key="index">
+                <div :key="index" v-if="!hideReportLink">
                  <a
                    class="item-name primary-link"
                    :href="getBlogUrl(row)"
@@ -85,6 +85,7 @@
 <script>
 import { isJson, timestampToTime } from '@/utils';
 import moment from "moment";
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
  props: {
@@ -125,6 +126,11 @@ export default {
      }
      return "Other Services Available";
    },
+  hideReportLink() {
+    const access_level = getCookieData()?.access_level
+    const cannotAccessReport = access_level.some(str => str.includes('datalite'))
+    return cannotAccessReport
+  }
  },
  watch: {
   latest_commentary(value) {
