@@ -313,6 +313,7 @@ export default {
 
 				await this.editBacktest(res.data)
 				await this.displaySetUpForm(res.data)
+				await this.viewBacktestResults(res.data)
 				LocalStorageUtil.remove('backtestID')
 			}else {
 				this.$store.state.form.rowDataForDisplay = {};
