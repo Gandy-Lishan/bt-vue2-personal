@@ -754,10 +754,11 @@ quoteFeedSimulator.formatChartData = async function(response){
                     
                     const res = await config.getMyIndicatorData(url);
                     if(res.data.code == 404) {
-                        _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
+                        _this.popUpMsgBox('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds', 10000)
                         setTimeout(() => {
                             window.location.reload();
-                            }, 2000); // 2000毫秒 = 3秒
+                            }, 5000); // 5000毫秒 = 6秒
+                        if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
                     }else if(res.data.code === 401) {
                         _this.popUpMsgBox(res.data.msg || '')
                         setTimeout(() => {
