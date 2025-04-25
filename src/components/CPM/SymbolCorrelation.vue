@@ -4,32 +4,14 @@
       <el-row :gutter="24">
         <el-col :span="8">
           <el-form-item label="1. Designated Ticker" prop="benchmark">
-            <el-autocomplete
-                ref="autocomplete"
-                class="inline-input"
-                v-model="data.benchmark"
-                :fetch-suggestions="querySearch"
-                placeholder="Select Ticker"
-                clearable
-                @select="
-                  (item) => {
-                    getBenchMark(item)
-                  }
-                "
-              >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                <!-- 使用 scoped slot 自定义选项 -->
-                <template slot-scope="{ item }">
-                  <div class="custom-option">
-                    <span class="symbol-label">{{
-                      item.url
-                    }}</span>
-                    <span class="symbol-url">{{
-                      item.label
-                    }}</span>
-                  </div>
-                </template>
-              </el-autocomplete>
+            <SearchAutocomplete
+              ref="autocomplete"
+              v-model="data.benchmark"
+              @query="querySearch"
+              @select="item => getBenchMark(item)"
+              placeholder="Select Ticker"
+              clearable
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -110,32 +92,13 @@
         <el-col :span="24">
           <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
             <div class="ticker-select">
-              <el-autocomplete
+              <SearchAutocomplete
                 ref="autocomplete"
-                class="inline-input"
                 v-model="symbol"
-                :fetch-suggestions="querySearch"
+                @query="querySearch"
+                @select="item => getSymbol(item)"
                 placeholder="Select Ticker"
-                clearable
-                @select="
-                  (item) => {
-                    getSymbol(item)
-                  }
-                "
-              >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                <!-- 使用 scoped slot 自定义选项 -->
-                <template slot-scope="{ item }">
-                  <div class="custom-option">
-                    <span class="symbol-label">{{
-                      item.url
-                    }}</span>
-                    <span class="symbol-url">{{
-                      item.label
-                    }}</span>
-                  </div>
-                </template>
-              </el-autocomplete>
+              />
           <div class="tickerTag">
             <el-tag
             :key="tag"
@@ -200,9 +163,13 @@ import Highcharts from 'highcharts/highstock';
  import 'highcharts/indicators/indicators';
  import 'highcharts/indicators/bollinger-bands';
 import moment from 'moment';
+import { SearchAutocomplete } from "@/components/common"
 
 export default {
   name: 'SymbolCorrelation',
+  components: {
+    SearchAutocomplete
+  },
   data() {
       return {
         data: {
@@ -211,11 +178,6 @@ export default {
           benchmark: 'AAPL',
           roll_window: 21
         },
-        // 自定义动态渲染下拉栏
-        searchResults: [],
-        currentPage: 1,
-        pageSize: 20,
-        hasMore: true, // 是否还有更多数据
         stock_comparison: [],
         symbol: '',
         dropdownList: [],
@@ -400,51 +362,6 @@ export default {
         const startDay = timestampToTime(new Date(this.data.start_date))
         return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
-    attachScrollListener() {
-      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    handleDropdownScroll(event, inputType) {
-      var self = this;
-      const dropdown = event.target;
-      // 根据传入的 inputType 访问不同的 ref
-      const inputRef = self.$refs[inputType];
-
-      if (
-        dropdown.scrollHeight - dropdown.scrollTop - 10 <
-        dropdown.clientHeight
-      ) {
-        // 判断是否有更多数据
-        if (!this.hasMore) return;
-
-        // 记录滚动位置
-        const currentScrollTop = dropdown.scrollTop;
-
-        self.currentPage++;
-        self.loadMore((results) => {
-            inputRef.$data.suggestions = results;
-
-            // 恢复滚动位置
-            requestAnimationFrame(() => {
-                dropdown.scrollTop = currentScrollTop;
-            });
-        });
-      }
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
-    },
     async validForm(formName) {
       const validateForm = async (formRef) => {
         return new Promise(resolve => {
@@ -574,18 +491,7 @@ export default {
         }))
         .filter(item => item.priority > 0)
 
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     handleClose(tag) {
       this.stock_comparison.splice(this.stock_comparison.indexOf(tag), 1)

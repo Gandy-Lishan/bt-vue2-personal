@@ -2,20 +2,29 @@
     <el-autocomplete
       ref="input"
       class="inline-input"
+      clearable
       :size="size"
       v-model="inputValue"
       :fetch-suggestions="querySearchHandler"
       :placeholder="placeholder"
+      :clearable="clearable"
+      :disabled="disabled"
       @select="onSelect"
+      @clear="onClear"
     >
       <i slot="prefix" class="el-input__icon el-icon-search"></i>
       <template slot-scope="{ item }">
+        <!-- 单列显示的tech,独立显示逻辑 -->
+        <div v-if="item.class" class="custom-option">
+          <span class="item-label">{{ item.value }}</span>
+        </div>
         <!-- 用是否存在update来判断为indicator还是symbol,加入兼容措施， -->
-        <div class="custom-option">
+        <div v-else class="custom-option">
           <span class="item-label indicator" v-if="item.updated">{{ item.label || item.value }}</span>
-          <span class="item-label symbol" v-else-if="!item.updated">{{ item.url }}</span>
+          <span class="item-label symbol" v-else-if="!item.updated">{{ item.type == 'Custom' ? item.label : item.url }}</span>
           <span v-if="!item.updated" class="symbol-label">{{ item.label }}</span>
-          <span v-if="item.category" class="type-label">{{ item.category }}</span>
+          <!-- 处理用户自定义symbol显示 -->
+          <span v-if="item.category || item.type == 'Custom'" class="type-label">{{ item.type == 'Custom' ? item.type : item.category }}</span>
           <span v-if="item.updated" class="updated-label">{{ item.updated }}</span>
           <span v-if="!item.updated" class="inception-label">{{ item.inception }}</span>
         </div>
@@ -39,6 +48,14 @@
         type: String,
         default: '',
       },
+      clearable: {
+        type: Boolean,
+        default: false,
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
+      }
     },
     data() {
       return {
@@ -63,9 +80,26 @@
     },
     methods: {
       onSelect(item) {
+        if(item.type == 'Custom'){
+            // 防止symbol 选中时不触发handleGetBacktestSymbol,而导致没有更新autocomplete input value
+            this.setInputValue(item.label)
+        }
         this.$emit('select', item);
       },
+      onClear() {
+        this.$emit('clear',this.$refs.input.value); // 同时触发 input 事件
+      },
+      // 一般不调用此函数，用来处理cusmtom symbol选择时input显示名错误的特殊情况
+      setInputValue(newValue) {
+        // 只修改输入框显示内容
+        this.$nextTick(() => {this.$refs.input.$refs.input.$el.querySelector('input').value = newValue;}) 
+    },
       querySearchHandler(queryString, cb) {
+        // 检查 queryString 是否为 undefined，如果是，则处理为 ""
+        if (queryString === undefined) {
+            queryString = ''; // 将 undefined 转换为空字符串
+        }
+
         this.$emit('query', queryString, (results) => {
             this.searchResults = results;
             this.currentPage = 1;
@@ -116,7 +150,7 @@
   };
   </script>
   
-  <style lang="less" scoped>
+  <style lang="less" scoped> 
   .custom-option {
     display: flex;
     align-items: center;
@@ -150,6 +184,7 @@
       flex: 0 0 200px;
       padding: 0 3px;
       width: 100%;
+      padding-right: 10px;
     }
   
     .type-label {

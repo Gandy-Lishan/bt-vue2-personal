@@ -53,21 +53,11 @@
                 v-model="si.sentimentIndicator"
                 @query="indicatorSentimentSearch"
                 @select="item => handleSentimentSelect(item)"
+                @clear="clearSentimentSelect"
                 placeholder="Search for the sentiment indicator"
+                clearable
+                :disabled="!isBTChartReady"
               />
-              <!-- <el-autocomplete
-              ref="sentiInput"
-							prefix-icon="el-icon-search"
-							class="inline-input"
-							clearable
-							v-model="si.sentimentIndicator"
-							:fetch-suggestions="indicatorSentimentSearch"
-							placeholder="Search for the sentiment indicator"
-							@select="handleSentimentSelect"
-              @clear="clearSentimentSelect"
-							highlight-first-item
-              :disabled="!isBTChartReady"
-						></el-autocomplete> -->
             </div>
         </el-form-item>
       </div>
@@ -85,18 +75,15 @@
               </label>
             </template>
             <div class="selectBox">
-              <el-autocomplete
-              ref="techInput"
-							class="inline-input"
-							clearable
-							prefix-icon="el-icon-search"
-							v-model="si.technicalIndicator"
-							:fetch-suggestions="indicatorTechnicalSearch"
-							placeholder="Search for the technical indicator"
-							@select="handleTechnicalSelect"
-              @clear="clearTechnicalSelect"
-              :disabled="!isBTChartReady"
-						></el-autocomplete>
+              <SearchAutocomplete
+                v-model="si.technicalIndicator"
+                @query="indicatorTechnicalSearch"
+                @select="item => handleTechnicalSelect(item)"
+                @clear="clearTechnicalSelect"
+                placeholder="Search for the technical indicator"
+                clearable
+                :disabled="!isBTChartReady"
+              />
             </div>
         </el-form-item>
       </div>
@@ -144,17 +131,14 @@
               </label>
             </template>
             <div class="selectBox userIndicatorBox">
-                <el-autocomplete
-                prefix-icon="el-icon-search"
-                class="inline-input"
-                clearable
+              <SearchAutocomplete
                 v-model="si.userIndicator"
+                @query="indicatorUsersSearch"
+                @select="item => handleUsersOwnIndicatorSelect(item)"
                 placeholder="Search for my indicator"
-                :fetch-suggestions="indicatorUsersSearch"
-                @select="handleUsersOwnIndicatorSelect"
-              :disabled="!isBTChartReady"
-              >
-              </el-autocomplete>
+                clearable
+                :disabled="!isBTChartReady"
+              />
             </div>
 
             <el-upload
@@ -786,11 +770,7 @@ export default {
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
-
-        this.searchResults = results.sort((a, b) => b.priority - a.priority)
-        this.currentPage = 1;
-        this.hasMore = true;
-        this.loadMore(cb)
+        cb(results.sort((a, b) => b.priority - a.priority))
     },
     indicatorRiskSearch(queryString, cb) {
       let riskIndicatorList = this.loadRiskList()
@@ -810,9 +790,8 @@ export default {
       this.$refs.upload.clearFiles()
       this.fileList = []
     },
-    clearSentimentSelect() {
-      const item = this.sentimentIndicatorList.find(i=>i.value ==  this.$refs.sentiInput.value)
-
+    clearSentimentSelect(value) {
+      const item = this.sentimentIndicatorList.find(i=>i.value == value)
       this.currentSentiUpdated = item.updated
       let freqObj = {}
       freqObj.value = ''
@@ -1003,8 +982,8 @@ export default {
       // }
       CIQ.addIndicators({})
     },
-    clearTechnicalSelect() {
-      const item = CIQ.findBuiltinTechIndicator(this.$refs.techInput.value,null)
+    clearTechnicalSelect(value) {
+      const item = CIQ.findBuiltinTechIndicator(value,null)
 
       let freqObj = {}
       freqObj.value = ''
