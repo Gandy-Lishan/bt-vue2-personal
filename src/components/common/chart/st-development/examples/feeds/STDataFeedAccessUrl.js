@@ -56,6 +56,27 @@ var config = {
                     reject(err)
                 })
         })
+    },
+    getAnalystMyIndicatorData: function(data) {
+	    const path = `/dev/my_indicator/analyst_get_data/`
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        const formData = new FormData()
+        for (const [key, value] of Object.entries(data)) {
+            formData.append(key, value);
+        }
+        return new Promise((resolve, reject) => {
+            CIQ.axios
+                .post(path, formData, { headers, withCredentials: true })
+                .then(res => {
+                    resolve(res)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+        
     }
     /********************lishan modify end*************************/
 }
