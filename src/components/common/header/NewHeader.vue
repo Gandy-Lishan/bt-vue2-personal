@@ -248,6 +248,11 @@ export default {
             label: 'Kaeppel\'s Corner',
             keyPath: '10-3',
             path: '/MR/quantedge'
+          },
+          {
+              label: 'My Favorites',
+              keyPath: '10-5',
+              path: '/MR/favorites'
           }
         ]
       }
