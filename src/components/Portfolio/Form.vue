@@ -635,6 +635,7 @@ export default {
         if(!isIn) inAllowedList = false
       }
       totalWeight += this.portfolioFirstLine.percent
+      if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
       if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
@@ -819,14 +820,17 @@ export default {
     validateWeightRule: debounce(function (row) {
       row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
       // 每次都计算第一个 percent
+      const temp_strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
-      for (const row of [...this.strategy_combination.slice(1)]) {
-        totalWeight += parseFloat(row.percent) || 0
+      for (const _row of temp_strategy_combination) {
+        totalWeight += parseFloat(_row.percent) || 0
+        _row.weightValidErrMsg = _validatePercentageRule(_, _row.percent)
       }
       if(totalWeight <= 0) return
       if(totalWeight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'; return}
       const percent = 100 - totalWeight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
+      this.strategy_combination = [{}, ...temp_strategy_combination]
     }, 500),
     handleRowSelect(item, row) {
       row.model_name = item.model_name
