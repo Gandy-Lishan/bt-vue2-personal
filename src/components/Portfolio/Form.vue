@@ -496,36 +496,36 @@ export default {
       },
       portfolioRules: {
         min_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
     }
@@ -570,10 +570,16 @@ export default {
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading)) return true
-			Object.assign(this.$data, this.$options.data())
+      // 保存 portfolioFormData 的引用
+      const portfolioFormData = this.portfolioFormData;
+      // 重置数据
+      Object.assign(this.$data, this.$options.data());
+      // 重新赋值 portfolioFormData
+      this.portfolioFormData = portfolioFormData;
       this.generateCPMName()
       this.setBacktestHistory(120)
       this.$refs['Form'].clearValidate()
+      if(this.auto_portfolio) this.$refs['AutoPortfolioForm'].clearValidate()
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getPortfolioList(null, null, name)
@@ -599,7 +605,6 @@ export default {
       return await validateForm(formName)
     },
     async saveFormData() {
-      
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Please review and correct form errors')
@@ -675,6 +680,8 @@ export default {
       } while (true); // Keep polling indefinitely
     },
     async findPortfolio() {
+      debugger
+      console.log('portfolioFormData', this.portfolioFormData)
       if(!this.auto_portfolio) return
       this.findPortfolioLoading = true
       const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
