@@ -68,11 +68,11 @@
           Auto Combination
         <el-tooltip effect="dark" placement="top">
           <span slot="content">
-            Define your ideal investment profile by setting target ranges for key performance metrics:<br/>
-            Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return (%)), Win Rate (%), and Max Drawdown (%). <br/>
-            Click "Find Matching Combinations" and the system will recommend strategy combinations that meet your criteria. <br/>
-            Select your preferred combination from the recommendations, and its constituent strategies will automatically <br/>
-            populate the Strategy Allocation list below for further customization or simulation.
+            Define your ideal investment profile by setting target ranges for key performance metrics<br/>
+            such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+            Click "Find Matching Combinations", and the system will automatically generate strategy combinations<br/>
+            that align with your specified criteria. Select your preferred combination from the results—its individual strategies <br/>
+            will then be automatically added to the Strategy Allocation list below for further customization or simulation.
           </span>
           <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
         </el-tooltip>

@@ -8,7 +8,7 @@
         </template>
         <div class="portfolio-des">
           <p>
-            Design, build, and analyze your custom investment combinations. Select from various available strategies, assign specific weights to control allocation, and define your desired simulation period (start date, end date) along with the initial capital. Execute the simulation by clicking 'Run Combination'. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the combination.
+            Design, construct, and evaluate your own custom strategy combinations. Select from a variety of available strategies, assign specific weightings to control your allocation, and define your simulation period (start date and end date) as well as your initial capital. Click "Run Combination" to launch the simulation. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the combination.
         </p>
         </div>
       </el-collapse-item>
