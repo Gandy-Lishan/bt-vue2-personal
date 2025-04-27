@@ -335,6 +335,8 @@ import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
+const debounce = require('lodash/debounce')
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'Form',
@@ -619,7 +621,7 @@ export default {
         }
       }
       // 验证百分比
-      const strategy_combination = this.strategy_combination.slice(1)
+      const strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
       let rowWeightValid = true
       let inAllowedList = true
@@ -648,7 +650,7 @@ export default {
       this.percentage = 8
       let saveData = {
         ...this.data,
-        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
+        strategy_combination: JSON.stringify(strategy_combination.length === 0 ? [] : strategy_combination.map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
         auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
       let saveRes
@@ -764,7 +766,7 @@ export default {
         return {...item, model_name: item.model_name, url: item.model_name, category: this.tags[category], _category: category}
       })]
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
+      for (const row of [...this.strategy_combination.slice(1)]) {
         totalWeight += parseFloat(row.percent) || 0
       }
       this.portfolioFirstLine.percent = 100 - totalWeight
@@ -808,25 +810,24 @@ export default {
     deleteRow(scope) {
       this.strategy_combination.splice(scope.$index, 1)
       let weight = 0
-      for (const _row of this.strategy_combination.slice(1)) {
+      for (const _row of [...this.strategy_combination.slice(1)]) {
         weight += parseFloat(_row.percent) || 0
       }
       const percent = 100 - weight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
-    validateWeightRule(row) {
-      console.log(row.percent)
+    validateWeightRule: debounce(function (row) {
       row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
       // 每次都计算第一个 percent
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
+      for (const row of [...this.strategy_combination.slice(1)]) {
         totalWeight += parseFloat(row.percent) || 0
       }
       if(totalWeight <= 0) return
       if(totalWeight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'; return}
       const percent = 100 - totalWeight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
-    },
+    }, 500),
     handleRowSelect(item, row) {
       row.model_name = item.model_name
       row.category = this.tags[item.category]
