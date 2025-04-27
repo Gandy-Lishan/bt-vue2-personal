@@ -13,8 +13,7 @@
         </el-menu-item> -->
         <el-submenu index="1">
           <template slot="title">
-            <i class="fa fa-question-circle" aria-hidden="true" style="margin-right: 3px;"></i>
-            Help
+            Tutorial
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
           <el-menu-item index="1-2">
@@ -25,7 +24,17 @@
           <el-menu-item index="1-4"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Analyst's Backtest Videos</el-menu-item>
           <el-menu-item index="1-5"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Other Tools Videos</el-menu-item>
           <el-menu-item index="1-6"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Webinar Videos</el-menu-item>
-          <el-menu-item index="1-1"><i class="fa fa-book" aria-hidden="true" style="margin-right: 5px;"></i>BacktestEdge Tutorial Document</el-menu-item>
+          <el-menu-item index="1-1"><i class="fa fa-book" aria-hidden="true" style="margin-right: 5px;"></i>BacktestEdge Document</el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            Help
+            <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
+          </template>
+          <el-menu-item index="2-1"><i class="fa fa-arrow-right" style="margin-right: 10px;"></i>Getting Started</el-menu-item>
+          <el-menu-item index="2-2"><i class="fa fa-question" style="margin-right: 10px;"></i>Knowledge Base / FAQ's</el-menu-item>
+          <el-menu-item index="2-3"><i class="fa fa-book" style="margin-right: 10px;"></i>Glossary of Terms</el-menu-item>
+          <el-menu-item index="2-4"><i class="fa fa-plus" style="margin-right: 10px;"></i>Whats New</el-menu-item>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
@@ -291,6 +300,26 @@ export default {
       }
       else if(key === '1-6') {
         let path = 'https://users.sentimentrader.com/users/webinar_videos/'
+        window.open(path, '_blank')
+        return
+      }
+      else if(key === '2-1') {
+        let path = 'https://users.sentimentrader.com/users/getting_started/'
+        window.open(path, '_blank')
+        return
+      }
+      else if(key === '2-2') {
+        let path = 'https://users.sentimentrader.com/users/knowledge_base/'
+        window.open(path, '_blank')
+        return
+      }
+      else if(key === '2-3') {
+        let path = 'https://users.sentimentrader.com/users/knowledge_base_article/Glossary%20of%20terms'
+        window.open(path, '_blank')
+        return
+      }
+      else if(key === '2-4') {
+        let path = 'https://users.sentimentrader.com/users/knowledge_base_article/Whats%20New%20-%20Updates%20and%20New%20Features'
         window.open(path, '_blank')
         return
       }
