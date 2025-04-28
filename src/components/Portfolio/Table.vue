@@ -1,7 +1,7 @@
 <template>
   <div class="CPM-list-container ScannerBTTable">
     <div class="search-box">
-      <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
+      <el-input placeholder="Search" v-model="searchKey" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
     </div>
@@ -170,6 +170,7 @@
 <script>
 import { delPortfolio, getRunPortfolioResults, getPortfolioList } from '@/service/service'
 import { capitalizeFirstLetter, isJson } from "@/utils"
+const debounce = require('lodash/debounce')
 
 export default {
   name: 'ScannerBTTable',
@@ -276,6 +277,7 @@ export default {
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
             item.return = ((item.float_profit/item.cash)*100)
+            debugger
             const unifyNumber = (num) => {
             if (num === '') {
               return 0
@@ -391,10 +393,10 @@ export default {
       if(code != 200) {_this.$emit('displayResultsData', {row})}
       row.viewLoading = false
     },
-    async handleQuery() {
+    handleQuery: debounce(async function() {
       if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
-    },
+    }, 500),
     handleCellMouseEnter(row, column, cell, event) {
       // 如果是第一， 第二列， 直接返回
       if(typeof column.id === 'string') {
