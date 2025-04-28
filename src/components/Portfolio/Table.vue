@@ -194,8 +194,8 @@ export default {
         },
         {
           label: 'Return',
-          value: 'return',
-          key: 'return'
+          value: 'total_return',
+          key: 'total_return'
         },
         {
           label: 'Win Rate %',
@@ -273,7 +273,7 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
-            const handleKey = ['return', 'winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
+            const handleKey = ['total_return', 'winrate', 'std_dev', 'max_risk', 'avg_loss', 'avg_win', 'median_return', 'total_negative', 'total_positive', 'total_trades']
             item.status = capitalizeFirstLetter(item.status)
             item.strategy_combination = isJson(item.strategy_combination) ? JSON.parse(item.strategy_combination) : item.strategy_combination
             item.return = ((item.float_profit/item.cash)*100)
