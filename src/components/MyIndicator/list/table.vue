@@ -684,7 +684,8 @@ export default {
         }
       },
       jumpToTutoiral(){
-        const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        // const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        const path = 'https://youtube.com/playlist?list=PL_pqMRWeHIxMw2WNydMdvsjk14WvOb_lU&si=DEPZk4A4C9GI42Rb'
         window.open(path, '_blank')
 	    },
   }
