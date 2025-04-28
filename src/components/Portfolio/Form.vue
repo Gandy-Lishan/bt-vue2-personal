@@ -65,13 +65,13 @@
     </el-form>
     <div class="portfolioCheckedBox">
         <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;">
-          Auto Combination
+          Auto Basket
         <el-tooltip effect="dark" placement="top">
           <span slot="content">
             Define your ideal investment profile by setting target ranges for key performance metrics<br/>
             such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
-            Click "Find Matching Combinations", and the system will automatically generate strategy combinations<br/>
-            that align with your specified criteria. Select your preferred combination from the results—its individual strategies <br/>
+            Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
+            that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
             will then be automatically added to the Strategy Allocation list below for further customization or simulation.
           </span>
           <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
@@ -184,7 +184,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Combinations</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Baskets</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -277,7 +277,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="8"></el-col>
       <el-col :span="8">
-        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Combination</el-button>
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Basket</el-button>
         <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
@@ -288,7 +288,7 @@
     </el-row>
     <br>
     </div>
-    <el-dialog title="Strategy Combinations" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+    <el-dialog title="Strategy Baskets" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <el-table
         :data="autoPortfolioData"
         stripe
@@ -546,7 +546,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `My Combination ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `My Basket ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -621,7 +621,7 @@ export default {
         const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
         if(!validateAutoPortfolioForm) {
           // 选择了 auto portfolio，但是表单验证没有通过
-          this.popUpMsgBox('Auto Combination needs more info. Correct format, please')
+          this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
           return
         }
       }
@@ -646,7 +646,7 @@ export default {
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
       if(strategy_combination.length<1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      this.processTips = `Tips: Saving combination...`
+      this.processTips = `Tips: Saving basket...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -671,7 +671,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Running combination. Please wait patiently...'
+      this.processTips = 'Tips: Running basket. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -696,7 +696,7 @@ export default {
       if(!validateAutoPortfolioForm) {
         // 选择了 auto portfolio，但是表单验证没有通过
         this.findPortfolioLoading = false
-        this.popUpMsgBox('Auto Combination needs more info. Correct format, please')
+        this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
         return
       }
       const {
@@ -740,16 +740,16 @@ export default {
      if(!saveRes) { this.$emit('clearResults');
       this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
-     if(code == 203) this.popUpMsgBox(`The combination is running. You can wait or click the "+" button to create a new combination`)
+     if(code == 203) this.popUpMsgBox(`The basket is running. You can wait or click the "+" button to create a new basket`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty combination. Please run again')
+      if(code == 407) this.popUpMsgBox('Empty basket. Please run again')
       if(code == 200) {
-        this.popUpMsgBox(`The combination is completed successfully`)
+        this.popUpMsgBox(`The basket is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据

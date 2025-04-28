@@ -85,7 +85,7 @@ export default {
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
 				{ type: 'info', label: 'My Favorites', value: 'Favorites' },
-				{ type: 'info', label: 'My Strategies Combination', value: 'Portfolio' }
+				{ type: 'info', label: 'My Strategies Basket', value: 'Portfolio' }
 			],
 			activatedTag: 'All',
     }
