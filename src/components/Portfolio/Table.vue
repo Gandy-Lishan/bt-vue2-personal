@@ -379,15 +379,15 @@ export default {
       const status = res.data?.data?.status || preStatus
       if(code == 403) {_this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
       if(code == 200) {
-        _this.popUpMsgBox('Combination details viewed successfully')
+        _this.popUpMsgBox('Basket details viewed successfully')
         const data = res.data.data
         data.row = row
         _this.$emit('displayResultsData', data)
         // 如果说之前的状态是 running 之后的状态变成了 finish 或者 fail, 那么需要刷新列表
         if((preStatus === 'Running' || preStatus === 'running') && (['finish', 'Finish', 'Failed', 'failed', 'Fail', 'fail'].includes(status))) await _this.getDataList(null) // 成功后刷新列表
       }
-      if(status === 'Failed' || status === 'failed' || status === 'Fail' || status === 'fail') _this.popUpMsgBox('Combination failed. Adjust filters and rerun')
-      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Combination in progress. Details and editing are unavailable');return}
+      if(status === 'Failed' || status === 'failed' || status === 'Fail' || status === 'fail') _this.popUpMsgBox('Basket failed. Adjust filters and rerun')
+      if(code == 203) {row.viewLoading = false; _this.popUpMsgBox('Basket in progress. Details and editing are unavailable');return}
       if(code != 200) {_this.$emit('displayResultsData', {row})}
       row.viewLoading = false
     },

@@ -4,11 +4,11 @@
       <el-collapse accordion>
       <el-collapse-item>
         <template slot="title">
-          <p class="page-title">Combination (click to expand)</p><i class="header-icon el-icon-info"></i>
+          <p class="page-title">Basket (click to expand)</p><i class="header-icon el-icon-info"></i>
         </template>
         <div class="portfolio-des">
           <p>
-            Design, construct, and evaluate your own custom strategy combinations. Select from a variety of available strategies, assign specific weightings to control your allocation, and define your simulation period (start date and end date) as well as your initial capital. Click "Run Combination" to launch the simulation. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the combination.
+            Design, construct, and evaluate your own custom strategy baskets. Select from a variety of available strategies, assign specific weightings to control your allocation, and define your simulation period (start date and end date) as well as your initial capital. Click "Run Basket" to launch the simulation. The results provide a comprehensive overview, including key summary statistics, a detailed list of current holdings, and access to the performance and trade details for each individual strategy within the basket.
         </p>
         </div>
       </el-collapse-item>
@@ -18,7 +18,7 @@
       <el-collapse-item name="1" class="form">
         <template v-slot:title>
           <div class="title">
-            <p>Combination List</p>
+            <p>Basket List</p>
           </div>
         </template>
         <div class="content">
@@ -28,9 +28,9 @@
       <el-collapse-item name="2" class="form">
         <template v-slot:title>
           <div class="title" ref="formTarget">
-            <p>Create new Combination</p>
+            <p>Create new Basket</p>
             <p>
-              <el-tooltip class="item" effect="dark" content="Create New Combination" placement="bottom-start">
+              <el-tooltip class="item" effect="dark" content="Create New Basket" placement="bottom-start">
                 <el-button  type="warning" plain class="delete-btn" @click.stop="resetForm" size="small" icon="el-icon-plus">Create New</el-button>
               </el-tooltip>
             </p>
@@ -185,7 +185,7 @@ export default {
         this.clearResults()
         return
       }
-      if(!statistics || !strategy_details) {this.popUpMessage('Combination is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
+      if(!statistics || !strategy_details) {this.popUpMessage('Basket is empty. Please adjust filters');this.scrollToTarget('formTarget', -200); this.clearResults(); return}
       this.displaySummary(data)
       this.scrollToTarget('scrollTarget')
     },
