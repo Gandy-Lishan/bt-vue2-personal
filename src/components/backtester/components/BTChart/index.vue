@@ -72,6 +72,14 @@ export default {
 			symbol = storeSymbol
 		}
 		if (symbol === 'TEN') symbol = 'ten'
+		if(backtestID) {
+			try {
+					res = await seeParams(backtestID)
+				} catch(error) {
+					backtestID = ''
+					LocalStorageUtil.remove('backtestID')
+				}
+		}
 		if((params.usedFor && params.usedFor === 'showBTForm') || backtestID || symbol) {
 			this.default_symbol = null
 		}
