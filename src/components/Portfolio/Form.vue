@@ -337,6 +337,7 @@ import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule }
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 const debounce = require('lodash/debounce')
 import cloneDeep from 'lodash/cloneDeep'
+import moment from "moment";
 
 export default {
   name: 'Form',
@@ -558,8 +559,8 @@ export default {
       }
     },
     handleDisabledEndDate(time) {
-      const today = timestampToTime(new Date())
-      const startDay = timestampToTime(new Date(this.data.start_date))
+      const today = moment.utc().format('YYYY-MM-DD')
+      const startDay = moment.utc(this.data.start_date).format('YYYY-MM-DD')
       return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
     },
     setBacktestHistory(val) {
@@ -574,13 +575,17 @@ export default {
       if((!this.isPolling && this.btnLoading)) return true
       // 保存 portfolioFormData 的引用
       const portfolioFormData = this.portfolioFormData;
+      const startPickerOptions = this.startPickerOptions;
+      const endPickerOptions = this.endPickerOptions;
       // 重置数据
       Object.assign(this.$data, this.$options.data());
       // 重新赋值 portfolioFormData
       this.portfolioFormData = portfolioFormData;
+      this.startPickerOptions = startPickerOptions
+      this.endPickerOptions = endPickerOptions
       this.generateCPMName()
-      this.setBacktestHistory(120)
       this.$refs['Form'].clearValidate()
+      this.setBacktestHistory(120)
       if(this.auto_portfolio) this.$refs['AutoPortfolioForm'].clearValidate()
     },
     async checkDuplicateNames(name) {
