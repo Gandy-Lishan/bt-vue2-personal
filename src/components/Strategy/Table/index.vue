@@ -69,6 +69,7 @@ import SummaryTable from "./SummaryTable";
 import Portfolio from "@/components/Portfolio"
 import { LocalStorageUtil } from "@/utils";
 const XLSX = require('xlsx');
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
   name: 'StrategyList',
@@ -114,6 +115,9 @@ export default {
     await this.$refs['Summary'].getDataList()
     if(this.selectedTitle === 'Summary') this.highlightedTag(this.activatedTag)
     else if(this.selectedTitle === 'Strategies') this.$refs['Strategies'].highlightTag(this.activatedTag)
+    // 单独给 hao@sentimentrader.com 和 jinjing@sentimentrader.com 开放 portfolio 入口
+    const email = getCookieData()?.username
+    if(['hao@sentimentrader.com', 'jinjing@sentimentrader.com'].includes(email)) this.tags.push({ type: 'info', label: 'My Strategies Basket', value: 'Portfolio' })
   },
   methods: {
     portfolio() {
