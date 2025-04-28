@@ -351,6 +351,7 @@ export default {
       else if(key === '3-6') {
         // 删除 cookie
         Cookies.remove('sentimen_session')
+        Cookies.remove('session')
         // Cookies.remove('session')
         this.$store.commit('states/setErrorMessage404', {
 					status: 401,
