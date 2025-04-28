@@ -268,8 +268,8 @@
     </el-table-column>
     <el-table-column header-align="center" align="center" width="200">
       <template slot-scope="scope">
-        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
-        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategies</el-button> 
+        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategy</el-button>
+        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategy</el-button> 
       </template>
     </el-table-column>
     </el-table>
