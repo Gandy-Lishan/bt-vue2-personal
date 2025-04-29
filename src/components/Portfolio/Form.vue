@@ -560,8 +560,11 @@ export default {
     },
     handleDisabledEndDate(time) {
       const today = moment.utc().format('YYYY-MM-DD')
-      const startDay = moment.utc(this.data.start_date).format('YYYY-MM-DD')
-      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      if(this.data.start_date) {
+        const startDay = moment.utc(this.data.start_date).format('YYYY-MM-DD')
+        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      }
+      return (timestampToTime(time) > today)
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
