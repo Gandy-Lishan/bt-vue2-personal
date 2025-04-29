@@ -50,18 +50,14 @@
                   </label>
                 </template>
                 <div class="selectBox">
-                  <el-autocomplete
-                  ref="sentiInput"
-                  prefix-icon="el-icon-search"
-                  class="inline-input"
-                  clearable
-                  v-model="si.sentimentIndicator"
-                  :fetch-suggestions="indicatorSentimentSearch"
-                  placeholder="Search for the sentiment indicator"
-                  @select="(data) => {handleIndicatorSelect(data, 'senti')}"
-                  @clear="() => {handleIndicatorSelect({updated: '', value: '', url: ''}, 'senti')}"
-                  highlight-first-item
-                ></el-autocomplete>
+                  <SearchAutocomplete
+                    v-model="si.sentimentIndicator"
+                    @query="indicatorSentimentSearch"
+                    @select="(data) => {handleIndicatorSelect(data, 'senti')}"
+                    @clear="() => {handleIndicatorSelect({updated: '', value: '', url: ''}, 'senti')}"
+                    placeholder="Search for the sentiment indicator"
+                    clearable
+                  />
                 </div>
             </el-form-item>
           </div>
@@ -79,17 +75,14 @@
                   </label>
                 </template>
                 <div class="selectBox">
-                  <el-autocomplete
-                  ref="techInput"
-                  class="inline-input"
-                  clearable
-                  prefix-icon="el-icon-search"
-                  v-model="si.technicalIndicator"
-                  :fetch-suggestions="indicatorTechnicalSearch"
-                  placeholder="Search for the technical indicator"
-                  @select="(item) => {handleIndicatorSelect(item, 'tech')}"
-                  @clear="() => {handleIndicatorSelect({updated: '', value: '', url: '', class: ''}, 'senti')}"
-                ></el-autocomplete>
+                  <SearchAutocomplete
+                    v-model="si.technicalIndicator"
+                    @query="indicatorTechnicalSearch"
+                    @select="(data) => {handleIndicatorSelect(data, 'tech')}"
+                    @clear="() => {handleIndicatorSelect({updated: '', value: '', url: '', class: ''}, 'tech')}"
+                    placeholder="Search for the technical indicator"
+                    clearable
+                  />
                 </div>
             </el-form-item>
           </div>
@@ -137,17 +130,14 @@
                   </label>
                 </template>
                 <div class="selectBox userIndicatorBox">
-                    <el-autocomplete
-                    prefix-icon="el-icon-search"
-                    class="inline-input"
-                    clearable
+                  <SearchAutocomplete
                     v-model="si.userIndicator"
-                    placeholder="Search for my indicator"
-                    :fetch-suggestions="indicatorUsersSearch"
+                    @query="indicatorUsersSearch"
                     @select="(data) => {handleIndicatorSelect(data, 'user')}"
                     @clear="() => {handleIndicatorSelect({updated: '', value: '', url: ''}, 'user')}"
-                  >
-                  </el-autocomplete>
+                    placeholder="Search for my indicator"
+                    clearable
+                  />
                 </div>
 
                 <!-- <el-upload
@@ -302,6 +292,7 @@ import Uploader from "@/components/common/chart/st-development/js/webcomponents/
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
 const throttle = require('lodash/throttle')
 import { CIQ } from '@/components/common/chart/st-development/js'
+import { SearchAutocomplete } from "@/components/common"
 
 export default {
   props: {
@@ -313,7 +304,8 @@ export default {
   },
   components: {
     searchBar,
-    Uploader
+    Uploader,
+    SearchAutocomplete
   },
   data() {
     var validateSenti = (rule, value, callback) => {
@@ -435,12 +427,6 @@ export default {
         {value: "Users' Own Indicator", label: "Users' Own Indicator"},
       ],
       createdIndicatorOptions: [],
-
-      // 自定义动态渲染下拉栏
-      searchResults: [],
-      currentPage: 1,
-      pageSize: 20,
-      hasMore: true, // 是否还有更多数据
     }
   },
   computed: {
@@ -459,74 +445,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.attachScrollListener()
-  },
-  beforeDestroy() {
-    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
-  },
+
   methods: {
-    /** START 加载更多数据且保持滚动条位置 */
-    // 绑定滚动事件
-    attachScrollListener() {
-      const refs = ['sentiInput', 'techInput']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 解绑滚动事件
-    detachScrollListener() {
-      const refs = ['sentiInput', 'techInput']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 监听滚动事件，触发加载更多
-    handleDropdownScroll(event, inputType) {
-      var self = this;
-      const dropdown = event.target;
-      // 根据传入的 inputType 访问不同的 ref
-      const inputRef = self.$refs[inputType];
-
-      if (
-        dropdown.scrollHeight - dropdown.scrollTop - 10 <
-        dropdown.clientHeight
-      ) {
-        // 判断是否有更多数据
-        if (!this.hasMore) return;
-
-        // 记录滚动位置
-        const currentScrollTop = dropdown.scrollTop;
-
-        self.currentPage++;
-        self.loadMore((results) => {
-            inputRef.$data.suggestions = results;
-
-            // 恢复滚动位置
-            requestAnimationFrame(() => {
-                dropdown.scrollTop = currentScrollTop;
-            });
-        });
-      }
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
-    },
-    /** END 加载更多数据且保持滚动条位置 */
-
     /** disable enter while naming a custom symbol */
 		onEnter(event) {
       event.preventDefault();
@@ -570,10 +490,7 @@ export default {
         }))
         .filter(item => item.priority > 0)
  
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     async indicatorUsersSearch(queryString, cb) {
       if(this.createdIndicatorOptions.length === 0) {
@@ -585,16 +502,6 @@ export default {
           }))
           .filter(item => item.priority > 0)
         cb(results.sort((a, b) => b.priority - a.priority).slice(0, 50))
-        // await getAllMyIndicatorsList(1, (data) => {
-        //   this.createdIndicatorOptions = data
-        //   const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
-        //   var results = list.map(item => ({
-        //       ...item,
-        //       priority: createStateFilter(queryString)(item),
-        //     }))
-        //     .filter(item => item.priority > 0)
-        //   cb(results.sort((a, b) => b.priority - a.priority))
-        // })
       }else{
         const list = this.createdIndicatorOptions.map(item => ({...item, url: item.url, value: item.name, file_name: item.name, file_id: `${item.name}CREATE${item.url}`, updated: item.timeframe}))
         let results = list.map(item => ({
@@ -620,10 +527,7 @@ export default {
         }))
         .filter(item => item.priority > 0)
  
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
     indicatorRiskSearch(queryString, cb) {
       var riskIndicatorList = this.loadRiskList()

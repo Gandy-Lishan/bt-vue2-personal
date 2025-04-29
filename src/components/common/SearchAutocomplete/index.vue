@@ -18,6 +18,11 @@
         <div v-if="item.class" class="custom-option">
           <span class="item-label">{{ item.value }}</span>
         </div>
+        <!-- 单列显示的tech,独立显示逻辑 -->
+        <div v-else-if="item.model_name" class="custom-option">
+          <span class="item-label indicator">{{ item.model_name }}</span>
+          <span class="type-label">{{ item.category }}</span>
+        </div>
         <!-- 用是否存在update来判断为indicator还是symbol,加入兼容措施， -->
         <div v-else class="custom-option">
           <span class="item-label indicator" v-if="item.updated">{{ item.label || item.value }}</span>
