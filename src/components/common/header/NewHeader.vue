@@ -84,7 +84,6 @@
 <script>
 import { getTokenRole } from '@/utils'
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
-import Cookies from 'vue-cookies'
 
 export default {
   name: 'NewHeader',
@@ -350,14 +349,11 @@ export default {
       }
       else if(key === '3-6') {
         // 删除 cookie
-        const removeAllCookies = (keys) => {
-          keys.forEach(key => {
-            Cookies.remove(key)                         // 当前路径当前域
-            Cookies.remove(key, '/')                    // 根路径
-            Cookies.remove(key, '/', window.location.hostname) // 根路径+当前域
-            Cookies.remove(key, '/', '.' + window.location.hostname) // 根路径+加点的域名（比如 .yourdomain.com）
-          })
+        function removeCookie({name, domain}) {
+          document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
         }
+
+        [{name: 'sentimen_session', domain: '.sentimentrader.com'}, {name: 'session', domain: 'users.sentimentrader.com'}].forEach(removeCookie)
         // 调用
         removeAllCookies(['sentimen_session', 'session'])
         // Cookies.remove('session')
