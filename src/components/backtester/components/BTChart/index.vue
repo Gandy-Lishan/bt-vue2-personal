@@ -74,7 +74,7 @@ export default {
 		if (symbol === 'TEN') symbol = 'ten'
 		if(backtestID) {
 			try {
-					res = await seeParams(backtestID)
+					await seeParams(backtestID)
 				} catch(error) {
 					backtestID = ''
 					LocalStorageUtil.remove('backtestID')
