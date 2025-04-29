@@ -76,6 +76,13 @@ export default {
 			try {
 					await seeParams(backtestID)
 				} catch(error) {
+					if(error.response.status === 404) {
+						this.popUpMsgBox('This backtest has been deleted', 10000)
+					}else {
+						this.popUpMagBox('This backtest is unavailable', 10000)
+					}
+					debugger
+					console.log('error', error)
 					backtestID = ''
 					LocalStorageUtil.remove('backtestID')
 				}
