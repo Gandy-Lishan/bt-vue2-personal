@@ -258,6 +258,11 @@ export default {
             path: '/MR/quantedge'
           },
           {
+            label: 'TradingEdge',
+            keyPath: '10-4',
+            path: '/MR/tradingedge'
+          },
+          {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
