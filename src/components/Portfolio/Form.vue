@@ -633,14 +633,16 @@ export default {
       let totalWeight = 0
       let rowWeightValid = true
       let inAllowedList = true
-      for (const row of strategy_combination) {
+      for (let index = 0; index < strategy_combination.length; index++) {
+        const row = strategy_combination[index]
         totalWeight += parseFloat(row.percent) || 0
         row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
         if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
         console.log('this.strategiesList', this.strategiesList)
+        if(!row.strategy) {inAllowedList = false; break}
         const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
-        if(!isIn) inAllowedList = false
+        if(!isIn) {inAllowedList = false; break}
       }
       totalWeight += this.portfolioFirstLine.percent
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
