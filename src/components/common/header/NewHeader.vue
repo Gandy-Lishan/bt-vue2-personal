@@ -349,13 +349,13 @@ export default {
       }
       else if(key === '3-6') {
         // 删除 cookie
-        function removeCookie({name, domain}) {
+        const removeCookie = ({name, domain}) => {
           document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
         }
 
         [{name: 'sentimen_session', domain: '.sentimentrader.com'}, {name: 'session', domain: 'users.sentimentrader.com'}].forEach(removeCookie)
         // 调用
-        removeAllCookies(['sentimen_session', 'session'])
+        removeCookie(['sentimen_session', 'session'])
         // Cookies.remove('session')
         this.$store.commit('states/setErrorMessage404', {
 					status: 401,
