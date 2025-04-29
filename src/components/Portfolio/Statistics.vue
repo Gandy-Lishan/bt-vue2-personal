@@ -166,9 +166,6 @@
      :max-width="l.maxWidth"
      align="center"
      :key="index"
-     :sortable="
-     l.label === 'Strategy' ? 'custom' : false
-     "
      >
      <template slot-scope="scope">
         <div v-for="(item, index) in scope.row[l.value]" :key="index">
@@ -325,21 +322,33 @@ export default {
 				this.queryInfo.page = page
 		},
 		changeTableSort(column){
-			var sortingOrder = column.order
-			var colName = column.prop
-			// 数字类型排序
-			if(['FloatProfit'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.processedTradesData.sort((a,b) => {
-						return b[colName] - a[colName]
-					})
-				}else if(sortingOrder == 'descending'){
-					this.processedTradesData.sort((a,b) => {
-						return a[colName] - b[colName]
-					})
-				}else{
+			const sortingOrder = column.order
+			const colName = column.prop
+			debugger
+		// 数字字符串转数字类型排序
+		if (['FloatProfit', 'Entry Price', 'Current Price', 'Shares', 'Profit', 'Market Value', 'Total position(%)'].indexOf(colName) !== -1) {
+				if (sortingOrder == 'ascending') {
+								this.processedTradesData.sort((a, b) => {
+												b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
+												a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
+												let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+												let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+												_b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+												_a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+												return _b - _a
+								})
+				} else if (sortingOrder == 'descending') {
+								this.processedTradesData.sort((a, b) => {
+												b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
+												a[colName] = typeof a[colName] === 'number' ? String(a[colName]): a[colName]
+												let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
+												let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
+												_b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+												_a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
+												return _a - _b
+								})
 				}
-			}
+		}
 			// 日期类型排序
 			if(['EntryDate', 'ExitDate'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
@@ -354,7 +363,7 @@ export default {
 				}
 			}
 			// 字符串类型排序
-			if(['Symbol','Signal','ExitReason', 'Direction'].indexOf(colName) !== -1){
+			if(['Symbol','Signal','ExitReason', 'Direction', 'Strategy'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.processedTradesData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
