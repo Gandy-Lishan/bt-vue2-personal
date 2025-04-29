@@ -82,8 +82,26 @@ export const CommonMethodsMixin = {
 		async copyBacktest(data) {
 			try {
 				this.loading = true
-				const copyName = `${data.name}(copy)`
-
+					/* 为防止出现重名, 在这里加上时间戳 */
+					const generateCopyName = (name) => {
+						const datePattern = /\(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\)/;
+						
+						// 去掉 data.name 中已有的日期时间部分
+						const cleanedName = name.replace(datePattern, '');
+						
+						const now = new Date();
+						const year = now.getFullYear();
+						const month = String(now.getMonth() + 1).padStart(2, '0');
+						const day = String(now.getDate()).padStart(2, '0');
+						const hour = String(now.getHours()).padStart(2, '0');
+						const minute = String(now.getMinutes()).padStart(2, '0');
+						const second = String(now.getSeconds()).padStart(2, '0');
+						
+						const copyName = `${cleanedName}(copy) (${year}-${month}-${day} ${hour}:${minute}:${second})`;
+						
+						return copyName;
+				}
+				const copyName = generateCopyName(data.name)
 				// 检查是否已经存在同名的 backtest
 				const nameLookUp = await getBacktestName(copyName)
 				const isDuplicate = nameLookUp.data.results.some(

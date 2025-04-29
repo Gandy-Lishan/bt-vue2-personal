@@ -65,14 +65,14 @@
     </el-form>
     <div class="portfolioCheckedBox">
         <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;">
-          Auto Combination
+          Auto Basket
         <el-tooltip effect="dark" placement="top">
           <span slot="content">
-            Define your ideal investment profile by setting target ranges for key performance metrics:<br/>
-            Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return (%)), Win Rate (%), and Max Drawdown (%). <br/>
-            Click "Find Matching Combinations" and the system will recommend strategy combinations that meet your criteria. <br/>
-            Select your preferred combination from the recommendations, and its constituent strategies will automatically <br/>
-            populate the Strategy Allocation list below for further customization or simulation.
+            Define your ideal investment profile by setting target ranges for key performance metrics<br/>
+            such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+            Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
+            that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
+            will then be automatically added to the Strategy Allocation list below for further customization or simulation.
           </span>
           <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
         </el-tooltip>
@@ -184,7 +184,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Combinations</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Baskets</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -268,8 +268,8 @@
     </el-table-column>
     <el-table-column header-align="center" align="center" width="200">
       <template slot-scope="scope">
-        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
-        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategies</el-button> 
+        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategy</el-button>
+        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategy</el-button> 
       </template>
     </el-table-column>
     </el-table>
@@ -277,7 +277,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="8"></el-col>
       <el-col :span="8">
-        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Combination</el-button>
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Basket</el-button>
         <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
@@ -288,7 +288,7 @@
     </el-row>
     <br>
     </div>
-    <el-dialog title="Strategy Combinations" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+    <el-dialog title="Strategy Baskets" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <el-table
         :data="autoPortfolioData"
         stripe
@@ -335,6 +335,9 @@ import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
+const debounce = require('lodash/debounce')
+import cloneDeep from 'lodash/cloneDeep'
+import moment from "moment";
 
 export default {
   name: 'Form',
@@ -496,36 +499,36 @@ export default {
       },
       portfolioRules: {
         min_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
     }
@@ -543,7 +546,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `My Combination ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `My Basket ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -556,9 +559,12 @@ export default {
       }
     },
     handleDisabledEndDate(time) {
-      const today = timestampToTime(new Date())
-      const startDay = timestampToTime(new Date(this.data.start_date))
-      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      const today = moment.utc().format('YYYY-MM-DD')
+      if(this.data.start_date) {
+        const startDay = moment.utc(this.data.start_date).format('YYYY-MM-DD')
+        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      }
+      return (timestampToTime(time) > today)
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
@@ -570,10 +576,20 @@ export default {
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading)) return true
-			Object.assign(this.$data, this.$options.data())
+      // 保存 portfolioFormData 的引用
+      const portfolioFormData = this.portfolioFormData;
+      const startPickerOptions = this.startPickerOptions;
+      const endPickerOptions = this.endPickerOptions;
+      // 重置数据
+      Object.assign(this.$data, this.$options.data());
+      // 重新赋值 portfolioFormData
+      this.portfolioFormData = portfolioFormData;
+      this.startPickerOptions = startPickerOptions
+      this.endPickerOptions = endPickerOptions
       this.generateCPMName()
-      this.setBacktestHistory(120)
       this.$refs['Form'].clearValidate()
+      this.setBacktestHistory(120)
+      if(this.auto_portfolio) this.$refs['AutoPortfolioForm'].clearValidate()
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getPortfolioList(null, null, name)
@@ -599,7 +615,6 @@ export default {
       return await validateForm(formName)
     },
     async saveFormData() {
-      
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Please review and correct form errors')
@@ -609,31 +624,34 @@ export default {
         const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
         if(!validateAutoPortfolioForm) {
           // 选择了 auto portfolio，但是表单验证没有通过
-          this.popUpMsgBox('Auto Combination needs more info. Correct format, please')
+          this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
           return
         }
       }
       // 验证百分比
-      const strategy_combination = this.strategy_combination.slice(1)
+      const strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
       let rowWeightValid = true
       let inAllowedList = true
-      for (const row of strategy_combination) {
+      for (let index = 0; index < strategy_combination.length; index++) {
+        const row = strategy_combination[index]
         totalWeight += parseFloat(row.percent) || 0
         row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
         if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
         console.log('this.strategiesList', this.strategiesList)
+        if(!row.strategy) {inAllowedList = false; break}
         const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
-        if(!isIn) inAllowedList = false
+        if(!isIn) {inAllowedList = false; break}
       }
       totalWeight += this.portfolioFirstLine.percent
+      if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
       if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
       if(strategy_combination.length<1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      this.processTips = `Tips: Saving combination...`
+      this.processTips = `Tips: Saving basket...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -643,7 +661,7 @@ export default {
       this.percentage = 8
       let saveData = {
         ...this.data,
-        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
+        strategy_combination: JSON.stringify(strategy_combination.length === 0 ? [] : strategy_combination.map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
         auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
       let saveRes
@@ -658,7 +676,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Running combination. Please wait patiently...'
+      this.processTips = 'Tips: Running basket. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -675,13 +693,15 @@ export default {
       } while (true); // Keep polling indefinitely
     },
     async findPortfolio() {
+      debugger
+      console.log('portfolioFormData', this.portfolioFormData)
       if(!this.auto_portfolio) return
       this.findPortfolioLoading = true
       const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
       if(!validateAutoPortfolioForm) {
         // 选择了 auto portfolio，但是表单验证没有通过
         this.findPortfolioLoading = false
-        this.popUpMsgBox('Auto Combination needs more info. Correct format, please')
+        this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
         return
       }
       const {
@@ -725,16 +745,16 @@ export default {
      if(!saveRes) { this.$emit('clearResults');
       this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
-     if(code == 203) this.popUpMsgBox(`The combination is running. You can wait or click the "+" button to create a new combination`)
+     if(code == 203) this.popUpMsgBox(`The basket is running. You can wait or click the "+" button to create a new basket`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty combination. Please run again')
+      if(code == 407) this.popUpMsgBox('Empty basket. Please run again')
       if(code == 200) {
-        this.popUpMsgBox(`The combination is completed successfully`)
+        this.popUpMsgBox(`The basket is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
@@ -757,7 +777,7 @@ export default {
         return {...item, model_name: item.model_name, url: item.model_name, category: this.tags[category], _category: category}
       })]
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
+      for (const row of [...this.strategy_combination.slice(1)]) {
         totalWeight += parseFloat(row.percent) || 0
       }
       this.portfolioFirstLine.percent = 100 - totalWeight
@@ -801,25 +821,27 @@ export default {
     deleteRow(scope) {
       this.strategy_combination.splice(scope.$index, 1)
       let weight = 0
-      for (const _row of this.strategy_combination.slice(1)) {
+      for (const _row of [...this.strategy_combination.slice(1)]) {
         weight += parseFloat(_row.percent) || 0
       }
       const percent = 100 - weight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
-    validateWeightRule(row) {
-      console.log(row.percent)
+    validateWeightRule: debounce(function (row) {
       row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
       // 每次都计算第一个 percent
+      const temp_strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
-        totalWeight += parseFloat(row.percent) || 0
+      for (const _row of temp_strategy_combination) {
+        totalWeight += parseFloat(_row.percent) || 0
+        _row.weightValidErrMsg = _validatePercentageRule(_, _row.percent)
       }
       if(totalWeight <= 0) return
       if(totalWeight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'; return}
       const percent = 100 - totalWeight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
-    },
+      this.strategy_combination = [{}, ...temp_strategy_combination]
+    }, 500),
     handleRowSelect(item, row) {
       row.model_name = item.model_name
       row.category = this.tags[item.category]

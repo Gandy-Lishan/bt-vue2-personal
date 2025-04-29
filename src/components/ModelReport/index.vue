@@ -195,7 +195,9 @@ export default {
       this.navItems = [
         { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
         { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
-        { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' }
+        { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
+        { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
+        { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' }
       ]
     }
     window.addEventListener('scroll', this.handleScroll);
