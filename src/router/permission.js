@@ -43,7 +43,7 @@ export function setRouterPermission(router) {
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
 			// hao@sentimentrader
-			const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			// const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			// reports 权限
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
 			// daniel@sentimentrader.com
@@ -54,12 +54,12 @@ export function setRouterPermission(router) {
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqejoZeS+pZ9xdhKrkTjTWcCFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+1K1E2kEHEDRSO73gIBBLzLgUs9px+NQUAhS6QuXGi61iXjPsyCUB+eZRfZ9cmee9jUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwAFMYBj9lCXHXCZ4oXH8hbfJIw0wqaRKd8xXx7SQHKFrhctGlPBiU/NVN+tuzK4g32K5DZib9pJY25o6aMK7uSOwU3Zr6IIsg5Nw1LD/s7dUxArFIVekxyQUKd9epvqDwXyLiaGJI7G1mhM0aKXbwRRDFlyVRtvqJMD9BXf0Or/hETAe6m96mFxmT3ccFQLrxOQ=="
 			// datalite
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqf7esOK24j4IZaV+aGkCMK1HDsNiXUfX5Pu5upJJST8oTpvTm0BdvYrnHrJbQm8XdjYFZgwUNoEBiuKsKAIH4rEW6nBv511krdR+eHgpUiRNjeE2og+1mrxGst89AW01Bj56Uo1kJPBGfw7MWFmpCeFkNoXjLNOzTbmMirhca1m7nEOyuDTUqoUp59w2G6c1gdLdLRI8tjYxKcH8tV8WFx1krMbQVbAzv4tegUYI5fOLTv/vcyCJxxnapa38ygsA7g="
-			Cookies.set(
-				'sentimen_session',
-				_userCookies
+			// Cookies.set(
+			// 	'sentimen_session',
+			// 	_userCookies
 				
-			)
-			Cookies.set('session', _userCookies)
+			// )
+			// Cookies.set('session', _userCookies)
 		}
 		// Jason
 		// Cookies.set(
@@ -178,13 +178,13 @@ export function setRouterPermission(router) {
 				}
 			// 只能访问 Reports 页面: reports
 			else if(access_level.some(str => str.includes('reports')))  {
-				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/modeledge', '/favorites', '/tags']
+				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/modeledge', '/tradingedge', '/favorites', '/tags']
 				if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
 				else next('/MR/sentimentedge')
 			}
 		 // 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
 			else if(access_level.some(str => str.includes('corelite'))) {
-				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/modeledge', '/favorites', '/tags']
+				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/modeledge', '/tradingedge','/favorites', '/tags']
 				if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
 				else next('/MR/sentimentedge')
 			}

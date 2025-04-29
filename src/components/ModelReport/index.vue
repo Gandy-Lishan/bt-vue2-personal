@@ -196,6 +196,7 @@ export default {
         { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
         { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
         { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
+        { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
         { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' }
       ]
     }

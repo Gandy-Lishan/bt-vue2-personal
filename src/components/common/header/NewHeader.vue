@@ -84,7 +84,6 @@
 <script>
 import { getTokenRole } from '@/utils'
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
-import Cookies from 'vue-cookies'
 
 export default {
   name: 'NewHeader',
@@ -259,6 +258,11 @@ export default {
             path: '/MR/quantedge'
           },
           {
+            label: 'TradingEdge',
+            keyPath: '10-4',
+            path: '/MR/tradingedge'
+          },
+          {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
@@ -350,8 +354,13 @@ export default {
       }
       else if(key === '3-6') {
         // 删除 cookie
-        Cookies.remove('sentimen_session')
-        Cookies.remove('session')
+        const removeCookie = ({name, domain}) => {
+          document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        }
+
+        [{name: 'sentimen_session', domain: '.sentimentrader.com'}, {name: 'session', domain: 'users.sentimentrader.com'}].forEach(removeCookie)
+        // 调用
+        removeCookie(['sentimen_session', 'session'])
         // Cookies.remove('session')
         this.$store.commit('states/setErrorMessage404', {
 					status: 401,

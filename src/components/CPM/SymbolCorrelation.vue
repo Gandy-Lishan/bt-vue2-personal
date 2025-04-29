@@ -5,7 +5,7 @@
         <el-col :span="8">
           <el-form-item label="1. Designated Ticker" prop="benchmark">
             <el-autocomplete
-                ref="autocomplete"
+                ref="TickerAutocomplete"
                 class="inline-input"
                 v-model="data.benchmark"
                 :fetch-suggestions="querySearch"
@@ -401,7 +401,7 @@ export default {
         return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
     attachScrollListener() {
-      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
+      const refs = ['autocomplete', 'TickerAutocomplete']; // 要监听的下拉框的 ref 名称
 
       refs.forEach(refName => {
         const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
