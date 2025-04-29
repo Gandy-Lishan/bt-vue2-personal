@@ -350,8 +350,16 @@ export default {
       }
       else if(key === '3-6') {
         // 删除 cookie
-        Cookies.remove('sentimen_session')
-        Cookies.remove('session')
+        const removeAllCookies = (keys) => {
+          keys.forEach(key => {
+            Cookies.remove(key)                         // 当前路径当前域
+            Cookies.remove(key, '/')                    // 根路径
+            Cookies.remove(key, '/', window.location.hostname) // 根路径+当前域
+            Cookies.remove(key, '/', '.' + window.location.hostname) // 根路径+加点的域名（比如 .yourdomain.com）
+          })
+        }
+        // 调用
+        removeAllCookies(['sentimen_session', 'session'])
         // Cookies.remove('session')
         this.$store.commit('states/setErrorMessage404', {
 					status: 401,
