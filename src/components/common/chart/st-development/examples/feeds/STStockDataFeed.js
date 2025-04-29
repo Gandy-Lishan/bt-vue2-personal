@@ -769,6 +769,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                         }
                     } catch (error) {
                         console.error('Error fetching getAnalystMyIndicatorData:', error);
+                        localStorage.removeItem('backtestID')
                     }
                     }
 
