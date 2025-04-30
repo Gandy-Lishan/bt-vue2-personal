@@ -493,8 +493,8 @@ export default {
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
         cash: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null, true)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null, true)(rule, value, callback), trigger: 'change' }
         ]
       },
       portfolioRules: {
