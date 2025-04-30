@@ -29,6 +29,9 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }" title="Refresh List">My Signals List</p>
+            <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+              <span>View Video Tutorial</span>
+            </el-button>
             <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p> -->
              
           </div>
@@ -263,6 +266,10 @@ export default {
         else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
         else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
     },
+  	jumpToTutoiral(){
+      const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxN3rtpZLoyR4lYVrR66BpGH'
+      window.open(path, '_blank')
+	  },
   }
 }
 </script>
