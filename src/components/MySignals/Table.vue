@@ -4,9 +4,6 @@
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
-      <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-        <span>View Video Tutorial</span>
-      </el-button>
       <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
       <!-- <el-popconfirm
         confirm-button-text="Continue"
@@ -493,11 +490,7 @@ export default {
     tableRowClassName({row, rowIndex}) {
       if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
       return ''
-		},
-  	jumpToTutoiral(){
-      const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxN3rtpZLoyR4lYVrR66BpGH'
-      window.open(path, '_blank')
-	  },
+		}
     }
   }
 </script>
