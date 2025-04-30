@@ -41,8 +41,6 @@
 			<!-- 预留一个过滤器的div -->
 			<div class="header-part2">
 				<div class="filterBox _filterConditionBox">
-					<el-row :gutter="20">
-						<el-col :span="7">
 							<!-- <el-date-picker
 								v-model="date"
 								class="aiscanner-date"
@@ -79,30 +77,26 @@
 								>
 								</el-date-picker>
 							</div>
-						</el-col>
-						<el-col :span="6">
-							<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
+							<div class="datePicker">
+								<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
 								>Only Show Profit Target > Stop Loss
-							</el-checkbox>
-						</el-col>
-						<el-col :span="5">
-							<label for="radioGroup" class="direction">Direction: </label>
-							<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
-								<el-radio :label='false'>Long</el-radio>
-								<el-radio :label='true'>Short</el-radio>
-							</el-radio-group>
-						</el-col>
-						<el-col :span="6">
-							<div class="btns">
-								<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
-								<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
-								<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
+								</el-checkbox>
+								<div class="direction">
+										<label for="radioGroup" class="direction">Direction: </label>
+										<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
+											<el-radio :label='false'>Long</el-radio>
+											<el-radio :label='true'>Short</el-radio>
+										</el-radio-group>
+								</div>
 							</div>
-						</el-col>
-					</el-row>
 					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
 						>Only Show Direction Is Short
 					</el-checkbox> -->
+				</div>
+				<div class="btns">
+					<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
+					<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+					<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
 				</div>
 			</div>
 		</div>
@@ -964,6 +958,8 @@ h4 {
 		.btns {
 			display: flex;
 			justify-content: flex-end;
+			margin: 10px 0px 10px 0px;
+			float: right;
 		}
 		.sign {
 			margin: 0 5px;
@@ -971,7 +967,6 @@ h4 {
 		.datePicker {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
 		}
 		.h6-text {
 			margin-top: 0px;
@@ -979,5 +974,11 @@ h4 {
 /deep/ .el-collapse-item__content {
 	font-size: 16px;
 	font-weight: 400;
+}
+._filterConditionBox {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
 }
 </style>
