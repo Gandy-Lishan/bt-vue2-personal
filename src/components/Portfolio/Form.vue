@@ -206,12 +206,12 @@
         <span v-else>{{ scope.$index + 1 }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="Category" header-align="center" align="center" width="200px">
+    <!-- <el-table-column label="Category" header-align="center" align="center" width="200px">
       <template slot-scope="scope">
         <el-input v-model="portfolioFirstLine.category" size="mini" disabled  v-if="scope.$index === 0"></el-input>
         <el-input v-model="scope.row.category" size="mini" disabled  v-else></el-input>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
       <template slot-scope="scope">
         <el-autocomplete
@@ -277,7 +277,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="8"></el-col>
       <el-col :span="8">
-        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Basket</el-button>
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">View Performance Results of the Basket</el-button>
         <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
@@ -311,10 +311,10 @@
 				</el-table-column>
       <el-table-column label="#" width="100px">
         <template slot-scope="scope">
-          <p style="margin: 0">{{ `Strategy #${scope.$index + 1}` }}</p>
+          <p style="margin: 0">{{ `Basket #${scope.$index + 1}` }}</p>
         </template>
       </el-table-column>
-      <el-table-column label="Model">
+      <el-table-column label="Strategy Combination">
         <template slot-scope="scope">
           <template v-for="(item, index) in scope.row.array">
               <p :key="index" style="margin: 0">{{ `${index + 1}. ${item.model_name}` }}</p>
@@ -324,7 +324,7 @@
     </el-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogTableVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
-      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm selection</el-button>
+      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm Selection</el-button>
    </span>
     </el-dialog>
   </div>
@@ -393,13 +393,13 @@ export default {
       ],
       detailTableCol: [
         {
-          label: '# Strategy',
+          label: '# Basket',
           name: 'strategy',
           key: 'strategy',
           width: '100px'
         },
         {
-          label: 'Model',
+          label: 'Strategy Combination',
           name: 'model',
           key: 'model',
           width: '200px'
