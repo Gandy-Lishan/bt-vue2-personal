@@ -187,7 +187,7 @@
       </el-table>
     </div>
     <div class="symbol-correlation-chart">
-      <div id="chart-container" style="height: 600px;"></div>
+      <div id="chart-container" style="height: 900px; width: 100%;"></div>
     </div>
   </div>
 </template>
@@ -661,7 +661,7 @@ export default {
         animation: false,
         backgroundColor: 'transparent',
         renderTo: 'charts',
-        spacingRight: 50
+        spacingRight: 0
       };
 
       Highcharts.stockChart("chart-container", {
@@ -768,12 +768,12 @@ export default {
               }
             },
             tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 30
+            offset: 10
           },
           {
             title: { text: "Correlation", style: {fontWeight: 600} },
-            top: '65%',
-            height: '35%',
+            top: '60%',
+            height: '45%',
             offset: 0,
             lineWidth: 0,
             min: -1,
@@ -786,7 +786,7 @@ export default {
               }
             },
             tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 30
+            offset: 10
           }
         ],
         rangeSelector: {
