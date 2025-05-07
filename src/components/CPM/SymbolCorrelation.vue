@@ -187,7 +187,7 @@
       </el-table>
     </div>
     <div class="symbol-correlation-chart">
-      <div id="chart-container" style="height: 900px; width: 100%;"></div>
+      <div id="chart-container" style="height: 900px;"></div>
     </div>
   </div>
 </template>
@@ -752,13 +752,13 @@ export default {
               return Highcharts.dateFormat('%b %e, %H:%M', this.value);
             }
           },
-          maxPadding: 0.10  // 👉 在右边增加 5% 的 padding 空间
+          maxPadding: 0  // 👉 在右边增加 5% 的 padding 空间
         },
         yAxis: [
           {
             title: { text: this.data.benchmark, style: {fontWeight: 600} },
             opposite: true, // 主轴在左边
-            height: '60%',
+            height: '50%',
             lineWidth: 0,
             labels: {
               align: 'right', // 👈 放最右边
@@ -768,12 +768,12 @@ export default {
               }
             },
             tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 10
+            offset: 30
           },
           {
             title: { text: "Correlation", style: {fontWeight: 600} },
-            top: '60%',
-            height: '45%',
+            top: '50%',
+            height: '50%',
             offset: 0,
             lineWidth: 0,
             min: -1,
@@ -786,7 +786,7 @@ export default {
               }
             },
             tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 10
+            offset: 30
           }
         ],
         rangeSelector: {
