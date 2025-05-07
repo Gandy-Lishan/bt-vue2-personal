@@ -64,19 +64,35 @@
         </el-row>
     </el-form>
     <div class="portfolioCheckedBox">
-        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;">
-          Auto Basket
-        <el-tooltip effect="dark" placement="top">
-          <span slot="content">
-            Define your ideal investment profile by setting target ranges for key performance metrics<br/>
-            such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
-            Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
-            that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
-            will then be automatically added to the Strategy Allocation list below for further customization or simulation.
-          </span>
-          <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
-        </el-tooltip>
-        </a>
+        <!-- <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"> -->
+          <div class="portfolioSelect">
+            <span class="portfolioSelectLabel">5.</span>
+            <el-select
+              v-model="auto_portfolio"
+              placeholder="— Select —"
+            >
+              <el-option
+                v-for="item in autoPortfolioCondition"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <span style="margin-left: 15px;">
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">
+                  Define your ideal investment profile by setting target ranges for key performance metrics<br/>
+                  such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+                  Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
+                  that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
+                  will then be automatically added to the Strategy Allocation list below for further customization or simulation.
+                </span>
+                <i class="header-icon el-icon-info"  style="margin-right: 5px; font-size: 16px;"></i>
+              </el-tooltip>
+            </span>
+        </div>
+        <!-- </a> -->
         <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
@@ -437,6 +453,10 @@ export default {
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
+      ],
+      autoPortfolioCondition: [
+        { value: true, label: 'Auto Basket'},
+        { value: false, label: 'Manually Add/Pick Strategy'}
       ],
       bondOptions: [
         { value: 'CASH', label: 'CASH'},
@@ -1150,6 +1170,19 @@ export default {
     margin: 0px;
     font-weight: 500;
     color: #606266;
+  }
+  .portfolioSelectLabel{
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  .portfolioSelect {
+    /deep/ .el-input__inner {
+       margin-left: 5px;
+    }
+    /deep/ .el-select {
+      width: 39%;
+    }
   }
 }
 </style>
