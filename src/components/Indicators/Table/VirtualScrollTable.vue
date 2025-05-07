@@ -1763,7 +1763,7 @@ export default {
     }
 	},
   mounted() {
-    if(this.$route.path === '/trend_score') {
+    if(this.$route.path === '/trend_score' || this.$route.path === '/sector_trend_score') {
       this.isTrendScorePage = true
       this.enlarged = true
     }

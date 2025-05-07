@@ -19,14 +19,14 @@
         @showDetails="showDetails"
         @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
         :style="{ 
-             'width': ((checkedType === 'TrendSector')) ? '100%' : '50%', 
+             'width': (isFullScreen) ? '100%' : '50%', 
              'display': 'block'
          }"
         ></Table>
      </template>
      <!-- 点击之后详情页放在这里 -->
      <!-- <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :style="{ width: '50%' }" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details> -->
-     <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
+     <Chart :id="'indiChart'" v-if="!isFullScreen && enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
      <!-- <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }"></SeasonalityChart> -->
      <AboutUs></AboutUs>
    </div>
@@ -51,6 +51,7 @@ export default {
    return {
      toggleEnlarge: this.toggleEnlarge,
      checkedOption: this.checkedOption,
+     enterOrExitFullScreenTrendScorePage: this.enterOrExitFullScreenTrendScorePage
    };
  },
  data () {
@@ -80,7 +81,8 @@ export default {
      indicatorsCSVName: '',
      checkedTitle: '',
      sectorTitle: '',
-     sectorIndex: ''
+     sectorIndex: '',
+     enlargedTrendScoreTable: null,
    }
  },
  components: {
@@ -94,7 +96,13 @@ export default {
  computed: {
    ...mapGetters({
      indicatorsListData: 'getIndicatorsPageListData'
-   })
+   }),
+   isFullScreen() {
+    const optionValues = (this.tableInfoList[0]?.options || []).map(ele => ele.value).filter(value => value !== 'TrendSector')
+    return (
+    (this.enlargedTrendScoreTable === 'Selected Sector/Index' && optionValues.includes(this.checkedType))
+    )
+   }
  },
  beforeRouteEnter(to, from, next) {
   const index = to.query.index
@@ -128,6 +136,14 @@ export default {
        this.enlargedTable = label; // Enlarge the clicked table
      }
    },
+   enterOrExitFullScreenTrendScorePage(label) {
+    console.log('enterOrExitFullScreenTrendScorePage', label)
+      if (this.enlargedTrendScoreTable === label) {
+        this.enlargedTrendScoreTable = null; // Restore all tables if already enlarged
+      } else {
+        this.enlargedTrendScoreTable = label; // Enlarge the clicked table
+      }
+    },
    checkedOption(checkedType) {
      this.checkedType = checkedType
    },
