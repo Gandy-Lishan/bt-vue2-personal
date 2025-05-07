@@ -84,11 +84,7 @@
                 <span style="margin-left: 15px;">
                   <el-tooltip effect="dark" placement="top">
                     <span slot="content">
-                      Define your ideal investment profile by setting target ranges for key performance metrics<br/>
-                      such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
-                      Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
-                      that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
-                      will then be automatically added to the Strategy Allocation list below for further customization or simulation.
+                      <span v-html="portfolioSelectDes"></span>
                     </span>
                     <i class="header-icon el-icon-info"  style="font-size: 16px;"></i>
                   </el-tooltip>
@@ -555,6 +551,15 @@ export default {
           { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
+    }
+  },
+  computed: {
+    portfolioSelectDes() {
+      if(this.auto_portfolio) return `Define your ideal investment profile by setting target ranges for key performance metrics <br/>
+      such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+      Click "Find Matching Baskets", and the system will automatically generate strategy baskets that align with your specified criteria. <br/>
+      Select your preferred basket from the results—its individual strategies will then be automatically added to the Strategy Allocation list below for further customization or simulation.`
+      if(!this.auto_portfolio) return `Manually populate your chosen strategies and define their respective allocations for a more tailored approach to strategy selection and portfolio construction.`
     }
   },
   mounted() {
