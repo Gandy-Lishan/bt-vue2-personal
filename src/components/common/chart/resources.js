@@ -72,6 +72,7 @@ import defaultConfig from '@/components/common/chart/st-development/js/defaultCo
 import 'chartiq/plugins/timespanevent/timespanevent'
 import 'chartiq/plugins/timespanevent/examples/timeSpanEventSample' /* if using sample */
 
+
 // Trading Central: Analyst Views
 // import 'chartiq/plugins/analystviews/components'
 

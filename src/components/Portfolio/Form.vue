@@ -64,19 +64,35 @@
         </el-row>
     </el-form>
     <div class="portfolioCheckedBox">
-        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;">
-          Auto Basket
-        <el-tooltip effect="dark" placement="top">
-          <span slot="content">
-            Define your ideal investment profile by setting target ranges for key performance metrics<br/>
-            such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
-            Click "Find Matching Baskets", and the system will automatically generate strategy baskets<br/>
-            that align with your specified criteria. Select your preferred basket from the results—its individual strategies <br/>
-            will then be automatically added to the Strategy Allocation list below for further customization or simulation.
-          </span>
-          <i class="header-icon el-icon-info"  style="margin-right: 5px"></i>
-        </el-tooltip>
-        </a>
+        <!-- <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"> -->
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="portfolioSelect">
+                <span class="portfolioSelectLabel">5.</span>
+                <el-select
+                  v-model="auto_portfolio"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in autoPortfolioCondition"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <span style="margin-left: 15px;">
+                  <el-tooltip effect="dark" placement="top">
+                    <span slot="content">
+                      <span v-html="portfolioSelectDes"></span>
+                    </span>
+                    <i class="header-icon el-icon-info"  style="font-size: 16px;"></i>
+                  </el-tooltip>
+                </span>
+            </div>
+            </el-col>
+          </el-row>
+        <!-- </a> -->
         <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
@@ -206,12 +222,12 @@
         <span v-else>{{ scope.$index + 1 }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="Category" header-align="center" align="center" width="200px">
+    <!-- <el-table-column label="Category" header-align="center" align="center" width="200px">
       <template slot-scope="scope">
         <el-input v-model="portfolioFirstLine.category" size="mini" disabled  v-if="scope.$index === 0"></el-input>
         <el-input v-model="scope.row.category" size="mini" disabled  v-else></el-input>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
       <template slot-scope="scope">
         <el-autocomplete
@@ -277,7 +293,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="8"></el-col>
       <el-col :span="8">
-        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Basket</el-button>
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">View Performance Results of the Basket</el-button>
         <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
@@ -311,10 +327,10 @@
 				</el-table-column>
       <el-table-column label="#" width="100px">
         <template slot-scope="scope">
-          <p style="margin: 0">{{ `Strategy #${scope.$index + 1}` }}</p>
+          <p style="margin: 0">{{ `Basket #${scope.$index + 1}` }}</p>
         </template>
       </el-table-column>
-      <el-table-column label="Model">
+      <el-table-column label="Strategy Combination">
         <template slot-scope="scope">
           <template v-for="(item, index) in scope.row.array">
               <p :key="index" style="margin: 0">{{ `${index + 1}. ${item.model_name}` }}</p>
@@ -324,7 +340,7 @@
     </el-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogTableVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
-      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm selection</el-button>
+      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm Selection</el-button>
    </span>
     </el-dialog>
   </div>
@@ -393,13 +409,13 @@ export default {
       ],
       detailTableCol: [
         {
-          label: '# Strategy',
+          label: '# Basket',
           name: 'strategy',
           key: 'strategy',
           width: '100px'
         },
         {
-          label: 'Model',
+          label: 'Strategy Combination',
           name: 'model',
           key: 'model',
           width: '200px'
@@ -437,6 +453,10 @@ export default {
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
+      ],
+      autoPortfolioCondition: [
+        { value: true, label: 'Auto Basket'},
+        { value: false, label: 'Manually Add/Pick Strategy'}
       ],
       bondOptions: [
         { value: 'CASH', label: 'CASH'},
@@ -531,6 +551,15 @@ export default {
           { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
+    }
+  },
+  computed: {
+    portfolioSelectDes() {
+      if(this.auto_portfolio) return `Define your ideal investment profile by setting target ranges for key performance metrics <br/>
+      such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+      Click "Find Matching Baskets", and the system will automatically generate strategy baskets that align with your specified criteria. <br/>
+      Select your preferred basket from the results—its individual strategies will then be automatically added to the Strategy Allocation list below for further customization or simulation.`
+      if(!this.auto_portfolio) return `Manually populate your chosen strategies and define their respective allocations for a more tailored approach to strategy selection and portfolio construction.`
     }
   },
   mounted() {
@@ -1150,6 +1179,22 @@ export default {
     margin: 0px;
     font-weight: 500;
     color: #606266;
+  }
+  .portfolioSelectLabel{
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  .portfolioSelect {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /deep/ .el-input__inner {
+       margin-left: 5px;
+    }
+    /deep/ .el-select {
+      width: 100%;
+    }
   }
 }
 </style>
