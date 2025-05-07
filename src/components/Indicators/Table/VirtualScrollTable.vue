@@ -6,7 +6,7 @@
         {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
         <i v-show="isMostPopular" class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i>
       </span>
-      <el-tooltip effect="dark" placement="top" :content="enlarged ? 'Back to View All' : 'Enlarge to View'">
+      <el-tooltip effect="dark" placement="top" :content="tooltipsContent">
         <!-- <i class="el-icon-full-screen" ></i> -->
           <svg class="icon-full-screen" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-if="!enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M96 96H64V85.3333H85.3333V64H96V96Z" fill="black"/>
@@ -17,6 +17,8 @@
           <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M32 32H0V21.3333H21.3333V0H32V32ZM32 64H0V74.6667H21.3333V96H32V64ZM96 64H64V96H74.6667V74.6667H96V64ZM64 32H96V21.3333H74.6667V0H64V32Z" fill="black"/>
           </svg>
+          <svg @click="fullScreenTrendScorePage" v-else-if="!isTrendScoreFullScreen && isTrendScorePage" t="1746517730978" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1443" width="200" height="200"><path d="M895.4 153.7c0-0.9-0.6-1.8-0.8-2.7s-0.6-2.2-1-3.2a30.7 30.7 0 0 0-1.7-3.1 18.3 18.3 0 0 0-1.3-2.4 30 30 0 0 0-8.9-8.9c-0.7-0.5-1.6-0.9-2.3-1.3l-3.2-2.1a30 30 0 0 0-3.2 0l-3-1.4a33.6 33.6 0 0 0-6.3-0.6H672a32 32 0 0 0 0 64h114.7L553.4 425.4a31.9 31.9 0 0 0 0 45.2 31.9 31.9 0 0 0 45.2 0L832 237.3V352a32 32 0 1 0 64 0V160a33.6 33.6 0 0 0-0.6-6.3zM425.4 553.4L192 786.7V672a32 32 0 1 0-64 0v192a33.6 33.6 0 0 0 0.6 6.3c0 0.9 0.6 1.8 0.8 2.7s0.6 2.2 1 3.2a30.7 30.7 0 0 0 1.7 3.1 18.3 18.3 0 0 0 1.3 2.4 29.1 29.1 0 0 0 8.9 8.9 18.3 18.3 0 0 0 2.4 1.3 30.7 30.7 0 0 0 3.1 1.7l3.2 1 2.7 0.8a33.6 33.6 0 0 0 6.3 0.6h192a32 32 0 0 0 0-64H237.3l233.3-233.4a32 32 0 0 0-45.2-45.2z" fill="#333333" p-id="1444"></path></svg>
+          <svg @click="fullScreenTrendScorePage" v-else-if="isTrendScoreFullScreen && isTrendScorePage" t="1746518175001" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2581" width="200" height="200"><path d="M597.333333 395.861333V192a21.333333 21.333333 0 0 0-42.666666 0v256a21.333333 21.333333 0 0 0 21.333333 21.333333h256a21.333333 21.333333 0 0 0 0-42.666666h-205.12L890.24 163.306667a21.333333 21.333333 0 0 0-30.165333-30.165334L597.333333 395.861333z m-170.666666 232.277334V832a21.333333 21.333333 0 0 0 42.666666 0V576a21.333333 21.333333 0 0 0-21.333333-21.333333H192a21.333333 21.333333 0 0 0 0 42.666666h205.12L133.76 860.693333a21.333333 21.333333 0 0 0 30.165333 30.165334L426.666667 628.138667z" fill="#3D3D3D" p-id="2582"></path></svg>
       </el-tooltip>
     </div>
     <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
@@ -29,9 +31,9 @@
   </div>
   <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
     <el-row>
-      <div class="search-input">
+      <div class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}">
         <el-input
-          class="search-input"
+          class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}"
           @input="handleQuery"
           size="small"
           placeholder="Search"
@@ -200,6 +202,7 @@ import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData } from "@/service/service";
+import { fullScreen } from 'chartiq/js/addOns';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -227,7 +230,7 @@ export default {
     VirtualScroll,
     TrendScoreTable
   },
-  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex'],
+  inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex', 'enterOrExitFullScreenTrendScorePage'],
   data() {
     return {
       virtualList: [],
@@ -255,6 +258,7 @@ export default {
       trendUpdateDate: '',
       isExpanded: false, // 控制输入框是否展开
       isTrendScorePage: false,
+      isTrendScoreFullScreen: false,
       dynamicHeight: '510px'
     }
   },
@@ -271,6 +275,12 @@ export default {
     },
     virtualTableHight() {
       return this.enlarged ? 620 : 300
+    },
+    tooltipsContent() {
+      if(this.enlarged && !this.isTrendScorePage) return 'Back to View All'
+      if(!this.enlarged && !this.isTrendScorePage) return 'Enlarge to View'
+      if(!this.isTrendScoreFullScreen && this.isTrendScorePage) return 'Expand to Full Screen'
+      if(this.isTrendScoreFullScreen && this.isTrendScorePage) return 'Exit Full Screen'
     },
     columns() {
       this.columnsMap = new Map(([
@@ -1793,6 +1803,24 @@ export default {
       }
       this.$emit("updateChart", this.firstRow || {})
     },
+    async fullScreenTrendScorePage(checked, row) {
+      debugger
+      if(this._loading) return
+      if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.isTrendScoreFullScreen = !this.isTrendScoreFullScreen;this.enterOrExitFullScreenTrendScorePage(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
+      if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
+        const option = this.options.find(item => item.value === checked)
+        if(option) await this.changeOption(option, false)
+      }
+      if(checked && typeof checked === 'string' && row && row?.chart_name) {
+        // 图表显示和排序高亮
+        if(!this.isTrendScoreFullScreen) {this.enterOrExitFullScreenTrendScorePage(this.label);this.isTrendScoreFullScreen = true}
+        this.$emit("updateChart", row || {})
+        console.log('图表显示和排序高亮 Table', this.checkedType)
+        this.updateChart(row)
+        return
+      }
+      this.$emit("updateChart", this.firstRow || {})
+    },
     async loadMore () {
       // await this.$emit('loadMore', this.checkedType)
     },
@@ -2901,6 +2929,9 @@ export default {
   width: 218px;
   margin: 5px 0px 2px 0px;
   float: left;
+}
+.full-screen-search-input {
+  width: 538px;
 }
 .filter-div {
   position: relative;
