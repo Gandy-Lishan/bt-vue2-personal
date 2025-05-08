@@ -254,13 +254,16 @@ export default {
                 // 鏈変氦鏄撴墠濉〃鍗
                 vm.tableData.push(data)
                 try {
-                  for (let i = 0; i < initalData['Trades'].length; i++) {
-                  if (i % 2 == 0) {
-                    initalData['Trades'][i].trade_number = i / 2
-                    initalData['Trades'][i + 1].trade_number = i / 2
+                  if (initalData['Trades'].length % 2 !== 0) {
+                    initalData['Trades'].pop(); // 删除最后一个元素
                   }
-                }
 
+                  for (let i = 0; i < initalData['Trades'].length; i++) {
+                    if (i % 2 === 0) {
+                      initalData['Trades'][i].trade_number = i / 2;
+                      initalData['Trades'][i + 1].trade_number = i / 2;
+                    }
+                  }
                 for (let i = 0; i < initalData['Trades'].length; i++) {
                   initalData['Trades'][i].TradeReturn =
                     tradeReturn[initalData['Trades'][i].trade_number]
@@ -280,6 +283,7 @@ export default {
                   console.log(error)
                 }
                 vm.tradesData = initalData['Trades']
+                console.log('tradesData', vm.tradesData)
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
                 // TIM 数据准备
@@ -289,7 +293,6 @@ export default {
                   const datatime = initalData['basic']['start_date']
                   this.$refs.timChild.prepareData(row.id,datatime)
                   this.$refs.maxMinChild.prepareData(row.id,datatime)
-                  debugger
                   this.$refs.IndexesInfo.prepareData(initalData['Indexes Info'] || {})
                   this.$refs.OtherAssets.prepareData(initalData['Other Assert'] || {})
                 });
@@ -405,7 +408,6 @@ export default {
 			return type === 'custom' ? name : symbol;
 		},
     handleDownloadCsv() {
-      debugger
       const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
       let medianReturn, consistency, OtherAssets
