@@ -55,6 +55,10 @@ cq-menu-dropdown,cq-indicators-lookup-results,cq-lookup-results{
     background-color: rgb(233, 233, 233);
     border-radius: 12px;
 }
+.el-autocomplete-suggestion{
+  width: auto;
+  min-width: 550px;
+}
 .el-tabs{
   padding: 0px;
 	background-color: #fff;
