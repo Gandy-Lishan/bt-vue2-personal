@@ -369,25 +369,22 @@ export default {
         order: sortingOrder
       };
 			// 数字字符串转数字类型排序
-			if(['SymbolClose', 'CorrelationPercentage', 'Return'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.tradesData.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _b - _a
-					})
-				}else if(sortingOrder == 'descending'){
-					this.tradesData.sort((a,b) => {
-            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _a - _b
-					})
-				}else{
-				}
+			if (['SymbolClose', 'CorrelationPercentage', 'Return'].includes(colName)) {
+					const parseValue = val => {
+							if (typeof val === 'number') return val;
+							if (typeof val === 'string') {
+									// 去除 %、$ 等符号，只保留数字部分，转成 float
+									const match = val.match(/-?\d+(\.\d+)?/);
+									return match ? parseFloat(match[0]) : 0;
+							}
+							return 0;
+					};
+
+					if (sortingOrder === 'ascending') {
+							this.tradesData.sort((a, b) => parseValue(a[colName]) - parseValue(b[colName]));
+					} else if (sortingOrder === 'descending') {
+							this.tradesData.sort((a, b) => parseValue(b[colName]) - parseValue(a[colName]));
+					}
 			}
 			// 日期类型排序
 			if(['TradeDate'].indexOf(colName) !== -1){
