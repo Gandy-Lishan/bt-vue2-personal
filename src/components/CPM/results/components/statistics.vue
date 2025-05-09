@@ -250,12 +250,15 @@
 				:row-class-name="tableRowClassName"
 				:data="tradesData"
 				border
+				@sort-change="onSortChange"
 			>
 				<el-table-column
 					prop="TradeDate"
 					label="Trade Date"
 					show-overflow-tooltip
 					align="center"
+					sortable="custom"
+					width="140px"
 				>
 					<template slot-scope="scope">
 						<span>{{ scope.row.TradeDate }}</span>
@@ -266,6 +269,7 @@
 					label="Symbol Close"
 					show-overflow-tooltip
 					align="center"
+					sortable="custom"
 				>
 					<template slot-scope="scope">
 						<span :style="scope.row.SymbolClose >= 0 ? '' : 'color: #dd3a13'">{{
@@ -278,6 +282,7 @@
 					label="Correlation Percentage"
 					show-overflow-tooltip
 					align="center"
+					sortable="custom"
 				>
 					<template slot-scope="scope">
 						<span
@@ -293,10 +298,11 @@
 					label="Return"
 					show-overflow-tooltip
 					align="center"
+					sortable="custom"
 				>
 					<template slot-scope="scope">
 						<span :style="scope.row.Return >= 0 ? '' : 'color: #dd3a13'">{{
-							scope.row.Return.toFixed(2) + '%'
+							scope.row.Return + '%'
 						}}</span>
 					</template>
 				</el-table-column>	
@@ -330,7 +336,8 @@ export default {
 		return {
 			summaryData: [{}],
 			tradesData: [],
-      textContent: {'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'}
+   textContent: {'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'},
+			currentSort: {}, // 当前的排序信息
 		}
 	},
 	methods: {
@@ -347,11 +354,55 @@ export default {
 					...data
 				}
 			]
-			this.tradesData = transformedResult
+			this.tradesData = transformedResult.map(item => {item.Return = item.Return.toFixed(2); return item})
 		},
 		exportData() {
 			return {summaryData: this.summaryData, tradesData: this.tradesData};
-		}
+		},
+		onSortChange(column){
+			debugger
+			const sortingOrder = column.order
+			const colName = column.prop
+      console.log('colName', colName)
+      this.currentSort = {
+        prop: colName,
+        order: sortingOrder
+      };
+			// 数字字符串转数字类型排序
+			if(['SymbolClose', 'CorrelationPercentage', 'Return'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.tradesData.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _b - _a
+					})
+				}else if(sortingOrder == 'descending'){
+					this.tradesData.sort((a,b) => {
+            b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
+            a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
+						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
+						return _a - _b
+					})
+				}else{
+				}
+			}
+			// 日期类型排序
+			if(['TradeDate'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.tradesData.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.tradesData.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+		},
 	}
 }
 </script>
