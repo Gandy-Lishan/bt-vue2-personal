@@ -360,6 +360,7 @@ export default {
       }
       const code = res.data.code
       if(code == 403) {this.popUpMsgBox('Sorry, details not found. Possibly deleted or moved'); return}
+      if(code == 401) {this.popUpMsgBox('Backtest Pattern failed to run. Please adjust the parameters and try again');}
       if(code == 200) {
         this.$router.push({
         name: 'CPMResults',

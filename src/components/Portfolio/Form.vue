@@ -64,8 +64,35 @@
         </el-row>
     </el-form>
     <div class="portfolioCheckedBox">
-        <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"
-          >Auto Portfolio</a>
+        <!-- <a @click="auto_portfolio = !auto_portfolio" style="cursor: pointer;"> -->
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="portfolioSelect">
+                <span class="portfolioSelectLabel">5.</span>
+                <el-select
+                  v-model="auto_portfolio"
+                  placeholder="— Select —"
+                >
+                  <el-option
+                    v-for="item in autoPortfolioCondition"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+                <span style="margin-left: 15px;">
+                  <el-tooltip effect="dark" placement="top">
+                    <span slot="content">
+                      <span v-html="portfolioSelectDes"></span>
+                    </span>
+                    <i class="header-icon el-icon-info"  style="font-size: 16px;"></i>
+                  </el-tooltip>
+                </span>
+            </div>
+            </el-col>
+          </el-row>
+        <!-- </a> -->
         <div class="des-content" v-show="auto_portfolio">
         <el-form
           ref="AutoPortfolioForm"
@@ -79,7 +106,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label>
-                      <el-checkbox v-model="portfolioFormData.CAGRChecked" label="Return">GAGR</el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.CAGRChecked" label="Return">CAGR</el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -151,7 +178,7 @@
                 <el-form-item>
                   <template slot="label">
                     <label for="max_drow_down_checkbox">
-                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drow Down" id="max_drow_down_checkbox"></el-checkbox>
+                      <el-checkbox v-model="portfolioFormData.max_drow_downChecked" label="Max Drawdown" id="max_drow_down_checkbox"></el-checkbox>
                     </label>
                   </template>
                   <div class="_conditionBox">
@@ -173,7 +200,7 @@
             <div class="bottom-row">
               <div></div>
               <el-form-item label-width="0px">
-                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Found Portfolio</el-button>
+                <el-button type="primary" :disabled="!auto_portfolio" @click="findPortfolio" :loading="findPortfolioLoading">Find Matching Baskets</el-button>
               </el-form-item>
               <div></div>
             </div>
@@ -195,12 +222,12 @@
         <span v-else>{{ scope.$index + 1 }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="Category" header-align="center" align="center" width="200px">
+    <!-- <el-table-column label="Category" header-align="center" align="center" width="200px">
       <template slot-scope="scope">
         <el-input v-model="portfolioFirstLine.category" size="mini" disabled  v-if="scope.$index === 0"></el-input>
         <el-input v-model="scope.row.category" size="mini" disabled  v-else></el-input>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
       <template slot-scope="scope">
         <SearchAutocomplete
@@ -245,8 +272,8 @@
     </el-table-column>
     <el-table-column header-align="center" align="center" width="200">
       <template slot-scope="scope">
-        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategies</el-button>
-        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategies</el-button> 
+        <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Strategy</el-button>
+        <el-button v-else-if="scope.$index >= 1" size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope)" class="delete-btn">Delete Strategy</el-button> 
       </template>
     </el-table-column>
     </el-table>
@@ -254,7 +281,7 @@
     <el-row :gutter="10" type="flex" justify="center">
       <el-col :span="8"></el-col>
       <el-col :span="8">
-        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">Run Portfolio</el-button>
+        <el-button  v-show="percentage == 0" type="primary" size="small" icon="el-icon-caret-right" @click="submitForm" :loading="btnLoading" :disabled="btnLoading">View Performance Results of the Basket</el-button>
         <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :color="customColorMethod"></el-progress>
         </div>
@@ -265,7 +292,7 @@
     </el-row>
     <br>
     </div>
-    <el-dialog title="Title" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape	="false">
+    <el-dialog title="Strategy Baskets" :visible.sync="dialogTableVisible" size="mini" class="portfolioDialogTable" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <el-table
         :data="autoPortfolioData"
         stripe
@@ -288,10 +315,10 @@
 				</el-table-column>
       <el-table-column label="#" width="100px">
         <template slot-scope="scope">
-          <p style="margin: 0">{{ `Strategy #${scope.$index + 1}` }}</p>
+          <p style="margin: 0">{{ `Basket #${scope.$index + 1}` }}</p>
         </template>
       </el-table-column>
-      <el-table-column label="Model">
+      <el-table-column label="Strategy Combination">
         <template slot-scope="scope">
           <template v-for="(item, index) in scope.row.array">
               <p :key="index" style="margin: 0">{{ `${index + 1}. ${item.model_name}` }}</p>
@@ -301,7 +328,7 @@
     </el-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogTableVisible = false" size="mini" icon="el-icon-close">Cancel</el-button>
-      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm selection</el-button>
+      <el-button @click="confirmStrategy" type="primary" size="mini" icon="el-icon-check" :disabled="disabled" :loading="checkStrategyLoading">Confirm Selection</el-button>
    </span>
     </el-dialog>
   </div>
@@ -371,13 +398,13 @@ export default {
       ],
       detailTableCol: [
         {
-          label: '# Strategy',
+          label: '# Basket',
           name: 'strategy',
           key: 'strategy',
           width: '100px'
         },
         {
-          label: 'Model',
+          label: 'Strategy Combination',
           name: 'model',
           key: 'model',
           width: '200px'
@@ -415,6 +442,10 @@ export default {
         { value: 'Z_Score', label: 'Z-Score'},
         { value: 'StdDev', label: 'STD.DEV'},
         { value: 'Expected Return(%)', label: 'Expected Return(%)'},
+      ],
+      autoPortfolioCondition: [
+        { value: true, label: 'Auto Basket'},
+        { value: false, label: 'Manually Add/Pick Strategy'}
       ],
       bondOptions: [
         { value: 'CASH', label: 'CASH'},
@@ -471,44 +502,53 @@ export default {
         { required: true, message: 'Select end date', trigger: 'change' }
         ],
         cash: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null, true)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Starting Capital', 1000, null, true)(rule, value, callback), trigger: 'change' }
         ]
       },
       portfolioRules: {
         min_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum CAGR', null, this.portfolioFormData?.max_CAGR || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_CAGR: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum CAGR', this.portfolioFormData?.min_CAGR || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Minimum YTD Return', null, this.portfolioFormData?.max_YTD_return || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_YTD_return: [
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createIntegerRule('Maximum YTD Return', this.portfolioFormData?.min_YTD_return || null, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_win_rate: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ],
         min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Minimum Win Rate', 0, this.portfolioFormData?.max_win_rate || 100)(rule, value, callback), trigger: 'change'}
         ],
         max_min_max_drow_down: [
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
-          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'blur'},
+          { validator: (rule, value, callback) => createPositiveIntegerRule('Maximum Win Rate', this.portfolioFormData?.min_win_rate || 0, 100)(rule, value, callback), trigger: 'change'}
         ]
       }
+    }
+  },
+  computed: {
+    portfolioSelectDes() {
+      if(this.auto_portfolio) return `Define your ideal investment profile by setting target ranges for key performance metrics <br/>
+      such as Compound Annual Growth Rate (CAGR %), Year-to-Date Return (YTD Return %), Win Rate (%), and Maximum Drawdown (%). <br/>
+      Click "Find Matching Baskets", and the system will automatically generate strategy baskets that align with your specified criteria. <br/>
+      Select your preferred basket from the results—its individual strategies will then be automatically added to the Strategy Allocation list below for further customization or simulation.`
+      if(!this.auto_portfolio) return `Manually populate your chosen strategies and define their respective allocations for a more tailored approach to strategy selection and portfolio construction.`
     }
   },
   mounted() {
@@ -524,7 +564,7 @@ export default {
       const hour = date.getHours();
       const minute = date.getMinutes();
       const second = date.getSeconds();
-      this.data.name = `My Portfolio ${year}-${month}-${day} ${hour}:${minute}:${second}`
+      this.data.name = `My Basket ${year}-${month}-${day} ${hour}:${minute}:${second}`
     },
     handleDisabledStartDate(time) {
       const today = timestampToTime(new Date())
@@ -537,9 +577,12 @@ export default {
       }
     },
     handleDisabledEndDate(time) {
-      const today = timestampToTime(new Date())
-      const startDay = timestampToTime(new Date(this.data.start_date))
-      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      const today = moment.utc().format('YYYY-MM-DD')
+      if(this.data.start_date) {
+        const startDay = moment.utc(this.data.start_date).format('YYYY-MM-DD')
+        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      }
+      return (timestampToTime(time) > today)
     },
     setBacktestHistory(val) {
       this.data.end_date = timestampToTime(new Date());
@@ -551,10 +594,20 @@ export default {
     resetForm() {
       // 如果当前在预览状态，不允许重置; 运行但是没进入轮询: isPolling: false; btnLoading: true
       if((!this.isPolling && this.btnLoading)) return true
-			Object.assign(this.$data, this.$options.data())
+      // 保存 portfolioFormData 的引用
+      const portfolioFormData = this.portfolioFormData;
+      const startPickerOptions = this.startPickerOptions;
+      const endPickerOptions = this.endPickerOptions;
+      // 重置数据
+      Object.assign(this.$data, this.$options.data());
+      // 重新赋值 portfolioFormData
+      this.portfolioFormData = portfolioFormData;
+      this.startPickerOptions = startPickerOptions
+      this.endPickerOptions = endPickerOptions
       this.generateCPMName()
-      this.setBacktestHistory(120)
       this.$refs['Form'].clearValidate()
+      this.setBacktestHistory(120)
+      if(this.auto_portfolio) this.$refs['AutoPortfolioForm'].clearValidate()
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getPortfolioList(null, null, name)
@@ -580,7 +633,6 @@ export default {
       return await validateForm(formName)
     },
     async saveFormData() {
-      
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Please review and correct form errors')
@@ -590,31 +642,34 @@ export default {
         const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
         if(!validateAutoPortfolioForm) {
           // 选择了 auto portfolio，但是表单验证没有通过
-          this.popUpMsgBox('Auto Portfolio needs more info. Correct format, please')
+          this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
           return
         }
       }
       // 验证百分比
-      const strategy_combination = this.strategy_combination.slice(1)
+      const strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
       let rowWeightValid = true
       let inAllowedList = true
-      for (const row of strategy_combination) {
+      for (let index = 0; index < strategy_combination.length; index++) {
+        const row = strategy_combination[index]
         totalWeight += parseFloat(row.percent) || 0
         row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
         if(row.weightValidErrMsg) rowWeightValid = false
         if(!this.strategiesList || !this.strategiesList.length) {this.strategiesList = await this.getStrategyList()}
         console.log('this.strategiesList', this.strategiesList)
+        if(!row.strategy) {inAllowedList = false; break}
         const isIn = (this.strategiesList.find(ele => ele.model_name.toLocaleLowerCase() === row.strategy.toLocaleLowerCase()) || this.strategiesList.find(ele => ele.url.toLocaleLowerCase() === row.url.toLocaleLowerCase()))?.model_name || false
-        if(!isIn) inAllowedList = false
+        if(!isIn) {inAllowedList = false; break}
       }
       totalWeight += this.portfolioFirstLine.percent
+      if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(totalWeight > 100) {this.popUpMsgBox('Total weight percentages cannot exceed 100%'); return false}
       if(totalWeight != 100) {this.popUpMsgBox('Total weight percentages need to be 100%'); return false}
       if(!rowWeightValid) {this.popUpMsgBox('Incorrect Weight column input format'); return false}
       if(!inAllowedList) {this.popUpMsgBox('Please choose strategies from the dropdown'); return false}
       if(strategy_combination.length<1) {this.popUpMsgBox('Please select at least 1 strategies'); return false}
-      this.processTips = `Tips: Saving portfolio...`
+      this.processTips = `Tips: Saving basket...`
       const rowUrl = this.rowUrl
       const name = this.data.name
       if(!rowUrl) {
@@ -624,7 +679,7 @@ export default {
       this.percentage = 8
       let saveData = {
         ...this.data,
-        strategy_combination: JSON.stringify(this.strategy_combination.slice(1).length === 0 ? [] : this.strategy_combination.slice(1).map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
+        strategy_combination: JSON.stringify(strategy_combination.length === 0 ? [] : strategy_combination.map(item => {delete item.url; delete item.weightValidErrMsg; delete item.category; delete item.model_name; delete item._category; item.model = 'CASH'; return item})),
         auto_portfolio: capitalizeFirstLetter(this.auto_portfolio.toString()),
       }
       let saveRes
@@ -639,7 +694,7 @@ export default {
         // 保存失败, 不进入轮询
         return saveRes
       }
-      this.processTips = 'Tips: Running portfolio. Please wait patiently...'
+      this.processTips = 'Tips: Running basket. Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
@@ -648,7 +703,7 @@ export default {
         if(this.percentage < 99) this.percentage += 1
         pollingRes = await getRunPortfolioResults(url)
         const code = pollingRes.data.code
-        if (code === 200)  return pollingRes
+        if (code === 200 || code === 204)  return pollingRes
         const _failedConditions = [401, 403, 443, 404, 407, 444, 445, 446, 500]
         if(_failedConditions.includes(Number(code))) return pollingRes
         // Add a delay here to avoid excessive polling, e.g., using setTimeout
@@ -656,13 +711,15 @@ export default {
       } while (true); // Keep polling indefinitely
     },
     async findPortfolio() {
+      debugger
+      console.log('portfolioFormData', this.portfolioFormData)
       if(!this.auto_portfolio) return
       this.findPortfolioLoading = true
       const validateAutoPortfolioForm = await this.validForm('AutoPortfolioForm')
       if(!validateAutoPortfolioForm) {
         // 选择了 auto portfolio，但是表单验证没有通过
         this.findPortfolioLoading = false
-        this.popUpMsgBox('Auto Portfolio needs more info. Correct format, please')
+        this.popUpMsgBox('Auto Basket needs more info. Correct format, please')
         return
       }
       const {
@@ -686,6 +743,8 @@ export default {
         console.log('data', data)
         this.dialogTableVisible = true
         this.autoPortfolioData = data
+      }else if(code == 204) {
+        this.popUpMsgBox('No Results Found')
       }
       this.findPortfolioLoading = false
     },
@@ -704,20 +763,20 @@ export default {
      if(!saveRes) { this.$emit('clearResults');
       this.btnLoading = false; this.processTips = ''; this.percentage = 0; return}
      const code = saveRes.data.code
-     if(code == 203) this.popUpMsgBox(`The portfolio is running. You can wait or click the "+" button to create a new portfolio`)
+     if(code == 203) this.popUpMsgBox(`The basket is running. You can wait or click the "+" button to create a new basket`)
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Save failed, Please try again')}
      if(code == 406) {
         const name =  saveRes.data.data.name
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
-      if(code == 407) this.popUpMsgBox('Empty portfolio. Please run again')
+      if(code == 407) this.popUpMsgBox('Empty basket. Please run again')
       if(code == 200) {
-        this.popUpMsgBox(`The portfolio is completed successfully`)
+        this.popUpMsgBox(`The basket is completed successfully`)
         this.$emit('displayResultsAndFilter', saveRes.data.data)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
-      if([400, 401, 404, 403, 406, 407, 443, 444, 445, 446, 500].includes(code)) {this.popUpMsgBox('No results'); this.$emit('clearResults')}
+      if([400, 401, 404, 403, 406, 407, 443, 444, 445, 446, 500, 204].includes(code)) {this.popUpMsgBox('No Results Found'); this.$emit('clearResults')}
       // 运行成或者失败后刷新列表
       this.$emit('refreshBTList')
       this.btnLoading = false
@@ -736,7 +795,7 @@ export default {
         return {...item, model_name: item.model_name, url: item.model_name, category: this.tags[category], _category: category}
       })]
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
+      for (const row of [...this.strategy_combination.slice(1)]) {
         totalWeight += parseFloat(row.percent) || 0
       }
       this.portfolioFirstLine.percent = 100 - totalWeight
@@ -780,25 +839,27 @@ export default {
     deleteRow(scope) {
       this.strategy_combination.splice(scope.$index, 1)
       let weight = 0
-      for (const _row of this.strategy_combination.slice(1)) {
+      for (const _row of [...this.strategy_combination.slice(1)]) {
         weight += parseFloat(_row.percent) || 0
       }
       const percent = 100 - weight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
     },
-    validateWeightRule(row) {
-      console.log(row.percent)
+    validateWeightRule: debounce(function (row) {
       row.weightValidErrMsg = _validatePercentageRule(_, row.percent)
       // 每次都计算第一个 percent
+      const temp_strategy_combination = cloneDeep([...this.strategy_combination.slice(1)])
       let totalWeight = 0
-      for (const row of this.strategy_combination.slice(1)) {
-        totalWeight += parseFloat(row.percent) || 0
+      for (const _row of temp_strategy_combination) {
+        totalWeight += parseFloat(_row.percent) || 0
+        _row.weightValidErrMsg = _validatePercentageRule(_, _row.percent)
       }
       if(totalWeight <= 0) return
       if(totalWeight > 100) {row.weightValidErrMsg = 'Total weight percentages ≤ 100%'; return}
       const percent = 100 - totalWeight
       if(percent >= 0) this.portfolioFirstLine.percent = percent
-    },
+      this.strategy_combination = [{}, ...temp_strategy_combination]
+    }, 500),
     handleRowSelect(item, row) {
       row.model_name = item.model_name
       row.category = this.tags[item.category]
@@ -1040,9 +1101,7 @@ export default {
   .portfolioCheckedBox a {
     font-weight: 600;
     display: flex;
-    justify-content: center;
     align-items: center;
-    justify-content: space-between;
     font-size: 18px;
     padding: 5px 5px 5px 0px
   }
@@ -1109,6 +1168,22 @@ export default {
     margin: 0px;
     font-weight: 500;
     color: #606266;
+  }
+  .portfolioSelectLabel{
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  .portfolioSelect {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /deep/ .el-input__inner {
+       margin-left: 5px;
+    }
+    /deep/ .el-select {
+      width: 100%;
+    }
   }
 }
 </style>

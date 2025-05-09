@@ -119,7 +119,8 @@ const state = {
 
 	indicatorsPageListdata: {},
 	cssMonthLabel: '',
-	indicatorPageBtv1List: []
+	indicatorPageBtv1List: [],
+	JumpToBTSymbol: ''
 }
 
 const mutations = {
@@ -345,6 +346,9 @@ const mutations = {
 	SET_MI_SHIFT(state, obj) {
 		state.miFormShift = obj
 	},
+	SET_JUMP_TO_BT_SYMBOL(state, index) {
+		state.JumpToBTSymbol = index
+	}
 }
 
 const actions = {
@@ -572,11 +576,11 @@ const actions = {
 						}])
 						resolve(csvContent)
 					}else if (res.data.status === 401) {
-						Toast('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds',2000)
+						Toast('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds',10000)
 						setTimeout(() => {
 							window.location.reload();
 						}, 2000); // 2000毫秒 = 3秒
-						reject(new Error('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds'));
+						reject(new Error('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds'));
 					} else {
 						// 处理其他状态码
 						console.error(`Unexpected status code: ${res.data.status}`);
@@ -779,10 +783,14 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'russell', 'russell&rel_trend=1', 
 					'etf_domestic', 'etf_domestic&rel_trend=1',
 					'etf_foreign', 'etf_foreign&rel_trend=1',
-					'etf_other', 'etf_other&rel_trend=1',
+					'etf_other', 'etf_other&rel_trend=1'
 				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
+				if(url.includes('sector_trend_reltrend')) {
+					_results = response.data?.data || []
+					_results = isJson(_results) ? JSON.parse(_results) : _results
+				}
 				if(url === 'commod_sentiment_seasonality') {
           const {month, screen_data} = _results
           state.cssMonthLabel = `for ${month}`

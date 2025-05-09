@@ -150,7 +150,7 @@
       </el-table>
     </div>
     <div class="symbol-correlation-chart">
-      <div id="chart-container" style="height: 600px;"></div>
+      <div id="chart-container" style="height: 900px;"></div>
     </div>
   </div>
 </template>
@@ -362,6 +362,7 @@ export default {
         const startDay = timestampToTime(new Date(this.data.start_date))
         return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
+
     async validForm(formName) {
       const validateForm = async (formRef) => {
         return new Promise(resolve => {
@@ -567,7 +568,7 @@ export default {
         animation: false,
         backgroundColor: 'transparent',
         renderTo: 'charts',
-        spacingRight: 50
+        spacingRight: 0
       };
 
       Highcharts.stockChart("chart-container", {
@@ -658,13 +659,13 @@ export default {
               return Highcharts.dateFormat('%b %e, %H:%M', this.value);
             }
           },
-          maxPadding: 0.10  // 👉 在右边增加 5% 的 padding 空间
+          maxPadding: 0  // 👉 在右边增加 5% 的 padding 空间
         },
         yAxis: [
           {
             title: { text: this.data.benchmark, style: {fontWeight: 600} },
             opposite: true, // 主轴在左边
-            height: '60%',
+            height: '50%',
             lineWidth: 0,
             labels: {
               align: 'right', // 👈 放最右边
@@ -678,8 +679,8 @@ export default {
           },
           {
             title: { text: "Correlation", style: {fontWeight: 600} },
-            top: '65%',
-            height: '35%',
+            top: '50%',
+            height: '50%',
             offset: 0,
             lineWidth: 0,
             min: -1,

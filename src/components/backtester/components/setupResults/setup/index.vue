@@ -303,7 +303,21 @@ export default {
 			let backtestID = localStorage.getItem('backtestID')
 			if(backtestID) {
 				backtestID = backtestID.replace(/['"\/]/g, '')
-				const res = await seeParams(backtestID)
+				let res = null
+				try {
+					res = await seeParams(backtestID)
+				} catch(error) {
+					if(error.response.status === 404) {
+						this.popUpMsgBox('This backtest has been deleted', 10000)
+					}else {
+						this.popUpMagBox('This backtest is unavailable', 10000)
+					}
+					console.log('error', error)
+					LocalStorageUtil.remove('backtestID')
+					this.$store.state.form.rowDataForDisplay = {};
+					this.$store.state.form.cachedBTBasicInfoData = {}
+					return
+				}
 				// res.data.commission = (res.data.commission * 100).toFixed(2)
 				this.$store.state.form.favoriteBacktestRowData.id = res.data.id
 				res.data.user_tag = 'client'
@@ -313,6 +327,7 @@ export default {
 
 				await this.editBacktest(res.data)
 				await this.displaySetUpForm(res.data)
+				await this.viewBacktestResults(res.data)
 				LocalStorageUtil.remove('backtestID')
 			}else {
 				this.$store.state.form.rowDataForDisplay = {};

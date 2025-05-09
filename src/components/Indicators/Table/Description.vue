@@ -64,7 +64,7 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des page-content-wrapper" v-else-if="(enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType))">
+        <div class="des page-content-wrapper" v-else-if="(enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto' ||enlarged === 'Sector Trend RelTrend') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'SectorTrendRelTrend'].includes(checkedType))">
           <p>The <b>Absolute</b> and <b>Relative Trend Score Indicators</b> use a weight of the evidence framework by aggregating ten trend-following indicators to deliver a comprehensive composite score for trend evaluation. Scores range from 0 (weakest) to 10 (strongest).</p>
           <p>Although the components and duration parameters remain fixed, the indicators provide investors with flexible options for identifying trading or investing opportunities and controlling risk. Additionally, the composites can serve as a secondary filter for your existing technical or fundamental investment approaches, ensuring your strategies align with current market trends.</p>
           <ul>

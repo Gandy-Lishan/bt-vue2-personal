@@ -1034,6 +1034,26 @@ export function getRelatedBacktest(url) {
 			})
 	})
 }
+export function getAnalystMyIndicatorData(data) {
+	const url = `/dev/my_indicator/analyst_get_data/`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
 export function runOPT(pk) {
 	let path = `/dev/bt_opt/run_bt_opt?pk=${pk}`
@@ -2131,6 +2151,20 @@ export async function getSmartDumbSentiment() {
 		return new Promise((resolve, reject) => {
 			axios
 				.get(url, { cache: true, withCredentials: true })
+				.then(res => {
+					resolve(res)
+				})
+				.catch(err => {
+					reject(err)
+				})
+		})
+	}
+	export function getSectorTrendRelTrend(url, index) {
+		let path = `/dev/st_data/${url}?index=${index}`
+	
+		return new Promise((resolve, reject) => {
+			axios
+				.get(path, { withCredentials: true })
 				.then(res => {
 					resolve(res)
 				})

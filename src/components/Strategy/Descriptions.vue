@@ -26,7 +26,7 @@
 								<!-- <StrategyChart :strat_data="strat_data" :load_strategy_chart="true" v-show="!isShowChart"></StrategyChart> -->
 								<newChart :data="strat_data" :load_strategy_chart="true" v-show="!isShowChart" :singleModel="singleModel"></newChart>
 								<div v-html="convertedHTML"></div>
-								<strong>
+								<strong v-if="!hideJumpBTButton">
 								Use BacktestEdge 2.0 to see more details of this strategy,
 								<el-tooltip effect="dark" content="Click this button to backtest the strategy" placement="top-start">
 								<el-button type="text" @click="_backtestStrategy" style="color: #5b9bd1; font-size: 16px"><strong>click here.</strong></el-button>
@@ -130,6 +130,7 @@
 import StrategyChart from "./Table/StrategyChart";
 import newChart from "./Table/newChart.vue";
 import { getStrategyDescription, getStrategiesJSON, getPairData } from '@/service/service'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import { isJson, timestampToTime } from '@/utils'
 
 export default {
@@ -167,6 +168,13 @@ export default {
 				isShowChart: false,
 				singleModel: 'False'
 		}
+	},
+ computed: {
+		hideJumpBTButton() {
+    const access_level = getCookieData()?.access_level
+    const cannotAccessReport = access_level.some(str => str.includes('corelite'))
+    return cannotAccessReport
+  }
 	},
 	beforeRouteEnter(to, from, next) {
   if (to.path.includes('/strategy/descriptions')) {

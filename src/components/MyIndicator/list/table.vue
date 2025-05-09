@@ -481,6 +481,7 @@ export default {
       // specialMAValues.forEach(ele => {
         maList.forEach((value, index) => {
           if(index < 2) {
+            debugger
             if(specialMAValues.some(keyword => value.includes(keyword))) {
               const deleteNum = value.replace(/^\d+/, '');
               const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
@@ -495,7 +496,7 @@ export default {
               if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
               _maValues[index] = (value && value != 0) ? `Simple Moving Average ${value}` : ''
-              if(index === 1) _maValues[index] = `${_maValues[index]}${(symbol_ma2 && symbol_ma2 != 0 && !isNaN(symbol_ma2)) ? `${typeAttribute === 'symbol' ? `Shift ${symbol_ma2}` : ''}` : ''}`
+              if(index === 1) _maValues[index] = `${_maValues[index]}${(shift_ma2 && shift_ma2 != 0 && !isNaN(shift_ma2)) ? `${typeAttribute === 'symbol' ? ` Shift ${shift_ma2}` : ''}` : ''}`
             }
           }
         })
@@ -683,7 +684,8 @@ export default {
         }
       },
       jumpToTutoiral(){
-        const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        // const path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+        const path = 'https://youtube.com/playlist?list=PL_pqMRWeHIxMw2WNydMdvsjk14WvOb_lU&si=DEPZk4A4C9GI42Rb'
         window.open(path, '_blank')
 	    },
   }

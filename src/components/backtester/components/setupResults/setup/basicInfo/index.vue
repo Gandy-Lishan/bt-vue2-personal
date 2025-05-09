@@ -797,10 +797,12 @@
 </template>
 <script>
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { timestampToTime, LocalStorageUtil, encodeBase64 } from '@/utils'
+import { timestampToTime, LocalStorageUtil, encodeBase64, getQueryVariable } from '@/utils'
 import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
+import { getIndicatorsRowData } from "@/service/service";
+
 import {
   getBacktestName
 } from '@/service/service.js'
@@ -1149,7 +1151,19 @@ export default {
       async handler(val) {
         if(!val) return
         // 预填充 btv2 按钮跳转过来携带的 symbol
-        let symbol = sessionStorage.getItem('symbol')
+        // let symbol = sessionStorage.getItem('symbol')
+        let indicator = getQueryVariable('indicator')
+        let symbol = getQueryVariable('index')
+        let storeSymbol = this.$store.state.chart.JumpToBTSymbol || ''
+        if (symbol === 'Unknown' && !storeSymbol){
+          const rowData = await getIndicatorsRowData(indicator)
+          const {market_symbol} = rowData?.data
+          const _symbol = market_symbol || 'SPX'
+          symbol = _symbol
+        }else if(storeSymbol) {
+          symbol = storeSymbol
+        }
+        if (symbol === 'TEN') symbol = 'ten'
         if(!symbol) return
         await this.remoteMethod(symbol)
         if(!this.options) return
@@ -1158,7 +1172,7 @@ export default {
         this.bd.symbol = symbol
         // this.$store.commit('form/getBacktestSymbol', symbol)
         // this.getSymbol(symbol)
-        sessionStorage.removeItem('symbol')
+        // sessionStorage.removeItem('symbol')
       }
     },
     userRole: {
@@ -1667,6 +1681,12 @@ export default {
       // 首次创建, 或者点击按钮跳转过来
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag)
+      if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
+        // 没有分析师权限
+        delete _this.bd.analystID
+        delete _this.bd.id
+        delete _this.bd.old_uuid
+      }
       // 编辑, 但是没有权限
       if(!isClient && !isAdmin) {
         _this.popUpMsgBox('Permission denied');

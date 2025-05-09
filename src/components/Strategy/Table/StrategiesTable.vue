@@ -144,8 +144,10 @@
 									effect="dark"
 									content="Backtest This Strategy"
 									placement="bottom-start"
+								 v-if="!hideJumpBTButton"
 								>
 								<el-button
+								 v-if="!hideJumpBTButton"
 									round
 									size="mini"
 									type="primary"
@@ -175,6 +177,7 @@
 import { getStrategyList, getStrategiesJSON, addStrategyFavorites, moveStrategyFavorites } from '@/service/service'
 import { LocalStorageUtil, timestampToTime } from '@/utils'
 import moment from 'moment';
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
 	name: 'StrategiesTable',
@@ -214,7 +217,12 @@ export default {
 			const startIndex = (this.currentPage - 1) * this.pageSize
 			const endIndex = startIndex + this.pageSize
 			return this.immutableTableData.slice(startIndex, endIndex)
-		}
+		},
+		hideJumpBTButton() {
+    const access_level = getCookieData()?.access_level
+    const cannotAccessReport = access_level.some(str => str.includes('corelite'))
+    return cannotAccessReport
+  }
 	},
 	async mounted() {
 		// if (!this.tableData.length || !this.tableData) await this.getDataList()

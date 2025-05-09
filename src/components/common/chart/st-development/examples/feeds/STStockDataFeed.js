@@ -619,7 +619,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                             newQuotes[i][indicatorKey] = null;
                             continue;
                         }
-                        var str = sentiIndex==0?'indicator_Close':`indicator${Number(j)+sentiIndex}_Close`; 
+                        var str = sentiIndex==0?'indicator_Close':`indicator${sentiIndex+1}_Close`; 
                         sentiIndex++
 
                         // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过
@@ -751,20 +751,43 @@ quoteFeedSimulator.formatChartData = async function(response){
                 const [_, url] = indicator.split(/CREATE/);
                 let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
                 if(!datafeed){
-                    
+                    let validData = null;
+                    try {
                     const res = await config.getMyIndicatorData(url);
-                    if(res.data.code == 404) {
-                        _this.popUpMsgBox('this backtesting utilizes an user customized indicator that is deleted, this page will be refresh in 2 seconds')
-                        setTimeout(() => {
-                            window.location.reload();
-                            }, 2000); // 2000毫秒 = 3秒
-                    }else if(res.data.code === 401) {
-                        _this.popUpMsgBox(res.data.msg || '')
-                        setTimeout(() => {
-                            window.location.reload();
-                            }, 2000); // 2000毫秒 = 3秒
+                    if (res.data.data && Array.isArray(res.data.data)) {
+                        validData = res;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
                     }
-                    datafeed = res.data.data;
+                    } catch (error) {
+                        console.error('Error fetching getMyIndicatorData:', error);
+                    }
+
+                    if (!validData) {
+                    try {
+                        const analystRes = await config.getAnalystMyIndicatorData({url});
+                        if (analystRes.data.data && Array.isArray(analystRes.data.data)) {
+                            validData = analystRes;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
+                        }
+                    } catch (error) {
+                        console.error('Error fetching getAnalystMyIndicatorData:', error);
+                        localStorage.removeItem('backtestID')
+                    }
+                    }
+
+
+                    if(validData.data.code == 404) {
+                        _this.popUpMsgBox('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds', 10000)
+                        setTimeout(() => {
+                            window.location.reload();
+                            }, 5000); // 5000毫秒 = 6秒
+                        if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
+                    }else if(validData.data.code === 401) {
+                        _this.popUpMsgBox(validData.data.msg || '')
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000); // 2000毫秒 = 3秒
+                        if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
+                    }
+                    datafeed = validData.data.data;
                     if(!datafeed) return
                     // 暂存
                     localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))

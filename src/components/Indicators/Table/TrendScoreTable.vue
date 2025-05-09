@@ -26,7 +26,8 @@
          <tr :key="index">
           <template v-for="(key, keyIndex) in enlarged ? columns.concat(['rts_equal_ten_spx', 'last_date']) : columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
-            {{ele[key] !== 'Communication Ser' ? `${ele[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}` : 'Communication Service'}}
+            <a v-if="key === 'index_name'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
+            <span v-else>{{ele[key] !== 'Communication Ser' ? `${ele[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}` : 'Communication Service'}}</span>
            </td>
           </template>
          </tr>

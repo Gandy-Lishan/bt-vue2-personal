@@ -1,7 +1,7 @@
 <template>
   <div class="page-content-wrapper asset-correlation">
   <!-- <p v-show="date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period 01/01/2008 to {{date}}.</strong></p> -->
-  <p v-show="datePicks.end_date" style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period
+  <p style="margin-top: 10px"><strong>Correlation matrix of monthly asset returns for the period
     <el-tooltip effect="dark" placement="top">
       <span slot="content">
         The analysis begins in January 2008, <br/>
@@ -137,8 +137,11 @@ export default {
     },
     handleDisabledEndDate(time) {
       const today = moment.utc().format('YYYY-MM-DD')
-      const startDay = moment.utc(this.datePicks.start_date).format('YYYY-MM-DD')
-      return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      if(this.datePicks.start_date) {
+        const startDay = moment.utc(this.datePicks.start_date).format('YYYY-MM-DD')
+        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
+      }
+      return (timestampToTime(time) > today)
     },
     getCellStyle(row, col) {
         // 固定列和额外固定列不应用颜色渐变
