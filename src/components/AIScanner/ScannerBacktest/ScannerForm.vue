@@ -902,7 +902,7 @@ export default {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
       }
-      const {
+      let {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
@@ -911,13 +911,28 @@ export default {
         capital_allocate,
         capital_allocate_num
       } = this.data
+      signals = Array.from(new Set([...signals]))
+      const arraysEqualIgnoreOrder = (a, b) => {
+        if (!Array.isArray(a) || !Array.isArray(b)) return false;
+        if (a.length !== b.length) return false;
+        const sortedA = [...a].sort();
+        const sortedB = [...b].sort();
+        return sortedA.every((val, index) => val === sortedB[index]);
+      }
+      // 判断 signals 是数组，且内容为 ['All']
+      const isArrEqual = Array.isArray(signals) &&
+      signals.length === 1 &&
+      signals[0] === 'All'
+      const isStringEqual = typeof signals === 'string' &&
+      String(signals) === 'All'
+      const isSignalAll = arraysEqualIgnoreOrder(signals, this.options.map(item => item.value))
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length !== 16 ? signals : ['All']),
+        signals: JSON.stringify((isSignalAll || isArrEqual || isStringEqual) ? ['All'] : signals),
         capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
@@ -933,6 +948,7 @@ export default {
       return await perviewScannerForm(saveData)
     },
     async saveFormData() {
+      debugger
       if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
@@ -947,7 +963,7 @@ export default {
         if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       }
       this.percentage = 8
-      const {
+      let {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
@@ -956,13 +972,28 @@ export default {
         capital_allocate,
         capital_allocate_num
       } = this.data
+      signals = Array.from(new Set([...signals]))
+      const arraysEqualIgnoreOrder = (a, b) => {
+        if (!Array.isArray(a) || !Array.isArray(b)) return false;
+        if (a.length !== b.length) return false;
+        const sortedA = [...a].sort();
+        const sortedB = [...b].sort();
+        return sortedA.every((val, index) => val === sortedB[index]);
+      }
+      // 判断 signals 是数组，且内容为 ['All']
+      const isArrEqual = Array.isArray(signals) &&
+      signals.length === 1 &&
+      signals[0] === 'All'
+      const isStringEqual = typeof signals === 'string' &&
+      String(signals) === 'All'
+      const isSignalAll = arraysEqualIgnoreOrder(signals, this.options.map(item => item.value))
       const saveData = {
         ...this.data,
         long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
         commission: (commission / 100).toFixed(5),
-        signals: JSON.stringify(signals.length >= 16 ? ['All'] : signals),
+        signals: JSON.stringify((isSignalAll || isArrEqual || isStringEqual) ? ['All'] : signals),
         capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
       }
       const removeProperties = (obj, properties) => {
