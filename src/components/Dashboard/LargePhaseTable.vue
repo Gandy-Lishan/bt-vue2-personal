@@ -28,7 +28,6 @@ export default {
     }
   },
  beforeRouteEnter(to, from, next) {
-  debugger
   console.log('lishan data')
 
   if(to.path.includes('/dashboard/phase_table')) {

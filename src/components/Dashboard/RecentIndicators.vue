@@ -153,7 +153,6 @@ export default {
       const end = start + this.perPage;
       this.start = start + 1
       this.end = end
-      debugger
       return this.filterData.slice(start, end);
     },
     total() {
@@ -238,7 +237,6 @@ export default {
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
 		  this.filterData = this.getSearchResult()
-      debugger
       if(this.currentPage != 1) this.currentPage = 1
     },
 

@@ -53,7 +53,6 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    debugger
   if(to.path.includes('/dashboard/htop_webinar')) {
     next(async _this => {
       let {data} = await getDashboardData()
