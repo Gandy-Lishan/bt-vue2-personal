@@ -90,7 +90,8 @@ export default {
         ETFSectorBreadth: 'etf_breadth',
         GlobalIndexBreadth: 'country_breadth',
         CryptoCurrencyBreadth: 'crypto_breadth',
-        SectorTrendRelTrend: 'sector_trend_reltrend'
+        SectorTrendRelTrend: 'sector_trend_reltrend',
+        macroeconomic: 'macro_indicator_list'
       },
       firstRow: {},
       blog_results_length: 0,

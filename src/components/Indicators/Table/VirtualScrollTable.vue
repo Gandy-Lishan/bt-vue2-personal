@@ -329,6 +329,51 @@ export default {
             }
             ]
         ],
+        ['macroeconomicColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '200px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value',
+              addPercentSign: true
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change',
+              addPercentSign: true,
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
         ['NASDAQColumns', 
           [
             {
@@ -1983,6 +2028,8 @@ export default {
             requireUrl = 'country_breadth'
           }else if(sub_type === 'crp_breadth') {
             requireUrl = 'crypto_breadth'
+          }else if(groups === 'macroeconomic') {
+            requireUrl = 'macro_indicator_list'
           }
           if(!requireUrl) return
           await this.fetchIndicatorsPageList(requireUrl)
@@ -2174,6 +2221,7 @@ export default {
       }
 		},
     async downloadCSV() {
+      debugger
       // 访问组件示例数据
       const checks = [
         {
@@ -2320,7 +2368,12 @@ export default {
           label: this.options[0]?.label || 'Sector Trend RelTrend',
           value: 'sector_trend_reltrend',
           type: 'SectorTrendRelTrend'
-        }
+        },
+        {
+          label: 'Macroeconomic Conditions',
+          value: 'macro_indicator_list',
+          type: 'macroeconomic'
+        },
       ]
       const type = checks.find(item => item.type === this.checkedType)?.value
       if(!type) return
@@ -2728,7 +2781,8 @@ export default {
         cstScreen: 'commod_optix_trend',
         CHMinMax: 'cot_max_min',
         TSCRP: 'crp',
-        SectorTrendRelTrend: 'sector_trend_reltrend'
+        SectorTrendRelTrend: 'sector_trend_reltrend',
+        macroeconomic: 'macro_indicator_list'
       }
       let url = urlMap[this.checkedType]
       if(this.condition === 'relative') url = `${url}&rel_trend=1`

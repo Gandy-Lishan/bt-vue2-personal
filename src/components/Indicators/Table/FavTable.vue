@@ -707,7 +707,12 @@ export default {
           label: 'My Favorites',
           value: 'my_favorites',
           type: 'favorite'
-        }
+        },
+        {
+          label: 'Macroeconomic Conditions',
+          value: 'macroeconomic',
+          type: 'macro_indicator_list'
+        },
       ]
       const checkedType = 'favorite'
       debugger

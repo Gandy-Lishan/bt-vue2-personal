@@ -806,7 +806,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 																if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
 																else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
 																else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
+														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'macro_indicator_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
 										if(url === 'commodity_complete_list' && key === 'sub_type' && obj['url'].startsWith('vol_')) {
 											obj[key] = 'Volatility'
 										}else if(url === 'etf_complete_list' && obj['sub_type'] === 'etf_bond' && obj['url'].startsWith('etf_') && (obj['underlying_name'] && obj['underlying_name'].endsWith('Treasury'))) {
@@ -815,7 +815,9 @@ get_indicator_page_btv1_list({ commit, state }) {
 										}else if(url === 'etf_seasonality' && obj['type'] === 'etf_seasonality' && (obj['underlying_name'] && (obj['underlying_name'].includes('Industrial') || obj['underlying_name'].includes('Discretionary')))) {
 												if(obj['underlying_name'].includes('Industrial')) obj['underlying_name'] = obj['underlying_name'].replace('Industrial', 'Ind.')
 													if(obj['underlying_name'].includes('Discretionary')) obj['underlying_name'] = obj['underlying_name'].replace('Discretionary', 'Disc.')
-										} else if(url === 'bond_complete_list' && key === 'sub_type') {
+										}else if(url === 'macro_indicator_list' && key === 'sub_type') {
+										 obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
+									}else if(url === 'bond_complete_list' && key === 'sub_type') {
 										const chartNamesFor10Year = [
 										'Bond Optix', '10-Year Optix', '10-Year Treasury Hedgers Position',
 										'10-Year Bond Put/Call Ratio', '10-Year Treasury Seasonality','Conference Board - Bonds',
@@ -892,7 +894,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 											obj['sub_type'] = 'Rydex';
 										} else if (obj['sub_type'] === 'mff_stocks') {
 											obj['sub_type'] = 'Stocks';
-										} else if (obj['sub_type'].startsWith('etf_fund_')) {
+										} else if ((obj['sub_type'].startsWith('etf_fund_'))) {
 											obj['sub_type'] = obj['sub_type'].split('_')[2].charAt(0).toUpperCase() + obj['sub_type'].split('_')[2].slice(1); // Capitalize the 3rd part
 										} else {
 											obj['sub_type'] = obj['sub_type'].charAt(0).toUpperCase() + obj['sub_type'].slice(1);
@@ -946,7 +948,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 								obj['source_list'] = url
 
 									if(
-											((key === 'last_value' || key === 'last_change') && (url === 'stock_complete_list' || url === 'most_popular') && obj['last_change_type'] === 'percent')
+											((key === 'last_value' || key === 'last_change') && (url === 'stock_complete_list' || url === 'most_popular' || url === 'macro_indicator_list') && obj['last_change_type'] === 'percent')
 											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
 											|| (key === 'avg_net_return' && url === 'etf_seasonality'
