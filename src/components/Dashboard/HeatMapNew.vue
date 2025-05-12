@@ -47,7 +47,6 @@ export default {
   methods: {
     // Format the heatmap data
     formatData(data) {
-      debugger
       const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
       return data.map(item => ({
         name: item[0],
@@ -189,7 +188,6 @@ export default {
     // Handle the selection of a moving average button
     handleMovingAverageClick(index) {
       this.selectedMovingAverageIndex = index;
-      debugger
       const formattedData = this.formatData(this._heatmap_data[index]);
       this.createHeatMap(formattedData);
     },

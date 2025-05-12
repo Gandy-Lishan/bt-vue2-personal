@@ -18,11 +18,11 @@
        <div class="col-md-12">
          <p>
            <a :href="getChartUrl('model_dumb_money')">Dumb Money Confidence</a> is
-           <u>{{ sentimentInfo.dumb_money_text }}</u>
+           <u>{{ dumb_money_text }}</u>
            and
            <a :href="getChartUrl('model_smart_money')">Smart Money Confidence</a> is
-           <u>{{ sentimentInfo.smart_money_text }}</u>. This suggests an
-           {{ sentimentInfo.smart_verbiage }} return of {{ sentimentInfo.smart_dumb_returns.toFixed(1) }}% over the next 2 months.
+           <u>{{ smart_money_text }}</u>. This suggests an
+           {{ smart_verbiage }} return of {{ smart_dumb_returns.toFixed(1) }}% over the next 2 months.
          </p>
          <div ref="chartContainer" class="highcharts-chart-container"></div>
        </div>
@@ -37,47 +37,62 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 import { getSmartDumbSentiment, getPairDataDashboard } from '@/service/service'
 import moment from 'moment';
-import { LocalStorageUtil } from '@/utils'
+import { LocalStorageUtil, isJson, isObject } from '@/utils'
 
 Exporting(Highcharts);
 ExportData(Highcharts);
 
 export default {
+  props: {
+    dashBoardData: {
+      type: Object,
+      required: true,
+    }
+  },
  data() {
     return {
       chartData: null,
       title: "Smart Money / Dumb Money Confidence",
       id: "dumb_money_chart",
       legendTitle: ["Smart Money", "Dumb Money"],
-      sentimentInfo: {
-        smart_money_text: '...',
-        dumb_money_text: '...',
-        smart_dumb_returns: NaN,
-        smart_verbiage: '...',
-      },
       lineHeight: 195,
       lastSmart: null,
       lastDumb: null,
+      smart_money_text: '...',
+      dumb_money_text: '...',
+      smart_verbiage: '...',
+      smart_dumb_returns: 'N/A'
     }
  },
- async mounted() {
-    const symbol = 'SPX'
-    const startDate = moment.utc().subtract(Number(1), 'years').format('YYYY-MM-DD')
-    this.chartData = await getPairDataDashboard(symbol,'daily',startDate,undefined,['model_dumb_money','model_smart_money']);
-    this.lastSmart = this.chartData[this.chartData.length-1]['indicator_Close']
-    this.lastDumb = this.chartData[this.chartData.length-1]['indicator2_Close']
-    this.legendTitle[0] = this.legendTitle[0] + " (Last = " + this.lastDumb + ")"
-    this.legendTitle[1] = this.legendTitle[1] + " (Last = " + this.lastSmart + ")"
-    this.sentimentInfo = await getSmartDumbSentiment()
-
-    this.$nextTick(() => {
-        // 确保 DOM 渲染完成后再访问 chartContainer
-        const chartContainer = this.$refs.chartContainer;
-        if (chartContainer) {
-          this.setupChart();
-        }
-      });
- },
+ computed: {
+    chartData() {
+      console.log('lishanthis.dashBoardData.data', this.dashBoardData)
+      return this.dashBoardData.data
+    }
+  },
+  watch: {
+    dashBoardData(data) {
+      if(isObject(data) && Object.keys(data).length !== 0) {
+        const {data, smart_last, dumb_last, smart_money_text, dumb_money_text, smart_verbiage, smart_dumb_returns} = this.dashBoardData
+        this.smart_money_text = smart_money_text
+        this.dumb_money_text = dumb_money_text
+        this.smart_verbiage = smart_verbiage
+        this.smart_dumb_returns = smart_dumb_returns
+        this.chartData = data
+        this.lastSmart = dumb_last
+        this.lastDumb = smart_last
+        this.legendTitle[0] = this.legendTitle[0] + " (Last = " + this.lastDumb + ")"
+        this.legendTitle[1] = this.legendTitle[1] + " (Last = " + this.lastSmart + ")"
+        this.$nextTick(() => {
+          // 确保 DOM 渲染完成后再访问 chartContainer
+          const chartContainer = this.$refs.chartContainer;
+          if (chartContainer) {
+            this.setupChart();
+          }
+        });
+      }
+    }
+  },
  methods: {
    getChartUrl(indicator) {
      return `/backtester/sr/setup?index=${'Unknown'}&indicator=${indicator}`
@@ -85,8 +100,6 @@ export default {
    JumpToBacktest() {
     // 携带两个 indicator 和 一个 symbol
     const symbol = 'SPX'
-    const indicator1 = 'model_dumb_money'
-    const indicator2 = 'model_smart_money'
     const jumpBacktestData = {}
     jumpBacktestData.symbol = symbol
     const date = new Date()
@@ -226,7 +239,7 @@ export default {
         series: [
           {
             name: 'SPX',
-            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.Close]),
+            data: this.chartData.map(item => [moment.utc(item[0]).valueOf(), item[2]]),
             tooltip: {
               valueDecimals: 2
             },
@@ -235,7 +248,7 @@ export default {
           },
           {
             name: this.legendTitle[0],
-            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator2_Close]),
+            data: this.chartData.map(item => [moment.utc(item[0]).valueOf(), item[1]]),
             tooltip: {
               valueDecimals: 2
             },
@@ -244,7 +257,7 @@ export default {
           },
           {
             name: this.legendTitle[1],
-            data: this.chartData.map(item => [moment.utc(item.DT).valueOf(), item.indicator_Close]),
+            data: this.chartData.map(item => [moment.utc(item[0]).valueOf(), item[3]]),
             tooltip: {
               valueDecimals: 2
             },

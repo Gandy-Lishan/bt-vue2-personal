@@ -26,7 +26,6 @@ export default {
     }
   },
  beforeRouteEnter(to, from, next) {
-  debugger
   if(to.path.includes('/dashboard/heatmap')) {
     next(async _this => {
       // await _this.$nextTick(async () => {

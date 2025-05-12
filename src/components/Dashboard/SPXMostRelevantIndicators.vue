@@ -61,7 +61,6 @@ export default {
  computed: {
    columns() {
      // 获取动态列名（排除固定列和额外固定列）
-     debugger
      if((Array.isArray(this.data) && this.data.length === 0) || !this.data) return []
      // 按照接口返回的顺序排列动态列名
      this.date = moment.utc(this.data[0]?.last_updated_date).format('MM/DD/YYYY')

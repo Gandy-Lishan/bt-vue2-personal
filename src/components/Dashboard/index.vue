@@ -12,7 +12,7 @@
           <Commentary :dashBoardData="dashBoardData"/>
         </div>
         <div class="col-md-7">
-          <SmartDumbChart />
+          <SmartDumbChart :dashBoardData="dashBoardData"/>
           <MarketOverview :dashBoardData="dashBoardData"/>
           <SPXMostRelevantIndicators :data="mostRelevantIndicatorsData" />
         </div>
@@ -53,6 +53,11 @@ export default {
   return {
     dashBoardData: {},
     mostRelevantIndicatorsData: []
+  }
+ },
+ computed: {
+  dashBoardChartData() {
+    return this.dashBoardData.data
   }
  },
  async mounted() {
@@ -117,6 +122,7 @@ export default {
     const blogs_and_charts = isJson(this.dashBoardData.blogs_and_charts) ? JSON.parse(this.dashBoardData.blogs_and_charts) : this.dashBoardData.blogs_and_charts
     this.dashBoardData.blogs_and_charts = blogs_and_charts
     this.dashBoardData.dashboard_spotlight_data = isJson(this.dashBoardData.dashboard_spotlight_data) ? JSON.parse(this.dashBoardData.dashboard_spotlight_data) : this.dashBoardData.dashboard_spotlight_data
+    this.dashBoardData.data = (isJson(this.dashBoardData.data) ? JSON.parse(this.dashBoardData.data) : this.dashBoardData.data) || []
     this.dashBoardData = parseData
     const heatmap_data = JSON.parse(parseData.heatmap_data)
     console.log('heatmap_data', heatmap_data)
