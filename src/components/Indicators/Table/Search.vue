@@ -202,6 +202,8 @@ export default {
           url = 'commod_seasonality'
         }else if(groups === 'stocks') {
           requireUrl = 'stock_complete_list'
+        }else if(groups === 'macroeconomic') {
+          requireUrl = 'macro_indicator_list'
         }
         if(!requireUrl) return
         await this.fetchIndicatorsPageList(requireUrl)

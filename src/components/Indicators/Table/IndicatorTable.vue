@@ -53,6 +53,21 @@ export default {
     return {
       tableInfoList: [
         {
+          label: 'Macroeconomic Conditions',
+          type: 'macroeconomic',
+          refName: 'macroeconomicVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Macroeconomic Conditions',
+              value: 'macroeconomic',
+              type: 'macroeconomic',
+              url: 'macro_indicator_list'
+            }
+          ]
+        },
+        {
           label: 'Stock Market Indicators & Optix',
           type: 'stock',
           refName: 'stockVirtualScroll',
@@ -89,27 +104,6 @@ export default {
               type: 'Crypto',
               url: 'crypt_complete_list'
             },
-          ]
-        },
-        {
-          label: 'Bond & Commodity',
-          type: 'bond',
-          refName: 'bondVirtualScroll',
-          itemSize: 50,
-          keyProp: 'url',
-          options: [
-            {
-              label: 'Bond Market Indicators',
-              value: 'bond',
-              type: 'bond',
-              url: 'bond_complete_list'
-            },
-            {
-              label: 'Commodity Market Indicators',
-              value: 'commodity',
-              type: 'commodity',
-              url: 'commodity_complete_list'
-            }
           ]
         },
         // {
@@ -166,30 +160,24 @@ export default {
           ]
         },
         {
-          label: 'Seasonality',
-          type: 'CommoditySeasonality',
-          refName: 'seasonalityVirtualScroll',
+          label: 'Bond & Commodity',
+          type: 'bond',
+          refName: 'bondVirtualScroll',
           itemSize: 50,
           keyProp: 'url',
           options: [
             {
-              label: 'Commodity Market Seasonality',
-              value: 'CommoditySeasonality',
-              type: 'seasonality',
-              url: 'commod_seasonality'
+              label: 'Bond Market Indicators',
+              value: 'bond',
+              type: 'bond',
+              url: 'bond_complete_list'
             },
             {
-              label: 'ETF Seasonality',
-              value: 'ETFSeasonality',
-              type: 'seasonality',
-              url: 'etf_seasonality'
-            },
-            {
-              label: 'Bond Market Seasonality',
-              value: 'BondSeasonality',
-              type: 'seasonality',
-              url: 'bond_seasonality'
-            },
+              label: 'Commodity Market Indicators',
+              value: 'commodity',
+              type: 'commodity',
+              url: 'commodity_complete_list'
+            }
           ]
         },
         {
@@ -217,6 +205,33 @@ export default {
               type: 'Breadth',
               url: 'crypto_breadth'
             }
+          ]
+        },
+        {
+          label: 'Seasonality',
+          type: 'CommoditySeasonality',
+          refName: 'seasonalityVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Commodity Market Seasonality',
+              value: 'CommoditySeasonality',
+              type: 'seasonality',
+              url: 'commod_seasonality'
+            },
+            {
+              label: 'ETF Seasonality',
+              value: 'ETFSeasonality',
+              type: 'seasonality',
+              url: 'etf_seasonality'
+            },
+            {
+              label: 'Bond Market Seasonality',
+              value: 'BondSeasonality',
+              type: 'seasonality',
+              url: 'bond_seasonality'
+            },
           ]
         },
         // {

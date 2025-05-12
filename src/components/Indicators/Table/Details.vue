@@ -236,7 +236,8 @@ export default {
         ['ETFShares', 'Most Active ETF Shares Outstanding'],
         ['CommoditySeasonality', 'Commodity Market Seasonality'],
         ['BondSeasonality', 'Bond Market Seasonality'],
-        ['ETFSeasonality', 'ETF Seasonality']
+        ['ETFSeasonality', 'ETF Seasonality'],
+        ['macroeconomic', 'Macroeconomic Conditions'],
       ])
       if(map.has(this.checkedTitle)) return map.get(this.checkedTitle)
       else return this.checkedTitle
