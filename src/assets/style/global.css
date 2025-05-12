@@ -21,7 +21,7 @@
   width: 136px;
 }
 ._filterConditionBox .el-form-item__label {
-  width: auto;
+  width: 100%;
 }
 .exclude_oo .el-form-item label.el-form-item__label {
 	width: auto;
