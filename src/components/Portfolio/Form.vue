@@ -341,6 +341,7 @@ import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule }
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 import { SearchAutocomplete } from "@/components/common"
 const debounce = require('lodash/debounce')
+const cloneDeep = require('lodash/cloneDeep')
 
 export default {
   name: 'Form',
@@ -750,6 +751,7 @@ export default {
       this.findPortfolioLoading = false
     },
     async submitForm() {
+      debugger
      this.btnLoading = true
      this.percentage = 5
       let saveRes = null
