@@ -932,6 +932,9 @@ h4 {
 ._filterConditionBox /deep/ .el-select {
 	width: 100%;
 }
+._filterConditionBox.el-form-item--small /deep/ .el-form-item__content {
+	width: 100%;
+}
 .portfolioCheckedBox {
   border: #cacaca solid 1px;
   padding: 0 5px 0 10px;
