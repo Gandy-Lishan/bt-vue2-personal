@@ -498,7 +498,6 @@ export default {
         daily_limit: 3,
         capital_allocate: 'manual_input',
         capital_allocate_num: 60,
-        signals: ['All']
       },
       rowUrl: null,
       btnLoading: false,
@@ -506,6 +505,7 @@ export default {
       isPolling: false,
       processTips: '',
       percentage: 0,
+      signals: ['All'],
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -784,10 +784,6 @@ export default {
           { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'blur' },
           { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'change' }
         ],
-        signals: [
-          { validator: validateSignals, trigger: 'blur' },
-          { validator: validateSignals, trigger: 'change' },
-        ]
       }
     }
   },
@@ -854,9 +850,9 @@ export default {
           daily_limit: 3,
           capital_allocate: 'manual_input',
           capital_allocate_num: 60,
-          signals: ['All']
         }
         }
+        this.signals = ['All']
         this.rowUrl = null
         this.btnLoading = false
         this.previewBtnLoading = false
@@ -869,7 +865,7 @@ export default {
     },
     selected(signals){
       console.log('触发了', signals)
-      this.data.signals = signals
+      this.signals = signals
     },
     async checkDuplicateNames(name) {
         const nameLookupRes = await getScannerBTList(null, null, name)
@@ -896,7 +892,7 @@ export default {
     },
     async previewSCList() {
       
-      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
+      if(this.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
@@ -907,10 +903,10 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals,
         capital_allocate,
         capital_allocate_num
       } = this.data
+      let {signals} = this
       signals = Array.from(new Set([...signals]))
       const arraysEqualIgnoreOrder = (a, b) => {
         if (!Array.isArray(a) || !Array.isArray(b)) return false;
@@ -949,7 +945,7 @@ export default {
     },
     async saveFormData() {
       debugger
-      if(this.data.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
+      if(this.signals.length === 0) {this.popUpMsgBox('Please select at least one signal');return}
       const validForm = await this.validForm('Form')
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
@@ -968,10 +964,10 @@ export default {
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
         commission,
-        signals,
         capital_allocate,
         capital_allocate_num
       } = this.data
+      let {signals} = this
       signals = Array.from(new Set([...signals]))
       const arraysEqualIgnoreOrder = (a, b) => {
         if (!Array.isArray(a) || !Array.isArray(b)) return false;
@@ -1110,28 +1106,25 @@ export default {
         capital_allocate: capital_allocate !== 'Kelly' ? 'manual_input' : 'Kelly'
       }
       if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
-      
-      for (const key in target) {
-        if(key === 'signals') {
-          if(Array.isArray(data[key]) && data[key].length === 1 && data[key][0] === 'All') {
-            this.$refs['SelectCheck'].handleoptionsAllChange(true)
-            target[key] = this.data.signals
-          }else if(Array.isArray(data[key])){
-            this.$refs['SelectCheck'].handleoptionsAllChange(false)
-            const arr = []
-            data[key].forEach(ele => {
-              const item = {
-                label: ele,
-                value: ele,
-                check: true
-              }
-              this.$refs['SelectCheck'].handleTaskItemChange(item)
-              arr.push(ele)
-            })
-            target[key] = arr
+      if(Array.isArray(data['signals']) && data['signals'].length === 1 && data['signals'][0] === 'All') {
+        this.$refs['SelectCheck'].handleoptionsAllChange(true)
+        this['signals'] = this.data.signals
+        delete data.signals
+      }else if(Array.isArray(data['signals'])){
+        this.$refs['SelectCheck'].handleoptionsAllChange(false)
+        const arr = []
+        data['signals'].forEach(ele => {
+          const item = {
+            label: ele,
+            value: ele,
+            check: true
           }
-        }else {target[key] = prepareData[key]}
+          this.$refs['SelectCheck'].handleTaskItemChange(item)
+          arr.push(ele)
+        })
+        this['signals'] = arr
       }
+      for (const key in target) {target[key] = prepareData[key]}
       this.data = target
     },
     async rerunSCBacktest(data) {
