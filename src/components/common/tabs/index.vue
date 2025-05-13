@@ -129,7 +129,7 @@ main .el-menu--horizontal>.el-menu-item.is-active {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
+    width: 250px;
     height: 42px;
     border-radius: 10px;
     background-image: initial;

@@ -177,7 +177,24 @@ export default {
         {
           label: 'BacktestEdge',
           keyPath: '4',
-          path: '/backtester'
+          path: '/backtester',
+          subMenu: [
+            {
+              label: 'Backtest List',
+              keyPath: '4-1',
+              path: '/backtester/list/history'
+            },
+            {
+              label: 'Sample Backtests',
+              keyPath: '4-2',
+              path: '/backtester/list/sample'
+            },
+            {
+              label: 'Analysts\' Backtests',
+              keyPath: '4-3',
+              path: '/backtester/list/analyst'
+            }
+          ]
         },
         {
           label: 'Smart Stock Scanner',
