@@ -30,7 +30,7 @@
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }" title="Refresh List">My Signals List</p>
             <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-              <span>View Video Tutorial</span>
+              <span>Watch My Signals Tutorial</span>
             </el-button>
             <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }">Sample Signals List</p> -->
              

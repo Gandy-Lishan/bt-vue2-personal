@@ -35,7 +35,7 @@
           {{ tag.label }}
         </el-tag>
         <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-          <span>View Video Tutorial</span>
+          <span>Watch Strategies Tutorial</span>
         </el-button>
       </div>
       <div class="strategy-header" v-show="activatedTag !== 'Portfolio'">
