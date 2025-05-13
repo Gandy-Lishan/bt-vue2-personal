@@ -180,18 +180,28 @@ export default {
           path: '/backtester',
           subMenu: [
             {
-              label: 'Backtest List',
+              label: 'Backtest Set Up & Results',
               keyPath: '4-1',
+              path: '/backtester/sr/setup'
+            },
+            {
+              label: 'Backtest List',
+              keyPath: '4-2',
               path: '/backtester/list/history'
             },
             {
+              label: 'My Favorites',
+              keyPath: '4-3',
+              path: '/backtester/list/favorites'
+            },
+            {
               label: 'Sample Backtests',
-              keyPath: '4-2',
+              keyPath: '4-4',
               path: '/backtester/list/sample'
             },
             {
               label: 'Analysts\' Backtests',
-              keyPath: '4-3',
+              keyPath: '4-5',
               path: '/backtester/list/analyst'
             }
           ]
