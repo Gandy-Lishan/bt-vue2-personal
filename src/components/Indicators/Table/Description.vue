@@ -8,13 +8,13 @@
         </template>
         <div class="centent" :class="{tendScore: (enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP'].includes(checkedType))}">
         <div class="des" v-if="
-        !enlarged || (enlarged === 'Stock Market Indicators & Optix' && (!checkedType || checkedType === 'stock'))
+        !enlarged || (enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'stock'))
         || (enlarged === 'Bond & Commodity' && (!checkedType || checkedType === 'bond' || checkedType === 'commodity'))
         || (enlarged === 'Seasonality' && (!checkedType || checkedType === 'CommoditySeasonality'))
         || (enlarged === 'Seasonality' && (checkedType === 'BondSeasonality'))
         || (enlarged === 'Crypto' && (checkedType === 'CRP'))
-        ||  (enlarged === 'Stock Market Indicators & Optix' && (!checkedType || checkedType === 'Russell'))
-        ||  (enlarged === 'Stock Market Indicators & Optix' && (!checkedType || checkedType === 'CRP'))
+        ||  (enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'Russell'))
+        ||  (enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'CRP'))
         ||  (enlarged === 'Macroeconomic Conditions' && (!checkedType || checkedType === 'macroeconomic'))
         ||  (enlarged === 'Stock' && checkedType === 'stock')
         ">
@@ -44,7 +44,7 @@
             and then select the columns you wish to sort by.</p>
         </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Stock Market Indicators & Optix' && (!checkedType || checkedType === 'NASDAQ')">
+        <div class="des" v-else-if="enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'NASDAQ')">
           <p>The following table shows the Optimism Index (Optix) for each stock in the NASDAQ 100.  Click any
               column heading to sort the table by that column, and click again to reverse it.  Click the "excess"
               icon to sort the table by stocks showing the most pessimism (the most hated stocks); click again to
@@ -60,7 +60,7 @@
             and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="des" v-else-if="enlarged === 'Stock Market Indicators & Optix' && (!checkedType || checkedType === 'SP1500')">
+        <div class="des" v-else-if="enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'SP1500')">
           <p>The following table shows the Optimism Index (Optix) for each stock in the S&P 1500.  Click any column heading to sort the table by that column, and click again to reverse it.  Click the "excess"   icon to sort the table by stocks showing the most pessimism (the most hated stocks); click again to sort it by stocks with the most optimism.  Click the hyperlinked Ticker to pull up an interactive chart page.  The best prospects for potential long positions have an Optix between 50 - 75 (positive but not showing excessive optimism) or below 25 (showing excessive pessimism).  The prospects to avoid have an Optix between 25 - 50 (negative but not showing excessive pessimism) or above 75 (showing excessive optimism). Additionally, using the Z-Score column, you can better understand where the sentiment values are relative to a typical sentiment score. </p>
           <div class="note note-info">
             <p>You can sort the table below by a single column or by multiple columns. To sort by one column, just

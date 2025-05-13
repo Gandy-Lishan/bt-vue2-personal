@@ -53,22 +53,7 @@ export default {
     return {
       tableInfoList: [
         {
-          label: 'Macroeconomic Conditions',
-          type: 'macroeconomic',
-          refName: 'macroeconomicVirtualScroll',
-          itemSize: 50,
-          keyProp: 'url',
-          options: [
-            {
-              label: 'Macroeconomic Conditions',
-              value: 'macroeconomic',
-              type: 'macroeconomic',
-              url: 'macro_indicator_list'
-            }
-          ]
-        },
-        {
-          label: 'Stock Market Indicators & Optix',
+          label: 'Stock Market Indicator & Optix (Optimism Index)',
           type: 'stock',
           refName: 'stockVirtualScroll',
           itemSize: 50,
@@ -104,6 +89,21 @@ export default {
               type: 'Crypto',
               url: 'crypt_complete_list'
             },
+          ]
+        },
+        {
+          label: 'Macroeconomic Conditions',
+          type: 'macroeconomic',
+          refName: 'macroeconomicVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Macroeconomic Conditions',
+              value: 'macroeconomic',
+              type: 'macroeconomic',
+              url: 'macro_indicator_list'
+            }
           ]
         },
         // {
@@ -337,7 +337,7 @@ export default {
   mounted() {
     if(this.$route.fullPath.includes('?enlarge=stock')) {
       this.$nextTick(() => {
-        this.enLargeTable = 'Stock Market Indicators & Optix'
+        this.enLargeTable = 'Stock Market Indicator & Optix (Optimism Index)'
         this.checkedType = 'stock'
       })
     }

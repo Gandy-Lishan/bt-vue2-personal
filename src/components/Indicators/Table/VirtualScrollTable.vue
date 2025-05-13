@@ -1816,7 +1816,7 @@ export default {
       this.$nextTick(() => {
         this.checkedType = 'stock'
         this.enlarged = true
-        this.toggleEnlarge('Stock Market Indicators & Optix');
+        this.toggleEnlarge('Stock Market Indicator & Optix (Optimism Index)');
       })
     }
     if(this.$route.fullPath.includes('sector_trend_score') && this.refName === 'SectorTrendRelTrendVirtualScroll') {
