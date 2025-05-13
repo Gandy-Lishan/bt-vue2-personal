@@ -2,7 +2,7 @@
   <div class="CPM-list-container">
     <div class="tutorial-box">
       <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-        <span>View Video Tutorial</span>
+        <span>Watch Correlation Pattern Match Tutorial</span>
       </el-button>
     </div>
     <div class="search-box">

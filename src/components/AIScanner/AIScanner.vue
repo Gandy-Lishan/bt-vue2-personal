@@ -22,7 +22,7 @@
 
 				<div class="searchBox">
 					<el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-							<span>View Video Tutorial</span>
+							<span>Watch Smart Stock Scanner Tutorial</span>
 					</el-button>
 					<h6 class="h6-text">Today's pick will be completed by 11:40pm US Eastern Time .</h6>
 					<el-input 

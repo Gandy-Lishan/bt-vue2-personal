@@ -6,7 +6,7 @@
       </el-input>
       <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
       <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-        <span>View Video Tutorial</span>
+        <span>Watch My Screen Tutorial</span>
       </el-button>
       <!-- <el-popconfirm
         confirm-button-text="Continue"

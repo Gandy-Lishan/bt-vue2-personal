@@ -123,7 +123,7 @@
 			<el-tooltip
 				class="item"
 				effect="dark"
-				content="View Video Tutorial"
+				content="Watch BacktestEdge Tutorial"
 				placement="bottom"
 				v-if="showComp.tutorial"
 			>
