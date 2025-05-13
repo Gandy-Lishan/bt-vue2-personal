@@ -487,9 +487,16 @@ export default {
 			]
 			this.summaryData.forEach(ele => {
 				for (const key in ele) {
-					if (isFinite(ele[key])) {
+					if (isFinite(ele[key]) && key !== 'total_trades') {
 						let num = parseFloat(ele[key]);
 						if (!isNaN(num)) ele[key] = num.toFixed(2);
+					}else if(isFinite(ele[key]) && key === 'total_trades') {
+						let num = parseFloat(ele[key]);
+							if (!isNaN(num) && num > 0) {
+								ele[key] = Math.floor(num); // 或 Math.round(num)，视你是否需要四舍五入
+							} else {
+								ele[key] = ''; // 或者根据需求保留原值或设置为 null
+							}
 					}
 				}
 				
