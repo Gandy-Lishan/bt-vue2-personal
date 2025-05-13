@@ -180,7 +180,7 @@ export default {
           path: '/backtester',
           subMenu: [
             {
-              label: 'Backtest Set Up & Results',
+              label: 'Backtest Set Up',
               keyPath: '4-1',
               path: '/backtester/sr/setup'
             },
@@ -190,7 +190,7 @@ export default {
               path: '/backtester/list/history'
             },
             {
-              label: 'My Favorites',
+              label: 'My Favorites Backtest',
               keyPath: '4-3',
               path: '/backtester/list/favorites'
             },
@@ -565,9 +565,12 @@ li.el-menu-item.is-active.menu-item-active {
 }
 .main-nav.bottom {
   background-color: black;
+  position: relative;
 }
 .bottom .el-menu.el-menu--horizontal {
   background-color: black;
+  position: absolute;
+  z-index: 99999;
 }
 li.el-menu-item.tutorial-svg:hover {
   color: #909399;

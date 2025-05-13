@@ -3,7 +3,76 @@
 		<div class="statistics-title">
 		</div>
 		<div>
-			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
+	<div class="page-content-wrapper">
+		<div class="tab-pane">
+			<div class="tg-wrap">
+				<table class="tg">
+					<tbody>
+						<tr>
+									<th :style="{width: getColumnWidth()}" v-for="(col, i) in firstColumns" :key="i" class="tg-0lax"><b v-html="col.label"></b></th>
+							</tr>
+							<tr>
+									<td
+											v-for="(col, i) in firstColumns"
+											:key="i"
+											class="tg-0lax"
+									>
+										 <b
+											:style="{
+												color:
+															Array.isArray(summaryData) &&
+															summaryData.length !== 0 &&
+															Number(summaryData[0][col.field]) < 0
+																	? '#dd3a13'
+																	: 'unset'
+											}"
+											>{{ summaryData?.[0]?.[col.field] !== undefined
+													? `${summaryData[0][col.field]}${col.unit === 'percent' ? '%' : ''}`
+													: '-' }}</b>
+									</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="page-content-wrapper">
+		<div class="tab-pane">
+			<div class="tg-wrap">
+				<table class="tg">
+					<tbody>
+						<tr>
+									<th :style="{width: getColumnWidth()}" v-for="(col, i) in secondColumns" :key="i" class="tg-0lax"><b v-html="col.label"></b></th>
+							</tr>
+							<tr>
+									<td
+											v-for="(col, i) in secondColumns"
+											:key="i"
+											class="tg-0lax"
+									>
+										 <b 
+											:style="{
+												color:
+														Array.isArray(summaryData) &&
+														summaryData.length !== 0 &&
+														Number(summaryData[0][col.field]) < 0
+																? '#dd3a13'
+																: 'unset'
+										}"
+											>{{ summaryData?.[0]?.[col.field] !== undefined
+													? `${summaryData[0][col.field]}${col.unit === 'percent' ? '%' : ''}`
+													: '-' }}</b>
+									</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<br>
+	<!-- <hr style="color: 2px solid #dddddd;"> -->
+	<hr style="height:2px;border:none;color:#dddddd;background-color:#dddddd;" class="hr">
+			<!-- <el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
 				<template v-for="(col,index) in extraColumns">
 					<el-table-column
 						:prop="col.field"
@@ -34,7 +103,7 @@
 						</template>
 					</el-table-column>
 				</template>
-			</el-table>
+			</el-table> -->
 			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
 				<el-table-column
 					prop="total_assets"
@@ -321,7 +390,7 @@ export default {
 					minWidth: '200px'
 				}
 			],
-			extraColumns: [
+			firstColumns: [
 				{
 					label: 'Strategy CAGR',
 					field: 'CAGR',
@@ -333,26 +402,61 @@ export default {
 					unit: 'percent'
 				},
 				{
+					label: 'Max Drawdown',
+					field: 'max_risk',
+					unit: 'percent'
+				},
+				{
 					label: 'Expectancy',
 					field: 'Expectancy_val',
-				},
-				{
-					label: 'Information Ratio',
-					field: 'info_ratio',
-				},
-				{
-					label: 'Profit/Loss Ratio',
-					field: 'profit_loss_ratio',
 				},
 				{
 					label: 'Sharpe Ratio',
 					field: 'sharp_ratio',
 				},
 				{
-					label: 'Trades Per Year',
-					field: 'trades_per_year',
+						label: 'Information Ratio',
+						field: 'info_ratio',
 				},
-			]
+			],
+			secondColumns: [
+					{
+						label: 'Profit/Loss Ratio',
+						field: 'profit_loss_ratio',
+					},
+					{
+						label: 'Average Win',
+						field: 'avg_win',
+						unit: 'percent'
+					},
+					{
+						label: 'Average Loss',
+						field: 'avg_loss',
+						unit: 'percent'
+					},
+					{
+						label: 'Total Trades',
+						field: 'total_trades',
+					},
+					{
+						label: 'Win Rate (%)',
+						field: 'winrate',
+						unit: 'percent'
+					},
+					{
+						label: 'Trades Per Year',
+						field: 'trades_per_year',
+					},
+			],
+			keyMatchMap: new Map([
+					['CAGR', `Strategy<br />CAGR`],
+					['benchmark_CAGR', `Benchmark<br />CAGR`],
+					['Expectancy_val', `Expectancy`],
+					['info_ratio', `Information <br />Ratio`],
+					['profit_loss_ratio', `Profit/Loss<br />Ratio`],
+					['sharp_ratio', `Sharpe<br />Ratio`],
+					['trades_per_year', `Trades<br />Per Year`],
+				]),
 		}
 	},
 	computed: {
@@ -448,6 +552,7 @@ export default {
 		},
     handleDownloadCsv() {
 			const summary = []
+			const staticSummary = []
       this.summaryData.forEach((item, index) => {
         const obj = {}
         obj['TOTAL ASSETS'] = item.total_assets
@@ -456,14 +561,21 @@ export default {
         obj['CASH'] = item.cash
         obj['MARKET VALUE'] = item.market_value
 								obj['WIN RATE %'] = `${item.winrate}%`
-								obj['Strategy CAGR'] = `${item.CAGR}%`
-								obj['Benchmark CAGR'] = `${item.benchmark_CAGR}%`
-								obj['Expectancy'] = `${item.Expectancy_val}`
-								obj['Information Ratio'] = `${item.info_ratio}`
-								obj['Profit/Loss Ratio'] = `${item.profit_loss_ratio}`
-								obj['Sharpe Ratio'] = `${item.sharp_ratio}`
-								obj['Trades Per Year'] = `${item.trades_per_year}`
         summary.push(obj)
+								const staticObj = {}
+								staticObj['Strategy CAGR'] = `${item.CAGR}%`
+								staticObj['Benchmark CAGR'] = `${item.benchmark_CAGR}%`
+								staticObj['Max Drawdown'] = `${item.max_risk}%`
+								staticObj['Expectancy'] = `${item.Expectancy_val}`
+								staticObj['Sharpe Ratio'] = `${item.sharp_ratio}`
+								staticObj['Information Ratio'] = `${item.info_ratio}`
+								staticObj['Profit/Loss Ratio'] = `${item.profit_loss_ratio}`
+								staticObj['Average Win'] = `${item.avg_win}%`
+								staticObj['Average Loss'] = `${item.avg_loss}%`
+								staticObj['Total Trades'] = `${item.total_trades}`
+								staticObj['Win Rate (%)'] = `${item.winrate}%`
+								staticObj['Trades Per Year'] = `${item.trades_per_year}`
+								staticSummary.push(staticObj)
       })
 			const trade = []
 			debugger
@@ -483,17 +595,20 @@ export default {
       if (
         !(
           summary.length &&
-          trade.length
+          trade.length &&
+										staticSummary.length
         )
       ) {
         this.popUpMsgBox('No data available for download')
         return
       }
       const dataList = [ 
-				summary,
+						staticSummary,
+							summary,
         trade
       ]
       const sheetNames = [
+							'Summary Statistics',
         'Summary',
         'HOLDING DETAILS'
       ]
@@ -545,6 +660,9 @@ export default {
       }
       return buf;
     },
+				getColumnWidth() {
+					return `${(100 / this.firstColumns.length)}%`
+				}
 	}
 }
 </script>
@@ -580,5 +698,11 @@ export default {
 		font-size: 18px;
 		font-weight: 600;
 	}
+}
+table.tg {
+	width: 100%;
+}
+.tg-0lax {
+	text-align: center !important;
 }
 </style>
