@@ -4,6 +4,38 @@
 		</div>
 		<div>
 			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
+				<template v-for="(col,index) in extraColumns">
+					<el-table-column
+						:prop="col.field"
+						show-overflow-tooltip
+						:label="col.label"
+						align="center"
+						:key="index"
+						v-if="col.unit === 'percent'"
+					> 
+						<template slot-scope="scope">
+							<span v-if="scope.row[col.field] >= 0">{{scope.row[col.field]}}%</span>
+							<span v-else-if="isNaN(scope.row[col.field])"></span>
+							<span v-else style="color: #dd3a13">{{scope.row[col.field]}}%</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						:prop="col.field"
+						show-overflow-tooltip
+						:label="col.label"
+						align="center"
+						:key="index"
+						v-else
+					>
+						<template slot-scope="scope">
+							<span v-if="scope.row[col.field] >= 0">{{scope.row[col.field]}}</span>
+							<span v-else-if="isNaN(scope.row[col.field])"></span>
+							<span v-else style="color: #dd3a13">{{scope.row[col.field]}}</span>
+						</template>
+					</el-table-column>
+				</template>
+			</el-table>
+			<el-table header-align="center" class="CPM-summary" :data="summaryData" size="small">
 				<el-table-column
 					prop="total_assets"
 					show-overflow-tooltip
@@ -238,43 +270,43 @@ export default {
 			totalTradesNumber: 0,
 			processedTradesData: [],
 			tableCol: [
-        {
-          label: 'Symbol',
-          value: 'Symbol',
-          key: 'Symbol',
+				{
+					label: 'Symbol',
+					value: 'Symbol',
+					key: 'Symbol',
 					minWidth: '120px'
-        },
+				},
 				{
-          label: 'Entry Price',
-          value: 'Entry Price',
-          key: 'Entry Price',
-										width: '90px'
-        },
-				{
-          label: 'Current Price',
-          value: 'Current Price',
-          key: 'Current Price',
-					width: '100px'
-        },
-				{
-          label: 'Shares',
-          value: 'Shares',
-          key: 'Shares',
-					width: '100px'
-        },
-				{
-          label: 'Profit',
-          value: 'Profit',
-          key: 'Profit',
+					label: 'Entry Price',
+					value: 'Entry Price',
+					key: 'Entry Price',
 					width: '90px'
-        },
+				},
 				{
-          label: 'Market Value',
-          value: 'Market Value',
-          key: 'Market Value',
+					label: 'Current Price',
+					value: 'Current Price',
+					key: 'Current Price',
+					width: '100px'
+				},
+				{
+					label: 'Shares',
+					value: 'Shares',
+					key: 'Shares',
+					width: '100px'
+				},
+				{
+					label: 'Profit',
+					value: 'Profit',
+					key: 'Profit',
+					width: '90px'
+				},
+				{
+					label: 'Market Value',
+					value: 'Market Value',
+					key: 'Market Value',
 					width: '90px',
 					maxWidth: '160px'
-        },
+				},
 				{
 					label: 'Total Position(%)',
 					value: 'Total position(%)',
@@ -288,7 +320,39 @@ export default {
 					key: 'Strategy',
 					minWidth: '200px'
 				}
-      ],
+			],
+			extraColumns: [
+				{
+					label: 'Strategy CAGR',
+					field: 'CAGR',
+					unit: 'percent'
+				},
+				{
+					label: 'Benchmark CAGR',
+					field: 'benchmark_CAGR',
+					unit: 'percent'
+				},
+				{
+					label: 'Expectancy',
+					field: 'Expectancy_val',
+				},
+				{
+					label: 'Information Ratio',
+					field: 'info_ratio',
+				},
+				{
+					label: 'Profit/Loss Ratio',
+					field: 'profit_loss_ratio',
+				},
+				{
+					label: 'Sharpe Ratio',
+					field: 'sharp_ratio',
+				},
+				{
+					label: 'Trades Per Year',
+					field: 'trades_per_year',
+				},
+			]
 		}
 	},
 	computed: {
@@ -317,6 +381,16 @@ export default {
 					...data
 				}
 			]
+			this.summaryData.forEach(ele => {
+				for (const key in ele) {
+					if (isFinite(ele[key])) {
+						let num = parseFloat(ele[key]);
+						if (!isNaN(num)) ele[key] = num.toFixed(2);
+					}
+				}
+				
+			});
+			console.log('lishan summaryData', this.summaryData)
 		},
 		handleCurrentChange(page){
 				this.queryInfo.page = page
@@ -381,10 +455,18 @@ export default {
         obj['TOTAL RETURN %'] = `${item.total_return}%`
         obj['CASH'] = item.cash
         obj['MARKET VALUE'] = item.market_value
-				obj['WIN RATE %'] = `${item.winrate}%`
+								obj['WIN RATE %'] = `${item.winrate}%`
+								obj['Strategy CAGR'] = `${item.CAGR}%`
+								obj['Benchmark CAGR'] = `${item.benchmark_CAGR}%`
+								obj['Expectancy'] = `${item.Expectancy_val}`
+								obj['Information Ratio'] = `${item.info_ratio}`
+								obj['Profit/Loss Ratio'] = `${item.profit_loss_ratio}`
+								obj['Sharpe Ratio'] = `${item.sharp_ratio}`
+								obj['Trades Per Year'] = `${item.trades_per_year}`
         summary.push(obj)
       })
 			const trade = []
+			debugger
 			this.tradesData.forEach((item, index) => {
 				const obj = {}
         obj['#'] = index + 1
@@ -395,7 +477,7 @@ export default {
         obj['Profit'] = item['Profit']
         obj['Market Value'] = item['Market Value']
         obj['Total Position(%)'] = `${item['Total position(%)']}%`
-        obj['Strategy'] = item.Strategy.join(', ')
+        obj['Strategy'] = Array.isArray(item.Strategy) ? item.Strategy.join(', ') : item.Strategy || '-'
         trade.push(obj)
 			})
       if (
