@@ -130,12 +130,22 @@ export default {
 	watch: {
 		data: {
 			handler(newValue, oldValue){
-				if(!newValue) return
-				if(newValue.profit_loss_ratio == -1) newValue.profit_loss_ratio = 'Low risk'
-				for (const key in newValue) {
-					if(key !== 'profit_loss_ratio' && Array.from(this.keyMatchMap.keys()).includes(key)) newValue[key] = newValue[key].toFixed(2)
+				if (!newValue) return;
+				if (newValue.profit_loss_ratio == -1) {
+					newValue.profit_loss_ratio = 'Low risk';
 				}
-			  this.signalDes = [newValue]
+				for (const key in newValue) {
+					if (
+						key !== 'profit_loss_ratio' &&
+						Array.from(this.keyMatchMap.keys()).includes(key) &&
+						typeof newValue[key] === 'number' && 
+						isFinite(newValue[key])
+					) {
+						let num = parseFloat(newValue[key]);
+						if (!isNaN(num)) newValue[key] = num.toFixed(2);
+					}
+				}
+				this.signalDes = [newValue];
 			},
 			immediate: true,
 			deep: true
