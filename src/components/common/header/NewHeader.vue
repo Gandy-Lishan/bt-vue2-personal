@@ -77,6 +77,9 @@
         </el-submenu>
         </template>
       </el-menu>
+      <div class="autocomplete-wrapper">
+        <autocomplete />
+      </div>
     </header>
   </div>
 </template>
@@ -84,9 +87,13 @@
 <script>
 import { getTokenRole } from '@/utils'
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
+import autocomplete from "./component/AlgoliaAutocomplete.vue";
 
 export default {
   name: 'NewHeader',
+  components: {
+    autocomplete
+  },
   data() {
     return {
       navs: [
@@ -194,26 +201,26 @@ export default {
           keyPath: '8',
           path: '/cpm'
         },
-        {
-          label: 'My Indicator',
-          keyPath: '6',
-          path: '/myindicator'
-        },
-        {
-          label: 'My Signal',
-          keyPath: '9',
-          path: '/my_signals'
-        },
-        {
-          label: 'My Screen',
-          keyPath: '13',
-          path: '/my_screen'
-        },
-        {
-          label: 'AI Trading',
-          keyPath: '10',
-          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
-        },
+        // {
+        //   label: 'My Indicator',
+        //   keyPath: '6',
+        //   path: '/myindicator'
+        // },
+        // {
+        //   label: 'My Signal',
+        //   keyPath: '9',
+        //   path: '/my_signals'
+        // },
+        // {
+        //   label: 'My Screen',
+        //   keyPath: '13',
+        //   path: '/my_screen'
+        // },
+        // {
+        //   label: 'AI Trading',
+        //   keyPath: '10',
+        //   path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
+        // },
       ],
       activeIndex: '1',
     }
@@ -544,5 +551,18 @@ li.el-menu-item.is-active.menu-item-active {
 }
 li.el-menu-item.tutorial-svg:hover {
   color: #909399;
+}
+
+
+.autocomplete-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+
+  /* 根据 el-menu 的样式微调 */
+  /deep/ .aa-Autocomplete {
+    width: 300px;
+  }
 }
 </style>
