@@ -395,6 +395,8 @@ export default {
 				})
         this.$router.push('/404')
         return
+      }else if(key.includes('4-')) {
+			  this.animationUp(1000)
       }
       this.activeIndex = key
       const keyPathEle = this.navs.map(ele => {
@@ -404,7 +406,8 @@ export default {
         }
       }).filter(value => (value !== undefined && value !== null && value !== ''))
       console.log('keyPathEle',keyPathEle)
-      if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') window.location.href = keyPathEle[0].path
+      if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading' && key.includes('4-')) this.$router.push(keyPathEle[0].path)
+      else if(keyPathEle && Array.isArray(keyPathEle) && keyPathEle.length > 0 && keyPathEle.label !== 'AI Trading') window.location.href = keyPathEle[0].path
     },
     handleClick(e) {
       console.log('e', e)
@@ -439,7 +442,15 @@ export default {
     },
     backHome() {
       this.$router.push('/')
-    }
+    },
+    animationUp: function (ph) {
+      this.$nextTick(() => {
+        window.scrollTo({
+          top: ph,
+          behavior: 'smooth'
+        })
+      })
+    },
   }
 }
 </script>
