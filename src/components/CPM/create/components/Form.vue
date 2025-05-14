@@ -184,7 +184,7 @@
       </el-col>
     </div>
     <div v-if="pattern === 'system_pattern'">
-    <el-col :span="5">
+    <el-col :span="6">
       <el-form-item prop="pattern">
       <template slot="label">
         <label>
@@ -210,7 +210,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-      <el-col :span="5">
+      <el-col :span="6">
         <el-form-item prop="system_pattern">
           <template slot="label">
             <label>
@@ -237,13 +237,13 @@
                 <template slot="content">
                   <img :src="item.image" alt="Pattern" style="max-width: 200px; max-height: 180px;" />
                 </template>
-                <span>{{ item.label }}</span>
+                <p style="margin: 0px">{{ item.label }}</p>
               </el-tooltip>
             </el-option>
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
       <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
@@ -261,7 +261,7 @@
           </el-select>
       </el-form-item>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
         <el-form-item
           label="7. Correlation Percentage"
           prop="corr_per"

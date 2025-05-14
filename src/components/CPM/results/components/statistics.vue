@@ -266,7 +266,7 @@
 				</el-table-column>
 				<el-table-column
 					prop="SymbolClose"
-					label="Symbol Close"
+					label="Entry Price"
 					show-overflow-tooltip
 					align="center"
 					sortable="custom"
@@ -276,6 +276,79 @@
 							scope.row.SymbolClose
 						}}</span>
 					</template>
+				</el-table-column>
+				<el-table-column
+					prop="ExitPrice"
+					label="Exit Price"
+					show-overflow-tooltip
+					align="center"
+					sortable="custom"
+					v-if="showNewCol('ExitPrice')"
+				>
+					<template slot-scope="scope">
+						<span :style="scope.row.ExitPrice >= 0 ? '' : 'color: #dd3a13'">{{
+							scope.row.ExitPrice
+						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+				v-if="showNewCol('MaxGain')"
+					prop="MaxGain"
+					label="Max Gain"
+					show-overflow-tooltip
+					align="center"
+					sortable="custom"
+				>
+					<template slot-scope="scope">
+						<span :style="scope.row.MaxGain >= 0 ? '' : 'color: #dd3a13'">{{
+							scope.row.MaxGain
+						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+				v-if="showNewCol('MaxLoss')"
+					prop="MaxLoss"
+					label="Max Loss"
+					show-overflow-tooltip
+					align="center"
+					sortable="custom"
+				>
+					<template slot-scope="scope">
+						<span :style="scope.row.MaxLoss >= 0 ? '' : 'color: #dd3a13'">{{
+							scope.row.MaxLoss
+						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="Return"
+					label="Return"
+					show-overflow-tooltip
+					align="center"
+					sortable="custom"
+				>
+					<template slot-scope="scope">
+						<span :style="scope.row.Return >= 0 ? '' : 'color: #dd3a13'">{{
+							scope.row.Return + '%'
+						}}</span>
+					</template>
+				</el-table-column>	
+				<el-table-column
+					prop="MarketCondition"
+					label="Market Condition"
+					align="center"
+				>
+				<template slot="header">
+					Market Condition
+					<el-tooltip effect="dark" placement="top" style="display: inline">
+							<span slot="content" v-html="textContent['MarketCondition']">
+							</span>
+							<i class="iconfont icon-wenhao"></i>
+					</el-tooltip>
+				</template>
+				<template slot-scope="scope">
+					<span v-if="scope.row.MarketCondition">{{scope.row.MarketCondition}}</span>
+					<span v-else></span>
+		  </template>
 				</el-table-column>
 				<el-table-column
 					prop="CorrelationPercentage"
@@ -293,37 +366,6 @@
 						>
 					</template>
 				</el-table-column>
-				<el-table-column
-					prop="Return"
-					label="Return"
-					show-overflow-tooltip
-					align="center"
-					sortable="custom"
-				>
-					<template slot-scope="scope">
-						<span :style="scope.row.Return >= 0 ? '' : 'color: #dd3a13'">{{
-							scope.row.Return + '%'
-						}}</span>
-					</template>
-				</el-table-column>	
-				<el-table-column
-                prop="MarketCondition"
-                label="Market Condition"
-                align="center"
-            >
-            <template slot="header">
-                Market Condition
-                    <el-tooltip effect="dark" placement="top" style="display: inline">
-                    <span slot="content" v-html="textContent['MarketCondition']">
-                    </span>
-                    <i class="iconfont icon-wenhao"></i>
-                </el-tooltip>
-            </template>
-            <template slot-scope="scope">
-							<span v-if="scope.row.MarketCondition">{{scope.row.MarketCondition}}</span>
-							<span v-else></span>
-            </template>
-        </el-table-column>
 			</el-table>
 		</div>
 	</div>
@@ -341,6 +383,9 @@ export default {
 		}
 	},
 	methods: {
+		showNewCol(label) {
+			return Array.isArray(this.summaryData) && this.summaryData.length >= 0 && Object.keys(this.summaryData[0]).length >= 0 && this.summaryData[0].hasOwnProperty(label)
+		},
 		tableRowClassName(obj) {
 			const { row, rowIndex } = obj
 			if (rowIndex % 2 === 1) {
@@ -369,7 +414,7 @@ export default {
         order: sortingOrder
       };
 			// 数字字符串转数字类型排序
-			if (['SymbolClose', 'CorrelationPercentage', 'Return'].includes(colName)) {
+			if (['SymbolClose', 'CorrelationPercentage', 'Return', 'ExitPrice', 'MaxGain','MaxLoss'].includes(colName)) {
 					const parseValue = val => {
 							if (typeof val === 'number') return val;
 							if (typeof val === 'string') {
@@ -380,9 +425,9 @@ export default {
 							return 0;
 					};
 
-					if (sortingOrder === 'ascending') {
+					if (sortingOrder === 'descending') {
 							this.tradesData.sort((a, b) => parseValue(a[colName]) - parseValue(b[colName]));
-					} else if (sortingOrder === 'descending') {
+					} else if (sortingOrder === 'ascending') {
 							this.tradesData.sort((a, b) => parseValue(b[colName]) - parseValue(a[colName]));
 					}
 			}

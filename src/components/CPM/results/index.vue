@@ -164,6 +164,41 @@ export default {
       summary.end_date = _data.end_date
       summary.direction = _data.direction || 'Long'
       summary.corr_per = _data.corr_per
+      const systemPatternOptions = [
+        {
+          value: 'triple_tap',
+          label: 'Triple Tap'
+        },
+        {
+          value: 'rounding_bottom',
+          label: 'Rounding Bottom',
+        },
+        {
+          value: 'descending_channel',
+          label: 'Descending Channel'
+        },
+        {
+          value: 'ascending_channel',
+          label: 'Ascending Channel'
+        },
+        {
+          value: 'head_and_shoulder_bottom',
+          label: 'Head and Shoulders Bottom'
+        },
+        {
+          value: 'head_and_shoulder_top',
+          label: 'Head and Shoulders Top'
+        },
+        {
+          value: 'double_bottom',
+          label: 'Double Bottom'
+        },
+        {
+          value: 'double_top',
+          label: 'Double Top'
+        },
+      ]
+      if(_data.hasOwnProperty('system_pattern') && _data['system_pattern'] ) summary.system_pattern = (systemPatternOptions.find(ele => ele.value === _data.system_pattern)?.label || '')
       let timeframe = _data.timeframe
       let period
       switch (timeframe) {
@@ -206,18 +241,24 @@ export default {
       for (let i = 0; i < result['End Date'].length; i++) {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
+        const ExitPrice = result.hasOwnProperty('Exit Price') ? result['Exit Price'][i] : ''
+        const MaxGain = result.hasOwnProperty('Max Gain') ? result['Max Gain'][i] : ''
+        const MaxLoss = result.hasOwnProperty('Max Loss') ? result['Max Loss'][i] : ''
         const correlationPercentage = result['Correlation Percentage'][i];
         const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i].join(', ') : null
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
-        transformedResult.push({
+        const _obj = {
           'TradeDate': tradeDate,
           'SymbolClose': symbolClose,
           'CorrelationPercentage': correlationPercentage,
           'Return': eachReturn,
           'MarketCondition': marketCondition
-        });
+        }
+        const labelArr = [{label: 'ExitPrice', value: ExitPrice}, {label: 'MaxGain', value: MaxGain}, {label: 'MaxLoss', value: MaxLoss}]
+        labelArr.forEach(ele => {if(ele.value) _obj[ele.label] = ele.value})
+        transformedResult.push(_obj);
         TradeDateArray.push(
           {'Date': tradeDate}
         )
@@ -303,10 +344,13 @@ export default {
       tradesData.forEach((item, index) => {
         const obj = {}
         obj['Trade Date'] = item.TradeDate
-        obj['Symbol Close'] = item.SymbolClose
-        obj['Correlation Percentage'] = `${item.CorrelationPercentage}%`
-        obj['Return'] = item.Return.toFixed(2) + '%'
+        obj['Entry Price'] = item.SymbolClose
+        const labelArr = [{label: 'ExitPrice'}, {label: 'MaxGain'}, {label: 'MaxLoss'}]
+        labelArr.forEach(ele => {if(item[ele.label]) obj[ele.label] = item[ele.label]})
+        const num = parseFloat(item.Return);
+        obj['Return'] = !isNaN(num) ? num.toFixed(2) + '%' : '';
         obj['Market Condition'] = item.MarketCondition
+        obj['Correlation Percentage'] = `${item.CorrelationPercentage}%`
         trade.push(obj)
       })
       const correlationInfo = []

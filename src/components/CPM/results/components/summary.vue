@@ -53,24 +53,37 @@
         </el-statistic> -->
         </div>
       </el-col>
-      <el-col :span="6">
-        <el-statistic
-          title="Pattern Start Date"
-        >
-        <template slot="formatter">
-              {{ summary.start_date }}
-        </template>
-        </el-statistic>
-      </el-col>
-      <el-col :span="6">
-        <el-statistic
-          title="Pattern End Date"
-        >
-        <template slot="formatter">
-              {{ summary.end_date }}
-        </template>
-        </el-statistic>
-      </el-col>
+      <div v-if="summary.hasOwnProperty('system_pattern')">
+        <el-col :span="6">
+          <el-statistic
+            title="System Pattern"
+          >
+          <template slot="formatter">
+            {{ summary.system_pattern }}
+          </template>
+          </el-statistic>
+        </el-col>
+      </div>
+      <div v-else>
+        <el-col :span="6">
+          <el-statistic
+            title="Pattern Start Date"
+          >
+          <template slot="formatter">
+                {{ summary.start_date }}
+          </template>
+          </el-statistic>
+        </el-col>
+        <el-col :span="6">
+          <el-statistic
+            title="Pattern End Date"
+          >
+          <template slot="formatter">
+                {{ summary.end_date }}
+          </template>
+          </el-statistic>
+        </el-col>
+      </div>
       <el-col :span="6">
         <el-statistic
           title="Correlation Percentage"
@@ -148,6 +161,7 @@ export default {
       this.summary = {
         ...data
       }
+      console.log('lishan this.summary ', this.summary )
       const {name,type} = getSymbolInfo(this.summary.symbol)
       if(type == 'custom'){
         this.summary.symbol = name
