@@ -559,10 +559,5 @@ li.el-menu-item.tutorial-svg:hover {
   display: flex;
   align-items: center;
   padding-left: 16px;
-
-  /* 根据 el-menu 的样式微调 */
-  /deep/ .aa-Autocomplete {
-    width: 300px;
-  }
 }
 </style>
