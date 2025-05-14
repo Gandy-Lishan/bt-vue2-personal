@@ -359,6 +359,11 @@ const routes = [
 		]
 	},
 	{
+		path: '/search',
+		name: 'AlgoliaSearchVue',
+		component: resolve => require(['@/components/AlgoliaSearchVue/index.vue'], resolve)
+	},
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}
