@@ -60,7 +60,7 @@
                    />
                  </div>
                  <div
-                   v-else-if="serviceType === 'quantedge'"
+                   v-else-if="serviceType === 'quantedge' || serviceType === 'kaeppelscorner'"
                    class="analysis_solutions_yellow"
                  >
                    <img

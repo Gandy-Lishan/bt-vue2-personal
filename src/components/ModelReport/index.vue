@@ -212,10 +212,12 @@ export default {
   if (isPathSubstring([
     '/MR/sentimentedge',
     '/MR/quantedge',
+    '/MR/kaeppelscorner',
     '/MR/modeledge',
     '/MR/tradingedge',
     '/MR/archives/sentimentedge',
     '/MR/archives/quantedge',
+    '/MR/archives/kaeppelscorner',
     '/MR/archives/modeledge',
     '/MR/archives/tradingedge',
     '/MR/blog',
@@ -227,7 +229,7 @@ export default {
   ], to.path)) {
     next(async _this => {
       if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
-      if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path)) _this.selectedTitle = 'quantedge'
+      if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path) || isPathSubstring(['/MR/kaeppelscorner', '/MR/archives/kaeppelscorner'], to.path)) _this.selectedTitle = 'quantedge'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
       if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
       if(isPathSubstring(['/MR/blog', '/MR/archived_reports', 'old_archived_reports'], to.path)) {
