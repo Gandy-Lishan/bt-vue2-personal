@@ -127,25 +127,55 @@ export default {
      this.searchInput = null;
    },
    anchorFromUrlAndValue(url, value) {
-     console.log('hehehe', url, value)
-     const removeBaseUrl = (fullUrl) => {
-      const baseUrls = [
-        "https://users.sentimentrader.com",
-        "https://users.sentimentrader.com/users",
-        "https://www.sentimentrader.com"
-      ]
-      const matchedBaseUrl = baseUrls.find(baseUrl => fullUrl.startsWith(baseUrl))
-      if (matchedBaseUrl && !fullUrl.includes('report')) {
-        let trimmedUrl = fullUrl.slice(matchedBaseUrl.length)
-        console.log('trimmedUrl', trimmedUrl)
-        if(trimmedUrl.includes('users')) trimmedUrl = trimmedUrl.replace('users', '');
-          return `/MR${trimmedUrl}`
-      }
-      return fullUrl; // 如果没有匹配到 baseUrl，返回原路径
-    };
-    const transformedUrl = removeBaseUrl(url);
-     return `<a href="${transformedUrl}" style="width: 330px; background-color: #fff; display: inline-block; padding: 0 10px">${value}</a>`;
-   },
+      console.log('hehehe', url, value);
+
+      const removeBaseUrl = (fullUrl) => {
+        const baseUrls = [
+          "https://users.sentimentrader.com",
+          "https://users.sentimentrader.com/users",
+          "https://www.sentimentrader.com"
+        ];
+
+        const matchedBaseUrl = baseUrls.find(baseUrl => fullUrl.startsWith(baseUrl));
+        if (!matchedBaseUrl) return fullUrl;
+
+        // 去掉 baseUrl
+        let trimmedUrl = fullUrl.slice(matchedBaseUrl.length);
+        if (trimmedUrl.startsWith('/')) trimmedUrl = trimmedUrl.slice(1);
+
+        // 检查关键词
+        const keywords = [
+          'sentimentedge',
+          'kaeppelscorner',
+          'modeledge',
+          'quantedge',
+          'tradingedge',
+          'blog'
+        ];
+
+        for (const keyword of keywords) {
+          const index = trimmedUrl.indexOf(keyword);
+          if (index !== -1) {
+            console.log('url',`/MR/${trimmedUrl.slice(index)}`)
+            return `/MR/${trimmedUrl.slice(index)}`;
+          }
+        }
+
+        // fallback，路径不包含关键词也不包含 report 时，继续使用原逻辑
+        if (!fullUrl.includes('report')) {
+          if (trimmedUrl.includes('users')) {
+            trimmedUrl = trimmedUrl.replace('users', '');
+          }
+          console.log('url',`/MR${trimmedUrl}`)
+          return `/MR${trimmedUrl}`;
+        }
+        console.log('url',fullUrl)
+        return fullUrl;
+      };
+
+      const transformedUrl = removeBaseUrl(url);
+      return `<a href="${transformedUrl}" style="width: 330px; background-color: #fff; display: inline-block; padding: 0 10px">${value}</a>`;
+    },
    performAutocomplete(suggestion, dataset) {
      let url = '';
      if (dataset === 'charts') {

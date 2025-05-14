@@ -142,7 +142,7 @@ export default {
      if (
        this.dashboard_type === "indicatoredge" &&
        ["Jason Goepfert", "Dean Christians", "Jay Kaeppel"].includes(row.author) &&
-       ['sentimentedge', 'modeledge', 'quantedge', 'tradingedge'].includes(row.user_level)
+       ['sentimentedge', 'modeledge', 'quantedge', 'kaeppelscorner', 'tradingedge'].includes(row.user_level)
      ) {
        return `/MR/${row.user_level}/${row.url}`;
      }

@@ -23,7 +23,7 @@
                    class="mcnImage"
                  />
                </div>
-               <div class="analysis_solutions_yellow" v-if="serviceType === 'quantedge'">
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'quantedge' || serviceType === 'kaeppelscorner'">
                  <img
                    align="center"
                    alt=""
@@ -124,7 +124,7 @@ export default {
   }),
   requestedType() {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
-    else if(this.serviceType.toLowerCase() === 'quantedge') return 'quantedge';
+    else if(this.serviceType.toLowerCase() === 'quantedge' || this.serviceType.toLowerCase() === 'kaeppelscorner') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
     else return this.serviceType.toLowerCase();
   }
@@ -138,19 +138,21 @@ export default {
   if (isPathSubstring([
     '/MR/sentimentedge',
     '/MR/quantedge',
+    '/MR/kaeppelscorner',
     '/MR/modeledge',
     '/MR/tradingedge',
     '/MR/blog'
-  ], to.path) && ['sentimentedge', 'quantedge', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
+  ], to.path) && ['sentimentedge', 'quantedge', 'kaeppelscorner', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
     next(async _this => {
-      const serviceType = to.params.serviceType
+      let serviceType = to.params.serviceType
       const reportUrl = to.params.reportUrl
       if(serviceType === 'sentimentedge') {
         _this.title = 'SentimentEdge'
         _this.serviceType = 'SentimentEdge'
-      }else if(serviceType === 'quantedge') {
+      }else if(serviceType === 'quantedge' || serviceType === 'kaeppelscorner') {
         _this.title = 'Kaeppel\'s Corner'
         _this.serviceType = 'quantedge'
+        serviceType = 'quantedge'
       }else if(serviceType === 'modeledge') {
         _this.title = 'ModelEdge'
         _this.serviceType = 'ModelEdge'
@@ -163,6 +165,7 @@ export default {
       debugger
       /* 先拿对应的 report list 取最新的 post */
       let reportsArchivesTen = []
+      debugger
       if(_this.reportArchives[serviceType]) {
         reportsArchivesTen = JSON.parse(_this.reportArchives[serviceType])
       }else {
