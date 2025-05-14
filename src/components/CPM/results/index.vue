@@ -241,14 +241,12 @@ export default {
       for (let i = 0; i < result['End Date'].length; i++) {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
-        const ExitPrice = result.hasOwnProperty('Exit Price') ? result['Exit Price'][i] : ''
-        const MaxGain = result.hasOwnProperty('Max Gain') ? result['Max Gain'][i] : ''
-        const MaxLoss = result.hasOwnProperty('Max Loss') ? result['Max Loss'][i] : ''
         const correlationPercentage = result['Correlation Percentage'][i];
         const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i].join(', ') : null
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
+        debugger
         const _obj = {
           'TradeDate': tradeDate,
           'SymbolClose': symbolClose,
@@ -256,9 +254,10 @@ export default {
           'Return': eachReturn,
           'MarketCondition': marketCondition
         }
-        const labelArr = [{label: 'ExitPrice', value: ExitPrice}, {label: 'MaxGain', value: MaxGain}, {label: 'MaxLoss', value: MaxLoss}]
-        labelArr.forEach(ele => {if(ele.value) _obj[ele.label] = ele.value})
-        transformedResult.push(_obj);
+        if(result.hasOwnProperty('Exit Price'))  _obj['ExitPrice'] = result['Exit Price'][i] || ''
+        if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = result['Max Gain'][i] || ''
+        if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = result['Max Loss'][i] || ''
+        transformedResult.push(_obj)
         TradeDateArray.push(
           {'Date': tradeDate}
         )
@@ -266,6 +265,7 @@ export default {
           {'StartDate': startDate, 'EndDate': endDate, 'CorrelationPercentage': correlationPercentage}
         )
       }
+      console.log('lishan transformedResult', transformedResult)
       _this.$refs['Statistics'].displayData(statistics, transformedResult)
       
       _this.tradeDate = TradeDateArray
@@ -345,8 +345,9 @@ export default {
         const obj = {}
         obj['Trade Date'] = item.TradeDate
         obj['Entry Price'] = item.SymbolClose
-        const labelArr = [{label: 'ExitPrice'}, {label: 'MaxGain'}, {label: 'MaxLoss'}]
-        labelArr.forEach(ele => {if(item[ele.label]) obj[ele.label] = item[ele.label]})
+        if(item.hasOwnProperty('Exit Price'))  obj['ExitPrice'] = item['Exit Price'][i] || ''
+        if(item.hasOwnProperty('Max Gain'))  obj['MaxGain'] = item['Max Gain'][i] || ''
+        if(item.hasOwnProperty('Max Loss'))  obj['MaxLoss'] = item['Max Loss'][i] || ''
         const num = parseFloat(item.Return);
         obj['Return'] = !isNaN(num) ? num.toFixed(2) + '%' : '';
         obj['Market Condition'] = item.MarketCondition

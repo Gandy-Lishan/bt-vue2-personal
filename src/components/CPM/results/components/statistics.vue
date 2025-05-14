@@ -283,7 +283,7 @@
 					show-overflow-tooltip
 					align="center"
 					sortable="custom"
-					v-if="showNewCol('ExitPrice')"
+					v-if="showNewCol"
 				>
 					<template slot-scope="scope">
 						<span :style="scope.row.ExitPrice >= 0 ? '' : 'color: #dd3a13'">{{
@@ -292,7 +292,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-				v-if="showNewCol('MaxGain')"
+				v-if="showNewCol"
 					prop="MaxGain"
 					label="Max Gain"
 					show-overflow-tooltip
@@ -306,7 +306,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-				v-if="showNewCol('MaxLoss')"
+				v-if="showNewCol"
 					prop="MaxLoss"
 					label="Max Loss"
 					show-overflow-tooltip
@@ -382,10 +382,12 @@ export default {
 			currentSort: {}, // 当前的排序信息
 		}
 	},
-	methods: {
-		showNewCol(label) {
-			return Array.isArray(this.summaryData) && this.summaryData.length >= 0 && Object.keys(this.summaryData[0]).length >= 0 && this.summaryData[0].hasOwnProperty(label)
+	computed: {
+		showNewCol() {
+			return Array.isArray(this.tradesData) && this.tradesData.length >= 0 && Object.keys(this.tradesData[0]).length >= 0 && this.tradesData[0].hasOwnProperty('ExitPrice')
 		},
+	},
+	methods: {
 		tableRowClassName(obj) {
 			const { row, rowIndex } = obj
 			if (rowIndex % 2 === 1) {
