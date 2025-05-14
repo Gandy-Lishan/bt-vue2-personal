@@ -414,10 +414,10 @@ export default {
 					label: 'Sharpe Ratio',
 					field: 'sharp_ratio',
 				},
-				{
-						label: 'Information Ratio',
-						field: 'info_ratio',
-				},
+				// {
+				// 		label: 'Information Ratio',
+				// 		field: 'info_ratio',
+				// },
 			],
 			secondColumns: [
 					{
@@ -438,11 +438,11 @@ export default {
 						label: 'Total Trades',
 						field: 'total_trades',
 					},
-					{
-						label: 'Win Rate (%)',
-						field: 'winrate',
-						unit: 'percent'
-					},
+					// {
+					// 	label: 'Win Rate (%)',
+					// 	field: 'winrate',
+					// 	unit: 'percent'
+					// },
 					{
 						label: 'Trades Per Year',
 						field: 'trades_per_year',
@@ -575,12 +575,12 @@ export default {
 								staticObj['Max Drawdown'] = `${item.max_risk}%`
 								staticObj['Expectancy'] = `${item.Expectancy_val}`
 								staticObj['Sharpe Ratio'] = `${item.sharp_ratio}`
-								staticObj['Information Ratio'] = `${item.info_ratio}`
+								// staticObj['Information Ratio'] = `${item.info_ratio}`
 								staticObj['Profit/Loss Ratio'] = `${item.profit_loss_ratio}`
 								staticObj['Average Win'] = `${item.avg_win}%`
 								staticObj['Average Loss'] = `${item.avg_loss}%`
 								staticObj['Total Trades'] = `${item.total_trades}`
-								staticObj['Win Rate (%)'] = `${item.winrate}%`
+								// staticObj['Win Rate (%)'] = `${item.winrate}%`
 								staticObj['Trades Per Year'] = `${item.trades_per_year}`
 								staticSummary.push(staticObj)
       })
