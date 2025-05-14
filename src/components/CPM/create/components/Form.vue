@@ -97,11 +97,6 @@
       <template slot="label">
         <label>
           5. Select Pattern
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              ></span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
         </label>
       </template>
         <el-select
@@ -216,8 +211,7 @@
             <label>
               System Pattern
               <el-tooltip effect="dark" placement="top">
-                <span slot="content"
-                  ></span>
+                <span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
                 <i class="iconfont icon-wenhao"></i>
               </el-tooltip>
             </label>
