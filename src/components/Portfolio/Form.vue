@@ -230,43 +230,31 @@
     </el-table-column> -->
     <el-table-column label="Model Name" header-align="center" align="center" prop="indicator">
       <template slot-scope="scope">
-        <el-autocomplete
-          v-if="scope.$index === 0"
-          disabled
-          v-model="portfolioFirstLine.strategy"
-          size="mini"
-          :fetch-suggestions="querySearch"
-          @select="
-            (item) => {
-              handleRowSelect(item, scope.row)
-            }
-          "
-          >
-          <i slot="prefix" class="el-input__icon el-icon-search"></i></el-autocomplete>
-        <el-autocomplete
+        <SearchAutocomplete
+            v-if="scope.$index === 0"
+            v-model="portfolioFirstLine.strategy"
+            @query="querySearch"
+            @select="
+              (item) => {
+                handleRowSelect(item, scope.row)
+              }
+            "
+            placeholder=""
+            disabled
+            size="mini"
+          />
+        <SearchAutocomplete
           v-else
           v-model="scope.row.strategy"
-          size="mini"
-          :fetch-suggestions="querySearch"
+          @query="querySearch"
           @select="
             (item) => {
               handleRowSelect(item, scope.row)
             }
           "
-          >
-          <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          <!-- 使用 scoped slot 自定义选项 -->
-          <template slot-scope="{ item }">
-            <div class="custom-option">
-              <span class="item-label">{{
-                item.model_name
-              }}</span>
-              <span class="type-label"
-                >({{ tags[item.category] }})</span
-              >
-            </div>
-          </template>
-        </el-autocomplete>
+          placeholder=""
+          size="mini"
+        />
       </template>
     </el-table-column>
     <el-table-column label="Weight" header-align="center" align="center" prop="percent" width="200">
@@ -351,13 +339,16 @@ import { isJson, timestampToTime, capitalizeFirstLetter } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
+import { SearchAutocomplete } from "@/components/common"
 const debounce = require('lodash/debounce')
-import cloneDeep from 'lodash/cloneDeep'
-import moment from "moment";
+const cloneDeep = require('lodash/cloneDeep')
 
 export default {
   name: 'Form',
   props: ['parentContext'],
+  components: {
+    SearchAutocomplete
+  },
   data() {
     return {
       data: {
@@ -760,6 +751,7 @@ export default {
       this.findPortfolioLoading = false
     },
     async submitForm() {
+      debugger
      this.btnLoading = true
      this.percentage = 5
       let saveRes = null

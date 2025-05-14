@@ -28,28 +28,13 @@
             </el-tooltip>
           </label>
         </template>
-        <el-autocomplete
+        <SearchAutocomplete
             ref="autocomplete"
-            class="inline-input"
             v-model="data.symbol"
-            :fetch-suggestions="querySearch"
+            @query="querySearch"
+            @select="item => handleSelect(item)"
             placeholder="Select stock from the dropdown menu"
-            @select="
-              (item) => {
-                handleSelect(item)
-              }
-            "
-          >
-          <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          <!-- 使用 scoped slot 自定义选项 -->
-          <template slot-scope="{ item }">
-            <div class="custom-option">
-              <span class="symbol-label">{{
-                item.type == 'Custom' ? item.label : item.url
-              }}</span>
-            </div>
-          </template>
-        </el-autocomplete>
+          />
       </el-form-item>
     </el-col>
     <el-col :span="6">
@@ -359,7 +344,7 @@
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import { saveCPM, previewCPM, editCPM, getCPMList, getCPMResults, getCPMPreview } from '@/service/service'
 import { createPositiveIntegerRule, createVerifyValueInListRule, validateMarginRule } from "@/utils/formValidate"
-import { LoadingOverlay } from "@/components/common"
+import { LoadingOverlay,SearchAutocomplete } from "@/components/common"
 import { timestampToTime, isJson, encodeBase64 } from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
 import { mapGetters } from "vuex"
@@ -368,7 +353,8 @@ import { getSymbolInfo } from '@/utils/globalFunc'
 export default {
   name: 'Form',
   components: {
-    LoadingOverlay
+    LoadingOverlay,
+    SearchAutocomplete
   },
   data() {
     let validateBarsNum = (rule, value, callback) => {
@@ -515,12 +501,6 @@ export default {
       },
       btnLoading: false,
       previewBtnLoading: false,
-
-      // 自定义动态渲染下拉栏
-      searchResults: [],
-      currentPage: 1,
-      pageSize: 20,
-      hasMore: true, // 是否还有更多数据
     }
   },
   computed: {
@@ -540,8 +520,8 @@ export default {
         // 在判断到symbol为custom symbol时更新autocomplete input value以保证selector内显示为label而不是默认value
         const {name,type} = getSymbolInfo(newVal)
         if(type == 'custom'){
-          // 处理选中项的操作，例如更新输入框的显示值为 item.label
-          this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = name;}) 
+          // 直接修改输入框的显示值，而不影响 v-model 绑定的值
+          this.$refs.autocomplete.setInputValue(name);
         }
       },
       immediate: true,
@@ -558,66 +538,6 @@ export default {
     this.detachScrollListener(); // 在组件销毁前解绑滚动事件
   },
   methods: {
-    /** START 加载更多数据且保持滚动条位置 */
-    // 绑定滚动事件
-    attachScrollListener() {
-      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 解绑滚动事件
-    detachScrollListener() {
-      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
-
-      refs.forEach(refName => {
-        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
-        if (inputDropdown) {
-          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
-        }
-      });
-    },
-    // 监听滚动事件，触发加载更多
-    handleDropdownScroll(event, inputType) {
-      var self = this;
-      const dropdown = event.target;
-      // 根据传入的 inputType 访问不同的 ref
-      const inputRef = self.$refs[inputType];
-
-      if (
-        dropdown.scrollHeight - dropdown.scrollTop - 10 <
-        dropdown.clientHeight
-      ) {
-        // 判断是否有更多数据
-        if (!this.hasMore) return;
-
-        // 记录滚动位置
-        const currentScrollTop = dropdown.scrollTop;
-
-        self.currentPage++;
-        self.loadMore((results) => {
-            inputRef.$data.suggestions = results;
-
-            // 恢复滚动位置
-            requestAnimationFrame(() => {
-                dropdown.scrollTop = currentScrollTop;
-            });
-        });
-      }
-    },
-    loadMore(cb) {
-      // 根据页码从过滤后的结果中分页
-      console.log('paginated results',this.currentPage, this.searchResults.length)
-      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
-      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
-      // 将分页后的数据传递给 closure
-      cb(paginatedResults);
-    },
-    /** END 加载更多数据且保持滚动条位置 */
 
     handleCPMMAChange() {
       if(this.data.ma_condition == 0){
@@ -760,18 +680,11 @@ export default {
         }))
         .filter(item => item.priority > 0)
 
-      this.searchResults = results.sort((a, b) => b.priority - a.priority)
-      this.currentPage = 1;
-      this.hasMore = true;
-      this.loadMore(cb)
+      cb(results.sort((a, b) => b.priority - a.priority))
     },
 
     handleSelect(item) {
       this.data.symbol = item.url
-      if(item.type == 'Custom'){
-        // 防止symbol 选中时不触发handleGetBacktestSymbol,而导致没有更新autocomplete input value
-        this.$nextTick(() => {this.$refs.autocomplete.$refs.input.$el.querySelector('input').value = item.label;}) 
-      }
       // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
       CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
         this.calculateBarDistance()
@@ -1057,12 +970,7 @@ export default {
 	align-items: center; /* 垂直居中对齐 */
 	justify-content: space-between;
 }
-.updated-label{
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 10px;
-  text-align: center;
-}
+
 .el-select.el-select--mini {
   width: 100%;
 }
