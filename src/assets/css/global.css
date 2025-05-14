@@ -745,7 +745,7 @@ color: #333341;
 }
 .el-tooltip__popper {
   /* button的z-index是2001,遮罩层的z-index是2000 */
-  z-index: 2002 !important;
+  z-index: 2002;
 }
 .result-container .el-input.is-disabled .el-input__inner{
   color: #333;
