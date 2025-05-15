@@ -255,6 +255,7 @@ export default {
           'MarketCondition': marketCondition
         }
         if(result.hasOwnProperty('Exit Price'))  _obj['ExitPrice'] = result['Exit Price'][i] || ''
+        if(result.hasOwnProperty('Exit Date'))  _obj['ExitDate'] = result['Exit Date'][i] || ''
         if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = result['Max Gain'][i] || ''
         if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = result['Max Loss'][i] || ''
         transformedResult.push(_obj)
@@ -316,9 +317,9 @@ export default {
         obj['AVERAGE RETURN %'] = isNaN(item.averageReturn)
           ? 0
           : `${item.averageReturn}%`
-        obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
-          ? 0
-          : `${item.buyHoldGain}%`
+        // obj['BUY & HOLD %'] = isNaN(item.buyHoldGain)
+        //   ? 0
+        //   : `${item.buyHoldGain}%`
         obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
         obj['AVERAGE WIN %'] = isNaN(item.averageWin)
           ? 0
@@ -335,19 +336,20 @@ export default {
         obj['TOTAL NEGATIVE'] = isNaN(item.totalNegative)
           ? 0
           : `${item.totalNegative}`
-        obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
-          ? 0
-          : `${item.timeInMarket}%`
+        // obj['TIME IN MARKET %'] = isNaN(item.timeInMarket)
+        //   ? 0
+        //   : `${item.timeInMarket}%`
         summary.push(obj)
       })
       const trade = []
-      tradesData.forEach((item, index) => {
+      tradesData.forEach((item, i) => {
         const obj = {}
         obj['Trade Date'] = item.TradeDate
         obj['Entry Price'] = item.SymbolClose
-        if(item.hasOwnProperty('Exit Price'))  obj['ExitPrice'] = item['Exit Price'][i] || ''
-        if(item.hasOwnProperty('Max Gain'))  obj['MaxGain'] = item['Max Gain'][i] || ''
-        if(item.hasOwnProperty('Max Loss'))  obj['MaxLoss'] = item['Max Loss'][i] || ''
+        if(item.hasOwnProperty('ExitDate'))  obj['ExitDate'] = item['ExitDate'] || ''
+        if(item.hasOwnProperty('ExitPrice'))  obj['ExitPrice'] = item['ExitPrice'] || ''
+        if(item.hasOwnProperty('MaxGain'))  obj['MaxGain'] = item['MaxGain'] || ''
+        if(item.hasOwnProperty('MaxLoss'))  obj['MaxLoss'] = item['MaxLoss'] || ''
         const num = parseFloat(item.Return);
         obj['Return'] = !isNaN(num) ? num.toFixed(2) + '%' : '';
         obj['Market Condition'] = item.MarketCondition

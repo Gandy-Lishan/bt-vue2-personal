@@ -95,7 +95,7 @@
 								}}</span>
 							</template>
 						</el-table-column> -->
-				<el-table-column
+				<!-- <el-table-column
 					show-overflow-tooltip
 					prop="buyHoldGain"
 					label="BUY & HOLD %"
@@ -110,7 +110,11 @@
 							scope.row.buyHoldGain + '%'
 						}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
+			</el-table>
+			<el-table class="CPM-summary" header-align="center" :data="summaryData">
+			</el-table>
+			<el-table class="CPM-summary" header-align="center" :data="summaryData">
 				<el-table-column
 					prop="winRate"
 					label="WIN RATE %"
@@ -127,10 +131,6 @@
 						}}</span>
 					</template>
 				</el-table-column>
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
-			</el-table>
-			<el-table class="CPM-summary" header-align="center" :data="summaryData">
 				<el-table-column
 					show-overflow-tooltip
 					prop="averageWin"
@@ -163,21 +163,6 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
-					prop="totalTrades"
-					label="TOTAL TRADES"
-					show-overflow-tooltip
-					align="center"
-				>
-					<template slot-scope="scope">
-						<span v-if="scope.row.totalTrades >= 0">{{
-							scope.row.totalTrades
-						}}</span>
-						<span v-else style="color: #dd3a13">{{
-							scope.row.totalTrades
-						}}</span>
-					</template>
-				</el-table-column>
 				<!-- <el-table-column
 							show-overflow-tooltip
 							prop="maxRisk"
@@ -196,6 +181,21 @@
 						</el-table-column> -->
 			</el-table>
 			<el-table class="CPM-summary" header-align="center" :data="summaryData">
+				<el-table-column
+					prop="totalTrades"
+					label="TOTAL TRADES"
+					show-overflow-tooltip
+					align="center"
+				>
+					<template slot-scope="scope">
+						<span v-if="scope.row.totalTrades >= 0">{{
+							scope.row.totalTrades
+						}}</span>
+						<span v-else style="color: #dd3a13">{{
+							scope.row.totalTrades
+						}}</span>
+					</template>
+				</el-table-column>
 				<el-table-column
 					show-overflow-tooltip
 					prop="totalPositive"
@@ -226,7 +226,7 @@
 						}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
+				<!-- <el-table-column
 					prop="timeInMarket"
 					show-overflow-tooltip
 					label="TIME IN MARKET %"
@@ -241,7 +241,7 @@
 							scope.row.timeInMarket + '%'
 						}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 			</el-table>
 		</div>
 		<div class="CPM-trades">
@@ -271,10 +271,26 @@
 					align="center"
 					sortable="custom"
 				>
+				<template #header>
+					<span v-html="`Entry<br/>Price`"></span>
+			</template>
 					<template slot-scope="scope">
 						<span :style="scope.row.SymbolClose >= 0 ? '' : 'color: #dd3a13'">{{
 							scope.row.SymbolClose
 						}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="ExitDate"
+					label="Exit Date"
+					show-overflow-tooltip
+					align="center"
+					sortable="custom"
+					width="140px"
+					v-if="showNewCol"
+				>
+					<template slot-scope="scope">
+						<span>{{ scope.row.ExitDate }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -285,6 +301,9 @@
 					sortable="custom"
 					v-if="showNewCol"
 				>
+				<template slot="header">
+					<span v-html="`Exit<br/>Price`"></span>
+				</template>
 					<template slot-scope="scope">
 						<span :style="scope.row.ExitPrice >= 0 ? '' : 'color: #dd3a13'">{{
 							scope.row.ExitPrice
@@ -299,6 +318,9 @@
 					align="center"
 					sortable="custom"
 				>
+				<template slot="header">
+				  <span v-html="`Max<br/>Gain`"></span>
+				</template>
 					<template slot-scope="scope">
 						<span :style="scope.row.MaxGain >= 0 ? '' : 'color: #dd3a13'">{{
 							scope.row.MaxGain
@@ -313,6 +335,9 @@
 					align="center"
 					sortable="custom"
 				>
+				<template slot="header">
+						<span v-html="`Max<br/>Loss`"></span>
+				</template>
 					<template slot-scope="scope">
 						<span :style="scope.row.MaxLoss >= 0 ? '' : 'color: #dd3a13'">{{
 							scope.row.MaxLoss
@@ -338,7 +363,7 @@
 					align="center"
 				>
 				<template slot="header">
-					Market Condition
+				<span v-html="`Market<br/>Condition`"></span>
 					<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['MarketCondition']">
 							</span>
@@ -357,6 +382,9 @@
 					align="center"
 					sortable="custom"
 				>
+				<template slot="header">
+					<span v-html="`Correlation<br/>Percentage`"></span>
+				</template>
 					<template slot-scope="scope">
 						<span
 							:style="
@@ -434,7 +462,7 @@ export default {
 					}
 			}
 			// 日期类型排序
-			if(['TradeDate'].indexOf(colName) !== -1){
+			if(['TradeDate', 'ExitDate'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.tradesData.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
