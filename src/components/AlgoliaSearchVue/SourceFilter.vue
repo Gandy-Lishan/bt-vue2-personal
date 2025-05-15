@@ -45,9 +45,10 @@
   <style scoped>
   .filter-section {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     font-size: 0.9rem;
-    margin-left: 2rem;
+    margin: 2rem;
+    column-gap: 15px;
   }
   </style>
   

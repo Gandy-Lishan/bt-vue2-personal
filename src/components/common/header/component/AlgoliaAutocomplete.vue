@@ -12,13 +12,16 @@
 
   export default {
     name: 'AutocompleteSearch',
+    data: {
+        autocompleteInstance: {}
+    },
     mounted() {
       const searchClient = algoliasearch(
         ALGOLIA_APP_ID,
         ALGOLIA_SEARCH_KEY
       );
   
-      autocomplete({
+      this.autocompleteInstance = autocomplete({
         container: this.$refs.autocompleteContainer,
         placeholder: 'Search for Research, Content and/or Charts...',
         openOnFocus: true,
@@ -45,7 +48,7 @@
                         return html`<div>📈 Charts</div>`;
                     },
                     item({ item, html }) {
-                        return html`<a href="/users/charts/${item.chart_url}" target="_blank" class="aa-ItemTitle">
+                        return html`<a href="/users/charts/${item.chart_url}" class="aa-ItemTitle">
                         ${item.chart_name}${item.premium === 1 ? ' ★' : ''}
                         </a>`;
                     },
@@ -73,7 +76,7 @@
                         return html`<div>📄 Daily Reports</div>`;
                     },
                     item({ item, html }) {
-                        return html`<a href="https://users.sentimentrader.com/users/report/${item.filename}" target="_blank" class="aa-ItemTitle">
+                        return html`<a href="https://users.sentimentrader.com/users/report/${item.filename}" class="aa-ItemTitle">
                         ${item.title}
                         </a>`;
                     },
@@ -101,7 +104,7 @@
                         return html`<div>📝 Blog Posts</div>`;
                     },
                     item({ item, html }) {
-                        return html`<a href="/blogs/${item.slug}" class="aa-ItemTitle">
+                        return html`<a href="/MR/${item.category}/${item.url.split('/').pop()}" class="aa-ItemTitle">
                         ${item.title}
                         </a>`;
                     },
@@ -119,23 +122,42 @@
         ],
         onStateChange: ({ state }) => {
             this.$nextTick(() => {
-            const chartBtn = document.getElementById('more-results-charts');
-            const reportBtn = document.getElementById('more-results-reports');
-            const blogBtn = document.getElementById('more-results-blogs');
+                const chartBtn = document.getElementById('more-results-charts');
+                const reportBtn = document.getElementById('more-results-reports');
+                const blogBtn = document.getElementById('more-results-blogs');
 
-            if (chartBtn) {
-                chartBtn.onclick = () => this.passToSearch(state.query, 'charts');
-            }
-            if (reportBtn) {
-                reportBtn.onclick = () => this.passToSearch(state.query, 'reports');
-            }
-            if (blogBtn) {
-                blogBtn.onclick = () => this.passToSearch(state.query, 'blogs');
-            }
+                if (chartBtn) {
+                    chartBtn.onclick = () => {
+                        this.passToSearch(state.query, 'charts');
+                        this.autocompleteInstance.setIsOpen(false); // 👈关闭搜索面板
+                    };
+                }
+                if (reportBtn) {
+                    reportBtn.onclick = () => {
+                        this.passToSearch(state.query, 'reports');
+                        this.autocompleteInstance.setIsOpen(false);
+                    };
+                }
+                if (blogBtn) {
+                    blogBtn.onclick = () => {
+                        this.passToSearch(state.query, 'blogs');
+                        this.autocompleteInstance.setIsOpen(false);
+                    };
+                }
+
+                // //点击任意搜索结果项 <a class="aa-ItemTitle"> 时关闭面板
+                // const resultLinks = document.querySelectorAll('.aa-ItemTitle');
+                // resultLinks.forEach(link => {
+                //     link.onclick = () => {
+                //         this.autocompleteInstance.setIsOpen(false);
+                //     };
+                // });
             });
         },
       });
     },
+    // beforeDestroy() {
+    // },
     methods: {
         passToSearch(query) {
             let url = '/search';

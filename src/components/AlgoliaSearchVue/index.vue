@@ -207,18 +207,21 @@ export default {
 }
 .search-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 1.5rem;
 
-  .search-box {
+  /deep/ .ais-SearchBox-input {
     min-width: 700px;
-    flex-shrink: 0;    // 防止被挤压
+    padding: 0.8rem 0 0.8rem 3rem;
+    width: 100%;
   }
-  .search-filter {
-    flex-shrink: 0;
+  /deep/ .ais-SearchBox-submit {
+    left: .8rem;
   }
 }
+
 .results-grid {
   display: flex;
   justify-content: space-between;

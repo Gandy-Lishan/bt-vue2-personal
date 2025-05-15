@@ -16,6 +16,8 @@
     font-size: 14px !important;
     border-radius: 0px !important;
     box-sizing: border-box !important;
+
+    z-index: 1 !important;
       
     .aa-PanelLayout {
         padding: 0;

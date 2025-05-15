@@ -201,26 +201,26 @@ export default {
           keyPath: '8',
           path: '/cpm'
         },
-        // {
-        //   label: 'My Indicator',
-        //   keyPath: '6',
-        //   path: '/myindicator'
-        // },
-        // {
-        //   label: 'My Signal',
-        //   keyPath: '9',
-        //   path: '/my_signals'
-        // },
-        // {
-        //   label: 'My Screen',
-        //   keyPath: '13',
-        //   path: '/my_screen'
-        // },
-        // {
-        //   label: 'AI Trading',
-        //   keyPath: '10',
-        //   path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
-        // },
+        {
+          label: 'My Indicator',
+          keyPath: '6',
+          path: '/myindicator'
+        },
+        {
+          label: 'My Signal',
+          keyPath: '9',
+          path: '/my_signals'
+        },
+        {
+          label: 'My Screen',
+          keyPath: '13',
+          path: '/my_screen'
+        },
+        {
+          label: 'AI Trading',
+          keyPath: '10',
+          path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
+        },
       ],
       activeIndex: '1',
     }
