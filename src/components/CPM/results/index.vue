@@ -305,7 +305,8 @@ export default {
         obj['Trade Date'] = item.TradeDate
         obj['Symbol Close'] = item.SymbolClose
         obj['Correlation Percentage'] = `${item.CorrelationPercentage}%`
-        obj['Return'] = item.Return.toFixed(2) + '%'
+        const num = parseFloat(item.Return);
+        obj['Return'] = !isNaN(num) ? num.toFixed(2) + '%' : '';
         obj['Market Condition'] = item.MarketCondition
         trade.push(obj)
       })
