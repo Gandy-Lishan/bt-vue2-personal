@@ -1,9 +1,9 @@
 <template>
  <div class="indicators-container" ref="indiRef">
-   <br/>
-   <br/>
+  <br>
+  <br>
    <div class="footer-des">
-     <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
+     <Description :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
    </div>
    <div class="indicator-left">
      <template v-for="item in tableInfoList">
@@ -20,12 +20,12 @@
         @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
         :style="{ 
              'width': (isFullScreen) ? '100%' : '50%', 
-             'display': 'block'
+             'display': ((enlargedTable === 'Sector Trend RelTrend') && !isShowDetails) ? 'block' : 'none' 
          }"
         ></Table>
      </template>
      <!-- 点击之后详情页放在这里 -->
-     <!-- <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :style="{ width: '50%' }" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details> -->
+     <Details v-show="enlargedTable && isShowDetails && !isFullScreen"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :style="{ width: '50%' }" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
      <Chart :id="'indiChart'" v-if="!isFullScreen && enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
      <!-- <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }"></SeasonalityChart> -->
      <AboutUs></AboutUs>
@@ -40,10 +40,10 @@ import SeasonalityChart from "../Table/SeasonalityChart"
 import Description from "../Table/Description";
 import Details from "../Table/Details";
 import AboutUs from "../Table/AboutUs";
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import moment from "moment";
-import { getIndicatorsDownloadData, getSectorTrendRelTrend } from "@/service/service";
+import { getIndicatorsDownloadData, getSectorTrendRelTrend, getIndicatorsRowData } from "@/service/service";
 
 export default {
  name: 'RelatedStockSectors',
@@ -90,7 +90,7 @@ export default {
    Table,
   //  SeasonalityChart,
    Description,
-  //  Details,
+   Details,
    AboutUs
  },
  computed: {
@@ -103,6 +103,14 @@ export default {
     (this.enlargedTrendScoreTable === 'Selected Sector/Index' && optionValues.includes(this.checkedType))
     )
    }
+ },
+ async mounted() {
+  const indicator = this.$route.query.indicator
+  if(indicator) {
+    await this.$nextTick(async () => {
+      await this.enlargeSelectIndicator(indicator)
+    })
+  }
  },
  beforeRouteEnter(to, from, next) {
   const index = to.query.index
@@ -128,6 +136,7 @@ export default {
     }
   },
  methods: {
+  ...mapActions('chart', ['fetchIndicatorsPageList']),
    toggleEnlarge(label) {
      console.log('toggleEnlarge', label)
      if (this.enlargedTable === label) {
@@ -237,7 +246,150 @@ export default {
        this.$refs['SP1500ScoreVirtualScroll'][0].loadMore(type, null, condition)
        this.$forceUpdate()
      // })
-   }
+   },
+   async enlargeSelectIndicator(searchUrl) {
+    debugger
+    // vol_vix_transform 不存在
+    if(searchUrl === 'vol_vix_transform') {
+      this.$message({
+        message: `<strong>Unable to find the corresponding indicator</strong>`,
+        center: true,
+        dangerouslyUseHTMLString: true,
+        showClose: true,
+        duration: 8000,
+        customClass: 'no-icon',
+        type: 'warning'
+      })
+      return
+    }
+    // const urlTypes = Array.from(Object.keys(this.indicatorsListData)).filter(key => key !== 'most_popular')
+    const urlTypes = Array.from(Object.keys(this.indicatorsListData))
+    let sourceTable = urlTypes.map(type => {
+      const list = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
+        return list.map(item => {
+          if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+        }).filter(item => item !== undefined)
+    }).filter(item => item.length > 0).flat()
+    console.log('sourceTable', sourceTable)
+    // 存在第一次并未请求全部表单的情况
+    if(sourceTable.length > 0) {
+      const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
+      await this.enLargeTable(source_list, sourceTable[0])
+    }else {
+      let res = {}
+      try {
+        const {data:rowData} = await getIndicatorsRowData(searchUrl)
+        res = rowData
+      } catch (error) {
+        if(error?.response?.status === 404) {
+          this.$message({
+            message: `<strong>Unable to find the corresponding indicator</strong>`,
+            center: true,
+            dangerouslyUseHTMLString: true,
+            showClose: true,
+            duration: 8000,
+            customClass: 'no-icon',
+            type: 'warning'
+          })
+          return
+        }
+      }
+      const {type, groups, sub_type} = res
+      let requireUrl = ''
+      if(type === 'stock_nasdaq') {
+        requireUrl = 'ndx_100_complete_list'
+      }else if(type === 'stock_sent') {
+        requireUrl = 'sp_1500_complete_list'
+      }else if(type === 'stock_russell') {
+        requireUrl = 'russell_3000_complete_list'
+      }else if(sub_type === 'crp_stock') {
+        requireUrl = 'crypt_complete_list'
+      }else if(sub_type === 'all_country_breadth'){
+        requireUrl = 'country_breadth'
+      }else if(sub_type === 'crp_breadth') {
+        requireUrl = 'crypto_breadth'
+      }else if(groups === 'trend_reltrend') {
+        // spx_trend spx_reltrend 没有处理
+        const str = sub_type
+        const match = str.match(/(.*?)_trend_reltrend/)
+        const result = match ? match[1] : 'sp1500'
+        requireUrl = result
+      }else if(typeof groups === 'string' && groups.endsWith('_trend')) {
+        // spx_trend 没有处理
+        const str = sub_type
+        const match = str.match(/(.*?)_trend/)
+        const result = match ? match[1] : 'sp1500'
+        requireUrl = result
+      }else if(typeof groups === 'string' && groups.endsWith('_reltrend') && !groups.includes('_trend')) {
+        // spx_reltrend 没有处理
+        const str = sub_type
+        const match = str.match(/(.*?)_reltrend/)
+        const result = match ? match[1] : 'sp1500'
+        requireUrl = result
+      }else if(type === 'etf_opt') {
+        requireUrl = 'etf_breadth'
+      }else if(type === 'etf_fund') {
+        requireUrl = 'etf_flow'
+      }else if(type === 'mff') {
+        requireUrl = 'monthly_fund_flows'
+      }else if(type === 'shares') {
+        requireUrl = 'shares_outstanding'
+      }else if(type === 'etf_seasonality') {
+        requireUrl = 'etf_seasonality'
+      }else if(type === 'bond_seasonality') {
+        requireUrl = 'bond_seasonality'
+      }else if(groups === 'commod') {
+        requireUrl = 'commodity_complete_list'
+      }else if(groups === 'bonds'){
+        requireUrl = 'bonds_complete_list'
+      }else if(type === 'etf_opt') {
+        reportUrl = 'etf_complete_list'
+      }else if(type === 'commod_seasonality') {
+        url = 'commod_seasonality'
+      }else if(groups === 'stocks') {
+        requireUrl = 'stock_complete_list'
+      }else if(groups === 'macroeconomic') {
+        requireUrl = 'macro_indicator_list'
+      }
+      if(!requireUrl) return
+      await this.fetchIndicatorsPageList(requireUrl)
+      const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+      const _sourceList = _list.map(item => {
+          if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+      }).filter(item => item !== undefined).shift()
+      console.log('_sourceList', _sourceList)
+      // 如果是对象并且对象为空, 说明没有匹配到数据
+      if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
+        this.$message({
+          message: `<strong>Unable to find the corresponding indicator</strong>`,
+          center: true,
+          dangerouslyUseHTMLString: true,
+          showClose: true,
+          duration: 8000,
+          customClass: 'no-icon',
+          type: 'warning'
+        })
+        return
+      }
+      // this.updateChart(_sourceList)
+      await this.enLargeTable(_sourceList.source_list, _sourceList)
+      /* 如果匹配不到, 使用下面的规则请求个别表单
+      ndx_100_complete_list: type: stock_nasdaq
+      sp_1500_complete_list: type: stock_sent
+      russell_3000_complete_list: type: stock_russell
+      commodity_complete_list: groups: commod
+      etf_breadth: type: etf_opt
+      country_breadth: sub_type: all_country_breadth
+      crypto_breadth: sub_type: crp_breadth
+      etf_flow: type: etf_fund
+      monthly_fund_flows： type: mff
+      shares_outstanding: type: shares
+      etf_seasonality: type: etf_seasonality
+      bond_seasonality: type: bond_seasonality
+      */
+      // window.location.assign(url);
+    }
+    },
  }
 }
 </script>

@@ -63,6 +63,12 @@ export default {
     this.reports = this.client.initIndex('reports');
     this.charts = this.client.initIndex('charts');
     this.initAutocomplete();
+    const indicator = this.$route.query.indicator
+    if(indicator) {
+      this.$nextTick(async () => {
+        await this.enlargeSelectIndicator(indicator)
+      })
+    }
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
@@ -116,6 +122,10 @@ export default {
         searchUrl = suggestion.url;
       }
       console.log('searchUrl', searchUrl)
+      await this.enlargeSelectIndicator(searchUrl)
+  },
+    async enlargeSelectIndicator(searchUrl) {
+      debugger
       // vol_vix_transform 不存在
       if(searchUrl === 'vol_vix_transform') {
         this.$message({
