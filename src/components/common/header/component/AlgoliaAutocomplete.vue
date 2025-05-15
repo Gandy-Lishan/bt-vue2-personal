@@ -48,7 +48,8 @@
                         return html`<div>📈 Charts</div>`;
                     },
                     item({ item, html }) {
-                        return html`<a href="/users/charts/${item.chart_url}" class="aa-ItemTitle">
+                        const isTrendScore = item.chart_url.includes('_trend') || item.chart_url.includes('_reltrend')
+                        return html`<a href="/${isTrendScore?'trend_score':'indicators'}?indicator=${item.chart_url}" class="aa-ItemTitle">
                         ${item.chart_name}${item.premium === 1 ? ' ★' : ''}
                         </a>`;
                     },

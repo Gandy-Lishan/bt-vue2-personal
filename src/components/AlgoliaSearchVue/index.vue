@@ -16,7 +16,7 @@
               <div v-if="items.length === 0">No Results</div>
                 <div v-else>
                   <div v-for="item in items" :key="item.objectID" class="hit-item">
-                    <a :href="`/users/charts/${item.chart_url}`" target="_blank" rel="noopener">
+                    <a :href="generateChartUrl(item)" target="_blank" rel="noopener">
                       <ais-highlight :hit="item" attribute="chart_name" />
                       <span v-if="item.premium === 1" style="margin-left: 4px;">★</span>
                     </a>
@@ -140,6 +140,11 @@ export default {
         var d = new Date(stamp);
         var ds = months[d.getMonth()] + ' ' + d.getUTCDate() + ', ' + d.getFullYear();
         return ds;
+    },
+
+    generateChartUrl(item) {
+      const isTrendScore = item.chart_url.includes('_trend') || item.chart_url.includes('_reltrend')
+      return `/${isTrendScore?'trend_score':'indicators'}?indicator=${item.chart_url}`;
     }
   },
 };
