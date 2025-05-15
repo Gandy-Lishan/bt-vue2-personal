@@ -202,19 +202,26 @@ export default {
           path: '/cpm'
         },
         {
-          label: 'My Indicator',
+          label: 'My Stuff',
           keyPath: '6',
-          path: '/myindicator'
-        },
-        {
-          label: 'My Signal',
-          keyPath: '9',
-          path: '/my_signals'
-        },
-        {
-          label: 'My Screen',
-          keyPath: '13',
-          path: '/my_screen'
+          path: '/myindicator',
+          subMenu: [
+            {
+              label: 'My Indicator',
+              keyPath: '6-1',
+              path: '/myindicator'
+            },
+            {
+              label: 'My Signal',
+              keyPath: '6-2',
+              path: '/my_signals'
+            },
+            {
+              label: 'My Screen',
+              keyPath: '6-3',
+              path: '/my_screen'
+            },
+          ]
         },
         {
           label: 'AI Trading',
@@ -238,6 +245,11 @@ export default {
         const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
         if(navSubPath) this.activeIndex =navSubPath
         if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
+      }
+
+      // my stuff
+      if(['/myindicator', '/my_signals', '/my_screen'].includes(path)) {
+        this.activeIndex = this.navs.find(ele => ele.keyPath == 6)?.subMenu.find(ele => ele.path == path)?.keyPath
       }
     }
   },
@@ -399,7 +411,7 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score', 'My Screen', 'Dashboard'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Stuff', 'Dashboard'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
       if(label === 'Smart Stock Scanner') {
