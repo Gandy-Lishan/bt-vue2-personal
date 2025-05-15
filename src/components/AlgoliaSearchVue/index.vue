@@ -2,9 +2,8 @@
   <div class="search-container">
   <ais-instant-search :search-client="searchClient" index-name="charts">
     <ais-configure :hitsPerPage="15" />
-
     <div class="search-header">
-      <div class="search-box"><ais-search-box placeholder="Search for Research, Content or Charts…" /></div>
+      <div class="search-box"><ais-search-box v-model="searchQuery" placeholder="Search for Research, Content or Charts…" /></div>
       <div class="search-filter"><SourceFilter v-model="visibleSources" /></div>
     </div>
 
@@ -105,7 +104,20 @@ export default {
     return {
       searchClient: algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY),
       visibleSources: ["charts", "reports", "blogs"],
+      searchQuery: '',
     };
+  },
+  watch: {
+    // 监听路由变化，当 query 参数变化时更新 searchQuery
+    '$route.query.query': function(newQuery) {
+      this.searchQuery = newQuery || "";
+    }
+  },
+  created() {
+    // 如果 URL 中有 query 参数，设置 searchQuery 为该参数值
+    if (this.$route.query.query) {
+      this.searchQuery = this.$route.query.query;
+    }
   },
   methods: {
     scrollToTop() {
@@ -116,7 +128,7 @@ export default {
       if (modified.includes('-')) {
         const parts = modified.split('-');
         const dt = new Date(parts[0], +parts[1] - 1, parts[2]);
-        return this.datestampToString(dt.getTime());
+        return this.datestamp_to_string(dt.getTime());
       } else {
         return modified;
       }
