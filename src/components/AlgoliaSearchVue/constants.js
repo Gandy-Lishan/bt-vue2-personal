@@ -1,0 +1,2 @@
+export const ALGOLIA_APP_ID = 'K88SIIDLSF';
+export const ALGOLIA_SEARCH_KEY = '080aea2b84a5e1263909139a3d6f1df1';
