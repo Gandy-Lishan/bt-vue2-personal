@@ -27,7 +27,7 @@ export default {
         debugger
 				if(newValue === 'Symbol' && (!this.$route.path.includes('/cpm/symbol'))) this.$router.push({path: '/cpm/symbol'})
 				else if(newValue === 'Asset' && (!this.$route.path.includes('/cpm/asset'))) this.$router.push({path: '/cpm/asset'})
-				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm'})
+				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm/list'})
 			},
 			deep: true
 		},

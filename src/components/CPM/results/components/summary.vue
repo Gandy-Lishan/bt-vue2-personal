@@ -56,7 +56,7 @@
       <div v-if="summary.hasOwnProperty('system_pattern')">
         <el-col :span="6">
           <el-statistic
-            title="System Pattern"
+            title="Common Pattern"
           >
           <template slot="formatter">
             {{ summary.system_pattern }}

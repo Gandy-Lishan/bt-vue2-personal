@@ -219,7 +219,24 @@ export default {
         {
           label: 'Correlation',
           keyPath: '8',
-          path: '/cpm'
+          path: '/cpm',
+          subMenu: [
+            {
+              label: 'Correlation Pattern Match',
+              keyPath: '8-1',
+              path: '/cpm/list'
+            },
+            {
+              label: 'Symbol Correlation',
+              keyPath: '8-2',
+              path: '/cpm/symbol'
+            },
+            {
+              label: 'Asset Correlation',
+              keyPath: '8-3',
+              path: '/cpm/asset'
+            },
+          ]
         },
         {
           label: 'My Indicator',

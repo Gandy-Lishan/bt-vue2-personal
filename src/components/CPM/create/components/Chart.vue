@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="back">
-			<router-link to="/cpm"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
+			<router-link to="/cpm/list"><i class="el-icon-arrow-left"></i><span>{{breadcrumbTitle}}</span></router-link>
 		</div>
 			<div class="chart_box" id="chart_box">
 				<chart :symbol="default_symbol" width="100%" height="100%" :onChartReady="onChartReady">
