@@ -581,7 +581,6 @@ li.el-menu-item.is-active.menu-item-active {
 .bottom .el-menu.el-menu--horizontal {
   background-color: black;
   position: absolute;
-  z-index: 99999;
 }
 li.el-menu-item.tutorial-svg:hover {
   color: #909399;

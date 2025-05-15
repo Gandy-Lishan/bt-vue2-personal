@@ -1178,9 +1178,9 @@ export default {
 			debugger
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
-				// await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
-				// await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
-				// await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
+				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
+				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
+				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
 				const oppositeCriteria = capitalizeFirstLetter(_this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum)
 				const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][index]
 				console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
