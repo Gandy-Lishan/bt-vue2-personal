@@ -107,9 +107,8 @@
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
-      :class="{'enlargeStockTrend': enlarged && isStockTrend, 'trend-condition-table': isStockTrend}"
+      :class="{'enlargeStockTrend': enlarged && isStockTrend, 'trend-condition-table': isStockTrend, 'virtualScroll': true, 'unenlargeMacroeconomicScroll': checkedType === 'macroeconomic' && !enlarged}"
       key-prop="url"
-      class="virtualScroll"
       @change="(renderData) => virtualList = renderData">
       <el-table
         v-el-table-infinite-scroll="loadMore"
@@ -2824,6 +2823,12 @@ export default {
   }
   /deep/ .el-table--scrollable-x .el-table__body-wrapper {
     overflow-x: scroll !important;
+  }
+}
+
+.unenlargeMacroeconomicScroll {
+  /deep/ .el-table__body-wrapper {
+    height: 254px !important;
   }
 }
 .enlargeStockTrend {
