@@ -360,7 +360,6 @@ export default {
 			return {summaryData: this.summaryData, tradesData: this.tradesData};
 		},
 		onSortChange(column){
-			debugger
 			const sortingOrder = column.order
 			const colName = column.prop
       console.log('colName', colName)
