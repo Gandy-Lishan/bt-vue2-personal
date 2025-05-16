@@ -546,7 +546,7 @@ export default {
         }
         return {
           Period: val['timeframe'],
-					'Mean': temp_mean_list[i],
+					'Mean(%)': temp_mean_list[i],
           'Median(%)': median_list[i],
           '% Positive': Positive,
           'Avg Max Loss': AvgMaxLoss,
