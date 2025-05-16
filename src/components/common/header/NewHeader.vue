@@ -70,7 +70,7 @@
             :index="item.keyPath"
           >
           <template slot="title">
-            <span>{{item.label}}</span>
+            <span @click.stop="handleSubmenuClick(item)">{{item.label}}</span>
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
             <el-menu-item v-for="(subItem, subIndex) in item.subMenu" :index="subItem.keyPath" :key="subIndex">{{subItem.label}}</el-menu-item>
@@ -335,6 +335,13 @@ export default {
     }
   },
   methods: {
+    handleSubmenuClick(item) {
+      if (Array.isArray(item.subMenu) && item.subMenu.length > 0) {
+        const firstSubItem = item.subMenu[0];
+        // 手动触发 handleSelect
+        this.handleSelect(firstSubItem.keyPath);
+      }
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       if(key === '10') {
