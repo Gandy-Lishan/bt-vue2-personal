@@ -81,7 +81,6 @@ export default {
 					}else {
 						this.popUpMagBox('This backtest is unavailable', 10000)
 					}
-					debugger
 					console.log('error', error)
 					backtestID = ''
 					LocalStorageUtil.remove('backtestID')

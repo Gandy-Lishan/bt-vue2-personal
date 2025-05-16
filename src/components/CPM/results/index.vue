@@ -246,7 +246,6 @@ export default {
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
-        debugger
         const _obj = {
           'TradeDate': tradeDate,
           'SymbolClose': symbolClose,
