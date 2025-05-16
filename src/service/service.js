@@ -1133,9 +1133,11 @@ export function getBTV1FavIndicator() {
 				withCredentials: true
 			  })
 			.then(res => {
+				console.log('fetch btv1 fav indicator: ', res)
 				resolve(res)
 			})
 			.catch(err => {
+				console.log('Error fetching btv1 fav indicator: ', err)
 				reject(err)
 			})
 	})
