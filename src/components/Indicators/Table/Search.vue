@@ -218,22 +218,32 @@ export default {
         if(!requireUrl) return
         await this.fetchIndicatorsPageList(requireUrl)
         const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
-        const _sourceList = _list.map(item => {
+        let _sourceList = _list.map(item => {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
         }).filter(item => item !== undefined).shift()
         console.log('_sourceList', _sourceList)
-        // 如果是对象并且对象为空, 说明没有匹配到数据
         if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
-          this.$message({
-            message: `<strong>Unable to find the corresponding indicator</strong>`,
-            center: true,
-            dangerouslyUseHTMLString: true,
-            showClose: true,
-            duration: 8000,
-            customClass: 'no-icon',
-            type: 'warning'
-          })
-          return
+          // 尝试看在不在 most_popular
+          requireUrl = 'most_popular'
+          await this.fetchIndicatorsPageList(requireUrl)
+          const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+          const _tempSourceList = _list.map(item => {
+          if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined).shift()
+          _sourceList = _tempSourceList
+          // 如果是对象并且对象为空, 说明没有匹配到数据
+          if(!_tempSourceList || (((_tempSourceList !== null && typeof _tempSourceList === 'object' && !Array.isArray(_tempSourceList)) && Object.keys(_tempSourceList).length === 0))) {
+            this.$message({
+              message: `<strong>Unable to find the corresponding indicator</strong>`,
+              center: true,
+              dangerouslyUseHTMLString: true,
+              showClose: true,
+              duration: 8000,
+              customClass: 'no-icon',
+              type: 'warning'
+            })
+            return
+        }
         }
         await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
       /* 如果匹配不到, 使用下面的规则请求个别表单
