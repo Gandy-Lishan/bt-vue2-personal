@@ -11,7 +11,7 @@
       <div class="result-column">
         <h3>Chart Results</h3>
         <ais-index index-name="charts" v-show="visibleSources.includes('charts')">
-          <ais-hits>
+          <ais-hits :transform-items="filterChartHits">
             <template #default="{ items }">
               <div v-if="items.length === 0">No Results</div>
                 <div v-else>
@@ -120,6 +120,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * 过滤掉不该显示的 charts 记录。
+     * @param {Array} items Algolia 传入的原始 hits
+     * @returns {Array} 过滤后的 hits
+     */
+    filterChartHits(items) {
+      return items.filter(item => {
+        if (item.chart_url.includes('_trend_reltrend')) return false;
+
+        // ❸ 其他规则按需添加
+        // if (item.someFlag === 'hide') return false;
+
+        return true;            // 其余保留
+      });
+    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },

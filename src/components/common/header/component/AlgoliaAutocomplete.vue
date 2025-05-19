@@ -41,7 +41,11 @@
                 return searchClient
                     .initIndex('charts')
                     .search(query, { hitsPerPage: 5 })
-                    .then(res => res.hits);
+                    .then(res =>
+                        // ① 先拿命中的 hits
+                        // ② 过滤掉 chart_url 含 _trend_reltrend 的记录
+                        res.hits.filter(hit => !/_trend_reltrend/.test(hit.chart_url))
+                    );
                 },
                 templates: {
                     header({ html }) {
