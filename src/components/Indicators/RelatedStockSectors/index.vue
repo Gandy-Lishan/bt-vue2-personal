@@ -194,6 +194,8 @@ export default {
      clearRefName.forEach(item => {
        this.$refs[item][0].clearEnlarge()
      })
+    // 在放大之前要先看有没有数据
+    if(checked) await this.$refs[findRefsName][0].loadMore(checked)
      await this.$refs[findRefsName][0].enLargeTable(checked, row)
    },
    passIndicatorData(data, url) {
