@@ -304,6 +304,9 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
                 }
             }
+
+            initializeTickerIndicatorDisplay()
+
             this.sendReq(start,end,new_str,selectedFreq,cb)
 };
 
@@ -823,6 +826,35 @@ quoteFeedSimulator.formatChartData = async function(response){
     return newQuotes
 }
 
+function initializeTickerIndicatorDisplay() {
+    const symbol = CIQ.symbol
+    
+    const replaceNameMap = {
+		SPX: 'SPY',
+		COMP: 'QQQ',
+		DJIA: 'DIA'
+	}
+    const SymbolReplacedName = replaceNameMap[symbol] || symbol
+    const indicatorList = CIQ.store.getters.getIndicatorsList
+    let displayMap = {
+        0: "none",
+        1: "none",
+        2: "none",
+    }
+    for(let i=0;i<indicatorList.length;i++) {
+        if(indicatorList[i].market_symbol == SymbolReplacedName) {
+            if(indicatorList[i].type == 'optix') displayMap[0] = "block"
+            else if(indicatorList[i].type == 'trend') displayMap[1] = "block"
+            else if(indicatorList[i].type == 'reltrend') displayMap[2] = "block"
+        }
+    }
+
+    var node = document.querySelector("cq-menu-container[cq-name = 'menuTickerIndicators']")
+        for(var i = 0;i < node.children.length;i++){
+            node.children[i].style.display = displayMap[i]
+        }
+        debugger
+}
 function findEarliestIndicator(data) {
     const dates = Object.values(data)
     const earliestDate = new Date(Math.min(...dates));

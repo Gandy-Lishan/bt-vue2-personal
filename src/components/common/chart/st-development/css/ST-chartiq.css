@@ -1644,6 +1644,15 @@ body .ciq-period cq-menu-dropdown {
   width: 100px;
 }
 
+/* Ticker Indicator Menu */
+body .ciq-ticker-indicator {
+  min-width: 100px;
+}
+
+body .ciq-ticker-indicator cq-menu-dropdown {
+  width: 180px;
+}
+
 /* Views Menu */
 cq-views {
   display: block;
