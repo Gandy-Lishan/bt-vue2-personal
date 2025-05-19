@@ -164,7 +164,6 @@ export default {
 							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
 					}else if(ele['Dates of 1 Signals'] === 'Max. Gain') {
 							// 计算 Max Gain 最大值
-							debugger
 							const monthData = backtestHistoryList.map(entry => entry[label])
 							const maxLossValues = monthData.map(entry => entry["Max Gain"])
 							// 求出数组中的最大值
@@ -425,7 +424,6 @@ export default {
 			})
 		},
 		calculateBacktestHistory(dataSet, periodArray) {
-			debugger
 			/*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */

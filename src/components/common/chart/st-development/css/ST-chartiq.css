@@ -1651,6 +1651,7 @@ body .ciq-ticker-indicator {
 
 body .ciq-ticker-indicator cq-menu-dropdown {
   width: 180px;
+  min-height: 15px;
 }
 
 /* Views Menu */

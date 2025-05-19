@@ -42,8 +42,6 @@
 								<el-table
 									:data="backtestResultList"
 									stripe
-									show-summary
-									:summary-method="getSummaries"
 									class="aiResultsTable"
 									border
 								>
@@ -206,40 +204,6 @@ computed: {
 			this.isAsyncDown = true
 
 			return BacktestInfoContent
-		},
-		getSummaries(param) {
-			const { columns, data } = param
-			const sums = []
-
-			columns.forEach((column, index) => {
-					if (index === 0) {
-							sums[index] = 'Average(%)'
-							return
-					}
-
-					const values = data.map(item => {
-							const value = item[column.property]
-							return isNaN(value) ? 0 : parseFloat(value)
-					})
-
-					let totalCount = 0
-
-					sums[index] = values.reduce((prev, curr) => {
-							if (!isNaN(curr) && curr !== 0) {
-									totalCount++
-									return prev + curr
-							}
-							return prev
-					}, 0)
-
-					if (totalCount > 0) {
-							sums[index] = (sums[index] / totalCount).toFixed(2)
-					} else {
-							sums[index] = ''
-					}
-			})
-
-			return sums
 		},
 		getCellStyle(value) {
 			return {

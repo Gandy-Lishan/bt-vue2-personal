@@ -340,6 +340,7 @@ import {createStateFilter} from '@/utils/globalFunc'
 import { createIntegerRule, createPositiveIntegerRule, _validatePercentageRule } from '@/utils/formValidate'
 import { RunPortfolio, AutoPortfolio, getPortfolioList, UpdatePortfolio, getStrategyList, getRunPortfolioResults } from '@/service/service'
 import { SearchAutocomplete } from "@/components/common"
+import moment from 'moment'
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 

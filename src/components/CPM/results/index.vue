@@ -246,7 +246,6 @@ export default {
         const eachReturn = result['Each Return'][i];
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
-        debugger
         const _obj = {
           'TradeDate': tradeDate,
           'SymbolClose': symbolClose,
@@ -254,10 +253,10 @@ export default {
           'Return': eachReturn,
           'MarketCondition': marketCondition
         }
-        if(result.hasOwnProperty('Exit Price'))  _obj['ExitPrice'] = result['Exit Price'][i] || ''
-        if(result.hasOwnProperty('Exit Date'))  _obj['ExitDate'] = result['Exit Date'][i] || ''
-        if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = result['Max Gain'][i] || ''
-        if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = result['Max Loss'][i] || ''
+        if(result.hasOwnProperty('Exit Price'))  _obj['ExitPrice'] = result['Exit Price'][i]
+        if(result.hasOwnProperty('Exit Date'))  _obj['ExitDate'] = result['Exit Date'][i]
+        if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = result['Max Gain'][i]
+        if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = result['Max Loss'][i]
         transformedResult.push(_obj)
         TradeDateArray.push(
           {'Date': tradeDate}
@@ -346,10 +345,10 @@ export default {
         const obj = {}
         obj['Trade Date'] = item.TradeDate
         obj['Entry Price'] = item.SymbolClose
-        if(item.hasOwnProperty('ExitDate'))  obj['ExitDate'] = item['ExitDate'] || ''
-        if(item.hasOwnProperty('ExitPrice'))  obj['ExitPrice'] = item['ExitPrice'] || ''
-        if(item.hasOwnProperty('MaxGain'))  obj['MaxGain'] = item['MaxGain'] || ''
-        if(item.hasOwnProperty('MaxLoss'))  obj['MaxLoss'] = item['MaxLoss'] || ''
+        if(item.hasOwnProperty('ExitDate'))  obj['ExitDate'] = item['ExitDate']
+        if(item.hasOwnProperty('ExitPrice'))  obj['ExitPrice'] = item['ExitPrice']
+        if(item.hasOwnProperty('MaxGain'))  obj['MaxGain'] = item['MaxGain']
+        if(item.hasOwnProperty('MaxLoss'))  obj['MaxLoss'] = item['MaxLoss']
         const num = parseFloat(item.Return);
         obj['Return'] = !isNaN(num) ? num.toFixed(2) + '%' : '';
         obj['Market Condition'] = item.MarketCondition

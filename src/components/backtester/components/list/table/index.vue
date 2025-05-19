@@ -815,7 +815,6 @@ export default {
 								if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
 										const decode = signalCode.decode(_signalItem.code)
 										if(decode.analysis === 'User') {
-											debugger
 											const {data} = await searchIndicator(decode.indicator)
 											const element = data.results.find(ele => ele.name === decode.indicator)
 											if(element) {decode.indicator = element.url}

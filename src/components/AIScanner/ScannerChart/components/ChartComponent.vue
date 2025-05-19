@@ -470,7 +470,8 @@ export default {
         positive_list = [],
         max_loss_list = [],
         max_gain_list = [],
-        z_score_list = []
+        z_score_list = [],
+				temp_mean_list = []
       for (var i in period_dict) {
         let temp_median = this.calculate_median(
           used_quotes.map((obj) => obj[period_dict[i].timeframe])
@@ -511,6 +512,8 @@ export default {
         let temp_mean = this.calculate_mean(
           used_quotes.map((obj) => obj[period_dict[i].timeframe])
         )
+        const _temp_mean = parseFloat(temp_mean.toFixed(1))
+				temp_mean_list.push(_temp_mean)
 				const sqrt_length = used_quotes.map((obj) => obj[period_dict[i].timeframe]).filter(e => !isNaN(e)).length
         z_score_list.push(
           parseFloat(
@@ -530,14 +533,27 @@ export default {
         //  console.log('max_gain_list',max_gain_list)
         //  console.log('z_score_list',z_score_list)
       }
-      const res = period_dict.map((val, i) => ({
-        Period: val['timeframe'],
-        'Median(%)': median_list[i],
-        '% Positive': isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100),
-        'Avg Max Loss': (!median_list[i] && median_list[i]!=0) ? NaN : max_loss_list[i],
-        'Avg Max Gain': (!median_list[i] && median_list[i]!=0) ? NaN : max_gain_list[i],
-        'Z-Score': z_score_list[i]
-      }))
+      const res = period_dict.map((val, i) => {
+			  const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100)
+        let AvgMaxLoss = (!median_list[i] && median_list[i]!=0) ? NaN : max_loss_list[i]
+        let AvgMaxGain = (!median_list[i] && median_list[i]!=0) ? NaN : max_gain_list[i]
+        // 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
+        if (direction === 'Short' && !isNaN(AvgMaxLoss)) {
+          AvgMaxLoss = -parseFloat(AvgMaxLoss);
+        }
+        if (direction === 'Short' && !isNaN(AvgMaxGain)) {
+          AvgMaxGain = -parseFloat(AvgMaxGain);
+        }
+        return {
+          Period: val['timeframe'],
+					'Mean(%)': temp_mean_list[i],
+          'Median(%)': median_list[i],
+          '% Positive': Positive,
+          'Avg Max Loss': AvgMaxLoss,
+          'Avg Max Gain': AvgMaxGain,
+          'Z-Score': z_score_list[i]
+        }
+      })
       this.result_quotes = res
       this.generate_table_data()
     },
