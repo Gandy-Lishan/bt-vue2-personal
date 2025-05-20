@@ -51,15 +51,6 @@ export default {
 			handler(newValue, _) {
 				// 在对象属性发生变化时触发的处理逻辑
 				this.chartLoadingSetting = newValue
-				if(!newValue.isChartLoading) {
-					if (this.$route.hash === '#scrollAnchor') {
-						// 等自己 & 子组件都渲染完
-						this.$nextTick(() => {
-							const el = document.querySelector('#scrollAnchor')
-							if (el) el.scrollIntoView()
-						})
-					}
-				}
 			},
 			deep: true, // 启用深度监听，监视对象属性的变化
 		},
@@ -100,8 +91,17 @@ export default {
 		}
 	},
 	mounted() {
-		// const chartBox = document.getElementsByClassName('chart_box')[0] 
-   		//  if (chartBox) chartBox.style.width = ''
+		const unwatch = this.$watch(
+				() => this.chartLoadingSetting.isChartLoading,
+				(newVal) => {
+					if (!newVal) {
+					this.$nextTick(() => {
+						this.scrollToAnchor()
+					})
+					unwatch() // 只执行一次后移除 watcher
+					}
+				}
+			)
 	},
 	methods: {
     	...mapMutations('chart', ['SET_CHART_READY_STATE']),
@@ -117,6 +117,12 @@ export default {
 		hideComponents() {
 			// let studies = document.querySelector(".ciq-studies")
 			// studies.style.visibility = 'hidden'
+		},
+		scrollToAnchor() {
+			if (this.$route.hash === '#scrollAnchor') {
+			const el = document.querySelector('#scrollAnchor')
+			if (el) el.scrollIntoView()
+			}
 		}
 	}
 }
