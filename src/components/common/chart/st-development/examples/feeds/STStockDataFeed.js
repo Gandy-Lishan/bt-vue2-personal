@@ -837,21 +837,21 @@ function initializeTickerIndicatorDisplay() {
     const SymbolReplacedName = replaceNameMap[symbol] || symbol
     const indicatorList = CIQ.store.getters.getIndicatorsList
     let displayMap = {
-        0: "none",
-        1: "none",
-        2: "none",
+        0: "disabled",
+        1: "disabled",
+        2: "disabled",
     }
     for(let i=0;i<indicatorList.length;i++) {
         if(indicatorList[i].market_symbol == SymbolReplacedName) {
-            if(indicatorList[i].type == 'optix') displayMap[0] = "block"
-            else if(indicatorList[i].type == 'trend') displayMap[1] = "block"
-            else if(indicatorList[i].type == 'reltrend') displayMap[2] = "block"
+            if(indicatorList[i].type == 'optix') displayMap[0] = "enabled"
+            else if(indicatorList[i].type == 'trend') displayMap[1] = "enabled"
+            else if(indicatorList[i].type == 'reltrend') displayMap[2] = "enabled"
         }
     }
 
     var node = document.querySelector("cq-menu-container[cq-name = 'menuTickerIndicators']")
         for(var i = 0;i < node.children.length;i++){
-            node.children[i].style.display = displayMap[i]
+            node.children[i].setAttribute('tf',displayMap[i])
         }
 }
 function findEarliestIndicator(data) {
