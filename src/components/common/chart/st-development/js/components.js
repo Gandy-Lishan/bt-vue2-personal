@@ -13374,6 +13374,7 @@ import {__st_js_chartengine_prototype_overwrite_} from "@/components/common/char
 import {__st_js_indicatorType_} from "./extensions/indicatorType.js"
 import {__st_js_generateCsv_} from "./extensions/generateCsv.js"
 import {__st_js_utils_} from "./extensions/utils.js"
+import {__st_js_favsymbol_btn_} from "./extensions/favSymbolBtn.js"
 import {__st_js_maLayout_} from "./extensions/maLayout.js"
 import {__st_js_myindicator_chart_control_} from "./extensions/myIndicatorChartControl.js"
 import {__st_js_cpm_chart_control_} from "./extensions/cpmChartControl.js"
@@ -13482,6 +13483,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_indicatorType_,
 		__st_js_generateCsv_,
 		__st_js_utils_,
+		__st_js_favsymbol_btn_,
 		__st_js_maLayout_,
 		__st_js_myindicator_chart_control_,
 		__st_js_cpm_chart_control_,
