@@ -8834,31 +8834,38 @@ cq-study-legend[cq-hovershow][cq-marker] {
   margin-left: 28px;
 }
 
-button.test{
+button.btnFav{
   width:42px !important;
   transition: all 0.2s linear;
-  background-color: #409EFF;
 }
 
-button.test span{
+button.btnFav span{
   white-space: nowrap;
   display: none;
   flex: 0 0 88%;
   margin-left: -8px;
 }
 
-button.test:hover{
+button.btnFav:hover{
   width: 188px !important;
   transition: all 0.2s linear;
 }
 
-button.test:hover svg.button_icon{
+button.btnFav:hover svg.button_icon{
   flex: 0 0 12%;
 }
 
-button.test:hover span{
+button.btnFav:hover span{
   white-space: nowrap;
   display: block;
+}
+
+.addFav {
+  width: 188px;height: 32px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #f8f8f9;font-family: Helvetica, sans-serif;cursor:pointer;color: #666
+}
+
+.delFav {
+  width: 188px;height: 35px;border-radius: 20px;border: 0.1rem rgb(80, 166, 252) solid;font-size: 0.6rem;font-weight:bold;background: #409EFF;color: white;font-family: Helvetica, sans-serif;cursor:pointer
 }
 
 .reload {
@@ -9182,44 +9189,16 @@ cq-indicators-lookup-results.ciq-night {
 .ciq-night cq-indicators-lookup-results cq-item span:nth-of-type(3) {
   color: inherit;
 }
-/* .stxMenuActive .test{
-  width: 150px;
-  height: 30px;
-  border-radius: 15px;
-  border: 0.1rem rgb(80, 166, 252) solid;
-  font-size: 0.6rem;
-  font-weight:bold;
-  background: rgb(28 84 255);
-  color: white;
-  font-family: Helvetica, sans-serif;
-  cursor:pointer
-}
-.stxMenuActive .test:hover{
-  border:0.1rem rgb(207, 207, 207) solid;
-  background-color: rgb(71 116 254);
-} */
 
-.test{
-  width: 150px;
-  height: 30px;
-  border-radius: 15px;
-  border: 0.1rem rgb(80, 166, 252) solid;
-  font-size: 0.6rem;
-  font-weight:bold;
-  background: white;
-  font-family: Helvetica, sans-serif;
-  cursor:pointer
-}
-
-.test:active {
+.btnFav:active {
   position:relative;
   top:1px;
 }
-.test div{
+.btnFav div{
   display: flex;
   align-items: center;
 }
-.test span{
+.btnFav span{
   flex: 1;
   margin-right: 12px
 }
