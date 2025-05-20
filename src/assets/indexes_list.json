@@ -535,9 +535,9 @@
     },
     {
         "symbol": "FDN",
-        "name": "Internet Index Fund (FDN)",
+        "name": "First Trust Dow Jones Internet Index Fund (FDN)",
         "category": "ETF",
-        "inception": "2006/6/23"
+        "inception": "2006/06/23"
     },
     {
         "symbol": "FILG",
@@ -768,12 +768,6 @@
         "inception": "2000/6/19"
     },
     {
-        "symbol": "IYT",
-        "name": "Transportation (IYT)",
-        "category": "ETF",
-        "inception": "2003/10/10"
-    },
-    {
         "symbol": "JNK",
         "name": "High Yield Bonds (JNK)",
         "category": "ETF",
@@ -850,6 +844,24 @@
         "name": "Alternative Harvest (MJ)",
         "category": "ETF",
         "inception": "2015/12/3"
+    },
+    {
+        "symbol": "MLPI",
+        "name": "UBS Alerian MLP (MLPI)",
+        "category": "ETF",
+        "inception": "2010/4/1"
+    },
+    {
+        "symbol": "MLPI",
+        "name": "UBS Alerian MLP (MLPI)",
+        "category": "ETF",
+        "inception": "2010/4/1"
+    },
+    {
+        "symbol": "MLPI",
+        "name": "UBS Alerian MLP (MLPI)",
+        "category": "ETF",
+        "inception": "2010/4/1"
     },
     {
         "symbol": "MLPI",
@@ -1022,6 +1034,12 @@
     {
         "symbol": "RSPH",
         "name": "Invesco S&P 500 EW Health Care",
+        "category": "ETF",
+        "inception": "2006/11/7"
+    },
+    {
+        "symbol": "RSPM",
+        "name": "Invesco S&P 500 EW Materials",
         "category": "ETF",
         "inception": "2006/11/7"
     },
@@ -1626,6 +1644,12 @@
         "inception": "1901/1/31"
     },
     {
+        "symbol": "HEAVYTRUCK",
+        "name": "Heavy Truck Index",
+        "category": "Index",
+        "inception": "1967/01/31"
+    },
+    {
         "symbol": "HEX",
         "name": "HEX Index",
         "category": "Index",
@@ -1662,8 +1686,26 @@
         "inception": "1994/1/19"
     },
     {
+        "symbol": "MXAP",
+        "name": "Asia Pacific (MXAP)",
+        "category": "Index",
+        "inception": "1987/12/31"
+    },
+    {
         "symbol": "MXEF",
         "name": "Emerging Markets (MXEF)",
+        "category": "Index",
+        "inception": "1987/12/31"
+    },
+    {
+        "symbol": "MXEU",
+        "name": "Europe (MXEU)",
+        "category": "Index",
+        "inception": "1998/12/31"
+    },
+    {
+        "symbol": "MXLA",
+        "name": "South America (MXLA)",
         "category": "Index",
         "inception": "1987/12/31"
     },
@@ -1678,6 +1720,12 @@
         "name": "MXWO Index",
         "category": "Index",
         "inception": "1969/12/31"
+    },
+    {
+        "symbol": "NAPMPMI",
+        "name": "PMI Manufacturing Index",
+        "category": "Index",
+        "inception": "1948/01/31"
     },
     {
         "symbol": "NDX",
@@ -2124,12 +2172,6 @@
         "inception": "2017/11/9"
     },
     {
-        "symbol": "crp_MATIC",
-        "name": "Polygon",
-        "category": "Crypto",
-        "inception": "2019/4/28"
-    },
-    {
         "symbol": "crp_MINA",
         "name": "Mina Protocol",
         "category": "Crypto",
@@ -2322,12 +2364,6 @@
         "inception": "2017/11/9"
     },
     {
-        "symbol": "crp_XVG",
-        "name": "Verge",
-        "category": "Crypto",
-        "inception": "2017/11/9"
-    },
-    {
         "symbol": "crp_ZEC",
         "name": "Zcash",
         "category": "Crypto",
@@ -2340,45 +2376,9 @@
         "inception": "2018/1/25"
     },
     {
-        "symbol": "FDN",
-        "name": "First Trust Dow Jones Internet Index Fund (FDN)",
-        "category": "ETF",
-        "inception": "2006/06/23"
-    },
-    {
         "symbol": "IYT",
-        "name": "iShares US Trans (IYT)",
+        "name": "iShares Transportation Average ETF (IYT)",
         "category": "ETF",
         "inception": "2003/10/10"
-    },
-    {
-        "symbol": "HEAVYTRUCK",
-        "name": "Heavy Truck Index",
-        "category": "Index",
-        "inception": "1967/01/31"
-    },
-    {
-        "symbol": "MXAP",
-        "name": "Asia Pacific (MXAP)",
-        "category": "Index",
-        "inception": "1987/12/31"
-    },
-    {
-        "symbol": "MXEU",
-        "name": "Europe (MXEU)",
-        "category": "Index",
-        "inception": "1998/12/31"
-    },
-    {
-        "symbol": "MXLA",
-        "name": "South America (MXLA)",
-        "category": "Index",
-        "inception": "1987/12/31"
-    },
-    {
-        "symbol": "NAPMPMI",
-        "name": "PMI Manufacturing Index",
-        "category": "Index",
-        "inception": "1948/01/31"
     }
 ]

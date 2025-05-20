@@ -43022,7 +43022,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CRPT Outstanding Shares",
+        "chart_name": "CRPT Outstanding Shares",
         "url": "etf_crpt_shares",
         "market_symbol": "CRPT",
         "type": "other",
@@ -43036,7 +43036,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CRPT Optix",
+        "chart_name": "CRPT Optix",
         "url": "etf_crpt",
         "market_symbol": "CRPT",
         "type": "other",
@@ -52314,13 +52314,6 @@
         "chart_name": "Byline Bancorp Inc",
         "url": "BY",
         "market_symbol": "BY",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "IBEX Holdings Ltd",
-        "url": "IBEX",
-        "market_symbol": "IBEX",
         "type": "optix",
         "updated": "Daily"
     },
@@ -71197,20 +71190,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IBEX Holdings Ltd Trend Score",
-        "url": "IBEX_trend",
-        "market_symbol": "IBEX",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "IBEX Holdings Ltd RelTrend Score",
-        "url": "IBEX_reltrend",
-        "market_symbol": "IBEX",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Roku Inc Trend Score",
         "url": "ROKU_trend",
         "market_symbol": "ROKU",
@@ -73115,28 +73094,28 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IVE Optix",
+        "chart_name": "IVE Optix",
         "url": "etf_ive",
         "market_symbol": "ive",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IVW Optix",
+        "chart_name": "IVW Optix",
         "url": "etf_ivw",
         "market_symbol": "ivw",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "MAGS Optix",
+        "chart_name": "MAGS Optix",
         "url": "etf_mags",
         "market_symbol": "mags",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IHE Optix",
+        "chart_name": "IHE Optix",
         "url": "etf_ihe",
         "market_symbol": "ihe",
         "type": "other",
@@ -73150,112 +73129,112 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PBW Optix",
+        "chart_name": "PBW Optix",
         "url": "etf_pbw",
         "market_symbol": "pbw",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IYZ Optix",
+        "chart_name": "IYZ Optix",
         "url": "etf_iyz",
         "market_symbol": "iyz",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "MTUM Optix",
+        "chart_name": "MTUM Optix",
         "url": "etf_mtum",
         "market_symbol": "mtum",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "NUKZ Optix",
+        "chart_name": "NUKZ Optix",
         "url": "etf_nukz",
         "market_symbol": "nukz",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "URA Optix",
+        "chart_name": "URA Optix",
         "url": "etf_ura",
         "market_symbol": "ura",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SFYF Optix",
+        "chart_name": "SFYF Optix",
         "url": "etf_sfyf",
         "market_symbol": "sfyf",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IGV Optix",
+        "chart_name": "IGV Optix",
         "url": "etf_igv",
         "market_symbol": "IGV",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPG Optix",
+        "chart_name": "RSPG Optix",
         "url": "etf_rspg",
         "market_symbol": "RSPG",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPH Optix",
+        "chart_name": "RSPH Optix",
         "url": "etf_rsph",
         "market_symbol": "RSPH",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPF Optix",
+        "chart_name": "RSPF Optix",
         "url": "etf_rspf",
         "market_symbol": "RSPF",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPM Optix",
+        "chart_name": "RSPM Optix",
         "url": "etf_rspm",
         "market_symbol": "RSPM",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPU Optix",
+        "chart_name": "RSPU Optix",
         "url": "etf_rspu",
         "market_symbol": "RSPU",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPS Optix",
+        "chart_name": "RSPS Optix",
         "url": "etf_rsps",
         "market_symbol": "RSPS",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPC Optix",
+        "chart_name": "RSPC Optix",
         "url": "etf_rspc",
         "market_symbol": "RSPC",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPT Optix",
+        "chart_name": "RSPT Optix",
         "url": "etf_rspt",
         "market_symbol": "RSPT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPR Optix",
+        "chart_name": "RSPR Optix",
         "url": "etf_rspr",
         "market_symbol": "RSPR",
         "type": "other",
@@ -73269,56 +73248,56 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "XBTUSD Optix",
+        "chart_name": "XBTUSD Optix",
         "url": "etf_xbtusd",
         "market_symbol": "XBTUSD",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "GSG Optix",
+        "chart_name": "GSG Optix",
         "url": "etf_gsg",
         "market_symbol": "GSG",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PPLT Optix",
+        "chart_name": "PPLT Optix",
         "url": "etf_pplt",
         "market_symbol": "PPLT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCE Optix",
+        "chart_name": "PSCE Optix",
         "url": "etf_psce",
         "market_symbol": "PSCE",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "CPER Optix",
+        "chart_name": "CPER Optix",
         "url": "etf_cper",
         "market_symbol": "CPER",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCT Optix",
+        "chart_name": "PSCT Optix",
         "url": "etf_psct",
         "market_symbol": "PSCT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "FDN Optix",
+        "chart_name": "FDN Optix",
         "url": "etf_fdn",
         "market_symbol": "FDN",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SPSM Optix",
+        "chart_name": "SPSM Optix",
         "url": "etf_spsm",
         "market_symbol": "SPSM",
         "type": "other",
@@ -73332,28 +73311,28 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "VEU Optix",
+        "chart_name": "VEU Optix",
         "url": "etf_veu",
         "market_symbol": "VEU",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SLX Optix",
+        "chart_name": "SLX Optix",
         "url": "etf_slx",
         "market_symbol": "SLX",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCF Optix",
+        "chart_name": "PSCF Optix",
         "url": "etf_pscf",
         "market_symbol": "PSCF",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "DBC Optix",
+        "chart_name": "DBC Optix",
         "url": "etf_dbc",
         "market_symbol": "DBC",
         "type": "other",
@@ -73367,14 +73346,14 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCC Optix",
+        "chart_name": "PSCC Optix",
         "url": "etf_pscc",
         "market_symbol": "PSCC",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "ETHA Optix",
+        "chart_name": "ETHA Optix",
         "url": "etf_etha",
         "market_symbol": "ETHA",
         "type": "other",
@@ -73388,35 +73367,35 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IBIT Optix",
+        "chart_name": "IBIT Optix",
         "url": "etf_ibit",
         "market_symbol": "IBIT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCM Optix",
+        "chart_name": "PSCM Optix",
         "url": "etf_pscm",
         "market_symbol": "PSCM",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SI1 Optix",
+        "chart_name": "SI1 Optix",
         "url": "etf_si1",
         "market_symbol": "SI1",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "COPPER Optix",
+        "chart_name": "COPPER Optix",
         "url": "etf_copper",
         "market_symbol": "copper",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "CL1 Optix",
+        "chart_name": "CL1 Optix",
         "url": "etf_cl1",
         "market_symbol": "CL1",
         "type": "other",
@@ -73430,7 +73409,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IPAY Optix",
+        "chart_name": "IPAY Optix",
         "url": "etf_ipay",
         "market_symbol": "IPAY",
         "type": "other",
@@ -74567,13 +74546,6 @@
         "chart_name": "Strawberry Fields REIT Inc",
         "url": "STRW",
         "market_symbol": "STRW",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Solidion Technology Inc",
-        "url": "STI",
-        "market_symbol": "STI",
         "type": "optix",
         "updated": "Daily"
     },
@@ -79901,20 +79873,6 @@
         "chart_name": "Strawberry Fields REIT Inc RelTrend Score",
         "url": "STRW_reltrend",
         "market_symbol": "STRW",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Solidion Technology Inc Trend Score",
-        "url": "STI_trend",
-        "market_symbol": "STI",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Solidion Technology Inc RelTrend Score",
-        "url": "STI_reltrend",
-        "market_symbol": "STI",
         "type": "reltrend",
         "updated": "Daily"
     },
