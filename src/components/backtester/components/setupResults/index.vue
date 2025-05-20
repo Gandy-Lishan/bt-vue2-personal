@@ -1,5 +1,5 @@
 <template>
-  <Tabs :activeIndex="activeItem" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect"></Tabs>
+  <Tabs :activeIndex="activeItem" :mode="mode" :menuItems="menuItems" :handle-select="handleSelect" id="scrollAnchor"></Tabs>
 </template>
 
 <script>

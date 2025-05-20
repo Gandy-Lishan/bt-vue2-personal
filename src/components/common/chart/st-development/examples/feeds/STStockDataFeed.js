@@ -853,7 +853,6 @@ function initializeTickerIndicatorDisplay() {
         for(var i = 0;i < node.children.length;i++){
             node.children[i].style.display = displayMap[i]
         }
-        debugger
 }
 function findEarliestIndicator(data) {
     const dates = Object.values(data)
