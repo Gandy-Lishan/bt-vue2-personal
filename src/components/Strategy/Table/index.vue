@@ -190,7 +190,7 @@ export default {
       LocalStorageUtil.set('strategy_filter_state', {selectedTitle: this.selectedTitle, highlightedTag: this.activatedTag, currentStrategiesPage, currentSummaryPage})
 		},
     jumpToTutoiral(){
-			const path = 'https://youtu.be/9cDF1w0mHGQ'
+			const path = 'https://youtube.com/playlist?list=PL_pqMRWeHIxNHIjkA2Cuf1gPh8OzQXr-A&si=svLdd8AHLcUiHFPx'
 			window.open(path, '_blank')
     },
   }
