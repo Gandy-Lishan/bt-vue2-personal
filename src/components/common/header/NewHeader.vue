@@ -3,6 +3,15 @@
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <!-- <div class="btn-group" id="notifications-group">
+          <a
+            :href="notificationLink"
+            class="iconify"
+          >
+            <i class="fa fa-bell" style="vertical-align: middle; font-size: 22px;"></i>
+            <span id="notifications-badge" class="badge badge-default"></span>
+          </a>
+        </div> -->
         <!-- <el-menu-item index="2" class="tutorial-svg">
           <svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M164.301 0H21.4442C15.761 5.18001e-08 10.3105 2.25765 6.29191 6.27628C2.27327 10.2949 0.0156251 15.7454 0.015625 21.4286V164.286C0.0156251 169.969 2.27327 175.419 6.29191 179.438C10.3105 183.457 15.761 185.714 21.4442 185.714H164.301C169.985 185.714 175.435 183.457 179.454 179.438C183.472 175.419 185.73 169.969 185.73 164.286V21.4286C185.73 15.7454 183.472 10.2949 179.454 6.27628C175.435 2.25765 169.985 5.18001e-08 164.301 0ZM21.4442 14.2857H164.301C166.196 14.2857 168.013 15.0383 169.352 16.3778C170.692 17.7174 171.444 19.5342 171.444 21.4286V164.286C171.444 166.18 170.692 167.997 169.352 169.336C168.013 170.676 166.196 171.429 164.301 171.429H21.4442C19.5498 171.429 17.733 170.676 16.3934 169.336C15.0539 167.997 14.3013 166.18 14.3013 164.286V21.4286C14.3013 19.5342 15.0539 17.7174 16.3934 16.3778C17.733 15.0383 19.5498 14.2857 21.4442 14.2857Z" fill="#333"/>
@@ -297,6 +306,18 @@ export default {
       }
     }
   },
+	computed: {
+		notificationLink() {
+      const access_level = getCookieData()?.access_level
+      const canAccessNotifications = 
+        access_level.some(str => str.includes('basic')) ||
+        access_level.some(str => str.includes('premium')) || 
+        access_level.some(str => str.includes('premium-data-yearly')) || 
+        access_level.some(str => str.includes('institutional')) || 
+        access_level.some(str => str.includes('indicatoredge'))
+      return canAccessNotifications ? '/notifications' : '/dashboard'
+    }
+	},
   created() {
     const access_level = getCookieData()?.access_level
     // 权限验证的时候, report 子项要去掉: reports, corelite
@@ -635,5 +656,40 @@ li.el-menu-item.tutorial-svg:hover {
   display: flex;
   align-items: center;
   padding-left: 16px;
+}
+
+// notification
+#notifications-group {
+    padding: 0 16px;
+}
+.btn-group {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.badge {
+    position: absolute;
+    right: 32px;
+    font-weight: 300;
+    background-color: #f36a5a;
+    background-image: none;
+
+}
+.badge {
+    font-size: 11px!important;
+    height: 18px;
+    width: 18px;
+    border-radius: 12px!important;
+    text-shadow: none!important;
+    text-align: center;
+    vertical-align: middle;
+}
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    line-height: 18px;
+    color: #fff;
+    white-space: nowrap;
 }
 </style>
