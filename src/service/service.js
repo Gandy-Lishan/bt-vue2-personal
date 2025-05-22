@@ -2189,7 +2189,18 @@ export function fetchCurrentNNotifications() {
 		})
 	})
   }
-
+export function NotificationsMarkAllRead() {
+	return new Promise((resolve, reject) => {
+		axios
+		.put('/dev/st_data/notifications/mark-all-read/')
+		.then(res => {
+			resolve(res)
+		})
+		.catch(err => {
+			reject(err)
+		})
+	})
+  }
 	/* watch list start*/
 export function postWatchList(data) {
 	const url = `/dev/watchlist_app/watchlist`

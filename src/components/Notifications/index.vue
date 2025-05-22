@@ -73,6 +73,7 @@
 
 <script>
 import moment from 'moment-timezone'
+import {NotificationsMarkAllRead} from "@/service/service"
 
 export default {
   data() {
@@ -107,6 +108,13 @@ export default {
     },
     async loadData() {
       this.loading = true
+
+      const res = await NotificationsMarkAllRead()
+      if(res.status == 200) {
+        var badge = document.getElementById('notifications-badge');
+			  if(!badge) return
+				badge.style.display = 'none';
+      }
 
       this.$store.dispatch('states/fetchNotifications', {
         page: this.currentPage,
