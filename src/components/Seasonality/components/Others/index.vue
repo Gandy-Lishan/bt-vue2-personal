@@ -215,8 +215,10 @@ export default {
       cb(results.sort((a, b) => b.priority - a.priority))
     },
     handleSelect(item) {
-      this.data.symbol = item.url
-      this.symbol = item.url
+      this.$nextTick(()=>{
+        this.data.symbol = item.url
+        this.symbol = item.url
+      });
     },
     changeCategory(value) {
       console.log(value)

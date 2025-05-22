@@ -684,15 +684,19 @@ export default {
     },
 
     handleSelect(item) {
-      this.data.symbol = item.url
-      // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
-      CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
-        this.calculateBarDistance()
-        this.handleCPMMAChange()
-        CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
-        CIQ.hideCover()
-        CIQ.nprogress.done()
-      })
+      // 如果不用nextTick会导致复制粘贴keyword并选择全匹配项时不刷新绑定值
+      this.$nextTick(()=>{
+        this.data.symbol = item.url
+        // this.$store.commit('form/getBacktestSymbol', this.data.symbol)
+        CIQ.addSymbol(this.data.symbol,CIQ.stxx,()=>{
+          this.calculateBarDistance()
+          this.handleCPMMAChange()
+          CIQ.Marker.removeByLabel(CIQ.stxx, 'events');
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+        })
+      });
+      
     },
     async previewForm() {
       this.changeLoadingStatus('preview',true)

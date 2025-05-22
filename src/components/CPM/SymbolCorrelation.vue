@@ -470,16 +470,19 @@ export default {
         this.$refs[formName].clearValidate()
       },
       getSymbol(ticker) {
-        console.log('ticker', ticker)
-        this.symbol = ''
-        // 往标签数组里面推送
-        if(this.stock_comparison.length >= 5) {this.popUpMsgBox(`You can only select up to 5 tickers`);return};
-        const tickerUrl = ticker.url
-        if(this.stock_comparison.includes(tickerUrl)) {this.popUpMsgBox(`Duplicate tickers detected`);return}
-        this.stock_comparison.push(ticker.url);
+        this.$nextTick(()=>{
+          this.symbol = ''
+          // 往标签数组里面推送
+          if(this.stock_comparison.length >= 5) {this.popUpMsgBox(`You can only select up to 5 tickers`);return};
+          const tickerUrl = ticker.url
+          if(this.stock_comparison.includes(tickerUrl)) {this.popUpMsgBox(`Duplicate tickers detected`);return}
+          this.stock_comparison.push(ticker.url);
+        });
       },
       getBenchMark(ticker) {
-        this.data.benchmark = ticker.url
+        this.$nextTick(()=>{
+          this.data.benchmark = ticker.url
+        });
       },
       querySearch(queryString, cb) {
       var dropdownList = this.dropdownList

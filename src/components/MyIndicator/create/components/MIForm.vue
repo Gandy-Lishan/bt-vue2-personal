@@ -1054,64 +1054,64 @@ export default {
         nodeSetup[i].setAttribute('tf','enabled')
       }
     },
-    async handleSelect(item, source) {
-      debugger
-      console.log('item', item,source)
-      const type = item.type
+    handleSelect(item, source) {
+      this.$nextTick(async ()=>{      
+        const type = item.type
 
-      const selectIndicator = (item) => {
-        this.data[source] = item.label
-        this.data[`${source}_url`] = item.url
-        // this.data.time_frame = item.updated;
-      }
-
-      const selectSymbol = (item) => {
-        this.data[source] = item.url
-        this.data[`${source}_url`] = item.url
-        this[`${source}_category`] = item.category || null
-
-        this.$store.dispatch('chart/set_mi_shift',{
-          'display': this.data.indicator_1_url == this.data.indicator_2_url, 
-          'showInput': this.$refs['shiftForm'].showInput, 
-          'value':  Number(this.$refs['shiftForm'].value)
-        })
-      }
-
-
-      if (type === 'Indicator') {
-        if (this.data.categories.includes('Indicator')) {
-          selectIndicator(item)
-        } else if (this.data.categories.includes('Symbol')) {
-          this.data.categories = 'Indicator Spread'
-          this.changeCategories('Indicator Spread')
-          selectIndicator(item)
-        } else {
-          this.data.categories = 'Indicator Spread'
-          this.changeCategories('Indicator Spread')
-          selectIndicator(item)
+        const selectIndicator = (item) => {
+          this.data[source] = item.label
+          this.data[`${source}_url`] = item.url
+          // this.data.time_frame = item.updated;
         }
-      } else if (type === 'Symbol') {
-        if (this.data.categories.includes('Symbol')) {
-          selectSymbol(item)
-        } else if (this.data.categories.includes('Indicator')) {
-          this.data.categories = 'Symbol Spread'
-          this.changeCategories('Symbol Spread')
-          selectSymbol(item)
-        } else {
-          this.data.categories = 'Symbol Spread'
-          this.changeCategories('Symbol Spread')
-          selectSymbol(item)
+
+        const selectSymbol = (item) => {
+          this.data[source] = item.url
+          this.data[`${source}_url`] = item.url
+          this[`${source}_category`] = item.category || null
+
+          this.$store.dispatch('chart/set_mi_shift',{
+            'display': this.data.indicator_1_url == this.data.indicator_2_url, 
+            'showInput': this.$refs['shiftForm'].showInput, 
+            'value':  Number(this.$refs['shiftForm'].value)
+          })
         }
-      }
-      this.data.time_frame = this.findMaxFreq() 
-      console.log('当前最大的 timeframe 是', this.data.time_frame)
 
-      // 用promise包裹indicator加载流程确保其在stma加载之前执行
-      await this.$store.dispatch('chart/set_miFormStateChange',this.data)
 
-      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
-      const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
-      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
+        if (type === 'Indicator') {
+          if (this.data.categories.includes('Indicator')) {
+            selectIndicator(item)
+          } else if (this.data.categories.includes('Symbol')) {
+            this.data.categories = 'Indicator Spread'
+            this.changeCategories('Indicator Spread')
+            selectIndicator(item)
+          } else {
+            this.data.categories = 'Indicator Spread'
+            this.changeCategories('Indicator Spread')
+            selectIndicator(item)
+          }
+        } else if (type === 'Symbol') {
+          if (this.data.categories.includes('Symbol')) {
+            selectSymbol(item)
+          } else if (this.data.categories.includes('Indicator')) {
+            this.data.categories = 'Symbol Spread'
+            this.changeCategories('Symbol Spread')
+            selectSymbol(item)
+          } else {
+            this.data.categories = 'Symbol Spread'
+            this.changeCategories('Symbol Spread')
+            selectSymbol(item)
+          }
+        }
+        this.data.time_frame = this.findMaxFreq() 
+        console.log('当前最大的 timeframe 是', this.data.time_frame)
+
+        // 用promise包裹indicator加载流程确保其在stma加载之前执行
+        await this.$store.dispatch('chart/set_miFormStateChange',this.data)
+
+        // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+        const checkInputRef = source=="indicator_1"?'ma1Form':'ma2Form'
+        this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,source=="indicator_1"?'ma1':'ma2',this.$refs[checkInputRef].showInput)
+      });
     },
     findMaxFreq() {
       let frequencyArray = []
