@@ -59,16 +59,17 @@ export default {
   },
   mounted() {
     console.log(window)
-    this.blogs = this.client.initIndex('blog');
-    this.reports = this.client.initIndex('reports');
-    this.charts = this.client.initIndex('charts');
-    this.initAutocomplete();
     const indicator = this.$route.query.indicator
     if(indicator) {
       this.$nextTick(async () => {
         await this.enlargeSelectIndicator(indicator)
       })
     }
+
+    this.blogs = this.client.initIndex('blog');
+    this.reports = this.client.initIndex('reports');
+    this.charts = this.client.initIndex('charts');
+    this.initAutocomplete();
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
