@@ -2176,57 +2176,17 @@ export async function getSmartDumbSentiment() {
 		})
 	}
 
-	// fetchNotifications.js
-import { mockNotifications } from './mockNotifications'
-
-function compare(a, b, prop, order) {
-  const valA = a[prop]
-  const valB = b[prop]
-  if (order === 'asc') {
-    return valA > valB ? 1 : -1
-  } else {
-    return valA < valB ? 1 : -1
-  }
-}
-
-export function fetchNotifications({ page, pageSize, search, sortProp, sortOrder }) {
-  return new Promise((resolve) => {
-    let data = [...mockNotifications]
-
-    // 模拟搜索
-    if (search) {
-      const keyword = search.toLowerCase()
-      data = data.filter(item =>
-        item.message.toLowerCase().includes(keyword) ||
-        item.broadcast_type.toLowerCase().includes(keyword) ||
-        item.created_date.toLowerCase().includes(keyword)
-      )
-    }
-
-    // 模拟排序
-    if (sortProp) {
-      data.sort((a, b) => compare(a, b, sortProp, sortOrder))
-    }
-
-    // 模拟分页
-    const total = data.length
-    const start = (page - 1) * pageSize
-    const end = start + pageSize
-    const items = data.slice(start, end)
-
-    setTimeout(() => {
-      resolve({
-        items,
-        total
-      })
-    }, 300) // 模拟网络延迟
-  })
-}
-
+// fetchNotifications.js
 export function fetchCurrentNNotifications() {
-	return new Promise((resolve) => {
-	  let data = 6
-	  resolve({notification_count : data})
+	return new Promise((resolve, reject) => {
+		axios
+		.get('/dev/st_data/notifications/count/', { auth: author })
+		.then(res => {
+			resolve(res.data)
+		})
+		.catch(err => {
+			reject(err)
+		})
 	})
   }
 
@@ -2341,4 +2301,3 @@ export function getAllWatchlist(page, sort, name) {
 	})
 }
 /* watch list end*/
-  

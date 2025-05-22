@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import { fetchNotifications } from "@/service/service";
 import moment from 'moment-timezone'
 
 export default {
@@ -108,15 +107,21 @@ export default {
     },
     async loadData() {
       this.loading = true
-      const res = await fetchNotifications({
+
+      this.$store.dispatch('states/fetchNotifications', {
         page: this.currentPage,
         pageSize: this.pageSize,
         search: this.search,
         sortProp: this.sortProp,
-        sortOrder: this.sortOrder
+        sortOrder: this.sortOrder,
+        forceReload: false
+      }).then(({ items, total }) => {
+        this.tableData = items
+        this.total = total
+      }).catch(err => {
+        console.error('获取通知失败:', err)
       })
-      this.tableData = res.items
-      this.total = res.total
+
       this.loading = false
     },
     handlePageChange(page) {
