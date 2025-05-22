@@ -1240,3 +1240,10 @@ button#checkResBtn {
 body > .el-menu--horizontal {
   z-index: 10000 !important;
 }
+
+/* larger than mask which is 9999 */
+/* larger than navbar submenu which is 10000 */
+.el-notification {
+  z-index: 10001 !important;
+  width: auto !important;
+}
