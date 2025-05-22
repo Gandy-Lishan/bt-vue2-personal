@@ -16,8 +16,9 @@
     font-size: 14px !important;
     border-radius: 0px !important;
     box-sizing: border-box !important;
-
-    z-index: 1 !important;
+    /* larger than el-tab which is 2 */
+    /* larger than mask which is 9999 */
+    z-index: 10000 !important;
       
     .aa-PanelLayout {
         padding: 0;
@@ -79,4 +80,14 @@
         color: #bbb !important; /* 禁用时文字变为浅灰 */
     }
   }
+
+
+@media (max-width: 1679px) {
+    .autocomplete-container.aa-Autocomplete {
+        width: 250px;
+    }
+    .autocomplete-panel.aa-Panel {
+        width: 250px !important;
+    }
+}
   
