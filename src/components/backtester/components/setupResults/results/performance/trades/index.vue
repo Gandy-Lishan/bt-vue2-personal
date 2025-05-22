@@ -80,6 +80,34 @@
             >
             </el-table-column>
             <el-table-column
+                v-if="showNewCol"
+                prop="MaxGain"
+                label="Max Gain %"
+                align="center"
+                show-overflow-tooltip
+            >
+            <template slot-scope="scope">
+                <span v-if="scope.row.MaxGain == 'none'">{{ '' }}</span>
+                <span v-else-if="scope.row.MaxGain > 0">{{ scope.row.MaxGain }}%</span>
+                <span v-else-if="scope.row.MaxGain < 0" style="color: #dd3a13">{{ scope.row.MaxGain }}%</span>
+                <span v-else-if="scope.row.MaxGain == 0">{{ 0 }}%</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                v-if="showNewCol"
+                prop="MaxLoss"
+                label="Max Loss %"
+                align="center"
+                show-overflow-tooltip
+            >
+            <template slot-scope="scope">
+                <span v-if="scope.row.MaxLoss == 'none'">{{ '' }}</span>
+                <span v-else-if="scope.row.MaxLoss > 0">{{ scope.row.MaxLoss }}%</span>
+                <span v-else-if="scope.row.MaxLoss < 0" style="color: #dd3a13">{{ scope.row.MaxLoss }}%</span>
+                <span v-else-if="scope.row.MaxLoss == 0">{{ 0 }}%</span>
+                </template>
+            </el-table-column>
+            <el-table-column
                 prop="TradeReturn"
                 label="Trade Return %"
                 align="center"
@@ -177,7 +205,8 @@ export default {
             processedTradesData: [],
             textContent: {
                 'MarketCondition': 'Indicates the market environment for this transaction:<br/> "Bear" stands for "Bear Market",<br/> "Bull" stands for "Bull Market",<br/> "Rec" stands for "Recession", "Ease" refers to "FOMC Easing",<br/> and "Tight" represents "FOMC Tightening".'
-            }
+            },
+            showNewCol: false
 		}
 	},
 	props: {
@@ -200,6 +229,9 @@ export default {
 			handler(newValue, _){
                 const mergedData = [];
                 const _newValue = JSON.parse(JSON.stringify(newValue))
+                debugger
+                const showNewCol = Array.isArray(newValue) && newValue.length >= 0 && Object.keys(newValue[0]).length >= 0 && newValue[0].hasOwnProperty('MaxGain')
+                if(showNewCol) this.showNewCol = true
                 for (let i = 0; i < newValue.length; i += 2) {
                     const entryData = newValue[i];
                     const exitData = newValue[i + 1] || {}; // 确保后面有对象或使用一个空对象
@@ -218,6 +250,8 @@ export default {
                         'ExitDate': formatExitDate,
                         'ExitAction': exitData.TradeStatus.toUpperCase(),
                         'ExitPrice': !isNaN(exitData.TradePrice) ? Number(exitData.TradePrice).toFixed(2) : '',
+                        'MaxGain': !isNaN(exitData.MaxGain) ? Number(exitData.MaxGain).toFixed(2) : '',
+                        'MaxLoss': !isNaN(exitData.MaxLoss) ? Number(exitData.MaxLoss).toFixed(2) : '',
                         'TradeReturn': !isNaN(exitData.TradeReturn) ? Number(exitData.TradeReturn).toFixed(2) : '',
                         'TotalReturn': !isNaN(exitData.Return) ? Number(exitData.Return * 100).toFixed(2) : '',
                         'ExitReason': exitData.ExitReason || '',

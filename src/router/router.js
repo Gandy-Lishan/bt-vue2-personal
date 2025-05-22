@@ -147,6 +147,12 @@ const routes = [
 			require(['@/components/Portfolio/index.vue'], resolve),
 	},
 	{
+		path: '/watchlist',
+		name: 'WatchList',
+		component: resolve =>
+			require(['@/components/WatchList/index.vue'], resolve),
+	},
+	{
 		path: '/reports',
 		name: 'Reports',
 		component: resolve =>
