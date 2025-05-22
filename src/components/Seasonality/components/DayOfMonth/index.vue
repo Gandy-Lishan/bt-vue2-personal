@@ -251,8 +251,10 @@ export default {
       cb(results.sort((a, b) => b.priority - a.priority))
     },
     handleSelect(item) {
-      this.symbol = item.url
-      this.data.symbol = item.url
+      this.$nextTick(()=>{
+        this.symbol = item.url
+        this.data.symbol = item.url
+      });
     },
     changeMonth(month) {
       console.log(month)
