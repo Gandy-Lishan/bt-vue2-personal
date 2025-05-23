@@ -166,7 +166,7 @@ export default {
         }
         const lastBar = arr.slice(-preNum); // 获取最后 preNum 项
         const sum = lastBar.reduce((acc, val) => acc + parseFloat(val), 0);
-        return sum / preNum
+        return (sum / preNum).toFixed(2)
       }
       const getColor = (normalizedValue) => {
         if (normalizedValue <= 0) return '#41A317';       // 极端悲观（绿色）
@@ -301,6 +301,7 @@ export default {
   // width: 80%;
   width: 100%;
   // padding: 20px;
+  overflow-y: hidden;
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;

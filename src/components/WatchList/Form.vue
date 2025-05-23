@@ -163,7 +163,8 @@ export default {
         {value: 'RelTrend Score', label: 'RelTrend Score'},
         {value: 'Optix', label: 'Optix'},
         {value: 'ROC', label: 'ROC'},
-        {value: 'SMA', label: 'EMA'},
+        {value: 'SMA', label: 'SMA'},
+        {value: 'EMA', label: 'EMA'},
       ],
       btnLoading: false,
       previewLoading: false,
@@ -296,7 +297,7 @@ export default {
       let saveRes
       if(rowUrl) {saveRes = await updateWatchList(rowUrl,saveData)}
       else{saveRes = await postWatchList(saveData)}
-      this.processTips = 'Tips: Running basket. Please wait patiently...'
+      this.processTips = 'Tips: Saving Watch List, Please wait patiently...'
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       let url = saveRes.data?.url
       this.rowUrl = url

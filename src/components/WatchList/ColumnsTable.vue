@@ -2,7 +2,7 @@
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
     <p class="filterTableDes">
-						After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Run"</span> to save it.
+						After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Save Watch List"</span> to save it.
     </p>
 		<el-table
 			ref="tableREF"
@@ -116,7 +116,7 @@ export default {
 			const containsAnySubstring = (variable, keywords) => {
 				return keywords.some(keyword => variable.includes(keyword))
 			}
-			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'SMA']
+			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'SMA', 'EMA']
 			const result = containsAnySubstring(colName, keywords);
 			// 数字字符串转数字类型排序
 			if(result){
