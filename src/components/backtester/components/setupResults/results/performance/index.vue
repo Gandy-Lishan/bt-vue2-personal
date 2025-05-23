@@ -171,6 +171,8 @@ export default {
               const tradeReturn = initalData['Each Return']
               const exitReason = initalData['Exit Reason'] ? initalData['Exit Reason'] : []
               const marketCondition = initalData['MarketCondition'] ? initalData['MarketCondition'] : []
+              const MaxGain = initalData['Max Gain'] ? initalData['Max Gain'] : []
+              const MaxLoss = initalData['Max Loss'] ? initalData['Max Loss'] : []
 
               /** used for display last signal marker, if last signal and end date exist in report, then if they're the same , display marker */ 
               this.showLastSignalMarker1 = initalData['Symbol Last Signal'] ? 
@@ -273,7 +275,16 @@ export default {
 
                   initalData['Trades'][i].MarketCondition =
                     (!marketCondition[initalData['Trades'][i].trade_number] || marketCondition[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : marketCondition[initalData['Trades'][i].trade_number]
-                  
+
+                  if(MaxGain.length !== 0) {
+                    initalData['Trades'][i].MaxGain =
+                    (!MaxGain[initalData['Trades'][i].trade_number] || MaxGain[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : MaxGain[initalData['Trades'][i].trade_number]
+                  }
+                  if(MaxLoss.length !== 0) {
+                    initalData['Trades'][i].MaxLoss =
+                    (!MaxLoss[initalData['Trades'][i].trade_number] || MaxLoss[initalData['Trades'][i].trade_number]?.length == 0) ? ['N\/A'] : MaxLoss[initalData['Trades'][i].trade_number]
+                  }
+
                   if (i % 2 !== 0) {
                     initalData['Trades'][i - 1].Return =
                       initalData['Trades'][i].Return
@@ -479,6 +490,7 @@ export default {
         summary.push(obj)
       })
       const tradeData = []
+      debugger
       this.tradesData.forEach((item, index) => {
         const obj = {}
         obj['Trade #'] = index + 1
@@ -488,20 +500,21 @@ export default {
         obj['Indicator'] = item.Indicator.join(';')
         obj['Trade Price'] = item.TradePrice
         obj['Exit Reason'] = item.ExitReason
+        if(item.hasOwnProperty('MaxGain')) obj['Max Gain %'] = `${item.MaxGain}%`
+        if(item.hasOwnProperty('MaxLoss')) obj['Max Loss %'] = `${item.MaxLoss}%`
         obj['Trade Return %'] = `${item.TradeReturn}%`
         obj['Total Return %'] = `${(item.Return * 100).toFixed(2)}%`
         obj['Market Condition'] = item.MarketCondition.join(';')
         tradeData.push(obj)
       })
       const mergedData = [];
-
       for (let i = 0; i < tradeData.length; i += 2) {
         const entryData = tradeData[i];
         const exitData = tradeData[i + 1] || {}; // 确保后面有对象或使用一个空对象
         // 转换日期格式
         const formatEntryDate = entryData['Trade Date'].replaceAll('-','/')
         const formatExitDate = exitData['Trade Date'] ? exitData['Trade Date'].replaceAll('-','/') : '';
-        mergedData.push({
+        const obj = {
           'Symbol': entryData.Symbol,
           'Entry Date': formatEntryDate,
           'Entry Action': entryData.Action.toUpperCase(),
@@ -509,11 +522,14 @@ export default {
           'Exit Date': formatExitDate,
           'Exit Action': exitData.Action.toUpperCase(),
           'Exit Price': !isNaN(exitData['Trade Price']) ?  Number(exitData['Trade Price']).toFixed(2) : '',
-          'Trade Return': !isNaN(exitData['Trade Return %']) ?  Number(exitData['Trade Return %']).toFixed(2) : '',
-          'Total Return': !isNaN(exitData['Total Return %']) ?  Number(exitData['Total Return %']).toFixed(2) : '',
+          'Trade Return %':  exitData['Trade Return %'],
+          'Total Return %':  exitData['Total Return %'],
           'Exit Reason': exitData['Exit Reason'] || '',
           'Market Condition': exitData['Market Condition'] || 'N\/A',
-        });
+        }
+        if(exitData.hasOwnProperty('Max Gain %')) obj['Max Gain %'] = exitData['Max Gain %']
+        if(exitData.hasOwnProperty('Max Loss %')) obj['Max Loss %'] = exitData['Max Loss %']
+        mergedData.push(obj);
       }
 
       console.log(mergedData);

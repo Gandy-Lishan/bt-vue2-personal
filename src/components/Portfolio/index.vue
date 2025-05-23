@@ -249,6 +249,11 @@ export default {
   // width: 80%;
   width: 100%;
   // padding: 20px;
+  /deep/ i.el-collapse-item__arrow.el-icon-arrow-right.is-active {
+    position: absolute;
+    right: 0;
+    top: 50%;
+  }
 }
 /deep/ .el-collapse-item__header {
   background-color: #c0c4cc5c;
