@@ -70,7 +70,10 @@
 									</div>
                   <div class="col-md-6" v-show="return_segments && Array.isArray(return_segments) && return_segments.length
                    > 0">
-                    <el-button size="small" @click="isShowInfoTable = !isShowInfoTable">Hide Info Table</el-button>
+                    <el-button size="small" @click="isShowInfoTable = !isShowInfoTable">
+                      <span v-show="isShowInfoTable">Hide Info Table</span>
+                      <span v-show="!isShowInfoTable">Show Info Table</span>
+                    </el-button>
                     <table class="threshold-table" v-show="isShowInfoTable">
 											<thead>
 												<tr>
