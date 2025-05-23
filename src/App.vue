@@ -52,8 +52,6 @@ export default {
 		console.time("bt timer")
 		this.watchUpdate()
 
-		this.getNotificationCount()
-
 		/** pre-fetching and updating the data */
 		if(window.location.pathname.includes('/backtester')) {
 			// fetch all custom list
@@ -79,6 +77,8 @@ export default {
 				// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 				// await delay(10000);
 				console.log('权限响应', res)
+
+				this.getNotificationCount()
 			} catch (error) {
 				switch (error?.response?.status) {
 				case 401:
@@ -170,12 +170,12 @@ export default {
 			}, 300000); // Update every 5 minutes
 		},
 		async getNotificationCount() {
-			const {notification_count} = await fetchCurrentNNotifications()
+			const {count} = await fetchCurrentNNotifications()
 			var badge = document.getElementById('notifications-badge');
 			if(!badge) return
-			if (notification_count > 0) {
+			if (count > 0) {
 				badge.style.display = 'inline'; // 或 'block'，取决于你的布局需求
-				badge.textContent = notification_count;
+				badge.textContent = count;
 			} else {
 				badge.style.display = 'none';
 			}
