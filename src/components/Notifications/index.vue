@@ -113,7 +113,10 @@ export default {
       if(res.status == 200) {
         var badge = document.getElementById('notifications-badge');
 			  if(!badge) return
+        var icon = document.getElementById('notification-icon');
+        if(!icon) return
 				badge.style.display = 'none';
+        icon.style.color = 'grey'
       }
 
       this.$store.dispatch('states/fetchNotifications', {

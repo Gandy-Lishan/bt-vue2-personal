@@ -8,8 +8,16 @@
             :href="notificationLink"
             class="iconify"
           >
-            <i class="fa fa-bell" style="vertical-align: middle; font-size: 22px;"></i>
+            <i id="notification-icon" class="fa fa-bell" style="vertical-align: middle; font-size: 22px;"></i>
             <span id="notifications-badge" class="badge badge-default"></span>
+          </a>
+        </div>
+        <div class="btn-group" id="btv1-group">
+          <a
+            href="https://users.sentimentrader.com/users/"
+            class="iconify"
+          >
+            <i class="fa fa-home" style="vertical-align: middle; font-size: 28px; color: #5b9bd1"></i>
           </a>
         </div>
         <!-- <el-menu-item index="2" class="tutorial-svg">
@@ -659,8 +667,9 @@ li.el-menu-item.tutorial-svg:hover {
 }
 
 // notification
-#notifications-group {
-    padding: 0 16px;
+#notifications-group,#btv1-group {
+    padding: 0 16px 0 0;
+    margin-right: 10px;
 }
 .btn-group {
     position: relative;
@@ -686,10 +695,13 @@ li.el-menu-item.tutorial-svg:hover {
     vertical-align: middle;
 }
 .badge {
-    display: inline-block;
+    display: none;
     min-width: 10px;
     line-height: 18px;
     color: #fff;
     white-space: nowrap;
+}
+#notification-icon {
+  color: grey; //default color
 }
 </style>
