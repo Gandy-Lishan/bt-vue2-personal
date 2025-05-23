@@ -52,8 +52,6 @@ export default {
 		console.time("bt timer")
 		this.watchUpdate()
 
-		this.getNotificationCount()
-
 		/** pre-fetching and updating the data */
 		if(window.location.pathname.includes('/backtester')) {
 			// fetch all custom list
@@ -79,6 +77,8 @@ export default {
 				// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 				// await delay(10000);
 				console.log('权限响应', res)
+
+				this.getNotificationCount()
 			} catch (error) {
 				switch (error?.response?.status) {
 				case 401:
