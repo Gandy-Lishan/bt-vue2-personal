@@ -595,12 +595,12 @@ quoteFeedSimulator.formatChartData = async function(response){
                 }
                 //console.timeEnd('🚗Execution Time');
         }else{
+            let sentiList = []
+            for(var j in CIQ.objIndicator){
+                let indicator = CIQ.findSentiIndicator(null,CIQ.objIndicator[j])
+                if(indicator) sentiList.push(indicator.url)
+            }
             if('High' in data[0]){
-                let sentiList = []
-                for(var j in CIQ.objIndicator){
-                    let indicator = CIQ.findSentiIndicator(null,CIQ.objIndicator[j])
-                    if(indicator) sentiList.push(indicator.url)
-                }
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
@@ -620,6 +620,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                         // 只有sentiment indicator可以被从数据源中读入对应数据到quote,不然就是在对应列留空值
                         if(!sentiList.includes(indicatorKey)){
                             newQuotes[i][indicatorKey] = null;
+                            sentiIndex++
                             continue;
                         }
                         var str = sentiIndex==0?'indicator_Close':`indicator${sentiIndex+1}_Close`; 
@@ -675,9 +676,17 @@ quoteFeedSimulator.formatChartData = async function(response){
     
                     // 默认加载 ‘aapl’，它没有indicator，跳过
                     if(CIQ.objIndicator && typeof CIQ.objIndicator == 'string') continue
+                    let sentiIndex = 0
                     for(var j in CIQ.objIndicator){
                         var indicatorKey = CIQ.objIndicator[j];
-                        var str = j==0?'indicator_Close':`indicator${Number(j)+1}_Close`; 
+                        // 只有sentiment indicator可以被从数据源中读入对应数据到quote,不然就是在对应列留空值
+                        if(!sentiList.includes(indicatorKey)){
+                            newQuotes[i][indicatorKey] = null;
+                            sentiIndex++
+                            continue;
+                        }
+                        var str = sentiIndex==0?'indicator_Close':`indicator${sentiIndex+1}_Close`; 
+                        sentiIndex++ 
                         
                         // 如果某个指标的最后有效数据的索引已经被记录并且小于当前索引，跳过
                         if (i > indicatorCutoffIndices[indicatorKey]) {

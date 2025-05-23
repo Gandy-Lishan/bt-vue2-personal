@@ -83,12 +83,40 @@ const getCoresSymbolDual = (isSymbol2) => {
       const standardizedValue = standardizeString(resultValue);
       const standardizedUrl = standardizeString(resultUrl);
   
-      // 正则匹配：将查询字符串转为正则，允许字符间有任意字符
+      // // 正则匹配：将查询字符串转为正则，允许字符间有任意字符
+      // const fuzzyMatch = (text, query) => {
+      //   const regex = new RegExp(query.split('').join('.*?'), 'g'); // 模糊匹配
+      //   return [...text.matchAll(regex)];
+      // };
+  
+      const escapeRegExp = (string) => {
+        return string.replace(/[.*+?^=${}()|[\]\\]/g, '\\$&'); // Escape special regex characters
+      };
+      
       const fuzzyMatch = (text, query) => {
-        const regex = new RegExp(query.split('').join('.*?'), 'g'); // 模糊匹配
+        // 1. Escape the query string
+        const escapedQuery = escapeRegExp(query);
+        
+        // 2. Create the regex with the escaped query
+        // Add `.*?` between characters that aren't special characters
+        let regexString = '';
+        
+        for (let i = 0; i < escapedQuery.length; i++) {
+          const char = escapedQuery[i];
+          
+          // If the character is not a special character, add the `.*?` after it
+          regexString += char;
+          if (i < escapedQuery.length - 1 && /[a-zA-Z0-9]/.test(char)) {
+            regexString += '.*?';  // Insert fuzzy match pattern
+          }
+        }
+        
+        const regex = new RegExp(regexString, 'g'); // Create regex from the pattern
+        
+        // 3. Match the text against the fuzzy regex
         return [...text.matchAll(regex)];
       };
-  
+      
       // 模糊匹配分数
       let score = 0;
       

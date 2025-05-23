@@ -171,13 +171,18 @@ export default {
 		},
 		async getNotificationCount() {
 			const {count} = await fetchCurrentNNotifications()
+			// const count = 6
 			var badge = document.getElementById('notifications-badge');
 			if(!badge) return
+			var icon = document.getElementById('notification-icon');
+			if(!icon) return
 			if (count > 0) {
 				badge.style.display = 'inline'; // 或 'block'，取决于你的布局需求
 				badge.textContent = count;
+				icon.style.color = '#5b9bd1'
 			} else {
 				badge.style.display = 'none';
+				icon.style.color = 'grey'
 			}
 
 		},
