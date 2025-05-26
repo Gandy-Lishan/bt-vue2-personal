@@ -116,7 +116,7 @@ export default {
 			const containsAnySubstring = (variable, keywords) => {
 				return keywords.some(keyword => variable.includes(keyword))
 			}
-			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'SMA', 'EMA']
+			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'MA', 'Optix_Period', 'ROC_Period', 'MA_Period']
 			const result = containsAnySubstring(colName, keywords);
 			// 数字字符串转数字类型排序
 			if(result){

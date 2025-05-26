@@ -134,10 +134,10 @@ export default {
         console.error("❌ Highcharts 容器 #HM 未找到");
         return;
       }
-      if (!data || data.length === 0) {
-        console.error("❌ Heatmap 数据为空");
-        return;
-      }
+      // if (!data || data.length === 0) {
+      //   console.error("❌ Heatmap 数据为空");
+      //   return;
+      // }
       console.log("✅ Highcharts 容器已找到，准备渲染图表...");
       const baseUrl = "/backtester/sr/setup";
 
