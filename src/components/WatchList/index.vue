@@ -192,7 +192,9 @@ export default {
           const _tempHeatMap = []
           tickerObj['Ticker'] = ticker
           const Closes = records.map(ele => (ele.Close))
+          const Optix = records.map(ele => (ele.Optix))
           const lastClose = Closes.at(-1)
+          const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
           const minClose =  Math.min(...Closes)
           const maxClose =  Math.max(...Closes)
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
@@ -200,7 +202,7 @@ export default {
 
           _tempHeatMap.push(ticker)
           _tempHeatMap.push(optix_url) // url
-          _tempHeatMap.push(lastClose)
+          _tempHeatMap.push(lastOptix)
           _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
             let {label, indicator, bar} = column

@@ -164,7 +164,6 @@ export default {
         {value: 'RelTrend Score', label: 'RelTrend Score'},
         {value: 'Optix', label: 'Optix'},
         {value: 'ROC', label: 'Rate of Change (ROC)'},
-        {value: 'MA', label: 'Moving Average (MA)'},
         {value: 'Optix_Period', label: 'Optix (With Period)'},
         {value: 'ROC_Period', label: 'Rate of Change (ROC With Period)'},
         {value: 'MA_Period', label: 'Moving Average (MA With Period)'}
