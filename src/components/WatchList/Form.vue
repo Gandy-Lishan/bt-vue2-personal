@@ -52,10 +52,10 @@
         <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" width="50px">Index</th>
+            <th scope="col" width="15px"></th>
+            <th scope="col" width="30px">Index</th>
             <th scope="col">Indicator</th>
             <th scope="col"></th>
-            <th scope="col" width="50px"></th>
           </tr>
         </thead>
         <draggable 
@@ -66,6 +66,12 @@
           :move="onMove"
         >
           <tr v-for="(item, index) in manageColumns" :key="index">
+            <td>
+              <template>
+                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-plus" size="mini" type="primary" ></el-button>
+                <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn" ></el-button> 
+              </template>
+            </td>
             <td scope="row">{{ index + 1 }}</td>
             <td class="manage-td">
               <el-select v-model="item.indicator" placeholder="- Select -" size="small">
@@ -92,12 +98,6 @@
               <div class="weight-error-message">
                 {{ item.barErrMsg }}
               </div>
-            </td>
-            <td>
-              <template>
-                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-circle-plus-outline" size="small" type="primary"></el-button>
-                <el-button v-else size="small" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn"></el-button> 
-              </template>
             </td>
           </tr>
           <td>
