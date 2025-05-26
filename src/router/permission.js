@@ -165,6 +165,19 @@ export function setRouterPermission(router) {
 			/* 权限跳转控制 */
    const access_level = getCookieData()?.access_level
 			if(Array.isArray(access_level)) {
+				// notifications 路由根据权限的跳转控制， 单独判断的逻辑，和下方的代码无关
+				if(to.path.includes('/notifications')) {
+					const canAccessNotifications = 
+						access_level.some(str => str.includes('basic')) ||
+						access_level.some(str => str.includes('premium')) || 
+						access_level.some(str => str.includes('premium-data-yearly')) || 
+						access_level.some(str => str.includes('institutional')) || 
+						access_level.some(str => str.includes('indicatoredge'))
+					if(canAccessNotifications) next()
+					else next('/dashboard')
+				}
+
+				
 				// 全部权限 everything
 				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))) {
 					next()

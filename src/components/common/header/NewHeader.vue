@@ -5,7 +5,7 @@
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <div class="btn-group" id="notifications-group">
           <a
-            :href="notificationLink"
+            href='/notifications'
             class="iconify"
           >
             <i id="notification-icon" class="fa fa-bell" style="vertical-align: middle; font-size: 22px;"></i>
@@ -314,18 +314,6 @@ export default {
       }
     }
   },
-	computed: {
-		notificationLink() {
-      const access_level = getCookieData()?.access_level
-      const canAccessNotifications = 
-        access_level.some(str => str.includes('basic')) ||
-        access_level.some(str => str.includes('premium')) || 
-        access_level.some(str => str.includes('premium-data-yearly')) || 
-        access_level.some(str => str.includes('institutional')) || 
-        access_level.some(str => str.includes('indicatoredge'))
-      return canAccessNotifications ? '/notifications' : '/dashboard'
-    }
-	},
   created() {
     const access_level = getCookieData()?.access_level
     // 权限验证的时候, report 子项要去掉: reports, corelite
