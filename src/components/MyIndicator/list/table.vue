@@ -218,6 +218,10 @@ export default {
           value: 'indicator addition'
         },
         {
+          label: 'Indicator Resample',
+          value: 'Indicator resample'
+        },
+        {
           label: 'Symbol Ratio',
           value: 'symbol ratio'
         },

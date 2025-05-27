@@ -502,7 +502,6 @@
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
         //考虑到addSeries必须在displaydata前设定好timeframe
         CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
-
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         const newData = {
@@ -1017,6 +1016,21 @@
             )
             }
         }
+    }
+
+    CIQ.changeUserOwnIndicatorResample = function(indicator){
+        //考虑到addSeries必须在displaydata前设定好timeframe
+        CIQ.store.commit('form/getFrequency', indicator.updated) //考虑到addSeries必须写死timeframe
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //编辑时对内容修改或者preview应该移除生成的indicator
+
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type) || sd.type != indicator.url) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
+
+        addSingleIndicator([indicator.url],indicator.url,null,null,()=>{});
     }
 
     // 预留：layout management
