@@ -2,7 +2,7 @@
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
     <p class="filterTableDes">
-						After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Save Watch List"</span> to save it.
+			After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Save Watch List"</span> to save it.
     </p>
 		<el-table
 			ref="tableREF"
@@ -18,25 +18,25 @@
 			<!-- :min-width="90" -->
 			<template v-for="(l, index) in tableCol">
 				<el-table-column		
-					v-if="l.label === 'Button'"
-					align="center"
-					:key="index"
-					:width="l.width"
-					:sortable="false"
-				>
-				<template slot-scope="scope">
-					<el-button type="text" icon="el-icon-close" @click="deleteRow(scope)" title="Delete Ticker" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
-				</template>
-				</el-table-column>
-				<el-table-column		
-					v-else-if="l.label !== 'Button'"
+					v-if="l.label !== 'Button'"
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
 					sortable="custom"
 				>
 					<template slot-scope="scope">
-       {{ scope.row[l.value] }}
+						{{ scope.row[l.value] }}
+					</template>
+				</el-table-column>
+				<el-table-column		
+					v-if="l.label === 'Button'"
+					align="center"
+					:key="index"
+					:width="l.width"
+					:sortable="false"
+				>
+					<template slot-scope="scope">
+						<el-button type="text" icon="el-icon-close" @click="deleteRow(scope)" title="Delete Ticker" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
 					</template>
 				</el-table-column>
 			</template>

@@ -134,11 +134,21 @@ export default {
       console.log('lishan content', data)
       const {formData, data:content}  = data
       if(!formData) return
+      const removeStartEndNumbers = (str) => {
+        return str
+          .replace(/^\d+/, '')    // 去掉开头数字
+          .replace(/\d+$/, '')    // 去掉结尾数字
+          .trim();                // 去除首尾空格
+      }
       const tickersColumns = formData.columns.map(column => {
         let { indicator, bar } = column
+        bar = `${bar && bar != 1 ? ` ${bar}` : ''}`
         const originalIndicator = indicator
-        indicator = indicator.replace('_Period', '')
-        return {...column, value: `${indicator} ${bar}`, label: `${indicator} ${bar}`, originalIndicator}
+        indicator = removeStartEndNumbers(indicator)
+        let label = `${indicator}${bar}`
+        let value = `${indicator}${bar}`
+        if(label.includes('ROC')) {label = `${bar} ${indicator}`; value = `${bar} ${indicator}`}
+        return {...column, value, label, originalIndicator}
       })
       /* 
       [
@@ -150,6 +160,21 @@ export default {
         }
       ]
       */
+     const parseField = (str) => {
+        const match = str.match(/^([a-zA-Z_]+)(\d+)$/);
+        if (match) {
+          return {
+            prefix: match[1],
+            number: Number(match[2])
+          };
+        } else {
+          return {
+            prefix: str,
+            number: null  // 或 false/undefined，根据你需要
+          };
+        }
+      }
+
       const calculateROC = (arr, preNum) => {
         if (!Array.isArray(arr) || arr.length < preNum) {
           return 'N/A'; // 或者提示 "数据不足 preNum 项"
@@ -206,15 +231,16 @@ export default {
           _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
             let {label, indicator, bar} = column
-            if(indicator.includes('_Optix')) bar = 1
-            indicator = indicator.replace('_Optix')
-            if(['Trend Score', 'RelTrend Score', 'Optix', 'Optix_Period'].includes(indicator)) tickerObj[label] = lastClose
-            else if(indicator === 'ROC' || indicator === 'ROC_Period') {
+            indicator = removeStartEndNumbers(indicator)
+            if(['Trend Score', 'RelTrend Score', 'Optix'].includes(indicator)) tickerObj[label] = lastClose
+            else if(indicator.includes('ROC')) {
               const ROCRate = calculateROC(Closes, Number(bar))
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
               tickerObj[label] = ROC
-            } else if(indicator === 'MA' || indicator === 'MA_Period') {
+            } else if(indicator === 'Close MA') {
               tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+            } else if(indicator === 'Optix MA') {
+              tickerObj[label] = getLastBarAvg(Optix, Number(bar))
             }
           })
           _heatMap.push(_tempHeatMap)
@@ -232,7 +258,7 @@ export default {
       console.log('tickersColumns', tickersColumns)
       this.filterTableData = {
         ...this.filterTableData,
-        tableCol: [buttonColumns ,{value: 'Ticker', label: 'Ticker'},...tickersColumns],
+        tableCol: [{value: 'Ticker', label: 'Ticker'},...tickersColumns, buttonColumns],
         content: _content
       }
       this.heatmap = [_heatMap]

@@ -49,13 +49,13 @@
       <p class="label-title" @click.stop="dialogManageColumnsVisible = !dialogManageColumnsVisible">3. Manage Columns</p>
       <div v-show="dialogManageColumnsVisible">
         <br>
+        <div class="manage-columns-table">
         <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" width="15px"></th>
             <th scope="col" width="30px">Index</th>
             <th scope="col">Indicator</th>
-            <th scope="col"></th>
+            <th scope="col" width="15px"></th>
           </tr>
         </thead>
         <draggable 
@@ -66,12 +66,6 @@
           :move="onMove"
         >
           <tr v-for="(item, index) in manageColumns" :key="index">
-            <td>
-              <template>
-                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-plus" size="mini" type="primary" ></el-button>
-                <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn" ></el-button> 
-              </template>
-            </td>
             <td scope="row">{{ index + 1 }}</td>
             <td class="manage-td">
               <el-select v-model="item.indicator" placeholder="- Select -" size="small">
@@ -87,23 +81,18 @@
                 {{ item.indicatorErrMsg }}
               </div>
             </td>
-            <td class="manage-td">
-              <el-input
-              size="small"
-              :class="{ 'valueInput': true, showInput: item.indicator.includes('_Period') }"
-              v-model="item.bar"
-              placeholder="Enter Bars"
-              @input="validateBarRule"
-              ><template v-slot:append>(bars)</template></el-input>
-              <div class="weight-error-message">
-                {{ item.barErrMsg }}
-              </div>
+            <td>
+              <template>
+                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-plus" size="mini" type="primary" ></el-button>
+                <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn" ></el-button> 
+              </template>
             </td>
           </tr>
           <td>
           </td>
         </draggable>
         </table>
+        </div>
       </div>
     </div>
     <div class="btns">
@@ -137,6 +126,7 @@ import { postWatchList, getAllWatchlist, updateWatchList, previewWatchlist } fro
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 import draggable from "./vuedraggable";
+import { on } from 'events'
 
 export default {
   name: 'Form',
@@ -156,17 +146,33 @@ export default {
       hasMore: true, // 是否还有更多数据
       tickers: [], // 旧的数据
       manageColumns: [
-        {indicator: '', bar: '', indicatorErrMsg: '', barErrMsg: ''}
+        {indicator: 'Trend Score', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'RelTrend Score', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'Optix', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'ROC', bar: 1, indicatorErrMsg: ''},
       ],
       _dropdownList: [],
       indicatorOptions: [
-        {value: 'Trend Score', label: 'Trend Score'},
-        {value: 'RelTrend Score', label: 'RelTrend Score'},
-        {value: 'Optix', label: 'Optix'},
-        {value: 'ROC', label: 'Rate of Change (ROC)'},
-        {value: 'Optix_Period', label: 'Optix (With Period)'},
-        {value: 'ROC_Period', label: 'Rate of Change (ROC With Period)'},
-        {value: 'MA_Period', label: 'Moving Average (MA With Period)'}
+        {value: 'Trend Score', label: 'Trend Score', inputValue: 1},
+        {value: 'RelTrend Score', label: 'RelTrend Score', inputValue: 1},
+        {value: 'Optix', label: 'Optix', inputValue: 1},
+        {value: 'ROC', label: 'Rate of Change', inputValue: 1},
+        {value: 'Optix MA5', label: 'Symbol Optix 5-Day Moving Average', inputValue: 5},
+        {value: 'Optix MA10', label: 'Symbol Optix 10-Day Moving Average', inputValue: 10},
+        {value: 'Optix MA20', label: 'Symbol Optix 21-Day Moving Average', inputValue: 21},
+        {value: 'Optix MA63', label: 'Symbol Optix 63-Day Moving Average', inputValue: 63},
+        {value: 'Close MA5', label: 'Symbol Close 5-Day Moving Average', inputValue: 5},
+        {value: 'Close MA10', label: 'Symbol Close 10-Day Moving Average', inputValue: 10},
+        {value: 'Close MA21', label: 'Symbol Close 21-Day Moving Average', inputValue: 21},
+        {value: 'Close MA63', label: 'Symbol Close 63-Day Moving Average', inputValue: 63},
+        {value: 'Close MA126', label: 'Symbol Close 126-Day Moving Average', inputValue: 126},
+        {value: 'Close MA252', label: 'Symbol Close 252-Day Moving Average', inputValue: 252},
+        {value: 'ROC5', label: '5-Day Rate of Change', inputValue: 5},
+        {value: 'ROC10', label: '10-Day Rate of Change', inputValue: 10},
+        {value: 'ROC21', label: '21-Day Rate of Change', inputValue: 21},
+        {value: 'ROC63', label: '63-Day Rate of Change', inputValue: 63},
+        {value: 'ROC126', label: '126-Day Rate of Change', inputValue: 126},
+        {value: 'ROC252', label: '252-Day Rate of Change', inputValue: 252}
       ],
       btnLoading: false,
       previewLoading: false,
@@ -223,7 +229,10 @@ export default {
       if(!this.dialogTickerFormVisible) this.dialogTickerFormVisible = true
       if(!this.dialogManageColumnsVisible) this.dialogManageColumnsVisible = true
       this.manageColumns = [
-        {indicator: '', bar: '', indicatorErrMsg: '', barErrMsg: ''}
+        {indicator: 'Trend Score', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'RelTrend Score', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'Optix', bar: 1, indicatorErrMsg: ''},
+        {indicator: 'ROC', bar: 1, indicatorErrMsg: ''}
       ]
       this.rowUrl = null
       this.tickers = []
@@ -259,8 +268,6 @@ export default {
         return
       }
       const manageColumns = this.manageColumns.map(ele => {
-        if(ele.indicator.includes('_Period')) ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
-        else ele.barErrMsg = ''
         const isItInTheList = this.indicatorOptions.find(option => option.value === ele.indicator)
         if(!ele.indicator || !isItInTheList) ele.indicatorErrMsg = 'Please select indicator from the dropdown menu'
         return ele
@@ -268,7 +275,7 @@ export default {
       this.manageColumns = manageColumns
 
       const isValid = !manageColumns.some(
-        (item) => item.indicatorErrMsg || item.barErrMsg
+        (item) => item.indicatorErrMsg
       )
       return formValid && isValid
     },
@@ -286,7 +293,26 @@ export default {
         const nameChecked = await this.checkDuplicateNames(name)
         if(nameChecked){this.popUpMsgBox(`The Name already exists`); return}
       }
-      const manageColumns = this.manageColumns.map(ele => ({indicator: ele.indicator, bar: ele.bar}))
+      const manageColumns = this.manageColumns.map(ele => ({indicator: ele.indicator, bar: this.indicatorOptions.find(option => option.value === ele.indicator)?.inputValue || 1}))
+      const findDuplicateFlexible = (arr) => {
+        const seen = {
+          indicator: new Set()
+        };
+        for (const item of arr) {
+          if (item.indicator && seen.indicator.has(item.indicator)) {
+            return item
+          }
+          if (item.indicator) seen.indicator.add(item.indicator)
+        }
+
+        return false;
+      };
+      const findDuplicate = findDuplicateFlexible(manageColumns)
+      if(findDuplicate) {
+        const duplicateItem = this.indicatorOptions.find(option => option.value === findDuplicate.indicator)
+        this.popUpMsgBox(`Duplicate Indicator: ${duplicateItem.label || ''}`)
+        return
+      }
       this.percentage = 8
       let saveData = {
         ...this.data,
@@ -357,7 +383,26 @@ export default {
         const saveData = {
           tickers: JSON.stringify(this.tickers),
         }
-      const manageColumns = this.manageColumns.map(ele => ({indicator: ele.indicator, bar: ele.bar}))
+      const manageColumns = this.manageColumns.map(ele => ({indicator: ele.indicator, bar: this.indicatorOptions.find(option => option.value === ele.indicator)?.inputValue || 1}))
+      const findDuplicateFlexible = (arr) => {
+        const seen = {
+          indicator: new Set()
+        };
+        for (const item of arr) {
+          if (item.indicator && seen.indicator.has(item.indicator)) {
+            return item
+          }
+          if (item.indicator) seen.indicator.add(item.indicator)
+        }
+
+        return false;
+      };
+      const findDuplicate = findDuplicateFlexible(manageColumns)
+      if(findDuplicate) {
+        const duplicateItem = this.indicatorOptions.find(option => option.value === findDuplicate.indicator)
+        this.popUpMsgBox(`Duplicate Indicator: ${duplicateItem.label || ''}`)
+        return
+      }
         const formData = {
           tickers: this.tickers,
           columns: manageColumns
@@ -383,7 +428,7 @@ export default {
       const {url, name, tickers, columns} = row
       this.rowUrl = url
       this.tickers = cloneDeep(tickers)
-      this.manageColumns = columns.map(ele => ({...ele, indicatorErrMsg: '', barErrMsg: '' }))
+      this.manageColumns = columns.map(ele => ({...ele, indicatorErrMsg: ''}))
       if(!this.dialogTickerFormVisible) this.dialogTickerFormVisible = true
       if(!this.dialogManageColumnsVisible) this.dialogManageColumnsVisible = true
       this.data = {name}
@@ -397,7 +442,7 @@ export default {
     },
     addRow() {
       if(this.manageColumns.slice(1).length === 5) {this.popUpMsgBox(`Up to 5 rows can be added`); return}
-      this.manageColumns.push({indicator: '', bar: '', indicatorErrMsg: '', barErrMsg: ''})
+      this.manageColumns.push({indicator: '', bar: '', indicatorErrMsg: ''})
     },
     deleteRow(index) {
       this.$emit('deleteManageColumns', {...this.manageColumns[index], index})
@@ -485,14 +530,6 @@ export default {
       }
       this.$emit('retainFormTicker', val)
     },
-    validateBarRule: debounce(function() {
-      const manageColumns = this.manageColumns.map(ele => {
-        if(ele.indicator.includes('_Period')) ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
-        else ele.barErrMsg = ''
-        return ele
-      })
-      this.manageColumns = manageColumns
-    }, 500)
   },
 }
 </script>
@@ -799,8 +836,12 @@ th {
 .stripe {
  background-color: #f9f9f9;
 }
-.table-striped {
- border-top: 2px solid #eee;
+.manage-columns-table {
+  border: 2px solid #eee;
+  border-radius: 5px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 5px;
 }
 .drag-ghost {
  background-color: #b8daff !important;

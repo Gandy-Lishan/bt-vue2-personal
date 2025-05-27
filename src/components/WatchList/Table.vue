@@ -17,18 +17,6 @@
 			style="width: 100%; height: 100%; margin: 0 auto;"
       stripe
 		>
-    <el-table-column align="center" width="80px">
-      <template #header>
-        <!-- 将表头内容替换成 -->
-        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="() => {currentPage = 1;getDataList(null)}"></el-button>
-      </template>
-				<template slot-scope="scope">
-          <el-button-group>
-            <el-button class="viewDetailsBtn" type="text" icon="el-icon-view" @click="handleRowClick(scope.row)" title="View Watch List Details" :loading="scope.row.viewLoading"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Watch List" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
-          </el-button-group>
-        </template>
-      </el-table-column>
 			<template v-for="(l) in tableCol">
         <el-table-column
           v-if="l.label === 'Columns'"
@@ -69,6 +57,18 @@
 					</template>
 				</el-table-column>
 			</template>
+      <el-table-column align="center" width="80px">
+      <template #header>
+        <!-- 将表头内容替换成 -->
+        <el-button type="text" icon="el-icon-refresh" title="Refresh List" @click="() => {currentPage = 1;getDataList(null)}"></el-button>
+      </template>
+				<template slot-scope="scope">
+          <el-button-group>
+            <el-button class="viewDetailsBtn" type="text" icon="el-icon-view" @click="handleRowClick(scope.row)" title="View Watch List Details" :loading="scope.row.viewLoading"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Watch List" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
 		</el-table>
 		<el-pagination
 		@current-change="handleCurrentChange"
@@ -131,6 +131,12 @@ export default {
       const page = this.currentPage
 			try {
 				res = await getAllWatchlist(page, orderby, this.searchKey)
+        const removeStartEndNumbers = (str) => {
+          return str
+            .replace(/^\d+/, '')    // 去掉开头数字
+            .replace(/\d+$/, '')    // 去掉结尾数字
+            .trim();                // 去除首尾空格
+        }
         console.log('列表响应', res)
 				if (res.status == 200) {
 					let data = res.data.results
@@ -145,11 +151,13 @@ export default {
                 item[`_${key}`] = item[key].map((ele,index) => {
                   if(ele.hasOwnProperty('indicator') && ele.hasOwnProperty('bar')) {
                     let {indicator, bar} = ele
-                    bar = ` ${bar}`
-                    if(!indicator.includes('_Period')) bar = ''
-                    indicator = indicator.replace('_Period', '')
+                     bar = `${bar && bar != 1 ? ` ${bar}` : ''}`
+                     indicator = removeStartEndNumbers(indicator)
+                     let label = `${indicator}${bar}`
+                     if(label.includes('ROC')) label = `${bar} ${indicator}`
+
                     const serialNumber = Array.isArray(item[key]) && item[key].length > 1 ? `${(index + 1)}. ` : ''
-                    return `${serialNumber}${indicator}${bar}`
+                    return `${serialNumber}${label}`
                   }
                   return ele
                 })
