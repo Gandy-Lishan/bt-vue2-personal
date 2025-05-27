@@ -664,18 +664,24 @@ export default {
           model_name: new Set(),
           url: new Set()
         };
+
         for (const item of arr) {
-          if (seen.strategy.has(item.strategy) ||
-              seen.model_name.has(item.model_name) ||
-              seen.url.has(item.url)) {
+          if (
+            (item.strategy && seen.strategy.has(item.strategy)) ||
+            (item.model_name && seen.model_name.has(item.model_name)) ||
+            (item.url && seen.url.has(item.url))
+          ) {
             return item;
           }
-          seen.strategy.add(item.strategy);
-          seen.model_name.add(item.model_name);
-          seen.url.add(item.url);
+
+          if (item.strategy) seen.strategy.add(item.strategy);
+          if (item.model_name) seen.model_name.add(item.model_name);
+          if (item.url) seen.url.add(item.url);
         }
+
         return false;
-      }
+      };
+
       const findDuplicate = findDuplicateStrategyFlexible(strategy_combination)
       if(findDuplicate) {
         this.popUpMsgBox(`Duplicate Strategy: ${findDuplicate.model_name || ''}`)
@@ -895,7 +901,12 @@ export default {
       this.strategy_combination = [{}, ...temp_strategy_combination]
     }, 500),
     handleRowSelect(item, row) {
-      const duplicateStrategy = [...this.strategy_combination.slice(1)].find(ele => (ele.url == item.url || ele.model_name === item.model_name))
+      const duplicateStrategy = [...this.strategy_combination.slice(1)].find(ele => {
+        return (
+          (ele.url && item.url && ele.url === item.url) ||
+          (ele.model_name && item.model_name && ele.model_name === item.model_name)
+        );
+      });
       if(duplicateStrategy) {
         this.popUpMsgBox(`Duplicate Strategy: ${item.model_name || ''}`)
         this.strategy_combination.pop()
