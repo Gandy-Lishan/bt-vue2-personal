@@ -144,8 +144,12 @@ export default {
               }else if(key === 'columns') {
                 item[`_${key}`] = item[key].map((ele,index) => {
                   if(ele.hasOwnProperty('indicator') && ele.hasOwnProperty('bar')) {
+                    let {indicator, bar} = ele
+                    bar = ` ${bar}`
+                    if(!indicator.includes('_Period')) bar = ''
+                    indicator = indicator.replace('_Period', '')
                     const serialNumber = Array.isArray(item[key]) && item[key].length > 1 ? `${(index + 1)}. ` : ''
-                    return `${serialNumber}${ele.indicator} ${ele.bar}`
+                    return `${serialNumber}${indicator}${bar}`
                   }
                   return ele
                 })

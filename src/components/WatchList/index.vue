@@ -134,7 +134,12 @@ export default {
       console.log('lishan content', data)
       const {formData, data:content}  = data
       if(!formData) return
-      const tickersColumns = formData.columns.map(column => ({value: `${column.indicator} ${column.bar}`, label: `${column.indicator} ${column.bar}`, ...column}))
+      const tickersColumns = formData.columns.map(column => {
+        let { indicator, bar } = column
+        const originalIndicator = indicator
+        indicator = indicator.replace('_Period', '')
+        return {...column, value: `${indicator} ${bar}`, label: `${indicator} ${bar}`, originalIndicator}
+      })
       /* 
       [
         {
@@ -187,7 +192,9 @@ export default {
           const _tempHeatMap = []
           tickerObj['Ticker'] = ticker
           const Closes = records.map(ele => (ele.Close))
+          const Optix = records.map(ele => (ele.Optix))
           const lastClose = Closes.at(-1)
+          const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
           const minClose =  Math.min(...Closes)
           const maxClose =  Math.max(...Closes)
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
@@ -195,16 +202,18 @@ export default {
 
           _tempHeatMap.push(ticker)
           _tempHeatMap.push(optix_url) // url
-          _tempHeatMap.push(lastClose)
+          _tempHeatMap.push(lastOptix)
           _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
-            const {label, indicator, bar} = column
-            if(['Trend Score', 'RelTrend Score', 'Optix'].includes(indicator)) tickerObj[label] = lastClose
-            else if(indicator === 'ROC') {
+            let {label, indicator, bar} = column
+            if(indicator.includes('_Optix')) bar = 1
+            indicator = indicator.replace('_Optix')
+            if(['Trend Score', 'RelTrend Score', 'Optix', 'Optix_Period'].includes(indicator)) tickerObj[label] = lastClose
+            else if(indicator === 'ROC' || indicator === 'ROC_Period') {
               const ROCRate = calculateROC(Closes, Number(bar))
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
               tickerObj[label] = ROC
-            } else if(indicator === 'SMA') {
+            } else if(indicator === 'MA' || indicator === 'MA_Period') {
               tickerObj[label] = getLastBarAvg(Closes, Number(bar))
             }
           })
@@ -220,6 +229,7 @@ export default {
 				key: '',
 				width: '50px'
 			}
+      console.log('tickersColumns', tickersColumns)
       this.filterTableData = {
         ...this.filterTableData,
         tableCol: [buttonColumns ,{value: 'Ticker', label: 'Ticker'},...tickersColumns],

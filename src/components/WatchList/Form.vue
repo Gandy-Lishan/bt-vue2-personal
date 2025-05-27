@@ -52,10 +52,10 @@
         <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" width="50px">Index</th>
+            <th scope="col" width="15px"></th>
+            <th scope="col" width="30px">Index</th>
             <th scope="col">Indicator</th>
-            <th scope="col">Period</th>
-            <th scope="col" width="50px"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <draggable 
@@ -66,6 +66,12 @@
           :move="onMove"
         >
           <tr v-for="(item, index) in manageColumns" :key="index">
+            <td>
+              <template>
+                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-plus" size="mini" type="primary" ></el-button>
+                <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn" ></el-button> 
+              </template>
+            </td>
             <td scope="row">{{ index + 1 }}</td>
             <td class="manage-td">
               <el-select v-model="item.indicator" placeholder="- Select -" size="small">
@@ -84,6 +90,7 @@
             <td class="manage-td">
               <el-input
               size="small"
+              :class="{ 'valueInput': true, showInput: item.indicator.includes('_Period') }"
               v-model="item.bar"
               placeholder="Enter Bars"
               @input="validateBarRule"
@@ -91,12 +98,6 @@
               <div class="weight-error-message">
                 {{ item.barErrMsg }}
               </div>
-            </td>
-            <td>
-              <template>
-                <el-button v-if="index === 0" @click="addRow(index)" icon="el-icon-circle-plus-outline" size="small" type="primary"></el-button>
-                <el-button v-else size="small" type="primary" icon="el-icon-delete" @click.stop="deleteRow(index)" class="delete-btn"></el-button> 
-              </template>
             </td>
           </tr>
           <td>
@@ -162,9 +163,10 @@ export default {
         {value: 'Trend Score', label: 'Trend Score'},
         {value: 'RelTrend Score', label: 'RelTrend Score'},
         {value: 'Optix', label: 'Optix'},
-        {value: 'ROC', label: 'ROC'},
-        {value: 'SMA', label: 'SMA'},
-        {value: 'EMA', label: 'EMA'},
+        {value: 'ROC', label: 'Rate of Change (ROC)'},
+        {value: 'Optix_Period', label: 'Optix (With Period)'},
+        {value: 'ROC_Period', label: 'Rate of Change (ROC With Period)'},
+        {value: 'MA_Period', label: 'Moving Average (MA With Period)'}
       ],
       btnLoading: false,
       previewLoading: false,
@@ -257,7 +259,8 @@ export default {
         return
       }
       const manageColumns = this.manageColumns.map(ele => {
-        ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
+        if(ele.indicator.includes('_Period')) ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
+        else ele.barErrMsg = ''
         const isItInTheList = this.indicatorOptions.find(option => option.value === ele.indicator)
         if(!ele.indicator || !isItInTheList) ele.indicatorErrMsg = 'Please select indicator from the dropdown menu'
         return ele
@@ -379,7 +382,7 @@ export default {
       if(!row) return
       const {url, name, tickers, columns} = row
       this.rowUrl = url
-      this.tickers = tickers
+      this.tickers = cloneDeep(tickers)
       this.manageColumns = columns.map(ele => ({...ele, indicatorErrMsg: '', barErrMsg: '' }))
       if(!this.dialogTickerFormVisible) this.dialogTickerFormVisible = true
       if(!this.dialogManageColumnsVisible) this.dialogManageColumnsVisible = true
@@ -484,7 +487,8 @@ export default {
     },
     validateBarRule: debounce(function() {
       const manageColumns = this.manageColumns.map(ele => {
-        ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
+        if(ele.indicator.includes('_Period')) ele.barErrMsg = createPositiveIntegerValidate(ele.bar, 0)
+        else ele.barErrMsg = ''
         return ele
       })
       this.manageColumns = manageColumns
@@ -833,5 +837,11 @@ th {
 }
 /deep/ .el-select .el-tag {
   justify-content: space-around;
+}
+.el-input.el-input--small.el-input-group.el-input-group--append.valueInput {
+  visibility: hidden;
+}
+.el-input.el-input--small.el-input-group.el-input-group--append.showInput {
+  visibility: visible;
 }
 </style>
