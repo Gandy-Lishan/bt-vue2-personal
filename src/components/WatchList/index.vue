@@ -7,7 +7,11 @@
           <p class="page-title">My Watch List (click to expand)</p>
         </template>
         <div class="portfolio-des">
-          <p></p>
+          <p>
+          Create, customize, and monitor your personal stock watchlists.
+          </p>
+          <p>This page allows you to build and name your own watchlists by selecting specific stock tickers. You can customize the information displayed by choosing from various indicators such as Trend Score, RelTrend Score, Optix, and Rate of Change.</p>
+          <p>Before saving, you can preview your watchlist as a list or a heatmap. Once satisfied, save the list to track your selected securities and their chosen data points efficiently. This tool provides a tailored way to manage and monitor your investments.</p>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -212,14 +216,18 @@ export default {
       for (const ticker in content) {
         if (Object.prototype.hasOwnProperty.call(content, ticker)) {
           const element = content[ticker];
-          const {optix_url, records} = element
+          const {optix_url, records, ticker_name} = element
           const tickerObj = {}
           const _tempHeatMap = []
-          tickerObj['Ticker'] = ticker
           const Closes = records.map(ele => (ele.Close))
           const Optix = records.map(ele => (ele.Optix))
+          const TrendScore = records.map(ele => (ele['Trend']))
+          const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
           const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
+          tickerObj['Ticker'] = ticker
+          tickerObj['Name'] = ticker_name
+          tickerObj['Close'] = lastClose
           const minClose =  Math.min(...Closes)
           const maxClose =  Math.max(...Closes)
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
@@ -232,7 +240,15 @@ export default {
           tickersColumns.forEach(column => {
             let {label, indicator, bar} = column
             indicator = removeStartEndNumbers(indicator)
-            if(['Trend Score', 'RelTrend Score', 'Optix'].includes(indicator)) tickerObj[label] = lastClose
+            if(indicator === 'Optix') {
+              tickerObj[label] = Optix.at(-1)
+            }
+            else if(indicator === 'RelTrend Score') {
+              tickerObj[label] = RelTrendScore.at(-1)
+            }
+            else if(indicator === 'Trend Score') {
+              tickerObj[label] = TrendScore.at(-1)
+            }
             else if(indicator.includes('ROC')) {
               const ROCRate = calculateROC(Closes, Number(bar))
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
@@ -255,10 +271,22 @@ export default {
 				key: '',
 				width: '50px'
 			}
-      console.log('tickersColumns', tickersColumns)
+      let tableCol =  [{value: 'Ticker', label: 'Ticker'}, {value: 'Name', label: 'Name'}, {value: 'Close', label: 'Close'}, ...tickersColumns, buttonColumns]
+      tableCol = tableCol.map(column => {
+        const obj = {...column}
+        const {label, indicator} = column
+        if(indicator === 'RelTrend Score') {
+          obj.labelHtml = 'RelTrend <br/>Score'
+        }else if(indicator === 'Trend Score') {
+          obj.labelHtml = 'Trend <br/>Score'
+        }else {
+          obj.labelHtml = label
+        }
+        return obj
+      })
       this.filterTableData = {
         ...this.filterTableData,
-        tableCol: [{value: 'Ticker', label: 'Ticker'},...tickersColumns, buttonColumns],
+        tableCol,
         content: _content
       }
       this.heatmap = [_heatMap]
