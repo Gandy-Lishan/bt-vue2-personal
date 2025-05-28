@@ -24,8 +24,13 @@
 					:key="index"
 					sortable="custom"
 				>
+					<template #header>
+						<span v-html="l.labelHtml"></span>
+					</template>
 					<template slot-scope="scope">
-						{{ scope.row[l.value] }}
+						<p :class="getCellStyle(scope.row[l.value])">
+							{{ scope.row[l.value] }}
+						</p>
 					</template>
 				</el-table-column>
 				<el-table-column		
@@ -165,7 +170,43 @@ export default {
 			// delete form ticker and refresh heatmap
 			this.$emit('deleteFormTicker', {...scope.row, index})
 			this.$emit('deleteHeatMapTicker', {...scope.row, index})
-		}
+		},
+		getCellStyle(value) {
+			let numericValue = value;
+
+			if (typeof value === 'string') {
+				if (value.endsWith('%')) {
+					numericValue = parseFloat(value.replace('%', ''));
+				} else {
+					numericValue = parseFloat(value); // 尝试转为数字
+				}
+			}
+
+			return {
+				'negative-value': !isNaN(numericValue) && numericValue < 0,
+			}
+		},
+		downloadCSV() {
+			debugger
+      if(!this.data.content.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const xlsxName = 'Preview Watch List'
+      const _keySort = this.tableCol.map(ele => ele.value).filter(ele => ele)
+      let csvContent = this.data.content.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${xlsxName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 	}
 };
 </script>
@@ -207,5 +248,8 @@ export default {
 }
 i.el-icon-delete {
 	color: #dd3a13;
+}
+.negative-value{
+  color: #dd3a13;
 }
 </style>

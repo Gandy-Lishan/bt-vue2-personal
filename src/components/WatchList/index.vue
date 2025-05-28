@@ -57,8 +57,19 @@
             <p @click.stop="() => {changeSecondTab('list')}" :class="{ secondActive: activeSecondTab == 'list' || '' }">Preview List</p>
             <p @click.stop="() => {changeSecondTab('heatmap')}" :class="{ secondActive: activeSecondTab == 'heatmap' || '' }">HeatMap</p>
           </div>
+          <div class="downLoadCsvBtn">
+            <el-button
+              @click.stop="() => {handleDownloadCsv()}"
+              style="display: inline-block"
+              type="primary"
+              size="small"
+              icon="el-icon-download"
+              title="Export Data"
+              ></el-button
+            >
+          </div>
         </template>
-         <ColumnsTable v-show="activeSecondTab == 'list'" ref="filterTable"
+         <ColumnsTable v-show="activeSecondTab == 'list'" ref="ColumnsTable"
           :data="filterTableData" 
           :label="filterTableData.label" 
           :tableCol="filterTableData.tableCol" 
@@ -225,9 +236,11 @@ export default {
           const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
           const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
+          const lastTrend = TrendScore.at(-1)
+          const lastRelTrend = RelTrendScore.at(-1)
           tickerObj['Ticker'] = ticker
           tickerObj['Name'] = ticker_name
-          tickerObj['Close'] = lastClose
+          tickerObj['Close'] = parseFloat(lastClose.toFixed(2))
           const minClose =  Math.min(...Closes)
           const maxClose =  Math.max(...Closes)
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
@@ -241,22 +254,22 @@ export default {
             let {label, indicator, bar} = column
             indicator = removeStartEndNumbers(indicator)
             if(indicator === 'Optix') {
-              tickerObj[label] = Optix.at(-1)
+              tickerObj[label] = lastOptix
             }
             else if(indicator === 'RelTrend Score') {
-              tickerObj[label] = RelTrendScore.at(-1)
+              tickerObj[label] = lastTrend
             }
             else if(indicator === 'Trend Score') {
-              tickerObj[label] = TrendScore.at(-1)
+              tickerObj[label] = lastRelTrend
             }
             else if(indicator.includes('ROC')) {
               const ROCRate = calculateROC(Closes, Number(bar) + 1)
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
               tickerObj[label] = ROC
             } else if(indicator === 'Close MA') {
-              tickerObj[label] = getLastBarAvg(Closes, Number(bar) + 1)
+              tickerObj[label] = getLastBarAvg(Closes, Number(bar))
             } else if(indicator === 'Optix MA') {
-              tickerObj[label] = getLastBarAvg(Optix, Number(bar) + 1)
+              tickerObj[label] = getLastBarAvg(Optix, Number(bar))
             }
           })
           _heatMap.push(_tempHeatMap)
@@ -279,7 +292,11 @@ export default {
           obj.labelHtml = 'RelTrend <br/>Score'
         }else if(indicator === 'Trend Score') {
           obj.labelHtml = 'Trend <br/>Score'
-        }else {
+        }else if(label.includes('Close MA')) {
+          obj.labelHtml = label.replace(/\s+/, '<br/>')
+        }else if(label.includes('Optix MA')) {
+          obj.labelHtml = label.replace(/\s+/, '<br/>')
+        }else{
           obj.labelHtml = label
         }
         return obj
@@ -351,7 +368,10 @@ export default {
         const findIndex = tableCol.findIndex(ele => (ele.bar == row.bar && ele.indicator === row.indicator))
         if(findIndex !== -1) this.filterTableData.tableCol.splice(findIndex, 1)
       }
-    }
+    },
+    handleDownloadCsv() {
+      this.$refs.ColumnsTable.downloadCSV()
+    },
   }
 }
 </script>
@@ -451,5 +471,11 @@ export default {
   .CPMResults-container {
       width: 1170px;
   }
+}
+.downLoadCsvBtn {
+	position: absolute;
+	right: 90px;
+  margin-left: 10px;
+	color: #333333;
 }
 </style>
