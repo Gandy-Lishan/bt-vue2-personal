@@ -1028,6 +1028,13 @@ export default {
           this.data.name+'CREATE'+url,
           this.OHLCVData.symbol
         )
+      }else if(this.data.categories == 'Resample'){
+        CIQ.previewUserOwnIndicator(
+          [this.RESAMPLEData.indicator,this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          null,
+          {op:this.data.extreme_optimism,ep:this.data.eResamplextreme_pessimism}
+        )
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 

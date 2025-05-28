@@ -389,6 +389,28 @@ export default {
           btnLoading: false,
         };
       }
+      if (item.combine_type === 'resample') {
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getResampleIncludedData(item, this.sentimentList);
+        console.log(included, included_url, former, latter, former_url, latter_url, type)
+        return {
+          ...item,
+          indicator_2_url:'', // indicator2爲空
+          categories: 'Indicator Resample',
+          included,
+          included_url,
+          key: item.url,
+          former,
+          latter,
+          former_url,
+          latter_url,
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type,
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
+        };
+      }
     });
       let data = await Promise.all(promise);
       data = data.filter(
@@ -536,6 +558,25 @@ export default {
       return {
         included: [`${former}${ma1}`],
         included_url: [`${former_url}${ma1}`],
+        former,
+        latter,
+        former_url,
+        latter_url,
+        type: typeAttribute
+      }
+    },
+    getResampleIncludedData(item, sentimentList) {
+      const url_1 = item.indicator_1_url
+      const typeAttribute = item.combine_type || 'resample'
+      const indicator_1 = (typeAttribute == 'resample') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
+      const former = indicator_1;
+      const latter = '';
+      const former_url = indicator_1;
+      const latter_url = '';
+
+      return {
+        included: [`${former}`],
+        included_url: [`${former_url}`],
         former,
         latter,
         former_url,
