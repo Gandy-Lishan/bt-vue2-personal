@@ -250,13 +250,13 @@ export default {
               tickerObj[label] = TrendScore.at(-1)
             }
             else if(indicator.includes('ROC')) {
-              const ROCRate = calculateROC(Closes, Number(bar))
+              const ROCRate = calculateROC(Closes, Number(bar) + 1)
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
               tickerObj[label] = ROC
             } else if(indicator === 'Close MA') {
-              tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+              tickerObj[label] = getLastBarAvg(Closes, Number(bar) + 1)
             } else if(indicator === 'Optix MA') {
-              tickerObj[label] = getLastBarAvg(Optix, Number(bar))
+              tickerObj[label] = getLastBarAvg(Optix, Number(bar) + 1)
             }
           })
           _heatMap.push(_tempHeatMap)
