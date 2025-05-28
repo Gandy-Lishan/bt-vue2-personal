@@ -301,11 +301,13 @@ export default {
         }
         return obj
       })
-      this.filterTableData = {
-        ...this.filterTableData,
-        tableCol,
-        content: _content
-      }
+      this.$nextTick(() => {
+         this.filterTableData = {
+          ...this.filterTableData,
+          tableCol: [...tableCol],
+          content: _content
+        }
+      })
       this.heatmap = [_heatMap]
     },
     clearResults() {

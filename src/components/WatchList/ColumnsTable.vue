@@ -14,9 +14,10 @@
 			style="width: 100%; height: 100%"
 			size="small"
 			stripe
+			:key="tableKey"
 		>
 			<!-- :min-width="90" -->
-			<template v-for="(l, index) in tableCol">
+			<template v-for="(l, index) in _tableCol">
 				<el-table-column		
 					v-if="l.label !== 'Button'"
 					:label="l.label"
@@ -69,9 +70,10 @@ export default {
 	},
 	data() {
 		return {
-				pageSize: 10, // Default page size
+		pageSize: 10, // Default page size
     currentPage: 1, // Default current page
-
+		_tableCol: [],
+		tableKey: Date.now(), // 初始 key
 		}
 	},
 	computed: {
@@ -82,6 +84,15 @@ export default {
 			// 当checkbox未勾选时，返回原始数据
 			return this.data.content?.slice(startIndex, endIndex);
 		},
+	},
+	watch: {
+		tableCol: {
+			handler(newVal) {
+				this._tableCol = newVal || []
+				this.tableKey = Date.now(); // 触发表格刷新
+			},
+			deep: true
+		}
 	},
 	methods: {
 		handleSizeChange(size) {

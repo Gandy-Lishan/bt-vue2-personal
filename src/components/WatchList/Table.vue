@@ -24,14 +24,18 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
-				  show-overflow-tooltip
 				>
 					<template slot-scope="scope">
-            <template  v-if="Array.isArray(scope.row[l.value])">
-              <template v-for="(item, index) in scope.row[l.value]">
-                <p :key="index">{{item}}</p>
-              </template>
-            </template>
+            <el-tooltip
+            class="item"
+            effect="dark"
+            placement="top"
+          >
+          	<span slot="content" v-html="getTooltipContent(scope.row['columns'])"></span>
+            <span class="tableText">
+              {{ scope.row[l.value] }}
+            </span>
+          </el-tooltip>
 					</template>
 				</el-table-column>
 				<el-table-column
@@ -156,11 +160,11 @@ export default {
                      let label = `${indicator}${bar}`
                      if(label.includes('ROC')) label = `${bar} ${indicator}`
 
-                    const serialNumber = Array.isArray(item[key]) && item[key].length > 1 ? `${(index + 1)}. ` : ''
-                    return `${serialNumber}${label}`
+                    // const serialNumber = Array.isArray(item[key]) && item[key].length > 1 ? `${(index + 1)}. ` : ''
+                    return `${label}`
                   }
                   return ele
-                })
+                }).join(', ')
               }
             })
             item.viewLoading = false
@@ -262,6 +266,43 @@ export default {
       if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
     }, 500),
+    getTooltipContent(columns) {
+      const indicatorOptions = [
+        { value: 'Trend Score', label: 'Trend Score', inputValue: 1 },
+        { value: 'RelTrend Score', label: 'RelTrend Score', inputValue: 1 },
+        { value: 'Optix', label: 'Optix', inputValue: 1 },
+        { value: 'ROC', label: 'Rate of Change', inputValue: 1 },
+        { value: 'Optix MA5', label: 'Symbol Optix 5-Day Moving Average', inputValue: 5 },
+        { value: 'Optix MA10', label: 'Symbol Optix 10-Day Moving Average', inputValue: 10 },
+        { value: 'Optix MA20', label: 'Symbol Optix 21-Day Moving Average', inputValue: 21 },
+        { value: 'Optix MA63', label: 'Symbol Optix 63-Day Moving Average', inputValue: 63 },
+        { value: 'Close MA5', label: 'Symbol Close 5-Day Moving Average', inputValue: 5 },
+        { value: 'Close MA10', label: 'Symbol Close 10-Day Moving Average', inputValue: 10 },
+        { value: 'Close MA21', label: 'Symbol Close 21-Day Moving Average', inputValue: 21 },
+        { value: 'Close MA63', label: 'Symbol Close 63-Day Moving Average', inputValue: 63 },
+        { value: 'Close MA126', label: 'Symbol Close 126-Day Moving Average', inputValue: 126 },
+        { value: 'Close MA252', label: 'Symbol Close 252-Day Moving Average', inputValue: 252 },
+        { value: 'ROC5', label: '5-Day Rate of Change', inputValue: 5 },
+        { value: 'ROC10', label: '10-Day Rate of Change', inputValue: 10 },
+        { value: 'ROC21', label: '21-Day Rate of Change', inputValue: 21 },
+        { value: 'ROC63', label: '63-Day Rate of Change', inputValue: 63 },
+        { value: 'ROC126', label: '126-Day Rate of Change', inputValue: 126 },
+        { value: 'ROC252', label: '252-Day Rate of Change', inputValue: 252 }
+      ];
+
+      const columnLabels = columns
+        .map(column => indicatorOptions.find(option => option.value === column.indicator)?.label || '')
+        .filter(Boolean);
+
+      // 如果只有一项，不加序号
+      if (columnLabels.length === 1) {
+        return `<ul><li>${columnLabels[0]}</li></ul>`;
+      }
+
+      // 多于一项，加序号
+      const html = `<ul>${columnLabels.map((item, index) => `<li>${index + 1}. ${item}</li>`).join('')}</ul>`;
+      return html;
+    }
     }
   }
 </script>

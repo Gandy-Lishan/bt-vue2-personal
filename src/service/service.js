@@ -2222,7 +2222,7 @@ export function postWatchList(data) {
 			})
 	})
 }
-export function updateWatchList(data, rowUrl) {
+export function updateWatchList(rowUrl, data) {
 	const url = `/dev/watchlist_app/watchlist?url=${rowUrl}`
 	const formData = new FormData()
 

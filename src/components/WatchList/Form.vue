@@ -52,6 +52,7 @@
         <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
+            <th scope="col" width="20px"></th>
             <th scope="col" width="30px">Index</th>
             <th scope="col">Indicator</th>
             <th scope="col" width="15px"></th>
@@ -65,6 +66,9 @@
           :move="onMove"
         >
           <tr v-for="(item, index) in manageColumns" :key="index">
+            <td style="cursor: pointer;">
+              <svg t="1748417870958" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2176" width="10" height="10"><path d="M64.1 194v89.6h896.1V194H64.1z m0 358.4h896.1v-89.6H64.1v89.6z m0 268.9h896.1v-89.6H64.1v89.6z" fill="#2c2c2c" p-id="2177"></path></svg>
+            </td>
             <td scope="row">{{ index + 1 }}</td>
             <td class="manage-td">
               <el-select v-model="item.indicator" placeholder="- Select -" size="small">
@@ -359,7 +363,7 @@ export default {
         this.popUpMsgBox(`Sorry, ${name} is taken. Please pick another`)
       }
       if(code == 407) this.popUpMsgBox('Empty watch list. Please try again')
-      if(code == 211) {
+      if(code == 211 || code === 213) {
         this.popUpMsgBox(`The Watch List is completed successfully`)
         this.$emit('displayResultsAndFilter', {data: saveRes.data.data, formData: saveRes.formData})
       }
