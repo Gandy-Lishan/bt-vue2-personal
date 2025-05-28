@@ -59,6 +59,7 @@
 			</el-form-item>
       <el-form-item
 				label="3.Timeframe"
+        v-if="!(data.categories == 'Resample')"
 			>
         <template slot="label">
           <label>
@@ -215,6 +216,7 @@
               v-model="RESAMPLEData.condition"
               placeholder="Select Resample Timeframe"
               @change="changeResampleCondition"
+              :disabled="RESAMPLEData.indicator==''"
             >
               <el-option
                 v-for="item in resampleConditions"
@@ -617,6 +619,33 @@ export default {
               this.$refs[formRef]?.clearForm()
             }
           }
+        },
+    },
+    'RESAMPLEData.indicator': {
+        handler (newV, oldV) {
+          debugger
+
+          const {updated} = CIQ.findSentiIndicator(null,newV)
+              var nodeSetup = document.getElementsByClassName('timeframeResample')
+
+              if(!nodeSetup.length) return
+              if(updated == "Monthly"){
+                  nodeSetup[0].setAttribute('tf','enabled')
+                  nodeSetup[1].setAttribute('tf','enabled')
+                  nodeSetup[2].setAttribute('tf','disabled')
+              }else if(updated == "Weekly"){  
+                  nodeSetup[0].setAttribute('tf','enabled')
+                  nodeSetup[1].setAttribute('tf','disabled')
+                  nodeSetup[2].setAttribute('tf','disabled')
+              }else{
+                  nodeSetup[0].setAttribute('tf','disabled')
+                  nodeSetup[1].setAttribute('tf','disabled')
+                  nodeSetup[2].setAttribute('tf','disabled')
+              }
+
+              // // 初始化为默认condition即daily
+              // this.RESAMPLEData.condition = 'daily'
+              // this.data.time_frame = 'daily'
         },
     }
   },
@@ -1030,10 +1059,11 @@ export default {
         )
       }else if(this.data.categories == 'Resample'){
         CIQ.previewUserOwnIndicator(
-          [this.RESAMPLEData.indicator,this.data.name+'CREATE'+url],
+          [this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,
           null,
-          {op:this.data.extreme_optimism,ep:this.data.eResamplextreme_pessimism}
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism},
+          this.data.categories
         )
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
@@ -1291,6 +1321,7 @@ export default {
       this.rowUrl = data.url
 
       this.dropdownList = this.getList()
+      debugger
       //如果类型是weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
@@ -1328,8 +1359,8 @@ export default {
         });
 
         //覆盖checkbox初始化配置
-        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
-        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[0].config };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[1].config };
       }else {
         const extractValues = (str) => {
           const parts = str.split('|');
@@ -1575,12 +1606,18 @@ export default {
       // if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
       // else this.OHLCVData.symbol = item // from changeTimeFrame
       this.RESAMPLEData.indicator = item.url
-      this.data.time_frame = this.findMaxFreq() 
-        console.log('当前最大的 timeframe 是', this.data.time_frame)
+      //this.data.time_frame = this.findMaxFreq() 
+
+      // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
+      this.data.time_frame = this.RESAMPLEData.condition
       CIQ.changeUserOwnIndicatorResample(item)  
     },
     changeResampleCondition(item) {
       this.RESAMPLEData.condition = item
+      this.data.time_frame = item
+
+      // resample条件下tf是靠condition手动选择控制的
+      this.$store.commit('form/getFrequency', timeframeTransform(this.RESAMPLEData.condition))
     }
   }
 }

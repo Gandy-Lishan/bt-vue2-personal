@@ -461,8 +461,10 @@
                 for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                     if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-                }
 
+                    // 如果是resample, 把现存的indicator也清空
+                    if(category == 'Resample') CIQ.Studies.removeStudy(CIQ.stxx, sd);
+                }
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
             // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
             if(category?.includes('Symbol')) {
@@ -610,6 +612,21 @@
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             }, function(){
                 displayOwnIndicatorMAStudies(newData)
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            })
+        }
+        debugger
+        if(newData.categories == "Resample") {
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+
+            const benchmark = CIQ.store.state.chart.miBenmark
+            CIQ.stxx.loadChart({
+                symbol: benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                indicator:[newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             })

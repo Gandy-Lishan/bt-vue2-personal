@@ -219,6 +219,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             var nodeSetup = document.getElementsByTagName('li')
 
             for(var i =0;i<nodeSetup.length;i++){
+                if(nodeSetup[i].classList.contains('timeframeResample')) continue
                 for(var j in nodeSetup[i].firstChild){
                     if(j == 'textContent'){
                         if(nodeSetup[i].firstChild.textContent === 'Daily'){
@@ -305,7 +306,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
                 }
             }
 
-            updateMyIndicatorTFOptions(orignalFreq)
+
 
             initializeTickerIndicatorDisplay()
 
@@ -870,24 +871,7 @@ function findEarliestIndicator(data) {
     const earliestDate = new Date(Math.min(...dates));
     return earliestDate;
 }
-function updateMyIndicatorTFOptions(timeframe) {
-    var nodeSetup = document.getElementsByClassName('timeframeResample')
-if(!nodeSetup.length) return
-    if(timeframe == "monthly"){
-        nodeSetup[0].setAttribute('tf','enabled')
-        nodeSetup[1].setAttribute('tf','enabled')
-        nodeSetup[2].setAttribute('tf','disabled')
-    }else if(timeframe == "weekly"){  
-        nodeSetup[0].setAttribute('tf','enabled')
-        nodeSetup[1].setAttribute('tf','disabled')
-        nodeSetup[2].setAttribute('tf','disabled')
-    }else{
-        nodeSetup[0].setAttribute('tf','disabled')
-        nodeSetup[1].setAttribute('tf','disabled')
-        nodeSetup[2].setAttribute('tf','disabled')
-    }
-    debugger
-}
+
   
 
 

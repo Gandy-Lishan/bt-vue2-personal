@@ -219,7 +219,7 @@ export default {
         },
         {
           label: 'Indicator Resample',
-          value: 'Indicator resample'
+          value: 'resample'
         },
         {
           label: 'Symbol Ratio',
@@ -324,7 +324,6 @@ export default {
       this.total = listRes.data.count
       this.tableData = await this.processRowData(listRes.data.results)
       this.loading = false
-      debugger
     },
     async processRowData(resData) {
       let promise = resData.map(async item => {
@@ -395,7 +394,7 @@ export default {
         return {
           ...item,
           indicator_2_url:'', // indicator2爲空
-          categories: 'Indicator Resample',
+          categories: 'Resample',
           included,
           included_url,
           key: item.url,
