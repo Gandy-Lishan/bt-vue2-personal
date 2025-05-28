@@ -24,7 +24,6 @@
               v-model="tickers"
               multiple
               filterable
-              allow-create
               default-first-option
               @change="onSelectChange"
               placeholder="- Select Ticker -">
