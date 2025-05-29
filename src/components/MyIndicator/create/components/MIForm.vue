@@ -59,6 +59,7 @@
 			</el-form-item>
       <el-form-item
 				label="3.Timeframe"
+        v-if="!(data.categories == 'Resample')"
 			>
         <template slot="label">
           <label>
@@ -89,7 +90,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle" v-if="!['WIC','OHLCV'].includes(data.categories)">
+		<div class="MI-form-middle" v-if="!['WIC','OHLCV','Resample'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
           <SearchAutocomplete
@@ -183,7 +184,53 @@
 				></CheckInput>
 			</div>
 		</div>
-
+    <div class="RESAMPLE-container"  v-if="data.categories == 'Resample'">
+			<div class="left">
+				<el-form-item v-model="RESAMPLEData.indicator">
+          <SearchAutocomplete
+            v-model="RESAMPLEData.indicator"
+            @query="querySearch"
+            @select="item => changeResampleIndicator(item)"
+            placeholder="Please select indicator from the dropdown menu"
+          />
+				</el-form-item>
+			</div>
+			<div class="center">
+				<el-divider direction="vertical" class="is-vertical"></el-divider>
+        <div class="category-box">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="30" height="30" viewBox="0 0 48 48" fill="none">
+          <rect width="30" height="30" fill="currentColor" fill-opacity="0.01"/>
+          <path d="M18 31H38V5" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M30 21H10V43" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M44 11L38 5L32 11" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 37L10 43L4 37" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="category-text">(resample)</span>
+        </div>
+				<el-divider direction="vertical" class="is-vertical"></el-divider>
+			</div>
+			<div class="right">
+				<el-form-item prop="indicatorResampleTF">
+          <div class="selectBox">
+            <el-select
+              v-model="RESAMPLEData.condition"
+              placeholder="Select Resample Timeframe"
+              @change="changeResampleCondition"
+              :disabled="RESAMPLEData.indicator==''"
+            >
+              <el-option
+                v-for="item in resampleConditions"
+                :key="item.value"
+                :label="item.obj.label"
+                :value="item.obj.field"
+                class="timeframeResample"
+              >
+              </el-option>
+            </el-select>
+          </div>
+				</el-form-item>
+			</div>
+    </div>
 		<el-divider v-if="!['WIC','OHLCV'].includes(data.categories)"></el-divider>
 		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<CheckInput
@@ -350,6 +397,10 @@ export default {
           value: 'Indicator Addition'
         },
         {
+          label: 'Indicator Resample',
+          value: 'Resample'
+        },
+        {
           label: 'Symbol Spread',
           value: 'Symbol Spread'
         },
@@ -467,6 +518,14 @@ export default {
 
       indicator_1_category: '',
       indicator_2_category: '',
+
+      // indicator resample
+      RESAMPLEData: {indicator:'', condition:''},
+      resampleConditions: [
+        { value: 0, obj: { label: 'Daily', field: 'daily' } },
+        { value: 1, obj: { label: 'Weekly', field: 'weekly' } },
+        { value: 2, obj: { label: 'Monthly', field: 'monthly' } },
+      ],
     }
   },
   computed: {
@@ -560,6 +619,33 @@ export default {
               this.$refs[formRef]?.clearForm()
             }
           }
+        },
+    },
+    'RESAMPLEData.indicator': {
+        handler (newV, oldV) {
+          this.$nextTick(()=>{
+            const {updated} = CIQ.findSentiIndicator(null,newV)
+            var nodeSetup = document.getElementsByClassName('timeframeResample')
+            if(!nodeSetup.length) return
+            if(updated == "Monthly"){
+                nodeSetup[0].setAttribute('tf','enabled')
+                nodeSetup[1].setAttribute('tf','enabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }else if(updated == "Weekly"){  
+                nodeSetup[0].setAttribute('tf','enabled')
+                nodeSetup[1].setAttribute('tf','disabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }else{
+                nodeSetup[0].setAttribute('tf','disabled')
+                nodeSetup[1].setAttribute('tf','disabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }
+
+            // // 初始化为默认condition即daily
+            // this.RESAMPLEData.condition = 'daily'
+            // this.data.time_frame = 'daily'
+          })
+
         },
     }
   },
@@ -696,6 +782,11 @@ export default {
       if(this.data.categories == 'WIC') {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
+      }else if(this.data.categories == 'Resample') {
+        const formsToSave = ['EOForm', 'EPForm'];
+        for (const formRef of formsToSave) {
+          this.$refs[formRef].saveData();
+        }
       }else{
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
@@ -707,6 +798,8 @@ export default {
         calculate = 'weight_combination'
       }else if(this.data.categories === 'OHLCV'){
         calculate = this.OHLCVData.condition.split(' ')[1].toLowerCase()
+      }else if(this.data.categories === 'Resample'){
+        calculate = this.RESAMPLEData.condition
       }else{
         calculate = this.data.categories.split(' ')[1].toLowerCase()
       }
@@ -769,6 +862,14 @@ export default {
           extreme_pessimism: 0,
           combine_type: 'ohlcv'
         };
+      }else if(this.data.categories == 'Resample') {
+        saveData = {
+          ...commonData,
+          indicator_1: this.RESAMPLEData.indicator,
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          combine_type: 'resample'
+        };
       } else {
         saveData = {
           ...commonData
@@ -785,7 +886,12 @@ export default {
       if(this.data.categories == 'WIC') {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
-      }else{
+      }else if(this.data.categories == 'Resample') {
+        const formsToSave = ['EOForm', 'EPForm'];
+        for (const formRef of formsToSave) {
+          this.$refs[formRef].saveData();
+        }
+      }else {
         const formsToSave = ['ma1Form', 'ma2Form', 'EOForm', 'EPForm', 'shiftForm'];
         for (const formRef of formsToSave) {
           this.$refs[formRef].saveData();
@@ -799,6 +905,8 @@ export default {
         calculate = 'weight_combination'
       }else if(this.data.categories === 'OHLCV'){
         calculate = this.OHLCVData.condition.split(' ')[1].toLowerCase()
+      }else if(this.data.categories === 'Resample'){
+        calculate = this.RESAMPLEData.condition
       }else{
         calculate = this.data.categories.split(' ')[1].toLowerCase()
       }
@@ -859,6 +967,14 @@ export default {
           extreme_optimism: 0,
           extreme_pessimism: 0,
           combine_type: 'ohlcv'
+        };
+      }else if(this.data.categories == 'Resample') {
+        saveData = {
+          ...commonData,
+          indicator_1: this.RESAMPLEData.indicator,
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          combine_type: 'resample'
         };
       } else {
         saveData = {
@@ -941,6 +1057,14 @@ export default {
           this.data.name+'CREATE'+url,
           this.OHLCVData.symbol
         )
+      }else if(this.data.categories == 'Resample'){
+        CIQ.previewUserOwnIndicator(
+          [this.data.name+'CREATE'+url],
+          this.data.name+'CREATE'+url,
+          null,
+          {op:this.data.extreme_optimism,ep:this.data.extreme_pessimism},
+          this.data.categories
+        )
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 
@@ -963,6 +1087,7 @@ export default {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
       const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV'
+      const isResample = data.categories == 'Resample'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
@@ -973,6 +1098,9 @@ export default {
       if (isSymbol) {
         return this.symbolList
       }
+      if (isResample) {
+        return this.sentimentList.filter(i=>i.updated != 'Daily')
+      }
     },
     changeCategories(category) {
       this.resetTimeframeDisplayState()
@@ -981,6 +1109,7 @@ export default {
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
       const isOHLCV = category.includes('OHLCV')
+      const isResample = category == 'Resample'
 
       const clearIndicatorIfMatch = (list, urlProp, indicatorProp, type) => {
         const exitItem = list.find((item) => item[type=='Indicator'?'label':'url'] === this.data[indicatorProp])
@@ -999,6 +1128,7 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
+        this.RESAMPLEData = {indicator:'', condition:''}
       }
 
       if (isSymbol) {
@@ -1010,6 +1140,7 @@ export default {
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
         this.OHLCVData = {symbol:'', condition:''}
+        this.RESAMPLEData = {indicator:'', condition:''}
       }
 
       if(isWIC) {
@@ -1019,6 +1150,7 @@ export default {
         this.data['indicator_2_url'] = ''
 
         this.OHLCVData = {symbol:'', condition:''} 
+        this.RESAMPLEData = {indicator:'', condition:''}
       }
 
       CIQ.isOHLCVSelectedMI = false
@@ -1036,7 +1168,22 @@ export default {
         this.weightData =  [
           {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
         ]
+        this.RESAMPLEData = {indicator:'', condition:''}
       }
+
+      if(isResample) {
+        this.data['indicator_1'] = ''
+        this.data['indicator_1_url'] = ''
+        this.data['indicator_2'] = ''
+        this.data['indicator_2_url'] = ''
+
+        // 还原weightData初始状态
+        this.weightData =  [
+          {weight: '', indicator: '', indicator_url: '', weightValidErrMsg: '', type: ''}
+        ]
+        this.OHLCVData = {symbol:'', condition:''} 
+      }
+      
       CIQ.stxx.setChartType(this.$store.getters.getChartType); 
 
       this.dropdownList = this.getList()
@@ -1049,6 +1196,7 @@ export default {
     },
     resetTimeframeDisplayState() {
       const list = this.$refs.timeframe?.popperElm;
+      if(!list) return
       var nodeSetup = list.getElementsByTagName('li')
       for(var i = 0;i < nodeSetup.length;i++){            
         nodeSetup[i].setAttribute('tf','enabled')
@@ -1115,7 +1263,10 @@ export default {
     },
     findMaxFreq() {
       let frequencyArray = []
-      if(this.data.categories !== 'WIC') {
+      if(this.data.categories == 'Resample'){
+        const updated = this.sentimentList.find(ele => ele.url.toLocaleLowerCase() === this.RESAMPLEData.indicator.toLocaleLowerCase())?.updated?.toLowerCase()
+        frequencyArray = [updated]
+      }else if(this.data.categories !== 'WIC') {
         const url_1 = this.data.indicator_1_url
         const url_2 = this.data.indicator_2_url
         if(this.data.categories.includes('Indicator')) {
@@ -1174,6 +1325,7 @@ export default {
       this.rowUrl = data.url
 
       this.dropdownList = this.getList()
+      debugger
       //如果类型是weight_combination
       if (data.mul_indicator && data.indicator_weight && data.calculate == 'weight_combination') {
         this.weightData = data.weightData
@@ -1194,6 +1346,25 @@ export default {
 
         //覆盖checkbox初始化配置
         this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
+      }else if(data.categories == 'Resample'){
+        this.RESAMPLEData.indicator = data.indicator_1_url
+        this.RESAMPLEData.condition = data.calculate
+        const configMap = [
+          { key: 'upper_extreme_value' },
+          { key: 'lower_extreme_value' },
+        ];
+
+        configMap.forEach(item => {
+          const value = data[item.key];
+          item.config = {
+            value: value,
+            checked: value != 0,
+          };
+        });
+
+        //覆盖checkbox初始化配置
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[0].config };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[1].config };
       }else {
         const extractValues = (str) => {
           const parts = str.split('|');
@@ -1336,6 +1507,17 @@ export default {
           this.popUpMsgBox('Please choose an symbol condition from the dropdown.')
           return false
         }
+      }else if(categories == 'Resample') {
+        const indicator = this.RESAMPLEData.indicator
+        const condition = this.RESAMPLEData.condition
+        if(!indicator) {
+          this.popUpMsgBox('Please choose an indicator name from the dropdown.')
+          return false
+        }
+        if(!condition) {
+          this.popUpMsgBox('Please choose an timeframe from the dropdown.')
+          return false
+        }
       }else {
         // 只需要校验 indicator_1 和 indicator_2
         const indicator_1_url = this.data.indicator_1_url
@@ -1419,6 +1601,29 @@ export default {
       // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
       const checkInputRef = 'maohlcvForm'
       this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+    },
+
+    /**
+     * indicator resample
+     */
+    async changeResampleIndicator(item) {
+      // if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
+      // else this.OHLCVData.symbol = item // from changeTimeFrame
+      this.RESAMPLEData.indicator = item.url
+      //this.data.time_frame = this.findMaxFreq() 
+
+      // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
+      // 切换Indicator后把condition切换为默认当前indicator的tf
+      this.RESAMPLEData.condition = 'daily'
+      this.data.time_frame = this.RESAMPLEData.condition
+      CIQ.changeUserOwnIndicatorResample(item)  
+    },
+    changeResampleCondition(item) {
+      this.RESAMPLEData.condition = item
+      this.data.time_frame = item
+
+      // resample条件下tf是靠condition手动选择控制的
+      this.$store.commit('form/getFrequency', timeframeTransform(this.RESAMPLEData.condition))
     }
   }
 }
@@ -1625,6 +1830,12 @@ h4 {
 	display: inline-grid;
 	grid-template-columns: 1fr 1fr;
   grid-gap:50px;
+}
+
+/** indicator resample */
+.RESAMPLE-container{
+	display: inline-grid;
+	grid-template-columns: 1fr 0.2fr 1fr;
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
