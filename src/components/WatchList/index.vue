@@ -7,7 +7,11 @@
           <p class="page-title">My Watch List (click to expand)</p>
         </template>
         <div class="portfolio-des">
-          <p></p>
+          <p>
+          Create, customize, and monitor your personal stock watchlists.
+          </p>
+          <p>This page allows you to build and name your own watchlists by selecting specific stock tickers. You can customize the information displayed by choosing from various indicators such as Trend Score, RelTrend Score, Optix, and Rate of Change.</p>
+          <p>Before saving, you can preview your watchlist as a list or a heatmap. Once satisfied, save the list to track your selected securities and their chosen data points efficiently. This tool provides a tailored way to manage and monitor your investments.</p>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -53,8 +57,19 @@
             <p @click.stop="() => {changeSecondTab('list')}" :class="{ secondActive: activeSecondTab == 'list' || '' }">Preview List</p>
             <p @click.stop="() => {changeSecondTab('heatmap')}" :class="{ secondActive: activeSecondTab == 'heatmap' || '' }">HeatMap</p>
           </div>
+          <div class="downLoadCsvBtn">
+            <el-button
+              @click.stop="() => {handleDownloadCsv()}"
+              style="display: inline-block"
+              type="primary"
+              size="small"
+              icon="el-icon-download"
+              title="Export Data"
+              ></el-button
+            >
+          </div>
         </template>
-         <ColumnsTable v-show="activeSecondTab == 'list'" ref="filterTable"
+         <ColumnsTable v-show="activeSecondTab == 'list'" ref="ColumnsTable"
           :data="filterTableData" 
           :label="filterTableData.label" 
           :tableCol="filterTableData.tableCol" 
@@ -134,11 +149,21 @@ export default {
       console.log('lishan content', data)
       const {formData, data:content}  = data
       if(!formData) return
+      const removeStartEndNumbers = (str) => {
+        return str
+          .replace(/^\d+/, '')    // 去掉开头数字
+          .replace(/\d+$/, '')    // 去掉结尾数字
+          .trim();                // 去除首尾空格
+      }
       const tickersColumns = formData.columns.map(column => {
         let { indicator, bar } = column
+        bar = `${bar && bar != 1 ? ` ${bar}` : ''}`
         const originalIndicator = indicator
-        indicator = indicator.replace('_Period', '')
-        return {...column, value: `${indicator} ${bar}`, label: `${indicator} ${bar}`, originalIndicator}
+        indicator = removeStartEndNumbers(indicator)
+        let label = `${indicator}${bar}`
+        let value = `${indicator}${bar}`
+        if(label.includes('ROC')) {label = `${bar} ${indicator}`; value = `${bar} ${indicator}`}
+        return {...column, value, label, originalIndicator}
       })
       /* 
       [
@@ -150,6 +175,21 @@ export default {
         }
       ]
       */
+     const parseField = (str) => {
+        const match = str.match(/^([a-zA-Z_]+)(\d+)$/);
+        if (match) {
+          return {
+            prefix: match[1],
+            number: Number(match[2])
+          };
+        } else {
+          return {
+            prefix: str,
+            number: null  // 或 false/undefined，根据你需要
+          };
+        }
+      }
+
       const calculateROC = (arr, preNum) => {
         if (!Array.isArray(arr) || arr.length < preNum) {
           return 'N/A'; // 或者提示 "数据不足 preNum 项"
@@ -187,14 +227,20 @@ export default {
       for (const ticker in content) {
         if (Object.prototype.hasOwnProperty.call(content, ticker)) {
           const element = content[ticker];
-          const {optix_url, records} = element
+          const {optix_url, records, ticker_name} = element
           const tickerObj = {}
           const _tempHeatMap = []
-          tickerObj['Ticker'] = ticker
           const Closes = records.map(ele => (ele.Close))
           const Optix = records.map(ele => (ele.Optix))
+          const TrendScore = records.map(ele => (ele['Trend']))
+          const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
           const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
+          const lastTrend = TrendScore.at(-1)
+          const lastRelTrend = RelTrendScore.at(-1)
+          tickerObj['Ticker'] = ticker
+          tickerObj['Name'] = ticker_name
+          tickerObj['Close'] = parseFloat(lastClose.toFixed(2))
           const minClose =  Math.min(...Closes)
           const maxClose =  Math.max(...Closes)
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
@@ -206,15 +252,24 @@ export default {
           _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
             let {label, indicator, bar} = column
-            if(indicator.includes('_Optix')) bar = 1
-            indicator = indicator.replace('_Optix')
-            if(['Trend Score', 'RelTrend Score', 'Optix', 'Optix_Period'].includes(indicator)) tickerObj[label] = lastClose
-            else if(indicator === 'ROC' || indicator === 'ROC_Period') {
-              const ROCRate = calculateROC(Closes, Number(bar))
+            indicator = removeStartEndNumbers(indicator)
+            if(indicator === 'Optix') {
+              tickerObj[label] = lastOptix
+            }
+            else if(indicator === 'RelTrend Score') {
+              tickerObj[label] = lastTrend
+            }
+            else if(indicator === 'Trend Score') {
+              tickerObj[label] = lastRelTrend
+            }
+            else if(indicator.includes('ROC')) {
+              const ROCRate = calculateROC(Closes, Number(bar) + 1)
               const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
               tickerObj[label] = ROC
-            } else if(indicator === 'MA' || indicator === 'MA_Period') {
+            } else if(indicator === 'Close MA') {
               tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+            } else if(indicator === 'Optix MA') {
+              tickerObj[label] = getLastBarAvg(Optix, Number(bar))
             }
           })
           _heatMap.push(_tempHeatMap)
@@ -229,12 +284,30 @@ export default {
 				key: '',
 				width: '50px'
 			}
-      console.log('tickersColumns', tickersColumns)
-      this.filterTableData = {
-        ...this.filterTableData,
-        tableCol: [buttonColumns ,{value: 'Ticker', label: 'Ticker'},...tickersColumns],
-        content: _content
-      }
+      let tableCol =  [{value: 'Ticker', label: 'Ticker'}, {value: 'Name', label: 'Name'}, {value: 'Close', label: 'Close'}, ...tickersColumns, buttonColumns]
+      tableCol = tableCol.map(column => {
+        const obj = {...column}
+        const {label, indicator} = column
+        if(indicator === 'RelTrend Score') {
+          obj.labelHtml = 'RelTrend <br/>Score'
+        }else if(indicator === 'Trend Score') {
+          obj.labelHtml = 'Trend <br/>Score'
+        }else if(label.includes('Close MA')) {
+          obj.labelHtml = label.replace(/\s+/, '<br/>')
+        }else if(label.includes('Optix MA')) {
+          obj.labelHtml = label.replace(/\s+/, '<br/>')
+        }else{
+          obj.labelHtml = label
+        }
+        return obj
+      })
+      this.$nextTick(() => {
+         this.filterTableData = {
+          ...this.filterTableData,
+          tableCol: [...tableCol],
+          content: _content
+        }
+      })
       this.heatmap = [_heatMap]
     },
     clearResults() {
@@ -297,7 +370,10 @@ export default {
         const findIndex = tableCol.findIndex(ele => (ele.bar == row.bar && ele.indicator === row.indicator))
         if(findIndex !== -1) this.filterTableData.tableCol.splice(findIndex, 1)
       }
-    }
+    },
+    handleDownloadCsv() {
+      this.$refs.ColumnsTable.downloadCSV()
+    },
   }
 }
 </script>
@@ -397,5 +473,11 @@ export default {
   .CPMResults-container {
       width: 1170px;
   }
+}
+.downLoadCsvBtn {
+	position: absolute;
+	right: 90px;
+  margin-left: 10px;
+	color: #333333;
 }
 </style>

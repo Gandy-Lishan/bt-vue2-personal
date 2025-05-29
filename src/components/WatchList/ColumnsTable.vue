@@ -2,7 +2,7 @@
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
     <p class="filterTableDes">
-						After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Save Watch List"</span> to save it.
+			After completing the above steps, click <span class="strongSpan">"View List"</span> to automatically generate a pre-filtered Watch List. If you’re satisfied with the results, simply click <span class="strongSpan">"Save Watch List"</span> to save it.
     </p>
 		<el-table
 			ref="tableREF"
@@ -14,9 +14,26 @@
 			style="width: 100%; height: 100%"
 			size="small"
 			stripe
+			:key="tableKey"
 		>
 			<!-- :min-width="90" -->
-			<template v-for="(l, index) in tableCol">
+			<template v-for="(l, index) in _tableCol">
+				<el-table-column		
+					v-if="l.label !== 'Button'"
+					:label="l.label"
+					:prop="l.value"
+					:key="index"
+					sortable="custom"
+				>
+					<template #header>
+						<span v-html="l.labelHtml"></span>
+					</template>
+					<template slot-scope="scope">
+						<p :class="getCellStyle(scope.row[l.value])">
+							{{ scope.row[l.value] }}
+						</p>
+					</template>
+				</el-table-column>
 				<el-table-column		
 					v-if="l.label === 'Button'"
 					align="center"
@@ -24,19 +41,8 @@
 					:width="l.width"
 					:sortable="false"
 				>
-				<template slot-scope="scope">
-					<el-button type="text" icon="el-icon-close" @click="deleteRow(scope)" title="Delete Ticker" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
-				</template>
-				</el-table-column>
-				<el-table-column		
-					v-else-if="l.label !== 'Button'"
-					:label="l.label"
-					:prop="l.value"
-					:key="index"
-					sortable="custom"
-				>
 					<template slot-scope="scope">
-       {{ scope.row[l.value] }}
+						<el-button type="text" icon="el-icon-close" @click="deleteRow(scope)" title="Delete Ticker" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
 					</template>
 				</el-table-column>
 			</template>
@@ -64,9 +70,10 @@ export default {
 	},
 	data() {
 		return {
-				pageSize: 10, // Default page size
+		pageSize: 10, // Default page size
     currentPage: 1, // Default current page
-
+		_tableCol: [],
+		tableKey: Date.now(), // 初始 key
 		}
 	},
 	computed: {
@@ -77,6 +84,15 @@ export default {
 			// 当checkbox未勾选时，返回原始数据
 			return this.data.content?.slice(startIndex, endIndex);
 		},
+	},
+	watch: {
+		tableCol: {
+			handler(newVal) {
+				this._tableCol = newVal || []
+				this.tableKey = Date.now(); // 触发表格刷新
+			},
+			deep: true
+		}
 	},
 	methods: {
 		handleSizeChange(size) {
@@ -165,7 +181,43 @@ export default {
 			// delete form ticker and refresh heatmap
 			this.$emit('deleteFormTicker', {...scope.row, index})
 			this.$emit('deleteHeatMapTicker', {...scope.row, index})
-		}
+		},
+		getCellStyle(value) {
+			let numericValue = value;
+
+			if (typeof value === 'string') {
+				if (value.endsWith('%')) {
+					numericValue = parseFloat(value.replace('%', ''));
+				} else {
+					numericValue = parseFloat(value); // 尝试转为数字
+				}
+			}
+
+			return {
+				'negative-value': !isNaN(numericValue) && numericValue < 0,
+			}
+		},
+		downloadCSV() {
+			debugger
+      if(!this.data.content.length) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const xlsxName = 'Preview Watch List'
+      const _keySort = this.tableCol.map(ele => ele.value).filter(ele => ele)
+      let csvContent = this.data.content.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${xlsxName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 	}
 };
 </script>
@@ -207,5 +259,8 @@ export default {
 }
 i.el-icon-delete {
 	color: #dd3a13;
+}
+.negative-value{
+  color: #dd3a13;
 }
 </style>
