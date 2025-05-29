@@ -282,11 +282,11 @@ export default {
               keyPath: '6-3',
               path: '/my_screen'
             },
-            {
-              label: 'My Watch List',
-              keyPath: '6-4',
-              path: '/watchlist'
-            },
+            // {
+            //   label: 'My Watch List',
+            //   keyPath: '6-4',
+            //   path: '/watchlist'
+            // },
           ]
         },
         {
