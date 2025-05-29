@@ -413,27 +413,6 @@
         "updated": "Weekly"
     },
     {
-        "chart_name": "Pension Fund Allocation - Stocks",
-        "url": "survey_pension_stocks",
-        "market_symbol": "SPX",
-        "type": "other",
-        "updated": "Quarterly"
-    },
-    {
-        "chart_name": "Equities as % of GDP",
-        "url": "survey_equities_gdp",
-        "market_symbol": "SPX",
-        "type": "other",
-        "updated": "Quarterly"
-    },
-    {
-        "chart_name": "Equities as % of Total Assets",
-        "url": "survey_equities_total",
-        "market_symbol": "SPX",
-        "type": "other",
-        "updated": "Quarterly"
-    },
-    {
         "chart_name": "Japanese Margin Traders Gain/Loss",
         "url": "survey_japanese_margin",
         "market_symbol": "SPX",
@@ -8895,20 +8874,6 @@
         "market_symbol": "eurodollar",
         "type": "optix",
         "updated": "Weekly"
-    },
-    {
-        "chart_name": "Pension Fund Allocation - Bonds",
-        "url": "survey_pension_bonds",
-        "market_symbol": "thirty",
-        "type": "other",
-        "updated": "Quarterly"
-    },
-    {
-        "chart_name": "Pension Fund Allocation - Cash",
-        "url": "survey_pension_cash",
-        "market_symbol": "SPX",
-        "type": "other",
-        "updated": "Quarterly"
     },
     {
         "chart_name": "% Showing Excess Optimism-Pessimism Spread",
@@ -34638,14 +34603,14 @@
     {
         "chart_name": "Hudson Pacific Properties Inc Trend Score",
         "url": "HPP_trend",
-        "market_symbol": "hpp",
+        "market_symbol": "HPP",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Hudson Pacific Properties Inc RelTrend Score",
         "url": "HPP_reltrend",
-        "market_symbol": "hpp",
+        "market_symbol": "HPP",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -43022,7 +42987,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CRPT Outstanding Shares",
+        "chart_name": "CRPT Outstanding Shares",
         "url": "etf_crpt_shares",
         "market_symbol": "CRPT",
         "type": "other",
@@ -43036,7 +43001,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CRPT Optix",
+        "chart_name": "CRPT Optix",
         "url": "etf_crpt",
         "market_symbol": "CRPT",
         "type": "other",
@@ -73094,28 +73059,28 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IVE Optix",
+        "chart_name": "IVE Optix",
         "url": "etf_ive",
         "market_symbol": "ive",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IVW Optix",
+        "chart_name": "IVW Optix",
         "url": "etf_ivw",
         "market_symbol": "ivw",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "MAGS Optix",
+        "chart_name": "MAGS Optix",
         "url": "etf_mags",
         "market_symbol": "mags",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IHE Optix",
+        "chart_name": "IHE Optix",
         "url": "etf_ihe",
         "market_symbol": "ihe",
         "type": "other",
@@ -73129,112 +73094,112 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PBW Optix",
+        "chart_name": "PBW Optix",
         "url": "etf_pbw",
         "market_symbol": "pbw",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IYZ Optix",
+        "chart_name": "IYZ Optix",
         "url": "etf_iyz",
         "market_symbol": "iyz",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "MTUM Optix",
+        "chart_name": "MTUM Optix",
         "url": "etf_mtum",
         "market_symbol": "mtum",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "NUKZ Optix",
+        "chart_name": "NUKZ Optix",
         "url": "etf_nukz",
         "market_symbol": "nukz",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "URA Optix",
+        "chart_name": "URA Optix",
         "url": "etf_ura",
         "market_symbol": "ura",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SFYF Optix",
+        "chart_name": "SFYF Optix",
         "url": "etf_sfyf",
         "market_symbol": "sfyf",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "IGV Optix",
+        "chart_name": "IGV Optix",
         "url": "etf_igv",
         "market_symbol": "IGV",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPG Optix",
+        "chart_name": "RSPG Optix",
         "url": "etf_rspg",
         "market_symbol": "RSPG",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPH Optix",
+        "chart_name": "RSPH Optix",
         "url": "etf_rsph",
         "market_symbol": "RSPH",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPF Optix",
+        "chart_name": "RSPF Optix",
         "url": "etf_rspf",
         "market_symbol": "RSPF",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPM Optix",
+        "chart_name": "RSPM Optix",
         "url": "etf_rspm",
         "market_symbol": "RSPM",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPU Optix",
+        "chart_name": "RSPU Optix",
         "url": "etf_rspu",
         "market_symbol": "RSPU",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPS Optix",
+        "chart_name": "RSPS Optix",
         "url": "etf_rsps",
         "market_symbol": "RSPS",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPC Optix",
+        "chart_name": "RSPC Optix",
         "url": "etf_rspc",
         "market_symbol": "RSPC",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPT Optix",
+        "chart_name": "RSPT Optix",
         "url": "etf_rspt",
         "market_symbol": "RSPT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPR Optix",
+        "chart_name": "RSPR Optix",
         "url": "etf_rspr",
         "market_symbol": "RSPR",
         "type": "other",
@@ -73248,56 +73213,56 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "XBTUSD Optix",
+        "chart_name": "XBTUSD Optix",
         "url": "etf_xbtusd",
         "market_symbol": "XBTUSD",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "GSG Optix",
+        "chart_name": "GSG Optix",
         "url": "etf_gsg",
         "market_symbol": "GSG",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PPLT Optix",
+        "chart_name": "PPLT Optix",
         "url": "etf_pplt",
         "market_symbol": "PPLT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCE Optix",
+        "chart_name": "PSCE Optix",
         "url": "etf_psce",
         "market_symbol": "PSCE",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "CPER Optix",
+        "chart_name": "CPER Optix",
         "url": "etf_cper",
         "market_symbol": "CPER",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCT Optix",
+        "chart_name": "PSCT Optix",
         "url": "etf_psct",
         "market_symbol": "PSCT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "FDN Optix",
+        "chart_name": "FDN Optix",
         "url": "etf_fdn",
         "market_symbol": "FDN",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SPSM Optix",
+        "chart_name": "SPSM Optix",
         "url": "etf_spsm",
         "market_symbol": "SPSM",
         "type": "other",
@@ -73311,28 +73276,28 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "VEU Optix",
+        "chart_name": "VEU Optix",
         "url": "etf_veu",
         "market_symbol": "VEU",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SLX Optix",
+        "chart_name": "SLX Optix",
         "url": "etf_slx",
         "market_symbol": "SLX",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCF Optix",
+        "chart_name": "PSCF Optix",
         "url": "etf_pscf",
         "market_symbol": "PSCF",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "DBC Optix",
+        "chart_name": "DBC Optix",
         "url": "etf_dbc",
         "market_symbol": "DBC",
         "type": "other",
@@ -73346,14 +73311,14 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCC Optix",
+        "chart_name": "PSCC Optix",
         "url": "etf_pscc",
         "market_symbol": "PSCC",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "ETHA Optix",
+        "chart_name": "ETHA Optix",
         "url": "etf_etha",
         "market_symbol": "ETHA",
         "type": "other",
@@ -73367,35 +73332,35 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IBIT Optix",
+        "chart_name": "IBIT Optix",
         "url": "etf_ibit",
         "market_symbol": "IBIT",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "PSCM Optix",
+        "chart_name": "PSCM Optix",
         "url": "etf_pscm",
         "market_symbol": "PSCM",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "SI1 Optix",
+        "chart_name": "SI1 Optix",
         "url": "etf_si1",
         "market_symbol": "SI1",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "COPPER Optix",
+        "chart_name": "COPPER Optix",
         "url": "etf_copper",
         "market_symbol": "copper",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "CL1 Optix",
+        "chart_name": "CL1 Optix",
         "url": "etf_cl1",
         "market_symbol": "CL1",
         "type": "other",
@@ -73409,7 +73374,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IPAY Optix",
+        "chart_name": "IPAY Optix",
         "url": "etf_ipay",
         "market_symbol": "IPAY",
         "type": "other",
@@ -82671,14 +82636,14 @@
     },
     {
         "chart_name": "Euro Stocks 50 (EUROSTOXX) Trend Score",
-        "url": "EUROSTOXX_trend",
+        "url": "eurostoxx_trend",
         "market_symbol": "eurostoxx",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Euro Stocks 50 (EUROSTOXX) RelTrend Score",
-        "url": "EUROSTOXX_reltrend",
+        "url": "eurostoxx_reltrend",
         "market_symbol": "eurostoxx",
         "type": "reltrend",
         "updated": "Daily"
@@ -90737,6 +90702,713 @@
         "chart_name": "H2O America",
         "url": "HTO",
         "market_symbol": "HTO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 (SPX) Trend Score",
+        "url": "SPX_trend",
+        "market_symbol": "SPX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 (SPX) RelTrend Score",
+        "url": "SPX_reltrend",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Industrial (DJIA) Trend Score",
+        "url": "DJIA_trend",
+        "market_symbol": "DJIA",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Industrial (DJIA) RelTrend Score",
+        "url": "DJIA_reltrend",
+        "market_symbol": "DJIA",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 2000 (RUT) Trend Score",
+        "url": "RUT_trend",
+        "market_symbol": "RUT",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 2000 (RUT) RelTrend Score",
+        "url": "RUT_reltrend",
+        "market_symbol": "RUT",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NYSE Composite (NYA) Trend Score",
+        "url": "NYA_trend",
+        "market_symbol": "NYA",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NYSE Composite (NYA) RelTrend Score",
+        "url": "NYA_reltrend",
+        "market_symbol": "NYA",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Bugs Index (HUI) Trend Score",
+        "url": "HUI_trend",
+        "market_symbol": "HUI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold Bugs Index (HUI) RelTrend Score",
+        "url": "HUI_reltrend",
+        "market_symbol": "HUI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRB Index Trend Score",
+        "url": "crb_trend",
+        "market_symbol": "crb",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRB Index RelTrend Score",
+        "url": "crb_reltrend",
+        "market_symbol": "crb",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CBOE Volatility Index (VIX) Trend Score",
+        "url": "VIX_trend",
+        "market_symbol": "VIX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CBOE Volatility Index (VIX) RelTrend Score",
+        "url": "VIX_reltrend",
+        "market_symbol": "VIX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Swiss Market Index (SMI) Trend Score",
+        "url": "SMI_trend",
+        "market_symbol": "SMI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Swiss Market Index (SMI) RelTrend Score",
+        "url": "SMI_reltrend",
+        "market_symbol": "SMI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nikkei 225 (NKY) Trend Score",
+        "url": "nky_trend",
+        "market_symbol": "nky",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nikkei 225 (NKY) RelTrend Score",
+        "url": "nky_reltrend",
+        "market_symbol": "nky",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hang Seng (HSI) Trend Score",
+        "url": "hsi_trend",
+        "market_symbol": "hsi",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hang Seng (HSI) RelTrend Score",
+        "url": "hsi_reltrend",
+        "market_symbol": "hsi",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shanghai (SHCOMP) Trend Score",
+        "url": "shcomp_trend",
+        "market_symbol": "shcomp",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shanghai (SHCOMP) RelTrend Score",
+        "url": "shcomp_reltrend",
+        "market_symbol": "shcomp",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brazil Stock Index (IBOV) Trend Score",
+        "url": "ibov_trend",
+        "market_symbol": "ibov",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brazil Stock Index (IBOV) RelTrend Score",
+        "url": "ibov_reltrend",
+        "market_symbol": "ibov",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Korea Stock Index (KOSPI) Trend Score",
+        "url": "KOSPI_trend",
+        "market_symbol": "KOSPI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Korea Stock Index (KOSPI) RelTrend Score",
+        "url": "KOSPI_reltrend",
+        "market_symbol": "KOSPI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AS30 Index Trend Score",
+        "url": "AS30_trend",
+        "market_symbol": "AS30",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AS30 Index RelTrend Score",
+        "url": "AS30_reltrend",
+        "market_symbol": "AS30",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ATX Index Trend Score",
+        "url": "ATX_trend",
+        "market_symbol": "ATX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ATX Index RelTrend Score",
+        "url": "ATX_reltrend",
+        "market_symbol": "ATX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BEL20 Index Trend Score",
+        "url": "BEL20_trend",
+        "market_symbol": "BEL20",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BEL20 Index RelTrend Score",
+        "url": "BEL20_reltrend",
+        "market_symbol": "BEL20",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HEX Index Trend Score",
+        "url": "HEX_trend",
+        "market_symbol": "HEX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HEX Index RelTrend Score",
+        "url": "HEX_reltrend",
+        "market_symbol": "HEX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ISEQ Index Trend Score",
+        "url": "ISEQ_trend",
+        "market_symbol": "ISEQ",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ISEQ Index RelTrend Score",
+        "url": "ISEQ_reltrend",
+        "market_symbol": "ISEQ",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TA-35 Index Trend Score",
+        "url": "TA-35_trend",
+        "market_symbol": "TA-35",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TA-35 Index RelTrend Score",
+        "url": "TA-35_reltrend",
+        "market_symbol": "TA-35",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSEMIB Index Trend Score",
+        "url": "FTSEMIB_trend",
+        "market_symbol": "FTSEMIB",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSEMIB Index RelTrend Score",
+        "url": "FTSEMIB_reltrend",
+        "market_symbol": "FTSEMIB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AEX Index Trend Score",
+        "url": "AEX_trend",
+        "market_symbol": "AEX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AEX Index RelTrend Score",
+        "url": "AEX_reltrend",
+        "market_symbol": "AEX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NZSE Index Trend Score",
+        "url": "NZSE_trend",
+        "market_symbol": "NZSE",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NZSE Index RelTrend Score",
+        "url": "NZSE_reltrend",
+        "market_symbol": "NZSE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OSEBX Index Trend Score",
+        "url": "OSEBX_trend",
+        "market_symbol": "OSEBX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OSEBX Index RelTrend Score",
+        "url": "OSEBX_reltrend",
+        "market_symbol": "OSEBX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PSI20 Index Trend Score",
+        "url": "PSI20_trend",
+        "market_symbol": "PSI20",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PSI20 Index RelTrend Score",
+        "url": "PSI20_reltrend",
+        "market_symbol": "PSI20",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OMX Index Trend Score",
+        "url": "OMX_trend",
+        "market_symbol": "OMX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OMX Index RelTrend Score",
+        "url": "OMX_reltrend",
+        "market_symbol": "OMX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXWD Index Trend Score",
+        "url": "MXWD_trend",
+        "market_symbol": "MXWD",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXWD Index RelTrend Score",
+        "url": "MXWD_reltrend",
+        "market_symbol": "MXWD",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXWO Index Trend Score",
+        "url": "MXWO_trend",
+        "market_symbol": "MXWO",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXWO Index RelTrend Score",
+        "url": "MXWO_reltrend",
+        "market_symbol": "MXWO",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nifty 50 Index Trend Score",
+        "url": "NIFTY_trend",
+        "market_symbol": "NIFTY",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nifty 50 Index RelTrend Score",
+        "url": "NIFTY_reltrend",
+        "market_symbol": "NIFTY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GDM Index Trend Score",
+        "url": "GDM_trend",
+        "market_symbol": "GDM",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GDM Index RelTrend Score",
+        "url": "GDM_reltrend",
+        "market_symbol": "GDM",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SENSEX Index Trend Score",
+        "url": "SENSEX_trend",
+        "market_symbol": "SENSEX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SENSEX Index RelTrend Score",
+        "url": "SENSEX_reltrend",
+        "market_symbol": "SENSEX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Growth Index (RAG) Trend Score",
+        "url": "RAG_trend",
+        "market_symbol": "RAG",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Growth Index (RAG) RelTrend Score",
+        "url": "RAG_reltrend",
+        "market_symbol": "RAG",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Index (RAY) Trend Score",
+        "url": "RAY_trend",
+        "market_symbol": "RAY",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Index (RAY) RelTrend Score",
+        "url": "RAY_reltrend",
+        "market_symbol": "RAY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Value Index (RAV) Trend Score",
+        "url": "RAV_trend",
+        "market_symbol": "RAV",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Russell 3000 Value Index (RAV) RelTrend Score",
+        "url": "RAV_reltrend",
+        "market_symbol": "RAV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bloomberg Spot Index (BCOMSP) Trend Score",
+        "url": "BCOMSP_trend",
+        "market_symbol": "BCOMSP",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bloomberg Spot Index (BCOMSP) RelTrend Score",
+        "url": "BCOMSP_reltrend",
+        "market_symbol": "BCOMSP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Credit Default Swaps (CDX Index) Trend Score",
+        "url": "CDX_trend",
+        "market_symbol": "CDX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Credit Default Swaps (CDX Index) RelTrend Score",
+        "url": "CDX_reltrend",
+        "market_symbol": "CDX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Completion Total Stock Market Index (DWCPF) Trend Score",
+        "url": "DWCPF_trend",
+        "market_symbol": "DWCPF",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Completion Total Stock Market Index (DWCPF) RelTrend Score",
+        "url": "DWCPF_reltrend",
+        "market_symbol": "DWCPF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Transportation Index (TRAN) Trend Score",
+        "url": "TRAN_trend",
+        "market_symbol": "TRAN",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Transportation Index (TRAN) RelTrend Score",
+        "url": "TRAN_reltrend",
+        "market_symbol": "TRAN",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Toronto Stock Exchange (TSX) Trend Score",
+        "url": "TSX_trend",
+        "market_symbol": "TSX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Toronto Stock Exchange (TSX) RelTrend Score",
+        "url": "TSX_reltrend",
+        "market_symbol": "TSX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE 100 (FTSE) Trend Score",
+        "url": "ftse_trend",
+        "market_symbol": "ftse",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FTSE 100 (FTSE) RelTrend Score",
+        "url": "ftse_reltrend",
+        "market_symbol": "ftse",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BMV IPC (MEXBOL) Trend Score",
+        "url": "MEXBOL_trend",
+        "market_symbol": "MEXBOL",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BMV IPC (MEXBOL) RelTrend Score",
+        "url": "MEXBOL_reltrend",
+        "market_symbol": "MEXBOL",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Markets (MXEF) Trend Score",
+        "url": "MXEF_trend",
+        "market_symbol": "MXEF",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Emerging Markets (MXEF) RelTrend Score",
+        "url": "MXEF_reltrend",
+        "market_symbol": "MXEF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GOLDLNPM Trend Score",
+        "url": "GOLDLNPM_trend",
+        "market_symbol": "GOLDLNPM",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GOLDLNPM RelTrend Score",
+        "url": "GOLDLNPM_reltrend",
+        "market_symbol": "GOLDLNPM",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Note Yield (TNX) Trend Score",
+        "url": "TNX_trend",
+        "market_symbol": "TNX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Note Yield (TNX) RelTrend Score",
+        "url": "TNX_reltrend",
+        "market_symbol": "TNX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Utility Average (UTIL) Trend Score",
+        "url": "UTIL_trend",
+        "market_symbol": "UTIL",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dow Jones Utility Average (UTIL) RelTrend Score",
+        "url": "UTIL_reltrend",
+        "market_symbol": "UTIL",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IBEX Index Trend Score",
+        "url": "IBEX_trend",
+        "market_symbol": "IBEX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IBEX Index RelTrend Score",
+        "url": "IBEX_reltrend",
+        "market_symbol": "IBEX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "STI Index Trend Score",
+        "url": "STI_trend",
+        "market_symbol": "STI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "STI Index RelTrend Score",
+        "url": "STI_reltrend",
+        "market_symbol": "STI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CAC 40 (CAC) Trend Score",
+        "url": "cac_trend",
+        "market_symbol": "cac",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CAC 40 (CAC) RelTrend Score",
+        "url": "cac_reltrend",
+        "market_symbol": "cac",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global Economic Surprise Index",
+        "url": "survey_cesigl_surprise",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "United Kingdom Economic Surprise",
+        "url": "survey_cesigbp_surprise",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "China Economic Surprise Index",
+        "url": "survey_cesicny_surprise",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Eurozone Economic Surprise Index",
+        "url": "survey_cesieur_surprise",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "S&P 500 Trend Score",
+        "url": "spx_constituent_trend_score",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 1500 Trend Score",
+        "url": "sp1500_constituent_trend_score",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hudson Pacific Properties Inc",
+        "url": "HPP",
+        "market_symbol": "HPP",
         "type": "optix",
         "updated": "Daily"
     }

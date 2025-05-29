@@ -385,6 +385,8 @@ export default {
 		runBacktest:debounce(async function() {
 			console.log('devounce func click')
 			const _this = this
+			_this.setSetUpLoadingSetting(true, true, 2, 'Saving backtest basic information...')
+
 			const basicErr = await _this.$refs['basicInfo'].saveData()
 			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, '');_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', {});return}
 			CIQ.addCover()
