@@ -366,6 +366,7 @@ import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay,SearchAutocomplete } from "@/components/common"
 import { mapGetters } from "vuex"
 import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
+const debounce = require('lodash/debounce')
 
 export default {
   name: 'MIForm',
@@ -741,7 +742,7 @@ export default {
         CIQ.addOwnIndicatorShift(offset) 
       }
     },
-    async submitForm() {
+    submitForm:debounce(async function() {
      const saveRes = await this.saveIndicator()
      console.log('saveRes', saveRes)
      if(!saveRes) return
@@ -761,7 +762,7 @@ export default {
       }
       if(saveRes.status == 201) {this.$router.push('/myindicator')}
       // this.$store.commit('SET_CREACT_LOADING', false)
-    },
+		}, 500),
     async saveIndicator() {
       debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
@@ -983,7 +984,7 @@ export default {
       }
       return await saveMyIndicators(saveData);
     },
-    async previewIndicator() {
+    previewIndicator:debounce(async function() {
       CIQ.addCover()
       this.$store.commit('states/SET_MI_CREATE_LOADING', true)
       // 先存名字
@@ -1068,7 +1069,7 @@ export default {
       }
       this.$store.commit('states/SET_MI_CREATE_LOADING', false)
 
-    },
+		}, 500),
     saveSubData(field, value) {
       this.data[field] = value // ma1, ma2, extreme_pessimism, extreme_optimism
     },
