@@ -623,29 +623,29 @@ export default {
     },
     'RESAMPLEData.indicator': {
         handler (newV, oldV) {
-          debugger
+          this.$nextTick(()=>{
+            const {updated} = CIQ.findSentiIndicator(null,newV)
+            var nodeSetup = document.getElementsByClassName('timeframeResample')
+            if(!nodeSetup.length) return
+            if(updated == "Monthly"){
+                nodeSetup[0].setAttribute('tf','enabled')
+                nodeSetup[1].setAttribute('tf','enabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }else if(updated == "Weekly"){  
+                nodeSetup[0].setAttribute('tf','enabled')
+                nodeSetup[1].setAttribute('tf','disabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }else{
+                nodeSetup[0].setAttribute('tf','disabled')
+                nodeSetup[1].setAttribute('tf','disabled')
+                nodeSetup[2].setAttribute('tf','disabled')
+            }
 
-          const {updated} = CIQ.findSentiIndicator(null,newV)
-              var nodeSetup = document.getElementsByClassName('timeframeResample')
+            // // 初始化为默认condition即daily
+            // this.RESAMPLEData.condition = 'daily'
+            // this.data.time_frame = 'daily'
+          })
 
-              if(!nodeSetup.length) return
-              if(updated == "Monthly"){
-                  nodeSetup[0].setAttribute('tf','enabled')
-                  nodeSetup[1].setAttribute('tf','enabled')
-                  nodeSetup[2].setAttribute('tf','disabled')
-              }else if(updated == "Weekly"){  
-                  nodeSetup[0].setAttribute('tf','enabled')
-                  nodeSetup[1].setAttribute('tf','disabled')
-                  nodeSetup[2].setAttribute('tf','disabled')
-              }else{
-                  nodeSetup[0].setAttribute('tf','disabled')
-                  nodeSetup[1].setAttribute('tf','disabled')
-                  nodeSetup[2].setAttribute('tf','disabled')
-              }
-
-              // // 初始化为默认condition即daily
-              // this.RESAMPLEData.condition = 'daily'
-              // this.data.time_frame = 'daily'
         },
     }
   },
