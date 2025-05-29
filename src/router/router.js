@@ -147,6 +147,12 @@ const routes = [
 			require(['@/components/Portfolio/index.vue'], resolve),
 	},
 	{
+		path: '/watchlist',
+		name: 'WatchList',
+		component: resolve =>
+			require(['@/components/WatchList/index.vue'], resolve),
+	},
+	{
 		path: '/reports',
 		name: 'Reports',
 		component: resolve =>
@@ -363,6 +369,16 @@ const routes = [
 					require(['@/components/Dashboard/Webinar.vue'], resolve)
 			}
 		]
+	},
+	{
+		path: '/search',
+		name: 'AlgoliaSearchVue',
+		component: resolve => require(['@/components/AlgoliaSearchVue/index.vue'], resolve)
+	},
+	{
+		path: '/notifications',
+		name: 'Notifications',
+		component: resolve => require(['@/components/Notifications/index.vue'], resolve)
 	},
 	{
 		path: '/404',

@@ -109,7 +109,10 @@ export default {
     async enLargeTable(source_list, row) {
       if(source_list === 'most_popular') {
         if(this.selectedTitle !== 'Popular') this.selectedTitle = 'Popular'
-        this.$refs['Popular'].enLargeTable(row)
+        debugger
+        this.$nextTick(() => {
+          this.$refs['Popular'].enLargeTable(row)
+        })
         return
       }
       if(this.selectedTitle !== 'Indicators') this.selectedTitle = 'Indicators'

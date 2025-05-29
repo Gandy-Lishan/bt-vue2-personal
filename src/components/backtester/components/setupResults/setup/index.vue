@@ -94,7 +94,7 @@ import { LoadingOverlay } from "@/components/common"
 import { seeParams} from '@/service/service'
 import UUID from '@/utils/cryptoUtils/uuid'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
-
+const debounce = require('lodash/debounce')
 
 export default {
 	name: 'SetUp',
@@ -382,8 +382,11 @@ export default {
 				progressText
 			})
 		},
-		async runBacktest() {
+		runBacktest:debounce(async function() {
+			console.log('devounce func click')
 			const _this = this
+			_this.setSetUpLoadingSetting(true, true, 2, 'Saving backtest basic information...')
+
 			const basicErr = await _this.$refs['basicInfo'].saveData()
 			if(basicErr) {_this.setSetUpLoadingSetting(false, false, 0, '');_this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', {});return}
 			CIQ.addCover()
@@ -441,7 +444,7 @@ export default {
 			_this.setSetUpLoadingSetting(true, true, 25, 'Processing saved backtest information...');
 			_this.reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj);
 
-		},
+		}, 500),
 		async saveCriteriaData(criteriaRef) {
 			const _this = this
 			_this.$refs[criteriaRef].addSignalLength()

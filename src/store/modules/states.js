@@ -1,6 +1,7 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { obtainIndicatorsList } from "@/service/service";
 import { report } from 'process';
+import axios from "@/axios";
 
 const state = {
 	errorMessage404:{status:null,message:''},
@@ -17,10 +18,15 @@ const state = {
 	cpmResultsData: JSON.parse(sessionStorage.getItem('cpmResultsData')) || null,
 	symbolUploadDomActive: false,
 	reportArchives: {},
-	tradingSignalStrategies: []
+	tradingSignalStrategies: [],
+	allNotifications: null,  // 缓存的notifications数据
 }
 
 const mutations = {
+	setNotifications(state, notifications) {
+		state.allNotifications = notifications
+	},
+	
 	DETECT_SYMBOL_UPLOAD_DOM(state,val) {
 		state.symbolUploadDomActive = val
 	},
@@ -67,6 +73,44 @@ const mutations = {
 }
 
 const actions = {
+	fetchNotifications({ state, commit }, { page, pageSize, search, sortProp, sortOrder, forceReload = false }) {
+		return new Promise(async (resolve, reject) => {
+		  try {
+			if (!state.allNotifications || forceReload) {
+			  const res = await axios.get('/dev/st_data/notifications/?all=true')
+			  commit('setNotifications', res.data || [])
+			}
+	
+			let data = [...state.allNotifications]
+	
+			// 搜索
+			if (search) {
+			  const keyword = search.toLowerCase()
+			  data = data.filter(item =>
+				item.message.toLowerCase().includes(keyword) ||
+				item.broadcast_type.toLowerCase().includes(keyword) ||
+				item.created_date.toLowerCase().includes(keyword)
+			  )
+			}
+	
+			// 排序
+			if (sortProp) {
+			  data.sort((a, b) => compare(a, b, sortProp, sortOrder))
+			}
+	
+			// 分页
+			const total = data.length
+			const start = (page - 1) * pageSize
+			const end = start + pageSize
+			const items = data.slice(start, end)
+	
+			resolve({ items, total })
+		  } catch (err) {
+			reject(err)
+		  }
+		})
+	},
+	
 	detect_symbol_upload_dom({commit}){
 		return new Promise(resolve=>{
 			let node = document.querySelector('.symbol-upload')
@@ -136,6 +180,15 @@ const actions = {
 		commit('SET_REPORT_ARCHIVES', data)
 	}
 }
+
+function compare(a, b, prop, order) {
+	const valA = a[prop]
+	const valB = b[prop]
+	if (valA === valB) return 0
+	const result = valA > valB ? 1 : -1
+	return order === 'desc' ? -result : result
+  }
+  
 export default {
 	namespaced: true,
 	state,

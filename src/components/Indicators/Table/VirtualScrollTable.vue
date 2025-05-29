@@ -1925,11 +1925,13 @@ export default {
       }
     },
     async updateChart(row) {
+      // 如果是在全屏状态下, 应该先退出全屏
+      if(this.isTrendScoreFullScreen) {this.enterOrExitFullScreenTrendScorePage(this.label);this.isTrendScoreFullScreen = false}
       debugger
-      if(this.isTrendScorePage) {
-        this.$emit("updateChart", row)
-        return
-      }
+      // if(this.isTrendScorePage) {
+      //   this.$emit("updateChart", row)
+      //   return
+      // }
       if(this.showRelated) {
         await this.clickRelated(row)
         return

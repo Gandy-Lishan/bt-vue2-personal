@@ -381,6 +381,7 @@ export default {
       }
     },
     async enLargeTable(source_list, row) {
+      debugger
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
       console.log('findTable', findTable)
       if(!findTable) return
@@ -392,7 +393,9 @@ export default {
       clearRefName.forEach(item => {
         this.$refs[item][0].clearEnlarge()
       })
-      await this.$refs[findRefsName][0].enLargeTable(checked, row)
+      // 在放大之前要先看有没有数据
+      if(checked) await this.$refs[findRefsName][0].loadMore(checked)
+        await this.$refs[findRefsName][0].enLargeTable(checked, row)
     },
     passIndicatorData(data, url) {
       this.indicatorCSVData = data

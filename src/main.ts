@@ -43,6 +43,10 @@ import GlobalMixins from "@/components/common/mixins/globalMixins";
 // 引入自动更新提醒
 import autoUpdate from './auto-update'
 
+import InstantSearch from 'vue-instantsearch';
+
+Vue.use(InstantSearch);
+
 Vue.use(VueCookies)
 
 Vue.prototype.$qs = qs

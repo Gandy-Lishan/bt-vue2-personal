@@ -745,7 +745,7 @@ color: #333341;
 }
 .el-tooltip__popper {
   /* button的z-index是2001,遮罩层的z-index是2000 */
-  z-index: 2002 !important;
+  z-index: 2002;
 }
 .result-container .el-input.is-disabled .el-input__inner{
   color: #333;
@@ -1234,4 +1234,16 @@ button#checkResBtn {
 }
 .el-pagination .el-select .el-input .el-input__inner {
   margin: 0px;
+}
+
+/* larger than mask which is 9999 */
+body > .el-menu--horizontal {
+  z-index: 10000 !important;
+}
+
+/* larger than mask which is 9999 */
+/* larger than navbar submenu which is 10000 */
+.el-notification {
+  z-index: 10001 !important;
+  width: auto !important;
 }

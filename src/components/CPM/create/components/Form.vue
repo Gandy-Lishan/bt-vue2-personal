@@ -90,81 +90,150 @@
       </el-form-item>
     </el-col>
   </el-row>
-  </el-form>
-  <el-form
-		ref="PreviewForm"
-		:model="data"
-		label-position="top"
-		size="small"
-    :rules="rules"
-	>
   <el-row :gutter="10">
-    <el-col :span="4">
-      <el-form-item
-				label="5. Pattern Start Date"
-        prop="start_date"
-			>
+    <div v-if="pattern === 'customize_pattern'">
+    <el-col :span="6">
+      <el-form-item prop="pattern">
       <template slot="label">
         <label>
-          5. Pattern Start Date
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >The date on which you would like to start the price comparison.</span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
+          5. Select Pattern
         </label>
       </template>
-        <el-date-picker
-          v-model="data.start_date"
-          type="date"
-          placeholder="- Select Start Date -"
-          value-format="yyyy-MM-dd"
-          :picker-options="startPickerOptions"
-          @change="calculateBarDistance"
-        >
-        </el-date-picker>
-			</el-form-item>
-    </el-col>
-    <el-col :span="4">
-      <el-form-item
-				label="6. Pattern End Date"
-        prop="end_date"
-			>
-      <template slot="label">
-        <label>
-          6. Pattern End Date
-          <el-tooltip effect="dark" placement="top">
-            <span slot="content"
-              >The date on which you would like to stop the price comparison.</span>
-            <i class="iconfont icon-wenhao"></i>
-          </el-tooltip>
-        </label>
-      </template>
-        <el-date-picker
-          v-model="data.end_date"
-          type="date"
-          placeholder="- Select End Date -"
-          value-format="yyyy-MM-dd"
-          :picker-options="endPickerOptions"
-          @change="calculateBarDistance"
-        >
-        </el-date-picker>
-			</el-form-item>
-    </el-col>
-    <el-col :span="4">
-      <el-form-item
-        label="7. Number of Bars"
-        prop="bars_num"
-      >
-        <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
-          <template v-slot:append>
-            (≥3 and ≤252)
-          </template>
-        </el-input>
+        <el-select
+            v-model="pattern"
+            placeholder="— Select Pattern —"
+          >
+            <el-option
+              v-for="item in patternOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="4">
-      <el-form-item prop="timeframe" label="8. Timeframe">
+      <el-col :span="6">
+        <el-form-item
+          label="Pattern Start Date"
+          prop="start_date"
+        >
+        <template slot="label">
+          <label>
+            Pattern Start Date
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The date on which you would like to start the price comparison.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-date-picker
+            v-model="data.start_date"
+            type="date"
+            placeholder="- Select Start Date -"
+            value-format="yyyy-MM-dd"
+            :picker-options="startPickerOptions"
+            @change="calculateBarDistance"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item
+          label="Pattern End Date"
+          prop="end_date"
+        >
+        <template slot="label">
+          <label>
+            Pattern End Date
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content"
+                >The date on which you would like to stop the price comparison.</span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+          <el-date-picker
+            v-model="data.end_date"
+            type="date"
+            placeholder="- Select End Date -"
+            value-format="yyyy-MM-dd"
+            :picker-options="endPickerOptions"
+            @change="calculateBarDistance"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item
+          label="Number of Bars"
+          prop="bars_num"
+        >
+          <el-input v-model="data.bars_num" :disabled="false" @change="changeNumberOfBars">
+            <template v-slot:append>
+              (≥3 and ≤252)
+            </template>
+          </el-input>
+        </el-form-item>
+      </el-col>
+    </div>
+    <div v-if="pattern === 'system_pattern'">
+    <el-col :span="6">
+      <el-form-item prop="pattern">
+      <template slot="label">
+        <label>
+          5. Select Pattern
+        </label>
+      </template>
+        <el-select
+            v-model="pattern"
+            placeholder="— Select Pattern —"
+          >
+            <el-option
+              v-for="item in patternOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+      </el-form-item>
+    </el-col>
+      <el-col :span="6">
+        <el-form-item prop="system_pattern">
+          <template slot="label">
+            <label>
+              Common Pattern
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-select v-model="data.system_pattern" placeholder="— Select Pattern —">
+            <el-option
+              v-for="item in systemPatternOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+              <el-tooltip
+                placement="right"
+                effect="light"
+                :content="''"
+              >
+                <template slot="content">
+                  <img :src="item.image" alt="Pattern" style="max-width: 200px; max-height: 180px;" />
+                </template>
+                <p style="margin: 0px">{{ item.label }}</p>
+              </el-tooltip>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+      <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
             placeholder="— Select Timeframe —"
@@ -180,41 +249,97 @@
             </el-option>
           </el-select>
       </el-form-item>
-    </el-col>
-    <el-col :span="8">
-      <el-row :gutter="10">
-        <el-col :span="14">
-          <el-form-item
-            label="9. Correlation Percentage"
-            prop="corr_per"
-          >
-            <template slot="label">
-              <label>
-                9. Correlation Percentage
-                <el-tooltip effect="dark" placement="top">
-                  <span slot="content">
-                    This is the minimum threshold required for matching patterns. <br />
-                    Only values between 75-100 are accepted. A value of "90", <br/>
-                    for example, means that only correlations above +0.90 will be shown.
-                  </span>
-                  <i class="iconfont icon-wenhao"></i>
-                </el-tooltip>
-              </label>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item
+          label="7. Correlation Percentage"
+          prop="corr_per"
+        >
+          <template slot="label">
+            <label>
+              7. Correlation Percentage
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">
+                  This is the minimum threshold required for matching patterns. <br />
+                  Only values between 75-100 are accepted. A value of "90", <br/>
+                  for example, means that only correlations above +0.90 will be shown.
+                </span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input v-model="data.corr_per" placeholder="Enter correlation percentage">
+            <template v-slot:append>
+            (%)
             </template>
-            <el-input v-model="data.corr_per" placeholder="Enter correlation percentage">
-              <template v-slot:append>
-              (%)
-              </template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item class="CPM-btn" label=" ">
-            <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-col>
+          </el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item class="CPM-btn" label=" ">
+          <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
+        </el-form-item>
+      </el-col>
+    </div>
+  </el-row>
+  </el-form>
+
+  <el-form
+		ref="PreviewForm"
+		:model="data"
+		label-position="top"
+		size="small"
+    :rules="rules"
+	>
+    <el-row :gutter="10" v-if="pattern === 'customize_pattern'">
+      <el-col :span="6">
+      <el-form-item prop="timeframe" label="6. Timeframe">
+        <el-select
+            v-model="data.timeframe"
+            placeholder="— Select Timeframe —"
+            @change="changeTimeframe"
+            :disabled="previewBtnLoading || btnLoading"
+          >
+            <el-option
+              v-for="item in frequencyOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+      </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item
+          label="7. Correlation Percentage"
+          prop="corr_per"
+        >
+          <template slot="label">
+            <label>
+              7. Correlation Percentage
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">
+                  This is the minimum threshold required for matching patterns. <br />
+                  Only values between 75-100 are accepted. A value of "90", <br/>
+                  for example, means that only correlations above +0.90 will be shown.
+                </span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </template>
+          <el-input v-model="data.corr_per" placeholder="Enter correlation percentage">
+            <template v-slot:append>
+            (%)
+            </template>
+          </el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item class="CPM-btn" label=" ">
+          <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
+        </el-form-item>
+      </el-col>
   </el-row>
   </el-form>
   <el-form
@@ -225,53 +350,53 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
+    <el-col :span="6">
+    <el-form-item prop="direction" label="8. Direction">
+      <el-select
+          v-model="data.direction"
+          placeholder="— Select Direction —"
+        >
+          <el-option
+            v-for="item in directionOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+    </el-form-item>
+    </el-col>
+    <el-col :span="6">
+      <el-form-item
+        label="9. Time In Market"
+        prop="tim"
+      >
+        <template slot="label">
+          <label>
+            11. Time In Market
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Input a value of bars to stay in market after entry.<br />Exit
+                  position when the specified Time In Market is reached.
+                  (default: 21)<br
+                />
+              </span>
+              <i class="iconfont icon-wenhao"></i>
+            </el-tooltip>
+          </label>
+        </template>
+        <el-input
+          v-model="data.tim"
+          placeholder="Enter time in market"
+        ><template v-slot:append>
+          (bars)
+          </template></el-input>
+      </el-form-item>
+    </el-col>
     <el-col :span="12">
       <el-row :gutter="10">
         <el-col :span="8">
-        <el-form-item prop="direction" label="10. Direction">
-          <el-select
-              v-model="data.direction"
-              placeholder="— Select Direction —"
-            >
-              <el-option
-                v-for="item in directionOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-        </el-form-item>
-        </el-col>
-        <el-col :span="8">
-        <el-form-item
-          label="11. Time In Market"
-          prop="tim"
-        >
-          <template slot="label">
-            <label>
-              11. Time In Market
-              <el-tooltip effect="dark" placement="top">
-                <span slot="content">
-                  Input a value of bars to stay in market after entry.<br />Exit
-                    position when the specified Time In Market is reached.
-                    (default: 21)<br
-                  />
-                </span>
-                <i class="iconfont icon-wenhao"></i>
-              </el-tooltip>
-            </label>
-          </template>
-          <el-input
-            v-model="data.tim"
-            placeholder="Enter time in market"
-          ><template v-slot:append>
-            (bars)
-            </template></el-input>
-        </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="backtestHistory" label="12. Lookback Period">
+          <el-form-item prop="backtestHistory" label="10. Lookback Period">
               <template slot="label">
                 <label>
                   12. Lookback Period
@@ -301,42 +426,36 @@
               </div>
             </el-form-item>
         </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span="12">
-      <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item
-              label="13. Custom Duration"
-              prop="year"
-              v-if="data.lookback_period == 'Custom'"
-            >
-              <el-input
-                v-model="data.year"
-                placeholder="Enter custom years"
-              ><template v-slot:append>
-                (years)
-                </template></el-input>
-            </el-form-item>
+            label="13. Custom Duration"
+            prop="year"
+            v-if="data.lookback_period == 'Custom'"
+          >
+            <el-input
+              v-model="data.year"
+              placeholder="Enter custom years"
+            ><template v-slot:append>
+              (years)
+              </template></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="8">
-            <el-button v-show="percentage == 0" size="small" class="CPM-btn" type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
-            <div class="processTipsBox" v-show="percentage != 0">
+          <el-button v-show="percentage == 0" size="small" class="CPM-btn" type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
+          <div class="processTipsBox" v-show="percentage != 0">
             <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
-            </div>
-        </el-col>
-        <el-col :span="8">
+          </div>
         </el-col>
       </el-row>
     </el-col>
   </el-row>
   <el-row :gutter="10">
-        <el-col :span="24">
-          <el-form-item>
-          <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
-          </el-form-item>
-        </el-col>
-      </el-row>
+    <el-col :span="24">
+      <el-form-item>
+      <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
+      </el-form-item>
+    </el-col>
+  </el-row>
   </el-form>
   </div>
 </template>
@@ -379,11 +498,59 @@ export default {
         direction: 'Long',
         bars_num: 0,
         ma_condition: 0,
-        ma: 200
+        ma: 200,
+        system_pattern: 'head_and_shoulder_top'
       },
+      pattern: 'customize_pattern',
       dropdownList: [],
       percentage: 0,
       processTips: '',
+      patternOptions: [
+        { value: 'system_pattern', label: 'Common Pattern' },
+        { value: 'customize_pattern', label: 'Customize Pattern' }
+      ],
+      systemPatternOptions: [
+        {
+          value: 'triple_tap',
+          label: 'Triple Tap',
+          image: require('@/assets/patterns/triple_tap.png')
+        },
+        {
+          value: 'rounding_bottom',
+          label: 'Rounding Bottom',
+          image: require('@/assets/patterns/rounding_bottom.png')
+        },
+        {
+          value: 'descending_channel',
+          label: 'Descending Channel',
+          image: require('@/assets/patterns/descending_channel.png')
+        },
+        {
+          value: 'ascending_channel',
+          label: 'Ascending Channel',
+          image: require('@/assets/patterns/ascending_channel.png')
+        },
+        {
+          value: 'head_and_shoulder_bottom',
+          label: 'Head and Shoulders Bottom',
+          image: require('@/assets/patterns/head_and_shoulder_bottom.png')
+        },
+        {
+          value: 'head_and_shoulder_top',
+          label: 'Head and Shoulders Top',
+          image: require('@/assets/patterns/head_and_shoulder_top.png')
+        },
+        {
+          value: 'double_bottom',
+          label: 'Double Bottom',
+          image: require('@/assets/patterns/double_bottom.png')
+        },
+        {
+          value: 'double_top',
+          label: 'Double Top',
+          image: require('@/assets/patterns/double_top.png')
+        },
+      ],
       frequencyOptions: [
         { value: 'Daily', label: 'Daily' },
         { value: 'Weekly', label: 'Weekly' },
@@ -531,14 +698,8 @@ export default {
   async mounted() {
     this.setBacktestHistory(1)
     this.generateCPMName()
-
-    this.attachScrollListener()
-  },
-  beforeDestroy() {
-    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
   },
   methods: {
-
     handleCPMMAChange() {
       if(this.data.ma_condition == 0){
         CIQ.removeCPMMA()
@@ -793,6 +954,7 @@ export default {
 
     },
     async previewCPM() {
+      debugger
       if(this.barDistance < 3) {this.popUpMsgBox('Bars must be 3 or more. Adjust the Pattern Start and End Dates accordingly');return}
       this.$refs['BacktestForm'].clearValidate()
       const validForm = await this.validForm(['BasicForm', 'PreviewForm'])
@@ -809,6 +971,7 @@ export default {
         direction: 'Long',
         tim: 21
       }
+      if(this.pattern === 'customize_pattern') delete saveData.system_pattern
       delete saveData.year
       if(saveData.lookback_period > 10 || saveData.lookback_period == 'All') {
         this.$notify.info({
@@ -858,6 +1021,7 @@ export default {
         ...this.data,
         exclude_overlap
       }
+      if(this.pattern === 'customize_pattern') delete saveData.system_pattern
       if(saveData.lookback_period == 'Custom') saveData.lookback_period = saveData.year
       delete saveData.year
       if(saveData.lookback_period > 10 || saveData.lookback_period == 'All') {
@@ -928,9 +1092,17 @@ export default {
         }else if(key === 'ma_condition' && !data[key]) {
           // 默认 None
           target[key] = 0
-        }else if(key === 'ma' && !data[key]) {
+        }else if(key === 'system_pattern' && !data[key]) {
+          this.pattern = 'customize_pattern'
+          target[key] = ''
+        }else if(key === 'system_pattern' && data[key]) {
+          this.pattern = 'system_pattern'
+          target[key] = data[key]
+        }
+        else if(key === 'ma' && !data[key]) {
           target[key] = 200
-        }else {
+        }
+        else {
           target[key] = data[key]
         }
       }
@@ -1083,5 +1255,9 @@ export default {
 }
 /deep/ .el-button, /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
   font-weight: 500;
+}
+.el-tooltip__popper {
+  /* button的z-index是2001,遮罩层的z-index是2000 */
+  z-index: 4000 !important;
 }
 </style>

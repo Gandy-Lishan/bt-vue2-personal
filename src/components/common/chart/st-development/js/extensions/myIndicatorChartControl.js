@@ -461,8 +461,10 @@
                 for (var studyInstanceName in CIQ.stxx.layout.studies) { 
                     var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
                     if(CIQ.isOwnIndicator(sd.type)) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
-                }
 
+                    // 如果是resample, 把现存的indicator也清空
+                    if(category == 'Resample') CIQ.Studies.removeStudy(CIQ.stxx, sd);
+                }
         addSingleIndicator(indicatorList,indicator,symbol,extremeLines,()=>{
             // 但是需要判断symbol1与symbol2一致，不一致的话自然不会去计算偏移
             if(category?.includes('Symbol')) {
@@ -502,7 +504,6 @@
     CIQ.displayUserOwnIndicatorLayout = async function(_newVal){
         //考虑到addSeries必须在displaydata前设定好timeframe
         CIQ.store.commit('form/getFrequency', _newVal.time_frame) //考虑到addSeries必须写死timeframe
-
         CIQ.addCover()
         CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
         const newData = {
@@ -611,6 +612,21 @@
                 startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
             }, function(){
                 displayOwnIndicatorMAStudies(newData)
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            })
+        }
+        debugger
+        if(newData.categories == "Resample") {
+            // 自定义indicator
+            await getUserOwnIndicatorMatedata(newData.url,extremeLines)
+
+            const benchmark = CIQ.store.state.chart.miBenmark
+            CIQ.stxx.loadChart({
+                symbol: benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                indicator:[newData.url],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
                 CIQ.hideCover()
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             })
@@ -1017,6 +1033,21 @@
             )
             }
         }
+    }
+
+    CIQ.changeUserOwnIndicatorResample = function(indicator){
+        //考虑到addSeries必须在displaydata前设定好timeframe
+        CIQ.store.commit('form/getFrequency', indicator.updated) //考虑到addSeries必须写死timeframe
+        CIQ.addCover()
+        CIQ.store.commit('states/SET_MI_CREATE_LOADING', true)
+        //编辑时对内容修改或者preview应该移除生成的indicator
+
+        for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            if(CIQ.isOwnIndicator(sd.type) || sd.type != indicator.url) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+        }
+
+        addSingleIndicator([indicator.url],indicator.url,null,null,()=>{});
     }
 
     // 预留：layout management

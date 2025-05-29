@@ -202,6 +202,11 @@ import {CIQ} from "chartiq/js/chartiq.js";
 				nameValueStore: resources.nameValueStore
 			},
 			// menu items
+			// menuTickerIndicators: [
+			// 	{ type: "item", label: "Optix", cmd: "Layout.setTickerIindicator('optix')" },
+			// 	{ type: "item", label: "Trend Score", cmd: "Layout.setTickerIindicator('trend')" },
+			// 	{ type: "item", label: "Rel Trend Score", cmd: "Layout.setTickerIindicator('reltrend')" },
+			// ],
 			menuPeriodicity: [
 				{ type: "item", label: "1 D", cmd: "Layout.setPeriodicity(1,1,'day')" },
 				{ type: "item", label: "1 W", cmd: "Layout.setPeriodicity(1,1,'week')" },

@@ -59,6 +59,13 @@ export default {
   },
   mounted() {
     console.log(window)
+    const indicator = this.$route.query.indicator
+    if(indicator) {
+      this.$nextTick(async () => {
+        await this.enlargeSelectIndicator(indicator)
+      })
+    }
+
     this.blogs = this.client.initIndex('blog');
     this.reports = this.client.initIndex('reports');
     this.charts = this.client.initIndex('charts');
@@ -116,6 +123,10 @@ export default {
         searchUrl = suggestion.url;
       }
       console.log('searchUrl', searchUrl)
+      await this.enlargeSelectIndicator(searchUrl)
+  },
+    async enlargeSelectIndicator(searchUrl) {
+      debugger
       // vol_vix_transform 不存在
       if(searchUrl === 'vol_vix_transform') {
         this.$message({
@@ -180,7 +191,7 @@ export default {
           const match = str.match(/(.*?)_trend_reltrend/)
           const result = match ? match[1] : 'sp1500'
           requireUrl = result
-        }else if(type === 'etf_opt') {
+        }else if(sub_type === 'etf_breadth') {
           requireUrl = 'etf_breadth'
         }else if(type === 'etf_fund') {
           requireUrl = 'etf_flow'
@@ -197,7 +208,7 @@ export default {
         }else if(groups === 'bonds'){
           requireUrl = 'bonds_complete_list'
         }else if(type === 'etf_opt') {
-          reportUrl = 'etf_complete_list'
+          requireUrl = 'etf_complete_list'
         }else if(type === 'commod_seasonality') {
           url = 'commod_seasonality'
         }else if(groups === 'stocks') {
@@ -208,22 +219,32 @@ export default {
         if(!requireUrl) return
         await this.fetchIndicatorsPageList(requireUrl)
         const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
-        const _sourceList = _list.map(item => {
+        let _sourceList = _list.map(item => {
             if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
         }).filter(item => item !== undefined).shift()
         console.log('_sourceList', _sourceList)
-        // 如果是对象并且对象为空, 说明没有匹配到数据
         if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
-          this.$message({
-            message: `<strong>Unable to find the corresponding indicator</strong>`,
-            center: true,
-            dangerouslyUseHTMLString: true,
-            showClose: true,
-            duration: 8000,
-            customClass: 'no-icon',
-            type: 'warning'
-          })
-          return
+          // 尝试看在不在 most_popular
+          requireUrl = 'most_popular'
+          await this.fetchIndicatorsPageList(requireUrl)
+          const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+          const _tempSourceList = _list.map(item => {
+          if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined).shift()
+          _sourceList = _tempSourceList
+          // 如果是对象并且对象为空, 说明没有匹配到数据
+          if(!_tempSourceList || (((_tempSourceList !== null && typeof _tempSourceList === 'object' && !Array.isArray(_tempSourceList)) && Object.keys(_tempSourceList).length === 0))) {
+            this.$message({
+              message: `<strong>Unable to find the corresponding indicator</strong>`,
+              center: true,
+              dangerouslyUseHTMLString: true,
+              showClose: true,
+              duration: 8000,
+              customClass: 'no-icon',
+              type: 'warning'
+            })
+            return
+        }
         }
         await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
       /* 如果匹配不到, 使用下面的规则请求个别表单

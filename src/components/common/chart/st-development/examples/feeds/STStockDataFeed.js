@@ -219,6 +219,7 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
             var nodeSetup = document.getElementsByTagName('li')
 
             for(var i =0;i<nodeSetup.length;i++){
+                if(nodeSetup[i].classList.contains('timeframeResample')) continue
                 for(var j in nodeSetup[i].firstChild){
                     if(j == 'textContent'){
                         if(nodeSetup[i].firstChild.textContent === 'Daily'){
@@ -304,6 +305,11 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
                 }
             }
+
+
+
+            initializeTickerIndicatorDisplay()
+
             this.sendReq(start,end,new_str,selectedFreq,cb)
 };
 
@@ -832,11 +838,40 @@ quoteFeedSimulator.formatChartData = async function(response){
     return newQuotes
 }
 
+function initializeTickerIndicatorDisplay() {
+    const symbol = CIQ.symbol
+    
+    const replaceNameMap = {
+		SPX: 'SPY',
+		COMP: 'QQQ',
+		DJIA: 'DIA'
+	}
+    const SymbolReplacedName = replaceNameMap[symbol] || symbol
+    const indicatorList = CIQ.store.getters.getIndicatorsList
+    let displayMap = {
+        0: "disabled",
+        1: "disabled",
+        2: "disabled",
+    }
+    for(let i=0;i<indicatorList.length;i++) {
+        if(indicatorList[i].market_symbol == SymbolReplacedName) {
+            if(indicatorList[i].type == 'optix') displayMap[0] = "enabled"
+            else if(indicatorList[i].type == 'trend') displayMap[1] = "enabled"
+            else if(indicatorList[i].type == 'reltrend') displayMap[2] = "enabled"
+        }
+    }
+
+    var node = document.querySelector("cq-menu-container[cq-name = 'menuTickerIndicators']")
+        for(var i = 0;i < node.children.length;i++){
+            node.children[i].setAttribute('tf',displayMap[i])
+        }
+}
 function findEarliestIndicator(data) {
     const dates = Object.values(data)
     const earliestDate = new Date(Math.min(...dates));
     return earliestDate;
 }
+
   
 
 

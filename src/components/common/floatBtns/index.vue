@@ -348,7 +348,8 @@ button.createNew,
 .toTop,
 .tutorial {
 	// opacity: 0.4;
-	z-index: 2001;
+	/* larger than mask which is 9999 */
+	z-index: 10000;
 	border: unset;
 	position: fixed;
 	right: 60px;

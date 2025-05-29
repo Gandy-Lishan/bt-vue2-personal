@@ -26,6 +26,8 @@
 </template>
 <script>
 import { Header, NewHeader, Footer, RecentUpdate, FloatBtns, CnNotify } from "@/components/common"
+import { fetchCurrentNNotifications } from "@/service/service";
+
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import Cookies from 'vue-cookies'
 import axios from "./axios";
@@ -75,6 +77,8 @@ export default {
 				// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 				// await delay(10000);
 				console.log('权限响应', res)
+
+				this.getNotificationCount()
 			} catch (error) {
 				switch (error?.response?.status) {
 				case 401:
@@ -164,6 +168,23 @@ export default {
 			this.updateInterval = setInterval(() => {
 				this.fetchCustomList(onlySymbol);
 			}, 300000); // Update every 5 minutes
+		},
+		async getNotificationCount() {
+			const {count} = await fetchCurrentNNotifications()
+			// const count = 6
+			var badge = document.getElementById('notifications-badge');
+			if(!badge) return
+			var icon = document.getElementById('notification-icon');
+			if(!icon) return
+			if (count > 0) {
+				badge.style.display = 'inline'; // 或 'block'，取决于你的布局需求
+				badge.textContent = count;
+				icon.style.color = '#5b9bd1'
+			} else {
+				badge.style.display = 'none';
+				icon.style.color = 'grey'
+			}
+
 		},
 		changeSvg() {
 			this.isClosed = !this.isClosed

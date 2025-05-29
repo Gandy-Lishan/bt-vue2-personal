@@ -4225,6 +4225,52 @@ CIQ.UI.Layout.prototype.periodicity = function(node) {
 	CIQ.UI.observeProperty('timeUnit', CIQ.periodicity, listener)
 }
 
+
+CIQ.UI.Layout.prototype.setTickerIindicator = function(
+	node,
+	option
+) {
+	const stx = this.context.stx
+	const symbol = stx.chart.symbol
+	const replaceNameMap = {
+		SPX: 'SPY',
+		COMP: 'QQQ',
+		DJIA: 'DIA'
+	}
+	const SymbolReplacedName = replaceNameMap[symbol] || symbol
+	const indicatorList = CIQ.store.getters.getIndicatorsList
+
+	let data
+	// xu改过数据源结构后，靠 i.market_symbol == symbol url匹配item
+	data = indicatorList.find(i=>i.market_symbol == SymbolReplacedName && i.type == option)
+
+	// if(option == 'optix') {
+	// 	data = indicatorList.find(i=>i.chart_name == SymbolReplacedName + ' Optix')
+	// }else {
+	// 	data = indicatorList.find(i=>i.url == SymbolReplacedName+'_'+option)
+	// }
+
+debugger
+	for (var studyInstanceName in stx.layout.studies) {
+		var sd = stx.layout.studies[studyInstanceName]
+		if (sd.type == data.url || sd.type == data.symbol) {return}
+	}
+
+	CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.chart_name, updated: data.updated})     
+	let extraIndicators = []
+	extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)
+	let indicator = ''
+	if (data.symbol == undefined){
+		indicator = data.url       
+	}else{
+		indicator = data.symbol
+	}
+	extraIndicators.push(indicator)
+	CIQ.store.commit('chart/getExtraIndicators',extraIndicators)
+
+	CIQ.addIndicators({stx:stx})
+}
+
 /**
  * Populates and displays the language widget.
  *
@@ -5938,7 +5984,6 @@ class Chart {
 				var sd = stx.layout.studies[studyInstanceName]
 				if (sd.type == data.url || sd.type == data.symbol) {return}
 			}
-
 			CIQ.store.commit("chart/setCurrentSenti",{url: data.url?data.url:data.symbol, name: data.name, updated: data.updated})     
 			let extraIndicators = []
 			extraIndicators.push(...CIQ.store.state.chart.indicators.extraIndicators)

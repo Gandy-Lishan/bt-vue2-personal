@@ -3,6 +3,23 @@
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <div class="btn-group" id="notifications-group">
+          <a
+            href='/notifications'
+            class="iconify"
+          >
+            <i id="notification-icon" class="fa fa-bell" style="vertical-align: middle; font-size: 22px;"></i>
+            <span id="notifications-badge" class="badge badge-default"></span>
+          </a>
+        </div>
+        <div class="btn-group" id="btv1-group">
+          <a
+            href="https://users.sentimentrader.com/users/"
+            class="iconify"
+          >
+            <i class="fa fa-home" style="vertical-align: middle; font-size: 28px; color: #5b9bd1"></i>
+          </a>
+        </div>
         <!-- <el-menu-item index="2" class="tutorial-svg">
           <svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M164.301 0H21.4442C15.761 5.18001e-08 10.3105 2.25765 6.29191 6.27628C2.27327 10.2949 0.0156251 15.7454 0.015625 21.4286V164.286C0.0156251 169.969 2.27327 175.419 6.29191 179.438C10.3105 183.457 15.761 185.714 21.4442 185.714H164.301C169.985 185.714 175.435 183.457 179.454 179.438C183.472 175.419 185.73 169.969 185.73 164.286V21.4286C185.73 15.7454 183.472 10.2949 179.454 6.27628C175.435 2.25765 169.985 5.18001e-08 164.301 0ZM21.4442 14.2857H164.301C166.196 14.2857 168.013 15.0383 169.352 16.3778C170.692 17.7174 171.444 19.5342 171.444 21.4286V164.286C171.444 166.18 170.692 167.997 169.352 169.336C168.013 170.676 166.196 171.429 164.301 171.429H21.4442C19.5498 171.429 17.733 170.676 16.3934 169.336C15.0539 167.997 14.3013 166.18 14.3013 164.286V21.4286C14.3013 19.5342 15.0539 17.7174 16.3934 16.3778C17.733 15.0383 19.5498 14.2857 21.4442 14.2857Z" fill="#333"/>
@@ -70,13 +87,16 @@
             :index="item.keyPath"
           >
           <template slot="title">
-            <span>{{item.label}}</span>
+            <span @click.stop="handleSubmenuClick(item)">{{item.label}}</span>
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
             <el-menu-item v-for="(subItem, subIndex) in item.subMenu" :index="subItem.keyPath" :key="subIndex">{{subItem.label}}</el-menu-item>
         </el-submenu>
         </template>
       </el-menu>
+      <div class="autocomplete-wrapper">
+        <autocomplete />
+      </div>
     </header>
   </div>
 </template>
@@ -84,9 +104,13 @@
 <script>
 import { getTokenRole } from '@/utils'
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
+import autocomplete from "./component/AlgoliaAutocomplete.vue";
 
 export default {
   name: 'NewHeader',
+  components: {
+    autocomplete
+  },
   data() {
     return {
       navs: [
@@ -239,19 +263,31 @@ export default {
           ]
         },
         {
-          label: 'My Indicator',
+          label: 'My Stuff',
           keyPath: '6',
-          path: '/myindicator'
-        },
-        {
-          label: 'My Signal',
-          keyPath: '9',
-          path: '/my_signals'
-        },
-        {
-          label: 'My Screen',
-          keyPath: '13',
-          path: '/my_screen'
+          path: '/myindicator',
+          subMenu: [
+            {
+              label: 'My Indicator',
+              keyPath: '6-1',
+              path: '/myindicator'
+            },
+            {
+              label: 'My Signal',
+              keyPath: '6-2',
+              path: '/my_signals'
+            },
+            {
+              label: 'My Screen',
+              keyPath: '6-3',
+              path: '/my_screen'
+            },
+            {
+              label: 'My Watch List',
+              keyPath: '6-4',
+              path: '/watchlist'
+            },
+          ]
         },
         {
           label: 'AI Trading',
@@ -275,6 +311,11 @@ export default {
         const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
         if(navSubPath) this.activeIndex =navSubPath
         if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
+      }
+
+      // my stuff
+      if(['/myindicator', '/my_signals', '/my_screen', '/watchlist'].includes(path)) {
+        this.activeIndex = this.navs.find(ele => ele.keyPath == 6)?.subMenu.find(ele => ele.path == path)?.keyPath
       }
     }
   },
@@ -316,6 +357,13 @@ export default {
     }
   },
   methods: {
+    handleSubmenuClick(item) {
+      if (Array.isArray(item.subMenu) && item.subMenu.length > 0) {
+        const firstSubItem = item.subMenu[0];
+        // 手动触发 handleSelect
+        this.handleSelect(firstSubItem.keyPath);
+      }
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       if(key === '10') {
@@ -439,7 +487,7 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'My Signal', 'Trend Score', 'My Screen', 'Dashboard'].includes(label)) {
+      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Dashboard'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
       if(label === 'Smart Stock Scanner') {
@@ -601,5 +649,52 @@ li.el-menu-item.is-active.menu-item-active {
 }
 li.el-menu-item.tutorial-svg:hover {
   color: #909399;
+}
+
+
+.autocomplete-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+// notification
+#notifications-group,#btv1-group {
+    padding: 0 16px 0 0;
+    margin-right: 10px;
+}
+.btn-group {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.badge {
+    position: absolute;
+    right: 32px;
+    font-weight: 300;
+    background-color: #f36a5a;
+    background-image: none;
+
+}
+.badge {
+    font-size: 11px!important;
+    height: 18px;
+    width: 18px;
+    border-radius: 12px!important;
+    text-shadow: none!important;
+    text-align: center;
+    vertical-align: middle;
+}
+.badge {
+    display: none;
+    min-width: 10px;
+    line-height: 18px;
+    color: #fff;
+    white-space: nowrap;
+}
+#notification-icon {
+  color: grey; //default color
 }
 </style>

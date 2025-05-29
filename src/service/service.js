@@ -1133,9 +1133,11 @@ export function getBTV1FavIndicator() {
 				withCredentials: true
 			  })
 			.then(res => {
+				console.log('fetch btv1 fav indicator: ', res)
 				resolve(res)
 			})
 			.catch(err => {
+				console.log('Error fetching btv1 fav indicator: ', err)
 				reject(err)
 			})
 	})
@@ -2173,3 +2175,140 @@ export async function getSmartDumbSentiment() {
 				})
 		})
 	}
+
+// fetchNotifications.js
+export function fetchCurrentNNotifications() {
+	return new Promise((resolve, reject) => {
+		axios
+		.get('/dev/st_data/notifications/count/', { auth: author })
+		.then(res => {
+			resolve(res.data)
+		})
+		.catch(err => {
+			reject(err)
+		})
+	})
+  }
+export function NotificationsMarkAllRead() {
+	return new Promise((resolve, reject) => {
+		axios
+		.put('/dev/st_data/notifications/mark-all-read/')
+		.then(res => {
+			resolve(res)
+		})
+		.catch(err => {
+			reject(err)
+		})
+	})
+  }
+	/* watch list start*/
+export function postWatchList(data) {
+	const url = `/dev/watchlist_app/watchlist`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+		formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function updateWatchList(rowUrl, data) {
+	const url = `/dev/watchlist_app/watchlist?url=${rowUrl}`
+	const formData = new FormData()
+
+	// 将data对象的属性添加到FormData
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			formData.append(key, data[key])
+		}
+	}
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(url, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data' // 设置请求头为form-data格式
+				}
+			})
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function deleteWatchlist(url) {
+	const path = `/dev/watchlist_app/watchlist?url=${url}`
+	return axios.delete(path)
+}
+export function getWatchlist(url) {
+	let path = `/dev/watchlist_app/watchlist/?url=${url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function previewWatchlist(data) {
+	const url = `/dev/watchlist_app/get_tickers_data`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+		formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getAllWatchlist(page, sort, name) {
+	let url = null
+	url = '/dev/watchlist_app/get_watchlist_records/?ordering=-create_date'
+	// sort -> ,total_return
+	if (sort) {
+		url = `/dev/watchlist_app/get_watchlist_records/?ordering=${sort}`
+	}
+	if (name) {
+		url = `/dev/watchlist_app/get_watchlist_records/?name=${name}`
+	}
+	if (name && sort) {
+		url = `/dev/watchlist_app/get_watchlist_records/?ordering=${sort}&name=${name}`
+	}
+	if(page) {url = `${url}&page=${page}`}
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+/* watch list end*/

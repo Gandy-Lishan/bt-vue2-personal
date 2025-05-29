@@ -15,7 +15,8 @@ import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
 import stocksData from '@/assets/stocks_list.json';
 import indexsData from '@/assets/indexes_list.json';
-import indicatorsData from '@/assets/indicatorsList.json';
+// import indicatorsData from '@/assets/indicatorsList.json';
+import indicatorsData from '@/assets/indicatorsWithSymbolList.json';
 
 const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
@@ -465,7 +466,9 @@ const actions = {
 					newAllSymbolsList.push({
 					  chart_name: newName,
 					  url: item.url + '@indicator',
-					  updated: item.updated
+					  market_symbol: item.market_symbol,
+					  type: item.type,
+					  updated: item.updated,
 					});
 				  } else {
 					newAllSymbolsList.push(item);
