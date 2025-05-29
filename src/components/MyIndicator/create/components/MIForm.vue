@@ -1092,11 +1092,14 @@ export default {
       if (neitherOfThem) {
         return this.sentimentList.concat(this.symbolList)
       }
-      if (isIndicator || isResample) {
+      if (isIndicator) {
         return this.sentimentList
       }
       if (isSymbol) {
         return this.symbolList
+      }
+      if (isResample) {
+        return this.sentimentList.filter(i=>i.updated != 'Daily')
       }
     },
     changeCategories(category) {
@@ -1193,6 +1196,7 @@ export default {
     },
     resetTimeframeDisplayState() {
       const list = this.$refs.timeframe?.popperElm;
+      if(!list) return
       var nodeSetup = list.getElementsByTagName('li')
       for(var i = 0;i < nodeSetup.length;i++){            
         nodeSetup[i].setAttribute('tf','enabled')
