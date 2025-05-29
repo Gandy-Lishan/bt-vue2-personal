@@ -1067,7 +1067,7 @@
         "chart_name": "British Pound Optix",
         "url": "po_pound",
         "market_symbol": "pound",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1081,7 +1081,7 @@
         "chart_name": "Canadian Dollar Optix",
         "url": "po_canada",
         "market_symbol": "canada",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1095,7 +1095,7 @@
         "chart_name": "Euro Optix",
         "url": "po_euro",
         "market_symbol": "euro",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1116,7 +1116,7 @@
         "chart_name": "Swiss Franc Optix",
         "url": "po_franc",
         "market_symbol": "franc",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1130,7 +1130,7 @@
         "chart_name": "US Dollar Optix",
         "url": "po_dollar",
         "market_symbol": "dollar",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1158,7 +1158,7 @@
         "chart_name": "Japanese Yen Optix",
         "url": "po_yen",
         "market_symbol": "yen",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1172,7 +1172,7 @@
         "chart_name": "Crude Oil Optix",
         "url": "po_crude",
         "market_symbol": "crude",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1200,7 +1200,7 @@
         "chart_name": "Heating Oil Optix",
         "url": "po_heating",
         "market_symbol": "heating",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1214,7 +1214,7 @@
         "chart_name": "Natural Gas Optix",
         "url": "po_natural",
         "market_symbol": "natural",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1228,7 +1228,7 @@
         "chart_name": "Unleaded Gas Optix",
         "url": "po_unleaded",
         "market_symbol": "unleaded",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1242,7 +1242,7 @@
         "chart_name": "Copper Optix",
         "url": "po_copper",
         "market_symbol": "copper",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1256,7 +1256,7 @@
         "chart_name": "Gold Optix",
         "url": "po_gold",
         "market_symbol": "gold",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1305,7 +1305,7 @@
         "chart_name": "Platinum Optix",
         "url": "po_platinum",
         "market_symbol": "platinum",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1319,7 +1319,7 @@
         "chart_name": "Silver Optix",
         "url": "po_silver",
         "market_symbol": "silver",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1340,7 +1340,7 @@
         "chart_name": "Corn Optix",
         "url": "po_corn",
         "market_symbol": "corn",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1361,7 +1361,7 @@
         "chart_name": "Soybeans Optix",
         "url": "po_soybeans",
         "market_symbol": "soybeans",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1375,7 +1375,7 @@
         "chart_name": "Wheat Optix",
         "url": "po_wheat",
         "market_symbol": "wheat",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1389,7 +1389,7 @@
         "chart_name": "Cocoa Optix",
         "url": "po_cocoa",
         "market_symbol": "cocoa",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1403,7 +1403,7 @@
         "chart_name": "Coffee Optix",
         "url": "po_coffee",
         "market_symbol": "coffee",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1417,14 +1417,14 @@
         "chart_name": "Cotton Optix",
         "url": "po_cotton",
         "market_symbol": "cotton",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "Lumber Optix",
         "url": "po_lumber",
         "market_symbol": "lumber",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1438,7 +1438,7 @@
         "chart_name": "Orange Juice Optix",
         "url": "po_oj",
         "market_symbol": "oj",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1452,7 +1452,7 @@
         "chart_name": "Sugar Optix",
         "url": "po_sugar",
         "market_symbol": "sugar",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1466,7 +1466,7 @@
         "chart_name": "Cattle Optix",
         "url": "po_cattle",
         "market_symbol": "cattle",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -1480,7 +1480,7 @@
         "chart_name": "Hogs Optix",
         "url": "po_hogs",
         "market_symbol": "hogs",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -16488,7 +16488,7 @@
         "chart_name": "Lumber Future Optix",
         "url": "po_lumber_future",
         "market_symbol": "lumber_future",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -43004,7 +43004,7 @@
         "chart_name": "CRPT Optix",
         "url": "etf_crpt",
         "market_symbol": "CRPT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73062,28 +73062,28 @@
         "chart_name": "IVE Optix",
         "url": "etf_ive",
         "market_symbol": "ive",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "IVW Optix",
         "url": "etf_ivw",
         "market_symbol": "ivw",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "MAGS Optix",
         "url": "etf_mags",
         "market_symbol": "mags",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "IHE Optix",
         "url": "etf_ihe",
         "market_symbol": "ihe",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73097,112 +73097,112 @@
         "chart_name": "PBW Optix",
         "url": "etf_pbw",
         "market_symbol": "pbw",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "IYZ Optix",
         "url": "etf_iyz",
         "market_symbol": "iyz",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "MTUM Optix",
         "url": "etf_mtum",
         "market_symbol": "mtum",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "NUKZ Optix",
         "url": "etf_nukz",
         "market_symbol": "nukz",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "URA Optix",
         "url": "etf_ura",
         "market_symbol": "ura",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "SFYF Optix",
         "url": "etf_sfyf",
         "market_symbol": "sfyf",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "IGV Optix",
         "url": "etf_igv",
         "market_symbol": "IGV",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPG Optix",
         "url": "etf_rspg",
         "market_symbol": "RSPG",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPH Optix",
         "url": "etf_rsph",
         "market_symbol": "RSPH",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPF Optix",
         "url": "etf_rspf",
         "market_symbol": "RSPF",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPM Optix",
         "url": "etf_rspm",
         "market_symbol": "RSPM",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPU Optix",
         "url": "etf_rspu",
         "market_symbol": "RSPU",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPS Optix",
         "url": "etf_rsps",
         "market_symbol": "RSPS",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPC Optix",
         "url": "etf_rspc",
         "market_symbol": "RSPC",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPT Optix",
         "url": "etf_rspt",
         "market_symbol": "RSPT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "RSPR Optix",
         "url": "etf_rspr",
         "market_symbol": "RSPR",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73216,56 +73216,56 @@
         "chart_name": "XBTUSD Optix",
         "url": "etf_xbtusd",
         "market_symbol": "XBTUSD",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "GSG Optix",
         "url": "etf_gsg",
         "market_symbol": "GSG",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "PPLT Optix",
         "url": "etf_pplt",
         "market_symbol": "PPLT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "PSCE Optix",
         "url": "etf_psce",
         "market_symbol": "PSCE",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "CPER Optix",
         "url": "etf_cper",
         "market_symbol": "CPER",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "PSCT Optix",
         "url": "etf_psct",
         "market_symbol": "PSCT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "FDN Optix",
         "url": "etf_fdn",
         "market_symbol": "FDN",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "SPSM Optix",
         "url": "etf_spsm",
         "market_symbol": "SPSM",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73279,28 +73279,28 @@
         "chart_name": "VEU Optix",
         "url": "etf_veu",
         "market_symbol": "VEU",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "SLX Optix",
         "url": "etf_slx",
         "market_symbol": "SLX",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "PSCF Optix",
         "url": "etf_pscf",
         "market_symbol": "PSCF",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "DBC Optix",
         "url": "etf_dbc",
         "market_symbol": "DBC",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73314,14 +73314,14 @@
         "chart_name": "PSCC Optix",
         "url": "etf_pscc",
         "market_symbol": "PSCC",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "ETHA Optix",
         "url": "etf_etha",
         "market_symbol": "ETHA",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73335,35 +73335,35 @@
         "chart_name": "IBIT Optix",
         "url": "etf_ibit",
         "market_symbol": "IBIT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "PSCM Optix",
         "url": "etf_pscm",
         "market_symbol": "PSCM",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "SI1 Optix",
         "url": "etf_si1",
         "market_symbol": "SI1",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "COPPER Optix",
         "url": "etf_copper",
         "market_symbol": "copper",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "CL1 Optix",
         "url": "etf_cl1",
         "market_symbol": "CL1",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -73377,7 +73377,7 @@
         "chart_name": "IPAY Optix",
         "url": "etf_ipay",
         "market_symbol": "IPAY",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
