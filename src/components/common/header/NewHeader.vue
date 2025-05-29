@@ -282,6 +282,11 @@ export default {
               keyPath: '6-3',
               path: '/my_screen'
             },
+            {
+              label: 'My Watch List',
+              keyPath: '6-4',
+              path: '/watchlist'
+            },
           ]
         },
         {
@@ -309,7 +314,7 @@ export default {
       }
 
       // my stuff
-      if(['/myindicator', '/my_signals', '/my_screen'].includes(path)) {
+      if(['/myindicator', '/my_signals', '/my_screen', '/watchlist'].includes(path)) {
         this.activeIndex = this.navs.find(ele => ele.keyPath == 6)?.subMenu.find(ele => ele.path == path)?.keyPath
       }
     }

@@ -120,7 +120,7 @@ export default {
 				}
 			}
 			// 字符串类型排序
-			if(['Ticker'].indexOf(colName) !== -1){
+			if(['Ticker', 'Name'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'descending'){
@@ -132,27 +132,38 @@ export default {
 			const containsAnySubstring = (variable, keywords) => {
 				return keywords.some(keyword => variable.includes(keyword))
 			}
-			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'MA', 'Optix_Period', 'ROC_Period', 'MA_Period']
+			const keywords = ['Trend Score', 'RelTrend Score', 'Optix', 'ROC', 'MA', 'Optix_Period', 'ROC_Period', 'MA_Period', 'Close']
 			const result = containsAnySubstring(colName, keywords);
 			// 数字字符串转数字类型排序
 			if(result){
-				if(sortingOrder == 'ascending'){
-					this.data.content.sort((a,b) => {
-						b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-						a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _b - _a
-					})
-				}else if(sortingOrder == 'descending'){
-					this.data.content.sort((a,b) => {
-						b[colName] = typeof b[colName] === 'number' ? b[colName] + '' : b[colName]
-						a[colName] = typeof a[colName] === 'number' ? a[colName] + '' : a[colName]
-						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						let _a = a[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
-						return _a - _b
-					})
-				}else{
+				if (sortingOrder === 'ascending') {
+					this.data.content.sort((a, b) => {
+						let aVal = typeof a[colName] === 'number' ? a[colName] : String(a[colName]);
+						let bVal = typeof b[colName] === 'number' ? b[colName] : String(b[colName]);
+						let aValStr = String(aVal)
+						let bValStr = String(bVal)
+						let aMatch = aValStr.match(/-?\d+(\.\d+)?/);
+						let bMatch = bValStr.match(/-?\d+(\.\d+)?/);
+
+						let aNum = aMatch ? parseFloat(aMatch[0]) : 0;
+						let bNum = bMatch ? parseFloat(bMatch[0]) : 0;
+
+						return aNum - bNum;
+					});
+				} else if (sortingOrder === 'descending') {
+					this.data.content.sort((a, b) => {
+						let aVal = typeof a[colName] === 'number' ? a[colName] : String(a[colName]);
+						let bVal = typeof b[colName] === 'number' ? b[colName] : String(b[colName]);
+						let aValStr = String(aVal)
+						let bValStr = String(bVal)
+						let aMatch = aValStr.match(/-?\d+(\.\d+)?/);
+						let bMatch = bValStr.match(/-?\d+(\.\d+)?/);
+
+						let aNum = aMatch ? parseFloat(aMatch[0]) : 0;
+						let bNum = bMatch ? parseFloat(bMatch[0]) : 0;
+
+						return bNum - aNum;
+					});
 				}
 			}
 		},
