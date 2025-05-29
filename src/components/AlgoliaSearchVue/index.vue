@@ -94,6 +94,7 @@ import algoliasearch from 'algoliasearch/lite';
 import SourceFilter from './SourceFilter.vue';
 import 'instantsearch.css/themes/algolia-min.css';
 import { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY } from './constants';
+import { CIQ } from '@/components/common/chart/st-development/js'
 
 export default {
   name: "MultiIndexSearch",
@@ -127,6 +128,9 @@ export default {
      */
     filterChartHits(items) {
       return items.filter(item => {
+        // Algolia列表的每个项判断是否存在与本地列表并满足过滤条件
+        let obj = CIQ.findSentiIndicator(null,item.chart_url)
+        if(!obj || obj.updated == 'Quarterly') return false
         if (item.chart_url.includes('_trend_reltrend')) return false;
 
         // ❸ 其他规则按需添加
@@ -159,7 +163,15 @@ export default {
 
     generateChartUrl(item) {
       const isTrendScore = item.chart_url.includes('_trend') || item.chart_url.includes('_reltrend')
-      return `/${isTrendScore?'trend_score':'indicators'}?indicator=${item.chart_url}`;
+      function extractPrefix(str) {
+          if (str.endsWith('_trend')) {
+              return str.slice(0, -'_trend'.length) + '_trend_reltrend';
+          } else if (str.endsWith('_reltrend')) {
+              return str.slice(0, -'_reltrend'.length) + '_trend_reltrend';
+          }
+          return str; // 不符合规则
+      }
+      return `/${isTrendScore?'trend_score':'indicators'}?indicator=${extractPrefix(item.chart_url)}`;
     }
   },
 };

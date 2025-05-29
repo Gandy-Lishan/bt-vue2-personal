@@ -9,6 +9,7 @@
   import algoliasearch from 'algoliasearch/lite';
   import '@algolia/autocomplete-theme-classic'; // 默认样式
   import { ALGOLIA_APP_ID, ALGOLIA_SEARCH_KEY } from './constants';
+  import { CIQ } from '@/components/common/chart/st-development/js'
 
   export default {
     name: 'AutocompleteSearch',
@@ -44,7 +45,14 @@
                     .then(res =>
                         // ① 先拿命中的 hits
                         // ② 过滤掉 chart_url 含 _trend_reltrend 的记录
-                        res.hits.filter(hit => !/_trend_reltrend/.test(hit.chart_url))
+                        // res.hits.filter(hit => !/_trend_reltrend/.test(hit.chart_url))
+                        // Algolia列表的每个项判断是否存在与本地列表并满足过滤条件
+                        res.hits.filter(hit => {
+                            if (/_trend_reltrend/.test(hit.chart_url)) return null;
+                            let obj = CIQ.findSentiIndicator(null,hit.chart_url)
+                            if(!obj || obj.updated == 'Quarterly') return 
+                            return hit
+                        })
                     );
                 },
                 templates: {
@@ -53,7 +61,15 @@
                     },
                     item({ item, html }) {
                         const isTrendScore = item.chart_url.includes('_trend') || item.chart_url.includes('_reltrend')
-                        return html`<a href="/${isTrendScore?'trend_score':'indicators'}?indicator=${item.chart_url}" class="aa-ItemTitle">
+                        function extractPrefix(str) {
+                            if (str.endsWith('_trend')) {
+                                return str.slice(0, -'_trend'.length) + '_trend_reltrend';
+                            } else if (str.endsWith('_reltrend')) {
+                                return str.slice(0, -'_reltrend'.length) + '_trend_reltrend';
+                            }
+                            return str; // 不符合规则
+                        }
+                        return html`<a href="/${isTrendScore?'trend_score':'indicators'}?indicator=${extractPrefix(item.chart_url)}" class="aa-ItemTitle">
                         ${item.chart_name}${item.premium === 1 ? ' ★' : ''}
                         </a>`;
                     },
