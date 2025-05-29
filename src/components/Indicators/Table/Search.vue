@@ -191,7 +191,7 @@ export default {
           const match = str.match(/(.*?)_trend_reltrend/)
           const result = match ? match[1] : 'sp1500'
           requireUrl = result
-        }else if(type === 'etf_opt') {
+        }else if(sub_type === 'etf_breadth') {
           requireUrl = 'etf_breadth'
         }else if(type === 'etf_fund') {
           requireUrl = 'etf_flow'
@@ -208,7 +208,7 @@ export default {
         }else if(groups === 'bonds'){
           requireUrl = 'bonds_complete_list'
         }else if(type === 'etf_opt') {
-          reportUrl = 'etf_complete_list'
+          requireUrl = 'etf_complete_list'
         }else if(type === 'commod_seasonality') {
           url = 'commod_seasonality'
         }else if(groups === 'stocks') {
