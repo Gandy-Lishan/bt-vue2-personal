@@ -286,7 +286,7 @@ export default {
       debugger
       const validForm = await this.validForm('Form')
       if(!validForm) {
-        // this.popUpMsgBox('Please review and correct form errors')
+        this.popUpMsgBox('Please review and correct form errors')
         return
       }
       this.processTips = `Tips: Saving basket...`
@@ -377,7 +377,7 @@ export default {
       debugger
       const validForm = await this.validForm('Form', true)
       if(!validForm) {
-        // this.popUpMsgBox('Please review and correct form errors')
+        this.popUpMsgBox('Please review and correct form errors')
         return
       }
       this.previewLoading = true
