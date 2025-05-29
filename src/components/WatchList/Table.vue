@@ -227,6 +227,7 @@ export default {
       const { url } = row
       const _this = this
       row.deleteLoading = true
+      this.$emit('deleteRowURL', url)
 			const res = await deleteWatchlist(url)
       const code = res.data.code
       if(code == 204) _this.popUpMsgBox('Successfully deleted')

@@ -24,7 +24,7 @@
           </div>
         </template>
         <div class="content">
-            <Table ref="Table" @displayResultsData="displayResultsData"></Table>
+            <Table ref="Table" @displayResultsData="displayResultsData" @deleteRowURL="deleteRowURL"></Table>
         </div>
       </el-collapse-item>
       <el-collapse-item name="2" class="form">
@@ -374,6 +374,10 @@ export default {
     handleDownloadCsv() {
       this.$refs.ColumnsTable.downloadCSV()
     },
+    deleteRowURL(url) {
+      debugger
+      this.$refs['Form'].deleteRowURL(url)
+    }
   }
 }
 </script>

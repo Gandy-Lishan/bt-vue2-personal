@@ -5,6 +5,7 @@
       :model="data"
       label-position="top"
       size="small"
+      @submit.native.prevent
       :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
@@ -24,11 +25,11 @@
               v-model="tickers"
               multiple
               filterable
-              default-first-option
               @change="onSelectChange"
+              :filter-method="handleFilterInput"
               placeholder="- Select Ticker -">
               <el-option
-                v-for="item in symbolList"
+                v-for="item in filteredList"
                 :key="item.key"
                 :label="item.label"
                 :value="item.value"
@@ -191,6 +192,7 @@ export default {
       rowUrl: null,
       processTips: '',
       percentage: 0,
+      filteredList: []      // 根据输入实时更新的排序列表
       /* WatchList End */
     }
   },
@@ -212,6 +214,7 @@ export default {
   },
   mounted() {
     this._dropdownList = this.symbolList
+    this.filteredList = this._dropdownList
     this.attachScrollListener()
     this.generateName()
   },
@@ -534,6 +537,60 @@ export default {
       }
       this.$emit('retainFormTicker', val)
     },
+    deleteRowURL(url) {
+      debugger
+      if(this.rowUrl === url) this.rowUrl = null
+    },
+    handleFilterInput(queryString) {
+      const standardizeString = (str) => {
+        return String(str).toLowerCase().replace(/[_\s-]+/g, ' ');
+      };
+      
+      const escapeRegExp = (string) => {
+        return string.replace(/[.*+?^=${}()|[\]\\]/g, '\\$&');
+      };
+      
+      const fuzzyMatch = (text, query) => {
+        const escapedQuery = escapeRegExp(query);
+        let regexString = '';
+        for (let i = 0; i < escapedQuery.length; i++) {
+          const char = escapedQuery[i];
+          regexString += char;
+          if (i < escapedQuery.length - 1 && /[a-zA-Z0-9]/.test(char)) {
+            regexString += '.*?';
+          }
+        }
+        const regex = new RegExp(regexString, 'g');
+        return [...text.matchAll(regex)];
+      };
+
+      const standardizedQuery = standardizeString(queryString);
+      
+      const scoredList = this.symbolList.map((item) => {
+        const resultValue = item.value || item.name || item.label || item.model_name || '';
+        const resultUrl = item.url || item.symbol || '';
+        const standardizedValue = standardizeString(resultValue);
+        const standardizedUrl = standardizeString(resultUrl);
+        
+        let score = 0;
+        if (!standardizedQuery) score = 9999; // query 为空默认置顶
+        else if (standardizedValue === standardizedQuery || standardizedUrl === standardizedQuery) {
+          score = 100;
+        } else if (standardizedValue.startsWith(standardizedQuery) || standardizedUrl.startsWith(standardizedQuery)) {
+          score = 50;
+        } else {
+          const valMatches = fuzzyMatch(standardizedValue, standardizedQuery).length;
+          const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery).length;
+          score = (valMatches + urlMatches) * 5;
+        }
+        
+        return { ...item, _score: score };
+      });
+
+    this.filteredList = scoredList
+      .filter(i => i._score > 0)
+      .sort((a, b) => b._score - a._score);
+  }
   },
 }
 </script>
