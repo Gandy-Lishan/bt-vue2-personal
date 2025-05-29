@@ -228,6 +228,7 @@ export default {
         if (Object.prototype.hasOwnProperty.call(content, ticker)) {
           const element = content[ticker];
           const {optix_url, records, ticker_name} = element
+          if(!records || (Array.isArray(records) && !records.length))continue
           const tickerObj = {}
           const _tempHeatMap = []
           const Closes = records.map(ele => (ele.Close))
