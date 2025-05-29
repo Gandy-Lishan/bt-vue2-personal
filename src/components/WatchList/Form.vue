@@ -273,6 +273,7 @@ export default {
       const manageColumns = this.manageColumns.map(ele => {
         const isItInTheList = this.indicatorOptions.find(option => option.value === ele.indicator)
         if(!ele.indicator || !isItInTheList) ele.indicatorErrMsg = 'Please select indicator from the dropdown menu'
+        else ele.indicatorErrMsg = ''
         return ele
       })
       this.manageColumns = manageColumns
@@ -444,7 +445,7 @@ export default {
       this.percentage = 0
     },
     addRow() {
-      if(this.manageColumns.slice(1).length === 5) {this.popUpMsgBox(`Up to 5 rows can be added`); return}
+      if(this.manageColumns.length === 5) {this.popUpMsgBox(`Up to 5 rows can be added`); return}
       this.manageColumns.push({indicator: '', bar: '', indicatorErrMsg: ''})
     },
     deleteRow(index) {
