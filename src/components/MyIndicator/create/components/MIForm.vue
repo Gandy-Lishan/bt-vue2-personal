@@ -1609,6 +1609,8 @@ export default {
       //this.data.time_frame = this.findMaxFreq() 
 
       // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
+      // 切换Indicator后把condition切换为默认当前indicator的tf
+      this.RESAMPLEData.condition = 'daily'
       this.data.time_frame = this.RESAMPLEData.condition
       CIQ.changeUserOwnIndicatorResample(item)  
     },
