@@ -45,6 +45,10 @@ export default {
               value: 'Indicator ratio'
             },
             {
+              label: 'Indicator resample',
+              value: 'Indicator resample'
+            },
+            {
               label: 'Symbol spread',
               value: 'Symbol spread'
             },
