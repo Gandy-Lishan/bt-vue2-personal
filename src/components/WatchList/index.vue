@@ -471,6 +471,9 @@ export default {
   background-color: #fff;
   color: #333;
   user-select: text;
+  /deep/ .el-collapse {
+    overflow: hidden;
+  }
 }
 @media (min-width: 768px) {
   .CPMResults-container {
