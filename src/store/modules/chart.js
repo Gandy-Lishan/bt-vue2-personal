@@ -76,6 +76,7 @@ const state = {
 	// indicators look up
 	stocksList: stocksData, //chartiq
 	indexsList: indexsData, //chartiq
+	originIndicatorList: indicatorsData, //chartiq
 	formateTechnicalList: [], //chartiq 和builtinList不同，这个是只给表单提供的techList
 	spanPeriod: {},
 	isBTChartReady: false,

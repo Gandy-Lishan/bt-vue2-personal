@@ -49,7 +49,7 @@
                         // Algolia列表的每个项判断是否存在与本地列表并满足过滤条件
                         res.hits.filter(hit => {
                             if (/_trend_reltrend/.test(hit.chart_url)) return null;
-                            let obj = CIQ.findSentiIndicator(null,hit.chart_url)
+                            let obj = CIQ.findOriginSentiIndicator(null,hit.chart_url)
                             if(!obj || obj.updated == 'Quarterly') return 
                             return hit
                         })

@@ -34,6 +34,21 @@ let __st_js_indicatorType_ = _exports => {
 		return signal
 	}
 
+	CIQ.findOriginSentiIndicator = function(name, url) {
+		let signal
+		if (name) {
+			signal = CIQ.store.getters.getOriginIndicatorList.find(i => {
+				return i.chart_name == name
+			})
+		}
+		if (url) {
+			signal = CIQ.store.getters.getOriginIndicatorList.find(i => {
+				return i.url == url
+			})
+		}
+		return signal
+	}
+
 	CIQ.isUserIndicator = function(indicator) {
 		if (!indicator || indicator.indexOf('HASH') == -1) {
 			return false
