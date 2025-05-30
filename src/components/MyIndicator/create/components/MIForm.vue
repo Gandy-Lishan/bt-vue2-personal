@@ -1618,16 +1618,15 @@ export default {
      * indicator resample
      */
     async changeResampleIndicator(item) {
-      // if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
-      // else this.OHLCVData.symbol = item // from changeTimeFrame
-      this.RESAMPLEData.indicator = item.url
-      //this.data.time_frame = this.findMaxFreq() 
+      this.$nextTick(()=>{
+        this.RESAMPLEData.indicator = item.url
 
-      // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
-      // 切换Indicator后把condition切换为默认当前indicator的tf
-      this.RESAMPLEData.condition = 'daily'
-      this.data.time_frame = this.RESAMPLEData.condition
-      CIQ.changeUserOwnIndicatorResample(item)  
+        // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
+        // 切换Indicator后把condition切换为默认当前indicator的tf
+        this.RESAMPLEData.condition = 'daily'
+        this.data.time_frame = this.RESAMPLEData.condition
+        CIQ.changeUserOwnIndicatorResample(item)  
+      })
     },
     changeResampleCondition(item) {
       this.RESAMPLEData.condition = item
