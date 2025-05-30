@@ -129,7 +129,7 @@ export default {
     filterChartHits(items) {
       return items.filter(item => {
         // Algolia列表的每个项判断是否存在与本地列表并满足过滤条件
-        let obj = CIQ.findSentiIndicator(null,item.chart_url)
+        let obj = CIQ.findOriginSentiIndicator(null,item.chart_url)
         if(!obj || obj.updated == 'Quarterly') return false
         if (item.chart_url.includes('_trend_reltrend')) return false;
 

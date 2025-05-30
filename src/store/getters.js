@@ -29,6 +29,7 @@ const getters = {
 	getChartType: state => state.chart.chartType,
 	getStockList: state => state.chart.stocksList,
 	getIndexList: state => state.chart.indexsList,
+	getOriginIndicatorList: state => state.chart.originIndicatorList,
 	getIndicatorsList: state => state.chart.indicatorsList,
 	getTechnicalCategory: state => state.chart.technicalCategory,
 	getBuiltinList: state => state.chart.builtinList,
