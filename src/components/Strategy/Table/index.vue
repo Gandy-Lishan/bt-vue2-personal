@@ -86,7 +86,7 @@ export default {
 				{ type: 'info', label: 'Factors', value: 'Factors' },
 				{ type: 'info', label: 'Sector', value: 'Sector' },
 				{ type: 'info', label: 'My Favorites', value: 'Favorites' },
-				// { type: 'info', label: 'My Strategies Basket', value: 'Portfolio' }
+				{ type: 'info', label: 'My Strategies Basket', value: 'Portfolio' }
 			],
 			activatedTag: 'All',
     }
@@ -116,8 +116,8 @@ export default {
     if(this.selectedTitle === 'Summary') this.highlightedTag(this.activatedTag)
     else if(this.selectedTitle === 'Strategies') this.$refs['Strategies'].highlightTag(this.activatedTag)
     // 单独给 hao@sentimentrader.com 和 jinjing@sentimentrader.com 开放 portfolio 入口
-    const email = getCookieData()?.username
-    if(['hao@sentimentrader.com', 'jinjing@sentimentrader.com'].includes(email)) this.tags.push({ type: 'info', label: 'My Strategies Basket', value: 'Portfolio' })
+    // const email = getCookieData()?.username
+    // if(['hao@sentimentrader.com', 'jinjing@sentimentrader.com'].includes(email)) this.tags.push({ type: 'info', label: 'My Strategies Basket', value: 'Portfolio' })
   },
   methods: {
     portfolio() {
