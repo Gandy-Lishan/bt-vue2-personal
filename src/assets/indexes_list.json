@@ -852,24 +852,6 @@
         "inception": "2010/4/1"
     },
     {
-        "symbol": "MLPI",
-        "name": "UBS Alerian MLP (MLPI)",
-        "category": "ETF",
-        "inception": "2010/4/1"
-    },
-    {
-        "symbol": "MLPI",
-        "name": "UBS Alerian MLP (MLPI)",
-        "category": "ETF",
-        "inception": "2010/4/1"
-    },
-    {
-        "symbol": "MLPI",
-        "name": "UBS Alerian MLP (MLPI)",
-        "category": "ETF",
-        "inception": "2010/4/1"
-    },
-    {
         "symbol": "MOAT",
         "name": "VanEck Wide Moat ETF (MOAT)",
         "category": "ETF",
@@ -1034,12 +1016,6 @@
     {
         "symbol": "RSPH",
         "name": "Invesco S&P 500 EW Health Care",
-        "category": "ETF",
-        "inception": "2006/11/7"
-    },
-    {
-        "symbol": "RSPM",
-        "name": "Invesco S&P 500 EW Materials",
         "category": "ETF",
         "inception": "2006/11/7"
     },
