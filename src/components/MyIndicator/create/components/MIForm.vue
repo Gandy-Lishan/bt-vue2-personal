@@ -1,6 +1,7 @@
 <template>
   <div class="MI-container">
     <h4>Create My Own Indicator</h4>
+    {{ OHLCVData }}
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
@@ -1205,17 +1206,22 @@ export default {
       }
     },
     handleSelect(item, source) {
-      this.$nextTick(async ()=>{      
+      this.$nextTick(async ()=>{    
         const type = item.type
 
         const selectIndicator = (item) => {
           this.data[source] = item.label
+          // 防止重复加载同一个indicator
+          if(item.url == this.data[`${source}_url`]) return 0
           this.data[`${source}_url`] = item.url
           // this.data.time_frame = item.updated;
+          return 1
         }
 
         const selectSymbol = (item) => {
           this.data[source] = item.url
+          // 防止重复加载同一个indicator
+          if(item.url == this.data[`${source}_url`]) return 0
           this.data[`${source}_url`] = item.url
           this[`${source}_category`] = item.category || null
 
@@ -1224,32 +1230,32 @@ export default {
             'showInput': this.$refs['shiftForm'].showInput, 
             'value':  Number(this.$refs['shiftForm'].value)
           })
+          return 1
         }
-
 
         if (type === 'Indicator') {
           if (this.data.categories.includes('Indicator')) {
-            selectIndicator(item)
+            if(!selectIndicator(item)) return
           } else if (this.data.categories.includes('Symbol')) {
             this.data.categories = 'Indicator Spread'
             this.changeCategories('Indicator Spread')
-            selectIndicator(item)
+            if(!selectIndicator(item)) return
           } else {
             this.data.categories = 'Indicator Spread'
             this.changeCategories('Indicator Spread')
-            selectIndicator(item)
+            if(!selectIndicator(item)) return
           }
         } else if (type === 'Symbol') {
           if (this.data.categories.includes('Symbol')) {
-            selectSymbol(item)
+            if(!selectSymbol(item)) return
           } else if (this.data.categories.includes('Indicator')) {
             this.data.categories = 'Symbol Spread'
             this.changeCategories('Symbol Spread')
-            selectSymbol(item)
+            if(!selectSymbol(item)) return
           } else {
             this.data.categories = 'Symbol Spread'
             this.changeCategories('Symbol Spread')
-            selectSymbol(item)
+            if(!selectSymbol(item)) return
           }
         }
         this.data.time_frame = this.findMaxFreq() 
@@ -1548,20 +1554,21 @@ export default {
       row.weightValidErrMsg = validatePercentageRule(_, row.weight)
     },
     handleRowSelect(item, row) {
-      
-      console.log('item', item, row)
-      row.indicator = item.label
-      if(item.type == 'Symbol') row.indicator = item.url
-      row.indicator_url = item.url
-      row.type = item.type
-      
-      console.log(this.weightData)
+      this.$nextTick(async ()=>{    
+        console.log('item', item, row)
+        row.indicator = item.label
+        if(item.type == 'Symbol') row.indicator = item.url
+        row.indicator_url = item.url
+        row.type = item.type
+        
+        console.log(this.weightData)
 
-      this.data.time_frame = this.findMaxFreq() 
-      console.log('当前最大的 timeframe 是', this.data.time_frame)
+        this.data.time_frame = this.findMaxFreq() 
+        console.log('当前最大的 timeframe 是', this.data.time_frame)
 
-      // 更新weightList并刷新chartiq状态
-      this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
+        // 更新weightList并刷新chartiq状态
+        this.$store.dispatch('chart/set_miFormWeightedListChange',{data:this.weightData,url:null})
+      })
     },
     addRow(row) {
       /*
@@ -1585,18 +1592,20 @@ export default {
      * symbol ohlcv
      */
     async changeSymbol(item) {
-      if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
-      else this.OHLCVData.symbol = item // from changeTimeFrame
- 
-      // 用promise包裹indicator加载流程确保其在stma加载之前执行
-      await this.$store.dispatch('chart/set_miFormSOHLCVChange',{
-        data:{
-          symbol:this.OHLCVData.symbol,
-        }
+      this.$nextTick(async ()=>{    
+        if(typeof(item) == 'object') this.OHLCVData.symbol = item.url
+        else this.OHLCVData.symbol = item // from changeTimeFrame
+  
+        // 用promise包裹indicator加载流程确保其在stma加载之前执行
+        await this.$store.dispatch('chart/set_miFormSOHLCVChange',{
+          data:{
+            symbol:this.OHLCVData.symbol,
+          }
+        })
+        // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
+        const checkInputRef = 'maohlcvForm'
+        this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
       })
-      // 直接通过子组件引用获取checkInput data,这种单项数据传输需要在vue中避免
-      const checkInputRef = 'maohlcvForm'
-      this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
     },
     handleSymbolSelect(item) {
       this.OHLCVData.condition = item.label
