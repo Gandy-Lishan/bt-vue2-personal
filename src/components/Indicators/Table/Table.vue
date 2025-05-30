@@ -263,6 +263,7 @@ export default {
     async loadMore (type, isUpdateChart, condition) {
       debugger
       const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
+      const indicator = this.$route.query.indicator
       this.optionsChecked = type
       this.loading = true
       let _results
@@ -293,7 +294,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart || isTrendScore || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || (isTrendScore && !indicator) || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     },
