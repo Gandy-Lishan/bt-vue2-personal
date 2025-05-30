@@ -86,6 +86,7 @@ export default {
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
+			let tickerIndicator = document.querySelector(".ciq-ticker-indicator")
 			//let footer = document.querySelector('.ciq-footer')
 
 			// search.style.visibility = 'hidden'
@@ -93,6 +94,7 @@ export default {
 			studies.style.visibility = 'hidden'
 			favBtnContainer.style.display = 'none'
 			timeframeBtn.style.display = 'none'
+			tickerIndicator.style.visibility = 'hidden'
 			// footer.style.display = 'none'
 
 			let menuYAxisPreferences = document.querySelector('[cq-name="menuYAxisPreferences"] :first-child')

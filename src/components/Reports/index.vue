@@ -73,6 +73,7 @@ methods:{
     let huTooltip = document.querySelector(".hu-tooltip")
     let gridGroup = document.querySelector(".grid-group")
     let lastpGroup = document.querySelector(".lastp-group")
+    let tickerIndicator = document.querySelector(".ciq-ticker-indicator")
     //let footer = document.querySelector('.ciq-footer')
 
     //如果是ActiveStudies, 屏幕较窄, 用display代替visibility
@@ -84,9 +85,11 @@ methods:{
       huTooltip.style.visibility = 'hidden'
       gridGroup.style.visibility = 'hidden'
       lastpGroup.style.visibility = 'hidden'
+      tickerIndicator.style.display = 'none'
     }else{
       indicatorSearch.style.visibility = 'hidden'
       studies.style.visibility = 'hidden'
+      tickerIndicator.style.visibility = 'hidden'
     }
     
     favBtnContainer.style.display = 'none'
