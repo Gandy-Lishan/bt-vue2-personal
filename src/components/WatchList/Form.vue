@@ -448,7 +448,7 @@ export default {
       this.percentage = 0
     },
     addRow() {
-      if(this.manageColumns.length === 5) {this.popUpMsgBox(`Up to 5 rows can be added`); return}
+      if(this.manageColumns.length >= 10) {this.popUpMsgBox(`Up to 10 rows can be added`); return}
       this.manageColumns.push({indicator: '', bar: '', indicatorErrMsg: ''})
     },
     deleteRow(index) {
