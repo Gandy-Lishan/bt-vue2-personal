@@ -225,12 +225,12 @@ export default {
       }
       const getColor = (normalizedValue) => {
         if (normalizedValue <= 0) return '#41A317';       // 极端悲观（绿色）
-        if (normalizedValue <= 0.2) return '#89C35C';     // 较强的悲观（浅绿色）
-        if (normalizedValue <= 0.3) return '#99C68E';     // 中等的悲观（淡绿）
-        if (normalizedValue <= 0.5) return '#FFF8DC';     // 中立
-        if (normalizedValue <= 0.7) return '#E18B6B';     // 较强的乐观（橙色）
-        if (normalizedValue <= 0.8) return '#F75D59';     // 极端乐观（红色）
-        return '#FF0000';                                 // 非常乐观（红色）
+        if (normalizedValue <= 20) return '#89C35C';      // 较强的悲观（浅绿色）
+        if (normalizedValue <= 30) return '#99C68E';      // 中等的悲观（淡绿）
+        if (normalizedValue <= 50) return '#FFF8DC';      // 中立
+        if (normalizedValue <= 70) return '#E18B6B';      // 较强的乐观（橙色）
+        if (normalizedValue <= 80) return '#F75D59';      // 极端乐观（红色）
+        return '#FF0000';                                // 非常乐观（红色）
       };
       const _content = []
       const _heatMap = []
@@ -257,7 +257,7 @@ export default {
           const minClose =  Math.min(...Closes) || 0
           const maxClose =  Math.max(...Closes) || 0
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
-          const colorValue = getColor(normalized)
+          const colorValue = getColor(_lastOptix)
 
           _tempHeatMap.push(ticker)
           _tempHeatMap.push(optix_url) // url
@@ -335,6 +335,7 @@ export default {
         content: [],
         tableCol: []
       }
+      this.heatmap = [[]]
     },
     resetForm() {
       this.$nextTick(() => {
