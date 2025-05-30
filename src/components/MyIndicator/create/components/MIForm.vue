@@ -1,7 +1,6 @@
 <template>
   <div class="MI-container">
     <h4>Create My Own Indicator</h4>
-    {{ OHLCVData }}
 	<el-form
 		ref="MICreateForm"
 		class="MI-form-container"
