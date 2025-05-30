@@ -1059,6 +1059,7 @@ export default {
           this.OHLCVData.symbol
         )
       }else if(this.data.categories == 'Resample'){
+        CIQ.store.commit('form/getFrequency', timeframeTransform(this.RESAMPLEData.condition)) //timeframe直接和更改的condition一致
         CIQ.previewUserOwnIndicator(
           [this.data.name+'CREATE'+url],
           this.data.name+'CREATE'+url,

@@ -122,7 +122,7 @@
 					<cq-menu class="ciq-menu ciq-ticker-indicator">
 						<span
 							><cq-clickable
-								>Ticker Indicator</cq-clickable
+								>Quick Access</cq-clickable
 							></span
 						>
 						<cq-menu-dropdown>
