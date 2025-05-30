@@ -109,11 +109,11 @@ export default {
           value: '_tickers',
           key: '_tickers'
         },
-        {
-          label: 'Columns',
-          value: '_columns',
-          key: '_columns'
-        },
+        // {
+        //   label: 'Columns',
+        //   value: '_columns',
+        //   key: '_columns'
+        // },
         {
           label: 'Updated',
           value: 'updated_at',

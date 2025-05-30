@@ -156,12 +156,22 @@ export default {
           .trim();                // 去除首尾空格
       }
       const tickersColumns = formData.columns.map(column => {
+        debugger
         let { indicator, bar } = column
-        bar = `${bar && bar != 1 ? ` ${bar}` : ''}`
-        const originalIndicator = indicator
+        /*
+        Optix
+        Optix MA5
+        Close MA5
+        ROC5
+        */
+        bar = `${bar && bar != 1 ? ` ${bar}-Day ` : ''}`
+        let originalIndicator = indicator
         indicator = removeStartEndNumbers(indicator)
         let label = `${indicator}${bar}`
         let value = `${indicator}${bar}`
+        if(indicator === 'Optix MA' || indicator === 'Close MA') {
+          label = indicator.replace(/ /g, bar)
+        }
         if(label.includes('ROC')) {label = `${bar} ${indicator}`; value = `${bar} ${indicator}`}
         return {...column, value, label, originalIndicator}
       })
@@ -215,12 +225,12 @@ export default {
       }
       const getColor = (normalizedValue) => {
         if (normalizedValue <= 0) return '#41A317';       // 极端悲观（绿色）
-        if (normalizedValue <= 0.2) return '#89C35C';     // 较强的悲观（浅绿色）
-        if (normalizedValue <= 0.3) return '#99C68E';     // 中等的悲观（淡绿）
-        if (normalizedValue <= 0.5) return '#FFF8DC';     // 中立
-        if (normalizedValue <= 0.7) return '#E18B6B';     // 较强的乐观（橙色）
-        if (normalizedValue <= 0.8) return '#F75D59';     // 极端乐观（红色）
-        return '#FF0000';                                 // 非常乐观（红色）
+        if (normalizedValue <= 20) return '#89C35C';      // 较强的悲观（浅绿色）
+        if (normalizedValue <= 30) return '#99C68E';      // 中等的悲观（淡绿）
+        if (normalizedValue <= 50) return '#FFF8DC';      // 中立
+        if (normalizedValue <= 70) return '#E18B6B';      // 较强的乐观（橙色）
+        if (normalizedValue <= 80) return '#F75D59';      // 极端乐观（红色）
+        return '#FF0000';                                // 非常乐观（红色）
       };
       const _content = []
       const _heatMap = []
@@ -247,37 +257,37 @@ export default {
           const minClose =  Math.min(...Closes) || 0
           const maxClose =  Math.max(...Closes) || 0
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
-          const colorValue = getColor(normalized)
+          const colorValue = getColor(_lastOptix)
 
           _tempHeatMap.push(ticker)
           _tempHeatMap.push(optix_url) // url
           _tempHeatMap.push(lastOptix)
           _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
-            let {label, indicator, bar} = column
+            let {label, indicator, bar, value} = column
             indicator = removeStartEndNumbers(indicator)
             if(indicator === 'Optix') {
-              tickerObj[label] = lastOptix
+              tickerObj[value] = lastOptix
             }
             else if(indicator === 'RelTrend Score') {
-              tickerObj[label] = lastRelTrend !== null ? lastRelTrend : ''
+              tickerObj[value] = lastRelTrend !== null ? lastRelTrend : ''
             }
             else if(indicator === 'Trend Score') {
-              tickerObj[label] = lastTrend !== null ? lastTrend : ''
+              tickerObj[value] = lastTrend !== null ? lastTrend : ''
             }
             else if(indicator.includes('ROC')) {
-              if(!lastClose) {tickerObj[label] = '';}else{
+              if(!lastClose) {tickerObj[value] = '';}else{
                 const ROCRate = calculateROC(Closes, Number(bar) + 1)
                 const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
-                tickerObj[label] = ROC
+                tickerObj[value] = ROC
               }
             } else if(indicator === 'Close MA') {
-              if(!lastClose) {tickerObj[label] = '';}else{
-                tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+              if(!lastClose) {tickerObj[value] = '';}else{
+                tickerObj[value] = getLastBarAvg(Closes, Number(bar))
               }
             } else if(indicator === 'Optix MA') {
-              if(!lastOptix) {tickerObj[label] = '';}else{
-                tickerObj[label] = getLastBarAvg(Optix, Number(bar))
+              if(!lastOptix) {tickerObj[value] = '';}else{
+                tickerObj[value] = getLastBarAvg(Optix, Number(bar))
               }
             }
           })
@@ -325,6 +335,7 @@ export default {
         content: [],
         tableCol: []
       }
+      this.heatmap = [[]]
     },
     resetForm() {
       this.$nextTick(() => {
