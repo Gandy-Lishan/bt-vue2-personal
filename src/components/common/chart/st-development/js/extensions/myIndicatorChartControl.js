@@ -1044,7 +1044,8 @@
 
         for (var studyInstanceName in CIQ.stxx.layout.studies) { 
             var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
-            if(CIQ.isOwnIndicator(sd.type) || sd.type != indicator.url) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            CIQ.Studies.removeStudy(CIQ.stxx, sd);
+            // if(CIQ.isOwnIndicator(sd.type) || sd.type != indicator.url) CIQ.Studies.removeStudy(CIQ.stxx, sd); 
         }
 
         addSingleIndicator([indicator.url],indicator.url,null,null,()=>{});

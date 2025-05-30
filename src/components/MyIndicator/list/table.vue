@@ -115,7 +115,7 @@
           </template>
 					<template slot-scope="scope">
 						<p class="tableText">
-							{{ scope.row[l.value] }}
+							{{ (l.label == 'Categories' && scope.row[l.value] == 'Resample') ? 'Indicator Resample' : scope.row[l.value] }}
 						</p>
 					</template>
 				</el-table-column>
