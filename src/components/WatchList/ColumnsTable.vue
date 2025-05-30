@@ -215,9 +215,9 @@ export default {
         return
       }
       const xlsxName = 'Preview Watch List'
-      const _keySort = this.tableCol.map(ele => ele.value).filter(ele => ele)
-      let csvContent = this.data.content.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
-      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+      const _keySort = this.tableCol.map(ele => ({value: ele.value, label: ele.label})).filter(ele => ele.label !== 'Button')
+      let csvContent = this.data.content.map(row => _keySort.map(key => `${row[key['value']]}`).join(',')).join('\n');
+      csvContent = `${_keySort.map(ele => ele.label).join(',')}\n${csvContent}`;
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
