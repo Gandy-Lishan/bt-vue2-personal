@@ -901,17 +901,6 @@ export default {
       this.strategy_combination = [{}, ...temp_strategy_combination]
     }, 500),
     handleRowSelect(item, row) {
-      const duplicateStrategy = [...this.strategy_combination.slice(1)].find(ele => {
-        return (
-          (ele.url && item.url && ele.url === item.url) ||
-          (ele.model_name && item.model_name && ele.model_name === item.model_name)
-        );
-      });
-      if(duplicateStrategy) {
-        this.popUpMsgBox(`Duplicate Strategy: ${item.model_name || ''}`)
-        this.strategy_combination.pop()
-        return
-      }
       row.model_name = item.model_name
       row.category = this.tags[item.category]
       row._category = item.category
