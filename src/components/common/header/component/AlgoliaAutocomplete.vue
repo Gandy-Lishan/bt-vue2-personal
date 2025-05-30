@@ -60,7 +60,7 @@
                         return html`<div>📈 Charts</div>`;
                     },
                     item({ item, html }) {
-                        const isTrendScore = item.chart_url.includes('_trend') || item.chart_url.includes('_reltrend')
+                        const isTrendScore = item.chart_url.endsWith('_trend') || item.chart_url.endsWith('_reltrend')
                         function extractPrefix(str) {
                             if (str.endsWith('_trend')) {
                                 return str.slice(0, -'_trend'.length) + '_trend_reltrend';
