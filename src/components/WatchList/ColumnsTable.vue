@@ -30,7 +30,7 @@
 					</template>
 					<template slot-scope="scope">
 						<p :class="getCellStyle(scope.row[l.value])">
-							{{ scope.row[l.value] }}
+							{{ scope.row[l.value] !== '' ? scope.row[l.value] : '-' }}
 						</p>
 					</template>
 				</el-table-column>

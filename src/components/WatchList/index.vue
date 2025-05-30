@@ -192,14 +192,14 @@ export default {
 
       const calculateROC = (arr, preNum) => {
         if (!Array.isArray(arr) || arr.length < preNum) {
-          return 'N/A'; // 或者提示 "数据不足 preNum 项"
+          return ''; // 或者提示 "数据不足 preNum 项"
         }
 
         const last = parseFloat(arr[arr.length - 1]);
         const prev = parseFloat(arr[arr.length - preNum]);
 
         if (isNaN(last) || isNaN(prev) || prev === 0) {
-          return 'N/A'; // 防止除以 0 或无效数据
+          return ''; // 防止除以 0 或无效数据
         }
 
         const rate = (last - prev) / Math.abs(prev);
@@ -207,7 +207,7 @@ export default {
       }
       const getLastBarAvg = (arr, preNum) => {
         if (!Array.isArray(arr) || arr.length < preNum) {
-          return 'N/A'; // 或者抛出错误：数据不足 preNum 项
+          return ''; // 或者抛出错误：数据不足 preNum 项
         }
         const lastBar = arr.slice(-preNum); // 获取最后 preNum 项
         const sum = lastBar.reduce((acc, val) => acc + parseFloat(val), 0);
@@ -227,7 +227,8 @@ export default {
       for (const ticker in content) {
         if (Object.prototype.hasOwnProperty.call(content, ticker)) {
           const element = content[ticker];
-          const {optix_url, records, ticker_name} = element
+          let {optix_url, records, ticker_name} = element
+          records = isJson(records) ? JSON.parse(records) : records
           if(!records || (Array.isArray(records) && !records.length))continue
           const tickerObj = {}
           const _tempHeatMap = []
@@ -236,14 +237,15 @@ export default {
           const TrendScore = records.map(ele => (ele['Trend']))
           const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
-          const lastOptix = parseFloat(Optix.at(-1).toFixed(2))
+          const _lastOptix = Optix.at(-1)
+          const lastOptix = _lastOptix !== null ? parseFloat(_lastOptix.toFixed(2)) : ''
           const lastTrend = TrendScore.at(-1)
           const lastRelTrend = RelTrendScore.at(-1)
           tickerObj['Ticker'] = ticker
           tickerObj['Name'] = ticker_name
-          tickerObj['Close'] = parseFloat(lastClose.toFixed(2))
-          const minClose =  Math.min(...Closes)
-          const maxClose =  Math.max(...Closes)
+          tickerObj['Close'] = lastClose !== null ? parseFloat(lastClose.toFixed(2)) : ''
+          const minClose =  Math.min(...Closes) || 0
+          const maxClose =  Math.max(...Closes) || 0
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
           const colorValue = getColor(normalized)
 
@@ -258,19 +260,25 @@ export default {
               tickerObj[label] = lastOptix
             }
             else if(indicator === 'RelTrend Score') {
-              tickerObj[label] = lastTrend
+              tickerObj[label] = lastRelTrend !== null ? lastRelTrend : ''
             }
             else if(indicator === 'Trend Score') {
-              tickerObj[label] = lastRelTrend
+              tickerObj[label] = lastTrend !== null ? lastTrend : ''
             }
             else if(indicator.includes('ROC')) {
-              const ROCRate = calculateROC(Closes, Number(bar) + 1)
-              const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
-              tickerObj[label] = ROC
+              if(!lastClose) {tickerObj[label] = '';}else{
+                const ROCRate = calculateROC(Closes, Number(bar) + 1)
+                const ROC = !isNaN(ROCRate) ? `${(ROCRate * 100).toFixed(2)}%` : ROCRate
+                tickerObj[label] = ROC
+              }
             } else if(indicator === 'Close MA') {
-              tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+              if(!lastClose) {tickerObj[label] = '';}else{
+                tickerObj[label] = getLastBarAvg(Closes, Number(bar))
+              }
             } else if(indicator === 'Optix MA') {
-              tickerObj[label] = getLastBarAvg(Optix, Number(bar))
+              if(!lastOptix) {tickerObj[label] = '';}else{
+                tickerObj[label] = getLastBarAvg(Optix, Number(bar))
+              }
             }
           })
           _heatMap.push(_tempHeatMap)
