@@ -30,7 +30,7 @@
 					</template>
 					<template slot-scope="scope">
 						<p :class="getCellStyle(scope.row[l.value])">
-							{{ scope.row[l.value] }}
+							{{ scope.row[l.value] !== '' ? scope.row[l.value] : '-' }}
 						</p>
 					</template>
 				</el-table-column>
@@ -258,7 +258,7 @@ export default {
   }
 }
 .CPM-list-container{
-  padding: 20px;
+  padding: 20px 0px;
 }
 .ScannerBTTable .demo-table-expand .el-form-item {
     margin-right: 0;
