@@ -1014,7 +1014,7 @@ export default {
         url = res.data.url
         const indicatorData = await getMyIndicatorData(url)
         // 更新 rowUrl
-        this.rowUrl = ''
+        // this.rowUrl = ''
         // 暂存
         localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
         const delRes = await delMyIndicator(url)
