@@ -1360,6 +1360,10 @@ export default {
       }else if(data.categories == 'Resample'){
         this.RESAMPLEData.indicator = data.indicator_1_url
         this.RESAMPLEData.condition = data.calculate
+        
+        // 强制让input的显示值为label而不是url,设计缺陷，没有给RESAMPLEDATA加label
+        let label = CIQ.findSentiIndicator(null,this.RESAMPLEData.indicator).chart_name
+        this.changeResampleIndicator({url:this.RESAMPLEData.indicator,label: label})
         const configMap = [
           { key: 'upper_extreme_value' },
           { key: 'lower_extreme_value' },
