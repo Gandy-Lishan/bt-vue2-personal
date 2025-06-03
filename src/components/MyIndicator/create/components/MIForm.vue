@@ -594,6 +594,10 @@ export default {
           const checkInputRef = 'maohlcvForm'
       this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
         }
+        if(this.data.categories == 'Resample'){
+          let label = CIQ.findSentiIndicator(null,this.RESAMPLEData.indicator).chart_name
+          this.changeResampleIndicator({url:this.RESAMPLEData.indicator,label: label})
+        }
        
       },
       //immediate: true,
@@ -1617,14 +1621,18 @@ export default {
      * indicator resample
      */
     async changeResampleIndicator(item) {
-      this.$nextTick(()=>{
+      this.$nextTick(async()=>{
         this.RESAMPLEData.indicator = item.url
 
         // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
         // 切换Indicator后把condition切换为默认当前indicator的tf
         this.RESAMPLEData.condition = 'daily'
         this.data.time_frame = this.RESAMPLEData.condition
-        CIQ.changeUserOwnIndicatorResample(item)  
+        await CIQ.changeUserOwnIndicatorResample(item)
+        
+        // 强制让input的显示值为label而不是url,设计缺陷，没有给RESAMPLEDATA加label
+        document.querySelectorAll('.inline-input .el-input .el-input__inner')[0].value = item.label
+
       })
     },
     changeResampleCondition(item) {
