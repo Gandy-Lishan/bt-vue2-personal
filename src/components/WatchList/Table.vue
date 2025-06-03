@@ -116,8 +116,8 @@ export default {
         // },
         {
           label: 'Updated',
-          value: 'updated_at',
-          key: 'updated_at'
+          value: 'final_latest_date',
+          key: 'final_latest_date'
         }
       ],
       tableData: [],
@@ -145,11 +145,11 @@ export default {
 				if (res.status == 200) {
 					let data = res.data.results
 					data = data.map(item => {
-            const handleKey = ['columns', 'tickers', 'updated_at']
+            const handleKey = ['columns', 'tickers', 'final_latest_date']
             handleKey.forEach(key => {
               item[key] = isJson(item[key]) ? JSON.parse(item[key]) : item[key]
               if(key === 'tickers' && Array.isArray(item[key])) item[`_${key}`] = item[key].join(', ')
-              else if(key === 'updated_at' && item[key]) {
+              else if(key === 'final_latest_date' && item[key]) {
                 item[key] = item[key].slice(0, 10)
               }else if(key === 'columns') {
                 item[`_${key}`] = item[key].map((ele,index) => {
