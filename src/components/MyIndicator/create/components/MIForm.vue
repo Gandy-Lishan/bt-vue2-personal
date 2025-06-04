@@ -594,6 +594,10 @@ export default {
           const checkInputRef = 'maohlcvForm'
       this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
         }
+        if(this.data.categories == 'Resample'){
+          let label = CIQ.findSentiIndicator(null,this.RESAMPLEData.indicator).chart_name
+          this.changeResampleIndicator({url:this.RESAMPLEData.indicator,label: label})
+        }
        
       },
       //immediate: true,
@@ -625,7 +629,13 @@ export default {
     'RESAMPLEData.indicator': {
         handler (newV, oldV) {
           this.$nextTick(()=>{
-            const {updated} = CIQ.findSentiIndicator(null,newV)
+            let senti = CIQ.findSentiIndicator(null,newV)
+            if(!senti) return
+            const {updated, chart_name} = senti
+
+            // 强制让input的显示值为label而不是url,设计缺陷，没有给RESAMPLEDATA加label
+            document.querySelectorAll('.inline-input .el-input .el-input__inner')[0].value = chart_name
+
             var nodeSetup = document.getElementsByClassName('timeframeResample')
             if(!nodeSetup.length) return
             if(updated == "Monthly"){
@@ -641,10 +651,6 @@ export default {
                 nodeSetup[1].setAttribute('tf','disabled')
                 nodeSetup[2].setAttribute('tf','disabled')
             }
-
-            // // 初始化为默认condition即daily
-            // this.RESAMPLEData.condition = 'daily'
-            // this.data.time_frame = 'daily'
           })
 
         },
@@ -1014,7 +1020,7 @@ export default {
         url = res.data.url
         const indicatorData = await getMyIndicatorData(url)
         // 更新 rowUrl
-        this.rowUrl = ''
+        // this.rowUrl = ''
         // 暂存
         localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
         const delRes = await delMyIndicator(url)
@@ -1355,7 +1361,7 @@ export default {
         this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
       }else if(data.categories == 'Resample'){
         this.RESAMPLEData.indicator = data.indicator_1_url
-        this.RESAMPLEData.condition = data.calculate
+        this.RESAMPLEData.condition = data.calculate 
         const configMap = [
           { key: 'upper_extreme_value' },
           { key: 'lower_extreme_value' },
@@ -1617,14 +1623,14 @@ export default {
      * indicator resample
      */
     async changeResampleIndicator(item) {
-      this.$nextTick(()=>{
+      this.$nextTick(async()=>{
         this.RESAMPLEData.indicator = item.url
 
         // timeframe用不上，直接同步为condition的值，因为后续一些判断还是对timeframe而不是condition
         // 切换Indicator后把condition切换为默认当前indicator的tf
         this.RESAMPLEData.condition = 'daily'
         this.data.time_frame = this.RESAMPLEData.condition
-        CIQ.changeUserOwnIndicatorResample(item)  
+        await CIQ.changeUserOwnIndicatorResample(item)
       })
     },
     changeResampleCondition(item) {
