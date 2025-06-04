@@ -50,5 +50,5 @@
   };
   </script>
   
-  <style scoped lang="scss" src="./market.scss" />
+  <style lang="scss" src="./market.scss" />
   

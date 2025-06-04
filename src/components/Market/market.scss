@@ -1,3 +1,6 @@
+/* ------------------------ */
+/* Market/index.vue 框架样式 */
+/* ------------------------ */
 .market {
   display: flex;
   height: 100%;
@@ -125,6 +128,18 @@
   margin-bottom: 0.4em;
 }
 
+.placeholder {
+  background-color: #2a2a2a;
+  border-radius: 6px;
+  color: #666;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+}
+
 /* 通用正文文本 */
 .text {
   font-size: 0.875rem; // 14px
@@ -234,7 +249,7 @@
   margin: 16px 0;
 }
 
-/* 响应式示例：小屏幕时侧边栏折叠（可根据需求拓展） */
+/* 响应式：小屏幕时侧边栏变成可折叠式TODO */
 @media (max-width: 768px) {
   .market__sidebar {
     width: 60px;
