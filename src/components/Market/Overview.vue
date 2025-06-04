@@ -66,9 +66,11 @@
   </script>
   
   <style scoped lang="scss">
+  @import "./market.scss";
+  
   .market-overview {
     &__heading {
-      color: #1e1e1e;
+      color: $color-bg-primary;
     }
   
     &__grid {
