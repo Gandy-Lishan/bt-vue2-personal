@@ -381,6 +381,42 @@ const routes = [
 		component: resolve => require(['@/components/Notifications/index.vue'], resolve)
 	},
 	{
+		path: '/market',
+		name: 'Market',
+		redirect: '/market/overview',
+		component: resolve => require(['@/components/Market/index.vue'], resolve),
+		children: [
+			{
+				path: 'overview',
+				name: 'MarketOverview',
+				meta: { activeItem: 'overview' },
+				component: resolve =>
+					require(['@/components/Market/Overview.vue'], resolve)
+			},
+			// {
+			// 	path: 'equities',
+			// 	name: 'Equities',
+			// 	meta: { activeItem: 'equities' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Equities.vue'], resolve)
+			// },
+			// {
+			// 	path: 'commodities',
+			// 	name: 'Commodities',
+			// 	meta: { activeItem: 'commodities' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Commodities.vue'], resolve)
+			// },
+			// {
+			// 	path: 'earnings',
+			// 	name: 'EarningsCalendar',
+			// 	meta: { activeItem: 'earnings' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Earnings.vue'], resolve)
+			// }
+		]
+	},	
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
 	}
