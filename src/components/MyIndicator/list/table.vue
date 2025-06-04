@@ -217,10 +217,10 @@ export default {
           label: 'Indicator Addition',
           value: 'indicator addition'
         },
-        // {
-        //   label: 'Indicator Resample',
-        //   value: 'resample'
-        // },
+        {
+          label: 'Indicator Resample',
+          value: 'resample'
+        },
         {
           label: 'Symbol Ratio',
           value: 'symbol ratio'
@@ -388,28 +388,28 @@ export default {
           btnLoading: false,
         };
       }
-      // if (item.combine_type === 'resample') {
-      //   const {included, included_url, former, latter, former_url, latter_url, type} = this.getResampleIncludedData(item, this.sentimentList);
-      //   console.log(included, included_url, former, latter, former_url, latter_url, type)
-      //   return {
-      //     ...item,
-      //     indicator_2_url:'', // indicator2爲空
-      //     categories: 'Resample',
-      //     included,
-      //     included_url,
-      //     key: item.url,
-      //     former,
-      //     latter,
-      //     former_url,
-      //     latter_url,
-      //     time_frame: capitalizeFirstLetter(item.timeframe),
-      //     type,
-      //     popTitle: 'Loading...',
-      //     BTList: [],
-      //     visible: false,
-      //     btnLoading: false,
-      //   };
-      // }
+      if (item.combine_type === 'resample') {
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getResampleIncludedData(item, this.sentimentList);
+        console.log(included, included_url, former, latter, former_url, latter_url, type)
+        return {
+          ...item,
+          indicator_2_url:'', // indicator2爲空
+          categories: 'Resample',
+          included,
+          included_url,
+          key: item.url,
+          former,
+          latter,
+          former_url,
+          latter_url,
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type,
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
+        };
+      }
     });
       let data = await Promise.all(promise);
       data = data.filter(

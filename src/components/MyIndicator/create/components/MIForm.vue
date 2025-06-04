@@ -397,10 +397,10 @@ export default {
           label: 'Indicator Addition',
           value: 'Indicator Addition'
         },
-        // {
-        //   label: 'Indicator Resample',
-        //   value: 'Resample'
-        // },
+        {
+          label: 'Indicator Resample',
+          value: 'Resample'
+        },
         {
           label: 'Symbol Spread',
           value: 'Symbol Spread'
