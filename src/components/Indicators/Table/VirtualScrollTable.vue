@@ -469,7 +469,103 @@ export default {
             }
             ]
         ],
-        ['RussellColumns', 
+        ['Russell3000Columns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '140px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
+        ['Russell1000Columns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '140px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
+        ['Russell2000Columns', 
           [
             {
               key: 'chart_name',
@@ -2243,7 +2339,17 @@ export default {
         {
           label: 'Russell 3000 Stock Sentiment',
           value: 'russell_3000_complete_list',
-          type: 'Russell'
+          type: 'Russell3000'
+        },
+        {
+          label: 'Russell 1000 Stock Sentiment',
+          value: 'russell_1000_complete_list',
+          type: 'Russell1000'
+        },
+        {
+          label: 'Russell 2000 Stock Sentiment',
+          value: 'russell_2000_complete_list',
+          type: 'Russell2000'
         },
         {
           label: 'S&P 1500',
@@ -2421,16 +2527,16 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') {
         // Name 放在 Symbol 前面
-        if(type === 'russell_3000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
+        if(type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
       const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other', 'sector_trend_reltrend'].includes(type)
@@ -2756,7 +2862,9 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
-        Russell: 'russell_3000_complete_list',
+        Russell1000: 'russell_1000_complete_list',
+        Russell2000: 'russell_2000_complete_list',
+        Russell3000: 'russell_3000_complete_list',
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',

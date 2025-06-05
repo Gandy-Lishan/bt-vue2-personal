@@ -636,7 +636,17 @@ export default {
         {
           label: 'Russell 3000 Stock Sentiment',
           value: 'russell_3000_complete_list',
-          type: 'Russell'
+          type: 'Russell3000'
+        },
+        {
+          label: 'Russell 1000 Stock Sentiment',
+          value: 'russell_1000_complete_list',
+          type: 'Russell1000'
+        },
+        {
+          label: 'Russell 2000 Stock Sentiment',
+          value: 'russell_2000_complete_list',
+          type: 'Russell2000'
         },
         {
           label: 'Bond Market Sentiment',
@@ -758,7 +768,7 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || url === 'russell_3000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || url === 'russell_3000_complete_list'|| url === 'russell_1000_complete_list'|| url === 'russell_2000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) keysMap.set('chart_name', 'Symbol')
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
