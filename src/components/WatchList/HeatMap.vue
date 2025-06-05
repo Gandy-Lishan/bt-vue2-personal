@@ -239,7 +239,7 @@ export default {
             }
           }
         }],
-        title: { text: 'Optimism Index Heatmap' }
+        title: { text: '' }
       });
     },
     
