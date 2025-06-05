@@ -1,11 +1,6 @@
 <template>
  <div class="col-md-12">
-  <div class="page-title" v-show="large">
-    <h1 style="padding: 15px 0 15px;">
-      Optix Heatmap
-    </h1>
-  </div>
-  <p>{{ heatmapDescription }}</p>
+  <br>
     <div style="text-align: center; margin-bottom: 20px;display: flex;justify-content: center;align-items: center;">
       HeatMap View:
       <div class="btn-group heatmap-moving-average-buttons" role="group">
@@ -88,8 +83,7 @@ HighchartsTreemap(Highcharts);
 
 export default {
   props: {
-    heatmap_data: Array,
-    large: Boolean
+    heatmap_data: Array
   },
   data() {
     return {
@@ -102,19 +96,6 @@ export default {
     },
     heatMapButtons() {
       return this._heatmap_data.map(item => item.name)
-    },
-    heatmapDescription() {
-      const currentType = this._heatmap_data[this.selectedButton]?.name;
-      switch (currentType) {
-        case 'Optix':
-          return 'The Optix Heatmap shows all of our Optimism Index indicators in a heatmap format. Optix readings can be seen by hovering over the heatmap. Additionally, if you click a label or box, you\'ll be taken to that Optix chart.';
-        case 'Trend Score':
-          return 'The Trend Score Heatmap displays trend strength indicators across various assets. Higher scores indicate stronger upward trends, while lower scores suggest downward trends. Click any box to view detailed trend analysis.';
-        case 'RelTrend Score':
-          return 'The Relative Trend Score Heatmap compares trend performance across different assets. This visualization helps identify which assets are showing stronger or weaker relative trends. Click for detailed relative trend analysis.';
-        default:
-          return 'The Optix Moving Average Heatmap shows smoothed sentiment indicators using moving averages. This helps identify longer-term sentiment trends while reducing short-term noise. Click any box for detailed MA analysis.';
-      }
     },
     buttonName() {
       const currentType = this._heatmap_data[this.selectedButton]?.name;
@@ -165,6 +146,9 @@ export default {
       console.log("✅ Highcharts 容器已找到，准备渲染图表...");
       const baseUrl = "/backtester/sr/setup";
 
+      const currentType = this._heatmap_data[this.selectedButton]?.name;
+      const showThumbnail = !['Trend Score', 'RelTrend Score'].includes(currentType);
+
       Highcharts.chart('HM', {
         credits: {
           enabled: true,
@@ -209,6 +193,7 @@ export default {
                   window.open(baseUrl + `?index=${'Unknown'}&indicator=${this.options.link}`, "_self");
                 },
                 mouseOver(e) {
+                  if (!showThumbnail) return;
                   const x = e.target.plotX;
                   const y = e.target.plotY;
                   const offset = document.getElementById('HM').getBoundingClientRect();
@@ -224,6 +209,7 @@ export default {
                   document.body.insertAdjacentHTML('afterbegin', html);
                 },
                 mouseOut() {
+                  if (!showThumbnail) return;
                   const thumb = document.querySelector('.chart-thumb');
                   if (thumb) thumb.remove();
                 }
