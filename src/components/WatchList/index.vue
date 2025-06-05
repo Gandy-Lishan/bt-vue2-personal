@@ -221,7 +221,7 @@ export default {
         }
         const lastBar = arr.slice(-preNum); // 获取最后 preNum 项
         const sum = lastBar.reduce((acc, val) => acc + parseFloat(val), 0);
-        return (sum / preNum).toFixed(2)
+        return parseFloat((sum / preNum).toFixed(2))
       }
       const getColor = (normalizedValue) => {
         if (normalizedValue <= 0) return '#41A317';       // 极端悲观（绿色）
@@ -232,8 +232,18 @@ export default {
         if (normalizedValue <= 80) return '#F75D59';      // 极端乐观（红色）
         return '#FF0000';                                // 非常乐观（红色）
       };
+      const getTrendColor = (normalizedValue) => {
+      if (normalizedValue <= 0) return '#41A317';      // 极端悲观（绿色）
+      if (normalizedValue <= 2) return '#89C35C';      // 较强的悲观（浅绿色）
+      if (normalizedValue <= 3) return '#99C68E';      // 中等的悲观（淡绿）
+      if (normalizedValue <= 5) return '#FFF8DC';      // 中立
+      if (normalizedValue <= 7) return '#E18B6B';      // 较强的乐观（橙色）
+      if (normalizedValue <= 8) return '#F75D59';      // 极端乐观（红色）
+      return '#FF0000';                                // 非常乐观（红色）
+    };
       const _content = []
-      const _heatMap = []
+      const heatMapName = ['Optix', 'RelTrend Score', 'Trend Score']
+      let _heatMap = heatMapName.map(name => ({data: [], name}))
       for (const ticker in content) {
         if (Object.prototype.hasOwnProperty.call(content, ticker)) {
           const element = content[ticker];
@@ -241,7 +251,6 @@ export default {
           records = isJson(records) ? JSON.parse(records) : records
           if(!records || (Array.isArray(records) && !records.length))continue
           const tickerObj = {}
-          const _tempHeatMap = []
           const Closes = records.map(ele => (ele.Close))
           const Optix = records.map(ele => (ele.Optix))
           const TrendScore = records.map(ele => (ele['Trend']))
@@ -258,22 +267,33 @@ export default {
           const maxClose =  Math.max(...Closes) || 0
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
           const colorValue = getColor(_lastOptix)
-
-          _tempHeatMap.push(ticker)
-          _tempHeatMap.push(optix_url) // url
-          _tempHeatMap.push(lastOptix)
-          _tempHeatMap.push(colorValue)
           tickersColumns.forEach(column => {
             let {label, indicator, bar, value} = column
             indicator = removeStartEndNumbers(indicator)
             if(indicator === 'Optix') {
+              const findIndex = _heatMap.findIndex(ele => ele.name === 'Optix')
+              if(findIndex !== -1) {
+                _heatMap[findIndex].data.push([ticker, optix_url, lastOptix, colorValue])
+              }
               tickerObj[value] = lastOptix
             }
             else if(indicator === 'RelTrend Score') {
-              tickerObj[value] = lastRelTrend !== null ? lastRelTrend : ''
+              const _lastRelTrend = lastRelTrend !== null ? lastRelTrend : ''
+              const trendColor = getTrendColor(_lastRelTrend)
+              const findIndex = _heatMap.findIndex(ele => ele.name === 'RelTrend Score')
+              if(findIndex !== -1) {
+                _heatMap[findIndex].data.push([ticker, optix_url, _lastRelTrend, trendColor])
+              }
+              tickerObj[value] = _lastRelTrend
             }
             else if(indicator === 'Trend Score') {
-              tickerObj[value] = lastTrend !== null ? lastTrend : ''
+              const _lastTrend = lastTrend !== null ? lastTrend : ''
+              const trendColor = getTrendColor(_lastTrend)
+              const findIndex = _heatMap.findIndex(ele => ele.name === 'Trend Score')
+              if(findIndex !== -1) {
+                _heatMap[findIndex].data.push([ticker, optix_url, _lastTrend, trendColor])
+              }
+              tickerObj[value] = _lastTrend
             }
             else if(indicator.includes('ROC')) {
               if(!lastClose) {tickerObj[value] = '';}else{
@@ -287,11 +307,18 @@ export default {
               }
             } else if(indicator === 'Optix MA') {
               if(!lastOptix) {tickerObj[value] = '';}else{
-                tickerObj[value] = getLastBarAvg(Optix, Number(bar))
+                const _lastOptix = getLastBarAvg(Optix, Number(bar))
+                const optixColor = getColor(_lastOptix)
+                const findIndex = _heatMap.findIndex(ele => ele.name === label)
+                if(findIndex === -1) {
+                  _heatMap.push({name: label, data: [[ticker, optix_url, _lastOptix, optixColor]]})
+                }else {
+                  _heatMap[findIndex].data.push([ticker, optix_url, _lastOptix, optixColor])
+                }
+                tickerObj[value] = _lastOptix
               }
             }
           })
-          _heatMap.push(_tempHeatMap)
           _content.push(tickerObj)
         }
       }
@@ -327,7 +354,7 @@ export default {
           content: _content
         }
       })
-      this.heatmap = [_heatMap]
+      this.heatmap = _heatMap
     },
     clearResults() {
       this.activeSecondTab = 'list'

@@ -5,27 +5,24 @@
       Optix Heatmap
     </h1>
   </div>
-  <p>The Optix Heatmap shows all of our Optimism Index indicators in a heatmap
-   format. Optix readings can be seen by hovering over the heatmap.
-   Additionally, if you click a lable or box, you'll be taken to that Optix
-   chart.</p>
-    <!-- <div style="text-align: center; margin-bottom: 20px;">
-      Moving Average:
+  <p>{{ heatmapDescription }}</p>
+    <div style="text-align: center; margin-bottom: 20px;display: flex;justify-content: center;align-items: center;">
+      HeatMap View:
       <div class="btn-group heatmap-moving-average-buttons" role="group">
         <button
-          v-for="(averageDays, index) in movingAverages"
+          v-for="(button, index) in heatMapButtons"
           :key="index"
           type="button"
           class="btn grey-cascade"
-          :class="{ active: index === selectedMovingAverageIndex }"
-          @click="handleMovingAverageClick(index)"
+          :class="{ active: index === selectedButton }"
+          @click="handleButtonClick(index)"
         >
-          <i class="fa fa-check"></i> {{ averageDays }} Days
+          <i class="fa fa-check"></i> {{ button }}
         </button>
       </div>
-    </div> -->
+    </div>
    <div id="HM" style="min-width: 750px; height: 800px; margin: 0 auto"></div>
-   <div class="chart-container">
+   <div class="chart-container" v-show="buttonName !== 'Trend Score' && buttonName !== 'RelTrend Score'">
         <svg width="100%" height="100" viewBox="0 0 320 100">
             <!-- 定义6个独立的渐变 -->
             <defs>
@@ -96,13 +93,32 @@ export default {
   },
   data() {
     return {
-      movingAverages: [0, 3, 5, 10, 20, 50, 100, 200],
-      selectedMovingAverageIndex: 0, // Default to the first moving average
+      selectedButton: 0, // Default to the first moving average
     };
   },
   computed: {
     _heatmap_data() {
       return isJson(this.heatmap_data) ? JSON.parse(this.heatmap_data) : this.heatmap_data
+    },
+    heatMapButtons() {
+      return this._heatmap_data.map(item => item.name)
+    },
+    heatmapDescription() {
+      const currentType = this._heatmap_data[this.selectedButton]?.name;
+      switch (currentType) {
+        case 'Optix':
+          return 'The Optix Heatmap shows all of our Optimism Index indicators in a heatmap format. Optix readings can be seen by hovering over the heatmap. Additionally, if you click a label or box, you\'ll be taken to that Optix chart.';
+        case 'Trend Score':
+          return 'The Trend Score Heatmap displays trend strength indicators across various assets. Higher scores indicate stronger upward trends, while lower scores suggest downward trends. Click any box to view detailed trend analysis.';
+        case 'RelTrend Score':
+          return 'The Relative Trend Score Heatmap compares trend performance across different assets. This visualization helps identify which assets are showing stronger or weaker relative trends. Click for detailed relative trend analysis.';
+        default:
+          return 'The Optix Moving Average Heatmap shows smoothed sentiment indicators using moving averages. This helps identify longer-term sentiment trends while reducing short-term noise. Click any box for detailed MA analysis.';
+      }
+    },
+    buttonName() {
+      const currentType = this._heatmap_data[this.selectedButton]?.name;
+      return currentType
     }
   },
 		watch: {
@@ -115,15 +131,23 @@ export default {
   methods: {
     // Format the heatmap data
     formatData(data) {
-      
       const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
-      return data.map(item => ({
-        name: item[0],
-        link: item[1],
-        value: item[2],
-        color: item[3],
-        thumbnail: thumbnailBase + item[1].toLowerCase() + '_250.png',
-      }));
+      // 过滤掉值为空字符串的数据
+      return data
+        .filter(item => item[2] !== '')  // 过滤掉值为空字符串的项
+        .map(item => {
+          const displayValue = item[2];  // 保持原始值用于显示
+          const sizeValue = Math.max(0.1, Math.abs(displayValue));  // 只用于控制方块大小，不用于显示
+          
+          return {
+            name: item[0],
+            link: item[1],
+            displayValue: displayValue,  // 原始值，用于显示
+            value: sizeValue,           // 用于控制方块大小
+            color: item[3],
+            thumbnail: thumbnailBase + item[1].toLowerCase() + '_250.png',
+          };
+        });
     },
     
     // Create the Highcharts heatmap
@@ -150,26 +174,8 @@ export default {
         },
         tooltip: {
           style: { fontWeight: 'bold', fontSize: '2em' },
-        },
-        colorAxis: {
-          stops: [
-            [0, '#41A317'], // 极端悲观（绿色）
-            [0.2, '#89C35C'], // 较强的悲观（浅绿色）
-            [0.3, '#99C68E'], // 中等的悲观（淡绿）
-            [0.5, '#FFF8DC'], // 中立
-            [0.7, '#E18B6B'], // 较强的乐观（橙色）
-            [0.8, '#F75D59'], // 极端乐观（红色）
-            [0.9, '#FF0000']  // 非常乐观（红色）
-          ],
-          min: 1,  // 设置最小值
-          max: 7, // 设置最大值
-          tickInterval: 1,
-          labels: {
-            step: 6,
-            enabled: true,
-            formatter: function () {
-              return this.value === 1 ? "Extreme Pessimism" : "Extreme Optimism";
-            }
+          formatter: function() {
+            return `${this.point.name}: ${this.point.displayValue}`;
           }
         },
         exporting: {
@@ -225,33 +231,45 @@ export default {
             }
           },
           treemap: {
-            turboThreshold: 1800 // 设置更高的限制，比如 5000
+            layoutAlgorithm: 'squarified',
+            turboThreshold: 1800,
+            dataLabels: {
+              enabled: true,
+              formatter: function() {
+                return `${this.point.name}: ${this.point.displayValue}`;
+              }
+            }
           }
         },
         series: [{
           type: 'treemap',
           layoutAlgorithm: 'squarified',
           data: data,
-          // colorKey: "colorValue", 
-          dataLabels: { enabled: true, shadow: false }
+          dataLabels: { 
+            enabled: true, 
+            shadow: false,
+            formatter: function() {
+              return `${this.point.name}: ${this.point.displayValue}`;
+            }
+          }
         }],
         title: { text: 'Optimism Index Heatmap' }
       });
     },
     
     // Handle the selection of a moving average button
-    // handleMovingAverageClick(index) {
-    //   this.selectedMovingAverageIndex = index;
-    //   const formattedData = this.formatData(this._heatmap_data[index]);
-    //   this.createHeatMap(formattedData);
-    // },
+    handleButtonClick(index) {
+      this.selectedButton = index;
+      const formattedData = this.formatData(this._heatmap_data[index].data);
+      this.createHeatMap(formattedData);
+    },
 
     // Initialize the component with data
     initializeHeatMap() {
       // Make sure heatmap data is available
       console.log('_heatmap_data', this._heatmap_data)
       if (this._heatmap_data && this._heatmap_data.length > 0) {
-        const formattedData = this.formatData(this._heatmap_data[0]);
+        const formattedData = this.formatData(this._heatmap_data[0].data);
         console.log('formattedData', formattedData)
         this.createHeatMap(formattedData);
       }
