@@ -14,30 +14,38 @@
         </section>
   
         <section class="card market-overview__card news-card">
-          <h3 class="title card__title">News</h3>
-          <div class="placeholder">[News Feed Placeholder]</div>
+          <h3 class="title card__title">AAPL</h3>
+          <BarChart id="eps-growth-chart" />
         </section>
   
         <section class="card market-overview__card snapshot-card">
           <h3 class="title card__title">Market Snapshot</h3>
-          <div class="placeholder">[Snapshot Placeholder]</div>
+          <StockChart
+            symbol="aapl"
+            start-date="2005-05-15"
+            end-date="2025-06-01"
+            frequency="Daily"
+            :chart-height="550"
+            line-color="#1E88E5"
+          />
+
         </section>
   
         <!-- 第二行：两列 -->
         <section class="card market-overview__card sector-card">
           <h3 class="title card__title">Sector Performance</h3>
-          <div class="placeholder">[Sector Performance Placeholder]</div>
+          <div class="card__item">[Sector Performance placeholder]</div>
         </section>
   
         <section class="card market-overview__card volume-card">
           <h3 class="title card__title">Volume</h3>
-          <div class="placeholder">[Volume Placeholder]</div>
+          <div class="card__item">[Volume placeholder]</div>
         </section>
   
         <!-- 第三行：一整行 -->
         <section class="card market-overview__card full-width-chart">
           <h3 class="title card__title">Market Trend Chart</h3>
-          <div class="placeholder" style="height: 300px;">[Highcharts Placeholder]</div>
+          <div class="card__item" style="height: 300px;">[Highcharts placeholder]</div>
         </section>
       </div>
     </div>
@@ -45,9 +53,16 @@
   
   <script>
   import BaseTable from './components/BaseTable.vue';
+  import BarChart from './components/charts/BarChart.vue';
+  import StockChart from './components/charts/StockChart.vue';
+
   export default {
     name: 'MarketOverview',
-    components: { BaseTable },
+    components: { 
+      BaseTable,
+      BarChart,
+      StockChart
+    },
     data() {
       return {
         indicators: [
@@ -59,8 +74,16 @@
         indicatorColumns: [
           { prop: 'name', label: 'Indicator Name' },
           { prop: 'value', label: 'Value' }
-        ]
+        ],
+
+
       };
+    },
+    mounted() {
+
+    },
+    methods: {
+
     }
   };
   </script>
