@@ -13,12 +13,19 @@
           </a>
         </div>
         <div class="btn-group" id="btv1-group">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Back to Classic Site"
+            placement="bottom-end"
+					>
           <a
             href="https://users.sentimentrader.com/users/"
             class="iconify"
           >
             <i class="fa fa-home" style="vertical-align: middle; font-size: 28px; color: #5b9bd1"></i>
           </a>
+          </el-tooltip>
         </div>
         <!-- <el-menu-item index="2" class="tutorial-svg">
           <svg width="12" height="12" viewBox="0 0 186 186" fill="none" xmlns="http://www.w3.org/2000/svg">
