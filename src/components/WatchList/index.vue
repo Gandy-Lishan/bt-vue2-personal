@@ -260,40 +260,36 @@ export default {
           const lastOptix = _lastOptix !== null ? parseFloat(_lastOptix.toFixed(2)) : ''
           const lastTrend = TrendScore.at(-1)
           const lastRelTrend = RelTrendScore.at(-1)
+          const colorValue = getColor(_lastOptix)
+          const updateHeatMapData = (name, value, useGetTrendColor = true) => {
+            const index = _heatMap.findIndex(ele => ele.name === name)
+            if (index !== -1) {
+              const processedValue = value !== null ? value : ''
+              const color = useGetTrendColor ? getTrendColor(processedValue) : colorValue
+              _heatMap[index].data.push([ticker, optix_url, processedValue, color])
+            }
+          }
+
+          updateHeatMapData('Optix', lastOptix, false)
+          updateHeatMapData('RelTrend Score', lastRelTrend)
+          updateHeatMapData('Trend Score', lastTrend)
           tickerObj['Ticker'] = ticker
           tickerObj['Name'] = ticker_name
           tickerObj['Close'] = lastClose !== null ? parseFloat(lastClose.toFixed(2)) : ''
           const minClose =  Math.min(...Closes) || 0
           const maxClose =  Math.max(...Closes) || 0
           const normalized = (lastClose - minClose) / (maxClose - minClose || 1); // 防止除以 0
-          const colorValue = getColor(_lastOptix)
           tickersColumns.forEach(column => {
             let {label, indicator, bar, value} = column
             indicator = removeStartEndNumbers(indicator)
             if(indicator === 'Optix') {
-              const findIndex = _heatMap.findIndex(ele => ele.name === 'Optix')
-              if(findIndex !== -1) {
-                _heatMap[findIndex].data.push([ticker, optix_url, lastOptix, colorValue])
-              }
               tickerObj[value] = lastOptix
             }
             else if(indicator === 'RelTrend Score') {
-              const _lastRelTrend = lastRelTrend !== null ? lastRelTrend : ''
-              const trendColor = getTrendColor(_lastRelTrend)
-              const findIndex = _heatMap.findIndex(ele => ele.name === 'RelTrend Score')
-              if(findIndex !== -1) {
-                _heatMap[findIndex].data.push([ticker, optix_url, _lastRelTrend, trendColor])
-              }
-              tickerObj[value] = _lastRelTrend
+              tickerObj[value] = lastRelTrend !== null ? lastRelTrend : ''
             }
             else if(indicator === 'Trend Score') {
-              const _lastTrend = lastTrend !== null ? lastTrend : ''
-              const trendColor = getTrendColor(_lastTrend)
-              const findIndex = _heatMap.findIndex(ele => ele.name === 'Trend Score')
-              if(findIndex !== -1) {
-                _heatMap[findIndex].data.push([ticker, optix_url, _lastTrend, trendColor])
-              }
-              tickerObj[value] = _lastTrend
+              tickerObj[value] = lastTrend !== null ? lastTrend : ''
             }
             else if(indicator.includes('ROC')) {
               if(!lastClose) {tickerObj[value] = '';}else{
