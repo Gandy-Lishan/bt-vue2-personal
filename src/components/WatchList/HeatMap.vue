@@ -12,7 +12,7 @@
           :class="{ active: index === selectedButton }"
           @click="handleButtonClick(index)"
         >
-          <i class="fa fa-check"></i> {{ button }}
+        {{ button }}
         </button>
       </div>
     </div>
@@ -112,7 +112,6 @@ export default {
   methods: {
     // Format the heatmap data
     formatData(data) {
-      const thumbnailBase = 'https://d1wrgh3h32hjn2.cloudfront.net/';
       // 过滤掉值为空字符串的数据
       return data
         .filter(item => item[2] !== '')  // 过滤掉值为空字符串的项
@@ -125,8 +124,7 @@ export default {
             link: item[1],
             displayValue: displayValue,  // 原始值，用于显示
             value: sizeValue,           // 用于控制方块大小
-            color: item[3],
-            thumbnail: thumbnailBase + item[1].toLowerCase() + '_250.png',
+            color: item[3]
           };
         });
     },
@@ -181,41 +179,6 @@ export default {
           alignTicks: false,
         },
         plotOptions: {
-          series: {
-            cursor: 'pointer',
-            point: {
-              events: {
-                click() {
-                  if (!this.options.link) {
-                    console.warn("❌ 缺少 link，无法跳转");
-                    return;
-                  }
-                  window.open(baseUrl + `?index=${'Unknown'}&indicator=${this.options.link}`, "_self");
-                },
-                mouseOver(e) {
-                  if (!showThumbnail) return;
-                  const x = e.target.plotX;
-                  const y = e.target.plotY;
-                  const offset = document.getElementById('HM').getBoundingClientRect();
-                  let pos_left = offset.left + x;
-                  if (pos_left > window.innerWidth / 2) pos_left -= 250;
-                  let pos_top = offset.top + y - 170;
-                  if (pos_top < window.innerHeight / 2) pos_top += 250;
-                  const html = `
-                    <div class="chart-thumb" style="position: fixed; max-width: 400px; min-width: 400px; top: ${pos_top}px; left: ${pos_left}px; z-index: 1000;">
-                      <img src="${this.options.thumbnail}" style="width: 100%; display: block;" onload="$(this).css({'border': '1px solid #c2c2c2', 'box-shadow': '2px 2px 4px #595959'}).show();" />
-                    </div>
-                  `;
-                  document.body.insertAdjacentHTML('afterbegin', html);
-                },
-                mouseOut() {
-                  if (!showThumbnail) return;
-                  const thumb = document.querySelector('.chart-thumb');
-                  if (thumb) thumb.remove();
-                }
-              }
-            }
-          },
           treemap: {
             layoutAlgorithm: 'squarified',
             turboThreshold: 1800,
@@ -270,7 +233,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .heatmap-moving-average-buttons .btn {
-  margin: 0 5px;
+  margin: 5px;
 }
 
 .heatmap-moving-average-buttons .active {
