@@ -419,7 +419,11 @@ const routes = [
 	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
-	}
+	},
+	{
+		path: '/testpage',
+		component: resolve => require(['@/components/TestPage/index.vue'], resolve)
+	},
 ]
 
 export default routes

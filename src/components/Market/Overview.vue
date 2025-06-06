@@ -6,11 +6,7 @@
         <!-- 第一行：三列 -->
         <section class="card market-overview__card indicators-card">
           <h3 class="card__title">Indicators</h3>
-          <BaseTable
-            :data="indicators"
-            :columns="indicatorColumns"
-            :searchable-fields="['name']"
-          />
+          <UseTable/>
         </section>
   
         <section class="card market-overview__card news-card">
@@ -55,6 +51,23 @@
           <h3 class="title card__title">Market Trend Chart</h3>
           <div class="card__item" style="height: 300px;">[Highcharts placeholder]</div>
         </section>
+
+        <!-- <section class="card market-overview__card full-width-chart">
+          <h3 class="title card__title">Sector Performance</h3>
+          <SectorCardIndex/>
+        </section> -->
+        <!-- <section class="card market-overview__card full-width-chart">
+          <h3 class="title card__title">Ownership Distribution</h3>
+          <OwnershipDistribution/>
+        </section> -->
+        <!-- <section class="card market-overview__card full-width-chart">
+          <h3 class="title card__title">Insider Transactions</h3>
+          <InsiderTransactions/>
+        </section> -->
+        <section class="card market-overview__card full-width-chart">
+          <h3 class="title card__title">Analyst Recommendations</h3>
+          <AnalystRecommendations/>
+        </section>
       </div>
     </div>
   </template>
@@ -63,13 +76,19 @@
   import BaseTable from './components/BaseTable.vue';
   import BarChart from './components/charts/BarChart.vue';
   import StockChart from './components/charts/StockChart.vue';
+  import UseTable from './components/UseTable.vue';
+  import SectorCardIndex from './components/SectorCardIndex.vue';
+  import OwnershipDistribution from './components/OwnershipDistribution.vue';
+  import InsiderTransactions from './components/InsiderTransactions.vue';
+  import AnalystRecommendations from './components/AnalystRecommendations.vue';
 
   export default {
     name: 'MarketOverview',
     components: { 
       BaseTable,
       BarChart,
-      StockChart
+      StockChart,
+      UseTable, SectorCardIndex, OwnershipDistribution, InsiderTransactions, AnalystRecommendations
     },
     data() {
       return {
