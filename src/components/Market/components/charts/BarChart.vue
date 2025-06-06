@@ -7,15 +7,10 @@
   </template>
   
   <script>
-  import Highcharts from "highcharts"; // Use regular Highcharts for bar charts
+  import Highcharts from "highcharts";
   import Exporting from "highcharts/modules/exporting";
   import ExportData from "highcharts/modules/export-data";
   
-  // No need for getPairData or timestampToTime for this bar chart example,
-  // unless you intend to fetch data similarly.
-  // import { isJson } from '@/utils'; // Keep if used elsewhere
-  
-  // Enable Highcharts modules
   Exporting(Highcharts);
   ExportData(Highcharts);
   
@@ -24,65 +19,62 @@
       chartData: {
         type: Array,
         required: true,
-        validator: function (value) {
-          // Basic validation: ensure it's an array of objects
-          // with date, estimate, and actual properties.
-          return (
-            Array.isArray(value) &&
-            value.every(
-              (item) =>
-                typeof item === "object" &&
-                item !== null &&
-                "date" in item &&
-                "estimate" in item &&
-                "actual" in item
-            )
-          );
-        },
       },
-      titleText: { // Optional title for the chart
+      seriesConfigs: {
+        type: Array,
+        required: true,
+        validator: (arr) =>
+          Array.isArray(arr) &&
+          arr.every(item =>
+            item &&
+            typeof item === 'object' &&
+            'key' in item &&
+            'label' in item &&
+            'color' in item
+          )
+      },
+      titleText: {
         type: String,
         default: "",
       },
       chartHeight: {
         type: String,
-        default: "400px", // Bar charts might not need as much height by default
-      },
-      estimateColor: {
-        type: String,
-        default: "#A9A9A9", // Light gray for estimate
-      },
-      actualColor: {
-        type: String,
-        default: "#4682B4", // Steel blue for actual
+        default: "400px",
       },
       enableExporting: {
         type: Boolean,
         default: true,
       },
-      yAxisTitleText: { // Optional Y-axis title
-          type: String,
-          default: 'Value'
+      orientation: {
+        type: String,
+        default: "column", // or 'bar'
+        validator: val => ['column', 'bar'].includes(val)
+      },
+      yAxisTitleText: {
+        type: String,
+        default: 'Value'
       }
     },
     data() {
       return {
         chart: null,
-        isLoading: false, // Could be true if data was fetched async
+        isLoading: false,
         error: null,
-        // For bar charts, categories and series are derived directly
         categories: [],
         seriesData: [],
       };
     },
     watch: {
       chartData: {
-        deep: true, // Watch for changes inside the array/objects
+        deep: true,
         handler: "processDataAndInitializeChart",
       },
+      seriesConfigs: {
+        deep: true,
+        handler: "reRenderChartWithCurrentData",
+      },
       chartHeight: "reRenderChartWithCurrentData",
-      estimateColor: "reRenderChartWithCurrentData",
-      actualColor: "reRenderChartWithCurrentData",
+      orientation: "reRenderChartWithCurrentData",
       enableExporting: "reRenderChartWithCurrentData",
       titleText: "reRenderChartWithCurrentData",
       yAxisTitleText: "reRenderChartWithCurrentData",
@@ -106,38 +98,24 @@
           return;
         }
   
-        this.isLoading = true; // Simulate loading, or set based on actual async fetch
+        this.isLoading = true;
         this.error = null;
         this.destroyChart();
   
         try {
           this.categories = this.chartData.map(item => item.date);
-          const estimateValues = this.chartData.map(item => item.estimate);
-          const actualValues = this.chartData.map(item => item.actual);
   
-          this.seriesData = [
-            {
-              name: "Estimate",
-              data: estimateValues,
-              color: this.estimateColor,
-              type: "column", // 'column' for vertical bars, 'bar' for horizontal
-            },
-            {
-              name: "Actual",
-              data: actualValues,
-              color: this.actualColor,
-              type: "column",
-            },
-          ];
-          
+          this.seriesData = this.seriesConfigs.map(cfg => ({
+            name: cfg.label,
+            data: this.chartData.map(item => item[cfg.key]),
+            color: cfg.color,
+            type: this.orientation
+          }));
+  
           this.initializeChart();
-  
         } catch (err) {
           console.error("Error processing chart data:", err);
-          this.error = "Failed to process chart data.";
-          if (err.message) {
-            this.error += ` Details: ${err.message}`;
-          }
+          this.error = "Failed to process chart data." + (err.message ? ` Details: ${err.message}` : "");
           this.categories = [];
           this.seriesData = [];
         } finally {
@@ -146,7 +124,6 @@
       },
   
       reRenderChartWithCurrentData() {
-        // Only attempt to re-render if not loading, no critical error, and valid data exists
         if (!this.isLoading && !this.error && this.categories.length > 0 && this.seriesData.length > 0) {
           this.destroyChart();
           this.initializeChart();
@@ -154,16 +131,14 @@
       },
   
       initializeChart() {
-        if (!this.$refs.chartContainer || this.categories.length === 0 || this.seriesData.length === 0) {
-          if (!this.error && !this.isLoading) {
-            this.error = "Chart container not available or no data to display.";
-          }
+        if (!this.$refs.chartContainer) {
+          this.error = "Chart container not available.";
           return;
         }
   
-        this.chart = Highcharts.chart(this.$refs.chartContainer, { // Use Highcharts.chart for non-stock charts
+        this.chart = Highcharts.chart(this.$refs.chartContainer, {
           chart: {
-            type: "column", // Default chart type, series can override
+            type: this.orientation,
             height: this.chartHeight,
           },
           title: {
@@ -171,59 +146,48 @@
           },
           exporting: {
             enabled: this.enableExporting,
-            buttons: {
-              contextButton: {
-                menuItems: [
-                  "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG",
-                  "separator", "downloadCSV", "downloadXLS",
-                ],
-              },
-            },
           },
           xAxis: {
             categories: this.categories,
-            crosshair: true, // Shows a line across the plot area on hover
+            crosshair: true,
           },
           yAxis: {
-            min: 0, // Typically bar charts start from 0
+            min: 0,
             title: {
               text: this.yAxisTitleText,
             },
-            // Allow Highcharts to determine max based on data
-          },
-          legend: {
-            enabled: true, // Show legend for 'Estimate' vs 'Actual'
-          },
-          credits: { // Optional: you can make this a prop too
-            enabled: true,
-            text: "SENTIMENTRADER", // Example credit text
-            href: '#',
-            position: { align: 'right', x: -10, y: -10 } // Adjusted for bar chart
           },
           tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                         '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>', // Display one decimal place
+              '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
             footerFormat: '</table>',
-            shared: true, // Tooltip shows info for all series at that x-axis point
+            shared: true,
             useHTML: true,
           },
+          legend: {
+            enabled: true,
+          },
+          credits: {
+            enabled: true,
+            text: "SENTIMENTRADER",
+            href: "#",
+            position: { align: 'right', x: -10, y: -10 }
+          },
           plotOptions: {
-            column: {
+            [this.orientation]: {
               pointPadding: 0.2,
+              groupPadding: 0.1,
               borderWidth: 0,
-              dataLabels: { // Optionally show data labels on bars
-                  enabled: false, // Set to true to show values on bars
-                  // format: '{point.y:.1f}'
+              dataLabels: {
+                enabled: false
               }
-            },
-            series: {
-              // General series options if needed
             }
           },
           series: this.seriesData,
         });
       },
+  
       destroyChart() {
         if (this.chart) {
           this.chart.destroy();
@@ -235,13 +199,12 @@
   </script>
   
   <style scoped>
-  /* Styles are identical to StockChart.vue for consistency */
   .chart-loading,
   .chart-error {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px; /* Or bind to chartHeight prop for consistency */
+    height: 200px;
     color: #888;
     font-style: italic;
     border: 1px dashed #ccc;
@@ -255,3 +218,4 @@
     border: 1px solid #FFCDD2;
   }
   </style>
+  

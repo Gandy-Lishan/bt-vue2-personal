@@ -10,21 +10,27 @@
         </section>
   
         <section class="card market-overview__card news-card">
-          <h3 class="title card__title">AAPL</h3>
+          <h3 class="title card__title">News</h3>
           <!-- <div class="card__item">[News placeholder]</div> -->
           <BarChart
-            :chart-data="performanceData"
-            title-text="Earnings: Estimate vs. Actual"
-            y-axis-title-text="Earnings (Millions USD)"
+            :chart-data="[
+              { date: 'Q1', estimate: 1.2, actual: 1.5 },
+              { date: 'Q2', estimate: 1.4, actual: 1.3 },
+              { date: 'Q3', estimate: 1.6, actual: 1.7 }
+            ]"
+            :series-configs="[
+              { key: 'estimate', label: 'Estimate', color: '#A9A9A9' },
+              { key: 'actual', label: 'Actual', color: '#4682B4' }
+            ]"
+            title-text="EPS Comparison"
+            orientation="bar"
             chart-height="auto"
-            :enable-exporting="false"
-            estimate-color="#B0C4DE"
-            actual-color="#FF6347"
+            :enableExporting="false"
           />
         </section>
   
         <section class="card market-overview__card snapshot-card">
-          <h3 class="title card__title">Market Snapshot</h3>
+          <h3 class="title card__title">AAPL</h3>
           <StockChart
             symbol="aapl"
             start-date="2005-01-01"
@@ -38,7 +44,7 @@
         <!-- 第二行：两列 -->
         <section class="card market-overview__card sector-card">
           <h3 class="title card__title">Sector Performance</h3>
-          <div class="card__item">[Sector Performance placeholder]</div>
+          <SectorCardIndex/>
         </section>
   
         <section class="card market-overview__card volume-card">
@@ -47,40 +53,69 @@
         </section>
   
         <!-- 第三行：一整行 -->
-        <section class="card market-overview__card full-width-chart">
-          <h3 class="title card__title">Market Trend Chart</h3>
-          <div class="card__item" style="height: 300px;">[Highcharts placeholder]</div>
-        </section>
-
-        <!-- <section class="card market-overview__card full-width-chart">
-          <h3 class="title card__title">Sector Performance</h3>
-          <SectorCardIndex/>
-        </section> -->
-        <!-- <section class="card market-overview__card full-width-chart">
+        <section class="card market-overview__card ownership-chart">
           <h3 class="title card__title">Ownership Distribution</h3>
-          <OwnershipDistribution/>
-        </section> -->
-        <!-- <section class="card market-overview__card full-width-chart">
+          <PieChart
+            :chart-data="[
+              { name: 'Executive Insiders', y: 43.5, color: '#2196F3' },
+              { name: 'Institutions', y: 33.5, color: '#1A237E' },
+              { name: 'Mutual Funds', y: 23.0, color: '#03A9F4' },
+              { name: 'Public Float', y: 0, color: '#B3E5FC' }
+            ]"
+            title-text="Ownership Distribution"
+            :show-legend="true"
+            inner-size="50%"
+            chart-height="350px"
+            :enableExporting="true"
+          />
+        </section>
+        <section class="card market-overview__card transaction-chart">
           <h3 class="title card__title">Insider Transactions</h3>
-          <InsiderTransactions/>
-        </section> -->
-        <section class="card market-overview__card full-width-chart">
+          <BarChart
+            :chart-data="[
+              { date: '2024-Q1', shares: 123 },
+              { date: '2024-Q2', shares: 156 },
+              { date: '2024-Q3', shares: 98 },
+              { date: '2024-Q4', shares: 172 }
+            ]"
+            :series-configs="[
+              { key: 'shares', label: 'Total Shares', color: '#4CAF50' }
+            ]"
+            title-text="Quarterly Shares Growth"
+            orientation="column"
+            chart-height="auto"
+            y-axis-title-text="Shares"
+            :enableExporting="true"
+          />        
+        </section> 
+        <section class="card market-overview__card analyst-chart">
           <h3 class="title card__title">Analyst Recommendations</h3>
-          <AnalystRecommendations/>
+          <BaseDashboard
+            title="Analyst Recommendations"
+            :value="2.8"
+            :data="[
+              { name: 'Strong Buy', value: 7, color: '#2196F3' },
+              { name: 'Buy', value: 23, color: '#90CAF9' },
+              { name: 'Hold', value: 16, color: '#80DEEA' },
+              { name: 'Sell', value: 2, color: '#FFB74D' },
+              { name: 'Strong Sell', value: 1, color: '#FF8A65' }
+            ]"
+            :fullCircle="false"            
+            :exportable="true"
+          />
         </section>
       </div>
     </div>
   </template>
   
   <script>
-  import BaseTable from './components/BaseTable.vue';
+  import BaseTable from './components/tables/BaseTable.vue';
   import BarChart from './components/charts/BarChart.vue';
   import StockChart from './components/charts/StockChart.vue';
-  import UseTable from './components/UseTable.vue';
-  import SectorCardIndex from './components/SectorCardIndex.vue';
-  import OwnershipDistribution from './components/OwnershipDistribution.vue';
-  import InsiderTransactions from './components/InsiderTransactions.vue';
-  import AnalystRecommendations from './components/AnalystRecommendations.vue';
+  import UseTable from './components/tables/UseTable.vue';
+  import SectorCardIndex from './components/sectorCard/index.vue';
+  import PieChart from './components/charts/PieChart.vue';
+  import BaseDashboard from './components/charts/BaseDashboard.vue';
 
   export default {
     name: 'MarketOverview',
@@ -88,7 +123,7 @@
       BaseTable,
       BarChart,
       StockChart,
-      UseTable, SectorCardIndex, OwnershipDistribution, InsiderTransactions, AnalystRecommendations
+      UseTable, SectorCardIndex, PieChart, BaseDashboard
     },
     data() {
       return {
@@ -140,7 +175,8 @@
       grid-template-areas:
         "indicators news snapshot"
         "sector volume volume"
-        "chart chart chart";
+        "chart chart chart"
+        "ownership-chart transaction-chart analyst-chart";
       grid-template-columns: repeat(3, 1fr);
       grid-auto-rows: auto;
       gap: 16px;
