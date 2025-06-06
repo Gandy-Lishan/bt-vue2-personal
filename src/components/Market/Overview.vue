@@ -15,18 +15,26 @@
   
         <section class="card market-overview__card news-card">
           <h3 class="title card__title">AAPL</h3>
-          <BarChart id="eps-growth-chart" />
+          <!-- <div class="card__item">[News placeholder]</div> -->
+          <BarChart
+            :chart-data="performanceData"
+            title-text="Earnings: Estimate vs. Actual"
+            y-axis-title-text="Earnings (Millions USD)"
+            chart-height="auto"
+            :enable-exporting="false"
+            estimate-color="#B0C4DE"
+            actual-color="#FF6347"
+          />
         </section>
   
         <section class="card market-overview__card snapshot-card">
           <h3 class="title card__title">Market Snapshot</h3>
           <StockChart
             symbol="aapl"
-            start-date="2005-05-15"
+            start-date="2005-01-01"
             end-date="2025-06-01"
-            frequency="Daily"
-            :chart-height="550"
             line-color="#1E88E5"
+            :enable-exporting="false"
           />
 
         </section>
@@ -65,6 +73,7 @@
     },
     data() {
       return {
+        // data table example data
         indicators: [
           { id: 1, name: 'Moving Average', value: '23.45' },
           { id: 2, name: 'RSI', value: '56' },
@@ -76,6 +85,17 @@
           { prop: 'value', label: 'Value' }
         ],
 
+        // barchart example data
+        performanceData: [
+          { date: '2021-Q1', estimate: 5.0, actual: 5.3 },
+          { date: '2021-Q2', estimate: 6.3, actual: 6.1 },
+          { date: '2021-Q3', estimate: 5.0, actual: 4.8 },
+          { date: '2021-Q4', estimate: 7.0, actual: 7.2 },
+          { date: '2022-Q1', estimate: 6.5, actual: 6.9 },
+          { date: '2022-Q2', estimate: 8.1, actual: 8.3 },
+          { date: '2022-Q3', estimate: 9.5, actual: 9.1 },
+          { date: '2022-Q4', estimate: 10.0, actual: 10.5 }
+        ]
 
       };
     },

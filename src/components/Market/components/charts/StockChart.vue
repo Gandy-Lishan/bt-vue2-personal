@@ -1,7 +1,7 @@
 <template>
     <div>
       <div v-if="isLoading" class="chart-loading">Loading chart data...</div>
-      <div v-show="!isLoading" ref="chartContainer" :style="{ width: '100%', height: chartHeight + 'px' }"></div>
+      <div v-show="!isLoading" ref="chartContainer" :style="{ width: '100%', height: chartHeight }"></div>
       <div v-if="error && !isLoading" class="chart-error">{{ error }}</div>
     </div>
   </template>
@@ -33,17 +33,17 @@
         type: String,
         required: true,
       },
-      frequency: {
-        type: String,
-        default: "Daily",
-      },
       chartHeight: {
-        type: Number,
-        default: 600,
+        type: String,
+        default: '100%',
       },
       lineColor: { // Optional: allow customizing line color
         type: String,
         default: "#007bff" // A nice blue, change as you like
+      },
+      enableExporting: { // New prop to control exporting
+        type: Boolean,
+        default: true,
       }
     },
     data() {
@@ -60,9 +60,9 @@
       symbol: "fetchDataAndInitializeChart",
       startDate: "fetchDataAndInitializeChart",
       endDate: "fetchDataAndInitializeChart",
-      frequency: "fetchDataAndInitializeChart",
       chartHeight: "reRenderChartWithCurrentData",
-      lineColor: "reRenderChartWithCurrentData"
+      lineColor: "reRenderChartWithCurrentData",
+      enableExporting: "reRenderChartWithCurrentData" // Re-render if exporting changes
     },
     mounted() {
       this.fetchDataAndInitializeChart();
@@ -85,7 +85,7 @@
   
         try {
           // Directly call the imported getPairData function
-          const response = await getPairData(this.startDate, this.endDate, this.frequency, this.symbol);
+          const response = await getPairData(this.startDate, this.endDate, 'daily', this.symbol);
   debugger
           this.currentSymbolName = this.symbol;
   
@@ -169,15 +169,15 @@
           title: {
             text: null,
           },
-          exporting: {
-            enabled: true,
-            buttons: {
-              contextButton: {
+          exporting: { // Conditionally enable exporting
+            enabled: this.enableExporting,
+            buttons: { // Define buttons structure; Highcharts handles visibility if enabled is false
+                contextButton: {
                 menuItems: [
-                  "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG",
-                  "separator", "downloadCSV", "downloadXLS",
+                    "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG",
+                    "separator", "downloadCSV", "downloadXLS",
                 ],
-              },
+                },
             },
           },
           yAxis: [ // Single Y-axis configuration
@@ -188,7 +188,7 @@
                 x: -8,
                 style: { color: this.lineColor }
               },
-              opposite: false, // Y-axis on the left
+              //opposite: false, // Y-axis on the left
               gridLineWidth: 1,
             }
           ],
@@ -199,14 +199,15 @@
             selected: 1,
             allButtonsEnabled: true,
             buttons: [
-              { type: 'month', count: 1, text: '1m' },
-              { type: 'month', count: 3, text: '3m' },
-              { type: 'month', count: 6, text: '6m' },
-              { type: 'ytd', text: 'YTD' },
-              { type: 'year', count: 1, text: '1y' },
-              { type: 'year', count: 3, text: '3y' },
-              { type: 'all', text: 'All' },
-            ],
+                { type: 'month', count: 3, text: '3m' },
+                { type: 'month', count: 6, text: '6m' },
+                { type: 'ytd', text: 'YTD' },
+                { type: 'year', count: 1, text: '1y' },
+                { type: 'year', count: 3, text: '3y' },
+                { type: 'year', count: 5, text: '5y' },
+                { type: 'year', count: 10, text: '10y' },
+                { type: 'all', text: 'All' }
+            ]
           },
           credits: {
             enabled: true,
@@ -221,16 +222,16 @@
             xDateFormat: '%A, %b %e, %Y',
             pointFormat: `<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:.2f}</b><br/>`,
             // If you prefer the previous formatter style:
-            // formatter: function () {
-            //    let s = `${Highcharts.dateFormat('%A, %b %e, %Y', this.x)}<br/>`;
-            //    // this.points will only have one point for a single series chart if not shared
-            //    const point = this.points ? this.points[0] : this.point;
-            //    if (point) {
-            //      const colorSpan = `<span style="color:${point.series.color}">●</span> `;
-            //      s += `${colorSpan} ${point.series.name}: <b>${point.y.toFixed(2)}</b><br/>`;
-            //    }
-            //    return s;
-            // }
+            formatter: function () {
+               let s = `${Highcharts.dateFormat('%A, %b %e, %Y', this.x)}<br/>`;
+               // this.points will only have one point for a single series chart if not shared
+               const point = this.points ? this.points[0] : this.point;
+               if (point) {
+                 const colorSpan = `<span style="color:${point.series.color}">●</span> `;
+                 s += `${colorSpan} ${point.series.name}: <b>${point.y.toFixed(2)}</b><br/>`;
+               }
+               return s;
+            }
           },
           plotOptions: {
             line: {
