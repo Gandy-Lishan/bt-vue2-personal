@@ -3446,4 +3446,7 @@ export default {
     color: #333;
   }
 }
+/deep/ .el-select__input {
+  margin-left: 2px;
+}
 </style>
