@@ -1,54 +1,63 @@
 <template>
-    <div class="market">
-      <aside class="market__sidebar">
-        <nav class="market__nav">
-          <ul class="market__nav-list">
-            <li
-              v-for="item in menuItems"
-              :key="item.name"
-              :class="['market__nav-item', { 'market__nav-item--active': isActive(item.path) }]"
-              @click="goTo(item.path)"
-            >
-              {{ item.label }}
-            </li>
-          </ul>
+  <div class="layout">
+    <header class="layout__header">
+      <div class="layout__header-left">
+        <div class="layout__menu-toggle" @click="toggleSidebar">
+          <i class="el-icon-menu"></i>
+        </div>
+        <div class="layout__logo">Meta Data</div>
+      </div>
+      <div class="layout__header-right">
+        <!-- <search-bar placeholder="搜索行情..." /> -->
+      </div>
+    </header>
+
+    <div class="layout__body">
+      <aside :class="['layout__sidebar', { 'layout__sidebar--collapsed': sidebarCollapsed }]">
+        <nav class="layout__nav">
+          <router-link v-for="item in menuItems" :key="item.path" :to="item.path" class="layout__nav-item">
+            <i :class="item.icon"></i>
+            <span class="layout__nav-text">{{ item.label }}</span>
+          </router-link>
         </nav>
       </aside>
-  
-      <section class="market__main">
-        <div class="market__toolbar">
-          <input class="market__search-input" placeholder="Search..." />
-        </div>
-        <div class="market__content">
-          <router-view />
-        </div>
-      </section>
+
+      <main class="layout__content">
+        <router-view />
+      </main>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-  export default {
-    name: 'Market',
-    data() {
-      return {
-        menuItems: [
-          { name: 'Overview', path: '/market/overview', label: 'Overview' },
-          { name: 'TrendScore', path: '/market/trend_score', label: 'Trend Score' },
-          { name: 'Sectors', path: '/market/sector_trend_score', label: 'Sector Trends' }
-          // 可根据路由配置继续添加更多项
-        ]
-      };
-    },
-    methods: {
-      isActive(path) {
-        return this.$route.path === path;
-      },
-      goTo(path) {
-        this.$router.push(path);
-      }
+<script>
+//import SearchBar from '@/components/common/SearchBar.vue';
+
+export default {
+  name: 'Layout',
+  //components: { SearchBar },
+  data() {
+    return {
+      sidebarCollapsed: false,
+      menuItems: [
+        { path: '/market-overview', label: 'Market Overview', icon: 'el-icon-data-analysis' },
+        { path: '/equities', label: 'Equities', icon: 'el-icon-s-data' },
+        { path: '/commodities', label: 'Commodities', icon: 'el-icon-s-goods' },
+        { path: '/cryptocurrencies', label: 'Crypto Currencies', icon: 'el-icon-coin' },
+        { path: '/crypto-funding-rates', label: 'Crypto Funding Rates', icon: 'el-icon-money' },
+        { path: '/earnings-calendar', label: 'Earnings Calendar', icon: 'el-icon-date' },
+        { path: '/economic-dashboard', label: 'Economic Dashboard', icon: 'el-icon-s-marketing' },
+        { path: '/news-feed', label: 'News', icon: 'el-icon-news' }
+      ]
+    };
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
     }
-  };
-  </script>
+  }
+};
+</script>
+
 
 <style scoped lang="scss" >
  @import "./market.scss";
@@ -56,73 +65,107 @@
 // Market/index.vue 框架样式
 // ------------------------
 
-.market {
+.layout {
   display: flex;
+  flex-direction: column;
   height: 100%;
-  min-height: 800px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 $spacing-md;
+    background-color: $color-bg-toolbar;
+    color: $color-text-secondary;
+    border-bottom: 1px solid $color-border-medium;
+    box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__menu-toggle {
+    margin-right: $spacing-md;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  &__logo {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
 
   &__sidebar {
-    width: 200px;
+    width: 220px;
     background-color: $color-bg-sidebar;
     border-right: 1px solid $color-border-medium;
-    padding: 16px 0;
+    transition: width 0.3s;
+    overflow-y: auto;
+
+    &--collapsed {
+      width: 64px;
+
+      .layout__nav-text {
+        display: none;
+      }
+
+      .layout__nav-item {
+        justify-content: center;
+      }
+    }
   }
 
   &__nav {
-    &-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+    padding: $spacing-md 0;
 
     &-item {
-      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      padding: $spacing-sm $spacing-md;
       color: $color-text-secondary;
-      cursor: pointer;
-      transition: background 0.2s;
+      transition: background-color 0.3s;
+      text-decoration: none;
+
+      i {
+        margin-right: $spacing-sm;
+        font-size: 18px;
+      }
 
       &:hover {
-        background: $color-bg-secondary;
+        background-color: $color-bg-secondary;
       }
 
-      &--active {
-        background: $color-border-medium;
-        font-weight: bold;
+      &.router-link-active {
         color: $color-text-primary;
+        background-color: $color-border-medium;
+        font-weight: 500;
       }
     }
-  }
-
-  &__main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  &__toolbar {
-    position: sticky;
-    top: 0;
-    background-color: $color-bg-toolbar;
-    padding: 12px 16px;
-    z-index: 10;
-    border-bottom: 1px solid $color-border-medium;
-  }
-
-  &__search-input {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid $color-border-dark;
-    background-color: darken($color-bg-primary, 5%);
-    color: $color-text-primary;
   }
 
   &__content {
     flex: 1;
-    padding: 16px;
     overflow-y: auto;
+    background-color: $color-bg-primary;
   }
 }
+
 </style>
   

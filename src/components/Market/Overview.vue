@@ -2,7 +2,7 @@
     <div class="market-overview">
       <h2 class="heading market-overview__heading">Market Overview</h2>
   
-      <div class="market-overview__grid">
+      <div class="grid market-overview__grid">
         <!-- 第一行：三列 -->
         <section class="card market-overview__card indicators-card">
           <h3 class="card__title">Indicators</h3>
@@ -32,13 +32,13 @@
         <section class="card market-overview__card snapshot-card">
           <h3 class="title card__title">AAPL</h3>
             <div class="card__item">
-              <StockChart
-                symbol="aapl"
-                start-date="2005-01-01"
-                end-date="2025-06-01"
-                line-color="#1E88E5"
-                :enable-exporting="false"
-              />
+            <StockChart
+              symbol="aapl"
+              start-date="2005-01-01"
+              end-date="2025-06-01"
+              line-color="#1E88E5"
+              :enable-exporting="false"
+            />
             </div>
         </section>
   
@@ -171,20 +171,19 @@
   @import "./market.scss";
   
   .market-overview {
+    padding: $spacing-md;
+
     &__heading {
-      color: $color-bg-primary;
+      color: $color-text-secondary;
     }
   
     &__grid {
-      display: grid;
       grid-template-areas:
         "indicators news snapshot"
         "sector volume volume"
         "chart chart chart"
         "ownership-chart transaction-chart analyst-chart";
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: auto;
-      gap: 16px;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
     }
   
     &__card {
