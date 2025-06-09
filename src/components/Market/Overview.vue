@@ -31,14 +31,15 @@
   
         <section class="card market-overview__card snapshot-card">
           <h3 class="title card__title">AAPL</h3>
-          <StockChart
-            symbol="aapl"
-            start-date="2005-01-01"
-            end-date="2025-06-01"
-            line-color="#1E88E5"
-            :enable-exporting="false"
-          />
-
+            <div class="card__item">
+              <StockChart
+                symbol="aapl"
+                start-date="2005-01-01"
+                end-date="2025-06-01"
+                line-color="#1E88E5"
+                :enable-exporting="false"
+              />
+            </div>
         </section>
   
         <!-- 第二行：两列 -->
@@ -55,7 +56,8 @@
         <!-- 第三行：一整行 -->
         <section class="card market-overview__card ownership-chart">
           <h3 class="title card__title">Ownership Distribution</h3>
-          <PieChart
+          <div class="card__item">
+            <PieChart
             :chart-data="[
               { name: 'Executive Insiders', y: 43.5, color: '#2196F3' },
               { name: 'Institutions', y: 33.5, color: '#1A237E' },
@@ -68,25 +70,28 @@
             chart-height="350px"
             :enableExporting="true"
           />
+          </div>
         </section>
         <section class="card market-overview__card transaction-chart">
           <h3 class="title card__title">Insider Transactions</h3>
-          <BarChart
-            :chart-data="[
-              { date: '2024-Q1', shares: 123 },
-              { date: '2024-Q2', shares: 156 },
-              { date: '2024-Q3', shares: 98 },
-              { date: '2024-Q4', shares: 172 }
-            ]"
-            :series-configs="[
-              { key: 'shares', label: 'Total Shares', color: '#4CAF50' }
-            ]"
-            title-text="Quarterly Shares Growth"
-            orientation="column"
-            chart-height="auto"
-            y-axis-title-text="Shares"
-            :enableExporting="true"
-          />        
+          <div class="card__item">
+            <BarChart
+              :chart-data="[
+                { date: '2024-Q1', shares: 123 },
+                { date: '2024-Q2', shares: 156 },
+                { date: '2024-Q3', shares: 98 },
+                { date: '2024-Q4', shares: 172 }
+              ]"
+              :series-configs="[
+                { key: 'shares', label: 'Total Shares', color: '#4CAF50' }
+              ]"
+              title-text="Quarterly Shares Growth"
+              orientation="column"
+              chart-height="auto"
+              y-axis-title-text="Shares"
+              :enableExporting="true"
+            />  
+          </div>
         </section> 
         <section class="card market-overview__card analyst-chart">
           <h3 class="title card__title">Analyst Recommendations</h3>

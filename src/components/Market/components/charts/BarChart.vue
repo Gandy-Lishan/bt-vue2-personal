@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="bar-chart">
       <div v-if="isLoading" class="chart-loading">Loading chart data...</div>
-      <div v-show="!isLoading" ref="chartContainer" :style="{ width: '100%', height: chartHeight }"></div>
+      <div v-show="!isLoading" ref="chartContainer" :style="{ width: '100%', height: chartHeight, borderRadius: 'inherit' }"></div>
       <div v-if="error && !isLoading" class="chart-error">{{ error }}</div>
     </div>
   </template>
@@ -199,6 +199,11 @@
   </script>
   
   <style scoped>
+  .bar-chart {
+    background: white;
+    width: 100%;
+    border-radius: inherit;
+  }
   .chart-loading,
   .chart-error {
     display: flex;

@@ -148,9 +148,9 @@ export default {
 
 <style scoped>
 .pie-chart {
-  padding: 20px;
   background: white;
-  border-radius: 8px;
+  width: 100%;
+  border-radius: inherit;
 }
 .chart-title {
   font-size: 18px;
