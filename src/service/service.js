@@ -2312,3 +2312,68 @@ export function getAllWatchlist(page, sort, name) {
 	})
 }
 /* watch list end*/
+export function getUserWatchlistTrend() {
+	const url = `/dev/st_data/user_watchlist_trend/`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getCurrentUserWatchlistTrend() {
+	const url = `/dev/st_data/user_watchlist/`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function postUserWatchlist(data) {
+	const url = `/dev/st_data/user_watchlist/`
+	const headers = {
+		'Content-Type': 'application/json',
+		'Cache-Control': 'no-cache',  // 禁用缓存
+		'Pragma': 'no-cache',
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function deleteUserWatchlist(data) {
+	const path = `/dev/st_data/user_watchlist/`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+		formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios.delete(path, { data: formData, headers, withCredentials: true }).then(res => {
+			resolve(res)
+		}).catch(err => {
+			reject(err)
+		})
+	})
+}
