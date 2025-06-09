@@ -113,6 +113,12 @@ export default {
              value: 'TrendSector',
              type: 'SP1500Score',
              url: 'sector_trend_score'
+           },
+           {
+             label: 'My Favorites',
+             value: 'WatchList',
+             type: 'WatchList',
+             url: 'watchlist'
            }
          ]
        }
