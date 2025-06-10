@@ -51,7 +51,6 @@
         </el-button>
       </el-col>
     </el-row>
-    </el-row>
     <el-row>
     <div class="stock-selector">
     <!-- 股票选择区域 -->
@@ -3143,9 +3142,7 @@ export default {
         this.form.selectedStocks = []
         
         // 触发更新事件
-        await this.$nextTick(async () => {
-          this.$emit('forceUpdateTable', this.checkedType, this.condition)
-        })
+        await this.$emit('forceUpdateTable', this.checkedType, this.condition)
       } catch (error) {
         console.error('Error saving stocks:', error)
       } finally {
@@ -3156,9 +3153,7 @@ export default {
       debugger
       const res = await deleteUserWatchlist({symbols: JSON.stringify([scope.row.market_symbol])})
       console.log('res', res)
-      await this.$nextTick(async () => {
-        this.$emit('forceUpdateTable', this.checkedType, this.condition)
-      })
+      await this.$emit('forceUpdateTable', this.checkedType, this.condition)
     },
     handleCancel() {
       this.form.selectedStocks = []
