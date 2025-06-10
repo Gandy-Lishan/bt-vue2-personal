@@ -282,6 +282,9 @@ export default {
         }else if(url === 'watchlist'){
           const res = await getUserWatchlistTrend()
           _results = res.data
+          if(!Array.isArray(_results) && _results.code == 404) {
+            _results = []
+          }
           console.log('watchlist _results', _results)
         }
         if(type === 'GlobalIndexBreadth') {
