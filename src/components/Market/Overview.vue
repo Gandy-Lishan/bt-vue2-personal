@@ -168,7 +168,7 @@
   </script>
   
   <style scoped lang="scss">
-  @import "./market.scss";
+   @import "@/components/Market/market.scss";
   
   .market-overview {
     padding: $spacing-md;

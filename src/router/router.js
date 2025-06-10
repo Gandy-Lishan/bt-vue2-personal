@@ -413,7 +413,59 @@ const routes = [
 			// 	meta: { activeItem: 'earnings' },
 			// 	component: resolve =>
 			// 		require(['@/components/Market/Earnings.vue'], resolve)
-			// }
+			// },
+			{
+				path: 'sec/:symbolname',
+				name: 'MarketSecDetail',
+				meta: { activeItem: 'sec' },
+				component: resolve => require(['@/components/Market/sec/index.vue'], resolve),
+				children: [
+					{
+					  path: '',
+					  redirect: 'overview'
+					},
+					{
+					  path: 'overview',
+					  component: resolve => require(['@/components/Market/sec/Overview.vue'], resolve),
+					},
+					{
+						path: 'analysts',
+						component: resolve => require(['@/components/Market/sec/Analysts.vue'], resolve),
+					  },
+					// {
+					//   path: 'earnings',
+					//   component: () => import('@/components/Market/Sec/Earnings.vue')
+					// },
+					// {
+					//   path: 'financials',
+					//   component: () => import('@/components/Market/Sec/Financials.vue')
+					// },
+					// {
+					//   path: 'balance-sheet',
+					//   component: () => import('@/components/Market/Sec/BalanceSheet.vue')
+					// },
+					// {
+					//   path: 'cash-flow',
+					//   component: () => import('@/components/Market/Sec/CashFlow.vue')
+					// },
+					// {
+					//   path: 'ownership',
+					//   component: () => import('@/components/Market/Sec/Ownership.vue')
+					// },
+					// {
+					//   path: 'news',
+					//   component: () => import('@/components/Market/Sec/News.vue')
+					// },
+					// {
+					//   path: 'sec',
+					//   component: () => import('@/components/Market/Sec/SecFilings.vue')
+					// }
+				  ]
+			},
+			{
+				path: 'sec',
+				redirect: '/market'
+			}
 		]
 	},	
 	{

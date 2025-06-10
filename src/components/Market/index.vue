@@ -13,7 +13,10 @@
     </header>
 
     <div class="layout__body">
-      <aside :class="['layout__sidebar', { 'layout__sidebar--collapsed': sidebarCollapsed }]">
+      <aside
+        v-if="!isSecDetailRoute"
+        :class="['layout__sidebar', { 'layout__sidebar--collapsed': sidebarCollapsed }]"
+      >
         <nav class="layout__nav">
           <router-link v-for="item in menuItems" :key="item.path" :to="item.path" class="layout__nav-item">
             <i :class="item.icon"></i>
@@ -50,6 +53,11 @@ export default {
       ]
     };
   },
+  computed: {
+    isSecDetailRoute() {
+      return this.$route.path.startsWith('/market/sec/');
+    }
+  },
   methods: {
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -60,7 +68,7 @@ export default {
 
 
 <style scoped lang="scss" >
- @import "./market.scss";
+@import "@/components/Market/market.scss";
 // ------------------------
 // Market/index.vue 框架样式
 // ------------------------
@@ -68,7 +76,7 @@ export default {
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
 
   &__header {
     display: flex;
