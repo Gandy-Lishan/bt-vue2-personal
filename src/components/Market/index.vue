@@ -1,12 +1,15 @@
 <template>
   <div class="layout">
     <header class="layout__header">
-      <div class="layout__header-left">
+      <div v-if="!isSecDetailRoute"class="layout__header-left">
         <div class="layout__menu-toggle" @click="toggleSidebar">
           <i class="el-icon-menu"></i>
         </div>
         <div class="layout__logo">Meta Data</div>
       </div>
+      <div v-else class="layout__header-left back">
+				<router-link to="/market"><i class="el-icon-arrow-left"></i><span>Back to Meta Data</span></router-link>
+			</div>
       <div class="layout__header-right">
         <!-- <search-bar placeholder="搜索行情..." /> -->
       </div>
@@ -100,6 +103,24 @@ export default {
     &-right {
       display: flex;
       align-items: center;
+    }
+
+    .back {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      // margin: 30px 0px 20px 0px;
+      font-size: 1.1rem;
+      i {
+        font-weight: bold;
+      }
+      a {
+        color: $color-text-secondary;
+        font-weight: bold;
+        &:hover {
+          color: $color-text-highlight;
+        }
+      }
     }
   }
 
