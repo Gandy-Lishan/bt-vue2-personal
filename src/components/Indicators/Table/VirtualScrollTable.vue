@@ -51,49 +51,48 @@
         </el-button>
       </el-col>
     </el-row>
-    </el-row>
     <el-row>
-    <div class="stock-selector">
-    <!-- 股票选择区域 -->
-    <div v-show="isVisible && checkedType === 'WatchList'" class="stock-selector-panel">
-      <el-form :model="form" size="mini" label-width="80px" class="selector-form">
-        <el-row :gutter="20">
-          <el-col :span="16">
-            <el-form-item label="" label-width="0px">
-              <el-select
-                v-model="form.selectedStocks"
-                multiple
-                filterable
-                placeholder="Select Ticker"
-                style="width: 100%"
-                size="small"
-                :filter-method="handleFilterInput"
-                @change="onSelectChange"
-              >
-                <el-option
-                  v-for="item in filteredList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                <div class="custom-option">
-                  <span class="symbol-label">{{ item.url }}</span>
-                  <span class="symbol-url">{{ item.name }}</span>
-                </div>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-row>
-              <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
-              <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
+      <div class="stock-selector">
+        <!-- 股票选择区域 -->
+        <div v-show="isVisible && checkedType === 'WatchList'" class="stock-selector-panel">
+          <el-form :model="form" size="mini" label-width="80px" class="selector-form">
+            <el-row :gutter="20">
+              <el-col :span="16">
+                <el-form-item label="" label-width="0px">
+                  <el-select
+                    v-model="form.selectedStocks"
+                    multiple
+                    filterable
+                    placeholder="Select Ticker"
+                    style="width: 100%"
+                    size="small"
+                    :filter-method="handleFilterInput"
+                    @change="onSelectChange"
+                  >
+                    <el-option
+                      v-for="item in filteredList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    <div class="custom-option">
+                      <span class="symbol-label">{{ item.url }}</span>
+                      <span class="symbol-url">{{ item.name }}</span>
+                    </div>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-row>
+                  <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
+                  <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
+                </el-row>
+              </el-col>
             </el-row>
-          </el-col>
-        </el-row>
-      </el-form>
-    </div>
-    </div>
+          </el-form>
+        </div>
+      </div>
     </el-row>
     <el-row>
       <el-col :span="24">
