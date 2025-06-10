@@ -3145,6 +3145,10 @@ export default {
         await this.$emit('forceUpdateTable', this.checkedType, this.condition)
       } catch (error) {
         console.error('Error saving stocks:', error)
+        // 添加失败
+        this.popUpMsgBox('Oops! Something went wrong. Couldn\'t add it.')
+        this.form.selectedStocks = []
+        this.isVisible = false
       } finally {
         this.saving = false
       }
