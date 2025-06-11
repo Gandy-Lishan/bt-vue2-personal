@@ -59,12 +59,22 @@ export default {
       ],
       symbolHeader: 'Apple Inc.(AAPL)',
       symbolDescription: `Apple nc,desians,manuactures,and markets smartohone
-Mac,a line of personalcomputers Pad, a lne of mul
-Ty, Apple Watch, Beats products, and HomePod. t also provides AppleCare support and cloud services; and operates various platfoms,including the A.
-purpose tablets: and wearables, home.
-and accessories comprising AirPods.`,
+        Mac,a line of personalcomputers Pad, a lne of mul
+        Ty, Apple Watch, Beats products, and HomePod. t also provides AppleCare support and cloud services; and operates various platfoms,including the A.
+        purpose tablets: and wearables, home.
+        and accessories comprising AirPods.`,
+        prevOverflow: '', // 存储滚动条状态
     };
-  }
+  },
+  mounted() {
+    document.documentElement.classList.remove('scroll');
+    this.prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';     // 如果是内联 style
+  },
+  unmounted() {
+    //组件卸载时恢复 scroll，避免影响别的组件
+    document.documentElement.style.overflow = this.prevOverflow;
+  },
 };
 </script>
 
@@ -92,7 +102,7 @@ and accessories comprising AirPods.`,
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: scroll;
   }
 
   &__nav {
@@ -120,7 +130,6 @@ and accessories comprising AirPods.`,
 
   &__content {
     padding: $spacing-md;
-    overflow-y: auto;
     background-color: $color-bg-primary;
     flex: 1;
   }

@@ -36,7 +36,7 @@
     </div>
  
     <!-- 搜索和过滤区域 -->
-    <div class="table-header">
+    <div v-if="showSearch || filters.length > 0" class="table-header">
       <div class="filter-section">
         <el-input
           v-if="showSearch"
@@ -180,8 +180,7 @@
     },
     // 是否显示搜索框
     showSearch: {
-      type: Boolean,
-      default: true
+      type: Boolean
     },
     // 是否显示分页
     showPagination: {
