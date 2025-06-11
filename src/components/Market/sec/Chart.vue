@@ -1,6 +1,6 @@
 <template>
     <div>
-    <div class="card__title">Chart</div>
+    <div class="title">Chart</div>
     <div class="overview card">
       <div class="overview__toolbar">
         <div class="overview__legend">

@@ -1,6 +1,6 @@
 <template>
   <div class="analyst-recommendations">
-    <h2 class="title">Analysts</h2>
+    <div class="title">Analysts</div>
     <div class="contentWrapper">
       <h3 class="subtitle">Analyst Recommendations</h3>
       <div class="chart-container">
@@ -248,17 +248,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "@/components/Market/market.scss";
+
 .analyst-recommendations {
   margin: 0 auto;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0 0 20px 0;
-}
 
 .contentWrapper {
   background-color: white;
@@ -268,14 +264,7 @@ export default {
   margin-bottom: 15px;
 }
 
-.subtitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #374151;
-  margin: 0 0 12px 0;
-  border-bottom: 1px solid #dcdfe6;
-  padding: 0 0 12px 0;
-}
+
 
 .chart-container {
   display: flex;

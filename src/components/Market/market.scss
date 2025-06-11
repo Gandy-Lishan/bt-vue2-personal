@@ -56,17 +56,19 @@
 }
 
 .title {
-  font-size: 1.125rem;
+  font-size: 24px;
   font-weight: 600;
-  color: lighten($color-text-secondary, 20%);
-  margin-bottom: 0.8rem;
+  color: #fff;
+  margin: 0 0 20px 0;
 }
 
 .subtitle {
-  font-size: 1rem;
+  font-size: 18px;
   font-weight: 500;
-  color: $color-text-subtle;
-  margin-bottom: 0.8rem;
+  color: #374151;
+  margin: 0 0 12px 0;
+  border-bottom: 1px solid #dcdfe6;
+  padding: 0 0 12px 0;
 }
 
 
