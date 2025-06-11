@@ -78,10 +78,8 @@
         :columns="columns"
         :loading="loading"
         tip-text=""
-        @delete="handleDelete"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        @remove-tag="handleRemoveTag"
       >
       </base-table>
     </div>
@@ -240,29 +238,12 @@ export default {
       
       return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4} Z`
     },
-    handleDelete({ index, row }) {
-     this.$confirm('确认删除该记录?', '提示', {
-       type: 'warning'
-     }).then(() => {
-       // 执行删除操作
-       this.tableData.splice(index, 1)
-       this.$message.success('删除成功')
-     }).catch(() => {})
-    },
-    handleEdit(row) {
-      // 处理编辑操作
-      console.log('编辑', row)
-    },
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },
     handleCurrentChange(page) {
       console.log('当前页改变：', page)
     },
-    handleRemoveTag(tag) {
-      // 处理移除 tag 的逻辑
-      console.log('移除标签：', tag)
-    }
   }
 }
 </script>

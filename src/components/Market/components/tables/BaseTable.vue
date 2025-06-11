@@ -81,13 +81,18 @@
         <el-table-column
           :key="column.prop"
           :prop="column.prop"
-          :label="column.label"
           :width="column.width"
           :sortable="column.sortable"
           :align="column.align || 'left'"
         >
+          <!-- 自定义表头 -->
+          <template slot="header" slot-scope="scope">
+            <div v-if="column.labelHTML" v-html="column.labelHTML"></div>
+            <div v-else>{{ column.label }}</div>
+          </template>
+
+          <!-- 单元格内容 -->
           <template slot-scope="scope">
-            <!-- 自定义单元格内容 -->
             <div :class="getCellClass(scope.row[column.prop], column)">
               <!-- 图片类型 -->
               <template v-if="column.type === 'image'">

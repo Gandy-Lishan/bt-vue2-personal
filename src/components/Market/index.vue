@@ -16,7 +16,7 @@
     </header>
 
     <div class="layout__body">
-      <aside
+      <!-- <aside
         v-if="!isSecDetailRoute"
         :class="['layout__sidebar', { 'layout__sidebar--collapsed': sidebarCollapsed }]"
       >
@@ -26,7 +26,7 @@
             <span class="layout__nav-text">{{ item.label }}</span>
           </router-link>
         </nav>
-      </aside>
+      </aside> -->
 
       <main class="layout__content">
         <router-view />
@@ -53,13 +53,23 @@ export default {
         { path: '/earnings-calendar', label: 'Earnings Calendar', icon: 'el-icon-date' },
         { path: '/economic-dashboard', label: 'Economic Dashboard', icon: 'el-icon-s-marketing' },
         { path: '/news-feed', label: 'News', icon: 'el-icon-news' }
-      ]
+      ],
+      prevOverflow: '', // 存储滚动条状态
     };
   },
   computed: {
     isSecDetailRoute() {
       return this.$route.path.startsWith('/market/sec/');
     }
+  },
+  mounted() {
+    document.documentElement.classList.remove('scroll');
+    this.prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';     // 如果是内联 style
+  },
+  unmounted() {
+    //组件卸载时恢复 scroll，避免影响别的组件
+    document.documentElement.style.overflow = this.prevOverflow;
   },
   methods: {
     toggleSidebar() {
