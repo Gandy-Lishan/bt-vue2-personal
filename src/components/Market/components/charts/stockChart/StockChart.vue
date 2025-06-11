@@ -1,8 +1,8 @@
 // StockChart.vue
 <template>
   <div class="stock-chart">
-    {{chartType}}
-    {{seriesDataCache}}
+    <!-- {{chartType}}
+    {{seriesDataCache}} -->
     <div v-if="isLoading" class="chart-loading">Loading chart data...</div>
     <div v-show="!isLoading" ref="chartContainer" :style="{ width: '100%', height: chartHeight, borderRadius: 'inherit' }"></div>
     <div v-if="error && !isLoading" class="chart-error">{{ error }}</div>
@@ -147,7 +147,24 @@ export default {
           xDateFormat: '%A, %b %e, %Y',
           formatter() {
             const p = this.points?.[0] || this.point;
-            return `${Highcharts.dateFormat('%A, %b %e, %Y', this.x)}<br/><span style=\"color:${p.series.color}\">●</span> ${p.series.name}: <b>${p.y.toFixed(2)}</b>`;
+            const date = Highcharts.dateFormat('%A, %b %e, %Y', this.x);
+
+            if (p.series.type === 'candlestick') {
+              const [open, high, low, close] = [p.open, p.high, p.low, p.close];
+              return `
+                ${date}<br/>
+                <span style="color:${p.series.color}">●</span> ${p.series.name}<br/>
+                Open: <b>${open.toFixed(2)}</b><br/>
+                High: <b>${high.toFixed(2)}</b><br/>
+                Low: <b>${low.toFixed(2)}</b><br/>
+                Close: <b>${close.toFixed(2)}</b>
+              `;
+            } else {
+              return `
+                ${date}<br/>
+                <span style="color:${p.series.color}">●</span> ${p.series.name}: <b>${p.y.toFixed(2)}</b>
+              `;
+            }
           },
         },
         plotOptions: {
@@ -178,25 +195,25 @@ export default {
 
       // 如果是 candlestick，需要 5 个值，否则只取收盘价重新构造数据
       const rawData = this.seriesDataCache[0].data;
-
-      const newData = rawData.map(d => {
-        if (newType === 'candlestick') {
-          // 如果原始数据就是 [timestamp, open, high, low, close]
-          return d.length === 5 ? d : [d[0], d[1], d[1], d[1], d[1]];
-        } else {
-          // 使用收盘价（或你可以选择返回 d[4]）
-          return [d[0], d.length === 5 ? d[4] : d[1]];
-        }
-      });
+debugger
+      // const newData = rawData.map(d => {
+      //   if (newType === 'candlestick') {
+      //     // 如果原始数据就是 [timestamp, open, high, low, close]
+      //     return d.length === 5 ? d : [d[0], d[1], d[1], d[1], d[1]];
+      //   } else {
+      //     // 使用收盘价（或你可以选择返回 d[4]）
+      //     return [d[0], d.length === 5 ? d[4] : d[1]];
+      //   }
+      // });
 
       this.seriesDataCache[0].type = newType;
-      this.seriesDataCache[0].data = newData;
+      //this.seriesDataCache[0].data = newData;
 
       // 更新图表中的 series
       const chartSeries = this.chart.series[0];
       chartSeries.update({
         type: newType,
-        data: newData,
+        data: rawData,
       }, true);
     },
   },

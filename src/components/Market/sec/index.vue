@@ -15,19 +15,23 @@
 
     <!-- 右侧内容区域 -->
     <section class="sec-layout__main">
-      <div class="sec-layout__title">
-        <h1>{{symbolHeader}}</h1>
-        <p>{{symbolDescription}}</p>
+      <div class="sec-layout__header">
+        <div class="sec-layout__header-heading heading">{{ symbolHeading }}</div>
+        <div class="sec-layout__header-details text--muted">
+          <div>Industry: {{ 'Consumer Electronic' }}</div>
+          <div>Exchange: {{ 'NASDAQ Global Select' }}</div>
+          <div>Is ETF: {{ 'No' }}</div>
+          <div>Is Fund: {{ 'No' }}</div>
+        </div>
+        <div class="spacing-md"></div>
+        <div class="sec-layout__header-description">
+          <ExpandableText :text="symbolDescription" :maxLines="2" />
+        </div>
       </div>
       <!-- 子导航 -->
       <nav class="sec-layout__nav">
-        <router-link
-          v-for="tab in tabs"
-          :key="tab.name"
-          :to="`/market/sec/${symbol}/${tab.route}`"
-          class="sec-layout__nav-item"
-          active-class="sec-layout__nav-item--active"
-        >
+        <router-link v-for="tab in tabs" :key="tab.name" :to="`/market/sec/${symbol}/${tab.route}`"
+          class="sec-layout__nav-item" active-class="sec-layout__nav-item--active">
           <span class="sec-layout__nav-text">{{ tab.name }}</span>
         </router-link>
       </nav>
@@ -41,8 +45,10 @@
 </template>
 
 <script>
+import ExpandableText from '@/components/Market/components/ExpandableText.vue';
 export default {
   name: 'SecLayout',
+  components: { ExpandableText },
   computed: {
     symbol() {
       return this.$route.params.symbolname;
@@ -57,19 +63,28 @@ export default {
         { name: 'Financials', route: 'financials' },
         { name: 'News', route: 'news' },
       ],
-      symbolHeader: 'Apple Inc.(AAPL)',
+      symbolHeading: 'Apple Inc.(AAPL)',
       symbolDescription: `Apple nc,desians,manuactures,and markets smartohone
 Mac,a line of personalcomputers Pad, a lne of mul
 Ty, Apple Watch, Beats products, and HomePod. t also provides AppleCare support and cloud services; and operates various platfoms,including the A.
 purpose tablets: and wearables, home.
 and accessories comprising AirPods.`,
     };
+  },
+  mounted() {
+
+  },
+  watch: {
+
+  },
+  methods: {
+
   }
 };
 </script>
 
 <style scoped lang="scss">
-   @import "@/components/Market/market.scss";
+@import "@/components/Market/market.scss";
 
 .sec-layout {
   display: flex;
@@ -83,9 +98,20 @@ and accessories comprising AirPods.`,
     overflow-y: auto;
   }
 
-  &__title {
+  &__header {
     color: $color-text-secondary;
     padding: $spacing-md;
+
+    &-heading {}
+
+    &-details {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-md;
+    }
+
+    &-description {}
+
   }
 
   &__main {
@@ -124,5 +150,42 @@ and accessories comprising AirPods.`,
     background-color: $color-bg-primary;
     flex: 1;
   }
+}
+
+.sec-layout__header-description-wrapper {
+  margin-top: $spacing-xs;
+}
+
+.sec-layout__header-description {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  font-size: 14px;
+  line-height: 1.6;
+  column-gap: $spacing-sm;
+
+  span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.expanded span {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    white-space: normal;
+  }
+}
+
+.sec-layout__header-toggle {
+  background: none;
+  border: none;
+  color: $color-text-highlight;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+  align-self: end;
 }
 </style>

@@ -19,7 +19,7 @@
                 <button
                     v-for="option in zoomOptions"
                     :key="option.text"
-                    class="overview__tool__zoom-button"
+                    class="overview__tool-zoom-button"
                     :class="{ active: selectedZoom === option.text }"
                     @click="setZoom(option)"
                 >
@@ -173,13 +173,16 @@
         cursor: pointer;
 
         &.active {
-        background: #006cff;
-        color: #fff;
-        border-color: #006cff;
+            background: $color-blue;
+            color: $color-text-primary;
+            border-color: $color-border-light;
+            &:hover {
+                background: #477da8;
+            }
         }
 
         &:hover {
-        background: #e0e0e0;
+            background: #e0e0e0;
         }
     }
     &__chart {
