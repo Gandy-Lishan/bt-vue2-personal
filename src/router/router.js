@@ -383,16 +383,22 @@ const routes = [
 	{
 		path: '/market',
 		name: 'Market',
-		redirect: '/market/overview',
+		redirect: '/market/predict',
 		component: resolve => require(['@/components/Market/index.vue'], resolve),
 		children: [
-			{
-				path: 'overview',
-				name: 'MarketOverview',
-				meta: { activeItem: 'overview' },
-				component: resolve =>
-					require(['@/components/Market/Overview.vue'], resolve)
-			},
+				{
+					path: 'overview',
+					name: 'MarketOverview',
+					meta: { activeItem: 'overview' },
+					component: resolve =>
+						require(['@/components/Market/Overview.vue'], resolve)
+				},
+				{
+					path: 'predict',
+					name: 'MarketPredict',
+					meta: { activeItem: 'predict' },
+					component: resolve => require(['@/components/Market/Predict.vue'], resolve)
+				},
 			// {
 			// 	path: 'equities',
 			// 	name: 'Equities',

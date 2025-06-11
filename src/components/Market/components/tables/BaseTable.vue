@@ -36,7 +36,7 @@
     </div>
  
     <!-- 搜索和过滤区域 -->
-    <div class="table-header">
+    <div v-if="showSearch || filters.length > 0" class="table-header">
       <div class="filter-section">
         <el-input
           v-if="showSearch"
@@ -81,13 +81,18 @@
         <el-table-column
           :key="column.prop"
           :prop="column.prop"
-          :label="column.label"
           :width="column.width"
           :sortable="column.sortable"
           :align="column.align || 'left'"
         >
+          <!-- 自定义表头 -->
+          <template slot="header" slot-scope="scope">
+            <div v-if="column.labelHTML" v-html="column.labelHTML"></div>
+            <div v-else>{{ column.label }}</div>
+          </template>
+
+          <!-- 单元格内容 -->
           <template slot-scope="scope">
-            <!-- 自定义单元格内容 -->
             <div :class="getCellClass(scope.row[column.prop], column)">
               <!-- 图片类型 -->
               <template v-if="column.type === 'image'">
@@ -180,8 +185,7 @@
     },
     // 是否显示搜索框
     showSearch: {
-      type: Boolean,
-      default: true
+      type: Boolean
     },
     // 是否显示分页
     showPagination: {
