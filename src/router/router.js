@@ -422,11 +422,11 @@ const routes = [
 				children: [
 					{
 					  path: '',
-					  redirect: 'overview'
+					  redirect: 'chart'
 					},
 					{
-					  path: 'overview',
-					  component: resolve => require(['@/components/Market/sec/Overview.vue'], resolve),
+					  path: 'chart',
+					  component: resolve => require(['@/components/Market/sec/Chart.vue'], resolve),
 					},
 					{
 						path: 'analysts',

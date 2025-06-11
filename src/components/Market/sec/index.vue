@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       tabs: [
-        { name: 'Overview', route: 'overview' },
+        { name: 'Chart', route: 'chart' },
         { name: 'Analysts', route: 'analysts' },
         { name: 'Earnings', route: 'earnings' },
         { name: 'Financials', route: 'financials' },

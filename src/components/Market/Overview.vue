@@ -29,16 +29,10 @@
           />
         </section>
   
-        <section class="card market-overview__card snapshot-card">
-          <h3 class="title card__title">AAPL</h3>
+        <section class="card market-overview__card volume-card">
+          <h3 class="title card__title">Volume</h3>
             <div class="card__item">
-            <StockChart
-              symbol="aapl"
-              start-date="2005-01-01"
-              end-date="2025-06-01"
-              line-color="#1E88E5"
-              :enable-exporting="false"
-            />
+              [Volume placeholder]
             </div>
         </section>
   
@@ -48,9 +42,13 @@
           <SectorCardIndex/>
         </section>
   
-        <section class="card market-overview__card volume-card">
-          <h3 class="title card__title">Volume</h3>
-          <div class="card__item">[Volume placeholder]</div>
+        <section class="card market-overview__card snapshot-card">
+          <h3 class="title card__title">Snapshot</h3>
+             <StockChartGroup
+                  :symbols="['AAPL','AAON']"
+                  :startDate="startDate"
+                  :endDate="endDate"
+              />
         </section>
   
         <!-- 第三行：一整行 -->
@@ -116,18 +114,18 @@
   <script>
   import BaseTable from './components/tables/BaseTable.vue';
   import BarChart from './components/charts/BarChart.vue';
-  import StockChart from './components/charts/StockChart.vue';
   import UseTable from './components/tables/UseTable.vue';
   import SectorCardIndex from './components/sectorCard/index.vue';
   import PieChart from './components/charts/PieChart.vue';
   import BaseDashboard from './components/charts/BaseDashboard.vue';
+  import StockChartGroup from '@/components/Market/components/charts/stockChart/StockChartGroup.vue'
 
   export default {
     name: 'MarketOverview',
     components: { 
       BaseTable,
       BarChart,
-      StockChart,
+      StockChartGroup,
       UseTable, SectorCardIndex, PieChart, BaseDashboard
     },
     data() {
@@ -154,8 +152,11 @@
           { date: '2022-Q2', estimate: 8.1, actual: 8.3 },
           { date: '2022-Q3', estimate: 9.5, actual: 9.1 },
           { date: '2022-Q4', estimate: 10.0, actual: 10.5 }
-        ]
+        ],
 
+        // stockchart group
+        startDate: '2020-01-01',
+        endDate: new Date().toISOString().slice(0, 10),
       };
     },
     mounted() {
@@ -179,8 +180,8 @@
   
     &__grid {
       grid-template-areas:
-        "indicators news snapshot"
-        "sector volume volume"
+        "indicators news volume"
+        "sector snapshot snapshot"
         "chart chart chart"
         "ownership-chart transaction-chart analyst-chart";
       grid-template-columns: repeat(3, minmax(280px, 1fr));
