@@ -49,6 +49,10 @@ export default {
       type: String,
       default: null, // 不堆叠，若设为 'normal' 则堆叠
       validator: val => ['normal', 'percent', null].includes(val)
+    },
+    enablePositiveNegativeColors: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -97,12 +101,29 @@ export default {
       try {
         this.categories = this.chartData.map(item => item.date);
 
-        this.seriesData = this.seriesConfigs.map(cfg => ({
-          name: cfg.label,
-          data: this.chartData.map(item => item[cfg.key]),
-          color: cfg.color,
-          type: cfg.type || this.orientation
-        }));
+        this.seriesData = this.seriesConfigs.map(cfg => {
+          const baseConfig = {
+            name: cfg.label,
+            data: this.chartData.map(item => item[cfg.key]),
+            type: cfg.type || this.orientation,
+          };
+
+          if (this.enablePositiveNegativeColors) {
+            baseConfig.zones = [
+              {
+                value: 0,
+                color: '#D64A3B'  // 负值为红色
+              },
+              {
+                color: '#4CAF50'  // 正值为绿色
+              }
+            ];
+          } else {
+            baseConfig.color = cfg.color;
+          }
+
+          return baseConfig;
+        });
 
         this.initializeChart();
       } catch (err) {

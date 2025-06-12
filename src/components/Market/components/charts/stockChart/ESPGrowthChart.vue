@@ -267,16 +267,6 @@ export default {
 </script>
 
 <style scoped>
-.eps-growth-chart {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 600px;
-  margin: 0 auto;
-}
 
 .chart-header {
   display: flex;

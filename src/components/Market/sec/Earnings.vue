@@ -47,7 +47,7 @@
               { date: 'Q3 2022', estimate: 1.6 }
             ]"
             :series-configs="[
-              { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50' }
+              { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
             ]"
             title-text="Earnings Surprise"
             orientation="column"
@@ -57,6 +57,23 @@
         </div>
         <div class="esp-chart">
           <ESPGrowthChart />
+        </div>
+        <div class="esp-chart">
+          <BarChart
+            :chart-data="[
+              { date: 'Q1 2024', estimate: 1.2 },
+              { date: 'Q2 2023', estimate: -0.8 },
+              { date: 'Q3 2023', estimate: 1.6 }
+            ]"
+            :series-configs="[
+              { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
+            ]"
+            title-text="Revenue Surprise"
+            orientation="column"
+            chart-height="auto"
+            :enableExporting="false"
+            :enablePositiveNegativeColors="true"
+          />
         </div>
       </div>
     </div>
