@@ -2747,13 +2747,13 @@ export default {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
-        // ['sector_name', 'Sector'],
+        ['sector_name', 'Sector'],
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score'],
         ['reltrend_five_day_score_chg', '5-Day Relative Score Chg']
       ])
-      if(['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.set('sector_name', 'Sector')
+      if(!['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.delete('sector_name')
       if(this.condition === 'trend') {
         keysMap.delete('reltrend_last_value')
         keysMap.delete('reltrend_five_day_score_chg')
