@@ -14,7 +14,10 @@
     <div class="grid-col-3">
       <section class="card financials__card" v-for="panel in financialPanels" :key="panel.title">
         <div class="card__subtitle">{{ panel.title }}</div>
-        <base-table :data="panel.data" :columns="panel.columns" :loading="false" tip-text="" :show-pagination="false" />
+        <base-table-simple
+          :data="panel.data"
+          :highlight-last-row="false"
+        />
       </section>
     </div>
     <section class="card financials__card">
@@ -42,6 +45,7 @@
         legendPosition="topright"
         chartHeight="400px"
       />
+      <!-- 預留sector card -->
     </section>
     <div class="grid-col-2">
       <section class="card financials__card">
@@ -75,7 +79,7 @@
 </template>
 
 <script>
-import BaseTable from "@/components/Market/components/tables/BaseTable";
+import BaseTableSimple from "@/components/Market/components/tables/BaseTableSimple";
 import BarChart from '@/components/Market/components/charts/BarChart.vue';
 import ButtonGroup from '@/components/Market/components/baseButton/ButtonGroup.vue';
 export default {
@@ -85,10 +89,6 @@ export default {
       financialPanels: [
         {
           title: 'Margin Analysis',
-          columns: [
-            { prop: 'label', label: '', width: '160' },
-            { prop: 'value', label: '' }
-          ],
           data: [
             { label: 'Gross Margin', value: '46.21%' },
             { label: 'Operating Margin', value: '31.51%' },
@@ -97,10 +97,6 @@ export default {
         },
         {
           title: 'Earnings Surprises',
-          columns: [
-            { prop: 'label', label: '', width: '160' },
-            { prop: 'value', label: '' }
-          ],
           data: [
             { label: 'Asset Turnover', value: 'N/A' },
             { label: 'Return on Equity', value: 'N/A' },
@@ -109,10 +105,6 @@ export default {
         },
         {
           title: 'Financial Scores',
-          columns: [
-            { prop: 'label', label: '', width: '160' },
-            { prop: 'value', label: '' }
-          ],
           data: [
             { label: 'Altman Z-Score', value: '2.15' },
             { label: 'Piotroski Score', value: '4.00' }
@@ -217,21 +209,21 @@ export default {
       ],
 
         // Income Metrics mockdata
-        cashDebtChartData: [
-      { date: '2020', revenue: 100, growth: 3 },
-      { date: '2021', revenue: 150, growth: 3.5 },
-      { date: '2022', revenue: 170, growth: 3.2 },
-      { date: '2023', revenue: 168, growth: 2.9 },
-      { date: '2024 (TTM)', revenue: 172, growth: 2.5 }
+        cashDebtChartData:  [
+        { date: '2020', cash: 90, totalDebt:110 },
+        { date: '2021', cash: 150, totalDebt:122 },
+        { date: '2022', cash: 300, totalDebt:100 },
+        { date: '2023', cash: 200, totalDebt:90 },
+        { date: '2024 (TTM)', cash: 100, totalDebt:70 }
       ],
       cashDebtSeriesConfigs: [
-        { key: 'revenue', label: 'Revenue', color: '#4A90E2' },
-        { key: 'growth', label: 'Growth Rate', color: '#D32F2F', type: 'line' }
+        { key: 'cash', label: 'Cash', color: 'green' },
+        { key: 'totalDebt', label: 'Total Debt', color: 'red' },
       ],
     }
   },
   components: {
-    BaseTable,
+    BaseTableSimple,
     BarChart,
     ButtonGroup,
   },

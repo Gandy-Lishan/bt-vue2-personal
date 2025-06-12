@@ -18,7 +18,14 @@
     <!-- 右侧内容区域 -->
     <section class="sec-layout__main">
       <div class="sec-layout__header">
-        <div class="sec-layout__header-heading heading">{{ symbolHeading }}</div>
+        <div class="sec-layout__header-heading heading">
+          <img
+            :src="`https://images.financialmodelingprep.com/symbol/${symbol}.png`"
+            alt="symbol icon"
+            class="sec-layout__symbol-icon"
+          />
+          {{ symbolHeading }}
+        </div>
         <div class="sec-layout__header-details text--muted">
           <div>Industry: {{ symbolIndustry }}</div>
           <div>Exchange: {{symbolExchange }}</div>
@@ -154,7 +161,17 @@ export default {
     color: $color-text-secondary;
     padding: $spacing-md;
 
-    &-heading {}
+    &-heading {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .sec-layout__symbol-icon {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+    }
 
     &-details {
       display: flex;
