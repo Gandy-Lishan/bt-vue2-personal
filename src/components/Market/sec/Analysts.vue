@@ -1,9 +1,9 @@
 <template>
   <div class="analyst-recommendations">
-    <h2 class="title">Analysts</h2>
-    <div class="contentWrapper">
-      <h3 class="subtitle">Analyst Recommendations</h3>
-      <div class="chart-container">
+    <div class="title">Analysts</div>
+    <section class="card analysts__card">
+      <div class="card__subtitle">Analyst Recommendations</div>
+      <div class="card__chart-container">
         <!-- 左侧半圆形图表 -->
         <div class="semicircle-chart">
           <svg :width="chartSize" :height="chartSize / 2 + 50" class="chart-svg">
@@ -70,9 +70,9 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="contentWrapper">
-      <h3 class="subtitle">Analyst Predict Summary</h3>
+    </section>
+    <section class="card analysts__card">
+      <div class="card__subtitle">Analyst Predict Summary</div>
       <base-table
         :data="tableData"
         :columns="columns"
@@ -82,7 +82,7 @@
         @current-change="handleCurrentChange"
       >
       </base-table>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -248,39 +248,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "@/components/Market/market.scss";
+
 .analyst-recommendations {
   margin: 0 auto;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0 0 20px 0;
-}
-
-.contentWrapper {
-  background-color: white;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
-}
-
-.subtitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #374151;
-  margin: 0 0 12px 0;
-  border-bottom: 1px solid #dcdfe6;
-  padding: 0 0 12px 0;
-}
-
-.chart-container {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+.analysts {
+  &__card {
+    background-color: white;
+    border-radius: $spacing-xs;
+    padding: $spacing-lg;
+  }
+  &__chart-container {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xl;
+  }
 }
 
 .semicircle-chart {
@@ -292,7 +277,7 @@ export default {
 }
 
 .chart-label {
-  font-size: 12px;
+  font-size: $spacing-sm;
   fill: #333;
   font-weight: 500;
   opacity: 0;
@@ -307,17 +292,17 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: $spacing-sm;
 }
 
 .bar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: $spacing-sm;
 }
 
 .bar-label {
-  font-size: 14px;
+  font-size: $spacing-md;
   font-weight: 500;
   color: #374151;
   min-width: 80px;
@@ -348,13 +333,14 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .chart-container {
-    flex-direction: column;
-    gap: 24px;
-  }
-  
-  .contentWrapper {
-    padding: 16px;
+  .analysts {
+    &__card {
+      padding: $spacing-md;
+    }
+    &__chart-container {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
   }
 }
 

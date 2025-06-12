@@ -17,19 +17,30 @@
 
     <!-- 右侧内容区域 -->
     <section class="sec-layout__main">
-      <div class="sec-layout__title">
-        <h1>{{symbolHeader}}</h1>
-        <p>{{symbolDescription}}</p>
+      <div class="sec-layout__header">
+        <div class="sec-layout__header-heading heading">
+          <img
+            :src="`https://images.financialmodelingprep.com/symbol/${symbol}.png`"
+            alt="symbol icon"
+            class="sec-layout__symbol-icon"
+          />
+          {{ symbolHeading }}
+        </div>
+        <div class="sec-layout__header-details text--muted">
+          <div>Industry: {{ symbolIndustry }}</div>
+          <div>Exchange: {{symbolExchange }}</div>
+          <div>Is ETF: {{ symbolIsETF }}</div>
+          <div>Is Fund: {{ symbolIsFund }}</div>
+        </div>
+        <div class="spacing-md"></div>
+        <div class="sec-layout__header-description">
+          <ExpandableText :text="symbolDescription" :maxLines="2" />
+        </div>
       </div>
       <!-- 子导航 -->
       <nav class="sec-layout__nav">
-        <router-link
-          v-for="tab in tabs"
-          :key="tab.name"
-          :to="`/market/sec/${symbol}/${tab.route}`"
-          class="sec-layout__nav-item"
-          active-class="sec-layout__nav-item--active"
-        >
+        <router-link v-for="tab in tabs" :key="tab.name" :to="`/market/sec/${symbol}/${tab.route}`"
+          class="sec-layout__nav-item" active-class="sec-layout__nav-item--active">
           <span class="sec-layout__nav-text">{{ tab.name }}</span>
         </router-link>
       </nav>
@@ -43,12 +54,12 @@
 </template>
 
 <script>
+import ExpandableText from '@/components/Market/components/ExpandableText.vue';
 import CompanyStats from "@/components/Market/components/CompanyStats";
 export default {
   name: 'SecLayout',
-  components: {
-    CompanyStats
-  },
+  components: { ExpandableText,CompanyStats },
+
   computed: {
     symbol() {
       return this.$route.params.symbolname;
@@ -63,8 +74,15 @@ export default {
         { name: 'Financials', route: 'financials' },
         { name: 'News', route: 'news' },
       ],
-      symbolHeader: 'Apple Inc.(AAPL)',
-      symbolDescription: `Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide.`,
+
+      // symbol header mock data
+      symbolHeading: 'Apple Inc.(AAPL)',
+      symbolDescription: `Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, and HomePod. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allow customers to discover and download applications and digital content, such as books, music, video, games, and podcasts, as well as advertising services include third-party licensing arrangements and its own advertising platforms. In addition, the company offers various subscription-based services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV+, which offers exclusive original content; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers, wholesalers, retailers, and resellers. Apple Inc. was founded in 1976 and is headquartered in Cupertino, California.`,
+      symbolIndustry: 'Consumer Electronic',
+      symbolExchange: 'NASDAQ Global Select',
+      symbolIsETF: 'No',
+      symbolIsFund: 'No',
+
       prevOverflow: '', // 存储滚动条状态
 
       // 新增虚拟数据
@@ -115,7 +133,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-   @import "@/components/Market/market.scss";
+@import "@/components/Market/market.scss";
 
 .sec-layout {
   display: flex;
@@ -139,9 +157,30 @@ export default {
     }
   }
 
-  &__title {
+  &__header {
     color: $color-text-secondary;
     padding: $spacing-md;
+
+    &-heading {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .sec-layout__symbol-icon {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+    }
+
+    &-details {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-md;
+    }
+
+    &-description {}
+
   }
 
   &__main {
@@ -189,5 +228,42 @@ export default {
     background-color: $color-bg-primary;
     flex: 1;
   }
+}
+
+.sec-layout__header-description-wrapper {
+  margin-top: $spacing-xs;
+}
+
+.sec-layout__header-description {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  font-size: 14px;
+  line-height: 1.6;
+  column-gap: $spacing-sm;
+
+  span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.expanded span {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    white-space: normal;
+  }
+}
+
+.sec-layout__header-toggle {
+  background: none;
+  border: none;
+  color: $color-text-highlight;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+  align-self: end;
 }
 </style>
