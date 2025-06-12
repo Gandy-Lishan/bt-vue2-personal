@@ -438,10 +438,10 @@ const routes = [
 						path: 'analysts',
 						component: resolve => require(['@/components/Market/sec/Analysts.vue'], resolve),
 					  },
-					// {
-					//   path: 'earnings',
-					//   component: () => import('@/components/Market/Sec/Earnings.vue')
-					// },
+					{
+					  path: 'earnings',
+					  component: () => import('@/components/Market/sec/Earnings.vue')
+					},
 					// {
 					//   path: 'financials',
 					//   component: () => import('@/components/Market/Sec/Financials.vue')

@@ -2,14 +2,14 @@
 <template>
   <div class="sector-card">
     <h3 class="sector-title">{{ title }}</h3>
-    <div class="sector-region">{{ region }}</div>
+    <div v-if="region" class="sector-region">{{ region }}</div>
     <div class="sector-metrics">
       <div class="metric">
-        <div class="value positive">{{ totalPremium }}%</div>
+        <div class="value" :class="{ positive: totalPremium > 0, negative: totalPremium < 0 }">{{ totalPremium }}%</div>
         <div class="label">Total Premium</div>
       </div>
-      <div class="metric">
-        <div class="value positive">{{ countryRisk }}%</div>
+      <div v-if="countryRisk !== undefined" class="metric">
+        <div class="value" :class="{ positive: countryRisk > 0, negative: countryRisk < 0 }">{{ countryRisk }}%</div>
         <div class="label">Country Risk</div>
       </div>
     </div>
@@ -26,7 +26,8 @@ export default {
     },
     region: {
       type: String,
-      required: true
+      required: false,
+      default: undefined
     },
     totalPremium: {
       type: [Number, String],
@@ -34,7 +35,8 @@ export default {
     },
     countryRisk: {
       type: [Number, String],
-      required: true
+      required: false,
+      default: undefined
     }
   }
 }
@@ -42,11 +44,19 @@ export default {
 
 <style scoped>
 .sector-card {
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 8px;
   padding: 16px;
   min-width: 200px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.sector-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
 }
 
 .sector-title {
