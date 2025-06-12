@@ -103,6 +103,16 @@
   @extend .text;
 }
 
+// grid 常用佈局
+.grid-col-3 {
+  @extend .grid;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+}
+.grid-col-2 {
+  @extend .grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+}
+
 /* 通用按钮 */
 .btn {
   display: inline-block;
