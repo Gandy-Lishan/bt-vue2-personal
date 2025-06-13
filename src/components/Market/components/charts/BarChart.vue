@@ -45,6 +45,10 @@ export default {
       default: 'bottomcenter', // 默認為下方置中
       validator: val => ['topleft', 'topright', 'bottomcenter'].includes(val)
     },
+    showLegend: {
+      type: Boolean,
+      default: true
+    },
     stacking: {
       type: String,
       default: null, // 不堆叠，若设为 'normal' 则堆叠
@@ -178,10 +182,13 @@ export default {
           shared: true,
           useHTML: true,
         },
-        legend: {
-          ...this.getLegendConfig(),
-          margin: 24 // 這個值越大，legend 和圖表之間間隔越大，預設為 12
-        },
+        legend: this.showLegend
+        ? {
+            ...this.getLegendConfig(),
+            enabled: true,
+            margin: 24
+          }
+        : { enabled: false },
         credits: {
           enabled: true,
           text: "SENTIMENTRADER",
