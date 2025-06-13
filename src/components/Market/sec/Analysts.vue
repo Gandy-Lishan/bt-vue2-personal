@@ -3,7 +3,7 @@
     <div class="title">Analysts</div>
     <section class="card analysts__card">
       <div class="card__subtitle">Analyst Recommendations</div>
-      <div class="card__chart-container">
+      <div class="analysts__chart-container">
         <!-- 左侧半圆形图表 -->
         <div class="semicircle-chart">
           <svg :width="chartSize" :height="chartSize / 2 + 50" class="chart-svg">
