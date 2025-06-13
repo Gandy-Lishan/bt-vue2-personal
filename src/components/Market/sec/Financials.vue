@@ -267,17 +267,9 @@ export default {
 
 .financials {
   &__card {
-    background-color: white;
-    border-radius: 8px;
     padding: 24px;
 
     position: relative; //爲了讓btn group position absolute顯示
-  }
-
-  &__chart-container {
-    display: flex;
-    align-items: center;
-    gap: 40px;
   }
 }
 

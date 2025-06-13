@@ -1,105 +1,123 @@
 <template>
   <div class="analyst-recommendations">
     <h2 class="title">Earnings</h2>
-    <div class="contentWrapper">
-      <h3 class="subtitle">EPS Trend & Estimates</h3>
-      <div class="chart-container">
-        <!-- 左侧半圆形图表 -->
-        <div class="card semicircle-chart">
-          <BarChart
-            :chart-data="[
-              { date: 'Q1', estimate: 1.2, actual: 1.5 },
-              { date: 'Q2', estimate: 1.4, actual: 1.3 },
-              { date: 'Q3', estimate: 1.6, actual: 1.7 }
-            ]"
-            :series-configs="[
-              { key: 'estimate', label: 'Estimate ESP', color: '#3b82f6' },
-              { key: 'actual', label: 'Actual ESP', color: '#b3d8ff' }
-            ]"
-            title-text="EPS Comparison"
-            orientation="column"
-            chart-height="auto"
-            :enableExporting="false"
-          />
-        </div>
-        
-        <!-- 右侧条形图 -->
-        <div class="bar-chart">
-          <SectorCard
-            v-for="sector in sectors"
-            :key="sector.id"
-            :title="sector.title"
-            :region="sector.region"
-            :total-premium="sector.totalPremium"
-            :country-risk="sector.countryRisk"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="contentWrapper">
-      <div class="chart-container">
-        <!-- 左侧半圆形图表 -->
-        <div class="esp-chart">
-          <BarChart
-            :chart-data="[
-              { date: 'Q1 2024', estimate: 1.2 },
-              { date: 'Q2 3023', estimate: 1.4 },
-              { date: 'Q3 2022', estimate: 1.6 }
-            ]"
-            :series-configs="[
-              { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
-            ]"
-            title-text="Earnings Surprise"
-            orientation="column"
-            chart-height="auto"
-            :enableExporting="false"
-          />
-        </div>
-        <div class="esp-chart">
-          <ESPGrowthChart />
-        </div>
-        <div class="esp-chart">
-          <BarChart
-            :chart-data="[
-              { date: 'Q1 2024', estimate: 1.2 },
-              { date: 'Q2 2023', estimate: -0.8 },
-              { date: 'Q3 2023', estimate: 1.6 }
-            ]"
-            :series-configs="[
-              { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
-            ]"
-            title-text="Revenue Surprise"
-            orientation="column"
-            chart-height="auto"
-            :enableExporting="false"
-            :enablePositiveNegativeColors="true"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="contentWrapper">
-      <h3 class="subtitle">Earnings History</h3>
-      <base-table
-        :data="tableData"
-        :columns="columns"
-        :loading="loading"
-        tip-text=""
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      >
-      </base-table>
-    </div>
-    <div class="contentWrapper">
-      <h3 class="subtitle">Earnings History</h3>
-      <base-table
-        :data="tableData"
-        :columns="columns"
-        :loading="loading"
-        tip-text=""
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      >
-      </base-table>
+
+    <div class="grid analyst-recommendations__grid">
+      <!-- 左侧条形图 -->
+      <section class="card earnings__card trend-estimate">
+        <h3 class="card__subtitle">EPS Trend & Estimates</h3>
+        <BarChart
+          :chart-data="[
+            { date: 'Q1', estimate: 1.2, actual: 1.5 },
+            { date: 'Q2', estimate: 1.4, actual: 1.3 },
+            { date: 'Q3', estimate: 1.6, actual: 1.7 }
+          ]"
+          :series-configs="[
+            { key: 'estimate', label: 'Estimate ESP', color: '#3b82f6' },
+            { key: 'actual', label: 'Actual ESP', color: '#b3d8ff' }
+          ]"
+          title-text=""
+          orientation="column"
+          chart-height="auto"
+          :enableExporting="false"
+        />
+      </section>
+
+      <!-- 右侧信息卡 -->
+      <section class="sector-group grid-row-3">
+        <SectorCard
+          class="sector-ave-eps"
+          :title="sectors[0].title"
+          :region="sectors[0].region"
+          :total-premium="sectors[0].totalPremium"
+          :country-risk="sectors[0].countryRisk"
+        />
+
+        <SectorCard
+          class="sector-beat-miss-ratio"
+          :title="sectors[1].title"
+          :region="sectors[1].region"
+          :total-premium="sectors[1].totalPremium"
+          :country-risk="sectors[1].countryRisk"
+        />
+
+        <SectorCard
+          class="sector-ave-surprise"
+          :title="sectors[2].title"
+          :region="sectors[2].region"
+          :total-premium="sectors[2].totalPremium"
+          :country-risk="sectors[2].countryRisk"
+        />
+      </section>
+
+      <!-- 三列 -->
+      <section class="card earnings__card eps-growth-rate">
+        <h3 class="card__subtitle">EPS Growth Rate</h3>
+        <ESPGrowthChart />
+      </section>
+      <section class="card earnings__card earnings-surprises">
+        <h3 class="card__subtitle">Earnings Surprises</h3>
+        <BarChart
+          :chart-data="[
+            { date: 'Q1 2024', estimate: 1.2 },
+            { date: 'Q2 3023', estimate: 1.4 },
+            { date: 'Q3 2022', estimate: 1.6 }
+          ]"
+          :series-configs="[
+            { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
+          ]"
+          title-text="Earnings Surprise"
+          orientation="column"
+          chartHeight="auto"
+          :enableExporting="false"
+          :show-legend="false"
+        />
+      </section>
+      <section class="card earnings__card revenue-surprises">
+        <h3 class="card__subtitle">Revenue Surprises</h3>
+        <BarChart
+              :chart-data="[
+                { date: 'Q1 2024', estimate: 1.2 },
+                { date: 'Q2 2023', estimate: -0.8 },
+                { date: 'Q3 2023', estimate: 1.6 }
+              ]"
+              :series-configs="[
+                { key: 'estimate', label: 'Estimate ESP', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
+              ]"
+              title-text="Revenue Surprise"
+              orientation="column"
+              chart-height="auto"
+              :enableExporting="false"
+              :enablePositiveNegativeColors="true"
+              :show-legend="false"
+            />
+      </section>
+
+      <!-- 一整行 -->
+      <section class="card earnings__card earnings-history">
+        <h3 class="subtitle">Earnings History</h3>
+        <base-table
+          :data="tableData"
+          :columns="columns"
+          :loading="loading"
+          tip-text=""
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </base-table>
+      </section>
+      <section class="card earnings__card upcoming-earnings">
+        <h3 class="subtitle">Upcoming Earnings</h3>
+        <base-table
+          :data="tableData"
+          :columns="columns"
+          :loading="loading"
+          tip-text=""
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </base-table>
+      </section>
     </div>
   </div>
 </template>
@@ -187,139 +205,44 @@ export default {
 </script>
 
 <style scoped lang="scss">
-// 设置边框和阴影
-@mixin esp-border-shadow {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 600px;
-  margin: 0 auto;
-}
+ @import "@/components/Market/market.scss";
+
 .analyst-recommendations {
   margin: 0 auto;
-}
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0 0 20px 0;
-}
-
-.contentWrapper {
-  background-color: white;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
-}
-
-.subtitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #374151;
-  margin: 0 0 12px 0;
-  border-bottom: 1px solid #dcdfe6;
-  padding: 0 0 12px 0;
-}
-
-.chart-container {
-  display: flex;
-  gap: 40px;
-  align-items: stretch;
-}
-
-.semicircle-chart {
-  flex: 1;
-  @include esp-border-shadow;
-}
-.esp-chart {
-  flex: 1;
-  @include esp-border-shadow;
-}
-
-.chart-svg {
-  overflow: visible;
-}
-
-.chart-label {
-  font-size: 12px;
-  fill: #333;
-  font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.label-visible {
-  opacity: 1;
-}
-
-.bar-chart {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.bar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.bar-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  min-width: 80px;
-  text-align: left;
-}
-
-.bar-container {
-  flex: 1;
-  height: 20px;
-  background-color: #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.bar {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
-
-.bar-value {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
-  min-width: 20px;
-  text-align: right;
-}
-
-@media (max-width: 768px) {
-  .chart-container {
-    flex-direction: column;
-    gap: 24px;
+  &__grid {
+    grid-template-areas:
+      "a a b"
+      "a a b"
+      "a a b"
+      "c d e"
+      "f f f"
+      "g g g";
+    grid-template-columns: repeat(3, minmax(280px, 1fr));
+    
   }
-  
-  .contentWrapper {
-    padding: 16px;
+
+  .trend-estimate {
+    grid-area: a;
   }
-}
-
-.segment-path {
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.segment-hover {
-  opacity: 0.8;
-  filter: brightness(1.2);
+  .sector-group {
+    grid-area: b;
+  }
+  .eps-growth-rate {
+    grid-area: c;
+  }
+  .earnings-surprises {
+    grid-area: d;
+  }
+  .revenue-surprises {
+    grid-area: e;
+  }
+  .earnings-history {
+    grid-area: f;
+  }
+  .upcoming-earnings {
+    grid-area: g;
+  }
 }
 </style>
 

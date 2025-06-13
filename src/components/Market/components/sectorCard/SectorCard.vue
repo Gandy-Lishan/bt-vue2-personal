@@ -1,6 +1,6 @@
 <!-- SectorCard.vue -->
 <template>
-  <div class="sector-card">
+  <div class="card sector-card">
     <h3 class="sector-title">{{ title }}</h3>
     <div v-if="region" class="sector-region">{{ region }}</div>
     <div class="sector-metrics">
@@ -42,20 +42,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/components/Market/market.scss";
+
 .sector-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
   min-width: 200px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); */
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .sector-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
   background: #ffffff;
 }
 
