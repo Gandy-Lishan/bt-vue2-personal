@@ -6,6 +6,10 @@
       <div class="left-section">
         <h3 class="table-title">{{ title }}</h3>
         <span v-if="subtitle" class="table-subtitle">{{ subtitle }}</span>
+        <!-- 用于显示信息的 tag -->
+        <el-tag v-if="infoTag" :type="infoTag.type" :closable="infoTag.closable" @close="handleRemoveTag(infoTag)">
+          {{ infoTag.label }}
+        </el-tag>
       </div>
       <div class="right-section">
         <!-- 时间显示 -->
@@ -253,6 +257,10 @@
       type: Array,
       default: () => []
     },
+    infoTag: {
+      type: Object,
+      default: () => null
+    }
   },
   data() {
     return {

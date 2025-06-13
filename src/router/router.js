@@ -446,6 +446,10 @@ const routes = [
 						path: 'financials',
 						component: resolve => require(['@/components/Market/sec/Financials.vue'], resolve),
 					  },
+					  {
+						path: 'ownership',
+						component: resolve => require(['@/components/Market/sec/Ownership.vue'], resolve),
+					  },
 					// {
 					//   path: 'financials',
 					//   component: () => import('@/components/Market/Sec/Financials.vue')
