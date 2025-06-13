@@ -73,6 +73,7 @@ export default {
         { name: 'Earnings', route: 'earnings' },
         { name: 'Financials', route: 'financials' },
         { name: 'News', route: 'news' },
+        { name: 'Ownership', route: 'ownership' },
       ],
 
       // symbol header mock data
