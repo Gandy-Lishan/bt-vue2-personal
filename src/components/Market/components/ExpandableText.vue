@@ -106,6 +106,7 @@
   .expandable-text {
     font-size: 14px;
     color: $color-text-primary;
+    font-weight: 500;
   
     &__content {
       line-height: 1.6;
@@ -117,7 +118,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      color: $color-text-highlight;
+      color: $color-blue;
       font-size: 0.875rem;
       cursor: pointer;
       user-select: none;

@@ -9,7 +9,7 @@
   border: 1px solid $color-border-medium;
   border-radius: $border-radius-base;
   padding: $spacing-md;
-  box-shadow: 0 2px 6px $color-shadow;
+  // box-shadow: 0 2px 6px $color-shadow;
   margin-bottom: $spacing-md;
   &__item {
     background-color: $color-bg-secondary;
@@ -58,7 +58,7 @@
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #fff;
+  color: $color-text-primary;
   margin: 0 0 20px 0;
 }
 
@@ -87,7 +87,7 @@
 
 .text--muted {
   color: $color-text-muted;
-  font-style: italic;
+  font-weight: 400;
 }
 
 /* 卡片内部常用标题和内容 */

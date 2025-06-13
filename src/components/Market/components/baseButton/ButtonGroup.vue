@@ -139,12 +139,12 @@
     position: relative;
     z-index: 2;
     background: transparent !important;
-    color: #333 !important;
   }
   
   .highlight-slider {
     pointer-events: none;
     background-color: $color-blue;
+    color: $color-text-subtle;
     border-radius: $border-radius-base;
     top: 2px;
     height: 30px;

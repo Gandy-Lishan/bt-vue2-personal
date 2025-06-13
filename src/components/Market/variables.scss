@@ -1,24 +1,44 @@
 // ------------------------
-// Market SCSS 变量定义
+// Dark Theme Variables
 // ------------------------
+$color-bg-primary-night: #1e1e1e;
+$color-bg-secondary-night: #2a2a2a;
+$color-bg-grey-night: #e7e7e7;
+$color-bg-toolbar-night: #111;
+$color-bg-sidebar-night: #1f1f1f;
 
-$color-bg-primary: #1e1e1e;
-$color-bg-secondary: #2a2a2a;
-$color-bg-grey: #e7e7e7;
-$color-bg-toolbar: #111;
-$color-bg-sidebar: #1f1f1f;
+$color-border-light-night: #ebebeb;
+$color-border-medium-night: #333;
+$color-border-dark-night: #444;
 
-$color-border-light: #ebebeb;
-$color-border-medium: #333;
-$color-border-dark: #444;
+$color-text-primary-night: #fff;
+$color-text-secondary-night: #ccc;
+$color-text-muted-night: #777;
+$color-text-highlight-night: #5b9bd1;
+$color-text-subtle-night: #bbb;
 
-$color-text-primary: #fff;
-$color-text-secondary: #ccc;
-$color-text-muted: #777;
-$color-text-highlight: #5b9bd1;
-$color-text-subtle: #bbb;
+$color-placeholder-night: #666;
 
-$color-placeholder: #666;
+// ------------------------
+// Light Theme Variables
+// ------------------------
+$color-bg-primary: #ffffff;
+$color-bg-secondary: #f6f8f9;;
+$color-bg-grey: #f0f0f0;
+$color-bg-toolbar: #ffffff;
+$color-bg-sidebar: #fafafa;
+
+$color-border-light: #dcdfe6;
+$color-border-medium: #c0c4cc;
+$color-border-dark: #a8abb2;
+
+$color-text-primary: #303133;
+$color-text-secondary: #606266;
+$color-text-muted: #909399;
+$color-text-highlight: #409EFF;
+$color-text-subtle: #b0b0b0;
+
+$color-placeholder: #c0c4cc;
 
 $color-green: #4caf50;
 $color-red: #f44336;
@@ -29,7 +49,7 @@ $color-shadow: rgba(0, 0, 0, 0.3);
 
 // border radius
 $border-radius-base: 8px;
-$border-radius-sm: 4px; // 添加border-radius-
+$border-radius-sm: 4px;
 
 $spacing-xxs: 4px;
 $spacing-xs: 8px;

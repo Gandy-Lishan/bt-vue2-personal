@@ -225,7 +225,7 @@ export default {
 
   &__content {
     padding: $spacing-md;
-    background-color: $color-bg-primary;
+    background-color: $color-bg-secondary;
     flex: 1;
   }
 }
