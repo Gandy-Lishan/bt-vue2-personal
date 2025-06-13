@@ -131,16 +131,19 @@ export default {
 
 .sec-layout {
   display: flex;
+  height: 100%;
+  overflow-y: auto;
 
   &__sidebar {
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100%;
     width: 280px;
     padding: $spacing-md;
     border-right: 1px solid $color-border-medium;
     background-color: $color-bg-sidebar;
     overflow-y: auto;
+    box-sizing: border-box;
     &::-webkit-scrollbar {
       width: 10px;
     }
