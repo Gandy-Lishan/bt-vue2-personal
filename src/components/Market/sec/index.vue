@@ -137,7 +137,6 @@ export default {
 
 .sec-layout {
   display: flex;
-  height: 100%;
 
   &__sidebar {
     width: 280px;
@@ -187,7 +186,6 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
     &::-webkit-scrollbar {
       width: 10px;
     }
