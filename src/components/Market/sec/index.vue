@@ -1,18 +1,11 @@
 <template>
   <div class="sec-layout">
     <!-- 左侧公司信息栏 -->
-    <aside class="sec-layout__sidebar card">
-      <div class="card__content">
-        <div class="grid">
-          <!-- <div class="text--muted">Market Cap</div>
-          <div class="text--highlight color--green">$3.5T</div> -->
-          <company-stats 
-            :company-details="companyDetails"
-            :trading-stats="tradingStats"
-          />
-          <!-- 可继续添加其他信息 -->
-        </div>
-      </div>
+    <aside class="sec-layout__sidebar">
+      <company-stats 
+        :company-details="companyDetails"
+        :trading-stats="tradingStats"
+      />
     </aside>
 
     <!-- 右侧内容区域 -->
@@ -139,6 +132,9 @@ export default {
   display: flex;
 
   &__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
     width: 280px;
     padding: $spacing-md;
     border-right: 1px solid $color-border-medium;
