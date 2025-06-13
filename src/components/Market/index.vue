@@ -89,8 +89,8 @@ export default {
 .layout {
   display: flex;
   flex-direction: column;
-  // height: 100vh;
-  height: 827px;
+  height: 100vh;
+  // height: 827px;
 
   &__header {
     display: flex;
