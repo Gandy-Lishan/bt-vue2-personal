@@ -1560,12 +1560,6 @@
         "inception": "2012/8/8"
     },
     {
-        "symbol": "COMP",
-        "name": "NASDAQ Composite (COMP)",
-        "category": "Index",
-        "inception": "2021/4/1"
-    },
-    {
         "symbol": "DJIA",
         "name": "Dow Jones Industrial (DJIA)",
         "category": "Index",
@@ -1612,12 +1606,6 @@
         "name": "Gold Bugs Index (HUI)",
         "category": "Index",
         "inception": "1996/5/1"
-    },
-    {
-        "symbol": "IBEX",
-        "name": "IBEX Index",
-        "category": "Index",
-        "inception": "2020/8/7"
     },
     {
         "symbol": "ISEQ",
@@ -1762,12 +1750,6 @@
         "name": "S&P 500 (SPX)",
         "category": "Index",
         "inception": "1927/12/30"
-    },
-    {
-        "symbol": "STI",
-        "name": "STI Index",
-        "category": "Index",
-        "inception": "2008/1/10"
     },
     {
         "symbol": "TA-35",
@@ -2338,12 +2320,6 @@
         "name": "Platinum",
         "category": "ETF",
         "inception": "2010/01/08"
-    },
-    {
-        "symbol": "JPY",
-        "name": "Japanese Yen",
-        "category": "Forex",
-        "inception": "1971/1/4"
     },
     {
         "symbol": "crp_BTC",

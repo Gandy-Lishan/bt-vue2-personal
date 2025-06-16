@@ -9066,6 +9066,12 @@
         "inception": "2018/5/29"
     },
     {
+        "stock": "HPP",
+        "name": "Hudson Pacific Properties Inc",
+        "category": "Stock",
+        "inception": "2010/06/23"
+    },
+    {
         "stock": "HPQ",
         "name": "Hewlett-Packard",
         "category": "Stock",
@@ -21060,6 +21066,84 @@
         "inception": "2004/2/25"
     },
     {
+        "stock": "2519469D",
+        "name": "Ramaco Resources Inc",
+        "category": "Stock",
+        "inception": "2099-12-31"
+    },
+    {
+        "stock": "ABC",
+        "name": "AmerisourceBergen Corp",
+        "category": "Stock",
+        "inception": "1995/04/04"
+    },
+    {
+        "stock": "AJRD",
+        "name": "Aerojet Rocketdyne Holdings In",
+        "category": "Stock",
+        "inception": "1987/12/24"
+    },
+    {
+        "stock": "AMBC",
+        "name": "Ambac Financial Group Inc",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "AMCX",
+        "name": "AMC Networks Inc",
+        "category": "Stock",
+        "inception": "2011/06/16"
+    },
+    {
+        "stock": "AMEH",
+        "name": "Apollo Medical Holdings Inc",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "ARNC",
+        "name": "Arconic Corp",
+        "category": "Stock",
+        "inception": "1974/02/04"
+    },
+    {
+        "stock": "ATVI",
+        "name": "Activision Blizzard Inc",
+        "category": "Stock",
+        "inception": "1990/01/02"
+    },
+    {
+        "stock": "AVID",
+        "name": "Avid Technology Inc",
+        "category": "Stock",
+        "inception": "1993/03/12"
+    },
+    {
+        "stock": "AVR",
+        "name": "Anteris Technologies Global Co",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "AVTA",
+        "name": "Avantax Inc",
+        "category": "Stock",
+        "inception": "1998/12/15"
+    },
+    {
+        "stock": "AZPN",
+        "name": "Aspen Technology Inc",
+        "category": "Stock",
+        "inception": "1997/03/03"
+    },
+    {
+        "stock": "B",
+        "name": "Barnes Group Inc",
+        "category": "Stock",
+        "inception": "1980/07/28"
+    },
+    {
         "stock": "BATRK",
         "name": "Atlanta Braves Holdings Inc",
         "category": "Stock",
@@ -21072,10 +21156,130 @@
         "inception": "2012/03/13"
     },
     {
+        "stock": "BBNX",
+        "name": "Beta Bionics Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
         "stock": "BELFB",
         "name": "Bel Fuse Inc",
         "category": "Stock",
         "inception": "1998/07/10"
+    },
+    {
+        "stock": "BF_B",
+        "name": "Brown-Forman Corp",
+        "category": "Stock",
+        "inception": "1987/04/02"
+    },
+    {
+        "stock": "BSIG",
+        "name": "Brightsphere Investment Group",
+        "category": "Stock",
+        "inception": "2014/10/08"
+    },
+    {
+        "stock": "CAC",
+        "name": "Camden National Corp",
+        "category": "Stock",
+        "inception": "1997/10/07"
+    },
+    {
+        "stock": "CDAY",
+        "name": "Ceridian HCM Holding Inc",
+        "category": "Stock",
+        "inception": "2018/04/26"
+    },
+    {
+        "stock": "CHS",
+        "name": "Chicos FAS Inc",
+        "category": "Stock",
+        "inception": "1994/01/18"
+    },
+    {
+        "stock": "CHUY",
+        "name": "Chuys Holdings Inc",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "CIR",
+        "name": "CIRCOR International Inc",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "CLW",
+        "name": "Clearwater Paper Corp",
+        "category": "Stock",
+        "inception": "2008/12/05"
+    },
+    {
+        "stock": "CMDB",
+        "name": "Costamare Bulkers Holdings Ltd",
+        "category": "Stock",
+        "inception": "2025/05/05"
+    },
+    {
+        "stock": "COMP",
+        "name": "Compass Inc",
+        "category": "Stock",
+        "inception": "2021/04/01"
+    },
+    {
+        "stock": "CPE",
+        "name": "Callon Petroleum Co",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "CPSI",
+        "name": "Computer Programs and Systems",
+        "category": "Stock",
+        "inception": "2018/01/02"
+    },
+    {
+        "stock": "CVGW",
+        "name": "Calavo Growers Inc",
+        "category": "Stock",
+        "inception": "2002/03/22"
+    },
+    {
+        "stock": "CWEN_A",
+        "name": "Clearway Energy Inc",
+        "category": "Stock",
+        "inception": "2013/07/17"
+    },
+    {
+        "stock": "DBI",
+        "name": "Designer Brands Inc",
+        "category": "Stock",
+        "inception": "2005/06/28"
+    },
+    {
+        "stock": "DISH",
+        "name": "DISH Network Corp",
+        "category": "Stock",
+        "inception": "1999/07/20"
+    },
+    {
+        "stock": "EBIX",
+        "name": "Ebix Inc",
+        "category": "Stock",
+        "inception": "1987/07/01"
+    },
+    {
+        "stock": "EHAB",
+        "name": "Enhabit Inc",
+        "category": "Stock",
+        "inception": "2022/06/23"
+    },
+    {
+        "stock": "ENV",
+        "name": "Envestnet Inc",
+        "category": "Stock",
+        "inception": "2010/07/29"
     },
     {
         "stock": "EXE",
@@ -21084,10 +21288,40 @@
         "inception": "2002/07/03"
     },
     {
+        "stock": "FISV",
+        "name": "Fiserv Inc",
+        "category": "Stock",
+        "inception": "1991/07/02"
+    },
+    {
+        "stock": "FLGT",
+        "name": "Fulgent Genetics Inc",
+        "category": "Stock",
+        "inception": "2021/10/25"
+    },
+    {
+        "stock": "FLOC",
+        "name": "Flowco Holdings Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "FLT",
+        "name": "FleetCor Technologies Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
         "stock": "FWONK",
         "name": "Liberty Media Corp-Liberty For",
         "category": "Stock",
         "inception": "2014/07/08"
+    },
+    {
+        "stock": "GDOT",
+        "name": "Green Dot Corp",
+        "category": "Stock",
+        "inception": "2021/10/25"
     },
     {
         "stock": "GPS",
@@ -21096,22 +21330,94 @@
         "inception": "1980/07/28"
     },
     {
+        "stock": "GTM",
+        "name": "ZoomInfo Technologies Inc",
+        "category": "Stock",
+        "inception": "2021/10/25"
+    },
+    {
+        "stock": "HAYN",
+        "name": "Haynes International Inc",
+        "category": "Stock",
+        "inception": "2004/09/21"
+    },
+    {
         "stock": "HEI_A",
         "name": "HEICO Corp",
         "category": "Stock",
         "inception": "2010/04/27"
     },
     {
-        "stock": "HPP",
-        "name": "Hudson Pacific Properties Inc",
+        "stock": "HSC",
+        "name": "Harsco Corp",
         "category": "Stock",
-        "inception": "2010/06/23"
+        "inception": "1997/02/18"
+    },
+    {
+        "stock": "HSKA",
+        "name": "Heska Corp",
+        "category": "Stock",
+        "inception": "2010/12/30"
     },
     {
         "stock": "HTBI",
         "name": "HomeTrust Bancshares Inc",
         "category": "Stock",
         "inception": "2012/07/11"
+    },
+    {
+        "stock": "HVT",
+        "name": "Haverty Furniture Cos Inc",
+        "category": "Stock",
+        "inception": "1980/03/17"
+    },
+    {
+        "stock": "IBEX",
+        "name": "IBEX Holdings Ltd",
+        "category": "Stock",
+        "inception": "2020/08/07"
+    },
+    {
+        "stock": "IBTX",
+        "name": "Independent Bank Group Inc",
+        "category": "Stock",
+        "inception": "2013/04/02"
+    },
+    {
+        "stock": "INR",
+        "name": "Infinity Natural Resources Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "INT",
+        "name": "World Fuel Services Corp",
+        "category": "Stock",
+        "inception": "1987/06/10"
+    },
+    {
+        "stock": "IRWD",
+        "name": "Ironwood Pharmaceuticals Inc",
+        "category": "Stock",
+        "inception": "2010/02/03"
+    },
+    {
+        "stock": "JBIO",
+        "name": "Jade Biosciences Inc",
+        "category": "Stock",
+        "inception": "2021/10/25"
+    },
+    {
+        "stock": "JBT",
+        "name": "John Bean Technologies Corp",
+        "category": "Stock",
+        "inception": "2008/07/18"
+    },
+    {
+        "stock": "KG",
+        "name": "Kestrel Group Ltd",
+        "category": "Stock",
+        "inception": "2025/05/05"
     },
     {
         "stock": "LBRDK",
@@ -21126,6 +21432,12 @@
         "inception": "2005/09/08"
     },
     {
+        "stock": "LESL",
+        "name": "Leslies Inc",
+        "category": "Stock",
+        "inception": "2020/10/29"
+    },
+    {
         "stock": "LGF_B",
         "name": "Lions Gate Entertainment Corp",
         "category": "Stock",
@@ -21138,10 +21450,22 @@
         "inception": "2015/06/23"
     },
     {
+        "stock": "LION",
+        "name": "Lionsgate Studios Corp",
+        "category": "Stock",
+        "inception": "1995/09/26"
+    },
+    {
         "stock": "LLYVK",
         "name": "Liberty Media Corp-Liberty Liv",
         "category": "Stock",
         "inception": "2023/08/08"
+    },
+    {
+        "stock": "LSI",
+        "name": "Life Storage Inc",
+        "category": "Stock",
+        "inception": "1995/06/21"
     },
     {
         "stock": "LSXMK",
@@ -21150,10 +21474,40 @@
         "inception": "2023/11/01"
     },
     {
+        "stock": "LTHM",
+        "name": "Livent Corp",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
         "stock": "MAGN",
         "name": "Magnite Inc",
         "category": "Stock",
         "inception": "1980/07/28"
+    },
+    {
+        "stock": "MATV",
+        "name": "Mativ Holdings Inc",
+        "category": "Stock",
+        "inception": "1995/11/09"
+    },
+    {
+        "stock": "MAZE",
+        "name": "Maze Therapeutics Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "MDRX",
+        "name": "Veradigm Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "MERC",
+        "name": "Mercer International Inc",
+        "category": "Stock",
+        "inception": "1988/08/02"
     },
     {
         "stock": "METCB",
@@ -21162,10 +21516,142 @@
         "inception": "2023/06/16"
     },
     {
+        "stock": "MOG_A",
+        "name": "Moog Inc",
+        "category": "Stock",
+        "inception": "1989/07/13"
+    },
+    {
+        "stock": "MOV",
+        "name": "Movado Group Inc",
+        "category": "Stock",
+        "inception": "1993/09/30"
+    },
+    {
+        "stock": "MTSR",
+        "name": "Metsera Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "MYE",
+        "name": "Myers Industries Inc",
+        "category": "Stock",
+        "inception": "1980/03/17"
+    },
+    {
+        "stock": "NAGE",
+        "name": "Niagen Bioscience Inc",
+        "category": "Stock",
+        "inception": "2021/10/25"
+    },
+    {
+        "stock": "NARI",
+        "name": "Inari Medical Inc",
+        "category": "Stock",
+        "inception": "2020/05/22"
+    },
+    {
+        "stock": "NATI",
+        "name": "National Instruments Corp",
+        "category": "Stock",
+        "inception": "1995/03/14"
+    },
+    {
+        "stock": "NCR",
+        "name": "NCR Corp",
+        "category": "Stock",
+        "inception": "2005/01/24"
+    },
+    {
+        "stock": "NEX",
+        "name": "NexTier Oilfield Solutions Inc",
+        "category": "Stock",
+        "inception": "2017/01/20"
+    },
+    {
+        "stock": "NUS",
+        "name": "Nu Skin Enterprises Inc",
+        "category": "Stock",
+        "inception": "1996/11/22"
+    },
+    {
+        "stock": "NUVA",
+        "name": "NuVasive Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "NXGN",
+        "name": "NextGen Healthcare Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "OFC",
+        "name": "Corporate Office Properties Tr",
+        "category": "Stock",
+        "inception": "1992/06/15"
+    },
+    {
+        "stock": "PACW",
+        "name": "PacWest Bancorp",
+        "category": "Stock",
+        "inception": "2000/06/05"
+    },
+    {
         "stock": "PARAA",
         "name": "Paramount Global",
         "category": "Stock",
         "inception": "2019/12/05"
+    },
+    {
+        "stock": "PDCE",
+        "name": "PDC Energy Inc",
+        "category": "Stock",
+        "inception": "1987/08/04"
+    },
+    {
+        "stock": "PEAK",
+        "name": "Healthpeak Properties Inc",
+        "category": "Stock",
+        "inception": "1985/05/23"
+    },
+    {
+        "stock": "PGTI",
+        "name": "PGT Innovations Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "PRFT",
+        "name": "Perficient Inc",
+        "category": "Stock",
+        "inception": "2020/01/02"
+    },
+    {
+        "stock": "QURE",
+        "name": "uniQure NV",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "RCM",
+        "name": "R1 RCM Inc",
+        "category": "Stock",
+        "inception": "2010/05/19"
+    },
+    {
+        "stock": "RE",
+        "name": "Everest Re Group Ltd",
+        "category": "Stock",
+        "inception": "1995/10/02"
+    },
+    {
+        "stock": "RGNX",
+        "name": "REGENXBIO Inc",
+        "category": "Stock",
+        "inception": "2021/10/25"
     },
     {
         "stock": "RHHBY",
@@ -21174,10 +21660,46 @@
         "inception": "1995/05/11"
     },
     {
+        "stock": "RILY",
+        "name": "B Riley Financial Inc",
+        "category": "Stock",
+        "inception": "2007/08/13"
+    },
+    {
+        "stock": "ROCC",
+        "name": "Ranger Oil Corp",
+        "category": "Stock",
+        "inception": "2016/11/15"
+    },
+    {
+        "stock": "RPT",
+        "name": "RPT Realty",
+        "category": "Stock",
+        "inception": "1988/12/28"
+    },
+    {
         "stock": "RUSHB",
         "name": "Rush Enterprises Inc",
         "category": "Stock",
         "inception": "1996/06/07"
+    },
+    {
+        "stock": "RUTH",
+        "name": "Ruths Hospitality Group Inc",
+        "category": "Stock",
+        "inception": "2005/08/08"
+    },
+    {
+        "stock": "SFD",
+        "name": "Smithfield Foods Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
+    },
+    {
+        "stock": "SGH",
+        "name": "SMART Global Holdings Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
     },
     {
         "stock": "SIX",
@@ -21186,10 +21708,82 @@
         "inception": "2010/05/11"
     },
     {
+        "stock": "SJW",
+        "name": "SJW Group",
+        "category": "Stock",
+        "inception": "1980/07/29"
+    },
+    {
+        "stock": "SRC",
+        "name": "Spirit Realty Capital Inc",
+        "category": "Stock",
+        "inception": "2012/09/20"
+    },
+    {
+        "stock": "SRCL",
+        "name": "Stericycle Inc",
+        "category": "Stock",
+        "inception": "1996/08/23"
+    },
+    {
+        "stock": "STI",
+        "name": "Solidion Technology Inc",
+        "category": "Stock",
+        "inception": "1996/05/22"
+    },
+    {
+        "stock": "STRZ",
+        "name": "Starz Entertainment Corp",
+        "category": "Stock",
+        "inception": "2025/05/07"
+    },
+    {
+        "stock": "SVC",
+        "name": "Service Properties Trust",
+        "category": "Stock",
+        "inception": "1995/08/17"
+    },
+    {
+        "stock": "SYNH",
+        "name": "Syneos Health Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
         "stock": "TBCH",
         "name": "Turtle Beach Corp",
         "category": "Stock",
         "inception": "2010/11/15"
+    },
+    {
+        "stock": "TMST",
+        "name": "TimkenSteel Corp",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
+        "stock": "TPX",
+        "name": "Tempur Sealy International Inc",
+        "category": "Stock",
+        "inception": "2003/12/17"
+    },
+    {
+        "stock": "TWNK",
+        "name": "Hostess Brands Inc",
+        "category": "Stock",
+        "inception": "2015/11/30"
+    },
+    {
+        "stock": "UBA",
+        "name": "Urstadt Biddle Properties Inc",
+        "category": "Stock",
+        "inception": "1998/08/17"
+    },
+    {
+        "stock": "UCBI",
+        "name": "United Community Banks Inc/GA",
+        "category": "Stock",
+        "inception": "1999/09/23"
     },
     {
         "stock": "UHAL_B",
@@ -21198,10 +21792,46 @@
         "inception": "2024/12/16"
     },
     {
+        "stock": "UNVR",
+        "name": "Univar Solutions Inc",
+        "category": "Stock",
+        "inception": "2021/10/27"
+    },
+    {
         "stock": "UONEK",
         "name": "Urban One Inc",
         "category": "Stock",
         "inception": "2000/06/02"
+    },
+    {
+        "stock": "VGR",
+        "name": "Vector Group Ltd",
+        "category": "Stock",
+        "inception": "1987/10/08"
+    },
+    {
+        "stock": "VREX",
+        "name": "Varex Imaging Corp",
+        "category": "Stock",
+        "inception": "2017/01/23"
+    },
+    {
+        "stock": "VRTV",
+        "name": "Veritiv Corp",
+        "category": "Stock",
+        "inception": "2014/06/18"
+    },
+    {
+        "stock": "VVI",
+        "name": "Viad Corp",
+        "category": "Stock",
+        "inception": "1972/06/05"
+    },
+    {
+        "stock": "WWE",
+        "name": "World Wrestling Entertainment",
+        "category": "Stock",
+        "inception": "1999/10/18"
     },
     {
         "stock": "XYZ",
@@ -21210,9 +21840,27 @@
         "inception": "2015/11/19"
     },
     {
+        "stock": "ZEUS",
+        "name": "Olympic Steel Inc",
+        "category": "Stock",
+        "inception": "1994/03/10"
+    },
+    {
         "stock": "ZG",
         "name": "Zillow Group Inc",
         "category": "Stock",
         "inception": "2011/07/20"
+    },
+    {
+        "stock": "ZM",
+        "name": "Zoom Communications Inc",
+        "category": "Stock",
+        "inception": "2019/04/18"
+    },
+    {
+        "stock": "ZSPC",
+        "name": "Zspace Inc",
+        "category": "Stock",
+        "inception": "2025/03/31"
     }
 ]
