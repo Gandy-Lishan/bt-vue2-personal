@@ -1,9 +1,9 @@
 <template>
-  <div class="analyst-recommendations">
+  <div class="ownership">
     <div class="title">Ownership</div>
     <div class="spacing-lg"></div>
     <div class="ownership-grid">
-      <section class="card financials__card pie-chart-section">
+      <section class="card pie-chart-section">
         <div class="card__subtitle">Ownership Distribution</div>
           <PieChart
           :chart-data="[
@@ -18,7 +18,7 @@
         />
       </section>
       <div class="tables-grid">
-        <section class="card financials__card" v-for="panel in ownershipPanels" :key="panel.title">
+        <section class="card" v-for="panel in ownershipPanels" :key="panel.title">
           <div class="card__subtitle">{{ panel.title }}</div>
           <base-table-simple
             :data="panel.data"
@@ -27,7 +27,7 @@
         </section>
       </div>
     </div>
-    <section class="card financials__card">
+    <section class="card">
       <nav class="card-layout__nav">
         <div v-for="tab in tabs" :key="tab.name"
           class="card-layout__nav-item" :class="{ 'card-layout__nav-item--active': activeTab === tab.route }"
@@ -432,24 +432,8 @@ export default {
 <style scoped lang="scss">
 @import "@/components/Market/market.scss";
 
-.analyst-recommendations {
+.ownership {
   margin: 0 auto;
-}
-
-.financials {
-  &__card {
-    background-color: white;
-    border-radius: 8px;
-    padding: 24px;
-
-    position: relative; //爲了讓btn group position absolute顯示
-  }
-
-  &__chart-container {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-  }
 }
 
 .btn-group {
