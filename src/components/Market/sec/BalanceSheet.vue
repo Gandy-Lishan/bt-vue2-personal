@@ -53,7 +53,7 @@
       />
     </div>
     <div v-if="category == 'assets'">
-      <div class="grid-col-2">
+      <div class="grid-col-1">
         <!-- total-assets-trend & asset-composition -->
         <section class="card total-assets-trend">
           <h3 class="card__subtitle">{{ balanceSheetPanels[4].title }}</h3>
@@ -70,36 +70,20 @@
             chartHeight="400px"
           />
         </section>
-        <section class="card asset-composition">
-          <h3 class="card__subtitle">{{ balanceSheetPanels[5].title }}</h3>
-          <BarChart
-            ref="assetComposition"
-            :chartData="balanceSheetPanels[5].data.chartData"
-            :seriesConfigs="balanceSheetPanels[5].data.seriesConfigs"
-            titleText=""
-            yAxisTitleText=""
-            orientation="column"
-            :enableExporting="false"
-            legendPosition="bottomcenter"
-            :show-legend="true"
-            chartHeight="400px"
-            stacking="normal"
-          />
-        </section>
       </div>
       <div class="grid-col-2">
         <!-- assets-current -->
         <section class="card assets-current">
-          <div class="card__subtitle">{{ balanceSheetPanels[6].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetPanels[5].title }}</div>
           <base-table-simple
-            :data="balanceSheetPanels[6].data"
+            :data="balanceSheetPanels[5].data"
             :highlight-last-row="true"
           />
         </section>
         <section class="card assets-noncurrent">
-          <div class="card__subtitle">{{ balanceSheetPanels[7].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetPanels[6].title }}</div>
           <base-table-simple
-            :data="balanceSheetPanels[7].data"
+            :data="balanceSheetPanels[6].data"
             :highlight-last-row="true"
           />
         </section>
@@ -109,9 +93,24 @@
       <div class="grid-col-2">
         <!-- Liabilities Breakdown -->
         <section class="card lb">
-          <h3 class="card__subtitle">{{ balanceSheetPanels[8].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetPanels[7].title }}</h3>
           <BarChart
             ref="lb"
+            :chartData="balanceSheetPanels[7].data.chartData"
+            :seriesConfigs="balanceSheetPanels[7].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="bottomcenter"
+            :show-legend="true"
+            chartHeight="400px"
+          />
+        </section>
+        <section class="card shareholder">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[8].title }}</h3>
+          <BarChart
+            ref="shareholder"
             :chartData="balanceSheetPanels[8].data.chartData"
             :seriesConfigs="balanceSheetPanels[8].data.seriesConfigs"
             titleText=""
@@ -123,41 +122,26 @@
             chartHeight="400px"
           />
         </section>
-        <section class="card shareholder">
-          <h3 class="card__subtitle">{{ balanceSheetPanels[9].title }}</h3>
-          <BarChart
-            ref="shareholder"
-            :chartData="balanceSheetPanels[9].data.chartData"
-            :seriesConfigs="balanceSheetPanels[9].data.seriesConfigs"
-            titleText=""
-            yAxisTitleText=""
-            orientation="column"
-            :enableExporting="false"
-            legendPosition="bottomcenter"
-            :show-legend="true"
-            chartHeight="400px"
-          />
-        </section>
       </div>
       <div class="grid-col-3">
         <section class="card liabilities-current">
+          <div class="card__subtitle">{{ balanceSheetPanels[9].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[9].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card liabilities-noncurrent">
           <div class="card__subtitle">{{ balanceSheetPanels[10].title }}</div>
           <base-table-simple
             :data="balanceSheetPanels[10].data"
             :highlight-last-row="true"
           />
         </section>
-        <section class="card liabilities-noncurrent">
+        <section class="card shareholder-equity">
           <div class="card__subtitle">{{ balanceSheetPanels[11].title }}</div>
           <base-table-simple
             :data="balanceSheetPanels[11].data"
-            :highlight-last-row="true"
-          />
-        </section>
-        <section class="card shareholder-equity">
-          <div class="card__subtitle">{{ balanceSheetPanels[12].title }}</div>
-          <base-table-simple
-            :data="balanceSheetPanels[12].data"
             :highlight-last-row="true"
           />
         </section>
@@ -167,11 +151,11 @@
       <div class="grid-col-1">
         <!-- Liabilities Breakdown -->
         <section class="card key-performance-metrics">
-          <h3 class="card__subtitle">{{ balanceSheetPanels[13].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetPanels[12].title }}</h3>
           <BarChart
             ref="keyPerformanceMetrics"
-            :chartData="balanceSheetPanels[13].data.chartData"
-            :seriesConfigs="balanceSheetPanels[13].data.seriesConfigs"
+            :chartData="balanceSheetPanels[12].data.chartData"
+            :seriesConfigs="balanceSheetPanels[12].data.seriesConfigs"
             titleText=""
             yAxisTitleText=""
             orientation="column"
@@ -184,23 +168,23 @@
       </div>
       <div class="grid-col-3">
         <section class="card liabilities-current">
+          <div class="card__subtitle">{{ balanceSheetPanels[9].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[9].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card liabilities-noncurrent">
           <div class="card__subtitle">{{ balanceSheetPanels[10].title }}</div>
           <base-table-simple
             :data="balanceSheetPanels[10].data"
             :highlight-last-row="true"
           />
         </section>
-        <section class="card liabilities-noncurrent">
+        <section class="card shareholder-equity">
           <div class="card__subtitle">{{ balanceSheetPanels[11].title }}</div>
           <base-table-simple
             :data="balanceSheetPanels[11].data"
-            :highlight-last-row="true"
-          />
-        </section>
-        <section class="card shareholder-equity">
-          <div class="card__subtitle">{{ balanceSheetPanels[12].title }}</div>
-          <base-table-simple
-            :data="balanceSheetPanels[12].data"
             :highlight-last-row="true"
           />
         </section>
@@ -261,39 +245,25 @@ export default {
             totalPremium: 186.2
           },
         },
-         // 4 total assets trend 
-        {
-          title: 'Total Assets Trend',
-          data: {
-            chartData: [
-              { date: '2020', value: 100 },
-              { date: '2021', value: 150 },
-              { date: '2022', value: 170 },
-              { date: '2023', value: 168 },
-            ],
-            seriesConfigs: [
-              { key: 'value', label: 'Value', color: '#4A90E2' },
-            ],
-          },
-        },
-         // 5 asset composition
+         // 4 asset composition
         {
           title: 'Asset Composition',
           data: {
             chartData: [
-              { date: '2020', current: 145, nonCurrent: 330 },
-              { date: '2021', current: 140, nonCurrent: 350 },
-              { date: '2022', current: 148, nonCurrent: 344 },
-              { date: '2023', current: 150, nonCurrent: 348 },
-              { date: '2024(TTM)', current: 145, nonCurrent: 220 },
+              { date: '2020', total:475, current: 145, nonCurrent: 330 },
+              { date: '2021', total:490, current: 140, nonCurrent: 350 },
+              { date: '2022', total:492, current: 148, nonCurrent: 344 },
+              { date: '2023', total:498, current: 150, nonCurrent: 348 },
+              { date: '2024(TTM)', total:365, current: 145, nonCurrent: 220 },
             ],
             seriesConfigs: [
+              { key: 'total', label: 'Total Assets', color: 'green' },
               { key: 'current', label: 'Current Assets', color: 'blue' },
-              { key: 'nonCurrent', label: 'Non-Current Assets', color: 'green' },
+              { key: 'nonCurrent', label: 'Non-Current Assets', color: 'red' },
             ],
           },
         },
-        // 6 current || noncurrent assets
+        // 5 current || noncurrent assets
         {
           title: 'Current Assets',
           data: [
@@ -304,7 +274,7 @@ export default {
             { label: 'Total Current Assets', value: '152.99B' },
           ]
         },
-        // 7
+        // 6
         {
           title: 'Non-Current Assets',
           data: [
@@ -315,7 +285,7 @@ export default {
             { label: 'Total Non-Current Assets', value: '364.98B' },
           ]
         },
-        // 8
+        // 7
         {
           title: 'Liabilities Breakdown',
           data: {
@@ -334,7 +304,7 @@ export default {
             ],
           }
         },
-        // 9
+        // 8
         {
           title: `Shareholders' Equity Trend`,
           data: {
@@ -353,7 +323,7 @@ export default {
             ],
           }
         },
-        // 10 Liabilities & Equity
+        // 9 Liabilities & Equity
         {
           title: 'Current Liabilities',
           data: [
@@ -382,7 +352,7 @@ export default {
             { label: `Stockholders' Equity`, value: '152.99B' },
           ]
         },
-        // 13 Key Performance Metrics
+        // 12 Key Performance Metrics
         {
           title: 'Key Performance Metrics',
           data: {
