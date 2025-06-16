@@ -1,5 +1,5 @@
 <template>
-  <div class="analyst-recommendations">
+  <div class="financials">
     <div class="title">Financials</div>
     <button-group 
       v-model="timeframe" 
@@ -261,11 +261,8 @@ export default {
 <style scoped lang="scss">
 @import "@/components/Market/market.scss";
 
-.analyst-recommendations {
-  margin: 0 auto;
-}
-
 .financials {
+  margin: 0 auto;
   &__card {
     padding: 24px;
 

@@ -89,7 +89,7 @@ export default {
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 120px);
   // height: 827px;
 
   &__header {
@@ -201,8 +201,6 @@ export default {
   }
 
   &__content {
-    flex: 1;
-    overflow-y: auto;
     background-color: $color-bg-primary;
   }
 }
