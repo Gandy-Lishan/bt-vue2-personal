@@ -458,6 +458,14 @@ const routes = [
 						path: 'ownership',
 						component: resolve => require(['@/components/Market/sec/Ownership.vue'], resolve),
 					  },
+					  {
+						path: 'news',
+						component: resolve => require(['@/components/Market/sec/News.vue'], resolve),
+					  },
+					  {
+						path: 'sec',
+						component: resolve => require(['@/components/Market/sec/SEC.vue'], resolve),
+					  }
 				  ]
 			},
 			{

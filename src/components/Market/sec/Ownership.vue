@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       infoTag: {
-        label: 'Insider Transactions',
+        label: `Largest Transaction: $397.03M &nbsp; 90d Net Buying: 192 trades`,
         type: 'info',
         closable: false
       },

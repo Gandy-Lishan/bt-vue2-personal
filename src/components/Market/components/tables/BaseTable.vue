@@ -8,8 +8,39 @@
         <span v-if="subtitle" class="table-subtitle">{{ subtitle }}</span>
         <!-- 用于显示信息的 tag -->
         <el-tag v-if="infoTag" :type="infoTag.type" :closable="infoTag.closable" @close="handleRemoveTag(infoTag)">
-          {{ infoTag.label }}
+          <span v-html="infoTag.label"></span>
         </el-tag>
+        <!-- 搜索和过滤区域 -->
+        <div v-if="showSearch || filters.length > 0" class="table-header">
+          <div class="filter-section">
+            <el-input
+              v-if="showSearch"
+              v-model="searchQuery"
+              placeholder="Search..."
+              prefix-icon="el-icon-search"
+              @input="handleSearch"
+              size="small"
+              clearable
+            />
+            
+            <el-select
+              v-for="filter in filters"
+              :key="filter.key"
+              v-model="filterValues[filter.key]"
+              :placeholder="filter.placeholder"
+              @change="handleFilter"
+              clearable
+              size="small"
+            >
+              <el-option
+                v-for="option in filter.options"
+                :key="option.value"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </div>
+        </div>
       </div>
       <div class="right-section">
         <!-- 时间显示 -->
@@ -39,37 +70,6 @@
       <i class="el-icon-close" @click="closeTip"></i>
     </div>
  
-    <!-- 搜索和过滤区域 -->
-    <div v-if="showSearch || filters.length > 0" class="table-header">
-      <div class="filter-section">
-        <el-input
-          v-if="showSearch"
-          v-model="searchQuery"
-          placeholder="请输入搜索内容"
-          prefix-icon="el-icon-search"
-          @input="handleSearch"
-          size="small"
-          clearable
-        />
-        
-        <el-select
-          v-for="filter in filters"
-          :key="filter.key"
-          v-model="filterValues[filter.key]"
-          :placeholder="filter.placeholder"
-          @change="handleFilter"
-          clearable
-          size="small"
-        >
-          <el-option
-            v-for="option in filter.options"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
-      </div>
-    </div>
  
     <!-- 表格主体 -->
     <el-table
@@ -373,7 +373,6 @@
   .left-section {
     display: flex;
     align-items: center;
-    gap: 12px;
     
     .table-title {
       margin: 0;
@@ -390,7 +389,6 @@
   .right-section {
     display: flex;
     align-items: center;
-    gap: 16px;
     
     .date-time {
       color: #606266;
@@ -409,16 +407,16 @@
     }
   }
  }
- 
- .table-header {
-  margin-bottom: 16px;
- }
+
  
  .filter-section {
   display: flex;
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
+  /deep/ .el-input.el-input--small.el-input--prefix.el-input--suffix {
+    margin: 0 5px;
+  }
  }
  
  .table-tip {
