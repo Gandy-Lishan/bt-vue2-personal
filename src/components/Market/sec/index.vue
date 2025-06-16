@@ -66,6 +66,7 @@ export default {
         { name: 'Earnings', route: 'earnings' },
         { name: 'Financials', route: 'financials' },
         { name: 'Balance Sheet', route: 'balancesheet' },
+        { name: 'Cash Flow', route: 'cashflow' },
         { name: 'News', route: 'news' },
         { name: 'Ownership', route: 'ownership' },
       ],

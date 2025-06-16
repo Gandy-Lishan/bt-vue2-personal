@@ -451,6 +451,10 @@ const routes = [
 						component: resolve => require(['@/components/Market/sec/BalanceSheet.vue'], resolve),
 					  },
 					  {
+						path: 'cashflow',
+						component: resolve => require(['@/components/Market/sec/CashFlow.vue'], resolve),
+					  },
+					  {
 						path: 'ownership',
 						component: resolve => require(['@/components/Market/sec/Ownership.vue'], resolve),
 					  },

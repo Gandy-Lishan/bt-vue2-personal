@@ -66,6 +66,7 @@ export default {
       error: null,
       categories: [],
       seriesData: [],
+      resizeObserver: null, // ✅ 新增 resizeObserver
     };
   },
   watch: {
@@ -79,15 +80,32 @@ export default {
     legendPosition: "reRenderChartWithCurrentData"
   },
   mounted() {
-    console.log(this.stacking)
     if (this.chartData && this.chartData.length > 0) {
       this.processDataAndInitializeChart();
     } else {
       this.error = "No data provided to render the chart.";
     }
+
+    // ✅ 初始化 ResizeObserver
+    const el = this.$refs.chartContainer;
+    if (el) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.reflowChart();
+      });
+      this.resizeObserver.observe(el);
+    }
   },
   beforeDestroy() {
     this.destroyChart();
+
+    // ✅ 初始化 ResizeObserver
+    const el = this.$refs.chartContainer;
+    if (el) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.reflowChart();
+      });
+      this.resizeObserver.observe(el);
+    }
   },
   methods: {
     processDataAndInitializeChart() {
@@ -233,6 +251,13 @@ export default {
         this.chart = null;
       }
     },
+
+    reflowChart() {
+      if (this.chart) {
+        console.log('reflow barchart')
+        this.chart.reflow();
+      }
+    }
   },
 };
 </script>

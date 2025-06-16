@@ -52,54 +52,159 @@
         :country-risk="balanceSheetPanels[3].data.countryRisk"
       />
     </div>
-    <div v-if="category == 'assets'" class="grid balance-sheet__assets-grid">
-      <section class="card total-assets-trend">
-        <h3 class="card__subtitle">{{ balanceSheetPanels[4].title }}</h3>
-        <BarChart
-          :chartData="balanceSheetPanels[4].data.chartData"
-          :seriesConfigs="balanceSheetPanels[4].data.seriesConfigs"
-          titleText=""
-          yAxisTitleText=""
-          orientation="column"
-          :enableExporting="false"
-          legendPosition="topright"
-          :show-legend="false"
-          chartHeight="400px"
-        />
-      </section>
-      <section class="card asset-composition">
-        <h3 class="card__subtitle">{{ balanceSheetPanels[5].title }}</h3>
-        <BarChart
-          :chartData="balanceSheetPanels[5].data.chartData"
-          :seriesConfigs="balanceSheetPanels[5].data.seriesConfigs"
-          titleText=""
-          yAxisTitleText=""
-          orientation="column"
-          :enableExporting="false"
-          legendPosition="bottomcenter"
-          :show-legend="true"
-          chartHeight="400px"
-          stacking="normal"
-        />
-      </section>
-      <section class="card assets-current">
-        <div class="card__subtitle">{{ balanceSheetPanels[6].title }}</div>
-        <base-table-simple
-          :data="balanceSheetPanels[6].data"
-          :highlight-last-row="false"
-        />
-      </section>
-      <section class="card assets-noncurrent">
-        <div class="card__subtitle">{{ balanceSheetPanels[7].title }}</div>
-        <base-table-simple
-          :data="balanceSheetPanels[7].data"
-          :highlight-last-row="false"
-        />
-      </section>
+    <div v-if="category == 'assets'">
+      <div class="grid-col-2">
+        <!-- total-assets-trend & asset-composition -->
+        <section class="card total-assets-trend">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[4].title }}</h3>
+          <BarChart
+            ref="totalAssetsTrend"
+            :chartData="balanceSheetPanels[4].data.chartData"
+            :seriesConfigs="balanceSheetPanels[4].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="topright"
+            :show-legend="false"
+            chartHeight="400px"
+          />
+        </section>
+        <section class="card asset-composition">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[5].title }}</h3>
+          <BarChart
+            ref="assetComposition"
+            :chartData="balanceSheetPanels[5].data.chartData"
+            :seriesConfigs="balanceSheetPanels[5].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="bottomcenter"
+            :show-legend="true"
+            chartHeight="400px"
+            stacking="normal"
+          />
+        </section>
+      </div>
+      <div class="grid-col-2">
+        <!-- assets-current -->
+        <section class="card assets-current">
+          <div class="card__subtitle">{{ balanceSheetPanels[6].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[6].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card assets-noncurrent">
+          <div class="card__subtitle">{{ balanceSheetPanels[7].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[7].data"
+            :highlight-last-row="true"
+          />
+        </section>
+      </div>
     </div>
-    <div v-if="category == 'liabilitiesEquity'" class="grid balance-sheet__liabilities-equity-grid">
+    <div v-if="category == 'liabilitiesEquity'">
+      <div class="grid-col-2">
+        <!-- Liabilities Breakdown -->
+        <section class="card lb">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[8].title }}</h3>
+          <BarChart
+            ref="lb"
+            :chartData="balanceSheetPanels[8].data.chartData"
+            :seriesConfigs="balanceSheetPanels[8].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="bottomcenter"
+            :show-legend="true"
+            chartHeight="400px"
+          />
+        </section>
+        <section class="card shareholder">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[9].title }}</h3>
+          <BarChart
+            ref="shareholder"
+            :chartData="balanceSheetPanels[9].data.chartData"
+            :seriesConfigs="balanceSheetPanels[9].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="bottomcenter"
+            :show-legend="true"
+            chartHeight="400px"
+          />
+        </section>
+      </div>
+      <div class="grid-col-3">
+        <section class="card liabilities-current">
+          <div class="card__subtitle">{{ balanceSheetPanels[10].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[10].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card liabilities-noncurrent">
+          <div class="card__subtitle">{{ balanceSheetPanels[11].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[11].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card shareholder-equity">
+          <div class="card__subtitle">{{ balanceSheetPanels[12].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[12].data"
+            :highlight-last-row="true"
+          />
+        </section>
+      </div>
     </div>
-    <div v-if="category == 'keyRatios'" class="grid balance-sheet__key-ratios-grid">
+    <div v-if="category == 'keyRatios'">
+      <div class="grid-col-1">
+        <!-- Liabilities Breakdown -->
+        <section class="card key-performance-metrics">
+          <h3 class="card__subtitle">{{ balanceSheetPanels[13].title }}</h3>
+          <BarChart
+            ref="keyPerformanceMetrics"
+            :chartData="balanceSheetPanels[13].data.chartData"
+            :seriesConfigs="balanceSheetPanels[13].data.seriesConfigs"
+            titleText=""
+            yAxisTitleText=""
+            orientation="column"
+            :enableExporting="false"
+            legendPosition="bottomcenter"
+            :show-legend="true"
+            chartHeight="400px"
+          />
+        </section>
+      </div>
+      <div class="grid-col-3">
+        <section class="card liabilities-current">
+          <div class="card__subtitle">{{ balanceSheetPanels[10].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[10].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card liabilities-noncurrent">
+          <div class="card__subtitle">{{ balanceSheetPanels[11].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[11].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card shareholder-equity">
+          <div class="card__subtitle">{{ balanceSheetPanels[12].title }}</div>
+          <base-table-simple
+            :data="balanceSheetPanels[12].data"
+            :highlight-last-row="true"
+          />
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -120,6 +225,7 @@ export default {
       category: 'assets',
 
       balanceSheetPanels: [
+        // 0
         {
           title: 'Total Assets',
           data: {
@@ -128,6 +234,7 @@ export default {
             totalPremium: 5.27
           },
         },
+        // 1
         {
           title: 'Fixed Assets',
           data: {
@@ -136,6 +243,7 @@ export default {
             totalPremium: 211.99
           },
         },
+        // 2
         {
           title: 'Total Liabilities',
           data: {
@@ -144,6 +252,7 @@ export default {
             totalPremium: 166.4
           },
         },
+        // 3
         {
           title: 'Total Equity',
           data: {
@@ -152,7 +261,7 @@ export default {
             totalPremium: 186.2
           },
         },
-         // total assets trend 
+         // 4 total assets trend 
         {
           title: 'Total Assets Trend',
           data: {
@@ -167,7 +276,7 @@ export default {
             ],
           },
         },
-         // asset composition
+         // 5 asset composition
         {
           title: 'Asset Composition',
           data: {
@@ -184,7 +293,7 @@ export default {
             ],
           },
         },
-        // current || noncurrent assets
+        // 6 current || noncurrent assets
         {
           title: 'Current Assets',
           data: [
@@ -195,6 +304,7 @@ export default {
             { label: 'Total Current Assets', value: '152.99B' },
           ]
         },
+        // 7
         {
           title: 'Non-Current Assets',
           data: [
@@ -204,6 +314,94 @@ export default {
             { label: 'Intangivle Assets', value: '0.00' },
             { label: 'Total Non-Current Assets', value: '364.98B' },
           ]
+        },
+        // 8
+        {
+          title: 'Liabilities Breakdown',
+          data: {
+            chartData: [
+              { date: 'Jul 2023', total: 7, current: 5, nonCurrent: 2  },
+              { date: 'Oct 2023', total: 8, current: 5, nonCurrent: 3 },
+              { date: 'Dec 2023', total: 12, current: 7, nonCurrent: 5 },
+              { date: 'Apr 2024', total: 5, current: 4, nonCurrent: 2 },
+              { date: 'Jul 2024', total: 9, current: 2, nonCurrent: 7 },
+              { date: 'Oct 2024', total: 5, current: 2, nonCurrent: 3 },
+            ],
+            seriesConfigs: [
+              { key: 'total', label: 'Total Liabilities', color: 'green', type: 'line' },
+              { key: 'current', label: 'Current Liabilities', color: 'blue' },
+              { key: 'nonCurrent', label: 'Non-Current Liabilities', color: 'red' },
+            ],
+          }
+        },
+        // 9
+        {
+          title: `Shareholders' Equity Trend`,
+          data: {
+            chartData: [
+              { date: 'Jul 2023', total: 2.5, retained: 4.7, common: 0  },
+              { date: 'Oct 2023', total: 3, retained: 4, common: 0 },
+              { date: 'Dec 2023', total: 2.8, retained: 4, common: 0 },
+              { date: 'Apr 2024', total: 2.7, retained: 4, common: 0 },
+              { date: 'Jul 2024', total: 3.8, retained: 3.8, common: 0 },
+              { date: 'Oct 2024', total: 4, retained: 4, common: 1 },
+            ],
+            seriesConfigs: [
+              { key: 'total', label: 'Total Equity', color: 'green', type: 'line' },
+              { key: 'retained', label: 'Retained Earnings', color: 'blue' },
+              { key: 'common', label: 'Common Stock', color: 'red' },
+            ],
+          }
+        },
+        // 10 Liabilities & Equity
+        {
+          title: 'Current Liabilities',
+          data: [
+            { label: 'Accounts Payable', value: '29.94B' },
+            { label: 'Short-term Debt', value: '35.23B' },
+            { label: 'Deferred Revenue', value: '66.24B' },
+            { label: 'Current Liabilities', value: '152.99B' },
+          ]
+        },
+        {
+          title: 'Non-Current Liabilities',
+          data: [
+            { label: 'Long-term Debt', value: '29.94B' },
+            { label: 'Deferred Revenue (Non-Current)', value: '35.23B' },
+            { label: 'Other Non-Current Liabilities', value: '7.29B' },
+            { label: 'Non-Current Liabilities', value: '152.99B' },
+          ]
+        },
+        {
+          title: `Stockholders' Equity`,
+          data: [
+            { label: 'Retained Earnings', value: '29.94B' },
+            { label: 'Common Stock', value: '35.23B' },
+            { label: 'Treasury Stock', value: '66.24B' },
+            { label: 'Inventory', value: '7.29B' },
+            { label: `Stockholders' Equity`, value: '152.99B' },
+          ]
+        },
+        // 13 Key Performance Metrics
+        {
+          title: 'Key Performance Metrics',
+          data: {
+            chartData: [
+              { date: '2017-12-30', currtRadio: 7, debt: 5, turnover: 2  },
+              { date: '2018-12-29', currtRadio: 8, debt: 5, turnover: 3 },
+              { date: '2019-12-28', currtRadio: 12, debt: 7, turnover: 5 },
+              { date: '2021-01-02', currtRadio: 5, debt: 4, turnover: 2 },
+              { date: '2022-01-01', currtRadio: 9, debt: 2, turnover: 7 },
+              { date: '2022-12-31', currtRadio: 5, debt: 2, turnover: 3 },
+              { date: '2023-12-30', currtRadio: 5, debt: 2, turnover: 3 },
+              { date: '2024-12-28', currtRadio: 5, debt: 2, turnover: 3 },
+            ],
+            seriesConfigs: [
+              { key: 'currtRadio', label: 'Current Ratio', color: 'green', type: 'line' },
+              { key: 'debt', label: 'Debt to Equity', color: 'blue', type: 'line' },
+              { key: 'turnover', label: 'Asset Turnover', color: 'red', type: 'line' },
+            ],
+          }
         },
       ],
 
@@ -230,66 +428,42 @@ export default {
 .balance-sheet {
   margin: 0 auto;
 
-  &__assets-grid {
-    grid-template-areas:
-      "a a b b"
-      "c c d d";
-    grid-template-columns: repeat(4, 1fr);
-  }
-  &__-liabilities-equity-grid {
-    grid-template-areas:
-      "a a b b"
-      "c c c c";
-    grid-template-columns: repeat(4, 1fr);
-  }
-  &__key-ratios-grid {
-    grid-template-areas:
-      "a a a a"
-      "b c d e";
-    grid-template-columns: repeat(4, 1fr);
-  }
+  // &__assets-grid {
+  //   grid-template-areas:
+  //     "a a b b";
+  //   grid-template-columns: repeat(4, 1fr);
+  // }
+  // &__-liabilities-equity-grid {
+  //   grid-template-areas:
+  //     "a a b b";
+  //   grid-template-columns: repeat(4, 1fr);
+  // }
+  // &__key-ratios-grid {
+  //   grid-template-areas:
+  //     "a a a a";
+  //   grid-template-columns: repeat(4, 1fr);
+  // }
 
-  // Assets cards
-  .total-assets-trend {
-    grid-area: a;
-  }
-  .asset-composition {
-    grid-area: b;
-  }
-  .assets-current {
-    grid-area: c;
-  }
-  .assets-noncurrent {
-    grid-area: d;
-  }
+  // // Assets cards
+  // .total-assets-trend {
+  //   grid-area: a;
+  // }
+  // .asset-composition {
+  //   grid-area: b;
+  // }
 
-  // Liabilities equity cards
-  .liabilities-breakdown {
-    grid-area: a;
-  }
-  .equity-trend {
-    grid-area: b;
-  }
-  .liabilities-equity {
-    grid-area: c;
-  }
+  // // Liabilities equity cards
+  // .liabilities-breakdown {
+  //   grid-area: a;
+  // }
+  // .equity-trend {
+  //   grid-area: b;
+  // }
 
-  // Key ratios
-  .key-performance-metrics {
-    grid-area: a;
-  }
-  .liquidity-metrics {
-    grid-area: b;
-  }
-  .asset-management {
-    grid-area: c;
-  }
-  .capital-structure {
-    grid-area: d;
-  }
-  .growth-analysis {
-    grid-area: e;
-  }
+  // // Key ratios
+  // .key-performance-metrics {
+  //   grid-area: a;
+  // }
 }
 </style>
 

@@ -1,7 +1,18 @@
 <template>
   <div class="base-table-simple">
     <table class="base-table-simple__table">
-      <tbody>
+      <thead v-if="title">
+        <tr>
+          <th
+            class="base-table-simple__title"
+            :colspan="transpose ? data.length : 2"
+          >
+            {{ title }}
+          </th>
+        </tr>
+      </thead>
+      <!-- 標準表格 -->
+      <tbody v-if="!transpose">
         <tr
           v-for="(row, index) in data"
           :key="index"
@@ -14,6 +25,28 @@
             {{ row.label }}
           </td>
           <td class="base-table-simple__cell">
+            {{ row.value }}
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- 轉置表格（無 Label/Value header） -->
+      <tbody v-else>
+        <tr class="base-table-simple__row">
+          <td
+            v-for="(row, index) in data"
+            :key="'label-' + index"
+            class="base-table-simple__cell base-table-simple__cell--label"
+          >
+            {{ row.label }}
+          </td>
+        </tr>
+        <tr class="base-table-simple__row">
+          <td
+            v-for="(row, index) in data"
+            :key="'value-' + index"
+            class="base-table-simple__cell"
+          >
             {{ row.value }}
           </td>
         </tr>
@@ -31,6 +64,14 @@ export default {
       required: true
     },
     highlightLastRow: {
+      type: Boolean,
+      default: false
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    transpose: {
       type: Boolean,
       default: false
     }
@@ -56,20 +97,23 @@ export default {
   white-space: nowrap;
 }
 
-/* 第一列背景固定淺灰 */
 .base-table-simple__cell--label {
-  width: 45%;
   background-color: #f5f7fa;
 }
 
-/* 高亮最後一行 */
 .base-table-simple__row--highlight .base-table-simple__cell {
   background-color: #f5f7fa;
 }
 
-/* hover 效果（不改變第一列） */
 .base-table-simple__row:hover .base-table-simple__cell:not(.base-table-simple__cell--label) {
-  /* background-color: #f0f9ff; */
   cursor: pointer;
+}
+
+.base-table-simple__title {
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 12px;
+  border: 1px solid #ebeef5;
 }
 </style>
