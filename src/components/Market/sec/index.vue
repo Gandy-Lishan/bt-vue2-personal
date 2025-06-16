@@ -66,8 +66,9 @@ export default {
         { name: 'Earnings', route: 'earnings' },
         { name: 'Financials', route: 'financials' },
         { name: 'Balance Sheet', route: 'balancesheet' },
-        { name: 'News', route: 'news' },
         { name: 'Ownership', route: 'ownership' },
+        { name: 'News', route: 'news' },
+        { name: 'SEC', route: 'sec' },
       ],
 
       // symbol header mock data
