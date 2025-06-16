@@ -447,33 +447,13 @@ const routes = [
 						component: resolve => require(['@/components/Market/sec/Financials.vue'], resolve),
 					  },
 					  {
+						path: 'balancesheet',
+						component: resolve => require(['@/components/Market/sec/BalanceSheet.vue'], resolve),
+					  },
+					  {
 						path: 'ownership',
 						component: resolve => require(['@/components/Market/sec/Ownership.vue'], resolve),
 					  },
-					// {
-					//   path: 'financials',
-					//   component: () => import('@/components/Market/Sec/Financials.vue')
-					// },
-					// {
-					//   path: 'balance-sheet',
-					//   component: () => import('@/components/Market/Sec/BalanceSheet.vue')
-					// },
-					// {
-					//   path: 'cash-flow',
-					//   component: () => import('@/components/Market/Sec/CashFlow.vue')
-					// },
-					// {
-					//   path: 'ownership',
-					//   component: () => import('@/components/Market/Sec/Ownership.vue')
-					// },
-					// {
-					//   path: 'news',
-					//   component: () => import('@/components/Market/Sec/News.vue')
-					// },
-					// {
-					//   path: 'sec',
-					//   component: () => import('@/components/Market/Sec/SecFilings.vue')
-					// }
 				  ]
 			},
 			{

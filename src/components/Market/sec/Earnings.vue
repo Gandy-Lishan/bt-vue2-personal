@@ -1,8 +1,8 @@
 <template>
-  <div class="analyst-recommendations">
+  <div class="earnings">
     <h2 class="title">Earnings</h2>
 
-    <div class="grid analyst-recommendations__grid">
+    <div class="grid earnings__grid">
       <!-- 左侧条形图 -->
       <section class="card earnings__card trend-estimate">
         <h3 class="card__subtitle">EPS Trend & Estimates</h3>
@@ -207,7 +207,7 @@ export default {
 <style scoped lang="scss">
  @import "@/components/Market/market.scss";
 
-.analyst-recommendations {
+.earnings {
   margin: 0 auto;
 
   &__grid {

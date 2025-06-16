@@ -65,6 +65,7 @@ export default {
         { name: 'Analysts', route: 'analysts' },
         { name: 'Earnings', route: 'earnings' },
         { name: 'Financials', route: 'financials' },
+        { name: 'Balance Sheet', route: 'balancesheet' },
         { name: 'News', route: 'news' },
         { name: 'Ownership', route: 'ownership' },
       ],
@@ -169,6 +170,7 @@ export default {
         width: 24px;
         height: 24px;
         object-fit: contain;
+        scale:2;
       }
     }
 
