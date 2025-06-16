@@ -11,7 +11,13 @@
 				<router-link to="/market"><i class="el-icon-arrow-left"></i><span>Back to Meta Data</span></router-link>
 			</div>
       <div class="layout__header-right">
-        <!-- <search-bar placeholder="搜索行情..." /> -->
+        <div class="selectBox">
+          <SearchAutocomplete
+            @query="querySearch"
+            @select="item => changeSymbol(item)"
+            placeholder="Seach for ticker"
+          />
+        </div>
       </div>
     </header>
 
@@ -36,11 +42,12 @@
 </template>
   
 <script>
-//import SearchBar from '@/components/common/SearchBar.vue';
+import { SearchAutocomplete } from "@/components/common"
+import {createStateFilter} from '@/utils/globalFunc'
 
 export default {
   name: 'Layout',
-  //components: { SearchBar },
+  components: { SearchAutocomplete },
   data() {
     return {
       sidebarCollapsed: false,
@@ -60,7 +67,11 @@ export default {
   computed: {
     isSecDetailRoute() {
       return this.$route.path.startsWith('/market/sec/');
-    }
+    },
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      return data ? JSON.parse(data) : [];
+    },
   },
   mounted() {
     document.documentElement.classList.remove('scroll');
@@ -74,7 +85,21 @@ export default {
   methods: {
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
-    }
+    },
+    async querySearch(queryString, callback) {
+      var dropdownList = this.symbolList
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+        
+      callback(results.sort((a, b) => b.priority - a.priority))
+    },
+    async changeSymbol(item) {
+      const url = `/market/sec/${item.url}`
+      this.$router.push(url)
+    },
   }
 };
 </script>
@@ -82,6 +107,10 @@ export default {
 
 <style scoped lang="scss" >
 @import "@/components/Market/market.scss";
+
+::v-deep(.el-input__inner) {
+  margin-left: 0;
+}
 // ------------------------
 // Market/index.vue 框架样式
 // ------------------------

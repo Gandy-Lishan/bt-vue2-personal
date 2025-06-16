@@ -169,10 +169,10 @@ export default {
       gap: $spacing-sm;
 
       .sec-layout__symbol-icon {
-        width: 24px;
-        height: 24px;
+        width: 50px;
+        // height: 24px;
         object-fit: contain;
-        scale:2;
+        // scale:2;
       }
     }
 

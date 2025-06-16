@@ -105,7 +105,7 @@
   
   .overview {
     padding: $spacing-md;
-    background: $color-text-primary;
+    background: $color-bg-primary;
   
     &__toolbar {
         display: flex;
