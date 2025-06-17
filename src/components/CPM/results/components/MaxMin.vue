@@ -209,11 +209,18 @@ export default {
 				case 'Weekly':
 					this.defaultTableLabels = [
 						'Dates of 1 Signals',
-						'1 Week [%]',
-						'2 Weeks [%]',
+						// '1 Week [%]',
+						// '2 Weeks [%]',
+						// '1 Month [%]',
+						// '2 Months [%]',
+						// '3 Months [%]',
+						// '6 Months [%]',
+						// '1 Year [%]',
 						'1 Month [%]',
 						'2 Months [%]',
-						'3 Months [%]',
+						'3 Months [%]',	
+						'4 Months [%]',
+						'5 Months [%]',
 						'6 Months [%]',
 						'1 Year [%]',
 						'Max Gain',
@@ -223,24 +230,38 @@ export default {
 				case 'Monthly':
 					this.defaultTableLabels = [
 						'Dates of 1 Signals',
+						// '1 Month [%]',
+						// '3 Months [%]',
+						// '6 Months [%]',
+						// '9 Months [%]',
+						// '1 Year [%]',
+						// '2 Years [%]',
+						// '3 Years [%]',
 						'1 Month [%]',
-						'3 Months [%]',
+						'2 Months [%]',
+						'3 Months [%]',	
+						'4 Months [%]',
+						'5 Months [%]',
 						'6 Months [%]',
-						'9 Months [%]',
 						'1 Year [%]',
-						'2 Years [%]',
-						'3 Years [%]',
 						'Max Gain',
 						'Max Loss'
 					]
 					periodArray = [
+						// { period: 1, timeframe: 'Month' },
+						// { period: 3, timeframe: 'Month' },
+						// { period: 6, timeframe: 'Month' },
+						// { period: 9, timeframe: 'Month' },
+						// { period: 1, timeframe: 'Year' },
+						// { period: 2, timeframe: 'Year' },
+						// { period: 3, timeframe: 'Year' }
 						{ period: 1, timeframe: 'Month' },
+						{ period: 2, timeframe: 'Month' },
 						{ period: 3, timeframe: 'Month' },
+						{ period: 4, timeframe: 'Month' },
+						{ period: 5, timeframe: 'Month' },
 						{ period: 6, timeframe: 'Month' },
-						{ period: 9, timeframe: 'Month' },
-						{ period: 1, timeframe: 'Year' },
-						{ period: 2, timeframe: 'Year' },
-						{ period: 3, timeframe: 'Year' }
+						{ period: 1, timeframe: 'Year' }
 					]
 					break
 				default:
