@@ -9061,6 +9061,7 @@ cq-indicators-scroll {
   display: block;
   position: relative;
   overflow-x: hidden;
+  max-height: 863px !important;
 }
 
 cq-indicators-scroll .ps-scrollbar-y-rail,
