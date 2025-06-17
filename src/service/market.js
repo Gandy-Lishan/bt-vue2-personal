@@ -180,3 +180,17 @@ export function getBalanceSheet() {
     }, 1000);
     });
 }
+
+export function getCompanyProfile(url) {
+    let path = `/dev/company_detail_app/get_profile?symbol=${url}`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

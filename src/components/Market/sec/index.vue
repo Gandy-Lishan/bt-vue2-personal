@@ -1,10 +1,10 @@
 <template>
-  <div class="sec-layout">
+  <div class="sec-layout" v-loading="isLoading">
     <!-- 左侧公司信息栏 -->
     <aside class="sec-layout__sidebar">
       <company-stats 
-        :company-details="companyDetails"
-        :trading-stats="tradingStats"
+        :company-details="companyProfileData?.companyDetails"
+        :trading-stats="companyProfileData?.tradingStats"
       />
     </aside>
 
@@ -17,17 +17,17 @@
             alt="symbol icon"
             class="sec-layout__symbol-icon"
           />
-          {{ symbolHeading }}
+          {{ companyProfileData?.profile?.companyName }}
         </div>
         <div class="sec-layout__header-details text--muted">
-          <div>Industry: {{ symbolIndustry }}</div>
-          <div>Exchange: {{symbolExchange }}</div>
-          <div>Is ETF: {{ symbolIsETF }}</div>
-          <div>Is Fund: {{ symbolIsFund }}</div>
+          <div>Industry: {{ companyProfileData?.profile?.industry }}</div>
+          <div>Exchange: {{ companyProfileData?.profile?.exchange }}</div>
+          <div>Is ETF: {{ companyProfileData?.profile?.isEtf }}</div>
+          <div>Is Fund: {{ companyProfileData?.profile?.isFund }}</div>
         </div>
         <div class="spacing-md"></div>
-        <div class="sec-layout__header-description">
-          <ExpandableText :text="symbolDescription" :maxLines="2" />
+        <div v-if="!isLoading" class="sec-layout__header-description">
+          <ExpandableText :text="companyProfileData?.profile?.description" :maxLines="2" />
         </div>
       </div>
       <!-- 子导航 -->
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import ExpandableText from '@/components/Market/components/ExpandableText.vue';
 import CompanyStats from "@/components/Market/components/CompanyStats";
 export default {
@@ -56,7 +57,22 @@ export default {
   computed: {
     symbol() {
       return this.$route.params.symbolname;
+    },
+    ...mapGetters("market/sec/companyProfile", [
+      "companyProfileData",
+      "isLoading",
+      "errorMessage",
+    ]),
+  },
+  watch: {
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchCompanyProfile(newSymbol);
+      }
     }
+  },
+  created() {
+    this.fetchCompanyProfile(this.symbol);
   },
   data() {
     return {
@@ -71,50 +87,7 @@ export default {
         { name: 'News', route: 'news' },
         { name: 'SEC', route: 'sec' },
       ],
-
-      // symbol header mock data
-      symbolHeading: 'Apple Inc.(AAPL)',
-      symbolDescription: `Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, and HomePod. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allow customers to discover and download applications and digital content, such as books, music, video, games, and podcasts, as well as advertising services include third-party licensing arrangements and its own advertising platforms. In addition, the company offers various subscription-based services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV+, which offers exclusive original content; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers, wholesalers, retailers, and resellers. Apple Inc. was founded in 1976 and is headquartered in Cupertino, California.`,
-      symbolIndustry: 'Consumer Electronic',
-      symbolExchange: 'NASDAQ Global Select',
-      symbolIsETF: 'No',
-      symbolIsFund: 'No',
-
       prevOverflow: '', // 存储滚动条状态
-
-      // 新增虚拟数据
-      companyDetails: [
-        { label: 'Market Cap', value: '$2.85T' },
-        { label: 'P/E Ratio', value: '29.45' },
-        { label: 'P/B Ratio', value: '15.32' },
-        { label: 'EV/Sales', value: '7.89' },
-        { label: 'EV/EBITDA', value: '22.15' },
-        { label: 'P/S Ratio', value: '6.78' },
-        { label: 'Beta', value: '1.28' },
-        { label: 'Return on Equity', value: '147.25%' },
-        { label: 'ROIC', value: '172.63%' },
-        { label: 'Current Ratio', value: '0.94' },
-        { label: 'FCF Yield', value: '3.45%' },
-        { label: 'Dividend Yield', value: '0.51%' }
-      ],
-      tradingStats: [
-        { label: 'Price', value: '$175.84' },
-        { label: 'Open', value: '$176.24' },
-        { label: 'Previous Close', value: '$175.04' },
-        { label: 'Day High', value: '$177.24' },
-        { label: 'Day Low', value: '$174.93' },
-        { label: '52W High', value: '$198.23' },
-        { label: '52W Low', value: '$124.17' },
-        { label: 'Volume', value: '52.34M' },
-        { label: 'Avg Volume', value: '58.76M' },
-        { label: 'ATR (14)', value: '$3.24' },
-        { 
-          label: '200MA Distance', 
-          value: '-8.45%',
-          isNegative: true
-        },
-        { label: 'Relative Volume', value: '0.89x' }
-      ]
     };
   },
   mounted() {
@@ -125,6 +98,9 @@ export default {
   unmounted() {
     //组件卸载时恢复 scroll，避免影响别的组件
     document.documentElement.style.overflow = this.prevOverflow;
+  },
+  methods: {
+    ...mapActions("market/sec/companyProfile", ["fetchCompanyProfile"]),
   },
 };
 </script>

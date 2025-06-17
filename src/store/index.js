@@ -8,6 +8,7 @@ import user from './modules/user'
 
 // import predict from "./modules/market/predict";
 import balanceSheet from "./modules/market/sec/balanceSheet";
+import companyProfile from "./modules/market/sec/companyProfile";
 
 Vue.use(Vuex)
 // TODO 按照page细分, 并做code grouping
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
           namespaced: true,
           modules: {
             balanceSheet,
+            companyProfile,
           },
         },
       },
