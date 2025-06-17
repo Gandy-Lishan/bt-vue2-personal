@@ -6,6 +6,9 @@ import form from './modules/form'
 import states from './modules/states'
 import user from './modules/user'
 
+// import predict from "./modules/market/predict";
+import balanceSheet from "./modules/market/sec/balanceSheet";
+
 Vue.use(Vuex)
 // TODO 按照page细分, 并做code grouping
 const store = new Vuex.Store({
@@ -13,7 +16,20 @@ const store = new Vuex.Store({
     chart,
     form,
     states,
-    user
+    user,
+    market: {
+      namespaced: true,
+      modules: {
+        // overview,
+        // predict,
+        sec: {
+          namespaced: true,
+          modules: {
+            balanceSheet,
+          },
+        },
+      },
+    },
   },
   getters,
 })

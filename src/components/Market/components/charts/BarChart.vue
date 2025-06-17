@@ -1,9 +1,14 @@
 <template>
   <div class="bar-chart">
-    <div v-if="isLoading" class="chart-loading">Loading chart data...</div>
-    <div v-show="!isLoading" ref="chartContainer"
-      :style="{ width: '100%', height: chartHeight, borderRadius: 'inherit' }"></div>
-    <div v-if="error && !isLoading" class="chart-error">{{ error }}</div>
+    <div v-if="loading" class="chart-loading">Loading chart data...</div>
+
+    <div
+      v-show="!loading"
+      ref="chartContainer"
+      :style="{ width: '100%', height: chartHeight, borderRadius: 'inherit' }"
+    ></div>
+
+    <div v-if="error && !loading" class="chart-error">{{ error }}</div>
   </div>
 </template>
 
@@ -25,11 +30,11 @@ export default {
         Array.isArray(arr) &&
         arr.every(item =>
           item &&
-          typeof item === 'object' &&
-          'key' in item &&
-          'label' in item &&
-          'color' in item
-        )
+          typeof item === "object" &&
+          "key" in item &&
+          "label" in item &&
+          "color" in item
+        ),
     },
     titleText: { type: String, default: "" },
     chartHeight: { type: String, default: "400px" },
@@ -37,36 +42,30 @@ export default {
     orientation: {
       type: String,
       default: "column",
-      validator: val => ['column', 'bar'].includes(val)
+      validator: val => ["column", "bar"].includes(val),
     },
-    yAxisTitleText: { type: String, default: 'Value' },
+    yAxisTitleText: { type: String, default: "Value" },
     legendPosition: {
       type: String,
-      default: 'bottomcenter', // 默認為下方置中
-      validator: val => ['topleft', 'topright', 'bottomcenter'].includes(val)
+      default: "bottomcenter",
+      validator: val => ["topleft", "topright", "bottomcenter"].includes(val),
     },
-    showLegend: {
-      type: Boolean,
-      default: true
-    },
+    showLegend: { type: Boolean, default: true },
     stacking: {
       type: String,
-      default: null, // 不堆叠，若设为 'normal' 则堆叠
-      validator: val => ['normal', 'percent', null].includes(val)
+      default: null,
+      validator: val => ["normal", "percent", null].includes(val),
     },
-    enablePositiveNegativeColors: {
-      type: Boolean,
-      default: false
-    }
+    enablePositiveNegativeColors: { type: Boolean, default: false },
+    loading: { type: Boolean, default: false }, // 👈 新增由外部控制的 loading prop
   },
   data() {
     return {
       chart: null,
-      isLoading: false,
       error: null,
       categories: [],
       seriesData: [],
-      resizeObserver: null, // ✅ 新增 resizeObserver
+      resizeObserver: null,
     };
   },
   watch: {
@@ -77,16 +76,14 @@ export default {
     enableExporting: "reRenderChartWithCurrentData",
     titleText: "reRenderChartWithCurrentData",
     yAxisTitleText: "reRenderChartWithCurrentData",
-    legendPosition: "reRenderChartWithCurrentData"
+    legendPosition: "reRenderChartWithCurrentData",
+    loading: "reRenderChartWithCurrentData", // 👈 loading 變化也重新渲染
   },
   mounted() {
-    if (this.chartData && this.chartData.length > 0) {
+    if (!this.loading && this.chartData?.length > 0) {
       this.processDataAndInitializeChart();
-    } else {
-      this.error = "No data provided to render the chart.";
     }
 
-    // ✅ 初始化 ResizeObserver
     const el = this.$refs.chartContainer;
     if (el) {
       this.resizeObserver = new ResizeObserver(() => {
@@ -97,32 +94,23 @@ export default {
   },
   beforeDestroy() {
     this.destroyChart();
-
-    // ✅ 初始化 ResizeObserver
-    const el = this.$refs.chartContainer;
-    if (el) {
-      this.resizeObserver = new ResizeObserver(() => {
-        this.reflowChart();
-      });
-      this.resizeObserver.observe(el);
-    }
+    this.resizeObserver?.disconnect();
   },
   methods: {
     processDataAndInitializeChart() {
+      if (this.loading) return;
+
       if (!this.chartData || this.chartData.length === 0) {
         this.error = "No data available to process for the chart.";
-        this.isLoading = false;
         this.destroyChart();
         return;
       }
 
-      this.isLoading = true;
-      this.error = null;
-      this.destroyChart();
-
       try {
-        this.categories = this.chartData.map(item => item.date);
+        this.error = null;
+        this.destroyChart();
 
+        this.categories = this.chartData.map(item => item.date);
         this.seriesData = this.seriesConfigs.map(cfg => {
           const baseConfig = {
             name: cfg.label,
@@ -132,13 +120,8 @@ export default {
 
           if (this.enablePositiveNegativeColors) {
             baseConfig.zones = [
-              {
-                value: 0,
-                color: '#D64A3B'  // 负值为红色
-              },
-              {
-                color: '#4CAF50'  // 正值为绿色
-              }
+              { value: 0, color: "#D64A3B" },
+              { color: "#4CAF50" },
             ];
           } else {
             baseConfig.color = cfg.color;
@@ -153,13 +136,11 @@ export default {
         this.error = "Failed to process chart data." + (err.message ? ` Details: ${err.message}` : "");
         this.categories = [];
         this.seriesData = [];
-      } finally {
-        this.isLoading = false;
       }
     },
 
     reRenderChartWithCurrentData() {
-      if (!this.isLoading && !this.error && this.categories.length > 0 && this.seriesData.length > 0) {
+      if (!this.loading && !this.error && this.categories.length > 0 && this.seriesData.length > 0) {
         this.destroyChart();
         this.initializeChart();
       }
@@ -177,52 +158,45 @@ export default {
           height: this.chartHeight,
           spacingTop: 30,
         },
-        title: {
-          text: this.titleText,
-        },
-        exporting: {
-          enabled: this.enableExporting,
-        },
+        title: { text: this.titleText },
+        exporting: { enabled: this.enableExporting },
         xAxis: {
           categories: this.categories,
           crosshair: true,
         },
         yAxis: {
-          title: {
-            text: this.yAxisTitleText,
-          },
+          title: { text: this.yAxisTitleText },
         },
         tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          pointFormat:
+            '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
             '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-          footerFormat: '</table>',
+          footerFormat: "</table>",
           shared: true,
           useHTML: true,
         },
         legend: this.showLegend
-        ? {
-            ...this.getLegendConfig(),
-            enabled: true,
-            margin: 24
-          }
-        : { enabled: false },
+          ? {
+              ...this.getLegendConfig(),
+              enabled: true,
+              margin: 24,
+            }
+          : { enabled: false },
         credits: {
           enabled: true,
           text: "SENTIMENTRADER",
           href: "#",
-          position: { align: 'right', x: -10, y: -10 }
+          position: { align: "right", x: -10, y: -10 },
         },
         plotOptions: {
           [this.orientation]: {
             pointPadding: 0.2,
             groupPadding: 0.1,
             borderWidth: 0,
-            stacking: this.stacking || undefined,  // <- 根据传入参数决定是否堆叠
-            dataLabels: {
-              enabled: false
-            }
-          }
+            stacking: this.stacking || undefined,
+            dataLabels: { enabled: false },
+          },
         },
         series: this.seriesData,
       });
@@ -230,18 +204,18 @@ export default {
 
     getLegendConfig() {
       const positions = {
-        topleft: { align: 'left', verticalAlign: 'top', layout: 'horizontal', x: 0, y: 0 },
-        topright: { align: 'right', verticalAlign: 'top', layout: 'horizontal', x: 0, y: -20 },
-        bottomcenter: { align: 'center', verticalAlign: 'bottom', layout: 'horizontal', x: 0, y: 0 }
+        topleft: { align: "left", verticalAlign: "top", layout: "horizontal", x: 0, y: 0 },
+        topright: { align: "right", verticalAlign: "top", layout: "horizontal", x: 0, y: -20 },
+        bottomcenter: { align: "center", verticalAlign: "bottom", layout: "horizontal", x: 0, y: 0 },
       };
       return {
         ...positions[this.legendPosition],
         symbolRadius: 4,
         itemMarginTop: 5,
         itemStyle: {
-          fontWeight: 'normal',
-          fontSize: '12px'
-        }
+          fontWeight: "normal",
+          fontSize: "12px",
+        },
       };
     },
 
@@ -254,10 +228,10 @@ export default {
 
     reflowChart() {
       if (this.chart) {
-        console.log('reflow barchart')
+        console.log("reflow barchart");
         this.chart.reflow();
       }
-    }
+    },
   },
 };
 </script>
@@ -282,10 +256,10 @@ export default {
 }
 
 .chart-error {
-  color: #D32F2F;
-  background-color: #FFEBEE;
+  color: #d32f2f;
+  background-color: #ffebee;
   padding: 10px;
   border-radius: 4px;
-  border: 1px solid #FFCDD2;
+  border: 1px solid #ffcdd2;
 }
 </style>
