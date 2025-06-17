@@ -66,13 +66,13 @@ export default {
 			backtestHistoryList: [],
 			defaultTableLabels: [
 				'Dates of 1 Signals',
-				'1 Week [%]',
-				'2 Weeks [%]',
 				'1 Month [%]',
 				'2 Months [%]',
 				'3 Months [%]',
+				'4 Months [%]',
+				'5 Months [%]',
 				'6 Months [%]',
-				'12 Months [%]',
+				'1 Year [%]',
 				'Max Gain',
 				'Max Loss'
 			],
@@ -186,11 +186,11 @@ export default {
 		},
 		getAllDefaultTableLabels() {
 			let periodArray = [
-				{ period: 1, timeframe: 'Week' },
-				{ period: 2, timeframe: 'Week' },
 				{ period: 1, timeframe: 'Month' },
 				{ period: 2, timeframe: 'Month' },
 				{ period: 3, timeframe: 'Month' },
+				{ period: 4, timeframe: 'Month' },
+				{ period: 5, timeframe: 'Month' },
 				{ period: 6, timeframe: 'Month' },
 				{ period: 1, timeframe: 'Year' }
 			]
@@ -199,11 +199,11 @@ export default {
 				case 'Daily':
 					this.defaultTableLabels = [
 						'Dates of 1 Signals',
-						'1 Week [%]',
-						'2 Weeks [%]',
 						'1 Month [%]',
 						'2 Months [%]',
-						'3 Months [%]',
+						'3 Months [%]',	
+						'4 Months [%]',
+						'5 Months [%]',
 						'6 Months [%]',
 						'1 Year [%]',
 						'Max Gain',

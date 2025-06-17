@@ -419,7 +419,20 @@ export default {
 			return type === 'custom' ? name : symbol;
 		},
     handleDownloadCsv() {
-      const {backtestHistoryList, TIMHistoryList, result_quotes, TIMResult_quotes, periodsTIM, periods, defaultTIMTableLabels, defaultTableLabels} = this.$refs.timChild.exportData()
+      const {
+        backtestHistoryList, 
+        backtestShortTermHistoryList,
+        TIMHistoryList, 
+        result_quotes, 
+        result_shortTerm_quotes,
+        TIMResult_quotes, 
+        periodsTIM, 
+        periods,
+        periodsShortTerm,
+        defaultTIMTableLabels, 
+        defaultTableLabels,
+        defaultShortTermTableLabels
+      } = this.$refs.timChild.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
       let medianReturn, consistency, OtherAssets
       try {
@@ -582,7 +595,32 @@ export default {
           }
           _TIMHistoryList.push(zscore)
         })
-        
+
+        // Exit with default Time Frame (Short-Term)
+        const _backtestShortTermHistoryList = []
+        backtestShortTermHistoryList.forEach((item) => {
+          const obj = {}
+          obj['Entry Date'] = item['Entry Date']
+          for(let i=1;i < defaultShortTermTableLabels.length;i++ ){
+            obj[defaultShortTermTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultShortTermTableLabels[i]]
+          }
+          _TIMHistoryList.push(obj)
+        })
+        result_shortTerm_quotes.forEach(item => {
+          const zscore = {}
+          zscore['Entry Date'] = item['property']
+          for (let i = 1; i < defaultShortTermTableLabels.length; i++) {
+            const value = item[periodsShortTerm[i - 1].period];
+            // 检查值是否有效
+            if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+              zscore[defaultShortTermTableLabels[i].replace('[%]', 'Later [%]')] = value;
+            } else {
+              zscore[defaultShortTermTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
+            }
+          }
+          _backtestShortTermHistoryList.push(zscore)
+        })
+
         const _maxMinData = maxMinData.map(item => {
           const transformedItem = {
             "Dates of 1 Signals": item["Dates of 1 Signals"],
@@ -608,13 +646,17 @@ export default {
       let sheetNames = [
         'Summary',
         'Trades',
-        'Exit with default Time Frame',
-        'Exit with Customized TIM',
+        'Exit: Default TF(Long-Term)',
+        'Exit: Customized TIM',
         'Max Gain and Loss'
       ]
       if(this.strategy === 'Dual') {
         dataList = [summary,mergedData]
         sheetNames = ['Summary','Trades']
+      }
+      if(this.rowFrequency === 'Daily') {
+        sheetNames = [...sheetNames, 'Exit: Default TF(Short-Term)']
+        dataList = [...dataList, _backtestShortTermHistoryList]
       }
       if(Object.prototype.hasOwnProperty.call(this.initalData, 'Indexes Info')) {
         sheetNames = [...sheetNames, 'Major Sectors(Median % Return)', 'Major Sectors(Consistency)']
