@@ -78,33 +78,33 @@ data() {
     break
    case 'Weekly':
      this.defaultTableLabels = [
-     '1 Week Later(%)',
-     '2 Weeks Later(%)',
      '1 Month Later(%)',
      '2 Months Later(%)',
      '3 Months Later(%)',
+     '4 Months Later(%)',
+     '5 Months Later(%)',
      '6 Months Later(%)',
      '1 Year Later(%)'
     ]
     break
    case 'Monthly':
     this.defaultTableLabels = [
-     '1 Month Later(%)',
+    '1 Month Later(%)',
+     '2 Months Later(%)',
      '3 Months Later(%)',
+     '4 Months Later(%)',
+     '5 Months Later(%)',
      '6 Months Later(%)',
-     '9 Months Later(%)',
-     '1 Year Later(%)',
-     '2 Years Later(%)',
-     '3 Years Later(%)'
+     '1 Year Later(%)'
     ]
     break
    default:
        this.defaultTableLabels = [
-     '1 Week Later(%)',
-     '2 Weeks Later(%)',
-     '1 Month Later(%)',
+       '1 Month Later(%)',
      '2 Months Later(%)',
      '3 Months Later(%)',
+     '4 Months Later(%)',
+     '5 Months Later(%)',
      '6 Months Later(%)',
      '1 Year Later(%)'
     ]
