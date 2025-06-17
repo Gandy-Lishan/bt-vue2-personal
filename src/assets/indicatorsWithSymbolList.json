@@ -410,7 +410,7 @@
         "url": "survey_risk_appetite",
         "market_symbol": "SPX",
         "type": "other",
-        "updated": "Weekly"
+        "updated": "Daily"
     },
     {
         "chart_name": "Japanese Margin Traders Gain/Loss",
@@ -431,7 +431,7 @@
         "url": "survey_economic_surprise",
         "market_symbol": "SPX",
         "type": "other",
-        "updated": "Weekly"
+        "updated": "Daily"
     },
     {
         "chart_name": "University of Michigan Consumer Confidence",
