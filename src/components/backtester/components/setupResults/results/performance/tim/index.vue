@@ -660,6 +660,15 @@ export default {
 						'6 Months [%]',
 						'1 Year [%]'
 					]
+					periodArray = [
+						{ period: 1, timeframe: 'Week' },
+						{ period: 2, timeframe: 'Week' },
+						{ period: 1, timeframe: 'Month' },
+						{ period: 2, timeframe: 'Month' },
+						{ period: 3, timeframe: 'Month' },
+						{ period: 6, timeframe: 'Month' },
+						{ period: 1, timeframe: 'Year' }
+					]
 					this.defaultTIMTableLabels = [
 						'Entry Date',
 						'1 Month [%]',
