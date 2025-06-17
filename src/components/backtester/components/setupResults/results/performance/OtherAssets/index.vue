@@ -40,6 +40,8 @@ data() {
   '1 Month Later(%)': '1 Month<br/>Later(%)',
   '2 Months Later(%)': '2 Months<br/>Later(%)',
   '3 Months Later(%)': '3 Months<br/>Later(%)',
+  '4 Months Later(%)': '4 Months<br/>Later(%)',
+  '5 Months Later(%)': '5 Months<br/>Later(%)',
   '6 Months Later(%)': '6 Months<br/>Later(%)',
   '9 Months Later(%)': '9 Months<br/>Later(%)',
   '1 Year Later(%)': '1 Year<br/>Later(%)',
@@ -47,11 +49,11 @@ data() {
   '3 Years Later(%)': '3 Years<br/>Later(%)',
   },
   defaultTableLabels: [
-  '1 Week Later(%)',
-  '2 Weeks Later(%)',
   '1 Month Later(%)',
   '2 Months Later(%)',
   '3 Months Later(%)',
+  '4 Months Later(%)',
+  '5 Months Later(%)',
   '6 Months Later(%)',
   '1 Year Later(%)'
   ],
@@ -65,11 +67,11 @@ data() {
   switch (frequency) {
    case 'Daily':
     this.defaultTableLabels = [
-     '1 Week Later(%)',
-     '2 Weeks Later(%)',
      '1 Month Later(%)',
      '2 Months Later(%)',
      '3 Months Later(%)',
+     '4 Months Later(%)',
+     '5 Months Later(%)',
      '6 Months Later(%)',
      '1 Year Later(%)'
     ]

@@ -123,13 +123,13 @@ export default {
 				try{
 					this.hideComponents()
 					const periodArray = [
-						{ period: 1, timeframe: 'Week' },
-						{ period: 2, timeframe: 'Week' },
 						{ period: 1, timeframe: 'Month' },
 						{ period: 2, timeframe: 'Month' },
 						{ period: 3, timeframe: 'Month' },
+						{ period: 4, timeframe: 'Month' },
+						{ period: 5, timeframe: 'Month' },
 						{ period: 6, timeframe: 'Month' },
-						{ period: 12, timeframe: 'Month' }
+						{ period: 1, timeframe: 'Year' }
 					]
 					this.calculateBacktestHistory(this.other['EntryTradeDate'], periodArray,this.direction)
 					this.calculateZScore(this.other, periodArray, this.direction)
@@ -726,7 +726,7 @@ export default {
         if (item.period % 12 === 0 && item.timeframe === 'Month') {
           return { period: item.period / 12, timeframe: 'Year' }
         }
-        return item
+        return { period: item.period, timeframe: item.timeframe }
       })
       data = data.map(item => {
         let period = item.period;
@@ -875,7 +875,7 @@ export default {
 				if (item.period % 21 === 0 && item.timeframe === 'Day') {
 				return { period: item.period / 21, timeframe: 'Month' }
 				}
-				return item
+				return { period: item.period, timeframe: item.timeframe }
 			})
 			const uniqueData = [];
 			data.forEach(item => {
@@ -903,6 +903,9 @@ export default {
 					break
 				case 'Month':
 					value = Number(item.period) * 21
+					break
+				case 'Year':
+					value = Number(item.period) * 252
 					break
 				default:
 					break
@@ -982,6 +985,9 @@ export default {
               value = value / 12;
               unit = value==1?"Year":"Years";
             }
+          }else {
+            value = value
+            unit = value==1?unit:`${unit}s`
           }
           }else if(this.rowFrequency === 'Weekly') {
             if (unit === 'Week') {
@@ -1088,12 +1094,12 @@ export default {
 					// 创建一个新的对象，将key值修改为'key [%]'
 					return {
 						'1 Month [%]': item['1 Month'],
-						'1 Week [%]': item['1 Week'],
-						'12 Months [%]': item['1 Year'],
 						'2 Months [%]': item['2 Months'],
-						'2 Weeks [%]': item['2 Weeks'],
 						'3 Months [%]': item['3 Months'],
+						'4 Months [%]': item['4 Months'],
+						'5 Months [%]': item['5 Months'],
 						'6 Months [%]': item['6 Months'],
+						'1 Year [%]': item['1 Year'],
 						property: item.property
 					 }
 				})

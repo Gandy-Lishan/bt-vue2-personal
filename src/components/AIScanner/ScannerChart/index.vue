@@ -50,7 +50,7 @@
 												:label="l.replace('[%]', 'Later [%]')"
 												:prop="l"
 												:key="index"
-												:width="l == 'Entry Date' ? '128px' : '110px'"
+												:width="l == 'Entry Date' ? 'auto' : '90px'"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[l])">
@@ -75,14 +75,14 @@
 
 										<template v-for="column in defaultTableLabels">
 											
-										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column" width="128px">
+										<el-table-column prop="property" label="Property" v-if="column == 'Entry Date'" :key="column" width="auto">
 										</el-table-column>
 											<el-table-column
 												v-else
 												:key="column"
 												:label="column"
 												:prop="column"
-												width="110px"
+												width="90px"
 											>
 												<template slot-scope="scope">
 													<p class="tableText" :class="getCellStyle(scope.row[column])">
@@ -146,13 +146,13 @@ export default {
 			backtestResultList : [],
 			defaultTableLabels: [
 			'Entry Date',
-			'1 Week [%]',
-			'2 Weeks [%]',
 			'1 Month [%]',
 			'2 Months [%]',
 			'3 Months [%]',
+			'4 Months [%]',
+			'5 Months [%]',
 			'6 Months [%]',
-			'12 Months [%]'
+			'1 Year [%]'
 			],
 			currTabPage : 'BacktestResult',
 			translateTabelCol : [],
