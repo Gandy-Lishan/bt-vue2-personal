@@ -93112,5 +93112,19 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Commodity Trend-Following Model Signal",
+        "url": "jk_commodity_trend_signal",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Commodity Trend-Following Model",
+        "url": "jk_commodity_trend_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
