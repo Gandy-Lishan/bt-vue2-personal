@@ -231,6 +231,7 @@ export default {
 
   &__content {
     background-color: $color-bg-primary;
+    width: 100%;
   }
 }
 

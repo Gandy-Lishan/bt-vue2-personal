@@ -8,8 +8,8 @@
           <div class="symbol-price">
             <span class="price">${{ lastPrice }}</span>
             <span class="change up">
-              {{ `${change > 0 ? '+' : '-'}${change}` }}
-              {{ `${changePercentage > 0 ? '+' : '-'}${(changePercentage * 100).toFixed(2)}%` }}
+              {{ `${change}` }}
+              {{ `${(changePercentage * 100).toFixed(2)}%` }}
               <span class="interval">1 day</span>
             </span>
           </div>
@@ -42,9 +42,6 @@
               @click="chartType = 'candlestick'" title="Candlestick Chart">
               <!-- K线图图标 -->
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Candlestick-Chart--Streamline-Sharp-Material" height="24" width="24">
-                <desc>
-                  Candlestick Chart Streamline Icon: https://streamlinehq.com
-                </desc>
                 <path fill="currentColor" d="M7 20v-2.25h-2v-11.5h2V4h1.5v2.25h2v11.5h-2V20h-1.5Zm-0.5 -3.75h2.5v-8.5h-2.5v8.5ZM15.5 20V14.75h-2v-6.5h2V4h1.5v4.25h2v6.5h-2V20h-1.5Zm-0.5 -6.75h2.5v-3.5h-2.5v3.5Z" stroke-width="0.5"></path>
               </svg>
             </button>
@@ -54,8 +51,15 @@
       </div>
 
       <div class="overview__chart">
-        <StockChart :symbol="symbol" :startDate="startDate" :endDate="endDate" :zoomRange="zoomRange"
-          :showDefaultZoomSelector="false" chartHeight="400px" :chartType="chartType" />
+        <StockChart 
+          :seriesData="seriesData"
+          :isLoading="isLoading"
+          :error="error"
+          :zoomRange="zoomRange"
+          :showDefaultZoomSelector="false"
+          :chartHeight="chartHeight"
+          :enableExporting="true"
+        />
       </div>
     </div>
   </div>
@@ -63,6 +67,7 @@
 
 <script>
 import StockChart from '@/components/Market/components/charts/stockChart/StockChart.vue'
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Chart',
@@ -72,7 +77,13 @@ export default {
   data() {
     return {
       chartType: 'candlestick',
+      lineColor: '#007bff',
       zoomRange: null,
+      chartHeight: '400px',
+      startDate: '2020-01-01',
+      endDate: new Date().toISOString().slice(0, 10),
+
+      // zoom btns
       selectedZoom: 'All',
       zoomOptions: [
         { text: '1m', range: 1000 * 60 * 60 * 24 * 30 },
@@ -82,19 +93,73 @@ export default {
         { text: '1y', range: 1000 * 60 * 60 * 24 * 365 },
         { text: 'All', range: null },
       ],
-      startDate: '2020-01-01',
-      endDate: new Date().toISOString().slice(0, 10),
-      lastPrice: 150.25,
-      change: 3.29,
-      changePercentage: 0.0164,
     };
   },
   computed: {
     symbol() {
       return this.$route.params.symbolname || 'AAPL';
     },
+    ...mapGetters("market/sec/metadataChart", [
+      "pairData",
+      "isLoading",
+      "error",
+    ]),
+    seriesData() {
+      // 根據 chartType 格式化數據
+      if (!this.pairData || !this.pairData.length) return [];
+      const processed = this.pairData.map(item => {
+        // const timestamp = new Date(item.DT).getTime();
+        const timestamp = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/.test(item.DT) ? new Date(item.DT).getTime() : null;
+        return this.chartType === 'candlestick'
+          ? [timestamp, item.Open, item.High, item.Low, item.Close]
+          : [timestamp, item.Close];
+      });
+
+      return [
+        {
+          name: this.symbol,
+          type: this.chartType,
+          data: processed,
+          color: this.lineColor,
+          showInNavigator: true,
+        },
+      ];
+    },
+    lastPrice() {
+      if (!this.pairData || this.pairData.length === 0) return null;
+      return this.pairData[this.pairData.length - 1].Close;
+    },
+    change() {
+      if (!this.pairData || this.pairData.length < 2) return null;
+      const latest = this.pairData[this.pairData.length - 1].Close;
+      const previous = this.pairData[this.pairData.length - 2].Close;
+      return +(latest - previous).toFixed(2);
+    },
+    changePercentage() {
+      if (!this.pairData || this.pairData.length < 2) return null;
+      const latest = this.pairData[this.pairData.length - 1].Close;
+      const previous = this.pairData[this.pairData.length - 2].Close;
+      return +((latest - previous) / previous).toFixed(4);
+    },
+  },
+  mounted() {
+    this.reloadData();
+  },
+  watch: {
+    symbol: 'reloadData',
+    startDate: 'reloadData',
+    endDate: 'reloadData',
+    lineColor: 'reloadData',
   },
   methods: {
+    ...mapActions("market/sec/metadataChart", ["fetchChartData"]),
+    reloadData() {
+      this.fetchChartData({
+        symbol: this.symbol,
+        startDate: this.startDate,
+        endDate: this.endDate,
+      });
+    },
     setZoom(option) {
       this.selectedZoom = option.text;
 
@@ -104,7 +169,8 @@ export default {
         const yearStart = new Date(new Date(this.endDate).getFullYear(), 0, 1).getTime();
         this.zoomRange = { min: yearStart, max: now };
       } else if (option.range === null) {
-        this.zoomRange = null;
+        // 全部范围，清除 extremes
+        this.zoomRange = { min: null, max: null };
       } else {
         this.zoomRange = { min: now - option.range, max: now };
       }
