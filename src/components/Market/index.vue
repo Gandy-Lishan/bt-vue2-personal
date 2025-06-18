@@ -177,6 +177,8 @@ export default {
 
   &__body {
     flex: 1;
+    display: flex;
+    overflow: hidden;
   }
 
   &__sidebar {
@@ -229,6 +231,7 @@ export default {
 
   &__content {
     background-color: $color-bg-primary;
+    width: 100%;
   }
 }
 
