@@ -66,6 +66,7 @@ export default {
       categories: [],
       seriesData: [],
       resizeObserver: null,
+      _rawLabels: {},
     };
   },
   watch: {
@@ -106,15 +107,35 @@ export default {
         return;
       }
 
+      const valueAndLabel = (raw) => {
+        if (typeof raw === 'number') return { value: raw, label: String(raw) };
+        if (typeof raw === 'string') {
+          const match = raw.match(/^([^\d\.-]*)([\d\.,+-]+)(.*)$/);
+          if (match) {
+            const num = parseFloat(match[2].replace(/,/g, ''));
+            return { value: isNaN(num) ? null : num, label: raw };
+          }
+          return { value: null, label: raw };
+        }
+        return { value: null, label: '' };
+      };
+
       try {
         this.error = null;
         this.destroyChart();
 
         this.categories = this.chartData.map(item => item.date);
+        this._rawLabels = {};
         this.seriesData = this.seriesConfigs.map(cfg => {
+          const dataArr = this.chartData.map(item => {
+            const { value, label } = valueAndLabel(item[cfg.key]);
+            if (!this._rawLabels[cfg.key]) this._rawLabels[cfg.key] = [];
+            this._rawLabels[cfg.key].push(label);
+            return value;
+          });
           const baseConfig = {
             name: cfg.label,
-            data: this.chartData.map(item => item[cfg.key]),
+            data: dataArr,
             type: cfg.type || this.orientation,
           };
 
@@ -166,6 +187,29 @@ export default {
         },
         yAxis: {
           title: { text: this.yAxisTitleText },
+          labels: {
+            formatter: function() {
+              const chart = this.axis.chart;
+              if (!chart.options._rawLabels) return this.value;
+              const rawLabelsArr = Object.values(chart.options._rawLabels)[0];
+              if (!rawLabelsArr) return this.value;
+              let closest = this.value, minDiff = Infinity;
+              for (const raw of rawLabelsArr) {
+                const match = raw.match(/([\d\.,+-]+)/);
+                if (match) {
+                  const num = parseFloat(match[1].replace(/,/g, ''));
+                  if (!isNaN(num)) {
+                    const diff = Math.abs(num - this.value);
+                    if (diff < minDiff) {
+                      minDiff = diff;
+                      closest = raw;
+                    }
+                  }
+                }
+              }
+              return closest;
+            }
+          }
         },
         tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -199,6 +243,7 @@ export default {
           },
         },
         series: this.seriesData,
+        _rawLabels: this._rawLabels,
       });
     },
 

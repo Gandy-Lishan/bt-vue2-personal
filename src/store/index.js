@@ -9,6 +9,7 @@ import user from './modules/user'
 // import predict from "./modules/market/predict";
 import balanceSheet from "./modules/market/sec/balanceSheet";
 import companyProfile from "./modules/market/sec/companyProfile";
+import companyEarning from "./modules/market/sec/companyEarning";
 import metadataChart from "./modules/market/sec/metadataChart";
 
 Vue.use(Vuex)
@@ -29,6 +30,7 @@ const store = new Vuex.Store({
           modules: {
             balanceSheet,
             companyProfile,
+            companyEarning,
             metadataChart,
           },
         },

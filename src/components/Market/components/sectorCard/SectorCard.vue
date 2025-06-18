@@ -5,12 +5,10 @@
     <div v-if="region" class="sector-region">{{ region }}</div>
     <div class="sector-metrics">
       <div class="metric">
-        <div class="value" :class="{ positive: totalPremium > 0, negative: totalPremium < 0 }">{{ totalPremium }}%</div>
-        <div class="label">Total Premium</div>
+        <div class="value" :style="totalPremiumColor ? { color: totalPremiumColor } : {}">{{ totalPremium }}</div>
       </div>
       <div v-if="countryRisk !== undefined" class="metric">
-        <div class="value" :class="{ positive: countryRisk > 0, negative: countryRisk < 0 }">{{ countryRisk }}%</div>
-        <div class="label">Country Risk</div>
+        <div class="value" :style="countryRiskColor ? { color: countryRiskColor } : {}">{{ countryRisk }}</div>
       </div>
     </div>
   </div>
@@ -33,8 +31,18 @@ export default {
       type: [Number, String],
       required: true
     },
+    totalPremiumColor: {
+      type: String,
+      required: false,
+      default: undefined
+    },
     countryRisk: {
       type: [Number, String],
+      required: false,
+      default: undefined
+    },
+    countryRiskColor: {
+      type: String,
       required: false,
       default: undefined
     }
@@ -84,14 +92,6 @@ export default {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 4px;
-}
-
-.value.positive {
-  color: #4CAF50;
-}
-
-.value.negative {
-  color: #F44336;
 }
 
 .label {
