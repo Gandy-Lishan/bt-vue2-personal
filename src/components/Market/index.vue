@@ -176,9 +176,7 @@ export default {
   }
 
   &__body {
-    display: flex;
     flex: 1;
-    overflow: hidden;
   }
 
   &__sidebar {
