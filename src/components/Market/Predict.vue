@@ -142,6 +142,8 @@ export default {
 
 .predict-layout {
   padding: $spacing-md;
+  height: 100%;
+  overflow: auto;
 
   .heading {
     color: $color-text-secondary;
