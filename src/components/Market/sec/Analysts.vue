@@ -88,6 +88,9 @@
 
 <script>
 import BaseTable from "@/components/Market/components/tables/BaseTable";
+import { mapGetters, mapActions } from 'vuex';
+import { isObject } from '@/utils';
+
 export default {
   name: 'AnalystRecommendations',
   props: {
@@ -108,46 +111,22 @@ export default {
       pointerAngle: -45, // 指针角度（度）
       hoveredSegment: null,
       loading: false,
-      tableData: [
-        {
-          date: '2025-06-11',
-          target: 'BTC',
-          minPrice: 100,
-          maxPrice: 100,
-          reportNumber: 10,
-          accuracy: '80%',
-        },
-        {
-          date: '2025-06-11',
-          target: 'ETH',
-          minPrice: 200,
-          maxPrice: 200,
-          reportNumber: 10,
-          accuracy: '80%'
-        }
-      ],
-      columns: [
-        { prop: 'date', label: 'Date', width: '120', sortable: true },
-        { prop: 'target', label: 'Target', sortable: true },
-        { prop: 'minPrice', label: 'Min Price', sortable: true },
-        { prop: 'maxPrice', label: 'Max Price', sortable: true },
-        { 
-          prop: 'reportNumber', 
-          label: 'Report Number', 
-          sortable: true 
-        },
-        { 
-          prop: 'accuracy', 
-          label: 'Accuracy', 
-          sortable: true 
-        }
-      ],
+      tableData: [],
+      columns: [],
     }
   },
   components: {
     BaseTable
   },
   computed: {
+    ...mapGetters("market/sec/analyst", [
+      "analystData",
+      "isLoading",
+      "errorMessage",
+    ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    },
     chartData() {
       return this.data
     },
@@ -215,7 +194,32 @@ export default {
       return Math.sin(angle) * (this.chartSize / 2 - 60)
     }
   },
+  watch: {
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchAnalyst(newSymbol);
+      }
+    },
+    analystData: {
+      handler(newVal) {
+        debugger
+        if(isObject(newVal) && Object.keys(newVal).length > 0) {
+          const {
+            AnalystData, 
+            AnalystDataColumns
+          } = newVal
+          this.tableData = AnalystData
+          this.columns = AnalystDataColumns
+        }
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.fetchAnalyst(this.symbol);
+  },
   methods: {
+    ...mapActions("market/sec/analyst", ["fetchAnalyst"]),
     getArcPath(startAngle, endAngle, radius) {
       const centerX = this.chartSize / 2
       const centerY = this.chartSize / 2

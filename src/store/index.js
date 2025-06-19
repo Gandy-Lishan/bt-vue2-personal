@@ -11,6 +11,8 @@ import balanceSheet from "./modules/market/sec/balanceSheet";
 import companyProfile from "./modules/market/sec/companyProfile";
 import companyEarning from "./modules/market/sec/companyEarning";
 import sec from "./modules/market/sec/sec";
+import analyst from "./modules/market/sec/analyst";
+
 
 Vue.use(Vuex)
 // TODO 按照page细分, 并做code grouping
@@ -32,6 +34,7 @@ const store = new Vuex.Store({
             companyProfile,
             companyEarning,
             sec,
+            analyst
           },
         },
       },
