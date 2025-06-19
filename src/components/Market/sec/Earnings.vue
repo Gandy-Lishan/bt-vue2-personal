@@ -16,11 +16,12 @@
           orientation="column"
           chart-height="auto"
           :enableExporting="false"
+          :isLoading="isLoading"
         />
       </section>
 
       <!-- 右侧信息卡 -->
-      <section class="sector-group grid-row-3">
+      <section v-loading="isLoading" class="sector-group grid-row-3">
         <template v-for="item in EarningsInfo">
           <SectorCard
             :key="item.title"
@@ -33,11 +34,11 @@
       </section>
 
       <!-- 三列 -->
-      <section class="card earnings__card eps-growth-rate">
+      <section v-loading="isLoading" class="card earnings__card eps-growth-rate">
         <h3 class="card__subtitle">EPS Growth Rate</h3>
         <ESPGrowthChart />
       </section>
-      <section class="card earnings__card earnings-surprises">
+      <section v-loading="isLoading" class="card earnings__card earnings-surprises">
         <h3 class="card__subtitle">Earnings Surprises</h3>
         <BarChart
           :chart-data="EarningSurprise"
@@ -49,9 +50,10 @@
           chartHeight="auto"
           :enableExporting="false"
           :show-legend="false"
+          :isLoading="isLoading"
         />
       </section>
-      <section class="card earnings__card revenue-surprises">
+      <section v-loading="isLoading" class="card earnings__card revenue-surprises">
         <h3 class="card__subtitle">Revenue Surprises</h3>
         <BarChart
           :chart-data="RevenueSurprises"
@@ -64,16 +66,17 @@
           :enableExporting="false"
           :enablePositiveNegativeColors="true"
           :show-legend="false"
+          :isLoading="isLoading"
         />
       </section>
 
       <!-- 一整行 -->
-      <section class="card earnings__card earnings-history">
+      <section v-loading="isLoading" class="card earnings__card earnings-history">
         <h3 class="subtitle">Earnings History</h3>
         <base-table
           :data="EarningHistory"
           :columns="EarningHistoryColumns"
-          :loading="loading"
+          :loading="isLoading"
           tip-text=""
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -85,7 +88,7 @@
         <base-table
           :data="UpcomingEarning"
           :columns="UpcomingEarningColumns"
-          :loading="loading"
+          :loading="isLoading"
           tip-text=""
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -118,7 +121,6 @@ export default {
       EarningHistoryColumns: [],
       UpcomingEarning: [],
       UpcomingEarningColumns: [],
-      loading: false,
     }
   },
   components: {

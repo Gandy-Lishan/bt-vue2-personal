@@ -1,14 +1,14 @@
 <template>
   <div class="bar-chart">
-    <div v-if="loading" class="chart-loading">Loading chart data...</div>
+    <div v-if="isLoading" class="chart-loading">Loading chart data...</div>
 
     <div
-      v-show="!loading"
+      v-show="!isLoading"
       ref="chartContainer"
       :style="{ width: '100%', height: chartHeight, borderRadius: 'inherit' }"
     ></div>
 
-    <div v-if="error && !loading" class="chart-error">{{ error }}</div>
+    <div v-if="error && !isLoading" class="chart-error">{{ error }}</div>
   </div>
 </template>
 
@@ -57,7 +57,7 @@ export default {
       validator: val => ["normal", "percent", null].includes(val),
     },
     enablePositiveNegativeColors: { type: Boolean, default: false },
-    loading: { type: Boolean, default: false }, // 👈 新增由外部控制的 loading prop
+    isLoading: { type: Boolean, default: false }, // 👈 新增由外部控制的 isLoading prop
   },
   data() {
     return {
@@ -78,10 +78,10 @@ export default {
     titleText: "reRenderChartWithCurrentData",
     yAxisTitleText: "reRenderChartWithCurrentData",
     legendPosition: "reRenderChartWithCurrentData",
-    loading: "reRenderChartWithCurrentData", // 👈 loading 變化也重新渲染
+    isLoading: "reRenderChartWithCurrentData", // 👈 isLoading 變化也重新渲染
   },
   mounted() {
-    if (!this.loading && this.chartData?.length > 0) {
+    if (!this.isLoading && this.chartData?.length > 0) {
       this.processDataAndInitializeChart();
     }
 
@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     processDataAndInitializeChart() {
-      if (this.loading) return;
+      if (this.isLoading) return;
 
       if (!this.chartData || this.chartData.length === 0) {
         this.error = "No data available to process for the chart.";
@@ -161,7 +161,7 @@ export default {
     },
 
     reRenderChartWithCurrentData() {
-      if (!this.loading && !this.error && this.categories.length > 0 && this.seriesData.length > 0) {
+      if (!this.isLoading && !this.error && this.categories.length > 0 && this.seriesData.length > 0) {
         this.destroyChart();
         this.initializeChart();
       }
