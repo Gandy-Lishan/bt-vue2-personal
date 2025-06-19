@@ -75,6 +75,7 @@
      :stripe="stripe"
      v-loading="loading"
      size="small"
+     @row-click="handleRowClick"
    >
      <!-- 表格列 -->
      <template v-for="column in columns">
@@ -249,6 +250,16 @@ export default {
      type: Array,
      default: () => []
    },
+   // 新增：是否可点击行
+   rowClickable: {
+     type: Boolean,
+     default: false
+   },
+   // 新增：行点击跳转的链接字段名
+   rowClickUrlField: {
+     type: String,
+     default: 'url'
+   },
  },
  data() {
    return {
@@ -342,6 +353,24 @@ export default {
    // 新增方法
    handleRemoveTag(tag) {
      this.$emit('remove-tag', tag)
+   },
+   // 新增：处理行点击
+   handleRowClick(row, column, event) {
+    debugger
+     if (!this.rowClickable) return
+     
+     // 如果点击的是操作列，不跳转
+     if (column.label === '操作') return
+     
+     // 获取当前行的链接
+     const url = row[this.rowClickUrlField]
+     if (url) {
+       // 跳转到新页面
+       window.open(url, '_blank')
+     }
+     
+     // 触发事件
+    //  this.$emit('row-click', { row, column, event })
    }
  }
 }

@@ -197,8 +197,8 @@ export function getCompanyProfile(url) {
 
 export function getCompanyEarning(url) {
   let path = `/dev/company_detail_app/get_earning?symbol=${url}`
-return new Promise((resolve, reject) => {
-  axios
+  return new Promise((resolve, reject) => {
+   axios
     .get(path, { withCredentials: true, retry: null })
     .then(res => {
       resolve(res)
@@ -206,5 +206,19 @@ return new Promise((resolve, reject) => {
     .catch(err => {
       reject(err)
     })
-})
+  })
+}
+
+export function getCompanySEC(url) {
+  let path = `/dev/company_detail_app/get_sec?symbol=${url}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(path, { withCredentials: true, retry: null })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }

@@ -10,7 +10,7 @@ import user from './modules/user'
 import balanceSheet from "./modules/market/sec/balanceSheet";
 import companyProfile from "./modules/market/sec/companyProfile";
 import companyEarning from "./modules/market/sec/companyEarning";
-import metadataChart from "./modules/market/sec/metadataChart";
+import sec from "./modules/market/sec/sec";
 
 Vue.use(Vuex)
 // TODO 按照page细分, 并做code grouping
@@ -31,7 +31,7 @@ const store = new Vuex.Store({
             balanceSheet,
             companyProfile,
             companyEarning,
-            metadataChart,
+            sec,
           },
         },
       },

@@ -6,9 +6,11 @@
       <section class="card financials__card">
         <base-table
           showSearch="true"
-          :data="tableData"
-          :columns="columns"
+          :data="SECData"
+          :columns="SECDataColumns"
           :loading="loading"
+          :rowClickable="true" 
+          :rowClickUrlField="'rowLink'" 
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         >
@@ -26,36 +28,57 @@
 
 <script>
 import BaseTable from "@/components/Market/components/tables/BaseTable.vue";
+import { mapActions, mapGetters } from "vuex";
+import { isObject } from "lodash";
+
 export default {
   name: 'SEC',
   data() {
     return {
-      tableData: [
-       {
-         date: '2025-06-16',
-         from: 'From',
-         description: 'Samsung launches thin S25 Edge as Aoole reportedly prepares the Ipone \'AIR\''
-       },
-       {
-        date: '2025-06-16',
-         from: 'From',
-         description: 'Samsung launches thin S25 Edge as Aoole reportedly prepares the Ipone \'AIR\''
-       },
-     ],
-     columns: [
-       { prop: 'date', label: 'Date', sortable: true },
-       { prop: 'from', label: 'From', sortable: true },
-       { prop: 'description', label: 'Description', sortable: true },
-     ],
-     loading: false
+      SECData: [],
+      SECDataColumns: [],
+      loading: false
     }
   },
   components: {
     BaseTable,
   },
   computed: {
+    ...mapGetters("market/sec/sec", [
+      "companySECData",
+      "isLoading",
+      "errorMessage",
+    ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    }
+  },
+  watch: {
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchCompanySEC(newSymbol);
+      }
+    },
+    companySECData: {
+      handler(newVal) {
+        if(isObject(newVal) && Object.keys(newVal).length > 0) {
+          debugger
+          const {
+            SECData, 
+            SECDataColumns
+          } = newVal
+          this.SECData = SECData
+          this.SECDataColumns = SECDataColumns
+        }
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.fetchCompanySEC(this.symbol);
   },
   methods: {
+    ...mapActions("market/sec/sec", ["fetchCompanySEC"]),
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },
