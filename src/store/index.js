@@ -10,6 +10,7 @@ import user from './modules/user'
 import balanceSheet from "./modules/market/sec/balanceSheet";
 import companyProfile from "./modules/market/sec/companyProfile";
 import companyEarning from "./modules/market/sec/companyEarning";
+import metadataChart from "./modules/market/sec/metadataChart";
 import sec from "./modules/market/sec/sec";
 import analyst from "./modules/market/sec/analyst";
 import news from "./modules/market/sec/news";
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
             balanceSheet,
             companyProfile,
             companyEarning,
+            metadataChart,
             sec,
             analyst,
             news

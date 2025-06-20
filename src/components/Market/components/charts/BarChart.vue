@@ -293,7 +293,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: 400px;
   color: #888;
   font-style: italic;
   border: 1px dashed #ccc;

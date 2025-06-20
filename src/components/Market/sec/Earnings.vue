@@ -21,16 +21,28 @@
       </section>
 
       <!-- 右侧信息卡 -->
-      <section v-loading="isLoading" class="sector-group grid-row-3">
-        <template v-for="item in EarningsInfo">
-          <SectorCard
-            :key="item.title"
+      <section class="sector-group grid-row-3">
+        <SectorCard
             class="sector-ave-eps"
-            :title="item.title"
-            :total-premium="item.totalPremium"
-            :total-premium-color="item.totalPremiumColor"
+            :title="EarningsInfo[0]?.title"
+            :total-premium="EarningsInfo[0]?.totalPremium"
+            :total-premium-color="EarningsInfo[0]?.totalPremiumColor"
+            :isLoading="isLoading"
           />
-        </template>
+          <SectorCard
+            class="sector-ave-eps"
+            :title="EarningsInfo[1]?.title"
+            :total-premium="EarningsInfo[1]?.totalPremium"
+            :total-premium-color="EarningsInfo[1]?.totalPremiumColor"
+            :isLoading="isLoading"
+          />
+          <SectorCard
+            class="sector-ave-eps"
+            :title="EarningsInfo[2]?.title"
+            :total-premium="EarningsInfo[2]?.totalPremium"
+            :total-premium-color="EarningsInfo[2]?.totalPremiumColor"
+            :isLoading="isLoading"
+          />
       </section>
 
       <!-- 三列 -->
