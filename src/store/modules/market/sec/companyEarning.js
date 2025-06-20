@@ -66,6 +66,7 @@ const formatEPSData = (data) => {
   data.forEach((item, index) => {
     const date = item.fiscal_date_ending.split("T")[0].split("-")[0].slice(-2);
     const dateStr = `Q${index + 1}'${date}`
+    const yearStr = `Q${index + 1}'${item.fiscal_date_ending.slice(0, 4)}`
 
     EPSTrendEstimates.push({
       date: dateStr,
@@ -87,7 +88,7 @@ const formatEPSData = (data) => {
     })
     EarningHistory.push({
       period: formatUTCDate(item.fiscal_date_ending),
-      date: dateStr,
+      date: yearStr,
       estimated_eps: formatNumber(item.eps_estimated, 'dollar'),
       actual_eps: formatNumber(item.eps, 'dollar'),
       surprise: formatNumber(item.eps_surprise, 'avg'),

@@ -14,6 +14,7 @@ import metadataChart from "./modules/market/sec/metadataChart";
 import sec from "./modules/market/sec/sec";
 import analyst from "./modules/market/sec/analyst";
 import news from "./modules/market/sec/news";
+import ownership from "./modules/market/sec/ownership";
 
 
 Vue.use(Vuex)
@@ -38,7 +39,8 @@ const store = new Vuex.Store({
             metadataChart,
             sec,
             analyst,
-            news
+            news,
+            ownership
           },
         },
       },

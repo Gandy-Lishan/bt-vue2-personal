@@ -63,10 +63,13 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import BaseTableSimple from "@/components/Market/components/tables/BaseTableSimple";
 import BarChart from '@/components/Market/components/charts/BarChart.vue';
 import PieChart from '@/components/Market/components/charts/PieChart.vue';
 import BaseTable from '@/components/Market/components/tables/BaseTable.vue';
+import { isObject } from '@/utils';
+
 
 export default {
   name: 'Ownership',
@@ -243,7 +246,7 @@ export default {
         { name: 'Insider Transactions', route: 'insider-transactions' },
         { name: 'Total Institutional Holdings', route: 'institutional-holdings' },
         { name: 'Total Mutual Fund Holdings', route: 'mutual-fund-holdings' },
-        { name: 'Political Trading Activity', route: 'political-trading-activity' },
+        // { name: 'Political Trading Activity', route: 'political-trading-activity' },
       ],
       activeTab: 'insider-transactions',
       loading: false,
@@ -381,6 +384,14 @@ export default {
     BaseTable,
   },
   computed: {
+    ...mapGetters("market/sec/ownership", [
+      "ownershipData",
+      "isLoading",
+      "errorMessage",
+    ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    },
     columns() {
       // 根据activeTab动态生成columns
       if (this.activeTab === 'insider-transactions') {
@@ -395,14 +406,32 @@ export default {
     }
   },
   watch: {
-    trendsOption: {
-      immediate: true,
-      handler(newVal) {
-        this.updateTrendsChartByOption(newVal);
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchOwnership(newSymbol);
       }
+    },
+    ownershipData: {
+      handler(newVal) {
+        if(isObject(newVal) && Object.keys(newVal).length > 0) {
+          const {
+            ownershipData,
+            ownershipDataColumns
+          } = newVal
+          this.ownershipData = ownershipData
+          this.ownershipDataColumns = ownershipDataColumns
+        }
+      },
+      deep: true
     }
   },
+  created() {
+    this.fetchOwnership(this.symbol);
+  },
   methods: {
+    ...mapActions("market/sec/ownership", [
+      "fetchOwnership",
+    ]),
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },
