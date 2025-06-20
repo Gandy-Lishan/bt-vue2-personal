@@ -222,3 +222,16 @@ export function getCompanySEC(url) {
       })
   })
 }
+export function getCompanyNews(url) {
+  let path = `/dev/company_detail_app/get_news?symbol=${url}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(path, { withCredentials: true, retry: null })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}

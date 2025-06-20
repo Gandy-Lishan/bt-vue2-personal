@@ -19,6 +19,8 @@
           :data="tableData"
           :columns="columns"
           :loading="loading"
+          :rowClickable="true" 
+          :rowClickUrlField="'rowLink'" 
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         >
@@ -37,36 +39,16 @@
 <script>
 import BaseTable from "@/components/Market/components/tables/BaseTable.vue";
 import ButtonGroup from '@/components/Market/components/baseButton/ButtonGroup.vue';
+import { mapGetters, mapActions } from 'vuex';
+import { isObject } from '@/utils';
+
 export default {
   name: 'News',
   data() {
     return {
       timeframe: 'all',
-      tableData: [
-       {
-         time: '05/12/2025 8:30 PM',
-         symbol: 'AAPL',
-         source: 'https://example.com',
-         title: 'Samsung launches thin S25 Edge as Aoole reportedly prepares the Ipone \'AIR\''
-       },
-       {
-         time: '05/12/2025 8:30 PM',
-         symbol: 'AAPL',
-         source: 'https://example.com',
-         title: 'Samsung launches thin S25 Edge as Aoole reportedly prepares the Ipone \'AIR\''
-       },
-     ],
-     columns: [
-       { prop: 'time', label: 'Time', sortable: true },
-       { prop: 'symbol', label: 'Symbol', sortable: true },
-       { 
-         prop: 'source', 
-         label: 'source', 
-         type: 'link',
-         formatter: (row) => 'cnbc.com'
-       },
-       { prop: 'title', label: 'Title', sortable: true },
-     ],
+      tableData: [],
+     columns: [],
      loading: false
     }
   },
@@ -74,9 +56,41 @@ export default {
     BaseTable,
     ButtonGroup,
   },
-  computed: {
+  computed: {    
+    ...mapGetters("market/sec/news", [
+      "companyNewsData",
+      "isLoading",
+      "errorMessage",
+    ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    }
+  },
+  watch: {
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchCompanyNews(newSymbol);
+      }
+    },  
+    companyNewsData: {
+      handler(newVal) {
+        if(isObject(newVal) && Object.keys(newVal).length > 0) {
+          const {
+            companyNewsData,
+            companyNewsDataColumns
+          } = newVal
+          this.tableData = companyNewsData
+          this.columns = companyNewsDataColumns
+        }
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.fetchCompanyNews(this.symbol);
   },
   methods: {
+    ...mapActions("market/sec/news", ["fetchCompanyNews"]),
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },

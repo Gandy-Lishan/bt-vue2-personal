@@ -12,6 +12,7 @@ import companyProfile from "./modules/market/sec/companyProfile";
 import companyEarning from "./modules/market/sec/companyEarning";
 import sec from "./modules/market/sec/sec";
 import analyst from "./modules/market/sec/analyst";
+import news from "./modules/market/sec/news";
 
 
 Vue.use(Vuex)
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
             companyProfile,
             companyEarning,
             sec,
-            analyst
+            analyst,
+            news
           },
         },
       },

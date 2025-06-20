@@ -105,7 +105,7 @@
                   :src="scope.row[column.prop]"
                   :preview-src-list="[scope.row[column.prop]]"
                   fit="contain"
-                  :style="{ width: column.imageWidth || '50px' }"
+                  :style="{ width: column.imageWidth || '50px', height: column.imageHeight || 'auto' }"
                 />
               </template>
  
