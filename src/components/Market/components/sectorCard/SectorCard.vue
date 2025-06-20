@@ -1,14 +1,17 @@
 <!-- SectorCard.vue -->
 <template>
   <div class="card sector-card">
-    <h3 class="sector-title">{{ title }}</h3>
-    <div v-if="region" class="sector-region">{{ region }}</div>
-    <div class="sector-metrics">
-      <div class="metric">
-        <div class="value" :style="totalPremiumColor ? { color: totalPremiumColor } : {}">{{ totalPremium }}</div>
-      </div>
-      <div v-if="countryRisk !== undefined" class="metric">
-        <div class="value" :style="countryRiskColor ? { color: countryRiskColor } : {}">{{ countryRisk }}</div>
+    <div v-if="isLoading" class="card-loading">Loading data...</div>
+    <div v-else>
+      <h3 class="sector-title">{{ title }}</h3>
+      <div v-if="region" class="sector-region">{{ region }}</div>
+      <div class="sector-metrics">
+        <div class="metric">
+          <div class="value" :style="totalPremiumColor ? { color: totalPremiumColor } : {}">{{ totalPremium }}</div>
+        </div>
+        <div v-if="countryRisk !== undefined" class="metric">
+          <div class="value" :style="countryRiskColor ? { color: countryRiskColor } : {}">{{ countryRisk }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -20,7 +23,6 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
     },
     region: {
       type: String,
@@ -29,23 +31,20 @@ export default {
     },
     totalPremium: {
       type: [Number, String],
-      required: true
     },
     totalPremiumColor: {
       type: String,
-      required: false,
       default: undefined
     },
     countryRisk: {
       type: [Number, String],
-      required: false,
       default: undefined
     },
     countryRiskColor: {
       type: String,
-      required: false,
       default: undefined
-    }
+    },
+    isLoading: { type: Boolean, default: false },
   }
 }
 </script>
@@ -97,5 +96,23 @@ export default {
 .label {
   font-size: 12px;
   color: #666;
+}
+
+.card-loading, .card-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #888;
+  font-style: italic;
+  border: 1px dashed #ccc;
+  box-sizing: border-box;
+}
+.card-error {
+  color: #D32F2F;
+  background-color: #FFEBEE;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #FFCDD2;
 }
 </style> 
