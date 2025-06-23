@@ -25,42 +25,34 @@
     <div class="spacing-lg"></div>
     <div class="grid-col-4">
       <SectorCard
-        :title="balanceSheetData[0].title"
-        :region="balanceSheetData[0].data.region"
-        :total-premium="balanceSheetData[0].data.totalPremium"
-        :country-risk="balanceSheetData[0].data.countryRisk"
+        :title="balanceSheetData['totalAssets'].title"
+        :total-premium="balanceSheetData['totalAssets'].data.totalPremium"
       />
 
       <SectorCard
-        :title="balanceSheetData[1].title"
-        :region="balanceSheetData[1].data.region"
-        :total-premium="balanceSheetData[1].data.totalPremium"
-        :country-risk="balanceSheetData[1].data.countryRisk"
+        :title="balanceSheetData['fixedAssets'].title"
+        :total-premium="balanceSheetData['fixedAssets'].data.totalPremium"
       />
 
       <SectorCard
-        :title="balanceSheetData[2].title"
-        :region="balanceSheetData[2].data.region"
-        :total-premium="balanceSheetData[2].data.totalPremium"
-        :country-risk="balanceSheetData[2].data.countryRisk"
+        :title="balanceSheetData['totalLiabilities'].title"
+        :total-premium="balanceSheetData['totalLiabilities'].data.totalPremium"
       />
 
       <SectorCard
-        :title="balanceSheetData[3].title"
-        :region="balanceSheetData[3].data.region"
-        :total-premium="balanceSheetData[3].data.totalPremium"
-        :country-risk="balanceSheetData[3].data.countryRisk"
+        :title="balanceSheetData['totalEquity'].title"
+        :total-premium="balanceSheetData['totalEquity'].data.totalPremium"
       />
     </div>
     <div v-if="category == 'assets'">
       <div class="grid-col-1">
         <!-- total-assets-trend & asset-composition -->
         <section class="card total-assets-trend">
-          <h3 class="card__subtitle">{{ balanceSheetData[4].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetData['totalAssetsTrend'].title }}</h3>
           <BarChart
             ref="totalAssetsTrend"
-            :chartData="balanceSheetData[4].data.chartData"
-            :seriesConfigs="balanceSheetData[4].data.seriesConfigs"
+            :chartData="balanceSheetData['totalAssetsTrend'].data.chartData"
+            :seriesConfigs="balanceSheetData['totalAssetsTrend'].data.seriesConfigs"
             titleText=""
             yAxisTitleText=""
             orientation="column"
@@ -75,16 +67,16 @@
       <div class="grid-col-2">
         <!-- assets-current -->
         <section class="card assets-current">
-          <div class="card__subtitle">{{ balanceSheetData[5].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetData['currentAssets'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[5].data"
+            :data="balanceSheetData['currentAssets'].data"
             :highlight-last-row="true"
           />
         </section>
         <section class="card assets-noncurrent">
-          <div class="card__subtitle">{{ balanceSheetData[6].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetData['nonCurrentAssets'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[6].data"
+            :data="balanceSheetData['nonCurrentAssets'].data"
             :highlight-last-row="true"
           />
         </section>
@@ -94,11 +86,11 @@
       <div class="grid-col-2">
         <!-- Liabilities Breakdown -->
         <section class="card lb">
-          <h3 class="card__subtitle">{{ balanceSheetData[7].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetData['liabilitiesBreakdown'].title }}</h3>
           <BarChart
             ref="lb"
-            :chartData="balanceSheetData[7].data.chartData"
-            :seriesConfigs="balanceSheetData[7].data.seriesConfigs"
+            :chartData="balanceSheetData['liabilitiesBreakdown'].data.chartData"
+            :seriesConfigs="balanceSheetData['liabilitiesBreakdown'].data.seriesConfigs"
             titleText=""
             yAxisTitleText=""
             orientation="column"
@@ -109,11 +101,11 @@
           />
         </section>
         <section class="card shareholder">
-          <h3 class="card__subtitle">{{ balanceSheetData[8].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetData['shareholdersEquityTrend'].title }}</h3>
           <BarChart
             ref="shareholder"
-            :chartData="balanceSheetData[8].data.chartData"
-            :seriesConfigs="balanceSheetData[8].data.seriesConfigs"
+            :chartData="balanceSheetData['shareholdersEquityTrend'].data.chartData"
+            :seriesConfigs="balanceSheetData['shareholdersEquityTrend'].data.seriesConfigs"
             titleText=""
             yAxisTitleText=""
             orientation="column"
@@ -126,23 +118,23 @@
       </div>
       <div class="grid-col-3">
         <section class="card liabilities-current">
-          <div class="card__subtitle">{{ balanceSheetData[9].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetData['currentLiabilities'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[9].data"
+            :data="balanceSheetData['currentLiabilities'].data"
             :highlight-last-row="true"
           />
         </section>
         <section class="card liabilities-noncurrent">
-          <div class="card__subtitle">{{ balanceSheetData[10].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetData['nonCurrentLiabilities'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[10].data"
+            :data="balanceSheetData['nonCurrentLiabilities'].data"
             :highlight-last-row="true"
           />
         </section>
         <section class="card shareholder-equity">
-          <div class="card__subtitle">{{ balanceSheetData[11].title }}</div>
+          <div class="card__subtitle">{{ balanceSheetData['stockholdersEquity'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[11].data"
+            :data="balanceSheetData['stockholdersEquity'].data"
             :highlight-last-row="true"
           />
         </section>
@@ -152,11 +144,11 @@
       <div class="grid-col-1">
         <!-- Liabilities Breakdown -->
         <section class="card key-performance-metrics">
-          <h3 class="card__subtitle">{{ balanceSheetData[12].title }}</h3>
+          <h3 class="card__subtitle">{{ balanceSheetData['keyPerformanceMetrics'].title }}</h3>
           <BarChart
             ref="keyPerformanceMetrics"
-            :chartData="balanceSheetData[12].data.chartData"
-            :seriesConfigs="balanceSheetData[12].data.seriesConfigs"
+            :chartData="balanceSheetData['keyPerformanceMetrics'].data.chartData"
+            :seriesConfigs="balanceSheetData['keyPerformanceMetrics'].data.seriesConfigs"
             titleText=""
             yAxisTitleText=""
             orientation="column"
@@ -167,25 +159,32 @@
           />
         </section>
       </div>
-      <div class="grid-col-3">
-        <section class="card liabilities-current">
-          <div class="card__subtitle">{{ balanceSheetData[9].title }}</div>
+      <div class="grid-col-4">
+        <section class="card">
+          <div class="card__subtitle">{{ balanceSheetData['liquidityMetrics'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[9].data"
+            :data="balanceSheetData['liquidityMetrics'].data"
             :highlight-last-row="true"
           />
         </section>
-        <section class="card liabilities-noncurrent">
-          <div class="card__subtitle">{{ balanceSheetData[10].title }}</div>
+        <section class="card">
+          <div class="card__subtitle">{{ balanceSheetData['assetManagement'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[10].data"
+            :data="balanceSheetData['assetManagement'].data"
             :highlight-last-row="true"
           />
         </section>
-        <section class="card shareholder-equity">
-          <div class="card__subtitle">{{ balanceSheetData[11].title }}</div>
+        <section class="card">
+          <div class="card__subtitle">{{ balanceSheetData['capitalStructure'].title }}</div>
           <base-table-simple
-            :data="balanceSheetData[11].data"
+            :data="balanceSheetData['capitalStructure'].data"
+            :highlight-last-row="true"
+          />
+        </section>
+        <section class="card">
+          <div class="card__subtitle">{{ balanceSheetData['growthAnalysis'].title }}</div>
+          <base-table-simple
+            :data="balanceSheetData['growthAnalysis'].data"
             :highlight-last-row="true"
           />
         </section>
@@ -224,12 +223,29 @@ export default {
       "isLoading",
       "errorMessage",
     ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    }
+  },
+  watch: {
+    timeframe: 'fetchData',
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchData();
+      }
+    }
   },
   created() {
-    this.fetchBalanceSheet();
+    this.fetchData();
   },
   methods: {
     ...mapActions("market/sec/balanceSheet", ["fetchBalanceSheet"]),
+    fetchData() {
+      this.fetchBalanceSheet({
+        symbol: this.symbol,
+        period: this.timeframe
+      });
+    },
   },
 }
 </script>

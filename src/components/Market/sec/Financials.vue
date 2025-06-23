@@ -203,9 +203,9 @@ export default {
         { date: '2024 (TTM)', revenue: 100, netIncome:70, ebitda: 150 }
       ],
       IncomeMeticsSeriesConfigs: [
-        { key: 'revenue', label: 'Revenue', color: 'blue' },
-        { key: 'netIncome', label: 'Net Income', color: 'green' },
-        { key: 'ebitda', label: 'EBITDA', color: 'purple' },
+        { key: 'revenue', label: 'Revenue', color: '#3B82F6' },
+        { key: 'netIncome', label: 'Net Income', color: '#16A34A' },
+        { key: 'ebitda', label: 'EBITDA', color: '#818CF8' },
       ],
 
         // Income Metrics mockdata
@@ -217,7 +217,7 @@ export default {
         { date: '2024 (TTM)', cash: 100, totalDebt:70 }
       ],
       cashDebtSeriesConfigs: [
-        { key: 'cash', label: 'Cash', color: 'green' },
+        { key: 'cash', label: 'Cash', color: '#16A34A' },
         { key: 'totalDebt', label: 'Total Debt', color: 'red' },
       ],
     }
