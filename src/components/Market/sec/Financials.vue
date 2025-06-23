@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import BaseTableSimple from "@/components/Market/components/tables/BaseTableSimple";
 import BarChart from '@/components/Market/components/charts/BarChart.vue';
 import ButtonGroup from '@/components/Market/components/baseButton/ButtonGroup.vue';
@@ -228,8 +229,22 @@ export default {
     ButtonGroup,
   },
   computed: {
+    ...mapGetters("market/sec/financials", [
+      "financialsData",
+      "isLoading",
+      "errorMessage",
+    ]),
+    symbol() {
+      return this.$route.params.symbolname;
+    }
   },
   watch: {
+    timeframe: 'fetchData',
+    symbol(newSymbol, oldSymbol) {
+      if (newSymbol !== oldSymbol) {
+        this.fetchData();
+      }
+    },
     trendsOption: {
       immediate: true,
       handler(newVal) {
@@ -237,7 +252,18 @@ export default {
       }
     }
   },
+  created() {
+    this.fetchData();
+  },
   methods: {
+    ...mapActions("market/sec/financials", ["fetchFinancials"]),
+    fetchData() {
+      this.fetchFinancials({
+        symbol: this.symbol,
+        period: this.timeframe
+      });
+    },
+    
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },
