@@ -77,9 +77,9 @@ function preprocessData(raw) {
           'nonCurrent': formatNumber(i.total_non_current_assets)
         })) || {},
         seriesConfigs: [
-          { key: 'total', label: 'Total Assets', color: 'green' },
-          { key: 'current', label: 'Current Assets', color: 'blue' },
-          { key: 'nonCurrent', label: 'Non-Current Assets', color: 'red' },
+          { key: 'total', label: 'Total Assets', color: '#16A34A' },
+          { key: 'current', label: 'Current Assets', color: '#3B82F6' },
+          { key: 'nonCurrent', label: 'Non-Current Assets', color: '#DC2626' },
         ],
       },
     },
@@ -115,9 +115,9 @@ function preprocessData(raw) {
           'nonCurrent': formatNumber(i.total_non_current_assets)
         })) || {},
         seriesConfigs: [
-          { key: 'total', label: 'Total Liabilities', color: 'green' },
-          { key: 'current', label: 'Current Liabilities', color: 'blue' },
-          { key: 'nonCurrent', label: 'Non-Current Liabilities', color: 'red' },
+          { key: 'total', label: 'Total Liabilities', color: '#16A34A' },
+          { key: 'current', label: 'Current Liabilities', color: '#3B82F6' },
+          { key: 'nonCurrent', label: 'Non-Current Liabilities', color: '#DC2626' },
         ],
       },
     },
@@ -131,9 +131,9 @@ function preprocessData(raw) {
           'common': formatNumber(i.total_non_current_assets)
         })) || {},
         seriesConfigs: [
-          { key: 'total', label: 'Total Equity', color: 'green' },
-          { key: 'retained', label: 'Retained Earnings', color: 'blue' },
-          { key: 'common', label: 'Common Stock', color: 'red' },
+          { key: 'total', label: 'Total Equity', color: '#16A34A' },
+          { key: 'retained', label: 'Retained Earnings', color: '#3B82F6' },
+          { key: 'common', label: 'Common Stock', color: '#DC2626' },
         ],
       },
     },
@@ -171,47 +171,47 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatUTCDate(i.date), 
-          'currtRadio': formatNumber(0), 
-          'debt': formatNumber(0), 
-          'turnover': formatNumber(0)
+          'currtRadio': formatNumber(i.current_ratio), 
+          'debt': formatNumber(i.d2e_ratio), 
+          'turnover': formatNumber(i.asset_turnover)
         })) || {},
         seriesConfigs: [
-          { key: 'currtRadio', label: 'Current Ratio', color: 'green' },
-          { key: 'debt', label: 'Debt to Equity', color: 'blue' },
-          { key: 'turnover', label: 'Asset Turnover', color: 'red' },
+          { key: 'currtRadio', label: 'Current Ratio', color: '#16A34A' },
+          { key: 'debt', label: 'Debt to Equity', color: '#3B82F6' },
+          { key: 'turnover', label: 'Asset Turnover', color: '#DC2626' },
         ],
       },
     },
     liquidityMetrics: {
       title: 'Liquidity Metrics',
       data: [
-        { label: 'Current Ratio', value: formatNumber(0) },
-        { label: 'Quick Ratio', value: formatNumber(0) },
-        { label: 'Cash Ratio', value: formatNumber(0) },
+        { label: 'Current Ratio', value: formatNumber(lastedRow.current_ratio) },
+        { label: 'Quick Ratio', value: formatNumber(lastedRow.quick_ratio) },
+        { label: 'Cash Ratio', value: formatNumber(lastedRow.cash_ratio) },
       ]
     },
     assetManagement: {
       title: 'Asset Management',
       data: [
-        { label: 'Asset Turnover', value: formatNumber(0) },
-        { label: 'Fixed Asset Turnover', value: formatNumber(0) },
-        { label: 'Inventory Turnover', value: formatNumber(0) },
+        { label: 'Asset Turnover', value: formatNumber(lastedRow.asset_turnover) },
+        { label: 'Fixed Asset Turnover', value: formatNumber(lastedRow.fixed_asset_turnover) },
+        { label: 'Inventory Turnover', value: formatNumber(lastedRow.inventory_turnover) },
       ]
     },
     capitalStructure: {
       title: 'Capital Structure',
       data: [
-        { label: 'Debt to Equity', value: formatNumber(0) },
-        { label: 'Debt to Capital', value: formatNumber(0) },
-        { label: 'Equity Ratio', value: formatNumber(0) },
+        { label: 'Debt to Equity', value: formatNumber(lastedRow.d2e_ratio,'percent') },
+        { label: 'Debt to Capital', value: formatNumber(lastedRow.d2c_ratio,'percent') },
+        { label: 'Equity Ratio', value: formatNumber(lastedRow.equity_ratio,'percent') },
       ]
     },
     growthAnalysis: {
       title: 'Growth Analysis',
       data: [
-        { label: 'Asset Growth', value: formatNumber(0) },
-        { label: 'Liabilities Growth', value: formatNumber(0) },
-        { label: 'Equity Growth', value: formatNumber(0) },
+        { label: 'Asset Growth', value: formatNumber(lastedRow.asset_growth,'percent') },
+        { label: 'Liabilities Growth', value: formatNumber(lastedRow.liabilities_growth,'percent') },
+        { label: 'Equity Growth', value: formatNumber(lastedRow.equity_growth,'percent') },
       ]
     },
   };

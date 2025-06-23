@@ -195,6 +195,20 @@ export function getBalanceSheet(symbol = 'AAPL', period = 'annual') {
 	})
 }
 
+export function getCashFlow(symbol = 'AAPL', period = 'annual') {
+  let path = `/dev/company_detail_app/get_cash?symbol=${symbol}&period=${period}`
+  return new Promise((resolve, reject) => {
+		axios
+			.get(path, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(JSON.parse(res.data.data.cash_data.data))
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
 export function getCompanyProfile(symbol) {
     let path = `/dev/company_detail_app/get_profile?symbol=${symbol}`
 	return new Promise((resolve, reject) => {
