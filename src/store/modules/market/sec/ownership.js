@@ -13,17 +13,8 @@ const formatUTCDate = (isoStr) => {
   }).format(date);
 }
 
-const formatNumber = (value, type) => {
+const formatNumber = (value, type, sign) => {
   if (value === null || isNaN(value)) return '-';
-  if(type === 'percent') {
-    return `${(Number(value) * 100).toFixed(2)}%`;
-  }
-  else if(type === 'avg') {
-    return `${Number(value) > 0 ? '+' : ''}${Number(value).toFixed(2)}%`
-  }
-  else if(type === 'dollar') {
-    return `$${Number(value).toFixed(2)}`
-  }
   // 自动判断单位
   const absValue = Math.abs(value);
   let formatted;
@@ -33,8 +24,21 @@ const formatNumber = (value, type) => {
     formatted = `${(value / 1e9).toFixed(2)}B`;
   } else if (absValue >= 1e6) {
     formatted = `${(value / 1e6).toFixed(2)}M`;
+  } else if (absValue >= 1e3) {
+    formatted = `${(value / 1e3).toFixed(2)}K`;
   } else {
     formatted = `${Number(value).toFixed(2)}`;
+  }
+  if(type === 'percent') {
+    return `${(Number(formatted) * 100).toFixed(2)}%`;
+  }
+  else if(type === 'avg') {
+    return `${Number(formatted) > 0 ? '+' : ''}${formatted}%`
+  }
+  else if(type === 'dollar') {
+    return `$${formatted}`
+  }else if(type === 'customSign') {
+    return `${formatted}${sign}`
   }
   return formatted;
 }
@@ -49,41 +53,57 @@ const formatOwnershipInfo = (detail) => [
   ]
 const formatOwnershipData = (data) => {
   const InsiderShipData = []
+  const InsiderShipChartData = []
+  const institutionalHoldingsData = []
+  const mutualFundHoldingsData = []
+  const insider_data = isJson(data.insider_data.data) ? JSON.parse(data.insider_data.data) : []
+  const institutional_holders = isJson(data.holder_data.institutional_holders) ? JSON.parse(data.holder_data.institutional_holders) : []
+  const fund_holders = isJson(data.holder_data.fund_holders) ? JSON.parse(data.holder_data.fund_holders) : []
 
-  data.forEach((item, index) => {
-    const date = item.transaction_date;
-    const dateStr = `Q${index + 1}'${date}`
-    const yearStr = `Q${index + 1}'${item.fiscal_date_ending.slice(0, 4)}`
-
-    EPSTrendEstimates.push({
-      date: dateStr,
-      estimate: item.eps_estimated,
-      actual: item.eps
+  insider_data.forEach((item, index) => {
+    const date = formatUTCDate(item.transaction_date);
+    InsiderShipData.push({
+      date: date,
+      insider: item.reporting_name,
+      type: item.type,
+      shares: item.securities_transacted,
+      price: formatNumber(item.price, 'dollar'),
+      value: formatNumber(item.value, 'dollar')
     })
-    EPSGrowthRate.push({
-      date: dateStr,
-      yoy_growth: formatNumber(item.yoy_growth, 'percent'),
-      qoq_growth: formatNumber(item.qoq_growth, 'percent')
-    })
-    EarningSurprise.push({
-      date: dateStr,
-      surprise: formatNumber(item.eps_surprise)
-    })
-    RevenueSurprises.push({
-      date: dateStr,
-      surprise: formatNumber(item.revenue_surprise)
-    })
-    EarningHistory.push({
-      period: formatUTCDate(item.fiscal_date_ending),
+    const yearStr = `Q${index + 1}'${item.transaction_date.slice(0, 4)}`
+    InsiderShipChartData.push({
       date: yearStr,
-      estimated_eps: formatNumber(item.eps_estimated, 'dollar'),
-      actual_eps: formatNumber(item.eps, 'dollar'),
-      surprise: formatNumber(item.eps_surprise, 'avg'),
-      est_revenue: formatNumber(item.revenue_estimated),
-      actual_revenue: formatNumber(item.revenue)
+      insider: item.reporting_name,
+      type: item.type,
+      shares: item.securities_transacted,
+      price: formatNumber(item.price, 'dollar'),
     })
   })
-  return {EPSTrendEstimates, EPSGrowthRate, EarningSurprise, RevenueSurprises, EarningHistory, EarningHistoryColumns}
+  institutional_holders.forEach((item, index) => {
+    institutionalHoldingsData.push({
+      name: item.holder,
+      date: formatUTCDate(item.date_reported),
+      shares: formatNumber(item.shares),
+      changes_shares: formatNumber(item.share_change),
+      change: formatNumber(item.change_percent, 'customSign', '%'),
+      value: formatNumber(item.value, 'dollar')
+    })
+  })
+  fund_holders.forEach((item, index) => {
+    mutualFundHoldingsData.push({
+      name: item.holder,
+      shares: formatNumber(item.shares),
+      day_reported: formatUTCDate(item.date_reported),
+      value: formatNumber(item.value, 'dollar')
+    })
+  })
+  return {
+    InsiderShipData,
+    InsiderShipChartData,
+    institutionalHoldingsData, 
+    mutualFundHoldingsData, 
+    institutional_holders
+  }
 }
 
 const formatUpcomingEarning = (data) => {
@@ -106,14 +126,11 @@ const formatUpcomingEarning = (data) => {
 function preprocessData(raw) {
   // 處理 raw 為你需要的格式
   const data = raw.data.data
-  // let OwnershipInfo = formatOwnershipInfo(data.ownership_data)
-  let {InsiderShipData} = formatOwnershipData(isJson(data.insider_data.data) ? JSON.parse(data.insider_data.data) : [])
-  let {UpcomingEarning, UpcomingEarningColumns} = formatUpcomingEarning(isJson(data.earning_data.upcoming_earn_data) ? JSON.parse(data.earning_data.upcoming_earn_data) : [])
+  let {InsiderShipData, institutionalHoldingsData, mutualFundHoldingsData} = formatOwnershipData(data)
   return {
-    OwnershipInfo, 
     InsiderShipData, 
-    UpcomingEarning, 
-    UpcomingEarningColumns
+    institutionalHoldingsData, 
+    mutualFundHoldingsData
   };
 }
 

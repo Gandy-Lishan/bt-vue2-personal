@@ -250,106 +250,10 @@ export default {
       ],
       activeTab: 'insider-transactions',
       loading: false,
-      tableData: [
-        {
-          // 这里放一些假数据，用于测试
-          date: '2025-06-11',
-          insider: 'John Doe',
-          position: '100',
-          type: 'Buy',
-          shares: '100',
-          price: '100',
-          value: '100',
-          name: 'John Doe',
-          shares_held: '100',
-          changes_shares: '100',
-          change: '100',
-          value: '100',
-          fund_name: 'John Doe',
-          shares_held: '100',
-          day_reported: '2025-06-11',
-          shares_reported: '100',
-          date: '2025-06-11',
-          politician: 'John Doe',
-          trade_type: 'Buy',
-          amount: '100',
-          ticker: 'AAPL',
-        },
-        {
-          // 这里放一些假数据，用于测试
-          date: '2025-06-11',
-          insider: 'John Doe',
-          position: '100',
-          type: 'Buy',
-          shares: '100',
-          price: '100',
-          value: '100',
-          name: 'John Doe',
-          shares_held: '100',
-          changes_shares: '100',
-          change: '100',
-          value: '100',
-          fund_name: 'John Doe',
-          shares_held: '100',
-          day_reported: '2025-06-11',
-          shares_reported: '100',
-          date: '2025-06-11',
-          politician: 'John Doe',
-          trade_type: 'Buy',
-          amount: '100',
-          ticker: 'AAPL',
-        },
-        {
-          date: '2025-06-11',
-          insider: 'John Doe',
-          position: '100',
-          type: 'Buy',
-          shares: '100',
-          price: '100',
-          value: '100',
-          name: 'John Doe',
-          shares_held: '100',
-          changes_shares: '100',
-          change: '100',
-          value: '100',
-          fund_name: 'John Doe',
-          shares_held: '100',
-          day_reported: '2025-06-11',
-          shares_reported: '100',
-          date: '2025-06-11',
-          politician: 'John Doe',
-          trade_type: 'Buy',
-          amount: '100',
-          ticker: 'AAPL',
-        },
-        {
-          date: '2025-06-11',
-          insider: 'John Doe',
-          position: '100',
-          type: 'Buy',
-          shares: '100',
-          price: '100',
-          value: '100',
-          name: 'John Doe',
-          shares_held: '100',
-          changes_shares: '100',
-          change: '100',
-          value: '100',
-          fund_name: 'John Doe',
-          shares_held: '100',
-          day_reported: '2025-06-11',
-          shares_reported: '100',
-          date: '2025-06-11',
-          politician: 'John Doe',
-          trade_type: 'Buy',
-          amount: '100',
-          ticker: 'AAPL',
-        },
-      ],
+      tableData: [],
       insiderTransactionsColumns: [
         { prop: 'date', label: 'Date', sortable: true },
         { prop: 'insider', label: 'Insider', width: '120', sortable: true },
-        { prop: 'position', label: 'Position', sortable: true },
         { prop: 'type', label: 'Type', sortable: true },
         { prop: 'shares', label: 'Shares', sortable: true },
         { prop: 'price', label: 'Price', sortable: true },
@@ -411,18 +315,39 @@ export default {
         this.fetchOwnership(newSymbol);
       }
     },
+    activeTab: {
+      handler(newVal) {
+        const {
+          InsiderShipData,
+          institutionalHoldingsData,
+          mutualFundHoldingsData
+        } = this.ownershipData
+        if (newVal === 'insider-transactions') {
+          this.tableData = InsiderShipData;
+        } else if (newVal === 'institutional-holdings') {
+          this.tableData = institutionalHoldingsData;
+        } else if (newVal === 'mutual-fund-holdings') {
+          this.tableData = mutualFundHoldingsData;
+        }
+      }
+    },
     ownershipData: {
       handler(newVal) {
         if(isObject(newVal) && Object.keys(newVal).length > 0) {
           const {
-            ownershipData,
-            ownershipDataColumns
-          } = newVal
-          this.ownershipData = ownershipData
-          this.ownershipDataColumns = ownershipDataColumns
+            InsiderShipData,
+            institutionalHoldingsData,
+            mutualFundHoldingsData
+          } = newVal;
+          if (this.activeTab === 'insider-transactions') {
+            this.tableData = InsiderShipData;
+          } else if (this.activeTab === 'institutional-holdings') {
+            this.tableData = institutionalHoldingsData;
+          } else if (this.activeTab === 'mutual-fund-holdings') {
+            this.tableData = mutualFundHoldingsData;
+          }
         }
       },
-      deep: true
     }
   },
   created() {
