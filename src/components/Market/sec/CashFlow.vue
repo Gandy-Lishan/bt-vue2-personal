@@ -15,16 +15,19 @@
       <SectorCard
         :title="cashFlowData['operatingCashFlow'].title"
         :total-premium="cashFlowData['operatingCashFlow'].data.totalPremium"
+        :isLoading="isLoading"
       />
 
       <SectorCard
         :title="cashFlowData['freeCashFlow'].title"
         :total-premium="cashFlowData['freeCashFlow'].data.totalPremium"
+        :isLoading="isLoading"
       />
 
       <SectorCard
         :title="cashFlowData['cashBalance'].title"
         :total-premium="cashFlowData['cashBalance'].data.totalPremium"
+        :isLoading="isLoading"
       />
     </div>
     <div class="grid-col-2">
@@ -42,6 +45,7 @@
           legendPosition="bottomcenter"
           :show-legend="true"
           chartHeight="400px"
+          :isLoading="isLoading"
         />
       </section>
       <section class="card asset-composition">
@@ -57,7 +61,7 @@
           legendPosition="bottomcenter"
           :show-legend="false"
           chartHeight="400px"
-          stacking="normal"
+          :isLoading="isLoading"
         />
       </section>
     </div>

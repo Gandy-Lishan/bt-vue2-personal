@@ -27,21 +27,25 @@
       <SectorCard
         :title="balanceSheetData['totalAssets'].title"
         :total-premium="balanceSheetData['totalAssets'].data.totalPremium"
+        :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['fixedAssets'].title"
         :total-premium="balanceSheetData['fixedAssets'].data.totalPremium"
+        :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['totalLiabilities'].title"
         :total-premium="balanceSheetData['totalLiabilities'].data.totalPremium"
+        :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['totalEquity'].title"
         :total-premium="balanceSheetData['totalEquity'].data.totalPremium"
+        :isLoading="isLoading"
       />
     </div>
     <div v-if="category == 'assets'">
@@ -60,7 +64,7 @@
             legendPosition="topright"
             :show-legend="false"
             chartHeight="400px"
-            :loading="isLoading"
+            :isLoading="isLoading"
           />
         </section>
       </div>
@@ -71,6 +75,7 @@
           <base-table-simple
             :data="balanceSheetData['currentAssets'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card assets-noncurrent">
@@ -78,6 +83,7 @@
           <base-table-simple
             :data="balanceSheetData['nonCurrentAssets'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
       </div>
@@ -98,6 +104,7 @@
             legendPosition="bottomcenter"
             :show-legend="true"
             chartHeight="400px"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card shareholder">
@@ -113,6 +120,7 @@
             legendPosition="bottomcenter"
             :show-legend="true"
             chartHeight="400px"
+            :isLoading="isLoading"
           />
         </section>
       </div>
@@ -122,6 +130,7 @@
           <base-table-simple
             :data="balanceSheetData['currentLiabilities'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card liabilities-noncurrent">
@@ -129,6 +138,7 @@
           <base-table-simple
             :data="balanceSheetData['nonCurrentLiabilities'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card shareholder-equity">
@@ -136,6 +146,7 @@
           <base-table-simple
             :data="balanceSheetData['stockholdersEquity'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
       </div>
@@ -156,6 +167,7 @@
             legendPosition="bottomcenter"
             :show-legend="true"
             chartHeight="400px"
+            :isLoading="isLoading"
           />
         </section>
       </div>
@@ -165,6 +177,7 @@
           <base-table-simple
             :data="balanceSheetData['liquidityMetrics'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card">
@@ -172,6 +185,7 @@
           <base-table-simple
             :data="balanceSheetData['assetManagement'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card">
@@ -179,6 +193,7 @@
           <base-table-simple
             :data="balanceSheetData['capitalStructure'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card">
@@ -186,6 +201,7 @@
           <base-table-simple
             :data="balanceSheetData['growthAnalysis'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </section>
       </div>
