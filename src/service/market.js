@@ -181,6 +181,39 @@ import moment from 'moment';
 //     });
 // }
 
+export function getFinancials(symbol = 'AAPL', period = 'annual') {
+  let incomePath = `/dev/company_detail_app/get_income?symbol=${symbol}&period=${period}`;
+  let balancePath = `/dev/company_detail_app/get_balance?symbol=${symbol}&period=${period}`; // Added for balance sheet
+
+  return new Promise(async (resolve, reject) => { // Made the Promise callback async
+    try {
+      // Create a Promise for the income data request
+      const incomePromise = axios.get(incomePath, { withCredentials: true, retry: null });
+
+      // Create a Promise for the balance sheet data request
+      const balanceSheetPromise = axios.get(balancePath, { withCredentials: true, retry: null });
+
+      // Use Promise.all to wait for both requests to complete
+      const [incomeRes, balanceRes] = await Promise.all([incomePromise, balanceSheetPromise]);
+
+      // Parse and resolve the data from both responses
+      const incomeData = JSON.parse(incomeRes.data.data.income_data.data);
+      const balanceData = JSON.parse(balanceRes.data.data.balance_data.data);
+
+      // Merge the results. You can define how you want to merge them.
+      // For example, returning an object with two keys:
+      resolve({
+        income: incomeData,
+        balanceSheet: balanceData
+      });
+
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+
 export function getBalanceSheet(symbol = 'AAPL', period = 'annual') {
   let path = `/dev/company_detail_app/get_balance?symbol=${symbol}&period=${period}`
   return new Promise((resolve, reject) => {
