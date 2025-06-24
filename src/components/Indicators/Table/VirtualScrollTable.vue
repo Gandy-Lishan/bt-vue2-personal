@@ -52,44 +52,45 @@
       </el-col>
     </el-row>
     <el-row>
-      <div class="stock-selector">
-        <!-- 股票选择区域 -->
-        <div v-show="isVisible && checkedType === 'WatchList'" class="stock-selector-panel">
-          <el-form :model="form" size="mini" label-width="80px" class="selector-form">
-            <el-row :gutter="20">
-              <el-col :span="16">
-                <el-form-item label="" label-width="0px">
-                  <el-select
-                    v-model="form.selectedStocks"
-                    multiple
-                    filterable
-                    placeholder="Select Ticker"
-                    style="width: 100%"
-                    size="small"
-                    :filter-method="handleFilterInput"
-                    @change="onSelectChange"
-                  >
-                    <el-option
-                      v-for="item in filteredList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    <div class="custom-option">
-                      <span class="symbol-label">{{ item.url }}</span>
-                      <span class="symbol-url">{{ item.name }}</span>
-                    </div>
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-row>
-                  <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
-                  <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
-                </el-row>
-              </el-col>
+    <div class="stock-selector">
+    <!-- 股票选择区域 -->
+    <div v-show="isVisible && checkedType === 'WatchList'" class="stock-selector-panel">
+      <el-form :model="form" size="mini" label-width="80px" class="selector-form">
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <el-form-item label="" label-width="0px">
+              <el-select
+                v-model="form.selectedStocks"
+                multiple
+                filterable
+                placeholder="Select Ticker"
+                style="width: 100%"
+                size="small"
+                :filter-method="handleFilterInput"
+                @change="onSelectChange"
+                allow-create
+              >
+                <el-option
+                  v-for="item in filteredList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                <div class="custom-option">
+                  <span class="symbol-label">{{ item.url }}</span>
+                  <span class="symbol-url">{{ item.name }}</span>
+                </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-row>
+              <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
+              <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
             </el-row>
+            </el-col>
+        </el-row>
           </el-form>
         </div>
       </div>
@@ -325,6 +326,7 @@ export default {
       currentPage: 1,
       pageSize: 20,
       hasMore: true, // 是否还有更多数据
+      symbolListMap: new Map()
     }
   },
   computed: {
@@ -2003,6 +2005,10 @@ export default {
       })
     }
     this.filteredList = this.symbolList
+    this.symbolList.map(item => {
+      const urlLower = item.url.toLowerCase()
+      if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
+    })
     console.log('filteredList', this.filteredList)
     this.attachScrollListener()
   },
@@ -2360,6 +2366,25 @@ export default {
         */
         // window.location.assign(url);
         }
+    },
+    onSelectChange(value) {
+      debugger
+      value.forEach(item => {
+        if (typeof item === 'string') {
+          let arr = item.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean).filter(url => this.symbolListMap.has(url.toLowerCase())).map(url => this.symbolListMap.get(url.toLowerCase())?.url)
+          console.log('lishan arr', arr)
+          this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(url => this.symbolListMap.has(url.toLowerCase()))
+        }
+      })
+      // value 可能是字符串或数组
+      // if (typeof value === 'string') {
+      //   let arr = value.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean);
+      //   console.log('lishan arr', arr)
+      //   this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // } else {
+      //   this.form.selectedStocks = value.filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // }
+      // console.log('拆分后的 selectedStocks', this.form.selectedStocks);
     },
     async addRow(scope) {
       debugger
