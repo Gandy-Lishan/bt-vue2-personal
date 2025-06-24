@@ -68,6 +68,7 @@
                 size="small"
                 :filter-method="handleFilterInput"
                 @change="onSelectChange"
+                allow-create
               >
                 <el-option
                   v-for="item in filteredList"
@@ -325,6 +326,7 @@ export default {
       currentPage: 1,
       pageSize: 20,
       hasMore: true, // 是否还有更多数据
+      symbolListMap: new Map()
     }
   },
   computed: {
@@ -2003,6 +2005,10 @@ export default {
       })
     }
     this.filteredList = this.symbolList
+    this.symbolList.map(item => {
+      const urlLower = item.url.toLowerCase()
+      if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
+    })
     console.log('filteredList', this.filteredList)
     this.attachScrollListener()
   },
@@ -2360,6 +2366,25 @@ export default {
         */
         // window.location.assign(url);
         }
+    },
+    onSelectChange(value) {
+      debugger
+      value.forEach(item => {
+        if (typeof item === 'string') {
+          let arr = item.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean).filter(url => this.symbolListMap.has(url.toLowerCase())).map(url => this.symbolListMap.get(url.toLowerCase())?.url)
+          console.log('lishan arr', arr)
+          this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(url => this.symbolListMap.has(url.toLowerCase()))
+        }
+      })
+      // value 可能是字符串或数组
+      // if (typeof value === 'string') {
+      //   let arr = value.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean);
+      //   console.log('lishan arr', arr)
+      //   this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // } else {
+      //   this.form.selectedStocks = value.filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // }
+      // console.log('拆分后的 selectedStocks', this.form.selectedStocks);
     },
     async addRow(scope) {
       debugger
