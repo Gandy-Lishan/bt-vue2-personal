@@ -16,6 +16,7 @@ import sec from "./modules/market/sec/sec";
 import analyst from "./modules/market/sec/analyst";
 import news from "./modules/market/sec/news";
 import ownership from "./modules/market/sec/ownership";
+import predict from "./modules/market/predict";
 
 
 Vue.use(Vuex)
@@ -30,7 +31,7 @@ const store = new Vuex.Store({
       namespaced: true,
       modules: {
         // overview,
-        // predict,
+        predict,
         sec: {
           namespaced: true,
           modules: {
