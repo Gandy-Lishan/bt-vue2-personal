@@ -551,12 +551,33 @@ export default {
       const former_url = symbol_1_url;
       const latter_url = '';
       const maList = item.ma.split('_');
-      const ma1 = maList[0] !== '1' ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      let calculate = item.calculate
+      switch (calculate) {
+        case 'close':
+          calculate = ' Symbol Close'
+          break;
+        case 'open':
+          calculate = ' Symbol Open'
+          break;
+        case 'high':
+         calculate = ' Symbol High'
+         break;
+        case 'low':
+          calculate = ' Symbol Low'
+          break;
+        case 'volume':
+          calculate = ' Symbol Volume'
+          break;
+        default:
+          calculate = ' Symbol Close'
+          break;
+      }
+      const ma1 = (maList[0] !== '1' && maList[0] !== '0') ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
       const ma2 = '';
 
       return {
-        included: [`${former}${ma1}`],
-        included_url: [`${former_url}${ma1}`],
+        included: [`${former}${calculate}${ma1}`],
+        included_url: [`${former_url}${calculate}${ma1}`],
         former,
         latter,
         former_url,
