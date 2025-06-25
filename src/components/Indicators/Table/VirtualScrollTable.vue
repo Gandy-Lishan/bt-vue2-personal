@@ -3150,8 +3150,8 @@ export default {
         const saveData = {
           symbols: JSON.stringify(updatedList),
         }
-        if (updatedList.length >= 10) {
-          this.popUpMsgBox('You can only select up to 10 tickers');
+        if (updatedList.length >= 30) {
+          this.popUpMsgBox('You can only select up to 30 tickers');
           return
         }
         // 保存到后端
