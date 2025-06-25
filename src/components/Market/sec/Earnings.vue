@@ -48,7 +48,7 @@
       <!-- 三列 -->
       <section v-loading="isLoading" class="card earnings__card eps-growth-rate">
         <h3 class="card__subtitle">EPS Growth Rate</h3>
-        <ESPGrowthChart />
+        <ESPGrowthChart :data="EPSGrowthRate" />
       </section>
       <section v-loading="isLoading" class="card earnings__card earnings-surprises">
         <h3 class="card__subtitle">Earnings Surprises</h3>
@@ -133,6 +133,10 @@ export default {
       EarningHistoryColumns: [],
       UpcomingEarning: [],
       UpcomingEarningColumns: [],
+      EPSGrowthRate: {
+        yoy: [],
+        qoq: []
+      }
     }
   },
   components: {

@@ -49,7 +49,10 @@ const formatEarningsInfo = (detail) => [
   ]
 const formatEPSData = (data) => {
   const EPSTrendEstimates = []
-  const EPSGrowthRate = []
+  const EPSGrowthRate = {
+    yoy: [],
+    qoq: []
+  }
   const EarningSurprise = []
   const RevenueSurprises = []
   const EarningHistory = []
@@ -73,10 +76,13 @@ const formatEPSData = (data) => {
       estimate: item.eps_estimated,
       actual: item.eps
     })
-    EPSGrowthRate.push({
-      date: dateStr,
-      yoy_growth: formatNumber(item.yoy_growth, 'percent'),
-      qoq_growth: formatNumber(item.qoq_growth, 'percent')
+    EPSGrowthRate.yoy.push({
+      period: dateStr,
+      value: formatNumber(item.yoy_growth, 'percent'),
+    })
+    EPSGrowthRate.qoq.push({
+      period: dateStr,
+      value: formatNumber(item.qoq_growth, 'percent')
     })
     EarningSurprise.push({
       date: dateStr,
