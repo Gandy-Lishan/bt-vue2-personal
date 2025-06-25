@@ -38,11 +38,13 @@ const formatNumber = (value, type) => {
 }
 
 function preprocessData(raw) {
-  const {income, balacneSheet} = raw
+  const {income, balanceSheet} = raw
   // 最新年度在前
   const lastedRowIncome = income[income.length-1];
-  const lastedRowBalacneSheet = balacneSheet[balacneSheet.length-1];
-  return {
+  const lastedRowBalanceSheet = balanceSheet[balanceSheet.length-1];
+  const totalDebtList = balanceSheet.map(i=>i.total_debt)
+  debugger
+  let res = {
     marginAnalysis: {
       title: "Margin Analysis",
       data: [
@@ -71,10 +73,10 @@ function preprocessData(raw) {
     revebue: {
       title: "Revebue",
       data: {
-        chartData: raw.map(i => ({
+        chartData: income.map((i,index) => ({
           'date': formatUTCDate(i.date),
-          'total': formatNumber(0), 
-          'revebue': formatNumber(0), 
+          'total': formatNumber(totalDebtList[index]), 
+          'revebue': formatNumber(i.revenue), 
         })) || {},
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -85,56 +87,56 @@ function preprocessData(raw) {
     grossProfit: {
       title: "Gross Profit",
       data: {
-        chartData: raw.map(i => ({
+        chartData: income.map((i,index) => ({
           'date': formatUTCDate(i.date),
-          'grossProfit': formatNumber(0), 
-          'margin': formatNumber(0), 
+          'total': formatNumber(totalDebtList[index]), 
+          'grossProfit': formatNumber(i.gross_profit), 
         })) || {},
         seriesConfigs: [
-          { key: 'grossProfit', label: 'Gross Profit', color: '#16A34A' },
-          { key: 'margin', label: 'Gross Margin %', color: '#3B82F6', type: 'line' },
+          { key: 'total', label: 'Total Debt', color: '#16A34A' },
+          { key: 'grossProfit', label: 'Gross Profit', color: '#3B82F6', type: 'line' },
         ],
       },
     },
     operating: {
       title: "Operating",
       data: {
-        chartData: raw.map(i => ({
+        chartData: income.map((i,index) => ({
           'date': formatUTCDate(i.date),
-          'operating': formatNumber(0), 
-          'margin': formatNumber(0), 
+          'total': formatNumber(totalDebtList[index]), 
+          'operating': formatNumber(i.operating_income), 
         })) || {},
         seriesConfigs: [
-          { key: 'operating', label: 'Operating Income', color: '#16A34A' },
-          { key: 'margin', label: 'Operating Margin %', color: '#3B82F6', type: 'line' },
+          { key: 'total', label: 'Total Debt', color: '#16A34A' },
+          { key: 'operating', label: 'Operating Income', color: '#3B82F6', type: 'line' },
         ],
       },
     },
     netIncome: {
       title: "Net Income",
       data: {
-        chartData: raw.map(i => ({
+        chartData: income.map((i,index) => ({
           'date': formatUTCDate(i.date),
-          'netIncome': formatNumber(0), 
-          'margin': formatNumber(0), 
+          'total': formatNumber(totalDebtList[index]), 
+          'netIncome': formatNumber(i.net_income), 
         })) || {},
         seriesConfigs: [
-          { key: 'operating', label: 'Net Income', color: '#16A34A' },
-          { key: 'margin', label: 'Net Margin %', color: '#3B82F6', type: 'line' },
+          { key: 'total', label: 'Total Debt', color: '#16A34A' },
+          { key: 'netIncome', label: 'Net Income', color: '#3B82F6', type: 'line' },
         ],
       },
     },
     ebitda: {
       title: "EBITDA",
       data: {
-        chartData: raw.map(i => ({
+        chartData: income.map((i,index) => ({
           'date': formatUTCDate(i.date),
-          'ebitda': formatNumber(0), 
-          'margin': formatNumber(0), 
+          'total': formatNumber(totalDebtList[index]), 
+          'ebitda': formatNumber(i.ebitda),
         })) || {},
         seriesConfigs: [
-          { key: 'ebitda', label: 'EBITDA', color: '#16A34A' },
-          { key: 'margin', label: 'EBITDA Margin %', color: '#3B82F6', type: 'line' },
+          { key: 'total', label: 'Total Debt', color: '#16A34A' },
+          { key: 'ebitda', label: 'EBITDA', color: '#3B82F6', type: 'line' },
         ],
       },
     },
@@ -143,14 +145,14 @@ function preprocessData(raw) {
     incomeMetics: {
       title: "Income Metics",
       data: {
-        chartData: lastedRowIncome.map(i => ({
+        chartData: income.map(i => ({
           'date': formatUTCDate(i.date),
-          'revenue': formatNumber(0), 
-          'netIncome': formatNumber(0), 
-          'ebitda': formatNumber(0), 
+          'revebue': formatNumber(i.revenue), 
+          'netIncome': formatNumber(i.net_income), 
+          'ebitda': formatNumber(i.ebitda), 
         })) || {},
         seriesConfigs: [
-          { key: 'revenue', label: 'Revenue', color: '#3B82F6' },
+          { key: 'revebue', label: 'Revebue', color: '#3B82F6' },
           { key: 'netIncome', label: 'Net Income', color: '#16A34A' },
           { key: 'ebitda', label: 'EBITDA', color: '#818CF8' },
         ],
@@ -159,10 +161,10 @@ function preprocessData(raw) {
     cashDebt: {
       title: "Cash & Debt Position",
       data: {
-        chartData: raw.map(i => ({
+        chartData: balanceSheet.map(i => ({
           'date': formatUTCDate(i.date),
-          'cash': formatNumber(0), 
-          'totalDebt': formatNumber(0), 
+          'cash': formatNumber(i.cash_and_cash_equivalents), 
+          'totalDebt': formatNumber(i.total_debt), 
         })) || {},
         seriesConfigs: [
           { key: 'cash', label: 'Cash', color: '#3B82F6' },
@@ -171,6 +173,7 @@ function preprocessData(raw) {
       },
     },
   };
+  return res
 }
 
 
@@ -207,7 +210,7 @@ export default {
         debugger
         commit("SET_DATA", processed);
       } catch (err) {
-        commit("SET_ERROR", err.message || "Financials data error.");
+        commit("SET_ERROR", err || "Financials data error.");
       } finally {
         commit("SET_LOADING", false);
       }

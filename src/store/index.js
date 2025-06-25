@@ -7,6 +7,7 @@ import states from './modules/states'
 import user from './modules/user'
 
 // import predict from "./modules/market/predict";
+import financials from "./modules/market/sec/financials";
 import balanceSheet from "./modules/market/sec/balanceSheet";
 import cashFlow from "./modules/market/sec/cashFlow";
 import companyProfile from "./modules/market/sec/companyProfile";
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
         sec: {
           namespaced: true,
           modules: {
+            financials,
             balanceSheet,
             cashFlow,
             companyProfile,

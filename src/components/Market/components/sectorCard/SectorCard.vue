@@ -1,6 +1,5 @@
-<!-- SectorCard.vue -->
 <template>
-  <div class="card sector-card">
+  <div class="card sector-card" :class="{ 'no-border': disableBorder }">
     <div v-if="isLoading" class="card-loading">Loading data...</div>
     <div v-else>
       <h3 class="sector-title">{{ title }}</h3>
@@ -45,6 +44,11 @@ export default {
       default: undefined
     },
     isLoading: { type: Boolean, default: false },
+    // 添加 disableBorder prop
+    disableBorder: { 
+      type: Boolean, 
+      default: false 
+    },
   }
 }
 </script>
@@ -57,7 +61,16 @@ export default {
   /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); */
   transition: all 0.3s ease;
   cursor: pointer;
+  // 默认边框，如果需要，可以取消注释或添加
+  // border: 1px solid #e0e0e0; // 假设有一个默认边框
 }
+
+// 新增的类，用于控制无边框状态
+.sector-card.no-border {
+  border: none; // 移除边框
+  box-shadow: none; // 如果有默认阴影，也一并移除
+}
+
 
 .sector-card:hover {
   transform: translateY(-2px);
@@ -115,4 +128,4 @@ export default {
   border-radius: 4px;
   border: 1px solid #FFCDD2;
 }
-</style> 
+</style>
