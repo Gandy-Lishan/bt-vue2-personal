@@ -86,7 +86,12 @@
           </el-col>
           <el-col :span="8">
             <el-row>
-              <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
+              <el-tooltip effect="dark" placement="top">
+                <div slot="content">
+                  You can select up to 30 tickers. Use the dropdown or paste multiple tickers like “AAPL, SPX, SPY”<br/> — they'll be automatically recognized and filled in. Click “Save” to add them to your favorites. 
+                </div>
+                <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save <i class="el-icon-question el-icon--right"></i></el-button>
+              </el-tooltip>
               <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
             </el-row>
             </el-col>
