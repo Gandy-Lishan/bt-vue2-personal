@@ -10,7 +10,7 @@
 				Edit exit with different TIM
 			</el-button>
 		<el-tabs v-model="activeTIM" type="card" v-loading="loading">
-			<el-tab-pane label="Exit With Default Time-In-Market" name="first">
+			<el-tab-pane label="Exit With Default Time-In-Market (Long-Term)" name="first">
 				<div class="history-container">
 						<template>
 							<el-table
@@ -48,6 +48,69 @@
 									</el-table-column>
 
 									<template v-for="column in periods">
+										<el-table-column
+											:key="column.period"
+											:label="column.period"
+											:prop="column.period"
+											align="center"
+											width="104px"
+										>
+											<template slot-scope="scope">
+												<p class="tableText" :class="getCellStyle(scope.row[column.period])">
+													{{
+														!Number.isNaN(scope.row[column.period])
+															? typeof scope.row[column.period] == 'string'
+																? scope.row[column.period]
+																: parseFloat(scope.row[column.period]).toFixed(1)
+															: null
+													}}
+												</p>
+											</template>
+										</el-table-column>
+									</template>
+								</el-table>
+							</template>
+					</div>
+				</div>
+			</el-tab-pane>
+			<el-tab-pane label="Exit With Default Time-In-Market (Short-Term)" name="third" v-if="rowFrequency === 'Daily'">
+				<div class="history-container">
+						<template>
+							<el-table
+								:data="backtestShortTermHistoryList"
+								:row-class-name="tableRowClassName"
+								stripe
+								border
+								style="height: 100%; margin: 0 auto;"
+							>
+								<template v-for="(l, index) in defaultShortTermTableLabels">
+									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : '104px'">
+										<template slot-scope="scope">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
+												{{ displayData(scope.row[l]) }}
+											</p>
+										</template>
+									</el-table-column>
+								</template>
+								<div slot="empty" style="text-align: left">
+									<el-empty image-size="80" description="No Data"></el-empty>
+								</div>
+							</el-table>
+						</template>
+					<hr style="height:2px;border:none;color:#333;background-color:#333;" class="hr">
+					<div class="zscore-container">
+							<template>
+								<el-table
+									:data="result_shortTerm_quotes"
+									:show-header="false"
+									stripe
+									border
+									style="height: 100%; margin: 0 auto"
+								>
+									<el-table-column prop="property" label="Property"  align="center" width="125px">
+									</el-table-column>
+
+									<template v-for="column in periodsShortTerm">
 										<el-table-column
 											:key="column.period"
 											:label="column.period"
@@ -257,13 +320,13 @@ export default {
 			backtestHistoryList: [],
 			defaultTableLabels: [
 				'Entry Date',
-				'1 Week [%]',
-				'2 Weeks [%]',
 				'1 Month [%]',
 				'2 Months [%]',
 				'3 Months [%]',
+				'4 Months [%]',
+				'5 Months [%]',
 				'6 Months [%]',
-				'12 Months [%]'
+				'1 Year [%]'
 			],
 			//Exit With Default Time-In-Market/zscore-container
 			result_quotes: [],
@@ -275,6 +338,20 @@ export default {
 			//Exit with Customized Time-In-Market/zscore-container
 			TIMResult_quotes: [],
 			periodsTIM: [],
+
+			backtestShortTermHistoryList: [],
+			defaultShortTermTableLabels: [
+				'Entry Date',
+				'1 Day [%]',
+				'2 Days [%]',
+				'3 Days [%]',
+				'4 Days [%]',
+				'1 Week [%]',
+				'2 Weeks [%]',
+				'3 Weeks [%]'
+			],
+			result_shortTerm_quotes: [],
+			periodsShortTerm: [],
 
 			//Dialog: edit table
 			showTable: false,
@@ -308,6 +385,9 @@ export default {
         // 父组件getResultData时用清空本组件内常用数据
         clearData() {
             this.backtestHistoryList = []
+						this.backtestShortTermHistoryList = []
+						this.result_shortTerm_quotes = []
+						this.periodsShortTerm = []
             this.TIMHistoryList = []
             this.TIMResult_quotes = []
             this.result_quotes = []
@@ -480,7 +560,19 @@ export default {
                 this.tradesData,
                 periodArray
             )
-												console.log('backtestHistoryList', this.backtestHistoryList)
+						const shortTermPeriodArray = [
+								{ period: 1, timeframe: 'Day' },
+								{ period: 2, timeframe: 'Day' },
+								{ period: 3, timeframe: 'Day' },
+								{ period: 4, timeframe: 'Day' },
+								{ period: 5, timeframe: 'Day' },
+								{ period: 10, timeframe: 'Day' },
+								{ period: 15, timeframe: 'Day' }
+							]
+						if(this.rowFrequency === 'Daily') {
+							this.backtestShortTermHistoryList = this.calculateBacktestHistory(this.tradesData, shortTermPeriodArray)
+						}
+						console.log('backtestHistoryList', this.backtestHistoryList)
             const res = await getCustomTIM(rowID)
             let timPeriodArray = null
             try {
@@ -510,17 +602,21 @@ export default {
             this.start_date = formatStandardTime(datatime)
             this.activeTIM = 'second'
             this.calculateZScore(this.tradesData, timPeriodArray)
+						if(this.rowFrequency === 'Daily') {
+							this.activeTIM = 'third'
+							this.calculateZScore(this.tradesData, shortTermPeriodArray)
+						}
             this.activeTIM = 'first'
             this.calculateZScore(this.tradesData, periodArray)
         },
 
 		getAllDefaultTableLabels() {
 			let periodArray = [
-				{ period: 1, timeframe: 'Week' },
-				{ period: 2, timeframe: 'Week' },
 				{ period: 1, timeframe: 'Month' },
 				{ period: 2, timeframe: 'Month' },
 				{ period: 3, timeframe: 'Month' },
+				{ period: 4, timeframe: 'Month' },
+				{ period: 5, timeframe: 'Month' },
 				{ period: 6, timeframe: 'Month' },
 				{ period: 1, timeframe: 'Year' }
 			]
@@ -529,11 +625,11 @@ export default {
 				case 'Daily':
 					this.defaultTableLabels = [
 						'Entry Date',
-						'1 Week [%]',
-						'2 Weeks [%]',
 						'1 Month [%]',
 						'2 Months [%]',
 						'3 Months [%]',
+						'4 Months [%]',
+						'5 Months [%]',
 						'6 Months [%]',
 						'1 Year [%]'
 					]
@@ -563,6 +659,15 @@ export default {
 						'3 Months [%]',
 						'6 Months [%]',
 						'1 Year [%]'
+					]
+					periodArray = [
+						{ period: 1, timeframe: 'Week' },
+						{ period: 2, timeframe: 'Week' },
+						{ period: 1, timeframe: 'Month' },
+						{ period: 2, timeframe: 'Month' },
+						{ period: 3, timeframe: 'Month' },
+						{ period: 6, timeframe: 'Month' },
+						{ period: 1, timeframe: 'Year' }
 					]
 					this.defaultTIMTableLabels = [
 						'Entry Date',
@@ -644,7 +749,7 @@ export default {
 					}
 				}
 				this.result_quotes = result
-			} else {
+			} else if(this.activeTIM == 'second') {
 				// 鎻愬彇灞炴€т俊鎭
 				let keys = Object.keys(this.TIMResult_quotes[0])
 				keys.splice(keys.indexOf('Period'), 1)
@@ -666,6 +771,28 @@ export default {
 					}
 				}
 				this.TIMResult_quotes = result
+			} else if(this.activeTIM == 'third') {
+				// 鎻愬彇灞炴€т俊鎭
+				let keys = Object.keys(this.result_shortTerm_quotes[0])
+						keys.splice(keys.indexOf('Period'), 1)
+						let result = []
+						for (let i = 0; i < keys.length; i++) {
+							result.push({
+								property: keys[i]
+							})
+						}
+						// 灏Periods 淇℃伅鎻掑叆鍒data 涓紝灏data 缁戝畾鍒table 涓
+						console.log('this.periodsShortTerm', this.periodsShortTerm, this.result_shortTerm_quotes)
+						for (let i = 0; i < this.periodsShortTerm.length; i++) {
+							for (let j = 0; j < result.length; j++) {
+								this.result_shortTerm_quotes.forEach((obj) => {
+									if (obj.Period === this.periodsShortTerm[i].period) {
+										result[j][this.periodsShortTerm[i].period] = obj[result[j].property]
+									}
+								})
+							}
+						}
+						this.result_shortTerm_quotes = result
 			}
 		},
 		generatePeriods() {
@@ -684,7 +811,7 @@ export default {
 					})
 				}
 				this.periods = columns
-			} else {
+			} else if(this.activeTIM == 'second') {
 				quotes = this.TIMResult_quotes
 				// 去重
 				let set = new Set()
@@ -703,6 +830,25 @@ export default {
 					})
 				}
 				this.periodsTIM = columns
+			} else if(this.activeTIM == 'third') {
+				quotes = this.result_shortTerm_quotes
+				// 去重
+				let set = new Set()
+				for (let i = 0; i < quotes.length; i++) {
+					set.add(quotes[i].Period)
+				}
+				let values = Array.from(set)
+				// 为label排序
+				values = this.transformDate(values)
+				values.sort((a, b) => a.value - b.value)
+				values = values.map((x) => x.label)
+				let columns = []
+				for (let i = 0; i < values.length; i++) {
+					columns.push({
+						period: values[i]
+					})
+				}
+				this.periodsShortTerm = columns
 			}
 		},
 		transformDate(arr) {
@@ -1353,7 +1499,7 @@ export default {
 			})
 			if (this.activeTIM == 'first') {
 				this.result_quotes = res
-			} else {
+			} else if(this.activeTIM == 'second') {
 				// 重命名periods属性，和上方表格label一致
 				this.TIMResult_quotes = res
 				// 去重
@@ -1387,6 +1533,8 @@ export default {
 				this.TIMResult_quotes = this.TIMResult_quotes.filter(
 					(item) => item != null
 				)
+			} else if(this.activeTIM == 'third') {
+				this.result_shortTerm_quotes = res
 			}
 			this.generate_table_data()
 		},
@@ -1550,7 +1698,20 @@ export default {
 			return '';
 		},
 		exportData() {
-			return {backtestHistoryList: this.backtestHistoryList, TIMHistoryList: this.TIMHistoryList, result_quotes: this.result_quotes, TIMResult_quotes: this.TIMResult_quotes, periodsTIM: this.periodsTIM, periods: this.periods, defaultTIMTableLabels: this.defaultTIMTableLabels, defaultTableLabels: this.defaultTableLabels};
+			return {
+				backtestHistoryList: this.backtestHistoryList, 
+				backtestShortTermHistoryList: this.backtestShortTermHistoryList, 
+				TIMHistoryList: this.TIMHistoryList, 
+				result_quotes: this.result_quotes, 
+				TIMResult_quotes: this.TIMResult_quotes, 
+				result_shortTerm_quotes: this.result_shortTerm_quotes,
+				periodsTIM: this.periodsTIM, 
+				periodsShortTerm: this.periodsShortTerm, 
+				periods: this.periods, 
+				defaultTIMTableLabels: this.defaultTIMTableLabels, 
+				defaultTableLabels: this.defaultTableLabels, 
+				defaultShortTermTableLabels: this.defaultShortTermTableLabels
+			};
 		}
 	}
 }

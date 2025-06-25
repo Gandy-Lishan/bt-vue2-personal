@@ -30,18 +30,70 @@
     </div>
   </div>
   <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
+    <el-row type="flex" align="middle" justify="space-between">
+      <el-col :span="20">
+        <div class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}">
+          <el-input
+            class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}"
+            @input="handleQuery"
+            size="small"
+            placeholder="Search"
+            v-model="searchInput"
+            clearable
+          ><i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <!-- 添加股票按钮 -->
+        <el-button type="primary" size="small" v-show="!isVisible && checkedType === 'WatchList'" @click="toggleSelector" style="position: absolute; top: 10px; right: 5px;">
+        Add Ticker
+        </el-button>
+      </el-col>
+    </el-row>
     <el-row>
-      <div class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}">
-        <el-input
-          class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}"
-          @input="handleQuery"
-          size="small"
-          placeholder="Search"
-          v-model="searchInput"
-          clearable
-        ><i slot="prefix" class="el-input__icon el-icon-search"></i>
-       </el-input>
-      </div>
+    <div class="stock-selector">
+    <!-- 股票选择区域 -->
+    <div v-show="isVisible && checkedType === 'WatchList'" class="stock-selector-panel">
+      <el-form :model="form" size="mini" label-width="80px" class="selector-form">
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <el-form-item label="" label-width="0px">
+              <el-select
+                v-model="form.selectedStocks"
+                multiple
+                filterable
+                placeholder="Select Ticker"
+                style="width: 100%"
+                size="small"
+                :filter-method="handleFilterInput"
+                @change="onSelectChange"
+                allow-create
+              >
+                <el-option
+                  v-for="item in filteredList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                <div class="custom-option">
+                  <span class="symbol-label">{{ item.url }}</span>
+                  <span class="symbol-url">{{ item.name }}</span>
+                </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-row>
+              <el-button size="mini"  type="primary" @click="handleSave" :loading="saving">Save</el-button>
+              <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    </div>
     </el-row>
     <el-row>
       <el-col :span="24">
@@ -146,10 +198,11 @@
             </div>
           </template> -->
           <el-table-column align="center" width="35px" v-if="!showRelated">
-            <template slot-scope="scope" v-if="enlarged && !isTrendScorePage">
+            <template slot-scope="scope">
               <el-button-group>
-                <el-button v-if="scope.row.favorite === false" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
-                <el-button v-else-if="scope.row.favorite === true" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-else-if="scope.row.favorite === true && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-else-if="checkedType === 'WatchList'" size="small" type="text" icon="el-icon-close" @click="deleteTickers(scope)" title="Delete from Watchlist"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -200,7 +253,7 @@ import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
-import { getIndicatorsRowData } from "@/service/service";
+import { getIndicatorsRowData, postUserWatchlist, deleteUserWatchlist } from "@/service/service";
 import { fullScreen } from 'chartiq/js/addOns';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
@@ -258,7 +311,22 @@ export default {
       isExpanded: false, // 控制输入框是否展开
       isTrendScorePage: false,
       isTrendScoreFullScreen: false,
-      dynamicHeight: '510px'
+      dynamicHeight: '510px',
+      isVisible: false,
+      loading: false,
+      saving: false,
+      form: {
+        selectedStocks: []
+      },
+      stockOptions: [],
+      selectedStocksList: [],
+      filteredList: [],      // 根据输入实时更新的排序列表
+      _dropdownList: [],
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
+      symbolListMap: new Map()
     }
   },
   computed: {
@@ -269,6 +337,20 @@ export default {
       _favoriteSymbolList: 'getFavoriteSymbolList',
       indicatorsListData: 'getIndicatorsPageListData',
     }),
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      let _data = data ? JSON.parse(data) : []
+      console.log('symbolList', _data)
+      _data = _data.map(ele => {
+        ele.name = ele.label
+        ele.label = ele.url
+        ele.value = ele.url
+        ele.key = `${ele.name}_${ele.url}`
+        return ele
+      })
+      console.log('symbolList', _data)
+      return _data
+    },
     _loading() {
       return this.loading
     },
@@ -469,7 +551,103 @@ export default {
             }
             ]
         ],
-        ['RussellColumns', 
+        ['Russell3000Columns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '140px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
+        ['Russell1000Columns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '140px'
+            },
+            {
+              key: 'url',
+              label: 'Symbol',
+              value: 'url',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'z_score',
+              label: 'Z-Score',
+              value: 'z_score'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
+        ['Russell2000Columns', 
           [
             {
               key: 'chart_name',
@@ -1334,7 +1512,7 @@ export default {
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
-      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'TSCRP', 'RTSCRP', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend'].includes(this.checkedType)
+      const isStockTrend = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'TSCRP', 'RTSCRP', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend', 'WatchList'].includes(this.checkedType)
       if(isStockTrend) _checkedType = 'SP1500Score'
       if(isStockTrend && (!this.condition || !this.enlarged)) {
         let saveColumns = ['market_symbol', 'chart_name']
@@ -1766,7 +1944,7 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend', 'WatchList'].includes(this.checkedType)
     },
     isCRPTrend() {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
@@ -1826,9 +2004,128 @@ export default {
         this.toggleEnlarge('Sector Trend RelTrend');
       })
     }
+    this.filteredList = this.symbolList
+    this.symbolList.map(item => {
+      const urlLower = item.url.toLowerCase()
+      if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
+    })
+    console.log('filteredList', this.filteredList)
+    this.attachScrollListener()
   },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'fetchIndicatorsPageList']),
+    attachScrollListener() {
+      const refs = ['autocomplete']; // 要监听的下拉框的 ref 名称
+
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName]?.$refs.suggestions?.$el?.childNodes[0]?.childNodes[0]; // 获取下拉框的 DOM
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    handleDropdownScroll(event, inputType) {
+      var self = this;
+      const dropdown = event.target;
+      // 根据传入的 inputType 访问不同的 ref
+      const inputRef = self.$refs[inputType];
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore((results) => {
+            inputRef.$data.suggestions = results;
+
+            // 恢复滚动位置
+            requestAnimationFrame(() => {
+                dropdown.scrollTop = currentScrollTop;
+            });
+        });
+      }
+    },
+    tickerQuerySearch(queryString, cb) {
+      debugger
+      var dropdownList = this._dropdownList
+      if(!dropdownList || dropdownList.length == 0) {
+        dropdownList = this.symbolList
+      }
+      var results = dropdownList.map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+
+      this.searchResults = results.sort((a, b) => b.priority - a.priority)
+      this.currentPage = 1;
+      this.hasMore = true;
+      this.loadMore(cb)
+    },
+    loadMore(cb) {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      const paginatedResults = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      // 将分页后的数据传递给 closure
+      cb(paginatedResults);
+    },
+    handleFilterInput(queryString) {
+      const standardizeString = (str) => {
+        return String(str).toLowerCase().replace(/[_\s-]+/g, ' ');
+      };
+      
+      const escapeRegExp = (string) => {
+        return string.replace(/[.*+?^=${}()|[\]\\]/g, '\\$&');
+      };
+      
+      const fuzzyMatch = (text, query) => {
+        const escapedQuery = escapeRegExp(query);
+        let regexString = '';
+        for (let i = 0; i < escapedQuery.length; i++) {
+          const char = escapedQuery[i];
+          regexString += char;
+          if (i < escapedQuery.length - 1 && /[a-zA-Z0-9]/.test(char)) {
+            regexString += '.*?';
+          }
+        }
+        const regex = new RegExp(regexString, 'g');
+        return [...text.matchAll(regex)];
+      };
+
+      const standardizedQuery = standardizeString(queryString);
+      
+      const scoredList = this.symbolList.map((item) => {
+        const resultValue = item.value || item.name || item.label || item.model_name || '';
+        const resultUrl = item.url || item.symbol || '';
+        const standardizedValue = standardizeString(resultValue);
+        const standardizedUrl = standardizeString(resultUrl);
+        
+        let score = 0;
+        if (!standardizedQuery) score = 9999; // query 为空默认置顶
+        else if (standardizedValue === standardizedQuery || standardizedUrl === standardizedQuery) {
+          score = 100;
+        } else if (standardizedValue.startsWith(standardizedQuery) || standardizedUrl.startsWith(standardizedQuery)) {
+          score = 50;
+        } else {
+          const valMatches = fuzzyMatch(standardizedValue, standardizedQuery).length;
+          const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery).length;
+          score = (valMatches + urlMatches) * 5;
+        }
+        
+        return { ...item, _score: score };
+      });
+
+    this.filteredList = scoredList
+      .filter(i => i._score > 0)
+      .sort((a, b) => b._score - a._score);
+    },
     async _toggleEnlarge(checked, row) {
       debugger
       if(this._loading) return
@@ -2070,6 +2367,25 @@ export default {
         // window.location.assign(url);
         }
     },
+    onSelectChange(value) {
+      debugger
+      value.forEach(item => {
+        if (typeof item === 'string') {
+          let arr = item.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean).filter(url => this.symbolListMap.has(url.toLowerCase())).map(url => this.symbolListMap.get(url.toLowerCase())?.url)
+          console.log('lishan arr', arr)
+          this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(url => this.symbolListMap.has(url.toLowerCase()))
+        }
+      })
+      // value 可能是字符串或数组
+      // if (typeof value === 'string') {
+      //   let arr = value.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean);
+      //   console.log('lishan arr', arr)
+      //   this.form.selectedStocks = Array.from(new Set([...this.form.selectedStocks, ...arr])).filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // } else {
+      //   this.form.selectedStocks = value.filter(item => this.symbolListMap.has(item.toLowerCase()));
+      // }
+      // console.log('拆分后的 selectedStocks', this.form.selectedStocks);
+    },
     async addRow(scope) {
       debugger
       try {
@@ -2243,7 +2559,17 @@ export default {
         {
           label: 'Russell 3000 Stock Sentiment',
           value: 'russell_3000_complete_list',
-          type: 'Russell'
+          type: 'Russell3000'
+        },
+        {
+          label: 'Russell 1000 Stock Sentiment',
+          value: 'russell_1000_complete_list',
+          type: 'Russell1000'
+        },
+        {
+          label: 'Russell 2000 Stock Sentiment',
+          value: 'russell_2000_complete_list',
+          type: 'Russell2000'
         },
         {
           label: 'S&P 1500',
@@ -2356,6 +2682,11 @@ export default {
           type: 'CRP'
         },
         {
+          label: 'My Favorites',
+          value: 'watchlist',
+          type: 'WatchList'
+        },
+        {
           label: 'Crypto Absolute and Relative Trend Scores',
           value: 'crp',
           type: 'TSCRP'
@@ -2381,6 +2712,9 @@ export default {
       let data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
       let cssMonthLabel = this.cssMonthLabel
       let xlsxName = null
+      if(type === 'watchlist') {
+        data = this.filterData
+      }
       if(!data || !data.length) {
         await this.fetchIndicatorsPageList(type)
         data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
@@ -2421,30 +2755,30 @@ export default {
       if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
       if(['etf_complete_list', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('chart_name', 'Symbol')}
       if(['etf_complete_list', 'etf_flow', 'commod_seasonality', 'etf_seasonality'].includes(type)) {keysMap.set('underlying_name', 'Name')}
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list') {
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') {
         // Name 放在 Symbol 前面
-        if(type === 'russell_3000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
+        if(type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
         keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
       }
-      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other', 'sector_trend_reltrend'].includes(type)
+      const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other', 'sector_trend_reltrend', 'watchlist'].includes(type)
       if(isTrendScore) {
         keysMap = new Map([
         ['market_symbol', 'Symbol'],
         ['chart_name', 'Name'],
-        // ['sector_name', 'Sector'],
+        ['sector_name', 'Sector'],
         ['trend_last_value', 'Trend Score'],
         ['trend_five_day_score_chg', '5-Day Score Chg'],
         ['reltrend_last_value', 'Relative Score'],
         ['reltrend_five_day_score_chg', '5-Day Relative Score Chg']
       ])
-      if(['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.set('sector_name', 'Sector')
+      if(!['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.delete('sector_name')
       if(this.condition === 'trend') {
         keysMap.delete('reltrend_last_value')
         keysMap.delete('reltrend_five_day_score_chg')
@@ -2715,6 +3049,12 @@ export default {
       return searchResult;
     }
   },
+  toggleSelector() {
+    this.isVisible = !this.isVisible
+    if (!this.isVisible) {
+      this.form.selectedStocks = []
+    }
+  },
     getSearchResult() {
       if(this.searchInput){
         // 在搜索之前对搜索关键词进行转义
@@ -2756,7 +3096,9 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
-        Russell: 'russell_3000_complete_list',
+        Russell1000: 'russell_1000_complete_list',
+        Russell2000: 'russell_2000_complete_list',
+        Russell3000: 'russell_3000_complete_list',
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
@@ -2797,7 +3139,55 @@ export default {
         this.dynamicHeight = `${height}px`;
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
-    }
+    },
+    async handleSave() {
+      try {
+        this.saving = true
+        // 将选中的股票添加到已选列表 找出 selectedStocks 和 selectedStocksList 的差集
+        const newStocks = this.form.selectedStocks.filter(item => !this.selectedStocksList.includes(item))
+        // 更新已选股票列表
+        const updatedList = [...new Set([...this.selectedStocksList, ...newStocks])]
+        const saveData = {
+          symbols: JSON.stringify(updatedList),
+        }
+        if (updatedList.length >= 30) {
+          this.popUpMsgBox('You can only select up to 30 tickers');
+          return
+        }
+        // 保存到后端
+        const res = await postUserWatchlist(saveData)
+        console.log('res', res)
+        
+        this.selectedStocksList = updatedList
+        
+        // 关闭选择器
+        this.isVisible = false
+        
+        // 清空选择
+        this.form.selectedStocks = []
+        
+        // 触发更新事件
+        await this.$emit('forceUpdateTable', this.checkedType, this.condition)
+      } catch (error) {
+        console.error('Error saving stocks:', error)
+        // 添加失败
+        this.popUpMsgBox('Oops! Something went wrong. Couldn\'t add it.')
+        this.form.selectedStocks = []
+        this.isVisible = false
+      } finally {
+        this.saving = false
+      }
+    },
+    async deleteTickers(scope) {
+      debugger
+      const res = await deleteUserWatchlist({symbols: JSON.stringify([scope.row.market_symbol])})
+      console.log('res', res)
+      await this.$emit('forceUpdateTable', this.checkedType, this.condition)
+    },
+    handleCancel() {
+      this.form.selectedStocks = []
+      this.isVisible = false
+    },
   }
 }
 </script>
@@ -3042,5 +3432,45 @@ export default {
 }
 .trend-score-range-rank {
   margin-top: 75px;
+}
+.custom-option {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between;
+  .symbol-label {
+    font-weight: 500;
+    margin-right: 10px;
+    text-align: center;
+    margin-left: 5px;
+  }
+  .symbol-url {
+    font-weight: 500;
+    color: #999999;
+  }
+}
+/deep/ .el-select .el-tag__close.el-icon-close {
+  background-color: #ffffff;
+  color: #0c0c0c;
+}
+/deep/ .el-select .el-tag {
+  background-color: #181919;
+}
+/deep/ .el-tag.el-tag--info {
+  font-weight: bold;
+  color: #ffffff;
+}
+.selected-stocks {
+  margin-bottom: 10px;
+  /deep/ .el-tag {
+    background-color: #ffffff;
+    color: #333;
+    font-weight: bold;
+  }
+  /deep/ .el-tag .el-tag__close {
+    color: #333;
+  }
+}
+/deep/ .el-select__input {
+  margin-left: 2px;
 }
 </style>

@@ -490,9 +490,4 @@ export default {
 		width: 1093px
 	}
 }
-@media (min-width: 1280px) and (max-width: 1600px) {
-	.statistics-container{
-		width: 830px
-	}
-}
 </style>

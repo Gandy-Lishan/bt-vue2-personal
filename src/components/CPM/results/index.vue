@@ -33,7 +33,11 @@
             >Backtest Statistics</p>
             <p
              @click.stop="() => {changeTab('results')}" :class="{ active: activeTab == 'results' || '' }"
-             >Multi-Timeframe Results</p>
+             >Multi-Timeframe Results(Long Term)</p>
+             <p
+             v-show="rowFrequency == 'Daily'"
+             @click.stop="() => {changeTab('resultsShortTerm')}" :class="{ active: activeTab == 'resultsShortTerm' || '' }"
+             >Multi-Timeframe Results(Short Term)</p>
              <p
              @click.stop="() => {changeTab('maxMin')}" :class="{ active: activeTab == 'maxMin' || '' }"
              >Max Gain and Loss</p>
@@ -56,6 +60,7 @@
       <div class="content">
           <Statistics v-show="activeTab == 'statistics'" ref="Statistics"></Statistics>
           <TIM v-show="activeTab == 'results'" ref="TIM" :tradeData="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIM>
+          <TIMShortTerm v-show="activeTab == 'resultsShortTerm' && rowFrequency == 'Daily'" ref="TIMShortTerm" :tradeData="tradeDate" :rowFrequency="rowFrequency" :tradePrice="tradePrice" :direction="direction"></TIMShortTerm>
           <CorrInfo v-show="activeTab == 'corrInfo'" ref="CorrInfo"></CorrInfo>
           <MaxMin
             ref="maxMinChild"
@@ -76,6 +81,7 @@
 import CPMSummary from "./components/summary";
 import Statistics from "./components/statistics";
 import TIM from "./components/tim";
+import TIMShortTerm from "./components/timShortTerm";
 import Chart from "../create/components/Chart"
 import CorrInfo from "./components/corrInfo";
 import Form from "../create/components/Form";
@@ -103,6 +109,7 @@ export default {
     CPMSummary,
     Statistics,
     TIM,
+    TIMShortTerm,
     Chart,
     CorrInfo,
     Form,
@@ -151,6 +158,9 @@ export default {
         _this.$refs['TIM'].prepareData(_this.tradeDate, datatime)
         _this.$refs['maxMinChild'].prepareData(_this.tradeDate, datatime)
         _this.$refs['CorrInfo'].prepareData(_this.StartEndDateArray)
+        if(this.rowFrequency == 'Daily'){
+          _this.$refs['TIMShortTerm'].prepareData(_this.tradeDate, datatime)
+        }
       });
     },
     displayResultsData(_data) {
@@ -292,6 +302,7 @@ export default {
       const {summaryData, tradesData} = this.$refs.Statistics.exportData()
       const {StartEndDateArray} = this.$refs.CorrInfo.exportData()
       const {maxMinData} = this.$refs.maxMinChild.exportData()
+      const _backtestHistoryListShortTerm = []
       if (
         !(
           summaryData.length &&
@@ -388,6 +399,33 @@ export default {
           }
           _backtestHistoryList.push(zscore);
         });
+        if(this.rowFrequency == 'Daily'){
+          const {backtestHistoryListShortTerm, result_quotes_ShortTerm, periodsShortTerm, defaultTableLabelsShortTerm} = this.$refs.TIMShortTerm.exportData()
+          if(backtestHistoryListShortTerm.length && result_quotes_ShortTerm.length && periodsShortTerm.length && defaultTableLabelsShortTerm.length){
+            backtestHistoryListShortTerm.forEach((item) => {
+              const obj = {}
+              obj['Entry Date'] = item['Entry Date']
+              for(var i=1;i < defaultTableLabelsShortTerm.length;i++ ){
+                obj[defaultTableLabelsShortTerm[i].replace('[%]', 'Later [%]')] = item[defaultTableLabelsShortTerm[i]]
+              }
+              _backtestHistoryListShortTerm.push(obj)
+            })
+            result_quotes_ShortTerm.forEach(item => {
+              const zscore = {};
+              zscore['Entry Date'] = item['property'];
+              for (let i = 1; i < defaultTableLabelsShortTerm.length; i++) {
+                const value = item[periodsShortTerm[i - 1].period];
+                // 检查值是否有效
+                if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
+                  zscore[defaultTableLabelsShortTerm[i].replace('[%]', 'Later [%]')] = value;
+                } else {
+                  zscore[defaultTableLabelsShortTerm[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
+                }
+              }
+              _backtestHistoryListShortTerm.push(zscore);
+            });
+          }
+        }
 
       const _maxMinData = maxMinData.map(item => {
         const transformedItem = {
@@ -412,13 +450,19 @@ export default {
         _maxMinData,
         correlationInfo
       ]
+      if(this.rowFrequency == 'Daily' && _backtestHistoryListShortTerm.length){
+        dataList.push(_backtestHistoryListShortTerm)
+      }
       const sheetNames = [
         'Summary',
         'Trades',
-        'Multi-Timeframe Results',
+        'Multi-TF Results(Long Term)',
         'Max Gain and Loss',
         'Correlation Info'
       ]
+      if(this.rowFrequency == 'Daily' && _backtestHistoryListShortTerm.length){
+        sheetNames.push('Multi-TF Results(Short Term)')
+      }
       this.exportDataToCSV(dataList, sheetNames)
     },
     exportDataToCSV(dataList, sheetNames) {
@@ -517,7 +561,7 @@ export default {
   color: #666;
 }
 .title p {
-  padding: 0 20px;
+  padding: 0 2px;
   margin: 0;
 }
 .title p:hover {

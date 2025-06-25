@@ -113,6 +113,12 @@ export default {
              value: 'TrendSector',
              type: 'SP1500Score',
              url: 'sector_trend_score'
+           },
+           {
+             label: 'My Favorites',
+             value: 'WatchList',
+             type: 'WatchList',
+             url: 'watchlist'
            }
          ]
        }
@@ -267,7 +273,8 @@ export default {
      console.log('type, condition', type, condition)
      console.log('updateRefs', this.$refs)
      // this.$nextTick(() => {
-       this.$refs['SP1500ScoreVirtualScroll'][0].loadMore(type, null, condition)
+       const isUpdateChart = type ===  'WatchList' ? true : null
+       this.$refs['SP1500ScoreVirtualScroll'][0].loadMore(type, isUpdateChart, condition)
        this.$forceUpdate()
      // })
    },

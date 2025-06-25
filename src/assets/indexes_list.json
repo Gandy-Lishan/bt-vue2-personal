@@ -210,18 +210,6 @@
         "inception": "2010/7/19"
     },
     {
-        "symbol": "XETUSD",
-        "name": "Ethereum",
-        "category": "Crypto",
-        "inception": "2018/2/8"
-    },
-    {
-        "symbol": "bitcoin",
-        "name": "Bitcoin",
-        "category": "Crypto",
-        "inception": "2010/7/19"
-    },
-    {
         "symbol": "ACWX",
         "name": "MSCI World Ex USA",
         "category": "ETF",
@@ -334,12 +322,6 @@
         "name": "Pacer US Cash Cows ETF (COWZ)",
         "category": "ETF",
         "inception": "2025/1/13"
-    },
-    {
-        "symbol": "CPER",
-        "name": "Copper",
-        "category": "ETF",
-        "inception": "2011/11/15"
     },
     {
         "symbol": "CRPT",
@@ -768,6 +750,12 @@
         "inception": "2000/6/19"
     },
     {
+        "symbol": "IYT",
+        "name": "iShares Transportation Average ETF (IYT)",
+        "category": "ETF",
+        "inception": "2003/10/10"
+    },
+    {
         "symbol": "JNK",
         "name": "High Yield Bonds (JNK)",
         "category": "ETF",
@@ -898,12 +886,6 @@
         "name": "Poland (PLND)",
         "category": "ETF",
         "inception": "2009/11/25"
-    },
-    {
-        "symbol": "PPLT",
-        "name": "Platinum",
-        "category": "ETF",
-        "inception": "2010/1/8"
     },
     {
         "symbol": "PSCC",
@@ -1494,12 +1476,6 @@
         "inception": "2025/1/13"
     },
     {
-        "symbol": "JPY",
-        "name": "Japanese Yen",
-        "category": "Forex",
-        "inception": "1971/1/4"
-    },
-    {
         "symbol": "aussie",
         "name": "Aussie Dollar",
         "category": "Forex",
@@ -1584,12 +1560,6 @@
         "inception": "2012/8/8"
     },
     {
-        "symbol": "COMP",
-        "name": "NASDAQ Composite (COMP)",
-        "category": "Index",
-        "inception": "2021/4/1"
-    },
-    {
         "symbol": "DJIA",
         "name": "Dow Jones Industrial (DJIA)",
         "category": "Index",
@@ -1636,12 +1606,6 @@
         "name": "Gold Bugs Index (HUI)",
         "category": "Index",
         "inception": "1996/5/1"
-    },
-    {
-        "symbol": "IBEX",
-        "name": "IBEX Index",
-        "category": "Index",
-        "inception": "2020/8/7"
     },
     {
         "symbol": "ISEQ",
@@ -1786,12 +1750,6 @@
         "name": "S&P 500 (SPX)",
         "category": "Index",
         "inception": "1927/12/30"
-    },
-    {
-        "symbol": "STI",
-        "name": "STI Index",
-        "category": "Index",
-        "inception": "2008/1/10"
     },
     {
         "symbol": "TA-35",
@@ -1950,12 +1908,6 @@
         "inception": "2017/11/9"
     },
     {
-        "symbol": "crp_BTC",
-        "name": "Bitcoin",
-        "category": "Crypto",
-        "inception": "2014/9/17"
-    },
-    {
         "symbol": "crp_CEL",
         "name": "Celsius Network",
         "category": "Crypto",
@@ -2036,12 +1988,6 @@
     {
         "symbol": "crp_EOS",
         "name": "EOS",
-        "category": "Crypto",
-        "inception": "2017/11/9"
-    },
-    {
-        "symbol": "crp_ETH",
-        "name": "Ethereum",
         "category": "Crypto",
         "inception": "2017/11/9"
     },
@@ -2352,9 +2298,39 @@
         "inception": "2018/1/25"
     },
     {
-        "symbol": "IYT",
-        "name": "iShares Transportation Average ETF (IYT)",
+        "symbol": "XETUSD",
+        "name": "Ethereum",
+        "category": "Crypto",
+        "inception": "2018/2/8"
+    },
+    {
+        "symbol": "bitcoin",
+        "name": "Bitcoin",
+        "category": "Crypto",
+        "inception": "2010/7/19"
+    },
+    {
+        "symbol": "CPER",
+        "name": "Copper",
         "category": "ETF",
-        "inception": "2003/10/10"
+        "inception": "2011/11/15"
+    },
+    {
+        "symbol": "PPLT",
+        "name": "Platinum",
+        "category": "ETF",
+        "inception": "2010/01/08"
+    },
+    {
+        "symbol": "crp_BTC",
+        "name": "Bitcoin",
+        "category": "Crypto",
+        "inception": "2014/9/17"
+    },
+    {
+        "symbol": "crp_ETH",
+        "name": "Ethereum",
+        "category": "Crypto",
+        "inception": "2017/11/9"
     }
 ]

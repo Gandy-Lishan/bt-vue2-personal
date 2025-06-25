@@ -78,8 +78,20 @@ export default {
               url: 'sp_1500_complete_list',
             },
             {
+              label: 'Russell 1000 Stock Sentiment',
+              value: 'Russell1000',
+              type: 'stock',
+              url: 'russell_1000_complete_list',
+            },
+            {
+              label: 'Russell 2000 Stock Sentiment',
+              value: 'Russell2000',
+              type: 'stock',
+              url: 'russell_2000_complete_list',
+            },
+            {
               label: 'Russell 3000 Stock Sentiment',
-              value: 'Russell',
+              value: 'Russell3000',
               type: 'stock',
               url: 'russell_3000_complete_list',
             },

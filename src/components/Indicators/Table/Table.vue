@@ -36,6 +36,7 @@
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
 import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
+import { getUserWatchlistTrend } from '@/service/service'
 
 export default {
   props: {
@@ -61,12 +62,15 @@ export default {
         stock: 'stock_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
-        Russell: 'russell_3000_complete_list',
+        Russell3000: 'russell_3000_complete_list',
+        Russell1000: 'russell_1000_complete_list',
+        Russell2000: 'russell_2000_complete_list',
         SP1500Score: 'sp1500',
         SP500Score: 'spx',
         NDX100Score: 'ndx',
         CRPScore: 'crp',
         RussellScore: 'russell',
+        WatchList: 'watchlist',
         DomesticETFScore: 'etf_domestic',
         ForeignETFScore: 'etf_foreign',
         OtherAssetsETFScore: 'etf_other',
@@ -269,11 +273,20 @@ export default {
       let _results
       try {
         let url = this.urlMap[this.optionsChecked]
-        if(!url || url === 'sector_trend_score') {this.loading = false;return}
+        if((!url || url === 'sector_trend_score') && url !== 'watchlist') {this.loading = false;return}
         if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
         if(type === 'SectorTrendRelTrend' && this.$route.query.index) url = `sector_trend_reltrend?index=${this.$route.query.index}${condition === 'relative' ? `&rel_trend=1` : ''}`
-        await this.fetchIndicatorsPageList(url)
-        _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        if(url !== 'watchlist') {
+          await this.fetchIndicatorsPageList(url)
+          _results = isJson(this.indicatorsListData[url]) ? JSON.parse(this.indicatorsListData[url]) : []
+        }else if(url === 'watchlist'){
+          const res = await getUserWatchlistTrend()
+          _results = res.data
+          if(!Array.isArray(_results) && _results.code == 404) {
+            _results = []
+          }
+          console.log('watchlist _results', _results)
+        }
         if(type === 'GlobalIndexBreadth') {
           if(Array.isArray(_results) && _results.length !== 0) {
             const results = Array.from(new Set([..._results.map(item => (item.sub_type))]))
