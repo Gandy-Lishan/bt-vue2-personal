@@ -1,5 +1,5 @@
 <template>
-    <div class="balance-sheet" v-loading="isLoading">
+    <div class="balance-sheet">
       <h2 class="title">Balance Sheet</h2>
       <div style="display: flex;gap:16px">
       <button-group 

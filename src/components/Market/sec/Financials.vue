@@ -1,5 +1,5 @@
 <template>
-  <div class="financials" v-loading="isLoading">
+  <div class="financials">
     <div class="title">Financials</div>
     <button-group 
       v-model="timeframe" 

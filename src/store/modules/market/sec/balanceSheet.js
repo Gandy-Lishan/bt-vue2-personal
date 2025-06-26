@@ -59,7 +59,7 @@ const formatNumber = (value, type) => {
 function preprocessData(raw) {
   // 最新年度在前
   const lastedRow = raw[raw.length-1];
-  
+
   return {
     totalAssets: {
       title: "Total Assets",
@@ -91,9 +91,9 @@ function preprocessData(raw) {
       title: "Total Assets Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
-          'total': formatNumber(i.total_assets), 
-          'current': formatNumber(i.total_current_assets), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'total': formatNumber(i.total_assets),
+          'current': formatNumber(i.total_current_assets),
           'nonCurrent': formatNumber(i.total_non_current_assets)
         })) || [],
         seriesConfigs: [
@@ -129,9 +129,9 @@ function preprocessData(raw) {
       title: "Liabilities Breakdown",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
-          'total': formatNumber(i.total_assets), 
-          'current': formatNumber(i.total_current_assets), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'total': formatNumber(i.total_assets),
+          'current': formatNumber(i.total_current_assets),
           'nonCurrent': formatNumber(i.total_non_current_assets)
         })) || [],
         seriesConfigs: [
@@ -145,9 +145,9 @@ function preprocessData(raw) {
       title: `Shareholders' Equity Trend`,
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
-          'total': formatNumber(i.total_assets), 
-          'retained': formatNumber(i.total_current_assets), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'total': formatNumber(i.total_assets),
+          'retained': formatNumber(i.total_current_assets),
           'common': formatNumber(i.total_non_current_assets)
         })) || [],
         seriesConfigs: [
@@ -190,9 +190,9 @@ function preprocessData(raw) {
       title: "Key Performance Metrics",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
-          'currtRadio': formatNumber(i.current_ratio), 
-          'debt': formatNumber(i.d2e_ratio), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'currtRadio': formatNumber(i.current_ratio),
+          'debt': formatNumber(i.d2e_ratio),
           'turnover': formatNumber(i.asset_turnover)
         })) || [],
         seriesConfigs: [
@@ -241,7 +241,30 @@ function preprocessData(raw) {
 export default {
   namespaced: true,
   state: () => ({
-    data: [],
+    // Initialize data with the full expected structure,
+    // but with default/empty values.
+    data: {
+      totalAssets: { title: "", data: { totalPremium: null } },
+      fixedAssets: { title: "", data: { totalPremium: null } },
+      totalLiabilities: { title: "", data: { totalPremium: null } },
+      totalEquity: { title: "", data: { totalPremium: null } },
+
+      totalAssetsTrend: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      currentAssets: { title: "", data: [] },
+      nonCurrentAssets: { title: "", data: [] },
+
+      liabilitiesBreakdown: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      shareholdersEquityTrend: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      currentLiabilities: { title: "", data: [] },
+      nonCurrentLiabilities: { title: "", data: [] },
+      stockholdersEquity: { title: "", data: [] },
+
+      keyPerformanceMetrics: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      liquidityMetrics: { title: "", data: [] },
+      assetManagement: { title: "", data: [] },
+      capitalStructure: { title: [], data: [] }, // Corrected based on your preprocessData
+      growthAnalysis: { title: [], data: [] },   // Corrected based on your preprocessData
+    },
     loading: false,
     error: null,
   }),
@@ -268,7 +291,7 @@ export default {
       try {
         const raw = await getBalanceSheet(symbol, period);
         const processed = preprocessData(raw);
-        debugger
+        // debugger // You can keep this for debugging if needed
         commit("SET_DATA", processed);
       } catch (err) {
         commit("SET_ERROR", err.message || "BalanceSheet data error.");

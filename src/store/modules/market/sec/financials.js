@@ -57,6 +57,17 @@ const formatNumber = (value, type) => {
 }
 
 const formatFinancialsTrendInfo = (lastedRowIncome) => {
+  // Return default structure if lastedRowIncome is undefined/null
+  if (!lastedRowIncome) {
+    return {
+      revenue: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      grossProfit: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      operating: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      netIncome: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      ebitda: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+    };
+  }
+
   return {
     revenue: {
       current: formatNumber(lastedRowIncome.revenue),
@@ -92,12 +103,12 @@ const formatFinancialsTrendInfo = (lastedRowIncome) => {
 }
 
 function preprocessData(raw) {
-  const {income, balanceSheet} = raw
-  // 最新年度在前
-  const lastedRowIncome = income[income.length-1];
-  const lastedRowBalanceSheet = balanceSheet[balanceSheet.length-1];
-  const totalDebtList = balanceSheet.map(i=>i.total_debt)
-  debugger
+  const {income, balanceSheet} = raw;
+  // Make sure income and balanceSheet are arrays and not empty
+  const lastedRowIncome = income && income.length > 0 ? income[income.length-1] : {};
+  const lastedRowBalanceSheet = balanceSheet && balanceSheet.length > 0 ? balanceSheet[balanceSheet.length-1] : {};
+  const totalDebtList = balanceSheet ? balanceSheet.map(i=>i.total_debt) : [];
+
   let res = {
     marginAnalysis: {
       title: "Margin Analysis",
@@ -107,7 +118,7 @@ function preprocessData(raw) {
         { label: 'Net Margin', value: formatNumber(lastedRowIncome.net_margin,'percent') },
       ]
     },
-    earningsSurprises: {
+    earningsSurprises: { // Note: Your data for this section seems to be more like 'Profitability Ratios' than 'Earnings Surprises'
       title: "Earnings Surprises",
       data: [
         { label: 'Asset Turnover', value: formatNumber(lastedRowIncome.asset_turnover) },
@@ -130,8 +141,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'total': formatNumber(totalDebtList[index]), 
-          'revenue': formatNumber(i.revenue), 
+          'total': formatNumber(totalDebtList[index]),
+          'revenue': formatNumber(i.revenue),
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -144,8 +155,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'total': formatNumber(totalDebtList[index]), 
-          'grossProfit': formatNumber(i.gross_profit), 
+          'total': formatNumber(totalDebtList[index]),
+          'grossProfit': formatNumber(i.gross_profit),
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -158,8 +169,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'total': formatNumber(totalDebtList[index]), 
-          'operating': formatNumber(i.operating_income), 
+          'total': formatNumber(totalDebtList[index]),
+          'operating': formatNumber(i.operating_income),
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -172,8 +183,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'total': formatNumber(totalDebtList[index]), 
-          'netIncome': formatNumber(i.net_income), 
+          'total': formatNumber(totalDebtList[index]),
+          'netIncome': formatNumber(i.net_income),
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -186,7 +197,7 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'total': formatNumber(totalDebtList[index]), 
+          'total': formatNumber(totalDebtList[index]),
           'ebitda': formatNumber(i.ebitda),
         })) || [],
         seriesConfigs: [
@@ -202,9 +213,9 @@ function preprocessData(raw) {
       data: {
         chartData: income.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
-          'revenue': formatNumber(i.revenue), 
-          'netIncome': formatNumber(i.net_income), 
-          'ebitda': formatNumber(i.ebitda), 
+          'revenue': formatNumber(i.revenue),
+          'netIncome': formatNumber(i.net_income),
+          'ebitda': formatNumber(i.ebitda),
         })) || [],
         seriesConfigs: [
           { key: 'revenue', label: 'Revenue', color: '#3B82F6' },
@@ -218,8 +229,8 @@ function preprocessData(raw) {
       data: {
         chartData: balanceSheet.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRowBalanceSheet.date),
-          'cash': formatNumber(i.cash_and_cash_equivalents), 
-          'totalDebt': formatNumber(i.total_debt), 
+          'cash': formatNumber(i.cash_and_cash_equivalents),
+          'totalDebt': formatNumber(i.total_debt),
         })) || [],
         seriesConfigs: [
           { key: 'cash', label: 'Cash', color: '#3B82F6' },
@@ -235,7 +246,29 @@ function preprocessData(raw) {
 export default {
   namespaced: true,
   state: () => ({
-    data: [],
+    // Initialize data with the full expected structure,
+    // but with default/empty values.
+    data: {
+      marginAnalysis: { title: "", data: [] },
+      earningsSurprises: { title: "", data: [] },
+      financialScores: { title: "", data: [] },
+
+      financialsTrendInfo: { // This structure matches `formatFinancialsTrendInfo`
+        revenue: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+        grossProfit: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+        operating: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+        netIncome: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+        ebitda: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      },
+      revenue: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      grossProfit: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      operating: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      netIncome: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      ebitda: { title: "", data: { chartData: [], seriesConfigs: [] } },
+
+      incomeMetics: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      cashDebt: { title: "", data: { chartData: [], seriesConfigs: [] } },
+    },
     loading: false,
     error: null,
   }),
@@ -261,11 +294,18 @@ export default {
       commit("SET_ERROR", null);
       try {
         const raw = await getFinancials(symbol, period);
+        // Add checks for raw.income and raw.balanceSheet before accessing
+        // This is crucial because if getFinancials returns an empty or malformed object,
+        // trying to access raw.income or raw.balanceSheet will cause an error
+        // before preprocessData even runs.
+        if (!raw || !raw.income || !Array.isArray(raw.income) || !raw.balanceSheet || !Array.isArray(raw.balanceSheet)) {
+          throw new Error("Invalid financial data received.");
+        }
         const processed = preprocessData(raw);
-        debugger
+        // debugger // You can keep this for debugging if needed
         commit("SET_DATA", processed);
       } catch (err) {
-        commit("SET_ERROR", err || "Financials data error.");
+        commit("SET_ERROR", err.message || "Financials data error."); // Use err.message for consistency
       } finally {
         commit("SET_LOADING", false);
       }

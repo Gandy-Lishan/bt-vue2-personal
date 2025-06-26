@@ -1,5 +1,5 @@
 <template>
-    <div class="cashflow" v-loading="isLoading">
+    <div class="cashflow">
       <h2 class="title">Cash Flow</h2>
       <button-group 
         v-model="timeframe" 
@@ -73,16 +73,19 @@
             :title="cashFlowData['operatingActivities'].title"
             :data="cashFlowData['operatingActivities'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
           <base-table-simple
             :title="cashFlowData['investingActivities'].title"
             :data="cashFlowData['investingActivities'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
           <base-table-simple
             :title="cashFlowData['financingActivities'].title"
             :data="cashFlowData['financingActivities'].data"
             :highlight-last-row="true"
+            :isLoading="isLoading"
           />
         </div>
         <div class="divider"></div>
@@ -91,6 +94,7 @@
           :data="cashFlowData['summary'].data"
           :highlight-last-row="true"
           :transpose="true"
+          :isLoading="isLoading"
         />
       </section>
 
@@ -100,6 +104,7 @@
           <base-table-simple
             :data="cashFlowData['efficiencyMetrics'].data"
             :highlight-last-row="false"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card">
@@ -107,6 +112,7 @@
           <base-table-simple
             :data="cashFlowData['capitalAllocation'].data"
             :highlight-last-row="false"
+            :isLoading="isLoading"
           />
         </section>
         <section class="card">
@@ -114,6 +120,7 @@
           <base-table-simple
             :data="cashFlowData['sustainabilityMetrics'].data"
             :highlight-last-row="false"
+            :isLoading="isLoading"
           />
         </section>
       </div>

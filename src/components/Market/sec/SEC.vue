@@ -8,7 +8,7 @@
           showSearch="true"
           :data="SECData"
           :columns="SECDataColumns"
-          :loading="loading"
+          :loading="isLoading"
           :rowClickable="true" 
           :rowClickUrlField="'rowLink'" 
           @size-change="handleSizeChange"
@@ -37,7 +37,6 @@ export default {
     return {
       SECData: [],
       SECDataColumns: [],
-      loading: false
     }
   },
   components: {

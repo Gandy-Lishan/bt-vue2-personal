@@ -179,7 +179,20 @@ function preprocessData(raw) {
 export default {
   namespaced: true,
   state: () => ({
-    data: [],
+    data: {
+      operatingCashFlow: { title: "", data: { totalPremium: null } },
+      freeCashFlow: { title: "", data: { totalPremium: null } },
+      cashBalance: { title: "", data: { totalPremium: null } },
+      cashFlowComponents: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      freeCashFlowTrend: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      operatingActivities: { title: "", data: [] },
+      investingActivities: { title: "", data: [] },
+      financingActivities: { title: "", data: [] },
+      summary: { title: "", data: [] },
+      efficiencyMetrics: { title: "", data: [] },
+      capitalAllocation: { title: "", data: [] },
+      sustainabilityMetrics: { title: "", data: [] },
+    },
     loading: false,
     error: null,
   }),
