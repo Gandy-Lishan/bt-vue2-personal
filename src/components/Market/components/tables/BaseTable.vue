@@ -113,7 +113,7 @@
               <template v-else-if="column.type === 'link'">
                 <a
                   :href="column.link ? column.link(scope.row) : scope.row[column.prop]"
-                  target="_blank"
+                  target=""
                   class="table-link"
                 >{{ column.formatter ? column.formatter(scope.row) : scope.row[column.prop] }}</a>
               </template>
