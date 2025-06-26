@@ -10,18 +10,25 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
-const formatQuartAnnualDate = (isoStr, type) => {
-  const year = isoStr.split("T")[0].split("-")[0]
+const formatQuartAnnualDate = (isoStr, type, latestDate) => {
+  const year = isoStr.split("T")[0].split("-")[0];
   const yearShort = year.slice(-2);
-  let dateStr
-  if(type == 'FY') {
-    dateStr = year
-  }else {
-    dateStr = `${type}'${yearShort}`
+  const latestYear = latestDate.split("T")[0].split("-")[0];
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = `${type}'${yearShort}`;
+  }
+
+  // 比较当前数据的年份与 latestDataYear
+  if (year === latestYear) {
+    dateStr += ' (TTM)';
   }
 
   return dateStr;
-}
+};
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -52,6 +59,7 @@ const formatNumber = (value, type) => {
 function preprocessData(raw) {
   // 最新年度在前
   const lastedRow = raw[raw.length-1];
+  
   return {
     totalAssets: {
       title: "Total Assets",
@@ -83,7 +91,7 @@ function preprocessData(raw) {
       title: "Total Assets Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
           'total': formatNumber(i.total_assets), 
           'current': formatNumber(i.total_current_assets), 
           'nonCurrent': formatNumber(i.total_non_current_assets)
@@ -121,7 +129,7 @@ function preprocessData(raw) {
       title: "Liabilities Breakdown",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
           'total': formatNumber(i.total_assets), 
           'current': formatNumber(i.total_current_assets), 
           'nonCurrent': formatNumber(i.total_non_current_assets)
@@ -137,7 +145,7 @@ function preprocessData(raw) {
       title: `Shareholders' Equity Trend`,
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
           'total': formatNumber(i.total_assets), 
           'retained': formatNumber(i.total_current_assets), 
           'common': formatNumber(i.total_non_current_assets)
@@ -182,7 +190,7 @@ function preprocessData(raw) {
       title: "Key Performance Metrics",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date), 
           'currtRadio': formatNumber(i.current_ratio), 
           'debt': formatNumber(i.d2e_ratio), 
           'turnover': formatNumber(i.asset_turnover)

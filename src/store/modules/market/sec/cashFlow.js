@@ -10,18 +10,25 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
-const formatQuartAnnualDate = (isoStr, type) => {
-  const year = isoStr.split("T")[0].split("-")[0]
+const formatQuartAnnualDate = (isoStr, type, latestDate) => {
+  const year = isoStr.split("T")[0].split("-")[0];
   const yearShort = year.slice(-2);
-  let dateStr
-  if(type == 'FY') {
-    dateStr = year
-  }else {
-    dateStr = `${type}'${yearShort}`
+  const latestYear = latestDate.split("T")[0].split("-")[0];
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = `${type}'${yearShort}`;
+  }
+
+  // 比较当前数据的年份与 latestDataYear
+  if (year === latestYear) {
+    dateStr += ' (TTM)';
   }
 
   return dateStr;
-}
+};
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -77,7 +84,7 @@ function preprocessData(raw) {
       title: "Cash Flow Components",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
           'operating': formatNumber(i.net_cash_provided_by_operating_activities), 
           'inversting': formatNumber(-(i.net_cash_used_for_investing_activities)), 
           'financing': formatNumber(i.net_cash_used_provided_by_financing_activities)
@@ -93,7 +100,7 @@ function preprocessData(raw) {
       title: "Free Cash Flow Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
           'freeCashFlow': formatNumber(i.free_cash_flow),
         })) || {},
         seriesConfigs: [

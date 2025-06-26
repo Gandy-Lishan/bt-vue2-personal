@@ -10,18 +10,25 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
-const formatQuartAnnualDate = (isoStr, type) => {
-  const year = isoStr.split("T")[0].split("-")[0]
+const formatQuartAnnualDate = (isoStr, type, latestDate) => {
+  const year = isoStr.split("T")[0].split("-")[0];
   const yearShort = year.slice(-2);
-  let dateStr
-  if(type == 'FY') {
-    dateStr = year
-  }else {
-    dateStr = `${type}'${yearShort}`
+  const latestYear = latestDate.split("T")[0].split("-")[0];
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = `${type}'${yearShort}`;
+  }
+
+  // 比较当前数据的年份与 latestDataYear
+  if (year === latestYear) {
+    dateStr += ' (TTM)';
   }
 
   return dateStr;
-}
+};
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -122,7 +129,7 @@ function preprocessData(raw) {
       title: "Revenue",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'total': formatNumber(totalDebtList[index]), 
           'revenue': formatNumber(i.revenue), 
         })) || [],
@@ -136,7 +143,7 @@ function preprocessData(raw) {
       title: "Gross Profit",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'total': formatNumber(totalDebtList[index]), 
           'grossProfit': formatNumber(i.gross_profit), 
         })) || [],
@@ -150,7 +157,7 @@ function preprocessData(raw) {
       title: "Operating",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'total': formatNumber(totalDebtList[index]), 
           'operating': formatNumber(i.operating_income), 
         })) || [],
@@ -164,7 +171,7 @@ function preprocessData(raw) {
       title: "Net Income",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'total': formatNumber(totalDebtList[index]), 
           'netIncome': formatNumber(i.net_income), 
         })) || [],
@@ -178,7 +185,7 @@ function preprocessData(raw) {
       title: "EBITDA",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatQuartAnnualDate(i.date, i.period),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'total': formatNumber(totalDebtList[index]), 
           'ebitda': formatNumber(i.ebitda),
         })) || [],
@@ -194,7 +201,7 @@ function preprocessData(raw) {
       title: "Income Metics",
       data: {
         chartData: income.map(i => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowIncome.date),
           'revenue': formatNumber(i.revenue), 
           'netIncome': formatNumber(i.net_income), 
           'ebitda': formatNumber(i.ebitda), 
@@ -210,7 +217,7 @@ function preprocessData(raw) {
       title: "Cash & Debt Position",
       data: {
         chartData: balanceSheet.map(i => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRowBalanceSheet.date),
           'cash': formatNumber(i.cash_and_cash_equivalents), 
           'totalDebt': formatNumber(i.total_debt), 
         })) || [],
