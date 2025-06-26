@@ -260,5 +260,34 @@ const isObject = (val) => {
   return val !== null && typeof val === 'object' && !Array.isArray(val);
 }
 
+const formatNumber = (value, type, sign) => {
+  if (value === null || isNaN(value)) return '-';
+  // 自动判断单位
+  const absValue = Math.abs(value);
+  let formatted;
+  if (absValue >= 1e12) {
+    formatted = `${(value / 1e12)}T`;
+  } else if (absValue >= 1e9) {
+    formatted = `${(value / 1e9)}B`;
+  } else if (absValue >= 1e6) {
+    formatted = `${(value / 1e6)}M`;
+  } else if (absValue >= 1e3) {
+    formatted = `${(value / 1e3)}K`;
+  } else {
+    formatted = `${Number(value)}`;
+  }
+  if(type === 'percent') {
+    return `${(Number(formatted) * 100).toFixed(2)}%`;
+  }
+  else if(type === 'avg') {
+    return `${Number(formatted) > 0 ? '+' : ''}${formatted}%`
+  }
+  else if(type === 'dollar') {
+    return `$${Number(formatted).toFixed(2)}`
+  }else if(type === 'customSign') {
+    return `${Number(formatted).toFixed(2)}${sign}`
+  }
+  return Number(formatted).toFixed(2);
+ }
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject}
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}
