@@ -1,33 +1,42 @@
 <template>
   <div class="trend-score-container page-content-wrapper" :class="{'enlarge-score-container': enlarged}">
    <div class="description" v-show="enlarged">
-     <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members</b></h4>
+     <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members {{`(${last_date})`}}</b></h4>
       <p>
        Relative to the S&P 500 and measured as a percentage of total sector stocks
        <el-button style="margin-left: 10px;" type="primary" size="small" @click="downloadCSV" title="download csv"><i class="el-icon-download"></i></el-button>
       </p>
    </div>
+   <a href="https://www.espenet.com/blog/sector-trend-score-sp-500-members" target="_blank"></a>
     <table class="threshold-table trend-score-table" :class="{'enlarge-table': enlarged}">
        <thead>
         <tr>
          <th width="180px" :class="getSortClass('index_name')" @click="sortTable('index_name')">Index/Sector</th>
-         <th :class="getSortClass('ts_above_zero')" @click="sortTable('ts_above_zero')">Trend Score >=8</th>
-         <th :class="getSortClass('ts_above_five')" @click="sortTable('ts_above_five')">Trend Score <=2</th>
-         <th :class="getSortClass('ts_equal_ten')" @click="sortTable('ts_equal_ten')">Relative Score >=8</th>
-         <th :class="getSortClass('rts_above_zero')" @click="sortTable('rts_above_zero')">Relative Score <=2</th>
-         <th :class="getSortClass('rts_above_five')" @click="sortTable('rts_above_five')">Trend & Rel Score >=8</th>
-         <th :class="getSortClass('rts_equal_ten')" @click="sortTable('rts_equal_ten')">Trend & Rel Score <=2</th>
-         <th v-if="enlarged" :class="getSortClass('rts_equal_ten_spx')" @click="sortTable('rts_equal_ten_spx')">Relative Score >=8 in S&P 500</th>
-         <th v-if="enlarged" width="100px" :class="getSortClass('last_date')" @click="sortTable('last_date')">Last Date</th>
+         <th :class="getSortClass('trend_above8_ratio')" @click="sortTable('trend_above8_ratio')">Trend Score >=8</th>
+         <th :class="getSortClass('trend_below2_ratio')" @click="sortTable('trend_below2_ratio')">Trend Score <=2</th>
+         <th :class="getSortClass('reltrend_above8_ratio')" @click="sortTable('reltrend_above8_ratio')">Relative Score >=8</th>
+         <th :class="getSortClass('reltrend_below2_ratio')" @click="sortTable('reltrend_below2_ratio')">Relative Score <=2</th>
+         <th :class="getSortClass('trend_and_reltrend_above8_ratio')" @click="sortTable('trend_and_reltrend_above8_ratio')">Trend & Rel Score >=8</th>
+         <th :class="getSortClass('trend_and_reltrend_below2_ratio')" @click="sortTable('trend_and_reltrend_below2_ratio')">Trend & Rel Score <=2</th>
+         <th :class="getSortClass('reltrend_above8_spx_ratio')" @click="sortTable('reltrend_above8_spx_ratio')">Relative Score >=8 in S&P 500</th>
+         <th :class="getSortClass('constituent_trend_score')" @click="sortTable('constituent_trend_score')">Trend Score (Average)</th>
+         <th :class="getSortClass('pct_rank_10_gte_80')" @click="sortTable('pct_rank_10_gte_80')">10-Day RSRR >= 80%</th>
+         <th :class="getSortClass('pct_rank_10_lte_20')" @click="sortTable('pct_rank_10_lte_20')">10-Day RSRR <= 20%</th>
+         <th :class="getSortClass('pct_rank_42_gte_80')" @click="sortTable('pct_rank_42_gte_80')">42-Day RSRR >= 80%</th>
+         <th :class="getSortClass('pct_rank_42_lte_20')" @click="sortTable('pct_rank_42_lte_20')">42-Day RSRR <= 20%</th>
+         <th :class="getSortClass('pct_rank_126_gte_80')" @click="sortTable('pct_rank_126_gte_80')">126-Day RSRR >= 80%</th>
+         <th :class="getSortClass('pct_rank_126_lte_20')" @click="sortTable('pct_rank_126_lte_20')">126-Day RSRR <= 20%</th>
+         <!-- <th width="100px" :class="getSortClass('last_date')" @click="sortTable('last_date')">Last Date</th> -->
         </tr>
        </thead>
        <tbody>
         <template v-for="(ele, index) in data">
          <tr :key="index">
-          <template v-for="(key, keyIndex) in enlarged ? columns.concat(['rts_equal_ten_spx', 'last_date']) : columns">
+          <template v-for="(key, keyIndex) in columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
             <a v-if="key === 'index_name'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
-            <span v-else>{{ele[key] !== 'Communication Ser' ? `${ele[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}` : 'Communication Service'}}</span>
+            <!-- <span v-else-if="key === 'last_date'">{{ele[key]}}</span>  -->
+            <a v-else :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ele[key]}}</a>
            </td>
           </template>
          </tr>
@@ -39,6 +48,7 @@
 
 <script>
 import { getSectorTrendScore } from "@/service/service";
+import { formatNumber } from "@/utils";
 
 export default {
  name: 'TrendScoreTable',
@@ -48,13 +58,57 @@ export default {
  data() {
   return {
    data: [],
-   columns: ['index_name', 'ts_above_zero', 'ts_above_five', 'ts_equal_ten', 'rts_above_zero', 'rts_above_five', 'rts_equal_ten'],
+   /*
+   其中对应现在展示的列的字段名为：
+    Trend Score >=8 ： trend_above8_ratio
+    Trend Score <=2： trend_below2_ratio
+    Relative Score >=8： reltrend_above8_ratio
+    Relative Score <=2： reltrend_below2_ratio
+    Trend & Rel Score >=8： trend_and_reltrend_above8_ratio
+    Trend & Rel Score <=2： trend_and_reltrend_below2_ratio
+    Relative Score >=8 in S&P 500： reltrend_above8_spx_ratio
+    然后再新增七列，展示名字和字段对应关系为：
+    Trend Score (Average)：constituent_trend_score
+    10-Day RSRR >= 80%：pct_rank_10_gte_80
+    10-Day RSRR <= 20%：pct_rank_10_lte_20
+    126-Day RSRR >= 80%：pct_rank_126_gte_80
+    126-Day RSRR <= 20%：pct_rank_126_lte_20
+    42-Day RSRR >= 80%：pct_rank_42_gte_80
+    42-Day RSRR <= 20%：pct_rank_42_lte_20
+    */
+   columns: [
+    'index_name', 
+    'trend_above8_ratio', 
+    'trend_below2_ratio', 
+    'reltrend_above8_ratio', 
+    'reltrend_below2_ratio', 
+    'trend_and_reltrend_above8_ratio', 
+    'trend_and_reltrend_below2_ratio',
+    'reltrend_above8_spx_ratio',
+    'constituent_trend_score',
+    'pct_rank_10_gte_80',
+    'pct_rank_10_lte_20',
+    'pct_rank_42_gte_80',
+    'pct_rank_42_lte_20',
+    'pct_rank_126_gte_80',
+    'pct_rank_126_lte_20',
+    // 'last_date'
+  ],
    currentSortColumn: '',
+   last_date: ''
   }
  },
  async mounted() {
   const res = await getSectorTrendScore()
-  this.data =  res.data
+  this.data =  res.data.map(item => {
+    // 保留两位小数 toFixed 可能报错
+    const columns = this.columns.filter(col => col !== 'index_name' && col !== 'last_date')
+    columns.forEach(col => {
+      item[col] = formatNumber(item[col], 'customSign', '%')
+    })
+    return item
+  })
+  this.last_date = res.data[0].last_date
  },
  methods: {
   getSortClass(column) {
@@ -102,19 +156,26 @@ export default {
     },
     downloadCSV() {
       const xlsxName = 'Sector Summary'
-      const _keySort = Array.from(Object.keys(this.data[0]))
+      const _keySort = this.columns
       const renameMap = new Map([
         [`index_name`, 'Index/Sector'],
-        [`ts_above_zero`, 'Trend Score >=8'],
-        [`ts_above_five`, 'Trend Score <=2'],
-        [`ts_equal_ten`, 'Relative Score >=8'],
-        [`rts_above_zero`, 'Relative Score <=2'],
-        [`rts_above_five`, 'Trend & Rel Score >=8'],
-        [`rts_equal_ten`, 'Trend & Rel Score <=2'],
-        [`rts_equal_ten_spx`, 'Relative Score >=8 in S&P 500'],
-        [`last_date`, 'Date']
+        [`trend_above8_ratio`, 'Trend Score >=8'],
+        [`trend_below2_ratio`, 'Trend Score <=2'],
+        [`reltrend_above8_ratio`, 'Relative Score >=8'],
+        [`reltrend_below2_ratio`, 'Relative Score <=2'],
+        [`trend_and_reltrend_above8_ratio`, 'Trend & Rel Score >=8'],
+        [`trend_and_reltrend_below2_ratio`, 'Trend & Rel Score <=2'],
+        [`reltrend_above8_spx_ratio`, 'Relative Score >=8 in S&P 500'],
+        [`constituent_trend_score`, 'Trend Score (Average)'],
+        [`pct_rank_10_gte_80`, '10-Day RSRR >= 80%'],
+        [`pct_rank_10_lte_20`, '10-Day RSRR <= 20%'],
+        [`pct_rank_126_gte_80`, '126-Day RSRR >= 80%'],
+        [`pct_rank_126_lte_20`, '126-Day RSRR <= 20%'],
+        [`pct_rank_42_gte_80`, '42-Day RSRR >= 80%'],
+        [`pct_rank_42_lte_20`, '42-Day RSRR <= 20%'],
+        // [`last_date`, 'Date']
       ])
-      let csvContent = this.data.map(row => _keySort.map(key => `${row[key]}${!['index_name', 'last_date'].includes(key) ? '%' : ''}`).join(',')).join('\n');
+      let csvContent = this.data.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
       _keySort.forEach(key => {
         if(renameMap.has(key)) {
           _keySort[_keySort.indexOf(key)] = renameMap.get(key)
