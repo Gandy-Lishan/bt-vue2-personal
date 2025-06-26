@@ -125,7 +125,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
+  height: 111px;
   color: #888;
   font-style: italic;
   border: 1px dashed #ccc;

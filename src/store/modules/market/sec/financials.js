@@ -37,6 +37,41 @@ const formatNumber = (value, type) => {
   return formatted;
 }
 
+const formatFinancialsTrendInfo = (lastedRowIncome) => {
+  return {
+    revebue: {
+      current: formatNumber(lastedRowIncome.revenue),
+      yoy: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.revenue_yoy_growth, 'percent'),
+      yoyColor: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? 'green' : 'red'}`,
+      ratio: formatNumber(lastedRowIncome.revenue_ratio, 'percent'),
+    },
+    grossProfit: {
+      current: formatNumber(lastedRowIncome.gross_profit),
+      yoy: `${Number(lastedRowIncome.gross_profit_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.gross_profit_yoy_growth, 'percent'),
+      yoyColor: `${Number(lastedRowIncome.gross_profit_yoy_growth) > 0 ? 'green' : 'red'}`,
+      ratio: formatNumber(lastedRowIncome.gross_profit_ratio, 'percent'),
+    },
+    operating: {
+      current: formatNumber(lastedRowIncome.operating_income),
+      yoy: `${Number(lastedRowIncome.operating_income_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.operating_income_yoy_growth, 'percent'),
+      yoyColor: `${Number(lastedRowIncome.operating_income_yoy_growth) > 0 ? 'green' : 'red'}`,
+      ratio: formatNumber(lastedRowIncome.operating_income_ratio, 'percent'),
+    },
+    netIncome: {
+      current: formatNumber(lastedRowIncome.net_income),
+      yoy: `${Number(lastedRowIncome.net_income_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.net_income_yoy_growth, 'percent'),
+      yoyColor: `${Number(lastedRowIncome.net_income_yoy_growth) > 0 ? 'green' : 'red'}`,
+      ratio: formatNumber(lastedRowIncome.net_income_ratio, 'percent'),
+    },
+    ebitda: {
+      current: formatNumber(lastedRowIncome.ebitda),
+      yoy: `${Number(lastedRowIncome.ebitda_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.ebitda_yoy_growth, 'percent'),
+      yoyColor: `${Number(lastedRowIncome.ebitda_yoy_growth) > 0 ? 'green' : 'red'}`,
+      ratio: formatNumber(lastedRowIncome.ebitda_ratio, 'percent'),
+    },
+  }
+}
+
 function preprocessData(raw) {
   const {income, balanceSheet} = raw
   // 最新年度在前
@@ -70,6 +105,7 @@ function preprocessData(raw) {
     },
 
     // Financial Trend
+    financialsTrendInfo: formatFinancialsTrendInfo(lastedRowIncome),
     revebue: {
       title: "Revebue",
       data: {
@@ -77,7 +113,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'total': formatNumber(totalDebtList[index]), 
           'revebue': formatNumber(i.revenue), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
           { key: 'revebue', label: 'Revebue', color: '#3B82F6', type: 'line' },
@@ -91,7 +127,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'total': formatNumber(totalDebtList[index]), 
           'grossProfit': formatNumber(i.gross_profit), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
           { key: 'grossProfit', label: 'Gross Profit', color: '#3B82F6', type: 'line' },
@@ -105,7 +141,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'total': formatNumber(totalDebtList[index]), 
           'operating': formatNumber(i.operating_income), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
           { key: 'operating', label: 'Operating Income', color: '#3B82F6', type: 'line' },
@@ -119,7 +155,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'total': formatNumber(totalDebtList[index]), 
           'netIncome': formatNumber(i.net_income), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
           { key: 'netIncome', label: 'Net Income', color: '#3B82F6', type: 'line' },
@@ -133,7 +169,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'total': formatNumber(totalDebtList[index]), 
           'ebitda': formatNumber(i.ebitda),
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
           { key: 'ebitda', label: 'EBITDA', color: '#3B82F6', type: 'line' },
@@ -150,7 +186,7 @@ function preprocessData(raw) {
           'revebue': formatNumber(i.revenue), 
           'netIncome': formatNumber(i.net_income), 
           'ebitda': formatNumber(i.ebitda), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'revebue', label: 'Revebue', color: '#3B82F6' },
           { key: 'netIncome', label: 'Net Income', color: '#16A34A' },
@@ -165,7 +201,7 @@ function preprocessData(raw) {
           'date': formatUTCDate(i.date),
           'cash': formatNumber(i.cash_and_cash_equivalents), 
           'totalDebt': formatNumber(i.total_debt), 
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'cash', label: 'Cash', color: '#3B82F6' },
           { key: 'totalDebt', label: 'Total Debt', color: '#16A34A' },

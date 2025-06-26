@@ -64,26 +64,31 @@
         :isLoading="isLoading"
       />
       <!-- 預留sector card -->
+      <div class="divider"></div>
       <div class="grid-col-3">
       <SectorCard
         title="Current EBITDA"
-        :total-premium="0"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].current"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
 
       <SectorCard
         title="YoY Growth"
-        total-premium="0.00%"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].yoy"
+        :total-premium-color="financialsData['financialsTrendInfo'][trendsOption].yoyColor"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
 
       <SectorCard
         title="% of Revenue"
-        :total-premium="0"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].ratio"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
     </div>
     </section>

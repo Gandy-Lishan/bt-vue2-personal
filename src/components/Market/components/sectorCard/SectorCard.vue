@@ -1,5 +1,5 @@
 <template>
-  <div class="card sector-card" :class="{ 'no-border': disableBorder }">
+  <div class="card sector-card" :class="{ 'no-border': disableBorder, 'is-centered': center }">
     <div v-if="isLoading" class="card-loading">Loading data...</div>
     <div v-else>
       <h3 class="sector-title">{{ title }}</h3>
@@ -49,6 +49,10 @@ export default {
       type: Boolean, 
       default: false 
     },
+    center: { // 新增的 prop
+      type: Boolean, 
+      default: false 
+    },
   }
 }
 </script>
@@ -71,6 +75,10 @@ export default {
   box-shadow: none; // 如果有默认阴影，也一并移除
 }
 
+// 新增的类，用于文本居中
+.sector-card.is-centered {
+  text-align: center;
+}
 
 .sector-card:hover {
   transform: translateY(-2px);
@@ -94,6 +102,10 @@ export default {
 .sector-metrics {
   display: flex;
   gap: 24px;
+  // 如果卡片居中，则需要调整内部 flex 容器的对齐方式
+  .is-centered & {
+    justify-content: center;
+  }
 }
 
 .metric {
