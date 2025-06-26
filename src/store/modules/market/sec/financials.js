@@ -10,6 +10,18 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
+const formatQuartAnnualDate = (isoStr, type) => {
+  const year = isoStr.split("T")[0].split("-")[0]
+  const yearShort = year.slice(-2);
+  let dateStr
+  if(type == 'FY') {
+    dateStr = year
+  }else {
+    dateStr = `${type}'${yearShort}`
+  }
+
+  return dateStr;
+}
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -39,7 +51,7 @@ const formatNumber = (value, type) => {
 
 const formatFinancialsTrendInfo = (lastedRowIncome) => {
   return {
-    revebue: {
+    revenue: {
       current: formatNumber(lastedRowIncome.revenue),
       yoy: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.revenue_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? 'green' : 'red'}`,
@@ -106,17 +118,17 @@ function preprocessData(raw) {
 
     // Financial Trend
     financialsTrendInfo: formatFinancialsTrendInfo(lastedRowIncome),
-    revebue: {
-      title: "Revebue",
+    revenue: {
+      title: "Revenue",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(totalDebtList[index]), 
-          'revebue': formatNumber(i.revenue), 
+          'revenue': formatNumber(i.revenue), 
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
-          { key: 'revebue', label: 'Revebue', color: '#3B82F6', type: 'line' },
+          { key: 'revenue', label: 'Revenue', color: '#3B82F6', type: 'line' },
         ],
       },
     },
@@ -124,7 +136,7 @@ function preprocessData(raw) {
       title: "Gross Profit",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(totalDebtList[index]), 
           'grossProfit': formatNumber(i.gross_profit), 
         })) || [],
@@ -138,7 +150,7 @@ function preprocessData(raw) {
       title: "Operating",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(totalDebtList[index]), 
           'operating': formatNumber(i.operating_income), 
         })) || [],
@@ -152,7 +164,7 @@ function preprocessData(raw) {
       title: "Net Income",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(totalDebtList[index]), 
           'netIncome': formatNumber(i.net_income), 
         })) || [],
@@ -166,7 +178,7 @@ function preprocessData(raw) {
       title: "EBITDA",
       data: {
         chartData: income.map((i,index) => ({
-          'date': formatUTCDate(i.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(totalDebtList[index]), 
           'ebitda': formatNumber(i.ebitda),
         })) || [],
@@ -183,12 +195,12 @@ function preprocessData(raw) {
       data: {
         chartData: income.map(i => ({
           'date': formatUTCDate(i.date),
-          'revebue': formatNumber(i.revenue), 
+          'revenue': formatNumber(i.revenue), 
           'netIncome': formatNumber(i.net_income), 
           'ebitda': formatNumber(i.ebitda), 
         })) || [],
         seriesConfigs: [
-          { key: 'revebue', label: 'Revebue', color: '#3B82F6' },
+          { key: 'revenue', label: 'Revenue', color: '#3B82F6' },
           { key: 'netIncome', label: 'Net Income', color: '#16A34A' },
           { key: 'ebitda', label: 'EBITDA', color: '#818CF8' },
         ],

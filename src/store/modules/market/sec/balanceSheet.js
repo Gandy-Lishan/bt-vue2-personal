@@ -10,6 +10,18 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
+const formatQuartAnnualDate = (isoStr, type) => {
+  const year = isoStr.split("T")[0].split("-")[0]
+  const yearShort = year.slice(-2);
+  let dateStr
+  if(type == 'FY') {
+    dateStr = year
+  }else {
+    dateStr = `${type}'${yearShort}`
+  }
+
+  return dateStr;
+}
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -71,11 +83,11 @@ function preprocessData(raw) {
       title: "Total Assets Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period), 
           'total': formatNumber(i.total_assets), 
           'current': formatNumber(i.total_current_assets), 
           'nonCurrent': formatNumber(i.total_non_current_assets)
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Assets', color: '#16A34A' },
           { key: 'current', label: 'Current Assets', color: '#3B82F6' },
@@ -109,11 +121,11 @@ function preprocessData(raw) {
       title: "Liabilities Breakdown",
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period), 
           'total': formatNumber(i.total_assets), 
           'current': formatNumber(i.total_current_assets), 
           'nonCurrent': formatNumber(i.total_non_current_assets)
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Liabilities', color: '#16A34A' },
           { key: 'current', label: 'Current Liabilities', color: '#3B82F6' },
@@ -125,11 +137,11 @@ function preprocessData(raw) {
       title: `Shareholders' Equity Trend`,
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period), 
           'total': formatNumber(i.total_assets), 
           'retained': formatNumber(i.total_current_assets), 
           'common': formatNumber(i.total_non_current_assets)
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Equity', color: '#16A34A' },
           { key: 'retained', label: 'Retained Earnings', color: '#3B82F6' },
@@ -170,11 +182,11 @@ function preprocessData(raw) {
       title: "Key Performance Metrics",
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period), 
           'currtRadio': formatNumber(i.current_ratio), 
           'debt': formatNumber(i.d2e_ratio), 
           'turnover': formatNumber(i.asset_turnover)
-        })) || {},
+        })) || [],
         seriesConfigs: [
           { key: 'currtRadio', label: 'Current Ratio', color: '#16A34A' },
           { key: 'debt', label: 'Debt to Equity', color: '#3B82F6' },

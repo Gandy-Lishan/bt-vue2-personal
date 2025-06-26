@@ -43,7 +43,7 @@
         class="btn-group"
         v-model="trendsOption" 
         :options="[
-          { label: 'Revebue', value: 'revebue' },
+          { label: 'Revenue', value: 'revenue' },
           { label: 'Gross Profit', value: 'grossProfit' },
           { label: 'Operating', value: 'operating' },
           { label: 'Net Income', value: 'netIncome' },
@@ -138,7 +138,7 @@ export default {
       timeframe: 'annual',
 
       // trends mockdata
-      trendsOption: 'revebue',
+      trendsOption: 'revenue',
     }
   },
   components: {

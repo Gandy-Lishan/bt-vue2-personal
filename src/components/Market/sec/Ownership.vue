@@ -136,7 +136,7 @@ export default {
       timeframe: 'annual',
 
       // trends mockdata
-      trendsOption: 'revebue',
+      trendsOption: 'revenue',
       trendsChartData: [
         { date: '2020', revenue: 100, growth: 3 },
         { date: '2021', revenue: 150, growth: 3.5 },
@@ -149,7 +149,7 @@ export default {
         { key: 'growth', label: 'Growth Rate', color: '#D32F2F' }
       ],
       trendOptionsMap: {
-      revebue: {
+      revenue: {
         data: [
           { date: 'Jan', buys: 100, sells: 130 },
           { date: 'Feb', buys: 150, sells: 110 },
