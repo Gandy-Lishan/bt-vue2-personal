@@ -3176,7 +3176,8 @@ export default {
       } catch (error) {
         console.error('Error saving stocks:', error)
         // 添加失败
-        this.popUpMsgBox('Oops! Something went wrong. Couldn\'t add it.')
+        console.log('error?.response?.status', error?.response?.status)
+        // if(error?.response?.status === 400) {this.popUpMsgBox('Oops! Something went wrong. Couldn\'t add it.')}
         this.form.selectedStocks = []
         this.isVisible = false
       } finally {
