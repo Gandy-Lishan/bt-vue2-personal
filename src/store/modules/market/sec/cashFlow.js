@@ -10,6 +10,25 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
+const formatQuartAnnualDate = (isoStr, type, latestDate) => {
+  const year = isoStr.split("T")[0].split("-")[0];
+  const yearShort = year.slice(-2);
+  const latestYear = latestDate.split("T")[0].split("-")[0];
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = `${type}'${yearShort}`;
+  }
+
+  // 比较当前数据的年份与 latestDataYear
+  if (year === latestYear) {
+    dateStr += ' (TTM)';
+  }
+
+  return dateStr;
+};
 
 const formatNumber = (value, type) => {
   if (value === null || isNaN(value)) return '-';
@@ -65,7 +84,7 @@ function preprocessData(raw) {
       title: "Cash Flow Components",
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
           'operating': formatNumber(i.net_cash_provided_by_operating_activities), 
           'inversting': formatNumber(-(i.net_cash_used_for_investing_activities)), 
           'financing': formatNumber(i.net_cash_used_provided_by_financing_activities)
@@ -81,7 +100,7 @@ function preprocessData(raw) {
       title: "Free Cash Flow Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatUTCDate(i.date), 
+          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
           'freeCashFlow': formatNumber(i.free_cash_flow),
         })) || {},
         seriesConfigs: [
@@ -160,7 +179,20 @@ function preprocessData(raw) {
 export default {
   namespaced: true,
   state: () => ({
-    data: [],
+    data: {
+      operatingCashFlow: { title: "", data: { totalPremium: null } },
+      freeCashFlow: { title: "", data: { totalPremium: null } },
+      cashBalance: { title: "", data: { totalPremium: null } },
+      cashFlowComponents: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      freeCashFlowTrend: { title: "", data: { chartData: [], seriesConfigs: [] } },
+      operatingActivities: { title: "", data: [] },
+      investingActivities: { title: "", data: [] },
+      financingActivities: { title: "", data: [] },
+      summary: { title: "", data: [] },
+      efficiencyMetrics: { title: "", data: [] },
+      capitalAllocation: { title: "", data: [] },
+      sustainabilityMetrics: { title: "", data: [] },
+    },
     loading: false,
     error: null,
   }),

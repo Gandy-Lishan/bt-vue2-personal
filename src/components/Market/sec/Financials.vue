@@ -1,5 +1,5 @@
 <template>
-  <div class="financials" v-loading="isLoading">
+  <div class="financials">
     <div class="title">Financials</div>
     <button-group 
       v-model="timeframe" 
@@ -43,7 +43,7 @@
         class="btn-group"
         v-model="trendsOption" 
         :options="[
-          { label: 'Revebue', value: 'revebue' },
+          { label: 'Revenue', value: 'revenue' },
           { label: 'Gross Profit', value: 'grossProfit' },
           { label: 'Operating', value: 'operating' },
           { label: 'Net Income', value: 'netIncome' },
@@ -64,26 +64,31 @@
         :isLoading="isLoading"
       />
       <!-- 預留sector card -->
+      <div class="divider"></div>
       <div class="grid-col-3">
       <SectorCard
         title="Current EBITDA"
-        :total-premium="0"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].current"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
 
       <SectorCard
         title="YoY Growth"
-        total-premium="0.00%"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].yoy"
+        :total-premium-color="financialsData['financialsTrendInfo'][trendsOption].yoyColor"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
 
       <SectorCard
         title="% of Revenue"
-        :total-premium="0"
+        :total-premium="financialsData['financialsTrendInfo'][trendsOption].ratio"
         :isLoading="isLoading"
         :disable-border="true"
+        :center="true"
       />
     </div>
     </section>
@@ -133,7 +138,7 @@ export default {
       timeframe: 'annual',
 
       // trends mockdata
-      trendsOption: 'revebue',
+      trendsOption: 'revenue',
     }
   },
   components: {

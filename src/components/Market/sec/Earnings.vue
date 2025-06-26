@@ -1,5 +1,5 @@
 <template>
-  <div class="earnings" v-loading="isLoading">
+  <div class="earnings">
     <h2 class="title">Earnings</h2>
 
     <div class="grid earnings__grid">

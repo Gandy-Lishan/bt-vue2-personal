@@ -18,7 +18,7 @@
           showSearch="true"
           :data="tableData"
           :columns="columns"
-          :loading="loading"
+          :loading="isLoading"
           :rowClickable="true" 
           :rowClickUrlField="'rowLink'" 
           @size-change="handleSizeChange"
@@ -49,7 +49,6 @@ export default {
       timeframe: 'all',
       tableData: [],
      columns: [],
-     loading: false
     }
   },
   components: {
