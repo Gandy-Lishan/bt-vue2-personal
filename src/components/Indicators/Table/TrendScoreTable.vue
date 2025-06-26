@@ -1,7 +1,7 @@
 <template>
   <div class="trend-score-container page-content-wrapper" :class="{'enlarge-score-container': enlarged}">
    <div class="description" v-show="enlarged">
-     <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members</b></h4>
+     <h4 style="margin: 10px 0;"><b>A Sector-by-Sector Examination of Trend Scores for S&P 500 Members {{`(${last_date})`}}</b></h4>
       <p>
        Relative to the S&P 500 and measured as a percentage of total sector stocks
        <el-button style="margin-left: 10px;" type="primary" size="small" @click="downloadCSV" title="download csv"><i class="el-icon-download"></i></el-button>
@@ -22,11 +22,11 @@
          <th :class="getSortClass('constituent_trend_score')" @click="sortTable('constituent_trend_score')">Trend Score (Average)</th>
          <th :class="getSortClass('pct_rank_10_gte_80')" @click="sortTable('pct_rank_10_gte_80')">10-Day RSRR >= 80%</th>
          <th :class="getSortClass('pct_rank_10_lte_20')" @click="sortTable('pct_rank_10_lte_20')">10-Day RSRR <= 20%</th>
-         <th :class="getSortClass('pct_rank_126_gte_80')" @click="sortTable('pct_rank_126_gte_80')">126-Day RSRR >= 80%</th>
-         <th :class="getSortClass('pct_rank_126_lte_20')" @click="sortTable('pct_rank_126_lte_20')">126-Day RSRR <= 20%</th>
          <th :class="getSortClass('pct_rank_42_gte_80')" @click="sortTable('pct_rank_42_gte_80')">42-Day RSRR >= 80%</th>
          <th :class="getSortClass('pct_rank_42_lte_20')" @click="sortTable('pct_rank_42_lte_20')">42-Day RSRR <= 20%</th>
-         <th width="100px" :class="getSortClass('last_date')" @click="sortTable('last_date')">Last Date</th>
+         <th :class="getSortClass('pct_rank_126_gte_80')" @click="sortTable('pct_rank_126_gte_80')">126-Day RSRR >= 80%</th>
+         <th :class="getSortClass('pct_rank_126_lte_20')" @click="sortTable('pct_rank_126_lte_20')">126-Day RSRR <= 20%</th>
+         <!-- <th width="100px" :class="getSortClass('last_date')" @click="sortTable('last_date')">Last Date</th> -->
         </tr>
        </thead>
        <tbody>
@@ -35,7 +35,7 @@
           <template v-for="(key, keyIndex) in columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
             <a v-if="key === 'index_name'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
-            <span v-else-if="key === 'last_date'">{{ele[key]}}</span>
+            <!-- <span v-else-if="key === 'last_date'">{{ele[key]}}</span>  -->
             <a v-else :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ele[key]}}</a>
            </td>
           </template>
@@ -88,13 +88,14 @@ export default {
     'constituent_trend_score',
     'pct_rank_10_gte_80',
     'pct_rank_10_lte_20',
-    'pct_rank_126_gte_80',
-    'pct_rank_126_lte_20',
     'pct_rank_42_gte_80',
     'pct_rank_42_lte_20',
-    'last_date'
+    'pct_rank_126_gte_80',
+    'pct_rank_126_lte_20',
+    // 'last_date'
   ],
    currentSortColumn: '',
+   last_date: ''
   }
  },
  async mounted() {
@@ -107,6 +108,7 @@ export default {
     })
     return item
   })
+  this.last_date = res.data[0].last_date
  },
  methods: {
   getSortClass(column) {
@@ -171,7 +173,7 @@ export default {
         [`pct_rank_126_lte_20`, '126-Day RSRR <= 20%'],
         [`pct_rank_42_gte_80`, '42-Day RSRR >= 80%'],
         [`pct_rank_42_lte_20`, '42-Day RSRR <= 20%'],
-        [`last_date`, 'Date']
+        // [`last_date`, 'Date']
       ])
       let csvContent = this.data.map(row => _keySort.map(key => `${row[key]}`).join(',')).join('\n');
       _keySort.forEach(key => {
