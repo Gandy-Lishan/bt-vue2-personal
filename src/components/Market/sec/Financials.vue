@@ -67,7 +67,7 @@
       <div class="divider"></div>
       <div class="grid-col-3">
       <SectorCard
-        title="Current EBITDA"
+        :title="financialsData['financialsTrendInfo'][trendsOption].title"
         :total-premium="financialsData['financialsTrendInfo'][trendsOption].current"
         :isLoading="isLoading"
         :disable-border="true"
