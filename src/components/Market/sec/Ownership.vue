@@ -3,7 +3,7 @@
     <div class="title">Ownership</div>
     <div class="spacing-lg"></div>
     <div class="ownership-grid">
-      <section class="card pie-chart-section">
+      <!-- <section class="card pie-chart-section">
         <div class="card__subtitle">Ownership Distribution</div>
           <PieChart
           :chart-data="[
@@ -16,7 +16,7 @@
           inner-size="50%"
           :enableExporting="true"
         />
-      </section>
+      </section> -->
       <div class="tables-grid">
         <section class="card" v-for="panel in ownershipPanels" :key="panel.title">
           <div class="card__subtitle">{{ panel.title }}</div>
@@ -80,58 +80,7 @@ export default {
         type: 'info',
         closable: false
       },
-      financialPanels: [
-        {
-          title: 'Margin Analysis',
-          data: [
-            { label: 'Gross Margin', value: '46.21%' },
-            { label: 'Operating Margin', value: '31.51%' },
-            { label: 'Net Margin', value: '23.97%' }
-          ]
-        },
-        {
-          title: 'Earnings Surprises',
-          data: [
-            { label: 'Asset Turnover', value: 'N/A' },
-            { label: 'Return on Equity', value: 'N/A' },
-            { label: 'Return on Assets', value: 'N/A' }
-          ]
-        },
-      ],
-      ownershipPanels: [
-        {
-          title: 'Margin Analysis',
-          data: [
-            { label: 'Gross Margin', value: '46.21%' },
-            { label: 'Operating Margin', value: '31.51%' },
-            { label: 'Net Margin', value: '23.97%' }
-          ]
-        },
-        {
-          title: 'Earnings Surprises',
-          data: [
-            { label: 'Asset Turnover', value: 'N/A' },
-            { label: 'Return on Equity', value: 'N/A' },
-            { label: 'Return on Assets', value: 'N/A' }
-          ]
-        },
-        {
-          title: 'Margin Analysis',
-          data: [
-            { label: 'Gross Margin', value: '46.21%' },
-            { label: 'Operating Margin', value: '31.51%' },
-            { label: 'Net Margin', value: '23.97%' }
-          ]
-        },
-        {
-          title: 'Earnings Surprises',
-          data: [
-            { label: 'Asset Turnover', value: 'N/A' },
-            { label: 'Return on Equity', value: 'N/A' },
-            { label: 'Return on Assets', value: 'N/A' }
-          ]
-        },
-      ],
+      ownershipPanels: [],
       
       timeframe: 'annual',
 
@@ -252,26 +201,26 @@ export default {
       loading: false,
       tableData: [],
       insiderTransactionsColumns: [
-        { prop: 'date', label: 'Date', sortable: true },
-        { prop: 'insider', label: 'Insider', width: '120', sortable: true },
-        { prop: 'type', label: 'Type', sortable: true },
-        { prop: 'shares', label: 'Shares', sortable: true },
-        { prop: 'price', label: 'Price', sortable: true },
-        { prop: 'value', label: 'Value', sortable: true },
+        { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+        { prop: 'insider', label: 'Insider', width: '120', sortable: true, type: 'string' },
+        { prop: 'type', label: 'Type', sortable: true, type: 'string' },
+        { prop: 'shares', label: 'Shares', sortable: true, type: 'number' },
+        { prop: 'price', label: 'Price', sortable: true, type: 'number' },
+        { prop: 'value', label: 'Value', sortable: true, type: 'number' },
       ],
       institutionalHoldingsColumns: [
-        { prop: 'name', label: 'Owner Name', sortable: true },
-        { prop: 'date', label: 'Date', sortable: true },
-        { prop: 'shares', label: 'Shares Held', sortable: true },
-        { prop: 'changes_shares', label: 'Changes (Shares)', sortable: true },
-        { prop: 'change', label: 'Change (%)', sortable: true },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true },
+        { prop: 'name', label: 'Owner Name', sortable: true, type: 'string' },
+        { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number' },
+        { prop: 'changes_shares', label: 'Changes (Shares)', sortable: true, type: 'number' },
+        { prop: 'change', label: 'Change (%)', sortable: true, type: 'number' },
+        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number' },
       ],
       mutualFundHoldingsColumns: [
-        { prop: 'name', label: 'Fund Name', sortable: true },
-        { prop: 'shares', label: 'Shares Held', sortable: true },
-        { prop: 'day_reported', label: 'Day Reported', sortable: true },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true },
+        { prop: 'name', label: 'Fund Name', sortable: true, type: 'string' },
+        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number' },
+        { prop: 'day_reported', label: 'Day Reported', sortable: true, type: 'date' },
+        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number' },
       ],
       politicalTradingActivityColumns: [
         { prop: 'date', label: 'Trede Date', sortable: true },
@@ -279,6 +228,7 @@ export default {
         { prop: 'trade_type', label: 'Trade Type', sortable: true },
         { prop: 'amount', label: 'Amount', sortable: true },
       ],
+      holder_info: {},
     }
   },
   components: {
@@ -337,7 +287,8 @@ export default {
           const {
             InsiderShipData,
             institutionalHoldingsData,
-            mutualFundHoldingsData
+            mutualFundHoldingsData,
+            ownershipPanels
           } = newVal;
           if (this.activeTab === 'insider-transactions') {
             this.tableData = InsiderShipData;
@@ -346,6 +297,7 @@ export default {
           } else if (this.activeTab === 'mutual-fund-holdings') {
             this.tableData = mutualFundHoldingsData;
           }
+          this.ownershipPanels = ownershipPanels; 
         }
       },
     }
@@ -403,12 +355,12 @@ export default {
   }
 }
 
-.ownership-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: $spacing-md;
-  width: 100%;
-}
+// .ownership-grid {
+//   display: grid;
+//   grid-template-columns: 1fr 2fr;
+//   gap: $spacing-md;
+//   width: 100%;
+// }
 .tables-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

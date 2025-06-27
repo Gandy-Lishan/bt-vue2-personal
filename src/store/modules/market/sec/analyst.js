@@ -1,3 +1,4 @@
+import { formatNumber } from '@/utils';
 
 const formatUTCDate = (isoStr) => {
   const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -8,32 +9,6 @@ const formatUTCDate = (isoStr) => {
     year: 'numeric',
     timeZone: 'UTC'
   }).format(date);
-}
-
-const formatNumber = (value, type) => {
-  if (value === null || isNaN(value)) return '-';
-  if(type === 'percent') {
-    return `${(Number(value) * 100).toFixed(2)}%`;
-  }
-  else if(type === 'avg') {
-    return `${Number(value) > 0 ? '+' : ''}${Number(value).toFixed(2)}%`
-  }
-  else if(type === 'dollar') {
-    return `$${Number(value).toFixed(2)}`
-  }
-  // 自动判断单位
-  const absValue = Math.abs(value);
-  let formatted;
-  if (absValue >= 1e12) {
-    formatted = `${(value / 1e12).toFixed(2)}T`;
-  } else if (absValue >= 1e9) {
-    formatted = `${(value / 1e9).toFixed(2)}B`;
-  } else if (absValue >= 1e6) {
-    formatted = `${(value / 1e6).toFixed(2)}M`;
-  } else {
-    formatted = `${Number(value).toFixed(2)}`;
-  }
-  return formatted;
 }
 
 const raw = [
@@ -354,21 +329,21 @@ const raw = [
 const formatData = (data) => {
   const AnalystData = []
   const AnalystDataColumns = [
-    { prop: 'date', label: 'Date', width: '120', sortable: true },
-    { prop: 'target', label: 'Target', sortable: true },
-    { prop: 'minPrice', label: 'Min Price', sortable: true },
-    { prop: 'maxPrice', label: 'Max Price', sortable: true },
-    { prop: 'reportNum', label: 'Report Num', sortable: true },
-    { prop: 'accuracy', label: 'Accuracy', sortable: true },
+    { prop: 'date', label: 'Date', width: '120', sortable: true, type: 'date' },
+    { prop: 'target', label: 'Target', sortable: true, type: 'number' },
+    { prop: 'minPrice', label: 'Min Price', sortable: true, type: 'number' },
+    { prop: 'maxPrice', label: 'Max Price', sortable: true, type: 'number' },
+    { prop: 'reportNum', label: 'Report Num', sortable: true, type: 'number' },
+    { prop: 'accuracy', label: 'Accuracy', sortable: true, type: 'number' },
   ]
   data.forEach((item, index) => {
     AnalystData.push({
       date: item.Date,
-      target: item.Target,
-      minPrice: item.MinPrice,
-      maxPrice: item.MaxPrice,
+      target: formatNumber(item.Target, 'dollar'),
+      minPrice: formatNumber(item.MinPrice, 'dollar'),
+      maxPrice: formatNumber(item.MaxPrice, 'dollar'),
       reportNum: item.ReportNum,
-      accuracy: item.Accuracy
+      accuracy: formatNumber(item.Accuracy, 'customSign', '%')
     })
   })
   return {AnalystData, AnalystDataColumns}

@@ -56,10 +56,10 @@ const formatNumber = (value, type) => {
 const formatCompanyNewsData = (data) => {
   const companyNewsData = []
   const companyNewsDataColumns = [
-    { prop: 'time', label: 'Time', sortable: true, width: '150px' },
-    { prop: 'symbol', label: 'Symbol', sortable: true, width: '100px' },
-    { prop: 'title', label: 'Title', sortable: true },
-    { prop: 'image', label: 'Source', type: 'image', imageWidth: '100px', imageHeight: '20px', width: '120px'},
+    { prop: 'time', label: 'Time', sortable: true, width: '150px', type: 'date' },
+    { prop: 'symbol', label: 'Symbol', sortable: true, width: '100px', type: 'string' },
+    { prop: 'title', label: 'Title', sortable: true, type: 'string' },
+    { prop: 'image', label: 'Source', type: 'image', imageWidth: '100px', imageHeight: '20px', width: '120px' },
   ]
   data.forEach((item, index) => {
     companyNewsData.push({

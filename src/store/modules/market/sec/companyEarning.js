@@ -1,6 +1,6 @@
 // store/modules/market/overview.js
 import {getCompanyEarning} from "@/service/market";
-import { isJson } from "@/utils";
+import { isJson, formatNumber } from "@/utils";
 
 const formatUTCDate = (isoStr) => {
   const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -11,32 +11,6 @@ const formatUTCDate = (isoStr) => {
     year: 'numeric',
     timeZone: 'UTC'
   }).format(date);
-}
-
-const formatNumber = (value, type) => {
-  if (value === null || isNaN(value)) return '-';
-  if(type === 'percent') {
-    return `${(Number(value) * 100).toFixed(2)}%`;
-  }
-  else if(type === 'avg') {
-    return `${Number(value) > 0 ? '+' : ''}${Number(value).toFixed(2)}%`
-  }
-  else if(type === 'dollar') {
-    return `$${Number(value).toFixed(2)}`
-  }
-  // 自动判断单位
-  const absValue = Math.abs(value);
-  let formatted;
-  if (absValue >= 1e12) {
-    formatted = `${(value / 1e12).toFixed(2)}T`;
-  } else if (absValue >= 1e9) {
-    formatted = `${(value / 1e9).toFixed(2)}B`;
-  } else if (absValue >= 1e6) {
-    formatted = `${(value / 1e6).toFixed(2)}M`;
-  } else {
-    formatted = `${Number(value).toFixed(2)}`;
-  }
-  return formatted;
 }
 
 const formatEarningsInfo = (detail) => [
@@ -57,13 +31,13 @@ const formatEPSData = (data) => {
   const RevenueSurprises = []
   const EarningHistory = []
   const EarningHistoryColumns = [
-    { prop: 'period', label: 'Period', sortable: true },
-    { prop: 'date', label: 'Date', width: '120', sortable: true },
-    { prop: 'estimated_eps', label: 'Estimated EPS', sortable: true },
-    { prop: 'actual_eps', label: 'Actual EPS', sortable: true },
-    { prop: 'surprise', label: 'Surprise', sortable: true },
-    { prop: 'est_revenue', label: 'Est. Revenue', sortable: true },
-    { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true }
+    { prop: 'period', label: 'Period', sortable: true, type: 'date' },
+    { prop: 'date', label: 'Date', width: '120', sortable: true, type: 'quarter' },
+    { prop: 'estimated_eps', label: 'Estimated EPS', sortable: true, type: 'number' },
+    { prop: 'actual_eps', label: 'Actual EPS', sortable: true, type: 'number' },
+    { prop: 'surprise', label: 'Surprise', sortable: true, type: 'number' },
+    { prop: 'est_revenue', label: 'Est. Revenue', sortable: true, type: 'number' },
+    { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true, type: 'number' }
   ]
 
   data.forEach((item, index) => {
@@ -108,9 +82,9 @@ const formatEPSData = (data) => {
 const formatUpcomingEarning = (data) => {
   const UpcomingEarning = []
   const UpcomingEarningColumns = [
-    { prop: 'date', label: 'Date', sortable: true },
-    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true },
-    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true }
+    { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true, type: 'number' },
+    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true, type: 'number' }
   ]
   data.forEach((item, index) => {
     UpcomingEarning.push({

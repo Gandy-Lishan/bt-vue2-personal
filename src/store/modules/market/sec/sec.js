@@ -41,17 +41,18 @@ const formatNumber = (value, type) => {
 const formatSECData = (data) => {
   const SECData = []
   const SECDataColumns = [
-    { prop: 'date', label: 'Date', sortable: true },
-    { prop: 'ticker', label: 'Ticker', sortable: true },
-    { prop: 'from', label: 'From', sortable: true },
-    // { prop: 'description', label: 'Description', sortable: true }
+    { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+    { prop: 'ticker', label: 'Ticker', sortable: true, type: 'string' },
+    { prop: 'description', label: 'Description', sortable: true, type: 'string' },
+    { prop: 'from', label: 'From', sortable: true, type: 'string' },
   ]
   data.forEach((item, index) => {
     SECData.push({
       date: formatUTCDate(item.filling_date),
       ticker: item.symbol,
       from: item.sec_type,
-      rowLink: item.finalLink
+      rowLink: item.finalLink,
+      description: item.description
     })
   })
   return {SECData, SECDataColumns}

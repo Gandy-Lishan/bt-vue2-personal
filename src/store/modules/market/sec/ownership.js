@@ -59,6 +59,43 @@ const formatOwnershipData = (data) => {
   const insider_data = isJson(data.insider_data.data) ? JSON.parse(data.insider_data.data) : []
   const institutional_holders = isJson(data.holder_data.institutional_holders) ? JSON.parse(data.holder_data.institutional_holders) : []
   const fund_holders = isJson(data.holder_data.fund_holders) ? JSON.parse(data.holder_data.fund_holders) : []
+  const {
+    insider_activity_annual_trading_volume, 
+    insider_activity_buy_sell_ratio, 
+    insider_activity_net_buy_sentiment,
+    institution_activity_total_holding,
+    institution_activity_quarterly_change,
+    institution_activity_avg_position,
+    mutual_fund_total_holding,
+    mutual_fund_unique_funds,
+    mutual_fund_avg_holding_size,
+  } = data.holder_data
+  const ownershipPanels = [
+    {
+      title: 'Executive Insider Activity',
+      data: [
+        { label: 'Annual Trading Volume', value: formatNumber(insider_activity_annual_trading_volume, 'dollar') },
+        { label: 'Buy/Sell Ratio', value: formatNumber(insider_activity_buy_sell_ratio, 'customSign', 'x') },
+        { label: 'Net Buying Sentiment', value: formatNumber(insider_activity_net_buy_sentiment, 'customSign', '%') }
+      ]
+    },
+    {
+      title: 'Institutional Activity',
+      data: [
+        { label: 'Total Holding', value: formatNumber(institution_activity_total_holding, 'dollar') },
+        { label: 'Quarterly Change', value: formatNumber(institution_activity_quarterly_change, 'customSign', '%') },
+        { label: 'Average Position', value: formatNumber(institution_activity_avg_position, 'dollar') }
+      ]
+    },
+    {
+      title: 'Mutual Fund Holdings',
+      data: [
+        { label: 'Total Fund Holding', value: formatNumber(mutual_fund_total_holding, 'dollar') },
+        { label: 'Unique Funds', value: formatNumber(mutual_fund_unique_funds) },
+        { label: 'Average Holding Size', value: formatNumber(mutual_fund_avg_holding_size, 'dollar') }
+      ]
+    }
+  ]
 
   insider_data.forEach((item, index) => {
     const date = formatUTCDate(item.transaction_date);
@@ -102,16 +139,17 @@ const formatOwnershipData = (data) => {
     InsiderShipChartData,
     institutionalHoldingsData, 
     mutualFundHoldingsData, 
-    institutional_holders
+    institutional_holders,
+    ownershipPanels
   }
 }
 
 const formatUpcomingEarning = (data) => {
   const UpcomingEarning = []
   const UpcomingEarningColumns = [
-    { prop: 'date', label: 'Date', sortable: true },
-    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true },
-    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true }
+    { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true, type: 'number' },
+    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true, type: 'number' }
   ]
   data.forEach((item, index) => {
     UpcomingEarning.push({
@@ -126,11 +164,12 @@ const formatUpcomingEarning = (data) => {
 function preprocessData(raw) {
   // 處理 raw 為你需要的格式
   const data = raw.data.data
-  let {InsiderShipData, institutionalHoldingsData, mutualFundHoldingsData} = formatOwnershipData(data)
+  let {InsiderShipData, institutionalHoldingsData, mutualFundHoldingsData, ownershipPanels} = formatOwnershipData(data)
   return {
     InsiderShipData, 
     institutionalHoldingsData, 
-    mutualFundHoldingsData
+    mutualFundHoldingsData,
+    ownershipPanels
   };
 }
 
@@ -162,8 +201,8 @@ export default {
       commit("SET_LOADING", true);
       try {
         const raw = await getOwnership(val)
-        console.log('lishan raw', raw)
         const processed = preprocessData(raw);
+        console.log('lishan processed', processed)
         commit("SET_DATA", processed);
       } catch (err) {
         commit("SET_ERROR", err.message || "Ownership data error.");

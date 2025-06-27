@@ -80,6 +80,7 @@
       v-loading="loading"
       size="small"
       @row-click="handleRowClick"
+      @sort-change="changeTableSort"
     >
       <!-- 表格列 -->
       <template v-for="column in columns">
@@ -380,7 +381,103 @@
      
      // 触发事件
     //  this.$emit('row-click', { row, column, event })
-   }
+   },
+  parseNumber(val) {
+    if (!val || typeof val !== 'string') return 0;
+
+    const str = val.trim();
+
+    if (str === '-' || str.toLowerCase().includes('nan')) return 0;
+
+    // 百分比
+    if (str.endsWith('%')) {
+      const percent = parseFloat(str.replace('%', ''));
+      return isNaN(percent) ? 0 : percent;
+    }
+
+    // 匹配正负号、金额、单位
+    const match = str.match(/^([-+])?[\$]?\s*([\d,]+(?:\.\d+)?)\s*([kmbtKMBT]?)$/);
+    if (!match) return 0;
+
+    const sign = match[1] === '-' ? -1 : 1;
+    let num = parseFloat(match[2].replace(/,/g, ''));
+    if (isNaN(num)) return 0;
+
+    const unit = match[3].toUpperCase();
+    const multipliers = { K: 1e3, M: 1e6, B: 1e9, T: 1e12 };
+    if (unit && multipliers[unit]) {
+      num *= multipliers[unit];
+    }
+
+    return sign * num;
+  },
+   changeTableSort(column){
+    const sortingOrder = column.order;
+    const colName = column.prop;
+    const columnDef = this.columns.find(col => col.prop === colName);
+    const columnType = columnDef?.type || 'string';
+
+    if (columnType === 'number' && (sortingOrder === 'ascending' || sortingOrder === 'descending')) {
+      this.data.sort((a, b) => {
+        const aVal = (this.parseNumber(a[colName]));
+        const bVal = (this.parseNumber(b[colName]));
+        const aInvalid = aVal === null;
+        const bInvalid = bVal === null;
+        if (aInvalid && !bInvalid) return 1;
+        else if (!aInvalid && bInvalid) return -1;
+        else if (aInvalid && bInvalid) return 0;
+        return sortingOrder === 'ascending' ? aVal - bVal : bVal - aVal;
+      });
+    }
+			// 日期类型排序
+			if(['last_update'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.filterData.sort((a,b) => {
+						return new Date(b[colName]) - new Date(a[colName])
+					})
+				}else if(sortingOrder == 'descending'){
+					this.filterData.sort((a,b) => {
+						return new Date(a[colName]) - new Date(b[colName])
+					})
+				}else{
+				}
+			}
+      if (['last_update'].indexOf(colName) !== -1) {
+        // 处理日期字符串
+        const isValidDate = date => !isNaN(Date.parse(date));
+        const sortedData = this.filterData.sort((a, b) => {
+        const dateA = new Date(a[colName])
+        const dateB = new Date(b[colName])
+        const isDateAValid = isValidDate(a[colName])
+        const isDateBValid = isValidDate(b[colName])
+        // 都是无效日期，保持原顺序
+        if (!isDateAValid && !isDateBValid) return 0
+
+        //a 是无效日期，排到最后 
+        if (!isDateAValid) return 1;
+
+        // b 是无效日期，排到最后
+        if (!isDateBValid) return -1
+
+        // 都是有效日期，按日期排序
+        if (sortingOrder === 'ascending') {
+        return dateB - dateA;
+        } else if (sortingOrder === 'descending') {
+        return dateA - dateB;
+        }
+        return 0
+        })
+        this.filterData = sortedData
+        }
+			// 字符串类型排序
+			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
+				if(sortingOrder == 'ascending'){
+					this.filterData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
+				}else if(sortingOrder == 'descending'){
+					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
+				}
+			}
+		},
   }
  }
  </script>
