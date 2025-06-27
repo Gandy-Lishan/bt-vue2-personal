@@ -46,7 +46,7 @@
             </div>
             <a
               class="full-screen-button"
-              href="/backtester/sr/setup"
+              :href="`/backtester/sr/setup?index=${symbol}&indicator=${symbol}`"
               target=""
             >
                 <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

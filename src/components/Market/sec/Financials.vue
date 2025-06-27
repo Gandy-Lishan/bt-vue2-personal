@@ -13,7 +13,7 @@
     <div class="spacing-lg"></div>
     <div class="grid-col-3">
       <section class="card financials__card">
-        <div class="card__subtitle">{{ financialsData['marginAnalysis'].title }}</div>
+        <div class="card__subtitle">Margin Analysis</div>
         <base-table-simple
           :data="financialsData['marginAnalysis'].data"
           :highlight-last-row="false"
@@ -21,7 +21,7 @@
         />
       </section>
       <section class="card financials__card">
-        <div class="card__subtitle">{{ financialsData['earningsSurprises'].title }}</div>
+        <div class="card__subtitle">Earnings Surprises</div>
         <base-table-simple
           :data="financialsData['earningsSurprises'].data"
           :highlight-last-row="false"
@@ -29,7 +29,7 @@
         />
       </section>
       <section class="card financials__card">
-        <div class="card__subtitle">{{ financialsData['financialScores'].title }}</div>
+        <div class="card__subtitle">Financial Scores</div>
         <base-table-simple
           :data="financialsData['financialScores'].data"
           :highlight-last-row="false"
