@@ -18,13 +18,12 @@ const formatQuartAnnualDate = (isoStr, type, latestDate) => {
 
   if (type === 'FY') {
     dateStr = year;
+    // 比较当前数据的年份与 latestDataYear
+    if (year === latestYear) {
+      dateStr += ' (TTM)';
+    }
   } else {
     dateStr = `${type}'${yearShort}`;
-  }
-
-  // 比较当前数据的年份与 latestDataYear
-  if (year === latestYear) {
-    dateStr += ' (TTM)';
   }
 
   return dateStr;
@@ -60,40 +59,45 @@ const formatFinancialsTrendInfo = (lastedRowIncome) => {
   // Return default structure if lastedRowIncome is undefined/null
   if (!lastedRowIncome) {
     return {
-      revenue: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
-      grossProfit: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
-      operating: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
-      netIncome: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
-      ebitda: { current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      revenue: { title: 'Current Revenue', current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      grossProfit: { title: 'Current Gross Profit', current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      operating: { title: 'Current Operating', current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      netIncome: { title: 'Current Net Income', current: '-', yoy: '-', yoyColor: '', ratio: '-' },
+      ebitda: { title: 'Current EBITDA', current: '-', yoy: '-', yoyColor: '', ratio: '-' },
     };
   }
 
   return {
     revenue: {
+      title: 'Current Revenue', 
       current: formatNumber(lastedRowIncome.revenue),
       yoy: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.revenue_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.revenue_yoy_growth) > 0 ? 'green' : 'red'}`,
       ratio: formatNumber(lastedRowIncome.revenue_ratio, 'percent'),
     },
     grossProfit: {
+      title: 'Current Gross Profit',
       current: formatNumber(lastedRowIncome.gross_profit),
       yoy: `${Number(lastedRowIncome.gross_profit_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.gross_profit_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.gross_profit_yoy_growth) > 0 ? 'green' : 'red'}`,
       ratio: formatNumber(lastedRowIncome.gross_profit_ratio, 'percent'),
     },
     operating: {
+      title: 'Current Operating', 
       current: formatNumber(lastedRowIncome.operating_income),
       yoy: `${Number(lastedRowIncome.operating_income_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.operating_income_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.operating_income_yoy_growth) > 0 ? 'green' : 'red'}`,
       ratio: formatNumber(lastedRowIncome.operating_income_ratio, 'percent'),
     },
     netIncome: {
+      title: 'Current Net Income', 
       current: formatNumber(lastedRowIncome.net_income),
       yoy: `${Number(lastedRowIncome.net_income_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.net_income_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.net_income_yoy_growth) > 0 ? 'green' : 'red'}`,
       ratio: formatNumber(lastedRowIncome.net_income_ratio, 'percent'),
     },
     ebitda: {
+      title: 'Current EBITDA', 
       current: formatNumber(lastedRowIncome.ebitda),
       yoy: `${Number(lastedRowIncome.ebitda_yoy_growth) > 0 ? '+' : ''}` + formatNumber(lastedRowIncome.ebitda_yoy_growth, 'percent'),
       yoyColor: `${Number(lastedRowIncome.ebitda_yoy_growth) > 0 ? 'green' : 'red'}`,
