@@ -1,7 +1,7 @@
 <template>
   <div class="financials">
     <div class="title">News</div>
-    <button-group 
+    <!-- <button-group 
       v-model="timeframe" 
       :options="[
         { label: 'All', value: 'all' },
@@ -10,7 +10,7 @@
       ]" 
       backgroundColor="#fff" 
       :enableTransition="true" 
-    />
+    /> -->
     <div class="spacing-lg"></div>
     <div class="grid-col-1">
       <section class="card financials__card">

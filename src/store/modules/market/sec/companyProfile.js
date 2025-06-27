@@ -1,42 +1,41 @@
 // store/modules/market/overview.js
 import {getCompanyProfile} from "@/service/market";
+import { formatNumber } from '@/utils';
 
 const formatCompanyDetails = (detail) => [
-    { label: 'Market Cap', value: `$${(Number(detail.market_cap) / 1e9).toFixed(2)}B` },
-    { label: 'P/E Ratio', value: parseFloat(detail.pe_ratio).toFixed(2) },
-    { label: 'P/B Ratio', value: parseFloat(detail.pb_ratio).toFixed(2) },
-    { label: 'EV/Sales', value: parseFloat(detail.ev_to_sales).toFixed(2) },
-    { label: 'EV/EBITDA', value: parseFloat(detail.enterprise_value_over_ebitda).toFixed(2) },
-    { label: 'P/S Ratio', value: parseFloat(detail.price_to_sales_ratio).toFixed(2) },
-    { label: 'Beta', value: 'N/A' }, // 源数据中无 beta，可根据需要补充
-    { label: 'Return on Equity', value: `${(parseFloat(detail.roe) * 100).toFixed(2)}%` },
-    { label: 'ROIC', value: `${(parseFloat(detail.roic) * 100).toFixed(2)}%` },
-    { label: 'Current Ratio', value: parseFloat(detail.current_ratio).toFixed(2) },
-    { label: 'FCF Yield', value: `${(parseFloat(detail.free_cash_flow_yield) * 100).toFixed(2)}%` },
-    { label: 'Dividend Yield', value: `${(parseFloat(detail.dividend_yield) * 100).toFixed(2)}%` }
+    { label: 'Market Cap', value: formatNumber(detail.market_cap, 'dollar') },
+    { label: 'P/E Ratio', value: formatNumber(detail.pe_ratio) },
+    { label: 'P/B Ratio', value: formatNumber(detail.pb_ratio) },
+    { label: 'EV/Sales', value: formatNumber(detail.ev_to_sales) },
+    { label: 'EV/EBITDA', value: formatNumber(detail.enterprise_value_over_ebitda) },
+    { label: 'P/S Ratio', value: formatNumber(detail.price_to_sales_ratio) },
+    { label: 'Beta', value: formatNumber(detail.beta) }, // 源数据中无 beta，可根据需要补充
+    { label: 'Return on Equity', value: formatNumber(detail.roe, 'percent') },
+    { label: 'ROIC', value: formatNumber(detail.roic, 'percent') },
+    { label: 'Current Ratio', value: formatNumber(detail.current_ratio) },
+    { label: 'FCF Yield', value: formatNumber(detail.free_cash_flow_yield, 'percent') },
+    { label: 'Dividend Yield', value: formatNumber(detail.dividend_yield, 'percent') }
   ]
   
 const formatTradingStats = (stat) => [
-    { label: 'Price', value: `$${parseFloat(stat.price).toFixed(2)}` },
-    { label: 'Open', value: `$${parseFloat(stat.open_price).toFixed(2)}`  }, // 源数据无 open
-    { label: 'Previous Close', value: `$${parseFloat(stat.previous_close).toFixed(2)}` },
-    { label: 'Day High', value: `$${parseFloat(stat.day_high).toFixed(2)}` },
-    { label: 'Day Low', value: `$${parseFloat(stat.day_low).toFixed(2)}` },
-    { label: '52W High', value: `$${parseFloat(stat.year_high).toFixed(2)}` },
-    { label: '52W Low', value: `$${parseFloat(stat.year_low).toFixed(2)}` },
-    { label: 'Volume', value: `${(stat.volume / 1e6).toFixed(2)}M` },
-    { label: 'Avg Volume', value: `${(stat.avg_volume / 1e6).toFixed(2)}M` },
-    { label: 'ATR (14)', value: stat.atr14 ? `${parseFloat(stat.atr14).toFixed(2)}` : 'N/A' },
+    { label: 'Price', value: formatNumber(stat.price, 'dollar') },
+    { label: 'Open', value: formatNumber(stat.open_price, 'dollar')  }, // 源数据无 open
+    { label: 'Previous Close', value: formatNumber(stat.previous_close, 'dollar') },
+    { label: 'Day High', value: formatNumber(stat.day_high, 'dollar') },
+    { label: 'Day Low', value: formatNumber(stat.day_low, 'dollar') },
+    { label: '52W High', value: formatNumber(stat.year_high, 'dollar') },
+    { label: '52W Low', value: formatNumber(stat.year_low, 'dollar') },
+    { label: 'Volume', value: formatNumber(stat.volume) },
+    { label: 'Avg Volume', value: formatNumber(stat.avg_volume) },
+    { label: 'ATR (14)', value: formatNumber(stat.atr14) },
     {
       label: '200MA Distance',
-      value: stat.ma200_distance
-        ? `${parseFloat(stat.ma200_distance).toFixed(2)}%`
-        : 'N/A',
+      value: `${formatNumber(stat.ma200_distance, 'customSign', '%')}`,
       isNegative: stat.ma200_distance && parseFloat(stat.ma200_distance) < 0
     },
     {
       label: 'Relative Volume',
-      value: stat.relative_volume ? `${parseFloat(stat.relative_volume).toFixed(2)}x` : 'N/A'
+      value: `${formatNumber(stat.relative_volume, 'customSign', 'x')}`
     }
   ]
 
