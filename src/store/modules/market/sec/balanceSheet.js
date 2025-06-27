@@ -129,9 +129,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
-          'total': formatNumber(i.total_assets),
-          'current': formatNumber(i.total_current_assets),
-          'nonCurrent': formatNumber(i.total_non_current_assets)
+          'total': formatNumber(i.total_liabilities),
+          'current': formatNumber(i.total_current_liabilities),
+          'nonCurrent': formatNumber(i.total_non_current_liabilities)
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Liabilities', color: '#16A34A' },
@@ -145,9 +145,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
-          'total': formatNumber(i.total_assets),
-          'retained': formatNumber(i.total_current_assets),
-          'common': formatNumber(i.total_non_current_assets)
+          'total': formatNumber(i.total_stockholders_equity),
+          'retained': formatNumber(i.retained_earnings),
+          'common': formatNumber(i.common_stock)
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Equity', color: '#16A34A' },
