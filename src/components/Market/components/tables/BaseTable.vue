@@ -103,7 +103,6 @@
               <template v-if="column.type === 'image'">
                 <el-image
                   :src="scope.row[column.prop]"
-                  :preview-src-list="[scope.row[column.prop]]"
                   fit="contain"
                   :style="{ width: column.imageWidth || '50px', height: column.imageHeight || 'auto' }"
                 />

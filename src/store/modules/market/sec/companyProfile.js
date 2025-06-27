@@ -18,7 +18,7 @@ const formatCompanyDetails = (detail) => [
   
 const formatTradingStats = (stat) => [
     { label: 'Price', value: `$${parseFloat(stat.price).toFixed(2)}` },
-    { label: 'Open', value: 'N/A' }, // 源数据无 open
+    { label: 'Open', value: `$${parseFloat(stat.open_price).toFixed(2)}`  }, // 源数据无 open
     { label: 'Previous Close', value: `$${parseFloat(stat.previous_close).toFixed(2)}` },
     { label: 'Day High', value: `$${parseFloat(stat.day_high).toFixed(2)}` },
     { label: 'Day Low', value: `$${parseFloat(stat.day_low).toFixed(2)}` },
@@ -26,7 +26,7 @@ const formatTradingStats = (stat) => [
     { label: '52W Low', value: `$${parseFloat(stat.year_low).toFixed(2)}` },
     { label: 'Volume', value: `${(stat.volume / 1e6).toFixed(2)}M` },
     { label: 'Avg Volume', value: `${(stat.avg_volume / 1e6).toFixed(2)}M` },
-    { label: 'ATR (14)', value: stat.atr14 ? `$${parseFloat(stat.atr14).toFixed(2)}` : 'N/A' },
+    { label: 'ATR (14)', value: stat.atr14 ? `${parseFloat(stat.atr14).toFixed(2)}` : 'N/A' },
     {
       label: '200MA Distance',
       value: stat.ma200_distance
@@ -44,6 +44,8 @@ function preprocessData(raw) {
   // 處理 raw 為你需要的格式
   const data = raw.data.data
   let profile = data.profile
+  profile.isEtf = profile.isEtf === 0 ? 'No' : 'Yes'
+  profile.isFund = profile.isFund === 0 ? 'No' : 'Yes'
   let companyDetails = formatCompanyDetails(data.latest_detail)
   let tradingStats = formatTradingStats(data.trading_stat)
   debugger
