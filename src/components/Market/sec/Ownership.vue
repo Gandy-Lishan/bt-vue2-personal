@@ -215,13 +215,13 @@ export default {
         { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number', formatter: (row) => formatNumber(row.shares) },
         { prop: 'changes_shares', label: 'Changes (Shares)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.changes_shares) },
         { prop: 'change', label: 'Change (%)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.change, 'customSign', '%') },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
+        { prop: 'value', label: 'Value', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
       ],
       mutualFundHoldingsColumns: [
         { prop: 'name', label: 'Fund Name', sortable: true, type: 'string' },
         { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number', formatter: (row) => formatNumber(row.shares) },
         { prop: 'day_reported', label: 'Day Reported', sortable: true, type: 'date', formatter: (row) => this.formatUTCDate(row.day_reported) },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
+        { prop: 'value', label: 'Value', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
       ],
       politicalTradingActivityColumns: [
         { prop: 'date', label: 'Trede Date', sortable: true },
