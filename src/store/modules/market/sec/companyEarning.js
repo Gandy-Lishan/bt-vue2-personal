@@ -1,0 +1,172 @@
+// store/modules/market/overview.js
+import {getCompanyEarning} from "@/service/market";
+import { isJson, formatNumber } from "@/utils";
+
+const formatUTCDate = (isoStr) => {
+  const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(date);
+}
+const formatQuartAnnualDate = (isoStr, type) => {
+  const year = isoStr.split("T")[0].split("-")[0];
+  const yearShort = year.slice(-2);
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = `${type}'${yearShort}`;
+  }
+
+  return dateStr;
+};
+
+const formatEarningsInfo = (detail) => [
+    { title: 'Average EPS', totalPremium: formatNumber(detail.avg_eps, 'dollar')},
+    // { title: 'vs. Est.', totalPremium: `$${Number(detail.avg_eps_est).toFixed(2)}` },
+    { title: 'Beat/Miss Ratio', totalPremium: `${Number(detail.beat_count)}/${12-Number(detail.beat_count)}` },
+    // { title: `${(parseFloat(detail.beat_rate) * 100).toFixed(2)}%`, totalPremium: 'Beat Rate' },
+    { title: 'Average Surprice', totalPremium: formatNumber(detail.avg_eps_surprise, 'avg'), totalPremiumColor: `${Number(detail.avg_eps_surprise) > 0 ? 'green' : 'red'}`  },
+    // { title: 'Last', totalPremium: `${Number(detail.last_eps_surprise)}%` },
+  ]
+const formatEPSData = (data) => {
+  const EPSTrendEstimates = []
+  const EPSGrowthRate = {
+    yoy: [],
+    qoq: []
+  }
+  const EarningSurprise = []
+  const RevenueSurprises = []
+  const EarningHistory = []
+  const EarningHistoryColumns = [
+    { prop: 'period', label: 'Period', sortable: true, type: 'date'},
+    { prop: 'date', label: 'Date', width: '120', sortable: true, type: 'quarter' },
+    { prop: 'estimated_eps', label: 'Estimated EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.estimated_eps, 'dollar') },
+    { prop: 'actual_eps', label: 'Actual EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.actual_eps, 'dollar') },
+    { prop: 'surprise', label: 'Surprise', sortable: true, type: 'number', formatter: (row) => formatNumber(row.surprise, 'avg') },
+    { prop: 'est_revenue', label: 'Est. Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.est_revenue) },
+    { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.actual_revenue) }
+  ]
+debugger
+  data.forEach((item, index) => {
+    // const date = item.fiscal_date_ending.split("T")[0].split("-")[0].slice(-2);
+    // const dateStr = `Q${index + 1}'${date}`
+    // const yearStr = `Q${index + 1}'${item.fiscal_date_ending.slice(0, 4)}`
+
+    const dateStr = formatQuartAnnualDate(item.fiscal_date_ending, item.period)
+
+    EPSTrendEstimates.push({
+      date: dateStr,
+      estimate: item.eps_estimated,
+      actual: item.eps
+    })
+    EPSGrowthRate.yoy.push({
+      period: dateStr,
+      value: formatNumber(item.yoy_growth, 'percent'),
+    })
+    EPSGrowthRate.qoq.push({
+      period: dateStr,
+      value: formatNumber(item.qoq_growth, 'percent')
+    })
+    EarningSurprise.push({
+      date: dateStr,
+      surprise: formatNumber(item.eps_surprise)
+    })
+    RevenueSurprises.push({
+      date: dateStr,
+      surprise: formatNumber(item.revenue_surprise)
+    })
+    EarningHistory.push({
+      period: formatUTCDate(item.fiscal_date_ending),
+      date: dateStr,
+      estimated_eps: item.eps_estimated,
+      actual_eps: item.eps,
+      surprise: item.eps_surprise,
+      est_revenue: item.revenue_estimated,
+      actual_revenue: item.revenue
+    })
+  })
+  return {EPSTrendEstimates, EPSGrowthRate, EarningSurprise, RevenueSurprises, EarningHistory, EarningHistoryColumns}
+}
+
+const formatUpcomingEarning = (data) => {
+  const UpcomingEarning = []
+  const UpcomingEarningColumns = [
+    { prop: 'date', label: 'Date', sortable: true, type: 'date' },
+    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.eps_estimated, 'dollar') },
+    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.revenue_estimated) }
+  ]
+  data.forEach((item, index) => {
+    UpcomingEarning.push({
+      date: formatUTCDate(item.fiscal_date_ending),
+      eps_estimated: item.eps_estimated,
+      revenue_estimated: item.revenue_estimated
+    })
+  })
+  return {UpcomingEarning, UpcomingEarningColumns}
+}
+
+function preprocessData(raw) {
+  // 處理 raw 為你需要的格式
+  const data = raw.data.data
+  let EarningsInfo = formatEarningsInfo(data.earning_data)
+  let {EPSTrendEstimates, EPSGrowthRate, EarningSurprise, RevenueSurprises, EarningHistory, EarningHistoryColumns} = formatEPSData(isJson(data.earning_data.history_earn_data) ? JSON.parse(data.earning_data.history_earn_data) : [])
+  let {UpcomingEarning, UpcomingEarningColumns} = formatUpcomingEarning(isJson(data.earning_data.upcoming_earn_data) ? JSON.parse(data.earning_data.upcoming_earn_data) : [])
+  return {
+    EarningsInfo, 
+    EPSTrendEstimates, 
+    EPSGrowthRate, 
+    EarningSurprise, 
+    RevenueSurprises, 
+    EarningHistory, 
+    EarningHistoryColumns, 
+    UpcomingEarning, 
+    UpcomingEarningColumns
+  };
+}
+
+export default {
+  namespaced: true,
+  state: () => ({
+    data: {},
+    loading: false,
+    error: null,
+  }),
+  getters: {
+    companyEarningData: (state) => state.data,
+    isLoading: (state) => state.loading,
+    errorMessage: (state) => state.error,
+  },
+  mutations: {
+    SET_DATA(state, payload) {
+      state.data = payload;
+    },
+    SET_LOADING(state, status) {
+      state.loading = status;
+    },
+    SET_ERROR(state, err) {
+      state.error = err;
+    },
+  },
+  actions: {
+    async fetchCompanyEarning({ commit }, val) {
+      commit("SET_LOADING", true);
+      try {
+        const raw = await getCompanyEarning(val)
+        debugger
+        const processed = preprocessData(raw);
+        console.log('lishan processed', processed)
+        commit("SET_DATA", processed);
+      } catch (err) {
+        commit("SET_ERROR", err.message || "CompanyEarning data error.");
+      } finally {
+        commit("SET_LOADING", false);
+      }
+    },
+  },
+};

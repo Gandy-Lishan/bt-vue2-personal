@@ -266,28 +266,28 @@ const formatNumber = (value, type, sign) => {
   const absValue = Math.abs(value);
   let formatted;
   if (absValue >= 1e12) {
-    formatted = `${(value / 1e12)}T`;
+    formatted = `${(value / 1e12).toFixed(2)}T`;
   } else if (absValue >= 1e9) {
-    formatted = `${(value / 1e9)}B`;
+    formatted = `${(value / 1e9).toFixed(2)}B`;
   } else if (absValue >= 1e6) {
-    formatted = `${(value / 1e6)}M`;
+    formatted = `${(value / 1e6).toFixed(2)}M`;
   } else if (absValue >= 1e3) {
-    formatted = `${(value / 1e3)}K`;
+    formatted = `${(value / 1e3).toFixed(2)}K`;
   } else {
-    formatted = `${Number(value)}`;
+    formatted = `${Number(value).toFixed(2)}`;
   }
   if(type === 'percent') {
-    return `${(Number(formatted) * 100).toFixed(2)}%`;
+    return `${(parseFloat(formatted) * 100).toFixed(2)}%`;
   }
   else if(type === 'avg') {
-    return `${Number(formatted) > 0 ? '+' : ''}${formatted}%`
+    return `${parseFloat(formatted) > 0 ? '+' : ''}${formatted}%`
   }
   else if(type === 'dollar') {
-    return `$${Number(formatted).toFixed(2)}`
+    return `$${formatted}`
   }else if(type === 'customSign') {
-    return `${Number(formatted).toFixed(2)}${sign}`
+    return `${formatted}${sign}`
   }
-  return Number(formatted).toFixed(2);
+  return formatted
  }
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}

@@ -94,11 +94,11 @@
               </el-tooltip>
               <el-button size="mini" type="danger" @click="handleCancel" icon="el-icon-close"></el-button>
             </el-row>
-            </el-col>
+          </el-col>
         </el-row>
-          </el-form>
-        </div>
-      </div>
+      </el-form>
+    </div>
+    </div>
     </el-row>
     <el-row>
       <el-col :span="24">
