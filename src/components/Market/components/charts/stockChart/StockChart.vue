@@ -64,7 +64,12 @@ export default {
         exporting: { enabled: this.enableExporting },
         yAxis: [{
           title: { text: this.currentSymbolName },
-          labels: { align: 'right', x: -8, style: { color: '#007bff' } },
+          labels: {
+            align: 'left', // 标签文本左对齐，使其从X坐标向右延伸
+            x: 5,           // 将标签文本从Y轴线向右偏移5像素
+            style: { color: '#007bff' }
+          },
+          opposite: true, // 保持Y轴在右侧
           gridLineWidth: 1,
         }],
         tooltip: {
@@ -91,6 +96,12 @@ export default {
               `;
             }
           },
+        },
+        credits: {
+          enabled: true,
+          text: "SENTIMENTRADER",
+          href: "#",
+          position: { align: "right", x: -10, y: 0 },
         },
         plotOptions: {
           line: {
