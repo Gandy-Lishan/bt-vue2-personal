@@ -309,3 +309,29 @@ export function getOwnership(url) {
       })
   })
 }
+export function getPredictData() {
+  let path = `/dev/company_detail_app/get_pred`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(path, { withCredentials: true, retry: null })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+export function getAnalystData(url) {
+  let path = `/dev/company_detail_app/get_analysis?symbol=${url}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(path, { withCredentials: true, retry: null })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}

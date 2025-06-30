@@ -61,12 +61,12 @@
               <div
                 class="bar"
                 :style="{
-                  width: (item.value / maxValue * 100) + '%',
+                  width: item.value + '%',
                   backgroundColor: item.color
                 }"
               ></div>
             </div>
-            <div class="bar-value">{{ item.value }}</div>
+            <div class="bar-value">{{ `${item.value}% (${item.actual})` }}</div>
           </div>
         </div>
       </div>
@@ -93,18 +93,6 @@ import { isObject, formatNumber } from '@/utils';
 
 export default {
   name: 'AnalystRecommendations',
-  props: {
-    data: {
-      type: Array,
-      default: () => [
-        { label: 'Strong Buy', value: 7, color: '#1e40af' },
-        { label: 'Buy', value: 23, color: '#3b82f6' },
-        { label: 'Hold', value: 16, color: '#10b981' },
-        { label: 'Sell', value: 2, color: '#f59e0b' },
-        { label: 'Strong Sell', value: 1, color: '#ec4899' }
-      ]
-    }
-  },
   data() {
     return {
       chartSize: 300,
@@ -113,6 +101,7 @@ export default {
       loading: false,
       tableData: [],
       columns: [],
+      chartData: []
     }
   },
   components: {
@@ -126,12 +115,6 @@ export default {
     ]),
     symbol() {
       return this.$route.params.symbolname;
-    },
-    chartData() {
-      return this.data
-    },
-    maxValue() {
-      return Math.max(...this.chartData.map(item => item.value))
     },
     totalValue() {
       return this.chartData.reduce((sum, item) => sum + item.value, 0)
@@ -206,10 +189,12 @@ export default {
         if(isObject(newVal) && Object.keys(newVal).length > 0) {
           const {
             AnalystData, 
-            AnalystDataColumns
+            AnalystDataColumns,
+            ColumnBarData
           } = newVal
           this.tableData = AnalystData
           this.columns = AnalystDataColumns
+          this.chartData = ColumnBarData
         }
       },
       deep: true

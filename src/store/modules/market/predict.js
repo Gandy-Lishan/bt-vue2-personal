@@ -1,5 +1,5 @@
-import predInfo from './pred_info_df.json';
-import { formatNumber } from '@/utils';
+import { getPredictData } from '@/service/market';
+import { formatNumber, isJson } from '@/utils';
 
 const formatUTCDate = (isoStr) => {
  const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -103,8 +103,9 @@ const formatData = (data) => {
 }
 
 function preprocessData(raw) {
+  debugger
  // 處理 raw 為你需要的格式
- const data = raw
+ const data = isJson(raw.data.data.all_pred_data) ? JSON.parse(raw.data.data.all_pred_data) : raw.data.data.all_pred_data
  let {PredictData, PredictDataColumns} = formatData(data)
  return {
    PredictData, 
@@ -140,7 +141,8 @@ export default {
      commit("SET_LOADING", true);
      try {
       debugger
-       const processed = preprocessData(predInfo);
+      const res = await getPredictData(val)
+      const processed = preprocessData(res);
        console.log('lishan processed', processed)
        commit("SET_DATA", processed);
      } catch (err) {
