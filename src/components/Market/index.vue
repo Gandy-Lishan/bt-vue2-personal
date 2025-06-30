@@ -235,5 +235,12 @@ export default {
   }
 }
 
+.selectBox {
+  width: 350px;
+}
+::v-deep(.el-autocomplete) {
+    width: 100%;
+  }
+
 </style>
   

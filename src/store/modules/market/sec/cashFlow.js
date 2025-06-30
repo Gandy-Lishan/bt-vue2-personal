@@ -19,11 +19,16 @@ const formatQuartAnnualDate = (isoStr, type) => {
   if (type === 'FY') {
     dateStr = year;
   } else {
-    dateStr = `${type}'${yearShort}`;
+    dateStr = `${formatQuartStr(type)}'${yearShort}`;
   }
 
   return dateStr;
 };
+const formatQuartStr = (str) => {
+  const num = str[1]
+  const num_res = Number(num) - 1 > 0 ? num - 1 : 4
+  return 'Q'+num_res
+}
 
 function preprocessData(raw) {
   // 最新年度在前
