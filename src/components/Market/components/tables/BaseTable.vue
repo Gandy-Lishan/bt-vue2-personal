@@ -170,7 +170,7 @@
  </template>
  
  <script>
- import { cloneDeep } from 'lodash';
+ import { cloneDeep, debounce } from 'lodash';
  export default {
   name: 'BaseTable',
   props: {
@@ -332,10 +332,10 @@
     }
   },
   methods: {
-    // 处理搜索
-    handleSearch() {
+    // 处理搜索 防抖
+    handleSearch: debounce(function() {
       this.currentPage = 1
-    },
+    }, 500),
     // 处理过滤
     handleFilter() {
       this.currentPage = 1

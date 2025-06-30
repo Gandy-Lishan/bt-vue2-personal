@@ -301,6 +301,11 @@ export default {
           keyPath: '10',
           path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
+        {
+          label: 'Market',
+          keyPath: '13',
+          path: '/market/predict'
+        },
       ],
       activeIndex: '1',
     }
@@ -500,7 +505,7 @@ export default {
       if(label === 'Smart Stock Scanner') {
         return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
       }
-      if(label === 'AI Trading') {
+      if(label === 'AI Trading' || label === 'Market') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {
