@@ -41,10 +41,10 @@ const formatNumber = (value, type) => {
 const formatSECData = (data) => {
   const SECData = []
   const SECDataColumns = [
-    { prop: 'date', label: 'Date', sortable: true, type: 'date' },
-    { prop: 'ticker', label: 'Ticker', sortable: true, type: 'string' },
+    { prop: 'date', label: 'Date', sortable: true, type: 'date', width: '130px' },
+    { prop: 'ticker', label: 'Ticker', sortable: true, type: 'string', width: '130px' },
     { prop: 'description', label: 'Description', sortable: true, type: 'string' },
-    { prop: 'from', label: 'From', sortable: true, type: 'string' },
+    { prop: 'from', label: 'From', sortable: true, type: 'string', width: '130px' },
   ]
   data.forEach((item, index) => {
     SECData.push({
