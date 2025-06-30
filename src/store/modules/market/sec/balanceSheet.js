@@ -11,18 +11,13 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
-const formatQuartAnnualDate = (isoStr, type, latestDate) => {
+const formatQuartAnnualDate = (isoStr, type) => {
   const year = isoStr.split("T")[0].split("-")[0];
   const yearShort = year.slice(-2);
-  const latestYear = latestDate.split("T")[0].split("-")[0];
   let dateStr;
 
   if (type === 'FY') {
     dateStr = year;
-    // // 比较当前数据的年份与 latestDataYear
-    // if (year === latestYear) {
-    //   dateStr += ' (TTM)';
-    // }
   } else {
     dateStr = `${type}'${yearShort}`;
   }
@@ -65,7 +60,7 @@ function preprocessData(raw) {
       title: "Total Assets Trend",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(i.total_assets),
           'current': formatNumber(i.total_current_assets),
           'nonCurrent': formatNumber(i.total_non_current_assets)
@@ -103,7 +98,7 @@ function preprocessData(raw) {
       title: "Liabilities Breakdown",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(i.total_liabilities),
           'current': formatNumber(i.total_current_liabilities),
           'nonCurrent': formatNumber(i.total_non_current_liabilities)
@@ -119,7 +114,7 @@ function preprocessData(raw) {
       title: `Shareholders' Equity Trend`,
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'total': formatNumber(i.total_stockholders_equity),
           'retained': formatNumber(i.retained_earnings),
           'common': formatNumber(i.common_stock)
@@ -164,7 +159,7 @@ function preprocessData(raw) {
       title: "Key Performance Metrics",
       data: {
         chartData: raw.map(i => ({
-          'date': formatQuartAnnualDate(i.date, i.period, lastedRow.date),
+          'date': formatQuartAnnualDate(i.date, i.period),
           'currtRadio': formatNumber(i.current_ratio),
           'debt': formatNumber(i.d2e_ratio),
           'turnover': formatNumber(i.asset_turnover)
