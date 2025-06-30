@@ -18,10 +18,10 @@ const formatQuartAnnualDate = (isoStr, type, latestDate) => {
 
   if (type === 'FY') {
     dateStr = year;
-    // 比较当前数据的年份与 latestDataYear
-    if (year === latestYear) {
-      dateStr += ' (TTM)';
-    }
+    // // 比较当前数据的年份与 latestDataYear
+    // if (year === latestYear) {
+    //   dateStr += ' (TTM)';
+    // }
   } else {
     dateStr = `${type}'${yearShort}`;
   }
@@ -179,7 +179,7 @@ function preprocessData(raw) {
       data: [
         { label: 'Retained Earnings', value: formatNumber(lastedRow.retained_earnings) },
         { label: 'Common Stock', value: formatNumber(lastedRow.common_stock) },
-        { label: 'Treasury Stock', value: NaN },
+        // { label: 'Treasury Stock', value: '-' },
         { label: `Stockholders' Equity`, value: formatNumber(lastedRow.total_equity) },
       ]
     },

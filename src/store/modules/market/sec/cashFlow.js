@@ -18,10 +18,10 @@ const formatQuartAnnualDate = (isoStr, type, latestDate) => {
 
   if (type === 'FY') {
     dateStr = year;
-    // 比较当前数据的年份与 latestDataYear
-    if (year === latestYear) {
-      dateStr += ' (TTM)';
-    }
+    // // 比较当前数据的年份与 latestDataYear
+    // if (year === latestYear) {
+    //   dateStr += ' (TTM)';
+    // }
   } else {
     dateStr = `${type}'${yearShort}`;
   }
