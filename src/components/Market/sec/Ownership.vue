@@ -35,7 +35,8 @@
           <span class="card-layout__nav-text">{{ tab.name }}</span>
       </div>
       </nav>
-      <BarChart
+      <br/>
+      <!-- <BarChart
         :chartData="trendsChartData"
         :seriesConfigs="trendsSeriesConfigs"
         titleText=""
@@ -44,12 +45,11 @@
         :enableExporting="false"
         legendPosition="topright"
         chartHeight="400px"
-      />
+      /> -->
       <div class="ownership-table">
         <base-table
-          showSearch="true"
-          :infoTag="infoTag"
-          :data="tableData"
+          :showSearch="true"
+          :tableData="tableData"
           :columns="columns"
           :loading="loading"
           tip-text=""
@@ -363,8 +363,8 @@ export default {
 // }
 .tables-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: $spacing-md;
 }
 .card-layout {
