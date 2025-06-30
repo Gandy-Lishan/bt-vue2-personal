@@ -330,20 +330,20 @@ const formatData = (data) => {
   const AnalystData = []
   const AnalystDataColumns = [
     { prop: 'date', label: 'Date', width: '120', sortable: true, type: 'date' },
-    { prop: 'target', label: 'Target', sortable: true, type: 'number' },
-    { prop: 'minPrice', label: 'Min Price', sortable: true, type: 'number' },
-    { prop: 'maxPrice', label: 'Max Price', sortable: true, type: 'number' },
+    { prop: 'target', label: 'Target', sortable: true, type: 'number', formatter: (row) => formatNumber(row.target, 'dollar') },
+    { prop: 'minPrice', label: 'Min Price', sortable: true, type: 'number', formatter: (row) => formatNumber(row.minPrice, 'dollar') },
+    { prop: 'maxPrice', label: 'Max Price', sortable: true, type: 'number', formatter: (row) => formatNumber(row.maxPrice, 'dollar') },
     { prop: 'reportNum', label: 'Report Num', sortable: true, type: 'number' },
-    { prop: 'accuracy', label: 'Accuracy', sortable: true, type: 'number' },
+    { prop: 'accuracy', label: 'Accuracy', sortable: true, type: 'number', formatter: (row) => formatNumber(row.accuracy, 'customSign', '%') },
   ]
   data.forEach((item, index) => {
     AnalystData.push({
       date: item.Date,
-      target: formatNumber(item.Target, 'dollar'),
-      minPrice: formatNumber(item.MinPrice, 'dollar'),
-      maxPrice: formatNumber(item.MaxPrice, 'dollar'),
+      target: item.Target,
+      minPrice: item.MinPrice,
+      maxPrice: item.MaxPrice,
       reportNum: item.ReportNum,
-      accuracy: formatNumber(item.Accuracy, 'customSign', '%')
+      accuracy: item.Accuracy
     })
   })
   return {AnalystData, AnalystDataColumns}

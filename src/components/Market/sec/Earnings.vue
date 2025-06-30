@@ -86,7 +86,7 @@
       <section v-loading="isLoading" class="card earnings__card earnings-history">
         <h3 class="subtitle">Earnings History</h3>
         <base-table
-          :data="EarningHistory"
+          :tableData="EarningHistory"
           :columns="EarningHistoryColumns"
           :loading="isLoading"
           tip-text=""
@@ -98,7 +98,7 @@
       <section class="card earnings__card upcoming-earnings">
         <h3 class="subtitle">Upcoming Earnings</h3>
         <base-table
-          :data="UpcomingEarning"
+          :tableData="UpcomingEarning"
           :columns="UpcomingEarningColumns"
           :loading="isLoading"
           tip-text=""

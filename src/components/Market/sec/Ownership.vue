@@ -69,7 +69,7 @@ import BaseTableSimple from "@/components/Market/components/tables/BaseTableSimp
 import BarChart from '@/components/Market/components/charts/BarChart.vue';
 import PieChart from '@/components/Market/components/charts/PieChart.vue';
 import BaseTable from '@/components/Market/components/tables/BaseTable.vue';
-import { isObject } from '@/utils';
+import { isObject, formatNumber } from '@/utils';
 
 
 export default {
@@ -206,22 +206,22 @@ export default {
         { prop: 'insider', label: 'Insider', width: '120', sortable: true, type: 'string' },
         { prop: 'type', label: 'Type', sortable: true, type: 'string' },
         { prop: 'shares', label: 'Shares', sortable: true, type: 'number' },
-        { prop: 'price', label: 'Price', sortable: true, type: 'number' },
-        { prop: 'value', label: 'Value', sortable: true, type: 'number' },
+        { prop: 'price', label: 'Price', sortable: true, type: 'number', formatter: (row) => formatNumber(row.price, 'dollar') },
+        { prop: 'value', label: 'Value', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
       ],
       institutionalHoldingsColumns: [
         { prop: 'name', label: 'Owner Name', sortable: true, type: 'string' },
-        { prop: 'date', label: 'Date', sortable: true, type: 'date' },
-        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number' },
-        { prop: 'changes_shares', label: 'Changes (Shares)', sortable: true, type: 'number' },
-        { prop: 'change', label: 'Change (%)', sortable: true, type: 'number' },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number' },
+        { prop: 'date', label: 'Date', sortable: true, type: 'date', formatter: (row) => this.formatUTCDate(row.date) },
+        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number', formatter: (row) => formatNumber(row.shares) },
+        { prop: 'changes_shares', label: 'Changes (Shares)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.changes_shares) },
+        { prop: 'change', label: 'Change (%)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.change, 'customSign', '%') },
+        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
       ],
       mutualFundHoldingsColumns: [
         { prop: 'name', label: 'Fund Name', sortable: true, type: 'string' },
-        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number' },
-        { prop: 'day_reported', label: 'Day Reported', sortable: true, type: 'date' },
-        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number' },
+        { prop: 'shares', label: 'Shares Held', sortable: true, type: 'number', formatter: (row) => formatNumber(row.shares) },
+        { prop: 'day_reported', label: 'Day Reported', sortable: true, type: 'date', formatter: (row) => this.formatUTCDate(row.day_reported) },
+        { prop: 'value', label: 'Value (In 1,000s)', sortable: true, type: 'number', formatter: (row) => formatNumber(row.value, 'dollar') },
       ],
       politicalTradingActivityColumns: [
         { prop: 'date', label: 'Trede Date', sortable: true },
@@ -310,6 +310,16 @@ export default {
     ...mapActions("market/sec/ownership", [
       "fetchOwnership",
     ]),
+    formatUTCDate(isoStr) {
+      const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC'
+      }).format(date);
+    },
     handleSizeChange(size) {
       console.log('每页显示条数改变：', size)
     },
@@ -332,7 +342,7 @@ export default {
     handleCurrentChange(page) {
       console.log('当前页改变：', page)
     },
-    parseNumber(val) {
+    formatNumber(val) {
       if (!val || typeof val !== 'string') return 0;
 
       const str = val.trim();
@@ -370,8 +380,8 @@ export default {
 
     if (columnType === 'number' && (sortingOrder === 'ascending' || sortingOrder === 'descending')) {
       const sortedData = this.tableData.slice().sort((a, b) => {
-        const aVal = (this.parseNumber(a[colName]));
-        const bVal = (this.parseNumber(b[colName]));
+        const aVal = (this.formatNumber(a[colName]));
+        const bVal = (this.formatNumber(b[colName]));
         const aInvalid = aVal === null;
         const bInvalid = bVal === null;
         if (aInvalid && !bInvalid) return 1;

@@ -1,4 +1,5 @@
 import { getBalanceSheet } from "@/service/market";
+import { formatNumber } from '@/utils';
 
 const formatUTCDate = (isoStr) => {
   const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -28,32 +29,6 @@ const formatQuartAnnualDate = (isoStr, type, latestDate) => {
 
   return dateStr;
 };
-
-const formatNumber = (value, type) => {
-  if (value === null || isNaN(value)) return '-';
-  if(type === 'percent') {
-    return `${(Number(value) * 100).toFixed(2)}%`;
-  }
-  else if(type === 'avg') {
-    return `${Number(value) > 0 ? '+' : ''}${Number(value).toFixed(2)}%`
-  }
-  else if(type === 'dollar') {
-    return `$${Number(value).toFixed(2)}`
-  }
-  // 自动判断单位
-  const absValue = Math.abs(value);
-  let formatted;
-  if (absValue >= 1e12) {
-    formatted = `${(value / 1e12).toFixed(2)}T`;
-  } else if (absValue >= 1e9) {
-    formatted = `${(value / 1e9).toFixed(2)}B`;
-  } else if (absValue >= 1e6) {
-    formatted = `${(value / 1e6).toFixed(2)}M`;
-  } else {
-    formatted = `${Number(value).toFixed(2)}`;
-  }
-  return formatted;
-}
 
 function preprocessData(raw) {
   // 最新年度在前

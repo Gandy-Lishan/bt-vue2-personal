@@ -74,7 +74,7 @@
     <section class="card analysts__card">
       <div class="card__subtitle">Analyst Predict Summary</div>
       <base-table
-        :data="tableData"
+        :tableData="tableData"
         :columns="columns"
         :loading="loading"
         tip-text=""
@@ -89,7 +89,7 @@
 <script>
 import BaseTable from "@/components/Market/components/tables/BaseTable";
 import { mapGetters, mapActions } from 'vuex';
-import { isObject } from '@/utils';
+import { isObject, formatNumber } from '@/utils';
 
 export default {
   name: 'AnalystRecommendations',

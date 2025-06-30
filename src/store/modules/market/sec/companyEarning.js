@@ -31,13 +31,13 @@ const formatEPSData = (data) => {
   const RevenueSurprises = []
   const EarningHistory = []
   const EarningHistoryColumns = [
-    { prop: 'period', label: 'Period', sortable: true, type: 'date' },
+    { prop: 'period', label: 'Period', sortable: true, type: 'date'},
     { prop: 'date', label: 'Date', width: '120', sortable: true, type: 'quarter' },
-    { prop: 'estimated_eps', label: 'Estimated EPS', sortable: true, type: 'number' },
-    { prop: 'actual_eps', label: 'Actual EPS', sortable: true, type: 'number' },
-    { prop: 'surprise', label: 'Surprise', sortable: true, type: 'number' },
-    { prop: 'est_revenue', label: 'Est. Revenue', sortable: true, type: 'number' },
-    { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true, type: 'number' }
+    { prop: 'estimated_eps', label: 'Estimated EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.estimated_eps, 'dollar') },
+    { prop: 'actual_eps', label: 'Actual EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.actual_eps, 'dollar') },
+    { prop: 'surprise', label: 'Surprise', sortable: true, type: 'number', formatter: (row) => formatNumber(row.surprise, 'avg') },
+    { prop: 'est_revenue', label: 'Est. Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.est_revenue) },
+    { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.actual_revenue) }
   ]
 
   data.forEach((item, index) => {
@@ -69,11 +69,11 @@ const formatEPSData = (data) => {
     EarningHistory.push({
       period: formatUTCDate(item.fiscal_date_ending),
       date: yearStr,
-      estimated_eps: formatNumber(item.eps_estimated, 'dollar'),
-      actual_eps: formatNumber(item.eps, 'dollar'),
-      surprise: formatNumber(item.eps_surprise, 'avg'),
-      est_revenue: formatNumber(item.revenue_estimated),
-      actual_revenue: formatNumber(item.revenue)
+      estimated_eps: item.eps_estimated,
+      actual_eps: item.eps,
+      surprise: item.eps_surprise,
+      est_revenue: item.revenue_estimated,
+      actual_revenue: item.revenue
     })
   })
   return {EPSTrendEstimates, EPSGrowthRate, EarningSurprise, RevenueSurprises, EarningHistory, EarningHistoryColumns}
@@ -83,14 +83,14 @@ const formatUpcomingEarning = (data) => {
   const UpcomingEarning = []
   const UpcomingEarningColumns = [
     { prop: 'date', label: 'Date', sortable: true, type: 'date' },
-    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true, type: 'number' },
-    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true, type: 'number' }
+    { prop: 'eps_estimated', label: 'Estimated EPS', sortable: true, type: 'number', formatter: (row) => formatNumber(row.eps_estimated, 'dollar') },
+    { prop: 'revenue_estimated', label: 'Est. Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.revenue_estimated) }
   ]
   data.forEach((item, index) => {
     UpcomingEarning.push({
       date: formatUTCDate(item.fiscal_date_ending),
-      eps_estimated: formatNumber(item.eps_estimated, 'dollar'),
-      revenue_estimated: formatNumber(item.revenue_estimated)
+      eps_estimated: item.eps_estimated,
+      revenue_estimated: item.revenue_estimated
     })
   })
   return {UpcomingEarning, UpcomingEarningColumns}

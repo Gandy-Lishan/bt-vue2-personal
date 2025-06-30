@@ -8,7 +8,7 @@
       <div class="contentWrapper">
         <h3 class="table-title">Predict Table</h3>
         <base-table
-          :data="tableData"
+          :tableData="tableData"
           :columns="columns"
           :loading="loading"
           tip-text=""
