@@ -1,6 +1,6 @@
 // store/modules/market/overview.js
 import {getOwnership} from "@/service/market";
-import { isJson } from "@/utils";
+import { isJson, formatNumber } from "@/utils";
 
 const formatUTCDate = (isoStr) => {
   const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -11,36 +11,6 @@ const formatUTCDate = (isoStr) => {
     year: 'numeric',
     timeZone: 'UTC'
   }).format(date);
-}
-
-const formatNumber = (value, type, sign) => {
-  if (value === null || isNaN(value)) return '-';
-  // 自动判断单位
-  const absValue = Math.abs(value);
-  let formatted;
-  if (absValue >= 1e12) {
-    formatted = `${(value / 1e12).toFixed(2)}T`;
-  } else if (absValue >= 1e9) {
-    formatted = `${(value / 1e9).toFixed(2)}B`;
-  } else if (absValue >= 1e6) {
-    formatted = `${(value / 1e6).toFixed(2)}M`;
-  } else if (absValue >= 1e3) {
-    formatted = `${(value / 1e3).toFixed(2)}K`;
-  } else {
-    formatted = `${Number(value).toFixed(2)}`;
-  }
-  if(type === 'percent') {
-    return `${(Number(formatted) * 100).toFixed(2)}%`;
-  }
-  else if(type === 'avg') {
-    return `${Number(formatted) > 0 ? '+' : ''}${formatted}%`
-  }
-  else if(type === 'dollar') {
-    return `$${formatted}`
-  }else if(type === 'customSign') {
-    return `${formatted}${sign}`
-  }
-  return formatted;
 }
 
 const formatOwnershipInfo = (detail) => [
@@ -104,7 +74,7 @@ const formatOwnershipData = (data) => {
       insider: item.reporting_name,
       type: item.type,
       shares: item.securities_transacted,
-      price: formatNumber(item.price, 'dollar'),
+      price: item.price,
       value: item.value
     })
     const yearStr = `Q${index + 1}'${item.transaction_date.slice(0, 4)}`
@@ -113,25 +83,25 @@ const formatOwnershipData = (data) => {
       insider: item.reporting_name,
       type: item.type,
       shares: item.securities_transacted,
-      price: formatNumber(item.price, 'dollar'),
+      price: item.price,
     })
   })
   institutional_holders.forEach((item, index) => {
     institutionalHoldingsData.push({
       name: item.holder,
-      date: formatUTCDate(item.date_reported),
-      shares: formatNumber(item.shares),
-      changes_shares: formatNumber(item.share_change),
-      change: formatNumber(item.change_percent, 'customSign', '%'),
-      value: formatNumber(item.value, 'dollar')
+      date: item.date_reported,
+      shares: item.shares,
+      changes_shares: item.share_change,
+      change: item.change_percent,
+      value: item.value
     })
   })
   fund_holders.forEach((item, index) => {
     mutualFundHoldingsData.push({
       name: item.holder,
-      shares: formatNumber(item.shares),
-      day_reported: formatUTCDate(item.date_reported),
-      value: formatNumber(item.value, 'dollar')
+      shares: item.shares,
+      day_reported: item.date_reported,
+      value: item.value
     })
   })
   return {

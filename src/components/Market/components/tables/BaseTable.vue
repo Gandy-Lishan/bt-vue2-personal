@@ -170,6 +170,7 @@
  </template>
  
  <script>
+ import { cloneDeep } from 'lodash';
  export default {
   name: 'BaseTable',
   props: {
@@ -285,36 +286,35 @@
   computed: {
     // 过滤后的数据
     filteredData() {
-      console.log('filteredData lishan', this.localTableData.map(item => item.value).join(','))
-      let result = this.localTableData
- 
+      let result = this.localTableData;
+
       // 搜索过滤
-      // if (this.searchQuery) {
-      //   result = result.filter(item => {
-      //     return this.columns.some(column => {
-      //       const value = item[column.prop]
-      //       if (value == null) return false
-      //       return String(value).toLowerCase().includes(this.searchQuery.toLowerCase())
-      //     })
-      //   })
-      // }
- 
-      // // 条件过滤
-      // Object.keys(this.filterValues).forEach(key => {
-      //   const value = this.filterValues[key]
-      //   if (value) {
-      //     result = result.filter(item => item[key] === value)
-      //   }
-      // })
- 
+      if (this.searchQuery) {
+        result = result.filter(item => {
+          return this.columns.some(column => {
+            const value = item[column.prop];
+            if (value == null) return false;
+            return String(value).toLowerCase().includes(this.searchQuery.toLowerCase());
+          });
+        });
+      }
+
+      // 条件过滤
+      Object.keys(this.filterValues).forEach(key => {
+        const value = this.filterValues[key];
+        if (value) {
+          result = result.filter(item => item[key] === value);
+        }
+      });
+
       // 分页
       if (this.showPagination) {
-        const start = (this.currentPage - 1) * this.pageSize
-        const end = start + this.pageSize
-        return result.slice(start, end)
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        return result.slice(start, end);
       }
- 
-      return result
+
+      return result;
     },
     // 总数据量
     total() {
@@ -325,7 +325,9 @@
     tableData: {
       immediate: true,
       handler(newVal) {
-        this.localTableData = [...newVal];
+        if(newVal.length){
+          this.localTableData = cloneDeep(newVal);
+        }
       }
     }
   },
@@ -426,25 +428,23 @@
     const colName = column.prop;
     const columnDef = this.columns.find(col => col.prop === colName);
     const columnType = columnDef?.type || 'string';
-    
+    // 重置分页到第一页
+    this.currentPage = 1;
     // 数字类型排序
     if(columnType === 'number'){
       const sortedData = [...this.localTableData].sort((a,b) => {
-        const aVal = this.parseNumber(a[colName]);
-        const bVal = this.parseNumber(b[colName]);
         if(sortingOrder === 'ascending'){
-          return aVal - bVal;
+          return a[colName] - b[colName];
         } else if(sortingOrder === 'descending'){
-          return bVal - aVal;
+          return b[colName] - a[colName];
         }
         return 0;
       });
-      console.log('sortedData lishan', sortedData.map(item => this.parseNumber(item[colName])).join(','))
       this.localTableData = sortedData;
     }
     
     // 日期类型排序
-    if(['last_update'].indexOf(colName) !== -1){
+    if(columnType === 'date'){
       const isValidDate = date => !isNaN(Date.parse(date));
       const sortedData = [...this.localTableData].sort((a, b) => {
         const dateA = new Date(a[colName])
@@ -467,7 +467,7 @@
     }
     
     // 字符串类型排序
-    if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
+    if(columnType === 'string'){
       const sortedData = [...this.localTableData].sort((a, b) => {
         if (sortingOrder === 'ascending') {
           return a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' });

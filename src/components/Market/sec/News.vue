@@ -16,7 +16,7 @@
       <section class="card financials__card">
         <base-table
           showSearch="true"
-          :data="tableData"
+          :tableData="tableData"
           :columns="columns"
           :loading="isLoading"
           :rowClickable="true" 

@@ -6,7 +6,7 @@
       <section class="card financials__card">
         <base-table
           showSearch="true"
-          :data="SECData"
+          :tableData="SECData"
           :columns="SECDataColumns"
           :loading="isLoading"
           :rowClickable="true" 

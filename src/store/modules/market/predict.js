@@ -1,4 +1,5 @@
 import predInfo from './pred_info_df.json';
+import { formatNumber } from '@/utils';
 
 const formatUTCDate = (isoStr) => {
  const [year, month, day] = isoStr.split("T")[0].split("-").map(Number);
@@ -11,36 +12,6 @@ const formatUTCDate = (isoStr) => {
  }).format(date);
 }
 
-const formatNumber = (value, type, sign) => {
- if (value === null || isNaN(value)) return '-';
- // 自动判断单位
- const absValue = Math.abs(value);
- let formatted;
- if (absValue >= 1e12) {
-   formatted = `${(value / 1e12)}T`;
- } else if (absValue >= 1e9) {
-   formatted = `${(value / 1e9)}B`;
- } else if (absValue >= 1e6) {
-   formatted = `${(value / 1e6)}M`;
- } else if (absValue >= 1e3) {
-   formatted = `${(value / 1e3)}K`;
- } else {
-   formatted = `${Number(value)}`;
- }
- if(type === 'percent') {
-   return `${(Number(formatted) * 100).toFixed(2)}%`;
- }
- else if(type === 'avg') {
-   return `${Number(formatted) > 0 ? '+' : ''}${formatted}%`
- }
- else if(type === 'dollar') {
-   return `$${Number(formatted).toFixed(2)}`
- }else if(type === 'customSign') {
-   return `${Number(formatted).toFixed(2)}${sign}`
- }
- return Number(formatted).toFixed(2);
-}
-
 const formatData = (data) => {
  const PredictData = []
  const PredictDataColumns = [
@@ -49,67 +20,83 @@ const formatData = (data) => {
    sortable: true,
    link: (row) => `/market/sec/${row.Ticker}`,
    prop: 'Ticker', 
-   label: 'Ticker', 
+   label: 'Ticker',
   },
   { 
     prop: 'PublishTime', 
     labelHTML: 'Publish<br>Time', 
-    sortable: true 
+    sortable: true,
+    type: 'date',
   },
   { 
     prop: 'PublishPrice', 
     labelHTML: 'Publish<br>Price', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.PublishPrice, 'dollar')
   },
   { 
     prop: 'Target',   
     label: 'Target', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.Target, 'dollar')
   },
   { 
     prop: 'PredictEndDate', 
     labelHTML: 'Predict<br>End Date', 
-    sortable: true 
+    sortable: true,
+    type: 'date',
   },
   { 
     prop: 'PhaseMinPrice', 
     label: 'Min Price', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.PhaseMinPrice, 'dollar')
   },
   { 
     prop: 'PhaseMaxPrice', 
     label: 'Max Price', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.PhaseMaxPrice, 'dollar')
   },
   { 
     prop: 'Close', 
     label: 'Close', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.Close, 'dollar')
   },
   { 
     prop: 'MeanAcc', 
     labelHTML: 'Mean<br>Accuracy', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.MeanAcc, 'customSign', '%')
   },
   { 
     prop: 'LastWinRate', 
     labelHTML: 'Last<br>Win Rate', 
-    sortable: true
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
   }
  ]
  data.forEach((item, index) => {
    PredictData.push({
     Ticker: item.Ticker,
     PublishTime: formatUTCDate(item.PublishTime),
-    PublishPrice: formatNumber(item.PublishPrice, 'dollar'),
-    Target: formatNumber(item.Target, 'dollar'),
+    PublishPrice: item.PublishPrice,
+    Target: item.Target,
     PredictEndDate: formatUTCDate(item.PredictEndDate),
-    PhaseMinPrice: formatNumber(item.PhaseMinPrice, 'dollar'),
-    PhaseMaxPrice: formatNumber(item.PhaseMaxPrice, 'dollar'),
+    PhaseMinPrice: item.PhaseMinPrice,
+    PhaseMaxPrice: item.PhaseMaxPrice,
     Date: formatUTCDate(item.Date),
-    Close: formatNumber(item.Close, 'dollar'),
-    MeanAcc: formatNumber(item.MeanAcc, 'customSign', '%'),
-    LastWinRate: formatNumber(item.LastWinRate, 'customSign', '%')
+    Close: item.Close,
+    MeanAcc: item.MeanAcc,
+    LastWinRate: item.LastWinRate,
    }) 
  })
  return {PredictData, PredictDataColumns}
