@@ -105,7 +105,7 @@ const formatOwnershipData = (data) => {
       type: item.type,
       shares: item.securities_transacted,
       price: formatNumber(item.price, 'dollar'),
-      value: formatNumber(item.value, 'dollar')
+      value: item.value
     })
     const yearStr = `Q${index + 1}'${item.transaction_date.slice(0, 4)}`
     InsiderShipChartData.push({

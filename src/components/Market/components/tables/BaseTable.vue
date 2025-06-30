@@ -88,8 +88,8 @@
           :key="column.prop"
           :prop="column.prop"
           :width="column.width"
-          :sortable="column.sortable"
           :align="column.align || 'left'"
+          :sortable="column.sortable"
         >
           <!-- 自定义表头 -->
           <template slot="header" slot-scope="scope">
@@ -174,7 +174,7 @@
   name: 'BaseTable',
   props: {
     // 表格数据
-    data: {
+    tableData: {
       type: Array,
       required: true
     },
@@ -279,31 +279,33 @@
       pageSize: 10,
       pageSizes: [10, 20, 50, 100],
       showTip: !!this.tipText,
+      localTableData: [],
     }
   },
   computed: {
     // 过滤后的数据
     filteredData() {
-      let result = [...this.data]
+      console.log('filteredData lishan', this.localTableData.map(item => item.value).join(','))
+      let result = this.localTableData
  
       // 搜索过滤
-      if (this.searchQuery) {
-        result = result.filter(item => {
-          return this.columns.some(column => {
-            const value = item[column.prop]
-            if (value == null) return false
-            return String(value).toLowerCase().includes(this.searchQuery.toLowerCase())
-          })
-        })
-      }
+      // if (this.searchQuery) {
+      //   result = result.filter(item => {
+      //     return this.columns.some(column => {
+      //       const value = item[column.prop]
+      //       if (value == null) return false
+      //       return String(value).toLowerCase().includes(this.searchQuery.toLowerCase())
+      //     })
+      //   })
+      // }
  
-      // 条件过滤
-      Object.keys(this.filterValues).forEach(key => {
-        const value = this.filterValues[key]
-        if (value) {
-          result = result.filter(item => item[key] === value)
-        }
-      })
+      // // 条件过滤
+      // Object.keys(this.filterValues).forEach(key => {
+      //   const value = this.filterValues[key]
+      //   if (value) {
+      //     result = result.filter(item => item[key] === value)
+      //   }
+      // })
  
       // 分页
       if (this.showPagination) {
@@ -316,7 +318,15 @@
     },
     // 总数据量
     total() {
-      return this.data.length
+      return this.localTableData.length
+    }
+  },
+  watch: {
+    tableData: {
+      immediate: true,
+      handler(newVal) {
+        this.localTableData = [...newVal];
+      }
     }
   },
   methods: {
@@ -335,12 +345,10 @@
     // 处理每页条数变化
     handleSizeChange(val) {
       this.pageSize = val
-      this.$emit('size-change', val)
     },
     // 处理页码变化
     handleCurrentChange(val) {
       this.currentPage = val
-      this.$emit('current-change', val)
     },
     // 关闭提示
     closeTip() {
@@ -382,102 +390,95 @@
      // 触发事件
     //  this.$emit('row-click', { row, column, event })
    },
-  parseNumber(val) {
-    if (!val || typeof val !== 'string') return 0;
+   parseNumber(val) {
+      if (!val || typeof val !== 'string') return 0;
 
-    const str = val.trim();
+      const str = val.trim();
 
-    if (str === '-' || str.toLowerCase().includes('nan')) return 0;
+      if (str === '-' || str.toLowerCase().includes('nan')) return 0;
 
-    // 百分比
-    if (str.endsWith('%')) {
-      const percent = parseFloat(str.replace('%', ''));
-      return isNaN(percent) ? 0 : percent;
-    }
+      // 百分比
+      if (str.endsWith('%')) {
+        const percent = parseFloat(str.replace('%', ''));
+        return isNaN(percent) ? 0 : percent;
+      }
 
-    // 匹配正负号、金额、单位
-    const match = str.match(/^([-+])?[\$]?\s*([\d,]+(?:\.\d+)?)\s*([kmbtKMBT]?)$/);
-    if (!match) return 0;
+      // 匹配正负号、金额、单位
+      const match = str.match(/^([-+])?[\$]?\s*([\d,]+(?:\.\d+)?)\s*([kmbtKMBT]?)$/);
+      if (!match) return 0;
 
-    const sign = match[1] === '-' ? -1 : 1;
-    let num = parseFloat(match[2].replace(/,/g, ''));
-    if (isNaN(num)) return 0;
+      const sign = match[1] === '-' ? -1 : 1;
+      let num = parseFloat(match[2].replace(/,/g, ''));
+      if (isNaN(num)) return 0;
 
-    const unit = match[3].toUpperCase();
-    const multipliers = { K: 1e3, M: 1e6, B: 1e9, T: 1e12 };
-    if (unit && multipliers[unit]) {
-      num *= multipliers[unit];
-    }
+      const unit = match[3].toUpperCase();
+      const multipliers = { K: 1e3, M: 1e6, B: 1e9, T: 1e12 };
+      if (unit && multipliers[unit]) {
+        num *= multipliers[unit];
+      }
 
-    return sign * num;
-  },
-   changeTableSort(column){
+      return sign * num;
+    },
+    changeTableSort(column){
+    debugger
     const sortingOrder = column.order;
+    console.log('sortingOrder', sortingOrder)
     const colName = column.prop;
     const columnDef = this.columns.find(col => col.prop === colName);
     const columnType = columnDef?.type || 'string';
-
-    if (columnType === 'number' && (sortingOrder === 'ascending' || sortingOrder === 'descending')) {
-      this.data.sort((a, b) => {
-        const aVal = (this.parseNumber(a[colName]));
-        const bVal = (this.parseNumber(b[colName]));
-        const aInvalid = aVal === null;
-        const bInvalid = bVal === null;
-        if (aInvalid && !bInvalid) return 1;
-        else if (!aInvalid && bInvalid) return -1;
-        else if (aInvalid && bInvalid) return 0;
-        return sortingOrder === 'ascending' ? aVal - bVal : bVal - aVal;
+    
+    // 数字类型排序
+    if(columnType === 'number'){
+      const sortedData = [...this.localTableData].sort((a,b) => {
+        const aVal = this.parseNumber(a[colName]);
+        const bVal = this.parseNumber(b[colName]);
+        if(sortingOrder === 'ascending'){
+          return aVal - bVal;
+        } else if(sortingOrder === 'descending'){
+          return bVal - aVal;
+        }
+        return 0;
       });
+      console.log('sortedData lishan', sortedData.map(item => this.parseNumber(item[colName])).join(','))
+      this.localTableData = sortedData;
     }
-			// 日期类型排序
-			if(['last_update'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.filterData.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.filterData.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
-      if (['last_update'].indexOf(colName) !== -1) {
-        // 处理日期字符串
-        const isValidDate = date => !isNaN(Date.parse(date));
-        const sortedData = this.filterData.sort((a, b) => {
+    
+    // 日期类型排序
+    if(['last_update'].indexOf(colName) !== -1){
+      const isValidDate = date => !isNaN(Date.parse(date));
+      const sortedData = [...this.localTableData].sort((a, b) => {
         const dateA = new Date(a[colName])
         const dateB = new Date(b[colName])
         const isDateAValid = isValidDate(a[colName])
         const isDateBValid = isValidDate(b[colName])
-        // 都是无效日期，保持原顺序
+        
         if (!isDateAValid && !isDateBValid) return 0
-
-        //a 是无效日期，排到最后 
         if (!isDateAValid) return 1;
+        if (!isDateBValid) return -1;
 
-        // b 是无效日期，排到最后
-        if (!isDateBValid) return -1
-
-        // 都是有效日期，按日期排序
         if (sortingOrder === 'ascending') {
-        return dateB - dateA;
+          return dateA - dateB;
         } else if (sortingOrder === 'descending') {
-        return dateA - dateB;
+          return dateB - dateA;
         }
         return 0
-        })
-        this.filterData = sortedData
+      })
+      this.localTableData = sortedData;
+    }
+    
+    // 字符串类型排序
+    if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
+      const sortedData = [...this.localTableData].sort((a, b) => {
+        if (sortingOrder === 'ascending') {
+          return a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' });
+        } else if (sortingOrder === 'descending') {
+          return b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' });
         }
-			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.filterData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}
-			}
-		},
+        return 0;
+      });
+      this.localTableData = sortedData;
+    }
+    },
   }
  }
  </script>
@@ -629,5 +630,8 @@
  
  /deep/ .el-input--small .el-input__inner {
   margin-left: 0px;
+ }
+ .filter-section /deep/ .el-input.el-input--small.el-input--prefix.el-input--suffix {
+  width: 350px
  }
  </style>
