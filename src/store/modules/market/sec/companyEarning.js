@@ -20,15 +20,16 @@ const formatQuartAnnualDate = (isoStr, type) => {
   if (type === 'FY') {
     dateStr = year;
   } else {
-    dateStr = `${formatQuartStr(type)}'${yearShort}`;
+    dateStr = formatQuartStr(type,yearShort);
   }
-
   return dateStr;
-};
-const formatQuartStr = (str) => {
+}
+
+const formatQuartStr = (str, yearShort) => {
   const num = str[1]
   const num_res = Number(num) - 1 > 0 ? num - 1 : 4
-  return 'Q'+num_res
+  const year_res = Number(num) - 1 > 0 ? Number(yearShort) : Number(yearShort) - 1
+  return 'Q' + num_res + ' ' + year_res
 }
 
 const formatEarningsInfo = (detail) => [
