@@ -292,7 +292,7 @@
   {
     "chart_name": "Risk Appetite Index",
     "url": "survey_risk_appetite",
-    "updated": "Weekly"
+    "updated": "Daily"
   },
   {
     "chart_name": "Pension Fund Allocation - Stocks",
@@ -322,7 +322,7 @@
   {
     "chart_name": "Economic Surprise Index",
     "url": "survey_economic_surprise",
-    "updated": "Weekly"
+    "updated": "Daily"
   },
   {
     "chart_name": "University of Michigan Consumer Confidence",

@@ -12,6 +12,25 @@ const formatUTCDate = (isoStr) => {
     timeZone: 'UTC'
   }).format(date);
 }
+const formatQuartAnnualDate = (isoStr, type) => {
+  const year = isoStr.split("T")[0].split("-")[0];
+  const yearShort = year.slice(-2);
+  let dateStr;
+
+  if (type === 'FY') {
+    dateStr = year;
+  } else {
+    dateStr = formatQuartStr(type,yearShort);
+  }
+  return dateStr;
+}
+
+const formatQuartStr = (str, yearShort) => {
+  const num = str[1]
+  const num_res = Number(num) - 1 > 0 ? num - 1 : 4
+  const year_res = Number(num) - 1 > 0 ? Number(yearShort) : Number(yearShort) - 1
+  return 'Q' + num_res + ' ' + year_res
+}
 
 const formatEarningsInfo = (detail) => [
     { title: 'Average EPS', totalPremium: formatNumber(detail.avg_eps, 'dollar')},
@@ -39,11 +58,13 @@ const formatEPSData = (data) => {
     { prop: 'est_revenue', label: 'Est. Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.est_revenue) },
     { prop: 'actual_revenue', label: 'Actual Revenue', sortable: true, type: 'number', formatter: (row) => formatNumber(row.actual_revenue) }
   ]
-
+debugger
   data.forEach((item, index) => {
-    const date = item.fiscal_date_ending.split("T")[0].split("-")[0].slice(-2);
-    const dateStr = `Q${index + 1}'${date}`
-    const yearStr = `Q${index + 1}'${item.fiscal_date_ending.slice(0, 4)}`
+    // const date = item.fiscal_date_ending.split("T")[0].split("-")[0].slice(-2);
+    // const dateStr = `Q${index + 1}'${date}`
+    // const yearStr = `Q${index + 1}'${item.fiscal_date_ending.slice(0, 4)}`
+
+    const dateStr = formatQuartAnnualDate(item.fiscal_date_ending, item.period)
 
     EPSTrendEstimates.push({
       date: dateStr,
@@ -68,7 +89,7 @@ const formatEPSData = (data) => {
     })
     EarningHistory.push({
       period: formatUTCDate(item.fiscal_date_ending),
-      date: yearStr,
+      date: dateStr,
       estimated_eps: item.eps_estimated,
       actual_eps: item.eps,
       surprise: item.eps_surprise,
