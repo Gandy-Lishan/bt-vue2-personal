@@ -93126,5 +93126,1111 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "spx_pct_rank_10_gte_80",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "spx_pct_rank_10_lte_20",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "spx_pct_rank_42_gte_80",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "spx_pct_rank_42_lte_20",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "spx_pct_rank_126_gte_80",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "spx_pct_rank_126_lte_20",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "s5rlst_pct_rank_10_gte_80",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "s5rlst_pct_rank_10_lte_20",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "s5rlst_pct_rank_42_gte_80",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "s5rlst_pct_rank_42_lte_20",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "s5rlst_pct_rank_126_gte_80",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "s5rlst_pct_rank_126_lte_20",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlc_pct_rank_10_gte_80",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlc_pct_rank_10_lte_20",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlc_pct_rank_42_gte_80",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlc_pct_rank_42_lte_20",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlc_pct_rank_126_gte_80",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlc_pct_rank_126_lte_20",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlb_pct_rank_10_gte_80",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlb_pct_rank_10_lte_20",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlb_pct_rank_42_gte_80",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlb_pct_rank_42_lte_20",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlb_pct_rank_126_gte_80",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlb_pct_rank_126_lte_20",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xle_pct_rank_10_gte_80",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xle_pct_rank_10_lte_20",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xle_pct_rank_42_gte_80",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xle_pct_rank_42_lte_20",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xle_pct_rank_126_gte_80",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xle_pct_rank_126_lte_20",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlf_pct_rank_10_gte_80",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlf_pct_rank_10_lte_20",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlf_pct_rank_42_gte_80",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlf_pct_rank_42_lte_20",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlf_pct_rank_126_gte_80",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlf_pct_rank_126_lte_20",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xli_pct_rank_10_gte_80",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xli_pct_rank_10_lte_20",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xli_pct_rank_42_gte_80",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xli_pct_rank_42_lte_20",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xli_pct_rank_126_gte_80",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xli_pct_rank_126_lte_20",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlk_pct_rank_10_gte_80",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlk_pct_rank_10_lte_20",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlk_pct_rank_42_gte_80",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlk_pct_rank_42_lte_20",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlk_pct_rank_126_gte_80",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlk_pct_rank_126_lte_20",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlp_pct_rank_10_gte_80",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlp_pct_rank_10_lte_20",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlp_pct_rank_42_gte_80",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlp_pct_rank_42_lte_20",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlp_pct_rank_126_gte_80",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlp_pct_rank_126_lte_20",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlu_pct_rank_10_gte_80",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlu_pct_rank_10_lte_20",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlu_pct_rank_42_gte_80",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlu_pct_rank_42_lte_20",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlu_pct_rank_126_gte_80",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlu_pct_rank_126_lte_20",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xlv_pct_rank_10_gte_80",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xlv_pct_rank_10_lte_20",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xlv_pct_rank_42_gte_80",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xlv_pct_rank_42_lte_20",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xlv_pct_rank_126_gte_80",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xlv_pct_rank_126_lte_20",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 10-Day RSRR >= 80%",
+        "url": "xly_pct_rank_10_gte_80",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 10-Day RSRR <= 20%",
+        "url": "xly_pct_rank_10_lte_20",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 42-Day RSRR >= 80%",
+        "url": "xly_pct_rank_42_gte_80",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 42-Day RSRR <= 20%",
+        "url": "xly_pct_rank_42_lte_20",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 126-Day RSRR >= 80%",
+        "url": "xly_pct_rank_126_gte_80",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with a 126-Day RSRR <= 20%",
+        "url": "xly_pct_rank_126_lte_20",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Trend Score >= 8",
+        "url": "spx_trend_above8_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Trend Score <= 2",
+        "url": "spx_trend_below2_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Relative Trend Score >= 8",
+        "url": "spx_reltrend_above8_ratio",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Relative Trend Score <= 2",
+        "url": "spx_reltrend_below2_ratio",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "spx_trend_and_reltrend_above8_ratio",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "spx_trend_and_reltrend_below2_ratio",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of S&P 500 Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "spx_reltrend_above8_spx_ratio",
+        "market_symbol": "SPX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Trend Score >= 8",
+        "url": "s5rlst_trend_above8_ratio",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Trend Score <= 2",
+        "url": "s5rlst_trend_below2_ratio",
+        "market_symbol": "s5rlst",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Relative Trend Score >= 8",
+        "url": "s5rlst_reltrend_above8_ratio",
+        "market_symbol": "s5rlst",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Relative Trend Score <= 2",
+        "url": "s5rlst_reltrend_below2_ratio",
+        "market_symbol": "s5rlst",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "s5rlst_trend_and_reltrend_above8_ratio",
+        "market_symbol": "s5rlst",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Real Estate - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "s5rlst_trend_and_reltrend_below2_ratio",
+        "market_symbol": "s5rlst",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Real Estate Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "s5rlst_reltrend_above8_spx_ratio",
+        "market_symbol": "s5rlst",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Trend Score >= 8",
+        "url": "xlc_trend_above8_ratio",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Trend Score <= 2",
+        "url": "xlc_trend_below2_ratio",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlc_reltrend_above8_ratio",
+        "market_symbol": "XLC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlc_reltrend_below2_ratio",
+        "market_symbol": "XLC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlc_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Communication Services - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlc_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Communication Services Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlc_reltrend_above8_spx_ratio",
+        "market_symbol": "XLC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Trend Score >= 8",
+        "url": "xlb_trend_above8_ratio",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Trend Score <= 2",
+        "url": "xlb_trend_below2_ratio",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlb_reltrend_above8_ratio",
+        "market_symbol": "XLB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlb_reltrend_below2_ratio",
+        "market_symbol": "XLB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlb_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Materials - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlb_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Materials Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlb_reltrend_above8_spx_ratio",
+        "market_symbol": "XLB",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Trend Score >= 8",
+        "url": "xle_trend_above8_ratio",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Trend Score <= 2",
+        "url": "xle_trend_below2_ratio",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Relative Trend Score >= 8",
+        "url": "xle_reltrend_above8_ratio",
+        "market_symbol": "XLE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Relative Trend Score <= 2",
+        "url": "xle_reltrend_below2_ratio",
+        "market_symbol": "XLE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xle_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xle_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Energy Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xle_reltrend_above8_spx_ratio",
+        "market_symbol": "XLE",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Trend Score >= 8",
+        "url": "xlf_trend_above8_ratio",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Trend Score <= 2",
+        "url": "xlf_trend_below2_ratio",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlf_reltrend_above8_ratio",
+        "market_symbol": "XLF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlf_reltrend_below2_ratio",
+        "market_symbol": "XLF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlf_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Financials - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlf_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Financials Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlf_reltrend_above8_spx_ratio",
+        "market_symbol": "XLF",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Trend Score >= 8",
+        "url": "xli_trend_above8_ratio",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Trend Score <= 2",
+        "url": "xli_trend_below2_ratio",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Relative Trend Score >= 8",
+        "url": "xli_reltrend_above8_ratio",
+        "market_symbol": "XLI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Relative Trend Score <= 2",
+        "url": "xli_reltrend_below2_ratio",
+        "market_symbol": "XLI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xli_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industrials - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xli_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Industrials Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xli_reltrend_above8_spx_ratio",
+        "market_symbol": "XLI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Trend Score >= 8",
+        "url": "xlk_trend_above8_ratio",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Trend Score <= 2",
+        "url": "xlk_trend_below2_ratio",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlk_reltrend_above8_ratio",
+        "market_symbol": "XLK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlk_reltrend_below2_ratio",
+        "market_symbol": "XLK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlk_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Technology - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlk_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Technology Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlk_reltrend_above8_spx_ratio",
+        "market_symbol": "XLK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Trend Score >= 8",
+        "url": "xlp_trend_above8_ratio",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Trend Score <= 2",
+        "url": "xlp_trend_below2_ratio",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlp_reltrend_above8_ratio",
+        "market_symbol": "XLP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlp_reltrend_below2_ratio",
+        "market_symbol": "XLP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlp_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Staples - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlp_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Staples Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlp_reltrend_above8_spx_ratio",
+        "market_symbol": "XLP",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Trend Score >= 8",
+        "url": "xlu_trend_above8_ratio",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Trend Score <= 2",
+        "url": "xlu_trend_below2_ratio",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlu_reltrend_above8_ratio",
+        "market_symbol": "XLU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlu_reltrend_below2_ratio",
+        "market_symbol": "XLU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlu_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Utilities - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlu_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Utilities Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlu_reltrend_above8_spx_ratio",
+        "market_symbol": "XLU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Trend Score >= 8",
+        "url": "xlv_trend_above8_ratio",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Trend Score <= 2",
+        "url": "xlv_trend_below2_ratio",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Relative Trend Score >= 8",
+        "url": "xlv_reltrend_above8_ratio",
+        "market_symbol": "XLV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Relative Trend Score <= 2",
+        "url": "xlv_reltrend_below2_ratio",
+        "market_symbol": "XLV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xlv_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Health Care - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xlv_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Health Care Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xlv_reltrend_above8_spx_ratio",
+        "market_symbol": "XLV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Trend Score >= 8",
+        "url": "xly_trend_above8_ratio",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Trend Score <= 2",
+        "url": "xly_trend_below2_ratio",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Relative Trend Score >= 8",
+        "url": "xly_reltrend_above8_ratio",
+        "market_symbol": "XLY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Relative Trend Score <= 2",
+        "url": "xly_reltrend_below2_ratio",
+        "market_symbol": "XLY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Trend & Rel-Trend >= 8",
+        "url": "xly_trend_and_reltrend_above8_ratio",
+        "market_symbol": "XLY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Discretionary - % of Stocks with Trend & Rel-Trend <= 2",
+        "url": "xly_trend_and_reltrend_below2_ratio",
+        "market_symbol": "XLY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "% of Discretionary Stocks in S&P 500 with Relative Trend Score >= 8",
+        "url": "xly_reltrend_above8_spx_ratio",
+        "market_symbol": "XLY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 Technology RSR & Rel RSR >=80 (10-Day)",
+        "url": "spx_tech_dual_10d",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "S&P 500 Technology RSR & Rel RSR >=80 (42-Day)",
+        "url": "spx_tech_dual_42d",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]

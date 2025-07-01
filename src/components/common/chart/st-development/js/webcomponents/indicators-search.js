@@ -198,9 +198,9 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.filters_data(value, filter, null, closure)  
             }
 
-            async filters_data(value,filter,params, closure){
+            async filters_data_old(value,filter,params, closure){
                 CIQ.symbols = []
-
+// console.time('filters_data')
                 if (filter == "ALL"){
                     let loader = document.querySelector(".loaderSearch");
                     if (loader) loader.show();  
@@ -367,6 +367,219 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 this.hasMore = true;
                 this.loadMore(closure)
             }
+
+            async filters_data(value,filter,params, closure){
+                CIQ.symbols = []
+                // console.time('filters_data')
+                if (filter == "ALL"){
+                    let loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.show();
+                    const list = CIQ.store.getters.getIndicatorsList
+                    let resu = list.map(item=>{return {
+                        name: item.chart_name,
+                        url: item.url,
+                        updated: item.updated,
+                        category: item.category
+                    }})
+            
+                    // 使用Set来跟踪已存在的url，以便去重
+                    const existingUrls = new Set(resu.map(item => item.url));
+            
+                    const favoriteIndicatorListBtv1 = CIQ.store.getters.getFavoriteIndicatorListBtv1
+                    favoriteIndicatorListBtv1.data.data.forEach(item => {
+                        const newItem = {
+                            name:item.chart_name[0],
+                            url:item.url[0]
+                        };
+                        // 只有当url不存在于resu中时才添加
+                        if (!existingUrls.has(newItem.url)) {
+                            resu.push(newItem);
+                            existingUrls.add(newItem.url); // 添加新url到Set中
+                        }
+                    });
+            
+                    // 移除原始的去重逻辑，因为我们已经在添加时处理了去重
+                    // resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+                    //     return resu.find(item => item.url === url);
+                    // });
+            
+                    let results = []
+                    const myIndicatorList = CIQ.store.getters.getMyIndicatorList
+                    const milist = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: timeframeTransform(item.timeframe)}))
+            
+                    // 在添加milist时也考虑去重
+                    milist.forEach(item => {
+                        if (!existingUrls.has(item.url)) {
+                            resu.push(item);
+                            existingUrls.add(item.url);
+                        }
+                    });
+            
+                    resu.map(element => {
+                        let item
+                        try{
+                            item = {
+                                name: element.name,
+                                url: element.url,
+                                updated: element.updated?element.updated:timeframeTransform(CIQ.findSentiIndicator(null,element.url).updated),
+                            }
+                        }catch(err){return null}
+            
+                        if (this.currentCategory!=='all' && item.category!==this.currentCategory){
+                            return null;
+                        }
+            
+                        if (item.updated.indexOf("Quarterly") !==-1){
+                            return null;
+                        }
+            
+                        if (item.name.indexOf("Seasonality") !==-1){
+                            return null;
+                        }
+            
+                        if (CIQ.symbols.indexOf(item.name) !==-1){
+                            return null;
+                        }
+            
+                        results.push({
+                            display: [item.name, item.updated],
+                            data: item,
+                            priority: createStateFilter(value)(item),
+                        });
+            
+                        return null;
+                    }).filter(Boolean); // 过滤掉null值
+            
+                    // 保存过滤后的数据（只包含优先级大于0的项）
+                    this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
+            
+                    // 隐藏加载指示器
+                    if (loader) loader.style.display = 'none';
+                }else if (filter == "MY FAVORITES"){
+                    let loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.show();
+                    let resu = []
+            
+                    // 使用Set来跟踪已存在的url，以便去重
+                    const existingUrls = new Set();
+            
+                    // btv2 fav
+                    CIQ.store.getters.getFavoriteIndicatorList.forEach(item => {
+                        const newItem = {...item, source:'Backtest Engine v2.0'};
+                        if (!existingUrls.has(newItem.url)) {
+                            resu.push(newItem);
+                            existingUrls.add(newItem.url);
+                        }
+                    });
+            
+                    // btv1 fav
+                    const favoriteIndicatorListBtv1 = CIQ.store.getters.getFavoriteIndicatorListBtv1
+                    favoriteIndicatorListBtv1.data.data.forEach(item=>{
+                        const newItem = {
+                            name:item.chart_name[0],
+                            url:item.url[0],
+                            source:'Backtest Engine v1.0'
+                        };
+                        if (!existingUrls.has(newItem.url)) {
+                            resu.push(newItem);
+                            existingUrls.add(newItem.url);
+                        }
+                    });
+            
+                    // 移除原始的去重逻辑
+                    // resu = Array.from(new Set(resu.map(item => item.url))).map(url => {
+                    //     return resu.find(item => item.url === url);
+                    // });
+            
+                    let results = []
+                    const myIndicatorList = CIQ.store.getters.getMyIndicatorList    // custom indicator
+                    const list = myIndicatorList.map(item => ({...item, name: item.name, url: `${item.name}CREATE${item.url}`, updated: item.timeframe, source:'Custom Indicator'}))
+                    
+                    // 在添加list时也考虑去重
+                    list.forEach(item => {
+                        if (!existingUrls.has(item.url)) {
+                            resu.push(item);
+                            existingUrls.add(item.url);
+                        }
+                    });
+            
+                    resu.map(element => {
+                        let item
+                        try{
+                            item = {
+                                url: element.url,
+                                name: element.name,
+                                updated: element.timeframe?element.timeframe:CIQ.findSentiIndicator(null,element.url).updated,
+                                exchDisp: "",
+                                source: element.source,
+                            }
+                        }catch(err){return null}
+            
+                        results.push({
+                            display: [item.name, item.updated, item.source],
+                            data: item,
+                            priority: createStateFilter(value)(item),
+                        });
+            
+                        return null
+                    }).filter(Boolean); // 过滤掉null值
+            
+                    this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
+            
+                    if (loader) loader.hide();
+                }else if (filter == "MOST POPULAR"){
+                    let loader = document.querySelector(".loaderSearch");
+                    if (loader) loader.hide();
+            
+                    let results = []
+                    for(let i=0;i<CIQ.store.getters.getIndicatorsList.length;i++){
+                        let fields = CIQ.store.getters.getIndicatorsList[i]
+            
+                        try{
+                            let item = {
+                                name: fields.chart_name,
+                                url: fields.url,
+                                updated: fields.updated,
+                                category: fields.category
+                            };
+            
+            
+                            if (this.currentCategory!=='all' && item.category!==this.currentCategory){
+                                continue;
+                            }
+            
+                            if(mostPopularItems.items.indexOf(item.url) ===-1){
+                                continue
+                            }
+            
+                            if (item.updated.indexOf("Quarterly") !==-1){
+                                continue;
+                            }
+            
+                            if (item.name.indexOf("Seasonality") !==-1){
+                                continue;
+                            }
+            
+                            if (CIQ.symbols.indexOf(item.name) !==-1){
+                                continue;
+                            }
+            
+                            results.push({
+                                display: [item.name, item.updated],
+                                data: item,
+                                priority: createStateFilter(value)(item),
+                            });
+                        }catch(err){return}
+            
+                    }
+            
+                    this.searchResults = results.filter(item => item.priority > 0).sort((a, b) => b.priority - a.priority);
+                }
+            
+                this.currentPage = 1;
+                this.hasMore = true;
+                this.loadMore(closure)
+            }
             loadMore(closure) {
                 // 根据页码从过滤后的结果中分页
                 console.log('paginated results',this.currentPage, this.searchResults.length)
@@ -374,6 +587,7 @@ let __js_webcomponents_indicatorsLookup_ = (_exports) => {
                 if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
                 // 将分页后的数据传递给 closure
                 closure(paginatedResults);
+                // console.timeEnd('filters_data')
             }
             attachDriver(driver) {
                 this.driver = driver;

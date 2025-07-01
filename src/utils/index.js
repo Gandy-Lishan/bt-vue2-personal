@@ -267,28 +267,28 @@ const formatNumber = (value, type, sign) => {
   let formatted;
 
   if (absValue >= 1e12) {
-    formatted = `${(absValue / 1e12).toFixed(2)}T`;
+    formatted = `${(value / 1e12).toFixed(2)}T`;
   } else if (absValue >= 1e9) {
-    formatted = `${(absValue / 1e9).toFixed(2)}B`;
+    formatted = `${(value / 1e9).toFixed(2)}B`;
   } else if (absValue >= 1e6) {
-    formatted = `${(absValue / 1e6).toFixed(2)}M`;
+    formatted = `${(value / 1e6).toFixed(2)}M`;
   } else if (absValue >= 1e3) {
-    formatted = `${(absValue / 1e3).toFixed(2)}K`;
+    formatted = `${(value / 1e3).toFixed(2)}K`;
   } else {
-    formatted = absValue.toFixed(2);
+    formatted = `${Number(value).toFixed(2)}`;
   }
-
-  if (type === 'percent') {
+  if(type === 'percent') {
     return `${(parseFloat(formatted) * 100).toFixed(2)}%`;
-  } else if (type === 'avg') {
-    return `${value > 0 ? '+' : ''}${formatted}%`;
-  } else if (type === 'dollar') {
-    return `${value < 0 ? '-' : ''}$${formatted}`;
-  } else if (type === 'customSign') {
-    return `${formatted}${sign}`;
   }
-
-  return formatted;
-}
+  else if(type === 'avg') {
+    return `${parseFloat(formatted) > 0 ? '+' : ''}${formatted}%`
+  }
+  else if(type === 'dollar') {
+    return `$${formatted}`
+  }else if(type === 'customSign') {
+    return `${formatted}${sign}`
+  }
+  return formatted
+ }
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}

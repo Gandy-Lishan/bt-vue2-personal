@@ -242,7 +242,8 @@ let __js_webcomponents_lookup_ = (_exports) => {
                             var item = {
                                 symbol: encodeBase64(element.name) + '||' + encodeBase64(element.url),
                                 name: element.name,
-                                category: ""
+                                category: "Custom",
+                                inception: "",
                             }
                             concatList.push(item)
                             resultsCustomSymbolList.push({

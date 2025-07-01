@@ -381,9 +381,107 @@ const routes = [
 		component: resolve => require(['@/components/Notifications/index.vue'], resolve)
 	},
 	{
+		path: '/market',
+		name: 'Market',
+		redirect: '/market/predict',
+		component: resolve => require(['@/components/Market/index.vue'], resolve),
+		children: [
+				{
+					path: 'overview',
+					name: 'MarketOverview',
+					meta: { activeItem: 'overview' },
+					component: resolve =>
+						require(['@/components/Market/Overview.vue'], resolve)
+				},
+				{
+					path: 'predict',
+					name: 'MarketPredict',
+					meta: { activeItem: 'predict' },
+					component: resolve => require(['@/components/Market/Predict.vue'], resolve)
+				},
+			// {
+			// 	path: 'equities',
+			// 	name: 'Equities',
+			// 	meta: { activeItem: 'equities' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Equities.vue'], resolve)
+			// },
+			// {
+			// 	path: 'commodities',
+			// 	name: 'Commodities',
+			// 	meta: { activeItem: 'commodities' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Commodities.vue'], resolve)
+			// },
+			// {
+			// 	path: 'earnings',
+			// 	name: 'EarningsCalendar',
+			// 	meta: { activeItem: 'earnings' },
+			// 	component: resolve =>
+			// 		require(['@/components/Market/Earnings.vue'], resolve)
+			// },
+			{
+				path: 'sec/:symbolname',
+				name: 'MarketSecDetail',
+				meta: { activeItem: 'sec' },
+				component: resolve => require(['@/components/Market/sec/index.vue'], resolve),
+				children: [
+					{
+					  path: '',
+					  redirect: 'chart'
+					},
+					{
+					  path: 'chart',
+					  component: resolve => require(['@/components/Market/sec/Chart.vue'], resolve),
+					},
+					{
+						path: 'analysts',
+						component: resolve => require(['@/components/Market/sec/Analysts.vue'], resolve),
+					  },
+					{
+					  path: 'earnings',
+					  component: () => import('@/components/Market/sec/Earnings.vue')
+					},
+					  {
+						path: 'financials',
+						component: resolve => require(['@/components/Market/sec/Financials.vue'], resolve),
+					  },
+					  {
+						path: 'balancesheet',
+						component: resolve => require(['@/components/Market/sec/BalanceSheet.vue'], resolve),
+					  },
+					  {
+						path: 'cashflow',
+						component: resolve => require(['@/components/Market/sec/CashFlow.vue'], resolve),
+					  },
+					  {
+						path: 'ownership',
+						component: resolve => require(['@/components/Market/sec/Ownership.vue'], resolve),
+					  },
+					  {
+						path: 'news',
+						component: resolve => require(['@/components/Market/sec/News.vue'], resolve),
+					  },
+					  {
+						path: 'sec',
+						component: resolve => require(['@/components/Market/sec/SEC.vue'], resolve),
+					  }
+				  ]
+			},
+			{
+				path: 'sec',
+				redirect: '/market'
+			}
+		]
+	},	
+	{
 		path: '/404',
 		component: resolve => require(['@/components/404.vue'], resolve)
-	}
+	},
+	{
+		path: '/testpage',
+		component: resolve => require(['@/components/TestPage/index.vue'], resolve)
+	},
 ]
 
 export default routes

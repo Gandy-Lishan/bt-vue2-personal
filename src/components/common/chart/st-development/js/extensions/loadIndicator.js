@@ -233,6 +233,7 @@ import { formatStandardTime } from '@/utils'
                     var start = config.timestampToTime(CIQ.initialDate.start)
                     var end = config.timestampToTime(CIQ.initialDate.end)
                     const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
+                    debugger
                     let _data = formatData(res.data)
                     stx.addSeries(comparisonSymbol.url, {
                         highlightable: false,
