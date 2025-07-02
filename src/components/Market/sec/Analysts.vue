@@ -13,7 +13,7 @@
       <div class="analysts__chart-container">
         <div class="semicircle-chart">
           <svg :width="chartSize" :height="chartSize / 2 + 50" class="chart-svg">
-            <path v-for="(segment, index) in segments" :key="segment.label || index"
+            <path v-for="(segment, index) in segments" :key="(segment.label || index) + '-' + index"
               :d="getArcPath(segment.startAngle, segment.endAngle, segment.radius)" :fill="segment.color"
               :stroke="segment.color" stroke-width="2" class="segment-path" @mouseenter="hoveredSegment = segment"
               @mouseleave="hoveredSegment = null"
@@ -25,7 +25,7 @@
               <circle cx="0" cy="0" r="4" fill="#000" />
             </g>
             <!-- 标签：添加 v-if="!isLoading" 确保加载时不显示 -->
-            <text v-for="(label, index) in labels" :key="label.text || index" :x="label.x" :y="label.y"
+            <text v-for="(label, index) in labels" :key="(label.text || index) + '-' + index" :x="label.x" :y="label.y"
               :text-anchor="label.anchor" :transform="`rotate(${label.rotation}, ${label.x}, ${label.y})`"
               class="chart-label"
               :class="{ 'label-visible': hoveredSegment && hoveredSegment.label === label.text }"
