@@ -510,7 +510,7 @@ export default {
 				(arr.length % 2 !== 0
 					? nums[mid]
 					: (nums[mid - 1] + nums[mid]) / 2
-				).toFixed(1)
+				)
 			)
 		},
 		get_period_parm(dataSeries, paramType, period) {
@@ -633,8 +633,8 @@ export default {
 				)
 			}
 			const res = period_dict.map((val, i) => {
-				let AvgMaxLoss = !median_list[i] && median_list[i] != 0 ? NaN : max_loss_list[i]
-				let AvgMaxGain = !median_list[i] && median_list[i] != 0 ? NaN : max_gain_list[i]
+				let AvgMaxLoss = !median_list[i] && median_list[i] != 0 ? NaN : max_loss_list[i].toFixed(1)
+				let AvgMaxGain = !median_list[i] && median_list[i] != 0 ? NaN : max_gain_list[i].toFixed(1)
 				// 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
 				if (direction === 'Short' && !isNaN(AvgMaxLoss)) {
 					AvgMaxLoss = -parseFloat(AvgMaxLoss);

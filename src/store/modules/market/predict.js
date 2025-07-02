@@ -51,6 +51,7 @@ const formatData = (data) => {
   { 
     prop: 'PhaseMinPrice', 
     label: 'Min Price', 
+    desc: `<p><strong>Min Price (Period Low)</strong> refers to the <strong>lowest price within the forecast period</strong>.</p>`,
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.PhaseMinPrice, 'dollar')
@@ -58,6 +59,7 @@ const formatData = (data) => {
   { 
     prop: 'PhaseMaxPrice', 
     label: 'Max Price', 
+    desc: `<p><strong>Max Price (Period High)</strong> refers to the <strong>highest price within the forecast period</strong>.</p>`,
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.PhaseMaxPrice, 'dollar')

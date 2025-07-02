@@ -9,7 +9,14 @@
           :key="index"
           class="stats-item"
         >
-          <span class="stats-label">{{ item.label }}</span>
+          <span class="stats-label">
+            {{ item.label }}
+            <el-tooltip v-if="item['desc']" effect="dark" placement="top">
+              <span slot="content" v-html="item['desc']">
+							</span>
+              <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+            </el-tooltip>
+          </span>
           <span class="stats-value" :class="{ 'negative': item.isNegative }">
             {{ item.value }}
           </span>
