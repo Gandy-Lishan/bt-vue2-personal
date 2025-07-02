@@ -2,7 +2,7 @@
   <div class="eps-growth-chart">
     <!-- Header -->
     <div class="chart-header">
-      <h3 class="chart-title">EPS Growth Rate</h3>
+      <!-- <h3 class="chart-title">EPS Growth Rate</h3> -->
       <div class="chart-tabs">
         <button
           v-for="tab in tabs"

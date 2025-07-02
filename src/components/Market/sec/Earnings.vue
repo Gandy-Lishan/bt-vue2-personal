@@ -81,7 +81,7 @@
           :series-configs="[
             { key: 'surprise', label: 'Estimate Surprise', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
           ]"
-          title-text="Earnings Surprise"
+          title-text=""
           orientation="column"
           chartHeight="auto"
           :enableExporting="false"
@@ -103,7 +103,7 @@
           :series-configs="[
             { key: 'surprise', label: 'Estimate Surprise', color: '#4CAF50', positiveColor: '#4CAF50', negativeColor: '#D64A3B' }
           ]"
-          title-text="Revenue Surprise"
+          title-text=""
           orientation="column"
           chart-height="auto"
           :enableExporting="false"
