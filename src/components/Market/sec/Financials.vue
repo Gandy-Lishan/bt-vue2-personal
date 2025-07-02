@@ -211,7 +211,7 @@ export default {
 }
 
 .btn-group {
-  position: absolute;
+  position: absolute !important;
   top: 80px;
 }
 
