@@ -422,12 +422,12 @@ export default {
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
-      const indicator_1 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
-      const symbol_1 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
-      const indicator_2 = (typeAttribute == 'indicator') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.label
-      const symbol_2 = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.label
-      const symbol_1_url = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.url
-      const symbol_2_url = (typeAttribute == 'symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.url
+      const indicator_1 = (typeAttribute == 'indicator' && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label) || ''
+      const symbol_1 = (typeAttribute == 'symbol' && symbolList.find(ele => ele.url === url_1)?.label) || ''
+      const indicator_2 = (typeAttribute == 'indicator' && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_2.toLocaleLowerCase())?.label) || ''
+      const symbol_2 = (typeAttribute == 'symbol' && symbolList.find(ele => ele.url === url_2)?.label) || ''
+      const symbol_1_url = (typeAttribute == 'symbol' && symbolList.find(ele => ele.url === url_1)?.url) || ''
+      const symbol_2_url = (typeAttribute == 'symbol' && symbolList.find(ele => ele.url === url_2)?.url) || ''
       const former = indicator_1 || symbol_1;
       const latter = indicator_2 || symbol_2;
       const former_url = indicator_1 || symbol_1_url;
@@ -544,8 +544,8 @@ export default {
     getSOHLCVIncludedData(item, symbolList) {
       const url_1 = item.indicator_1_url
       const typeAttribute = item.combine_type || 'ohlcv'
-      const symbol_1 = (typeAttribute == 'ohlcv') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
-      const symbol_1_url = (typeAttribute == 'ohlcv') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.url
+      const symbol_1 = (typeAttribute == 'ohlcv' && symbolList.find(ele => ele.url === url_1)?.label) || ''
+      const symbol_1_url = (typeAttribute == 'ohlcv' && symbolList.find(ele => ele.url === url_1)?.url) || ''
       const former = symbol_1;
       const latter = '';
       const former_url = symbol_1_url;
@@ -588,7 +588,7 @@ export default {
     getResampleIncludedData(item, sentimentList) {
       const url_1 = item.indicator_1_url
       const typeAttribute = item.combine_type || 'resample'
-      const indicator_1 = (typeAttribute == 'resample') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label
+      const indicator_1 = (typeAttribute == 'resample' && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url_1.toLocaleLowerCase())?.label) || ''
       const former = indicator_1;
       const latter = '';
       const former_url = indicator_1;
@@ -615,9 +615,9 @@ export default {
       return indicator_weight_arr.map((weight, index) => {
         const url = mul_indicator_obj[`indicator_${index + 1}`]
         const typeAttribute = combine_type_arr[index]
-        const indicator = (typeAttribute == 'Indicator') && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.label
-        const symbol = (typeAttribute == 'Symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.label
-        const symbol_url = (typeAttribute == 'Symbol') && symbolList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.url
+        const indicator = (typeAttribute == 'Indicator' && sentimentList.find(ele => ele.url.toLocaleLowerCase() === url.toLocaleLowerCase())?.label) || ''
+        const symbol = (typeAttribute == 'Symbol' && symbolList.find(ele => ele.url === url)?.label) || ''
+        const symbol_url = (typeAttribute == 'Symbol' && symbolList.find(ele => ele.url === url)?.url) || ''
         const result = indicator || symbol
         const result_url = indicator || symbol_url
         const type = typeAttribute

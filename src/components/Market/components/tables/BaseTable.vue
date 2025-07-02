@@ -94,7 +94,14 @@
           <!-- 自定义表头 -->
           <template slot="header" slot-scope="scope">
             <div v-if="column.labelHTML" v-html="column.labelHTML"></div>
-            <div v-else>{{ column.label }}</div>
+            <div v-else>
+              {{ column.label }}
+              <el-tooltip v-if="column.desc" effect="dark" placement="top">
+                <span slot="content" v-html="column.desc">
+                </span>
+                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+              </el-tooltip>
+            </div>
           </template>
 
           <!-- 单元格内容 -->

@@ -2,7 +2,14 @@
   <div class="card sector-card" :class="{ 'no-border': disableBorder, 'is-centered': center }">
     <div v-if="isLoading" class="card-loading">Loading data...</div>
     <div v-else>
-      <h3 class="sector-title">{{ title }}</h3>
+      <h3 class="sector-title">
+        {{ title }}
+        <el-tooltip v-if="desc" effect="dark" placement="top">
+          <span slot="content" v-html="desc">
+          </span>
+          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+        </el-tooltip>
+      </h3>
       <div v-if="region" class="sector-region">{{ region }}</div>
       <div class="sector-metrics">
         <div class="metric">
@@ -21,6 +28,9 @@ export default {
   name: 'SectorCard',
   props: {
     title: {
+      type: String,
+    },
+    desc: {
       type: String,
     },
     region: {

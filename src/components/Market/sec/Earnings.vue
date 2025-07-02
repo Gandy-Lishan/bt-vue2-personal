@@ -5,7 +5,14 @@
     <div class="grid earnings__grid">
       <!-- 左侧条形图 -->
       <section class="card earnings__card trend-estimate">
-        <h3 class="card__subtitle">EPS Trend & Estimates</h3>
+        <h3 class="card__subtitle">
+          EPS Trend & Estimates
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content" v-html="trendEstimateContent">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <BarChart
           :chart-data="EPSTrendEstimates"
           :series-configs="[
@@ -25,6 +32,7 @@
         <SectorCard
             class="sector-ave-eps"
             :title="EarningsInfo[0]?.title"
+            :desc="EarningsInfo[0]?.desc"
             :total-premium="EarningsInfo[0]?.totalPremium"
             :total-premium-color="EarningsInfo[0]?.totalPremiumColor"
             :isLoading="isLoading"
@@ -32,6 +40,7 @@
           <SectorCard
             class="sector-ave-eps"
             :title="EarningsInfo[1]?.title"
+            :desc="EarningsInfo[1]?.desc"
             :total-premium="EarningsInfo[1]?.totalPremium"
             :total-premium-color="EarningsInfo[1]?.totalPremiumColor"
             :isLoading="isLoading"
@@ -39,6 +48,7 @@
           <SectorCard
             class="sector-ave-eps"
             :title="EarningsInfo[2]?.title"
+            :desc="EarningsInfo[2]?.desc"
             :total-premium="EarningsInfo[2]?.totalPremium"
             :total-premium-color="EarningsInfo[2]?.totalPremiumColor"
             :isLoading="isLoading"
@@ -47,11 +57,25 @@
 
       <!-- 三列 -->
       <section v-loading="isLoading" class="card earnings__card eps-growth-rate">
-        <h3 class="card__subtitle">EPS Growth Rate</h3>
+        <h3 class="card__subtitle">
+          EPS Growth Rate
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content" v-html="EPSGrowthRateContent">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <ESPGrowthChart :data="EPSGrowthRate" />
       </section>
       <section v-loading="isLoading" class="card earnings__card earnings-surprises">
-        <h3 class="card__subtitle">Earnings Surprises</h3>
+        <h3 class="card__subtitle">
+          Earnings Surprises
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content" v-html="earningsSuprisesContent">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <BarChart
           :chart-data="EarningSurprise"
           :series-configs="[
@@ -66,7 +90,14 @@
         />
       </section>
       <section v-loading="isLoading" class="card earnings__card revenue-surprises">
-        <h3 class="card__subtitle">Revenue Surprises</h3>
+        <h3 class="card__subtitle">
+          Revenue Surprises
+          <el-tooltip effect="dark" placement="top">
+            <span slot="content" v-html="revenueSuprisesContent">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <BarChart
           :chart-data="RevenueSurprises"
           :series-configs="[
@@ -153,7 +184,45 @@ export default {
     ]),
     symbol() {
       return this.$route.params.symbolname;
-    }
+    },
+    trendEstimateContent() {
+      return `
+        <h2>Estimate ESP</h2>
+        <p><strong>Estimated Earnings Surprise Percentage</strong> refers to the difference between<br>
+        an analyst's most recent forecast for a company's upcoming earnings report and<br>
+        the prevailing consensus estimate. It attempts to predict the direction and<br>
+        magnitude of the &quot;surprise&quot; between a company's actual earnings and market<br>
+        expectations before the earnings report is released.</p>
+        <br>
+        <h2>Actual ESP</h2>
+        <p><strong>Actual Earnings Surprise Percentage</strong> refers to the actual percentage difference<br>
+        between a company's reported EPS or revenue and the &quot;market consensus<br>
+        estimate.&quot; This is typically the percentage representation of the &quot;Surprise&quot;<br>
+        mentioned above.</p>
+      `;
+    },
+    EPSGrowthRateContent() {
+      return `
+        <p><strong>EPS Growth Rate</strong> measures the speed at which a company's Earnings Per Share (EPS) has<br>
+           increased over different periods (e.g., year-over-year or quarter-over-quarter growth).</p>
+      `;
+    },
+    earningsSuprisesContent() {
+      return `
+        <p>The <strong>Earnings Surprises</strong> chart typically displays the difference (or "surprise") between a company's<br> 
+        actual EPS and analysts' estimated EPS over the past few quarters, often presented as a bar or <br>
+        line chart. This chart clearly illustrates whether the company frequently beats or misses expectations, <br>
+        as well as the magnitude of these surprises.</p>
+      `;
+    },
+    revenueSuprisesContent() {
+      return `
+        <p>The <strong>Revenue Surprises</strong> chart displays the difference between a company's actual revenue and<br>
+        analysts' estimated revenue over the past few quarters. Revenue forms the basis of profitability; <br>
+        if a company consistently beats revenue expectations, it often signals an expanding market <br>
+        share or strong demand for its products/services.</p>
+      `;
+    },
   },
   watch: {
     symbol(newSymbol, oldSymbol) {
