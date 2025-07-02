@@ -2,7 +2,14 @@
   <div class="analyst-recommendations">
     <div class="title">Analysts</div>
     <section class="card analysts__card">
-      <div class="card__subtitle">Analyst Recommendations</div>
+      <div class="card__subtitle">
+        Analyst Recommendations
+        <el-tooltip effect="dark" placement="top">
+          <span slot="content" v-html="analystRecommendationsContent">
+          </span>
+          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+        </el-tooltip>
+      </div>
       <div class="analysts__chart-container">
         <!-- 左侧半圆形图表 -->
         <div class="semicircle-chart">
@@ -72,7 +79,14 @@
       </div>
     </section>
     <section class="card analysts__card">
-      <div class="card__subtitle">Analyst Predict Summary</div>
+      <div class="card__subtitle">
+        Analyst Predict Summary
+        <el-tooltip effect="dark" placement="top">
+          <span slot="content" v-html="analystPredictSummaryContent">
+          </span>
+          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+        </el-tooltip>
+      </div>
       <base-table
         :tableData="tableData"
         :columns="columns"
@@ -175,7 +189,17 @@ export default {
     pointerY() {
       const angle = (this.pointerAngle * Math.PI) / 180
       return Math.sin(angle) * (this.chartSize / 2 - 60)
-    }
+    },
+    analystRecommendationsContent() {
+      return `
+        <p><strong>Analyst Recommendations</strong> refers to the <strong>latest compilation of attitudes and forecasts from financial analysts.</strong></p>
+      `;
+    },
+    analystPredictSummaryContent() {
+      return `
+        <p>This refers to the <strong>detailed historical forecasts</strong> made by analysts for a specific Ticker</p>
+      `;
+    },
   },
   watch: {
     symbol(newSymbol, oldSymbol) {

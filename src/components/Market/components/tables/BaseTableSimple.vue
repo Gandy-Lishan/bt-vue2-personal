@@ -25,6 +25,11 @@
           >
             <td class="base-table-simple__cell base-table-simple__cell--label">
               {{ row.label }}
+              <el-tooltip v-if="row['desc']" effect="dark" placement="top">
+                <span slot="content" v-html="row['desc']">
+                </span>
+                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+              </el-tooltip>
             </td>
             <td class="base-table-simple__cell">
               {{ row.value }}
@@ -41,6 +46,11 @@
               class="base-table-simple__cell base-table-simple__cell--label"
             >
               {{ row.label }}
+              <el-tooltip v-if="row['desc']" effect="dark" placement="top">
+                <span slot="content" v-html="row['desc']">
+                </span>
+                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+              </el-tooltip>
             </td>
           </tr>
           <tr class="base-table-simple__row">

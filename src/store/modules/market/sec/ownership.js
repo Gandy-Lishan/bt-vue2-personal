@@ -44,25 +44,25 @@ const formatOwnershipData = (data) => {
     {
       title: 'Executive Insider Activity',
       data: [
-        { label: 'Annual Trading Volume', value: formatNumber(insider_activity_annual_trading_volume, 'dollar') },
-        { label: 'Buy/Sell Ratio', value: formatNumber(insider_activity_buy_sell_ratio, 'customSign', 'x') },
-        { label: 'Net Buying Sentiment', value: formatNumber(insider_activity_net_buy_sentiment, 'customSign', '%') }
+        { label: 'Annual Trading Volume', value: formatNumber(insider_activity_annual_trading_volume, 'dollar'), desc: `The total number of shares bought and sold by company insiders within a year.`},
+        { label: 'Buy/Sell Ratio', value: formatNumber(insider_activity_buy_sell_ratio, 'customSign', 'x'), desc: `The ratio of the total number of shares bought by insiders to the total number of shares sold by insiders over a<br /> specific period (e.g., quarterly or annually).` },
+        { label: 'Net Buying Sentiment', value: formatNumber(insider_activity_net_buy_sentiment, 'customSign', '%'), desc: `Net Buy Sentiment is a qualitative or quantitative metric derived from the Insider Buy/Sell Ratio, usually expressed as<br /> a percentage or a sentiment score. It indicates whether insiders are, overall, net buyers or net sellers.` }
       ]
     },
     {
       title: 'Institutional Activity',
       data: [
-        { label: 'Total Holding', value: formatNumber(institution_activity_total_holding, 'dollar') },
-        { label: 'Quarterly Change', value: formatNumber(institution_activity_quarterly_change, 'customSign', '%') },
-        { label: 'Average Position', value: formatNumber(institution_activity_avg_position, 'dollar') }
+        { label: 'Total Holding', value: formatNumber(institution_activity_total_holding, 'dollar'), desc: `The total number of shares of a company's stock held by all reporting institutional investors at a specific point in time<br /> (typically reported quarterly through 13F filings).` },
+        { label: 'Quarterly Change', value: formatNumber(institution_activity_quarterly_change, 'customSign', '%'), desc: `The percentage or absolute change in total institutional holdings from one quarter to the next.` },
+        { label: 'Average Position', value: formatNumber(institution_activity_avg_position, 'dollar'), desc: `The average number of shares held by each institutional investor.` }
       ]
     },
     {
       title: 'Mutual Fund Holdings',
       data: [
-        { label: 'Total Fund Holding', value: formatNumber(mutual_fund_total_holding, 'dollar') },
-        { label: 'Unique Funds', value: formatNumber(mutual_fund_unique_funds) },
-        { label: 'Average Holding Size', value: formatNumber(mutual_fund_avg_holding_size, 'dollar') }
+        { label: 'Total Fund Holding', value: formatNumber(mutual_fund_total_holding, 'dollar'), desc: `The total number of shares of a company's stock held by all reporting mutual funds.` },
+        { label: 'Unique Funds', value: formatNumber(mutual_fund_unique_funds), desc: `The number of distinct mutual funds that hold a company's stock.` },
+        { label: 'Average Holding Size', value: formatNumber(mutual_fund_avg_holding_size, 'dollar'), desc: `The average number of shares held by each independent mutual fund.` }
       ]
     }
   ]

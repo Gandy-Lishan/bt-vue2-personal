@@ -68,6 +68,7 @@
       <div class="grid-col-3">
       <SectorCard
         :title="financialsData['financialsTrendInfo'][trendsOption].title"
+        :desc="financialsData[trendsOption].desc"
         :total-premium="financialsData['financialsTrendInfo'][trendsOption].current"
         :isLoading="isLoading"
         :disable-border="true"
@@ -76,6 +77,7 @@
 
       <SectorCard
         title="YoY Growth"
+        desc="Year-over-Year (YoY) Growth refers to the percentage increase in current period operating<br /> revenue compared to the operating revenue from the same period last year.<br /><br />This is a dynamic indicator that reflects the growth rate of a company's operating revenue.<br /> Positive growth indicates business expansion, while a high growth rate signifies strong<br /> momentum, which is typically viewed favorably by the market."
         :total-premium="financialsData['financialsTrendInfo'][trendsOption].yoy"
         :total-premium-color="financialsData['financialsTrendInfo'][trendsOption].yoyColor"
         :isLoading="isLoading"
@@ -85,6 +87,7 @@
 
       <SectorCard
         title="% of Revenue"
+        desc="Operating Income Margin refers to the percentage of operating income relative to total<br /> revenue (or sales).<br /><br />This ratio reflects a company's efficiency in controlling operating costs while generating<br /> revenue. A higher percentage means the company is earning more operating profit from each<br /> unit of revenue, demonstrating stronger core business profitability."
         :total-premium="financialsData['financialsTrendInfo'][trendsOption].ratio"
         :isLoading="isLoading"
         :disable-border="true"
@@ -108,7 +111,14 @@
         />
       </section>
       <section class="card financials__card">
-        <div class="card__subtitle">{{ financialsData['cashDebt'].title }}</div>
+        <div class="card__subtitle">
+          {{ financialsData['cashDebt'].title }}
+          <el-tooltip v-if="financialsData['cashDebt'].desc" effect="dark" placement="top">
+            <span slot="content" v-html="financialsData['cashDebt'].desc">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </div>
         <BarChart
           :chartData="financialsData['cashDebt'].data.chartData"
           :seriesConfigs="financialsData['cashDebt'].data.seriesConfigs"

@@ -14,18 +14,21 @@
     <div class="grid-col-3">
       <SectorCard
         :title="cashFlowData['operatingCashFlow'].title"
+        :desc="cashFlowData['operatingCashFlow'].desc"
         :total-premium="cashFlowData['operatingCashFlow'].data.totalPremium"
         :isLoading="isLoading"
       />
 
       <SectorCard
         :title="cashFlowData['freeCashFlow'].title"
+        :desc="cashFlowData['freeCashFlow'].desc"
         :total-premium="cashFlowData['freeCashFlow'].data.totalPremium"
         :isLoading="isLoading"
       />
 
       <SectorCard
         :title="cashFlowData['cashBalance'].title"
+        :desc="cashFlowData['cashBalance'].desc"
         :total-premium="cashFlowData['cashBalance'].data.totalPremium"
         :isLoading="isLoading"
       />
@@ -33,7 +36,14 @@
     <div class="grid-col-2">
       <!-- cash flow components & free cash flow trend -->
       <section class="card total-assets-trend">
-        <h3 class="card__subtitle">{{ cashFlowData['cashFlowComponents'].title }}</h3>
+        <h3 class="card__subtitle">
+          {{ cashFlowData['cashFlowComponents'].title }}
+          <el-tooltip v-if="cashFlowData['cashFlowComponents'].desc" effect="dark" placement="top">
+            <span slot="content" v-html="cashFlowData['cashFlowComponents'].desc">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <BarChart
           ref="totalAssetsTrend"
           :chartData="cashFlowData['cashFlowComponents'].data.chartData"
@@ -49,7 +59,14 @@
         />
       </section>
       <section class="card asset-composition">
-        <h3 class="card__subtitle">{{ cashFlowData['freeCashFlowTrend'].title }}</h3>
+        <h3 class="card__subtitle">
+          {{ cashFlowData['freeCashFlowTrend'].title }}
+          <el-tooltip v-if="cashFlowData['freeCashFlowTrend'].desc" effect="dark" placement="top">
+            <span slot="content" v-html="cashFlowData['freeCashFlowTrend'].desc">
+            </span>
+            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          </el-tooltip>
+        </h3>
         <BarChart
           ref="assetComposition"
           :chartData="cashFlowData['freeCashFlowTrend'].data.chartData"
@@ -67,7 +84,9 @@
     </div>
       <!-- cash flow activities -->
       <section class="card">
-        <div class="card__subtitle">Cash Flow Activities</div>
+        <div class="card__subtitle">
+          Cash Flow Activities
+        </div>
         <div class="grid-col-3">
           <base-table-simple
             :title="cashFlowData['operatingActivities'].title"

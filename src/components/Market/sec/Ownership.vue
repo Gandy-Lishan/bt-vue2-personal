@@ -32,7 +32,14 @@
         <div v-for="tab in tabs" :key="tab.name"
           class="card-layout__nav-item" :class="{ 'card-layout__nav-item--active': activeTab === tab.route }"
           @click="activeTab = tab.route">
-          <span class="card-layout__nav-text">{{ tab.name }}</span>
+          <span class="card-layout__nav-text">
+            {{ tab.name }}
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content" v-html="tab.desc">
+              </span>
+              <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+            </el-tooltip>
+          </span>
       </div>
       </nav>
       <br/>
@@ -193,9 +200,9 @@ export default {
         { key: 'totalDebt', label: 'Total Debt', color: 'red' },
       ],
       tabs: [
-        { name: 'Insider Transactions', route: 'insider-transactions' },
-        { name: 'Total Institutional Holdings', route: 'institutional-holdings' },
-        { name: 'Total Mutual Fund Holdings', route: 'mutual-fund-holdings' },
+        { name: 'Insider Transactions', route: 'insider-transactions', desc: `The number of shares and total value of stock sold by insiders on a specific date at a given price.` },
+        { name: 'Total Institutional Holdings', route: 'institutional-holdings', desc: `A specific institution's change in holdings (both the number of shares and the corresponding market value) on a given day.` },
+        { name: 'Total Mutual Fund Holdings', route: 'mutual-fund-holdings', desc: `A specific mutual fund's change in holdings (both the number of shares and the corresponding market value) on a given day.` },
         // { name: 'Political Trading Activity', route: 'political-trading-activity' },
       ],
       activeTab: 'insider-transactions',

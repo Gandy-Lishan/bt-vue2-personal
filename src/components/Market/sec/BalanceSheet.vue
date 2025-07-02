@@ -26,24 +26,28 @@
     <div class="grid-col-4">
       <SectorCard
         :title="balanceSheetData['totalAssets'].title"
+        :desc="balanceSheetData['totalAssets'].desc"
         :total-premium="balanceSheetData['totalAssets'].data.totalPremium"
         :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['fixedAssets'].title"
+        :desc="balanceSheetData['fixedAssets'].desc"
         :total-premium="balanceSheetData['fixedAssets'].data.totalPremium"
         :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['totalLiabilities'].title"
+        :desc="balanceSheetData['totalLiabilities'].desc"
         :total-premium="balanceSheetData['totalLiabilities'].data.totalPremium"
         :isLoading="isLoading"
       />
 
       <SectorCard
         :title="balanceSheetData['totalEquity'].title"
+        :desc="balanceSheetData['totalEquity'].desc"
         :total-premium="balanceSheetData['totalEquity'].data.totalPremium"
         :isLoading="isLoading"
       />
@@ -52,7 +56,14 @@
       <div class="grid-col-1">
         <!-- total-assets-trend & asset-composition -->
         <section class="card total-assets-trend">
-          <h3 class="card__subtitle">{{ balanceSheetData['totalAssetsTrend'].title }}</h3>
+          <h3 class="card__subtitle">
+            {{ balanceSheetData['totalAssetsTrend'].title }}
+            <el-tooltip v-if="balanceSheetData['totalAssetsTrend'].desc" effect="dark" placement="top">
+              <span slot="content" v-html="balanceSheetData['totalAssetsTrend'].desc">
+              </span>
+              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            </el-tooltip>
+          </h3>
           <BarChart
             ref="totalAssetsTrend"
             :chartData="balanceSheetData['totalAssetsTrend'].data.chartData"
@@ -92,7 +103,14 @@
       <div class="grid-col-2">
         <!-- Liabilities Breakdown -->
         <section class="card lb">
-          <h3 class="card__subtitle">{{ balanceSheetData['liabilitiesBreakdown'].title }}</h3>
+          <h3 class="card__subtitle">
+            {{ balanceSheetData['liabilitiesBreakdown'].title }}
+            <el-tooltip v-if="balanceSheetData['liabilitiesBreakdown'].desc" effect="dark" placement="top">
+              <span slot="content" v-html="balanceSheetData['liabilitiesBreakdown'].desc">
+              </span>
+              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            </el-tooltip>
+          </h3>
           <BarChart
             ref="lb"
             :chartData="balanceSheetData['liabilitiesBreakdown'].data.chartData"
@@ -108,7 +126,14 @@
           />
         </section>
         <section class="card shareholder">
-          <h3 class="card__subtitle">{{ balanceSheetData['shareholdersEquityTrend'].title }}</h3>
+          <h3 class="card__subtitle">
+            {{ balanceSheetData['shareholdersEquityTrend'].title }}
+            <el-tooltip v-if="balanceSheetData['shareholdersEquityTrend'].desc" effect="dark" placement="top">
+              <span slot="content" v-html="balanceSheetData['shareholdersEquityTrend'].desc">
+              </span>
+              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            </el-tooltip>
+          </h3>
           <BarChart
             ref="shareholder"
             :chartData="balanceSheetData['shareholdersEquityTrend'].data.chartData"
@@ -155,7 +180,14 @@
       <div class="grid-col-1">
         <!-- Liabilities Breakdown -->
         <section class="card key-performance-metrics">
-          <h3 class="card__subtitle">{{ balanceSheetData['keyPerformanceMetrics'].title }}</h3>
+          <h3 class="card__subtitle">
+            {{ balanceSheetData['keyPerformanceMetrics'].title }}
+            <el-tooltip v-if="balanceSheetData['keyPerformanceMetrics'].desc" effect="dark" placement="top">
+              <span slot="content" v-html="balanceSheetData['keyPerformanceMetrics'].desc">
+              </span>
+              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            </el-tooltip>
+          </h3>
           <BarChart
             ref="keyPerformanceMetrics"
             :chartData="balanceSheetData['keyPerformanceMetrics'].data.chartData"
