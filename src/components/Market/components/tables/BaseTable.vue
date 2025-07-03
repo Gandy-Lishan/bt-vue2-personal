@@ -474,7 +474,7 @@
     }
     
     // 字符串类型排序
-    if(columnType === 'string'){
+    if(columnType === 'string' || columnType === 'link'){
       const sortedData = [...this.localTableData].sort((a, b) => {
         if (sortingOrder === 'ascending') {
           return a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' });
