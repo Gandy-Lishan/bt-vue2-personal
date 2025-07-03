@@ -3,7 +3,6 @@
     <div class="title">Analysts</div>
     <section class="card analysts__card">
       <div class="card__subtitle">
-        pointerAngleDynamic{{pointerAngleDynamic}}
         Analyst Recommendations
         <el-tooltip effect="dark" placement="top">
           <span slot="content" v-html="analystRecommendationsContent">
