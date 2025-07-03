@@ -1,14 +1,66 @@
 <template>
 	<div class="criteria-box">
 				<div class="entry-title-box">
-					<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
-					<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
-						<span slot="content" v-html="config['criteriaTitleTP']">
-						</span>
-						<i class="iconfont icon-wenhao"></i>
-					</el-tooltip>
+					<!-- <p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p> -->
+					<div class="label-container" style="margin-bottom: 18px;">
+						<el-row :gutter="10">
+							<el-col :span="8">
+								<div class="title-label-container">
+								<span style="margin-right: 5px; font-weight: bold;">4. </span>
+									<el-select
+											v-model="criteria_option"
+											placeholder="— Select —"
+											size="small"
+									>
+											<el-option
+													v-for="item in criteriaOptions"
+													:key="item.value"
+													:label="item.label"
+													:value="item.value"
+													:disabled="item.disabled"
+											>
+											</el-option>
+									</el-select>
+									<span v-if="criteria_option === 'CommonPattern'" style="margin-left: 5px;">
+											<el-tooltip effect="dark" placement="top">
+													<span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
+													<i class="iconfont icon-wenhao"></i>
+											</el-tooltip>
+										</span>
+									<span v-else>
+										<el-tooltip  effect="dark" placement="top" style="margin-left: 5px; word-wrap: break-word;display: inline">
+											<span slot="content" v-html="config['criteriaTitleTP']">
+											</span>
+											<i class="iconfont icon-wenhao"></i>
+										</el-tooltip>
+									</span>
+								</div>
+							</el-col>
+							<el-col :span="8">
+								<el-select class="CommonPattern" style="margin-left: 5px;" v-model="system_pattern" placeholder="— Select Pattern —" size="small" v-show="criteria_option === 'CommonPattern'">
+									<el-option
+											v-for="item in systemPatternOptions"
+											:key="item.value"
+											:label="item.label"
+											:value="item.value"
+									>
+											<el-tooltip
+													placement="right"
+													effect="light"
+													:content="''"
+											>
+													<template slot="content">
+															<img :src="item.image" alt="Pattern" style="max-width: 200px; max-height: 180px;" />
+													</template>
+													<p style="margin: 0px">{{ item.label }}</p>
+											</el-tooltip>
+										</el-option>
+								</el-select>
+							</el-col>
+						</el-row>
+						</div>
 				</div>
-			<div class="criteria-content">
+			<div class="criteria-content" :class="criteria_option === 'SignalCriteria' ? 'fade-visible' : 'fade-hidden'">
 				<div class="signal-container">
 					<el-select
 						v-model="relation"
@@ -467,10 +519,58 @@ export default {
 			isDelayBar: false,
 			relation: 0,
 			isUsePeriodLimit: false,
+			criteria_option: 'SignalCriteria',
+			system_pattern: 'head_and_shoulder_top',
 			signalOptions: [
 				{ value: 1, label: 'Single-Condition' },
 				{ value: 2, label: 'SameBar Multi-Condition' },
 				{ value: 3, label: 'TimeOrder Multi-Condition' }
+			],
+			criteriaOptions: [
+					{ label: 'Signal Criteria', value: 'SignalCriteria' },
+					{ label: 'Common Pattern', value: 'CommonPattern' }
+			],
+			systemPatternOptions: [
+					{
+							value: 'triple_tap',
+							label: 'Triple Tap',
+							image: require('@/assets/patterns/triple_tap.png')
+					},
+					{
+							value: 'rounding_bottom',
+							label: 'Rounding Bottom',
+							image: require('@/assets/patterns/rounding_bottom.png')
+					},
+					{
+							value: 'descending_channel',
+							label: 'Descending Channel',
+							image: require('@/assets/patterns/descending_channel.png')
+					},
+					{
+							value: 'ascending_channel',
+							label: 'Ascending Channel',
+							image: require('@/assets/patterns/ascending_channel.png')
+					},
+					{
+							value: 'head_and_shoulder_bottom',
+							label: 'Head and Shoulders Bottom',
+							image: require('@/assets/patterns/head_and_shoulder_bottom.png')
+					},
+					{
+							value: 'head_and_shoulder_top',
+							label: 'Head and Shoulders Top',
+							image: require('@/assets/patterns/head_and_shoulder_top.png')
+					},
+					{
+							value: 'double_bottom',
+							label: 'Double Bottom',
+							image: require('@/assets/patterns/double_bottom.png')
+					},
+					{
+							value: 'double_top',
+							label: 'Double Top',
+							image: require('@/assets/patterns/double_top.png')
+					},
 			],
     }
   },
@@ -774,6 +874,14 @@ export default {
 
 			this.$store.commit('form/saveRelation', obj)
 		},
+		saveSystemPattern() {
+			if(this.criteria_option !== 'CommonPattern') return
+			let obj = {}
+			obj.criteria = this.criteriaNum
+			obj.value = this.system_pattern
+
+			this.$store.commit('form/saveSystemPattern', obj)
+		},
 		changePeriodLimit(val) {
 			this.isUsePeriodLimit = val
 			if(this.signals_in_market == 100000) {
@@ -956,7 +1064,7 @@ export default {
 					}
 					this.popUpMsgBox(`The current signal ${str} are the same, please change`)
 					return false
-        	}
+     }
 			}
 			return true
 		},
@@ -964,7 +1072,7 @@ export default {
 			let checked = true
 			// Save the selected indicator to vuex
 			let _this = this
-			if (_this.relation == 0) {
+			if (_this.relation == 0 || _this.criteria_option === 'CommonPattern') {
 				// Save risk description
 				let desObj = {}
 				desObj.criteria = this.criteriaNum
@@ -973,6 +1081,12 @@ export default {
 				desObj.description = {
 					'commentDes':_this.$store.state.form.riskDescription,
 					'rocCond':null
+				}
+				if(_this.criteria_option === 'CommonPattern') {
+					desObj.description = {
+						'commentDes': `Common Pattern: ${_this.systemPatternOptions.find(ele => ele.value === _this.system_pattern)?.label}`,
+						'rocCond':null
+					}
 				}
 				this.$store.commit('form/saveDescription', desObj)
 				return (checked = true)
@@ -1157,6 +1271,12 @@ export default {
 		},
 		async setEditPanel(num, data) {
 			debugger
+			if(data[this.criteriaNum].system_pattern) {
+				this.criteria_option = 'CommonPattern'
+				this.system_pattern = data[this.criteriaNum].system_pattern
+				return
+			}
+			this.criteria_option = 'SignalCriteria'
 			let criteria = this.criteriaNum
 			this.relation = data[criteria].relation ? data[criteria].relation : 1
 
@@ -1413,5 +1533,25 @@ export default {
 }
 .signal-container /deep/ .el-select .el-input__inner {
 	width: 220px;
+}
+.title-label-container {
+	display: flex;
+	align-items: center;
+	/deep/ .el-select {
+		width: 100%;
+	}
+}
+/deep/ .el-select.CommonPattern {
+	width: 100%;
+}
+.fade-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.fade-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 </style>

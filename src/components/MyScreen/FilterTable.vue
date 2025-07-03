@@ -68,7 +68,7 @@
 			<el-tooltip
 					class="item"
 					effect="dark"
-					content="Go to Backtest"
+					:content="`Go to ${showCPMBtn ? `CPM` : 'Backtest'}`"
 					placement="bottom-start"
 				>
 				<el-button
@@ -198,6 +198,9 @@ export default {
 		},
 		showBTBtn() {
 			return  (Object.keys(this.jumpBacktestData).length !== 0)
+		},
+		showCPMBtn() {
+			return  (Object.keys(this.jumpBacktestData).length !== 0 && this.jumpBacktestData.system_pattern)
 		}
 	},
 	watch: {
@@ -367,6 +370,33 @@ export default {
 		async goToBacktest(row) {
 			console.log('this.jumpBacktestData', this.jumpBacktestData)
 			if(Object.keys(this.jumpBacktestData) === 0) return
+			if(this.jumpBacktestData.system_pattern) {
+				const data = {
+					system_pattern: this.jumpBacktestData.system_pattern,
+					direction: this.jumpBacktestData.direction,
+					symbol: row.Symbol,
+					name: `My Screen with ${row.Symbol} (${this.jumpBacktestData.system_pattern})`,
+					timeframe: 'Daily',
+					start_date: '',
+					end_date: '',
+					lookback_period: 'All',
+					corr_per: 90,
+					tim: 21,
+					year: '',
+					exclude_overlap: true,
+					bars_num: 0,
+					ma_condition: 0,
+					ma: 200,
+				}
+				this.$router.push({
+						name: 'CPMResults',
+						params: {
+								data,
+								usedFor: 'emptyCPMResults'
+						}
+					})
+					return
+			}
 			const {Name, Symbol} = row
 			const {name} = this.currentRow
 			await this.initiateTechList()

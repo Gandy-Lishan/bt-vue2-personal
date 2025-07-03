@@ -542,11 +542,13 @@ export default {
 		},
     async viewResults(row) {
       debugger
-      const {url} = row
+      const {url, system_pattern, direction} = row
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
       const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      if(system_pattern) entry_template.system_pattern = system_pattern
+      if(direction) entry_template.direction = direction
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
       let date = ''
@@ -558,11 +560,14 @@ export default {
     },
     
     async handleRowClick(row) {
-      const {url} = row
+      debugger
+      const {url, system_pattern, direction} = row
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
       const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      if(system_pattern) entry_template.system_pattern = system_pattern
+      if(direction) entry_template.direction = direction
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
       const date = data[0].Date
