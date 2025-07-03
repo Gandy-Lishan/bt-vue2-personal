@@ -1100,7 +1100,10 @@ try {
         debugger
         const entry_template = saveRes.data.data.entry_template
         this.$emit('displayResultsData', saveRes.data.data.data)
-        if(this.criteria_option === 'CommonPattern') entry_template.system_pattern = this.system_pattern
+        if(this.criteria_option === 'CommonPattern') {
+          entry_template.system_pattern = this.system_pattern
+          entry_template.direction = this.data.direction || 'Long'
+        }
         if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
           const date = saveRes.data.data.data[0].Date
