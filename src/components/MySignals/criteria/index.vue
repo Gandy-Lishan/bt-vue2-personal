@@ -1546,12 +1546,12 @@ export default {
 }
 .fade-visible {
   opacity: 1;
-  visibility: visible;
+  display: block;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .fade-hidden {
   opacity: 0;
-  visibility: hidden;
+		display: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 </style>
