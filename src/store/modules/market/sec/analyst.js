@@ -37,11 +37,11 @@ const formatData = (data) => {
   } = data.rating_data
   const pt_data = data.pt_data
   const ColumnBarData = [
-    {label: 'Strong Buy', actual: analyst_ratings_strong_buy, value: analyst_ratings_strong_buy_percent, color: '#1e40af'},
-    {label: 'Buy', actual: analyst_ratings_buy, value: analyst_ratings_buy_percent, color: '#3b82f6'},
-    {label: 'Hold', actual: analyst_ratings_hold, value: analyst_ratings_hold_percent, color: '#10b981'},
-    {label: 'Sell', actual: analyst_ratings_sell, value: analyst_ratings_sell_percent, color: '#f59e0b'},
-    {label: 'Strong Sell', actual: analyst_ratings_strong_sell, value: analyst_ratings_strong_sell_percent, color: '#ec4899'}
+    {label: 'Strong Buy', actual: analyst_ratings_strong_buy, value: analyst_ratings_strong_buy_percent, color: '#1e40af', multiplyBy: 2},
+    {label: 'Buy', actual: analyst_ratings_buy, value: analyst_ratings_buy_percent, color: '#3b82f6', multiplyBy: 1},
+    {label: 'Hold', actual: analyst_ratings_hold, value: analyst_ratings_hold_percent, color: '#10b981', multiplyBy: 0},
+    {label: 'Sell', actual: analyst_ratings_sell, value: analyst_ratings_sell_percent, color: '#f59e0b', multiplyBy: -1},
+    {label: 'Strong Sell', actual: analyst_ratings_strong_sell, value: analyst_ratings_strong_sell_percent, color: '#ec4899', multiplyBy: -2}
   ]
   pt_data.forEach((item, index) => {
     AnalystData.push({
