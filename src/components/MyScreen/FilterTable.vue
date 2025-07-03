@@ -98,7 +98,7 @@
 import moment from 'moment';
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
-import { LocalStorageUtil } from '@/utils'
+import { LocalStorageUtil, timestampToTime } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 
@@ -368,6 +368,7 @@ export default {
 			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
 		},
 		async goToBacktest(row) {
+			debugger
 			console.log('this.jumpBacktestData', this.jumpBacktestData)
 			if(Object.keys(this.jumpBacktestData) === 0) return
 			if(this.jumpBacktestData.system_pattern) {
@@ -387,7 +388,13 @@ export default {
 					bars_num: 0,
 					ma_condition: 0,
 					ma: 200,
+					url: null
 				}
+				data.end_date = timestampToTime(new Date());
+				const endDate = new Date(data.end_date);
+				const startDate = new Date(endDate);
+				startDate.setMonth(endDate.getMonth() - 1);
+				data.start_date = timestampToTime(startDate);
 				this.$router.push({
 						name: 'CPMResults',
 						params: {
