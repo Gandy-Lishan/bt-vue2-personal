@@ -267,15 +267,15 @@ const formatNumber = (value, type, sign) => {
   let formatted;
 
   if (absValue >= 1e12) {
-    formatted = `${(absValue / 1e12).toFixed(2)}T`;
+    formatted = `${(value / 1e12).toFixed(2)}T`;
   } else if (absValue >= 1e9) {
-    formatted = `${(absValue / 1e9).toFixed(2)}B`;
+    formatted = `${(value / 1e9).toFixed(2)}B`;
   } else if (absValue >= 1e6) {
-    formatted = `${(absValue / 1e6).toFixed(2)}M`;
+    formatted = `${(value / 1e6).toFixed(2)}M`;
   } else if (absValue >= 1e3) {
-    formatted = `${(absValue / 1e3).toFixed(2)}K`;
+    formatted = `${(value / 1e3).toFixed(2)}K`;
   } else {
-    formatted = absValue.toFixed(2);
+    formatted = value.toFixed(2);
   }
 
   if (type === 'percent') {

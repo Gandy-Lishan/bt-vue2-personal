@@ -65,9 +65,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(i.total_assets),
-          'current': formatNumber(i.total_current_assets),
-          'nonCurrent': formatNumber(i.total_non_current_assets)
+          'total': i.total_assets,
+          'current': i.total_current_assets,
+          'nonCurrent': i.total_non_current_assets
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Assets', color: '#16A34A' },
@@ -127,9 +127,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(i.total_liabilities),
-          'current': formatNumber(i.total_current_liabilities),
-          'nonCurrent': formatNumber(i.total_non_current_liabilities)
+          'total': i.total_liabilities,
+          'current': i.total_current_liabilities,
+          'nonCurrent': i.total_non_current_liabilities
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Liabilities', color: '#16A34A' },
@@ -153,9 +153,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(i.total_stockholders_equity),
-          'retained': formatNumber(i.retained_earnings),
-          'common': formatNumber(i.common_stock)
+          'total': i.total_stockholders_equity,
+          'retained': i.retained_earnings,
+          'common': i.common_stock
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Equity', color: '#16A34A' },
@@ -214,9 +214,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'currtRadio': formatNumber(i.current_ratio),
-          'debt': formatNumber(i.d2e_ratio),
-          'turnover': formatNumber(i.asset_turnover)
+          'currtRadio': i.current_ratio,
+          'debt': i.d2e_ratio,
+          'turnover': i.asset_turnover
         })) || [],
         seriesConfigs: [
           { key: 'currtRadio', label: 'Current Ratio', color: '#16A34A' },
