@@ -13,22 +13,16 @@ const formatUTCDate = (isoStr) => {
 }
 const formatQuartAnnualDate = (isoStr, type) => {
   const year = isoStr.split("T")[0].split("-")[0];
-  const yearShort = year.slice(-2);
   let dateStr;
 
   if (type === 'FY') {
     dateStr = year;
   } else {
-    dateStr = `${formatQuartStr(type)}'${yearShort}`;
+    dateStr = formatUTCDate(isoStr)
   }
 
   return dateStr;
 };
-const formatQuartStr = (str) => {
-  const num = str[1]
-  const num_res = Number(num) - 1 > 0 ? num - 1 : 4
-  return 'Q'+num_res
-}
 
 function preprocessData(raw) {
   // 最新年度在前
@@ -63,9 +57,9 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'operating': formatNumber(i.net_cash_provided_by_operating_activities), 
-          'inversting': formatNumber(-(i.net_cash_used_for_investing_activities)), 
-          'financing': formatNumber(i.net_cash_used_provided_by_financing_activities)
+          'operating': i.net_cash_provided_by_operating_activities, 
+          'inversting': -(i.net_cash_used_for_investing_activities), 
+          'financing': i.net_cash_used_provided_by_financing_activities
         })) || {},
         seriesConfigs: [
           { key: 'operating', label: 'Operating', color: '#16A34A' },
@@ -80,7 +74,7 @@ function preprocessData(raw) {
       data: {
         chartData: raw.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'freeCashFlow': formatNumber(i.free_cash_flow),
+          'freeCashFlow': i.free_cash_flow,
         })) || {},
         seriesConfigs: [
           { key: 'freeCashFlow', label: 'Free Cash Flow', color: '#818CF8' },
