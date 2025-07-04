@@ -205,14 +205,14 @@ export default {
         (acc, item) => acc + (item.value * (item.multiplyBy || 0)),
         0
       );
-      // 2. 计算最大最小推荐值
-      const minVal = -2 * 100; // Strong Sell 100%
-      const maxVal = 2 * 100;  // Strong Buy 100%
-      // 3. 映射到 180~360
-      const clamped = Math.max(minVal, Math.min(maxVal, sum));
-      const angle = 180 + ((clamped - minVal) / (maxVal - minVal)) * 180;
-      return angle;
-      // return sum * 0.45 + 270;
+      // // 2. 计算最大最小推荐值
+      // const minVal = -2 * 100; // Strong Sell 100%
+      // const maxVal = 2 * 100;  // Strong Buy 100%
+      // // 3. 映射到 180~360
+      // const clamped = Math.max(minVal, Math.min(maxVal, sum));
+      // const angle = 180 + ((clamped - minVal) / (maxVal - minVal)) * 180;
+      // return angle;
+      return sum * 0.45 -90
     },
   },
   watch: {
