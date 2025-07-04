@@ -14,22 +14,14 @@ const formatUTCDate = (isoStr) => {
 }
 const formatQuartAnnualDate = (isoStr, type) => {
   const year = isoStr.split("T")[0].split("-")[0];
-  const yearShort = year.slice(-2);
   let dateStr;
 
   if (type === 'FY') {
     dateStr = year;
   } else {
-    dateStr = formatQuartStr(type,yearShort);
+    dateStr = formatUTCDate(isoStr)
   }
   return dateStr;
-}
-
-const formatQuartStr = (str, yearShort) => {
-  const num = str[1]
-  const num_res = Number(num) - 1 > 0 ? num - 1 : 4
-  const year_res = Number(num) - 1 > 0 ? Number(yearShort) : Number(yearShort) - 1
-  return 'Q' + num_res + ' ' + year_res
 }
 
 const formatEarningsInfo = (detail) => [

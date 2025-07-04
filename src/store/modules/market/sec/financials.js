@@ -13,22 +13,16 @@ const formatUTCDate = (isoStr) => {
 }
 const formatQuartAnnualDate = (isoStr, type) => {
   const year = isoStr.split("T")[0].split("-")[0];
-  const yearShort = year.slice(-2);
   let dateStr;
 
   if (type === 'FY') {
     dateStr = year;
   } else {
-    dateStr = `${formatQuartStr(type)}'${yearShort}`;
+    dateStr = formatUTCDate(isoStr)
   }
 
   return dateStr;
 };
-const formatQuartStr = (str) => {
-  const num = str[1]
-  const num_res = Number(num) - 1 > 0 ? num - 1 : 4
-  return 'Q'+num_res
-}
 
 const formatFinancialsTrendInfo = (lastedRowIncome) => {
   // Return default structure if lastedRowIncome is undefined/null
@@ -150,8 +144,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(totalDebtList[index]),
-          'revenue': formatNumber(i.revenue),
+          'total': totalDebtList[index],
+          'revenue': i.revenue,
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -170,8 +164,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(totalDebtList[index]),
-          'grossProfit': formatNumber(i.gross_profit),
+          'total': totalDebtList[index],
+          'grossProfit': i.gross_profit,
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -188,8 +182,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(totalDebtList[index]),
-          'operating': formatNumber(i.operating_income),
+          'total': totalDebtList[index],
+          'operating': i.operating_income,
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -206,8 +200,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(totalDebtList[index]),
-          'netIncome': formatNumber(i.net_income),
+          'total': totalDebtList[index],
+          'netIncome': i.net_income,
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -227,8 +221,8 @@ function preprocessData(raw) {
       data: {
         chartData: income.map((i,index) => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'total': formatNumber(totalDebtList[index]),
-          'ebitda': formatNumber(i.ebitda),
+          'total': totalDebtList[index],
+          'ebitda': i.ebitda,
         })) || [],
         seriesConfigs: [
           { key: 'total', label: 'Total Debt', color: '#16A34A' },
@@ -244,9 +238,9 @@ function preprocessData(raw) {
       data: {
         chartData: income.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'revenue': formatNumber(i.revenue),
-          'netIncome': formatNumber(i.net_income),
-          'ebitda': formatNumber(i.ebitda),
+          'revenue': i.revenue,
+          'netIncome': i.net_income,
+          'ebitda': i.ebitda,
         })) || [],
         seriesConfigs: [
           { key: 'revenue', label: 'Revenue', color: '#3B82F6' },
@@ -264,8 +258,8 @@ function preprocessData(raw) {
       data: {
         chartData: balanceSheet.map(i => ({
           'date': formatQuartAnnualDate(i.date, i.period),
-          'cash': formatNumber(i.cash_and_cash_equivalents),
-          'totalDebt': formatNumber(i.total_debt),
+          'cash': i.cash_and_cash_equivalents,
+          'totalDebt': i.total_debt,
         })) || [],
         seriesConfigs: [
           { key: 'cash', label: 'Cash', color: '#3B82F6' },

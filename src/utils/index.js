@@ -281,14 +281,14 @@ const formatNumber = (value, type, sign) => {
   if (type === 'percent') {
     return `${(parseFloat(formatted) * 100).toFixed(2)}%`;
   } else if (type === 'avg') {
-    return `${value > 0 ? '+' : ''}${formatted}%`;
+    return `${value === 0 ? '' : (value > 0 ? '+' : '-')}${formatted}%`;
   } else if (type === 'dollar') {
     return `${value < 0 ? '-' : ''}$${formatted}`;
   } else if (type === 'customSign') {
     return `${formatted}${sign}`;
   }
 
-  return formatted;
+  return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`;
 }
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}
