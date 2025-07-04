@@ -13,7 +13,7 @@
       <div class="analysts__chart-container">
         <div class="semicircle-chart">
           <svg :width="chartSize" :height="chartSize / 2 + 50" class="chart-svg">
-            <path v-for="(segment, index) in segments" :key="segment.label || index"
+            <path v-for="(segment, index) in segments" :key="(segment.label || index) + '-' + index"
               :d="getArcPath(segment.startAngle, segment.endAngle, segment.radius)" :fill="segment.color"
               :stroke="segment.color" stroke-width="2" class="segment-path" @mouseenter="hoveredSegment = segment"
               @mouseleave="hoveredSegment = null"
@@ -25,7 +25,7 @@
               <circle cx="0" cy="0" r="4" fill="#000" />
             </g>
             <!-- 标签：添加 v-if="!isLoading" 确保加载时不显示 -->
-            <text v-for="(label, index) in labels" :key="label.text || index" :x="label.x" :y="label.y"
+            <text v-for="(label, index) in labels" :key="(label.text || index) + '-' + index" :x="label.x" :y="label.y"
               :text-anchor="label.anchor" :transform="`rotate(${label.rotation}, ${label.x}, ${label.y})`"
               class="chart-label"
               :class="{ 'label-visible': hoveredSegment && hoveredSegment.label === label.text }"
@@ -82,7 +82,6 @@ export default {
   data() {
     return {
       chartSize: 300,
-      pointerAngle: -45, // 指针目标角度（度）
       animatedPointerAngle: 0, // 用于动画的当前指针角度，初始设为0度（最右侧）
       animationComplete: false, // 标记指针动画是否完成
       hoveredSegment: null,
@@ -93,6 +92,7 @@ export default {
       barAnimationComplete: false, // 新增：标记条形图动画是否完成
     }
   },
+  // percentage 加起来 * 0.45 + 90
   components: {
     BaseTable
   },
@@ -109,18 +109,16 @@ export default {
       return this.chartData.reduce((sum, item) => sum + item.value, 0)
     },
     segments() {
-      const radius = this.chartSize / 2 - 20 // 保持外半径
-      const innerRadius = radius - 8 // 进一步减小宽度（从15减到8）
-      let currentAngle = 180 // 从左侧开始（180度）
-
-      return this.chartData.map((item, index) => {
-        const percentage = item.value / this.totalValue
-        const angleSpan = percentage * 180 // 半圆是180度
-        const startAngle = currentAngle
-        const endAngle = currentAngle + angleSpan
-
-        currentAngle += angleSpan
-
+      const radius = this.chartSize / 2 - 20;
+      const innerRadius = radius - 8;
+      let currentAngle = 180;
+      // 用 chartDataForPie
+      return this.chartDataForPie.map((item, index) => {
+        const percentage = item.value / this.totalValueForPie;
+        const angleSpan = percentage * 180;
+        const startAngle = currentAngle;
+        const endAngle = currentAngle + angleSpan;
+        currentAngle += angleSpan;
         return {
           startAngle,
           endAngle,
@@ -129,25 +127,18 @@ export default {
           color: item.color,
           label: item.label
         }
-      })
+      });
     },
     labels() {
-      const centerX = this.chartSize / 2
-      const centerY = this.chartSize / 2
-      const labelRadius = this.chartSize / 2 - 5 // 调整标签位置，使其更靠外
-
+      const centerX = this.chartSize / 2;
+      const centerY = this.chartSize / 2;
+      const labelRadius = this.chartSize / 2 - 5;
       return this.segments.map(segment => {
-        // 计算标签的角度（扇形的中间角度）
-        const labelAngle = (segment.startAngle + segment.endAngle) / 2
-        const angleRad = (labelAngle * Math.PI) / 180
-
-        // 计算标签位置
-        const x = centerX + Math.cos(angleRad) * labelRadius
-        const y = centerY + Math.sin(angleRad) * labelRadius
-
-        // 计算旋转角度（使文字垂直于半径，并修正方向）
-        const rotation = labelAngle + 90
-
+        const labelAngle = (segment.startAngle + segment.endAngle) / 2;
+        const angleRad = (labelAngle * Math.PI) / 180;
+        const x = centerX + Math.cos(angleRad) * labelRadius;
+        const y = centerY + Math.sin(angleRad) * labelRadius;
+        const rotation = labelAngle + 90;
         return {
           text: segment.label,
           x,
@@ -155,7 +146,7 @@ export default {
           rotation,
           anchor: 'middle'
         }
-      })
+      });
     },
     pointerX() {
       // 使用 animatedPointerAngle 进行计算
@@ -176,6 +167,33 @@ export default {
       return `
         <p>This refers to the <strong>detailed historical forecasts</strong> made by analysts for a specific Ticker</p>
       `;
+    },
+    chartDataForPie() {
+      // 只用于扇形，顺序为 Strong Sell, Sell, Hold, Buy, Strong Buy
+      if (!this.chartData) return [];
+      const order = ['Strong Sell', 'Sell', 'Hold', 'Buy', 'Strong Buy'];
+      return order
+        .map(label => this.chartData.find(item => item.label === label))
+        .filter(Boolean);
+    },
+    totalValueForPie() {
+      return this.chartDataForPie.reduce((sum, item) => sum + item.value, 0)
+    },
+    pointerAngleDynamic() {
+      if (!this.chartData || this.chartData.length === 0) return 270; // 默认指向正上
+      // 1. 计算推荐值
+      const sum = this.chartData.reduce(
+        (acc, item) => acc + (item.value * (item.multiplyBy || 0)),
+        0
+      );
+      // 2. 计算最大最小推荐值
+      const minVal = -2 * 100; // Strong Sell 100%
+      const maxVal = 2 * 100;  // Strong Buy 100%
+      // 3. 映射到 180~360
+      const clamped = Math.max(minVal, Math.min(maxVal, sum));
+      const angle = 180 + ((clamped - minVal) / (maxVal - minVal)) * 180;
+      return angle;
+      // return sum * 0.45 + 270;
     },
   },
   watch: {
@@ -236,7 +254,7 @@ export default {
       this.animatedPointerAngle = 0; // 初始加载时指针从0开始
       // animatedBarWidths 会由 analystData handler 初始化
     } else {
-      this.animatedPointerAngle = this.pointerAngle;
+      this.animatedPointerAngle = this.pointerAngleDynamic;
       this.animationComplete = true; // 如果初始就不加载，则指针动画视为已完成
       // animatedBarWidths 会由 analystData handler 初始化
     }
@@ -268,7 +286,7 @@ export default {
     // 指针动画函数
     animatePointer() {
       const startAngle = 0; // 动画起始角度设为0度 (最右侧)
-      const endAngle = this.pointerAngle;
+      const endAngle = this.pointerAngleDynamic; // 动态角度
       const duration = 800; // 动画持续时间（毫秒）
       let startTime = null;
 

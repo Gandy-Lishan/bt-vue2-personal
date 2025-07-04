@@ -497,6 +497,9 @@ const mutations = {
 	saveRelation(state, obj) {
 		state.backtestInfo[obj.criteria].relation = Number(obj.value)
 	},
+	saveSystemPattern(state, obj) {
+		state.backtestInfo[obj.criteria].system_pattern = obj.value
+	},
 	saveRiskDescription(state, desObj) {
 		state.riskDescription = desObj.description
 	},

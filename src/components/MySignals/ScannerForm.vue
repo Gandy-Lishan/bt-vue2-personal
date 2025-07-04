@@ -335,6 +335,7 @@ try {
 			_this.$refs[criteriaRef].saveSignalsInMarket()
 			_this.$refs[criteriaRef].saveDelayBar()
 			_this.$refs[criteriaRef].saveRelation()
+      _this.$refs[criteriaRef].saveSystemPattern()
 } catch (error) {
   console.error(error);
   
@@ -373,6 +374,7 @@ try {
 				signals: signal_list,
 				cond: criteriaDescription.map((i) => i.rocCond)
 			}
+      if(backtestData[criteria].system_pattern) criteriaObj.system_pattern = backtestData[criteria].system_pattern
 			saveObj[criteria] = criteriaObj
 			saveObj[`${criteria}_description`] = criteriaDescription
 			// saveObj.indicatorLayout.formIndicators[`${criteria}Signal`] = signal
@@ -489,6 +491,10 @@ try {
 			backtestInfo['score'] = entrySaveObj['entry']['score']
 			backtestInfo['signals_in_market'] = entrySaveObj['entry']['signals_in_market']
 			backtestInfo['relation'] = entrySaveObj['entry']['relation']
+      if(entrySaveObj['entry']['system_pattern']) {
+        backtestInfo['system_pattern'] = entrySaveObj['entry']['system_pattern']
+        // backtestInfo['signals'] = JSON.stringify([{signal: entrySaveObj['entry']['system_pattern'], condition: 1, value: 1}])
+      }
 			// backtestInfo.old_uuid = backtestInfo.old_uuid
 			// if(!backtestInfo.old_uuid) delete backtestInfo.old_uuid
       // set default value
@@ -514,6 +520,7 @@ try {
         'cond',
         'description'
 			]
+      if(entrySaveObj['entry']['system_pattern']) selectedProps.push('system_pattern')
 			let backtestParams = Object.assign(
 				{},
 				...selectedProps.map((prop) => ({ [prop]: backtestInfo[prop] }))
@@ -573,10 +580,12 @@ try {
           score: data['score'],
           signals_in_market: data['signals_in_market'],
           relation: data['relation'],
+          system_pattern: data['system_pattern'],
           signals: data['signals'],
           cond: isJson( data['cond']) ? JSON.parse( data['cond']) :  data['cond']
         }
       }
+      if(data['system_pattern']) displayData.entry['system_pattern'] = data['system_pattern']
 			console.log('displayData', displayData)
 			let signalCode = new SignalCode();
 			const parseJsonIfNeeded = (data) => {

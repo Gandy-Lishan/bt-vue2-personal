@@ -68,7 +68,7 @@
 			<el-tooltip
 					class="item"
 					effect="dark"
-					content="Go to Backtest"
+					:content="`Go to ${showCPMBtn ? `CPM` : 'Backtest'}`"
 					placement="bottom-start"
 				>
 				<el-button
@@ -98,7 +98,7 @@
 import moment from 'moment';
 import { CIQ } from '@/components/common/chart/st-development/js/components'
 import defaultConfig from '@/components/common/chart/st-development/js/defaultConfiguration'
-import { LocalStorageUtil } from '@/utils'
+import { LocalStorageUtil, timestampToTime } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 
@@ -198,6 +198,9 @@ export default {
 		},
 		showBTBtn() {
 			return  (Object.keys(this.jumpBacktestData).length !== 0)
+		},
+		showCPMBtn() {
+			return  (Object.keys(this.jumpBacktestData).length !== 0 && this.jumpBacktestData.system_pattern)
 		}
 	},
 	watch: {
@@ -365,8 +368,42 @@ export default {
 			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
 		},
 		async goToBacktest(row) {
+			debugger
 			console.log('this.jumpBacktestData', this.jumpBacktestData)
 			if(Object.keys(this.jumpBacktestData) === 0) return
+			if(this.jumpBacktestData.system_pattern) {
+				const data = {
+					system_pattern: this.jumpBacktestData.system_pattern,
+					direction: this.jumpBacktestData.direction,
+					symbol: row.Symbol,
+					name: `My Screen with ${row.Symbol} (${this.jumpBacktestData.system_pattern})`,
+					timeframe: 'Daily',
+					start_date: '',
+					end_date: '',
+					lookback_period: 'All',
+					corr_per: 87,
+					tim: 21,
+					year: '',
+					exclude_overlap: true,
+					bars_num: 0,
+					ma_condition: 0,
+					ma: 200,
+					url: null
+				}
+				data.end_date = timestampToTime(new Date());
+				const endDate = new Date(data.end_date);
+				const startDate = new Date(endDate);
+				startDate.setMonth(endDate.getMonth() - 1);
+				data.start_date = timestampToTime(startDate);
+				this.$router.push({
+						name: 'CPMResults',
+						params: {
+								data,
+								usedFor: 'emptyCPMResults'
+						}
+					})
+					return
+			}
 			const {Name, Symbol} = row
 			const {name} = this.currentRow
 			await this.initiateTechList()

@@ -70,29 +70,39 @@
       <div class="signals-div">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form-item prop="timefame">
-            <template slot="label">
+          <el-form-item>
+            <!-- <template slot="label">
             <label>
               4. Screen Criteria
             </label>
-          </template>
-          <!-- <el-select
-              v-model="data.relation"
-              placeholder="— Select type —"
+          </template> -->
+          <div class="label-container">
+            <label style="margin-right: 5px; font-weight: bold;">4.
+            </label>
+            <el-select
+              v-model="criteria_option"
+              placeholder="— Select —"
             >
               <el-option
-                v-for="item in relationsOption"
+                v-for="item in criteriaOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
                 :disabled="item.disabled"
               >
               </el-option>
-            </el-select> -->
+            </el-select>
+            <label v-if="criteria_option === 'CommonPattern'" style="margin-left: 5px;">
+              <el-tooltip effect="dark" placement="top">
+                <span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
+                <i class="iconfont icon-wenhao"></i>
+              </el-tooltip>
+            </label>
+          </div>
         </el-form-item>
         </el-col>
       </el-row>
-      <div v-if="data.relation == 0">
+      <div v-if="data.relation == 0 && criteria_option === 'ScreenCriteria'">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item prop="signal" label-width="0">
@@ -163,7 +173,7 @@
           </el-col>
         </el-row>
       </div>
-      <div v-else-if="(data.score !== 0)">
+      <div v-else-if="(data.score !== 0) && criteria_option === 'ScreenCriteria'">
         <el-row :gutter="10" type="flex" justify="center" align="middle">
           <el-col :span="20">
             <el-row :gutter="10">
@@ -290,6 +300,33 @@
           </el-col>
         </el-row>
       </div>
+      <div v-else-if="criteria_option === 'CommonPattern'">
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item prop="system_pattern">
+              <el-select v-model="system_pattern" placeholder="— Select Pattern —">
+                <el-option
+                  v-for="item in systemPatternOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                  <el-tooltip
+                    placement="right"
+                    effect="light"
+                    :content="''"
+                  >
+                    <template slot="content">
+                      <img :src="item.image" alt="Pattern" style="max-width: 200px; max-height: 180px;" />
+                    </template>
+                    <p style="margin: 0px">{{ item.label }}</p>
+                  </el-tooltip>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     </el-form>
     <!-- <div class="setup">
@@ -359,6 +396,8 @@ export default {
       processTips: '',
       percentage: 0,
       symbolInfo: {strategy: 'Single', category: 'SPY', symbol2: ''}, 
+      criteria_option: 'ScreenCriteria',
+      system_pattern: 'head_and_shoulder_top',
       startPickerOptions: {
         disabledDate: this.handleDisabledStartDate
       },
@@ -399,6 +438,10 @@ export default {
       { value: 1, label: 'And', disabled: false},
       { value: 2, label: 'Or', disabled: false}
       ],
+      criteriaOptions: [
+        { label: 'Screen Criteria', value: 'ScreenCriteria' },
+        { label: 'Common Pattern', value: 'CommonPattern' }
+      ],
       signalOptions: [
         { label: 'Trend Score', value: 'TrendScore', onlyInput: true },
         { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
@@ -423,6 +466,48 @@ export default {
         { label: 'Symbol Close 13-Week Low', value: 'S13WL', type: 'Symbol' },
         { label: 'Symbol Close 4-Week High', value: 'S4WH', type: 'Symbol' },
         { label: 'Symbol Close 4-Week Low', value: 'S4WL', type: 'Symbol' }
+      ],
+      systemPatternOptions: [
+        {
+          value: 'triple_tap',
+          label: 'Triple Tap',
+          image: require('@/assets/patterns/triple_tap.png')
+        },
+        {
+          value: 'rounding_bottom',
+          label: 'Rounding Bottom',
+          image: require('@/assets/patterns/rounding_bottom.png')
+        },
+        {
+          value: 'descending_channel',
+          label: 'Descending Channel',
+          image: require('@/assets/patterns/descending_channel.png')
+        },
+        {
+          value: 'ascending_channel',
+          label: 'Ascending Channel',
+          image: require('@/assets/patterns/ascending_channel.png')
+        },
+        {
+          value: 'head_and_shoulder_bottom',
+          label: 'Head and Shoulders Bottom',
+          image: require('@/assets/patterns/head_and_shoulder_bottom.png')
+        },
+        {
+          value: 'head_and_shoulder_top',
+          label: 'Head and Shoulders Top',
+          image: require('@/assets/patterns/head_and_shoulder_top.png')
+        },
+        {
+          value: 'double_bottom',
+          label: 'Double Bottom',
+          image: require('@/assets/patterns/double_bottom.png')
+        },
+        {
+          value: 'double_top',
+          label: 'Double Top',
+          image: require('@/assets/patterns/double_top.png')
+        },
       ],
       rules: {
         name: [
@@ -691,6 +776,8 @@ export default {
         this.rowUrl = null
         this.processTips = ''
         this.percentage = 0
+        this.criteria_option = 'ScreenCriteria'
+        this.system_pattern = 'head_and_shoulder_top'
         this.generateCPMName()
         // this.$refs['entryChild1'].clearForm()
     },
@@ -735,13 +822,18 @@ export default {
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
         description = [`${signalLabel} ${_condition} ${value}&nbsp;&nbsp;<b>${relationLabel}</b>&nbsp;&nbsp;`, `${signalLabel2} ${_condition2} ${value2}`]
       }
+      if(this.criteria_option === 'CommonPattern') description = [`Common Pattern: ${this.systemPatternOptions.find(ele => ele.value === this.system_pattern)?.label}`]
       const saveData = {...this.data,
         relation: this.data.relation,
         score: relation === 1 ? 2 : 1,
         signals: JSON.stringify(signals),
         start_date: '2005-01-01',
         end_date: '2050-01-01',
-        description: JSON.stringify(description)
+        description: JSON.stringify(description),
+      }
+      if(this.criteria_option === 'CommonPattern') {
+        saveData.system_pattern = this.system_pattern || ''
+        saveData.signals = JSON.stringify([{signal: this.systemPatternOptions.find(ele => ele.value === this.system_pattern)?.label, condition: 1, value: 1}])
       }
       const remainProperties = (obj, properties) => {
         debugger
@@ -756,6 +848,7 @@ export default {
       const _description = Array.isArray(description) ? `${description.join(' ')}.` : ''
       // 要删除的属性列表
       const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+      if(this.criteria_option === 'CommonPattern') propertiesToRemain.push('system_pattern')
       const _saveData = remainProperties(saveData, propertiesToRemain)
       if(this.percentage < 99) this.percentage += 8
       let saveRes
@@ -1007,6 +1100,10 @@ try {
         debugger
         const entry_template = saveRes.data.data.entry_template
         this.$emit('displayResultsData', saveRes.data.data.data)
+        if(this.criteria_option === 'CommonPattern') {
+          entry_template.system_pattern = this.system_pattern
+          entry_template.direction = this.data.direction || 'Long'
+        }
         if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
           const date = saveRes.data.data.data[0].Date
@@ -1032,6 +1129,12 @@ try {
         name: data.name,
         category: data.category,
         timeframe: data.timeframe
+      }
+      if(data.system_pattern) {
+        this.criteria_option = 'CommonPattern'
+        this.system_pattern = data.system_pattern
+        _this.$refs['entryChild1'].clearForm()
+        return
       }
       _this.$refs['entryChild1'].clearForm()
       let displayData = {
@@ -1078,7 +1181,12 @@ try {
     displayData(data) {
       debugger
       this.rowUrl = data.url
-      const {relation} = data
+      const {system_pattern} = data
+      if(system_pattern) {
+        this.criteria_option = 'CommonPattern'
+        this.system_pattern = system_pattern
+        return
+      }
       const _data = {}
       const signals = isJson(data.signals) ? JSON.parse(data.signals) : data.signals
       signals.forEach((ele, index) => {
@@ -1242,5 +1350,10 @@ try {
   }
 /deep/ .el-autocomplete {
   width: 100%
+}
+.label-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
