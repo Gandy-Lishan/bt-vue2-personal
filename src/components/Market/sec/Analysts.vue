@@ -12,10 +12,23 @@
       </div>
       <div class="analysts__chart-container">
         <div class="semicircle-chart">
-          <svg :width="chartSize" :height="chartSize / 2 + 50" class="chart-svg">
+          <div class="semicircle-chart-wrapper">
+            <svg :width="chartSize" :height="chartSize / 2" :viewBox="`0 0 ${chartSize} ${chartSize / 2}`" class="chart-svg">
+            <defs>
+              <linearGradient v-for="(segment, index) in segments" :id="'pie-gradient-' + index" :key="'pie-gradient-' + index"
+                :gradientUnits="'userSpaceOnUse'"
+                :x1="chartSize / 2 + Math.cos((segment.startAngle * Math.PI) / 180) * segment.radius"
+                :y1="chartSize / 2 + Math.sin((segment.startAngle * Math.PI) / 180) * segment.radius"
+                :x2="chartSize / 2 + Math.cos((segment.endAngle * Math.PI) / 180) * segment.radius"
+                :y2="chartSize / 2 + Math.sin((segment.endAngle * Math.PI) / 180) * segment.radius">
+                <stop offset="0%" :stop-color="segment.color" />
+                <stop offset="100%" :stop-color="index === segments.length - 1 ? segment.color : (segments[(index + 1) % segments.length]?.color || segment.color)" />
+              </linearGradient>
+            </defs>
             <path v-for="(segment, index) in segments" :key="(segment.label || index) + '-' + index"
-              :d="getArcPath(segment.startAngle, segment.endAngle, segment.radius)" :fill="segment.color"
-              :stroke="segment.color" stroke-width="2" class="segment-path" @mouseenter="hoveredSegment = segment"
+              :d="getArcPath(segment.startAngle, segment.endAngle, segment.radius)"
+              :fill="'url(#pie-gradient-' + index + ')'"
+              stroke="none" stroke-width="0" class="segment-path" @mouseenter="hoveredSegment = segment"
               @mouseleave="hoveredSegment = null"
               :class="{ 'segment-hover': hoveredSegment === segment, 'segment-loading': isLoading }" />
             <!-- 指针：始终显示，并添加加载时的 class 和动画 -->
@@ -25,14 +38,15 @@
               <circle cx="0" cy="0" r="4" fill="#000" />
             </g>
             <!-- 标签：添加 v-if="!isLoading" 确保加载时不显示 -->
-            <text v-for="(label, index) in labels" :key="(label.text || index) + '-' + index" :x="label.x" :y="label.y"
-              :text-anchor="label.anchor" :transform="`rotate(${label.rotation}, ${label.x}, ${label.y})`"
-              class="chart-label"
-              :class="{ 'label-visible': hoveredSegment && hoveredSegment.label === label.text }"
-              v-if="!isLoading">
-              {{ label.text }}
-            </text>
+            <g v-if="!isLoading">
+              <text v-for="(label, index) in labels" :key="(label.text || index) + '-' + index" :x="label.x" :y="label.y"
+                :text-anchor="label.anchor"
+                class="chart-label"
+                v-html="label.labelHtml">
+              </text>
+            </g>
           </svg>
+          </div>
         </div>
 
         <div class="bar-chart">
@@ -81,7 +95,7 @@ export default {
   name: 'AnalystRecommendations',
   data() {
     return {
-      chartSize: 300,
+      chartSize: 280,
       animatedPointerAngle: 0, // 用于动画的当前指针角度，初始设为0度（最右侧）
       animationComplete: false, // 标记指针动画是否完成
       hoveredSegment: null,
@@ -111,11 +125,11 @@ export default {
     segments() {
       const radius = this.chartSize / 2 - 20;
       const innerRadius = radius - 8;
+      // 均分 5 份，每份 36 度
+      const segmentCount = this.chartDataForPie.length;
+      const angleSpan = 180 / (segmentCount || 1);
       let currentAngle = 180;
-      // 用 chartDataForPie
       return this.chartDataForPie.map((item, index) => {
-        const percentage = item.value / this.totalValueForPie;
-        const angleSpan = percentage * 180;
         const startAngle = currentAngle;
         const endAngle = currentAngle + angleSpan;
         currentAngle += angleSpan;
@@ -137,15 +151,20 @@ export default {
         const labelAngle = (segment.startAngle + segment.endAngle) / 2;
         const angleRad = (labelAngle * Math.PI) / 180;
         const x = centerX + Math.cos(angleRad) * labelRadius;
-        const y = centerY + Math.sin(angleRad) * labelRadius;
-        const rotation = labelAngle + 90;
-        return {
-          text: segment.label,
-          x,
-          y,
-          rotation,
-          anchor: 'middle'
+        // 统一 label 距离扇形的距离
+        const baseY = centerY + Math.sin(angleRad) * labelRadius ;
+        let labelHtml = segment.label;
+        // 对于两行的 label，让两行的中线与单行 label baseline 对齐
+        if (segment.label === 'Strong Buy') {
+          labelHtml = 'Strong<tspan x="' + (x + 15) + '" y="' + (baseY + 32) + '">Buy</tspan>';
+          // 整体下移，远离弧线
+          return { text: segment.label, labelHtml, x: x + 15, y: baseY + 18, anchor: 'middle' };
         }
+        if (segment.label === 'Strong Sell') {
+          labelHtml = 'Strong<tspan x="' + (x - 15) + '" y="' + (baseY + 32) + '">Sell</tspan>';
+          return { text: segment.label, labelHtml, x: x - 15, y: baseY + 18, anchor: 'middle' };
+        }
+        return { text: segment.label, labelHtml, x: x, y: baseY, anchor: 'middle' };
       });
     },
     pointerX() {
@@ -264,7 +283,7 @@ export default {
     getArcPath(startAngle, endAngle, radius) {
       const centerX = this.chartSize / 2
       const centerY = this.chartSize / 2
-      const innerRadius = radius - 30
+      const innerRadius = radius - 10 // 让扇形更细
 
       const startAngleRad = (startAngle * Math.PI) / 180
       const endAngleRad = (endAngle * Math.PI) / 180
@@ -363,6 +382,13 @@ export default {
 
 .semicircle-chart {
   flex-shrink: 0;
+  margin: 0 24px;
+}
+
+.semicircle-chart-wrapper {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
 }
 
 .chart-svg {
@@ -371,14 +397,10 @@ export default {
 
 .chart-label {
   font-size: $spacing-sm;
-  fill: #333;
+  fill: #888;
   font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.label-visible {
   opacity: 1;
+  transition: none;
 }
 
 .bar-chart {
@@ -398,13 +420,13 @@ export default {
   font-size: $spacing-md;
   font-weight: 500;
   color: #374151;
-  min-width: 80px;
+  width: 88px;
   text-align: left;
 }
 
 .bar-container {
   flex: 1;
-  height: 20px;
+  height: 12px;
   background-color: #e5e7eb;
   border-radius: 10px;
   overflow: hidden;
