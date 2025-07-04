@@ -35,7 +35,7 @@ const formatQuartStr = (str, yearShort) => {
 const formatEarningsInfo = (detail) => [
     { title: 'Average EPS', totalPremium: formatNumber(detail.avg_eps, 'dollar'), desc: `<p><strong>Earnings Per Share (EPS)</strong> is calculated as <strong>Net Income</strong> divided by the <strong>number of outstanding common shares</strong>. This is one of the most<br /> closely watched metrics by investors because it directly reflects the <strong>profit a company generates for each share of its stock</strong>.</p>`},
     // { title: 'vs. Est.', totalPremium: `$${Number(detail.avg_eps_est).toFixed(2)}` },
-    { title: 'Beat/Miss Ratio', totalPremium: `${Number(detail.beat_count)}/${12-Number(detail.beat_count)}`, desc: `<p>The <strong>Beat/Miss Ratio (EPS)</strong> measures the frequency with which a company's actual earnings (or revenue) exceed or fall short of analyst expectations.</p>` },
+    { title: 'Beat/Miss Ratio', totalPremium: `${Number(detail.beat_count)}/${Number(detail.miss_count)}`, desc: `<p>The <strong>Beat/Miss Ratio (EPS)</strong> measures the frequency with which a company's actual earnings (or revenue) exceed or fall short of analyst expectations.</p>` },
     // { title: `${(parseFloat(detail.beat_rate) * 100).toFixed(2)}%`, totalPremium: 'Beat Rate' },
     { title: 'Average Surprice', totalPremium: formatNumber(detail.avg_eps_surprise, 'avg'), totalPremiumColor: `${Number(detail.avg_eps_surprise) > 0 ? 'green' : 'red'}`, desc: `<p><strong>Average Surprise</strong> is the average percentage difference between a company's actual earnings (or revenue) and analyst expectations.</p>`  },
     // { title: 'Last', totalPremium: `${Number(detail.last_eps_surprise)}%` },
