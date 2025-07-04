@@ -16,6 +16,7 @@
 import Highcharts from "highcharts";
 import Exporting from "highcharts/modules/exporting";
 import ExportData from "highcharts/modules/export-data";
+import { formatNumber } from '@/utils';
 
 Exporting(Highcharts);
 ExportData(Highcharts);
@@ -168,6 +169,7 @@ export default {
     },
 
     initializeChart() {
+      console.log(this.chartData)
       if (!this.$refs.chartContainer) {
         this.error = "Chart container not available.";
         return;
@@ -189,37 +191,59 @@ export default {
           title: { text: this.yAxisTitleText },
           labels: {
             formatter: function() {
-              const chart = this.axis.chart;
-              if (!chart.options._rawLabels) return this.value;
-              const rawLabelsArr = Object.values(chart.options._rawLabels)[0];
-              if (!rawLabelsArr) return this.value;
-              let closest = this.value, minDiff = Infinity;
-              for (const raw of rawLabelsArr) {
-                const match = raw.match(/([\d\.,+-]+)/);
-                if (match) {
-                  const num = parseFloat(match[1].replace(/,/g, ''));
-                  if (!isNaN(num)) {
-                    const diff = Math.abs(num - this.value);
-                    if (diff < minDiff) {
-                      minDiff = diff;
-                      closest = raw;
-                    }
-                  }
+                const value = this.value;
+                if (value === null || isNaN(value)) return '-';
+
+                const absValue = Math.abs(value);
+                let formatted;
+
+                if (absValue >= 1e12) {
+                  formatted = `${(value / 1e12).toFixed(2)}T`;
+                } else if (absValue >= 1e9) {
+                  formatted = `${(value / 1e9).toFixed(2)}B`;
+                } else if (absValue >= 1e6) {
+                  formatted = `${(value / 1e6).toFixed(2)}M`;
+                } else if (absValue >= 1e3) {
+                  formatted = `${(value / 1e3).toFixed(2)}K`;
+                } else {
+                  formatted = value.toFixed(2);
                 }
-              }
-              return closest;
+                return formatted
             }
           }
         },
         tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat:
-            '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-          footerFormat: "</table>",
+          // Use a formatter for the tooltip to apply your formatNumber utility
+          formatter: function() {
+            let s = `<span style="font-size:10px">${this.x}</span><table>`; // X-axis category (date)
+            
+            // `this.points` contains all series points for the current x-category (column)
+            this.points.forEach(p => {
+              // Access the imported formatNumber function directly
+              // If you need specific 'type' or 'sign' for the tooltip, pass them here.
+              // For general display, empty strings should return the base B/M/K format.
+              const formattedValue = formatNumber(p.y, '', ''); 
+              
+              s += `<tr><td style="color:${p.series.color};padding:0">${p.series.name}: </td>` +
+                   `<td style="padding:0"><b>${formattedValue}</b></td></tr>`;
+            });
+            s += "</table>";
+            return s;
+          },
+          // footerFormat: "</table>", // This is redundant if you build the table yourself in formatter
           shared: true,
           useHTML: true,
         },
+        // tooltip: {
+        //   headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        //   pointFormat:
+        //     '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        //     '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
+        //   footerFormat: "</table>",
+        //   shared: true,
+        //   useHTML: true,
+        // },
         legend: this.showLegend
           ? {
               ...this.getLegendConfig(),
