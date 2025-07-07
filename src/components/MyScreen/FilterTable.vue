@@ -381,7 +381,7 @@ export default {
 					start_date: '',
 					end_date: '',
 					lookback_period: 'All',
-					corr_per: 87,
+					corr_per: 90,
 					tim: 21,
 					year: '',
 					exclude_overlap: true,

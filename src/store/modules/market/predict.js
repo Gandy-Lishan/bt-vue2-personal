@@ -24,20 +24,20 @@ const formatData = (data) => {
   },
   { 
     prop: 'PublishTime', 
-    labelHTML: 'Publish<br>Time', 
+    labelHTML: 'Last<br/>Publish Time', 
     sortable: true,
     type: 'date',
   },
   { 
     prop: 'PublishPrice', 
-    labelHTML: 'Publish<br>Price', 
+    labelHTML: 'Last<br/>Publish Price', 
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.PublishPrice, 'dollar')
   },
   { 
     prop: 'Target',   
-    label: 'Target', 
+    label: 'Target Price', 
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.Target, 'dollar')
@@ -66,7 +66,7 @@ const formatData = (data) => {
   },
   { 
     prop: 'Close', 
-    label: 'Close', 
+    label: 'Last Price', 
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.Close, 'dollar')

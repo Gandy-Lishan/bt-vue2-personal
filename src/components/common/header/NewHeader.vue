@@ -302,7 +302,7 @@ export default {
           path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'
         },
         {
-          label: 'Market',
+          label: 'Market Prediction',
           keyPath: '13',
           path: '/market/predict'
         },
