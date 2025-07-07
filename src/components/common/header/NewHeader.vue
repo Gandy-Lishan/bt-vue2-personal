@@ -505,7 +505,7 @@ export default {
       if(label === 'Smart Stock Scanner') {
         return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
       }
-      if(label === 'AI Trading' || label === 'Market') {
+      if(label === 'AI Trading' || label === 'Market Prediction') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {
