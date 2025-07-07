@@ -1,12 +1,15 @@
 <template>
   <div class="predict-layout">
-    <h2 class="heading">Predict</h2>
+    <!-- <h2 class="heading">Predict</h2> -->
 
     <div class="predict-layout__main">
       <!-- 第一行：三列 -->
       <section class="predict-layout__table">
       <div class="contentWrapper">
-        <h3 class="table-title">Predict Table</h3>
+         <p style="font-weight: 400; font-size: 14px;">
+          The Market Prediction summarizes the market's leading analysts' forecasts for the target price of a particular Ticker for the next three months. Based on analysts' professional interpretation of the current market conditions and latest data, we have compiled these informative estimates of future price movements for you, helping you to gain a better insight into potential market opportunities.
+         </p>
+         <h3 class="table-title">Market Prediction Summary</h3>
         <base-table
           :tableData="tableData"
           :columns="columns"
