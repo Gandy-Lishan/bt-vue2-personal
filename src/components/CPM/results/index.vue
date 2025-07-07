@@ -124,7 +124,7 @@ export default {
           _this.displayResultsData(_data)
 				} else if(to.params.usedFor && to.params.usedFor === 'emptyCPMResults') {
           const _data = to.params.data
-          _this.chart_data = {}
+          _this.chart_data = _data
           _this.$nextTick(() => {_this.$refs['Form'].displayData(_data)})
         }
 			})

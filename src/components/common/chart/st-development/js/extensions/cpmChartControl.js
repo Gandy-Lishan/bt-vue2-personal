@@ -33,6 +33,7 @@
                 }
 
                 CIQ.hideCover()
+                CIQ.nprogress.done()
                 //CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             }
         ) 

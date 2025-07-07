@@ -24,7 +24,6 @@ export default {
 	watch: {
 		selectedTitle: {
 			async handler(newValue, _){
-        debugger
 				if(newValue === 'Symbol' && (!this.$route.path.includes('/cpm/symbol'))) this.$router.push({path: '/cpm/symbol'})
 				else if(newValue === 'Asset' && (!this.$route.path.includes('/cpm/asset'))) this.$router.push({path: '/cpm/asset'})
 				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm/list'})
@@ -32,7 +31,6 @@ export default {
 			deep: true
 		},
     '$route'(to, _) {
-      debugger
 			if (to.fullPath.includes('/cpm/symbol')) {
 				this.selectedTitle = 'Symbol'
 			}else if (to.fullPath.includes('/cpm/asset')) {
