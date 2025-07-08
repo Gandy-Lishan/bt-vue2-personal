@@ -102,6 +102,7 @@ export default {
   },
   latest_commentary() {
     const latest_commentary = isJson(this.dashBoardData.latest_commentary) ? JSON.parse(this.dashBoardData.latest_commentary) : this.dashBoardData.latest_commentary
+    debugger
     return latest_commentary.map(ele => {
       if(ele.post_date) {
         const formattedDate = moment.utc(ele.post_date).format('YYYY-MM-DD');
@@ -145,6 +146,8 @@ export default {
        ['sentimentedge', 'modeledge', 'quantedge', 'kaeppelscorner', 'tradingedge'].includes(row.user_level)
      ) {
        return `/MR/${row.user_level}/${row.url}`;
+     }else if(row.author === 'Other'){
+      return `${row.url}`;
      }
      return `/MR/blog/${row.url}`;
    },
