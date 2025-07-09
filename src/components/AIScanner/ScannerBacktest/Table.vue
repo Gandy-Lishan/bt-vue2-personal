@@ -307,6 +307,7 @@ export default {
 			await _this.getDataList(null)
     },
     async handleRowClick(row) {
+      debugger
       row.viewLoading = true
       const {url, status:preStatus} = row
       const _this = this
@@ -344,7 +345,7 @@ export default {
       // 如果结束时间是当天就直接调用 handleRowClick 方法
       if(row.end_date === timestampToTime(new Date())) {await this.handleRowClick(row); return}
       row.viewLoading = true
-      this.$emit('rerunSCBacktest', row)
+      await this.$emit('rerunSCBacktest', row)
       row.viewLoading = false
     },
     async handleQuery() {

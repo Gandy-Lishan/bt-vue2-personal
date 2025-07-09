@@ -1108,7 +1108,7 @@ export default {
       if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       if(Array.isArray(data['signals']) && data['signals'].length === 1 && data['signals'][0] === 'All') {
         this.$refs['SelectCheck'].handleoptionsAllChange(true)
-        this['signals'] = this.data.signals
+        this['signals'] = data.signals
         delete data.signals
       }else if(Array.isArray(data['signals'])){
         this.$refs['SelectCheck'].handleoptionsAllChange(false)
