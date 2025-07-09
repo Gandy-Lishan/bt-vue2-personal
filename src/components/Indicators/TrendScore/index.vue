@@ -47,7 +47,8 @@ export default {
    return {
      toggleEnlarge: this.toggleEnlarge,
      checkedOption: this.checkedOption,
-     enterOrExitFullScreenTrendScorePage: this.enterOrExitFullScreenTrendScorePage
+     enterOrExitFullScreenTrendScorePage: this.enterOrExitFullScreenTrendScorePage,
+     enLargeTableFromIndex: this.enLargeTable
    };
  },
  data () {
