@@ -286,6 +286,9 @@ const formatNumber = (value, type, sign) => {
     return `${value < 0 ? '-' : ''}$${formatted}`;
   } else if (type === 'customSign') {
     return `${formatted}${sign}`;
+  } else if (type === 'stripZeros') {
+    formatted = type === 'stripZeros' ? parseFloat(formatted) : formatted;
+    return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`
   }
 
   return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`;
