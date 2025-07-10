@@ -1185,6 +1185,9 @@ try {
       if(system_pattern) {
         this.criteria_option = 'CommonPattern'
         this.system_pattern = system_pattern
+        this.data.name = data.name
+        this.data.category = data.category
+        this.data.direction = data.direction
         return
       }
       const _data = {}
