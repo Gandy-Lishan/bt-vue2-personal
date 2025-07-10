@@ -34,6 +34,7 @@ const formatData = (data) => {
     analyst_ratings_strong_buy_percent,
     analyst_ratings_strong_sell,
     analyst_ratings_strong_sell_percent,
+    latest_rating
   } = data.rating_data
   const pt_data = data.pt_data
   const ColumnBarData = [
@@ -41,7 +42,6 @@ const formatData = (data) => {
     {label: 'Buy', labelHtml: 'Buy', actual: analyst_ratings_buy, value: analyst_ratings_buy_percent, color: '#A1B81D', multiplyBy: 1}, // 浅绿色
     {label: 'Hold', labelHtml: 'Hold', actual: analyst_ratings_hold, value: analyst_ratings_hold_percent, color: '#F59E0B', multiplyBy: 0}, // 浅蓝色
     {label: 'Sell', labelHtml: 'Sell', actual: analyst_ratings_sell, value: analyst_ratings_sell_percent, color: '#EA580C', multiplyBy: -1}, // 较浅的红色
-    {label: 'Strong Sell', labelHtml: 'Strong<br>Sell', actual: analyst_ratings_strong_sell, value: analyst_ratings_strong_sell_percent, color: '#DC2626', multiplyBy: -2} // 深红色
   ]
   pt_data.forEach((item, index) => {
     AnalystData.push({
@@ -53,18 +53,19 @@ const formatData = (data) => {
       accuracy: parseFloat(item.mean_acc)
     })
   })
-  return {AnalystData, AnalystDataColumns, ColumnBarData}
+  return {AnalystData, AnalystDataColumns, ColumnBarData, latestRating: latest_rating}
 }
 
 function preprocessData(raw) {
   // 處理 raw 為你需要的格式
   debugger
   const data = raw.data.data
-  let {AnalystData, AnalystDataColumns, ColumnBarData} = formatData(data)
+  let {AnalystData, AnalystDataColumns, ColumnBarData, latestRating} = formatData(data)
   return {
     AnalystData, 
     AnalystDataColumns,
-    ColumnBarData
+    ColumnBarData,
+    latestRating
   };
 }
 

@@ -84,6 +84,20 @@ const formatData = (data) => {
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
+  },
+  { 
+    prop: 'history_count', 
+    labelHTML: 'Historical Prediction Period', 
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.LastWinRate, 'stripZeros')
+  },
+  { 
+    prop: 'latest_rating', 
+    labelHTML: 'Latest Rating', 
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
   }
  ]
  data.forEach((item, index) => {

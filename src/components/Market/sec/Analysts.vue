@@ -104,6 +104,7 @@ export default {
       chartData: [],
       animatedBarWidths: [], // 新增：用于条形图动画的宽度数组
       barAnimationComplete: false, // 新增：标记条形图动画是否完成
+      latestRating: 270,
     }
   },
   // percentage 加起来 * 0.45 + 90
@@ -199,12 +200,12 @@ export default {
       return this.chartDataForPie.reduce((sum, item) => sum + item.value, 0)
     },
     pointerAngleDynamic() {
-      if (!this.chartData || this.chartData.length === 0) return 270; // 默认指向正上
+      if (!this.latestRating) return 270; // 默认指向正上
       // 1. 计算推荐值
-      const sum = this.chartData.reduce(
-        (acc, item) => acc + (item.value * (item.multiplyBy || 0)),
-        0
-      );
+      // const sum = this.chartData.reduce(
+      //   (acc, item) => acc + (item.value * (item.multiplyBy || 0)),
+      //   0
+      // );
       // // 2. 计算最大最小推荐值
       // const minVal = -2 * 100; // Strong Sell 100%
       // const maxVal = 2 * 100;  // Strong Buy 100%
@@ -212,7 +213,7 @@ export default {
       // const clamped = Math.max(minVal, Math.min(maxVal, sum));
       // const angle = 180 + ((clamped - minVal) / (maxVal - minVal)) * 180;
       // return angle;
-      return sum * 0.45 -90
+      return this.latestRating
     },
   },
   watch: {
@@ -227,11 +228,13 @@ export default {
           const {
             AnalystData,
             AnalystDataColumns,
-            ColumnBarData
+            ColumnBarData,
+            latestRating
           } = newVal
           this.tableData = AnalystData
           this.columns = AnalystDataColumns
           this.chartData = ColumnBarData
+          this.latestRating = latestRating
 
           // 根据加载状态初始化 animatedBarWidths
           if (this.isLoading) {
