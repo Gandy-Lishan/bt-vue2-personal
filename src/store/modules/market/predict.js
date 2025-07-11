@@ -11,7 +11,7 @@ const formatUTCDate = (isoStr) => {
    timeZone: 'UTC'
  }).format(date);
 }
-
+// Ticker, Prediction End Date, Last Price, Historical Prediction Periods (历史上一共预测的多少期)，Mean Accuracy，Last Period Accuracy，Latest Rating.
 const formatData = (data) => {
  const PredictData = []
  const PredictDataColumns = [
@@ -23,46 +23,10 @@ const formatData = (data) => {
    label: 'Ticker',
   },
   { 
-    prop: 'PublishTime', 
-    labelHTML: 'Last<br/>Publish Time', 
-    sortable: true,
-    type: 'date',
-  },
-  { 
-    prop: 'PublishPrice', 
-    labelHTML: 'Last<br/>Publish Price', 
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.PublishPrice, 'dollar')
-  },
-  { 
-    prop: 'Target',   
-    label: 'Target Price', 
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.Target, 'dollar')
-  },
-  { 
     prop: 'PredictEndDate', 
-    labelHTML: 'Predict<br>End Date', 
+    labelHTML: 'Prediction<br/>End Date', 
     sortable: true,
     type: 'date',
-  },
-  { 
-    prop: 'PhaseMinPrice', 
-    label: 'Min Price', 
-    desc: `<p><strong>Min Price (Period Low)</strong> refers to the <strong>lowest price within the forecast period</strong>.</p>`,
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.PhaseMinPrice, 'dollar')
-  },
-  { 
-    prop: 'PhaseMaxPrice', 
-    label: 'Max Price', 
-    desc: `<p><strong>Max Price (Period High)</strong> refers to the <strong>highest price within the forecast period</strong>.</p>`,
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.PhaseMaxPrice, 'dollar')
   },
   { 
     prop: 'Close', 
@@ -70,6 +34,13 @@ const formatData = (data) => {
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.Close, 'dollar')
+  },
+  { 
+    prop: 'history_count', 
+    labelHTML: 'Historical<br/>Prediction Periods', 
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.LastWinRate, 'stripZeros')
   },
   { 
     prop: 'MeanAcc', 
@@ -80,20 +51,13 @@ const formatData = (data) => {
   },
   { 
     prop: 'LastWinRate', 
-    labelHTML: 'Last<br>Win Rate', 
+    labelHTML: 'Last<br/>Period Accuracy', 
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
   },
   { 
-    prop: 'history_count', 
-    labelHTML: 'Historical Prediction Period', 
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.LastWinRate, 'stripZeros')
-  },
-  { 
-    prop: 'latest_rating', 
+    prop: 'LatestRating', 
     labelHTML: 'Latest Rating', 
     sortable: true,
     type: 'number',
