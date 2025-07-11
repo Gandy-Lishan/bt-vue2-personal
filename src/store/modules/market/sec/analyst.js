@@ -42,6 +42,7 @@ const formatData = (data) => {
     {label: 'Buy', labelHtml: 'Buy', actual: analyst_ratings_buy, value: analyst_ratings_buy_percent, color: '#A1B81D', multiplyBy: 1}, // 浅绿色
     {label: 'Hold', labelHtml: 'Hold', actual: analyst_ratings_hold, value: analyst_ratings_hold_percent, color: '#F59E0B', multiplyBy: 0}, // 浅蓝色
     {label: 'Sell', labelHtml: 'Sell', actual: analyst_ratings_sell, value: analyst_ratings_sell_percent, color: '#EA580C', multiplyBy: -1}, // 较浅的红色
+    {label: 'Strong Sell', actual: analyst_ratings_strong_sell, value: analyst_ratings_strong_sell_percent, color: '#DC2626', multiplyBy: -2} // 深红色
   ]
   pt_data.forEach((item, index) => {
     AnalystData.push({
