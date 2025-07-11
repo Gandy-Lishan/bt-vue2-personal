@@ -27,41 +27,47 @@ const formatData = (data) => {
     labelHTML: 'Prediction<br/>End Date', 
     sortable: true,
     type: 'date',
+    desc: 'The future date to which the forecast applies'
   },
   { 
     prop: 'LastPrice', 
     label: 'Last Price', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.LastPrice, 'dollar')
+    formatter: (row) => formatNumber(row.LastPrice, 'dollar'),
+    desc: 'The latest price of the stock'
   },
   { 
     prop: 'HistoryPredictionPeriods', 
     labelHTML: 'Historical<br/>Prediction Periods', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.HistoryPredictionPeriods, 'stripZeros')
+    formatter: (row) => formatNumber(row.HistoryPredictionPeriods, null, null, true),
+    desc: 'The total number of past periods that have been forecasted'
   },
   { 
     prop: 'MeanAcc', 
     labelHTML: 'Mean<br>Accuracy', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.MeanAcc, 'customSign', '%')
+    formatter: (row) => formatNumber(row.MeanAcc, 'intAndCustomSign', '%', true),
+    desc: 'The average forecast accuracy across all historical periods'
   },
   { 
     prop: 'LastPeriodAcc', 
     labelHTML: 'Last<br/>Period Accuracy', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.LastPeriodAcc, 'customSign', '%')
+    formatter: (row) => formatNumber(row.LastPeriodAcc, 'intAndCustomSign', '%', true),
+    desc: 'The forecast accuracy for the most recent period'
   },
   { 
     prop: 'LatestRating', 
     labelHTML: 'Latest Rating', 
     sortable: true,
     type: 'string',
-    formatter: (row) => (row.LatestRating)
+    formatter: (row) => (row.LatestRating),
+    desc: 'A rating based on recent performance'
   }
  ]
  data.forEach((item, index) => {

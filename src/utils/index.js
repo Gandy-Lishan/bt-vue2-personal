@@ -260,38 +260,47 @@ const isObject = (val) => {
   return val !== null && typeof val === 'object' && !Array.isArray(val);
 }
 
-const formatNumber = (value, type, sign) => {
+const formatNumber = (value, type, sign, trimZeros = false) => {
   if (value === null || isNaN(value)) return '-';
 
   const absValue = Math.abs(value);
   let formatted;
 
+  const formatWithUnit = (num, unit) => {
+    let str = (num).toFixed(2);
+    if (trimZeros) str = Number(str).toString();
+    return `${str}${unit}`;
+  };
+
   if (absValue >= 1e12) {
-    formatted = `${(absValue / 1e12).toFixed(2)}T`;
+    formatted = formatWithUnit(absValue / 1e12, 'T');
   } else if (absValue >= 1e9) {
-    formatted = `${(absValue / 1e9).toFixed(2)}B`;
+    formatted = formatWithUnit(absValue / 1e9, 'B');
   } else if (absValue >= 1e6) {
-    formatted = `${(absValue / 1e6).toFixed(2)}M`;
+    formatted = formatWithUnit(absValue / 1e6, 'M');
   } else if (absValue >= 1e3) {
-    formatted = `${(absValue / 1e3).toFixed(2)}K`;
+    formatted = formatWithUnit(absValue / 1e3, 'K');
   } else {
-    formatted = absValue.toFixed(2);
+    let str = absValue.toFixed(2);
+    formatted = trimZeros ? Number(str).toString() : str;
+    if (type === 'intAndCustomSign') {
+    // 新增：只显示整数部分，不加单位
+    formatted = `${Math.round(formatted)}`;
+    }
   }
 
   if (type === 'percent') {
-    return `${(parseFloat(formatted) * 100).toFixed(2)}%`;
+    let num = parseFloat(formatted) * 100;
+    return `${trimZeros ? Number(num.toFixed(2)).toString() : num.toFixed(2)}%`;
   } else if (type === 'avg') {
     return `${value === 0 ? '' : (value > 0 ? '+' : '-')}${formatted}%`;
   } else if (type === 'dollar') {
     return `${value < 0 ? '-' : ''}$${formatted}`;
-  } else if (type === 'customSign') {
+  } else if (type === 'customSign' || type === 'intAndCustomSign') {
     return `${formatted}${sign}`;
-  } else if (type === 'stripZeros') {
-    formatted = type === 'stripZeros' ? parseFloat(formatted) : formatted;
-    return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`
   }
 
   return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`;
-}
+};
 
 export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}

@@ -21,7 +21,7 @@ const formatData = (data) => {
     { prop: 'minPrice', label: 'Min Price', sortable: true, type: 'number', formatter: (row) => formatNumber(row.minPrice, 'dollar') },
     { prop: 'maxPrice', label: 'Max Price', sortable: true, type: 'number', formatter: (row) => formatNumber(row.maxPrice, 'dollar') },
     { prop: 'reportNum', label: 'Number of Reports', sortable: true, type: 'number' },
-    { prop: 'accuracy', label: 'Accuracy', sortable: true, type: 'number', formatter: (row) => formatNumber(row.accuracy, 'customSign', '%') },
+    { prop: 'accuracy', label: 'Accuracy', sortable: true, type: 'number', formatter: (row) => formatNumber(row.accuracy, 'intAndCustomSign', '%') },
   ]
   const {
     analyst_ratings_buy,
