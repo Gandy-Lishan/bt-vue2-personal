@@ -29,18 +29,18 @@ const formatData = (data) => {
     type: 'date',
   },
   { 
-    prop: 'Close', 
+    prop: 'LastPrice', 
     label: 'Last Price', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.Close, 'dollar')
+    formatter: (row) => formatNumber(row.LastPrice, 'dollar')
   },
   { 
-    prop: 'history_count', 
+    prop: 'HistoryPredictionPeriods', 
     labelHTML: 'Historical<br/>Prediction Periods', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.LastWinRate, 'stripZeros')
+    formatter: (row) => formatNumber(row.HistoryPredictionPeriods, 'stripZeros')
   },
   { 
     prop: 'MeanAcc', 
@@ -50,33 +50,29 @@ const formatData = (data) => {
     formatter: (row) => formatNumber(row.MeanAcc, 'customSign', '%')
   },
   { 
-    prop: 'LastWinRate', 
+    prop: 'LastPeriodAcc', 
     labelHTML: 'Last<br/>Period Accuracy', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
+    formatter: (row) => formatNumber(row.LastPeriodAcc, 'customSign', '%')
   },
   { 
     prop: 'LatestRating', 
     labelHTML: 'Latest Rating', 
     sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.LastWinRate, 'customSign', '%')
+    type: 'string',
+    formatter: (row) => (row.LatestRating)
   }
  ]
  data.forEach((item, index) => {
    PredictData.push({
     Ticker: item.Ticker,
-    PublishTime: formatUTCDate(item.PublishTime),
-    PublishPrice: item.PublishPrice,
-    Target: item.Target,
     PredictEndDate: formatUTCDate(item.PredictEndDate),
-    PhaseMinPrice: item.PhaseMinPrice,
-    PhaseMaxPrice: item.PhaseMaxPrice,
-    Date: formatUTCDate(item.Date),
-    Close: item.Close,
+    LastPrice: item.Close,
+    HistoryPredictionPeriods: item.history_count,
     MeanAcc: item.MeanAcc,
-    LastWinRate: item.LastWinRate,
+    LastPeriodAcc: item.LastWinRate,
+    LatestRating: item.latest_rating,
    }) 
  })
  return {PredictData, PredictDataColumns}
