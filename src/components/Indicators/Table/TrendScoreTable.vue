@@ -133,6 +133,16 @@ export default {
       // 判断是否需要排序
       if (!this.currentSortColumn) return
       console.log('currentSortColumn', this.currentSortColumn)
+      const key = this.currentSortColumn;
+      if(key === 'index_name'){
+        debugger
+        if(this.currentSortDirection == 'ascending'){
+          this.data.sort((a, b) => a[key].localeCompare(b[key], 'en', { sensitivity: 'base' }));
+        }else if(this.currentSortDirection == 'descending'){
+          this.data.sort((a, b) => b[key].localeCompare(a[key], 'en', { sensitivity: 'base' }));
+        }
+        return
+      }
       this.data.sort((a, b) => {
         const key = this.currentSortColumn;                                                                                                                                                                                                                                                                                                                      
         const isAsc = this.currentSortDirection === 'descending';
@@ -149,8 +159,8 @@ export default {
           }else{
           }
         }
-        if (a[key] < b[key]) return isAsc ? -1 : 1;
-        if (a[key] > b[key]) return isAsc ? 1 : -1;
+        if (parseFloat(a[key]) < parseFloat(b[key])) return isAsc ? -1 : 1;
+        if (parseFloat(a[key]) > parseFloat(b[key])) return isAsc ? 1 : -1;
         return 0;
       });
     },
