@@ -34,7 +34,7 @@
          <tr :key="index">
           <template v-for="(key, keyIndex) in columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
-            <a v-if="key === 'index_name'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
+            <a v-if="key === 'index_name' || key === 'constituent_trend_score'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
             <!-- <span v-else-if="key === 'last_date'">{{ele[key]}}</span>  -->
             <a v-else :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ele[key]}}</a>
            </td>
@@ -104,7 +104,11 @@ export default {
     // 保留两位小数 toFixed 可能报错
     const columns = this.columns.filter(col => col !== 'index_name' && col !== 'last_date')
     columns.forEach(col => {
-      item[col] = formatNumber(item[col], 'customSign', '%')
+      if(col === 'constituent_trend_score') {
+        item[col] = formatNumber(item[col])
+      }else{
+        item[col] = formatNumber(item[col], 'customSign', '%')
+      }
     })
     return item
   })
