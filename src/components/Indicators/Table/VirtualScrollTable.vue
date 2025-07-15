@@ -259,7 +259,6 @@ import TrendScoreTable from "./TrendScoreTable";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData, postUserWatchlist, deleteUserWatchlist } from "@/service/service";
-import { fullScreen } from 'chartiq/js/addOns';
 const debounce = require('lodash/debounce')
 const cloneDeep = require('lodash/cloneDeep')
 
@@ -2246,6 +2245,7 @@ export default {
       }
       this.$emit("updateChart", row)
       this.$emit("showDetails", row, true, this.checkedType)
+      // this.$emit("showDetails", {}, true, this.checkedType)
     },
     onLoad() {
       this.showImg = true
@@ -2277,7 +2277,7 @@ export default {
         }).filter(item => item.length > 0).flat()
         if(sourceTable.length) {
           const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
-          this.enLargeTableFromIndex(source_list, sourceTable[0])
+          this.enLargeTableFromIndex(source_list, sourceTable[0], 'related')
         }else {
           let res = {}
           try {
@@ -2354,7 +2354,7 @@ export default {
             })
             return
           }
-          await this.enLargeTableFromIndex(_sourceList.source_list, _sourceList)
+          await this.enLargeTableFromIndex(_sourceList.source_list, _sourceList, 'related')
         /* 如果匹配不到, 使用下面的规则请求个别表单
         ndx_100_complete_list: type: stock_nasdaq
         sp_1500_complete_list: type: stock_sent

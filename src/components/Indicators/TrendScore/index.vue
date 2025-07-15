@@ -191,7 +191,7 @@ export default {
    },
    showDetails(row, isShowDetails, checkedType) {
      console.log('showDetails', row)
-     this.updateChart(Object.keys(row).length !== 0 ? {...row} : this.displayRow)
+    //  this.updateChart(Object.keys(row).length !== 0 ? {...row} : this.displayRow)
      this.isShowDetails = isShowDetails
      this.checkedTitle = checkedType
    },
@@ -210,7 +210,7 @@ export default {
        this.$refs[refName][0].loadMore(value)
      }
    },
-   async enLargeTable(source_list, row) {
+   async enLargeTable(source_list, row, type) {
     debugger
      const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
      console.log('findTable', findTable)
@@ -224,7 +224,7 @@ export default {
        this.$refs[item][0].clearEnlarge()
      })
     // 在放大之前要先看有没有数据
-    if(checked) await this.$refs[findRefsName][0].loadMore(checked)
+    if(checked) await this.$refs[findRefsName][0].loadMore(checked, null, type)
      await this.$refs[findRefsName][0].enLargeTable(checked, row)
    },
    passIndicatorData(data, url) {
