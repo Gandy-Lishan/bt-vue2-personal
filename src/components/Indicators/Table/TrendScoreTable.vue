@@ -34,9 +34,13 @@
          <tr :key="index">
           <template v-for="(key, keyIndex) in columns">
            <td :key="keyIndex" :class="{'bold-td': key === 'index_name', 'odd': index % 2 === 1, 'even': index % 2 === 0}">
-            <a v-if="key === 'index_name' || key === 'constituent_trend_score'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ele[key]}}</a>
-            <!-- <span v-else-if="key === 'last_date'">{{ele[key]}}</span>  -->
-            <a v-else :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ele[key]}}</a>
+              <a v-if="key === 'index_name'" :href="`/sector_trend_score?index=${ele['sector']}`">{{ ele[key] }}</a> 
+              <!-- <span v-else-if="key === 'last_date'">{{ ele[key] }}</span> -->
+
+              <a v-else-if="key === 'constituent_trend_score'" :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ ele[key] }}</a> 
+
+              <a v-else :href="`/indicators?indicator=${ele['sector']}_${key}`">{{ ele[key] }}</a>
+
            </td>
           </template>
          </tr>
