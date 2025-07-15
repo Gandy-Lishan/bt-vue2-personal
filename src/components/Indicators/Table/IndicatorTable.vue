@@ -373,7 +373,7 @@ export default {
     },
     showDetails(row, isShowDetails, checkedType) {
       console.log('showDetails', row)
-      this.updateChart(Object.keys(row).length !== 0 ? {...row} : this.displayRow)
+      // this.updateChart(Object.keys(row).length !== 0 ? {...row} : this.displayRow)
       this.isShowDetails = isShowDetails
       this.checkedTitle = checkedType
     },
