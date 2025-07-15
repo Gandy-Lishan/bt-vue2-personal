@@ -310,6 +310,16 @@ export default {
       if(isUpdateChart || (isTrendScore && !indicator && condition !== 'related') || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
+    if(this.$route.fullPath.includes('sector_trend_score') && this.$route.query.index && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll') {
+      this.$nextTick(() => {
+        this.$refs['virtualScroll'].changeTableSort(
+          {
+            order: 'ascending',
+            prop: 'trend_last_value'
+          }
+        )
+      })
+    }
     },
     async enLargeTable(checked, row) {
       await this.$refs['virtualScroll']._toggleEnlarge(checked, row)
