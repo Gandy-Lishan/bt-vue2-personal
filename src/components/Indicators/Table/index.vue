@@ -116,7 +116,9 @@ export default {
         return
       }
       if(this.selectedTitle !== 'Indicators') this.selectedTitle = 'Indicators'
-      await this.$refs['Indicators'].enLargeTable(source_list, row)
+      this.$nextTick(() => {
+        this.$refs['Indicators'].enLargeTable(source_list, row)
+      })
     }
   }
 }
