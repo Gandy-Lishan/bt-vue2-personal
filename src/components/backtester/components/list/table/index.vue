@@ -453,9 +453,12 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="view backtest results"
 									placement="bottom-start"
 								>
+								<span slot="content">
+									This View button is only used to review the results and signal points from the previous run, <br/> 
+									and does not display the new signals that have appeared since the previous run was completed.
+								</span>
 									<el-button
 										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										type="warning"
