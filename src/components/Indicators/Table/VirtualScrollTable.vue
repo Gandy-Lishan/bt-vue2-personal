@@ -248,7 +248,7 @@
   <div :class="{'dataTables_info': true, 'dataTables__trendscore_info': isStockTrend, 'trend-score-range-rank': condition === 'rangeRank'}" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
-  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged"></TrendScoreTable>
+  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged" @trendScoreTableDate="trendScoreTableDate"></TrendScoreTable>
 </div>
 </template>
 
@@ -3194,6 +3194,9 @@ export default {
       this.form.selectedStocks = []
       this.isVisible = false
     },
+    trendScoreTableDate(date) {
+      this.trendUpdateDate = ` (${date})`
+    }
   }
 }
 </script>
