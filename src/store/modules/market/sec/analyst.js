@@ -36,7 +36,7 @@ const formatData = (data) => {
     analyst_ratings_strong_sell_percent,
     latest_rating
   } = data.rating_data
-  const pt_data = data.pt_data
+  const pt_data = isJson(data.pt_data) ? JSON.parse(data.pt_data) : []
   const ColumnBarData = [
     {label: 'Strong Buy', labelHtml: 'Strong<br>Buy', actual: analyst_ratings_strong_buy, value: analyst_ratings_strong_buy_percent, color: '#16A34A', multiplyBy: 2}, // 深绿色
     {label: 'Buy', labelHtml: 'Buy', actual: analyst_ratings_buy, value: analyst_ratings_buy_percent, color: '#A1B81D', multiplyBy: 1}, // 浅绿色
