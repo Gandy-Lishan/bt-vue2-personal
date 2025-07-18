@@ -199,7 +199,13 @@ const routes = [
 				name: 'AssetCorrelation',
 				component: resolve =>
 					require(['@/components/CPM/AssetCorrelation.vue'], resolve)
-			}
+			},
+			{
+				path: 'pattern',
+				name: 'PatternCorrelation',
+				component: resolve =>
+					require(['@/components/CPM/PatternCorrelation.vue'], resolve)
+			},
 		]
 	},
 	
