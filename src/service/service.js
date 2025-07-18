@@ -2113,26 +2113,6 @@ export async function getSmartDumbSentiment() {
 				})
 		})
 	}
-	export function savePatternCorrelation(data) {
-		const url = `/dev/symbol_corr_app/pattern_corr/`
-		const headers = {
-			'Content-Type': 'application/json'
-		}
-		const formData = new FormData()
-		for (const [key, value] of Object.entries(data)) {
-			formData.append(key, value);
-		}
-		return new Promise((resolve, reject) => {
-			axios
-				.post(url, formData, { headers, withCredentials: true })
-				.then(res => {
-					resolve(res)
-				})
-				.catch(err => {
-					reject(err)
-				})
-		})
-	}
 	export function getAssetCorrelation(data) {
 		const url = `/dev/st_data/widgets?chart_name=AssetCorr`
 		return new Promise((resolve, reject) => {

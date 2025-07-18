@@ -6,7 +6,6 @@
 					<h4  @click="selectedTitle = 'CPM'" :class="{ 'selected': selectedTitle === 'CPM' }">Correlation Pattern Match</h4>
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
 					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
-					<h4  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Historical Correlation Pattern</h4>
 				</div>
 			</div>
 		</div>
@@ -28,7 +27,6 @@ export default {
 				if(newValue === 'Symbol' && (!this.$route.path.includes('/cpm/symbol'))) this.$router.push({path: '/cpm/symbol'})
 				else if(newValue === 'Asset' && (!this.$route.path.includes('/cpm/asset'))) this.$router.push({path: '/cpm/asset'})
 				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm/list'})
-        else if(newValue === 'Pattern' && (!this.$route.path.includes('/cpm/pattern'))) this.$router.push({path: '/cpm/pattern'})
 			},
 			deep: true
 		},
@@ -37,8 +35,6 @@ export default {
 				this.selectedTitle = 'Symbol'
 			}else if (to.fullPath.includes('/cpm/asset')) {
 				this.selectedTitle = 'Asset'
-			}else if (to.fullPath.includes('/cpm/pattern')) {
-				this.selectedTitle = 'Pattern'
 			}else {
         this.selectedTitle = 'CPM'
 			}
@@ -47,7 +43,6 @@ export default {
   mounted() {
     if(this.$route.fullPath.includes('/cpm/symbol')) {this.selectedTitle = 'Symbol'}
     else if(this.$route.fullPath.includes('/cpm/asset')) {this.selectedTitle = 'Asset'}
-    else if(this.$route.fullPath.includes('/cpm/pattern')) {this.selectedTitle = 'Pattern'}
     else {this.selectedTitle = 'CPM'}
   },
 	methods: {
