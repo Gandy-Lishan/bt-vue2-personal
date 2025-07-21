@@ -374,7 +374,7 @@ export default {
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				return parseFloat(data)
+				return parseFloat(data).toFixed(1)
 			} else if (dateRegex.test(data)) {
 				return data
 			} else {
