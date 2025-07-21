@@ -117,6 +117,11 @@ export default {
     return item
   })
   this.last_date = res.data[0].last_date
+  this.$emit('trendScoreTableDate', this.last_date)
+  // columns 默认使用 average 排序
+  this.currentSortColumn = 'constituent_trend_score'
+  this.currentSortDirection = 'descending'
+  this.sortTable('constituent_trend_score')
  },
  methods: {
   getSortClass(column) {

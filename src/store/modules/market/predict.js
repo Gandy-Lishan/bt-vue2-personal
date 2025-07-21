@@ -18,7 +18,7 @@ const formatData = (data) => {
   { 
    type: 'link',
    sortable: true,
-   link: (row) => `/market/sec/${row.Ticker}`,
+   link: (row) => `/market/sec/${row.Ticker}/analysts`,
    prop: 'Ticker', 
    label: 'Ticker',
   },
@@ -39,11 +39,11 @@ const formatData = (data) => {
   },
   { 
     prop: 'HistoryPredictionPeriods', 
-    labelHTML: 'Historical<br/>Prediction Periods', 
+    labelHTML: 'Total Analyst<br/>Predictions', 
     sortable: true,
     type: 'number',
     formatter: (row) => formatNumber(row.HistoryPredictionPeriods, null, null, true),
-    desc: 'The total number of past periods that have been forecasted'
+    desc: 'The total count of price target estimates made by financial analysts across all historical periods.'
   },
   { 
     prop: 'MeanAcc', 
@@ -53,14 +53,14 @@ const formatData = (data) => {
     formatter: (row) => formatNumber(row.MeanAcc, 'intAndCustomSign', '%', true),
     desc: 'The average forecast accuracy across all historical periods'
   },
-  { 
-    prop: 'LastPeriodAcc', 
-    labelHTML: 'Last<br/>Period Accuracy', 
-    sortable: true,
-    type: 'number',
-    formatter: (row) => formatNumber(row.LastPeriodAcc, 'intAndCustomSign', '%', true),
-    desc: 'The forecast accuracy for the most recent period'
-  },
+  // { 
+  //   prop: 'LastPeriodAcc', 
+  //   labelHTML: 'Last<br/>Period Accuracy', 
+  //   sortable: true,
+  //   type: 'number',
+  //   formatter: (row) => formatNumber(row.LastPeriodAcc, 'intAndCustomSign', '%', true),
+  //   desc: 'The forecast accuracy for the most recent period'
+  // },
   { 
     prop: 'LatestRating', 
     labelHTML: 'Latest Rating', 
