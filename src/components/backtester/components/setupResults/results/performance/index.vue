@@ -344,7 +344,8 @@ export default {
         let markers = CIQ.groups.pop()
 
         // if the last groups has no enough number of items, merge it with the last one
-        console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis)
+        // console.log('CIQ.stxx.chart.xaxis[0]',CIQ.stxx.chart.xaxis[0])
+        // let c_date = jutils.formatDate(CIQ.stxx.chart.xaxis[0].DT, 'YYYYMMDD')
         const firstNonEmpty = CIQ.stxx.chart.xaxis.find(obj => Object.keys(obj).length > 0);
         let c_date = jutils.formatDate(firstNonEmpty.DT, 'YYYYMMDD')
         if (CIQ.groups.slice(-1)[0]) {
