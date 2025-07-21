@@ -92,7 +92,7 @@
       <el-row :gutter="24" type="flex" justify="center">
         <el-col :span="8"></el-col>
         <el-col :span="8">
-          <el-button type="warning" @click="resetForm('Form')" size="small">Clear Form</el-button>
+          <el-button type="warning" @click="resetForm('Form')" size="small">Reset Form</el-button>
         </el-col>
         <el-col :span="8">
           <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
@@ -124,7 +124,7 @@
       </el-table>
     </div>
     <div class="symbol-correlation-chart">
-      <h3 v-if="patternCorrelation" style="text-align: center;">The correlation between AAPL and GOOG is {{patternCorrelation}}.</h3>
+      <h3 v-if="patternCorrelation" style="text-align: center;">{{patternCorrelation}}</h3>
       <div id="google-chart-container" style="height: 400px;"></div>
       <div id="apple-chart-container" style="height: 400px;"></div>
     </div>
@@ -149,12 +149,12 @@ export default {
   data() {
       return {
         data: {
-          referenceSymbol: 'GOOG',
+          referenceSymbol: 'SPX',
           referenceStartDate: '2017-01-01',
           referenceEndDate: '2017-05-01',
           comparisonStartDate: '2020-01-01',
           comparisonEndDate: '2020-04-01',
-          comparisonSymbol: 'AAPL',
+          comparisonSymbol: 'SPX',
         },
         dropdownList: [],
         dateRange: [],
@@ -314,11 +314,10 @@ export default {
       }
       if(code !== 211) this.popUpMsgBox('No results found. Adjust the parameters and try again.')
       if(code == 211) {
-        debugger
-        debugger
-        this.popUpMsgBox(`Completed successfully`)
+        this.popUpMsgBox(`Success. Rendering chart, please wait...`)
         const pattern_corr =  saveRes.data?.data?.pattern_corr
-        if(pattern_corr) this.patternCorrelation = `${pattern_corr}%`
+        if(pattern_corr && this.data.referenceSymbol === this.data.comparisonSymbol) this.patternCorrelation = `During a specific period, ${this.data.referenceSymbol} had a correlation of ${pattern_corr}%.`
+        if(pattern_corr && this.data.referenceSymbol !== this.data.comparisonSymbol) this.patternCorrelation = `Between two specific time periods, ${this.data.referenceSymbol} showed a correlation of ${pattern_corr}% with ${this.data.comparisonSymbol}.`
         // // 这里要开始画图
         // const {corr_matrix, corr_roll} = CharacterData
         await this.fetchData();
@@ -331,12 +330,12 @@ export default {
     },
       resetForm(formName) {
         this.data = {
-          referenceSymbol: 'GOOG',
+          referenceSymbol: 'SPX',
           referenceStartDate: '2017-01-01',
           referenceEndDate: '2017-05-01',
           comparisonStartDate: '2020-01-01',
           comparisonEndDate: '2020-04-01',
-          comparisonSymbol: 'AAPL'
+          comparisonSymbol: 'SPX'
         }
         this.$refs[formName].clearValidate()
       },
@@ -675,6 +674,15 @@ export default {
         comparisonStartDate,
         comparisonEndDate
       } = this.data
+      const referenceStart = moment(referenceStartDate);
+      const referenceEnd = moment(referenceEndDate);
+      const referenceMin = referenceStart.clone().subtract(1, 'year').valueOf();
+      const referenceMax = referenceEnd.clone().add(1, 'year').valueOf();
+
+      const comparisonStart = moment(comparisonStartDate);
+      const comparisonEnd = moment(comparisonEndDate);
+      const comparisonMin = comparisonStart.clone().subtract(1, 'year').valueOf();
+      const comparisonMax = comparisonEnd.clone().add(1, 'year').valueOf();
       Highcharts.stockChart('google-chart-container', {
         title: {
           text: `${referenceSymbol}`
@@ -685,6 +693,8 @@ export default {
           tooltip: { valueDecimals: 2 }
         }],
         xAxis: {
+          min: referenceMin,
+          max: referenceMax,
           plotBands: [{ // 添加垂直阴影区域
             from: moment(referenceStartDate).valueOf(),
             to: moment(referenceEndDate).valueOf(),
@@ -705,6 +715,8 @@ export default {
           tooltip: { valueDecimals: 2 }
         }],
         xAxis: {
+          min: comparisonMin,
+          max: comparisonMax,
           plotBands: [{ // 添加垂直阴影区域
             from: moment(comparisonStartDate).valueOf(),
             to: moment(comparisonEndDate).valueOf(),
@@ -714,6 +726,7 @@ export default {
         }
       });
     }
+    
   }
 }
 </script>
