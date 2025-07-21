@@ -12,7 +12,7 @@
 			<template v-for="(item, index) in medianReturn">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ !isNaN(val) ? val : '' }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ !isNaN(val) ? displayData(val) : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
@@ -251,7 +251,21 @@ export default {
 				_medianReturn: this.medianReturn,
 				_consistency: this.consistency
 			}
-		}
+		},
+		displayData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return parseFloat(data).toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
 	}
 }
 </script>

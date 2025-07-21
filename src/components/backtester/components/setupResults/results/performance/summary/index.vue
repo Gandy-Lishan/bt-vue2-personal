@@ -11,11 +11,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.totalReturn >= 0">{{
-                            scope.row.totalReturn + '%'
+                            displayData(scope.row.totalReturn) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.totalReturn)">0</span>
+                        <span v-else-if="isNaN(scope.row.totalReturn)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.totalReturn + '%'
+                            displayData(scope.row.totalReturn) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -28,11 +28,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.CAGR >= 0">{{
-                            scope.row.CAGR + '%'
+                            displayData(scope.row.CAGR) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.CAGR)">0</span>
+                        <span v-else-if="isNaN(scope.row.CAGR)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.CAGR + '%'
+                            displayData(scope.row.CAGR) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -44,11 +44,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.medianReturn >= 0">{{
-                            scope.row.medianReturn + '%'
+                            displayData(scope.row.medianReturn) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.medianReturn)">0</span>
+                        <span v-else-if="isNaN(scope.row.medianReturn)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.medianReturn + '%'
+                            displayData(scope.row.medianReturn) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -60,11 +60,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.averageReturn >= 0">{{
-                            scope.row.averageReturn + '%'
+                            displayData(scope.row.averageReturn) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.averageReturn)">0</span>
+                        <span v-else-if="isNaN(scope.row.averageReturn)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.averageReturn + '%'
+                            displayData(scope.row.averageReturn) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -76,10 +76,10 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.tzScore >= 0">{{
-                            scope.row.tzScore
+                            displayData(scope.row.tzScore)
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.tzScore)">0</span>
-                        <span v-else style="color: #dd3a13">{{ scope.row.tzScore }}</span>
+                        <span v-else-if="isNaN(scope.row.tzScore)">0.0</span>
+                        <span v-else style="color: #dd3a13">{{ displayData(scope.row.tzScore) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -90,11 +90,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.standardDeviation >= 0">{{
-                            scope.row.standardDeviation
+                            displayData(scope.row.standardDeviation)
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.standardDeviation)">0</span>
+                        <span v-else-if="isNaN(scope.row.standardDeviation)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.standardDeviation
+                            displayData(scope.row.standardDeviation)
                         }}</span>
                     </template>
                 </el-table-column>
@@ -106,11 +106,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.buyHoldGain >= 0">{{
-                            scope.row.buyHoldGain + '%'
+                            displayData(scope.row.buyHoldGain) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.buyHoldGain)">0</span>
+                        <span v-else-if="isNaN(scope.row.buyHoldGain)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.buyHoldGain + '%'
+                            displayData(scope.row.buyHoldGain) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -130,11 +130,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.winRate >= 0">{{
-                            scope.row.winRate + '%'
+                            displayData(scope.row.winRate) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.winRate)">0</span>
+                        <span v-else-if="isNaN(scope.row.winRate)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.winRate + '%'
+                            displayData(scope.row.winRate) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -146,11 +146,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.averageWin >= 0">{{
-                            scope.row.averageWin + '%'
+                            displayData(scope.row.averageWin) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.averageWin)">0</span>
+                        <span v-else-if="isNaN(scope.row.averageWin)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.averageWin + '%'
+                            displayData(scope.row.averageWin) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -162,11 +162,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.averageLoss >= 0">{{
-                            scope.row.averageLoss + '%'
+                            displayData(scope.row.averageLoss) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.averageLoss)">0</span>
+                        <span v-else-if="isNaN(scope.row.averageLoss)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.averageLoss + '%'
+                            displayData(scope.row.averageLoss) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -178,11 +178,11 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.drawDown >= 0">{{
-                            scope.row.drawDown + '%'
+                            displayData(scope.row.drawDown) + '%'
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.drawDown)">0</span>
+                        <span v-else-if="isNaN(scope.row.drawDown)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.drawDown + '%'
+                            displayData(scope.row.drawDown) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -246,10 +246,10 @@
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.timeInMarket >= 0">{{
-                            scope.row.timeInMarket + '%'
+                            displayData(scope.row.timeInMarket) + '%'
                         }}</span>
                         <span v-else style="color: #dd3a13">{{
-                            scope.row.timeInMarket + '%'
+                            displayData(scope.row.timeInMarket) + '%'
                         }}</span>
                     </template>
                 </el-table-column>
@@ -310,7 +310,20 @@ export default {
 
     },
 	methods: {
+    displayData(data) {
+        const numberRegex = /^-?\d+(\.\d+)?$/
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
+        if (numberRegex.test(data)) {
+            return data.toFixed(1)
+        } else if (dateRegex.test(data)) {
+            return data
+        } else if(typeof data == 'string'){
+            return data
+        }else {
+            return ''
+        }
+    },
     }
 }
 </script>
