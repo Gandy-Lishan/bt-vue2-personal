@@ -259,7 +259,7 @@ export default {
 					CIQ.nprogress.done()
 
 					// 文件上传完成后的处理逻辑
-					console.log('文件上传成功', response)
+					console.log('文件Response', response)
 					const { code, data, error } = response.data
 					// 还原文件对象的 raw 属性
 					if (code == 200 || code == 201) {
@@ -274,8 +274,10 @@ export default {
 								'File uploaded successfully. You can click on the file to preview it.',
 							duration: 0
 						})
-					} else if(code == 400){
+					} else if(code == 406){
 						return Promise.reject('Symbol name already exists')
+					} else if(code == 500){
+						return Promise.reject('Some fields contain invalid data types. Please check and re-upload.')
 					}
 					else {
 						return Promise.reject('File upload failed.')
@@ -409,7 +411,9 @@ export default {
 					 * 	remove empty line
 					 */
 					const fileContent = await this.readFileContent(file);
-					const filteredContent = await this.fillEmptyColsAndSkipEmptyLine(fileContent)
+					// 统一化Linux和Window换行符的差异
+					const normalizedContent = fileContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+					const filteredContent = await this.fillEmptyColsAndSkipEmptyLine(normalizedContent)
 					const newFile = new File([filteredContent], file.name, { type: file.type });
 					/********END********* */
 					
