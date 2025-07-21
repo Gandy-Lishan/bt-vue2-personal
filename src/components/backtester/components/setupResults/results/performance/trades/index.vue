@@ -245,11 +245,11 @@ export default {
                         mergedData.push({
                         'EntryDate': formatEntryDate,
                         'EntryAction': entryData.TradeStatus.toUpperCase(),
-                        'EntryPrice': !isNaN(entryData.TradePrice) ? Number(entryData.TradePrice).toFixed(1) : '',
+                        'EntryPrice': !isNaN(entryData.TradePrice) ? Number(entryData.TradePrice).toFixed(2) : '',
                         'EntryIndicator': entryData.Indicator || '',
                         'ExitDate': formatExitDate,
                         'ExitAction': exitData.TradeStatus.toUpperCase(),
-                        'ExitPrice': !isNaN(exitData.TradePrice) ? Number(exitData.TradePrice).toFixed(1) : '',
+                        'ExitPrice': !isNaN(exitData.TradePrice) ? Number(exitData.TradePrice).toFixed(2) : '',
                         'MaxGain': this.displayData(exitData.MaxGain),
                         'MaxLoss': this.displayData(exitData.MaxLoss),
                         'TradeReturn': !isNaN(exitData.TradeReturn) ? Number(exitData.TradeReturn).toFixed(1) : '',
