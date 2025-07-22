@@ -732,6 +732,27 @@ if (!CIQ.Marker) {
 		let endY = params.invert
 			? marker.params.box.y0 - stemHeight
 			: marker.params.box.y1 + stemHeight;
+		console.log(chart,endY)
+		ctx.moveTo(x, startY);
+		ctx.lineTo(x, endY);
+		ctx.stroke();
+		ctx.closePath();
+	};
+
+	CIQ.Marker.stPerformance.drawMarkerStemTriangle = function (marker, style, params) {
+		var stx = marker.params.stx,
+			chart = stx.chart,
+			ctx = chart.context;
+		var x = params.x,
+			y = params.y;
+
+		ctx.beginPath();
+		ctx.strokeStyle = style.borderLeftColor;
+		// ctx.setLineDash(CIQ.borderPatternToArray(stemStyle.borderLeftWidth, stemStyle.borderLeftStyle));
+		ctx.setLineDash([]);
+		let startY = params.invert ? marker.params.box.y0 : marker.params.box.y1;
+		let endY = chart.height;
+		console.log(chart,endY)
 		ctx.moveTo(x, startY);
 		ctx.lineTo(x, endY);
 		ctx.stroke();
@@ -767,7 +788,6 @@ if (!CIQ.Marker) {
 			CIQ.Marker.stPerformance.calculateMarkerStyles(stx, marker, style);
 		var markerStyle = (marker.style = stx.styles[style]),
 			stemStyle = stx.styles.stx_marker_stem;
-
 		if(nParams.category == 'buy'){
 			stemStyle.borderLeftColor = '#1afa29'
 			stemStyle.marginBottom = '-10px'
@@ -870,11 +890,24 @@ if (!CIQ.Marker) {
 		}
 
 		if (nParams.displayStem)
-			CIQ.Marker.stPerformance.drawMarkerStem(marker, stemStyle, {
-				x: x,
-				y: y,
-				invert: invert
-			});
+			if (type === "triangle") {
+				// CIQ.Marker.stPerformance.drawMarkerStemTriangle(marker, stemStyle, {
+				// 	x: x,
+				// 	y: y,
+				// 	invert: invert
+				// });
+				CIQ.Marker.stPerformance.drawMarkerStem(marker, stemStyle, {
+					x: x,
+					y: y,
+					invert: invert
+				});
+			} else {
+				CIQ.Marker.stPerformance.drawMarkerStem(marker, stemStyle, {
+					x: x,
+					y: y,
+					invert: invert
+				});
+			}
 
 		stx.endClip();
 		if (marker.attached) this.positionPopUpNode(marker);
