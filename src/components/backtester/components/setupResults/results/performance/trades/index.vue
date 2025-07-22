@@ -90,7 +90,7 @@
                 <span v-if="scope.row.MaxGain == 'none'">{{ '' }}</span>
                 <span v-else-if="scope.row.MaxGain > 0">{{ scope.row.MaxGain }}%</span>
                 <span v-else-if="scope.row.MaxGain < 0" style="color: #dd3a13">{{ scope.row.MaxGain }}%</span>
-                <span v-else-if="scope.row.MaxGain == 0">{{ 0 }}%</span>
+                <span v-else-if="scope.row.MaxGain == 0">{{ '0.0%' }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -104,8 +104,8 @@
                 <span v-if="scope.row.MaxLoss == 'none'">{{ '' }}</span>
                 <span v-else-if="scope.row.MaxLoss > 0">{{ scope.row.MaxLoss }}%</span>
                 <span v-else-if="scope.row.MaxLoss < 0" style="color: #dd3a13">{{ scope.row.MaxLoss }}%</span>
-                <span v-else-if="scope.row.MaxLoss == 0">{{ 0 }}%</span>
-                </template>
+                <span v-else-if="scope.row.MaxLoss == 0">{{ '0.0%' }}</span>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="TradeReturn"
@@ -117,7 +117,7 @@
                     <span v-if="scope.row.TradeReturn == 'none'">{{ '' }}</span>
                     <span v-else-if="scope.row.TradeReturn > 0">{{ scope.row.TradeReturn }}%</span>
                     <span v-else-if="scope.row.TradeReturn < 0" style="color: #dd3a13">{{ scope.row.TradeReturn }}%</span>
-                    <span v-else-if="scope.row.TradeReturn == 0">{{ 0 }}%</span>
+                    <span v-else-if="scope.row.TradeReturn == 0">{{ '0.0%' }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -130,7 +130,7 @@
                     <span v-if="scope.row.TotalReturn == 'none'">{{ '' }}</span>
                     <span v-else-if="scope.row.TotalReturn > 0">{{ scope.row.TotalReturn }}%</span>
                     <span v-else-if="scope.row.TotalReturn < 0" style="color: #dd3a13">{{ scope.row.TotalReturn }}%</span>
-                    <span v-else-if="scope.row.TotalReturn == 0">{{ 0 }}%</span>
+                    <span v-else-if="scope.row.TotalReturn == 0">{{ '0.0%' }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -250,10 +250,10 @@ export default {
                         'ExitDate': formatExitDate,
                         'ExitAction': exitData.TradeStatus.toUpperCase(),
                         'ExitPrice': !isNaN(exitData.TradePrice) ? Number(exitData.TradePrice).toFixed(2) : '',
-                        'MaxGain': !isNaN(exitData.MaxGain) ? Number(exitData.MaxGain).toFixed(2) : '',
-                        'MaxLoss': !isNaN(exitData.MaxLoss) ? Number(exitData.MaxLoss).toFixed(2) : '',
-                        'TradeReturn': !isNaN(exitData.TradeReturn) ? Number(exitData.TradeReturn).toFixed(2) : '',
-                        'TotalReturn': !isNaN(exitData.Return) ? Number(exitData.Return * 100).toFixed(2) : '',
+                        'MaxGain': this.displayData(exitData.MaxGain),
+                        'MaxLoss': this.displayData(exitData.MaxLoss),
+                        'TradeReturn': !isNaN(exitData.TradeReturn) ? Number(exitData.TradeReturn).toFixed(1) : '',
+                        'TotalReturn': !isNaN(exitData.Return) ? Number(exitData.Return * 100).toFixed(1) : '',
                         'ExitReason': exitData.ExitReason || '',
                         'MarketCondition': exitData.MarketCondition || ['N\/A'],
                         'ExitIndicator': exitData.Indicator || '',
@@ -279,7 +279,21 @@ export default {
 		},
         handleCurrentChange(page){
             this.queryInfo.page = page
-        }
+        },
+        displayData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return data.toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
     }
 }
 </script>

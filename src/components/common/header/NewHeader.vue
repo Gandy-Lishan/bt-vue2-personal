@@ -267,6 +267,11 @@ export default {
               keyPath: '8-3',
               path: '/cpm/asset'
             },
+            {
+              label: 'Historical Pattern Correlation',
+              keyPath: '8-4',
+              path: '/cpm/pattern'
+            },
           ]
         },
         {

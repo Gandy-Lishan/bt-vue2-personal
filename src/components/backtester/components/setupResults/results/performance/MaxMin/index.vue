@@ -26,14 +26,20 @@
 										'Max Loss'].includes(l)">
 										<el-table-column label="Max Loss" align="center" class-name="redHeader" width="60px">
 											<template slot-scope="scope">
-												<p class="negative-value">
-													{{ scope.row[l]['Max Loss'] }}
+												<p class="negative-value" v-if="!scope.row[l].init">
+													{{ displayData(scope.row[l]['Max Loss']) }}
+												</p>
+												<p v-else>
+													{{ scope.row[l]['Max Loss']}}
 												</p>
 												</template>
 										</el-table-column>
 										<el-table-column label="Max Gain" align="center" width="60px">
 											<template slot-scope="scope">
-												<p class="tableText">
+												<p class="tableText" v-if="!scope.row[l].init">
+													{{ displayData(scope.row[l]['Max Gain']) }}
+												</p>
+												<p class="tableText" v-else>
 													{{ scope.row[l]['Max Gain'] }}
 												</p>
 											</template>
@@ -91,7 +97,7 @@ export default {
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				return parseFloat(data)
+				return data.toFixed(1)
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
@@ -151,7 +157,7 @@ export default {
 							const lenMaxGain = maxGainValues.filter(num => num > 5).length
 							// const lenMaxGain = ''
 							const lenMaxLoss = maxLossValues.filter(num => num < -5).length
-							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
+							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss, init: true}
 					}
 					else if(ele['Dates of 1 Signals'] === '# of Times +/- 10%') {
 							// 计算大于-5%的个数
@@ -161,7 +167,7 @@ export default {
 							const lenMaxGain = maxGainValues.filter(num => parseFloat(num) > 10).length
 							// const lenMaxGain = ''
 							const lenMaxLoss = maxLossValues.filter(num => parseFloat(num) < -10).length
-							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
+							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss, init: true}
 					}else if(ele['Dates of 1 Signals'] === 'Min/Max') {
 							// 计算 Max Gain 最大值
 							const monthData = backtestHistoryList.map(entry => entry[label])
@@ -533,7 +539,21 @@ export default {
 			return finalData
 		},
 		exportData() {
-			return {maxMinData: this.backtestHistoryList};
+			const cleanInitField = (arr) => {
+				return arr.map(item => {
+						const newItem = { ...item };
+						for (const key in newItem) {
+								const value = newItem[key];
+								if (typeof value === 'object' && value !== null && 'init' in value) {
+										const { init, ...rest } = value;
+										newItem[key] = rest;
+								}
+						}
+						return newItem;
+				});
+		};
+		const cleanedArr = cleanInitField(this.backtestHistoryList);
+			return {maxMinData: cleanedArr};
 		},
 		tableRowClassName({row, rowIndex}) {
 		if (row['Dates of 1 Signals'] === 'Mean') {

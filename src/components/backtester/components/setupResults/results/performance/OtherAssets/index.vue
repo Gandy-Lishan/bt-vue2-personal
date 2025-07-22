@@ -168,7 +168,7 @@ data() {
           cell.classList.add("negative-value");
         }
 
-        cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN) ? values[i] : '-';
+        cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN) ? this.displayData(values[i]) : '-';
         row.appendChild(cell);
       }
 
@@ -201,7 +201,7 @@ exportData() {
 
       // 填充数据，确保列数对齐
       for (let i = 0; i < this.defaultTableLabels.length; i++) {
-        row[this.defaultTableLabels[i]] = (values[i] !== undefined && values[i] !== null && values[i] !== NaN  && values[i] !== 'NaN') ? values[i] : "-";
+        row[this.defaultTableLabels[i]] = (values[i] !== undefined && values[i] !== null && values[i] !== NaN  && values[i] !== 'NaN') ? this.displayData(values[i]) : "-";
       }
 
       sheetData.push(row);
@@ -209,7 +209,21 @@ exportData() {
   });
 
   return sheetData;
-}
+},
+displayData(data) {
+  const numberRegex = /^-?\d+(\.\d+)?$/
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+  if (numberRegex.test(data)) {
+    return parseFloat(data).toFixed(1)
+  } else if (dateRegex.test(data)) {
+    return data
+  } else if(typeof data == 'string'){
+    return data
+  }else {
+    return ''
+  }
+},
 }
 }
 </script>
