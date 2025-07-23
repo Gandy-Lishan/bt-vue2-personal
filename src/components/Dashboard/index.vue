@@ -15,6 +15,7 @@
           <SmartDumbChart :dashBoardData="dashBoardData"/>
           <MarketOverview :dashBoardData="dashBoardData"/>
           <SPXMostRelevantIndicators :data="mostRelevantIndicatorsData" />
+          <SP500SectorTrendScore v-if="showSP500SectorTrendScore" />
         </div>
       </div>
 
@@ -37,6 +38,8 @@ import { getDashboardData, getSPXMostRelevantIndicators } from "@/service/servic
 import { isJson, trimTrailingZeros } from "@/utils";
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 import SPXMostRelevantIndicators from "./SPXMostRelevantIndicators.vue"
+import SP500SectorTrendScore from "./SP500SectorTrendScore.vue"
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
  name: 'Dashboard',
@@ -47,7 +50,8 @@ export default {
   MarketOverview,
   Overview,
   AboutUs,
-  SPXMostRelevantIndicators
+  SPXMostRelevantIndicators,
+  SP500SectorTrendScore
  },
  data() {
   return {
@@ -58,6 +62,10 @@ export default {
  computed: {
   dashBoardChartData() {
     return this.dashBoardData.data
+  },
+  showSP500SectorTrendScore() {
+    const email = getCookieData()?.username
+    return email === 'hao@sentimentrader.com'
   }
  },
  async mounted() {
@@ -68,7 +76,6 @@ export default {
     item.latest_value = item.latest_value.toFixed(2)
     item.corr_kendall = item.corr_kendall.toFixed(2)
     return item
-
    })
    this.mostRelevantIndicatorsData = data
    this.initializeChartPopups();
