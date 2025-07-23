@@ -65,7 +65,8 @@ export default {
   },
   showSP500SectorTrendScore() {
     const email = getCookieData()?.username
-    return email === 'hao@sentimentrader.com'
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com'];
+    return allowedUserList.includes(email)
   }
  },
  async mounted() {
