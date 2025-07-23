@@ -240,6 +240,14 @@ export default {
             item.signals = isJson(item.signals) ? JSON.parse(item.signals) : item.signals
             item.viewLoading = false
             item.deleteLoading = false
+            item.win_rate = this.displayData(item.win_rate)
+            item.total_return = this.displayData(item.total_return)
+            item.std_dev = this.displayData(item.std_dev)
+            item.max_draw_down = this.displayData(item.max_draw_down)
+            item.time_in_market = this.displayData(item.time_in_market)
+            item.avg_win = this.displayData(item.avg_win)
+            item.avg_loss = this.displayData(item.avg_loss)
+            item.median_return = this.displayData(item.median_return)
 						return item
 					})
 					this.tableData = data
@@ -351,7 +359,21 @@ export default {
     async handleQuery() {
       if(this.currentPage != 1) this.currentPage = 1
       await this.applySort()
-    }
+    },
+    displayData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return parseFloat(data).toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		}
     },
   }
 </script>

@@ -273,6 +273,12 @@ export default {
 			const startIndex = (this.currentPage - 1) * this.pageSize;
 			const endIndex = startIndex + this.pageSize;
 			// 当checkbox未勾选时，返回原始数据
+			this.data.content.forEach(item => {
+				item['WinRate'] = this.displayData(item['WinRate'])
+				item['StopLoss'] = this.displayData(item['StopLoss'])
+				item['ProfitTarget'] = this.displayData(item['ProfitTarget'])
+				item['ExpectedReturn'] = this.displayData(item['ExpectedReturn'])
+			})
 			return this.data.content?.slice(startIndex, endIndex);
 		},
 	},
@@ -460,6 +466,20 @@ export default {
 				}
 			})
 			return processedData
+		},
+		displayData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return parseFloat(data).toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
 		}
 	}
 };
