@@ -291,7 +291,7 @@
 						>
 							<template slot-scope="scope">
 								<span  :class="getCellStyle(scope.row['eachReturn'])">{{
-									scope.row.eachReturn.toFixed(2) + '%'
+									scope.row.eachReturn.toFixed(1) + '%'
 								}}</span>
 							</template>
 						</el-table-column>
@@ -335,9 +335,9 @@ export default class PerformanceComponent extends Vue {
 		// data.tzScore = resultObj['Z_Score']
 		// data.standardDeviation = resultObj['StdDev']
 		// data.buyHoldGain = resultObj['BuyHold']
-		data.winRate = resultObj['WinRate']
-		data.averageWin = resultObj['AvgWin']
-		data.averageLoss = resultObj['AvgLoss']
+		data.winRate = this.displayData(resultObj['WinRate'])
+		data.averageWin = this.displayData(resultObj['AvgWin'])
+		data.averageLoss = this.displayData(resultObj['AvgLoss'])
 		//data.drawDown = resultObj['DrawDown']
 		data.totalTrades = resultObj['TradeNumber']
 		data.totalPositive = Math.round(
@@ -348,11 +348,11 @@ export default class PerformanceComponent extends Vue {
 				(resultObj['TradeNumber'] * resultObj['WinRate']) / 100
 		)
 		// lishan 新增字段
-		data.CAGR = resultObj['AnnualReturn']
-		data.medianReturn = resultObj['MedianReturn']
-		data.averageReturn = resultObj['AvgReturn']
-		data.standardDeviation = resultObj['StdDev']
-		data.maxRisk = resultObj['MaxRisk']
+		data.CAGR = this.displayData(resultObj['AnnualReturn'])
+		data.medianReturn = this.displayData(resultObj['MedianReturn'])
+		data.averageReturn = this.displayData(resultObj['AvgReturn'])
+		data.standardDeviation = this.displayData(resultObj['StdDev'])
+		data.maxRisk = this.displayData(resultObj['MaxRisk'])
 		//data.timeInMarket = resultObj['TimeInMarket']
 		this.tableData.push(data)
 
@@ -406,7 +406,7 @@ export default class PerformanceComponent extends Vue {
 			// }
 			// *****************************************************
 
-			sums[index] = sums[index].toFixed(2)
+			sums[index] = sums[index].toFixed(1)
 			sums[index] = sums[index] + '%'
 		})
 		return sums
@@ -423,6 +423,20 @@ export default class PerformanceComponent extends Vue {
 			return 'darken-row';
 			}
 			return '';
+	}
+	displayData(data:any) {
+		const numberRegex = /^-?\d+(\.\d+)?$/
+		const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+		if (numberRegex.test(data)) {
+			return parseFloat(data).toFixed(1)
+		} else if (dateRegex.test(data)) {
+			return data
+		} else if(typeof data == 'string'){
+			return data
+		}else {
+			return ''
+		}
 	}
 	exportData() {
 		return {

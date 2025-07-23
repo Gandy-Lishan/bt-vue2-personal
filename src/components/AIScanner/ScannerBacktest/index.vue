@@ -186,24 +186,24 @@ export default {
     displaySummary(result) {
       
       const statistics = {}
-      statistics.totalReturn = result['TOTAL RETURN']
-      statistics.medianReturn = result['MEDIAN RETURN']
-      statistics.averageReturn = result['AVERAGE RETURN']
-      statistics.tzScore = result['Z-SCORE'] 
-      statistics.standardDeviation = result['STD.DEV']
-      statistics.maxRisk = result['MAX RISK']
+      statistics.totalReturn = this.formatData(result['TOTAL RETURN'])
+      statistics.medianReturn = this.formatData(result['MEDIAN RETURN'])
+      statistics.averageReturn = this.formatData(result['AVERAGE RETURN'])
+      statistics.tzScore = this.formatData(result['Z-SCORE']) 
+      statistics.standardDeviation = this.formatData(result['STD.DEV'])
+      statistics.maxRisk = this.formatData(result['MAX RISK'])
       // statistics.buyHoldGain = _data.buy_and_hold 缺少
       // MDD + STD.DEV 我没加进去的
-      statistics.winRate = result['WIN RATE']
-      statistics.averageWin = result['AVERAGE WIN']
-      statistics.averageLoss = result['AVERAGE LOSS']
+      statistics.winRate = this.formatData(result['WIN RATE'])
+      statistics.averageWin = this.formatData(result['AVERAGE WIN'])
+      statistics.averageLoss = this.formatData(result['AVERAGE LOSS'])
       statistics.totalTrades = result['TOTAL TRADES']
       statistics.totalPositive = result['TOTAL POSITIVE']
       statistics.totalNegative = result['TOTAL NEGATIVE']
-      statistics.timeInMarket = result['TIME IN MARKET']
+      statistics.timeInMarket = this.formatData(result['TIME IN MARKET'])
       statistics.DDFileURL = result['DD File URL']
       statistics.ReturnsFileURL = result['Returns File URL']
-      statistics.BUYandHOLD = result['BUY and HOLD']
+      statistics.BUYandHOLD = this.formatData(result['BUY and HOLD'])
       const transformedResult = []
       const _result = result.result
       const ID = _result['ID']
@@ -229,7 +229,7 @@ export default {
           ExitDate: _result['Start Date'][_ID[i][dataSource]],
           ExitAction: _result['Action'][_ID[i][dataSource]],
           ExitPrice: _result['Close'][_ID[i][dataSource]],
-          FloatProfit: _result['FloatProfit'][_ID[i][dataSource]],
+          FloatProfit: this.formatData(_result['FloatProfit'][_ID[i][dataSource]]),
           ExitReason: _result['OrderStatus'][_ID[i][dataSource]],
           TradeNumber: i + 1,
           Shares: _result['Shares'][_ID[i][dataSource]],
@@ -354,6 +354,20 @@ export default {
       }
       return buf;
     },
+    formatData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return data.toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 }
 </script>

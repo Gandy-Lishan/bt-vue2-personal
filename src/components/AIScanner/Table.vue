@@ -476,7 +476,7 @@ export default {
 			this.data.content.map((item,index)=>{
 				if(this.checkboxGroupState[item.id]){
 					let kelly = kellyTotal*(item['WinRate']/Array.from(this.selectedWinRates).reduce((sum,value)=>{return Number(sum)+Number(value)},0))
-					item['Alloc'] = (kelly*100).toFixed(2)
+					item['Alloc'] = (kelly*100).toFixed(1)
 				}else{
 					item['Alloc'] = ''
 				}

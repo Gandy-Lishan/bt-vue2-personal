@@ -628,6 +628,25 @@ export default {
 	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
+		this.tableData.content.forEach(item => {
+			item['StopLoss'] = this.displayData(item['StopLoss'])
+			item['ProfitTarget'] = this.displayData(item['ProfitTarget'])
+			item['WinRate'] = this.displayData(item['WinRate'])
+			item['ExpectedReturn'] = this.displayData(item['ExpectedReturn'])
+			item['Z_Score'] = this.displayData(item['Z_Score'])
+			item['StdDev'] = this.displayData(item['StdDev'])
+			item['MaxRisk'] = this.displayData(item['MaxRisk'])
+			item['TimeInMarket'] = this.displayData(item['TimeInMarket'])
+			item['Alloc'] = this.displayData(item['Alloc'])
+			item['AvgWin'] = this.displayData(item['AvgWin'])
+			item['AvgLoss'] = this.displayData(item['AvgLoss'])
+			item['MaxRisk'] = this.displayData(item['MaxRisk'])
+			item['AnnualReturn'] = this.displayData(item['AnnualReturn'])
+			item['MedianReturn'] = this.displayData(item['MedianReturn'])
+			item['AvgReturn'] = this.displayData(item['AvgReturn'])
+			item['StdDev'] = this.displayData(item['StdDev'])
+			item['SharpeRatio'] = this.displayData(item['SharpeRatio'])
+		})
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
 	},
@@ -744,10 +763,10 @@ export default {
 		AIPickContent.forEach(x=>{
 			x['Close'] = x['Close'].toFixed(2)
 			x['Alloc'] = (x['Alloc']*100).toFixed(0)
-			x['StopLoss'] = Number(x['StopLoss']).toFixed(2)
-			x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(2)
-			x['WinRate'] = Number(x['WinRate']).toFixed(2)
-			x['ExpectedReturn'] = Number(x['ExpectedReturn']).toFixed(2)
+			x['StopLoss'] = Number(x['StopLoss']).toFixed(1)
+			x['ProfitTarget'] = Number(x['ProfitTarget']).toFixed(1)
+			x['WinRate'] = Number(x['WinRate']).toFixed(1)
+			x['ExpectedReturn'] = Number(x['ExpectedReturn']).toFixed(1)
 			// 给一些定值默认值
 			//x['Timing To Entry'] = 'Open'
 		})
@@ -819,6 +838,20 @@ export default {
 			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
 			window.open(path, '_blank')
 	},
+	displayData(data) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				return parseFloat(data).toFixed(1)
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 };
 </script>

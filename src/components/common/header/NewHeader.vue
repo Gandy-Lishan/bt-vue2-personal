@@ -266,7 +266,7 @@ export default {
               label: 'Asset Correlation',
               keyPath: '8-3',
               path: '/cpm/asset'
-            },
+            }
           ]
         },
         {
@@ -333,6 +333,8 @@ export default {
   },
   created() {
     const access_level = getCookieData()?.access_level
+    const email = getCookieData()?.username
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
     // 权限验证的时候, report 子项要去掉: reports, corelite
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
     if(canOnlyAccessPartOfReport) {
@@ -365,6 +367,16 @@ export default {
               path: '/MR/favorites'
           }
         ]
+      }
+    }
+    if(allowedUserList.includes(email)) {
+      const reportIndex = this.navs.findIndex(ele => ele.label === 'Correlation')
+      if(reportIndex !== -1) {
+        this.navs[reportIndex].subMenu.push({
+          label: 'Historical Pattern Correlation',
+          keyPath: '8-4',
+          path: '/cpm/pattern'
+        })
       }
     }
   },
