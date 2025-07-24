@@ -2000,6 +2000,11 @@ export default {
         this.toggleEnlarge('Stock Market Indicator & Optix (Optimism Index)');
       })
     }
+    if(this.$route.fullPath.includes('?enlarge=TrendSector') && this.refName === 'SP1500ScoreVirtualScroll') {
+      this.$nextTick(() => {
+        this.checkedType = 'TrendSector'
+      })
+    }
     if(this.$route.fullPath.includes('sector_trend_score') && this.refName === 'SectorTrendRelTrendVirtualScroll') {
       this.isTrendScorePage = true
       this.$nextTick(() => {
@@ -2151,6 +2156,7 @@ export default {
     async fullScreenTrendScorePage(checked, row) {
       debugger
       if(this._loading) return
+      const isTrendSector = this.$route.fullPath.includes('/trend_score?enlarge=TrendSector') && this.refName === 'SP1500ScoreVirtualScroll'
       if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.isTrendScoreFullScreen = !this.isTrendScoreFullScreen;this.enterOrExitFullScreenTrendScorePage(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
@@ -2165,6 +2171,9 @@ export default {
         return
       }
       this.$emit("updateChart", this.firstRow || {})
+      if(isTrendSector) {
+        window.location.href = `/trend_score`
+      }
     },
     async loadMore () {
       // await this.$emit('loadMore', this.checkedType)
