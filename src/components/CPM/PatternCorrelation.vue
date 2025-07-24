@@ -24,7 +24,6 @@
                 type="date"
                 placeholder="Select Reference Date"
                 value-format="yyyy-MM-dd"
-                :picker-options="startReferencePickerOptions"
               >
               </el-date-picker>
             </el-form-item>
@@ -36,7 +35,6 @@
                     type="date"
                     placeholder="Select Reference End Date"
                     value-format="yyyy-MM-dd"
-                    :picker-options="endReferencePickerOptions"
                   >
                   </el-date-picker>
               </el-form-item>
@@ -68,7 +66,6 @@
                 type="date"
                 placeholder="Select Comparison Start Date"
                 value-format="yyyy-MM-dd"
-                :picker-options="startPickerOptions_2"
               >
               </el-date-picker>
             </el-form-item>
@@ -80,7 +77,6 @@
                     type="date"
                     placeholder="Select Comparison End Date"
                     value-format="yyyy-MM-dd"
-                    :picker-options="endPickerOptions_2"
                   >
                   </el-date-picker>
               </el-form-item>
@@ -175,18 +171,6 @@ export default {
         <li><b>Mid-Range Score (~50%):</b> Indicates no significant similarity or correlation. The patterns' movements are likely unrelated.</li>
         <li><b>Low Score (< 25%):</b> Indicates a strong inverse similarity. The patterns may have a similar shape but move in opposite directions (one trends up while the other trends down).</li>
         `,
-        startReferencePickerOptions: {
-          disabledDate: this.handleDisabledStartDate
-        },
-        endReferencePickerOptions: {
-          disabledDate: this.handleDisabledEndDate
-        },
-        startPickerOptions_2: {
-          disabledDate: this.handleDisabledStartDate_2
-        },
-        endPickerOptions_2: {
-          disabledDate: this.handleDisabledEndDate_2
-        },
         rules: {
           referenceSymbol: [
             { required: true, message: 'Enter a ticker', trigger: 'blur' },
@@ -237,50 +221,48 @@ export default {
       validateDateRange() {
         const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
           if(referenceStartDate && referenceEndDate && comparisonStartDate && comparisonEndDate) {
-            const _referenceStart = new Date(referenceStartDate)
-            const _referenceEnd = new Date(referenceEndDate)
-            const referenceOneYearLater = new Date(_referenceStart);
-            referenceOneYearLater.setFullYear(referenceOneYearLater.getFullYear() + 1);
-            const _comparisonStart = new Date(comparisonStartDate)
-            const _comparisonEnd = new Date(comparisonEndDate)
-            const comparisonOneYearLater = new Date(_comparisonStart);
-            comparisonOneYearLater.setFullYear(comparisonOneYearLater.getFullYear() + 1);
-
-            if((_referenceEnd <= referenceOneYearLater) && (_comparisonEnd <= comparisonOneYearLater)) return true
-            else {
-              this.popUpMsgBox('The date range for both tickers should be at least 1 year')
-              return false
+            if (new Date(referenceStartDate) > new Date(referenceEndDate)) {
+              [this.data.referenceStartDate, this.data.referenceEndDate] = [this.data.referenceEndDate, this.data.referenceStartDate];
             }
+            if (new Date(comparisonStartDate) > new Date(comparisonEndDate)) {
+              [this.data.comparisonStartDate, this.data.comparisonEndDate] = [this.data.comparisonEndDate, this.data.comparisonStartDate];
+            }
+            const today = new Date();
+            if (new Date(this.data.referenceEndDate) > today) {
+              this.popUpMsgBox('Please ensure that reference date range is not in the future.');
+              this.data.referenceEndDate = ''
+              return false
+              // this.data.referenceEndDate = moment(today).format('YYYY-MM-DD')
+            }
+            if (new Date(this.data.comparisonEndDate) > today) {
+              this.popUpMsgBox('Please ensure that comparison date range is not in the future.');
+              this.data.comparisonEndDate = ''
+              return false
+              // this.data.comparisonEndDate = moment(today).format('YYYY-MM-DD')
+            }
+            debugger
+          // Validate the date ranges for at least one year apart
+          const _referenceStart = new Date(this.data.referenceStartDate);
+          const _referenceEnd = new Date(this.data.referenceEndDate);
+          const _comparisonStart = new Date(this.data.comparisonStartDate);
+          const _comparisonEnd = new Date(this.data.comparisonEndDate);
+
+          const referenceDiff = _referenceEnd - _referenceStart;
+          const comparisonDiff = _comparisonEnd - _comparisonStart;
+
+          // Check if the difference is less than one year (in milliseconds)
+          const oneYearInMs = 365 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
+
+          if (referenceDiff < oneYearInMs || comparisonDiff < oneYearInMs) {
+            this.popUpMsgBox('The date range for both tickers should be at least 1 year');
+            return false;
+          }
+          return true;
           }
         else {
           this.popUpMsgBox('Please select date range for both tickers');
           return false
         }
-      },
-      handleDisabledStartDate(time) {
-        const today = timestampToTime(new Date())
-        const endDay = timestampToTime(new Date(this.data.referenceEndDate))
-        // 如果endDate取消选择，则startDate可以选择全部
-        if(this.data.referenceEndDate){
-          return timestampToTime(time) >= endDay
-        }else{
-          return (timestampToTime(time) > today)
-        }
-      },
-      handleDisabledStartDate_2(time) {
-        const today = timestampToTime(new Date())
-        const endDay = timestampToTime(new Date(this.data.comparisonEndDate))
-        return timestampToTime(time) >= endDay
-      },
-      handleDisabledEndDate(time) {
-        const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(this.data.referenceStartDate))
-        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
-      },
-      handleDisabledEndDate_2(time) {
-        const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(this.data.comparisonStartDate))
-        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
     async validForm(formName) {
       const validateForm = async (formRef) => {
