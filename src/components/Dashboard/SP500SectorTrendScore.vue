@@ -2,7 +2,7 @@
   <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
    <div class="portlet-title relevant-portlet-title">
      <div class="caption caption-md">
-       <span class="caption-subject theme-font-color bold uppercase">S&P 500 Sector Trend Score
+       <span class="caption-subject theme-font-color bold uppercase"><a href="/trend_score?enlarge=TrendSector" target="_blank">S&P 500 Sector Trend Score</a>
        </span>
      </div>
    </div>
@@ -28,6 +28,7 @@
             </tr>
           </tbody>
         </table>
+        <i class="updateDateText">Update Date: {{date}}</i>
      </div>
    </div>
  </div>
@@ -48,7 +49,8 @@ export default {
       constituent_trend_score: 'Trend Score (Average)'
      },
    currentSortColumn: '',
-   currentSortDirection: ''
+   currentSortDirection: '',
+   date: ''
    }
  },
  async mounted() {
@@ -60,6 +62,7 @@ export default {
   this.currentSortColumn = 'constituent_trend_score'
   this.currentSortDirection = 'descending'
   this.sortTable('constituent_trend_score')
+  this.date = moment(this.data[0].last_date).format('MM/DD/YYYY')
  },
  methods: {
   getLink(item) {

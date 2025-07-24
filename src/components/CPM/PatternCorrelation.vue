@@ -230,13 +230,13 @@ export default {
             const today = new Date();
             if (new Date(this.data.referenceEndDate) > today) {
               this.popUpMsgBox('Please ensure that reference date range is not in the future.');
-              this.data.referenceEndDate = ''
+              this.data.referenceEndDate = null
               return false
               // this.data.referenceEndDate = moment(today).format('YYYY-MM-DD')
             }
             if (new Date(this.data.comparisonEndDate) > today) {
               this.popUpMsgBox('Please ensure that comparison date range is not in the future.');
-              this.data.comparisonEndDate = ''
+              this.data.comparisonEndDate = null
               return false
               // this.data.comparisonEndDate = moment(today).format('YYYY-MM-DD')
             }
@@ -251,10 +251,11 @@ export default {
           const comparisonDiff = _comparisonEnd - _comparisonStart;
 
           // Check if the difference is less than one year (in milliseconds)
-          const oneYearInMs = 365 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
+          const oneYearInMax = 366 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
+          const oneYearInMin = 6 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
 
-          if (referenceDiff < oneYearInMs || comparisonDiff < oneYearInMs) {
-            this.popUpMsgBox('The date range for both tickers should be at least 1 year');
+          if ((referenceDiff < oneYearInMin || comparisonDiff < oneYearInMin) || (referenceDiff > oneYearInMax || comparisonDiff > oneYearInMax)) {
+            this.popUpMsgBox('The date range for both tickers should be at least 1 week and less than 1 year');
             return false;
           }
           return true;

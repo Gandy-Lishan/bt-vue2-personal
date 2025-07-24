@@ -162,6 +162,11 @@ export default {
       await this.enlargeSelectIndicator(indicator)
     })
   }
+  if(this.$route.fullPath.includes('?enlarge=TrendSector')) {
+      this.$nextTick(() => {
+        this.checkedType = 'TrendSector'
+      })
+    }
  },
  methods: {
   ...mapActions('chart', ['fetchIndicatorsPageList']),
