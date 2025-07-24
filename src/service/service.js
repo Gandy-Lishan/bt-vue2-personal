@@ -408,7 +408,7 @@ export function getPairData(startDate, endDate, frequency, symbol) {
 
 	return new Promise((resolve, reject) => {
 		axios
-			.get(url, { auth: author })
+			.get(url, { timeout: 10000, auth: author })
 			.then(res => {
 				resolve(res)
 			})
