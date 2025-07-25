@@ -410,7 +410,7 @@
         "url": "survey_risk_appetite",
         "market_symbol": "SPX",
         "type": "other",
-        "updated": "Daily"
+        "updated": "Weekly"
     },
     {
         "chart_name": "Japanese Margin Traders Gain/Loss",
@@ -431,7 +431,7 @@
         "url": "survey_economic_surprise",
         "market_symbol": "SPX",
         "type": "other",
-        "updated": "Daily"
+        "updated": "Weekly"
     },
     {
         "chart_name": "University of Michigan Consumer Confidence",
@@ -18986,14 +18986,14 @@
     {
         "chart_name": "JK Bond Cycle Model",
         "url": "jk_bond_cycle_model",
-        "market_symbol": "SPX",
+        "market_symbol": "thirty",
         "type": "other",
         "updated": "Monthly"
     },
     {
         "chart_name": "JK Bond Cycle Thermometer",
         "url": "jk_bond_cycle_thermometer",
-        "market_symbol": "SPX",
+        "market_symbol": "thirty",
         "type": "other",
         "updated": "Monthly"
     },
@@ -94229,6 +94229,118 @@
     {
         "chart_name": "S&P 500 Technology RSR & Rel RSR >=80 (42-Day)",
         "url": "spx_tech_dual_42d",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX/WTI Ratio",
+        "url": "spx_wti_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX/WTI 7-Year Moving Average",
+        "url": "spx_wti_7y",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XETUSD Optix",
+        "url": "etf_xetusd",
+        "market_symbol": "XETUSD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Yield/Gold Ratio 7-Year MA",
+        "url": "ten_y_gold_7y_ma",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Yield/Gold Ratio",
+        "url": "ten_y_gold_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold/WTI Ratio",
+        "url": "gold_wti_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold/10-Year Treasury Yield Ratio 7-Year MA",
+        "url": "gold_10y_7y_ma",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gold/10-Year Treasury Yield Ratio",
+        "url": "gold_10y_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WTI/Gold Ratio",
+        "url": "wti_gold_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX/Gold Ratio 7-Year MA",
+        "url": "spx_gold_7y_ma",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPX/Gold Ratio",
+        "url": "spx_gold_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharpLink Gaming, Inc",
+        "url": "SBET",
+        "market_symbol": "SBET",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharpLink Gaming, Inc Trend Score",
+        "url": "SBET_trend",
+        "market_symbol": "SBET",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharpLink Gaming, Inc RelTrend Score",
+        "url": "SBET_reltrend",
+        "market_symbol": "SBET",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GOLD VIX Term Structure",
+        "url": "vol_gold_vix_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "COPPER VIX Term Structure",
+        "url": "vol_copper_vix_ratio",
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"

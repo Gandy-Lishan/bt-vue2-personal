@@ -23,7 +23,7 @@ function getCachedData(url) {
         // console.log('!!!!get cachedData!!!!: ',cachedData.config.url)
         return Promise.resolve(cachedData);
     } else {
-        return CIQ.axios.get(url).then((response) => {
+        return CIQ.axios.get(url, { timeout: 10000 }).then((response) => {
             cache.set(url, response);
             return response;
         });
