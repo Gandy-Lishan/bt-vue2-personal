@@ -732,7 +732,6 @@ if (!CIQ.Marker) {
 		let endY = params.invert
 			? marker.params.box.y0 - stemHeight
 			: marker.params.box.y1 + stemHeight;
-		console.log(chart,endY)
 		ctx.moveTo(x, startY);
 		ctx.lineTo(x, endY);
 		ctx.stroke();
@@ -752,7 +751,6 @@ if (!CIQ.Marker) {
 		ctx.setLineDash([]);
 		let startY = params.invert ? marker.params.box.y0 : marker.params.box.y1;
 		let endY = chart.height;
-		console.log(chart,endY)
 		ctx.moveTo(x, startY);
 		ctx.lineTo(x, endY);
 		ctx.stroke();
