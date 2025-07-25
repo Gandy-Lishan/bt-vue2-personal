@@ -403,7 +403,7 @@ export default {
 							: chartDataset[res + item.value].Open - entryPrice) /
 							entryPrice) *
 							100
-						).toFixed(2)
+						).toFixed(1)
 						: ''
 						obj[item.timeframe] = exitBar
 					})
@@ -639,7 +639,7 @@ export default {
       if (arr.length == 0) return NaN
 
       let return_series = arr.map((x) => (x > 0 ? 1 : 0))
-      return parseFloat(this.calculate_mean(return_series).toFixed(2))
+      return parseFloat(this.calculate_mean(return_series).toFixed(1))
     },
 		calculate_mean(arr) {
       arr = arr.filter(function (x) {

@@ -6,7 +6,7 @@
 					<h4  @click="selectedTitle = 'CPM'" :class="{ 'selected': selectedTitle === 'CPM' }">Correlation Pattern Match</h4>
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
 					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
-					<h4  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Historical Pattern Correlation</h4>
+					<h4 v-if="showSP500SectorTrendScore"  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Historical Pattern Correlation</h4>
 				</div>
 			</div>
 		</div>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
+
 export default {
 	name: 'CPM',
 	data() {
@@ -22,6 +24,13 @@ export default {
 			selectedTitle: 'CPM'
 		}
 	},
+ computed: {
+  showSP500SectorTrendScore() {
+    const email = getCookieData()?.username
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com'];
+    return allowedUserList.includes(email)
+  }
+ },
 	watch: {
 		selectedTitle: {
 			async handler(newValue, _){

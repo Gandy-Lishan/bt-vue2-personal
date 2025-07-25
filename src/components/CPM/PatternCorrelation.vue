@@ -24,7 +24,6 @@
                 type="date"
                 placeholder="Select Reference Date"
                 value-format="yyyy-MM-dd"
-                :picker-options="startReferencePickerOptions"
               >
               </el-date-picker>
             </el-form-item>
@@ -36,7 +35,6 @@
                     type="date"
                     placeholder="Select Reference End Date"
                     value-format="yyyy-MM-dd"
-                    :picker-options="endReferencePickerOptions"
                   >
                   </el-date-picker>
               </el-form-item>
@@ -68,7 +66,6 @@
                 type="date"
                 placeholder="Select Comparison Start Date"
                 value-format="yyyy-MM-dd"
-                :picker-options="startPickerOptions_2"
               >
               </el-date-picker>
             </el-form-item>
@@ -80,7 +77,6 @@
                     type="date"
                     placeholder="Select Comparison End Date"
                     value-format="yyyy-MM-dd"
-                    :picker-options="endPickerOptions_2"
                   >
                   </el-date-picker>
               </el-form-item>
@@ -124,7 +120,13 @@
       </el-table>
     </div>
     <div class="symbol-correlation-chart">
-      <h3 v-if="patternCorrelation" style="text-align: center;">{{patternCorrelation}}</h3>
+      <h3 v-if="patternCorrelation" style="text-align: center;">{{patternCorrelation}}
+        <el-tooltip effect="dark" placement="top" style="display: inline">
+          <span slot="content" v-html="patternCorrelationTooltip">
+          </span>
+          <i class="iconfont icon-wenhao"></i>
+        </el-tooltip>
+      </h3>
       <div id="google-chart-container" style="height: 400px;"></div>
       <div id="apple-chart-container" style="height: 400px;"></div>
     </div>
@@ -163,18 +165,12 @@ export default {
         corrMatrixText: '',
         corr_matrix: [],
         columns: [],
-        startReferencePickerOptions: {
-          disabledDate: this.handleDisabledStartDate
-        },
-        endReferencePickerOptions: {
-          disabledDate: this.handleDisabledEndDate
-        },
-        startPickerOptions_2: {
-          disabledDate: this.handleDisabledStartDate_2
-        },
-        endPickerOptions_2: {
-          disabledDate: this.handleDisabledEndDate_2
-        },
+        patternCorrelationTooltip: `
+        This score measures the similarity between the two price patterns on a scale of 0% to 100%. It considers both the shape and the directional correlation of the trends.
+        <li><b>High Score (> 75%):</b> Indicates a strong positive similarity. The patterns have a very similar shape and tend to move in the same direction.</li>
+        <li><b>Mid-Range Score (~50%):</b> Indicates no significant similarity or correlation. The patterns' movements are likely unrelated.</li>
+        <li><b>Low Score (< 25%):</b> Indicates a strong inverse similarity. The patterns may have a similar shape but move in opposite directions (one trends up while the other trends down).</li>
+        `,
         rules: {
           referenceSymbol: [
             { required: true, message: 'Enter a ticker', trigger: 'blur' },
@@ -213,11 +209,11 @@ export default {
       },
       showCorrMatrix() {
         return Array.isArray(this.corr_matrix) && this.corr_matrix.length !== 0
-      }
+      },
     },
     mounted() {
       this.dropdownList = this.symbolList
-      // this.setPeriod()
+      this.setPeriod()
       // this.fetchData();
       // this.renderCharts();
     },
@@ -225,50 +221,49 @@ export default {
       validateDateRange() {
         const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
           if(referenceStartDate && referenceEndDate && comparisonStartDate && comparisonEndDate) {
-            const _referenceStart = new Date(referenceStartDate)
-            const _referenceEnd = new Date(referenceEndDate)
-            const referenceOneYearLater = new Date(_referenceStart);
-            referenceOneYearLater.setFullYear(referenceOneYearLater.getFullYear() + 1);
-            const _comparisonStart = new Date(comparisonStartDate)
-            const _comparisonEnd = new Date(comparisonEndDate)
-            const comparisonOneYearLater = new Date(_comparisonStart);
-            comparisonOneYearLater.setFullYear(comparisonOneYearLater.getFullYear() + 1);
-
-            if((_referenceEnd <= referenceOneYearLater) && (_comparisonEnd <= comparisonOneYearLater)) return true
-            else {
-              this.popUpMsgBox('The date range for both tickers should be at least 1 year')
-              return false
+            if (new Date(referenceStartDate) > new Date(referenceEndDate)) {
+              [this.data.referenceStartDate, this.data.referenceEndDate] = [this.data.referenceEndDate, this.data.referenceStartDate];
             }
+            if (new Date(comparisonStartDate) > new Date(comparisonEndDate)) {
+              [this.data.comparisonStartDate, this.data.comparisonEndDate] = [this.data.comparisonEndDate, this.data.comparisonStartDate];
+            }
+            const today = new Date();
+            if (new Date(this.data.referenceEndDate) > today) {
+              this.popUpMsgBox('Please ensure that reference date range is not in the future.');
+              this.data.referenceEndDate = null
+              return false
+              // this.data.referenceEndDate = moment(today).format('YYYY-MM-DD')
+            }
+            if (new Date(this.data.comparisonEndDate) > today) {
+              this.popUpMsgBox('Please ensure that comparison date range is not in the future.');
+              this.data.comparisonEndDate = null
+              return false
+              // this.data.comparisonEndDate = moment(today).format('YYYY-MM-DD')
+            }
+            debugger
+          // Validate the date ranges for at least one year apart
+          const _referenceStart = new Date(this.data.referenceStartDate);
+          const _referenceEnd = new Date(this.data.referenceEndDate);
+          const _comparisonStart = new Date(this.data.comparisonStartDate);
+          const _comparisonEnd = new Date(this.data.comparisonEndDate);
+
+          const referenceDiff = _referenceEnd - _referenceStart;
+          const comparisonDiff = _comparisonEnd - _comparisonStart;
+
+          // Check if the difference is less than one year (in milliseconds)
+          const oneYearInMax = 366 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
+          const oneYearInMin = 6 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
+
+          if ((referenceDiff < oneYearInMin || comparisonDiff < oneYearInMin) || (referenceDiff > oneYearInMax || comparisonDiff > oneYearInMax)) {
+            this.popUpMsgBox('The date range for both tickers should be at least 1 week and less than 1 year');
+            return false;
+          }
+          return true;
           }
         else {
           this.popUpMsgBox('Please select date range for both tickers');
           return false
         }
-      },
-      handleDisabledStartDate(time) {
-        const today = timestampToTime(new Date())
-        const endDay = timestampToTime(new Date(this.data.referenceEndDate))
-        // 如果endDate取消选择，则startDate可以选择全部
-        if(this.data.referenceEndDate){
-          return timestampToTime(time) >= endDay
-        }else{
-          return (timestampToTime(time) > today)
-        }
-      },
-      handleDisabledStartDate_2(time) {
-        const today = timestampToTime(new Date())
-        const endDay = timestampToTime(new Date(this.data.comparisonEndDate))
-        return timestampToTime(time) >= endDay
-      },
-      handleDisabledEndDate(time) {
-        const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(this.data.referenceStartDate))
-        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
-      },
-      handleDisabledEndDate_2(time) {
-        const today = timestampToTime(new Date())
-        const startDay = timestampToTime(new Date(this.data.comparisonStartDate))
-        return (timestampToTime(time) > today) || (timestampToTime(time) <= startDay)
       },
     async validForm(formName) {
       const validateForm = async (formRef) => {
@@ -316,8 +311,8 @@ export default {
       if(code == 211) {
         this.popUpMsgBox(`Success. Rendering chart, please wait...`)
         const pattern_corr =  saveRes.data?.data?.pattern_corr
-        if(pattern_corr && this.data.referenceSymbol === this.data.comparisonSymbol) this.patternCorrelation = `During a specific period, ${this.data.referenceSymbol} had a correlation of ${pattern_corr}%.`
-        if(pattern_corr && this.data.referenceSymbol !== this.data.comparisonSymbol) this.patternCorrelation = `Between two specific time periods, ${this.data.referenceSymbol} showed a correlation of ${pattern_corr}% with ${this.data.comparisonSymbol}.`
+        if(pattern_corr && this.data.referenceSymbol === this.data.comparisonSymbol) this.patternCorrelation = `${this.data.referenceSymbol}: (${this.data.referenceStartDate} to ${this.data.referenceEndDate}) vs. (${this.data.comparisonStartDate} to ${this.data.comparisonEndDate}): ${pattern_corr}%`
+        if(pattern_corr && this.data.referenceSymbol !== this.data.comparisonSymbol) this.patternCorrelation = `${this.data.referenceSymbol} (${this.data.referenceStartDate} to ${this.data.referenceEndDate}) vs. ${this.data.comparisonSymbol} (${this.data.comparisonStartDate} to ${this.data.comparisonEndDate}): ${pattern_corr}%`
         // // 这里要开始画图
         // const {corr_matrix, corr_roll} = CharacterData
         await this.fetchData();
@@ -331,12 +326,9 @@ export default {
       resetForm(formName) {
         this.data = {
           referenceSymbol: 'SPX',
-          referenceStartDate: '2017-01-01',
-          referenceEndDate: '2017-05-01',
-          comparisonStartDate: '2020-01-01',
-          comparisonEndDate: '2020-04-01',
           comparisonSymbol: 'SPX'
         }
+        this.setPeriod()
         this.$refs[formName].clearValidate()
       },
       getReferenceSymbol(ticker) {
@@ -349,245 +341,6 @@ export default {
           this.data.comparisonSymbol = ticker.url
         });
       },
-    renderChart(correlationData) {
-      const priceData = correlationData.map(item => ({Date: item.Date, Price: item.stock_price}))
-
-      // 1. 构造股价线（主图）
-      const priceSeries = {
-        name: this.data.referenceSymbol,
-        data: priceData.map(item => {
-          const utcTimestamp = moment.utc(item['Date']).valueOf();
-          return [utcTimestamp, item['Price']];
-        }),
-        yAxis: 0, // 绑定到第一个 Y 轴（主图）
-        type: 'line',
-        tooltip: {
-          valueDecimals: 2,
-          valuePrefix: '$'
-        },
-        color: '#000000',
-        marker: { enabled: false },
-        lineWidth: 2, 
-        zIndex: 4,
-        enableMouseTracking: true,
-        states: {
-          hover: {
-            opacity: 1,
-            lineWidthPlus: 1,
-            borderColor: '#000',
-          },
-          inactive: {
-            opacity: 0.8,
-          },
-        },
-      };
-
-      // 2. 构造相关性线（副图）
-      const fieldNames = Object.keys(correlationData[0]).filter(field => field !== "Date" && field !== 'stock_price');
-      const correlationSeries = fieldNames.map(field => ({
-        name: field,
-        data: correlationData.map(item => {
-          const utcTimestamp = moment.utc(item['Date']).valueOf();
-          return [utcTimestamp, item[field]];
-        }),
-        yAxis: 1, // 绑定到第二个 Y 轴（副图）
-        type: 'line',
-        tooltip: {
-          valueSuffix: " correlation",
-          shared: true
-        },
-        lineWidth: 2,
-        marker: { enabled: false },
-        enableMouseTracking: true,
-        states: {
-          hover: {
-            opacity: 1,
-            lineWidthPlus: 1,
-            borderColor: '#000',
-          },
-          inactive: {
-            opacity: 0.8,
-          },
-        },
-      }));
-
-      // 3. 渲染 Highcharts
-      const basicChartOptions = {
-        zoomType: 'x',
-        style: {
-          fontFamily: "Open Sans, sans-serif"
-        },
-        animation: false,
-        backgroundColor: 'transparent',
-        renderTo: 'charts',
-        spacingRight: 0
-      };
-
-      Highcharts.stockChart("chart-container", {
-        chart: basicChartOptions,
-        plotOptions: {
-          series: {
-            states: {
-              hover: {
-                enabled: true
-              },
-              inactive: {
-                enabled: false
-              }
-            },
-            showInNavigator: true,
-            connectNulls: false,
-            pointStart: undefined,
-            pointInterval: undefined
-          },
-          line: {
-            lineWidth: 2,  // 设置线的宽度
-            states: {
-              hover: {
-                enabled: true,  // 线在 hover 时继续保持边框
-                lineWidthPlus: 0,  // hover 时不增加线宽
-                borderColor: '#000'  // 确保线的边框颜色为黑色
-              }
-            }
-          }
-        },
-        tooltip: {
-          xDateFormat: '%m-%d-%Y',
-          followTouchMove: true,
-          shared: true,
-          useHTML: true,
-          crosshairs: true,
-          formatter: function () {
-            let s = `<span style="font-weight: 400">${Highcharts.dateFormat('%m-%d-%Y', this.x)}</span><br>`;
-            this.points.forEach(point => {
-              const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
-              s += `${colorSpan}<span style="font-weight: 400">${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
-            });
-            return s;
-          }
-        },
-        credits: {
-          enabled: true,
-          text: "Source: SentimenTrader",
-          href: 'https://sentimentrader.com',
-          position: {
-            align: 'right',
-            y: -120,
-            x: -90
-          }
-        },
-        legend: {
-          enabled: true,
-          align: 'center',
-          verticalAlign: 'top',
-          layout: 'horizontal',
-          x: 0,
-          y: 40,
-          itemStyle: {
-            fontSize: '12px'
-          }
-        },
-        title: {
-          text: "Rolling Correlations",
-          style: {
-            fontSize: '18px',
-            fontWeight: 'bold',
-            fontFamily: 'Arial, sans-serif'
-          }
-        },
-        xAxis: {
-          type: 'datetime',
-          ordinal: false,
-          crosshair: { label: { enabled: false } },
-          tickPositions: null,
-          uniqueNames: false,
-          labels: {
-            formatter: function () {
-              const range = this.axis.max - this.axis.min;
-              if (range > 3 * 365 * 24 * 3600 * 1000) return Highcharts.dateFormat('%Y', this.value);
-              if (range > 365 * 24 * 3600 * 1000) return Highcharts.dateFormat('%Y %b', this.value);
-              if (range > 30 * 24 * 3600 * 1000) return Highcharts.dateFormat('%b %d', this.value);
-              if (range > 7 * 24 * 3600 * 1000) return Highcharts.dateFormat('%b %e', this.value);
-              return Highcharts.dateFormat('%b %e, %H:%M', this.value);
-            }
-          },
-          maxPadding: 0  // 👉 在右边增加 5% 的 padding 空间
-        },
-        yAxis: [
-          {
-            title: { text: this.data.referenceSymbol, style: {fontWeight: 600} },
-            opposite: true, // 主轴在左边
-            height: '50%',
-            lineWidth: 0,
-            labels: {
-              align: 'right', // 👈 放最右边
-              x: 0,
-              style: {
-                fontWeight: 500
-              }
-            },
-            tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 30
-          },
-          {
-            title: { text: "Correlation", style: {fontWeight: 600} },
-            top: '50%',
-            height: '50%',
-            offset: 0,
-            lineWidth: 0,
-            min: -1,
-            max: 1,
-            labels: {
-              align: 'right', // 👈 放最右边
-              x: 0,
-              style: {
-                fontWeight: 500
-              }
-            },
-            tickPosition: 'outside', // 👈 可选：刻度线向外
-            offset: 30
-          }
-        ],
-        rangeSelector: {
-          inputEnabled: true,
-          inputDateFormat: '%Y/%m/%d',
-          inputEditDateFormat: '%Y/%m%d',
-          buttons: [
-            { type: 'month', count: 3, text: '3m' },
-            { type: 'month', count: 6, text: '6m' },
-            { type: 'ytd', text: 'YTD' },
-            { type: 'year', count: 1, text: '1y' },
-            { type: 'year', count: 3, text: '3y' },
-            { type: 'year', count: 5, text: '5y' },
-            { type: 'year', count: 10, text: '10y' },
-            { type: 'year', count: 15, text: '15y' },
-            { type: 'year', count: 20, text: '20y' },
-            { type: 'all', text: 'All' }
-          ],
-          selected: 5
-        },
-        exporting: {
-          enabled: true,
-          buttons: {
-            contextButton: {
-              menuItems: ['printChart', 'downloadPNG', 'downloadJPEG', 'downloadPDF']
-            }
-          }
-        },
-        navigator: {
-          enabled: true,
-          xAxis: {
-            type: 'datetime',
-            crosshair: { label: { enabled: false } },
-            ordinal: false,
-            labels: { format: '{value:%Y}' },
-            tickPositions: null,
-            uniqueNames: false
-          }
-        },
-        series: [priceSeries, ...correlationSeries]
-      });
-    },
     handleDateChange() {
       if (this.dateRange && this.dateRange.length === 2) {
         const startDate = new Date(this.dateRange[0]);
@@ -606,25 +359,11 @@ export default {
         }
       }
     },
-    setPeriod(period) {
-      const referenceEndDate = timestampToTime(new Date())
-      this.data.referenceEndDate = referenceEndDate
-      if(period !== 'custom') {
-        debugger
-        const str = referenceEndDate.split('-')
-        str[0] = Number(str[0]) - this.cpm_period + ''
-        const referenceStartDate = str.join('-')
-        const isLeapYearFeb29 = (date) => {
-          const year = date.getFullYear();
-          return ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0))
-        }
-        if (!isLeapYearFeb29(new Date(referenceStartDate)) && (new Date(referenceStartDate).getMonth() === 1 && new Date(referenceStartDate).getDate() === 29 )) {
-          this.data.referenceStartDate = timestampToTime(new Date(referenceStartDate).setDate(new Date(referenceStartDate).getDate() + 1))
-          return
-        }
-        if(period !==  'all') this.data.referenceStartDate = referenceStartDate
-        else if(period ===  'all') this.data.referenceStartDate = ''
-      }
+    setPeriod() {
+      this.data.referenceEndDate = timestampToTime(new Date()) 
+      this.data.referenceStartDate = moment(this.data.referenceEndDate).subtract(1, 'years').format('YYYY-MM-DD') // One year before referenceEndDate
+      this.data.comparisonEndDate = moment(this.data.referenceEndDate).subtract(1, 'years').format('YYYY-MM-DD') // Two years after referenceEndDate
+      this.data.comparisonStartDate = moment(this.data.comparisonEndDate).subtract(1, 'years').format('YYYY-MM-DD') // One year after referenceEndDate
     },
     querySearch(queryString, cb) {
       var dropdownList = this.dropdownList
@@ -676,19 +415,19 @@ export default {
       } = this.data
       const referenceStart = moment(referenceStartDate);
       const referenceEnd = moment(referenceEndDate);
-      const referenceMin = referenceStart.clone().subtract(1, 'year').valueOf();
-      const referenceMax = referenceEnd.clone().add(1, 'year').valueOf();
+      const referenceMin = referenceStart.clone().subtract(1, 'month').valueOf();
+      const referenceMax = referenceEnd.clone().add(1, 'month').valueOf();
 
       const comparisonStart = moment(comparisonStartDate);
       const comparisonEnd = moment(comparisonEndDate);
-      const comparisonMin = comparisonStart.clone().subtract(1, 'year').valueOf();
-      const comparisonMax = comparisonEnd.clone().add(1, 'year').valueOf();
+      const comparisonMin = comparisonStart.clone().subtract(1, 'month').valueOf();
+      const comparisonMax = comparisonEnd.clone().add(1, 'month').valueOf();
       Highcharts.stockChart('google-chart-container', {
         title: {
           text: `${referenceSymbol}`
         },
         series: [{
-          name: 'Google',
+          name: referenceSymbol,
           data: this.googleData.map(item => [new Date(item.Date).getTime(), parseFloat(item.Close)]),
           tooltip: { valueDecimals: 2 }
         }],
@@ -701,7 +440,32 @@ export default {
             color: 'rgba(68, 170, 213, 0.2)',
             label: { style: { color: '#606060' } }
           }]
-        }
+        },
+        credits: {
+          enabled: true,
+          text: "Source: SentimenTrader",
+          href: 'https://sentimentrader.com',
+          position: {
+            align: 'right',
+            y: -120,
+            x: -90
+          }
+        },
+        tooltip: {
+          xDateFormat: '%m-%d-%Y',
+          followTouchMove: true,
+          shared: true,
+          useHTML: true,
+          crosshairs: true,
+          formatter: function () {
+            let s = `<span style="font-weight: 400">${Highcharts.dateFormat('%m-%d-%Y', this.x)}</span><br>`;
+            this.points.forEach(point => {
+              const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
+              s += `${colorSpan}<span style="font-weight: 400">${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
+            });
+            return s;
+          }
+        },
       });
 
       // 渲染 Apple 股票走势图
@@ -710,7 +474,7 @@ export default {
           text: `${comparisonSymbol}`
         },
         series: [{
-          name: 'Apple',
+          name: comparisonSymbol,
           data: this.appleData.map(item => [new Date(item.Date).getTime(), parseFloat(item.Close)]),
           tooltip: { valueDecimals: 2 }
         }],
@@ -723,7 +487,32 @@ export default {
             color: 'rgba(68, 170, 213, 0.2)',
             label: { style: { color: '#606060' } }
           }]
-        }
+        },
+        credits: {
+          enabled: true,
+          text: "Source: SentimenTrader",
+          href: 'https://sentimentrader.com',
+          position: {
+            align: 'right',
+            y: -120,
+            x: -90
+          }
+        },
+        tooltip: {
+          xDateFormat: '%m-%d-%Y',
+          followTouchMove: true,
+          shared: true,
+          useHTML: true,
+          crosshairs: true,
+          formatter: function () {
+            let s = `<span style="font-weight: 400">${Highcharts.dateFormat('%m-%d-%Y', this.x)}</span><br>`;
+            this.points.forEach(point => {
+              const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
+              s += `${colorSpan}<span style="font-weight: 400">${point.series.name}</span>: <b>${point.y.toFixed(2)}</b><br>`;
+            });
+            return s;
+          }
+        },
       });
     }
     
