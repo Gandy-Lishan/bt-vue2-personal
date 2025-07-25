@@ -50,8 +50,8 @@
       </template>
 				<template slot-scope="scope">
           <el-button-group>
-            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button>
-            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Backtest" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button type="text" icon="el-icon-caret-right" @click="handleRowClick(scope.row)" title="View Basket Details" :loading="scope.row.viewLoading"></el-button>
+            <el-button type="text" icon="el-icon-close" @click="deleteRow(scope.row)" title="Delete Basket" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
