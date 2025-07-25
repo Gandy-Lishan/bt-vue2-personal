@@ -188,6 +188,11 @@ export default {
               keyPath: '10-8',
               path: '/MR/active_studies'
             },
+            {
+              label: 'Intraday Minutes',
+              keyPath: '10-9',
+              path: '/MR/minutes'
+            }
           ]
         },
         {
