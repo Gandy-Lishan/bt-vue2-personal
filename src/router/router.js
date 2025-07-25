@@ -286,6 +286,12 @@ const routes = [
 					require(['@/components/ModelReport/ActiveStudies.vue'], resolve)
 			},
 			{
+				path: '/MR/minutes',
+				name: 'MinutesPage',
+				component: resolve =>
+					require(['@/components/ModelReport/ReportMinutes.vue'], resolve)
+			},
+			{
 				path: '/MR/archived_studies',
 				component: resolve =>
 					require(['@/components/ModelReport/ArchivedStudies.vue'], resolve)
