@@ -12,7 +12,7 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :key="index" align="center" v-if="l == 'Dates of 1 Signals'" width="160px">
+									<el-table-column :key="index" align="center" v-if="l == 'Dates of Signals'" width="160px">
 										<template slot="header">
 											{{`Dates of ${signalsNumber} Signals`}}
 										</template>			
@@ -21,7 +21,7 @@
 										</template>
 									</el-table-column>
 									<el-table-column :label="l.replace('[%]', 'Later [%]')" :key="index" align="center" v-if="![
-										'Dates of 1 Signals',
+										'Dates of Signals',
 										'Max Gain',
 										'Max Loss'].includes(l)">
 										<el-table-column label="Max Loss" align="center" class-name="redHeader" width="60px">
@@ -65,7 +65,7 @@ export default {
 			//Exit With Default Time-In-Market/HistoryList
 			backtestHistoryList: [],
 			defaultTableLabels: [
-				'Dates of 1 Signals',
+				'Dates of Signals',
 				'1 Month [%]',
 				'2 Months [%]',
 				'3 Months [%]',
@@ -92,7 +92,7 @@ export default {
 			this.getAllDefaultTableLabels()
 		},
 		tableRowClassName({row, rowIndex}) {
-		if (row['Dates of 1 Signals'] === 'Mean') {
+		if (row['Dates of Signals'] === 'Mean') {
 				return 'border-top-row'
 		}
 			return ''
@@ -119,12 +119,12 @@ export default {
 						this.tradesData,
 						periodArray
 				)
-				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of 1 Signals' && item != 'Max Gain' && item != 'Max Loss')
+				const defaultTableLabels = this.defaultTableLabels.filter(item => item != 'Dates of Signals' && item != 'Max Gain' && item != 'Max Loss')
 				
-				const medianMaxGainArray = [{'Dates of 1 Signals': 'Mean'}, {'Dates of 1 Signals': 'Median'}, {'Dates of 1 Signals': '# of Times +/- 5%'}, {'Dates of 1 Signals': '# of Times +/- 10%' }]
+				const medianMaxGainArray = [{'Dates of Signals': 'Mean'}, {'Dates of Signals': 'Median'}, {'Dates of Signals': '# of Times +/- 5%'}, {'Dates of Signals': '# of Times +/- 10%' }]
 				defaultTableLabels.forEach(label => {
 					medianMaxGainArray.forEach(ele => {
-						if(ele['Dates of 1 Signals'] === 'Median') {
+						if(ele['Dates of Signals'] === 'Median') {
 							// 计算中位数
 							const monthData = backtestHistoryList.map(entry => entry[label])
 
@@ -144,7 +144,7 @@ export default {
 								
 							ele[label] = {"Max Gain": medianMaxGain, "Max Loss": medianMaxLoss}
 						}
-						else if(ele['Dates of 1 Signals'] === 'Mean') {
+						else if(ele['Dates of Signals'] === 'Mean') {
 								// 计算平均值
 								const monthData = backtestHistoryList.map(entry => entry[label])
 								const maxGainValues = monthData.map(entry => entry["Max Gain"])
@@ -153,7 +153,7 @@ export default {
 								const avgMaxLoss = maxLossValues.reduce((sum, current) => sum + current, 0) / maxLossValues.length
 								ele[label] = {"Max Gain": avgMaxGain.toFixed(1), "Max Loss": avgMaxLoss.toFixed(1)}
 						}
-						else if(ele['Dates of 1 Signals'] === '# of Times +/- 5%') {
+						else if(ele['Dates of Signals'] === '# of Times +/- 5%') {
 							// 计算大于-5%的个数
 							const monthData = backtestHistoryList.map(entry => entry[label])
 							const maxGainValues = monthData.map(entry => entry["Max Gain"])
@@ -162,7 +162,7 @@ export default {
 							const lenMaxLoss = maxLossValues.filter(num => num < -5).length
 							ele[label] = {"Max Gain": lenMaxGain, "Max Loss": lenMaxLoss}
 					}
-					else if(ele['Dates of 1 Signals'] === '# of Times +/- 10%') {
+					else if(ele['Dates of Signals'] === '# of Times +/- 10%') {
 							// 计算大于-5%的个数
 							const monthData = backtestHistoryList.map(entry => entry[label])
 							const maxGainValues = monthData.map(entry => entry["Max Gain"])
@@ -192,7 +192,7 @@ export default {
 			switch (frequency) {
 				case 'Daily':
 					this.defaultTableLabels = [
-						'Dates of 1 Signals',
+						'Dates of Signals',
 						'1 Month [%]',
 						'2 Months [%]',
 						'3 Months [%]',	
@@ -206,7 +206,7 @@ export default {
 					break
 				case 'Weekly':
 					this.defaultTableLabels = [
-						'Dates of 1 Signals',
+						'Dates of Signals',
 						// '1 Week [%]',
 						// '2 Weeks [%]',
 						// '1 Month [%]',
@@ -227,7 +227,7 @@ export default {
 					break
 				case 'Monthly':
 					this.defaultTableLabels = [
-						'Dates of 1 Signals',
+						'Dates of Signals',
 						// '1 Month [%]',
 						// '3 Months [%]',
 						// '6 Months [%]',
@@ -503,7 +503,7 @@ export default {
 							[`${item.timeframe}`]:item.timeframe,
 							'Max Loss':finalMinReturn,
 							'Max Gain':finalMaxReturn,
-							'Dates of 1 Signals': dataSet[data].Date
+							'Dates of Signals': dataSet[data].Date
 						})
 					})
 				}
@@ -511,14 +511,14 @@ export default {
 			const mergedData = {};
 
 			returnResults.forEach(entry => {
-				const key = entry["Dates of 1 Signals"];
+				const key = entry["Dates of Signals"];
 
 				if (!mergedData[key]) {
-					mergedData[key] = { "Dates of 1 Signals": key };
+					mergedData[key] = { "Dates of Signals": key };
 				}
 
 				Object.keys(entry).forEach(prop => {
-					if (prop !== "Dates of 1 Signals") {
+					if (prop !== "Dates of Signals") {
 						if (!mergedData[key][prop]) {
 							mergedData[key][prop] = {};
 						}
