@@ -240,7 +240,17 @@ export default {
               return false
               // this.data.comparisonEndDate = moment(today).format('YYYY-MM-DD')
             }
-            debugger
+            // Calculate the lengths of the date ranges in days
+            const referenceLength = (new Date(this.data.referenceEndDate) - new Date(this.data.referenceStartDate)) / (1000 * 60 * 60 * 24);
+            const comparisonLength = (new Date(this.data.comparisonEndDate) - new Date(this.data.comparisonStartDate)) / (1000 * 60 * 60 * 24);
+            // Determine the longer and shorter lengths
+            const [longerLength, shorterLength] = referenceLength > comparisonLength ? [referenceLength, comparisonLength] : [comparisonLength, referenceLength];
+
+            // Check if the shorter length is within 0.93 to 1.07 times the longer length
+            if (shorterLength < Math.floor(longerLength * 0.93) || shorterLength > Math.floor(longerLength * 1.07)) {
+              this.popUpMsgBox('The current difference between your chosen <b>Date Range</b> lengths is substantial, please adjust your date selections.');
+              return false;
+            }
           // Validate the date ranges for at least one year apart
           const _referenceStart = new Date(this.data.referenceStartDate);
           const _referenceEnd = new Date(this.data.referenceEndDate);
