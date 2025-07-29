@@ -14,7 +14,8 @@ var config = {
      * if(process.env.NODE_ENV == production){ todo }
      */
     // pairDataUrl: "https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/pair_data",
-    pairDataUrl: "/dev/st_data/pair_data",
+    pairDataUrl: "https://bt2api.sentimentrader.com/st_data/pair_data",
+    //pairDataUrl: "/dev/st_data/pair_data",
     // 批处理metadata
     indicatorsMetadata:"https://xnmtr1pbn7.execute-api.us-east-1.amazonaws.com/prod/indicators_metadata",
     // 单个metadata

@@ -36,16 +36,34 @@ const trimTrailingZeros = (val) => {
 }
 
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
-const formatStandardTime = (date) => {
-  var datatime = new Date(date)
-  var offset = datatime.getTimezoneOffset() * 60 * 1000
-  let returnValue = new Date(datatime.getTime()+offset)
-  // if(returnValue.getDate() !== datatime.getDate()){
-  //   const newOffset = offset + 60*60*1000
-  //   returnValue = new Date(datatime.getTime()+newOffset)
-  // }
-  return returnValue
-}
+// const formatStandardTime = (date) => {
+//   var datatime = new Date(date)
+//   var offset = datatime.getTimezoneOffset() * 60 * 1000
+//   let returnValue = new Date(datatime.getTime()+offset)
+//   // if(returnValue.getDate() !== datatime.getDate()){
+//   //   const newOffset = offset + 60*60*1000
+//   //   returnValue = new Date(datatime.getTime()+newOffset)
+//   // }
+//   return returnValue
+// }
+const formatStandardTime = (dateInput) => {
+  if (!dateInput) return null;
+
+  let year, month, day;
+
+  if (typeof dateInput === 'string') {
+    // ISO 格式 或 YYYY-MM-DD
+    const match = dateInput.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      year = Number(match[1]);
+      month = Number(match[2]);
+      day = Number(match[3]);
+      return new Date(year, month - 1, day);  // 本地 00:00:00
+    }
+  }
+
+  return null;
+};
 
 const getQueryVariable = (variable) => {
   //获取当前URL中的查询字符串部分（即问号后面的部分）

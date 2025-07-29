@@ -561,7 +561,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 });
                 for (const i in sortedRows) {
                     newQuotes[i] = {};
-                    newQuotes[i].DT = sortedRows[i].DT
+                    newQuotes[i].DT = formatStandardTime(sortedRows[i].DT)
                     newQuotes[i].Open = Number(sortedRows[i].Open);
                     newQuotes[i].High = Number(sortedRows[i].High);
                     newQuotes[i].Low = Number(sortedRows[i].Low);
