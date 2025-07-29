@@ -1,6 +1,7 @@
 import {CIQ} from "chartiq/js/chartiq.js";
 import { getCoresSymbolDual } from '@/utils/globalFunc'
 import { off } from "process";
+import { printConsole } from '@/utils'
 
 let __st_addons_standard_tooltip_ = (_exports) => {
 
@@ -236,6 +237,7 @@ if (!CIQ.Marker) {
              if (hideIfDisabled()) return;
              var offset = 30;
              var stx = params.stx;
+             printConsole(stx.chart.dataSet)
              for (var i = 0; i < params.arr.length; i++) {
                  var marker = params.arr[i];
                  var bar = stx.barFromPixel(stx.cx);
