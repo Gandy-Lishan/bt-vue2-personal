@@ -247,7 +247,7 @@ export default {
             const [longerLength, shorterLength] = referenceLength > comparisonLength ? [referenceLength, comparisonLength] : [comparisonLength, referenceLength];
 
             // Check if the shorter length is within 0.93 to 1.07 times the longer length
-            if (shorterLength < Math.floor(longerLength * 0.93) || shorterLength > Math.floor(longerLength * 1.07)) {
+            if (shorterLength < Math.floor(longerLength * 0.9) || shorterLength > Math.floor(longerLength * 1.1)) {
               this.popUpMsgBox('The current difference between your chosen <b>Date Range</b> lengths is substantial, please adjust your date selections.');
               return false;
             }
