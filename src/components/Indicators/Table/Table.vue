@@ -156,6 +156,11 @@ export default {
     related: {
       handler (arr) {
         if(Array.isArray(arr)) this.showRelated = true
+        if(this.$route.path.includes('/sector_trend_score') || this.$route.path.includes('/trend_score')) {
+          this.showRelated = false
+          this.tableData = []
+          return
+        }
         if(Array.isArray(arr)) {
           this.loading = true
           const uniqueData = Array.from(

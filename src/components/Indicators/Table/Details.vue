@@ -246,7 +246,7 @@ export default {
       else return this.checkedTitle
     },
     isShowRelated() {
-      return this.row && this.row.source_list && !['ndx_100_complete_list', 'sp_1500_complete_list'].includes(this.row.source_list)
+      return this.row && this.row.source_list && !['ndx_100_complete_list', 'sp_1500_complete_list'].includes(this.row.source_list) && !this.$route.path.includes('/sector_trend_score') && !this.$route.path.includes('/trend_score')
     }
   },
   components: {

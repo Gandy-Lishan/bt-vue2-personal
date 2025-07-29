@@ -108,7 +108,7 @@
                   <el-tooltip
                     class="item"
                     effect="dark"
-                    content="copy start"
+                    content="copy signal"
                     placement="bottom-start"
                   >
                     <el-button

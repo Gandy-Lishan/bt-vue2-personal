@@ -164,7 +164,8 @@ export default {
       { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
       { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
       { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
-      { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' }
+      { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' },
+      { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' }
     ]
   }
  },
@@ -225,7 +226,8 @@ export default {
     '/MR/active_studies',
     '/MR/archived_studies',
     '/MR/old_archived_reports',
-    '/MR/favorites'
+    '/MR/favorites',
+    '/MR/minutes'
   ], to.path)) {
     next(async _this => {
       if(isPathSubstring(['/MR/sentimentedge', '/MR/archives/sentimentedge'], to.path)) _this.selectedTitle = 'sentimentedge'
@@ -238,6 +240,7 @@ export default {
       if(isPathSubstring(['/MR/active_studies'], to.path)) _this.selectedTitle = 'active_studies'
       if(isPathSubstring(['/MR/archived_studies'], to.path)) _this.selectedTitle = 'archived_studies'
       if(isPathSubstring(['/MR/favorites'], to.path)) _this.selectedTitle = 'favorites'
+      if(isPathSubstring(['/MR/minutes'], to.path)) _this.selectedTitle = 'minutes'
     })
     } else {
       next(_this => {

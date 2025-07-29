@@ -606,7 +606,7 @@ export default {
           for(let i=1;i < defaultShortTermTableLabels.length;i++ ){
             obj[defaultShortTermTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultShortTermTableLabels[i]]
           }
-          _TIMHistoryList.push(obj)
+          _backtestShortTermHistoryList.push(obj)
         })
         result_shortTerm_quotes.forEach(item => {
           const zscore = {}
@@ -625,11 +625,11 @@ export default {
 
         const _maxMinData = maxMinData.map(item => {
           const transformedItem = {
-            "Dates of 1 Signals": item["Dates of 1 Signals"],
+            "Dates of Signals": item["Dates of Signals"],
           };
 
           Object.keys(item).forEach(key => {
-            if (key !== "Dates of 1 Signals" && key !== "Max Gain" && key !== "Max Loss") {
+            if (key !== "Dates of Signals" && key !== "Max Gain" && key !== "Max Loss") {
               Object.keys(item[key]).forEach(subKey => {
                 transformedItem[`${key.replace('[%]', 'Later [%]')} - ${subKey}`] = item[key][subKey];
               });

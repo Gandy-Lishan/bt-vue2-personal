@@ -2398,3 +2398,17 @@ export function deleteUserWatchlist(data) {
 		})
 	})
 }
+export function getIntradayMinutes() {
+	const path = `/dev/st_data/intraday_minutes`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
