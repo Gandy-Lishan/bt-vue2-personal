@@ -36,20 +36,20 @@ const trimTrailingZeros = (val) => {
 }
 
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
-const formatStandardTime = (date) => {
-  var datatime = new Date(date)
-  var offset = datatime.getTimezoneOffset() * 60 * 1000
-  let returnValue = new Date(datatime.getTime()+offset)
-  // if(returnValue.getDate() !== datatime.getDate()){
-  //   const newOffset = offset + 60*60*1000
-  //   returnValue = new Date(datatime.getTime()+newOffset)
-  // }
-  return returnValue
-}
 // const formatStandardTime = (date) => {
-//   const [year, month, day] = date.split('-').map(Number);
-//   return new Date(year, month - 1, day);  // 本地 00:00:00
+//   var datatime = new Date(date)
+//   var offset = datatime.getTimezoneOffset() * 60 * 1000
+//   let returnValue = new Date(datatime.getTime()+offset)
+//   // if(returnValue.getDate() !== datatime.getDate()){
+//   //   const newOffset = offset + 60*60*1000
+//   //   returnValue = new Date(datatime.getTime()+newOffset)
+//   // }
+//   return returnValue
 // }
+const formatStandardTime = (date) => {
+  const [year, month, day] = date.split('-').map(Number);
+  return new Date(year, month - 1, day);  // 本地 00:00:00
+}
 
 const getQueryVariable = (variable) => {
   //获取当前URL中的查询字符串部分（即问号后面的部分）
