@@ -607,7 +607,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
-                    newQuotes[i].DT = data[i].DT
+                    newQuotes[i].Date = data[i].DT
                     
                     newQuotes[i].Open = data[i].Open;
                     newQuotes[i].High = data[i].High;
