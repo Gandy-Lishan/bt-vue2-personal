@@ -236,6 +236,7 @@ if (!CIQ.Marker) {
              if (hideIfDisabled()) return;
              var offset = 30;
              var stx = params.stx;
+             console.log(stx.chart.dataSet)
              for (var i = 0; i < params.arr.length; i++) {
                  var marker = params.arr[i];
                  var bar = stx.barFromPixel(stx.cx);
