@@ -378,7 +378,7 @@ export default {
       const reportIndex = this.navs.findIndex(ele => ele.label === 'Correlation')
       if(reportIndex !== -1) {
         this.navs[reportIndex].subMenu.push({
-          label: 'Historical Pattern Correlation',
+          label: 'Date Range Correlation',
           keyPath: '8-4',
           path: '/cpm/pattern'
         })

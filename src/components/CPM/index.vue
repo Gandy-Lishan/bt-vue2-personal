@@ -6,7 +6,7 @@
 					<h4  @click="selectedTitle = 'CPM'" :class="{ 'selected': selectedTitle === 'CPM' }">Correlation Pattern Match</h4>
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
 					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
-					<h4 v-if="showSP500SectorTrendScore"  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Historical Pattern Correlation</h4>
+					<h4 v-if="showSP500SectorTrendScore"  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Date Range Correlation</h4>
 				</div>
 			</div>
 		</div>

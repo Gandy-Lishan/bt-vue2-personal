@@ -2,8 +2,8 @@
   <div class="symbol-correlation">
     <el-form :model="data" size="small" status-icon :rules="rules" ref="Form" class="symbol-correlation-form" label-position="top">
       <el-row :gutter="24">
-        <el-col :span="12">
-          <el-form-item label="1. Symbol(1)" prop="referenceSymbol">
+        <el-col :span="7">
+          <el-form-item label="Symbol(1):" prop="referenceSymbol">
             <SearchAutocomplete
               ref="autocomplete"
               v-model="data.referenceSymbol"
@@ -14,15 +14,16 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="2. Date Range for Symbol(1)" class="dateSelect">
+        <el-col :span="10">
+          <el-form-item label="Date Range for Symbol(1):" class="dateSelect">
             <el-row :gutter="20">
             <el-col :span="12">
             <el-form-item prop="referenceStartDate" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.referenceStartDate"
+                @change="calculateBarDistance"
                 type="date"
-                placeholder="Select Reference Date"
+                placeholder="Select Start Date"
                 value-format="yyyy-MM-dd"
               >
               </el-date-picker>
@@ -32,8 +33,9 @@
               <el-form-item prop="referenceEndDate" label="" class="dateSelect">
                   <el-date-picker
                     v-model="data.referenceEndDate"
+                    @change="calculateBarDistance"
                     type="date"
-                    placeholder="Select Reference End Date"
+                    placeholder="Select End Date"
                     value-format="yyyy-MM-dd"
                   >
                   </el-date-picker>
@@ -42,10 +44,19 @@
             </el-row>
           </el-form-item>
         </el-col>
+        <el-col :span="7">
+          <el-form-item label="Number of Bars:" prop="referenceBarsNum">
+            <el-input v-model="data.referenceBarsNum" :disabled="false" @change="changeReferenceNumberOfBars">
+              <template v-slot:append>
+                (≥5 and ≤252)
+              </template>
+            </el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="24">
-        <el-col :span="12">
-          <el-form-item label="3. Symbol(2)" prop="comparisonSymbol">
+        <el-col :span="7">
+          <el-form-item label="Symbol(2):" prop="comparisonSymbol">
             <SearchAutocomplete
               ref="autocomplete"
               v-model="data.comparisonSymbol"
@@ -56,15 +67,16 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="4. Date Range for Symbol(2)" class="dateSelect">
+        <el-col :span="10">
+          <el-form-item label="Date Range for Symbol(2):" class="dateSelect">
             <el-row :gutter="20">
             <el-col :span="12">
             <el-form-item prop="comparisonStartDate" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.comparisonStartDate"
+                @change="calculateBarDistance"
                 type="date"
-                placeholder="Select Comparison Start Date"
+                placeholder="Select Start Date"
                 value-format="yyyy-MM-dd"
               >
               </el-date-picker>
@@ -74,14 +86,24 @@
               <el-form-item prop="comparisonEndDate" label="" class="dateSelect">
                   <el-date-picker
                     v-model="data.comparisonEndDate"
+                    @change="calculateBarDistance"
                     type="date"
-                    placeholder="Select Comparison End Date"
+                    placeholder="Select End Date"
                     value-format="yyyy-MM-dd"
                   >
                   </el-date-picker>
               </el-form-item>
             </el-col>
             </el-row>
+          </el-form-item>
+        </el-col>
+        <el-col :span="7">
+          <el-form-item label="Number of Bars:" prop="comparisonBarsNum">
+            <el-input v-model="data.comparisonBarsNum" :disabled="false" @change="changeComparisonNumberOfBars">
+              <template v-slot:append>
+                (≥5 and ≤252)
+              </template>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -134,7 +156,7 @@
 </template>
 
 <script>
-import { timestampToTime } from '@/utils'
+import { timestampToTime, formatStandardTime } from '@/utils'
 import { savePatternCorrelation, getPairData } from "@/service/service";
 import Highcharts from 'highcharts/highstock';
  import 'highcharts/indicators/indicators';
@@ -149,14 +171,23 @@ export default {
     SearchAutocomplete
   },
   data() {
+    let validateBarsNum = (rule, value, callback) => {
+        if (value < 5 || value > 252) {
+          return callback(new Error('The number of bars should be between 5 and 252, please change your date range.'));
+        } else {
+          callback();
+        }
+    };
       return {
         data: {
           referenceSymbol: 'SPX',
-          referenceStartDate: '2017-01-01',
-          referenceEndDate: '2017-05-01',
-          comparisonStartDate: '2020-01-01',
-          comparisonEndDate: '2020-04-01',
+          referenceStartDate: null,
+          referenceEndDate: null,
+          comparisonStartDate: null,
+          comparisonEndDate: null,
           comparisonSymbol: 'SPX',
+          referenceBarsNum: 252,
+          comparisonBarsNum: 252
         },
         dropdownList: [],
         dateRange: [],
@@ -195,11 +226,18 @@ export default {
           comparisonEndDate: [
             { required: true, message: 'Select end date', trigger: 'blur' },
             { required: true, message: 'Select end date', trigger: 'change' }
-          ]
+          ],
+          referenceBarsNum: [
+          { validator: validateBarsNum, trigger: 'change' }
+        ],
+        comparisonBarsNum: [
+          { validator: validateBarsNum, trigger: 'change' }
+        ],
         },
         googleData: [], // Google 股票数据
         appleData: [],   // Apple 股票数据
-        patternCorrelation: ''
+        patternCorrelation: '',
+        SPXAllDT: []
       }
     },
     computed: {
@@ -211,35 +249,24 @@ export default {
         return Array.isArray(this.corr_matrix) && this.corr_matrix.length !== 0
       },
     },
-    mounted() {
+    async mounted() {
       this.dropdownList = this.symbolList
+      await this.fetchSPXDT();
+      this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].DT.slice(0, 10)
       this.setPeriod()
-      // this.fetchData();
-      // this.renderCharts();
+      // this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
+      // this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
     },
     methods: {
+      async fetchSPXDT() {
+        const today = timestampToTime(new Date())
+        const res = await getPairData('1800-10-01', today, 'daily', 'SPX')
+        this.SPXAllDT = res.data.map((item) => {
+          return {DT: item.DT}
+        }).filter(ele => ele)
+        console.log('this.SPXAllDT', this.SPXAllDT)
+      },
       validateDateRange() {
-        const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
-          if(referenceStartDate && referenceEndDate && comparisonStartDate && comparisonEndDate) {
-            if (new Date(referenceStartDate) > new Date(referenceEndDate)) {
-              [this.data.referenceStartDate, this.data.referenceEndDate] = [this.data.referenceEndDate, this.data.referenceStartDate];
-            }
-            if (new Date(comparisonStartDate) > new Date(comparisonEndDate)) {
-              [this.data.comparisonStartDate, this.data.comparisonEndDate] = [this.data.comparisonEndDate, this.data.comparisonStartDate];
-            }
-            const today = new Date();
-            if (new Date(this.data.referenceEndDate) > today) {
-              this.popUpMsgBox('Please ensure that reference date range is not in the future.');
-              this.data.referenceEndDate = null
-              return false
-              // this.data.referenceEndDate = moment(today).format('YYYY-MM-DD')
-            }
-            if (new Date(this.data.comparisonEndDate) > today) {
-              this.popUpMsgBox('Please ensure that comparison date range is not in the future.');
-              this.data.comparisonEndDate = null
-              return false
-              // this.data.comparisonEndDate = moment(today).format('YYYY-MM-DD')
-            }
             // Calculate the lengths of the date ranges in days
             const referenceLength = (new Date(this.data.referenceEndDate) - new Date(this.data.referenceStartDate)) / (1000 * 60 * 60 * 24);
             const comparisonLength = (new Date(this.data.comparisonEndDate) - new Date(this.data.comparisonStartDate)) / (1000 * 60 * 60 * 24);
@@ -269,11 +296,6 @@ export default {
             return false;
           }
           return true;
-          }
-        else {
-          this.popUpMsgBox('Please select date range for both tickers');
-          return false
-        }
       },
     async validForm(formName) {
       const validateForm = async (formRef) => {
@@ -336,8 +358,15 @@ export default {
       resetForm(formName) {
         this.data = {
           referenceSymbol: 'SPX',
-          comparisonSymbol: 'SPX'
+          referenceStartDate: null,
+          referenceEndDate: null,
+          comparisonStartDate: null,
+          comparisonEndDate: null,
+          comparisonSymbol: 'SPX',
+          referenceBarsNum: 252,
+          comparisonBarsNum: 252
         }
+        this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].DT.slice(0, 10)
         this.setPeriod()
         this.$refs[formName].clearValidate()
       },
@@ -370,7 +399,6 @@ export default {
       }
     },
     setPeriod() {
-      this.data.referenceEndDate = timestampToTime(new Date()) 
       this.data.referenceStartDate = moment(this.data.referenceEndDate).subtract(1, 'years').format('YYYY-MM-DD') // One year before referenceEndDate
       this.data.comparisonEndDate = moment(this.data.referenceEndDate).subtract(1, 'years').format('YYYY-MM-DD') // Two years after referenceEndDate
       this.data.comparisonStartDate = moment(this.data.comparisonEndDate).subtract(1, 'years').format('YYYY-MM-DD') // One year after referenceEndDate
@@ -524,9 +552,57 @@ export default {
           }
         },
       });
+    },
+    calculateBarDistance() {
+        this.changeDateSort()
+        if(this.data.referenceStartDate && this.data.referenceEndDate) {
+          this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
+        }
+        if(this.data.comparisonStartDate && this.data.comparisonEndDate) {
+          this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
+        }
+      },
+    measureBarDistance(quotes, d1,d2) {
+    const standardStartDate = formatStandardTime(d1)
+    const standardEndDate = formatStandardTime(d2)
+    debugger
+    const subQuotes = quotes.filter(item => new Date(item.DT).getTime()>=standardStartDate.getTime() && new Date(item.DT).getTime()<=standardEndDate.getTime())
+    return subQuotes.length
+    },
+    changeComparisonNumberOfBars(val) {
+      if(val>=5 && val<=252 && this.data.comparisonEndDate) this.data.comparisonStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.comparisonEndDate,Number(val))
+    },
+    changeReferenceNumberOfBars(val) {
+      if(val>=5 && val<=252 && this.data.referenceEndDate) this.data.referenceStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.referenceEndDate,Number(val))
+    },
+    getStartDateByNumberOfBars(quotes,d2,barDistance) {
+      debugger
+      const startDateIndex = quotes.findIndex(item => item.DT.slice(0, 10) === d2) - barDistance + 1
+      if(startDateIndex < 0) return
+      const startDate = quotes[startDateIndex].DT
+      return startDate.slice(0, 10)
+    },
+    changeDateSort() {
+      const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
+      if(referenceStartDate && referenceEndDate && comparisonStartDate && comparisonEndDate) {
+        if (new Date(referenceStartDate) > new Date(referenceEndDate)) {
+          [this.data.referenceStartDate, this.data.referenceEndDate] = [this.data.referenceEndDate, this.data.referenceStartDate];
+        }
+        if (new Date(comparisonStartDate) > new Date(comparisonEndDate)) {
+          [this.data.comparisonStartDate, this.data.comparisonEndDate] = [this.data.comparisonEndDate, this.data.comparisonStartDate];
+        }
+        const today = new Date();
+        if (new Date(this.data.referenceEndDate) > today) {
+          this.popUpMsgBox('Please ensure that reference date range is not in the future.');
+          this.data.referenceEndDate = null
+        }
+        if (new Date(this.data.comparisonEndDate) > today) {
+          this.popUpMsgBox('Please ensure that comparison date range is not in the future.');
+          this.data.comparisonEndDate = null
+        }
     }
-    
   }
+}
 }
 </script>
 
