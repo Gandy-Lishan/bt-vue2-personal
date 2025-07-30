@@ -45,7 +45,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="Number of Bars:" prop="referenceBarsNum">
+          <el-form-item label="Number of Bars(1):" prop="referenceBarsNum">
             <el-input v-model="data.referenceBarsNum" :disabled="false" @change="changeReferenceNumberOfBars">
               <template v-slot:append>
                 (≥5 and ≤252)
@@ -98,7 +98,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="Number of Bars:" prop="comparisonBarsNum">
+          <el-form-item label="Number of Bars(2):" prop="comparisonBarsNum">
             <el-input v-model="data.comparisonBarsNum" :disabled="false" @change="changeComparisonNumberOfBars">
               <template v-slot:append>
                 (≥5 and ≤252)
@@ -252,7 +252,7 @@ export default {
     async mounted() {
       this.dropdownList = this.symbolList
       await this.fetchSPXDT();
-      this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].DT.slice(0, 10)
+      this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].Date
       this.setPeriod()
       // this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
       // this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
@@ -262,7 +262,7 @@ export default {
         const today = timestampToTime(new Date())
         const res = await getPairData('1800-10-01', today, 'daily', 'SPX')
         this.SPXAllDT = res.data.map((item) => {
-          return {DT: item.DT}
+          return {Date: item.DT.slice(0, 10), Close: item.Close}
         }).filter(ele => ele)
         console.log('this.SPXAllDT', this.SPXAllDT)
       },
@@ -366,7 +366,7 @@ export default {
           referenceBarsNum: 252,
           comparisonBarsNum: 252
         }
-        this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].DT.slice(0, 10)
+        this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].Date
         this.setPeriod()
         this.$refs[formName].clearValidate()
       },
@@ -417,15 +417,11 @@ export default {
       cb(results.sort((a, b) => b.priority - a.priority))
     },
     async fetchData() {
-      // 这里添加请求 Google 和 Apple 股票数据的逻辑
-      // 假设数据已经被赋值到 googleData 和 appleData
-      // 你可以使用 axios 或其他 HTTP 库来发送请求
-      // 例如：
-      // const googleResponse = await axios.get(`YOUR_API_ENDPOINT/google/data?symbol=${this.data.referenceSymbol}&startDate=${this.data.referenceStartDate}&endDate=${this.data.referenceEndDate}`);
-      // this.googleData = googleResponse.data;
-      // const appleResponse = await axios.get(`YOUR_API_ENDPOINT/apple/data?symbol=${this.data.comparisonSymbol}&startDate=${this.data.comparisonStartDate}&endDate=${this.data.comparisonEndDate}`);
-      // this.appleData = appleResponse.data;
+      debugger
       const today = timestampToTime(new Date())
+      if(this.data.referenceSymbol === 'SPX') {
+        this.googleData = this.SPXAllDT.filter(ele => ele)
+      }else {
       const referenceRes = await getPairData('1800-10-01', today, 'daily', this.data.referenceSymbol)
       this.googleData = referenceRes.data.map((item) => {
         return {
@@ -433,6 +429,10 @@ export default {
           Close: item.Close
         }
       }).filter(ele => ele)
+      }
+      if(this.data.comparisonSymbol === 'SPX') {
+        this.appleData = this.SPXAllDT.filter(ele => ele)
+      }else {
       const comparisonRes = await getPairData('1800-10-01', today, 'daily', this.data.comparisonSymbol)
       this.appleData = comparisonRes.data.map((item) => {
         return {
@@ -440,6 +440,7 @@ export default {
           Close: item.Close
         }
       }).filter(ele => ele)
+      }
     },
     renderCharts() {
       // 渲染 Google 股票走势图
@@ -566,7 +567,7 @@ export default {
     const standardStartDate = formatStandardTime(d1)
     const standardEndDate = formatStandardTime(d2)
     debugger
-    const subQuotes = quotes.filter(item => new Date(item.DT).getTime()>=standardStartDate.getTime() && new Date(item.DT).getTime()<=standardEndDate.getTime())
+    const subQuotes = quotes.filter(item => new Date(item.Date).getTime()>=standardStartDate.getTime() && new Date(item.Date).getTime()<=standardEndDate.getTime())
     return subQuotes.length
     },
     changeComparisonNumberOfBars(val) {
@@ -577,10 +578,10 @@ export default {
     },
     getStartDateByNumberOfBars(quotes,d2,barDistance) {
       debugger
-      const startDateIndex = quotes.findIndex(item => item.DT.slice(0, 10) === d2) - barDistance + 1
+      const startDateIndex = quotes.findIndex(item => item.Date === d2) - barDistance + 1
       if(startDateIndex < 0) return
-      const startDate = quotes[startDateIndex].DT
-      return startDate.slice(0, 10)
+      const startDate = quotes[startDateIndex].Date
+      return startDate
     },
     changeDateSort() {
       const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
