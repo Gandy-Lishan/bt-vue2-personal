@@ -149,8 +149,23 @@
           <i class="iconfont icon-wenhao"></i>
         </el-tooltip>
       </h3>
-      <div id="google-chart-container" style="height: 400px;"></div>
-      <div id="apple-chart-container" style="height: 400px;"></div>
+      <div style="height: 400px;">
+        <div v-show="chartLoading" class="chart-loading">
+          <i class="el-icon-loading"></i>
+          <span>Loading chart data...</span>
+        </div>
+        <div v-show="!chartLoading"  id="google-chart-container">
+
+        </div>
+      </div>
+      <div  style="height: 400px;">
+        <div v-show="chartLoading" class="chart-loading">
+          <i class="el-icon-loading"></i>
+          <span>Loading chart data...</span>
+        </div>
+        <div v-show="!chartLoading" id="apple-chart-container">
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -237,7 +252,8 @@ export default {
         googleData: [], // Google 股票数据
         appleData: [],   // Apple 股票数据
         patternCorrelation: '',
-        SPXAllDT: []
+        SPXAllDT: [],
+        chartLoading: false
       }
     },
     computed: {
@@ -278,23 +294,6 @@ export default {
               this.popUpMsgBox('The current difference between your chosen <b>Date Range</b> lengths is substantial, please adjust your date selections.');
               return false;
             }
-          // Validate the date ranges for at least one year apart
-          const _referenceStart = new Date(this.data.referenceStartDate);
-          const _referenceEnd = new Date(this.data.referenceEndDate);
-          const _comparisonStart = new Date(this.data.comparisonStartDate);
-          const _comparisonEnd = new Date(this.data.comparisonEndDate);
-
-          const referenceDiff = _referenceEnd - _referenceStart;
-          const comparisonDiff = _comparisonEnd - _comparisonStart;
-
-          // Check if the difference is less than one year (in milliseconds)
-          const oneYearInMax = 366 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
-          const oneYearInMin = 6 * 24 * 60 * 60 * 1000; // Approximate one year in milliseconds
-
-          if ((referenceDiff < oneYearInMin || comparisonDiff < oneYearInMin) || (referenceDiff > oneYearInMax || comparisonDiff > oneYearInMax)) {
-            this.popUpMsgBox('The date range for both tickers should be at least 1 week and less than 1 year');
-            return false;
-          }
           return true;
       },
     async validForm(formName) {
@@ -324,6 +323,7 @@ export default {
     async submitForm() {
       debugger
       this.btnLoading = true
+      this.chartLoading = true
       let saveRes = null
       try {
         saveRes = await this.saveFormData()
@@ -333,7 +333,7 @@ export default {
         this.btnLoading = false
       }
       
-     if(!saveRes) { this.btnLoading = false; return}
+     if(!saveRes) { this.btnLoading = false; this.chartLoading = false;return}
      const code = saveRes.data.code
      if(code == 401) this.popUpMsgBox('Calculate error')
      if(code == 404 || code == 403) {this.rowUrl = null; this.popUpMsgBox('Failed, Please try again')}
@@ -347,13 +347,15 @@ export default {
         if(pattern_corr && this.data.referenceSymbol !== this.data.comparisonSymbol) this.patternCorrelation = `${this.data.referenceSymbol} (${this.data.referenceStartDate} to ${this.data.referenceEndDate}) vs. ${this.data.comparisonSymbol} (${this.data.comparisonStartDate} to ${this.data.comparisonEndDate}): ${pattern_corr}%`
         // // 这里要开始画图
         // const {corr_matrix, corr_roll} = CharacterData
+        
         await this.fetchData();
-        this.renderCharts();
+        await this.renderCharts();
         // this.renderChart(corr_roll)
       }
       // 只要是错误状态码都要清空 filterList 和 result 数据
       if([400, 401, 404, 403, 406, 407].includes(code)) this.btnLoading = false
       this.btnLoading = false
+      this.chartLoading = false
     },
       resetForm(formName) {
         this.data = {
@@ -443,6 +445,7 @@ export default {
       }
     },
     renderCharts() {
+      
       // 渲染 Google 股票走势图
       const {
         referenceSymbol, 
@@ -703,5 +706,20 @@ background-color: #fff;
 .symbol-correlation-chart {
   display: flex;
   flex-direction: column;
+}
+
+.chart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #909399;
+  font-size: 14px;
+  
+  .el-icon-loading {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
 }
 </style>
