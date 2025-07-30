@@ -46,10 +46,24 @@ const trimTrailingZeros = (val) => {
 //   // }
 //   return returnValue
 // }
-const formatStandardTime = (date) => {
-  const [year, month, day] = date.split('-').map(Number);
-  return new Date(year, month - 1, day);  // 本地 00:00:00
-}
+const formatStandardTime = (dateInput) => {
+  if (!dateInput) return null;
+
+  let year, month, day;
+
+  if (typeof dateInput === 'string') {
+    // ISO 格式 或 YYYY-MM-DD
+    const match = dateInput.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      year = Number(match[1]);
+      month = Number(match[2]);
+      day = Number(match[3]);
+      return new Date(year, month - 1, day);  // 本地 00:00:00
+    }
+  }
+
+  return null;
+};
 
 const getQueryVariable = (variable) => {
   //获取当前URL中的查询字符串部分（即问号后面的部分）

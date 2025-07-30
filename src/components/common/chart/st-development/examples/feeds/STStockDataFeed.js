@@ -561,7 +561,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 });
                 for (const i in sortedRows) {
                     newQuotes[i] = {};
-                    newQuotes[i].DT = sortedRows[i].DT
+                    newQuotes[i].DT = formatStandardTime(sortedRows[i].DT)
                     newQuotes[i].Open = Number(sortedRows[i].Open);
                     newQuotes[i].High = Number(sortedRows[i].High);
                     newQuotes[i].Low = Number(sortedRows[i].Low);
@@ -607,7 +607,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
                     
-                    newQuotes[i].DT = formatStandardTime(data[i].DT.slice(0,10))
+                    newQuotes[i].DT = formatStandardTime(data[i].DT)
                     
                     newQuotes[i].Open = data[i].Open;
                     newQuotes[i].High = data[i].High;
@@ -666,7 +666,7 @@ quoteFeedSimulator.formatChartData = async function(response){
                 for (var i = 0; i < data.length; i++) {
                     newQuotes[i] = {};
  
-                    newQuotes[i].DT = data[i].DT
+                    newQuotes[i].DT = formatStandardTime(data[i].DT)
         
                     newQuotes[i].Open = data[i].Close;
                     newQuotes[i].High = data[i].Close;
