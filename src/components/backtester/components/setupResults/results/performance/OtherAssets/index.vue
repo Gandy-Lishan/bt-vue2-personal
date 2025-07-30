@@ -1,6 +1,7 @@
 <template>
  <div class="otherIndexContainer">
  <br>
+ 111
  <div class="page-content-wrapper">
  <table class="tg indexTable">
   <thead>
@@ -164,11 +165,12 @@ data() {
         cell.classList.add("align-center", "bold-text", "asset-td");
 
         // **如果值是负数，添加 `negative-value` 类**
-        if ((values[i] !== undefined && values[i] !== null && values[i] !== NaN) && values[i] < 0) {
+        if ((values[i] !== undefined && values[i] !== null && values[i] !== NaN) && values[i] < 0 && values[i] !== 'NaN' && values[i] !== 'null' && values[i] !== 'null%') {
           cell.classList.add("negative-value");
         }
 
-        cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN) ? this.displayData(values[i]) : '-';
+        cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN && values[i] !== 'NaN' && values[i] !== 'null' && values[i] !== 'null%') ? this.displayData(values[i]) : '-';
+        console.log('cell.innerHTML',values[i])
         row.appendChild(cell);
       }
 
@@ -218,7 +220,7 @@ displayData(data) {
     return parseFloat(data).toFixed(1)
   } else if (dateRegex.test(data)) {
     return data
-  } else if(typeof data == 'string'){
+  }else if(typeof data == 'string'){
     return data
   }else {
     return ''
