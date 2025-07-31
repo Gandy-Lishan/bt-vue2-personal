@@ -487,6 +487,12 @@ export default {
             label: { style: { color: '#606060' } }
           }]
         },
+        yAxis: {
+          labels: {
+            align: 'left',
+            x: 5
+          }
+        },
         credits: {
           enabled: true,
           text: "Source: SentimenTrader",
@@ -533,6 +539,12 @@ export default {
             color: 'rgba(68, 170, 213, 0.2)',
             label: { style: { color: '#606060' } }
           }]
+        },
+        yAxis: {
+          labels: {
+            align: 'left',
+            x: 5
+          }
         },
         credits: {
           enabled: true,
