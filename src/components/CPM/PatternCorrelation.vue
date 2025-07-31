@@ -283,18 +283,22 @@ export default {
         console.log('this.SPXAllDT', this.SPXAllDT)
       },
       validateDateRange() {
-            // Calculate the lengths of the date ranges in days
-            const referenceLength = (new Date(this.data.referenceEndDate) - new Date(this.data.referenceStartDate)) / (1000 * 60 * 60 * 24);
-            const comparisonLength = (new Date(this.data.comparisonEndDate) - new Date(this.data.comparisonStartDate)) / (1000 * 60 * 60 * 24);
-            // Determine the longer and shorter lengths
-            const [longerLength, shorterLength] = referenceLength > comparisonLength ? [referenceLength, comparisonLength] : [comparisonLength, referenceLength];
+        if(this.data.referenceBarsNum != this.data.comparisonBarsNum) {
+          this.popUpMsgBox('Please align the date ranges so both symbols have equal bars.')
+          return false
+        }
+        // Calculate the lengths of the date ranges in days
+        const referenceLength = (new Date(this.data.referenceEndDate) - new Date(this.data.referenceStartDate)) / (1000 * 60 * 60 * 24);
+        const comparisonLength = (new Date(this.data.comparisonEndDate) - new Date(this.data.comparisonStartDate)) / (1000 * 60 * 60 * 24);
+        // Determine the longer and shorter lengths
+        const [longerLength, shorterLength] = referenceLength > comparisonLength ? [referenceLength, comparisonLength] : [comparisonLength, referenceLength];
 
-            // Check if the shorter length is within 0.93 to 1.07 times the longer length
-            if (shorterLength < Math.floor(longerLength * 0.9) || shorterLength > Math.floor(longerLength * 1.1)) {
-              this.popUpMsgBox('The current difference between your chosen <b>Date Range</b> lengths is substantial, please adjust your date selections.');
-              return false;
-            }
-          return true;
+        // Check if the shorter length is within 0.93 to 1.07 times the longer length
+        if (shorterLength < Math.floor(longerLength * 0.9) || shorterLength > Math.floor(longerLength * 1.1)) {
+          this.popUpMsgBox('The current difference between your chosen <b>Date Range</b> lengths is substantial, please adjust your date selections.');
+          return false;
+        }
+        return true;
       },
     async validForm(formName) {
       const validateForm = async (formRef) => {
@@ -581,10 +585,30 @@ export default {
     },
     getStartDateByNumberOfBars(quotes,d2,barDistance) {
       debugger
-      const startDateIndex = quotes.findIndex(item => item.Date === d2) - barDistance + 1
-      if(startDateIndex < 0) return
-      const startDate = quotes[startDateIndex].Date
-      return startDate
+      // 找到小于等于目标日期的最接近的日期索引
+      const targetDate = new Date(d2);
+      let endDateIndex = -1;
+      
+      // 从后往前查找，找到第一个小于等于目标日期的索引
+      for (let i = quotes.length - 1; i >= 0; i--) {
+        const quoteDate = new Date(quotes[i].Date);
+        if (quoteDate <= targetDate) {
+          endDateIndex = i;
+          break;
+        }
+      }
+      
+      // 如果找不到合适的日期，返回 undefined
+      if (endDateIndex === -1) return;
+      
+      // 计算开始日期索引
+      const startDateIndex = endDateIndex - barDistance + 1;
+      
+      // 如果开始索引小于0，返回 undefined
+      if (startDateIndex < 0) return;
+      
+      const startDate = quotes[startDateIndex].Date;
+      return startDate;
     },
     changeDateSort() {
       const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data
