@@ -266,9 +266,9 @@ export const validateCapitalRule = createLDVRule(
 )
 export const validateCommissionRule = createLDVRule(
 	0,
-	50,
+	5,
 	'commission',
-	'under 50'
+	'under 5'
 )
 export const validateSlippageRule = createLDVRule(
 	0,
