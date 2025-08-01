@@ -593,6 +593,9 @@ const mutations = {
 	},
 	STORE_BACKTEST_ZSCORE_RESULT: (state, val) => {
 		state.backtestZScoreResult = val
+	},
+	SET_BACKTEST_INFO_PROPS(state, {key, value}) {
+		state.backtestInfo[key] = value
 	}
 }
 

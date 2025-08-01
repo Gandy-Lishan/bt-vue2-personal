@@ -1679,8 +1679,8 @@ export default {
         _this.popUpMsgBox('Kindly ensure that the form fields are filled correctly');
           return false }
       // 首次创建, 或者点击按钮跳转过来
-      const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client'
-      const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag)
+      const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client' // true false
+      const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag) // false true
       if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
         // 没有分析师权限
         delete _this.bd.analystID
@@ -1689,8 +1689,11 @@ export default {
       }
       // 编辑, 但是没有权限
       if(!isClient && !isAdmin) {
-        _this.popUpMsgBox('Permission denied');
-        return false
+        // _this.popUpMsgBox('Permission denied');
+        // 帮改权限
+        _this.$store.commit('form/SET_BACKTEST_INFO_PROPS', {key: 'user_tag', value: 'client'})
+        _this.bd.user_tag = 'client'
+        // return false
       }
       /* backtest name 校验 */
       debugger
