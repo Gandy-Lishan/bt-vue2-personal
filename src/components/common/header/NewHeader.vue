@@ -271,6 +271,11 @@ export default {
               label: 'Asset Correlation',
               keyPath: '8-3',
               path: '/cpm/asset'
+            },
+            {
+              label: 'Date Range Correlation',
+              keyPath: '8-4',
+              path: '/cpm/pattern'
             }
           ]
         },
@@ -372,16 +377,6 @@ export default {
               path: '/MR/favorites'
           }
         ]
-      }
-    }
-    if(allowedUserList.includes(email)) {
-      const reportIndex = this.navs.findIndex(ele => ele.label === 'Correlation')
-      if(reportIndex !== -1) {
-        this.navs[reportIndex].subMenu.push({
-          label: 'Date Range Correlation',
-          keyPath: '8-4',
-          path: '/cpm/pattern'
-        })
       }
     }
   },
