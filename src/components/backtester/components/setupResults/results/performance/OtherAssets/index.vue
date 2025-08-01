@@ -1,7 +1,5 @@
 <template>
  <div class="otherIndexContainer">
- <br>
- 111
  <div class="page-content-wrapper">
  <table class="tg indexTable">
   <thead>
