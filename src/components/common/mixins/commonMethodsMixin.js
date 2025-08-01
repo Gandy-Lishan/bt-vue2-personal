@@ -61,6 +61,7 @@ export const CommonMethodsMixin = {
 			/* 如果 currentPage 是 History 或者 Favorites,则传入 old_uuid，否则不传*/
 			if (['History', 'Favorites'].includes(currentPage)) {
 				data.old_uuid = data.id
+				data.user_tag = 'client'
 			} else {
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
