@@ -1319,6 +1319,12 @@ export default {
         "Users' Own Indicator",
         "User Defined Dates"
       ]
+      // 切换radio后还原usersOwnEntryFileHash
+      if(this.indicatorRadio === arr[5]) {
+        this.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
+      }else {
+        this.$emit('userDefinedDates', {index: this.panelIndex, value: ''})
+      }
       const obj = {}
       obj.criteria = this.criteria
       obj.index = this.panelIndex
@@ -1428,11 +1434,7 @@ export default {
         valUrl.index = this.panelIndex
         this.$emit('getIndicatorUrl', valUrl)
       } else if (this.indicatorRadio === arr[4] || this.indicatorRadio === arr[5]) {
-        // 切换radio后还原usersOwnEntryFileHash
-        if(this.indicatorRadio === arr[5]) {
-          this.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
-        }
-        if(this.si.userIndicator === 'User Defined Dates' && this.indicatorRadio === arr[4]) {
+        if(this.si.userIndicator.includes('UserDefinedDates') && this.indicatorRadio === arr[4]) {
           this.$refs.upload.clearFiles()
           this.si.userIndicator = ''
           this.file_hash = ''
