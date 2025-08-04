@@ -21,8 +21,9 @@
            <u>{{ dumb_money_text }}</u>
            and
            <a :href="getChartUrl('model_smart_money')">Smart Money Confidence</a> is
-           <u>{{ smart_money_text }}</u>. This suggests an
-           {{ smart_verbiage }} return of {{ smart_dumb_returns.toFixed(1) }}% over the next 2 months.
+           <u>{{ smart_money_text }}</u>. 
+           <!-- This suggests an
+           {{ smart_verbiage }} return of {{ smart_dumb_returns.toFixed(1) }}% over the next 2 months. -->
          </p>
          <div ref="chartContainer" class="highcharts-chart-container"></div>
        </div>
