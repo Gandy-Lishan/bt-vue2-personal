@@ -1070,7 +1070,7 @@ export default {
 			const commentDes = [criteria, direction, relation, score, period, delay_bars]
 				.filter(Boolean)
 				.join(' ');
-				if(this.relation == 1 && i === 0) return `${commentDes}${description}`
+				if(this.relation == 1 && i === 0) return `${commentDes} ${description}`
 				else if(this.relation != 1 && i === 0) return commentDes
 				else return description
 },
