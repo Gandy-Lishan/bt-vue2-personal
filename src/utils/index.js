@@ -35,6 +35,10 @@ const trimTrailingZeros = (val) => {
   return val.replace(/\.?0+$/, ''); // 使用正则表达式去除多余的零
 }
 
+// 注1：以下这两个函数都是可以把iso日期字符串变成当地时间 00：00：00的对象，但是第一种算偏差量的方法无法涵盖到一些
+// 特殊情况，比如1947-04-15号的国内偏差量会计算失误导致数据源转成14号零点而不是15号零点
+// 注2：数据源DT传入的应该是formatStandardTime返回的时间对象而不是ISO字符串， 虽然两者兼容， 但是后者对于国外时间会出现偏差一天的问题。
+
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
 // const formatStandardTime = (date) => {
 //   var datatime = new Date(date)
