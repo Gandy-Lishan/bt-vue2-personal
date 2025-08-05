@@ -814,7 +814,7 @@ export default {
       this.$refs?.siForm.clearValidate()
       this.$refs?.upload.clearFiles()
       this.fileList = []
-      this.changeIndicatorChecked('Sentiment Indicator')
+      // this.changeIndicatorChecked('Sentiment Indicator')
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
