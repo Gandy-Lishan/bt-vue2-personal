@@ -591,7 +591,17 @@ export default {
 			} else {
 				for (let i = 0; i < signalList.length; i++) {
 					console.log('未加密前的数据结构', signalList[i])
-					const code = b.encode(signalList[i])
+					const _signal = signalList[i]
+					if(_signal.analysis === 'User' && _signal.indicator.includes('UserDefinedDates:')) {
+						_signal.indicator = 'User Defined Dates'
+						_signal.period = 1
+						_signal.condition = 1
+						_signal.extreme_optimism = 0
+						_signal.extreme_pessimism = 1
+						_signal.comparison = 'SV'
+						_signal.value = 1
+					}
+					const code = b.encode(_signal)
 					signal_list.push({
 						code: code
 					})

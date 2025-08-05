@@ -99,6 +99,7 @@
 							@getTechIndiObj="getTechIndiObj"
 							@userUploadFileContent="userUploadFileContent"
 							@getFreqArray="getFreqArray"
+							@userDefinedDates="userDefinedDates"
 						></indicator>
 						<senti
 							v-bind="$attrs"
@@ -115,7 +116,7 @@
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
 							:indicatorRadio="indicatorRadioArr[index]"
-							v-if="indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user'"
+							v-if="(indicatorRadioArr[index] === 'sentiment' || indicatorRadioArr[index] === 'user') && userDefinedDatesArr[index] !== 'User Defined'"
 						></senti>
 						<symbol-indi
 							v-bind="$attrs"
@@ -438,7 +439,7 @@ import linearRegForecastLike from './signal/technical/Linear-RegForecast-like.vu
 import trailingStopLike from './signal/technical/Trailing-Stops-like.vue'
 import { eventBus } from "./EventBus/Bus.ts";
 import { CIQ } from '@/components/common/chart/st-development/js'
-import { mapMutations } from "vuex"
+import { mapMutations, mapGetters } from "vuex"
 import {searchKeys, isJson, capitalizeFirstLetter} from '@/utils'
 export default {
   name: 'Criteria',
@@ -479,6 +480,7 @@ export default {
 			signals_in_market: 1,
 			techIndiObj: new Array(5).fill(''),
 			indicatorRadioArr: ['sentiment'],
+			userDefinedDatesArr: new Array(5).fill(''),
 			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
@@ -496,6 +498,7 @@ export default {
     }
   },
   computed: {
+			...mapGetters(['getterDirection']),
 		criteriaCapFirstL() {
 			/* Entry or Exit */
 			return this.config['criteriaCapFirstL']
@@ -509,7 +512,10 @@ export default {
 		},
 		title() {
 			return this.symbolInfo.strategy !== 'Dual'? '': `(${this.criteriaNum === 'entry' || this.criteriaNum === 'exit' ? this.symbolInfo.symbol : this.symbolInfo.symbol2})`
-		}
+		},
+		direction() {
+				return this.getterDirection
+		},
 	},
 	watch: {
 		isRiskControl: {
@@ -776,6 +782,9 @@ export default {
 		getIndicatorRadio(obj) {
 			this.indicatorRadioArr.splice(obj.index, 1, obj.value)
 		},
+		userDefinedDates(obj) {
+			this.userDefinedDatesArr.splice(obj.index, 1, obj.value)
+		},
 		saveScoreValue() {
 			let obj = {}
 			obj.criteria = this.criteriaNum
@@ -1024,6 +1033,47 @@ export default {
 			}
 			return true
 		},
+		getDatesCommentDes(i) {
+			let criteria = this.config['criteriaNum']
+			let direction = '';
+			let description = 'User Defined Dates';
+			if (criteria.startsWith('entry')) {
+					criteria = 'E:';
+					direction = this.direction + ';';
+			} else if (criteria.startsWith('exit')) {
+					criteria = 'X:';
+					direction = this.direction === 'Long' ? 'Close;' : 'Cover;';
+			}
+
+			let relation = '';
+			let score = '';
+			let period = '';
+			switch (this.relation) {
+				case 0:
+						relation = 'Only Risk;';
+						break;
+				case 1:
+						relation = 'Single Condition';
+						break;
+				case 2:
+						relation = 'SameBar Multi Condition;';
+						score = `Score: ${this.score};`;
+						break;
+				case 3:
+						relation = 'TimeOrder Multi Condition;';
+						period = `Period: ${this.isUsePeriodLimit ? this.period : 'No Limit'};`;
+						break;
+			}
+
+			const delay_bars = this.delay_bars ? `Delay Bars: ${this.delay_bars};` : '';
+
+			const commentDes = [criteria, direction, relation, score, period, delay_bars]
+				.filter(Boolean)
+				.join(' ');
+				if(this.relation == 1 && i === 0) return `${commentDes} ${description}`
+				else if(this.relation != 1 && i === 0) return commentDes
+				else return description
+},
 		async saveData() {
 			// Save the selected indicator to vuex
 			debugger
@@ -1032,7 +1082,7 @@ export default {
 				// Save risk description
 				let desObj = {
 					index: 0,
-					criteria: this.criteriaNum,
+					criteria: this.config['criteriaNum'],
 					description: {
 						'commentDes':this.$store.state.form.riskDescription,
 						'rocCond':null
@@ -1043,14 +1093,33 @@ export default {
 			}
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				const indi = this.$refs.indiChild[i].saveIndicator(i)
+				debugger
+				if(this.indicatorRadioArr[i] === 'user' && this.userDefinedDatesArr[i] === 'User Defined') {
+					const commentDes = this.getDatesCommentDes(i)
+					const rocCond = {
+						newCondition: 1,
+						conditionPeriod: 1,
+						ma_type: 'S'
+					}
+					this.$store.commit('form/saveDescription', {
+						index: i,
+					 criteria: this.config['criteriaNum'],
+						description: {
+							commentDes,
+							rocCond
+						}
+					})
+				}
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}
 			const [sentimentSymbolRadio, technicalRadio, symbolRadio] = this.classifyIndicatorRadio(this.indicatorRadioArr)
 			for (let i = 0; i < sentimentSymbolRadio.length; i++) {
-				this.$refs.sentiChild[i].setDesciption()
-				let senti = this.$refs.sentiChild[i].saveCondition()
-				if (!senti) return
+				if(this.$refs.sentiChild[i]) {
+					this.$refs.sentiChild[i].setDesciption()
+					let senti = this.$refs.sentiChild[i].saveCondition()
+					if (!senti) return
+				}
 			}
 			const [groupedIndicators, categoryMap] = this.classifyTechIndiObj(this.techIndiObj)
 			if(technicalRadio.length) {

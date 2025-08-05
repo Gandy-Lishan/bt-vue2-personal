@@ -339,6 +339,7 @@ import { formatStandardTime } from '@/utils'
 
  // fetch indicator information and add studies to chart
  // 封装成了一个promise函数
+ // 原版
  CIQ.getIndicatorMatedata = function(indicatorList,stx){
      var senti_color = ["#000000"]
      var tech_color_1 = ["#5B9BD1","#368DF0"]
@@ -667,5 +668,288 @@ import { formatStandardTime } from '@/utils'
      })
  
  }
+
+// 实现批处理的metadata, 并优化结构, 把addStudyToChart提取出
+  CIQ.getIndicatorMatedata2 = function(indicatorList, stx) {
+    if (!stx) return Promise.resolve(); // If no stx, nothing to do.
+
+    // Clear existing studies from the chart
+    for (const studyInstanceName in stx.layout.studies) {
+        CIQ.Studies.removeStudy(stx, stx.layout.studies[studyInstanceName]);
+    }
+
+    const senti_color = ["#000000"];
+    // const tech_color_1 = ["#5B9BD1", "#368DF0"]; // Not used in the provided code
+    // const tech_color_2 = ["#000000", "#6b7280"]; // Not used in the provided code
+
+    let sentiUrlList = []; // For sentiment indicators requiring API calls
+    let studiesToLoad = []; // Unified list for all studies to be added
+
+    // --- Helper Function: Add a study to the chart and handle related logic ---
+    // This function encapsulates the logic for adding a study,
+    // updating extreme values, and attaching MAs.
+    const addStudyToChart = (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+        const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
+
+        // Update extreme values if provided
+        if (extremeInfo && sd) {
+            const newExtremeValue = {
+                indicator: indicatorKey,
+                extremeOptimism: sd.parameters.studyOverBoughtValue,
+                extremePessimism: sd.parameters.studyOverSoldValue
+            };
+            const extremeValueList = CIQ.store.state.chart.extremeValue || [];
+            CIQ.store.commit("chart/getExtremeValue", [...extremeValueList, newExtremeValue]);
+        }
+
+        // Add associated MAs
+        for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
+            if (activatedMAObj.url === indicatorKey && activatedMAObj.url !== '') {
+                const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, activatedMAObj.index);
+                let maType = activatedMAObj.type;
+                if (['SMA', 'EMA'].includes(maType)) {
+                    maType = (maType === 'SMA' ? 'simple' : 'exponential');
+                }
+
+                CIQ.Studies.addStudy(stx, "ST MA", {
+                    Type: maType,
+                    Period: activatedMAObj.period,
+                    display: "ST MA",
+                    Field: activatedMAObj.url
+                }, {
+                    MA: ma_color
+                }, {
+                    criteria: activatedMAObj.criteria,
+                    index: activatedMAObj.index
+                });
+            }
+        }
+    };
+
+    return new Promise(async resolve => {
+        // --- Phase 1: Categorize and Prepare Studies ---
+        for (const indicatorName of indicatorList) {
+            let indicatorObj = CIQ.findBuiltinTechIndicator(null, indicatorName) || CIQ.findSymbolIndicator(indicatorName, null);
+
+            if (indicatorObj) {
+                // It's a technical indicator (including MA-like)
+                const techSymbolName = indicatorObj.value ? indicatorObj.value : indicatorObj.label;
+
+                if (CIQ.store.getters.getMaLikeTech.includes(indicatorName)) {
+                    // Handle MA-like technical indicators
+                    for (const maLayoutItem of CIQ.store.state.chart.activatedMALayout) {
+                        if (maLayoutItem.url === indicatorName) {
+                            const criteria = maLayoutItem.criteria;
+                            // const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
+                            const inputs = indicatorName === 'ma' ?
+                                { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period } : {};
+                            const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
+                            const outputs = indicatorName === 'ma' ? { MA: ma_color } : null;
+
+                            studiesToLoad.push({
+                                type: indicatorName,
+                                inputs,
+                                outputs,
+                                parameters: { criteria: criteria, index: maLayoutItem.index },
+                                indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
+                            });
+                        }
+                    }
+                } else {
+                    // Handle other technical indicators
+                    const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorName);
+                    if (savedTechSDs.length > 0) {
+                        for (const savedSD of savedTechSDs) {
+                            const isComparison = savedSD.parameters.isComparison;
+                            const symbolLabel = getCoresSymbolDual(isComparison);
+                            savedSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
+                            studiesToLoad.push({
+                                type: indicatorName,
+                                inputs: savedSD.inputs,
+                                outputs: savedSD.outputs,
+                                parameters: savedSD.parameters,
+                                panel: savedSD.panel,
+                                indicatorKey: indicatorName
+                            });
+                        }
+                    } else {
+                        // If not found in savedTechSD, use activatedTechLayout
+                        const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
+                        const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+                        for (let item of activatedTechLayouts) {
+                            if (item.criteria && item.criteria.endsWith("2")) {
+                                item.symbolType = 'symbol2';
+                            } else {
+                                item.symbolType = 'symbol1';
+                            }
+
+                            if (!processedSymbols.has(item.symbolType)) {
+                                processedSymbols.add(item.symbolType);
+                                const criteria = item.criteria;
+                                const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: { display: `(${symbolLabel})${techSymbolName}` }, // Using placeholder for symbolLabel
+                                    outputs: null,
+                                    parameters: { isComparison: item.symbolType === 'symbol2' },
+                                    indicatorKey: indicatorName
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // Handle CIQ.store.getters.getBeforeCalculateNewConditions (logic moved here for clarity)
+                if (CIQ.findSymbolIndicator(indicatorName, null)) {
+                    CIQ.store.commit("states/envokeBeforeCalculateNewConditions", !CIQ.store.getters.getBeforeCalculateNewConditions);
+                }
+
+                // Handle activated MA for technical indicators (non-MA-like)
+                for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
+                    if (activatedMAObj.url === indicatorName && activatedMAObj.url !== '') {
+                        const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, activatedMAObj.index);
+                        let type = activatedMAObj.type;
+                        if (['SMA', 'EMA'].includes(type)) {
+                            type = (type === 'SMA' ? 'simple' : 'exponential');
+                        }
+                        studiesToLoad.push({
+                            type: "ST MA",
+                            inputs: {
+                                Type: type,
+                                Period: activatedMAObj.period,
+                                display: "ST MA",
+                                Field: activatedMAObj.url
+                            },
+                            outputs: { MA: ma_color },
+                            parameters: { criteria: activatedMAObj.criteria, index: activatedMAObj.index },
+                            indicatorKey: activatedMAObj.url // Use the URL as the key for MA processing
+                        });
+                    }
+                }
+
+            } else if (CIQ.isUserIndicator(indicatorName) || CIQ.isOwnIndicator(indicatorName)) {
+                // It's a user-defined or "own" indicator, requires individual API call
+                const indicatorBaseName = indicatorName.split(/(CREATE|HASH)/)[0];
+                try {
+                    const res = await searchIndicator(indicatorBaseName); // Assuming searchIndicator returns a Promise
+                    const ownIndicatorInfo = res?.data?.results[0];
+
+                    let newStudyDef = {
+                        inputs: { Period: 13, Overlay: false },
+                        outputs: {
+                            [`${indicatorName}`]: senti_color[0], // Dynamic key
+                            description: '',
+                            url: indicatorName
+                        },
+                        parameters: {
+                            init: {
+                                studyOverZonesEnabled: true,
+                                studyOverBoughtValue: ownIndicatorInfo ? Math.round(ownIndicatorInfo.lower_extreme_value * 1000) / 1000 : 999,
+                                studyOverBoughtColor: process.env.VUE_APP_RED,
+                                studyOverSoldValue: ownIndicatorInfo ? Math.round(ownIndicatorInfo.upper_extreme_value * 1000) / 1000 : -999,
+                                studyOverSoldColor: process.env.VUE_APP_GREEN
+                            }
+                        },
+                        attributes: {
+                            studyOverBoughtValue: { "step": 0.001 },
+                            studyOverSoldValue: { "step": 0.001 }
+                        }
+                    };
+
+                    CIQ.Studies.studyLibrary[indicatorName] = newStudyDef;
+
+                    const savedOwnSD = CIQ.store.state.chart.savedTechSD.find(sd => sd.type === indicatorName);
+                    const displayInput = savedOwnSD ? savedOwnSD.inputs : { display: indicatorBaseName };
+                    const parameters = savedOwnSD ? savedOwnSD.parameters : null;
+                    const panel = savedOwnSD ? savedOwnSD.panel : null;
+
+                    studiesToLoad.push({
+                        type: indicatorName,
+                        inputs: { ...displayInput, display: indicatorBaseName }, // Ensure display is updated
+                        outputs: null, // Outputs are already in studyLibrary definition
+                        parameters: parameters,
+                        panel: panel,
+                        indicatorKey: indicatorName,
+                        extremeInfo: true // Indicate that extreme values need to be updated
+                    });
+
+                } catch (err) {
+                    console.error(`Error fetching metadata for own indicator ${indicatorName}:`, err);
+                }
+            } else {
+                // It's a sentiment indicator
+                sentiUrlList.push(indicatorName);
+            }
+        }
+
+        // --- Phase 2: Handle Sentiment Indicators (Batched API Call) ---
+        if (sentiUrlList.length > 0) {
+            const params = sentiUrlList.map((url, i) => `${i === 0 ? 'indicator' : `indicator_${i + 1}`}=${recoverSymbolOptixUrl(url)}`).join('&');
+            const queryUrl = `${config.indicatorsMetadata}?${params}`;
+
+            try {
+                const res = await CIQ.axios.get(queryUrl);
+                const newQuotes = Object.values(res.data);
+
+                for (let i = 0; i < newQuotes.length; i++) {
+                    const sentiIndicator = sentiUrlList[i];
+                    const sentiData = newQuotes[i];
+
+                    if (sentiData !== null) {
+                        let newStudyDef = {
+                            inputs: { Period: 13, Overlay: false },
+                            outputs: {
+                                [`${sentiIndicator}`]: senti_color[i % senti_color.length], // Use modulo for color cycling if more colors are added
+                                description: sentiData.description,
+                                url: sentiIndicator
+                            },
+                            parameters: {
+                                init: {
+                                    studyOverZonesEnabled: true,
+                                    studyOverBoughtValue: sentiData.opt_extreme ? Math.round(sentiData.opt_extreme * 1000) / 1000 : NaN,
+                                    studyOverBoughtColor: process.env.VUE_APP_RED,
+                                    studyOverSoldValue: sentiData.pess_extreme ? Math.round(sentiData.pess_extreme * 1000) / 1000 : NaN,
+                                    studyOverSoldColor: process.env.VUE_APP_GREEN
+                                }
+                            },
+                            attributes: {
+                                studyOverBoughtValue: { "step": 0.001 },
+                                studyOverSoldValue: { "step": 0.001 }
+                            }
+                        };
+
+                        CIQ.Studies.studyLibrary[sentiIndicator] = newStudyDef;
+
+                        const sentiName = CIQ.findSentiIndicator(null, sentiIndicator)?.chart_name;
+                        const savedSentiSD = CIQ.store.state.chart.savedTechSD.find(sd => sd.type === sentiIndicator);
+
+                        const displayInput = savedSentiSD ? savedSentiSD.inputs : { display: sentiName };
+                        const parameters = savedSentiSD ? savedSentiSD.parameters : null;
+                        const panel = savedSentiSD ? savedSentiSD.panel : null;
+
+                        studiesToLoad.push({
+                            type: sentiIndicator,
+                            inputs: { ...displayInput, display: sentiName }, // Ensure display is updated
+                            outputs: null, // Outputs are already in studyLibrary definition
+                            parameters: parameters,
+                            panel: panel,
+                            indicatorKey: sentiIndicator,
+                            extremeInfo: true
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching sentiment indicator metadata:", err);
+            }
+        }
+
+        // --- Phase 3: Add all prepared studies to the chart ---
+        for (const study of studiesToLoad) {
+            addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
+        }
+
+        resolve();
+    });
+};
  }
  export {__st_js_loadIndicator_}

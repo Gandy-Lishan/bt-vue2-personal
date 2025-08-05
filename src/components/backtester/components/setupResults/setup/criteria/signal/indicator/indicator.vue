@@ -144,7 +144,7 @@
             <el-upload
 							class="upload-demo"
 							:action="uploadUrl"
-							:on-preview="_handlePreview"
+							:on-preview="handlePreview"
 							:on-progress="handleUploadProgress"
 							:on-remove="handleRemove"
 							:on-success="handleUploadSuccess"
@@ -169,6 +169,47 @@
 								names are only allowed to contain English letters, numbers,
 								spaces, and underscores.
 								<el-button type="text" @click="exampleDataVisible = true"
+									>View Example Data</el-button
+								>
+							</div>
+						</el-upload>
+        </el-form-item>
+      </div>
+      <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'User Defined Dates'">
+        <el-form-item prop="userIndicator">
+            <template slot="label">
+              <label>
+                Indicator
+                <el-tooltip effect="dark" placement="top">
+                  <span slot="content">
+                    Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
+                  </span>
+                  <i class="iconfont icon-wenhao"></i>
+                </el-tooltip>
+              </label>
+            </template>
+
+            <el-upload
+							class="upload-demo upload-dates-demo"
+							:action="uploadUrl"
+							:http-request="_uploadDatesFile"
+							:multiple="false"
+							:limit="1"
+							:on-exceed="handleDatesExceed"
+							:file-list="fileDatesList"
+							ref="DatesUpload"
+						>
+							<el-button
+								size="mini"
+								type="primary"
+								class="upload-indicator-btn"
+								>Click to upload custom dates file</el-button
+							>
+							<div slot="tip" class="el-upload__tip">
+								You can only upload 1 csv file which doesn't exceed 1MB. File
+								names are only allowed to contain English letters, numbers,
+								spaces, and underscores.
+								<el-button type="text" @click="exampleDatesVisible = true"
 									>View Example Data</el-button
 								>
 							</div>
@@ -266,6 +307,17 @@
           <el-table-column label="Close" prop="Close"></el-table-column>
         </el-table>
       </el-dialog>
+      <el-dialog
+        :title="exampleDataTitle"
+        :visible.sync="exampleDatesVisible"
+      >
+        <el-table
+          :data="exampleDates"
+          style="margin-top: 20px; max-height: 400px; overflow-y: auto"
+        >
+          <el-table-column label="Date" prop="Date"></el-table-column>
+        </el-table>
+      </el-dialog>
 		</el-form>
 	</div>
 </template>
@@ -353,7 +405,7 @@ export default {
         technicalIndicator: '',
         symbolIndicator: '',
         riskIndicator: '',
-        userIndicator: ''
+        userIndicator: '',
       },
      // sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
       symbolConditions: [
@@ -372,15 +424,23 @@ export default {
       },
       category: 'all',
       fileList: [],
+      fileDatesList: [],
       actionUrl: '', // 文件上传的接口地址
       headers: {
         'Content-Type': 'multipart/form-data'
       }, // 请求头部
       previewVisible: false, // 是否显示预览表格
+      previewDatesVisible: false,
       previewData: [], // 预览表格的数据
+      previewDatesData: [],
       previewFileName: '',
       previewFileID: '',
+      previewDatesFileID: '',
       previewPage: {
+        page: 1,
+        total: 0
+      },
+      previewDatesPage: {
         page: 1,
         total: 0
       },
@@ -398,7 +458,9 @@ export default {
         dialogValid: false
       },
       rawMap: {}, // 文件对象的 raw 属性备份
+      rawDatesMap: {}, // 文件对象的 raw 属性备份
       file_hash: '',
+      file_dates_hash: '',
       nonBusinessTitle: 'Non-trading day schedule in CSV',
       nonBusinessDay: [],
       nonBusinessDialogVisible: false,
@@ -416,14 +478,29 @@ export default {
         { 'Date': '2018-01-12', 'Close': '62.6' },
         { 'Date': '2018-01-16', 'Close': '50.63' }
       ],
+      exampleDates: [
+        { 'Date': '2018-01-02'},
+        { 'Date': '2018-01-03'},
+        { 'Date': '2018-01-04'},
+        { 'Date': '2018-01-05'},
+        { 'Date': '2018-01-08'},
+        { 'Date': '2018-01-09'},
+        { 'Date': '2018-01-10'},
+        { 'Date': '2018-01-11'},
+        { 'Date': '2018-01-12'},
+        { 'Date': '2018-01-16'}
+      ],
       exampleDataVisible: false,
+      exampleDatesVisible: false,
       typeOptions: [
         {value: 'Sentiment Indicator', label: 'Sentiment Indicator'},
         {value: 'Technical Indicator', label: 'Technical Indicator'},
         {value: 'Symbol OHLCV', label: 'Symbol OHLCV'},
         {value: "Users' Own Indicator", label: "Users' Own Indicator"},
+        {value: "User Defined Dates", label: "User Defined Dates"},
       ],
       createdIndicatorOptions: [],
+      pairDataDate: [],
     }
   },
   computed: {
@@ -1232,14 +1309,22 @@ export default {
       CIQ.addIndicators({})
     },
     changeIndicatorChecked(val) {
+      debugger
       this.clearFormValidate()
       const arr = [
         'Sentiment Indicator',
         'Technical Indicator',
         'Risk Control',
         'Symbol OHLCV',
-        "Users' Own Indicator"
+        "Users' Own Indicator",
+        "User Defined Dates"
       ]
+      // 切换radio后还原usersOwnEntryFileHash
+      if(this.indicatorRadio === arr[5]) {
+        this.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
+      }else {
+        this.$emit('userDefinedDates', {index: this.panelIndex, value: ''})
+      }
       const obj = {}
       obj.criteria = this.criteria
       obj.index = this.panelIndex
@@ -1348,9 +1433,14 @@ export default {
         valUrl.url = this.si.symbolIndicator
         valUrl.index = this.panelIndex
         this.$emit('getIndicatorUrl', valUrl)
-      } else if (this.indicatorRadio === arr[4]) {
-        // 切换radio后还原usersOwnEntryFileHash
-        const userUrl = this.si.userIndicator + 'HASH' + this.file_hash
+      } else if (this.indicatorRadio === arr[4] || this.indicatorRadio === arr[5]) {
+        if(this.si.userIndicator.includes('UserDefinedDates') && this.indicatorRadio === arr[4]) {
+          this.$refs.upload.clearFiles()
+          this.si.userIndicator = ''
+          this.file_hash = ''
+          this.fileList = []
+        }
+        const userUrl =  `${this.si.userIndicator}HASH${this.file_hash}`
         if (this.criteria.startsWith('entry')) {
           this.$store.commit(`form/saveUsersOwnFileHash`, {
             index: this.panelIndex,
@@ -1420,9 +1510,9 @@ export default {
         }
       }
       if (
-        this.indicatorRadio === "Users' Own Indicator" &&
+       (this.indicatorRadio === "Users' Own Indicator" || this.indicatorRadio === 'User Defined Dates') &&
         !this.isRiskControl
-      ) {
+      ) { 
         // this.$refs.siForm.validate((valid) => {
         // 	validForm = valid
         // })
@@ -1498,6 +1588,33 @@ export default {
           return checked
         }
       }
+      if (
+        this.indicatorRadio === "User Defined Dates" &&
+        !this.isRiskControl
+      ) {
+        // this.$refs.siForm.validate((valid) => {
+        // 	validForm = valid
+        // })
+        validForm = true
+        if (validForm) {
+          let obj = {}
+          obj.criteria = this.criteria
+          obj.index = index
+          obj.value = this.si.userIndicator
+          this.$store.commit('form/getUserValue', obj)
+          return checked
+        } else {
+          // if (!validName) {
+          //   this.popUpMsgBox('Please select #' +
+          //       (index + 1) +
+          //       ' ' +
+          //       this.criteria +
+          //       ' indicator from the drop-down box')
+          // }
+          checked = false
+          return checked
+        }
+      }
       if (this.isRiskControl) {
         checked = true
         return checked
@@ -1559,7 +1676,13 @@ export default {
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
-            vm.indicatorRadio = "Users' Own Indicator"
+            const isUserDefinedDates = newVal[this.criteria].signals[index].indicator === 'User Defined Dates'
+            if(isUserDefinedDates) {
+              vm.indicatorRadio = 'User Defined Dates'
+              vm.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
+            }else {
+              vm.indicatorRadio = "Users' Own Indicator"
+            }
             let userIndicator = newVal[this.criteria].signals[index].indicator
             vm.si.userIndicator = userIndicator
             const str =
@@ -1619,7 +1742,11 @@ export default {
                   type: 'text/csv'
                 })
                 file.raw = rawValue
-                this.fileList.splice(-1, 1, file)
+                if(isUserDefinedDates) {
+                  this.fileDatesList.splice(-1, 1, file)
+                }else {
+                  this.fileList.splice(-1, 1, file)
+                }
               } catch (error) {
                 console.log('error', error)
               }
@@ -1711,6 +1838,7 @@ export default {
           }
         })
         .then((response) => {
+          debugger
           CIQ.hideCover()
           CIQ.nprogress.done()
 
@@ -1722,7 +1850,7 @@ export default {
           if (status == 200 || status == 201) {
             self.$notify.success({
               title: 'Tips',
-              message: 'File uploaded successfully. You can click on the file to preview it.',
+              message: 'File uploaded successfully.',
               duration: 0
             });
             self.previewFileID = response.data.file_id
@@ -1744,7 +1872,131 @@ export default {
               criteria: self.criteria,
               index: self.panelIndex
             }
-            self.$emit('userUploadFileContent', fileObj)
+            if(this.indicatorRadio === 'Users\' Own Indicator') {
+              self.$emit('userUploadFileContent', fileObj)
+            }else if(this.indicatorRadio === 'User Defined Dates') {
+              this.handleUsersOwnIndicatorSelect(fileObj.val.data)
+            }
+            // self.handleUsersOwnIndicatorSelect(response.data)
+            // let valObj = {}
+            // valObj.value = this.si.userIndicator
+            // valObj.index = this.panelIndex
+            // self.$emit('getIndicatorVal', valObj)
+          } else {
+            return Promise.reject(error)
+          }
+          // ...
+        })
+        .catch((error) => {
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          // 文件上传出错的处理逻辑
+          console.log('文件上传失败', error)
+          // 清空文件列表
+          self.$refs.upload.clearFiles()
+          self.fileList = []
+          self.$notify.warning({
+            title: 'Tips',
+            message: 'File upload failed.',
+            duration: 0
+          });
+
+          // ...
+        })
+    },
+    uploadDatesFile(file) {
+      debugger
+      const _file = file.file || file
+      console.log('文件上传', file)
+      const self = this
+      let suffix = ''
+      // 创建 FormData 对象，将文件添加到 FormData 中
+      const _name = _file.name || _file.file.name
+      const formData = new FormData()
+      try {
+        suffix = /\.([a-zA-Z0-9]+)$/.exec(_name)[1]
+      } catch (error) {
+        return
+      }
+      const name = _name.replace(`.${suffix}`, '')
+      const fileName = name.replace(/\s*/g, "")
+      this.si.userIndicator = fileName
+      formData.append('name', fileName)
+      formData.append('hash', _file.hash)
+      formData.append('suffix', suffix)
+      delete _file.raw
+      formData.append('file', _file)
+
+      // 创建 CancelToken 实例
+      const cancelToken = axios.CancelToken.source()
+
+      // 保存取消令牌，以便在需要终止上传时使用
+      // 保存取消令牌，以便在需要终止上传时使用
+      self.cancelToken = cancelToken
+      // 发送上传请求
+      axios
+        .post(self.uploadUrl, formData, {
+          headers: {
+            ...self.uploadHeaders,
+            ...{
+              cancelToken: cancelToken.token
+            }
+          },
+          onUploadProgress: (event) => {
+            // 文件上传进度的处理逻辑
+            // self.handleUploadProgress(event, file.uid, self.fileList);
+            // const progress = Math.round((event.loaded * 100) / event.total)
+            // const curLi =
+            // 	self.$refs.upload.$el.querySelector('.el-progress-bar__inner') ||
+            // 	null
+            // console.log(
+            // 	curLi,
+            // 	self.$refs.upload.$el.querySelector('.el-progress__text')
+            // )
+            // self.$refs.upload.$el.querySelector(
+            // 	'.el-progress-bar__inner'
+            // ).style.width = progress + '%'
+            // this.$refs.upload.$el.querySelector('.el-progress__text').innerHTML = this.progress + '%';
+            // ...
+          }
+        })
+        .then((response) => {
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+
+          // 文件上传完成后的处理逻辑
+          console.log('文件上传成功', response)
+          const { status, error } = response.data
+          // self.$store.commit('form/saveUserCustomIndicator', response.data.fileID)
+          // 还原文件对象的 raw 属性
+          if (status == 200 || status == 201) {
+            self.$notify.success({
+              title: 'Tips',
+              message: 'File uploaded successfully.',
+              duration: 0
+            });
+            self.previewDatesFileID = response.data.file_id
+            const obj = {}
+            obj.index = this.panelIndex
+            obj.val = response.data.file_id
+            obj.criteriaCF = capitalizeFirstLetter(this.criteria)
+            obj.previewFileID = self.previewDatesFileID
+            if (self.criteria.startsWith('entry')) {
+              self.$store.commit(`form/saveUsersOwnFileHash`, obj)
+            }
+            if (self.criteria.startsWith('exit')) {
+              self.$store.commit(`form/saveUsersOwnFileHash`, obj)
+            }
+            let fileObj = {}
+            fileObj.index = self.panelIndex
+            fileObj.val = {
+              data: response.data,
+              criteria: self.criteria,
+              index: self.panelIndex
+            }
+            if(this.indicatorRadio === 'Users\' Own Indicator') {
+              self.$emit('userUploadFileContent', fileObj)
+            }
             // self.handleUsersOwnIndicatorSelect(response.data)
             // let valObj = {}
             // valObj.value = this.si.userIndicator
@@ -1783,12 +2035,31 @@ export default {
       // 	}
       // })
     },
+    handleDatesUploadSuccess(response, file, fileList) {
+      // 上传成功回调
+      console.log('上传成功回调：', response)
+      // 更新文件列表中对应文件的状态为成功
+      // this.fileList.forEach((item) => {
+      // 	if (item.uid === file.uid) {
+      // 		item.progress = 100 // 进度设置为 100
+      // 		item.status = 'success' // 状态设置为成功
+      // 	}
+      // })
+    },
     handleUploadError(error, file, fileList) {
       // 上传失败回调
       console.log('上传失败：', error)
       this.dialogFormVisible = false
       this.$refs.upload.clearFiles()
       this.fileList = []
+      // 更新文件列表中对应文件的状态为
+    },
+    handleDatesUploadError(error, file, fileList) {
+      // 上传失败回调
+      console.log('上传失败：', error)
+      this.dialogFormVisible = false
+      this.$refs.DatesUpload.clearFiles()
+      this.fileDatesList = []
       // 更新文件列表中对应文件的状态为
     },
     async handleRemove(file, fileList) {
@@ -1810,64 +2081,26 @@ export default {
         this.fileList = []
       }
     },
-    handlePreview(file) {
-      CIQ.addCover('Parsing the file....')
-      CIQ.nprogress.start()
-      const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
-      Papa.parse(fileContent, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result) => {
-          // 获取解析后的数据
-          const data = result.data
-          // 更新预览表格的数据
-          this.previewData = data
-          this.previewFileName = file.name
-          // 显示预览表格
-          CIQ.hideCover()
-          CIQ.nprogress.done()
-          this.previewVisible = true
-        },
-        error: (error) => {
-          // 解析错误时的处理逻辑
-          console.error('解析错误:', error)
-          this.$notify.warning({
-            title: 'Tips',
-            message: 'File parsing error, unable to preview.',
-            duration: 0
-          });
-          CIQ.hideCover()
-          CIQ.nprogress.done()
-        }
-      })
+    async handleDatesRemove(file, fileList) {
+      console.log('处理删除', file)
+      // 备份文件对象的 raw 属性
+      this.rawDatesMap[file.uid] = this.rawDatesMap[file.uid] || file.raw
+      // 发送请求删除服务器上的文件
+      const hash = this.file_dates_hash || file.hash
+      const fileID = file.name.replace('.csv', '') + 'HASH' + hash
+      if (!hash) { this.$refs.DatesUpload.clearFiles(); this.fileDatesList = []; return }
+      try {
+        await csvFileDelete(fileID)
+        console.log('删除成功')
+        this.clearUserOwnIndicatorSelect()
+      } catch (error) {
+        console.log('删除失败', error)
+      } finally {
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
+      }
     },
-    async _handlePreview(file) {
-      // CIQ.addCover('Parsing the file....')
-      // CIQ.nprogress.start()
-      // const fileContent = atob(file.raw.split(',')[1]) // 解码 Base64 数据
-      // Papa.parse(fileContent, {
-      //   header: true,
-      //   skipEmptyLines: true,
-      //   complete: (result) => {
-      //     // 获取解析后的数据
-      //     const data = result.data
-      //     // 更新预览表格的数据
-      //     this.previewData = data
-      //     this.previewFileName = file.name
-      //     // 显示预览表格
-      //     CIQ.hideCover()
-      //     CIQ.nprogress.done()
-      //     this.previewVisible = true
-      //   },
-      //   error: (error) => {
-      //     // 解析错误时的处理逻辑
-      //     console.error('解析错误:', error)
-      //     this.popUpMsgBox('File parsing error, unable to preview.')
-      //     CIQ.hideCover()
-      //     CIQ.nprogress.done()
-      //   }
-      // })
-
+    async handlePreview(file) {
       CIQ.addCover('Parsing the file....')
       CIQ.nprogress.start()
       debugger
@@ -1892,6 +2125,39 @@ export default {
       });
       return false
     },
+    handleDatesExceed(files, fileList) {
+      this.$notify.warning({
+        title: 'Tips',
+        message: 'Only single indicator files can be uploaded.',
+        duration: 0
+      });
+      return false
+    },
+    async handleDatesPreview(file) {
+      CIQ.addCover('Parsing the file....')
+      CIQ.nprogress.start()
+      debugger
+      const str = this.previewDatesFileID
+      const page = this.previewDatesPage.page
+      const startIndex = str.indexOf('HASH')
+      const endIndex = startIndex + 4 // 假设 "HASH" 的长度为 4
+      if (startIndex !== -1) {
+        const beforeHash = str.substring(0, startIndex)
+        const afterHash = str.substring(endIndex)
+        await this.getDatesPreviewList(beforeHash, afterHash, page)
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.previewDatesVisible = true
+      }
+    },
+    handleExceed(files, fileList) {
+      this.$notify.warning({
+        title: 'Tips',
+        message: 'Only single indicator files can be uploaded.',
+        duration: 0
+      });
+      return false
+    },
 
     /** START 
      * util functions for indicator uploader */
@@ -1901,7 +2167,11 @@ export default {
 				reader.onload = (event) => {
           const hash = SparkMD5.hashBinary(reader.result)
           file.hash = hash
-          this.file_hash = hash
+          if(this.indicatorRadio === 'User Defined Dates') {
+            this.file_dates_hash = hash
+          } else {
+            this.file_hash = hash
+          }
           debugger
 					resolve(event.target.result);
 				};
@@ -2017,11 +2287,153 @@ export default {
       }
       return false
     },
+    async beforeDatesUpload(file) {
+      CIQ.addCover('File verification in progress...')
+      CIQ.nprogress.start()
+      if (!file.raw) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          file.raw = event.target.result
+        }
+        reader.readAsDataURL(file)
+      }
+      console.log('上传前', file)
+      // 备份文件对象的 raw 属性
+      this.rawDatesMap[file.uid] = this.rawDatesMap[file.uid] || file.raw
+      if (!/(CSV)/i.test(file.type)) {
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'The uploaded file must be in CSV format.',
+          duration: 0
+        });
+        return Promise.reject('The uploaded file must be in CSV format.')
+      }
+      const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
+      let fileName = file.name.replace(/\s*/g, "")
+      if (!reg.test(fileName.replace('.csv', ''))) {
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'The file name must start with a letter and can only contain letters, numbers, spaces, and underscores.',
+          duration: 0
+        });
+        return Promise.reject('The file name must start with a letter and can only contain letters, numbers, spaces,and underscores.')
+      }
+      if (file.size === 0) {
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'Empty files cannot be uploaded.',
+          duration: 0
+        });
+        return Promise.reject('Empty files cannot be uploaded.')
+      }
+      // 限制文件上传大小 1M
+      if (file.size > 1 * 1024 * 1024) {
+        CIQ.hideCover()
+        CIQ.nprogress.done()
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'The uploaded file cannot exceed 1MB.',
+          duration: 0
+        });
+        return Promise.reject('The uploaded file cannot exceed 1MB.')
+      }
+      try {
+          /** START
+					 * 	remove empty line
+					 */
+					// const fileContent = await this.readFileContent(file);
+					// const filteredContent = await this.skipEmptyLine(fileContent)
+					// const newFile = new File([filteredContent], file.name, { type: file.type });
+					/********END********* */
+
+          await this.validateCSV(file)
+          const content = await this.readFileContent(file);
+          const rows = content.trim().split('\n')
+          .map(item => item.replace(/\r$/, ''))  // 去掉 \r
+          .filter(item => item !== ''); 
+          const startDate = rows[1]
+          const endDate = rows[rows.length - 1]
+          let symbol = this.$store.state.form.backtestSymbol || process.env.VUE_APP_DEFAULT_SYMBOL
+          /** 防止当前为custom symbol时发送对比pairdata和my data出错 */
+          const {type} = getSymbolInfo(symbol)
+          if(!['stock','index'].includes(type)){
+            symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+          }
+          const res = await getPairData(startDate, endDate, 'daily', symbol)
+          const pairDataDate = res.data.map((item) => {
+            const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+            if (dateRegex.test(item.DT)) {
+              const dateObj = new Date(item.DT)
+              const formattedDate = dateObj.toISOString().slice(0, 10)
+              return formattedDate
+            }
+          }).filter(item => item)
+          const csvDatesContent = []
+          for (let i = 0; i < pairDataDate.length; i++) {
+            csvDatesContent.push({
+              Date: pairDataDate[i],
+              Close: rows.slice(1).includes(pairDataDate[i]) ? 1 : 0
+            })
+          }
+          function convertToCSV(dataArray) {
+          const headers = Object.keys(dataArray[0]);
+          const rows = dataArray.map((row) => headers.map((header) => row[header]));
+          const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+          // return `data:text/csv;base64,${btoa(csvContent)}`;
+          return csvContent
+        }
+        const filteredCsvData = convertToCSV(csvDatesContent);
+        const base64Data = btoa(filteredCsvData); // 编码为 Base64
+        const rawValue = `data:text/csv;base64,${base64Data}`;
+        const filteredFile = new File([filteredCsvData], `User Defined Dates:${file.name}`, { type: 'text/csv' });
+        filteredFile.raw = rawValue;
+        filteredFile.uid = file.uid;
+        filteredFile.hash = file.hash;
+        console.log('file', file)
+        console.log('filteredFile', filteredFile.file)
+        this.$refs.DatesUpload.clearFiles()
+        this.fileDatesList = []
+        this.fileDatesList.push(filteredFile)
+        console.log(this.fileDatesList)
+          // await this.handleDatesParseResult(csvDatesContent, file)
+          this.form.indicatorName = `User Defined Dates:${file.name.replace('.csv', '')}`;
+          // this.fileDatesList.push(file);
+          CIQ.hideCover();
+          CIQ.nprogress.done();
+        } catch (error) {
+          console.log('error', error)
+          this.dialogFormVisible = false
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          return Promise.reject(error)
+        }
+        return false
+    },
     handleUploadProgress(event, uid, fileList) {
       // 上传进度回调
       let { loaded, total } = event
       const progress = (loaded / total) * 100
       this.fileList = fileList.map((item) => {
+        console.log(item.uid)
+        if (item.uid === uid) {
+          item.progress = progress
+        }
+      })
+      // const progress = Math.round(event.percent);
+      // 自定义方式展示进度条
+      // this.$refs.upload.$el.querySelector('.el-progress-bar__inner').style.width = progress + '%';
+    },
+    handleDatesUploadProgress(event, uid, fileList) {
+      // 上传进度回调
+      let { loaded, total } = event
+      const progress = (loaded / total) * 100
+      this.fileDatesList = fileList.map((item) => {
         console.log(item.uid)
         if (item.uid === uid) {
           item.progress = progress
@@ -2078,20 +2490,177 @@ export default {
       this.$refs[formName].resetFields()
       this.dialogFormVisible = false
     },
+    async _uploadDatesFile(file) {
+      const _this = this
+      debugger
+
+      // 1. 校验文件类型
+      if (file.file.type !== 'text/csv') {
+        this.popUpMsgBox('Only CSV files are allowed.');
+        return;
+      }
+
+      // 2. 读取文件内容为文本
+      const filename = file.file.name
+      const text = await file.file.text();
+
+      // 3. 用 PapaParse 解析 CSV
+      const data = text
+        .trim()
+        .split(/\r?\n/)    // 按换行分割
+        .filter(line => line.trim()); // 去掉空行和标题
+
+      console.log(data);  // ["2024-10-01", "2024-11-01", "2024-12-02"]
+
+      // 4. 校验只有一列，列名为 Date
+      const header = data[0];
+      if (!header || header.trim() !== 'Date') {
+        this.popUpMsgBox('CSV must contain exactly one column named "Date".');
+        return;
+      }
+
+      const originalDates = data.slice(1).map(row => row.trim());
+
+      // 5. 校验日期格式
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      const isValid = originalDates.every(d => dateRegex.test(d));
+      if (!isValid) {
+        this.popUpMsgBox('All dates must follow the format YYYY-MM-DD.');
+        return;
+      }
+      const sortedRows = originalDates.sort(
+        (a, b) => moment(a) - moment(b)
+      )
+      const startDate = sortedRows[0]
+      const endDate = sortedRows[sortedRows.length - 1]
+      const frequency = this.$store.state.form.backtestInfo.frequency.toLowerCase()
+      if (frequency !== 'daily') {
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
+          duration: 0
+        });
+        return Promise.reject(
+          `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
+        )
+      }
+      let symbol = this.$store.state.form.backtestSymbol || process.env.VUE_APP_DEFAULT_SYMBOL
+      const {type} = getSymbolInfo(symbol)
+			if(!['stock','index'].includes(type)){
+				symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+			}
+      const res = await getPairData(startDate, endDate, frequency, symbol)
+      const newDates = res.data.map((item) => {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+        if (dateRegex.test(item.DT)) {
+          const dateObj = new Date(item.DT)
+          const formattedDate = dateObj.toISOString().slice(0, 10)
+          return formattedDate
+        } else {
+          console.log('Invalid date format')
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          this.$notify.warning({
+            title: 'Tips',
+            message: 'Invalid date format.',
+            duration: 0
+          });
+          return Promise.reject(`Invalid date format.`)
+        }
+      })
+      // ✅ 校验通过，以下是处理逻辑
+
+      // 构建新数据
+      const result = [['Date', 'Close']];
+      for (const date of newDates) {
+        const close = sortedRows.includes(date) ? 1 : 0;
+        result.push([date, close]);
+      }
+
+      // 转成 CSV 字符串
+      const newCsv = Papa.unparse(result);
+
+      // 转成 File 或 Blob（用于上传）
+      const blob = new Blob([newCsv], { type: 'text/csv' });
+      const _fileName = `User Defined Dates: ${filename}`
+      _this.si.userIndicator = _fileName
+      const newFile = new File([blob], `${_fileName}.csv`, { type: 'text/csv' });
+      // 调用实际上传逻辑（例如直接上传、或触发 el-upload 的内部方法）
+      const generateHash = (file) => {
+       const reader = new FileReader();
+       const spark = new SparkMD5.ArrayBuffer();
+
+        reader.onload = async (e) => {
+            spark.append(e.target.result); // Append the file content
+            const hash = spark.end(); // Generate the hash
+            console.log('Hash:', hash);
+            file.hash = hash
+            _this.file_hash = hash
+            await this.uploadFile(file)
+        };
+        reader.readAsArrayBuffer(file); // Read the file as ArrayBuffer
+      }
+      generateHash(newFile)
+      this.popUpMsgBox('Processing successful. Uploading file...');
+    },
     async validateCSV(file) {
       const self = this
+      // const res = await getPairData(startDate, endDate, frequency, symbol)
+      // const pairDataDate = res.data.map((item) => {
+      //   const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+      //   if (dateRegex.test(item.DT)) {
+      //     const dateObj = new Date(item.DT)
+      //     const formattedDate = dateObj.toISOString().slice(0, 10)
+      //     return formattedDate
+      //   } else {
+      //     console.log('Invalid date format')
+      //     CIQ.hideCover()
+      //     CIQ.nprogress.done()
+      //     this.$notify.warning({
+      //       title: 'Tips',
+      //       message: 'Invalid date format.',
+      //       duration: 0
+      //     });
+      //     return Promise.reject(`Invalid date format.`)
+      //   }
+      // })
       return await new Promise(async (resolve, reject) => {
         // 限制字段
         let isDateFormat = true
         let isNumFormat = true
         let isNotEmpty = true
+        let pairDataDate = []
         self.csvContent = []
-        
+        self.csvDatesContent = []
+        let cleaned = []
         try {
+          debugger
           const content = await self.readFileContent(file);
           const rows = content.trim().split('\n')
           const headers = rows[0].trim().split(',')
           const lines = content.split('\n')
+          if(self.indicatorRadio === 'User Defined Dates') {
+            cleaned = lines
+            .map(item => item.replace(/\r$/, ''))  // 去掉 \r
+            .filter(item => item !== ''); 
+            const startDate = cleaned[1]
+            const endDate = cleaned[cleaned.length - 1]
+            let symbol = this.$store.state.form.backtestSymbol || process.env.VUE_APP_DEFAULT_SYMBOL
+            /** 防止当前为custom symbol时发送对比pairdata和my data出错 */
+            const {type} = getSymbolInfo(symbol)
+            if(!['stock','index'].includes(type)){
+              symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+            }
+            const res = await getPairData(startDate, endDate, 'daily', symbol)
+            pairDataDate = res.data.map((item) => {
+              const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+              if (dateRegex.test(item.DT)) {
+                const dateObj = new Date(item.DT)
+                const formattedDate = dateObj.toISOString().slice(0, 10)
+                return formattedDate
+              }
+            }).filter(item => item)
+          }
           // 获取 CSV 文件的字段顺序
           const fieldOrder = lines[0].trim().split(',')
           const isOrdered = this.validateCSVFieldOrder(fieldOrder)
@@ -2119,9 +2688,17 @@ export default {
               const error = {}
               const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/
               const dateColumnIndex = 'Date'
-              for (const key in row.data) {
-                if (Object.hasOwnProperty.call(row.data, key)) {
-                  row.data[key] = row.data[key].trim()
+              if(self.indicatorRadio !== 'User Defined Dates') {
+                for (const key in row.data) {
+                  if (Object.hasOwnProperty.call(row.data, key)) {
+                    row.data[key] = row.data[key].trim()
+                  }
+                }
+              }
+              if(self.indicatorRadio === 'User Defined Dates') {
+                for (let i = 0; i < pairDataDate.length; i++) {
+                  row.data['Date'] = pairDataDate[i]
+                  row.data['Close'] = cleaned.slice(1).includes(pairDataDate[i]) ? 1 : 0
                 }
               }
               // const trimmedRow = row.data.map((value) => value.trim())
@@ -2138,21 +2715,30 @@ export default {
                 // parser.pause()
                 return
               }
-              if (!numFormatRegex.test(numCell)) {
-                console.log('数字格式校验失败')
-                error.Date = dateCell
-                error.Close = numCell
-                errorRow.push(error)
-                isNumFormat = false
-                // parser.pause()
-                return
+              if(self.indicatorRadio === 'Users\' Own Indicator') {
+                if (!numFormatRegex.test(numCell)) {
+                  console.log('数字格式校验失败')
+                  error.Date = dateCell
+                  error.Close = numCell
+                  errorRow.push(error)
+                  isNumFormat = false
+                  // parser.pause()
+                  return
+                }
               }
               errorRow.push(error)
               self.csvContent.push(row)
+              if(self.indicatorRadio === 'User Defined Dates') {
+                self.csvDatesContent.push(row)
+              }
               // parser.resume()
             },
             complete: function () {
-              // resolve(csvContent)
+              if(self.indicatorRadio === 'User Defined Dates') {
+                resolve(self.csvDatesContent)
+              } else {
+                resolve(self.csvContent)
+              }
             },
             error: (error) => {
               reject(error)
@@ -2235,15 +2821,22 @@ export default {
       const data = _data.filter(item => Object.keys(item).length)
       if (data.length > 0) {
         // 如果有错误，显示错误信息 生成表格行的 HTML
-        const tableRows = data.map(item => `
+        let tableRows = data.map(item => `
           <tr>
             <td>${item.Date}</td>
             <td>${item.Close}</td>
           </tr>
         `).join('');
+        if(this.indicatorRadio === 'User Defined Dates') {
+          tableRows = data.map(item => `
+            <tr>
+              <td>${item.Date}</td>
+            </tr>
+          `).join('');
+        }
 
         // 生成完整的 HTML 片段，包括表头和动态生成的行
-        const tableHTML = `
+        let tableHTML = `
           <div>
             <p>Data format is wrong in these rows. Correct before re-uploading.</p>
             <table border="1" style="width: 100%; text-align: center">
@@ -2255,6 +2848,19 @@ export default {
             </table>
           </div>
         `;
+        if(this.indicatorRadio === 'User Defined Dates') {
+          tableHTML = `
+            <div>
+              <p>Data format is wrong in these rows. Correct before re-uploading.</p>
+              <table border="1" style="width: 100%; text-align: center">
+                <tr>
+                  <th>Date</th>
+                </tr>
+                ${tableRows}
+              </table>
+            </div>
+          `;
+        }
 
         // 使用 $message 显示 HTML
         this.$notify.warning({
@@ -2269,7 +2875,10 @@ export default {
     },
     validateCSVFieldOrder(fieldOrder) {
       // 在这里进行 CSV 字段顺序校验的逻辑
-      const orderedValues = ['Date', 'Close'] // 规定顺序
+      let orderedValues = ['Date', 'Close'] // 规定顺序
+      if(this.indicatorRadio === 'User Defined Dates') {
+        orderedValues = ['Date']
+      }
       for (let i = 0; i < fieldOrder.length - 1; i++) {
         const currentIndex = orderedValues.indexOf(fieldOrder[i])
         const nextIndex = orderedValues.indexOf(fieldOrder[i + 1])
@@ -2286,10 +2895,14 @@ export default {
           });
           return false
         }
-        if(currentIndex == -1 || nextIndex == -1) {
+        if((currentIndex == -1 || nextIndex == -1)) {
+          let message = 'File header is missing or incorrect. It should be: [Date, Close].'
+          if(this.indicatorRadio === 'User Defined Dates') {
+            message = 'File header is missing or incorrect. It should be: [Date].'
+          }
           this.$notify.warning({
             title: 'Tips',
-            message: 'File header is missing or incorrect. It should be: [Date, Close].',
+            message: message,
             duration: 0
           });
           return false
@@ -2344,10 +2957,42 @@ export default {
           return Promise.reject(`Invalid date format.`)
         }
       })
+      this.pairDataDate = pairDataDate
       // const pairStartDate = pairDataDate[0]
       // const pairEndDate = pairDataDate[pairDataDate.length - 1]
       // const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
       //  const filteredArr = dateData
+      // if(this.indicatorRadio === 'User Defined Dates') {
+      //   const csvData = file.raw
+      //   const csvContent = csvData.split(';base64,').pop();
+      //   const decodedData = atob(csvContent);
+      //   let parsedData = []
+      //   parsedData = this.parseUserDefinedDatesCSV(this.pairDataDate, decodedData)
+      //   function convertToCSV(dataArray) {
+      //     const headers = Object.keys(dataArray[0]);
+      //     const rows = dataArray.map((row) => headers.map((header) => row[header]));
+      //     const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+      //     // return `data:text/csv;base64,${btoa(csvContent)}`;
+      //     return csvContent
+      //   }
+      //   console.log('parsedData', parsedData)
+      //   const filteredCsvData = convertToCSV(parsedData);
+      //   const base64Data = btoa(filteredCsvData); // 编码为 Base64
+      //   const rawValue = `data:text/csv;base64,${base64Data}`;
+      //   const filteredFile = new File([filteredCsvData], `${file.name}`, { type: 'text/csv' });
+      //   filteredFile.raw = rawValue;
+      //   filteredFile.uid = file.uid;
+      //   filteredFile.hash = file.hash;
+      //   console.log('file', file)
+      //   console.log('filteredFile', filteredFile)
+      //   this.form.indicatorName = `User Defined Dates:${file.name.replace('.csv', '')}`
+      //   // this.$refs.DatesUpload.clearFiles()
+      //   this.fileDatesList = []
+      //   this.fileDatesList.push(filteredFile)
+      //   console.log(this.fileDatesList)
+      //   debugger
+      //   return Promise.resolve(true)
+      // }
       const isDiffDateArr = compareArrays(dateData, pairDataDate)
       if (isDiffDateArr === true) {
         // 用户上传的 Date 和 pairData 的 Date 一致
@@ -2370,16 +3015,102 @@ export default {
         )
       }
     },
+    async handleDatesParseResult(data, file) {
+      console.log('处理过的结果', data)
+      // 按照时间排序
+      const sortedRows = data.sort(
+        (a, b) => moment(a.data.Date) - moment(b.data.Date)
+      )
+      // 获取 Date 列的数据
+      const dateData = sortedRows.map((row) => row.data.Date)
+      // 计算时间间隔
+      const startDate = dateData[0]
+      const endDate = dateData[dateData.length - 1]
+      const frequency = this.$store.state.form.backtestInfo.frequency.toLowerCase()
+      if (frequency !== 'daily') {
+        this.$notify.warning({
+          title: 'Tips',
+          message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
+          duration: 0
+        });
+        return Promise.reject(
+          `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
+        )
+      }
+      let symbol = this.$store.state.form.backtestSymbol || process.env.VUE_APP_DEFAULT_SYMBOL
+      /** 防止当前为custom symbol时发送对比pairdata和my data出错 */
+      const {type} = getSymbolInfo(symbol)
+			if(!['stock','index'].includes(type)){
+				symbol = process.env.VUE_APP_DEFAULT_SYMBOL
+			}
+      const res = await getPairData(startDate, endDate, frequency, symbol)
+      const pairDataDate = res.data.map((item) => {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+        if (dateRegex.test(item.DT)) {
+          const dateObj = new Date(item.DT)
+          const formattedDate = dateObj.toISOString().slice(0, 10)
+          return formattedDate
+        } else {
+          console.log('Invalid date format')
+          CIQ.hideCover()
+          CIQ.nprogress.done()
+          this.$notify.warning({
+            title: 'Tips',
+            message: 'Invalid date format.',
+            duration: 0
+          });
+          return Promise.reject(`Invalid date format.`)
+        }
+      })
+      this.pairDataDate = pairDataDate
+      // const pairStartDate = pairDataDate[0]
+      // const pairEndDate = pairDataDate[pairDataDate.length - 1]
+      // const filteredArr = dateData.filter(date => date >= pairStartDate && date <= pairEndDate);
+      //  const filteredArr = dateData
+      if(this.indicatorRadio === 'User Defined Dates') {
+        const csvData = file.raw
+        const csvContent = csvData.split(';base64,').pop();
+        const decodedData = atob(csvContent);
+        let parsedData = []
+        parsedData = this.parseUserDefinedDatesCSV(this.pairDataDate, decodedData)
+        function convertToCSV(dataArray) {
+          const headers = Object.keys(dataArray[0]);
+          const rows = dataArray.map((row) => headers.map((header) => row[header]));
+          const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+          // return `data:text/csv;base64,${btoa(csvContent)}`;
+          return csvContent
+        }
+        console.log('parsedData', parsedData)
+        const filteredCsvData = convertToCSV(parsedData);
+        const base64Data = btoa(filteredCsvData); // 编码为 Base64
+        const rawValue = `data:text/csv;base64,${base64Data}`;
+        const filteredFile = new File([filteredCsvData], `${file.name}`, { type: 'text/csv' });
+        filteredFile.raw = rawValue;
+        filteredFile.uid = file.uid;
+        filteredFile.hash = file.hash;
+        console.log('file', file)
+        console.log('filteredFile', filteredFile)
+        this.form.indicatorName = `User Defined Dates:${file.name.replace('.csv', '')}`
+        this.$refs.DatesUpload.clearFiles()
+        this.fileDatesList = []
+        this.fileDatesList.push(filteredFile)
+        console.log(this.fileDatesList)
+        debugger
+        return Promise.resolve(true)
+      }
+    },
     cancelBusinessDialogClose() {
       this.nonBusinessDialogVisible = false
     },
     confirmBusinessDialogClose() {
+      debugger
       this.nonBusinessDialogVisible = false
+      if(this.indicatorRadio !== 'Users\' Own Indicator')  return
       const file = this.nonBusinessFile
       const csvData = file.raw
       const csvContent = csvData.split(';base64,').pop();
       const decodedData = atob(csvContent);
-      const parsedData = this.parseCSV(decodedData);
+      const parsedData = this.parseCSV(decodedData)
       console.log('解析的数据', parsedData)
       const filteredData = parsedData.filter((row) => !this.nonBusinessDay.includes(row.Date));
       console.log('filteredData', filteredData)
@@ -2422,6 +3153,22 @@ export default {
           }
           data.push(rowData);
         }
+      }
+
+      return data;
+    },
+    parseUserDefinedDatesCSV(pairDataDate, csvData) {
+      const rows = csvData.split('\n');
+      const cleaned = rows
+        .map(item => item.replace(/\r$/, ''))  // 去掉 \r
+        .filter(item => item !== ''); 
+      const data = [];
+
+      for (let i = 0; i < pairDataDate.length; i++) {
+        const rowData = {};
+        rowData.Date = pairDataDate[i]
+        rowData.Close = cleaned.slice(1).includes(pairDataDate[i]) ? 1 : 0
+          data.push(rowData);
       }
 
       return data;
@@ -2504,6 +3251,22 @@ export default {
         }))
         this.previewPage.total = res.data.total_rows
       }
+    },
+    async getDatesPreviewList(name, hash, page) {
+      const response = await csvFilePagingRead(name, hash, page)
+      const res = response.data
+      if (res.status == 200) {
+        const csv_content = res.data.csv_content
+        this.previewDatesData = csv_content.map((item) => ({
+          Date: formatStandardTime(item.DT).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }),
+          Close: item.indicator_Close
+        }))
+        this.previewDatesPage.total = res.data.total_rows
+      }
     }
   }
 }
@@ -2549,6 +3312,9 @@ export default {
   top: 28px;
   min-height: 85px;
 }
+.upload-dates-demo {
+  position: static;
+}
 .upload-demo {
 	flex-direction: column;
   border-bottom-left-radius: 4px;
@@ -2557,6 +3323,9 @@ export default {
 	border-right: 1px solid #dcdfe6;
 	border-bottom: 1px solid #dcdfe6;
 	padding: 5px;
+}
+.upload-dates-demo {
+	border-top: 1px solid #dcdfe6;
 }
 .indicator-form-item /deep/ .el-form-item__content {
 	line-height: 15px;

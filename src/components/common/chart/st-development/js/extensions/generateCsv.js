@@ -904,14 +904,28 @@ let __st_js_generateCsv_ = (_exports) => {
     /********************lishan modify end*************************/
          resultIndex = sd.type
          
-         // load a value of this study to dataframe(important note: the value of correspond resultIndex is caculated differently)
-         for(var item in arrData){
-             let result = formatSmallNum(arrData[item][resultIndex])
-             finalData[item][index] = result || result==0
-             ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
-             :null;     
+         let firstDateIndex
+         // 当为用户自定义日期指标时，如果当前下标没指标的值且不为0， 且当前日期大于第一天日期时。 设值为0
+         if(resultIndex.includes('UserDefinedDates:')) {
+            firstDateIndex = arrData.findIndex(obj => !!obj[resultIndex]);
+
+            for(var item in arrData){
+                let result = formatSmallNum(arrData[item][resultIndex])
+                if(!(result || result==0) && (item > firstDateIndex)) result = 0
+                finalData[item][index] = result || result==0
+                ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
+                :null;     
+            }
+         } else {
+            // load a value of this study to dataframe(important note: the value of correspond resultIndex is caculated differently)
+            for(var item in arrData){
+                let result = formatSmallNum(arrData[item][resultIndex])
+                finalData[item][index] = result || result==0
+                ?parseFloat(result.toFixed(CIQ.countDecimalPlaces(result)))
+                :null;     
+            }
          }
- 
+
          labelOption[criteria.includes('entry')?indexNum:indexNum+5] = ''
      }else if( CIQ.findSymbolIndicator(sd.type,null) ){
          resultIndex = Object.keys(sd.outputMap)[0]

@@ -35,17 +35,39 @@ const trimTrailingZeros = (val) => {
   return val.replace(/\.?0+$/, ''); // 使用正则表达式去除多余的零
 }
 
+// 注1：以下这两个函数都是可以把iso日期字符串变成当地时间 00：00：00的对象，但是第一种算偏差量的方法无法涵盖到一些
+// 特殊情况，比如1947-04-15号的国内偏差量会计算失误导致数据源转成14号零点而不是15号零点
+// 注2：数据源DT传入的应该是formatStandardTime返回的时间对象而不是ISO字符串， 虽然两者兼容， 但是后者对于国外时间会出现偏差一天的问题。
+
 // 后续把datatime.getTimezoneOffset() * 60 * 1000都封装在formatStandardTime
-const formatStandardTime = (date) => {
-  var datatime = new Date(date)
-  var offset = datatime.getTimezoneOffset() * 60 * 1000
-  let returnValue = new Date(datatime.getTime()+offset)
-  // if(returnValue.getDate() !== datatime.getDate()){
-  //   const newOffset = offset + 60*60*1000
-  //   returnValue = new Date(datatime.getTime()+newOffset)
-  // }
-  return returnValue
-}
+// const formatStandardTime = (date) => {
+//   var datatime = new Date(date)
+//   var offset = datatime.getTimezoneOffset() * 60 * 1000
+//   let returnValue = new Date(datatime.getTime()+offset)
+//   // if(returnValue.getDate() !== datatime.getDate()){
+//   //   const newOffset = offset + 60*60*1000
+//   //   returnValue = new Date(datatime.getTime()+newOffset)
+//   // }
+//   return returnValue
+// }
+const formatStandardTime = (dateInput) => {
+  if (!dateInput) return null;
+
+  let year, month, day;
+
+  if (typeof dateInput === 'string') {
+    // ISO 格式 或 YYYY-MM-DD
+    const match = dateInput.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      year = Number(match[1]);
+      month = Number(match[2]);
+      day = Number(match[3]);
+      return new Date(year, month - 1, day);  // 本地 00:00:00
+    }
+  }
+
+  return null;
+};
 
 const getQueryVariable = (variable) => {
   //获取当前URL中的查询字符串部分（即问号后面的部分）
