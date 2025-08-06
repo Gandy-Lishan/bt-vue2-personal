@@ -592,7 +592,7 @@ export default {
 				for (let i = 0; i < signalList.length; i++) {
 					console.log('未加密前的数据结构', signalList[i])
 					const _signal = signalList[i]
-					if(_signal.analysis === 'User' && _signal.indicator.includes('UserDefinedDates:')) {
+					if(_signal.analysis === 'User' && (_signal.indicator.includes('UserDefinedDates:') || _signal.indicator.includes('User Defined Dates'))) {
 						_signal.indicator = 'User Defined Dates'
 						_signal.period = 1
 						_signal.condition = 1
