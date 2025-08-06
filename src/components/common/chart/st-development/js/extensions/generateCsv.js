@@ -906,7 +906,7 @@ let __st_js_generateCsv_ = (_exports) => {
          
          let firstDateIndex
          // 当为用户自定义日期指标时，如果当前下标没指标的值且不为0， 且当前日期大于第一天日期时。 设值为0
-         if(resultIndex.includes('UserDefinedDates:')) {
+         if(resultIndex.includes('UserDefinedDates:') || resultIndex.includes('User Defined Dates')) {
             firstDateIndex = arrData.findIndex(obj => !!obj[resultIndex]);
 
             for(var item in arrData){
