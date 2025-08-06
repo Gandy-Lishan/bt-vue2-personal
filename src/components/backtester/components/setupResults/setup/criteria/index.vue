@@ -1110,7 +1110,7 @@ export default {
 							criteria: this.config['criteriaNum'],
 							description: {
 								commentDes: item.des,
-								rocCond: null
+								rocCond: item.rocCond
 							}
 						})
 					})
