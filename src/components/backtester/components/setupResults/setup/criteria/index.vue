@@ -1076,7 +1076,7 @@ export default {
 					conditionPeriod: 1,
 					ma_type: 'S'
 				}}]
-				else return [{des: description, index: i, rocCond: {
+				else return [{des: description, index: i+1, rocCond: {
 					newCondition: 1,
 					conditionPeriod: 1,
 					ma_type: 'S'
