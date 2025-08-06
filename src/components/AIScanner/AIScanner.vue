@@ -629,14 +629,14 @@ export default {
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		this.tableData.content.forEach(item => {
-			item['StopLoss'] = this.displayData(item['StopLoss'])
-			item['ProfitTarget'] = this.displayData(item['ProfitTarget'])
-			item['WinRate'] = this.displayData(item['WinRate'])
+			item['StopLoss'] = this.displayData(item['StopLoss'], true)
+			item['ProfitTarget'] = this.displayData(item['ProfitTarget'], true)
+			item['WinRate'] = this.displayData(item['WinRate'], true)
 			item['ExpectedReturn'] = this.displayData(item['ExpectedReturn'])
 			item['Z_Score'] = this.displayData(item['Z_Score'])
 			item['StdDev'] = this.displayData(item['StdDev'])
 			item['MaxRisk'] = this.displayData(item['MaxRisk'])
-			item['TimeInMarket'] = this.displayData(item['TimeInMarket'])
+			item['TimeInMarket'] = this.displayData(item['TimeInMarket'], true)
 			item['Alloc'] = this.displayData(item['Alloc'])
 			item['AvgWin'] = this.displayData(item['AvgWin'])
 			item['AvgLoss'] = this.displayData(item['AvgLoss'])
@@ -838,12 +838,14 @@ export default {
 			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
 			window.open(path, '_blank')
 	},
-	displayData(data) {
+	displayData(data, removeZero = false) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				return parseFloat(data).toFixed(1)
+				if(!removeZero) return parseFloat(data).toFixed(1)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
