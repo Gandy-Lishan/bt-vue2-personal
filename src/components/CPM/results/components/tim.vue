@@ -469,7 +469,7 @@ export default {
 			if (arr.length == 0) return NaN
 
 			let return_series = arr.map((x) => (x > 0 ? 1 : 0))
-			return parseFloat(this.calculate_mean(return_series).toFixed(2))
+			return parseFloat(this.calculate_mean(return_series).toFixed(1))
 		},
 		calculate_mean(arr) {
 			arr = arr.filter(function (x) {
@@ -693,7 +693,7 @@ export default {
 										: chartDataset[res + item.value][field] - entryPrice) /
 										entryPrice) *
 									100
-							  ).toFixed(2)
+							  ).toFixed(1)
 							: ''
 						obj[item.timeframe] = exitBar
 					})
@@ -912,7 +912,23 @@ export default {
 		},
 	exportData() {
 		return {backtestHistoryList: this.backtestHistoryList, result_quotes: this.result_quotes, periods: this.periods, defaultTableLabels: this.defaultTableLabels};
-	}
+	},
+	displayData(data, removeZero = false) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data) && !isNaN(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(1)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 }
 </script>

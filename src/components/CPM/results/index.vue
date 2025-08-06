@@ -228,20 +228,20 @@ export default {
       summary.observation_period = `${_data.tim} ${period}`
       _this.$refs['Summary'].displayData(summary)
       const statistics = {}
-      statistics.totalReturn = _data.total_return
-      statistics.medianReturn = _data.median_return
-      statistics.averageReturn = _data.avg_return
+      statistics.totalReturn = this.displayData(_data.total_return)
+      statistics.medianReturn = this.displayData(_data.median_return)
+      statistics.averageReturn = this.displayData(_data.avg_return)
       // statistics.tzScore = _data.tzScore
       // statistics.standardDeviation = _data.standardDeviation
       // statistics.maxRisk = _data.maxRisk
-      statistics.buyHoldGain = _data.buy_and_hold
-      statistics.winRate = _data.win_rate
-      statistics.averageWin = _data.avg_win
-      statistics.averageLoss = _data.avg_loss
-      statistics.totalTrades = _data.total_trades
-      statistics.totalPositive = _data.total_positive
-      statistics.totalNegative = _data.total_negative
-      statistics.timeInMarket = _data.time_in_market
+      statistics.buyHoldGain = this.displayData(_data.buy_and_hold)
+      statistics.winRate = this.displayData(_data.win_rate)
+      statistics.averageWin = this.displayData(_data.avg_win)
+      statistics.averageLoss = this.displayData(_data.avg_loss)
+      statistics.totalTrades = this.displayData(_data.total_trades, true)
+      statistics.totalPositive = this.displayData(_data.total_positive, true)
+      statistics.totalNegative = this.displayData(_data.total_negative, true)
+      statistics.timeInMarket = this.displayData(_data.time_in_market)
 
       const result = _data.result
       const transformedResult = [];
@@ -251,9 +251,9 @@ export default {
       for (let i = 0; i < result['End Date'].length; i++) {
         const tradeDate = result['End Date'][i];
         const symbolClose = result['Symbol Close'][i];
-        const correlationPercentage = result['Correlation Percentage'][i];
+        const correlationPercentage = this.displayData(result['Correlation Percentage'][i]);
         const marketCondition = result.hasOwnProperty('Market Condition') ? result['Market Condition'][i].join(', ') : null
-        const eachReturn = result['Each Return'][i];
+        const eachReturn = this.displayData(result['Each Return'][i]);
         const startDate = result['Start Date'][i];
         const endDate = result['End Date'][i];
         const _obj = {
@@ -265,8 +265,8 @@ export default {
         }
         if(result.hasOwnProperty('Exit Price'))  _obj['ExitPrice'] = result['Exit Price'][i]
         if(result.hasOwnProperty('Exit Date'))  _obj['ExitDate'] = result['Exit Date'][i]
-        if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = result['Max Gain'][i]
-        if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = result['Max Loss'][i]
+        if(result.hasOwnProperty('Max Gain'))  _obj['MaxGain'] = this.displayData(result['Max Gain'][i])
+        if(result.hasOwnProperty('Max Loss'))  _obj['MaxLoss'] = this.displayData(result['Max Loss'][i])
         transformedResult.push(_obj)
         TradeDateArray.push(
           {'Date': tradeDate}
@@ -515,7 +515,23 @@ export default {
       const NoResetAllowed = this.$refs['Form'].resetForm()
       if(NoResetAllowed) return
       this.clearResults('Daily')
-    }
+    },
+    displayData(data, removeZero = false) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data) && !isNaN(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(1)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 }
 </script>
