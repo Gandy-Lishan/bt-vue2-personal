@@ -429,7 +429,7 @@ export default {
 					...data
 				}
 			]
-			this.tradesData = transformedResult.map(item => {item.Return = item.Return.toFixed(2); return item})
+			this.tradesData = transformedResult.map(item => {return item})
 		},
 		exportData() {
 			return {summaryData: this.summaryData, tradesData: this.tradesData};
