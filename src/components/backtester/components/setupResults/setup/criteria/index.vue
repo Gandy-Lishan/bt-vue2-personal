@@ -1070,9 +1070,17 @@ export default {
 			const commentDes = [criteria, direction, relation, score, period, delay_bars]
 				.filter(Boolean)
 				.join(' ');
-				if(this.relation == 1 && i === 0) return `${commentDes} ${description}`
-				else if(this.relation != 1 && i === 0) return commentDes
-				else return description
+				if(this.relation == 1 && i === 0) return [{des: `${commentDes} ${description}`, index: i, rocCond: null}]
+				else if(this.relation != 1 && i === 0) return [{des: commentDes, index: i, rocCond: null}, {des: description, index: i + 1, rocCond: {
+					newCondition: 1,
+					conditionPeriod: 1,
+					ma_type: 'S'
+				}}]
+				else return [{des: description, index: i, rocCond: {
+					newCondition: 1,
+					conditionPeriod: 1,
+					ma_type: 'S'
+				}}]
 },
 		async saveData() {
 			// Save the selected indicator to vuex
@@ -1095,20 +1103,22 @@ export default {
 				const indi = this.$refs.indiChild[i].saveIndicator(i)
 				debugger
 				if(this.indicatorRadioArr[i] === 'user' && this.userDefinedDatesArr[i] === 'User Defined') {
-					const commentDes = this.getDatesCommentDes(i)
-					const rocCond = {
-						newCondition: 1,
-						conditionPeriod: 1,
-						ma_type: 'S'
-					}
-					this.$store.commit('form/saveDescription', {
-						index: i,
-					 criteria: this.config['criteriaNum'],
-						description: {
-							commentDes,
-							rocCond
-						}
+					const arr = this.getDatesCommentDes(i)
+					arr.forEach(item => {
+						this.$store.commit('form/saveDescription', {
+							index: item.index,
+							criteria: this.config['criteriaNum'],
+							description: {
+								commentDes: item.des,
+								rocCond: null
+							}
+						})
 					})
+					// const rocCond = {
+					// 	newCondition: 1,
+					// 	conditionPeriod: 1,
+					// 	ma_type: 'S'
+					// }
 				}
 				indiChecked = await indi
 				if(!indiChecked) return 
