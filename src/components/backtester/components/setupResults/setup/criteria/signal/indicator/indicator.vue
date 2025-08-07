@@ -1906,6 +1906,8 @@ export default {
     },
     uploadDatesFile(file) {
       debugger
+      CIQ.addCover('Uploading the user defined dates file....')
+      CIQ.nprogress.start()
       const _file = file.file || file
       console.log('文件上传', file)
       const self = this
