@@ -2499,6 +2499,8 @@ export default {
       // 1. 校验文件类型
       if (file.file.type !== 'text/csv') {
         this.popUpMsgBox('Only CSV files are allowed.');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
 
@@ -2518,6 +2520,8 @@ export default {
       const header = data[0];
       if (!header || header.trim() !== 'Date') {
         this.popUpMsgBox('CSV must contain exactly one column named "Date".');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
 
@@ -2528,6 +2532,8 @@ export default {
       const isValid = originalDates.every(d => dateRegex.test(d));
       if (!isValid) {
         this.popUpMsgBox('All dates must follow the format YYYY-MM-DD.');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
       const sortedRows = originalDates.sort(
@@ -2542,6 +2548,8 @@ export default {
           message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
           duration: 0
         });
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
@@ -2567,6 +2575,8 @@ export default {
             message: 'Invalid date format.',
             duration: 0
           });
+          this.$refs.DatesUpload.clearFiles();
+          this.fileDatesList = []
           return Promise.reject(`Invalid date format.`)
         }
       })
