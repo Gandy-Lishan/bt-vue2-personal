@@ -825,6 +825,7 @@ export default {
 											_signals.push({code: signalCode.encode(decode)})
 											}else {
 												reasons.push('User-defined/User-uploaded indicators is not supported')
+												_signals = []
 												break
 											}
 										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
