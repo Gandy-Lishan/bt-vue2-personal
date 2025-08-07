@@ -91,6 +91,8 @@
 							:panelIndex="index"
 							:editableTabs="editableTabs"
 							:editableTabsValue="editableTabsValue"
+							:sentiUrl="indicatorUrlArr[index]"
+							:sentiVal="indicatorValArr[index]"
 							ref="indiChild"
 							:isRiskControl="relation == 0"
 							@getIndicatorUrl="getIndicatorUrl"
@@ -1128,6 +1130,7 @@ export default {
 					// 	ma_type: 'S'
 					// }
 				}
+				debugger
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}

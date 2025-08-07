@@ -350,7 +350,9 @@ export default {
     panelIndex: Number,
     editableTabsValue: String,
     editableTabs: Array,
-    isRiskControl: Boolean
+    isRiskControl: Boolean,
+    sentiUrl: String,
+    sentiVal: String,
   },
   components: {
     searchBar,
@@ -1324,6 +1326,8 @@ export default {
         this.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
       }else {
         this.$emit('userDefinedDates', {index: this.panelIndex, value: ''})
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
       }
       const obj = {}
       obj.criteria = this.criteria
@@ -1510,7 +1514,7 @@ export default {
         }
       }
       if (
-       (this.indicatorRadio === "Users' Own Indicator" || this.indicatorRadio === 'User Defined Dates') &&
+       (this.indicatorRadio === "Users' Own Indicator") &&
         !this.isRiskControl
       ) { 
         // this.$refs.siForm.validate((valid) => {
@@ -1592,9 +1596,14 @@ export default {
         this.indicatorRadio === "User Defined Dates" &&
         !this.isRiskControl
       ) {
+        debugger
         // this.$refs.siForm.validate((valid) => {
         // 	validForm = valid
         // })
+        if(!this.sentiUrl || !this.sentiVal || !this.sentiUrl.includes('UserDefinedDates:')) {
+          this.popUpMsgBox('Please upload the user defined dates file')
+          return false
+        }
         validForm = true
         if (validForm) {
           let obj = {}
