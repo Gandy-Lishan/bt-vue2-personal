@@ -922,6 +922,13 @@ export default {
 				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
+				if (this.editableTabs.length > 4 && this.relation == 3) {
+					this.popUpMsgBox('Add up to four conditions')
+					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
+					this.editableTabsValue = '4'
+					this.tabIndex = 4
+				}
 				if (this.editableTabs.length <= 1) {
 					this.handleTabsEdit(null, 'add')
 					for (let i = 0; i < 2 - this.editableTabs.length; i++) {
@@ -1012,10 +1019,11 @@ export default {
 			}
 		},
 		isSameSignal() {
-			const description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
+			let description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
 			if (isJson(description)) {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
    }
+			description = description.filter(item => !item.commentDes.includes('User Defined Dates'))
 			debugger
 			let sameSignalArr = searchKeys(description)
 			if(this.relation == 3) sameSignalArr = []
@@ -1367,6 +1375,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 25px;
 }
 .signal-container {
 	display: flex;
