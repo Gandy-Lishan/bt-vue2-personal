@@ -1257,6 +1257,7 @@ export default {
 			debugger
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
+				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
 				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
 				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
 				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
@@ -1264,6 +1265,7 @@ export default {
 				const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][index]
 				console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
 				if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)
+				}
 			}
 		},
 		async userFileSelect(data) {
@@ -1273,11 +1275,12 @@ export default {
 			if(data.val.criteria === this.criteriaNum) return
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
-				if(_this.indicatorRadioArr[index] !== 'user') return
-				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
-				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
-				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
+				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
+					await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
+					await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
+					await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
 			}
+				}
 		},
 		
 	}
