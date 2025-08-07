@@ -86,7 +86,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
-            <el-button type="text" @click="handleRowClick(scope.row)">{{ scope.row[l.value] }}</el-button>
+            <el-button type="text" @click="handleRowClick(scope.row)">{{ displayData(scope.row[l.value]) }}</el-button>
 						</p>
 					</template>
 				</el-table-column>
@@ -101,7 +101,7 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText">
-							{{ scope.row[l.value] }}
+							{{ displayData(scope.row[l.value]) }}
 						</p>
 					</template>
 				</el-table-column>
@@ -116,10 +116,10 @@
 				>
 					<template slot-scope="scope">
 						<p class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}%
+							{{ displayData(scope.row[l.value]) }}%
 						</p>
             <p class="tableText" v-else>
-							{{ scope.row[l.value] }}
+							{{ displayData(scope.row[l.value]) }}
 						</p>
 					</template>
 				</el-table-column>
@@ -166,10 +166,10 @@
 				>
         <template slot-scope="scope">
 						<p class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
-							{{ scope.row[l.value] }}(Bars)
+							{{ displayData(scope.row[l.value], true) }}(Bars)
 						</p>
             <p class="tableText" v-else>
-							{{ scope.row[l.value] }}
+							{{ displayData(scope.row[l.value], true) }}
 						</p>
 					</template>
 				</el-table-column>
@@ -389,6 +389,22 @@ export default {
         const path = 'https://youtu.be/KtvmNOPBrCk'
         window.open(path, '_blank')
     },
+    displayData(data, removeZero = false) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(1)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
     },
   }
 </script>

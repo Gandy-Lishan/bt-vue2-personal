@@ -91,6 +91,8 @@
 							:panelIndex="index"
 							:editableTabs="editableTabs"
 							:editableTabsValue="editableTabsValue"
+							:sentiUrl="indicatorUrlArr[index]"
+							:sentiVal="indicatorValArr[index]"
 							ref="indiChild"
 							:isRiskControl="relation == 0"
 							@getIndicatorUrl="getIndicatorUrl"
@@ -922,6 +924,13 @@ export default {
 				CIQ.addIndicators({})
 			}
 			if (val == 2 || val == 3) {
+				if (this.editableTabs.length > 4 && this.relation == 3) {
+					this.popUpMsgBox('Add up to four conditions')
+					this.editableTabs.pop()
+					this.indicatorRadioArr.pop()
+					this.editableTabsValue = '4'
+					this.tabIndex = 4
+				}
 				if (this.editableTabs.length <= 1) {
 					this.handleTabsEdit(null, 'add')
 					for (let i = 0; i < 2 - this.editableTabs.length; i++) {
@@ -1012,10 +1021,11 @@ export default {
 			}
 		},
 		isSameSignal() {
-			const description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
+			let description = this.$store.state.form.backtestInfo[`${this.criteriaNum}_description`]
 			if (isJson(description)) {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
    }
+			description = description.filter(item => !item.commentDes.includes('User Defined Dates'))
 			debugger
 			let sameSignalArr = searchKeys(description)
 			if(this.relation == 3) sameSignalArr = []
@@ -1070,9 +1080,17 @@ export default {
 			const commentDes = [criteria, direction, relation, score, period, delay_bars]
 				.filter(Boolean)
 				.join(' ');
-				if(this.relation == 1 && i === 0) return `${commentDes}${description}`
-				else if(this.relation != 1 && i === 0) return commentDes
-				else return description
+				if(this.relation == 1 && i === 0) return [{des: `${commentDes} ${description}`, index: i, rocCond: null}]
+				else if(this.relation != 1 && i === 0) return [{des: commentDes, index: i, rocCond: null}, {des: description, index: i + 1, rocCond: {
+					newCondition: 1,
+					conditionPeriod: 1,
+					ma_type: 'S'
+				}}]
+				else return [{des: description, index: i+1, rocCond: {
+					newCondition: 1,
+					conditionPeriod: 1,
+					ma_type: 'S'
+				}}]
 },
 		async saveData() {
 			// Save the selected indicator to vuex
@@ -1095,21 +1113,24 @@ export default {
 				const indi = this.$refs.indiChild[i].saveIndicator(i)
 				debugger
 				if(this.indicatorRadioArr[i] === 'user' && this.userDefinedDatesArr[i] === 'User Defined') {
-					const commentDes = this.getDatesCommentDes(i)
-					const rocCond = {
-						newCondition: 1,
-						conditionPeriod: 1,
-						ma_type: 'S'
-					}
-					this.$store.commit('form/saveDescription', {
-						index: i,
-					 criteria: this.config['criteriaNum'],
-						description: {
-							commentDes,
-							rocCond
-						}
+					const arr = this.getDatesCommentDes(i)
+					arr.forEach(item => {
+						this.$store.commit('form/saveDescription', {
+							index: item.index,
+							criteria: this.config['criteriaNum'],
+							description: {
+								commentDes: item.des,
+								rocCond: item.rocCond
+							}
+						})
 					})
+					// const rocCond = {
+					// 	newCondition: 1,
+					// 	conditionPeriod: 1,
+					// 	ma_type: 'S'
+					// }
 				}
+				debugger
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}
@@ -1247,6 +1268,7 @@ export default {
 			debugger
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
+				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
 				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
 				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
 				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
@@ -1254,6 +1276,7 @@ export default {
 				const fileHash = _this.$store.state.form[`usersOwn${oppositeCriteria}FileHash`][index]
 				console.log(`判断 ${oppositeCriteria} 有没有填充的值`, fileHash)
 				if(fileHash == '' || fileHash == 'HASH') eventBus.$emit(`userFileSelect`, data)
+				}
 			}
 		},
 		async userFileSelect(data) {
@@ -1263,11 +1286,12 @@ export default {
 			if(data.val.criteria === this.criteriaNum) return
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
-				if(_this.indicatorRadioArr[index] !== 'user') return
-				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
-				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
-				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
+				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
+					await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
+					await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
+					await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
 			}
+				}
 		},
 		
 	}
@@ -1354,6 +1378,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 25px;
 }
 .signal-container {
 	display: flex;

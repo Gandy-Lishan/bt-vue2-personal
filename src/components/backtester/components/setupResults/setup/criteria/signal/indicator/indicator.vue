@@ -350,7 +350,9 @@ export default {
     panelIndex: Number,
     editableTabsValue: String,
     editableTabs: Array,
-    isRiskControl: Boolean
+    isRiskControl: Boolean,
+    sentiUrl: String,
+    sentiVal: String,
   },
   components: {
     searchBar,
@@ -814,7 +816,7 @@ export default {
       this.$refs?.siForm.clearValidate()
       this.$refs?.upload.clearFiles()
       this.fileList = []
-      this.changeIndicatorChecked('Sentiment Indicator')
+      // this.changeIndicatorChecked('Sentiment Indicator')
     },
     // sentiment search
     indicatorSentimentSearch(queryString, cb) {
@@ -1324,6 +1326,8 @@ export default {
         this.$emit('userDefinedDates', {index: this.panelIndex, value: 'User Defined'})
       }else {
         this.$emit('userDefinedDates', {index: this.panelIndex, value: ''})
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
       }
       const obj = {}
       obj.criteria = this.criteria
@@ -1510,7 +1514,7 @@ export default {
         }
       }
       if (
-       (this.indicatorRadio === "Users' Own Indicator" || this.indicatorRadio === 'User Defined Dates') &&
+       (this.indicatorRadio === "Users' Own Indicator") &&
         !this.isRiskControl
       ) { 
         // this.$refs.siForm.validate((valid) => {
@@ -1592,9 +1596,14 @@ export default {
         this.indicatorRadio === "User Defined Dates" &&
         !this.isRiskControl
       ) {
+        debugger
         // this.$refs.siForm.validate((valid) => {
         // 	validForm = valid
         // })
+        if(!this.sentiUrl || !this.sentiVal || !this.sentiUrl.includes('UserDefinedDates:')) {
+          this.popUpMsgBox('Please upload the user defined dates file')
+          return false
+        }
         validForm = true
         if (validForm) {
           let obj = {}
@@ -1779,7 +1788,8 @@ export default {
         this.$notify({
           title: 'Failed',
           message: 'The internal server is busy, please try again later',
-          type: 'error'
+          type: 'error',
+          duration: 10000
         })
       }
     },
@@ -1851,7 +1861,7 @@ export default {
             self.$notify.success({
               title: 'Tips',
               message: 'File uploaded successfully.',
-              duration: 0
+              duration: 10000
             });
             self.previewFileID = response.data.file_id
             const obj = {}
@@ -1898,7 +1908,7 @@ export default {
           self.$notify.warning({
             title: 'Tips',
             message: 'File upload failed.',
-            duration: 0
+            duration: 10000
           });
 
           // ...
@@ -1906,6 +1916,8 @@ export default {
     },
     uploadDatesFile(file) {
       debugger
+      CIQ.addCover('Uploading the user defined dates file....')
+      CIQ.nprogress.start()
       const _file = file.file || file
       console.log('文件上传', file)
       const self = this
@@ -1973,7 +1985,7 @@ export default {
             self.$notify.success({
               title: 'Tips',
               message: 'File uploaded successfully.',
-              duration: 0
+              duration: 10000
             });
             self.previewDatesFileID = response.data.file_id
             const obj = {}
@@ -2018,7 +2030,7 @@ export default {
           self.$notify.warning({
             title: 'Tips',
             message: 'File upload failed.',
-            duration: 0
+            duration: 10000
           });
 
           // ...
@@ -2121,7 +2133,7 @@ export default {
       this.$notify.warning({
         title: 'Tips',
         message: 'Only single indicator files can be uploaded.',
-        duration: 0
+        duration: 10000
       });
       return false
     },
@@ -2129,7 +2141,7 @@ export default {
       this.$notify.warning({
         title: 'Tips',
         message: 'Only single indicator files can be uploaded.',
-        duration: 0
+        duration: 10000
       });
       return false
     },
@@ -2154,7 +2166,7 @@ export default {
       this.$notify.warning({
         title: 'Tips',
         message: 'Only single indicator files can be uploaded.',
-        duration: 0
+        duration: 10000
       });
       return false
     },
@@ -2224,7 +2236,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The uploaded file must be in CSV format.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The uploaded file must be in CSV format.')
       }
@@ -2236,7 +2248,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The file name must start with a letter and can only contain letters, numbers, spaces, and underscores.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The file name must start with a letter and can only contain letters, numbers, spaces,and underscores.')
       }
@@ -2246,7 +2258,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Empty files cannot be uploaded.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('Empty files cannot be uploaded.')
       }
@@ -2257,7 +2269,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The uploaded file cannot exceed 1MB.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
@@ -2306,7 +2318,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The uploaded file must be in CSV format.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The uploaded file must be in CSV format.')
       }
@@ -2318,7 +2330,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The file name must start with a letter and can only contain letters, numbers, spaces, and underscores.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The file name must start with a letter and can only contain letters, numbers, spaces,and underscores.')
       }
@@ -2328,7 +2340,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Empty files cannot be uploaded.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('Empty files cannot be uploaded.')
       }
@@ -2339,7 +2351,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'The uploaded file cannot exceed 1MB.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject('The uploaded file cannot exceed 1MB.')
       }
@@ -2497,6 +2509,8 @@ export default {
       // 1. 校验文件类型
       if (file.file.type !== 'text/csv') {
         this.popUpMsgBox('Only CSV files are allowed.');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
 
@@ -2516,6 +2530,8 @@ export default {
       const header = data[0];
       if (!header || header.trim() !== 'Date') {
         this.popUpMsgBox('CSV must contain exactly one column named "Date".');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
 
@@ -2526,6 +2542,8 @@ export default {
       const isValid = originalDates.every(d => dateRegex.test(d));
       if (!isValid) {
         this.popUpMsgBox('All dates must follow the format YYYY-MM-DD.');
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return;
       }
       const sortedRows = originalDates.sort(
@@ -2538,8 +2556,10 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
-          duration: 0
+          duration: 10000
         });
+        this.$refs.DatesUpload.clearFiles();
+        this.fileDatesList = []
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
         )
@@ -2563,8 +2583,10 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: 'Invalid date format.',
-            duration: 0
+            duration: 10000
           });
+          this.$refs.DatesUpload.clearFiles();
+          this.fileDatesList = []
           return Promise.reject(`Invalid date format.`)
         }
       })
@@ -2771,7 +2793,7 @@ export default {
             this.$notify.warning({
               title: 'Tips',
               message: 'Uploaded CSV file is empty. Ensure table header and content are present.',
-              duration: 0
+              duration: 10000
             });
             return reject(
               new Error('Uploaded CSV file is empty. Ensure table header and content are present.')
@@ -2788,7 +2810,7 @@ export default {
             this.$notify.warning({
               title: 'Tips',
               message: 'Date column in the file has an incorrect format. It should be in yyyy-MM-dd format, like 2023-04-20.',
-              duration: 0
+              duration: 10000
             });
             return reject(
               new Error(
@@ -2802,7 +2824,7 @@ export default {
             this.$notify.warning({
               title: 'Tips',
               message: 'Close column in the file has an incorrect format. It must be a numerical value, such as 45.55.',
-              duration: 0
+              duration: 10000
             });
             return reject(
               new Error(
@@ -2867,7 +2889,7 @@ export default {
           title: 'Incorrect Data Format in Rows',
           dangerouslyUseHTMLString: true,
           message: tableHTML,
-          duration: 0
+          duration: 10000
         });
         return false
       }
@@ -2891,7 +2913,7 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: 'Field order validation failed.',
-            duration: 0
+            duration: 10000
           });
           return false
         }
@@ -2903,7 +2925,7 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: message,
-            duration: 0
+            duration: 10000
           });
           return false
         }
@@ -2926,7 +2948,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
@@ -2952,7 +2974,7 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: 'Invalid date format.',
-            duration: 0
+            duration: 10000
           });
           return Promise.reject(`Invalid date format.`)
         }
@@ -3004,7 +3026,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Only daily CSV files can be uploaded. Please ensure that the CSV file does not contain non-trading days such as weekends and public holidays.',
-          duration: 0
+          duration: 10000
         });
         console.log('上传的 CSV 中, 以下时间是非交易日', diffDateArr)
         this.nonBusinessDay = diffDateArr
@@ -3031,7 +3053,7 @@ export default {
         this.$notify.warning({
           title: 'Tips',
           message: 'Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.',
-          duration: 0
+          duration: 10000
         });
         return Promise.reject(
           `Only daily CSV files can be uploaded. Please set the timeframe to Daily and try uploading again.`
@@ -3057,7 +3079,7 @@ export default {
           this.$notify.warning({
             title: 'Tips',
             message: 'Invalid date format.',
-            duration: 0
+            duration: 10000
           });
           return Promise.reject(`Invalid date format.`)
         }
