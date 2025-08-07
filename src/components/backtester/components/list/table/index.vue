@@ -790,6 +790,7 @@ export default {
 				if(!even) criteriaName = i === 1 ? 'exit' : 'exit2'
 
 					const {relation, signals_in_market, delay_bars, score, signals} = isJson(row[criteriaName]) ? JSON.parse(row[criteriaName]) : row[criteriaName]
+					debugger
 					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
 					const _description = criteria_description.map((item, i) => {
 						if(i === 0) return item.commentDes
@@ -819,8 +820,13 @@ export default {
 										if(decode.analysis === 'User') {
 											const {data} = await searchIndicator(decode.indicator)
 											const element = data.results.find(ele => ele.name === decode.indicator)
-											if(element) {decode.indicator = element.url}
+											if(element) {
+												decode.indicator = element.url
 											_signals.push({code: signalCode.encode(decode)})
+											}else {
+												reasons.push('User-defined/User-uploaded indicators is not supported')
+												break
+											}
 										}else if(strategy === 'Dual' && decode.analysis === 'Symbol' && decode.indicator === 'Symbol Ratio') {
 											reasons.push('Dual Symbol Backtest with Symbol Ratio is not supported')
 											_signals = []
