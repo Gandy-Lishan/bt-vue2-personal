@@ -1300,12 +1300,12 @@ export default {
        CIQ.setTechLayout('', this.criteria, this.panelIndex)
        
       // avoid add indicator redundantly
-      for (let studyInstanceName in CIQ.stxx.layout.studies) {
-        let sd = CIQ.stxx.layout.studies[studyInstanceName]
-        if (sd.type == indicatorUrl) {
-          return
-        }
-      }
+      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
+      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
+      //   if (sd.type == indicatorUrl) {
+      //     return
+      //   }
+      // }
       CIQ.addIndicators({})
     },
     changeIndicatorChecked(val) {
