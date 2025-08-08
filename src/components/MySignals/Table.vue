@@ -4,7 +4,15 @@
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
+     <div>
+        <el-tooltip class="item" effect="dark" placement="bottom-start">
+          <span slot="content" v-html="textContent">
+          </span>
+          <el-button size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
+      </el-tooltip>
       <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
+     </div>
+
       <!-- <el-popconfirm
         confirm-button-text="Continue"
         cancel-button-text="Cancel"
@@ -212,7 +220,8 @@ export default {
         }
       ],
       tableData: [],
-      isShowLastSignalDate: false
+      isShowLastSignalDate: false,
+      textContent: `Click this button to sort the list in ascending or descending order based on the project's creation date. <br/>This helps you quickly find the most recently or earliest created projects. Click again to toggle the sorting direction.`
     }
   },
   computed: {
@@ -233,6 +242,12 @@ export default {
     }
   },
   methods: {
+    sortByDateCreated() {
+      this.currentSort.prop = 'create_date'
+      console.log('this.currentSort', this.currentSort)
+      this.currentSort.order = this.currentSort.order === 'ascending' ? 'descending' : 'ascending'
+      this.handleCurrentChange(1)
+    },
     async getDataList(tab, doNotResetPage = false) {
       // A request that requires writing two lists
       // if(this.currentPageTab === 'MySignal') {
@@ -325,7 +340,7 @@ export default {
       let { prop:colName, order:sortingOrder } = this.currentSort;
       console.log(colName, sortingOrder)
 			// 日期类型排序
-      if (['last_signal_date'].indexOf(colName) !== -1) {
+      if (['last_signal_date', 'create_date'].indexOf(colName) !== -1) {
         this.filterData.sort((a, b) => {
           const dateA = a[colName] ? new Date(a[colName]) : null;
           const dateB = b[colName] ? new Date(b[colName]) : null;
@@ -336,9 +351,9 @@ export default {
           if (!dateB) return -1; // `b`为空，排在后面
 
           // 正常比较日期
-          if (sortingOrder === 'ascending') {
+          if (sortingOrder === 'descending') {
               return dateA - dateB;
-          } else if (sortingOrder === 'descending') {
+          } else if (sortingOrder === 'ascending') {
               return dateB - dateA;
           }
 
@@ -347,9 +362,9 @@ export default {
       }
 			// 字符串类型排序
 			if(['name','symbol','timeframe'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
+				if(sortingOrder == 'descending'){
 					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
+				}else if(sortingOrder == 'ascending'){
 					this.filterData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
 				}else{
 				}
