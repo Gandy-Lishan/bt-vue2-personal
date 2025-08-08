@@ -976,7 +976,10 @@ h4 {
   border-radius: 4px;
   line-height: 28px;
   border-radius: 4px;
-	margin-top: 10px;
+		margin-top: 10px;
+		color: #606266;
+		font-weight: 500;
+		font-size: 14px;
   }
   .portfolioCheckedBox a {
     font-weight: 600;

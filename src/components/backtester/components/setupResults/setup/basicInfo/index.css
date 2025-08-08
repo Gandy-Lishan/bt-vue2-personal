@@ -93,6 +93,9 @@
 
 .el-input--mini .el-input__inner{
   margin-left: 0;
+  color: #606266;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .set-up-container input:not([type]),

@@ -722,9 +722,15 @@ try {
 }
 .scanner-form /deep/ .el-input__inner {
   margin-left: 0px;
+  color: #606266;
+  font-weight: 500;
+  font-size: 14px;
 }
 .set-up-container /deep/ .el-input__inner {
   margin-left: 0px;
+  color: #606266;
+  font-weight: 500;
+  font-size: 14px;
 }
 .set-up-container /deep/ .el-form-item__content {
   width: 100%;
