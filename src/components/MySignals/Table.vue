@@ -8,7 +8,7 @@
         <el-tooltip class="item" effect="dark" placement="bottom-start">
           <span slot="content" v-html="textContent">
           </span>
-          <el-button size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
+          <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
       </el-tooltip>
       <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
      </div>
