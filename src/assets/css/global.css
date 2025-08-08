@@ -269,6 +269,8 @@ input[type="time"] {
 }
 .el-radio__label {
   font-size: 15px !important;
+  color: #606266;
+  font-weight: 500;
 }
 .el-dialog__wrapper .el-dialog {
   width: 60% !important;
@@ -748,8 +750,9 @@ color: #333341;
   z-index: 2002;
 }
 .result-container .el-input.is-disabled .el-input__inner{
-  color: #333;
+  color: #606266;
   font-size: 14px;
+  font-weight: 500;
 }
 .CPM-trades .darken-row {
   background-color: #f9f9f9;

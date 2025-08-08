@@ -1255,6 +1255,10 @@ export default {
 }
 /deep/ .el-button, /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
   font-weight: 500;
+  font-size: 14px;
+}
+/deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
+  color: #606266;
 }
 .el-tooltip__popper {
   /* button的z-index是2001,遮罩层的z-index是2000 */

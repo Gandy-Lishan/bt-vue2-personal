@@ -7,7 +7,7 @@
     :class="{'WIC-form-container': data.categories == 'WIC'}"
 		:model="data"
 		label-position="left"
-		size="mini"
+		size="small"
     :rules="rules"
 	>
 
@@ -257,7 +257,7 @@
       element-loading-background="rgba(0, 0, 0, 0.8)"
       stripe
       border
-      size="mini"
+      size="small"
       highlight-current-row                                       
       >
       <el-table-column label="Index" header-align="center" align="center" width="80px">
@@ -270,15 +270,15 @@
             @query="querySearch"
             @select="item => handleRowSelect(item, scope.row)"
             placeholder="Please select indicator or symbol from the dropdown menu"
-            size="mini"
+            size="small"
           />
         </template>
       </el-table-column>
       <el-table-column label="Weight" header-align="center" align="center" prop="weight" width="150px">
         <template slot-scope="scope">
           <!-- 注释掉：无需校验 totalWeight <= 100 -->
-          <!-- <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)"> -->
-          <el-input v-model="scope.row.weight" size="mini" @input="validateWeightRule(scope.row)">
+          <!-- <el-input v-model="scope.row.weight" size="small" @input="validateWeightRule(scope.row)" @blur="validateTotalPercentage(scope.row)"> -->
+          <el-input v-model="scope.row.weight" size="small" @input="validateWeightRule(scope.row)">
             <template v-slot:append>(%)</template>
           </el-input>
           <div class="error-message">
@@ -288,8 +288,8 @@
       </el-table-column>
       <el-table-column header-align="center" align="center" width="250px">
         <template slot-scope="scope">
-          <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="mini" type="primary">Add Indicator</el-button>
-          <el-button v-else size="mini" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Indicator</el-button> 
+          <el-button v-if="scope.$index === 0" @click="addRow(scope.row)" icon="el-icon-circle-plus-outline" size="small" type="primary">Add Indicator</el-button>
+          <el-button v-else size="small" type="primary" icon="el-icon-delete" @click.stop="deleteRow(scope.$index)" class="delete-btn">Delete Indicator</el-button> 
         </template>
       </el-table-column>
       </el-table>
@@ -1808,7 +1808,7 @@ h4 {
 .item-label {
 	font-weight: 500;
 }
-.el-select.el-select--mini {
+.el-select.el-select--small {
   width: 100%;
 }
 .error-message {
@@ -1857,6 +1857,10 @@ h4 {
   color: #333;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 14px;
+}
+/deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
+  color: #606266;
 }
 </style>
