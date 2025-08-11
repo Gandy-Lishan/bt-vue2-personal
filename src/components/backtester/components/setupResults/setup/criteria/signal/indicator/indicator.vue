@@ -353,6 +353,7 @@ export default {
     isRiskControl: Boolean,
     sentiUrl: String,
     sentiVal: String,
+    relation: Number
   },
   components: {
     searchBar,
@@ -499,7 +500,6 @@ export default {
         {value: 'Technical Indicator', label: 'Technical Indicator'},
         {value: 'Symbol OHLCV', label: 'Symbol OHLCV'},
         {value: "Users' Own Indicator", label: "Users' Own Indicator"},
-        {value: "User Defined Dates", label: "User Defined Dates"},
       ],
       createdIndicatorOptions: [],
       pairDataDate: [],
@@ -751,6 +751,16 @@ export default {
           }
         }
       }
+    },
+    relation: {
+      handler(newVal) {
+        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates")) {
+          this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
+        }else {
+          this.typeOptions = this.typeOptions.filter(item => item.value !== "User Defined Dates")
+        }
+      },
+      immediate: true
     },
     async isBTChartReady(val) {
       if(!val) return
