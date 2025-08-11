@@ -37,8 +37,8 @@
 					<hr />
 					<p>
 						In the chart section of BacktestEdge, users can select stock/index/ETF
-						symbol to be backtested and add to favorites; select sentiment
-						indicators and add to favorites; select technical indicators and
+						symbol to be backtested and add to favorite symbols; select sentiment
+						indicators and add to favorite indicators; select technical indicators and
 						modify settings; select timeframe among Daily/Weekly/Monthly; select
 						the Day/Night theme of chart.
 					</p>
@@ -207,9 +207,9 @@
 					></el-image>
 					<h3 id="0-1-10">Add symbols to favorites</h3>
 					<p>
-						Click the Add to Favorites button to the right of the symbol name to
-						add the symbol to your favorites. At this time, you can click on the
-						Symbol search box to view the symbols in the favorites.
+						Click the Add to favorite symbols button to the right of the symbol name to
+						add the symbol to your favorite symbols. At this time, you can click on the
+						Symbol search box to view the symbols in the favorite symbols.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -224,9 +224,9 @@
 						Feel free to choose an Indexer in the Sentiment Indicator search
 						box, such as Smart Money Confidence. Place the mouse over the
 						selected graph and right-click on the one that appears Click add to
-						Favorites Indicators in the menu item to add the current stock to
-						the indicator favorites. If you want to see the Sentiment Indicator
-						in your favorites, you can click here Sentiment Indicator search box
+						favorite indicators in the menu item to add the current stock to
+						the indicator favorite indicators. If you want to see the Sentiment Indicator
+						in your favorite indicators, you can click here Sentiment Indicator search box
 						view.
 					</p>
 					<el-image
@@ -993,7 +993,7 @@
 					<h2 id="2-0">Open the Backtest History tab</h2>
 					<p>
 						Open the Backtest History tab, choose which backtest you want to add
-						to the favorites, and click the add to favorites button.
+						to the favorite backtests, and click the add to favorite backtests button.
 					</p>
 					<el-image
 						style="width: 100%; height: 50%"
@@ -1022,7 +1022,7 @@
 
 			<section v-else-if="id.includes('fls')">
 				<h1 id="fls">Using the “Find Last Signal” Feature</h1>
-				<p>Explore "Add to Favorites" and "Find Last Signal" features for efficient backtesting. Learn to streamline your analysis process and enhance trading strategies with organized tools. Whether you're new or want to optimize strategy analysis, these features offer valuable insights and convenience. </p>
+				<p>Explore "Add to favorite backtests" and "Find Last Signal" features for efficient backtesting. Learn to streamline your analysis process and enhance trading strategies with organized tools. Whether you're new or want to optimize strategy analysis, these features offer valuable insights and convenience. </p>
 				<iframe width="560" height="315" src="https://www.youtube.com/embed/oNDFG17j1OA?si=yQRHPOcD9PIlSwpD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<hr />
 				<!-- <h2 id="fls-0">Click the 'find last signal' button</h2>

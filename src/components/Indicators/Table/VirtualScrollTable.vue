@@ -205,8 +205,8 @@
           <el-table-column align="center" width="35px" v-if="!showRelated">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorites" :loading="scope.row.loading"></el-button>
-                <el-button v-else-if="scope.row.favorite === true && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.loading"></el-button>
+                <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorite indicators" :loading="scope.row.loading"></el-button>
+                <el-button v-else-if="scope.row.favorite === true && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorite indicators" :loading="scope.row.loading"></el-button>
                 <el-button v-else-if="checkedType === 'WatchList'" size="small" type="text" icon="el-icon-close" @click="deleteTickers(scope)" title="Delete from Watchlist"></el-button>
               </el-button-group>
             </template>

@@ -87,7 +87,7 @@
 				<template slot-scope="scope">
           <el-button-group>
             <!-- <el-button type="text" icon="el-icon-plus" @click="handleRowClick(scope.row)" title="View Backtest Details" :loading="scope.row.viewLoading"></el-button> -->
-            <el-button v-show="scope.row.source === 'Backtest Engine v2.0'" type="text" size="mini" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorites" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
+            <el-button v-show="scope.row.source === 'Backtest Engine v2.0'" type="text" size="mini" icon="el-icon-star-on" @click="addRow(scope)" title="Remove from favorite indicators" :loading="scope.row.deleteLoading" element-loading-spinner="el-icon-right"></el-button>
           </el-button-group>
         </template>
       </el-table-column>

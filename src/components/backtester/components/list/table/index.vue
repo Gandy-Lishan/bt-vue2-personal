@@ -345,7 +345,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="add to favorites" 
+									content="Add to favorite backtests" 
 									v-if="scope.row.favorites == false"
 									placement="bottom-start"
 								>
@@ -361,7 +361,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="remove from favorites"
+									content="Remove from favorite backtests"
 									v-if="scope.row.favorites == true && ['History', 'Favorites'].includes(currentPage)"
 									placement="bottom-start"
 								>
