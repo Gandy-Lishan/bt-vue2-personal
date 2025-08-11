@@ -221,7 +221,7 @@ export default {
       ],
       tableData: [],
       isShowLastSignalDate: false,
-      textContent: `Click this button to sort the list in ascending or descending order based on the project's creation date. <br/>This helps you quickly find the most recently or earliest created projects. Click again to toggle the sorting direction.`
+      textContent: `Click this button to sort the list in ascending or descending order based on the signals' creation date. <br/>This helps you quickly find the most recently or earliest created signals'. Click again to toggle the sorting direction.`
     }
   },
   computed: {
