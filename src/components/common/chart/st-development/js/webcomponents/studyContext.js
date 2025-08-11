@@ -28,7 +28,7 @@ let __js_webcomponents_studyContext_ = (_exports) => {
 
     StudyContext.markup = `
             <div stxtap="StudyEdit.description()">Indicator Description</div>
-            <div stxtap="StudyEdit.addIndicatorCookie()" class="cookie">Add To Favorite Indicators</div>
+            <div stxtap="StudyEdit.addIndicatorCookie()" class="cookie">Add to favorite indicators</div>
             <div stxtap="StudyEdit.edit()">Edit Setting</div>
             <div stxtap="StudyEdit.remove()">Delete Indicator</div>
         `;

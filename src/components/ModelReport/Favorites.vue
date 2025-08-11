@@ -138,7 +138,7 @@
                             <span>
                               | {{post.author}}
                             </span>
-                            <button class="btn btn-default like-button no-print" @click="likePost(post.url, true)" title="Remove from favorites">
+                            <button class="btn btn-default like-button no-print" @click="likePost(post.url, true)" title="Remove from favorite reports">
                               <i class="fa fa-heart" id="like-icon"></i>
                             </button>
                            </div>
