@@ -196,6 +196,8 @@ li.el-submenu.is-active.report-menu .el-submenu__title {
 }
 .el-form-item__label {
   font-weight: 500;
+  color: #606266;
+  font-size: 14px !important;
 }
 .el-tab-pane .el-tabs {
   overflow: auto;
@@ -243,7 +245,7 @@ li.el-submenu.is-active.report-menu .el-submenu__title {
   color: #5b9bd1;
 }
 .el-checkbox__label {
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 5px;
 }
 /* .backtest_container .dateBox .el-form-item .el-form-item__label {
@@ -268,7 +270,9 @@ input[type="time"] {
   width: 100%;
 }
 .el-radio__label {
-  font-size: 15px !important;
+  font-size: 14px !important;
+  color: #606266;
+  font-weight: 500;
 }
 .el-dialog__wrapper .el-dialog {
   width: 60% !important;
@@ -512,7 +516,7 @@ input[type="time"] {
 .condition-radio input{
 	  color: #606266 !important;
     font-weight: 500 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     width: 150px !important;
 }
 
@@ -748,8 +752,9 @@ color: #333341;
   z-index: 2002;
 }
 .result-container .el-input.is-disabled .el-input__inner{
-  color: #333;
+  color: #606266;
   font-size: 14px;
+  font-weight: 500;
 }
 .CPM-trades .darken-row {
   background-color: #f9f9f9;

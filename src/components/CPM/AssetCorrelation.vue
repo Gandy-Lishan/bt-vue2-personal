@@ -237,7 +237,10 @@ export default {
     border-top: 2px solid #eee;
   }
   /deep/ .el-input--prefix .el-input__inner {
-    margin: 0px
+    margin: 0px;
+    color: #606266;
+    font-weight: 500;
+    font-size: 14px;
   }
   .download-btn {
     float: right

@@ -123,6 +123,7 @@
 							:editableTabsValue="editableTabsValue"
 							:sentiUrl="indicatorUrlArr[index]"
 							:sentiVal="indicatorValArr[index]"
+							:relation="relation"
 							ref="indiChild"
 							:isRiskControl="relation == 0"
 							@getIndicatorUrl="getIndicatorUrl"

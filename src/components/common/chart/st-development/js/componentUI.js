@@ -3346,14 +3346,14 @@ CIQ.UI.StudyEdit.prototype.updateOverlayEdit = async function() {
 	for (var item in favoriteIndicatorList) {
 		if (favoriteIndicatorList[item].url == this.params.sd.type) {
 			var node = document.getElementsByClassName('cookie')
-			node[0].innerHTML = 'Remove From Favorite Indicators'
+			node[0].innerHTML = 'Remove from favorite indicators'
 			node[0].attributes.stxtap.nodeValue = 'StudyEdit.delIndicatorCookie()'
 			return
 		}
 	}
 	var node = document.getElementsByClassName('cookie')
 	if(node[0]) {
-		node[0].innerHTML = 'Add To Favorite Indicators'
+		node[0].innerHTML = 'Add to favorite indicators'
 		node[0].attributes.stxtap.nodeValue = 'StudyEdit.addIndicatorCookie()'
 	}
 }

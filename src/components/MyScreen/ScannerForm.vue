@@ -1289,7 +1289,8 @@ try {
   }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #606266;
+  font-size: 14px;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
   font-weight: 500;
@@ -1299,6 +1300,9 @@ try {
 }
 .scanner-form /deep/ .el-input__inner {
   margin-left: 0px;
+  color: #606266;
+  font-weight: 500;
+  font-size: 14px;
 }
 .set-up-container /deep/ .el-input__inner {
   margin-left: 0px;

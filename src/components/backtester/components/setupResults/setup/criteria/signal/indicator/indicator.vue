@@ -336,6 +336,7 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
 import {createStateFilter,maxNumOfStudy,getSymbolInfo} from '@/utils/globalFunc'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
@@ -353,6 +354,7 @@ export default {
     isRiskControl: Boolean,
     sentiUrl: String,
     sentiVal: String,
+    relation: Number
   },
   components: {
     searchBar,
@@ -499,7 +501,6 @@ export default {
         {value: 'Technical Indicator', label: 'Technical Indicator'},
         {value: 'Symbol OHLCV', label: 'Symbol OHLCV'},
         {value: "Users' Own Indicator", label: "Users' Own Indicator"},
-        {value: "User Defined Dates", label: "User Defined Dates"},
       ],
       createdIndicatorOptions: [],
       pairDataDate: [],
@@ -751,6 +752,19 @@ export default {
           }
         }
       }
+    },
+    relation: {
+      handler(newVal) {
+        const email = getCookieData()?.username
+		    const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+        const isAllowUser = allowedUserList.includes(email)
+        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates") && isAllowUser) {
+          this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
+        }else {
+          this.typeOptions = this.typeOptions.filter(item => item.value !== "User Defined Dates")
+        }
+      },
+      immediate: true
     },
     async isBTChartReady(val) {
       if(!val) return

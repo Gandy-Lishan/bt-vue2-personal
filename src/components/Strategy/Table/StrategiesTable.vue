@@ -111,7 +111,7 @@
 							<el-tooltip
 									class="item"
 									effect="dark"
-									content="Add To Favorites" 
+									content="Add to my favorite strategies" 
 									v-if="!scope.row.favorite"
 									placement="bottom-start"
 								>
@@ -126,7 +126,7 @@
 								<el-tooltip
 									class="item"
 									effect="dark"
-									content="Remove From Favorites"
+									content="Remove from my favorite strategies"
 									v-if="scope.row.favorite"
 									placement="bottom-start"
 								>
