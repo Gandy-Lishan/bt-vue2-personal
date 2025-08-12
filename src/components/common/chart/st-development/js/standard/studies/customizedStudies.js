@@ -1404,6 +1404,36 @@ if (!CIQ.Studies) {
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
 
+	CIQ.Studies.calculateCriteriaScore = function (stx, sd) {
+		// todo: 考虑从这里开始都替换成scrubbed
+		// var quotes = sd.chart.scrubbed;
+		// var field	// 它是流动的
+		// if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+		// 	field = CIQ.store.getters.getComparisonSymbol.url
+		// 	quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		// }else{
+		// 	quotes = sd.chart.scrubbed
+		// }
+		var quotes = sd.chart.dataSet
+
+		const criteriaCat = sd.parameters.criteria.startsWith('entry') ? 'Entry' : 'Exit'
+		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+		let display = `(${symbolLabel}) ${criteriaCat} Criteria Score`
+		sd.inputs.display = display
+
+		const criteriaScoreList = CIQ.store.getters.getCriteriaScoreList
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			if (!quote) continue;
+			
+			quote[sd.inputs.display] = criteriaScoreList[i]
+		}
+
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
+	};
+
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
 		"MAGap": {
@@ -1669,6 +1699,12 @@ if (!CIQ.Studies) {
             name: "Amplitude",
 			inputs: {},
             calculateFN: CIQ.Studies.calculateAmplitude,
+			outputs: { Result: "auto" },
+        },
+		"CriteriaScore": {
+            name: "CriteriaScore",
+			inputs: {},
+            calculateFN: CIQ.Studies.calculateCriteriaScore,
 			outputs: { Result: "auto" },
         },
 	});

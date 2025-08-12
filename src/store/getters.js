@@ -44,6 +44,8 @@ const getters = {
 
 	getMiFormShift: state => state.chart.miFormShift,
 
+	getCriteriaScoreList: state => state.chart.criteriaScoreList,
+
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
 	getScannerAIFlagState: state => state.states.scannerai_flag,
