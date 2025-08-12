@@ -308,7 +308,7 @@
         </el-table>
       </el-dialog>
       <el-dialog
-        :title="exampleDataTitle"
+        :title="`${exampleDataTitle} (Each date in Date column represents a signal.)`"
         :visible.sync="exampleDatesVisible"
       >
         <el-table
@@ -484,15 +484,15 @@ export default {
       ],
       exampleDates: [
         { 'Date': '2018-01-02'},
-        { 'Date': '2018-01-03'},
-        { 'Date': '2018-01-04'},
-        { 'Date': '2018-01-05'},
-        { 'Date': '2018-01-08'},
-        { 'Date': '2018-01-09'},
-        { 'Date': '2018-01-10'},
-        { 'Date': '2018-01-11'},
-        { 'Date': '2018-01-12'},
-        { 'Date': '2018-01-16'}
+        { 'Date': '2019-05-09'},
+        { 'Date': '2019-11-12'},
+        { 'Date': '2020-03-02'},
+        { 'Date': '2020-05-04'},
+        { 'Date': '2020-07-06'},
+        { 'Date': '2020-09-08'},
+        { 'Date': '2020-11-10'},
+        { 'Date': '2021-01-12'},
+        { 'Date': '2021-05-14'}
       ],
       exampleDataVisible: false,
       exampleDatesVisible: false,
