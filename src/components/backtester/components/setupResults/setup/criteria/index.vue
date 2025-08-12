@@ -11,6 +11,36 @@
 				</el-tooltip>
 			</div>
 			<div class="signal-container">
+				<span v-if="relation !== 1 && relation !== 0" class="scoreNote">
+					<!-- <div class="excludeBox">
+						<i v-if="isCriteriaScoreChecked" class="el-icon-refresh" @click="handleCriteriaScoreChecked" style="margin-right: 5px"></i>
+						<el-checkbox v-model="isCriteriaScoreChecked" @change="handleCriteriaScoreChecked"
+							>Criteria Score
+							<el-tooltip effect="dark" placement="top">
+								<span slot="content" v-html="config['criteriaScore']">
+								</span>
+								<i class="iconfont icon-wenhao"></i>
+							</el-tooltip>
+						</el-checkbox>
+					</div> -->
+					<button class="criteria-score" @click="handleCriteriaScoreChecked">
+						<svg
+							class="sidebar_button_icon"
+							width="12"
+							height="12"
+							viewBox="0 0 12 12"
+							fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"
+							/>
+						</svg>
+						<span>Show Criteria Score</span>
+					</button>
+				</span>
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="display: inline">
@@ -497,6 +527,9 @@ export default {
 				{ value: 2, label: 'SameBar Multi-Condition' },
 				{ value: 3, label: 'TimeOrder Multi-Condition' }
 			],
+
+			// Criteria Score
+			isCriteriaScoreChecked: false,
     }
   },
   computed: {
@@ -549,6 +582,11 @@ export default {
 			this.clearSubComponent()
 	},
 	methods: {
+		async handleCriteriaScoreChecked() {
+			this.addSignalLength()
+			await this.saveData()
+			CIQ.showScore(this.criteriaNum)
+		},
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
 			Object.assign(this.$data, this.$options.data())
@@ -1417,4 +1455,41 @@ export default {
 	border-radius: 0px;
 	margin: 0px;
 } 
+
+
+button.criteria-score {
+    border: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	font-weight: bold;
+    font-size: 10px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 10px;
+    background-image: initial;
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    //box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    margin: 0 10px 0 0;
+    svg {
+      padding-right: 10px;
+	  color: #333333;
+    }
+
+    span {
+      color: #333333;
+	  white-space: nowrap;
+    }
+
+	background: #d7d7d7;
+      &:hover {
+        background: #d1d1d1;
+        //box-shadow: 0 6px 20px #f59e0b;
+      }
+  }
 </style>

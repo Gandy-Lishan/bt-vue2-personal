@@ -122,10 +122,16 @@ const state = {
 	indicatorsPageListdata: {},
 	cssMonthLabel: '',
 	indicatorPageBtv1List: [],
-	JumpToBTSymbol: ''
+	JumpToBTSymbol: '',
+
+	// criteria score
+	criteriaScoreList: [],
 }
 
 const mutations = {
+	SAVE_CRITERIA_SCORELIST(state, list){
+		state.criteriaScoreList = list
+},
 	SET_FORECAST_MARKET(state, val){
 			state.forecastMarket = val
 	},
@@ -354,6 +360,12 @@ const mutations = {
 }
 
 const actions = {
+	save_criteria_scorelist({ commit }, list) {
+		return new Promise(resolve => {
+			commit('SAVE_CRITERIA_SCORELIST', list)
+			resolve()
+		})
+	},
 /** Begin manage fav indicator & symbol list */
 	get_favorite({ commit, state }) {
 		return new Promise(async (resolve,reject) => {

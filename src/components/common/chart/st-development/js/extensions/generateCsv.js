@@ -1,4 +1,6 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
+import cloneDeep from 'lodash/cloneDeep'
+
 let __st_js_generateCsv_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -943,5 +945,171 @@ let __st_js_generateCsv_ = (_exports) => {
      
      return finalData
  }
+
+/**
+ * 
+ * @param {*} criteria , criteria includes entry,entry2,exit,exit2
+ * @returns 
+ */
+ CIQ.showScore = async function(criteria){  
+    const criteriaCat = criteria.startsWith('entry') ? 'entry' : 'exit'
+    let finalData = []
+    
+    let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
+    if(study == undefined){ return }
+    // 因为scrubbed不包含没数据的row
+    let JSONData = study.chart.dataSet
+    //先转化json
+    let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    // 给数组内容换好位置
+    for(var i in _arrData){
+        let obj = {
+            [`${criteriaCat}_1`]: '',
+            [`${criteriaCat}_2`]: '',
+            [`${criteriaCat}_3`]: '',
+            [`${criteriaCat}_4`]: '',
+            [`${criteriaCat}_5`]: '', 
+        };
+      finalData.push(obj);
+    }
+
+    // find the correspond sd type
+    CIQ.store.state.chart.indicators.formIndicators[criteria].forEach((value,index)=>{
+        var _index = ''
+        var indexNum
+        var sd = {}
+        for(var i in CIQ.stxx.layout.studies){
+            var _sd = CIQ.stxx.layout.studies[i]
+            // 如果indicator不是ma (那就是senti,own,users,其他tech'),则不考虑criteria和index
+            // if(!_sd.parameters.criteria && _sd.type == value){
+           if( 
+               !_sd.parameters.criteria && 
+               _sd.type == value && 
+               // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+               (!_sd.parameters.hasOwnProperty('isComparison') || !_sd.parameters.isComparison)
+           ){
+               _index = `${criteriaCat}_`+(index+1)
+               indexNum = index
+               sd = _sd
+               continue;
+           }
+           if( 
+               _sd.type == value &&
+               _sd.parameters.criteria == criteria &&
+               _sd.parameters.index == index
+           ){
+               _index = `${criteriaCat}_`+(index+1)
+               indexNum = index
+               sd = _sd
+           }
+        }
+        finalData = generateFinalOutput(_arrData,finalData,sd,_index,indexNum,criteria)
+    })
+
+    // TODO ,逐个拿entry1, entry2 ...的条件来对比finalData值是否满足
+    
+    const signals = cloneDeep(CIQ.store.state.form.backtestInfo)[criteria].signals
+    const evalatedList = evaluateAll(finalData, signals)
+    // console.log('evalatedList: ', evalatedList)
+    await CIQ.store.dispatch('chart/save_criteria_scorelist',evalatedList.map(item=>Object.values(item).reduce((sum,num)=>sum+num,0)))
+    for (let studyInstanceName in CIQ.stxx.layout.studies) {
+        if (
+          CIQ.stxx.layout.studies[studyInstanceName].type == 'CriteriaScore'
+        ) {
+          CIQ.Studies.removeStudy(
+            CIQ.stxx,
+            CIQ.stxx.layout.studies[studyInstanceName]
+          )
+        }
+      }
+    let sd = CIQ.Studies.addStudy(CIQ.stxx, 'CriteriaScore', {
+    }, null,{ 
+        criteria: criteria, 
+        index: null 
+    }) 
+    CIQ.stxx.panels[sd.panel].holder.children[0].style.backgroundColor = '##5b9bd133'
+};
+
+function evaluateAll(finalData, signals) {
+    return finalData.map((row, rowIndex) => {
+      const entryKeys = Object.keys(row)
+        .filter(k => /^(entry|exit)_\d+$/.test(k))
+        .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]));
+  
+      const result = {};
+  
+      for (let i = 0; i < entryKeys.length; i++) {
+        const key = entryKeys[i];
+        const rawVal = row[key];
+  
+        // 空值 => 0
+        if (rawVal === '' || rawVal === null || rawVal === undefined || Number.isNaN(Number(rawVal))) {
+          result[key] = 0;
+          continue;
+        }
+  
+        // signals 下标越界 => 0
+        if (i >= signals.length) {
+          result[key] = 0;
+          continue;
+        }
+  
+        const signal = signals[i];
+        const ok = evaluateCondition(rawVal, signal, { finalData, rowIndex, keyIndex: i });
+        result[key] = ok ? 1 : 0;
+      }
+  
+      return result;
+    });
+  }
+  
+  function evaluateCondition(value, signal, ctx = {}) {
+    const comp = signal.condition; // 0: >, 1: ==, 2: <, 3: cross_above, 4: cross_below
+    const t = Number(signal.value);
+    const v = Number(value);
+  
+    if (!isFinite(v) || !isFinite(t)) return false;
+  
+    // 大于
+    if (comp === 0) return v > t;
+  
+    // 等于
+    if (comp === 1) return v === t;
+  
+    // 小于
+    if (comp === 2) return v < t;
+  
+    // 金叉（cross_above）
+    if (comp === 3) {
+      const { finalData, rowIndex, keyIndex } = ctx;
+      if (!finalData || rowIndex <= 0) return false;
+  
+      const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
+      if (!isFinite(prevVal)) return false;
+  
+      return prevVal < t && v >= t;
+    }
+  
+    // 死叉（cross_below）
+    if (comp === 4) {
+      const { finalData, rowIndex, keyIndex } = ctx;
+      if (!finalData || rowIndex <= 0) return false;
+  
+      const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
+      if (!isFinite(prevVal)) return false;
+  
+      return prevVal > t && v <= t;
+    }
+  
+    return false;
+  }
+  
+  function getPrevValue(finalData, rowIndex, keyIndex) {
+    const prevRow = finalData[rowIndex - 1];
+    const prevKey = Object.keys(prevRow)
+      .filter(k => /^(entry|exit)_\d+$/.test(k))
+      .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))[keyIndex];
+    return Number(prevRow[prevKey]);
+  }
 }
 export {__st_js_generateCsv_}
