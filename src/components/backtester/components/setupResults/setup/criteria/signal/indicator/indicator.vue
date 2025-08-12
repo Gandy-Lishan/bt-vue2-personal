@@ -336,6 +336,7 @@ import Papa from 'papaparse'
 import axios from 'axios'
 import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
 import {createStateFilter,maxNumOfStudy,getSymbolInfo} from '@/utils/globalFunc'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
@@ -754,7 +755,10 @@ export default {
     },
     relation: {
       handler(newVal) {
-        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates")) {
+        const email = getCookieData()?.username
+		    const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+        const isAllowUser = allowedUserList.includes(email)
+        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates") && isAllowUser) {
           this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
         }else {
           this.typeOptions = this.typeOptions.filter(item => item.value !== "User Defined Dates")
