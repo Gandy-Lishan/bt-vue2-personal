@@ -761,6 +761,12 @@ export default {
         if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates") && isAllowUser) {
           this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
         }else {
+          if(this.indicatorRadio === 'User Defined Dates'){
+            this.$refs.DatesUpload.clearFiles()
+            this.fileDatesList = []
+            this.indicatorRadio = 'Sentiment Indicator'
+            this.changeIndicatorType('Sentiment Indicator')
+          }
           this.typeOptions = this.typeOptions.filter(item => item.value !== "User Defined Dates")
         }
       },
@@ -2860,7 +2866,7 @@ export default {
         let tableRows = data.map(item => `
           <tr>
             <td>${item.Date}</td>
-            <td>${item.Close}</td>
+            <td>${item.Close || ''}</td>
           </tr>
         `).join('');
         if(this.indicatorRadio === 'User Defined Dates') {
