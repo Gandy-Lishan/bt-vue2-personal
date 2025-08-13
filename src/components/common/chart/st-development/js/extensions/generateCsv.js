@@ -954,7 +954,10 @@ let __st_js_generateCsv_ = (_exports) => {
  CIQ.showScore = async function(criteria){  
     const criteriaCat = criteria.startsWith('entry') ? 'entry' : 'exit'
     let finalData = []
+    let ohlcvRows = []
     
+    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+
     let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
     if(study == undefined){ return }
     // 因为scrubbed不包含没数据的row
@@ -963,6 +966,25 @@ let __st_js_generateCsv_ = (_exports) => {
     let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
     // 给数组内容换好位置
     for(var i in _arrData){
+        let item = _arrData[i]
+        // 考虑统一用dataSet总长度，symbol没有的一行用null
+        let close = item.Close || null
+        let open = item.Open || null
+        let high = item.High || null
+        let low = item.Low || null
+        if(comparisonSymbol.url && ['entry2','exit2'].includes(criteria)) {
+            close = item[comparisonSymbol.url]?item[comparisonSymbol.url].Close:null
+            open = item[comparisonSymbol.url]?item[comparisonSymbol.url].Open:null
+            high = item[comparisonSymbol.url]?item[comparisonSymbol.url].High:null
+            low = item[comparisonSymbol.url]?item[comparisonSymbol.url].Low:null
+        }
+        ohlcvRows.push({
+            'SC': close,
+            'SO': open,
+            'SH': high,
+            'SL': low,
+        })
+        
         let obj = {
             [`${criteriaCat}_1`]: '',
             [`${criteriaCat}_2`]: '',
@@ -970,9 +992,9 @@ let __st_js_generateCsv_ = (_exports) => {
             [`${criteriaCat}_4`]: '',
             [`${criteriaCat}_5`]: '', 
         };
-      finalData.push(obj);
+        finalData.push(obj);
     }
-
+    
     // find the correspond sd type
     CIQ.store.state.chart.indicators.formIndicators[criteria].forEach((value,index)=>{
         var _index = ''
@@ -1009,8 +1031,19 @@ let __st_js_generateCsv_ = (_exports) => {
     // TODO ,逐个拿entry1, entry2 ...的条件来对比finalData值是否满足
     
     const signals = cloneDeep(CIQ.store.state.form.backtestInfo)[criteria].signals
-    const evalatedList = evaluateAll(finalData, signals)
-    // console.log('evalatedList: ', evalatedList)
+
+    // 特殊情况： 如果comparison是SC即值应该是由Symbol Close - Value得来，
+    // 然而我们默认是只上传Value,这里需要单独判断并计算finalData那一列的值
+    // for(let signalIndex in signals) {
+    //     if(signals[signalIndex].comparison == 'SC') {
+    //         // TODO ,这里需要计算finalData那一列的值
+    //         finalData.forEach((item,idx) => {
+    //             item[`${criteriaCat}_${Number(signalIndex)+1}`] = _arrData[idx]['Close'] - item[`${criteriaCat}_${Number(signalIndex)+1}`]
+    //         });
+    //     }
+    // }
+    const evalatedList = evaluateAll(finalData, signals, ohlcvRows)
+    console.log('evalatedList: ', evalatedList)
     await CIQ.store.dispatch('chart/save_criteria_scorelist',evalatedList.map(item=>Object.values(item).reduce((sum,num)=>sum+num,0)))
     for (let studyInstanceName in CIQ.stxx.layout.studies) {
         if (
@@ -1030,7 +1063,7 @@ let __st_js_generateCsv_ = (_exports) => {
     CIQ.stxx.panels[sd.panel].holder.children[0].style.backgroundColor = '##5b9bd133'
 };
 
-function evaluateAll(finalData, signals) {
+function evaluateAll(finalData, signals, ohlcvRows) {
     return finalData.map((row, rowIndex) => {
       const entryKeys = Object.keys(row)
         .filter(k => /^(entry|exit)_\d+$/.test(k))
@@ -1055,7 +1088,7 @@ function evaluateAll(finalData, signals) {
         }
   
         const signal = signals[i];
-        const ok = evaluateCondition(rawVal, signal, { finalData, rowIndex, keyIndex: i });
+        const ok = evaluateCondition(rawVal, signal, { finalData, ohlcvRows, rowIndex, keyIndex: i });
         result[key] = ok ? 1 : 0;
       }
   
@@ -1063,42 +1096,60 @@ function evaluateAll(finalData, signals) {
     });
   }
   
-  function evaluateCondition(value, signal, ctx = {}) {
-    const comp = signal.condition; // 0: >, 1: ==, 2: <, 3: cross_above, 4: cross_below
-    const t = Number(signal.value);
-    const v = Number(value);
-  
-    if (!isFinite(v) || !isFinite(t)) return false;
+  function evaluateCondition(rawVal, signal, ctx = {}) {
+    const cond = signal.condition; // 0: >, 1: ==, 2: <, 3: cross_above, 4: cross_below
+    let comparison
+    let value
+    // Symbol Close 对比 Value
+    if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+        const { ohlcvRows, rowIndex } = ctx;
+        comparison = Number(ohlcvRows[rowIndex][signal.comparison]);
+        value = Number(rawVal);
+    }
+    // if comparison equal "MAMA" or the value equal "SL", "D","JAW", "TEETH", "LIPS", value = 0.
+    else if(signal.comparison=='MA' || ["SL", "D","JAW", "TEETH", "LIPS","SVMA"].includes(signal.value)) {
+        comparison = Number(rawVal);
+        value = 0;
+    }
+    // The type of remaining part of value is float or int, is himself.
+    else if(!isNaN(Number(signal.value))) {
+        comparison = Number(rawVal);
+        value = Number(signal.value);
+    }
+
+    //console.log('comparison, value', comparison, value, ctx.rowIndex, CIQ.stxx.chart.dataSet[ctx.rowIndex])
+
+    if (!isFinite(value) || !isFinite(comparison)) return false;
   
     // 大于
-    if (comp === 0) return v > t;
+    if (cond === 0) return comparison > value;
   
     // 等于
-    if (comp === 1) return v === t;
+    if (cond === 1) return comparison == value;
   
     // 小于
-    if (comp === 2) return v < t;
+    if (cond === 2) return comparison < value;
   
     // 金叉（cross_above）
-    if (comp === 3) {
+    if (cond === 3) {
       const { finalData, rowIndex, keyIndex } = ctx;
       if (!finalData || rowIndex <= 0) return false;
   
       const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
       if (!isFinite(prevVal)) return false;
   
-      return prevVal < t && v >= t;
+      return comparison < prevVal && comparison >= value;
     }
   
     // 死叉（cross_below）
-    if (comp === 4) {
+    if (cond === 4) {
       const { finalData, rowIndex, keyIndex } = ctx;
       if (!finalData || rowIndex <= 0) return false;
   
       const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
       if (!isFinite(prevVal)) return false;
   
-      return prevVal > t && v <= t;
+      return comparison > prevVal && comparison <= value;
     }
   
     return false;
