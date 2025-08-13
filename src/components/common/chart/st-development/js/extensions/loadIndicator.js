@@ -701,7 +701,7 @@ import { formatStandardTime } from '@/utils'
             const extremeValueList = CIQ.store.state.chart.extremeValue || [];
             CIQ.store.commit("chart/getExtremeValue", [...extremeValueList, newExtremeValue]);
         }
-
+console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedMA)
         // Add associated MAs
         for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
             if (activatedMAObj.url === indicatorKey && activatedMAObj.url !== '') {

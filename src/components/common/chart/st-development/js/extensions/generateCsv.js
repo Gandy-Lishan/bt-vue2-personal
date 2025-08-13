@@ -952,6 +952,9 @@ let __st_js_generateCsv_ = (_exports) => {
  * @returns 
  */
  CIQ.showScore = async function(criteria){  
+    CIQ.addCover()
+    CIQ.nprogress.start()
+
     const criteriaCat = criteria.startsWith('entry') ? 'entry' : 'exit'
     let finalData = []
     let ohlcvRows = []
@@ -1061,6 +1064,9 @@ let __st_js_generateCsv_ = (_exports) => {
         index: null 
     }) 
     CIQ.stxx.panels[sd.panel].holder.children[0].style.backgroundColor = '##5b9bd133'
+
+    CIQ.hideCover()
+    CIQ.nprogress.done()
 };
 
 function evaluateAll(finalData, signals, ohlcvRows) {
