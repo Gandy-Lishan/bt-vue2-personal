@@ -994,7 +994,7 @@ let __st_js_generateCsv_ = (_exports) => {
         };
         finalData.push(obj);
     }
-    
+
     // find the correspond sd type
     CIQ.store.state.chart.indicators.formIndicators[criteria].forEach((value,index)=>{
         var _index = ''
@@ -1100,9 +1100,9 @@ function evaluateAll(finalData, signals, ohlcvRows) {
     const cond = signal.condition; // 0: >, 1: ==, 2: <, 3: cross_above, 4: cross_below
     let comparison
     let value
+    const { finalData, ohlcvRows, rowIndex, keyIndex } = ctx;
     // Symbol Close 对比 Value
     if(["SC","SO","SH","SL"].includes(signal.comparison)) {
-        const { ohlcvRows, rowIndex } = ctx;
         comparison = Number(ohlcvRows[rowIndex][signal.comparison]);
         value = Number(rawVal);
     }
@@ -1132,30 +1132,38 @@ function evaluateAll(finalData, signals, ohlcvRows) {
   
     // 金叉（cross_above）
     if (cond === 3) {
-      const { finalData, rowIndex, keyIndex } = ctx;
       if (!finalData || rowIndex <= 0) return false;
   
-      const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
-      if (!isFinite(prevVal)) return false;
+      let prevComparison
+      if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+        prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+      } else {
+        prevComparison = getPrevComparison(finalData, rowIndex, keyIndex);
+      }
+      if (!isFinite(prevComparison)) return false;
   
-      return comparison < prevVal && comparison >= value;
+      return prevComparison < value && comparison >= value;
     }
   
     // 死叉（cross_below）
     if (cond === 4) {
-      const { finalData, rowIndex, keyIndex } = ctx;
-      if (!finalData || rowIndex <= 0) return false;
+        if (!finalData || rowIndex <= 0) return false;
   
-      const prevVal = getPrevValue(finalData, rowIndex, keyIndex);
-      if (!isFinite(prevVal)) return false;
-  
-      return comparison > prevVal && comparison <= value;
+        let prevComparison
+        if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+          prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+        } else {
+          prevComparison = getPrevComparison(finalData, rowIndex, keyIndex);
+        }
+        if (!isFinite(prevComparison)) return false;
+    
+        return prevComparison > value && comparison <= value;
     }
   
     return false;
   }
   
-  function getPrevValue(finalData, rowIndex, keyIndex) {
+  function getPrevComparison(finalData, rowIndex, keyIndex) {
     const prevRow = finalData[rowIndex - 1];
     const prevKey = Object.keys(prevRow)
       .filter(k => /^(entry|exit)_\d+$/.test(k))
