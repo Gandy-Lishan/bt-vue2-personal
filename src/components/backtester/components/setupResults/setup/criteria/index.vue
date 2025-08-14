@@ -11,7 +11,7 @@
 				</el-tooltip>
 			</div>
 			<div class="signal-container">
-				<span v-if="relation !== 1 && relation !== 0" class="scoreNote">
+				<span v-if="relation == 2" class="scoreNote">
 					<!-- <div class="excludeBox">
 						<i v-if="isCriteriaScoreChecked" class="el-icon-refresh" @click="handleCriteriaScoreChecked" style="margin-right: 5px"></i>
 						<el-checkbox v-model="isCriteriaScoreChecked" @change="handleCriteriaScoreChecked"
@@ -585,8 +585,16 @@ export default {
 	methods: {
 		async handleCriteriaScoreChecked() {
 			this.addSignalLength()
-			await this.saveData()
+			const valid = await this.saveData()
+			if (!valid) return
 			CIQ.showScore(this.criteriaNum)
+			this.animationUp(0)
+		},
+		animationUp: function (ph) {
+			window.scrollTo({
+				top: ph,
+				behavior: 'smooth'
+			})
 		},
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
@@ -1331,8 +1339,7 @@ export default {
 					await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
 			}
 				}
-		},
-		
+		}
 	}
 }
 </script>
