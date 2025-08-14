@@ -588,13 +588,17 @@ export default {
 			const valid = await this.saveData()
 			if (!valid) return
 			CIQ.showScore(this.criteriaNum)
-			this.animationUp(0)
+			this.scrollToTarget()
 		},
-		animationUp: function (ph) {
-			window.scrollTo({
-				top: ph,
-				behavior: 'smooth'
-			})
+		scrollToTarget(height=800) {
+			this.$nextTick(() => {
+				const targetDiv = document.getElementById('scrollAnchor')
+				const offsetTop = targetDiv.getBoundingClientRect().top + window.scrollY - height;
+				window.scrollTo({
+					top: offsetTop,
+					behavior: 'smooth'
+				});
+			});
 		},
 		...mapMutations('form', ['setFrequencyArray']),
 		clearForm() {
