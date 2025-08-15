@@ -1146,12 +1146,13 @@ function evaluateAll(finalData, signals, ohlcvRows) {
       if(["SC","SO","SH","SL"].includes(signal.comparison)) {
         prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
         prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+        if (!isFinite(prevComparison) || !isFinite(prevValue)) return false;
+        return prevComparison <= prevValue && comparison > value;
       } else {
         prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+        if (!isFinite(prevComparison)) return false;
+        return prevComparison <= value && comparison > value;
       }
-      if (!isFinite(prevComparison)) return false;
-  
-      return prevComparison <= prevValue && comparison > value;
     }
   
     // 死叉（cross_below）
@@ -1163,12 +1164,13 @@ function evaluateAll(finalData, signals, ohlcvRows) {
         if(["SC","SO","SH","SL"].includes(signal.comparison)) {
           prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
           prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+          if (!isFinite(prevComparison) || !isFinite(prevValue)) return false;
+          return prevComparison >= prevValue && comparison < value;
         } else {
           prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
-        }
-        if (!isFinite(prevComparison)) return false;
-    
-        return prevComparison >= prevValue && comparison < value;
+          if (!isFinite(prevComparison)) return false;
+          return prevComparison >= value && comparison < value;
+        }  
     }
   
     return false;
