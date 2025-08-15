@@ -952,6 +952,9 @@ let __st_js_generateCsv_ = (_exports) => {
  * @returns 
  */
  CIQ.showScore = async function(criteria){  
+    CIQ.addCover()
+    CIQ.nprogress.start()
+
     const criteriaCat = criteria.startsWith('entry') ? 'entry' : 'exit'
     let finalData = []
     let ohlcvRows = []
@@ -1061,6 +1064,9 @@ let __st_js_generateCsv_ = (_exports) => {
         index: null 
     }) 
     CIQ.stxx.panels[sd.panel].holder.children[0].style.backgroundColor = '##5b9bd133'
+
+    CIQ.hideCover()
+    CIQ.nprogress.done()
 };
 
 function evaluateAll(finalData, signals, ohlcvRows) {
@@ -1105,6 +1111,7 @@ function evaluateAll(finalData, signals, ohlcvRows) {
     if(["SC","SO","SH","SL"].includes(signal.comparison)) {
         comparison = Number(ohlcvRows[rowIndex][signal.comparison]);
         value = Number(rawVal);
+        console.log(rowIndex,comparison,value)
     }
     // if comparison equal "MAMA" or the value equal "SL", "D","JAW", "TEETH", "LIPS", value = 0.
     else if(signal.comparison=='MA' || ["SL", "D","JAW", "TEETH", "LIPS","SVMA"].includes(signal.value)) {
@@ -1135,14 +1142,16 @@ function evaluateAll(finalData, signals, ohlcvRows) {
       if (!finalData || rowIndex <= 0) return false;
   
       let prevComparison
+      let prevValue
       if(["SC","SO","SH","SL"].includes(signal.comparison)) {
         prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+        prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
       } else {
-        prevComparison = getPrevComparison(finalData, rowIndex, keyIndex);
+        prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
       }
       if (!isFinite(prevComparison)) return false;
   
-      return prevComparison < value && comparison >= value;
+      return prevComparison <= prevValue && comparison > value;
     }
   
     // 死叉（cross_below）
@@ -1150,20 +1159,23 @@ function evaluateAll(finalData, signals, ohlcvRows) {
         if (!finalData || rowIndex <= 0) return false;
   
         let prevComparison
+        let prevValue
         if(["SC","SO","SH","SL"].includes(signal.comparison)) {
           prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+          prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
         } else {
-          prevComparison = getPrevComparison(finalData, rowIndex, keyIndex);
+          prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
         }
         if (!isFinite(prevComparison)) return false;
     
-        return prevComparison > value && comparison <= value;
+        console.log(prevComparison,comparison,value,prevComparison > value && comparison <= value)
+        return prevComparison >= prevValue && comparison < value;
     }
   
     return false;
   }
   
-  function getPrevComparison(finalData, rowIndex, keyIndex) {
+  function getPrevIndicatorData(finalData, rowIndex, keyIndex) {
     const prevRow = finalData[rowIndex - 1];
     const prevKey = Object.keys(prevRow)
       .filter(k => /^(entry|exit)_\d+$/.test(k))
