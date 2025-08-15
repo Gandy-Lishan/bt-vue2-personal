@@ -340,7 +340,7 @@ import { formatStandardTime } from '@/utils'
  // fetch indicator information and add studies to chart
  // 封装成了一个promise函数
  // 原版
- CIQ.getIndicatorMatedata = function(indicatorList,stx){
+ CIQ.getIndicatorMatedata2 = function(indicatorList,stx){
      var senti_color = ["#000000"]
      var tech_color_1 = ["#5B9BD1","#368DF0"]
      var tech_color_2 = ["#000000","#6b7280"]
@@ -670,7 +670,7 @@ import { formatStandardTime } from '@/utils'
  }
 
 // 实现批处理的metadata, 并优化结构, 把addStudyToChart提取出
-  CIQ.getIndicatorMatedata2 = function(indicatorList, stx) {
+  CIQ.getIndicatorMatedata = function(indicatorList, stx) {
     if (!stx) return Promise.resolve(); // If no stx, nothing to do.
 
     // Clear existing studies from the chart
@@ -866,11 +866,11 @@ console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedM
 
             try {
                 const res = await CIQ.axios.get(queryUrl);
-                const newQuotes = Object.values(res.data);
+                const newQuotes = res.data;
 
-                for (let i = 0; i < newQuotes.length; i++) {
+                for (let i in sentiUrlList) {
                     const sentiIndicator = sentiUrlList[i];
-                    const sentiData = newQuotes[i];
+                    const sentiData = newQuotes[sentiIndicator];
 
                     if (sentiData !== null) {
                         let newStudyDef = {
