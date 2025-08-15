@@ -701,7 +701,7 @@ import { formatStandardTime } from '@/utils'
             const extremeValueList = CIQ.store.state.chart.extremeValue || [];
             CIQ.store.commit("chart/getExtremeValue", [...extremeValueList, newExtremeValue]);
         }
-
+console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedMA)
         // Add associated MAs
         for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
             if (activatedMAObj.url === indicatorKey && activatedMAObj.url !== '') {
@@ -715,7 +715,8 @@ import { formatStandardTime } from '@/utils'
                     Type: maType,
                     Period: activatedMAObj.period,
                     display: "ST MA",
-                    Field: activatedMAObj.url
+                    // 只有ma的附属stma是取默认收盘价为计算数据源
+                    Field: activatedMAObj.url == 'ma' ? 'field' : activatedMAObj.url
                 }, {
                     MA: ma_color
                 }, {
@@ -803,30 +804,6 @@ import { formatStandardTime } from '@/utils'
                 if (CIQ.findSymbolIndicator(indicatorName, null)) {
                     CIQ.store.commit("states/envokeBeforeCalculateNewConditions", !CIQ.store.getters.getBeforeCalculateNewConditions);
                 }
-
-                // Handle activated MA for technical indicators (non-MA-like)
-                for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
-                    if (activatedMAObj.url === indicatorName && activatedMAObj.url !== '') {
-                        const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, activatedMAObj.index);
-                        let type = activatedMAObj.type;
-                        if (['SMA', 'EMA'].includes(type)) {
-                            type = (type === 'SMA' ? 'simple' : 'exponential');
-                        }
-                        studiesToLoad.push({
-                            type: "ST MA",
-                            inputs: {
-                                Type: type,
-                                Period: activatedMAObj.period,
-                                display: "ST MA",
-                                Field: activatedMAObj.url
-                            },
-                            outputs: { MA: ma_color },
-                            parameters: { criteria: activatedMAObj.criteria, index: activatedMAObj.index },
-                            indicatorKey: activatedMAObj.url // Use the URL as the key for MA processing
-                        });
-                    }
-                }
-
             } else if (CIQ.isUserIndicator(indicatorName) || CIQ.isOwnIndicator(indicatorName)) {
                 // It's a user-defined or "own" indicator, requires individual API call
                 const indicatorBaseName = indicatorName.split(/(CREATE|HASH)/)[0];

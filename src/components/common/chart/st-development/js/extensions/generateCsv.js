@@ -1,4 +1,6 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from "chartiq/js/chartiq.js";
+import cloneDeep from 'lodash/cloneDeep'
+
 let __st_js_generateCsv_ = (_exports) => {
  /* global _CIQ, _timezoneJS, _SplinePlotter */
  var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -943,5 +945,242 @@ let __st_js_generateCsv_ = (_exports) => {
      
      return finalData
  }
+
+/**
+ * 
+ * @param {*} criteria , criteria includes entry,entry2,exit,exit2
+ * @returns 
+ */
+ CIQ.showScore = async function(criteria){  
+    CIQ.addCover()
+    CIQ.nprogress.start()
+
+    const criteriaCat = criteria.startsWith('entry') ? 'entry' : 'exit'
+    let finalData = []
+    let ohlcvRows = []
+    
+    const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+
+    let study = CIQ.stxx.layout.studies[Object.keys(CIQ.stxx.layout.studies).pop()]
+    if(study == undefined){ return }
+    // 因为scrubbed不包含没数据的row
+    let JSONData = study.chart.dataSet
+    //先转化json
+    let _arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    // 给数组内容换好位置
+    for(var i in _arrData){
+        let item = _arrData[i]
+        // 考虑统一用dataSet总长度，symbol没有的一行用null
+        let close = item.Close || null
+        let open = item.Open || null
+        let high = item.High || null
+        let low = item.Low || null
+        if(comparisonSymbol.url && ['entry2','exit2'].includes(criteria)) {
+            close = item[comparisonSymbol.url]?item[comparisonSymbol.url].Close:null
+            open = item[comparisonSymbol.url]?item[comparisonSymbol.url].Open:null
+            high = item[comparisonSymbol.url]?item[comparisonSymbol.url].High:null
+            low = item[comparisonSymbol.url]?item[comparisonSymbol.url].Low:null
+        }
+        ohlcvRows.push({
+            'SC': close,
+            'SO': open,
+            'SH': high,
+            'SL': low,
+        })
+        
+        let obj = {
+            [`${criteriaCat}_1`]: '',
+            [`${criteriaCat}_2`]: '',
+            [`${criteriaCat}_3`]: '',
+            [`${criteriaCat}_4`]: '',
+            [`${criteriaCat}_5`]: '', 
+        };
+        finalData.push(obj);
+    }
+
+    // find the correspond sd type
+    CIQ.store.state.chart.indicators.formIndicators[criteria].forEach((value,index)=>{
+        var _index = ''
+        var indexNum
+        var sd = {}
+        for(var i in CIQ.stxx.layout.studies){
+            var _sd = CIQ.stxx.layout.studies[i]
+            // 如果indicator不是ma (那就是senti,own,users,其他tech'),则不考虑criteria和index
+            // if(!_sd.parameters.criteria && _sd.type == value){
+           if( 
+               !_sd.parameters.criteria && 
+               _sd.type == value && 
+               // 如果_sd.parameters.isComparison,own,users, 不需判断_sd.parameters.isComparison
+               (!_sd.parameters.hasOwnProperty('isComparison') || !_sd.parameters.isComparison)
+           ){
+               _index = `${criteriaCat}_`+(index+1)
+               indexNum = index
+               sd = _sd
+               continue;
+           }
+           if( 
+               _sd.type == value &&
+               _sd.parameters.criteria == criteria &&
+               _sd.parameters.index == index
+           ){
+               _index = `${criteriaCat}_`+(index+1)
+               indexNum = index
+               sd = _sd
+           }
+        }
+        finalData = generateFinalOutput(_arrData,finalData,sd,_index,indexNum,criteria)
+    })
+
+    // TODO ,逐个拿entry1, entry2 ...的条件来对比finalData值是否满足
+    
+    const signals = cloneDeep(CIQ.store.state.form.backtestInfo)[criteria].signals
+
+    // 特殊情况： 如果comparison是SC即值应该是由Symbol Close - Value得来，
+    // 然而我们默认是只上传Value,这里需要单独判断并计算finalData那一列的值
+    // for(let signalIndex in signals) {
+    //     if(signals[signalIndex].comparison == 'SC') {
+    //         // TODO ,这里需要计算finalData那一列的值
+    //         finalData.forEach((item,idx) => {
+    //             item[`${criteriaCat}_${Number(signalIndex)+1}`] = _arrData[idx]['Close'] - item[`${criteriaCat}_${Number(signalIndex)+1}`]
+    //         });
+    //     }
+    // }
+    const evalatedList = evaluateAll(finalData, signals, ohlcvRows)
+    console.log('evalatedList: ', evalatedList)
+    await CIQ.store.dispatch('chart/save_criteria_scorelist',evalatedList.map(item=>Object.values(item).reduce((sum,num)=>sum+num,0)))
+    for (let studyInstanceName in CIQ.stxx.layout.studies) {
+        if (
+          CIQ.stxx.layout.studies[studyInstanceName].type == 'CriteriaScore'
+        ) {
+          CIQ.Studies.removeStudy(
+            CIQ.stxx,
+            CIQ.stxx.layout.studies[studyInstanceName]
+          )
+        }
+      }
+    let sd = CIQ.Studies.addStudy(CIQ.stxx, 'CriteriaScore', {
+    }, null,{ 
+        criteria: criteria, 
+        index: null 
+    }) 
+    CIQ.stxx.panels[sd.panel].holder.children[0].style.backgroundColor = '##5b9bd133'
+
+    CIQ.hideCover()
+    CIQ.nprogress.done()
+};
+
+function evaluateAll(finalData, signals, ohlcvRows) {
+    return finalData.map((row, rowIndex) => {
+      const entryKeys = Object.keys(row)
+        .filter(k => /^(entry|exit)_\d+$/.test(k))
+        .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]));
+  
+      const result = {};
+  
+      for (let i = 0; i < entryKeys.length; i++) {
+        const key = entryKeys[i];
+        const rawVal = row[key];
+  
+        // 空值 => 0
+        if (rawVal === '' || rawVal === null || rawVal === undefined || Number.isNaN(Number(rawVal))) {
+          result[key] = 0;
+          continue;
+        }
+  
+        // signals 下标越界 => 0
+        if (i >= signals.length) {
+          result[key] = 0;
+          continue;
+        }
+  
+        const signal = signals[i];
+        const ok = evaluateCondition(rawVal, signal, { finalData, ohlcvRows, rowIndex, keyIndex: i });
+        result[key] = ok ? 1 : 0;
+      }
+  
+      return result;
+    });
+  }
+  
+  function evaluateCondition(rawVal, signal, ctx = {}) {
+    const cond = signal.condition; // 0: >, 1: ==, 2: <, 3: cross_above, 4: cross_below
+    let comparison
+    let value
+    const { finalData, ohlcvRows, rowIndex, keyIndex } = ctx;
+    // Symbol Close 对比 Value
+    if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+        comparison = Number(ohlcvRows[rowIndex][signal.comparison]);
+        value = Number(rawVal);
+        console.log(rowIndex,comparison,value)
+    }
+    // if comparison equal "MAMA" or the value equal "SL", "D","JAW", "TEETH", "LIPS", value = 0.
+    else if(signal.comparison=='MA' || ["SL", "D","JAW", "TEETH", "LIPS","SVMA"].includes(signal.value)) {
+        comparison = Number(rawVal);
+        value = 0;
+    }
+    // The type of remaining part of value is float or int, is himself.
+    else if(!isNaN(Number(signal.value))) {
+        comparison = Number(rawVal);
+        value = Number(signal.value);
+    }
+
+    //console.log('comparison, value', comparison, value, ctx.rowIndex, CIQ.stxx.chart.dataSet[ctx.rowIndex])
+
+    if (!isFinite(value) || !isFinite(comparison)) return false;
+  
+    // 大于
+    if (cond === 0) return comparison > value;
+  
+    // 等于
+    if (cond === 1) return comparison == value;
+  
+    // 小于
+    if (cond === 2) return comparison < value;
+  
+    // 金叉（cross_above）
+    if (cond === 3) {
+      if (!finalData || rowIndex <= 0) return false;
+  
+      let prevComparison
+      let prevValue
+      if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+        prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+        prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+      } else {
+        prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+      }
+      if (!isFinite(prevComparison)) return false;
+  
+      return prevComparison <= prevValue && comparison > value;
+    }
+  
+    // 死叉（cross_below）
+    if (cond === 4) {
+        if (!finalData || rowIndex <= 0) return false;
+  
+        let prevComparison
+        let prevValue
+        if(["SC","SO","SH","SL"].includes(signal.comparison)) {
+          prevComparison = Number(ohlcvRows[rowIndex - 1][signal.comparison]);
+          prevValue = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+        } else {
+          prevComparison = getPrevIndicatorData(finalData, rowIndex, keyIndex);
+        }
+        if (!isFinite(prevComparison)) return false;
+    
+        console.log(prevComparison,comparison,value,prevComparison > value && comparison <= value)
+        return prevComparison >= prevValue && comparison < value;
+    }
+  
+    return false;
+  }
+  
+  function getPrevIndicatorData(finalData, rowIndex, keyIndex) {
+    const prevRow = finalData[rowIndex - 1];
+    const prevKey = Object.keys(prevRow)
+      .filter(k => /^(entry|exit)_\d+$/.test(k))
+      .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1]))[keyIndex];
+    return Number(prevRow[prevKey]);
+  }
 }
 export {__st_js_generateCsv_}

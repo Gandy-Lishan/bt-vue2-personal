@@ -51,6 +51,16 @@
   </el-tabs>
 		</div>
 		<div class="backtest-btns">
+			<!-- <el-tooltip
+				class="item"
+				effect="dark"
+				content="Complete the form filling, run the backtest, and view the results"
+				placement="bottom"
+			>
+				<el-button :disabled="isDisabled" type="success" @click="showScore"
+					>Show Score</el-button
+				></el-tooltip
+			> -->
 			<el-tooltip
 				class="item"
 				effect="dark"
@@ -456,6 +466,18 @@ export default {
 			_this.$refs[criteriaRef].saveRelation()
 			return _this.$refs[criteriaRef].isSameSignal()
 		},
+		// showScore:debounce(async function() {
+		// 	const _this = this
+		// 	console.log('devounce func click')
+		// 	const saveAndCheckCriteriaErrors = async (childName) => {
+		// 		_this.$refs[childName].addSignalLength()
+		// 		await _this.$refs[childName].saveData()
+		// 	};
+		// 	await saveAndCheckCriteriaErrors('entryChild1')
+		// 	await saveAndCheckCriteriaErrors('exitChild1')
+		// 	console.log('CIQ.store.state.form.backtestInfo',CIQ.store.state.form.backtestInfo)
+		// 	debugger
+		// }, 500),
 		handleSavedData(criteria) {
 			/*
 			saveObj should be like this:
