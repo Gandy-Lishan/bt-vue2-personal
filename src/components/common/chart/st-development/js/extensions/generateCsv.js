@@ -1168,7 +1168,6 @@ function evaluateAll(finalData, signals, ohlcvRows) {
         }
         if (!isFinite(prevComparison)) return false;
     
-        console.log(prevComparison,comparison,value,prevComparison > value && comparison <= value)
         return prevComparison >= prevValue && comparison < value;
     }
   
