@@ -95583,5 +95583,12 @@
         "market_symbol": "BERY",
         "type": "optix",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin 40-40-40 System",
+        "url": "bitcoin_triple_40",
+        "market_symbol": "bitcoin",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
