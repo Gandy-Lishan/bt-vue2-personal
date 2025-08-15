@@ -39699,14 +39699,14 @@
     {
         "chart_name": "Arcadium Lithium PLC Trend Score",
         "url": "ALTM_trend",
-        "market_symbol": "altm",
+        "market_symbol": "ALTM",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Arcadium Lithium PLC RelTrend Score",
         "url": "ALTM_reltrend",
-        "market_symbol": "altm",
+        "market_symbol": "ALTM",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -39839,14 +39839,14 @@
     {
         "chart_name": "Berry Global Group Inc Trend Score",
         "url": "BERY_trend",
-        "market_symbol": "bery",
+        "market_symbol": "BERY",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Berry Global Group Inc RelTrend Score",
         "url": "BERY_reltrend",
-        "market_symbol": "bery",
+        "market_symbol": "BERY",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -40133,14 +40133,14 @@
     {
         "chart_name": "Altair Engineering Inc Trend Score",
         "url": "ALTR_trend",
-        "market_symbol": "altr",
+        "market_symbol": "ALTR",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Altair Engineering Inc RelTrend Score",
         "url": "ALTR_reltrend",
-        "market_symbol": "altr",
+        "market_symbol": "ALTR",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -40609,14 +40609,14 @@
     {
         "chart_name": "SolarWinds Corp Trend Score",
         "url": "SWI_trend",
-        "market_symbol": "swi",
+        "market_symbol": "SWI",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "SolarWinds Corp RelTrend Score",
         "url": "SWI_reltrend",
-        "market_symbol": "swi",
+        "market_symbol": "SWI",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -73096,7 +73096,7 @@
     {
         "chart_name": "PBW Optix",
         "url": "etf_pbw",
-        "market_symbol": "pbw",
+        "market_symbol": "PBW",
         "type": "optix",
         "updated": "Daily"
     },
@@ -73185,7 +73185,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "RSPC Optix",
+        "chart_name": "RSPC Optix",
         "url": "etf_rspc",
         "market_symbol": "RSPC",
         "type": "optix",
@@ -73460,14 +73460,14 @@
     {
         "chart_name": "Invesco WilderHill Clean Energy ETF Trend Score",
         "url": "PBW_trend",
-        "market_symbol": "pbw",
+        "market_symbol": "PBW",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Invesco WilderHill Clean Energy ETF RelTrend Score",
         "url": "PBW_reltrend",
-        "market_symbol": "pbw",
+        "market_symbol": "PBW",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -93172,42 +93172,42 @@
     {
         "chart_name": "Real Estate - % of Stocks with a 10-Day RSRR >= 80%",
         "url": "s5rlst_pct_rank_10_gte_80",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with a 10-Day RSRR <= 20%",
         "url": "s5rlst_pct_rank_10_lte_20",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with a 42-Day RSRR >= 80%",
         "url": "s5rlst_pct_rank_42_gte_80",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with a 42-Day RSRR <= 20%",
         "url": "s5rlst_pct_rank_42_lte_20",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with a 126-Day RSRR >= 80%",
         "url": "s5rlst_pct_rank_126_gte_80",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with a 126-Day RSRR <= 20%",
         "url": "s5rlst_pct_rank_126_lte_20",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
@@ -93683,49 +93683,49 @@
     {
         "chart_name": "Real Estate - % of Stocks with Trend Score >= 8",
         "url": "s5rlst_trend_above8_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with Trend Score <= 2",
         "url": "s5rlst_trend_below2_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "other",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with Relative Trend Score >= 8",
         "url": "s5rlst_reltrend_above8_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with Relative Trend Score <= 2",
         "url": "s5rlst_reltrend_below2_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with Trend & Rel-Trend >= 8",
         "url": "s5rlst_trend_and_reltrend_above8_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Real Estate - % of Stocks with Trend & Rel-Trend <= 2",
         "url": "s5rlst_trend_and_reltrend_below2_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "% of Real Estate Stocks in S&P 500 with Relative Trend Score >= 8",
         "url": "s5rlst_reltrend_above8_spx_ratio",
-        "market_symbol": "s5rlst",
+        "market_symbol": "S5RLST",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -94332,17 +94332,1256 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "GOLD VIX Term Structure",
+        "chart_name": "GOLD Term Structure",
         "url": "vol_gold_vix_ratio",
-        "market_symbol": "SPX",
+        "market_symbol": "gold",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "COPPER VIX Term Structure",
+        "chart_name": "COPPER Term Structure",
         "url": "vol_copper_vix_ratio",
-        "market_symbol": "SPX",
+        "market_symbol": "copper",
         "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Personalis Inc",
+        "url": "PSNL",
+        "market_symbol": "PSNL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Actuate Therapeutics Inc",
+        "url": "ACTU",
+        "market_symbol": "ACTU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CB Financial Services Inc",
+        "url": "CBFV",
+        "market_symbol": "CBFV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SANUWAVE Health Inc",
+        "url": "SNWV",
+        "market_symbol": "SNWV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Modiv Industrial Inc",
+        "url": "MDV",
+        "market_symbol": "MDV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CuriosityStream Inc",
+        "url": "CURI",
+        "market_symbol": "CURI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Patriot National Bancorp Inc",
+        "url": "PNBK",
+        "market_symbol": "PNBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TSS Inc/MD",
+        "url": "TSSI",
+        "market_symbol": "TSSI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nexxen International Ltd",
+        "url": "NEXN",
+        "market_symbol": "NEXN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Red Cat Holdings Inc",
+        "url": "RCAT",
+        "market_symbol": "RCAT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Citizens Inc/TX",
+        "url": "CIA",
+        "market_symbol": "CIA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Journey Medical Corp",
+        "url": "DERM",
+        "market_symbol": "DERM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aeluma Inc",
+        "url": "ALMU",
+        "market_symbol": "ALMU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSP Inc",
+        "url": "CSPI",
+        "market_symbol": "CSPI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Satellogic Inc",
+        "url": "SATL",
+        "market_symbol": "SATL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Claritev Corp",
+        "url": "CTEV",
+        "market_symbol": "CTEV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Clover Health Investments Corp",
+        "url": "CLOV",
+        "market_symbol": "CLOV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "US Gold Corp",
+        "url": "USAU",
+        "market_symbol": "USAU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Reddit Inc",
+        "url": "RDDT",
+        "market_symbol": "RDDT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BV Financial Inc",
+        "url": "BVFL",
+        "market_symbol": "BVFL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Freedom Holding Corp/NV",
+        "url": "FRHC",
+        "market_symbol": "FRHC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DiaMedica Therapeutics Inc",
+        "url": "DMAC",
+        "market_symbol": "DMAC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Frequency Electronics Inc",
+        "url": "FEIM",
+        "market_symbol": "FEIM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GCI Liberty Inc",
+        "url": "GLIBK",
+        "market_symbol": "GLIBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GCI Liberty Inc",
+        "url": "GLIBA",
+        "market_symbol": "GLIBA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CRISPR Therapeutics AG",
+        "url": "CRSP",
+        "market_symbol": "CRSP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Viking Holdings Ltd",
+        "url": "VIK",
+        "market_symbol": "VIK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OP Bancorp",
+        "url": "OPBK",
+        "market_symbol": "OPBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First United Corp",
+        "url": "FUNC",
+        "market_symbol": "FUNC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Myomo Inc",
+        "url": "MYO",
+        "market_symbol": "MYO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "loanDepot Inc",
+        "url": "LDI",
+        "market_symbol": "LDI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lakeland Industries Inc",
+        "url": "LAKE",
+        "market_symbol": "LAKE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ralliant Corp",
+        "url": "RAL",
+        "market_symbol": "RAL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palladyne AI Corp",
+        "url": "PDYN",
+        "market_symbol": "PDYN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pro-Dex Inc",
+        "url": "PDEX",
+        "market_symbol": "PDEX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palvella Therapeutics Inc",
+        "url": "PVLA",
+        "market_symbol": "PVLA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ascent Industries Co",
+        "url": "ACNT",
+        "market_symbol": "ACNT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Acme United Corp",
+        "url": "ACU",
+        "market_symbol": "ACU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Flotek Industries Inc",
+        "url": "FTK",
+        "market_symbol": "FTK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nutex Health Inc",
+        "url": "NUTX",
+        "market_symbol": "NUTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Newsmax Inc",
+        "url": "NMAX",
+        "market_symbol": "NMAX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kopin Corp",
+        "url": "KOPN",
+        "market_symbol": "KOPN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Capital Inc",
+        "url": "FCAP",
+        "market_symbol": "FCAP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Xenon Pharmaceuticals Inc",
+        "url": "XENE",
+        "market_symbol": "XENE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Cidara Therapeutics Inc",
+        "url": "CDTX",
+        "market_symbol": "CDTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rezolve AI PLC",
+        "url": "RZLV",
+        "market_symbol": "RZLV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Calumet Inc",
+        "url": "CLMT",
+        "market_symbol": "CLMT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "aTyr Pharma Inc",
+        "url": "ATYR",
+        "market_symbol": "ATYR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Epsilon Energy Ltd",
+        "url": "EPSN",
+        "market_symbol": "EPSN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gossamer Bio Inc",
+        "url": "GOSS",
+        "market_symbol": "GOSS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arena Group Holdings Inc/The",
+        "url": "AREN",
+        "market_symbol": "AREN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Inhibikase Therapeutics Inc",
+        "url": "IKT",
+        "market_symbol": "IKT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "M-Tron Industries Inc",
+        "url": "MPTI",
+        "market_symbol": "MPTI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chain Bridge Bancorp Inc",
+        "url": "CBNA",
+        "market_symbol": "CBNA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Motorcar Parts of America Inc",
+        "url": "MPAA",
+        "market_symbol": "MPAA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Landmark Bancorp Inc/Manhattan",
+        "url": "LARK",
+        "market_symbol": "LARK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mobile Infrastructure Corp",
+        "url": "BEEP",
+        "market_symbol": "BEEP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Serve Robotics Inc",
+        "url": "SERV",
+        "market_symbol": "SERV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitdeer Technologies Group",
+        "url": "BTDR",
+        "market_symbol": "BTDR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Strattec Security Corp",
+        "url": "STRT",
+        "market_symbol": "STRT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ohio Valley Banc Corp",
+        "url": "OVBC",
+        "market_symbol": "OVBC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sila Realty Trust Inc",
+        "url": "SILA",
+        "market_symbol": "SILA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tectonic Therapeutic Inc",
+        "url": "TECX",
+        "market_symbol": "TECX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lucid Diagnostics Inc",
+        "url": "LUCD",
+        "market_symbol": "LUCD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sound Financial Bancorp Inc",
+        "url": "SFBC",
+        "market_symbol": "SFBC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Faraday Future Intelligent Ele",
+        "url": "FFAI",
+        "market_symbol": "FFAI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Finwise Bancorp",
+        "url": "FINW",
+        "market_symbol": "FINW",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Titan America SA",
+        "url": "TTAM",
+        "market_symbol": "TTAM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Idaho Strategic Resources Inc",
+        "url": "IDR",
+        "market_symbol": "IDR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LENSAR Inc",
+        "url": "LNSR",
+        "market_symbol": "LNSR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nextdoor Holdings Inc",
+        "url": "NXDR",
+        "market_symbol": "NXDR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neonode Inc",
+        "url": "NEON",
+        "market_symbol": "NEON",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spirit Aviation Holdings Inc",
+        "url": "FLYY",
+        "market_symbol": "FLYY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NextNRG Inc",
+        "url": "NXXT",
+        "market_symbol": "NXXT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United Security Bancshares/Fre",
+        "url": "UBFO",
+        "market_symbol": "UBFO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Richtech Robotics Inc",
+        "url": "RR",
+        "market_symbol": "RR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Siebert Financial Corp",
+        "url": "SIEB",
+        "market_symbol": "SIEB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Riverview Bancorp Inc",
+        "url": "RVSB",
+        "market_symbol": "RVSB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Richmond Mutual BanCorp Inc",
+        "url": "RMBI",
+        "market_symbol": "RMBI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brightstar Lottery PLC",
+        "url": "BRSL",
+        "market_symbol": "BRSL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Old Point Financial Corp",
+        "url": "OPOF",
+        "market_symbol": "OPOF",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Firstsun Capital Bancorp",
+        "url": "FSUN",
+        "market_symbol": "FSUN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eledon Pharmaceuticals Inc",
+        "url": "ELDN",
+        "market_symbol": "ELDN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Monopar Therapeutics Inc",
+        "url": "MNPR",
+        "market_symbol": "MNPR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hawthorn Bancshares Inc",
+        "url": "HWBK",
+        "market_symbol": "HWBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Finward Bancorp",
+        "url": "FNWD",
+        "market_symbol": "FNWD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Union Bankshares Inc/Morrisvil",
+        "url": "UNB",
+        "market_symbol": "UNB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eagle Financial Services Inc",
+        "url": "EFSI",
+        "market_symbol": "EFSI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sionna Therapeutics Inc",
+        "url": "SION",
+        "market_symbol": "SION",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ferroglobe PLC",
+        "url": "GSM",
+        "market_symbol": "GSM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Barnes & Noble Education Inc",
+        "url": "BNED",
+        "market_symbol": "BNED",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gaia Inc",
+        "url": "GAIA",
+        "market_symbol": "GAIA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vroom Inc",
+        "url": "VRM",
+        "market_symbol": "VRM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lightbridge Corp",
+        "url": "LTBR",
+        "market_symbol": "LTBR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eagle Bancorp Montana Inc",
+        "url": "EBMT",
+        "market_symbol": "EBMT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Delcath Systems Inc",
+        "url": "DCTH",
+        "market_symbol": "DCTH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Travelzoo",
+        "url": "TZOO",
+        "market_symbol": "TZOO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Benitec Biopharma Inc",
+        "url": "BNTC",
+        "market_symbol": "BNTC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Western New England Bancorp In",
+        "url": "WNEB",
+        "market_symbol": "WNEB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Westwood Holdings Group Inc",
+        "url": "WHG",
+        "market_symbol": "WHG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tempus AI Inc",
+        "url": "TEM",
+        "market_symbol": "TEM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "National Energy Services Reuni",
+        "url": "NESR",
+        "market_symbol": "NESR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VTEX",
+        "url": "VTEX",
+        "market_symbol": "VTEX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bright Minds Biosciences Inc",
+        "url": "DRUG",
+        "market_symbol": "DRUG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Better Home & Finance Holding",
+        "url": "BETR",
+        "market_symbol": "BETR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vox Royalty Corp",
+        "url": "VOXR",
+        "market_symbol": "VOXR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Citizens Community Bancorp Inc",
+        "url": "CZWI",
+        "market_symbol": "CZWI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ermenegildo Zegna NV",
+        "url": "ZGN",
+        "market_symbol": "ZGN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smartstop Self Storage REIT In",
+        "url": "SMA",
+        "market_symbol": "SMA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CF Bankshares Inc",
+        "url": "CFBK",
+        "market_symbol": "CFBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Genius Sports Ltd",
+        "url": "GENI",
+        "market_symbol": "GENI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Protara Therapeutics Inc",
+        "url": "TARA",
+        "market_symbol": "TARA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SBC Medical Group Holdings Inc",
+        "url": "SBC",
+        "market_symbol": "SBC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Logistic Properties Of The Ame",
+        "url": "LPA",
+        "market_symbol": "LPA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GBank Financial Holdings Inc",
+        "url": "GBFH",
+        "market_symbol": "GBFH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eton Pharmaceuticals Inc",
+        "url": "ETON",
+        "market_symbol": "ETON",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alpha Teknova Inc",
+        "url": "TKNO",
+        "market_symbol": "TKNO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rhinebeck Bancorp Inc",
+        "url": "RBKB",
+        "market_symbol": "RBKB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Teads Holding Co",
+        "url": "TEAD",
+        "market_symbol": "TEAD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "United States Antimony Corp",
+        "url": "UAMY",
+        "market_symbol": "UAMY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Commerce.com Inc",
+        "url": "CMRC",
+        "market_symbol": "CMRC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hanover Bancorp Inc",
+        "url": "HNVR",
+        "market_symbol": "HNVR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oncology Institute Inc/The",
+        "url": "TOI",
+        "market_symbol": "TOI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oportun Financial Corp",
+        "url": "OPRT",
+        "market_symbol": "OPRT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energy Services of America Cor",
+        "url": "ESOA",
+        "market_symbol": "ESOA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SB Financial Group Inc",
+        "url": "SBFG",
+        "market_symbol": "SBFG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FitLife Brands Inc",
+        "url": "FTLF",
+        "market_symbol": "FTLF",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Atlantic International Corp",
+        "url": "ATLN",
+        "market_symbol": "ATLN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First National Corp/VA",
+        "url": "FXNC",
+        "market_symbol": "FXNC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kolibri Global Energy Inc",
+        "url": "KGEI",
+        "market_symbol": "KGEI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lifevantage Corp",
+        "url": "LFVN",
+        "market_symbol": "LFVN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Outdoor Brands Inc",
+        "url": "AOUT",
+        "market_symbol": "AOUT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Triller Group Inc",
+        "url": "ILLR",
+        "market_symbol": "ILLR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OPAL Fuels Inc",
+        "url": "OPAL",
+        "market_symbol": "OPAL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SELLAS Life Sciences Group Inc",
+        "url": "SLS",
+        "market_symbol": "SLS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Savings Financial Group",
+        "url": "FSFG",
+        "market_symbol": "FSFG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Electromed Inc",
+        "url": "ELMD",
+        "market_symbol": "ELMD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSW Industrials Inc",
+        "url": "CSW",
+        "market_symbol": "CSW",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TriSalus Life Sciences Inc",
+        "url": "TLSI",
+        "market_symbol": "TLSI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TuHURA Biosciences Inc",
+        "url": "HURA",
+        "market_symbol": "HURA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Meridian Corp",
+        "url": "MRBK",
+        "market_symbol": "MRBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AirJoule Technologies Corp",
+        "url": "AIRJ",
+        "market_symbol": "AIRJ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Indivior PLC",
+        "url": "INDV",
+        "market_symbol": "INDV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rubrik Inc",
+        "url": "RBRK",
+        "market_symbol": "RBRK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corvus Pharmaceuticals Inc",
+        "url": "CRVS",
+        "market_symbol": "CRVS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marzetti Company/The",
+        "url": "MZTI",
+        "market_symbol": "MZTI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "US Goldmining Inc",
+        "url": "USGO",
+        "market_symbol": "USGO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rezolute Inc",
+        "url": "RZLT",
+        "market_symbol": "RZLT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BankFinancial Corp",
+        "url": "BFIN",
+        "market_symbol": "BFIN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tvardi Therapeutics Inc",
+        "url": "TVRD",
+        "market_symbol": "TVRD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neuronetics Inc",
+        "url": "STIM",
+        "market_symbol": "STIM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ACRES Commercial Realty Corp",
+        "url": "ACR",
+        "market_symbol": "ACR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crexendo Inc",
+        "url": "CXDO",
+        "market_symbol": "CXDO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Karman Holdings Inc",
+        "url": "KRMN",
+        "market_symbol": "KRMN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marex Group PLC",
+        "url": "MRX",
+        "market_symbol": "MRX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FB Bancorp Inc",
+        "url": "FBLA",
+        "market_symbol": "FBLA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Friedman Industries Inc",
+        "url": "FRD",
+        "market_symbol": "FRD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SailPoint Inc",
+        "url": "SAIL",
+        "market_symbol": "SAIL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lument Finance Trust Inc",
+        "url": "LFT",
+        "market_symbol": "LFT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bassett Furniture Industries I",
+        "url": "BSET",
+        "market_symbol": "BSET",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Abeona Therapeutics Inc",
+        "url": "ABEO",
+        "market_symbol": "ABEO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aardvark Therapeutics Inc",
+        "url": "AARD",
+        "market_symbol": "AARD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oruka Therapeutics Inc",
+        "url": "ORKA",
+        "market_symbol": "ORKA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aebi Schmidt Holding AG",
+        "url": "AEBI",
+        "market_symbol": "AEBI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Franklin Financial Services Co",
+        "url": "FRAF",
+        "market_symbol": "FRAF",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kestra Medical Technologies Lt",
+        "url": "KMTS",
+        "market_symbol": "KMTS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Quantum Computing Inc",
+        "url": "QUBT",
+        "market_symbol": "QUBT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SR Bancorp Inc",
+        "url": "SRBK",
+        "market_symbol": "SRBK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Battery Technology Co",
+        "url": "ABAT",
+        "market_symbol": "ABAT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Northpointe Bancshares Inc",
+        "url": "NPB",
+        "market_symbol": "NPB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solesence Inc",
+        "url": "SLSN",
+        "market_symbol": "SLSN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KULR Technology Group Inc",
+        "url": "KULR",
+        "market_symbol": "KULR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Rumble Inc",
+        "url": "RUM",
+        "market_symbol": "RUM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Altair Engineering Inc",
+        "url": "ALTR",
+        "market_symbol": "ALTR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SolarWinds Corp",
+        "url": "SWI",
+        "market_symbol": "SWI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Arcadium Lithium PLC",
+        "url": "ALTM",
+        "market_symbol": "ALTM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Berry Global Group Inc",
+        "url": "BERY",
+        "market_symbol": "BERY",
+        "type": "optix",
         "updated": "Daily"
     }
 ]
