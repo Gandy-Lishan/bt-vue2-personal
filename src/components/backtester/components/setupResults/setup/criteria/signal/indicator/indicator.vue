@@ -755,10 +755,10 @@ export default {
     },
     relation: {
       handler(newVal) {
-        const email = getCookieData()?.username
-		    const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
-        const isAllowUser = allowedUserList.includes(email)
-        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates") && isAllowUser) {
+        // const email = getCookieData()?.username
+		    // const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+        // const isAllowUser = allowedUserList.includes(email)
+        if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates")) {
           this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
         }else {
           if(this.indicatorRadio === 'User Defined Dates'){
