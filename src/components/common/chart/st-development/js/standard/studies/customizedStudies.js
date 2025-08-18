@@ -1418,7 +1418,7 @@ if (!CIQ.Studies) {
 
 		const criteriaCat = sd.parameters.criteria.startsWith('entry') ? 'Entry' : 'Exit'
 		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-		let display = `(${symbolLabel}) ${criteriaCat} Criteria Score`
+		let display = `(${symbolLabel}) SameBar Multi-Condition ${criteriaCat} Criteria Score`
 		sd.inputs.display = display
 
 		const criteriaScoreList = CIQ.store.getters.getCriteriaScoreList
