@@ -151,7 +151,7 @@ let __st_js_maLayout_ = (_exports) => {
 
         // 如tech是ma则保留第一个选项卡的ma信息
         activatedMALayoutList = activatedMALayoutList.filter(
-            (item) => item.criteria == 'entry'
+            (item) => ['entry', 'entry2'].includes(item.criteria)
         )
 
         CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
