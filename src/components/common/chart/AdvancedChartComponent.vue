@@ -21,34 +21,39 @@
 
 			<cq-side-nav cq-on="sidenavOn">
 				<div class="icon-toggles ciq-toggles">
-					<cq-menu class="ciq-search">
-						<cq-lookup cq-keystroke-claim cq-uppercase v-if="routeName != 'ActiveStudies'"></cq-lookup>
-						<cq-reports-lookup cq-keystroke-claim cq-uppercase v-if="routeName == 'ActiveStudies'"></cq-reports-lookup>
-					</cq-menu>
-					<cq-menu>
-						<div class='symbol-up'></div>
-					</cq-menu>
-					<cq-menu class="ciq-indicators-search">
-						<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-					</cq-menu>
+					<div class="search-bar-group">
+						<!-- <cq-toggle class="search-bar-group--toggle"> -->
+							<cq-menu class="ciq-search">	
+								<cq-lookup cq-keystroke-claim cq-uppercase v-if="routeName != 'ActiveStudies'"></cq-lookup>
+								<cq-reports-lookup cq-keystroke-claim cq-uppercase v-if="routeName == 'ActiveStudies'"></cq-reports-lookup>
+								<div class="cq-tooltip-copy">Symbol Search</div>
+							</cq-menu>
+						<!-- </cq-toggle> -->
+						<!-- <cq-toggle class="search-bar-group--toggle"> -->
+							<cq-menu class="ciq-indicators-search">
+								<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
+								<div class="cq-tooltip-copy">Indicators Search</div>
+							</cq-menu>
+						<!-- </cq-toggle> -->
+					</div>
 					<cq-info-toggle-dropdown class="ch-headsup">
-					<cq-toggle
-							class="ciq-CH"
-							cq-member="crosshair">
+						<cq-toggle
+								class="ciq-CH"
+								cq-member="crosshair">
+								<span></span>
+								<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
+						</cq-toggle>
+						<cq-menu class="ciq-menu toggle-options collapse">
 							<span></span>
-							<cq-tooltip>Crosshair (Alt + \)</cq-tooltip>
-					</cq-toggle>
-					<cq-menu class="ciq-menu toggle-options collapse">
-						<span></span>
-						<cq-menu-dropdown>
-							<cq-item
-								cq-member="crosshair">Hide Heads-Up Display<span class="ciq-radio"><span></span></span>
-							</cq-item>
-							<cq-item
-								cq-member="headsUp-static">Show Heads-Up Display<span class="ciq-radio"><span></span></span>
-							</cq-item>
-						</cq-menu-dropdown>
-					</cq-menu>
+							<cq-menu-dropdown>
+								<cq-item
+									cq-member="crosshair">Hide Heads-Up Display<span class="ciq-radio"><span></span></span>
+								</cq-item>
+								<cq-item
+									cq-member="headsUp-static">Show Heads-Up Display<span class="ciq-radio"><span></span></span>
+								</cq-item>
+							</cq-menu-dropdown>
+						</cq-menu>
 					</cq-info-toggle-dropdown>
 					<cq-info-toggle-dropdown  class="hu-tooltip">
 						<cq-toggle class="ciq-HU" id="ciq-HU" cq-member="headsUp">
@@ -88,8 +93,8 @@
 					</cq-info-toggle-dropdown>
 
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
-					<cq-info-toggle-dropdown>
-						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="display:none;margin-left:28px">
+					<cq-info-toggle-dropdown class="tradeMarkerWrapper flexRow">
+						<cq-toggle class="buy" id="buy" @click="changeMarkerVisibility('buy')" style="display:none;">
 							<span style='margin-right:10px;width: 32px'><svg t='1641979722051' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2092' width='30' height='30'><path d='M512 124L64 900h896z' p-id='2093' fill='#1afa29'></path></svg></span>
 							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>BUY(SYMBOL 1)</cq-tooltip>
 						</cq-toggle>
@@ -106,11 +111,11 @@
 							<cq-tooltip style='left: -30px;width: 100px;padding-top: 2px;padding-bottom: 2px;'>SELL(SYMBOL 2)</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<div class="favBtnContainer">
+					<cq-info-toggle-dropdown class="favBtnContainer">
 						<button class='btnFav addFav'>
 							<div><svg t='1638255076868' class='button_icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2654' width='200' height='200'><path d='M885.942179 427.687756l-267.445168-22.933315-104.470353-246.470461L409.553235 404.75444l-267.336698 22.933315 202.846918 175.770236-60.789505 261.34524 229.753731-138.569986 229.859132 138.569986-60.785411-261.34524L885.942179 427.687756zM514.026658 656.403854l-139.875724 84.425831 37.038568-159.160953-123.591853-106.975407 162.91751-14.053064 63.511499-150.116973 63.620993 150.116973 162.860205 14.053064-123.534548 106.975407 37.038568 159.160953L514.026658 656.403854z' p-id='2655' fill='#1296db'></path></svg><span>Add to favorites</span></div>
 						</button>
-					</div>
+					</cq-info-toggle-dropdown>
 					<!-- <cq-toggle class="ciq-DT tableview-ui" cq-member="tableView"
 						><span></span><cq-tooltip>Table View</cq-tooltip></cq-toggle
 					> -->
@@ -118,7 +123,7 @@
 			</cq-side-nav>
 
 			<div class="ciq-menu-section">
-				<div class="ciq-dropdowns">
+				<div class="ciq-dropdowns flexRow">
 					<cq-menu class="ciq-menu ciq-ticker-indicator">
 						<span
 							><cq-clickable
@@ -817,5 +822,65 @@ select {
 	justify-content: space-between;
 	align-items: center;
 	padding: 30px 70px 0px 70px;
+}
+
+.flexRow {
+	display: flex;
+	flex-direction: row;
+}
+.tradeMarkerWrapper {
+    margin-left: 28px;
+	span {
+		margin-left: 2px;
+	}
+}
+.icon-toggles.ciq-toggles {
+	display: flex;
+}
+
+.search-bar-group {
+	margin: 0 10px;
+	border-right: solid 1px black;
+
+	display: flex;
+	flex-direction: row;
+	&--toggle {
+		flex: 1;
+		width: auto;
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.cq-tooltip-copy {
+	bottom: -8px;
+    position: absolute;
+    display: block;
+    background: #398dff;
+    transition: opacity .1s 0s, margin .5s 0s;
+    opacity: 0;
+    z-index: 4;
+    width: 44px;
+    height: auto;
+    left: -8px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 10px;
+    color: #f8f8f8;
+    border-radius: 1px;
+    pointer-events: none;
+	padding: 4px;
+}
+html:not([ciq-last-interaction='touch']) .ciq-search:hover .cq-tooltip-copy,
+html:not([ciq-last-interaction='touch']) .ciq-indicators-search:hover .cq-tooltip-copy {
+	opacity: 1;
+		transition: opacity .1s .25s, bottom .5s .25s;
+		bottom: -38px;
+		border: 1px solid #e4e4e4;
+}
+
+html:not([ciq-last-interaction='touch']) .ciq-search:visited .cq-tooltip-copy,
+html:not([ciq-last-interaction='touch']) .ciq-indicators-search:visited .cq-tooltip-copy {
+	opacity: 0;
 }
 </style>
