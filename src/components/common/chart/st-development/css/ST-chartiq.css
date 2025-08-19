@@ -872,7 +872,7 @@ cq-section-dynamic .ciq-icon {
 /* Search Area */
 cq-lookup {
   display: block;
-  width: 139px;
+  width: 100%;
   transition: width 200ms 0s;
   z-index: 2;
 }
@@ -886,13 +886,6 @@ cq-lookup {
   width: 300px;
 }
 
-.break-sm cq-lookup {
-  width: 30px;
-}
-
-.break-md cq-lookup {
-  width: 95px;
-}
 
 cq-reports-lookup {
   display: block;
@@ -918,29 +911,18 @@ cq-reports-lookup {
   width: 95px;
 }
 
-.break-sm .ciq-search {
-  margin-right: 40px;
-  margin-left: 40px;
-}
-
-.break-sm .ciq-indicators-search {
-  margin-right: 40px;
-  margin-left: 40px;
-}
 
 .ciq-search,
 .ciq-indicators-search {
-  margin-right: 40px;
+  margin: 0 10px;
+  cursor: pointer;
 }
 
-.break-md .ciq-indicators-search {
-  margin-right: 85px;
-}
 
 .ciq-search {
-  width: 130px;
+  width: 27px;
   height: 45px;
-  padding: 9px 10px 0 10px;
+  padding: 0 10px 0 10px;
   float: left;
   position: relative;
   z-index: 5;
@@ -948,22 +930,15 @@ cq-reports-lookup {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-
 .ciq-search input {
-  height: 27px;
-  border: none;
+  height: 45px !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
 }
-
-.break-sm .ciq-search {
-  width: 40px;
-  padding: 9px 5px 0 5px;
+.ciq-search.stxMenuActive input {
+  border-right: solid 1px black !important;
 }
-
-.break-md .ciq-search {
-  width: 85px;
-}
-
-
 
 cq-lookup-input {
   position: relative;
@@ -995,7 +970,7 @@ cq-lookup-icon {
   height: 27px;
   width: 27px;
   right: 0px;
-  top: -6px;
+  top: -1px;
   background-image: url(img/stx-sprite-ui.svg);
   background-position: -50px -25px;
   opacity: .6;
@@ -1008,6 +983,7 @@ cq-lookup-icon {
 
 .stxMenuActive cq-lookup-icon {
   opacity: 1;
+  right: 8px;
 }
 
 /* Menus/Panel Toggles */
@@ -1310,6 +1286,7 @@ html:not([ciq-last-interaction='touch']) cq-drawing-settings .ciq-icon-btn:hover
 .ciq-nav cq-toggle {
   width: 40px;
   margin-top: 7px;
+  padding-bottom: 3px;   /* 解决toggle highlight位置太高问题 */
 }
 
 .ciq-nav cq-toggle>*:not(cq-text) {
@@ -1396,6 +1373,9 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
   background-position: -2071px -25px;
 }
 
+.trading-signal {
+  margin-left: 10px;
+}
 .trading-signal span {
   background-image: url(img/trading-signal.svg);
   background-position: center;
@@ -1422,6 +1402,9 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
   background-position: -400px -25px;
 }
 
+.ciq-CH {
+  margin-left: 10px;
+}
 .ciq-CH span {
   background-position: -443px -25px;
 }
@@ -4017,9 +4000,30 @@ html:not([ciq-last-interaction='touch']) .stx-ico-handle:hover {
   background-color: rgba(21, 118, 135, 0.3);
 }
 
+/* 移动端侧边栏toolbar适配 */
 .sidenav.active {
   display: flex;
   padding-bottom: 10px;
+  .ciq-CH,.ciq-HU,#grid,#lastP,.trading-signal {
+    margin-left: 0;
+  }
+  .ciq-search input,
+  .ciq-indicators-search input {
+    border: none;
+  }
+  .search-bar-group {
+    flex-direction: column;
+    border-right: none;
+  }
+  .flexRow {
+    flex-direction: column;
+  }
+  .tradeMarkerWrapper {
+    margin-left: 0;
+  }
+  .favBtnContainer {
+    margin-left: 0;
+  }
 }
 
 .sidenav {
@@ -4053,6 +4057,7 @@ html:not([ciq-last-interaction='touch']) .stx-ico-handle:hover {
 
 .break-sm .sidenav {
   top: 45px;
+  left: 0;
 }
 
 .break-sm cq-toggle.ciq-sidenav {
@@ -8959,16 +8964,6 @@ button.btnFav:hover span{
 .break-md .stxMenuActive cq-indicators-lookup {
   width: 300px;
 }
-.break-sm cq-indicators-lookup {
-  width: 30px;
-}
-.break-md cq-indicators-lookup {
-  width: 154px;
-}
-.ciq-search input {
-    height: 27px !important;
-    border: none !important;
-}
 
 .stx-panel-study .stx-subholder {
   border-top: solid 1.5px #3d3d3d;
@@ -8976,9 +8971,9 @@ button.btnFav:hover span{
 }
 
 .ciq-indicators-search {
-  width: 258px;
+  width: 27px;
   height: 45px;
-  padding: 9px 10px 0 10px;
+  padding: 0 10px 0 10px;
   float: left;
   position: relative;
   z-index: 4;
@@ -8988,23 +8983,21 @@ button.btnFav:hover span{
 }
 
 .ciq-indicators-search input {
-    height: 27px !important;
-    border: none !important;
+    height: 45px !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
 }
+.ciq-indicators-search.stxMenuActive input {
+  border-right: solid 1px black !important;
+}
+
 .ciq-dropdowns .ciq-studies{
   /* display:none */
 }
 
 .mSticky {
   display: none !important;
-}
-
-.break-sm .ciq-indicators-search {
-  width: 40px;
-  padding: 9px 5px 0 5px;
-}
-.break-md .ciq-indicators-search {
-  width: 85px;
 }
 
 cq-indicators-lookup-input {
@@ -9043,7 +9036,7 @@ cq-indicators-lookup-input {
   position: absolute;
   height: 27px;
   width: 27px;
-  top: -6px;
+  top: -1px;
   background-image: url(img/stx-sprite-ui.svg);
   background-position: -50px -25px;
   opacity: 0.6;
@@ -9055,6 +9048,7 @@ cq-indicators-lookup-input {
 
 .stxMenuActive .ciq-lookup-icon {
   opacity: 1;
+  right: 8px;
 }
 
 cq-indicators-scroll {
@@ -9492,9 +9486,7 @@ stx-hu-tooltip-field-value {
   display: flex;
   justify-content: space-between;
 }
-cq-side-nav{
-  flex: 1;
-}
+
 cq-side-nav .ciq-toggles{
   width: 100%;
 }

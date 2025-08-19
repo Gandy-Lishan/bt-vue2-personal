@@ -53,7 +53,10 @@ export default {
 		this.watchUpdate()
 
 		/** pre-fetching and updating the data */
-		if(window.location.pathname.includes('/backtester')) {
+		if(
+			window.location.pathname.includes('/backtester') ||
+			window.location.pathname.includes('/strategy')
+		) {
 			// fetch all custom list
 			this.preFetchData()
 		}

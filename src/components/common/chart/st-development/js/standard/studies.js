@@ -3601,11 +3601,13 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	 * important note:
 	 * spx+atx组合情况下，datasets是并集，scrubbed只包含symbol1存在的bar,所以symbol1用scrubbed,symbol2用datasets.filter(item => item.hasOwnProperty(field))
  	*/
+	// 判断一：是否属于Symbol2
 	if(
 		sd?.parameters?.isComparison ||
 		(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2'))
 	){
 		var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+		// 判断二：Study是否为Symbol OHLCV或者一次性的中间量运算，这些才涉及被过滤空值的数据源， 且可能需显示在chart panel
 		if(
 			/**
 			 *  防止"_EMA1 "这种的中间值或者sentiment url通过判断，'hl/2'等特殊处理
@@ -3614,23 +3616,24 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 			['Open','High','Low','Close','Volume'].includes(subField) ||
 			['hl/2','hlc/3','hlcc/4','ohlc/4','change'].includes(subField)
 		){
-			// 只处理计算数据源和symbol2相关的逻辑(symbol2 ma)
+			// 判断三：只处理技术指标和附属ma
 			if(CIQ.findBuiltinTechIndicator(null,sd.type) || sd.type == "ST MA"){
 				field = comparisonSymbol?.url
+				/**根据criteria动态设定study的Y轴属*******/
+				var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
+				sd.yAxis = actualXaxis
+				/****************** */
+				//filter valid rows
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
 			}
 		}
-		/**根据criteria动态设定study的Y轴属*******/
-		var actualXaxis = stx.getYAxisByField(stx.panels['chart'], comparisonSymbol.url);
-		sd.yAxis = actualXaxis
-		/****************** */
-		//filter valid rows
-		quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(comparisonSymbol?.url))
+
 	}else{
 		sd.yAxis = null
 		quotes = sd.chart.scrubbed
 	}
 	/********************************* */
-
+debugger
 	/** myIndicator 区分shift前后的指标 */
 	if(window.location.pathname.includes('/myindicator')) {
 		const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))

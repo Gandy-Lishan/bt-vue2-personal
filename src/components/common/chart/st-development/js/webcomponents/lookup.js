@@ -974,7 +974,7 @@ let __js_webcomponents_lookup_ = (_exports) => {
                         }
                         symbolInput.setAttribute(
                             "placeholder",
-                            breakPoint === "break-sm" ? "" : placeholder
+                            breakPoint === "break-sm" ? "" : ""
                         );
                     }
                 );

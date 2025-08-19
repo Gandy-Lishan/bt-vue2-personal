@@ -67,7 +67,7 @@ a:hover {
 }
 [class*=" fa-"], [class*=" glyphicon-"], [class*=" icon-"], [class^=fa-], [class^=glyphicon-], [class^=icon-] {
 	display: inline-block;
-	margin-top: 1px;
+	/* margin-top: 1px; */
 	font-size: 14px;
 	line-height: 14px;
 	-webkit-font-smoothing: antialiased;
