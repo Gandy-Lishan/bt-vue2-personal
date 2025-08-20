@@ -94,17 +94,19 @@ let __st_js_marker_drawer_ = _exports => {
         // 将 entryTradeDateArr 转换为一个字典（哈希表）
         let piontsDict = {};
         for (let i = 0; i < pionts.length; i++) {
-            const standardDate = formatStandardTime(pionts[i].Date)
-            piontsDict[standardDate] = true;
+            const standardDate = formatStandardTime(pionts[i].Date).getTime()
+            piontsDict[standardDate] = pionts[i];
         }
         for (var i = 0; i < quotes.length; i++) {
             var quote = quotes[i];
             if (quote.DT) {
                 var quoteTime = quote.DT.getTime();
-                // 使用字典来查找
-                if (piontsDict[quoteTime]) {
+                // 使用字典查找对应的 pionts 对象
+                const matchingPoint = piontsDict[quoteTime];
+                if (matchingPoint) {
+                    // 根据 PointType 确定 y 轴的值
+                    let yAxis = matchingPoint.PointType === 'High' ? quote.High : quote.Low;
                     // 添加study panel对应的小点
-                    let yAxis = piontsDict[quoteTime].PointType == 'High' ? quote['High'] : quote['Low']
                     new CIQ.Marker({
                         stx: CIQ.stxx,
                         xPositioner: "date",
