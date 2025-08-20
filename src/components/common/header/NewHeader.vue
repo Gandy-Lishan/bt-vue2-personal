@@ -226,7 +226,7 @@ export default {
               path: '/backtester/list/history'
             },
             {
-              label: 'My Favorites Backtest',
+              label: 'My Favorite Backtests',
               keyPath: '4-3',
               path: '/backtester/list/favorites'
             },
