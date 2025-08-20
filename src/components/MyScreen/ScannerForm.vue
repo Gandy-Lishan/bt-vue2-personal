@@ -446,7 +446,7 @@ export default {
         { label: 'Trend Score', value: 'TrendScore', onlyInput: true },
         { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
         { label: 'Daily Return', value: 'Change', onlyInput: true },
-        { label: 'Relative Strength Index', value: 'RSI', onlyInput: true },
+        { label: 'Relative Strength Index (RSI)', value: 'RSI', onlyInput: true },
         { label: 'Symbol Close 200-Day Moving Average', value: 'SMA200', type: 'Symbol' },
         { label: 'Symbol Close 100-Day Moving Average', value: 'SMA100', type: 'Symbol' },
         { label: 'Symbol Close 50-Day Moving Average', value: 'SMA50', type: 'Symbol' },
