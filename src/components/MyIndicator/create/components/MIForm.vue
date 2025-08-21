@@ -344,10 +344,19 @@
         <el-popover
           placement="bottom"
           trigger="manual"
-          width="320"
-          :content="popTitle"
           v-model="popVisible"
         >
+        <div>
+          <p v-html="popTitle"></p>
+          <div style="text-align: right; margin: 0;">
+            <el-button size="mini" type="text" @click="popVisible = false">Cancel</el-button>
+            <el-button size="mini" type="text" @click="() => {
+              ignoreUsedIndicator = true;
+              popVisible = false;
+              submitForm();
+            }">Confirm Edit</el-button>
+          </div>
+        </div>
 				  <el-button type="primary" @click="submitForm()" slot="reference">Save the created indicator</el-button>
         </el-popover>
 			</el-form-item>
@@ -534,7 +543,8 @@ export default {
         { value: 2, obj: { label: 'Monthly', field: 'monthly' } },
       ],
       popVisible: false,
-      popTitle: 'Indicator in Use: This indicator is used in a backtest. Remove it from the backtest to edit.',
+      popTitle: '<b>Indicator in Use:</b><br/>This indicator is currently used in a backtest. Editing it will disable any backtests that rely on this indicator.',
+      ignoreUsedIndicator: false,
 
     }
   },
@@ -795,10 +805,10 @@ export default {
           if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
         }
       }
-      // if(this.rowUrl) {
-      //   await this.getRelated(this.rowUrl)
-      //   return
-      // }
+      if(this.rowUrl && !this.ignoreUsedIndicator) {
+        await this.getRelated(this.rowUrl)
+        return
+      }
       let saveData = null;
       if(this.data.categories == 'WIC') {
       }else if(this.data.categories == 'OHLCV') {
