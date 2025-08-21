@@ -341,9 +341,15 @@
 				>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click="submitForm()"
-					>Save the created indicator</el-button
-				>
+        <el-popover
+          placement="bottom"
+          trigger="manual"
+          width="320"
+          :content="popTitle"
+          v-model="popVisible"
+        >
+				  <el-button type="primary" @click="submitForm()" slot="reference">Save the created indicator</el-button>
+        </el-popover>
 			</el-form-item>
 		</div>
 	</el-form>
@@ -359,7 +365,7 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator, getSymbollistForecast } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator, getSymbollistForecast, getRelatedBacktest } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
@@ -527,6 +533,9 @@ export default {
         { value: 1, obj: { label: 'Weekly', field: 'weekly' } },
         { value: 2, obj: { label: 'Monthly', field: 'monthly' } },
       ],
+      popVisible: false,
+      popTitle: 'Indicator in Use: This indicator is used in a backtest. Remove it from the backtest to edit.',
+
     }
   },
   computed: {
@@ -773,6 +782,7 @@ export default {
       debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
+      if(this.popVisible) this.popVisible = false
       const rowUrl = this.rowUrl
       if(!validForm) return
       if(!this.rowUrl) {
@@ -785,6 +795,10 @@ export default {
           if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
         }
       }
+      // if(this.rowUrl) {
+      //   await this.getRelated(this.rowUrl)
+      //   return
+      // }
       let saveData = null;
       if(this.data.categories == 'WIC') {
       }else if(this.data.categories == 'OHLCV') {
@@ -885,9 +899,19 @@ export default {
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
     },
+    async getRelated(url) {
+      const res = await getRelatedBacktest(url)
+      const count = res.data.count
+      if(count == 0) {
+        this.popVisible = false
+        return
+      }
+      this.popVisible = true
+    },
     async savePreviewIndicator() {
        // preview 按钮直接走新建不走 update
       const validForm = this.validForm()
+      if(this.popVisible) this.popVisible = false
       if(!validForm) return
       let saveData = null;
       if(this.data.categories == 'WIC') {
@@ -1647,6 +1671,12 @@ export default {
  .MI-container{
   position: relative;
   margin-bottom: 80px;
+  /deep/ .el-popover__title {
+    color: white !important;
+  }
+  /deep/ .el-popover {
+    top: 100% !important;
+  }
  }
 h4 {
 	text-align: center;
@@ -1728,6 +1758,9 @@ h4 {
 	.el-button {
 		width: 300px;
 	}
+  .el-button--mini {
+    width: 100px;
+  }
   .delete-btn {
     margin-right: 30px;
   }
