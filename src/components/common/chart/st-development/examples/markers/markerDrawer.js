@@ -133,14 +133,13 @@ let __st_js_marker_drawer_ = _exports => {
         // 显示trade study标记
         var newNode;
         var quotes = CIQ.stxx.chart.dataSet;
-
         //console.time("🚗 🚗Total execution time");
         // 将 entryTradeDateArr 转换为一个字典（哈希表）
         let entryTradeDateArr = eval('(' + trades + ')')
         let entryTradeDateDict = {};
         if(entryTradeDateArr){
             for (let i = 0; i < entryTradeDateArr.length; i++) {
-                const standardDate = formatStandardTime(entryTradeDateArr[i])
+                const standardDate = formatStandardTime(entryTradeDateArr[i]).getTime()
                 entryTradeDateDict[standardDate] = true;
             }
         }
@@ -489,6 +488,190 @@ let __st_js_marker_drawer_ = _exports => {
         console.log('removeForecastMarker')
         CIQ.Marker.removeByLabel(CIQ.stxx, 'bullish');
         CIQ.Marker.removeByLabel(CIQ.stxx, 'bearish');
+    }
+
+    // Draw support line and parallel channel
+    CIQ.createSupportLineWithChannelDrawing = function(data){
+        // manage all drawing objects
+        let drawingObjList = []
+
+        const support_line = data.drawing_instructions.trend_channel[0]['points']
+        const resistance_line = data.drawing_instructions.trend_channel[1]['points']
+        const horizontal_levels = data.drawing_instructions.horizontal_levels
+
+        // Set all drawings to permanent
+        CIQ.Drawing.prototype.permanent = true;  
+
+        //from: https://documentation.chartiq.com/tutorial-Using%20and%20Customizing%20Drawing%20Tools.html, similar to (DrawingEdit.prototype.clone)
+        // define or retrieve the parameters for the drawing
+    
+        //create factory for the drawing you want
+        for (let i = 0; i < support_line.length - 1; i++) {
+            const p1 = support_line[i];
+            const p2 = support_line[i + 1];
+            
+            var d0 = formatStandardTime(p1.date)
+            var d1 = formatStandardTime(p2.date)
+            let drawing = {
+                name: "continuous",
+                pnl: "chart",
+                col: "#8cc176",
+                fc: "#7DA6F5",
+                ptrn: "solid",
+                lw: 1.1,
+                d0: CIQ.yyyymmddhhmmssmmm(d0),
+                d1: CIQ.yyyymmddhhmmssmmm(d1),
+                // tzo0: 300,
+                // tzo1: 300,
+                v0: p1.price,
+                v1: p2.price,
+            }
+            var Factory = CIQ.Drawing[drawing.name];
+    
+            //create an empty template for that drawing
+            var newDrawing = new Factory();
+        
+            // build the drawing from the parameters
+            newDrawing.reconstruct(CIQ.stxx, drawing);
+        
+            // add it to the chart
+            CIQ.stxx.addDrawing(newDrawing);
+
+            drawingObjList.push(newDrawing)
+        }
+
+        for (let i = 0; i < resistance_line.length - 1; i++) {
+            const p1 = resistance_line[i];
+            const p2 = resistance_line[i + 1];
+            
+            var d0 = formatStandardTime(p1.date)
+            var d1 = formatStandardTime(p2.date)
+            let drawing = {
+                name: "continuous",
+                pnl: "chart",
+                col: "#b82d0c",
+                fc: "#7DA6F5",
+                ptrn: "solid",
+                lw: 1.1,
+                d0: CIQ.yyyymmddhhmmssmmm(d0),
+                d1: CIQ.yyyymmddhhmmssmmm(d1),
+                // tzo0: 300,
+                // tzo1: 300,
+                v0: p1.price,
+                v1: p2.price,
+                text: 'hello',
+                fontSize: '18px',
+                fontString: 'normal 300 18px Helvetica'
+            }
+            var Factory = CIQ.Drawing[drawing.name];
+    
+            //create an empty template for that drawing
+            var newDrawing = new Factory();
+        
+            // build the drawing from the parameters
+            newDrawing.reconstruct(CIQ.stxx, drawing);
+        
+            // add it to the chart
+            CIQ.stxx.addDrawing(newDrawing);
+
+            drawingObjList.push(newDrawing)
+        }
+
+        horizontal_levels.forEach(item => {  
+            var d0 = formatStandardTime('2025-08-10')
+            var d1 = formatStandardTime('2025-08-15')
+            let drawing = {
+                name: "line",
+                pnl: "chart",
+                col: item.type == 'resistance' ? "#b82d0c" : "#8cc176",
+                fc: "#7DA6F5",
+                ptrn: "dashed",
+                lw: 1.1,
+                d0: CIQ.yyyymmddhhmmssmmm(d0),
+                d1: CIQ.yyyymmddhhmmssmmm(d1),
+                // tzo0: 300,
+                // tzo1: 300,
+                v0: item.price,
+                v1: item.price,
+            }
+            var Factory = CIQ.Drawing[drawing.name];
+    
+            //create an empty template for that drawing
+            var newDrawing = new Factory();
+        
+            // build the drawing from the parameters
+            newDrawing.reconstruct(CIQ.stxx, drawing);
+        
+            // add it to the chart
+            CIQ.stxx.addDrawing(newDrawing);
+
+            drawingObjList.push(newDrawing)
+        })
+        horizontal_levels.forEach(item => { 
+            CIQ.createOneTimeHorizontalLabelMarker(item)
+            // // append annotation
+            // var d0 = formatStandardTime('2025-08-15')
+            // let drawing = {
+            //     name: "annotation",
+            //     d0: CIQ.yyyymmddhhmmssmmm(d0),
+            //     pnl: "chart",
+            //     col: item.type == 'resistance' ? "#00746a" : "#398BFF",
+            //     fc: "#7DA6F5",
+            //     // p0: [24500, item.price],
+            //     // p1: [24520, item.price],
+            //     // tzo0: 300,
+            //     v0: item.price,
+            //     text: 'hello@@@@@@@@',
+            //     fontSize: '18px',
+            //     fontString: 'normal 300 18px Helvetica',
+            //     w: 350.6,
+            //     h: 210,
+            //     padding: 4,
+            // }
+            // var Factory = CIQ.Drawing[drawing.name];
+
+            // //create an empty template for that drawing
+            // var newDrawing = new Factory();
+
+            // // build the drawing from the parameters
+            // newDrawing.reconstruct(CIQ.stxx, drawing);
+            // // newDrawing.boxToPixels(CIQ.stxx, "chart", {
+            // //     x0: 240,
+            // //     y0: item.price,
+            // //     x1: 270,
+            // //     y1: item.price,
+            // // })
+            // // add it to the chart
+            // CIQ.stxx.addDrawing(newDrawing);
+        })
+
+        //signal the chart that a drawing has been added...so you can save the layout if you want.
+        CIQ.stxx.changeOccurred("vector");
+        // draw the chart to display it.
+        CIQ.stxx.draw();
+
+        return drawingObjList
+    }
+    CIQ.createOneTimeHorizontalLabelMarker = function(item){
+        var newNode;
+        
+        //hoverable marker
+        newNode = document.querySelector("#stxHorizontalLabel").cloneNode(true);
+        newNode.id = null;
+        newNode.innerHTML = `
+            <div style="color:${item.type == 'resistance' ? '#b82d0c' : '#8cc176'}">${item.label}</div>
+        `
+
+        new CIQ.Marker({
+            stx: CIQ.stxx,
+            x: new Date(),
+            xPositioner: "none",
+            yPositioner: "value",
+            y: item.price,
+            label: "events",
+            node: newNode
+        });
+        CIQ.stxx.draw()
     }
 }
 
