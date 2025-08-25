@@ -419,6 +419,7 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
+      debugger
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
@@ -514,10 +515,10 @@ export default {
               if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
               else _maValues[index] = label || ''
               if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
-            }else if(symbol_ma1 && symbol_ma2 && (symbol_ma1 !== 'c' || symbol_ma2 !== 'c')) {
+            }else if(symbol_ma1 && symbol_ma2) {
               const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
               const label2 = options.find(item => item.value === symbol_ma2)?.label || ''
-              if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
+              if(symbol_ma1)  _maValues[0] = label1 || ''
               if(symbol_ma2 && index === 1)  _maValues[1] = `${label2}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
               _maValues[index] = (value && value != 0) ? `Simple Moving Average ${value}` : ''
