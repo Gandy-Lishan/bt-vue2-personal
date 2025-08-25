@@ -1,8 +1,8 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isSymbol && isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
-    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox>
-    <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
+    <!-- <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox> -->
+    <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect(MAType)" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
         v-for="item in options"
         :key="item.value"
@@ -12,7 +12,7 @@
     </el-select>
     <el-tooltip effect="dark" placement="top" v-if="MAType == 'amplitude' || MAType=='amplify'">
       <span slot="content">
-        Measures intraday price volatility as the percentage difference </br>between today's high and low prices relative to the previous closing price
+        Measures intraday price volatility as the percentage difference <br>between today's high and low prices relative to the previous closing price
       </span>
       <i class="iconfont icon-wenhao"></i>
     </el-tooltip>
@@ -33,7 +33,7 @@
     </div>
     <el-tooltip effect="dark" placement="top" v-if="(isSymbol && isShift && showShiftInput) && config['label'] === 'Shift'" style="margin-left: 5px;">
       <span slot="content">
-        Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), </br>aligning historical data with current dates for time-based comparisons
+        Offsets data backward by a specified number of periods (e.g., Shift 5 moves values 5 days back), <br>aligning historical data with current dates for time-based comparisons
       </span>
       <i class="iconfont icon-wenhao"></i>
     </el-tooltip>
@@ -169,7 +169,7 @@ export default {
   },
   watch: {
     showInput(newValue) {
-      this.validateValue()
+      // this.validateValue()
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
@@ -191,11 +191,14 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
+        const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
         const {field, value} = newValue
-        this.showInput = newValue.checked
+        if(this.config.type == 'SelectInput') this.showInput = true
+        else this.showInput = newValue.checked
+        debugger
         try {
           const _value = value.replace(/\d+/g, "")
-          if(this.isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify'].includes(_value)) {
+          if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify'].includes(_value)) {
             this.MAType = _value
           }
           else{this.MAType = 'MA'}
@@ -226,24 +229,26 @@ export default {
   methods: {
     clearForm() {
       this.showInput = false
+      if(this.config.type == 'SelectInput') this.showInput = true
+      else this.showInput = false
       this.value = ''
       // this.inputVisibility = 'hidden'
       this.MAType = 'MA'
     },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
-        let value = this.showInput ? this.value : 0
+        let value = this.value || 0
         const dontSaveMaValue = ['o', 'h', 'l', 'c'].includes(this.MAType)
         if(!this.showInput) value = 0
-        else if(this.showInput && this.MAType == 'EMA') value = `${this.value}e`
-        else if(this.showInput && this.MAType == 'roc') value = `${this.value}roc`
-        else if(this.showInput && this.MAType == 'amplitude') value = `amplitude`
-        else if(this.showInput && this.MAType == 'amplify') value = `amplify`
-        else if(this.showInput && this.MAType == 'MA') value = this.value
-        if(this.showInput && dontSaveMaValue) value = 0
+        else if(this.MAType == 'EMA') value = `${this.value}e`
+        else if(this.MAType == 'roc') value = `${this.value}roc`
+        else if(this.MAType == 'amplitude') value = `amplitude`
+        else if(this.MAType == 'amplify') value = `amplify`
+        else if(this.MAType == 'MA') value = this.value
+        if(dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {
-          let value = this.showInput ? this.MAType : 'c'
+          let value = this.MAType
           this.$emit('saveData', `symbol_${this.config.field}`, value)
         }
         this.$emit('saveData', this.config.field, value)
@@ -257,8 +262,11 @@ export default {
       }
     },
     handleSelect(val) {
+      if(['ma1', 'ma2'].includes(this.config.field) && isNaN(this.value)) {
+        this.value = ''
+      }
       this.MAType = val
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType))) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType))) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,true)
     },
     handleInput: debounce(function (val) {
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
@@ -295,10 +303,10 @@ export default {
         if(!this.showInput) {this.errMsg = ''}
         else this.errMsg = createEOEPValidate(value)
       }else if(_config.field == "ma1") {
-        if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
+        if(!this.showInput || this.inputVisibility === 'hidden' || this.isDisabled) {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 0)
       }else if(_config.field == "ma2") {
-        if(!this.showInput || this.inputVisibility === 'hidden') {this.errMsg = ''}
+        if(!this.showInput || this.inputVisibility === 'hidden' || this.isDisabled) {this.errMsg = ''}
         else this.errMsg = createPositiveIntegerValidate(value, 0)
       }else if(this.isSymbol && _config.field == "shift" && this.showShiftInput) {
         if(!this.showInput) {this.shiftErrMsg = ''}

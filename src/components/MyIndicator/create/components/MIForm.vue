@@ -346,15 +346,17 @@
           trigger="manual"
           v-model="popVisible"
         >
-        <div>
+        <div class="pop-content">
           <p v-html="popTitle"></p>
           <div style="text-align: right; margin: 0;">
             <el-button size="mini" type="text" @click="popVisible = false">Cancel</el-button>
             <el-button size="mini" type="text" @click="() => {
               ignoreUsedIndicator = true;
               popVisible = false;
+              rowUrl = null;
+              data.name = `${data.name}`
               submitForm();
-            }">Confirm Edit</el-button>
+            }">Create New Indicator</el-button>
           </div>
         </div>
 				  <el-button type="primary" @click="submitForm()" slot="reference">Save the created indicator</el-button>
@@ -440,7 +442,7 @@ export default {
       MA1CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the period',
-        checked: false,
+        checked: true,
         field: 'ma1',
         value: '',
         type: 'SelectInput'
@@ -456,7 +458,7 @@ export default {
       MA2CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the period',
-        checked: false,
+        checked: true,
         field: 'ma2',
         value: '',
         type: 'SelectInput'
@@ -543,7 +545,7 @@ export default {
         { value: 2, obj: { label: 'Monthly', field: 'monthly' } },
       ],
       popVisible: false,
-      popTitle: '<b>Indicator in Use:</b><br/>This indicator is currently used in a backtest. Editing it will disable any backtests that rely on this indicator.',
+      popTitle: '<b>Indicator in Use:</b><br/>This indicator is currently used in a backtest. To avoid affecting those results, a new indicator will be created.',
       ignoreUsedIndicator: false,
 
     }
@@ -777,7 +779,7 @@ export default {
         const url =  saveRes.data.data.url
         const name =  saveRes.data.data.name
         this.$notify({
-          title: `Duplicate Indicator: ${name} Exists`,
+          title: `Duplicate Indicator: "${name}" Exists`,
           message: `The same combination indicator <strong>${name}</strong> already exists. Please adjust your input to avoid duplicates.`,
           type: 'warning',
           dangerouslyUseHTMLString: true,
@@ -807,7 +809,7 @@ export default {
       }
       if(this.rowUrl && !this.ignoreUsedIndicator) {
         await this.getRelated(this.rowUrl)
-        return
+        if(this.popVisible) return
       }
       let saveData = null;
       if(this.data.categories == 'WIC') {
@@ -1457,10 +1459,10 @@ export default {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)
-                if(result !== null && (result[`symbol_ma${index+1}`] !== 'c')) {
+                if(result !== null) {
                   const symbol = result[`symbol_ma${index + 1}`] || 'c'
                   _value = symbol
-                  checked = symbol != 'c'
+                  checked = symbol
                 }
               }
             }
@@ -1681,6 +1683,8 @@ export default {
  .MI-container{
   position: relative;
   margin-bottom: 80px;
+ }
+ .pop-content {
   /deep/ .el-popover__title {
     color: white !important;
   }

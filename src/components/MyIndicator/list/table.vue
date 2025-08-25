@@ -518,7 +518,7 @@ export default {
               const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
               const label2 = options.find(item => item.value === symbol_ma2)?.label || ''
               if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
-              if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
+              if(symbol_ma2 && index === 1)  _maValues[1] = `${label2}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
               _maValues[index] = (value && value != 0) ? `Simple Moving Average ${value}` : ''
               if(index === 1) _maValues[index] = `${_maValues[index]}${(shift_ma2 && shift_ma2 != 0 && !isNaN(shift_ma2)) ? `${typeAttribute === 'symbol' ? ` Shift ${shift_ma2}` : ''}` : ''}`
