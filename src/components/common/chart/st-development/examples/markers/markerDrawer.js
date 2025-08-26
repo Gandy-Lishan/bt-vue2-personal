@@ -2,6 +2,7 @@ import { CIQ as _CIQ, timezoneJS as _timezoneJS } from 'chartiq/js/chartiq.js'
 import { formatStandardTime } from '@/utils'
 import { printConsole } from '@/utils'
 import marker from "./markersSample.js";
+import {fetchAISuplineData} from '@/service/service'
 
 // 定义global一次性marker,不注册了
 
@@ -668,10 +669,48 @@ let __st_js_marker_drawer_ = _exports => {
             xPositioner: "none",
             yPositioner: "value",
             y: item.price,
-            label: "events",
+            label: "horizontalLabel",
             node: newNode
         });
         CIQ.stxx.draw()
+    }
+
+    CIQ.updateSupportLineWithChannelDrawing = async function(){
+        const clearDrawing = function() {
+            CIQ.Marker.removeByLabel(CIQ.stxx, 'horizontalLabel');
+            const drawingObjList = CIQ.store.getters.getDrawingObjList
+            if(drawingObjList.length > 0) {
+                for(var i in drawingObjList) {
+                    CIQ.stxx.removeDrawing(drawingObjList[i])
+                }
+            }
+        }
+        return new Promise(async (resolve, reject) => {
+            var mNode = document.getElementById('ai-supline')
+            if(mNode && mNode.classList.contains('active')) {
+                // 添加active后需要获取数据源，失败则移除active
+                try {
+                    clearDrawing()
+                    const res = await fetchAISuplineData(CIQ.stxx.chart.symbol || 'SPX')
+                    let drawingObjList = CIQ.createSupportLineWithChannelDrawing(res)
+                    CIQ.store.dispatch('chart/set_drawing_objlist', drawingObjList)
+                    resolve('AI Support Line Appended')
+                } catch (error) {
+                    console.error(error)
+                    reject('Unknown Network Error: ')
+                    //mNode.classList.toggle('active')
+                }	
+            } else {
+                try {
+                    console.log('remove ai supline')
+                    resolve('AI Support Line Removed')
+                    clearDrawing()
+                    CIQ.store.dispatch('chart/set_drawing_objlist', [])
+                } catch (error) {
+                    reject("Failed to remove AI Support Line");
+                }
+            }
+        })
     }
 }
 

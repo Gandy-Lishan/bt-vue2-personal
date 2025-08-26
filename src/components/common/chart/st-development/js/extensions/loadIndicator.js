@@ -928,6 +928,7 @@ import { formatStandardTime } from '@/utils'
             addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
+        CIQ.updateSupportLineWithChannelDrawing()
         resolve();
     });
 };
