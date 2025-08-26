@@ -1181,27 +1181,10 @@ export default {
       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
 
-      /**
-       * symbol1 entry&exit: (Acc -> MACD)  
-       * symbol2 entry&exit: (Acc -> MACD)  
-       */
-      // // avoid add indicator redundantly
-      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
-      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
-      //   // 当url相同，不为ma,且都为同一symbol下时，跳过加载       
-      //   if (sd.type == item.url && 
-      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
-      //   ) {
-      //     return
-      //   }
-      //   // if (sd.type == item.url && sd.type != 'ma') {
-      //   //   return
-      //   // }
+      // if (arguments[1] != true) {
+      //   CIQ.addIndicators({})
       // }
-
-      if (arguments[1] != true) {
-        CIQ.addIndicators({})
-      }
+      CIQ.addIndicators({})
     },
     clearUserOwnIndicatorSelect() {
       let freqObj = {}
@@ -1665,21 +1648,20 @@ export default {
             let indi = this.si.sentimentIndicator
             sentimentList.forEach((item) => {
               if (indi.toUpperCase() == item.value.toUpperCase()) {
-                let obj = {}
-                obj.index = vm.panelIndex
-                obj.url = item.url
                 // Set the tiemframe that currently fills the indicator. If the indicator does not match after switching the timeframe, it will be removed
                 this.currentSentiUpdated = item.updated
-                vm.$emit('getIndicatorUrl', obj)
-
                 let freqObj = {}
                 freqObj.value = item.updated
                 freqObj.index = vm.panelIndex
                 freqObj.criteria = vm.criteria
                 freqObj.key = `${vm.criteria}_${vm.panelIndex}`
                 vm.setFrequencyArray(freqObj)
-                // vm.setFreqencyLP(freqObj)
+
                 vm.$emit('getFreqArray', freqObj)
+
+                vm.$emit('getIndicatorUrl', {
+                  url: item.url, index: vm.panelIndex
+                })
               }
             })
           }
@@ -1700,8 +1682,26 @@ export default {
 
             let techIndicatorResult = CIQ.findBuiltinTechIndicator(vm.si.technicalIndicator,null)
             if(techIndicatorResult){
-              let isFromEdit = true
-              vm.handleTechnicalSelect(techIndicatorResult, isFromEdit)
+              // let isFromEdit = true
+              // vm.handleTechnicalSelect(techIndicatorResult, isFromEdit)
+
+              // 把tech相关状态保存从handleTechnicalSelect中抽离开，类似handleSentiSelect
+              // tech也需要设置daily的FrequencyArray
+              // 防止changeRelation到singleCondition后报错
+              let freqObj = {}
+              freqObj.value = 'Daily'
+              freqObj.index = this.panelIndex
+              freqObj.criteria = this.criteria
+              freqObj.key = `${this.criteria}_${this.panelIndex}`
+              this.setFrequencyArray(freqObj)
+              this.$emit('getFreqArray', freqObj)
+
+              this.$emit('getIndicatorVal', {
+                value: techIndicatorResult.value, index: this.panelIndex
+              })
+              this.$emit('getTechIndiObj', {
+                class: techIndicatorResult.class, index: this.panelIndex
+              })
             }
           }
           if (newVal[this.criteria].signals[index].analysis === 'User') {
