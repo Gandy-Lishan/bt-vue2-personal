@@ -1005,7 +1005,7 @@
 					></el-image>
 					<h2 id="2-1">View backtest in My Favorites</h2>
 					<p>
-						Open My Favorites tab to view your favorite backtests, where you can
+						Open My Favorite tab to view your favorite backtests, where you can
 						remove backtesting collections, edit backtests, and view backtest
 						results.
 					</p>
@@ -1191,7 +1191,7 @@
 					<p>
 						The backtesting system has three list pages: Backtest History, My
 						Favorites, and Sample Backtests. The Backtest History contains all
-						the backtests you create; My Favorites Contains all backtests added
+						the backtests you create; My Favorite Contains all backtests added
 						to the collection; There are many Sample Backtests stored in Sample
 						Backtests, which you can use through copy. Now let's open one of the
 						list pages, such as Backtest History, Then click on the triangle

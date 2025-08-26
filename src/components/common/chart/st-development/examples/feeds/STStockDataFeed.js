@@ -11,6 +11,7 @@ import _this from "@/main";
 import {decodeBase64} from '@/utils'
 import {recoverSymbolOptixUrl,getSymbolInfo} from '@/utils/globalFunc'
 import { formatStandardTime } from '@/utils'
+import { deleteBacktest, getRelatedBacktest } from '@/service/service'
 
 // 目前只给pairdata LRU缓存
 const cache = new LRUCache({
@@ -764,11 +765,12 @@ quoteFeedSimulator.formatChartData = async function(response){
             }
             if (CIQ.isOwnIndicator(indicator)) {
                 const [_, url] = indicator.split(/CREATE/);
+                let res = null
                 let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
                 if(!datafeed){
                     let validData = null;
                     try {
-                    const res = await config.getMyIndicatorData(url);
+                        res = await config.getMyIndicatorData(url);
                     if (res.data.data && Array.isArray(res.data.data)) {
                         validData = res;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
                     }
@@ -779,6 +781,31 @@ quoteFeedSimulator.formatChartData = async function(response){
                     if (!validData) {
                     try {
                         const analystRes = await config.getAnalystMyIndicatorData({url});
+                        if((res && res.data.code == 404) && analystRes.data.code == 404) {
+                            _this.popUpMsgBox('This backtesting utilizes a user-customized indicator that is unavailable, this page will be refreshed in 5 seconds', 10000)
+                            const BTRes = await getRelatedBacktest(url)
+                            const count = BTRes.data.count
+                            if(count != 0) {
+                                const results = BTRes?.data?.results
+                                const BTList = results.map(ele => {
+                                    const dateString = ele.create_date
+                                    const dateTime = new Date(dateString)
+                                    const year = dateTime.getFullYear();
+                                    const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+                                    const day = String(dateTime.getDate()).padStart(2, '0');
+                                    const extractedDate = `${year}-${month}-${day}`;
+                                    return{id:ele.id, name: ele.name, date: extractedDate}
+                                })
+                                for (const item of BTList) {
+                                    await deleteBacktest(item.id);
+                                }
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 5000); // 5000毫秒 = 6秒
+                                if(localStorage.getItem('backtestID')) localStorage.removeItem('backtestID')
+                                return
+                            }
+                        }
                         if (analystRes.data.data && Array.isArray(analystRes.data.data)) {
                             validData = analystRes;  // 如果 AnalystRes 有数据, 则使用 AnalystRes
                         }
