@@ -104,7 +104,6 @@
           :categories="data.categories"
 					:config="MA1CheckInputConfig"
           :isDisabled="data.indicator_1==''"
-          :indicator_1_category="indicator_1_category"
 					ref="ma1Form"
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
@@ -168,7 +167,6 @@
           :categories="data.categories"
 					:config="MA2CheckInputConfig"
           :isDisabled="data.indicator_2==''"
-          :indicator_2_category="indicator_2_category"
 					ref="ma2Form"
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
@@ -534,9 +532,6 @@ export default {
         { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
       ],
 
-      indicator_1_category: '',
-      indicator_2_category: '',
-
       // indicator resample
       RESAMPLEData: {indicator:'', condition:''},
       resampleConditions: [
@@ -720,6 +715,17 @@ export default {
         }
         // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
         criteria = 'entry1'
+      }
+      if(type == 'i') {
+        CIQ.addOwnIndicatorMAStudy(
+          0,
+          'MA',
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          false,
+          this.data.categories
+        ) 
       }
       if(['EMA','MA'].includes(type)) {
         CIQ.addOwnIndicatorMAStudy(
@@ -1455,7 +1461,7 @@ export default {
             _value = (value.split('_')[item.index] != 0 ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
             checked = (valueFromStr != 0)
-            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
+            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude') && !_value.includes('i'))) {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)

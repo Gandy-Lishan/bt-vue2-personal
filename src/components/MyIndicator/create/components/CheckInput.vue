@@ -53,8 +53,6 @@ export default {
     },
     isDisabled: Boolean,
     categories: String,
-    indicator_1_category: String,
-    indicator_2_category: String,
     showShiftInput: Boolean
   },
   data() {
@@ -79,9 +77,6 @@ export default {
     },
     options() {
       const isSymbol = this.categories?.includes('Symbol')
-      let category
-      if(this.config.field === 'ma1') category = this.indicator_1_category
-      else if(this.config.field === 'ma2') category = this.indicator_2_category
       const options = [
         {
           value: 'o',
@@ -119,6 +114,10 @@ export default {
         //   isSymbol: true
         // },
         {
+          value: 'i',
+          label: 'Indicator Value'
+        },
+        {
           value: 'MA',
           label: 'Simple Moving Average'
         }, {
@@ -151,7 +150,7 @@ export default {
       //   return options
       // }
       if(isSymbol) return options
-      return  options.filter(ele => ele.isSymbol !== true)
+      return options.filter(ele => ele.isSymbol !== true)
     },
     isEOEP() {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
@@ -170,10 +169,13 @@ export default {
   watch: {
     showInput(newValue) {
       // this.validateValue()
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
+      debugger
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify') && this.MAType != 'i'){
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.MAType == 'i') {
+        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }else if(this.config.type === 'CheckInput'){
         this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }
@@ -198,7 +200,7 @@ export default {
         debugger
         try {
           const _value = value.replace(/\d+/g, "")
-          if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify'].includes(_value)) {
+          if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify', 'i'].includes(_value)) {
             this.MAType = _value
           }
           else{this.MAType = 'MA'}
@@ -207,6 +209,7 @@ export default {
         }
         this.value = newValue.value
         if(typeof newValue.value === 'string' && newValue.value.includes('e'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'EMA'}
+        if(typeof newValue.value === 'string' && newValue.value.includes('i'))  {this.value =  newValue.value.toString().replace(/e$/, ''); this.MAType = 'i'}
         if(typeof newValue.value === 'string' && newValue.value.includes('roc'))  {this.value =  newValue.value.toString().replace(/roc$/, ''); this.MAType = 'roc'}
         if(typeof newValue.value === 'string' && newValue.value.includes('amplify'))  {this.value =  newValue.value.toString().replace(/amplify$/, ''); this.MAType = 'amplify'}
         if(typeof newValue.value === 'string' && newValue.value.includes('amplitude'))  {this.value =  newValue.value.toString().replace(/amplitude$/, ''); this.MAType = 'amplitude'}
@@ -245,6 +248,7 @@ export default {
         else if(this.MAType == 'amplitude') value = `amplitude`
         else if(this.MAType == 'amplify') value = `amplify`
         else if(this.MAType == 'MA') value = this.value
+        else if(this.MAType == 'i') value = 'i'
         if(dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {
@@ -262,17 +266,21 @@ export default {
       }
     },
     handleSelect(val) {
-      if(['ma1', 'ma2'].includes(this.config.field) && isNaN(this.value)) {
+      debugger
+      if((['ma1', 'ma2'].includes(this.config.field) && isNaN(this.value))) {
         this.value = ''
       }
       this.MAType = val
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType))) this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,true)
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify' || ['o','h','l','c'].includes(this.MAType)) && this.MAType != 'i') this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,true)
+      else if(this.MAType == 'i')  this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
     },
     handleInput: debounce(function (val) {
-      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify')){
+      if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify') && this.MAType != 'i'){
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
+      }else if(this.MAType == 'i') {  
+        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }else if(this.config.type === 'CheckInput'){
         this.$emit('handleShiftChange',Number(this.value),this.showInput)
       }

@@ -123,6 +123,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
+          min-width="100"
           v-if="l.label == 'Indicators included'"
 				>
           <template slot-scope="scope">
@@ -498,11 +499,15 @@ export default {
           value: 'e',
           label: 'Exponential Moving Average',
           isSymbol: true
+        },
+        {
+          value: 'i',
+          label: 'Indicator Value'
         }
       ]
       const {shift_ma1, symbol_ma1, shift_ma2, symbol_ma2} = next_process_result || {}
       const maList = item.ma.split('_');
-      const specialMAValues = ['amplify', 'amplitude', 'roc', 'e']
+      const specialMAValues = ['amplify', 'amplitude', 'roc', 'e', 'i']
       let _maValues = []
       // specialMAValues.forEach(ele => {
         maList.forEach((value, index) => {
@@ -512,8 +517,11 @@ export default {
               const deleteNum = value.replace(/^\d+/, '');
               const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
               const replaceStr = value.replace(/\D+/g, '')
-              if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
-              else _maValues[index] = label || ''
+              let _label = label
+              if(value === 'e') _label = 'Exponential Moving Average '
+              if(value === 'i') _label = 'Indicator Value'
+              if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${_label} ${replaceStr}`
+              else _maValues[index] = _label || ''
               if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
             }else if(symbol_ma1 && symbol_ma2) {
               const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
