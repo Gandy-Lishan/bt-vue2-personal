@@ -705,7 +705,6 @@ li.el-menu-item.tutorial-svg:hover {
 .badge {
     font-size: 11px!important;
     height: 18px;
-    width: 18px;
     border-radius: 12px!important;
     text-shadow: none!important;
     text-align: center;
@@ -713,10 +712,11 @@ li.el-menu-item.tutorial-svg:hover {
 }
 .badge {
     display: none;
-    min-width: 10px;
+    min-width: 18px;
     line-height: 18px;
     color: #fff;
     white-space: nowrap;
+    padding: 0 2px;
 }
 #notification-icon {
   color: grey; //default color

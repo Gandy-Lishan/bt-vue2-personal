@@ -378,7 +378,7 @@ export default {
 		clearFormValidate() {
 			this.$refs?.maForm.clearValidate()
 		},
-		updateMAPeriod(val, limit) {
+		updateMAPeriod(val) {
 			// update MA period
 			for (let studyInstanceName in CIQ.stxx.layout.studies) {
 				let sd = CIQ.stxx.layout.studies[studyInstanceName]
@@ -410,7 +410,7 @@ export default {
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
       				CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}			
 		},
@@ -490,36 +490,6 @@ export default {
 				this.updateMAPeriod(this.tech.period)
 			}
 		},
-		// todo: ma应该随数据源变化而更新
-		// getRadioSelect(val) {
-		// 	let field
-		// 	switch(val){
-		// 		case 'SC': field = 'Close';break;
-		// 		case 'SH': field = 'High';break;
-		// 		case 'SO': field = 'Open';break;
-		// 		case 'SL': field = 'Low';break;
-		// 		default: field = 'field'
-		// 	}
-		// 	for (let studyInstanceName in CIQ.stxx.layout.studies) {
-		// 		let sd = CIQ.stxx.layout.studies[studyInstanceName]
-		// 		if (
-		// 			sd.type == 'ma' && sd.panel == 'chart' &&
-		// 			sd.parameters.criteria == this.criteria &&
-		// 			sd.parameters.index == this.panelIndex
-		// 		) {
-		// 			let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, {Field: field}, null, {
-		// 				criteria: this.criteria,
-		// 				index: this.panelIndex
-		// 			})
-		// 			// 解决附属ma或者roc漂移问题
-		// 			CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-		// 			//CIQ.store.commit('chart/getMAPeriod', val)
-
-		// 			// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      	// 			CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',field,this.criteria,this.panelIndex)
-		// 		}
-		// 	}
-		// },
 		setDesciption() {
 			let index = this.panelIndex
 			let rocCond = {
@@ -629,7 +599,7 @@ export default {
 				}
 				this.$store.commit('form/saveDescription', desObj)
 		},
-		getMaPeriodValue(val, limit) {
+		getMaPeriodValue(val) {
 			
 			this.tech.ma_period = val
 			for (let studyInstanceName in CIQ.stxx.layout.studies) {
@@ -659,7 +629,7 @@ export default {
 						index: this.panelIndex
 					})
 					// 解决附属ma或者roc漂移问题
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
+					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}
 			// keep current MA
@@ -684,49 +654,17 @@ export default {
 			this.$store.commit('chart/getMA', activatedMAList)
 			this.$store.commit('form/getStMaPeriod', val)
 		},
-		getSCvalue(val, limit) {
+		getSCvalue(val) {
 			if (this.tech.comparison !== 'MA') {
 				this.tech.period = val
 
-				this.updateMAPeriod(val, limit)
+				this.updateMAPeriod(val)
 		}
 		},
-		getMaValue(val, limit) {
+		getMaValue(val) {
 			this.tech.maPeriod = val
-			for (let studyInstanceName in CIQ.stxx.layout.studies) {
-				let sd = CIQ.stxx.layout.studies[studyInstanceName]
-				if (
-					sd.type == 'ma' && sd.panel == 'chart' &&
-					sd.parameters.criteria == this.criteria &&
-					sd.parameters.index == this.panelIndex
-				) {
-					const ma_color = this.$store.getters.getColorByCriteriaAndIndex(this.criteria, 0)
-					let replaceStudy = {
-						name: 'Moving Average',
-						overlay: true,
-						calculateFN: CIQ.Studies.calculateMovingAverage,
-						inputs: {
-							Period: val,
-							Field: sd.inputs.Field,
-							Type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
-							Offset: 0
-						},
-						outputs: { MA: ma_color },
-					}
-					CIQ.Studies.studyLibrary[sd.type] = replaceStudy
-					let st = CIQ.Studies.replaceStudy(CIQ.stxx, sd.inputs.id, sd.type, null, null, {
-						criteria: this.criteria,
-						index: this.panelIndex
-					})
-					
-					//CIQ.store.commit('chart/getMAPeriod', val)
-
-					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
-
-					if(!limit) CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
-				}
-			}
+			
+			this.updateMAPeriod(val)
 		},
 		saveCondition() {
 			let index = this.panelIndex
@@ -814,12 +752,14 @@ export default {
 					this.radio = 'Moving Average'
 					this.tech.ma_period = obj.ma_period
 					this.tech.maPeriod = obj.period
-					this.getMaPeriodValue(obj.ma_period,this.$store.getters.getIsMarkerShownFlagState)
-					this.getMaValue(obj.period,this.$store.getters.getIsMarkerShownFlagState)
+					// 注释内容：不应该在editdata内设定MaLayout, 在reloadData时就还原了回测的此属性并在getMetaData批量加载指标时还原到图表上
+					//this.getMaPeriodValue(obj.ma_period,this.$store.getters.getIsMarkerShownFlagState)
+					//this.getMaValue(obj.period,this.$store.getters.getIsMarkerShownFlagState)
 				} else {
 					this.radio = ' '
 					this.tech.period = obj.period
-					this.getSCvalue(this.tech.period,this.$store.getters.getIsMarkerShownFlagState)
+					// 注释内容：不应该在editdata内设定MaLayout, 在reloadData时就还原了回测的此属性并在getMetaData批量加载指标时还原到图表上
+					//this.getSCvalue(this.tech.period,this.$store.getters.getIsMarkerShownFlagState)
 				}
 				this.editTechVal = obj.indicator
 

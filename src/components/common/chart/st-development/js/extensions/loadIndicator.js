@@ -674,10 +674,12 @@ import { formatStandardTime } from '@/utils'
     if (!stx) return Promise.resolve(); // If no stx, nothing to do.
 
     // Clear existing studies from the chart
+    //console.log('*************Clear existing studies from the chart',stx.layout.studies,CIQ.store.state.chart.activatedMA)
     for (const studyInstanceName in stx.layout.studies) {
+        //console.log('removeStudy', stx.layout.studies[studyInstanceName].type)
         CIQ.Studies.removeStudy(stx, stx.layout.studies[studyInstanceName]);
     }
-
+    //console.log('****************Clear existing studies from the chart Done')
     const senti_color = ["#000000"];
     // const tech_color_1 = ["#5B9BD1", "#368DF0"]; // Not used in the provided code
     // const tech_color_2 = ["#000000", "#6b7280"]; // Not used in the provided code
@@ -701,16 +703,17 @@ import { formatStandardTime } from '@/utils'
             const extremeValueList = CIQ.store.state.chart.extremeValue || [];
             CIQ.store.commit("chart/getExtremeValue", [...extremeValueList, newExtremeValue]);
         }
-console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedMA)
         // Add associated MAs
         for (const activatedMAObj of CIQ.store.state.chart.activatedMA) {
-            if (activatedMAObj.url === indicatorKey && activatedMAObj.url !== '') {
+            if (
+                activatedMAObj.url === indicatorKey && activatedMAObj.url !== '' &&
+                activatedMAObj.index === parameters.index && activatedMAObj.criteria === parameters.criteria
+            ) {
                 const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(activatedMAObj.criteria, activatedMAObj.index);
                 let maType = activatedMAObj.type;
                 if (['SMA', 'EMA'].includes(maType)) {
                     maType = (maType === 'SMA' ? 'simple' : 'exponential');
                 }
-
                 CIQ.Studies.addStudy(stx, "ST MA", {
                     Type: maType,
                     Period: activatedMAObj.period,
@@ -726,7 +729,7 @@ console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedM
             }
         }
     };
-
+    
     return new Promise(async resolve => {
         // --- Phase 1: Categorize and Prepare Studies ---
         for (const indicatorName of indicatorList) {
@@ -925,6 +928,7 @@ console.log('CIQ.store.state.chart.activatedMA',CIQ.store.state.chart.activatedM
             addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
+        CIQ.updateSupportLineWithChannelDrawing()
         resolve();
     });
 };

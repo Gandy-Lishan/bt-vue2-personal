@@ -32,7 +32,7 @@
 						<!-- <cq-toggle class="search-bar-group--toggle"> -->
 							<cq-menu class="ciq-indicators-search">
 								<cq-indicators-lookup cq-keystroke-claim="" cq-uppercase=""></cq-indicators-lookup>
-								<div class="cq-tooltip-copy">Indicators Search</div>
+								<div class="cq-tooltip-copy">Add Indicator</div>
 							</cq-menu>
 						<!-- </cq-toggle> -->
 					</div>
@@ -91,6 +91,12 @@
 							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
+					<!-- <cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
+						<cq-toggle class="ai-supline" id="ai-supline" v-loading="aISuplineloading" @click="toogleAISupline">
+							<span></span>
+							<cq-tooltip style="z-index: 20001;">AI Support Line</cq-tooltip>
+						</cq-toggle>
+					</cq-info-toggle-dropdown> -->
 
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
 					<cq-info-toggle-dropdown class="tradeMarkerWrapper flexRow">
@@ -377,10 +383,11 @@
 			<span class="tooltip"></span>
 		</div>
 		<!-- last signal marker -->
-		<div id="stxMessage" class="myMes">
+		<div id="stxMessage" class="myMes"></div>
 		<!-- last signal marker -->
 		<div id="stxForecast" class="forecast"></div>
-		</div>
+		<!-- HorizontalLabel marker -->
+		<div id="stxHorizontalLabel" class="horizontalLabel"></div>
 		<ModalBox ref="modalBox">
 			<div class="strategy-container">
 				<div class="dropdown">
@@ -482,6 +489,7 @@ export default class AdvancedChartComponent extends Vue {
 	strategyIndex: number
 	strategiesOptions: {label: string, value: number}[]
 	isShowStrategyDescription: boolean
+	aISuplineloading: boolean
 	
 	constructor() {
 		super()
@@ -502,6 +510,7 @@ export default class AdvancedChartComponent extends Vue {
 		this.strategyIndex = 0
 		this.strategiesOptions = [{label: '- Select Strategy -', value: 0}]
 		this.isShowStrategyDescription = false
+		this.aISuplineloading = false
 	}
 
 	async mounted() {
@@ -575,6 +584,18 @@ export default class AdvancedChartComponent extends Vue {
         modal.open(); // 确保 modal 存在后再调用 open 方法
       }
     }
+	async toogleAISupline() {
+		this.aISuplineloading = true
+
+		try {
+			const msg = await CIQ.updateSupportLineWithChannelDrawing();
+			this.$message.success(msg);
+		} catch (errMsg) {
+			this.$message.error(errMsg);
+		}
+
+		this.aISuplineloading = false
+	}
 	closeModal() {
 		const modal = this.$refs.modalBox as any;
 		if (modal) {
@@ -882,5 +903,15 @@ html:not([ciq-last-interaction='touch']) .ciq-indicators-search:hover .cq-toolti
 html:not([ciq-last-interaction='touch']) .ciq-search:visited .cq-tooltip-copy,
 html:not([ciq-last-interaction='touch']) .ciq-indicators-search:visited .cq-tooltip-copy {
 	opacity: 0;
+}
+
+.ai-supline {
+	/deep/ .el-loading-spinner{
+		margin-top: -15px;
+		.circular {
+			width: 27px;
+			height: 27px;
+		}
+	}
 }
 </style>

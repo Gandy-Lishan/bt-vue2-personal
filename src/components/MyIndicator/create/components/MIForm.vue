@@ -104,7 +104,6 @@
           :categories="data.categories"
 					:config="MA1CheckInputConfig"
           :isDisabled="data.indicator_1==''"
-          :indicator_1_category="indicator_1_category"
 					ref="ma1Form"
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
@@ -168,7 +167,6 @@
           :categories="data.categories"
 					:config="MA2CheckInputConfig"
           :isDisabled="data.indicator_2==''"
-          :indicator_2_category="indicator_2_category"
 					ref="ma2Form"
           @manageMICondStudies="manageMICondStudies"
 					@saveData="saveSubData"
@@ -325,6 +323,7 @@
             </div>
         </el-form-item>
 				<CheckInput
+          :categories="data.categories"
 					:config="MAOHLCVCheckInputConfig"
           :isDisabled="OHLCVData.condition==''"
 					ref="maohlcvForm"
@@ -341,9 +340,26 @@
 				>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click="submitForm()"
-					>Save the created indicator</el-button
-				>
+        <el-popover
+          placement="bottom"
+          trigger="manual"
+          v-model="popVisible"
+        >
+        <div class="pop-content">
+          <p v-html="popTitle"></p>
+          <div style="text-align: right; margin: 0;">
+            <el-button size="mini" type="text" @click="popVisible = false">Cancel</el-button>
+            <el-button size="mini" type="text" @click="() => {
+              ignoreUsedIndicator = true;
+              popVisible = false;
+              rowUrl = null;
+              data.name = `${data.name}`
+              submitForm();
+            }">Create New Indicator</el-button>
+          </div>
+        </div>
+				  <el-button type="primary" @click="submitForm()" slot="reference">Save the created indicator</el-button>
+        </el-popover>
 			</el-form-item>
 		</div>
 	</el-form>
@@ -359,7 +375,7 @@
  <script>
  import { CIQ } from '@/components/common/chart/st-development/js/components'
 import CheckInput from './CheckInput.vue'
-import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator, getSymbollistForecast } from '@/service/service'
+import { saveMyIndicators, getMyIndicatorData, delMyIndicator, editMyIndicators, searchIndicator, getSymbollistForecast, getRelatedBacktest } from '@/service/service'
 import {  validatePercentageRule } from "@/utils/formValidate"
 import {timeframeTransform} from '@/utils'
 import {createStateFilter} from '@/utils/globalFunc'
@@ -425,7 +441,7 @@ export default {
       MA1CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the period',
-        checked: false,
+        checked: true,
         field: 'ma1',
         value: '',
         type: 'SelectInput'
@@ -441,7 +457,7 @@ export default {
       MA2CheckInputConfig: {
         label: 'Moving Average',
         placeholder: 'Please input the period',
-        checked: false,
+        checked: true,
         field: 'ma2',
         value: '',
         type: 'SelectInput'
@@ -517,9 +533,6 @@ export default {
         { value: 4, obj: { label: 'Symbol Volume', field: 'volume' } },
       ],
 
-      indicator_1_category: '',
-      indicator_2_category: '',
-
       // indicator resample
       RESAMPLEData: {indicator:'', condition:''},
       resampleConditions: [
@@ -527,6 +540,10 @@ export default {
         { value: 1, obj: { label: 'Weekly', field: 'weekly' } },
         { value: 2, obj: { label: 'Monthly', field: 'monthly' } },
       ],
+      popVisible: false,
+      popTitle: '<b>Indicator in Use:</b><br/>This indicator is currently used in a backtest. To avoid affecting those results, a new indicator will be created.',
+      ignoreUsedIndicator: false,
+
     }
   },
   computed: {
@@ -562,7 +579,6 @@ export default {
   watch: {
     handleGetMiBenmark: {
       async handler(newVal) {
-        debugger
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -700,6 +716,17 @@ export default {
         // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
         criteria = 'entry1'
       }
+      if(type == 'i') {
+        CIQ.addOwnIndicatorMAStudy(
+          0,
+          'MA',
+          fieldName,
+          criteria,
+          field == 'ma1'?0:1,
+          false,
+          this.data.categories
+        ) 
+      }
       if(['EMA','MA'].includes(type)) {
         CIQ.addOwnIndicatorMAStudy(
           value,
@@ -758,7 +785,7 @@ export default {
         const url =  saveRes.data.data.url
         const name =  saveRes.data.data.name
         this.$notify({
-          title: `Duplicate Indicator: ${name} Exists`,
+          title: `Duplicate Indicator: "${name}" Exists`,
           message: `The same combination indicator <strong>${name}</strong> already exists. Please adjust your input to avoid duplicates.`,
           type: 'warning',
           dangerouslyUseHTMLString: true,
@@ -770,9 +797,9 @@ export default {
       // this.$store.commit('SET_CREACT_LOADING', false)
 		}, 500),
     async saveIndicator() {
-      debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
+      if(this.popVisible) this.popVisible = false
       const rowUrl = this.rowUrl
       if(!validForm) return
       if(!this.rowUrl) {
@@ -784,6 +811,10 @@ export default {
           console.log('duplicateItem', duplicateItem)
           if(duplicateItem) {this.popUpMsgBox(`Custom indicator name already in use. Please choose another`); return}
         }
+      }
+      if(this.rowUrl && !this.ignoreUsedIndicator) {
+        await this.getRelated(this.rowUrl)
+        if(this.popVisible) return
       }
       let saveData = null;
       if(this.data.categories == 'WIC') {
@@ -885,9 +916,19 @@ export default {
       if(rowUrl) return await editMyIndicators(saveData, rowUrl)
       return await saveMyIndicators(saveData);
     },
+    async getRelated(url) {
+      const res = await getRelatedBacktest(url)
+      const count = res.data.count
+      if(count == 0) {
+        this.popVisible = false
+        return
+      }
+      this.popVisible = true
+    },
     async savePreviewIndicator() {
        // preview 按钮直接走新建不走 update
       const validForm = this.validForm()
+      if(this.popVisible) this.popVisible = false
       if(!validForm) return
       let saveData = null;
       if(this.data.categories == 'WIC') {
@@ -1419,14 +1460,14 @@ export default {
             _value = (value.split('_')[item.index] != 0 ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
             checked = (valueFromStr != 0)
-            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude'))) {
+            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude') && !_value.includes('i') && Number(_value) == 0)) {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)
-                if(result !== null && (result[`symbol_ma${index+1}`] !== 'c')) {
+                if(result !== null) {
                   const symbol = result[`symbol_ma${index + 1}`] || 'c'
                   _value = symbol
-                  checked = symbol != 'c'
+                  checked = symbol
                 }
               }
             }
@@ -1648,6 +1689,14 @@ export default {
   position: relative;
   margin-bottom: 80px;
  }
+ .pop-content {
+  /deep/ .el-popover__title {
+    color: white !important;
+  }
+  /deep/ .el-popover {
+    top: 100% !important;
+  }
+ }
 h4 {
 	text-align: center;
 	margin: 0;
@@ -1728,6 +1777,9 @@ h4 {
 	.el-button {
 		width: 300px;
 	}
+  .el-button--mini {
+    width: 100px;
+  }
   .delete-btn {
     margin-right: 30px;
   }

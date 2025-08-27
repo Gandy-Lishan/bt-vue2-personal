@@ -46,6 +46,8 @@ const getters = {
 
 	getCriteriaScoreList: state => state.chart.criteriaScoreList,
 
+	getDrawingObjList: state => state.chart.drawingObjList,
+
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
 	getScannerAIFlagState: state => state.states.scannerai_flag,

@@ -1035,7 +1035,7 @@ export default {
 					if(!toUpdateChart) return
 					//When removing the exit criteria, update the vuex status
 					// 移除senti indicator附属ma
-					const oppositeCriteria = this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') : this.criteriaNum
+					const oppositeCriteria = this.criteriaNum.startsWith('entry') ? (this.criteriaNum === 'entry' ? 'exit' : 'exit2') :(this.criteriaNum === 'exit' ? 'entry' : 'entry2')
 					let activatedMAList = this.$store.state.chart.activatedMA
 					activatedMAList = activatedMAList.filter((item)=>
 						item.criteria == oppositeCriteria

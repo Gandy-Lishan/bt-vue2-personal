@@ -1383,6 +1383,16 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
   background-position-y: 4px;
 }
 
+.ai-supline {
+  margin-left: 10px;
+}
+.ai-supline span {
+  background-image: url(img/ai-supline.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-position-y: 2px;
+}
+
 .performance-summary span {
   background-image: url(img/performance-summary.svg);
   background-position: center;
@@ -9037,8 +9047,8 @@ cq-indicators-lookup-input {
   height: 27px;
   width: 27px;
   top: -1px;
-  background-image: url(img/stx-sprite-ui.svg);
-  background-position: -50px -25px;
+  background-image: url(img/stx-sprite-ui-new.svg);
+  background-position: -934px -25px;
   opacity: 0.6;
   transition: opacity 0.2s 0s;
 }

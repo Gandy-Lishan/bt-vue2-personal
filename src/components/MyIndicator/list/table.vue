@@ -123,6 +123,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
+          min-width="100"
           v-if="l.label == 'Indicators included'"
 				>
           <template slot-scope="scope">
@@ -419,6 +420,7 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
+      debugger
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
@@ -497,11 +499,15 @@ export default {
           value: 'e',
           label: 'Exponential Moving Average',
           isSymbol: true
+        },
+        {
+          value: 'i',
+          label: 'Indicator Value'
         }
       ]
       const {shift_ma1, symbol_ma1, shift_ma2, symbol_ma2} = next_process_result || {}
       const maList = item.ma.split('_');
-      const specialMAValues = ['amplify', 'amplitude', 'roc', 'e']
+      const specialMAValues = ['amplify', 'amplitude', 'roc', 'e', 'i']
       let _maValues = []
       // specialMAValues.forEach(ele => {
         maList.forEach((value, index) => {
@@ -511,14 +517,17 @@ export default {
               const deleteNum = value.replace(/^\d+/, '');
               const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
               const replaceStr = value.replace(/\D+/g, '')
-              if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${value === 'e' ? 'Exponential Moving Average ' : label} ${replaceStr}`
-              else _maValues[index] = label || ''
+              let _label = label
+              if(value === 'e') _label = 'Exponential Moving Average '
+              if(value === 'i') _label = 'Indicator Value'
+              if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${_label} ${replaceStr}`
+              else _maValues[index] = _label || ''
               if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
-            }else if(symbol_ma1 && symbol_ma2 && (symbol_ma1 !== 'c' || symbol_ma2 !== 'c')) {
+            }else if(symbol_ma1 && symbol_ma2 && Number(value) == 0) {
               const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
               const label2 = options.find(item => item.value === symbol_ma2)?.label || ''
-              if(symbol_ma1 !== 'c')  _maValues[0] = label1 || ''
-              if(symbol_ma2 && index === 1)  _maValues[1] = `${label2 !== 'Symbol Close'?(label2 || ''):''}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
+              if(symbol_ma1)  _maValues[0] = label1 || ''
+              if(symbol_ma2 && index === 1)  _maValues[1] = `${label2}${(shift_ma2 != 0 && shift_ma2) ? `${(typeAttribute === 'symbol') ? ` Shift ${shift_ma2}` : ''}`: ''}`
             }else {
               _maValues[index] = (value && value != 0) ? `Simple Moving Average ${value}` : ''
               if(index === 1) _maValues[index] = `${_maValues[index]}${(shift_ma2 && shift_ma2 != 0 && !isNaN(shift_ma2)) ? `${typeAttribute === 'symbol' ? ` Shift ${shift_ma2}` : ''}` : ''}`
@@ -572,7 +581,11 @@ export default {
           calculate = ' Symbol Close'
           break;
       }
-      const ma1 = (maList[0] !== '1' && maList[0] !== '0') ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      const maValue = maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]
+      let maLabel = ''
+      if(maList[0].includes('e')) maLabel = ' Exponential Moving Average'
+      else if(maList[0] !== '1' && maList[0] !== '0') maLabel = ' Simple Moving Average'
+      const ma1 = `${maLabel} ${(maList[0] !== '1' && maList[0] !== '0') ? maValue : ''}`
       const ma2 = '';
 
       return {
