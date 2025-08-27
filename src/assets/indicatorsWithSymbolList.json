@@ -29953,20 +29953,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Tempur Sealy Int Trend Score",
-        "url": "TPX_trend",
-        "market_symbol": "TPX",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Tempur Sealy Int RelTrend Score",
-        "url": "TPX_reltrend",
-        "market_symbol": "TPX",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Tootsie Roll Ind Trend Score",
         "url": "TR_trend",
         "market_symbol": "TR",
@@ -91434,13 +91420,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Tempur Sealy International Inc",
-        "url": "TPX",
-        "market_symbol": "TPX",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "PacWest Bancorp",
         "url": "PACW",
         "market_symbol": "PACW",
@@ -95589,6 +95568,132 @@
         "url": "bitcoin_triple_40",
         "market_symbol": "bitcoin",
         "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN) Trend Score",
+        "url": "DFEN_trend",
+        "market_symbol": "dfen",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN) RelTrend Score",
+        "url": "DFEN_reltrend",
+        "market_symbol": "dfen",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Cybersecurity ETF (HACK) Trend Score",
+        "url": "HACK_trend",
+        "market_symbol": "hack",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amplify Cybersecurity ETF (HACK) RelTrend Score",
+        "url": "HACK_reltrend",
+        "market_symbol": "hack",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Uranium and Nuclear ETF (NLR) Trend Score",
+        "url": "NLR_trend",
+        "market_symbol": "nlr",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Uranium and Nuclear ETF (NLR) RelTrend Score",
+        "url": "NLR_reltrend",
+        "market_symbol": "nlr",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KraneShares Artificial Intelligence and Technology ETF (AGIX) Trend Score",
+        "url": "AGIX_trend",
+        "market_symbol": "agix",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "KraneShares Artificial Intelligence and Technology ETF (AGIX) RelTrend Score",
+        "url": "AGIX_reltrend",
+        "market_symbol": "agix",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "DFEN Optix",
+        "url": "etf_dfen",
+        "market_symbol": "dfen",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HACK Optix",
+        "url": "etf_hack",
+        "market_symbol": "hack",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NLR Optix",
+        "url": "etf_nlr",
+        "market_symbol": "nlr",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AGIX Optix",
+        "url": "etf_agix",
+        "market_symbol": "agix",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ST0XX Europe 600 Price Index EUR Trend Score",
+        "url": "SXXP_trend",
+        "market_symbol": "sxxp",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ST0XX Europe 600 Price Index EUR RelTrend Score",
+        "url": "SXXP_reltrend",
+        "market_symbol": "sxxp",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tokyo Stock Price Index (TOPIX) Trend Score",
+        "url": "TPX_trend",
+        "market_symbol": "tpx",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tokyo Stock Price Index (TOPIX) RelTrend Score",
+        "url": "TPX_reltrend",
+        "market_symbol": "tpx",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARM Holdings PLC Trend Score",
+        "url": "ARM_trend",
+        "market_symbol": "ARM",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARM Holdings PLC RelTrend Score",
+        "url": "ARM_reltrend",
+        "market_symbol": "ARM",
+        "type": "reltrend",
         "updated": "Daily"
     }
 ]

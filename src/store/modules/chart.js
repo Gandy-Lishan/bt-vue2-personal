@@ -126,12 +126,18 @@ const state = {
 
 	// criteria score
 	criteriaScoreList: [],
+
+	// drawing states
+	drawingObjList: [],
 }
 
 const mutations = {
+	SET_DRAWING_OBJLIST(state, list){
+		state.drawingObjList = list
+	},
 	SAVE_CRITERIA_SCORELIST(state, list){
 		state.criteriaScoreList = list
-},
+	},
 	SET_FORECAST_MARKET(state, val){
 			state.forecastMarket = val
 	},
@@ -360,6 +366,12 @@ const mutations = {
 }
 
 const actions = {
+	set_drawing_objlist({ commit }, list) {
+		return new Promise(resolve => {
+			commit('SET_DRAWING_OBJLIST', list)
+			resolve()
+		})
+	},
 	save_criteria_scorelist({ commit }, list) {
 		return new Promise(resolve => {
 			commit('SAVE_CRITERIA_SCORELIST', list)

@@ -290,7 +290,7 @@ $bearish-hover: #eba8a8;
 	line-height: 24px;
 	color: #606060;
 	margin-bottom: 35px;
-	//background: #ffd28f;
+	background: #ffd28f;
 	background-size: contain;
 	border-radius: 4px;
   }
@@ -353,4 +353,16 @@ $bearish-hover: #eba8a8;
 	left: 50%;
 	position: absolute;
 	z-index: 99;
+  }
+
+  /* Draw support line and parallel channel */
+  .horizontalLabel {
+	position: absolute;
+	right: 20px;
+	text-align: center;
+	width: 200px;
+	height: 30px;
+	line-height: 20px;
+	color: black;
+	margin-bottom: 4px;
   }
