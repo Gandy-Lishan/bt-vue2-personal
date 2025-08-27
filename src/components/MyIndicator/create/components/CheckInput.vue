@@ -200,7 +200,6 @@ export default {
   watch: {
     showInput(newValue) {
       // this.validateValue()
-      debugger
       if(this.config.type == 'SelectInput' && (this.isMAOption || this.MAType=='roc' || this.MAType=='amplitude' || this.MAType=='amplify') && this.MAType != 'i'){
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
@@ -229,7 +228,6 @@ export default {
         const {field, value} = newValue
         if(this.config.type == 'SelectInput') this.showInput = true
         else this.showInput = newValue.checked
-        debugger
         try {
           const _value = value.replace(/\d+/g, "")
           if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify', 'i'].includes(_value)) {
@@ -296,7 +294,6 @@ export default {
       }
     },
     handleSelect(val) {
-      debugger
       if((['ma1', 'ma2'].includes(this.config.field) && isNaN(this.value))) {
         this.value = ''
       }

@@ -579,7 +579,6 @@ export default {
   watch: {
     handleGetMiBenmark: {
       async handler(newVal) {
-        debugger
         if(this.data.categories.includes('Indicator')){ 
           if(!this.data.indicator_1 && !this.data.indicator_2) return //如果是空图标切换，则跳过还原表单indicator条件
           // 清空miFormState状态
@@ -798,7 +797,6 @@ export default {
       // this.$store.commit('SET_CREACT_LOADING', false)
 		}, 500),
     async saveIndicator() {
-      debugger
        // 保存数据之前先校验字段是否为空，特定字段是否从下拉框中选择 todo lishan
       const validForm = this.validForm()
       if(this.popVisible) this.popVisible = false
@@ -1462,7 +1460,7 @@ export default {
             _value = (value.split('_')[item.index] != 0 ? value.split('_')[item.index] : '')
             const valueFromStr = value.split('_')[item.index].match(/\d+/)?.[0]
             checked = (valueFromStr != 0)
-            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude') && !_value.includes('i'))) {
+            if(data.categories.includes('Symbol') && (!_value.includes('roc') && !_value.includes('e') && !_value.includes('amplify') && !_value.includes('amplitude') && !_value.includes('i') && Number(_value) == 0)) {
               if(data.next_process) {
                 debugger
                 const result = extractValues(data.next_process)
