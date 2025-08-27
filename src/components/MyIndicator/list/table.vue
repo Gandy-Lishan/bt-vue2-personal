@@ -523,7 +523,7 @@ export default {
               if(value != 0 && (value.includes('e') || value.includes('roc'))) _maValues[index] = `${_label} ${replaceStr}`
               else _maValues[index] = _label || ''
               if(shift_ma2 != 0 && index === 1 && typeAttribute === 'symbol' && shift_ma2) _maValues[index] = `${_maValues[index]} Shift ${shift_ma2}`
-            }else if(symbol_ma1 && symbol_ma2) {
+            }else if(symbol_ma1 && symbol_ma2 && Number(value) == 0) {
               const label1 = options.find(item => item.value === symbol_ma1)?.label || ''
               const label2 = options.find(item => item.value === symbol_ma2)?.label || ''
               if(symbol_ma1)  _maValues[0] = label1 || ''
@@ -581,7 +581,11 @@ export default {
           calculate = ' Symbol Close'
           break;
       }
-      const ma1 = (maList[0] !== '1' && maList[0] !== '0') ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      const maValue = maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]
+      let maLabel = ''
+      if(maList[0].includes('e')) maLabel = ' Exponential Moving Average'
+      else if(maList[0] !== '1' && maList[0] !== '0') maLabel = ' Simple Moving Average'
+      const ma1 = `${maLabel} ${(maList[0] !== '1' && maList[0] !== '0') ? maValue : ''}`
       const ma2 = '';
 
       return {
