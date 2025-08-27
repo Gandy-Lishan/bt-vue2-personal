@@ -91,12 +91,12 @@
 							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
+					<!-- <cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
 						<cq-toggle class="ai-supline" id="ai-supline" v-loading="aISuplineloading" @click="toogleAISupline">
 							<span></span>
 							<cq-tooltip style="z-index: 20001;">AI Support Line</cq-tooltip>
 						</cq-toggle>
-					</cq-info-toggle-dropdown>
+					</cq-info-toggle-dropdown> -->
 
 					<div class="reports-filter-container" v-if="routeName === 'ActiveStudies'"></div>
 					<cq-info-toggle-dropdown class="tradeMarkerWrapper flexRow">
