@@ -323,6 +323,7 @@
             </div>
         </el-form-item>
 				<CheckInput
+          :categories="data.categories"
 					:config="MAOHLCVCheckInputConfig"
           :isDisabled="OHLCVData.condition==''"
 					ref="maohlcvForm"

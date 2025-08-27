@@ -76,8 +76,14 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
-      const isSymbol = this.categories?.includes('Symbol')
-      const options = [
+      const isSymbol = this.categories?.includes('Symbol') && this.categories !== 'OHLCV'
+      const isIndicator = this.categories?.includes('Indicator')
+      const symbolOptions = [
+        // {
+        //   value: 'amplify',
+        //   label: 'Amplify',
+        //   isSymbol: true
+        // },
         {
           value: 'o',
           label: 'Symbol Open',
@@ -109,14 +115,14 @@ export default {
           isSymbol: true
         },
         // {
-        //   value: 'amplify',
-        //   label: 'Amplify',
+        //   value: 'i',
+        //   label: 'Symbol Value',
         //   isSymbol: true
         // },
-        {
-          value: 'i',
-          label: 'Indicator Value'
-        },
+        // {
+        //   value: 'i',
+        //   label: 'Indicator Value'
+        // },
         {
           value: 'MA',
           label: 'Simple Moving Average'
@@ -149,8 +155,33 @@ export default {
       //   if(!isInList) this.MAType = options[0].value
       //   return options
       // }
-      if(isSymbol) return options
-      return options.filter(ele => ele.isSymbol !== true)
+      if(isSymbol) return symbolOptions
+      else if (isIndicator) return [
+        {
+          value: 'i',
+          label: 'Indicator Value'
+        },
+        {
+          value: 'MA',
+          label: 'Simple Moving Average'
+        }, {
+          value: 'EMA',
+          label: 'Exponential Moving Average'
+        }
+      ]
+      if(this.categories === 'OHLCV') return [
+      {
+          value: 'i',
+          label: 'Symbol Value'
+        },
+        {
+          value: 'MA',
+          label: 'Simple Moving Average'
+        }, {
+          value: 'EMA',
+          label: 'Exponential Moving Average'
+        }
+      ]
     },
     isEOEP() {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
@@ -193,6 +224,7 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
+        console.log('lishan _config', this._config)
         const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
         const {field, value} = newValue
         if(this.config.type == 'SelectInput') this.showInput = true
@@ -202,6 +234,8 @@ export default {
           const _value = value.replace(/\d+/g, "")
           if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify', 'i'].includes(_value)) {
             this.MAType = _value
+          }else if(!isSymbol && this.categories === 'OHLCV' && ['ma1', 'ma2'].includes(field) && (value == '0' || value == '1')) {
+            this.MAType = 'i'
           }
           else{this.MAType = 'MA'}
         } catch (error) {
@@ -217,17 +251,12 @@ export default {
       deep: true, // 启用深度监听，监视对象属性的变化
       immediate: true,
     },
-    // categories(newValue) {
-    //   if(this.isEditState) return
-    //   // const isChecked = ['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(this.MAType)
-    //   const isSymbol = newValue.includes('Symbol')
-    //   if(isSymbol && (this.config.field === 'ma1' || this.config.field === 'ma2')) this.MAType = 'c'
-    //   if(!isSymbol && (['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(this.MAType))) this.MAType = 'MA'
-    //   if(!isSymbol && this.config['label'] === 'Shift' && this.inputVisibility === 'visible') {
-    //     this.inputVisibility = 'hidden'
-    //     this.showInput = false
-    //   }
-    // }
+    categories: {
+      handler(newValue, oldValue) {
+        console.log('lishan newValue', newValue)
+        console.log('lishan oldValue', oldValue)
+      }
+    }
   },
   methods: {
     clearForm() {
@@ -248,7 +277,8 @@ export default {
         else if(this.MAType == 'amplitude') value = `amplitude`
         else if(this.MAType == 'amplify') value = `amplify`
         else if(this.MAType == 'MA') value = this.value
-        else if(this.MAType == 'i') value = 'i'
+        else if(this.MAType == 'i' && this.categories !== 'OHLCV') value = 'i'
+        else if(this.MAType == 'i' && this.categories === 'OHLCV') value = 0
         if(dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {

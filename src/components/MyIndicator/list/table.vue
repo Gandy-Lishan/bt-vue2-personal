@@ -581,7 +581,11 @@ export default {
           calculate = ' Symbol Close'
           break;
       }
-      const ma1 = (maList[0] !== '1' && maList[0] !== '0') ? ` Moving Average ${maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]}` : '';
+      const maValue = maList[0].includes('e') ? maList[0].toString().replace(/e$/, '') : maList[0]
+      let maLabel = ''
+      if(maList[0].includes('e')) maLabel = ' Exponential Moving Average'
+      else if(maList[0] !== '1' && maList[0] !== '0') maLabel = ' Simple Moving Average'
+      const ma1 = `${maLabel} ${(maList[0] !== '1' && maList[0] !== '0') ? maValue : ''}`
       const ma2 = '';
 
       return {
