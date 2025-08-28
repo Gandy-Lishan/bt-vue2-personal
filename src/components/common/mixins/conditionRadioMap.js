@@ -42,6 +42,7 @@ function criteriaConditionRadioMap(criteria_item){
       case "ADX":
         conditionRadio = conditionRadioADX(criteria_item); break;
       case "SMA":
+      case "EMA":
         conditionRadio = conditionRadioSMA(criteria_item); break;
       case "ALLI":
         conditionRadio = conditionRadioALLI(criteria_item); break;
