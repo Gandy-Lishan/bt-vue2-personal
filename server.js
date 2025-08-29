@@ -78,71 +78,71 @@ app.get('/api/indexsList', (req, res) => {
     });
 });
 
-app.post('/api/sendContactTicket', (req, res) => {
-    console.log('sendContactTicket', req.body);
-    const data = req.body;
-    const { isInquiry, isEnterprise } = data;
+// app.post('/api/sendContactTicket', (req, res) => {
+//     console.log('sendContactTicket', req.body);
+//     const data = req.body;
+//     const { isInquiry, isEnterprise } = data;
   
-    const url = `https://sentimentrader.freshdesk.com/api/v2/tickets`;
-    const NEXT_APP_FRESHDESK_AUTH = "9IcPQw5rCrNkZ6tVaSMm"; // 建议放到环境变量里
-    const auth = NEXT_APP_FRESHDESK_AUTH || '';
-    const form = new FormData();
+//     const url = `https://sentimentrader.freshdesk.com/api/v2/tickets`;
+//     const NEXT_APP_FRESHDESK_AUTH = "9IcPQw5rCrNkZ6tVaSMm"; // 建议放到环境变量里
+//     const auth = NEXT_APP_FRESHDESK_AUTH || '';
+//     const form = new FormData();
   
-    let ticketData = {
-      description: isInquiry ? `Product:${data.message}` : data.message,
-      subject: isInquiry ? 'Inquiry from pricing' : 'Contact from the Website',
-      email: data.email,
-      priority: 1,
-      status: 2,
-      source: 2,
-      cc_emails: [],
-    };
+//     let ticketData = {
+//       description: isInquiry ? `Product:${data.message}` : data.message,
+//       subject: isInquiry ? 'Inquiry from pricing' : 'Contact from the Website',
+//       email: data.email,
+//       priority: 1,
+//       status: 2,
+//       source: 2,
+//       cc_emails: [],
+//     };
   
-    // Custom fields
-    const customFields = {
-      cf_type: isInquiry ? (isEnterprise ? 'Enterprise' : 'DataEdge') : 'Contact',
-      cf_company: isInquiry ? (isEnterprise ? data.companyEnterprise : data.companyDataedge) : '',
+//     // Custom fields
+//     const customFields = {
+//       cf_type: isInquiry ? (isEnterprise ? 'Enterprise' : 'DataEdge') : 'Contact',
+//       cf_company: isInquiry ? (isEnterprise ? data.companyEnterprise : data.companyDataedge) : '',
   
-      cf_job: isInquiry && !isEnterprise ? data.job : '',
-      cf_investortype: isInquiry && !isEnterprise ? data.investorType : '',
-      cf_assetclasses: isInquiry && !isEnterprise ? data.assetClasses.join('\n') : '',
-      cf_apiindicatorusage: isInquiry && !isEnterprise ? data.APIIndicatorUsage : '',
-      cf_serviceactivationtimeline: isInquiry && !isEnterprise ? data.serviceActivationTimeline : '',
-      cf_numberofindicators: isInquiry && !isEnterprise ? data.numberOfIndicators : '',
+//       cf_job: isInquiry && !isEnterprise ? data.job : '',
+//       cf_investortype: isInquiry && !isEnterprise ? data.investorType : '',
+//       cf_assetclasses: isInquiry && !isEnterprise ? data.assetClasses.join('\n') : '',
+//       cf_apiindicatorusage: isInquiry && !isEnterprise ? data.APIIndicatorUsage : '',
+//       cf_serviceactivationtimeline: isInquiry && !isEnterprise ? data.serviceActivationTimeline : '',
+//       cf_numberofindicators: isInquiry && !isEnterprise ? data.numberOfIndicators : '',
   
-      cf_numusers: isInquiry && isEnterprise ? data.numUsers : '',
-      cf_package232732: isInquiry && isEnterprise ? data.package : '',
-    };
+//       cf_numusers: isInquiry && isEnterprise ? data.numUsers : '',
+//       cf_package232732: isInquiry && isEnterprise ? data.package : '',
+//     };
   
-    // 填充表单
-    form.append('description', ticketData.description);
-    form.append('subject', ticketData.subject);
-    form.append('email', ticketData.email);
-    form.append('priority', ticketData.priority.toString());
-    form.append('status', ticketData.status.toString());
-    form.append('source', ticketData.source.toString());
-    ticketData.cc_emails.forEach(email => {
-      form.append('cc_emails[]', email);
-    });
-    Object.keys(customFields).forEach(key => {
-      form.append(`custom_fields[${key}]`, customFields[key]);
-    });
+//     // 填充表单
+//     form.append('description', ticketData.description);
+//     form.append('subject', ticketData.subject);
+//     form.append('email', ticketData.email);
+//     form.append('priority', ticketData.priority.toString());
+//     form.append('status', ticketData.status.toString());
+//     form.append('source', ticketData.source.toString());
+//     ticketData.cc_emails.forEach(email => {
+//       form.append('cc_emails[]', email);
+//     });
+//     Object.keys(customFields).forEach(key => {
+//       form.append(`custom_fields[${key}]`, customFields[key]);
+//     });
   
-    const headers = {
-      'Authorization': `Basic ${Buffer.from(auth).toString('base64')}`, // Node.js 用 Buffer
-      ...form.getHeaders(), // Node 端 form-data 支持 getHeaders
-    };
+//     const headers = {
+//       'Authorization': `Basic ${Buffer.from(auth).toString('base64')}`, // Node.js 用 Buffer
+//       ...form.getHeaders(), // Node 端 form-data 支持 getHeaders
+//     };
   
-    axios.post(url, form, { headers })
-      .then(apiRes => {
-        console.log('Ticket created successfully:', apiRes.data);
-        res.json(apiRes.data); // 返回给前端
-      })
-      .catch(err => {
-        console.error('send-contact-ticket err', err.message);
-        res.status(500).json({ error: 'Failed to create ticket', detail: err.message });
-      });
-  });
+//     axios.post(url, form, { headers })
+//       .then(apiRes => {
+//         console.log('Ticket created successfully:', apiRes.data);
+//         res.json(apiRes.data); // 返回给前端
+//       })
+//       .catch(err => {
+//         console.error('send-contact-ticket err', err.message);
+//         res.status(500).json({ error: 'Failed to create ticket', detail: err.message });
+//       });
+//   });
 // 寻找静态文件夹
 //app.use(serveStatic(path.join(__dirname, 'dist')))    //自带gzip
 app.use(express.static(path.join(__dirname, 'dist')))
