@@ -239,6 +239,11 @@ export default {
               label: 'Analysts\' Backtests',
               keyPath: '4-5',
               path: '/backtester/list/analyst'
+            },
+            {
+              label: 'Contact Us',
+              keyPath: '4-6',
+              path: '/contact'
             }
           ]
         },
@@ -328,6 +333,7 @@ export default {
       const nav = this.navs.find(ele => path.includes(ele.path))
       console.log('nav', nav)
       if(path.includes('/sector_trend_score')) {this.activeIndex = '12'; return}
+      if(path.includes('/contact')) {this.activeIndex = '4-6'; return}
       if(nav && !nav.subMenu && (nav.label !== 'AI Trading' && nav.label !== 'Tutorial Videos')) this.activeIndex = nav.keyPath
       if(nav && nav.subMenu) {
         const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
