@@ -154,7 +154,7 @@ name: 'Contact',
     await sendContactTicketFront({
     data: this.formData, isInquiry: false, isEnterprise: false
    })
-   this.popUpMsgBox('Thanks! Your message has been received. Our team will reach out soon.');
+   this.popUpMsgBox('Thanks! Your message has been received. Our team will reach out soon.', 'success');
 
    } catch (error) {
     console.log('error', error);
