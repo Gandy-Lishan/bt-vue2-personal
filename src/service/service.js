@@ -141,6 +141,32 @@ export function getAnalystList(page, sort, name, type) {
 			})
 	})
 }
+export function getUserSharedBacktestList(page, sort, name, type) {
+	let url = `/dev/dev/user_share_backtest/?ordering=-create_date,name,status`
+	// sort -> ,total_return
+	let strategy = type && type !== 'Strategy' ? type : null;
+	if (sort) {
+		url = `/dev/dev/user_share_backtest/?ordering=${sort}`
+	}
+	if (name) {
+		url += `&name=${name}`
+	}
+	if(strategy) {
+		url += `&strategy=${strategy}`
+	}
+	url += `&page=${page}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function searchAnalystList(keyword) {
 	let url = `/dev/dev/analyst/?name=${keyword}`
 
@@ -298,6 +324,21 @@ export function deleteBacktest(id) {
 }
 export function copyBacktest(paramsStr) {
 	const url = '/dev/dev/backtest/'
+	//return axios.post(url,paramsStr, {withCredentials: true})
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, paramsStr, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function shareBacktest(paramsStr) {
+	const url = '/dev/dev/share_backtest/'
 	//return axios.post(url,paramsStr, {withCredentials: true})
 
 	return new Promise((resolve, reject) => {
@@ -2477,4 +2518,25 @@ export function sendContactTicket(payload) {
 				reject(err)
 			})
 	})
+}
+
+export function sendContactTicketFront(payload) {
+	const { data, isInquiry, isEnterprise } = payload;
+	const url = `https://sentimentrader.freshdesk.com/api/v2/tickets`;
+	const auth = "9IcPQw5rCrNkZ6tVaSMm"; // ⚠️ API key 直接暴露
+
+	const form = new FormData();
+	form.append('description', isInquiry ? `Product:${data.message}` : data.message);
+	form.append('subject', isInquiry ? 'Inquiry from pricing' : 'Contact from the Website');
+	form.append('email', data.email);
+	form.append('priority', '1');
+	form.append('status', '2');
+	form.append('source', '2');
+
+	const headers = {
+			'Authorization': `Basic ${btoa(auth)}`,
+			'Content-Type': 'multipart/form-data',
+	};
+
+	return axios.post(url, form, { headers });
 }

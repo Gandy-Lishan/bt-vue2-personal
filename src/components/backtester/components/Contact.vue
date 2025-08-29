@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { sendContactTicket } from '@/service/service.js';
+import { sendContactTicketFront } from '@/service/service.js';
 
 export default {
 name: 'Contact',
@@ -151,12 +151,13 @@ name: 'Contact',
     }
    this.isSubmitting = true;
    try {
-    await sendContactTicket({
-    ...this.formData, isInquiry: false, isEnterprise: false
+    await sendContactTicketFront({
+    data: this.formData, isInquiry: false, isEnterprise: false
    })
    this.popUpMsgBox('Thanks! Your message has been received. Our team will reach out soon.');
 
    } catch (error) {
+    console.log('error', error);
     this.popUpMsgBox('Something went wrong. Please try again later.');
    } finally {
     this.isSubmitting = false;
