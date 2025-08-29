@@ -2528,7 +2528,7 @@ export function sendContactTicketFront(payload) {
 	const form = {
 		message: isInquiry ? `Product:${data.message}` : data.message,
 		email: data.email,
-		isInquiry: false,
+		subject: 'Contact from the Website',
 	}
 
 	const headers = {
