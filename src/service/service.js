@@ -2530,20 +2530,18 @@ export function sendContactTicket(payload) {
 
 export function sendContactTicketFront(payload) {
 	const { data, isInquiry, isEnterprise } = payload;
-	const url = `https://sentimentrader.freshdesk.com/api/v2/tickets`;
+	const url = `/dev/st_data/contact_us_ticket/`;
 	const auth = "9IcPQw5rCrNkZ6tVaSMm"; // ⚠️ API key 直接暴露
 
-	const form = new FormData();
-	form.append('description', isInquiry ? `Product:${data.message}` : data.message);
-	form.append('subject', isInquiry ? 'Inquiry from pricing' : 'Contact from the Website');
-	form.append('email', data.email);
-	form.append('priority', '1');
-	form.append('status', '2');
-	form.append('source', '2');
+	const form = {
+		message: isInquiry ? `Product:${data.message}` : data.message,
+		email: data.email,
+		subject: 'Contact from the Website',
+	}
 
 	const headers = {
 			'Authorization': `Basic ${btoa(auth)}`,
-			'Content-Type': 'multipart/form-data',
+			'Content-Type': 'application/json',
 	};
 
 	return axios.post(url, form, { headers });
