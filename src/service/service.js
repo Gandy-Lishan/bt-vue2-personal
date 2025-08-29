@@ -2413,52 +2413,58 @@ export function getIntradayMinutes() {
 	})
 }
 
-export function fetchAISuplineData(symbol) {
-	const url = '/dev/dev/report/?uuid='
+// 全局轮询开关
+let stopAll = false;
 
-	return new Promise((resolve, reject) => {
-		// axios
-		// 	.get(url + symbol)
-		// 	.then(res => {
-		// 		resolve(res)
-		// 	})
-		// 	.catch(err => {
-		// 		reject(err)
-		// 	})
+export async function fetchAISuplineData(ticker, latest_date, frequency) {
+	let url = `/dev/ai_engine_app/get_chart_analysis?ticker=${ticker}`;
+	if (latest_date) url += `&latest_date=${latest_date}`;
+	if (frequency) url += `&frequency=${frequency}`;
+  
+	try {
+		stopAll = false; //reset state
+	  const getChartAnalysisRes = await axios.get(url);
+  
+	  if (getChartAnalysisRes.status === 200) {
+		return getChartAnalysisRes.data.data;
+	  }
+  
+	  if (getChartAnalysisRes.status === 202) {
+		let retries = 0;
+		const maxRetries = 120;
+		let pollingUrl = `/dev/ai_engine_app/analysis_status?chart_key=${getChartAnalysisRes?.data.chart_key}`;
+  
+		do {
+		  // ✅ 全局中止检查
+		  if (stopAll) {
+			console.log("轮询已被全局中止");
+			stopAll = false; // 重置开关，避免影响下次调用
+			throw new Error("Polling is interrupted by another operation");
+		  }
+  
+		  const analysisStatusRes = await axios.get(pollingUrl);
+  
+		  if (analysisStatusRes.status === 200) {
+			return analysisStatusRes.data.data;
+		  }
+  
+		  if ([404].includes(analysisStatusRes.status)) {
+			return;
+		  }
+  
+		  await new Promise(resolve => setTimeout(resolve, 1500));
+		  retries++;
+		} while (retries < maxRetries);
+  
+		throw new Error("Polling timeout");
+	  }
+	} catch (err) {
+	  console.error("fetchAISuplineData 出错:", err);
+	  throw err;
+	}
+  }
 
-		setTimeout(() => {
-			const mockdata = {
-				"analysis_summary": {
-				  "trend_description": "The stock shows an upward trend with clear support and resistance levels forming a parallel channel."
-				},
-				"drawing_instructions": {
-				  "trend_channel": [
-					{
-					  "type": "support_line",
-					  "points": [
-						{"date": "2025-05-23", "price": 5750.6},
-						{"date": "2025-07-30", "price": 6310.54},
-						{"date": "2025-08-10", "price": 3310.54}
-					  ]
-					},
-					{
-					  "type": "resistance_line",
-					  "points": [
-						{"date": "2025-05-19", "price": 5950.54},
-						{"date": "2025-08-15", "price": 6460.09}
-					  ]
-					}
-				  ],
-				  "horizontal_levels": [
-					{"type": "resistance", "price": 6460.19, "label": "R1: Period High (6460.19)"},
-					{"type": "resistance", "price": 6340.21, "label": "R2: Significant Resistance (6340.21)"},
-					{"type": "support", "price": 6310.54, "label": "S1: Significant Support (6310.54)"},
-					{"type": "support", "price": 6190.29, "label": "S2: Key Support Zone (6190.29)"},
-					{"type": "support", "price": 5750.6, "label": "S3: Period Low (5750.6)"}
-				  ]   
-				}
-			  }
-			resolve(mockdata)
-		  }, 2000) // 2 秒
-	})
-}
+// ✅ 在任意地方调用即可终止所有轮询
+export function stopAllPolling() {
+	stopAll = true;
+  }

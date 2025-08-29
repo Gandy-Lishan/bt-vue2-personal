@@ -2,7 +2,7 @@ import { CIQ as _CIQ, timezoneJS as _timezoneJS } from 'chartiq/js/chartiq.js'
 import { formatStandardTime } from '@/utils'
 import { printConsole } from '@/utils'
 import marker from "./markersSample.js";
-import {fetchAISuplineData} from '@/service/service'
+import {fetchAISuplineData,stopAllPolling} from '@/service/service'
 
 // 定义global一次性marker,不注册了
 
@@ -519,7 +519,7 @@ let __st_js_marker_drawer_ = _exports => {
                 col: "#8cc176",
                 fc: "#7DA6F5",
                 ptrn: "solid",
-                lw: 1.1,
+                lw: 1.8,
                 d0: CIQ.yyyymmddhhmmssmmm(d0),
                 d1: CIQ.yyyymmddhhmmssmmm(d1),
                 // tzo0: 300,
@@ -553,7 +553,7 @@ let __st_js_marker_drawer_ = _exports => {
                 col: "#b82d0c",
                 fc: "#7DA6F5",
                 ptrn: "solid",
-                lw: 1.1,
+                lw: 1.8,
                 d0: CIQ.yyyymmddhhmmssmmm(d0),
                 d1: CIQ.yyyymmddhhmmssmmm(d1),
                 // tzo0: 300,
@@ -587,7 +587,7 @@ let __st_js_marker_drawer_ = _exports => {
                 col: item.type == 'resistance' ? "#b82d0c" : "#8cc176",
                 fc: "#7DA6F5",
                 ptrn: "dashed",
-                lw: 1.1,
+                lw: 1.2,
                 d0: CIQ.yyyymmddhhmmssmmm(d0),
                 d1: CIQ.yyyymmddhhmmssmmm(d1),
                 // tzo0: 300,
@@ -660,7 +660,7 @@ let __st_js_marker_drawer_ = _exports => {
         newNode = document.querySelector("#stxHorizontalLabel").cloneNode(true);
         newNode.id = null;
         newNode.innerHTML = `
-            <div style="color:${item.type == 'resistance' ? '#b82d0c' : '#8cc176'}">${item.label}</div>
+            <div style="font-size: 12px;font-weight: 400;color:${item.type == 'resistance' ? '#b82d0c' : '#8cc176'}">${item.label}</div>
         `
 
         new CIQ.Marker({
@@ -676,29 +676,24 @@ let __st_js_marker_drawer_ = _exports => {
     }
 
     CIQ.updateSupportLineWithChannelDrawing = async function(){
-        const clearDrawing = function() {
-            CIQ.Marker.removeByLabel(CIQ.stxx, 'horizontalLabel');
-            const drawingObjList = CIQ.store.getters.getDrawingObjList
-            if(drawingObjList.length > 0) {
-                for(var i in drawingObjList) {
-                    CIQ.stxx.removeDrawing(drawingObjList[i])
-                }
-            }
-        }
         return new Promise(async (resolve, reject) => {
             var mNode = document.getElementById('ai-supline')
-            if(mNode && mNode.classList.contains('active')) {
+            // 改为判断图表是否存在绘制的图形（CIQ.store.getters.getDrawingObjList）
+            const drawingObjList = CIQ.store.getters.getDrawingObjList
+            if(drawingObjList && drawingObjList.length == 0) {
                 // 添加active后需要获取数据源，失败则移除active
                 try {
                     clearDrawing()
-                    const res = await fetchAISuplineData(CIQ.stxx.chart.symbol || 'SPX')
+                    const curDate = new Date()
+                    const freq = CIQ.store.state.form.exitFrequency
+                    const res = await fetchAISuplineData(CIQ.stxx.chart.symbol || 'SPX', formatStandardTime(curDate), freq)
                     let drawingObjList = CIQ.createSupportLineWithChannelDrawing(res)
                     CIQ.store.dispatch('chart/set_drawing_objlist', drawingObjList)
+                    if(mNode) mNode.classList.add('active')
                     resolve('AI Support Line Appended')
                 } catch (error) {
                     console.error(error)
-                    reject('Unknown Network Error: ')
-                    //mNode.classList.toggle('active')
+                    reject(error)
                 }	
             } else {
                 try {
@@ -706,11 +701,31 @@ let __st_js_marker_drawer_ = _exports => {
                     resolve('AI Support Line Removed')
                     clearDrawing()
                     CIQ.store.dispatch('chart/set_drawing_objlist', [])
+                    if(mNode) mNode.classList.remove('active')
                 } catch (error) {
                     reject("Failed to remove AI Support Line");
                 }
             }
         })
+    }
+
+    CIQ.resetSupportLineWithChannel = function(){
+        var mNode = document.getElementById('ai-supline')
+        console.log('reset ai supline state')
+        stopAllPolling()
+        clearDrawing()
+        CIQ.store.dispatch('chart/set_drawing_objlist', [])
+        if(mNode) mNode.classList.remove('active')
+    }
+
+    const clearDrawing = function() {
+        CIQ.Marker.removeByLabel(CIQ.stxx, 'horizontalLabel');
+        const drawingObjList = CIQ.store.getters.getDrawingObjList
+        if(drawingObjList.length > 0) {
+            for(var i in drawingObjList) {
+                CIQ.stxx.removeDrawing(drawingObjList[i])
+            }
+        }
     }
 }
 
