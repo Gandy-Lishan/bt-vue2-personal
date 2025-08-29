@@ -2462,3 +2462,19 @@ export function fetchAISuplineData(symbol) {
 		  }, 2000) // 2 秒
 	})
 }
+export function sendContactTicket(payload) {
+	const url = '/api/sendContactTicket'
+	console.log('sendContactTicket', payload);
+	//return axios.post(url,backtestDataStr,{withCredentials: true})
+
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, payload, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

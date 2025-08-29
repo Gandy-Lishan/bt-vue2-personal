@@ -34,7 +34,7 @@ const routes = [
 							require([
 								'@/components/backtester/components/setupResults/results/index.vue'
 							], resolve)
-					}
+					},
 				]
 			},
 			{
@@ -494,6 +494,13 @@ const routes = [
 		path: '/testpage',
 		component: resolve => require(['@/components/TestPage/index.vue'], resolve)
 	},
+	{
+		path: '/contact',
+		name: 'Contact',
+		component: resolve => 	require([
+			'@/components/backtester/components/Contact.vue'
+		], resolve)
+	}
 ]
 
 export default routes
