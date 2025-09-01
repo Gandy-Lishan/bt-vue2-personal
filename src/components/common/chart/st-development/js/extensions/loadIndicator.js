@@ -226,6 +226,8 @@ import { formatStandardTime } from '@/utils'
                         }
                         resolve()
                     } 
+                    
+                    CIQ.resetSupportLineWithChannel()
                 }; 
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
                 if(comparisonSymbol.url){
@@ -928,7 +930,6 @@ import { formatStandardTime } from '@/utils'
             addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
-        CIQ.updateSupportLineWithChannelDrawing()
         resolve();
     });
 };
