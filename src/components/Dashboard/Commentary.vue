@@ -56,6 +56,15 @@
               Backtest Concierge Setup Service
               </a>
               <br />
+              <em>
+                <small>
+                  Published: 2025-08-29
+                </small>
+              </em>
+              <br />
+              <p>
+                Have a trading idea but find setting it up in the backtest engine overwhelming? You're in the right place. Our Backtest Concierge Service was built to eliminate technical barriers so no trading idea gets lost. Simply use this page to describe your strategy in plain English and send it to us. Our team will build it for you and deliver the finished backtest to your account, ready to be explored and refined.
+              </p>
             </div>
              <template v-if="LC_Length > 0">
                <template v-for="(row, index) in latest_commentary">
