@@ -48,6 +48,15 @@
                 </div>
                </template>
             </template>
+            <div>
+              <a
+                class="item-name primary-link"
+                href="/contact"
+              >
+              Backtest Concierge Setup Service
+              </a>
+              <br />
+            </div>
              <template v-if="LC_Length > 0">
                <template v-for="(row, index) in latest_commentary">
                 <div :key="index" v-if="!hideReportLink">
