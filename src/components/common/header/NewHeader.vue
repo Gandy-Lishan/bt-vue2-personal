@@ -241,7 +241,7 @@ export default {
               path: '/backtester/list/analyst'
             },
             {
-              label: 'Contact Us',
+              label: 'Backtest Concierge Setup Service',
               keyPath: '4-6',
               path: '/contact'
             }

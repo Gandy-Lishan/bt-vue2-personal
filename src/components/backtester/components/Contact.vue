@@ -1,7 +1,7 @@
 <template>
  <div class="contact-container">
   <div class="contact-form-wrapper">
-    <h1 class="contact-title">Contact Us</h1>
+    <h1 class="contact-title">Backtest Concierge Setup Service</h1>
       <!-- 标签页导航 -->
       <!-- <div class="tab-navigation">
           <button 
@@ -19,23 +19,25 @@
           <!-- <h2 class="form-title">{{ tabs[activeTab].title }}</h2> -->
           <div class="form-description">
             <p>Making Backtesting More Accessible</p>
-            <p>One of the most common hurdles I hear from traders is: “I have an idea, but setting it up in the backtest engine feels overwhelming.”</p>
+            <p>One of the most common hurdles I hear from traders is:</p>
+            <p>I have an idea, but setting it up in the backtest engine feels overwhelming.</p>
             <p>That’s exactly why we built the Concierge Backtest Service — so no trading idea gets lost because of technical barriers.</p>
             <ul>
                 How it works:
                 <li>You describe your strategy in plain English</li>
                 <li>Our team translates it into the backtest engine</li>
                 <li>The finished setup appears in your portal under My Favorite, ready for you to explore and refine</li>
-                <li>Whether your idea is straightforward or complex, you don’t need to worry about technical details — just tell us what you want to test, and we’ll handle the setup.</li>
             </ul>
+                <p>Whether your idea is straightforward or complex, you don’t need to worry about technical details — just tell us what you want to test, and we’ll handle the setup.</p>
                 <p>Email your request to <a target="_blank" href="mailto:admin@sentimentrader.com">admin@sentimentrader.com</a> - Every idea is welcome.</p>
             <ul>
                 Here are a few examples of how you can phrase it:
-                <li>“What happens when $AAPL triggers a MACD Golden Cross?”</li>
-                <li>“If the $SPX closes below its 50-day, how do Crude Oil and Gold perform over the next 10 days?”</li>
-                <li>“If both Nasdaq and Bitcoin drop more than 1% on the same day while Treasury yields rise, what typically happens to the S&P 500?”</li>
+                <li>What happens when $AAPL triggers a MACD Golden Cross?</li>
+                <li>What occurs when SPY enters an oversold condition (SPY Optix &lt; 10)?</li>
+                <li>What happens when the market enters an overbought condition short-term?</li>
+                <li>If the $SPX closes below its 50-day moving average, how do Crude Oil and Gold perform over the next 10 days?</li>
+                <li>If both Nasdaq and Bitcoin drop more than 1% on the same day while Treasury yields rise, what typically happens to the S&P 500?</li>
             </ul>
-            <p>Email your request to admin@sentimentrader.com -Every idea is welcome.</p>
         </div>
 
           <form @submit.prevent="submitForm" class="contact-form">
