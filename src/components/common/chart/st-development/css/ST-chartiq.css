@@ -1384,7 +1384,46 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
 }
 
 .ai-supline {
+  position: relative;
+  border-top: none;
+  border-left: none;
+  background: transparent;
+  border-bottom: none;
+  border-right: none;
+  width: 40px;
   margin-left: 10px;
+  margin-top: 10px;
+  padding-bottom: 3px;
+}
+.ai-supline .ai-supline--tooltip {
+  bottom: -8px;
+  position: absolute;
+  display: block;
+  background: #398dff;
+  transition: opacity 0.1s 0s, margin 0.5s 0s;
+  opacity: 0;
+  z-index: 4;
+  width: 44px;
+  height: auto;
+  left: -8px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 10px;
+  color: #f8f8f8;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  border-radius: 1px;
+  pointer-events: none;
+}
+.ai-supline:hover .ai-supline--tooltip {
+  opacity: 1;
+  transition: opacity 0.1s 0.25s, bottom 0.5s 0.25s;
+  bottom: -40px;
+  border: solid 1px #e4e4e4;
+}
+.ai-supline.active {
+  border-bottom: solid 3px #398dff !important;
 }
 .ai-supline span {
   background-image: url(img/ai-supline.svg);
