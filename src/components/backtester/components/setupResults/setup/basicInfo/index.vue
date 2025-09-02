@@ -1071,21 +1071,31 @@ export default {
     userRole() {
       return this.$store.state.user.role
     },
+    backtestUser() {
+      return localStorage.getItem('backtest_user')
+    },
     userTagOptions() {
       if(this.userRole == 'analyst') {
-        return [
-            { value: 'client', label: 'Client' },
-            { value: 'analyst', label: 'Analyst' }
-          ]
+        let tagOptions = [
+          { value: 'client', label: 'Backtest History (Private)' },
+          { value: 'analyst', label: 'Analyst Backtest (Public)' }
+        ]
+        if(this.bd.userID === this.backtestUser || !this.bd.userID) tagOptions = [...tagOptions, { value: 'user', label: 'Shared Backtest (Public)' }]
+        return tagOptions
       }else if(this.userRole == 'system') {
+        let tagOptions = [
+          { value: 'client', label: 'Backtest History (Private)' },
+          { value: 'system', label: 'Sample Backtest (Public)' }
+        ]
+        if(this.bd.userID === this.backtestUser || !this.bd.userID) tagOptions = [...tagOptions, { value: 'user', label: 'Shared Backtest (Public)' }]
+        return tagOptions
+      }else if((this.bd.userID === this.backtestUser) || !this.bd.userID){
         return [
-            { value: 'client', label: 'Client' },
-            { value: 'system', label: 'System' }
-          ]
+          { value: 'client', label: 'Backtest History (Private)' },
+          { value: 'user', label: 'Shared Backtest (Public)' }
+        ]
       }else {
-        return [
-            { value: 'client', label: 'Client' }
-          ]
+        return []
       }
     }
   },
@@ -1179,24 +1189,27 @@ export default {
       handler(role) {
         console.log('用户角色', role)
         if (this.is_admin) {
+          let tagOptions = [{ value: 'client', label: 'Backtest History (Private)' }]
           switch (role) {
             case 'analyst':
-                this.userTagOptions = [
-                    { value: 'client', label: 'Client' },
-                    { value: 'analyst', label: 'Analyst' }
-                ]
-                break;
+              if(this.bd.userID !== this.backtestUser) this.userTagOptions = [...tagOptions, { value: 'analyst', label: 'Analyst Backtest (Public)' }]
+              else this.userTagOptions = [...tagOptions, { value: 'analyst', label: 'Analyst' }, { value: 'user', label: 'Shared Backtest (Public)' }]
+              break;
             case 'system':
-                this.userTagOptions = [
-                    { value: 'client', label: 'Client' },
-                    { value: 'system', label: 'System' }
-                ]
-                break;
+              if(this.bd.userID !== this.backtestUser) this.userTagOptions = [...tagOptions, { value: 'system', label: 'System Backtest (Public)' }]
+              else this.userTagOptions = [...tagOptions, { value: 'system', label: 'System' }, { value: 'user', label: 'Shared Backtest (Public)' }]
+              break;
             case 'client':
+              if((this.bd.userID === this.backtestUser) || !this.bd.userID){
                 this.userTagOptions = [
-                    { value: 'client', label: 'Client' }
+                  { value: 'client', label: 'Backtest History (Private)' },
+                  { value: 'user', label: 'Shared Backtest (Public)' }
                 ]
-                break;
+              }
+              break;
+            default: 
+              this.userTagOptions = []
+              break;
           }
       }
 
@@ -1679,15 +1692,23 @@ export default {
         _this.popUpMsgBox('Kindly ensure that the form fields are filled correctly');
           return false }
       // 首次创建, 或者点击按钮跳转过来
-      const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && _this.getterBacktestInfo.user_tag == 'client' // true false
-      const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client'].includes(_this.bd.user_tag) // false true
+      const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && (_this.getterBacktestInfo.user_tag == 'client' || _this.getterBacktestInfo.user_tag == 'user') // true false
+      const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client', 'user'].includes(_this.bd.user_tag) // false true
       if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
         // 没有分析师权限
         delete _this.bd.analystID
         delete _this.bd.id
         delete _this.bd.old_uuid
       }
+      // Shared: 1.首次编辑 2.分享列表编辑
       // 编辑, 但是没有权限
+      if(_this.getterBacktestInfo.user && (_this.getterBacktestInfo.user_tag === 'user')) {
+        // 只有作者才能保存编辑
+        if(_this.getterBacktestInfo.user !== _this.backtestUser) {
+          _this.popUpMsgBox("Shared backtests can’t be edited.  Copy it to create your own version.")
+          return false
+        }
+      }
       if(!isClient && !isAdmin) {
         // _this.popUpMsgBox('Permission denied');
         // 帮改权限
@@ -1776,6 +1797,9 @@ export default {
         this.bdFormLabel = editData.strategy === 'Single' || editData.strategy === 'Signal' ? {...this.bdFormLabel, ...originalProperties} : {...this.bdFormLabel, ...modifyProperties};
         /* 设置编辑数据 */
         editData.description = description
+        if(typeof editData.name === 'string') {
+          editData.name = editData.name.replace('<br/>', '')
+        }
         editData.slippage = Number(editData.slippage).toFixed(2)
         editData.trade_price = Number(editData.trade_price)
         // 兼容之前不存在的两个参数
@@ -1808,6 +1832,9 @@ export default {
               }
             }
           });
+        }
+        if(editData.user_tag === 'user' && (editData.user !== this.backtestUser)) {
+          this.bd.user_tag = 'client'
         }
         if(editData.risk_control === '//') this.isRiskControl = false
         if(editData.risk_control && editData.risk_control !== '//') this.isRiskControl = true

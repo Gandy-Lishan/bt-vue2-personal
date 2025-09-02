@@ -6,9 +6,11 @@ const state = {
 
 const mutations = {
 	SETUSERROLE(state, val){
-		state.is_admin = val.is_admin
-		state.role = val.role
-		state.userID = val.userID
+		for (let key in val) {
+			if (val) {
+				state[key] = val[key]
+			}
+		}
 	},
 }
 

@@ -82,6 +82,15 @@ const routes = [
 							require([
 								'@/components/backtester/components/list/analyst/index.vue'
 							], resolve)
+					},
+					{
+						path: 'shared',
+						name: 'SubscriberShared',
+						meta: { activeItem: 'shared', actived: 'LIST' },
+						component: resolve =>
+							require([
+								'@/components/backtester/components/list/SubscriberShared/index.vue'
+							], resolve)
 					}
 				]
 			}

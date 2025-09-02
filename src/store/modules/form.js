@@ -556,6 +556,7 @@ const mutations = {
 		// 这是edit view之后保存的数据
 		state.backtestInfo.old_uuid = obj.id
 		state.backtestInfo.user_tag = obj.user_tag
+		state.backtestInfo.user = obj.user
 	},
 	CACHED_SCOPED_ROW_IMMUTABLE(state, obj) {
 		state.cachedScopedRowDataImmutable = obj
@@ -568,6 +569,7 @@ const mutations = {
 		state.cachedBTBasicInfoData = obj
 		// 这是轮询之后保存的数据
 		state.backtestInfo.old_uuid = obj.id
+		state.backtestInfo.user = obj.user
 		state.backtestInfo.user_tag = obj.user_tag
 	},
 	SET_LIST_LOADING(state, loading) {

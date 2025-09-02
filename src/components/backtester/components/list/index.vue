@@ -28,6 +28,10 @@ export default {
         {
           index: 'analyst',
           lable: "Analysts' Backtests"
+        },
+        {
+          index: 'shared',
+          lable: "Subscriber Shared Backtests"
         }
       ]
     }
