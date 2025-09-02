@@ -82,7 +82,10 @@ let __st_js_maLayout_ = (_exports) => {
         var MALayoutListIndex = activatedMALayoutList.findIndex(
             (item) => item.criteria == criteria && item.index == index
         )
-        if (MALayoutListIndex != -1) {
+        if (
+            (criteria || index) &&  // 替代现存MA时不能把extra studies里的MA替换掉
+            MALayoutListIndex != -1
+        ) {
             activatedMALayoutList.splice(MALayoutListIndex, 1)
         }
         if (CIQ.store.getters.getMaLikeTech.includes(url)){
