@@ -325,4 +325,18 @@ const formatNumber = (value, type, sign, trimZeros = false) => {
   return `${value === 0 ? '' : (value > 0 ? '' : '-')}${formatted}`;
 };
 
-export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber}
+const maskEmail = (email) => {
+  const [user, domain] = email.split('@');
+  const domainParts = domain.split('.');
+  const domainSuffix = domainParts.slice(1).join('.');
+
+  // 用户名保留前3位，其余用 ***
+  const maskedUser = user.slice(0, 3) + '***';
+
+  // 域名隐藏，只显示 ***
+  return maskedUser + '@***.' + domainSuffix;
+
+    // 输出: hao***@***.com
+}
+
+export {capitalizeFirstLetter, compareArrays, timestampToTime, formatStandardTime, getQueryVariable, isJson, searchKeys, Toast, LocalStorageUtil, checkProperties, timeframeTransform, getTokenRole, trimTrailingZeros, printConsole,encodeBase64,decodeBase64, unifyNumber, isObject, formatNumber, maskEmail}

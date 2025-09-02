@@ -178,9 +178,12 @@
         :label="item.label"
         :prop="item.field"
         :key="item.label"
-				:width="item.width"
-				show-overflow-tooltip
-				align="center">
+								:width="item.width"
+								show-overflow-tooltip
+								align="center">
+								<template slot-scope="scope">
+									<span v-html="scope.row.name"></span>
+								</template>
       </el-table-column>
 			<el-table-column
         v-if="item.label == 'Symbol'"
@@ -198,6 +201,18 @@
 					</div>
 				</template>
       </el-table-column>
+						<el-table-column
+						v-if="item.label == 'Shared Date'"
+						:key="item.label"
+						:label="item.label"
+						show-overflow-tooltip
+						align="center"
+						width="130px"
+					>
+				<template slot-scope="scope">
+					<div class="showDate">{{ scope.row.shared_date }}</div>
+				</template>
+			</el-table-column>
 			<el-table-column
 				v-if="item.label == 'Entry & Exit'"
 				:label="item.label"
@@ -398,7 +413,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites', 'Sample', 'Analyst'].includes(currentPage)"
+										v-if="['History', 'Favorites', 'Sample', 'Analyst', 'SubscriberShared'].includes(currentPage)"
 										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
@@ -519,13 +534,82 @@
 										@click="addBacktestSignal(scope.row)"
 									></el-button>
 								</el-tooltip>
+								<el-tooltip
+									class="item"
+									effect="dark"
+									content="Share backtest"
+									placement="bottom-start"
+								>
+								<el-button
+									 v-if="['History', 'Favorites'].includes(currentPage)"
+										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
+										icon="el-icon-share"
+										circle
+										size="mini"
+										@click="openShareDialog(scope.row)"
+									></el-button>
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
 		<div slot="empty" style="text-align: left">
 			<el-empty image-size="80" description="No Data"></el-empty>
 		</div>
-    </el-table>
+  </el-table>
+				<!-- Share 弹窗 -->
+   <el-dialog
+     title="Share Your Backtest"
+     :visible.sync="shareDialogVisible"
+     width="500px"
+					class="share-backtest-dialog"
+					:close-on-click-modal="false"
+   >
+     <!-- 提示 -->
+     <div style="margin-bottom: 15px; color:#666;">
+						Your backtest will be reviewed before being published. Please confirm the name and author information below.
+     </div>
+
+     <!-- 回测名称 -->
+     <el-form :model="shareForm" label-width="100px" label-position="top" size="small">
+       <el-form-item label="Backtest Name">
+         <el-input
+           v-model="shareForm.backtestName"
+           placeholder="Name your shared backtest"
+         />
+       </el-form-item>
+							<el-row :gutter="20">
+								<el-col :span="12">
+									<!-- First Name -->
+									<el-form-item label="First Name">
+											<el-input
+													v-model="shareForm.firstName"
+													placeholder="First Name (optional, shown as author)"
+											/>
+       </el-form-item>
+								</el-col>
+								<el-col :span="12">
+								<!-- Last Name -->
+								<el-form-item label="Last Name">
+										<el-input
+												v-model="shareForm.lastName"
+												placeholder="Last Name (optional, shown as author)"
+										/>
+								</el-form-item>
+								</el-col>
+							</el-row>
+     </el-form>
+
+     <!-- 预览区域 -->
+     <div v-if="previewShareBy" style="margin: 5px 0; padding: 10px; background: #f9f9f9; border-radius: 6px; color: #333;">
+       <strong>Preview Shared Backtest Name: </strong> {{ previewShareBy }}
+     </div>
+
+     <!-- 底部按钮 -->
+     <span slot="footer" class="dialog-footer">
+       <el-button @click="shareDialogVisible = false" size="small" style="margin-right: 10px;">Cancel</el-button>
+       <el-button type="primary" @click="() => addSubscriberSharedBacktest(shareBacktestInfo)" size="small">Share</el-button>
+     </span>
+   </el-dialog>
 		<el-pagination
 				@current-change="handleCurrentChange"
 				:current-page="queryInfo.page"
@@ -545,9 +629,10 @@ import {
   getFavoriteList,
 	getAnalystList,
 	saveMySignalForm,
-	searchIndicator
+	searchIndicator,
+	getUserSharedBacktestList
 } from '@/service/service.js'
-import {capitalizeFirstLetter, isJson} from '@/utils'
+import {capitalizeFirstLetter, isJson, timestampToTime} from '@/utils'
 import { getSymbolInfo } from '@/utils/globalFunc'
 import { throttle } from 'lodash'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
@@ -582,7 +667,20 @@ export default {
 			searchItem: '',
 			isButtonVisible: false,
 			typeTooltip: "'S' stands for Single Symbol Backtest, and 'D' stands for Dual Symbols Backtest.",
-			strategyType: 'Strategy'
+			strategyType: 'Strategy',
+			popTitle: `
+			Thanks for sharing!  <br>
+			Your backtest will be reviewed and, once approved, appear in <b>Subscriber Shared Backtests</b> for others to use.  <br>
+			The backtest will show the sharer’s email, but it will be masked (Share by gandy******.com).  <br>
+			Note: Shared backtests cannot be edited—only copied for use.  <br>
+			`,
+			shareDialogVisible: false,
+			shareForm: {
+					backtestName: "",
+					firstName: "",
+					lastName: "",
+			},
+			shareBacktestInfo: {}
 		}
 	},
 	directives: {
@@ -610,6 +708,13 @@ export default {
 		},
 		isOptRuning() {
 			return this.$refs['OPT'].optimizeState
+		},
+		previewShareBy() {
+				const { firstName, lastName } = this.shareForm;
+				if (firstName || lastName) {
+						return `${this.shareForm.backtestName} (Shared by ${firstName} ${lastName})`.trim();
+				}
+				return this.shareForm.backtestName || '';
 		},
 		...mapGetters(['getIsBacktestRunningFlagState']),
 	},
@@ -643,7 +748,7 @@ export default {
 				this.queryInfo.page = 1
 				await this.getDataList(null)
 			}
-			if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+			if (['Sample', 'Favorites', 'Analyst', 'SubscriberShared'].includes(this.currentPage)) {
 				this.$router.push('/backtester/list/history')
 			}
 			this.popUpMsgBox('Optimize successfully')
@@ -662,6 +767,8 @@ export default {
 					res = await getSampleList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}else if(this.currentPage == 'Analyst'){
 					res = await getAnalystList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
+				}else if(this.currentPage == 'SubscriberShared'){
+					res = await getUserSharedBacktestList(this.queryInfo.page, orderby, this.searchItem, this.strategyType)
 				}
 				if (res.status == 200) {
 					let data = res.data.results
@@ -691,6 +798,7 @@ export default {
 						}
 						item.entry_description = parseJsonOrString(item.entry_description);
 						item.exit_description = parseJsonOrString(item.exit_description);
+						item.shared_date = timestampToTime(item.create_date)
 						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
 							item.exit2_description = parseJsonOrString(item.exit2_description)
@@ -918,6 +1026,11 @@ export default {
 		console.log('backtestParams', backtestParams)
 			return backtestParams
 		},
+		openShareDialog(data) {
+			this.shareBacktestInfo = JSON.parse(JSON.stringify(data)) || {}
+			this.shareForm.backtestName = data.name || '';
+			this.shareDialogVisible = true;
+   },
 	}
 }
 </script>

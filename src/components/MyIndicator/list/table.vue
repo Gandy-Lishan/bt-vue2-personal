@@ -714,6 +714,9 @@ export default {
         const month = String(dateTime.getMonth() + 1).padStart(2, '0')
         const day = String(dateTime.getDate()).padStart(2, '0');
         const extractedDate = `${year}-${month}-${day}`;
+        if(typeof ele.name === 'string') {
+          ele.name = ele.name.replace('<br/>', '')
+        }
         return{id:ele.id, name: ele.name, date: extractedDate}
       })
       return {popTitle: `Confirm deletion of this indicator and its related backtests?`, BTList}
