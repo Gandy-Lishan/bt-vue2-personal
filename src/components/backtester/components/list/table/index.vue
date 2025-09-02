@@ -534,7 +534,7 @@
 										@click="addBacktestSignal(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<el-tooltip
+								<!-- <el-tooltip
 									class="item"
 									effect="dark"
 									content="Share backtest"
@@ -548,7 +548,7 @@
 										size="mini"
 										@click="openShareDialog(scope.row)"
 									></el-button>
-								</el-tooltip>
+								</el-tooltip> -->
 							</el-row>
 						</template>
 		</el-table-column>
