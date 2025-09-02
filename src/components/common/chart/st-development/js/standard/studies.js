@@ -3576,7 +3576,7 @@ CIQ.Studies.calculateStandardDeviationSample = function (stx, sd) {
  */
 CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	// console.log('invoke calculateMovingAverage', sd.type, sd.parameters)
-	console.log('invoke calculateMovingAverage')
+	// console.log('invoke calculateMovingAverage')
 	if (!sd.chart.dataSet) return;
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
