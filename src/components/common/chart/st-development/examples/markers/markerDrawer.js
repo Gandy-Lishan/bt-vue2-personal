@@ -675,12 +675,17 @@ let __st_js_marker_drawer_ = _exports => {
         CIQ.stxx.draw()
     }
 
-    CIQ.updateSupportLineWithChannelDrawing = async function(){
+    CIQ.updateSupportLineWithChannelDrawing = async function(vm){
         return new Promise(async (resolve, reject) => {
             var mNode = document.getElementById('ai-supline')
             // 改为判断图表是否存在绘制的图形（CIQ.store.getters.getDrawingObjList）
             const drawingObjList = CIQ.store.getters.getDrawingObjList
             if(drawingObjList && drawingObjList.length == 0) {
+                vm.$notify.info({
+                    title: 'Analysis in Progress',
+                    message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
+                    duration: 0
+                });
                 // 添加active后需要获取数据源，失败则移除active
                 try {
                     clearDrawing()

@@ -7782,11 +7782,12 @@ class Studies extends CIQ.UI.ContextTag {
 		function pickStudy(node, studyName) {
 			var stx = self.context.stx;
 
+			// 已经在addIndicatorsLine119去重了
 			// avoid add indicator redundantly
-			for (var studyInstanceName in stx.layout.studies) {
-				var sd = stx.layout.studies[studyInstanceName]
-				if (sd.type == studyName) {return}
-			}
+			// for (var studyInstanceName in stx.layout.studies) {
+			// 	var sd = stx.layout.studies[studyInstanceName]
+			// 	if (sd.type == studyName) {return}
+			// }
 			
 			/** extraIndicators也包括chartiq Study列表的Tech Study */
 			let extraIndicators = []
@@ -8422,6 +8423,7 @@ if (!CIQ.Studies) {
 							period: this.value
 						}
 						if(self.helper.sd.type == 'ma'){
+							// 由于只同步period信息，更新图表不会同步颜色信息
 							CIQ.store.commit('chart/studySettingMAChange',obj)
 							return
 						}
@@ -8430,7 +8432,24 @@ if (!CIQ.Studies) {
 							return
 						}
 					}
-
+					// if (
+						
+					// 	section == "inputs" && 
+					// 	(name == "Period" || name == "period") && 
+					// 	!self.helper.sd.parameters.criteria
+					// ) {
+					// 	let sd = self.helper.sd
+					// 	// 编辑ma时如果是extra ma也就是studies加载的ma,则在这里修改maLayout
+					// 	var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+						
+					// 	// 由于extra ma没有criteria信息也不想新加标识属性，就判断更改前的周期定位需要修改周期的ma
+					// 	var MALayoutListIndex = activatedMALayoutList.findIndex(
+					// 		(item) => item.period == Number(sd.inputs.Period) || !item.period
+					// 	)	
+					// 	activatedMALayoutList[MALayoutListIndex].period = Number(this.value)
+					// 	debugger
+					// 	CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
+					// }
 					self.updateStudy(updates);
 					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				};
