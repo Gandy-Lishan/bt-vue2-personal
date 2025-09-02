@@ -595,13 +595,9 @@ export default class AdvancedChartComponent extends Vue {
     }
 	async toogleAISupline() {
 		this.aISuplineloading = true
-		this.$notify.info({
-            title: 'Analysis in Progress',
-            message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
-            duration: 0
-          });
+		let vm = this
 		try {
-			const msg = await CIQ.updateSupportLineWithChannelDrawing();
+			const msg = await CIQ.updateSupportLineWithChannelDrawing(vm);
 			this.$message.success(msg);
 		} catch (errMsg) {
 			this.$message.warning(errMsg);
