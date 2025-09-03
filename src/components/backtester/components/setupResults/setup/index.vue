@@ -639,6 +639,9 @@ export default {
 			let indicatorLayout = {}
 			let savedTechSD = []
 			for (let i in CIQ.stxx.layout.studies) {
+				/** 跳过MA指标,MA只靠MALayout维护 */
+				if(CIQ.stxx.layout.studies[i].type == 'ma') continue
+
 				let output = {}
 				if (!CIQ.findSentiIndicator(null, CIQ.stxx.layout.studies[i].type)) {
 					output = CIQ.stxx.layout.studies[i].outputs
@@ -654,8 +657,10 @@ export default {
 			indicatorLayout.savedTechSD = savedTechSD
 			indicatorLayout.activatedMA = this.$store.state.chart.activatedMA
 			// 暂定，把MA对应位置和信息存在回测内
+			const filteredActivatedMALayout = this.$store.state.chart.activatedMALayout.filter(i=>!!i.criteria)
 			indicatorLayout.activatedMALayout =
-				this.$store.state.chart.activatedMALayout
+				filteredActivatedMALayout
+			// 不能把extra ma 带入回测中运行并保存
 			indicatorLayout.activatedTechLayout =
 				this.$store.state.chart.activatedTechLayout
 			return indicatorLayout

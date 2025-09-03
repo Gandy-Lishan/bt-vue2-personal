@@ -8432,24 +8432,22 @@ if (!CIQ.Studies) {
 							return
 						}
 					}
-					// if (
+					if (
 						
-					// 	section == "inputs" && 
-					// 	(name == "Period" || name == "period") && 
-					// 	!self.helper.sd.parameters.criteria
-					// ) {
-					// 	let sd = self.helper.sd
-					// 	// 编辑ma时如果是extra ma也就是studies加载的ma,则在这里修改maLayout
-					// 	var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-						
-					// 	// 由于extra ma没有criteria信息也不想新加标识属性，就判断更改前的周期定位需要修改周期的ma
-					// 	var MALayoutListIndex = activatedMALayoutList.findIndex(
-					// 		(item) => item.period == Number(sd.inputs.Period) || !item.period
-					// 	)	
-					// 	activatedMALayoutList[MALayoutListIndex].period = Number(this.value)
-					// 	debugger
-					// 	CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
-					// }
+						section == "inputs" && 
+						(name == "Period" || name == "period") && 
+						!self.helper.sd.parameters.criteria
+					) {
+						let sd = self.helper.sd
+						// 编辑ma时如果是extra ma也就是studies加载的ma,则在这里修改maLayout
+						var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+						// 由于extra ma没有criteria信息也不想新加标识属性，就判断更改前的周期定位需要修改周期的ma
+						var MALayoutListIndex = activatedMALayoutList.findIndex(
+							(item) => !item.criteria && item.period == Number(sd.inputs.Period) 
+						)	
+						activatedMALayoutList[MALayoutListIndex].period = Number(this.value)
+						CIQ.store.commit('chart/getMALayout', activatedMALayoutList)
+					}
 					self.updateStudy(updates);
 					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				};
