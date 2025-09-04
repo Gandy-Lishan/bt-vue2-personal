@@ -639,6 +639,8 @@ export default {
 			let indicatorLayout = {}
 			let savedTechSD = []
 			for (let i in CIQ.stxx.layout.studies) {
+				/** 跳过非参与回测的indicator */
+                if(CIQ.store.state.chart.indicators.extraIndicators.includes(CIQ.stxx.layout.studies[i].type)) continue
 				/** 跳过MA指标,MA只靠MALayout维护 */
 				if(CIQ.stxx.layout.studies[i].type == 'ma') continue
 
@@ -657,12 +659,10 @@ export default {
 			indicatorLayout.savedTechSD = savedTechSD
 			indicatorLayout.activatedMA = this.$store.state.chart.activatedMA
 			// 暂定，把MA对应位置和信息存在回测内
-			const filteredActivatedMALayout = this.$store.state.chart.activatedMALayout.filter(i=>!!i.criteria)
-			indicatorLayout.activatedMALayout =
-				filteredActivatedMALayout
-			// 不能把extra ma 带入回测中运行并保存
+			// 不能把extra ma 带入回测中运行并保存, 如果是其他技术指标还好只是保存多余的TechLayout和savedTechSD,运行回测时会根据indicatorsList加载所以不包括extra tech
+			indicatorLayout.activatedMALayout = this.$store.state.chart.activatedMALayout.filter(i=>!!i.criteria)
 			indicatorLayout.activatedTechLayout =
-				this.$store.state.chart.activatedTechLayout
+				this.$store.state.chart.activatedTechLayout.filter(i=>!!i.criteria)
 			return indicatorLayout
 		},
 		reassignBTAttributes(entrySaveObj, exitSaveObj, indicatorLayout, additionalSaveObj) {
