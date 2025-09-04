@@ -534,21 +534,21 @@
 										@click="addBacktestSignal(scope.row)"
 									></el-button>
 								</el-tooltip>
-								<!-- <el-tooltip
+								<el-tooltip
 									class="item"
 									effect="dark"
 									content="Share backtest"
 									placement="bottom-start"
 								>
 								<el-button
-									 v-if="['History', 'Favorites'].includes(currentPage)"
+									 v-if="['History', 'Favorites'].includes(currentPage) && openUserFunction"
 										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										icon="el-icon-share"
 										circle
 										size="mini"
 										@click="openShareDialog(scope.row)"
 									></el-button>
-								</el-tooltip> -->
+								</el-tooltip>
 							</el-row>
 						</template>
 		</el-table-column>
@@ -641,6 +641,7 @@ import { RefreshBus } from "../EventBus/Bus"
 import Optimize from "@/components/common/optimizeBT/Optimize.vue";
 import { mapGetters } from 'vuex';
 import SignalCode from '@/utils/cryptoUtils/codeTool'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
 	name: 'Table',
@@ -715,6 +716,11 @@ export default {
 						return `${this.shareForm.backtestName} (Shared by ${firstName} ${lastName})`.trim();
 				}
 				return this.shareForm.backtestName || '';
+		},
+		openUserFunction() {
+    const email = getCookieData()?.username
+				const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+				return allowedUserList.includes(email)
 		},
 		...mapGetters(['getIsBacktestRunningFlagState']),
 	},

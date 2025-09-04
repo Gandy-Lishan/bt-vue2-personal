@@ -4,6 +4,8 @@
 
 <script>
 import { Tabs } from "@/components/common"
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
+
 export default {
   name: 'List',
   components: {
@@ -40,6 +42,20 @@ export default {
     activeItem() {
       return this.$route.meta.activeItem;
     },
+    openUserFunction() {
+      const email = getCookieData()?.username
+      const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+      return allowedUserList.includes(email)
+		},
+  },
+  mounted() {
+    console.log('openUserFunction', this.openUserFunction)
+    if(this.openUserFunction) {
+      this.menuItems.push({
+        index: 'shared',
+        lable: "Subscriber Shared Backtests"
+      })
+    }
   },
   methods: {
     handleSelect(subUrl) {
