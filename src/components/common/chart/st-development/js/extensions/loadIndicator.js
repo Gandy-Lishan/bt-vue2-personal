@@ -141,7 +141,6 @@ import { formatStandardTime } from '@/utils'
              * vuex有techSD则存入savedTechSD */
             savedTechSD = CIQ.store.state.chart.techSD
          }
-         debugger
          CIQ.store.commit('chart/setSavedTechSD', savedTechSD)
  
          // sort indicatorsList into a "[senti,tech]" style
