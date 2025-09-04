@@ -262,6 +262,9 @@ li.el-submenu.is-active.report-menu .el-submenu__title {
   margin-left: 20px;
   line-height: 25px;
 }
+.share-backtest-dialog .el-input__inner{
+  margin-left: 0px !important;
+}
 
 .senti-container .ids-container input[type="text"],
 input[type="number"],

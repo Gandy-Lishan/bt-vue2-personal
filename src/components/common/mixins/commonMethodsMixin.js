@@ -1,5 +1,5 @@
 import { CIQ } from '@/components/common/chart/st-development/js'
-import {capitalizeFirstLetter, timestampToTime, isJson } from '@/utils'
+import {capitalizeFirstLetter, timestampToTime, isJson, maskEmail } from '@/utils'
 import { getSymbolInfo,getCoresSymbolDual } from '@/utils/globalFunc'
 import {
 	getBacktestName,
@@ -14,7 +14,9 @@ import {
 	getStatus,
 	findLastSignalApi,
 	getBTV1Backtest,
-	getOPTStatus
+	getOPTStatus,
+	shareBacktest,
+	getUserSharedBacktestList
 } from '@/service/service.js'
 import UUID from '@/utils/cryptoUtils/uuid'
 import SignalCode from '@/utils/cryptoUtils/codeTool'
@@ -22,6 +24,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import setPromiseInterval, { clearPromiseInterval } from 'set-promise-interval'
 import { RefreshBus } from '@/components/backtester/components/list/EventBus/Bus'
 import { conditionRadioMap } from './conditionRadioMap'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export const CommonMethodsMixin = {
 	data() {
@@ -145,7 +148,7 @@ export const CommonMethodsMixin = {
 						this.queryInfo.page = 1
 						await this.getDataList(null)
 					}
-					if (['Sample', 'Favorites', 'Analyst'].includes(this.currentPage)) {
+					if (['Sample', 'Favorites', 'Analyst', 'SubscriberShared'].includes(this.currentPage)) {
 						this.$router.push('/backtester/list/history')
 					}
 					this.popUpMsgBox('Copy successfully')
@@ -156,7 +159,113 @@ export const CommonMethodsMixin = {
 				this.loading = false
 			}
 		},
+		async generateMyIndicatorFromBacktest() {
+			const row = this.shareBacktestInfo
+			debugger
+			const indicator_layout = isJson(row.indicator_layout) ? JSON.parse(row.indicator_layout) : row.indicator_layout
+			const {entry, entry2, exit, exit2} = indicator_layout.formIndicators
+			let customIndicators = [];
+			// 把四个可能存在的数组放到一个列表里
+			const groups = [entry, entry2, exit, exit2]
 
+			// 遍历每个数组
+			groups.forEach(arr => {
+					if (Array.isArray(arr)) {
+							arr.forEach(item => {
+									if (typeof item === 'string' && item.includes("CREATE")) {
+											customIndicators.push(item);
+									}
+							});
+					}
+			});
+			// 去重
+			customIndicators = [...new Set(customIndicators)];
+			console.log(customIndicators);
+			return customIndicators
+		},
+		async addSubscriberSharedBacktest(data) {
+			const customIndicators = await this.generateMyIndicatorFromBacktest(data)
+			try {
+				this.loading = true
+					/* 为防止出现重名, 在这里加上时间戳 */
+					const generateCopyName = (name) => {
+						const datePattern = /\(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\)/;
+						
+						// 去掉 data.name 中已有的日期时间部分
+						const cleanedName = name.replace(datePattern, '');
+						
+						const now = new Date();
+						const year = now.getFullYear();
+						const month = String(now.getMonth() + 1).padStart(2, '0');
+						const day = String(now.getDate()).padStart(2, '0');
+						const hour = String(now.getHours()).padStart(2, '0');
+						const minute = String(now.getMinutes()).padStart(2, '0');
+						const second = String(now.getSeconds()).padStart(2, '0');
+						const firstName = this.shareForm.firstName || ''
+						const lastName = this.shareForm.lastName || ''
+						if(firstName || lastName) {
+							return `${name} <br/> (Shared by ${firstName} ${lastName})`;
+						}
+						return name || data.name;
+					}
+				const copyName = generateCopyName(this.shareForm.backtestName)
+				// 检查是否已经存在同名的 backtest
+				const nameLookUp = await getUserSharedBacktestList(1, null, copyName, null)
+				const isDuplicate = nameLookUp.data.results.some(
+					item => item.name === copyName
+				)
+
+				if (isDuplicate) {
+					this.popUpMsgBox('A shared backtest with the same name already exists')
+				} else {
+					data = JSON.parse(JSON.stringify(data))
+					for (const key in data) {
+						if (data.hasOwnProperty(key)) {
+							if (data[key] !== null && (typeof data[key] === 'object' || Array.isArray(data[key]))) {
+								data[key] = JSON.stringify(data[key]);
+							}
+						}
+					}
+					// 获取参数并准备复制
+					const params = {
+						...data,
+						name: copyName,
+						favorites: false,
+						user_tag: 'client',
+						strategy: data.strategy === 'Signal' ? 'Single' : data.strategy,
+					}
+					if(customIndicators.length > 0) {
+						params.my_indicators = JSON.stringify(customIndicators)
+					}else {
+						params.my_indicators = JSON.stringify([])
+					}
+					delete params.uuid
+					delete params.results
+					delete params.user_id
+					delete params.status
+					delete params.backtest_id
+					delete params.old_uuid
+					delete params._last_entry_signal_date
+					delete params._last_exit_signal_date
+
+					// 发起复制请求
+					await shareBacktest(this.$qs.stringify(params))
+
+					// 重置查询页码并获取数据 History
+					// if (['History', 'Favorites'].includes(this.currentPage)) {
+					// 	this.$router.push('/backtester/list/shared')
+					// }
+					this.popUpMsgBox('Submitted for review. It will be published once approved.')
+				}
+				this.loading = false
+			} catch (error) {
+				this.popUpMsgBox('Share failed: This backtest has been shared')
+				this.shareDialogVisible = false
+				console.error('An error occurred:', error)
+				this.loading = false
+			}
+			this.shareDialogVisible = false
+		},
 		async deleteBacktest(id) {
 			this.loading = true
 			await deleteBacktest(id)

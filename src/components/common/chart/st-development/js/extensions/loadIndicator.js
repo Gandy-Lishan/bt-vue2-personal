@@ -124,7 +124,10 @@ import { formatStandardTime } from '@/utils'
             /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
             for(var i in stx.layout.studies){
                 /** 跳过非参与回测的indicator */
-                if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+                //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+                
+                /** 跳过MA指标,MA只靠MALayout维护 */
+                if(stx.layout.studies[i].type == 'ma') continue
                 savedTechSD.push({
                     type: stx.layout.studies[i].type,
                     inputs: stx.layout.studies[i].inputs,
