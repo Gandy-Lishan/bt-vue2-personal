@@ -232,6 +232,7 @@
 		<el-divider v-if="!['WIC','OHLCV'].includes(data.categories)"></el-divider>
 		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<CheckInput
+        :categories="data.categories"
 				:config="EOCheckInputConfig"
 				ref="EOForm"
         @handleExtremeLineChange="handleExtremeLineChange"
@@ -239,6 +240,7 @@
 			></CheckInput>
 			<div></div>
 			<CheckInput
+        :categories="data.categories"
 				:config="EPCheckInputConfig"
 				ref="EPForm"
         @handleExtremeLineChange="handleExtremeLineChange"
@@ -1151,9 +1153,32 @@ export default {
         return this.sentimentList.filter(i=>i.updated != 'Daily')
       }
     },
+    symbolOrIndicator(value){
+      const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(value)
+      const isIndicator = ['Indicator Spread', 'Indicator Ratio', 'Indicator Addition'].includes(value)
+      if(isSymbol) return 'Symbol'
+      else if(isIndicator) return 'Indicator'
+      else if(value === 'OHLCV') return 'MA'
+      else return ''
+    },
     changeCategories(category) {
       this.resetTimeframeDisplayState()
 
+      console.log('category', category)
+      if(this.symbolOrIndicator(category) === 'Symbol') {
+        this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'c'}
+        this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'c'}
+      }
+      else if(this.symbolOrIndicator(category) === 'Indicator') {
+        this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'i'}
+        this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'i'}
+      }else if(category === 'OHLCV') {
+        this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'MA'}
+        this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'MA'}
+      }else {
+        this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: ''}
+        this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: ''}
+      }
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1492,11 +1517,11 @@ export default {
           };
         });
         //覆盖checkbox初始化配置
-        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
-        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
-        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
-        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
-        this.ShiftCheckInputConfig = { ...this.ShiftCheckInputConfig, ...configMap[4].config };
+        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config, source: 'EditData' };
+        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config, source: 'EditData' };
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config, source: 'EditData' };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config, source: 'EditData' };
+        this.ShiftCheckInputConfig = { ...this.ShiftCheckInputConfig, ...configMap[4].config, source: 'EditData' };
       }
 
       //获取合并后的新indicator数据
