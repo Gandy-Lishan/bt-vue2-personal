@@ -37,7 +37,7 @@
                  <img
                    align="center"
                    alt=""
-                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/c317db3d-2d06-155d-5c53-b1abfba1bb3d.png"
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/b9ffe0ae-74cc-9fb9-1b80-b4079091d020.png"
                    width="564"
                    style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
                    class="mcnImage"
