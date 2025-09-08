@@ -456,7 +456,7 @@ export default {
 		{value: true, label: 'Short'}
 	],
 	startPickerOptions: {
-		disabledDate: this.handleDisabledStartDate
+		disabledDate: this.handleDisabledEndDate
 	},
 	endPickerOptions: {
 			disabledDate: this.handleDisabledEndDate
@@ -591,10 +591,9 @@ export default {
   methods: {
 			handleDisabledStartDate(time) {
 			const today = timestampToTime(new Date());
-			const endDay = timestampToTime(new Date(this.curDate));
 			
 			// 添加新限制：日期大于 curDate 或为周末
-			const isDisabled = timestampToTime(time) > endDay || time.getDay() === 0 || time.getDay() === 6;
+			const isDisabled = time.getDay() === 0 || time.getDay() === 6;
 			
 			// 如果 endDate 取消选择，则 startDate 可以选择全部
 			if (this.curDate) {
@@ -606,12 +605,11 @@ export default {
 
 	handleDisabledEndDate(time) {
 			const today = timestampToTime(new Date());
-			const startDay = timestampToTime(new Date(this.date));
 
 			// 添加新限制：日期大于 curDate 或为周末
 			const isDisabled = time.getDay() === 0 || time.getDay() === 6;
 
-			return isDisabled || timestampToTime(time) > today || timestampToTime(time) < startDay;
+			return isDisabled || timestampToTime(time) > today
 	},
 	// table filter*********
 	disabledDate(time) {
@@ -709,20 +707,80 @@ export default {
 					.filter(item=>item["Direction"] === 'Short');
 		}
 	},
-	getSearchresult(){
-		if(this.searchItem){
-			// 在搜索之前对搜索关键词进行转义
-			const trimmedStr = this.searchItem.trim()
-			const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
-			return this.originData.content.filter(item => {
-				let searchTarget = this.midTermMap[item[this.searchCategory]]?this.midTermMap[item[this.searchCategory]]:item[this.searchCategory]
-				return regex.test(searchTarget)
-			});
-			//this.tableData.content = this.data.content.filter(item=>item[this.searchCategory].toLowerCase().indexOf(this.searchItem.toLowerCase())!=-1)
-		}else{
-			return this.originData.content
+	getSearchresult() {
+	if (!this.searchItem) {
+		return this.originData.content;
+	}
+
+	const trimmedStr = this.searchItem.trim();
+	const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+
+	// 过滤出匹配的
+	let results = this.originData.content.filter(item => {
+		let searchTarget = this.midTermMap[item[this.searchCategory]]
+			? this.midTermMap[item[this.searchCategory]]
+			: item[this.searchCategory];
+		return regex.test(searchTarget);
+	});
+
+	// 排序
+	results.sort((a, b) => {
+		const searchTargetA = this.midTermMap[a[this.searchCategory]]
+			? this.midTermMap[a[this.searchCategory]]
+			: a[this.searchCategory];
+		const searchTargetB = this.midTermMap[b[this.searchCategory]]
+			? this.midTermMap[b[this.searchCategory]]
+			: b[this.searchCategory];
+
+		const scoreA = this.getMatchScore(searchTargetA, trimmedStr);
+		const scoreB = this.getMatchScore(searchTargetB, trimmedStr);
+
+		if (scoreA === scoreB) {
+			// 分数相同，按字母顺序
+			return searchTargetA.localeCompare(searchTargetB);
 		}
-	},
+		return scoreB - scoreA;
+	});
+
+	return results;
+},
+
+getMatchScore(target, keyword) {
+	if (!target) return 0;
+	const lowerTarget = target.toLowerCase();
+	const lowerKeyword = keyword.toLowerCase();
+
+	// 完全匹配
+	if (lowerTarget === lowerKeyword) return 1000;
+
+	// 前缀匹配
+	if (lowerTarget.startsWith(lowerKeyword)) return 800;
+
+	// 子串匹配（位置越靠前优先级越高）
+	const index = lowerTarget.indexOf(lowerKeyword);
+	if (index !== -1) {
+		return 600 - index; 
+		// 位置 0 的话就是 600 分
+		// 位置越靠后，分数越低
+	}
+
+	// 不匹配
+	return 0;
+},
+	// getSearchresult(){
+	// 	if(this.searchItem){
+	// 		// 在搜索之前对搜索关键词进行转义
+	// 		const trimmedStr = this.searchItem.trim()
+	// 		const regex = new RegExp(this.escapeRegExp(trimmedStr), "i");
+	// 		return this.originData.content.filter(item => {
+	// 			let searchTarget = this.midTermMap[item[this.searchCategory]]?this.midTermMap[item[this.searchCategory]]:item[this.searchCategory]
+	// 			return regex.test(searchTarget)
+	// 		});
+	// 		//this.tableData.content = this.data.content.filter(item=>item[this.searchCategory].toLowerCase().indexOf(this.searchItem.toLowerCase())!=-1)
+	// 	}else{
+	// 		return this.originData.content
+	// 	}
+	// },
 	// 使用反斜杠转义特殊字符
 	escapeRegExp(str) {
 		return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -745,7 +803,13 @@ export default {
 	},
 	async getAIPick(){
 		this.loading = true
-		const date = [this.date, this.curDate] || [this.curDate,this.curDate]
+		let date = [this.date, this.curDate] || [this.curDate,this.curDate]
+		// 如果前者比后者大，就交换
+		if (new Date(date[0]) > new Date(date[1])) {
+			this.date = date[1]
+			this.curDate = date[0]
+			date = [date[1], date[0]];
+		}
 		if(!date[0] || !date[1]) { this.loading = false;return}
 		let AIPickContent = await getAIPick(date)
 		
