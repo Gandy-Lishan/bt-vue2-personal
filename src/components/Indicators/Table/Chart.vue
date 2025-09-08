@@ -61,16 +61,20 @@
             const chart = this;
             const button = document.createElement('button');
             button.id = 'button'
-            button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>Backtest This Indicator';
+            button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Large Chart Or Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/10}px`;
-            button.style.left = (chart.chartWidth / 2 - 82) + 'px';
+            //button.style.left = (chart.chartWidth / 2 - 82) + 'px';
+            button.style.left = '50%'
+            button.style.transform = 'translateX(-50%)';
             button.style.fontSize = '16px';
             button.style.fontWeight = 600;
             button.style.color = '#1f77b4';
             button.style.border = 'unset';
-            button.style.width = '220px';
+            // button.style.width = '220px';
+            button.style.width = '400px';
             button.style.background = 'unset';
+            button.style.whiteSpace = 'nowrap';
             // if(type.includes('trend_reltrend')) button.style.display = 'none'
             if(url === 'smart_dumb') _url = 'model_smart_money'
             else if(url === 'risk_levels') _url = 'model_risk_stocks_short'
