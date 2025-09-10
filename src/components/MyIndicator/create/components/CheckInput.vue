@@ -1,6 +1,7 @@
 <template>
   <div :class="{ 'checkbox-with-input': true, 'shift-checkbox-with-input': config['label'] === 'Shift' }">
     <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'CheckInput' && ((isSymbol && !isShift) || isEOEP || (isSymbol && isShift && showShiftInput))" @change="validateValue(config.value)">{{ config.label }}</el-checkbox>
+    <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput' && categories === 'OHLCV'" style="margin-right: 10px;"></el-checkbox>
     <!-- <el-checkbox :disabled="isDisabled" v-model="showInput" v-if="config['type'] == 'SelectInput'" style="margin-right: 10px;"></el-checkbox> -->
     <el-select :disabled="isDisabled" v-model="MAType" @change="handleSelect(MAType)" placeholder="-Select-" size="mini" v-if="config['type'] == 'SelectInput'" style="margin-right: 5px;">
       <el-option
@@ -60,7 +61,7 @@ export default {
       value: '',
       showInput: false,
       // inputVisibility: 'hidden', // 初始化时设置为隐藏
-      MAType: 'MA',
+      MAType: 'i',
       errMsg: '',
       shiftErrMsg: ''
     };
@@ -76,6 +77,7 @@ export default {
       return ['MA', 'EMA'].includes(this.MAType)
     },
     options() {
+      console.log('lishan options')
       const isSymbol = this.categories?.includes('Symbol') && this.categories !== 'OHLCV'
       const isIndicator = this.categories?.includes('Indicator')
       const symbolOptions = [
@@ -155,41 +157,48 @@ export default {
       //   if(!isInList) this.MAType = options[0].value
       //   return options
       // }
-      if(isSymbol) return symbolOptions
-      else if (isIndicator) return [
-        {
-          value: 'i',
-          label: 'Indicator Value'
-        },
-        {
-          value: 'MA',
-          label: 'Simple Moving Average'
-        }, {
-          value: 'EMA',
-          label: 'Exponential Moving Average'
-        }
-      ]
-      if(this.categories === 'OHLCV') return [
-      {
-          value: 'i',
-          label: 'Symbol Value'
-        },
-        {
-          value: 'MA',
-          label: 'Simple Moving Average'
-        }, {
-          value: 'EMA',
-          label: 'Exponential Moving Average'
-        }
-      ]
+      if(isSymbol) {
+        // this.MAType = 'c'
+        return symbolOptions
+      }
+      else if (isIndicator) {
+        // this.MAType = 'i'
+        return [
+          {
+            value: 'i',
+            label: 'Indicator Value'
+          },
+          {
+            value: 'MA',
+            label: 'Simple Moving Average'
+          }, {
+            value: 'EMA',
+            label: 'Exponential Moving Average'
+          }
+        ]
+      }
+      if(this.categories === 'OHLCV') {
+      //  this.MAType = 'MA'
+       return [
+          {
+            value: 'MA',
+            label: 'Simple Moving Average'
+          }, {
+            value: 'EMA',
+            label: 'Exponential Moving Average'
+          }
+        ]
+      }
     },
     isEOEP() {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
     },
     inputVisibility() {
+      debugger
       const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType) && this.config['label'] !== 'Shift'
       const isShift = this.config['label'] === 'Shift' && this.showShiftInput && this.isSymbol
-      const isEOEP = this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'
+      const isEOEP = this.config.field === 'extreme_optimism' || this.config.field === 'extreme_pessimism'
+      console.log('isShowInput, isShift, isEOEP', isShowInput, isShift, isEOEP)
       if(isShowInput || isShift || isEOEP) return 'visible'
       return 'hidden'
     },
@@ -223,6 +232,7 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
+        debugger
         console.log('lishan _config', this._config)
         const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
         const {field, value} = newValue
@@ -230,12 +240,29 @@ export default {
         else this.showInput = newValue.checked
         try {
           const _value = value.replace(/\d+/g, "")
-          if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify', 'i'].includes(_value)) {
+          if(isSymbol && ['ma1', 'ma2'].includes(field) && ['o', 'h', 'l', 'c', 'roc', 'amplitude', 'amplify', 'i', 'e'].includes(_value)) {
             this.MAType = _value
-          }else if(!isSymbol && this.categories === 'OHLCV' && ['ma1', 'ma2'].includes(field) && (value == '0' || value == '1')) {
-            this.MAType = 'i'
+          }else if(!isSymbol && this.categories === 'OHLCV' && ['ma1', 'ma2'].includes(field) && (value == '0' || value == '1' || !value)) {
+            this.MAType = 'MA'
+            this.showInput = false
+            this.value = ''
+          }else if(!isSymbol && ['ma1', 'ma2'].includes(field) && (Boolean(value))) {
+            this.value = value || ''
+            this.MAType = 'MA'
+            this.showInput = value ? true : false
+          }else if(isSymbol && ['ma1', 'ma2'].includes(field) && (Boolean(value))) {
+            this.value = value || ''
+            this.MAType = 'MA'
+            this.showInput = value ? true : false
           }
-          else{this.MAType = 'MA'}
+           else if(!isSymbol && ['ma1', 'ma2'].includes(field) && (!Boolean(value))) {
+            this.value = ''
+            this.MAType = 'i'
+            this.showInput = true
+          }
+          else {
+            this.MAType = newValue.MAType || ''
+          }
         } catch (error) {
           
         }
@@ -253,17 +280,55 @@ export default {
       handler(newValue, oldValue) {
         console.log('lishan newValue', newValue)
         console.log('lishan oldValue', oldValue)
+        // if(this.symbolOrIndicator(newValue) === 'Symbol') {
+        //     this.MAType = 'c'
+        //   }
+        //   else if(this.symbolOrIndicator(newValue) === 'Indicator') {
+        //     this.MAType = 'i'
+        //   }else if(newValue === 'OHLCV') {
+        //     this.MAType = 'MA'
+        //   }else {
+        //     this.MAType = ''
+        //   }
+        /*
+        Indicator Spread
+        Indicator Ratio
+        Indicator Addition
+        Indicator Resample
+        Symbol Spread
+        Symbol Ratio
+        Symbol Addition
+        Symbol OHLCV
+        Weighted Indicator Combination
+        */
       }
     }
   },
   methods: {
+    symbolOrIndicator(value){
+      const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(value)
+      const isIndicator = ['Indicator Spread', 'Indicator Ratio', 'Indicator Addition'].includes(value)
+      if(isSymbol) return 'Symbol'
+      else if(isIndicator) return 'Indicator'
+      else if(value === 'OHLCV') return 'MA'
+      else return ''
+    },
     clearForm() {
       this.showInput = false
       if(this.config.type == 'SelectInput') this.showInput = true
       else this.showInput = false
       this.value = ''
       // this.inputVisibility = 'hidden'
-      this.MAType = 'MA'
+      if(this.symbolOrIndicator(this.categories) === 'Symbol') {
+        this.MAType = 'c'
+      }
+      else if(this.symbolOrIndicator(this.categories) === 'Indicator') {
+        this.MAType = 'i'
+      }else if(this.categories === 'OHLCV') {
+        this.MAType = 'MA'
+      }else {
+        this.MAType = ''
+      }
     },
     saveData() {
       if(this.config.field === 'ma1' || this.config.field === 'ma2') {
@@ -276,7 +341,7 @@ export default {
         else if(this.MAType == 'amplify') value = `amplify`
         else if(this.MAType == 'MA') value = this.value
         else if(this.MAType == 'i' && this.categories !== 'OHLCV') value = 'i'
-        else if(this.MAType == 'i' && this.categories === 'OHLCV') value = 0
+        else if(!this.showInput && this.categories === 'OHLCV') value = 0
         if(dontSaveMaValue) value = 0
 
         if(!this.isMAOption && this.config['label'] === 'Moving Average') {
