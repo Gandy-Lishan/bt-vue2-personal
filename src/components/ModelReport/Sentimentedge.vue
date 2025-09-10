@@ -240,7 +240,6 @@ export default {
 .article-des {
   display: flex;
   flex-direction: column;
-  height: 200px;
   justify-content: space-around;
 }
 .btn>i {
