@@ -232,6 +232,7 @@
 		<el-divider v-if="!['WIC','OHLCV'].includes(data.categories)"></el-divider>
 		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
 			<CheckInput
+        :categories="data.categories"
 				:config="EOCheckInputConfig"
 				ref="EOForm"
         @handleExtremeLineChange="handleExtremeLineChange"
@@ -239,6 +240,7 @@
 			></CheckInput>
 			<div></div>
 			<CheckInput
+        :categories="data.categories"
 				:config="EPCheckInputConfig"
 				ref="EPForm"
         @handleExtremeLineChange="handleExtremeLineChange"
@@ -1151,9 +1153,79 @@ export default {
         return this.sentimentList.filter(i=>i.updated != 'Daily')
       }
     },
+    symbolOrIndicator(value){
+      const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(value)
+      const isIndicator = ['Indicator Spread', 'Indicator Ratio', 'Indicator Addition'].includes(value)
+      if(isSymbol) return 'Symbol'
+      else if(isIndicator) return 'Indicator'
+      else if(value === 'OHLCV') return 'MA'
+      else return ''
+    },
     changeCategories(category) {
       this.resetTimeframeDisplayState()
-
+      debugger
+      console.log('category', category)
+      // 获取子组件当前的 MAType
+      let ma1MAType = ''
+      let ma2MAType = ''
+      // if(this.$refs['ma1Form'] && this.$refs['ma2Form']) {
+      //   ma1MAType = this.$refs['ma1Form'].MAType
+      //   ma2MAType = this.$refs['ma2Form'].MAType
+      //   if(this.symbolOrIndicator(category) === 'Symbol') {
+      //     if(!['o', 'h', 'l', 'c', 'roc', 'amplitude', 'MA', 'EMA'].includes(ma1MAType) || ma1MAType === '') {
+      //       this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'c'}
+      //     }
+      //     if(!['o', 'h', 'l', 'c', 'roc', 'amplitude', 'MA', 'EMA'].includes(ma2MAType) || ma2MAType === '') {
+      //       this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'c'}
+      //     }
+      //   }else if(this.symbolOrIndicator(category) === 'Indicator') {
+      //     if(!['i', 'EMA', 'MA'].includes(ma1MAType) || ma1MAType === '') {
+      //       this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'i'}
+      //     }
+      //     if(!['i', 'EMA', 'MA'].includes(ma2MAType) || ma2MAType === '') {
+      //       this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'i'}
+      //     }
+      //   }else if(category === 'OHLCV') {
+      //     if(!['EMA', 'MA'].includes(ma1MAType) || ma1MAType === '') {
+      //       this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'MA'}
+      //     }
+      //     if(!['EMA', 'MA'].includes(ma2MAType) || ma2MAType === '') {
+      //       this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'MA'}
+      //     }
+      //   }else {
+      //     this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: ''}
+      //     this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: ''}
+      //   }
+      // }else {
+        if(this.symbolOrIndicator(category) === 'Symbol') {
+          const MAType = 'c'
+          this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType}
+          if(this.MA1CheckInputConfig.value.includes('i') || this.MA1CheckInputConfig.value === '') {
+            this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType, value: 'c'}
+          }else this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType}
+          if(this.MA2CheckInputConfig.value.includes('i') || this.MA2CheckInputConfig.value === '') {
+            this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType, value: 'c'}
+          }else this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType}
+        }
+        else if(this.symbolOrIndicator(category) === 'Indicator') {
+          const MAType = 'i'
+          const valueMA1 = this.MA1CheckInputConfig.value.replace(/\d+/g, "")
+          const valueMA2 = this.MA2CheckInputConfig.value.replace(/\d+/g, "")
+          if(['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(valueMA1) || valueMA1 === '') {
+            this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType, value: 'i'}
+          }else this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType}
+          if(['o', 'h', 'l', 'c', 'roc', 'amplitude'].includes(valueMA2) || valueMA2 === '') {
+            this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType, value: 'i'}
+          }else this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType}
+        
+        }else if(category === 'OHLCV') {
+          this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: 'MA'}
+          this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: 'MA'}
+        }else {
+          this.MA1CheckInputConfig = {...this.MA1CheckInputConfig, MAType: ''}
+          this.MA2CheckInputConfig = {...this.MA2CheckInputConfig, MAType: ''}
+        }
+      // }
       const isIndicator = category.includes('Indicator')
       const isSymbol = category.includes('Symbol')
       const isWIC = category.includes('WIC')
@@ -1492,11 +1564,11 @@ export default {
           };
         });
         //覆盖checkbox初始化配置
-        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config };
-        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config };
-        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config };
-        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config };
-        this.ShiftCheckInputConfig = { ...this.ShiftCheckInputConfig, ...configMap[4].config };
+        this.MA1CheckInputConfig = { ...this.MA1CheckInputConfig, ...configMap[0].config, source: 'EditData' };
+        this.MA2CheckInputConfig = { ...this.MA2CheckInputConfig, ...configMap[1].config, source: 'EditData' };
+        this.EOCheckInputConfig = { ...this.EOCheckInputConfig, ...configMap[2].config, source: 'EditData' };
+        this.EPCheckInputConfig = { ...this.EPCheckInputConfig, ...configMap[3].config, source: 'EditData' };
+        this.ShiftCheckInputConfig = { ...this.ShiftCheckInputConfig, ...configMap[4].config, source: 'EditData' };
       }
 
       //获取合并后的新indicator数据
