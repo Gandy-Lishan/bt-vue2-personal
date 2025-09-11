@@ -4,7 +4,14 @@
 		<el-collapse class='collape-title'>
 		<el-collapse-item>
 			<template slot="title">
-			<h2 class="page-title">Smart Stock Scanner (click to expand)</h2>
+				<div class="title-container">
+					<h2 class="page-title">Smart Stock Scanner (click to expand)</h2>
+					<div class="searchBox">
+						<el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
+							<span>Watch Smart Stock Scanner Tutorial</span>
+						</el-button>
+					</div>
+				</div>
 			</template>
 			<h4>Our Smart Stock Scanner is updated nightly by 11:40 PM Eastern Time. This system is designed to provide you with a list of stocks that have triggered a "Signal-for-Action", worthy of consideration for trading at the opening of the next market day. Currently, our system can scan the 1500 S&P stocks. We will announce when additional stocks from other market indices are included.</h4>
 			<div>•	The system’s default setting displays the “end of today” shortlisting results. You can find historical results by selecting start and end dates from the past.</div>
@@ -17,30 +24,12 @@
 		<div class="table-header">
 			<div class='header-part1'>
 				<div class="tableLabel">
-					<h4>Daily Picks at the end of today</h4>
-				</div>
-
-				<div class="searchBox">
-					<el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
-							<span>Watch Smart Stock Scanner Tutorial</span>
-					</el-button>
-					<h6 class="h6-text">Today's pick will be completed by 11:40pm US Eastern Time .</h6>
-					<el-input 
-						placeholder="" 
-						v-model="searchItem" 
-						class="search"
-						@input="handleQuery"
-						clearable
-						@clear="handleQuery"
-					>
-						<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
-						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
-					</el-input>
+					<h4 style="margin: 0px">Daily Picks at the end of today</h4><h6 class="h6-text">Today's pick will be completed by 11:40pm US Eastern Time.</h6>
 				</div>
 			</div>
 			<!-- 预留一个过滤器的div -->
 			<div class="header-part2">
-				<div class="filterBox _filterConditionBox">
+				<div class="filterBox">
 							<!-- <el-date-picker
 								v-model="date"
 								class="aiscanner-date"
@@ -54,6 +43,7 @@
 								value-format="yyyy-MM-dd"
 							>
 							</el-date-picker> -->
+							<div class="date-picker-container">
 							<div class="datePicker">
 								<el-date-picker
 								v-model="date"
@@ -77,26 +67,43 @@
 								>
 								</el-date-picker>
 							</div>
-							<div class="datePicker">
-								<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
-								>Only Show Profit Target > Stop Loss
-								</el-checkbox>
-								<div class="direction">
-										<label for="radioGroup" class="direction">Direction: </label>
-										<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
-											<el-radio :label='false'>Long</el-radio>
-											<el-radio :label='true'>Short</el-radio>
-										</el-radio-group>
-								</div>
+							<el-input 
+								placeholder="" 
+								v-model="searchItem" 
+								class="search"
+								size="small"
+								@input="handleQuery"
+								clearable
+								@clear="handleQuery"
+							>
+								<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
+								<el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
+							</el-input>
 							</div>
 					<!-- <el-checkbox v-model="isShowShortChecked" @change="ShowShortChecked"
 						>Only Show Direction Is Short
 					</el-checkbox> -->
 				</div>
-				<div class="btns">
-					<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
-					<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
-					<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
+				<div class="filter-section">
+					<div class="left-side">
+						<div class="datePicker">
+							<el-checkbox v-model="isPLSChecked" @change="PLSChecked"
+							>Only Show Profit Target > Stop Loss
+							</el-checkbox>
+						</div>
+						<div class="direction">
+								<label for="radioGroup" class="direction">Direction: </label>
+								<el-radio-group id="radioGroup" v-model="isShowShortChecked" @change="ShowShortChecked">
+									<el-radio :label='false'>Long</el-radio>
+									<el-radio :label='true'>Short</el-radio>
+								</el-radio-group>
+						</div>
+					</div>
+					<div class="btns">
+						<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
+						<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+						<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -944,18 +951,23 @@ h4 {
 }
 
 .collape-title {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
-
+.filter-section, .left-side {
+ display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
 .direction {
 	font-weight: 500;
-    color: #606266;
-    margin: 0 10px 0 20px;
+	color: #606266;
+	margin: 0 10px 0 5px;
+	align-items: center;
+ display: flex
 }
 
 // filter
 .table-header {
-	margin-bottom: 10px;
 	
 	.header-part1{
 		display: flex;
@@ -973,12 +985,9 @@ h4 {
 		// 		}
 		// 	}
 		// }
-		.searchBox {
-			margin-left: 50px;
-		}
 	}
 	.header-part2{
-		margin-top: 20px;
+		margin-top: 10px;
 	}
 }
 
@@ -1074,7 +1083,7 @@ h4 {
 			align-items: center;
 		}
 		.h6-text {
-			margin-top: 0px;
+			margin: 0px 0px 0px 5px;
 		}
 /deep/ .el-collapse-item__content {
 	font-size: 16px;
@@ -1085,5 +1094,25 @@ h4 {
 	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
+}
+.date-picker-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	/deep/ .el-input-group {
+		width: 330px;
+	}
+}
+.tableLabel {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+.title-container {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
 }
 </style>
