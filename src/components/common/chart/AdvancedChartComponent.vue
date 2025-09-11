@@ -139,6 +139,8 @@
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns flexRow">
+					<ManageLayout />
+
 					<cq-menu class="ciq-menu ciq-ticker-indicator">
 						<span
 							><cq-clickable
@@ -151,6 +153,8 @@
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('optix')">Optix</cq-item>
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('trend')">Trend</cq-item>
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('reltrend')">Rel Trend</cq-item>
+								<cq-item style="margin-top: 2px;" stxtap="Layout.saveLayout()">Save Layout</cq-item>
+								<cq-item style="margin-top: 2px;" stxtap="Layout.restoreLayout()">Restore Layout</cq-item>
 							</cq-menu-container>
 						</cq-menu-dropdown>
 					</cq-menu>
@@ -469,6 +473,7 @@ import SummaryChart from '@/components/common/StrategyModal/SummaryChart/index.v
 import StrategySigal from '@/components/common/StrategyModal/strategySignal/StrategySignal.vue'
 import TradesTable from '@/components/common/StrategyModal/TradesTable/index.vue'
 import Description from '@/components/common/StrategyModal/Description/index.vue'
+import ManageLayout from '@/components/common/ManageLayout/index.vue'
 
 @Component({
   components: {
@@ -478,6 +483,7 @@ import Description from '@/components/common/StrategyModal/Description/index.vue
 	StrategySigal,
 	TradesTable,
 	Description,
+	ManageLayout,
   },
 })
 export default class AdvancedChartComponent extends Vue {
