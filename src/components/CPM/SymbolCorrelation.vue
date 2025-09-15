@@ -834,42 +834,48 @@ export default {
         return
       }
       console.log('corr_roll', corr_roll)
-      const firstElement = corr_roll[0]
-      if(firstElement.length === 3) {
-        // 下载的数据只有 Date, Close(stock_price)
-      }
-    },
-    async downloadCSV() {
-     const xlsxName = this.indicatorsCSVName
-     let data = this.indicatorCSVData
-     try {
-       const {data:_data} = await getIndicatorsDownloadData(xlsxName)
-       data = _data
-     } catch (error) {
-       console.log('用户无 indicator api 权限', error)
-       // 当前日期，确保是 UTC 时间
-       const currentDate = new Date(); // 将当前日期转换为 'YYYY-MM-DD' 格式的字符串
-       // 调用函数并传入数据和当前日期
-       data = this.filterRecentThreeMonths(data, currentDate);
-     }
-     if (!data || !data.length) {
-       this.popUpMsgBox('No data available for download')
-       return
-     }
-     const _keySort = Array.from( Object.keys(data[0]))
-     let csvContent = data.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
-     csvContent = `${_keySort.join(',')}\n${csvContent}`;
+      const transformData = (data) => {
+        return data.map(item => {
+          const keys = Object.keys(item);
+          // 删除 stock_price
+          const { stock_price, Date, ...rest } = item;
 
-     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-     const link = document.createElement("a");
-     const url = URL.createObjectURL(blob);
-     link.setAttribute("href", url);
-     link.setAttribute("download", `${xlsxName}.csv`);
-     link.style.visibility = 'hidden';
-     document.body.appendChild(link);
-     link.click();
-     document.body.removeChild(link);
-   },
+          // 截取日期
+          const shortDate = item.Date.substring(0, 10);
+
+          if (keys.length === 3) {
+            // 找到动态字段 (非 Date 和 stock_price)
+            const dynamicKey = keys.find(k => k !== "Date" && k !== "stock_price");
+            return {
+              Date: shortDate,
+              Close: item[dynamicKey]
+            };
+          } else {
+            // 保持其他字段不变，只更新 Date
+            return {
+              Date: shortDate,
+              ...rest
+            };
+          }
+        });
+      }
+      const exportData = transformData(corr_roll)
+      console.log('exportData', exportData)
+      const csvName =  'symbol_correlation_data'
+      const _keySort = Array.from(Object.keys(exportData[0]))
+      let csvContent = exportData.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${csvName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
     }
 }
 </script>
