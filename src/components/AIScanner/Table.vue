@@ -61,6 +61,12 @@
 						<el-form-item label="SHARPE RATIO" v-if="props.row['SharpeRatio'] !== null">
 							<span>{{ props.row['SharpeRatio'] }}</span>
 						</el-form-item>
+						<el-form-item label="RelTrend Score" v-if="props.row['RelTrendScore'] !== null">
+							<span>{{ props.row['RelTrendScore'] }}</span>
+						</el-form-item>
+						<el-form-item label="Optix" v-if="props.row['Optix'] !== null">
+							<span>{{ props.row['Optix'] }}</span>
+						</el-form-item>
 					</el-form>
 				</template>
 			</el-table-column>

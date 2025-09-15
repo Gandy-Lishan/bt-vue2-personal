@@ -121,6 +121,12 @@ const routes = [
 				component: resolve =>
 					require(['@/components/AIScanner/ScannerBacktest/index.vue'], resolve)
 			},
+			{
+				path: 'option',
+				name: 'option_scanner',
+				component: resolve =>
+					require(['@/components/AIScanner/OptionScanner.vue'], resolve)
+			},
 		]
 	},
 	{ path: '/home/scannerai', component: resolve => require(['@/components/AIScanner/index.vue'], resolve), alias: '/scannerai' },

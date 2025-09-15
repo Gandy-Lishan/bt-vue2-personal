@@ -190,18 +190,19 @@ export function setRouterPermission(router) {
 				else if(access_level.some(str => str.includes('datalite'))) {
 					if(to.path.includes('/MR')) next('/dashboard')
 				}
-			// 只能访问 Reports 页面: reports
-			else if(access_level.some(str => str.includes('reports')))  {
-				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/favorites', '/tags']
-				if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
-				else next('/MR/sentimentedge')
-			}
-		 // 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
-			else if(access_level.some(str => str.includes('corelite'))) {
-				const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge','/favorites', '/tags']
-				if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
-				else next('/MR/sentimentedge')
-			}
+				// 只能访问 Reports 页面: reports
+				else if(access_level.some(str => str.includes('reports')))  {
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/favorites', '/tags']
+					if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
+					else next('/MR/sentimentedge')
+				}
+				// 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
+				else if(access_level.some(str => str.includes('corelite'))) {
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge','/favorites', '/tags']
+					if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
+					else next('/MR/sentimentedge')
+				}
+				// report 所有人都能看， 但是部分是没有编辑功能的只能看
 			}
 				next()
 			}

@@ -367,6 +367,75 @@
 									</div>
 								</el-form-item>
 							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Trend Score Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="trend_score_condition" label-width="0px">
+												<el-input v-model="data.trend_score_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="trend_score" label-width="0px">
+											<el-input v-model="data.trend_score" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											RelTrend Score Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="reltrend_score_condition" label-width="0px">
+												<el-input v-model="data.reltrend_score_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="reltrend_score" label-width="0px">
+											<el-input v-model="data.reltrend_score" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Optix Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="optix_condition" label-width="0px">
+												<el-input v-model="data.optix_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="optix" label-width="0px">
+											<el-input v-model="data.optix" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -450,6 +519,12 @@ export default {
 		expected_return: 5,
 		win_rate_condition: 52,
 		win_rate: 80,
+		trend_score_condition: 0,
+		trend_score: 10,
+		reltrend_score_condition: 0,
+		reltrend_score: 10,
+		optix_condition: 0,
+		optix: 60,
 		signals: ['All']
 	},
 	options: ['All'],
@@ -544,7 +619,31 @@ export default {
 			signals: [
 				{ validator: validateSignals, trigger: 'blur' },
 				{ validator: validateSignals, trigger: 'change' },
-			]
+			],
+			trend_score_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
+			],
+			trend_score: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+			],
+			reltrend_score_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
+			],
+			reltrend_score: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+			],
+			optix_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'change' }
+			],
+			optix: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'change' }
+			],
     }
   }
   },
@@ -642,6 +741,7 @@ export default {
 			item['StdDev'] = this.displayData(item['StdDev'])
 			item['MaxRisk'] = this.displayData(item['MaxRisk'])
 			item['TimeInMarket'] = this.displayData(item['TimeInMarket'], true)
+			item['TrendScore'] = this.displayData(item['TrendScore'], true)
 			item['Alloc'] = this.displayData(item['Alloc'])
 			item['AvgWin'] = this.displayData(item['AvgWin'])
 			item['AvgLoss'] = this.displayData(item['AvgLoss'])
@@ -685,7 +785,8 @@ export default {
 			sharpe_ratio_condition, sharpe_ratio,
 			std_dev_condition, std_dev,
 			expected_return_condition, expected_return,
-			win_rate_condition, win_rate
+			win_rate_condition, win_rate,
+			trend_score_condition, trend_score
 		} = this.data
 		console.log('this.data', this.data)
 		console.log('signals filter', signals)
@@ -703,6 +804,9 @@ export default {
 			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
 			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
 			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
+			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
+			&& (item['RlTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RlTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RlTrendScore'])))
+			&& (item['Optix'] === null  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
 		))
 	},
 	filterShowShortCondition(searchResult){
@@ -850,6 +954,7 @@ getMatchScore(target, keyword) {
 			{label:'Symbol',value:'Symbol',labelHtml: 'Symbol'},
 			{label:'Close',value:'Close',labelHtml: 'Close'},
 			{label:'Trend',value:'Market',labelHtml: 'Market'},
+			{label:'Trend Score',value:'TrendScore',labelHtml: 'Trend<br/>Score'},
 			{label:'Direction',value:'Direction',labelHtml: 'Direction', width: '80px'},
 			{label:'Signal',value:'_Signal',labelHtml: 'Signal'},
 			{label:'Win Rate(%)',value:'WinRate',labelHtml: 'Win<br/>Rate(%)'},
