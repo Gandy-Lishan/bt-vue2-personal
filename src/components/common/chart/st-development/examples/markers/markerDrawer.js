@@ -1,5 +1,5 @@
 import { CIQ as _CIQ, timezoneJS as _timezoneJS } from 'chartiq/js/chartiq.js'
-import { formatStandardTime } from '@/utils'
+import { formatStandardTime, timestampToTime, timeframeTransform } from '@/utils'
 import { printConsole } from '@/utils'
 import marker from "./markersSample.js";
 import {fetchAISuplineData,stopAllPolling} from '@/service/service'
@@ -685,8 +685,8 @@ let __st_js_marker_drawer_ = _exports => {
                 try {
                     clearDrawing()
                     const curDate = new Date()
-                    const freq = CIQ.store.state.form.exitFrequency
-                    const res = await fetchAISuplineData(vm, CIQ.stxx.chart.symbol || 'SPX', formatStandardTime(curDate), freq)
+                    const freq = timeframeTransform(CIQ.store.state.form.pairDataFreq)
+                    const res = await fetchAISuplineData(vm, CIQ.stxx.chart.symbol || 'SPX', timestampToTime(curDate), freq)
                     let drawingObjList = CIQ.createSupportLineWithChannelDrawing(res)
                     CIQ.store.dispatch('chart/set_drawing_objlist', drawingObjList)
                     if(mNode) mNode.classList.add('active')
