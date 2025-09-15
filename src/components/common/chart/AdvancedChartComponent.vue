@@ -91,7 +91,7 @@
 							<cq-tooltip>Trading Signal</cq-tooltip>
 						</cq-toggle>
 					</cq-info-toggle-dropdown>
-					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester')">
+					<cq-info-toggle-dropdown class="lastp-group" v-if="!!$route.matched.find(i=>i.path == '/backtester') && $store.getters.getIsAdmin">
 						<button class="ai-supline" :disabled="aISuplineloading" id="ai-supline" v-loading="aISuplineloading" @click="toogleAISupline">
 							<svg width="22" height="22" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M32.4518 132.453L40.2018 140.165C40.347 140.311 40.5194 140.426 40.7092 140.505C40.899 140.584 41.1025 140.624 41.3081 140.624C41.5136 140.624 41.7171 140.584 41.9069 140.505C42.0967 140.426 42.2692 140.311 42.4143 140.165L88.2518 94.4778L107.314 113.478C109.752 115.903 113.702 115.903 116.139 113.478L167.739 62.0778C167.885 61.9327 168 61.7602 168.079 61.5704C168.158 61.3806 168.198 61.1771 168.198 60.9716C168.198 60.766 168.158 60.5625 168.079 60.3727C168 60.1829 167.885 60.0105 167.739 59.8653L159.989 52.1403C159.697 51.8502 159.301 51.6875 158.889 51.6875C158.477 51.6875 158.082 51.8502 157.789 52.1403L111.752 98.0403L92.6643 79.0403C91.4896 77.8785 89.904 77.2269 88.2518 77.2269C86.5996 77.2269 85.014 77.8785 83.8393 79.0403L32.4643 130.228C32.3173 130.372 32.2005 130.544 32.1208 130.734C32.0411 130.924 32 131.128 32 131.334C32 131.54 32.0411 131.744 32.1208 131.934C32.2005 132.124 32.3173 132.296 32.4643 132.44L32.4518 132.453Z" fill="black" fill-opacity="0.65"/>
@@ -139,7 +139,7 @@
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns flexRow">
-					<ManageLayout />
+					<ManageLayout v-if="$store.getters.getIsAdmin"/>
 
 					<cq-menu class="ciq-menu ciq-ticker-indicator">
 						<span
@@ -153,8 +153,6 @@
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('optix')">Optix</cq-item>
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('trend')">Trend</cq-item>
 								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('reltrend')">Rel Trend</cq-item>
-								<cq-item style="margin-top: 2px;" stxtap="Layout.saveLayout()">Save Layout</cq-item>
-								<cq-item style="margin-top: 2px;" stxtap="Layout.restoreLayout()">Restore Layout</cq-item>
 							</cq-menu-container>
 						</cq-menu-dropdown>
 					</cq-menu>

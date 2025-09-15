@@ -4271,20 +4271,6 @@ debugger
 	CIQ.addIndicators({stx:stx})
 }
 
-CIQ.UI.Layout.prototype.saveLayout = function(
-	node,
-) {
-	const stx = this.context.stx
-	CIQ.saveLayout()
-}
-
-CIQ.UI.Layout.prototype.restoreLayout = function(
-	node,
-) {
-	const stx = this.context.stx
-	CIQ.restoreLayout()
-}
-
 /**
  * Populates and displays the language widget.
  *
