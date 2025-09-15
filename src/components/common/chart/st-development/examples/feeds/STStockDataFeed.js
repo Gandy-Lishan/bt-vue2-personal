@@ -88,17 +88,16 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
     this.initEndDate = endDate 
     var oneYear = (24 *60 *60 *1000) * 365
 
-    // 466963200000
-    // -138009600000
-    var startDateParse = (params.symbolObject.startDate?params.symbolObject.startDate:startDate).getTime()
-    var endDateParse = (params.symbolObject.endDate?params.symbolObject.endDate:endDate).getTime()
-    var start = config.timestampToTime(startDateParse)
-    var end = config.timestampToTime(endDateParse)
-    console.log('startDateParse: ',Date.parse(params.symbolObject.startDate?params.symbolObject.startDate:startDate),(params.symbolObject.startDate?params.symbolObject.startDate:startDate).getTime());
-    console.log('Initial urlstart: '+start + ' end:'+end);
+    // 兼容了startDateParse为字符串的情况（save & restore chart layout）
+    const startDateParse = params.symbolObject.startDate?params.symbolObject.startDate:startDate
+    const endDateParse = params.symbolObject.endDate?params.symbolObject.endDate:endDate
+    var startDateTimeStamp = typeof startDateParse == 'string' ? (new Date(startDateParse)).getTime() : startDateParse.getTime()
+    var endDateTimeStamp = typeof endDateParse == 'string' ? (new Date(endDateParse)).getTime() : endDateParse.getTime()
+    var start = config.timestampToTime(startDateTimeStamp)
+    var end = config.timestampToTime(endDateTimeStamp)
     
     // CIQ.initialDate is provided for Marker
-    CIQ.initialDate = {start:startDateParse,end:endDateParse}
+    CIQ.initialDate = {start:startDateTimeStamp,end:endDateTimeStamp}
 
     //this.fetchStatus(symbol,start,end,params.symbolObject.indicator)
     CIQ.symbol = symbol;

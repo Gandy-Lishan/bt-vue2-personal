@@ -681,17 +681,12 @@ let __st_js_marker_drawer_ = _exports => {
             // 改为判断图表是否存在绘制的图形（CIQ.store.getters.getDrawingObjList）
             const drawingObjList = CIQ.store.getters.getDrawingObjList
             if(drawingObjList && drawingObjList.length == 0) {
-                vm.$notify.info({
-                    title: 'Analysis in Progress',
-                    message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
-                    duration: 0
-                });
                 // 添加active后需要获取数据源，失败则移除active
                 try {
                     clearDrawing()
                     const curDate = new Date()
                     const freq = CIQ.store.state.form.exitFrequency
-                    const res = await fetchAISuplineData(CIQ.stxx.chart.symbol || 'SPX', formatStandardTime(curDate), freq)
+                    const res = await fetchAISuplineData(vm, CIQ.stxx.chart.symbol || 'SPX', formatStandardTime(curDate), freq)
                     let drawingObjList = CIQ.createSupportLineWithChannelDrawing(res)
                     CIQ.store.dispatch('chart/set_drawing_objlist', drawingObjList)
                     if(mNode) mNode.classList.add('active')

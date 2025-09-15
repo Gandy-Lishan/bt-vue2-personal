@@ -4932,12 +4932,6 @@
     "inception": "2013/10/25"
   },
   {
-    "stock": "COMP",
-    "name": "Compass Inc",
-    "category": "Stock",
-    "inception": "2021/04/01"
-  },
-  {
     "stock": "CON",
     "name": "Concentra Group Holdings Paren",
     "category": "Stock",
@@ -10054,12 +10048,6 @@
     "name": "Independent Bank Corp/MI",
     "category": "Stock",
     "inception": "1985/9/4"
-  },
-  {
-    "stock": "IBEX",
-    "name": "IBEX Holdings Ltd",
-    "category": "Stock",
-    "inception": "2020/08/07"
   },
   {
     "stock": "IBKR",

@@ -12,6 +12,12 @@
     "inception": "1983/1/3"
   },
   {
+    "symbol": "AGIX",
+    "name": "KraneShares Artificial Intelligence and Technology ETF (AGIX)",
+    "category": "ETF",
+    "inception": "2024/07/18"
+  },
+  {
     "symbol": "AMJ",
     "name": "JPM Alerian MLP (AMJ)",
     "category": "ETF",
@@ -138,6 +144,12 @@
     "inception": "2025/1/13"
   },
   {
+    "symbol": "COMP",
+    "name": "NASDAQ Composite (COMP)",
+    "category": "Index",
+    "inception": "2021/4/1"
+  },
+  {
     "symbol": "COPX",
     "name": "Copper Miners (COPX)",
     "category": "ETF",
@@ -172,6 +184,12 @@
     "name": "Commodity Index Tracking Fund",
     "category": "ETF",
     "inception": "2006/2/3"
+  },
+  {
+    "symbol": "DFEN",
+    "name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN)",
+    "category": "ETF",
+    "inception": "2017/05/03"
   },
   {
     "symbol": "DIA",
@@ -474,6 +492,12 @@
     "inception": "2009/2/9"
   },
   {
+    "symbol": "HACK",
+    "name": "Amplify Cybersecurity ETF (HACK)",
+    "category": "ETF",
+    "inception": "2014/11/12"
+  },
+  {
     "symbol": "HEAVYTRUCK",
     "name": "Heavy Truck Index",
     "category": "Index",
@@ -508,6 +532,12 @@
     "name": "Biotechnology (IBB)",
     "category": "ETF",
     "inception": "2001/2/9"
+  },
+  {
+    "symbol": "IBEX",
+    "name": "IBEX Index",
+    "category": "Index",
+    "inception": "2020/8/7"
   },
   {
     "symbol": "IBIT",
@@ -826,6 +856,12 @@
     "name": "NIfty 50 Index",
     "category": "Index",
     "inception": "1990/7/3"
+  },
+  {
+    "symbol": "NLR",
+    "name": "VanEck Uranium and Nuclear ETF (NLR)",
+    "category": "ETF",
+    "inception": "2007/08/15"
   },
   {
     "symbol": "NORW",
@@ -1176,6 +1212,12 @@
     "inception": "2025/1/13"
   },
   {
+    "symbol": "SXXP",
+    "name": "ST0XX Europe 600 Price Index EUR",
+    "category": "Index",
+    "inception": "1986/12/31"
+  },
+  {
     "symbol": "SYLD",
     "name": "Cambria Yield ETF (SYLD)",
     "category": "ETF",
@@ -1216,6 +1258,12 @@
     "name": "10-Year Treasury Note Yield (TNX)",
     "category": "Index",
     "inception": "1993/11/2"
+  },
+  {
+    "symbol": "TPX",
+    "name": "Tokyo Stock Price Index (TOPIX)",
+    "category": "Index",
+    "inception": "1949/05/16"
   },
   {
     "symbol": "TRAN",
@@ -2316,28 +2364,16 @@
     "inception": "1971/1/4"
   },
   {
-    "symbol": "AGIX",
-    "name": "KraneShares Artificial Intelligence and Technology ETF (AGIX)",
-    "category": "ETF",
-    "inception": "2024/07/18"
-  },
-  {
     "symbol": "CPER",
     "name": "Copper",
     "category": "ETF",
     "inception": "2011/11/15"
   },
   {
-    "symbol": "DFEN",
-    "name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN)",
+    "symbol": "IYH",
+    "name": "iShares U.S. Healthcare Providers ETF (IYH)",
     "category": "ETF",
-    "inception": "2017/05/03"
-  },
-  {
-    "symbol": "HACK",
-    "name": "Amplify Cybersecurity ETF (HACK)",
-    "category": "ETF",
-    "inception": "2014/11/12"
+    "inception": "2000/06/16"
   },
   {
     "symbol": "JPY",
@@ -2346,28 +2382,16 @@
     "inception": "1971/01/04"
   },
   {
-    "symbol": "NLR",
-    "name": "VanEck Uranium and Nuclear ETF (NLR)",
+    "symbol": "PHYS",
+    "name": "Sprott Physical Gold Trust (PHYS)",
     "category": "ETF",
-    "inception": "2007/08/15"
+    "inception": "2010/02/26"
   },
   {
     "symbol": "PPLT",
     "name": "Platinum",
     "category": "ETF",
     "inception": "2010/01/08"
-  },
-  {
-    "symbol": "SXXP",
-    "name": "ST0XX Europe 600 Price Index EUR",
-    "category": "Index",
-    "inception": "1986/12/31"
-  },
-  {
-    "symbol": "TPX",
-    "name": "Tokyo Stock Price Index (TOPIX)",
-    "category": "Index",
-    "inception": "1949/05/16"
   },
   {
     "symbol": "XETUSD",

@@ -95573,112 +95573,112 @@
     {
         "chart_name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN) Trend Score",
         "url": "DFEN_trend",
-        "market_symbol": "dfen",
+        "market_symbol": "DFEN",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Direxion Daily Aerospace & Defense Bull 3X Shares (DFEN) RelTrend Score",
         "url": "DFEN_reltrend",
-        "market_symbol": "dfen",
+        "market_symbol": "DFEN",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Amplify Cybersecurity ETF (HACK) Trend Score",
         "url": "HACK_trend",
-        "market_symbol": "hack",
+        "market_symbol": "HACK",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Amplify Cybersecurity ETF (HACK) RelTrend Score",
         "url": "HACK_reltrend",
-        "market_symbol": "hack",
+        "market_symbol": "HACK",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "VanEck Uranium and Nuclear ETF (NLR) Trend Score",
         "url": "NLR_trend",
-        "market_symbol": "nlr",
+        "market_symbol": "NLR",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "VanEck Uranium and Nuclear ETF (NLR) RelTrend Score",
         "url": "NLR_reltrend",
-        "market_symbol": "nlr",
+        "market_symbol": "NLR",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "KraneShares Artificial Intelligence and Technology ETF (AGIX) Trend Score",
         "url": "AGIX_trend",
-        "market_symbol": "agix",
+        "market_symbol": "AGIX",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "KraneShares Artificial Intelligence and Technology ETF (AGIX) RelTrend Score",
         "url": "AGIX_reltrend",
-        "market_symbol": "agix",
+        "market_symbol": "AGIX",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "DFEN Optix",
         "url": "etf_dfen",
-        "market_symbol": "dfen",
+        "market_symbol": "DFEN",
         "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "HACK Optix",
         "url": "etf_hack",
-        "market_symbol": "hack",
+        "market_symbol": "HACK",
         "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "NLR Optix",
         "url": "etf_nlr",
-        "market_symbol": "nlr",
+        "market_symbol": "NLR",
         "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "AGIX Optix",
         "url": "etf_agix",
-        "market_symbol": "agix",
+        "market_symbol": "AGIX",
         "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "ST0XX Europe 600 Price Index EUR Trend Score",
         "url": "SXXP_trend",
-        "market_symbol": "sxxp",
+        "market_symbol": "SXXP",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "ST0XX Europe 600 Price Index EUR RelTrend Score",
         "url": "SXXP_reltrend",
-        "market_symbol": "sxxp",
+        "market_symbol": "SXXP",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
         "chart_name": "Tokyo Stock Price Index (TOPIX) Trend Score",
         "url": "TPX_trend",
-        "market_symbol": "tpx",
+        "market_symbol": "TPX",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Tokyo Stock Price Index (TOPIX) RelTrend Score",
         "url": "TPX_reltrend",
-        "market_symbol": "tpx",
+        "market_symbol": "TPX",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -95693,6 +95693,321 @@
         "chart_name": "ARM Holdings PLC RelTrend Score",
         "url": "ARM_reltrend",
         "market_symbol": "ARM",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitcoin Hedgers Position",
+        "url": "cot_btc",
+        "market_symbol": "XBTUSD",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "XLC Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_xlc_50",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_xlc_10",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_xlc_200",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC New High %",
+        "url": "breadth_sector_xlc_nh",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC New Low %",
+        "url": "breadth_sector_xlc_nl",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC % Above Bband",
+        "url": "breadth_sector_xlc_bbup",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC % Below Bband",
+        "url": "breadth_sector_xlc_bbdown",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC % RSI 14-Day < 30",
+        "url": "breadth_sector_xlc_rsi30",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC % RSI 14-Day > 70",
+        "url": "breadth_sector_xlc_rsi70",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 12 Week High %",
+        "url": "breadth_sector_xlc_nh12",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 12 Week Low %",
+        "url": "breadth_sector_xlc_nl12",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 4 Week High %",
+        "url": "breadth_sector_xlc_nh4",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 4 Week Low %",
+        "url": "breadth_sector_xlc_nl4",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC Advance / Decline",
+        "url": "breadth_sector_xlc_ad",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC Cumulative A/D Line",
+        "url": "breadth_sector_xlc_adline",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC McClellan Summation",
+        "url": "breadth_sector_xlc_mcsumm",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC McClellan Oscillator",
+        "url": "breadth_sector_xlc_mcosc",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_xlc_ad10",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_s5rlst_50",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_s5rlst_10",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_s5rlst_200",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE New High %",
+        "url": "breadth_sector_s5rlst_nh",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE New Low %",
+        "url": "breadth_sector_s5rlst_nl",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE % Above Bband",
+        "url": "breadth_sector_s5rlst_bbup",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE % Below Bband",
+        "url": "breadth_sector_s5rlst_bbdown",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE % RSI 14-Day < 30",
+        "url": "breadth_sector_s5rlst_rsi30",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE % RSI 14-Day > 70",
+        "url": "breadth_sector_s5rlst_rsi70",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 12 Week High %",
+        "url": "breadth_sector_s5rlst_nh12",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 12 Week Low %",
+        "url": "breadth_sector_s5rlst_nl12",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 4 Week High %",
+        "url": "breadth_sector_s5rlst_nh4",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 4 Week Low %",
+        "url": "breadth_sector_s5rlst_nl4",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Advance / Decline",
+        "url": "breadth_sector_s5rlst_ad",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Cumulative A/D Line",
+        "url": "breadth_sector_s5rlst_adline",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE McClellan Summation",
+        "url": "breadth_sector_s5rlst_mcsumm",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE McClellan Oscillator",
+        "url": "breadth_sector_s5rlst_mcosc",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_s5rlst_ad10",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC Panic Breadth Composite",
+        "url": "breadth_sector_xlc_panic_composite",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE Panic Breadth Composite",
+        "url": "breadth_sector_S5RLST_panic_composite",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IYH Optix",
+        "url": "etf_iyh",
+        "market_symbol": "IYH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PHYS Optix",
+        "url": "etf_phys",
+        "market_symbol": "PHYS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Healthcare Providers ETF Trend Score",
+        "url": "IYH_trend",
+        "market_symbol": "IYH",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Healthcare Providers ETF RelTrend Score",
+        "url": "IYH_reltrend",
+        "market_symbol": "IYH",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sprott Physical Gold Trust Trend Score",
+        "url": "PHYS_trend",
+        "market_symbol": "PHYS",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sprott Physical Gold Trust RelTrend Score",
+        "url": "PHYS_reltrend",
+        "market_symbol": "PHYS",
         "type": "reltrend",
         "updated": "Daily"
     }
