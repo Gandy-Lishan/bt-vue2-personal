@@ -1374,16 +1374,15 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
 }
 
 .trading-signal {
+  color: black;
   margin-left: 10px;
 }
-.trading-signal span {
-  background-image: url(img/trading-signal.svg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-position-y: 4px;
+.ciq-night .trading-signal {
+  color: white;
 }
 
 .ai-supline {
+  color: black;
   position: relative;
   border-top: none;
   border-left: none;
@@ -1394,6 +1393,9 @@ html:not([ciq-last-interaction='touch']) .break-sm .ciq-menu.collapse:hover>span
   margin-left: 10px;
   margin-top: 10px;
   padding-bottom: 3px;
+}
+.ciq-night .ai-supline {
+  color: white;
 }
 .ai-supline .ai-supline--tooltip {
   bottom: -8px;
@@ -4831,6 +4833,7 @@ html:not([ciq-last-interaction='touch']) .ciq-night .stxMenuActive cq-indicators
 
 .ciq-night cq-lookup-input input {
   background: rgba(21, 31, 40, 0);
+  border-bottom: #000 solid 1px !important;
   color: #fff;
 }
 
@@ -9035,7 +9038,10 @@ button.btnFav:hover span{
     height: 45px !important;
     border-top: none !important;
     border-right: none !important;
-    border-left: none !important;
+    border-left: none !important; 
+}
+.ciq-night .ciq-indicators-search input {
+  border-bottom: #000 solid 1px !important;
 }
 .ciq-indicators-search.stxMenuActive input {
   border-right: solid 1px black !important;
@@ -9090,6 +9096,9 @@ cq-indicators-lookup-input {
   background-position: -934px -25px;
   opacity: 0.6;
   transition: opacity 0.2s 0s;
+}
+.ciq-night .ciq-lookup-icon {
+  background-position: -934px -50px;
 }
 .break-sm .ciq-lookup-icon {
   right: 0;

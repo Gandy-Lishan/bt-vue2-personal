@@ -334,6 +334,9 @@
 
     span{ transition: color .20s 0s; }
   }
+  .ciq-night .toolbar-button {
+    color: #c5c7c9;
+  }
 
   .toolbar-button:after {
         content: "";
@@ -350,6 +353,9 @@
   
   .toolbar-button:hover span{
      color: #000;
+  }
+  .ciq-night .toolbar-button:hover span{
+     color: #fff;
   }
   
   .chevron-icon {
@@ -446,7 +452,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 500px;
+    max-height: 300px;
     min-height: 100px;
     overflow-y: auto;
   }
