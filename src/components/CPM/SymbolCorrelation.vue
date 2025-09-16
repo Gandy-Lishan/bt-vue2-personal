@@ -86,6 +86,20 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-row :gutter="20">
+          <div v-if="data.roll_window === 'custom'">
+            <el-col :span="24">
+              <el-form-item label="" prop="barsNumber">
+                <el-input v-model="data.barsNumber">
+                  <template v-slot:append>
+                    Bars (≥21 and ≤252)
+                  </template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+        </div>
+          <div v-else style="height: 50px;"></div>
+        </el-row>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -123,13 +137,25 @@
         <el-col :span="8">
           <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
         </el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="8">
+        </el-col>
       </el-row>
       <el-form-item>
       </el-form-item>
     </el-form>
     <div class="correlation-table ScannerBTTable" v-show="showCorrMatrix">
+      <div class="correlation-table-header">
       <h2 style="margin-bottom: 0px" v-text="corrMatrixText"></h2>
+      <div class="downLoadCsvBtn">
+        <el-button
+          @click="handleDownloadCsv"
+          style="display: inline-block"
+          size="small"
+          icon="el-icon-download"
+          title="Export Chart Data">
+        </el-button>
+      </div>
+      </div>
       <div class="dateRangeText"><span v-html="correlationDateRange"></span></div>
       <el-table
       header-align="center"
@@ -171,12 +197,21 @@ export default {
     SearchAutocomplete
   },
   data() {
+    let validateBarsNum = (rule, value, callback) => {
+      console.log('lishan', value)
+        if (value < 21 || value > 252) {
+          return callback(new Error('The number of bars should be between 21 and 252, please change your date range.'));
+        } else {
+          callback();
+        }
+    };
       return {
         data: {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
-          roll_window: 21
+          roll_window: 21,
+          barsNumber: ''
         },
         stock_comparison: [],
         symbol: '',
@@ -188,6 +223,8 @@ export default {
         corrMatrixText: '',
         corr_matrix: [],
         columns: [],
+        barsNumber: '',
+        corr_roll: null,
         options: [
         {
           value: 1,
@@ -247,6 +284,10 @@ export default {
           value: 252,
           label: '252 Bars'
         },
+        {
+          value: 'custom',
+          label: 'Custom...'
+        }
       ],
         pickerOptions: {
           shortcuts: [
@@ -306,6 +347,10 @@ export default {
           end_date: [
             { required: true, message: 'Select end date', trigger: 'blur' },
             { required: true, message: 'Select end date', trigger: 'change' }
+          ],
+          barsNumber: [
+            { validator: validateBarsNum, trigger: 'change' },
+            { validator: validateBarsNum, trigger: 'blur' }
           ],
         }
       }
@@ -391,6 +436,10 @@ export default {
         saveData.start_date = '1800-10-01'
         saveData.end_date = timestampToTime(new Date())
       }
+      if(saveData.roll_window === 'custom') {
+        saveData.roll_window = saveData.barsNumber
+      }
+      delete saveData.barsNumber
       return await saveSymbolCorrelation(saveData)
     },
     async submitForm() {
@@ -427,6 +476,7 @@ export default {
         const chartData =  saveRes.data?.data
         // 这里要开始画图
         const {corr_matrix, corr_roll} = chartData
+        this.corr_roll = corr_roll || null
         if(Array.isArray(corr_matrix)) {
           const formatDate = (dateStr) => {
             return moment.parseZone(dateStr).format('MMM D, YYYY');
@@ -776,7 +826,56 @@ export default {
         if(period !==  'all') this.data.start_date = start_date
         else if(period ===  'all') this.data.start_date = ''
       }
-    }
+    },
+    handleDownloadCsv() {
+      const corr_roll = this.corr_roll
+      if(!corr_roll) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      console.log('corr_roll', corr_roll)
+      const transformData = (data) => {
+        return data.map(item => {
+          const keys = Object.keys(item);
+          // 删除 stock_price
+          const { stock_price, Date, ...rest } = item;
+
+          // 截取日期
+          const shortDate = item.Date.substring(0, 10);
+
+          if (keys.length === 3) {
+            // 找到动态字段 (非 Date 和 stock_price)
+            const dynamicKey = keys.find(k => k !== "Date" && k !== "stock_price");
+            return {
+              Date: shortDate,
+              Close: item[dynamicKey]
+            };
+          } else {
+            // 保持其他字段不变，只更新 Date
+            return {
+              Date: shortDate,
+              ...rest
+            };
+          }
+        });
+      }
+      const exportData = transformData(corr_roll)
+      console.log('exportData', exportData)
+      const csvName =  'symbol_correlation_data'
+      const _keySort = Array.from(Object.keys(exportData[0]))
+      let csvContent = exportData.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
+      csvContent = `${_keySort.join(',')}\n${csvContent}`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${csvName}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
     }
 }
 </script>
@@ -883,5 +982,12 @@ background-color: #fff;
   font-size: 14px;
   font-weight: 400;
   color: grey
+}
+.correlation-table-header {
+  display: flex;
+  align-items: flex-end;
+  .downLoadCsvBtn {
+    margin-left: 10px;
+  }
 }
 </style>
