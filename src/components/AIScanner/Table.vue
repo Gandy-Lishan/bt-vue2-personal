@@ -515,6 +515,7 @@ export default {
 					'Symbol': item.Symbol,
 					'Close': item.Close,
 					'Trend': item.Market,
+					'Trend Score': item.TrendScore,
 					'Direction': item.Direction,
 					'Signal': this.midTermMap[item._Signal] || item._Signal,
 					'Win Rate(%)': item.WinRate,
@@ -532,7 +533,9 @@ export default {
 					'MEDIAN RETURN %': item.MedianReturn,
 					'ANNUAL RETURN % (CAGR)': item.AnnualReturn,
 					'AVERAGE RETURN %': item.AvgReturn,
-					'STD. DEV': item.StdDev
+					'STD. DEV': item.StdDev,
+					'RelTrend Score': item.RelTrendScore,
+					'Optix': item.Optix
 				}
 				if (item['SharpeRatio'] !== null) ele['SHARPE RATIO'] = item.SharpeRatio
 				return ele

@@ -751,6 +751,7 @@ export default {
 			item['AvgReturn'] = this.displayData(item['AvgReturn'])
 			item['StdDev'] = this.displayData(item['StdDev'])
 			item['SharpeRatio'] = this.displayData(item['SharpeRatio'])
+			item['Optix'] = this.displayData(item['Optix'])
 		})
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
@@ -775,6 +776,7 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
+		console.log('searchResult', searchResult)
 		if(this.showFilterDialog || this.disabledFilter) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
@@ -786,7 +788,10 @@ export default {
 			std_dev_condition, std_dev,
 			expected_return_condition, expected_return,
 			win_rate_condition, win_rate,
-			trend_score_condition, trend_score
+			trend_score_condition, trend_score,
+			reltrend_score_condition, reltrend_score,
+			optix_condition, optix
+
 		} = this.data
 		console.log('this.data', this.data)
 		console.log('signals filter', signals)
@@ -805,7 +810,7 @@ export default {
 			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
 			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
 			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
-			&& (item['RlTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RlTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RlTrendScore'])))
+			&& (item['RelTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
 			&& (item['Optix'] === null  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
 		))
 	},
