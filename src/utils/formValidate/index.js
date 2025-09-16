@@ -70,19 +70,36 @@ export const createIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 	}
 }
 
-export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
+export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal, allowZero = false) => {
 	return (_, value, callback) => {
-		if(value === '') {
-			callback(new Error(`Enter ${errorMsgEmpty}`))
+		if (value === '') {
+			return callback(new Error(`Enter ${errorMsgEmpty}`))
 		}
+
 		const pattern = /^\d+$/
-		const isLessThanMin = Number(value) < Number(minVal)
-		if (isLessThanMin) callback(new Error(`Only positive integers > ${minVal} allowed`))
-		const isPositiveInteger = isNaN(value) || Number(value) <= 0 || !pattern.test(value)
-		if (isPositiveInteger) {
-			callback(new Error(`Enter positive integers only`))
+		if (!pattern.test(value)) {
+			return callback(new Error(`Enter positive integers only`))
 		}
-		if((maxVal && (minVal !== undefined || minVal !== null)) && (Number(value) > Number(maxVal) || Number(value) < Number(minVal))) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
+
+		const numVal = Number(value)
+
+		// allowZero 为 false -> 正常逻辑，值必须 > 0
+		// allowZero 为 true -> 如果 minVal == 0，可以允许输入 0
+		if ((!allowZero && numVal <= 0) || (allowZero && minVal !== 0 && numVal <= 0)) {
+			return callback(new Error(`Enter positive integers only`))
+		}
+
+		// 检查是否小于 minVal
+		if (numVal < Number(minVal)) {
+			return callback(new Error(`Only integers ≥ ${minVal} allowed`))
+		}
+
+		// 检查最大值
+		if (maxVal !== undefined && maxVal !== null && numVal > Number(maxVal)) {
+			return callback(new Error(`Value should be between ${minVal} and ${maxVal}`))
+		}
+
+		// 全部通过
 		callback()
 	}
 }
