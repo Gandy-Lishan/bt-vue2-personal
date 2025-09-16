@@ -141,22 +141,6 @@
 				<div class="ciq-dropdowns flexRow">
 					<ManageLayout v-if="$store.getters.getIsAdmin"/>
 
-					<cq-menu class="ciq-menu ciq-ticker-indicator">
-						<span
-							><cq-clickable
-								>Quick Access</cq-clickable
-							></span
-						>
-						<cq-menu-dropdown>
-							<!-- 手动插入options而不是通过config -->
-							<cq-menu-container cq-name="menuTickerIndicators">
-								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('optix')">Optix</cq-item>
-								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('trend')">Trend</cq-item>
-								<cq-item style="margin-top: 2px;" stxtap="Layout.setTickerIindicator('reltrend')">Rel Trend</cq-item>
-							</cq-menu-container>
-						</cq-menu-dropdown>
-					</cq-menu>
-
 					<cq-menu class="ciq-menu ciq-period">
 						<span
 							><cq-clickable stxbind="Layout.periodicity"
