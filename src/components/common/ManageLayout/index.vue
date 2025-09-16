@@ -385,7 +385,6 @@
     white-space: nowrap;
     background: transparent;
     cursor: default;
-    white-space: normal;
     color: #398dff;
     font-size: 12px;
     text-transform: uppercase;
