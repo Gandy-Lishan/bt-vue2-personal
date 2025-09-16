@@ -8,17 +8,20 @@ let __st_js_manage_chart_layout_ = (_exports) => {
     CIQ.saveLayout = function(name) {
         var layout = JSON.stringify(CIQ.stxx.exportLayout(true));
         let layoutFreq = CIQ.store.state.form.exitFrequency
+        let chartType = CIQ.stxx.layout.chartType
         let uid = crypto.randomUUID()
-        let obj = {id:uid,name,layout,layoutFreq}
+        let pref = savePreferences()
+        let obj = {id:uid,name,layout,layoutFreq,chartType,pref}
         return obj
     }
     
-    CIQ.savePreferences = function() {
+    const savePreferences = function() {
         var preferences = JSON.stringify(CIQ.stxx.exportPreferences());
-        localStorage.setItem("myChartPreferences", preferences);
+        return preferences
+        // localStorage.setItem("myChartPreferences", preferences);
     }
     
-    CIQ.saveDrawings = function() {
+    const saveDrawings = function() {
         var drawings = JSON.stringify(CIQ.stxx.exportDrawings());
     
         //saves drawings with symbol as the key
@@ -32,16 +35,18 @@ let __st_js_manage_chart_layout_ = (_exports) => {
         };
         if (layout) {
             CIQ.store.commit('form/getFrequency', layout.layoutFreq)
+            CIQ.store.dispatch('chart/set_chart_type', layout.chartType)
+            CIQ.isRestoreLayout = true
             CIQ.stxx.importLayout(JSON.parse(layout.layout), importOptions); 
+            restorePreferences(layout.pref)
         }
     }
     
-    CIQ.restorePreferences = function() {
-        var pref = CIQ.localStorage.getItem("myChartPreferences");
-        if (pref) CIQ.stxx.importPreferences(JSON.parse(pref));
+    const restorePreferences = function(pref) {
+        CIQ.stxx.importPreferences(JSON.parse(pref));
     }
     
-    CIQ.restoreDrawings = function() {
+    const restoreDrawings = function() {
         var drawings = localStorage.getItem(CIQ.stxx.chart.symbol);
         if (drawings) CIQ.stxx.importDrawings(JSON.parse(drawings));
     }

@@ -8232,7 +8232,8 @@ if (!CIQ.Studies) {
 			let userIndicator = CIQ.isUserIndicator(this.helper.name)
 			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
 			if(_obj || userIndicator || ownIndicator){
-				this.helper.outputs = [];
+				this.helper.outputs = this.helper.outputs.filter(x=>!["url","description"].includes(x.name))
+				//this.helper.outputs = [];
 			}
 			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
