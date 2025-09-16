@@ -144,12 +144,6 @@
     "inception": "2025/1/13"
   },
   {
-    "symbol": "COMP",
-    "name": "NASDAQ Composite (COMP)",
-    "category": "Index",
-    "inception": "2021/4/1"
-  },
-  {
     "symbol": "COPX",
     "name": "Copper Miners (COPX)",
     "category": "ETF",
@@ -678,6 +672,12 @@
     "inception": "2001/7/24"
   },
   {
+    "symbol": "IYH",
+    "name": "iShares U.S. Healthcare Providers ETF (IYH)",
+    "category": "ETF",
+    "inception": "2000/06/16"
+  },
+  {
     "symbol": "IYR",
     "name": "Real Estate (IYR)",
     "category": "ETF",
@@ -916,6 +916,12 @@
     "name": "Portugal (PGAL)",
     "category": "ETF",
     "inception": "2013/11/13"
+  },
+  {
+    "symbol": "PHYS",
+    "name": "Sprott Physical Gold Trust (PHYS)",
+    "category": "ETF",
+    "inception": "2010/02/26"
   },
   {
     "symbol": "PLND",
@@ -2370,22 +2376,10 @@
     "inception": "2011/11/15"
   },
   {
-    "symbol": "IYH",
-    "name": "iShares U.S. Healthcare Providers ETF (IYH)",
-    "category": "ETF",
-    "inception": "2000/06/16"
-  },
-  {
     "symbol": "JPY",
     "name": "Japanese Yen",
     "category": "Forex",
     "inception": "1971/01/04"
-  },
-  {
-    "symbol": "PHYS",
-    "name": "Sprott Physical Gold Trust (PHYS)",
-    "category": "ETF",
-    "inception": "2010/02/26"
   },
   {
     "symbol": "PPLT",
@@ -2400,12 +2394,6 @@
     "inception": "2018/02/08"
   },
   {
-    "symbol": "bitcoin",
-    "name": "Bitcoin",
-    "category": "Crypto",
-    "inception": "2010/07/19"
-  },
-  {
     "symbol": "crp_BTC",
     "name": "Bitcoin",
     "category": "Crypto",
@@ -2416,5 +2404,17 @@
     "name": "Ethereum",
     "category": "Crypto",
     "inception": "2017/11/09"
+  },
+  {
+    "stock": "bitcoin",
+    "name": "Bitcoin",
+    "category": "Crypto",
+    "inception": "2014/09/17"
+  },
+  {
+    "symbol": "crp_HYPE32196",
+    "name": "Hyperliquid",
+    "category": "Crypto",
+    "inception": "2024/11/29"
   }
 ]
