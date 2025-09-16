@@ -539,6 +539,11 @@
     flex-direction: column;
     gap: 10px;
   }
+  .ciq-night .create-layout-panel {
+    background: #151f28;
+    color: #fff;
+    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
+  }
   
   .create-layout-panel input {
     width: 100%;
