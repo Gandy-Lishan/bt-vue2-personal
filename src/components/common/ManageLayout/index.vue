@@ -380,6 +380,11 @@
     margin-top: 0px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   }
+  .ciq-night .dropdown-menu {
+    background: #151f28;
+    color: #fff;
+    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
+  }
   
   /* menu heading */
   .menu-heading {
@@ -468,6 +473,7 @@
     transition: background-color 0.2s ease;
     border-radius: 12px;
     max-height: 40px;
+    white-space: nowrap;
   }
   
   .layout-list li:hover {

@@ -9087,6 +9087,9 @@ cq-indicators-lookup-input {
       bottom: 10px;
       left: 10px;
     }
+    .ciq-night .chartContainer .stLogo{
+      background-image: url(img/logo-night.png);
+    }
 .ciq-lookup-icon {
   position: absolute;
   height: 27px;
