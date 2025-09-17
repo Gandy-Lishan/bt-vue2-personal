@@ -334,6 +334,9 @@
 
     span{ transition: color .20s 0s; }
   }
+  .ciq-night .toolbar-button {
+    color: #c5c7c9;
+  }
 
   .toolbar-button:after {
         content: "";
@@ -350,6 +353,9 @@
   
   .toolbar-button:hover span{
      color: #000;
+  }
+  .ciq-night .toolbar-button:hover span{
+     color: #fff;
   }
   
   .chevron-icon {
@@ -374,6 +380,11 @@
     margin-top: 0px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   }
+  .ciq-night .dropdown-menu {
+    background: #151f28;
+    color: #fff;
+    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
+  }
   
   /* menu heading */
   .menu-heading {
@@ -385,7 +396,6 @@
     white-space: nowrap;
     background: transparent;
     cursor: default;
-    white-space: normal;
     color: #398dff;
     font-size: 12px;
     text-transform: uppercase;
@@ -447,7 +457,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 500px;
+    max-height: 300px;
     min-height: 100px;
     overflow-y: auto;
   }
@@ -463,6 +473,7 @@
     transition: background-color 0.2s ease;
     border-radius: 12px;
     max-height: 40px;
+    white-space: nowrap;
   }
   
   .layout-list li:hover {
@@ -527,6 +538,11 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+  .ciq-night .create-layout-panel {
+    background: #151f28;
+    color: #fff;
+    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
   }
   
   .create-layout-panel input {

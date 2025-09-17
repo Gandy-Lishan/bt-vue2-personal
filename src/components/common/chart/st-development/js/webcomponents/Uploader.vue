@@ -963,5 +963,8 @@ export default {
 .el-upload__tip {
 	line-height: 15px;
 }
+.ciq-night .el-upload__tip {
+	color: #fff;
+}
 </style>
     
