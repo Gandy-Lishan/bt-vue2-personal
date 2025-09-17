@@ -200,7 +200,7 @@ export function setRouterPermission(router) {
 				else if(access_level.some(str => str.includes('corelite'))) {
 					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge','/favorites', '/tags']
 					if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
-					else next('/MR/sentimentedge')
+					else next('/MR/sentimentedge') 
 				}
 				// report 所有人都能看， 但是部分是没有编辑功能的只能看
 			}
