@@ -719,7 +719,7 @@ export default {
 		},
 		openUserFunction() {
     const email = getCookieData()?.username
-				const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+				const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'daniel@sentimentrader.com', 'jinny@sentimentrader.com']
 				return allowedUserList.includes(email)
 		},
 		...mapGetters(['getIsBacktestRunningFlagState']),
