@@ -413,7 +413,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites', 'Sample', 'Analyst', 'SubscriberShared'].includes(currentPage)"
+										v-if="['History', 'Favorites', 'Sample', 'Analyst', 'SubscriberShared'].includes(currentPage) && !canOnlyAccessPartOfReport"
 										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
@@ -509,7 +509,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="currentPage == 'Analyst'"
+										v-if="currentPage == 'Analyst' && !canOnlyAccessPartOfReport"
 										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
@@ -526,6 +526,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="!canOnlyAccessPartOfReport"
 										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-plus"
@@ -541,7 +542,7 @@
 									placement="bottom-start"
 								>
 								<el-button
-									 v-if="['History', 'Favorites'].includes(currentPage) && openUserFunction"
+									 v-if="['History', 'Favorites'].includes(currentPage) && !canOnlyAccessPartOfReport && openUserFunction"
 										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										icon="el-icon-share"
 										circle
@@ -718,9 +719,13 @@ export default {
 				return this.shareForm.backtestName || '';
 		},
 		openUserFunction() {
-    const email = getCookieData()?.username
-				const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
-				return allowedUserList.includes(email)
+			const email = getCookieData()?.username
+			const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+			return allowedUserList.includes(email)
+		},
+		canOnlyAccessPartOfReport() {
+			const access_level = getCookieData()?.access_level
+			return access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
 		},
 		...mapGetters(['getIsBacktestRunningFlagState']),
 	},

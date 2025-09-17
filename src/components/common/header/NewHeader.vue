@@ -338,7 +338,8 @@ export default {
       if(nav && nav.subMenu) {
         const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
         if(navSubPath) this.activeIndex =navSubPath
-        if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
+        else if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
+        else if(!navSubPath && to.path.includes('/backtester')) {this.activeIndex = '4'}
       }
 
       // my stuff
@@ -355,6 +356,7 @@ export default {
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
     if(canOnlyAccessPartOfReport) {
       const reportIndex = this.navs.findIndex(ele => ele.label === 'Reports')
+      const backtestIndex = this.navs.findIndex(ele => ele.label.includes('Backtest'))
       if(reportIndex !== -1) {
         this.navs[reportIndex].subMenu = [
           {
@@ -382,6 +384,35 @@ export default {
               keyPath: '10-5',
               path: '/MR/favorites'
           }
+        ]
+      }
+      if(backtestIndex !== -1) {
+        this.navs[backtestIndex].subMenu = [
+            {
+              label: 'Backtest Set Up',
+              keyPath: '4-1',
+              path: '/backtester/sr/setup'
+            },
+            {
+              label: 'Backtest List',
+              keyPath: '4-2',
+              path: '/backtester/list/history'
+            },
+            {
+              label: 'Sample Backtests',
+              keyPath: '4-4',
+              path: '/backtester/list/sample'
+            },
+            {
+              label: 'Analysts\' Backtests',
+              keyPath: '4-5',
+              path: '/backtester/list/analyst'
+            },
+            {
+              label: 'Backtest Concierge Setup Service',
+              keyPath: '4-6',
+              path: '/contact'
+            }
         ]
       }
     }
@@ -517,8 +548,11 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'BacktestEdge', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Dashboard'].includes(label)) {
+      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Dashboard'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
+      }
+      if(label === 'BacktestEdge') {
+        return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies') || canOnlyAccessReport
       }
       if(label === 'Smart Stock Scanner') {
         return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
