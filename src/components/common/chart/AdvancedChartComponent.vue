@@ -146,7 +146,7 @@
 
 			<div class="ciq-menu-section">
 				<div class="ciq-dropdowns flexRow">
-					<ManageLayout v-if="$store.getters.getIsAdmin"/>
+					<ManageLayout />
 
 					<cq-menu class="ciq-menu ciq-period">
 						<span
