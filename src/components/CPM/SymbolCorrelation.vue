@@ -153,7 +153,7 @@
           size="small"
           type="primary"
           icon="el-icon-download"
-          title="Export Chart Data">
+          title="Export Rolling Correlations Data">
         </el-button>
       </div>
       </div>
