@@ -88,17 +88,16 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
     this.initEndDate = endDate 
     var oneYear = (24 *60 *60 *1000) * 365
 
-    // 466963200000
-    // -138009600000
-    var startDateParse = (params.symbolObject.startDate?params.symbolObject.startDate:startDate).getTime()
-    var endDateParse = (params.symbolObject.endDate?params.symbolObject.endDate:endDate).getTime()
-    var start = config.timestampToTime(startDateParse)
-    var end = config.timestampToTime(endDateParse)
-    console.log('startDateParse: ',Date.parse(params.symbolObject.startDate?params.symbolObject.startDate:startDate),(params.symbolObject.startDate?params.symbolObject.startDate:startDate).getTime());
-    console.log('Initial urlstart: '+start + ' end:'+end);
+    // 兼容了startDateParse为字符串的情况（save & restore chart layout）
+    const startDateParse = params.symbolObject.startDate?params.symbolObject.startDate:startDate
+    const endDateParse = params.symbolObject.endDate?params.symbolObject.endDate:endDate
+    var startDateTimeStamp = typeof startDateParse == 'string' ? (new Date(startDateParse)).getTime() : startDateParse.getTime()
+    var endDateTimeStamp = typeof endDateParse == 'string' ? (new Date(endDateParse)).getTime() : endDateParse.getTime()
+    var start = config.timestampToTime(startDateTimeStamp)
+    var end = config.timestampToTime(endDateTimeStamp)
     
     // CIQ.initialDate is provided for Marker
-    CIQ.initialDate = {start:startDateParse,end:endDateParse}
+    CIQ.initialDate = {start:startDateTimeStamp,end:endDateTimeStamp}
 
     //this.fetchStatus(symbol,start,end,params.symbolObject.indicator)
     CIQ.symbol = symbol;
@@ -306,10 +305,6 @@ quoteFeedSimulator.fetchInitialData = function(symbol,startDate,endDate,params,c
 
                 }
             }
-
-
-
-            initializeTickerIndicatorDisplay()
 
             this.sendReq(start,end,new_str,selectedFreq,cb)
 };
@@ -652,13 +647,17 @@ quoteFeedSimulator.formatChartData = async function(response){
                 } 
 
                 // normal datafeed
-                if(window.location.pathname.includes('/scannerai')){
-                    CIQ.store.dispatch('chart/set_chart_type', 'candle')
-                }else if(window.location.pathname.includes('/myindicator') && CIQ.isOHLCVSelectedMI){    // TODO 考虑用vuex state替代CIQ全局变量
-                    CIQ.store.dispatch('chart/set_chart_type', 'candle')
-                }else{
-                    CIQ.store.dispatch('chart/set_chart_type', 'line')
+                if(!CIQ.isRestoreLayout) {
+                    if(window.location.pathname.includes('/scannerai')){
+                        CIQ.store.dispatch('chart/set_chart_type', 'candle')
+                    }else if(window.location.pathname.includes('/myindicator') && CIQ.isOHLCVSelectedMI){    // TODO 考虑用vuex state替代CIQ全局变量
+                        CIQ.store.dispatch('chart/set_chart_type', 'candle')
+                    }else{
+                        CIQ.store.dispatch('chart/set_chart_type', 'line')
+                    }
                 }
+                CIQ.isRestoreLayout = false
+                
                 var node = document.querySelector("cq-menu-container[cq-name = 'menuChartStyle']")
                 for(var i = 0;i < node.children.length;i++){
                     node.children[i].style.display = "inherit"
@@ -860,39 +859,10 @@ quoteFeedSimulator.formatChartData = async function(response){
         // const earliestIndicator = findEarliestIndicator(objIndicatorFirstDate)
         // newQuotes = earliestIndicator=='Invalid Date'?newQuotes:newQuotes.slice(newQuotes.findIndex(item=>item.DT - earliestIndicator == 0))
     }
-    
     CIQ.stxx.setChartType(CIQ.store.getters.getChartType);
     return newQuotes
 }
 
-function initializeTickerIndicatorDisplay() {
-    const symbol = CIQ.symbol
-    
-    const replaceNameMap = {
-		SPX: 'SPY',
-		COMP: 'QQQ',
-		DJIA: 'DIA'
-	}
-    const SymbolReplacedName = replaceNameMap[symbol] || symbol
-    const indicatorList = CIQ.store.getters.getIndicatorsList
-    let displayMap = {
-        0: "disabled",
-        1: "disabled",
-        2: "disabled",
-    }
-    for(let i=0;i<indicatorList.length;i++) {
-        if(indicatorList[i].market_symbol == SymbolReplacedName) {
-            if(indicatorList[i].type == 'optix') displayMap[0] = "enabled"
-            else if(indicatorList[i].type == 'trend') displayMap[1] = "enabled"
-            else if(indicatorList[i].type == 'reltrend') displayMap[2] = "enabled"
-        }
-    }
-
-    var node = document.querySelector("cq-menu-container[cq-name = 'menuTickerIndicators']")
-        for(var i = 0;i < node.children.length;i++){
-            node.children[i].setAttribute('tf',displayMap[i])
-        }
-}
 function findEarliestIndicator(data) {
     const dates = Object.values(data)
     const earliestDate = new Date(Math.min(...dates));

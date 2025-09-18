@@ -8232,7 +8232,8 @@ if (!CIQ.Studies) {
 			let userIndicator = CIQ.isUserIndicator(this.helper.name)
 			let ownIndicator = CIQ.isOwnIndicator(this.helper.name)
 			if(_obj || userIndicator || ownIndicator){
-				this.helper.outputs = [];
+				this.helper.outputs = this.helper.outputs.filter(x=>!["url","description"].includes(x.name))
+				//this.helper.outputs = [];
 			}
 			//this.helper.outputs = this.helper.outputs.filter(x=>x.name != "supLine")
 			var outputs = this.node.find("cq-study-outputs");
@@ -13396,6 +13397,7 @@ import {__st_js_maLayout_} from "./extensions/maLayout.js"
 import {__st_js_myindicator_chart_control_} from "./extensions/myIndicatorChartControl.js"
 import {__st_js_cpm_chart_control_} from "./extensions/cpmChartControl.js"
 import {__st_js_marker_drawer_} from "@/components/common/chart/st-development/examples/markers/markerDrawer.js"
+import {__st_js_manage_chart_layout_} from "./extensions/manageChartLayout.js"
 
 let _exports = {CIQ};
 export {__js_webcomponents_indicatorsScroll_ as indicatorsScrollindicatorsScroll};
@@ -13505,7 +13507,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__st_js_myindicator_chart_control_,
 		__st_js_cpm_chart_control_,
 		__st_js_marker_drawer_,
-
+		__st_js_manage_chart_layout_,
 		
 		
 

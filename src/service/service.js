@@ -2457,7 +2457,7 @@ export function getIntradayMinutes() {
 // 全局轮询开关
 let stopAll = false;
 
-export async function fetchAISuplineData(ticker, latest_date, frequency) {
+export async function fetchAISuplineData(vm, ticker, latest_date, frequency) {
 	let url = `/dev/ai_engine_app/get_chart_analysis?ticker=${ticker}`;
 	if (latest_date) url += `&latest_date=${latest_date}`;
 	if (frequency) url += `&frequency=${frequency}`;
@@ -2471,6 +2471,12 @@ export async function fetchAISuplineData(ticker, latest_date, frequency) {
 	  }
   
 	  if (getChartAnalysisRes.status === 202) {
+		vm.$notify.info({
+			title: 'Analysis in Progress',
+			message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
+			duration: 0
+		});
+		
 		let retries = 0;
 		const maxRetries = 120;
 		let pollingUrl = `/dev/ai_engine_app/analysis_status?chart_key=${getChartAnalysisRes?.data.chart_key}`;
