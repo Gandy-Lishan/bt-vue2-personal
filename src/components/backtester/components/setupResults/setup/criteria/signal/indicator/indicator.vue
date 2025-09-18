@@ -101,6 +101,15 @@
               </label>
             </template>
             <div class="selectBox">
+              <!-- <SearchAutocomplete
+                v-model="si.technicalIndicator"
+                @query="indicatorTechnicalSearch"
+                @select="item => handleTechnicalSelect(item)"
+                @clear="clearTechnicalSelect"
+                placeholder="Search for the technical indicator"
+                clearable
+                :disabled="!isBTChartReady"
+              /> -->
               <el-select
                 v-model="si.symbolIndicator"
                 placeholder="Select Symbol Open/High/Low/Close/Volume"
@@ -216,7 +225,6 @@
 						</el-upload>
         </el-form-item>
       </div>
-      <!-- <Uploader/> -->
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -334,14 +342,11 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
+import {compareArrays, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
 import {createStateFilter,maxNumOfStudy,getSymbolInfo} from '@/utils/globalFunc'
-import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
-import searchBar from "@/components/common/searchBar"
-import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
 import { SearchAutocomplete } from "@/components/common"
 const throttle = require('lodash/throttle')
 
@@ -357,8 +362,6 @@ export default {
     relation: Number
   },
   components: {
-    searchBar,
-    Uploader,
     SearchAutocomplete
   },
   data() {
@@ -426,7 +429,6 @@ export default {
         symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
         riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
       },
-      category: 'all',
       fileList: [],
       fileDatesList: [],
       actionUrl: '', // 文件上传的接口地址
@@ -755,9 +757,6 @@ export default {
     },
     relation: {
       handler(newVal) {
-        // const email = getCookieData()?.username
-		    // const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
-        // const isAllowUser = allowedUserList.includes(email)
         if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates")) {
           this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
         }else {
@@ -810,10 +809,6 @@ export default {
       event.preventDefault();
     },
     ...mapMutations('form',['setFrequencyArray', 'setFreqencyLP']),
-    /* 当用户选择indicator类别，进行搜索筛选*/
-    selectCategory(e) {
-      this.category = e.target.innerHTML
-    },
     // Clear form authentication
     clearFormValidate() {
       this.$refs.siForm.clearValidate()
@@ -991,7 +986,7 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.url, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
        CIQ.addIndicators({})
     },
@@ -1075,23 +1070,10 @@ export default {
         criteria: this.criteria
       })
 
-
-
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.label, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
-
-      // avoid add indicator redundantly
-      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
-      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
-      //   // 当url相同,且都为同一symbol下时，跳过加载       
-      //   if (sd.type == item.label && 
-      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
-      //   ) {
-      //     return
-      //   }
-      // }
-      CIQ.addIndicators({})
+       CIQ.addIndicators({})
     },
     clearTechnicalSelect(value) {
       const item = CIQ.findBuiltinTechIndicator(value,null)
@@ -1178,7 +1160,7 @@ export default {
 
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+      CIQ.setMALayout(item.url, this.criteria, this.panelIndex)
       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
 
       // if (arguments[1] != true) {
@@ -1301,7 +1283,7 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout('', this.criteria, this.panelIndex)
        CIQ.setTechLayout('', this.criteria, this.panelIndex)
        
       // avoid add indicator redundantly
