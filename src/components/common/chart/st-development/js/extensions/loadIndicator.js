@@ -99,7 +99,6 @@ import { formatStandardTime } from '@/utils'
             ...CIQ.store.state.chart.indicators.formIndicators.entry2,
             ...CIQ.store.state.chart.indicators.formIndicators.exit2
         ]
-
         // remove redundant elements and empty string
         for(var i=0;i<indicatorsList.length;i++){
             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
@@ -754,20 +753,29 @@ import { formatStandardTime } from '@/utils'
                     // Handle MA-like technical indicators
                     for (const maLayoutItem of CIQ.store.state.chart.activatedMALayout) {
                         if (maLayoutItem.url === indicatorName) {
-                            const criteria = maLayoutItem.criteria;
-                            // const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
-                            const inputs = indicatorName === 'ma' ?
-                                { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period } : {};
-                            const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
-                            const outputs = indicatorName === 'ma' ? { MA: ma_color } : null;
+                            if(indicatorName == 'ma') {
+                                const criteria = maLayoutItem.criteria;
+                                const inputs = { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period };
+                                const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
+                                const outputs = { MA: ma_color };
 
-                            studiesToLoad.push({
-                                type: indicatorName,
-                                inputs,
-                                outputs,
-                                parameters: { criteria: criteria, index: maLayoutItem.index },
-                                indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
-                            });
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs,
+                                    outputs,
+                                    parameters: { criteria: criteria, index: maLayoutItem.index },
+                                    indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
+                                });
+                            }
+                            if(CIQ.findSymbolIndicator(indicatorName, null)) {
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: { display: `${maLayoutItem.ticker} ${indicatorName}` }, // Using placeholder for symbolLabel
+                                    outputs: null,
+                                    parameters: {  criteria: maLayoutItem.criteria, index: maLayoutItem.index, ticker: maLayoutItem.ticker },
+                                    indicatorKey: indicatorName
+                                });
+                            }
                         }
                     }
                 } else {
@@ -867,7 +875,55 @@ import { formatStandardTime } from '@/utils'
                 } catch (err) {
                     console.error(`Error fetching metadata for own indicator ${indicatorName}:`, err);
                 }
-            } else {
+            } 
+            // else if (CIQ.isSymbolOHLCVIndicator(indicatorName)) {
+            //     // It's a user-defined or "own" indicator, requires individual API call
+            //     const indicatorTicker = indicatorName.split(/OHLCV/)[0];
+            //     const indicatorOHLCV = indicatorName.split(/OHLCV/)[1];
+            //     debugger
+            //     // Handle other technical indicators
+            //     const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorOHLCV);
+            //     if (savedTechSDs.length > 0) {
+            //         for (const savedSD of savedTechSDs) {
+            //             const isComparison = savedSD.parameters.isComparison;
+            //             const symbolLabel = getCoresSymbolDual(isComparison);
+            //             savedSD.inputs.display = `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}`; // Using placeholder for symbolLabel
+            //             studiesToLoad.push({
+            //                 type: indicatorOHLCV,
+            //                 inputs: savedSD.inputs,
+            //                 outputs: savedSD.outputs,
+            //                 parameters: savedSD.parameters,
+            //                 panel: savedSD.panel,
+            //                 indicatorKey: indicatorOHLCV
+            //             });
+            //         }
+            //     } else {
+            //         // If not found in savedTechSD, use activatedTechLayout
+            //         const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorOHLCV);
+            //         const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+            //         for (let item of activatedTechLayouts) {
+            //             if (item.criteria && item.criteria.endsWith("2")) {
+            //                 item.symbolType = 'symbol2';
+            //             } else {
+            //                 item.symbolType = 'symbol1';
+            //             }
+
+            //             if (!processedSymbols.has(item.symbolType)) {
+            //                 processedSymbols.add(item.symbolType);
+            //                 const criteria = item.criteria;
+            //                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
+            //                 // studiesToLoad.push({
+            //                 //     type: indicatorOHLCV,
+            //                 //     inputs: { display: `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}` }, // Using placeholder for symbolLabel
+            //                 //     outputs: null,
+            //                 //     parameters: { isComparison: item.symbolType === 'symbol2', ticker: indicatorTicker },
+            //                 //     indicatorKey: indicatorOHLCV
+            //                 // });
+            //             }
+            //         }
+            //     }
+            // } 
+            else {
                 // It's a sentiment indicator
                 sentiUrlList.push(indicatorName);
             }

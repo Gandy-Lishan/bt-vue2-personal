@@ -414,7 +414,8 @@ export default {
         riskIndicator: '',
         userIndicator: '',
       },
-     // sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
+      // symbol ohlcv related data
+      symbolTicker: '',
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -423,6 +424,7 @@ export default {
         { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
         { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
       ],
+
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
         technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
@@ -1071,7 +1073,7 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.label, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.label, this.criteria, this.panelIndex, {ticker: 'AAPL'})
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
        CIQ.addIndicators({})
     },

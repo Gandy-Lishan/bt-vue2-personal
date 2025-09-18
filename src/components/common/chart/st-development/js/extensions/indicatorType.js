@@ -90,5 +90,11 @@ let __st_js_indicatorType_ = _exports => {
 		}
 		return signal
 	}
+	CIQ.isSymbolOHLCVIndicator = function(indicator) {
+		if (!indicator || indicator.indexOf('OHLCV') == -1) {
+			return false
+		}
+		return true
+	}
 }
 export { __st_js_indicatorType_ }

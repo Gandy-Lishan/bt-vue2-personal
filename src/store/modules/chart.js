@@ -66,6 +66,11 @@ const state = {
 	builtinList: [], //chartiq 包含完整techList
 	maLikeTech: [
 		'ma',
+		'Symbol Open',
+		'Symbol High',
+		'Symbol Low',
+		'Symbol Close',
+		'Symbol Volume',
 		// 'Awesome',
 		// 'cci'
 	],

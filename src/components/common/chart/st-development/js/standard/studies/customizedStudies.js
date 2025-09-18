@@ -25,6 +25,8 @@ import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
 import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
+import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
+import { getPairData } from '@/service/service'
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -600,8 +602,7 @@ if (!CIQ.Studies) {
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
-	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
-		
+	CIQ.Studies.calculateSymbolOhlcv = async function (stx, sd) {
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -612,26 +613,41 @@ if (!CIQ.Studies) {
 		var subField = field
 		var quotes = sd.chart.scrubbed;
 		/** 
-		 * 用isComparison属性判断Study用来计算的数据源
-		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
-		 * ma和roc就是用critria判断Study用来计算的数据源
+		 * symbol ohlcv改用maLayout管理状态，不是传统tech， 弃用isComparison
 		 *  */
-		if(sd.parameters.isComparison){
+		if(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
 			quotes = sd.chart.scrubbed
 		}
 		
-		// 默认study模板
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var quote = quotes[i];
-			var RSIValue = getPropertyByString(quote, field, subField);
-			if (RSIValue) {
-				var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
-				quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
+		var start = config.timestampToTime(CIQ.initialDate.start)
+		var end = config.timestampToTime(CIQ.initialDate.end)
+		const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, sd.parameters.ticker)
+		let _data = formatData(res.data)
+		// 1. 创建一个 Map 以便快速通过 DT 查找 Close 值
+		// O(M) 复杂度, M 是 _data 的长度
+		const ohlcvDataMap = new Map();
+		for (const item of _data) {
+			if (item.DT && item[field] !== undefined) {
+				ohlcvDataMap.set(item.DT.getTime(), item[field]);
 			}
 		}
+		// 2. 遍历数据源，匹配并添加/更新属性
+		// O(N) 复杂度, N 是 quotes 的长度
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			let quote = quotes[i];
+			const timestamp = quote.DT.getTime();
+			// 检查当前项的 DT 是否在 Map 中存在
+			if (ohlcvDataMap.has(timestamp)) {
+				// 如果存在，获取对应的 Close 值
+				const ohlcvValue = ohlcvDataMap.get(timestamp);
+				quote["Result " + sd.name] = ohlcvValue;
+			}
+		}
+		// 强制刷新一次
+		stx.draw();
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
 	CIQ.Studies.calculateSTMACDGap = function (stx, sd) {
@@ -1776,6 +1792,40 @@ if (!CIQ.Studies) {
 		}
 
 		return dataArr;
+		}
+	function formatData(data) {
+		if(data == null){
+			data = []
+		}
+		
+		var newQuotes = [];
+		if('High' in data[0]){
+			for (var i = 0; i < data.length; i++) {
+				newQuotes[i] = {};
+				
+				newQuotes[i].DT = formatStandardTime(data[i].DT)   
+				newQuotes[i].Open = data[i].Open;
+				newQuotes[i].High = data[i].High;
+				newQuotes[i].Low = data[i].Low;
+				newQuotes[i].Close = data[i].Close;
+				newQuotes[i].Volume = data[i].Volume;  
+			} 
+		}else{
+			for (var i = 0; i < data.length; i++) {
+				newQuotes[i] = {};
+	
+				newQuotes[i].DT = formatStandardTime(data[i].DT)
+				newQuotes[i].Open = data[i].Close;
+				newQuotes[i].High = data[i].Close;
+				newQuotes[i].Low = data[i].Close;
+				newQuotes[i].Close = data[i].Close;
+				
+				if(data[i].Volume){
+					newQuotes[i].Volume = data[i].Volume
+				}
+			}
+		}
+		return newQuotes
 		}
 }
 
