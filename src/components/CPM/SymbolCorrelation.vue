@@ -151,6 +151,7 @@
           @click="handleDownloadCsv"
           style="display: inline-block"
           size="small"
+          type="primary"
           icon="el-icon-download"
           title="Export Chart Data">
         </el-button>
