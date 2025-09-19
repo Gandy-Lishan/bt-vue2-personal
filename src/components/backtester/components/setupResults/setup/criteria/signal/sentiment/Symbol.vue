@@ -212,6 +212,7 @@ export default {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
             CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+            !CIQ.findSymbolIndicator(CIQ.stxx.layout.studies[studyInstanceName].type) &&  // 防止symbol indicaotr在加载后被误删
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           ) {
@@ -483,6 +484,7 @@ export default {
       }
     },
     setEditData(newVal) {
+      debugger
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
