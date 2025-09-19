@@ -1183,16 +1183,25 @@ export default {
         const [trend_score_condition, trend_score] = trend_range.split('-')
         prepareData.trend_score_condition = trend_score_condition || 0
         prepareData.trend_score = trend_score || 10
+      }else {
+        prepareData.trend_score_condition = 0
+        prepareData.trend_score = 10
       }
       if(reltrend_range && typeof reltrend_range  === 'string') {
         const [reltrend_score_condition, reltrend_score] = trend_range.split('-')
         prepareData.reltrend_score_condition = reltrend_score_condition || 0
         prepareData.reltrend_score = reltrend_score || 10
+      }else {
+        prepareData.reltrend_score_condition = 0
+        prepareData.reltrend_score = 10
       }
       if(optix_range && typeof optix_range  === 'string') {
         const [optix_condition, optix] = trend_range.split('-')
         prepareData.optix_condition = optix_condition || 0
         prepareData.optix = optix || 100
+      }else {
+        prepareData.optix_condition = 0
+        prepareData.optix = 10
       }
       if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       if(Array.isArray(data['signals']) && data['signals'].length === 1 && data['signals'][0] === 'All') {
