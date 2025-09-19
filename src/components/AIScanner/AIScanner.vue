@@ -524,7 +524,7 @@ export default {
 		reltrend_score_condition: 0,
 		reltrend_score: 10,
 		optix_condition: 0,
-		optix: 60,
+		optix: 100,
 		signals: ['All']
 	},
 	options: ['All'],

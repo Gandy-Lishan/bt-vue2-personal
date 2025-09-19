@@ -308,12 +308,72 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
-        <el-form-item
-        prop="daily_limit"
-        >
+          <el-form-item
+          prop="risk_control_filter"
+          >
+          <template slot="label">
+            <label>
+              13. Trend Score Range:
+            </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item prop="trend_score_condition" label-width="0px">
+              <el-input v-model="data.trend_score_condition" placeholder="Enter number">
+              </el-input>
+          </el-form-item>
+            <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+          <el-form-item prop="trend_score" label-width="0px">
+          <el-input v-model="data.trend_score" placeholder="Enter number">
+          </el-input>
+          </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="risk_control_filter">
+          <template slot="label">
+            <label>
+              14. RelTrend Score Range:
+            </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item prop="reltrend_score_condition" label-width="0px">
+              <el-input v-model="data.reltrend_score_condition" placeholder="Enter number">
+              </el-input>
+          </el-form-item>
+            <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+          <el-form-item prop="reltrend_score" label-width="0px">
+          <el-input v-model="data.reltrend_score" placeholder="Enter number">
+          </el-input>
+          </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="risk_control_filter">
+          <template slot="label">
+            <label>
+              15. Optix Range:
+            </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item prop="optix_condition" label-width="0px">
+              <el-input v-model="data.optix_condition" placeholder="Enter number">
+              </el-input>
+          </el-form-item>
+            <span class="sign">&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+          <el-form-item prop="optix" label-width="0px">
+            <el-input v-model="data.optix" placeholder="Enter number">
+            </el-input>
+          </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+        <el-form-item prop="daily_limit">
         <template slot="label">
         <label>
-          13. MAX Daily Symbol Nums
+          16. MAX Daily Symbol Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
@@ -326,51 +386,13 @@
           </el-input>
         </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="6">
-          <!-- <el-form-item
-          prop="capital_allocate"
-          >
-          <template slot="label">
-          <label>
-            14. Capital Allocate
-            <el-tooltip effect="dark" placement="top">
-              <span slot="content"
-                >Funds allocation method. Choosing the Kelly formula<br/>
-                 allows the system to dynamically adjust fund allocation<br/>
-                  based on strategy performance. Selecting maximum <br/>
-                  capital allocation per trade enables you to manually <br/>
-                  specify the maximum capital allocation for each trade.</span>
-              <i class="fa fa-question-circle right" aria-hidden="true"></i>
-            </el-tooltip>
-          </label>
-          </template>
-            <el-input v-model="data.capital_allocate" placeholder="Enter 'Kelly' or a number between 0 and 1"></el-input>
-            
-        <el-select v-model="data.capital_allocate" @change="handleQuery">
-          <el-option
-            v-for="capitalAll in capitalAllocates"
-            :key="capitalAll.value"
-            :label="capitalAll.label"
-            :value="capitalAll.value"
-          ></el-option>
-        </el-select>
-					<el-input 
-						placeholder="" 
-						v-model="searchItem" 
-						class="search"
-						@input="handleQuery"
-						clearable
-						@clear="handleQuery"
-					>
-						<el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
-					</el-input>
-					<el-button @click="exportTable" type="primary" round size="mini" style="float: right; margin-top: 20px;"><i class="el-icon-arrow-left el-icon-download" style="margin-right: 5px;"></i>Export table</el-button>
-          </el-form-item> -->
-          <el-form-item
-          >
+          <el-form-item>
           <template slot="label">
             <label>
-            14. Capital Allocate
+            17. Capital Allocate
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Manual Input: This refers to entering a<br/> 
@@ -498,6 +520,12 @@ export default {
         daily_limit: 3,
         capital_allocate: 'manual_input',
         capital_allocate_num: 60,
+        trend_score_condition: 0,
+        trend_score: 10,
+        reltrend_score_condition: 0,
+        reltrend_score: 10,
+        optix_condition: 0,
+        optix: 100,
       },
       rowUrl: null,
       btnLoading: false,
@@ -784,6 +812,30 @@ export default {
           { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'blur' },
           { validator: createPositiveIntegerRule('MAX Daily Symbol Nums', 1, 5, true), trigger: 'change' }
         ],
+        trend_score_condition: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
+        ],
+        trend_score: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+        ],
+        reltrend_score_condition: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
+        ],
+        reltrend_score: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+        ],
+        optix_condition: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'change' }
+        ],
+        optix: [
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'change' }
+        ],
       }
     }
   },
@@ -850,6 +902,12 @@ export default {
           daily_limit: 3,
           capital_allocate: 'manual_input',
           capital_allocate_num: 60,
+          trend_score_condition: 0,
+          trend_score: 10,
+          reltrend_score_condition: 0,
+          reltrend_score: 10,
+          optix_condition: 0,
+          optix: 100,
         }
         }
         this.signals = ['All']
@@ -902,6 +960,9 @@ export default {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
+        trend_score_condition, trend_score,
+        reltrend_score_condition, reltrend_score,
+        optix_condition, optix,
         commission,
         capital_allocate,
         capital_allocate_num
@@ -927,6 +988,9 @@ export default {
         long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
+        trend_range: `${trend_score_condition}-${trend_score}`,
+        reltrend_range: `${reltrend_score_condition}-${reltrend_score}`,
+        optix_range: `${optix_condition}-${optix}`,
         commission: (commission / 100).toFixed(5),
         signals: JSON.stringify((isSignalAll || isArrEqual || isStringEqual) ? ['All'] : signals),
         capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
@@ -939,7 +1003,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num', 'trend_score_condition', 'trend_score', 'reltrend_score_condition', 'reltrend_score', 'optix_condition', 'optix']
       removeProperties(saveData, propertiesToRemove)
       return await perviewScannerForm(saveData)
     },
@@ -963,6 +1027,9 @@ export default {
         long_ratio, short_ratio, 
         stop_loss, take_profit, time_in_market,
         stop_loss_condition, take_profit_condition, time_in_market_condition,
+        trend_score_condition, trend_score,
+        reltrend_score_condition, reltrend_score,
+        optix_condition, optix,
         commission,
         capital_allocate,
         capital_allocate_num
@@ -988,6 +1055,9 @@ export default {
         long_short_ratio: `${(long_ratio / 100).toFixed(5)}/${(short_ratio / 100).toFixed(5)}`,
         risk_control_filter_number: `${take_profit}/${stop_loss}/${time_in_market}`,
         risk_control_filter_condition: `${take_profit_condition}/${stop_loss_condition}/${time_in_market_condition}`,
+        trend_range: `${trend_score_condition}-${trend_score}`,
+        reltrend_range: `${reltrend_score_condition}-${reltrend_score}`,
+        optix_range: `${optix_condition}-${optix}`,
         commission: (commission / 100).toFixed(5),
         signals: JSON.stringify((isSignalAll || isArrEqual || isStringEqual) ? ['All'] : signals),
         capital_allocate: capital_allocate !== 'Kelly' ? `${(capital_allocate_num/100).toFixed(2)}` : 'Kelly'
@@ -1000,7 +1070,7 @@ export default {
           })
       }
       // 要删除的属性列表
-      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num']
+      const propertiesToRemove = ['long_ratio', 'short_ratio', 'stop_loss', 'take_profit', 'time_in_market', 'stop_loss_condition', 'take_profit_condition', 'time_in_market_condition', 'capital_allocate_num', 'trend_score_condition', 'trend_score', 'reltrend_score_condition', 'reltrend_score', 'optix_condition', 'optix']
       removeProperties(saveData, propertiesToRemove)
       let saveRes, previewRes
       if(rowUrl) {saveRes = await editScannerForm(saveData, rowUrl)}
@@ -1085,7 +1155,11 @@ export default {
       this.percentage = 0
     },
     displayData(data) {
-      const {url, long_short_ratio, risk_control_filter_number, risk_control_filter_condition, commission, signals, capital_allocate} = data
+      const {
+      url, long_short_ratio, risk_control_filter_number, 
+      risk_control_filter_condition, commission, signals, capital_allocate,
+      trend_range, reltrend_range, optix_range
+      } = data
       this.rowUrl = url
       const target = this.data
       const [long_ratio, short_ratio] = long_short_ratio.split('/')
@@ -1104,6 +1178,21 @@ export default {
         commission: trimTrailingZeros((commission * 100).toFixed(2)),
         signals: isJson(signals) ? JSON.parse(signals) : signals,
         capital_allocate: capital_allocate !== 'Kelly' ? 'manual_input' : 'Kelly'
+      }
+      if(trend_range && typeof trend_range  === 'string') {
+        const [trend_score_condition, trend_score] = trend_range.split('-')
+        prepareData.trend_score_condition = trend_score_condition || 0
+        prepareData.trend_score = trend_score || 10
+      }
+      if(reltrend_range && typeof reltrend_range  === 'string') {
+        const [reltrend_score_condition, reltrend_score] = trend_range.split('-')
+        prepareData.reltrend_score_condition = reltrend_score_condition || 0
+        prepareData.reltrend_score = reltrend_score || 10
+      }
+      if(optix_range && typeof optix_range  === 'string') {
+        const [optix_condition, optix] = trend_range.split('-')
+        prepareData.optix_condition = optix_condition || 0
+        prepareData.optix = optix || 100
       }
       if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       if(Array.isArray(data['signals']) && data['signals'].length === 1 && data['signals'][0] === 'All') {
