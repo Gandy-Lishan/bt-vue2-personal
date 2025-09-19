@@ -88,7 +88,7 @@ export default {
 <style lang="less" scoped>
 @import "./index.less";
 .overview-table{
- color: #333;
+ color: #000000;
  font-family: "Open Sans", sans-serif;
  line-height: 1.5em;
  font-weight: 400;
@@ -106,7 +106,7 @@ export default {
  border-color: #ccc;
  border-style: solid;
  border-width: 1px;
- color: #333;
+ color: #000000;
  font-family: 'Open Sans', sans-serif;
  font-size: 14px;
  overflow: hidden;
@@ -119,7 +119,7 @@ export default {
  border-color: #ccc;
  border-style: solid;
  border-width: 1px;
- color: #333;
+ color: #000000;
  font-family: 'Open Sans', sans-serif;
  font-size: 14px;
  font-weight: normal;

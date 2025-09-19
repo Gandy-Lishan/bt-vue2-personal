@@ -6,7 +6,7 @@
         <el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
           <span slot="content" v-html="titleTooltips">
           </span>
-          <i class="iconfont icon-wenhao"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
          </el-tooltip>
        </span>
      </div>

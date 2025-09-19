@@ -61,7 +61,7 @@
             <el-tooltip v-if="balanceSheetData['totalAssetsTrend'].desc" effect="dark" placement="top">
               <span slot="content" v-html="balanceSheetData['totalAssetsTrend'].desc">
               </span>
-              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </h3>
           <BarChart
@@ -108,7 +108,7 @@
             <el-tooltip v-if="balanceSheetData['liabilitiesBreakdown'].desc" effect="dark" placement="top">
               <span slot="content" v-html="balanceSheetData['liabilitiesBreakdown'].desc">
               </span>
-              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </h3>
           <BarChart
@@ -131,7 +131,7 @@
             <el-tooltip v-if="balanceSheetData['shareholdersEquityTrend'].desc" effect="dark" placement="top">
               <span slot="content" v-html="balanceSheetData['shareholdersEquityTrend'].desc">
               </span>
-              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </h3>
           <BarChart
@@ -185,7 +185,7 @@
             <el-tooltip v-if="balanceSheetData['keyPerformanceMetrics'].desc" effect="dark" placement="top">
               <span slot="content" v-html="balanceSheetData['keyPerformanceMetrics'].desc">
               </span>
-              <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </h3>
           <BarChart

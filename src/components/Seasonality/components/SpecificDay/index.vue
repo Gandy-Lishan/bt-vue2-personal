@@ -18,7 +18,7 @@
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Choose a stock/index/ETF as symbol.(default:SPX)</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -41,7 +41,7 @@
               For instance, the start date is 2020, and the end date is 2022. <br/>
               The selected symbol data will cover the period from January 1, 2020, to December 31, 2022.
             </span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
       </template>
@@ -98,7 +98,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Choose specific days(Day 0 represents the selected day, when it is a trading day). <br/>To define a custom date please scroll down to choose "Custom Date"</span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
       </template>
@@ -557,8 +557,8 @@ export default {
     display: inline-block;
   }
   .customize-box span{
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
     font-size: 14px;
     margin-right: 10px;
   }
@@ -636,7 +636,7 @@ export default {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag {
   font-weight: 600;

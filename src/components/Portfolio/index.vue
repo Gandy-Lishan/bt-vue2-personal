@@ -279,7 +279,7 @@ export default {
   align-items: center;
   font-size: 18px;
   font-weight: 300;
-  color: #333;
+  color: #000000;
   flex-wrap: wrap;
 }
 .title p {
@@ -308,12 +308,12 @@ export default {
 .page-title {
   margin: 0;
   padding: 0 5px 0 20px;
-  color: #333;
+  color: #000000;
 }
 .portfolio-des {
   padding: 0 20px;
   font-weight: 400;
   font-size: 14px;
-  color: #333;
+  color: #000000;
 }
 </style>

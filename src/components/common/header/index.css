@@ -46,7 +46,7 @@
 		.ai-link {
 			display: flex;
 			align-items: center;
-			color: #333;
+			color: #000000;
 			font-weight: 600;
 		}
 		.strategy-link:hover {

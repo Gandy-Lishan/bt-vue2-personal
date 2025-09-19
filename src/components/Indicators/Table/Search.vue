@@ -294,7 +294,7 @@ export default {
     box-shadow: 4px 4px 0 rgba(241, 241, 241, 0.35);
     font-size: 14px;
     box-sizing: border-box;
-    color: #333;
+    color: #000000;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -367,7 +367,7 @@ export default {
 }
 
 .aa-suggestion>span:first-child {
-    color: #333;
+    color: #000000;
 }
 
 .aa-suggestion>span:last-child {

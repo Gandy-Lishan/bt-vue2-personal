@@ -26,7 +26,7 @@
     padding: $spacing-xxs $spacing-lg;
     border: 0px solid #ccc;
     background-color: transparent;
-    color: #333;
+    color: #000000;
     font-size: 14px;
     border-radius: $border-radius-base;
     cursor: pointer;

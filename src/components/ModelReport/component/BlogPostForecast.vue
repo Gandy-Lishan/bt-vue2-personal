@@ -86,7 +86,7 @@ a:hover {
  border-color: #e0e0e0;
 }
 .panel-default>.panel-heading {
-  color: #333;
+  color: #000000;
   background-color: #f9f9f9;
   border-color: #e0e0e0;
 }

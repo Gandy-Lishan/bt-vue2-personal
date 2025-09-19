@@ -367,7 +367,7 @@
 					<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['MarketCondition']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 					</el-tooltip>
 				</template>
 				<template slot-scope="scope">

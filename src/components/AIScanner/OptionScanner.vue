@@ -696,8 +696,8 @@ h4 {
 	justify-content: space-between;
 }
 .direction {
-	font-weight: 500;
-	color: #606266;
+	font-weight: 600;
+	color: #000000;
 	margin: 0 10px 0 5px;
 	align-items: center;
  display: flex
@@ -759,7 +759,7 @@ h4 {
 }
 .longShortLine{
 	text-align: center;
-	color: #606266;
+	color: #000000;
 	font-weight: 600;
 }
 ._conditionBox {
@@ -787,8 +787,8 @@ h4 {
   line-height: 28px;
   border-radius: 4px;
 		margin-top: 10px;
-		color: #606266;
-		font-weight: 500;
+		color: #000000;
+		font-weight: 600;
 		font-size: 14px;
   }
   .portfolioCheckedBox a {

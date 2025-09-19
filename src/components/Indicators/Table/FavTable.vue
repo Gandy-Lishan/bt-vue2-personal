@@ -962,7 +962,7 @@ export default {
     text-align: center;
     background-color: #d9d9d9;
     font-weight: 700;
-    color: #333;
+    color: #000000;
     padding: 4px 0;
     .cell {
       padding-left: 0px;
@@ -978,7 +978,7 @@ export default {
     text-align: center;
     .cell {
       font-weight: 700;
-      color: #333;
+      color: #000000;
       padding-left: 0px;
     }
   }
@@ -993,7 +993,7 @@ export default {
   /deep/ .el-select .el-input__inner {
     background-color: #d9d9d9;
     font-weight: 600;
-    color: #333;
+    color: #000000;
     padding: 0px;
     margin: 0px;
     width: 100%;
@@ -1002,7 +1002,7 @@ export default {
   }
   /deep/ .el-select .el-input .el-select__caret {
     font-weight: 600;
-    color: #333;
+    color: #000000;
   }
   /deep/ .el-button--mini, .el-button--small {
     font-size: 14px;
@@ -1019,7 +1019,7 @@ export default {
   }
 }
 .dataTables_info {
-  color: #333;
+  color: #000000;
   font-weight: 500;
   margin-top: 5px;
 }

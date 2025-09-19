@@ -17,7 +17,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The name of the backtest strategy. <br/>Please enter a custom name for identification</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -34,7 +34,7 @@
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >The total capital for backtesting.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -51,7 +51,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Trading commission rate.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -67,7 +67,7 @@
               <span slot="content"
                 >Ranking criteria. Choose one condition to determine<br/>
                  how stocks or ETFs meeting the filtering criteria are ranked.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -98,7 +98,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest start date. Data after this date will be used for backtesting</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -122,7 +122,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Backtest end date. Data before this date will be used for backtesting.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -148,7 +148,7 @@
                 selecting 'ETF' will only search for ETFs, <br/>
                 selecting 'Stock & ETF' will search for both. <br/>
                 Please choose one of these options.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -177,7 +177,7 @@
               <span slot="content"
                 >The trading signals used. <br/>
                 Select one or more signals here to determine when to buy or sell.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
           </template>
@@ -196,7 +196,7 @@
                   >The long-short position during the backtest period. <br/>
                   Enter two values here, <br/>
                   representing the weights of long and short positions respectively.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -226,7 +226,7 @@
                 <span slot="content"
                   >Set profit target range. 
                   Enter two values representing <br/>the minimum and maximum profit targets.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -256,7 +256,7 @@
                 <span slot="content"
                   >Set stop-loss range. 
                   Enter two values representing <br/>the minimum and maximum stop-loss points.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -286,7 +286,7 @@
                 <span slot="content"
                   >Set market stay duration range.
                   Enter two values representing <br/>the minimum and maximum duration the market stays.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -317,7 +317,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
         </template>
@@ -340,7 +340,7 @@
                   based on strategy performance. Selecting maximum <br/>
                   capital allocation per trade enables you to manually <br/>
                   specify the maximum capital allocation for each trade.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
           </template>
@@ -382,7 +382,7 @@
                 based on the information of selected stocks for that day, <br/>
                 using the Kelly Criterion (Kelly Formula).
               </span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
           </template>
@@ -1227,8 +1227,8 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 100%;
@@ -1252,11 +1252,11 @@ export default {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #606266;
+  color: #000000;
 }
-/deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
-  font-weight: 500;
-  color: #606266;
+/deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
+  font-weight: 600;
+  color: #000000;
   font-size: 14px;
 }
 }

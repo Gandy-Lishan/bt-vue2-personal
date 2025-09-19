@@ -385,10 +385,10 @@ h3 {
     padding: 10px 15px;
     &.selected {
       border-bottom: 4px solid #1c5271;
-      color: #333;
+      color: #000000;
     }
     &:hover {
-      color: #333;
+      color: #000000;
     }
   }
   .btns {
@@ -414,14 +414,14 @@ h3 {
   p {
     margin: 0 0 10px 0;
     font-size: 15px;
-    color: #333;
+    color: #000000;
     font-weight: 400;
   }
 }
 .convertedHTML p {
     margin: 0 0 10px 0;
     font-size: 15px;
-    color: #333;
+    color: #000000;
     font-weight: 400;
 }
 </style>

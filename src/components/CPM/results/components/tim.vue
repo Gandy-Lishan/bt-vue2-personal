@@ -938,7 +938,7 @@ p {
   margin: 20px 0;
   font-size: 16px;
   line-height: 1.5em;
-  color: #333;
+  color: #000000;
 }
 .negative-value{
   color: #dd3a13;

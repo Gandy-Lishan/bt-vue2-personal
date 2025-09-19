@@ -349,7 +349,7 @@ export default {
   padding: 15px 15px 0px 15px;
 }
 /deep/ .el-collapse-item__content {
-  color: #333;
+  color: #000000;
   font-weight: 400;
 }
 .centent {
