@@ -1201,7 +1201,7 @@ export default {
         prepareData.optix = optix || 100
       }else {
         prepareData.optix_condition = 0
-        prepareData.optix = 10
+        prepareData.optix = 100
       }
       if(capital_allocate !== 'Kelly') prepareData.capital_allocate_num = trimTrailingZeros((capital_allocate * 100).toFixed(2))
       if(Array.isArray(data['signals']) && data['signals'].length === 1 && data['signals'][0] === 'All') {
