@@ -73,7 +73,7 @@ export default {
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')
 			let clearChartBtn = document.querySelector('.reload')
-			let tickerIndicator = document.querySelector(".ciq-ticker-indicator")
+			let tickerIndicator = document.querySelector(".manage-layout-wrapper")
 			// let footer = document.querySelector('.ciq-footer')
 
 			// search.style.visibility = 'hidden'

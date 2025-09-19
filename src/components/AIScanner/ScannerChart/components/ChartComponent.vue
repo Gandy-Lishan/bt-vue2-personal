@@ -156,7 +156,7 @@ export default {
 		hideComponents() {
 			let search = document.querySelector(".ciq-search")
 			let indicatorSearch = document.querySelector(".ciq-indicators-search")
-      let tickerIndicator = document.querySelector(".ciq-ticker-indicator")
+      let tickerIndicator = document.querySelector(".manage-layout-wrapper")
 			let studies = document.querySelector(".ciq-studies")
 			let favBtnContainer = document.querySelector(".favBtnContainer")
 			let timeframeBtn = document.querySelector('.ciq-period')

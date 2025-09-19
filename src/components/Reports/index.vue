@@ -73,7 +73,7 @@ methods:{
     let huTooltip = document.querySelector(".hu-tooltip")
     let gridGroup = document.querySelector(".grid-group")
     let lastpGroup = document.querySelector(".lastp-group")
-    let tickerIndicator = document.querySelector(".ciq-ticker-indicator")
+    let tickerIndicator = document.querySelector(".manage-layout-wrapper")
     //let footer = document.querySelector('.ciq-footer')
 
     //如果是ActiveStudies, 屏幕较窄, 用display代替visibility
