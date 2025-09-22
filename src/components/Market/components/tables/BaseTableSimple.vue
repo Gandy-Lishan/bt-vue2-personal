@@ -28,7 +28,7 @@
               <el-tooltip v-if="row['desc']" effect="dark" placement="top">
                 <span slot="content" v-html="row['desc']">
                 </span>
-                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </td>
             <td class="base-table-simple__cell">
@@ -49,7 +49,7 @@
               <el-tooltip v-if="row['desc']" effect="dark" placement="top">
                 <span slot="content" v-html="row['desc']">
                 </span>
-                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </td>
           </tr>

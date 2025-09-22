@@ -813,7 +813,7 @@ export default {
   margin: 0;
   font-weight: 600;
   font-size: 18px;
-  color: #333;
+  color: #000000;
   text-align: center;
 }
 /deep/ .el-select .el-input__inner {
@@ -825,7 +825,7 @@ export default {
 }
 /deep/ .el-form--inline .el-form-item__label {
 	font-weight: 600;
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-form-item__content {
 	font-weight: 500;

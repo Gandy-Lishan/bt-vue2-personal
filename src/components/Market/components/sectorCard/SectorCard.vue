@@ -7,7 +7,7 @@
         <el-tooltip v-if="desc" effect="dark" placement="top">
           <span slot="content" v-html="desc">
           </span>
-          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
         </el-tooltip>
       </h3>
       <div v-if="region" class="sector-region">{{ region }}</div>
@@ -100,7 +100,7 @@ export default {
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 4px 0;
-  color: #333;
+  color: #000000;
 }
 
 .sector-region {

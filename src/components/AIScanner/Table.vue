@@ -142,7 +142,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['Trend']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -166,7 +166,7 @@
 						<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent[scope.row[l.value]]">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -188,7 +188,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['ExpectedReturn']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -562,11 +562,11 @@ export default {
 	margin: 20px 0;
 }
 .el-table /deep/ thead .iconfont{
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-form--inline .el-form-item__label {
 	font-weight: 600;
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-form-item__content {
 	font-weight: 500;

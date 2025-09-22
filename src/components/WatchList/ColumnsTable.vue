@@ -246,7 +246,7 @@ export default {
 	margin: 20px 0;
 }
 .el-table /deep/ thead .iconfont{
-	color: #606266;
+	color: #000000;
 }
 .filterTableDes {
   padding: 0px 0px 20px 0px;

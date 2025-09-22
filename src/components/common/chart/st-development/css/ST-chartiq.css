@@ -2632,7 +2632,7 @@ cq-hu-dynamic cq-volume-visual {
 cq-hu-dynamic cq-volume-grouping>div:nth-of-type(3) {
   /* Volume Number Text */
   font-size: 16px;
-  color: #333;
+  color: #000000;
   font-weight: 700;
 }
 
@@ -2656,7 +2656,7 @@ cq-hu-dynamic cq-hu-col2>* {
   text-align: right;
   font-weight: 700;
   font-size: 14px;
-  color: #333;
+  color: #000000;
   display: block;
 }
 
@@ -3472,7 +3472,7 @@ cq-chart-title {
   font-weight: 700;
   float: none;
   margin: 10px 10px;
-  color: #333;
+  color: #000000;
   padding: 0 10px 0 10px;
   line-height: 22px;
   font-size: 12px;
@@ -5586,12 +5586,12 @@ html:not([ciq-last-interaction='touch']) .ciq-night cq-share-button:hover {
 /* ------- chart controls -----*/
 .ciq-night .stx-float-date {
   background-color: #fff;
-  color: #333;
+  color: #000000;
 }
 
 .ciq-night .stx-float-price {
   background-color: #fff;
-  color: #333;
+  color: #000000;
 }
 
 .ciq-night .stx_xaxis {
@@ -6230,7 +6230,7 @@ body .ciq-night .stx-trade-positions .stx-current-position .stx-btn.click:not(.u
 body .ciq-night .stx-trade-positions .stx-head-bar .stx-btn.click {
   color: #999;
   background-color: #1f1f1f;
-  border-color: #333;
+  border-color: #000000;
 }
 
 body .ciq-night .stx-trade-positions .stx-current-position .stx-btn.click:active:not(.up):not(.down),

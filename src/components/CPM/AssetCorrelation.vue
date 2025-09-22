@@ -7,7 +7,7 @@
         The analysis begins in January 2008, <br/>
         corresponding to the start of available data for the iShares MSCI EAFE Small-Cap ETF (SCZ).
       </span>
-      <i class="iconfont icon-wenhao" style="margin-right: 5px"></i>
+      <i class="fa fa-question-circle left" aria-hidden="true"></i>
     </el-tooltip>
      <el-date-picker
         v-model="datePicks.start_date"
@@ -238,8 +238,8 @@ export default {
   }
   /deep/ .el-input--prefix .el-input__inner {
     margin: 0px;
-    color: #606266;
-    font-weight: 500;
+    color: #000000;
+    font-weight: 600;
     font-size: 14px;
   }
   .download-btn {

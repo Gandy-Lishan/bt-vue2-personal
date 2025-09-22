@@ -57,7 +57,7 @@ export default {
 	background-color: #ffffff;
 	font-family: "Open Sans",sans-serif;
 	.seasonality-top{
-		color: #333;
+		color: #000000;
 		p{
 			font-weight: 400;
 			font-size: 16px;

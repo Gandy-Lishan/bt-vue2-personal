@@ -967,6 +967,8 @@ export default {
 	}
 	.criteria-title {
 		font-size: 15px;
+		color: #000000;
+		font-weight: 600;
 	}
 }
 .set-up-container /deep/ .Single > .el-tabs__header.is-top {

@@ -116,7 +116,7 @@
           <el-tooltip v-if="financialsData['cashDebt'].desc" effect="dark" placement="top">
             <span slot="content" v-html="financialsData['cashDebt'].desc">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </div>
         <BarChart

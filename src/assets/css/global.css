@@ -195,9 +195,13 @@ li.el-submenu.is-active.report-menu .el-submenu__title {
   font-weight: bold;
 }
 .el-form-item__label {
-  font-weight: 500;
-  color: #606266;
+  font-weight: 600;
+  color: #000000;
   font-size: 14px !important;
+}
+.el-checkbox, .el-checkbox-button__inner {
+  font-weight: 600;
+  color: #000000;
 }
 .el-tab-pane .el-tabs {
   overflow: auto;
@@ -274,8 +278,8 @@ input[type="time"] {
 }
 .el-radio__label {
   font-size: 14px !important;
-  color: #606266;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
 }
 .el-dialog__wrapper .el-dialog {
   width: 60% !important;
@@ -574,7 +578,7 @@ input[type="time"] {
   padding: 0px;
   font-weight: 600;
 	font-size: 15px;
-  color: #606266;
+  color: #000000;
   font-family: "Open Sans",sans-serif;
   text-align: center;
 }
@@ -628,7 +632,7 @@ input[type="time"] {
 .strategiesTable .el-table .cell {
   font-weight: 600;
 	font-size: 15px;
-  color: #606266;
+  color: #000000;
   font-family: "Open Sans",sans-serif;
 }
 .tim-container .table thead tr th,
@@ -748,16 +752,16 @@ color: #333341;
 .ScannerBTTable .el-table--small th.el-table__cell .cell .el-button--text i.el-icon-refresh {
   font-weight: 600;
   font-size: 18px;
-  color: #333;
+  color: #000000;
 }
 .el-tooltip__popper {
   /* button的z-index是2001,遮罩层的z-index是2000 */
   z-index: 2002;
 }
 .result-container .el-input.is-disabled .el-input__inner{
-  color: #606266;
+  color: #000000;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .CPM-trades .darken-row {
   background-color: #f9f9f9;
@@ -767,18 +771,19 @@ color: #333341;
 } */
 .CPM-summary.el-table th.el-table__cell>.cell {
   text-transform: uppercase;
-  color: #333;
+  color: #000000;
   font-size: 18px !important;
   font-weight: 700;
 }
 .CPM-summary.el-table--enable-row-transition .el-table__body td.el-table__cell {
   font-size: 20px !important;
   font-weight: 600;
+  color: #000000;
 }
 
 .CPM-ZScore.el-table--border .el-table__cell:first-child .cell {
 	font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 .virtual-table.el-table--border .el-table__cell:first-child .cell {
   padding-left: 0px;
@@ -799,7 +804,7 @@ button#checkResBtn {
   display: none;
 }
 .page-content-wrapper {
-	color: #333;
+	color: #000000;
 	background-color: #fff;
   user-select: text;
 	line-height: 1.5em;
@@ -839,7 +844,7 @@ button#checkResBtn {
     padding: 10px 0;
 	}
   h1.construction {
-    color: #333;
+    color: #000000;
 		font-size: 16px;
     padding: 0px;
   }
@@ -991,7 +996,7 @@ button#checkResBtn {
     text-align: center;
     font-weight: 600;
     font-size: 14px;
-    color: #606266;
+    color: #000000;
   }
   .tg .tg-0lax {
     text-align: left;
@@ -1007,7 +1012,7 @@ button#checkResBtn {
     overflow: hidden;
     word-break: normal;
     border-color: #ccc;
-    color: #333;
+    color: #000000;
     background-color: #f0f0f0;
   }
   .tg td {
@@ -1019,7 +1024,7 @@ button#checkResBtn {
     overflow: hidden;
     word-break: normal;
     border-color: #ccc;
-    color: #333;
+    color: #000000;
     background-color: #fff;
   }
   .shadow-row td {
@@ -1254,4 +1259,13 @@ body > .el-menu--horizontal {
 .el-notification {
   z-index: 10001 !important;
   width: auto !important;
+}
+i.right {
+  margin-left: .5em;
+}
+i.left {
+  margin-right: .5em;
+}
+i.color {
+  color: #000000;
 }

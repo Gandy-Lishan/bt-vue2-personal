@@ -526,7 +526,7 @@
   }
   
   .remove-button:hover {
-    color: #333;
+    color: #000000;
     background-color: #e0e0e0;
   }
   

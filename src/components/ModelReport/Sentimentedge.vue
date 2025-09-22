@@ -261,7 +261,7 @@ export default {
  margin-right: 15px;
 }
 .btn-default {
-  color: #333;
+  color: #000000;
   background-color: #fff;
   border-color: #ccc !important;
   border-width: 1px;

@@ -712,7 +712,7 @@ try {
   }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
   font-weight: 500;
@@ -722,14 +722,14 @@ try {
 }
 .scanner-form /deep/ .el-input__inner {
   margin-left: 0px;
-  color: #606266;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
   font-size: 14px;
 }
 .set-up-container /deep/ .el-input__inner {
   margin-left: 0px;
-  color: #606266;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
   font-size: 14px;
 }
 .set-up-container /deep/ .el-form-item__content {
@@ -740,7 +740,7 @@ try {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   white-space: nowrap;
 }
 /deep/ .el-button--small, .el-button--small.is-round {
@@ -752,8 +752,8 @@ try {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 100%;

@@ -22,7 +22,7 @@
                             >Choose single or dual symbols for backtesting <br/>
                             according to your needs
                           </span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -55,7 +55,7 @@
                           <span slot="content"
                             >Choose a stock/index/ETF as backtest symbol. (default: SPX)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -108,7 +108,7 @@
                             >Input the value of starting capital of the backtest.
                         (default: 100000)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -128,7 +128,7 @@
                             >Input the percentage value of trading commission. (default:
                         0%)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -152,7 +152,7 @@
                             >Input the value of slippage of trading price. (default:
                         0)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -176,7 +176,7 @@
                         exit on the End date as benchmark compared with this
                         backtest. (default: SPX)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -226,7 +226,7 @@
                         indicators selection.<br
                       />
                           </span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -259,7 +259,7 @@
                         bar after the conditions are met on the current day.<br
                       />
                           </span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -291,7 +291,7 @@
                             >Select Long or Short to specify the starting position of
                           the backtest.<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -324,7 +324,7 @@
                         'All History' to include all data since the inception of the
                         backtesting stock/index/ETF.<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -399,7 +399,7 @@
                           the test will not allow another trade for the next 10
                           days.<br />
                         </span>
-                        <i class="iconfont icon-wenhao"></i> </el-tooltip
+                        <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                     ></el-checkbox>
                     <el-input
                       v-model="bd.exclude_oo"
@@ -420,7 +420,7 @@
                           <span slot="content"
                             >Choose a stock/index/ETF as backtest symbol 2. (default: SPY)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -470,7 +470,7 @@
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >If you'd like to backtest a specific market environments like a <br /> 'Above 200-bar Moving Average', select the environment here.</span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -498,7 +498,7 @@
                             >Select Long or Short to specify the starting position of
                           the backtest.<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -526,7 +526,7 @@
                         <el-tooltip effect="dark" placement="top">
                           <span slot="content"
                             >If you'd like to backtest based on the slope of the Moving Average of the Index, <br />select the appropriate period and slope direction here.</span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -554,7 +554,7 @@
                         <span slot="content"
                           >Choose the type of backtest you want to create.<br
                         /></span>
-                        <i class="iconfont icon-wenhao"></i>
+                        <i class="fa fa-question-circle right" aria-hidden="true"></i>
                       </el-tooltip>
                     </label>
                   </template>
@@ -587,7 +587,7 @@
                         <span slot="content"
                           >Fill in the analyst's report url here.<br
                         /></span>
-                        <i class="iconfont icon-wenhao"></i>
+                        <i class="fa fa-question-circle right" aria-hidden="true"></i>
                       </el-tooltip>
                     </label>
                   </template>
@@ -609,7 +609,7 @@
                           <span slot="content"
                             >Input a unique name for each backtest.<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </label>
                     </template>
@@ -715,7 +715,7 @@
                             it is mandatory to ensure that the take-profit is greater than the stop-loss. <br>
                             When short selling, Take Profit must be greater than Stop Loss.
                           </span>
-                          <i class="iconfont icon-wenhao"></i> </el-tooltip
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                       ></el-checkbox>
                     </div>
                     <div class="tpContainer riskItem" v-if="isRiskControl">
@@ -726,7 +726,7 @@
                             >Input a value of percentage to exit position when the
                             specified profit is reached. (default: 10%)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
                         </el-tooltip>
                       </el-checkbox>
                       <el-input
@@ -750,7 +750,7 @@
                             >Input a value of percentage to exit position when the
                             specified loss is reached. (default: 5%)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i> </el-tooltip
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                       ></el-checkbox>
                       <el-input
                         v-model="sl"
@@ -773,7 +773,7 @@
                             position when the specified Time In Market is reached.
                             (default: 20)<br
                           /></span>
-                          <i class="iconfont icon-wenhao"></i> </el-tooltip
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                       ></el-checkbox>
                       <el-input
                         v-model="tim"
@@ -2060,5 +2060,9 @@ export default {
   /deep/ .el-form-item__content {
     width: 100%;
   }
+}
+/deep/ .el-textarea__inner {
+  color: #000000;
+  font-weight: 600;
 }
 </style>

@@ -32,6 +32,7 @@
                 label="Entry Date"
                 align="center"
                 show-overflow-tooltip
+                width="100px"
             >
             </el-table-column>
             <el-table-column
@@ -64,6 +65,7 @@
                 label="Exit Date"
                 align="center"
                 show-overflow-tooltip
+                width="100px"
             >
             </el-table-column>
             <el-table-column
@@ -150,7 +152,7 @@
                     <el-tooltip effect="dark" placement="top" style="display: inline">
                     <span slot="content" v-html="textContent['MarketCondition']">
                     </span>
-                    <i class="iconfont icon-wenhao"></i>
+                    <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
             </template>
             <template slot-scope="scope">

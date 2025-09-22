@@ -210,7 +210,7 @@ export default {
       border: 1px solid #ccc;
       border-radius: 6px;
       text-decoration: none;
-      color: #333;
+      color: #000000;
       font-weight: bold;
       transition: all 0.2s ease;
 

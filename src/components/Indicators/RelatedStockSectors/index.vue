@@ -416,7 +416,7 @@ export default {
 //   width: 100% !important; /* 确保宽度占满父容器 */
 // }
 .indicators-container {
-  color: #333;
+  color: #000000;
   padding: 0 20px;
 }
 </style>
