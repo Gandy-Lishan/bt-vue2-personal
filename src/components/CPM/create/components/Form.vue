@@ -24,7 +24,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >Choose a stock/index/ETF as symbol.(default:SPX)</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -50,7 +50,7 @@
               it means that the End Date of all selected patterns must close at a price greater than<br/>
               the Symbol Close 200-day Moving Average.
             </span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
       </template>
@@ -81,7 +81,7 @@
             <span slot="content">
               It represents the period of the Symbol Close's Moving Average, which defaults to 200.
             </span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
       </template>
@@ -124,7 +124,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The date on which you would like to start the price comparison.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -150,7 +150,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content"
                 >The date on which you would like to stop the price comparison.</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -207,7 +207,7 @@
               Common Pattern
               <el-tooltip effect="dark" placement="top">
                 <span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -264,7 +264,7 @@
                   Only values between 75-100 are accepted. A value of "90", <br/>
                   for example, means that only correlations above +0.90 will be shown.
                 </span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -324,7 +324,7 @@
                   Only values between 75-100 are accepted. A value of "90", <br/>
                   for example, means that only correlations above +0.90 will be shown.
                 </span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </template>
@@ -381,7 +381,7 @@
                   (default: 21)<br
                 />
               </span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -406,7 +406,7 @@
                       Choose 'All History' to include all data since the inception of the backtesting stock/index/ETF. <br />
                       Additionally, select 'Custom' to input a custom year.<br
                     /></span>
-                    <i class="iconfont icon-wenhao"></i>
+                    <i class="fa fa-question-circle right" aria-hidden="true"></i>
                   </el-tooltip>
                 </label>
               </template>
@@ -1205,7 +1205,7 @@ export default {
 }
 /deep/ .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa5c;
-    color: #606266;
+    color: #000000;
 }
 /deep/ .el-checkbox__label {
   line-height: 32px;
@@ -1222,8 +1222,8 @@ export default {
     width: 100%;
     font-size: 14px;
     line-height: 14px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
 .processTipsBox {
     height: 100%;
@@ -1250,7 +1250,7 @@ export default {
 
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   width: 300px;
 }
 /deep/ .el-button, /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
@@ -1258,7 +1258,7 @@ export default {
   font-size: 14px;
 }
 /deep/ .el-input--small .el-input__inner, /deep/ .el-input-group__append {
-  color: #606266;
+  color: #000000;
 }
 .el-tooltip__popper {
   /* button的z-index是2001,遮罩层的z-index是2000 */

@@ -137,7 +137,7 @@ main .el-menu--horizontal > .el-menu-item{
   height: 40px;
   width: 50%;
   text-align: center;
-  color: #333;
+  color: #000000;
   font-weight: 700;
   font-size: 16px;
   background-color: #d7d7d7;

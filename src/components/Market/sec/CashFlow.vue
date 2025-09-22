@@ -41,7 +41,7 @@
           <el-tooltip v-if="cashFlowData['cashFlowComponents'].desc" effect="dark" placement="top">
             <span slot="content" v-html="cashFlowData['cashFlowComponents'].desc">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <BarChart
@@ -64,7 +64,7 @@
           <el-tooltip v-if="cashFlowData['freeCashFlowTrend'].desc" effect="dark" placement="top">
             <span slot="content" v-html="cashFlowData['freeCashFlowTrend'].desc">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <BarChart

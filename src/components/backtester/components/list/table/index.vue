@@ -601,7 +601,7 @@
      </el-form>
 
      <!-- 预览区域 -->
-     <div v-if="previewShareBy" style="margin: 5px 0; padding: 10px; background: #f9f9f9; border-radius: 6px; color: #333;">
+     <div v-if="previewShareBy" style="margin: 5px 0; padding: 10px; background: #f9f9f9; border-radius: 6px; color: #000000;">
        <strong>Preview Shared Backtest Name: </strong> {{ previewShareBy }}
      </div>
 
@@ -1162,7 +1162,7 @@ export default {
 }
 /deep/ .el-button--info.is-plain {
 	font-weight: 600;
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
 	color: #333341;

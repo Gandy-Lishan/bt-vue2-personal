@@ -133,7 +133,7 @@
                           >The long-short position during the backtest period. <br/>
                           Enter two values here, <br/>
                           representing the weights of long and short positions respectively.</span>
-                        <i class="iconfont icon-wenhao"></i>
+                        <i class="fa fa-question-circle right" aria-hidden="true"></i>
                       </el-tooltip> -->
                     </label>
                   </template>
@@ -1016,7 +1016,7 @@ export default {
     background-color: rgb(251, 192, 92);
   }
   /deep/ .el-input .el-input__inner {
-    color: #333;
+    color: #000000;
     background-color: #fbfbfb;
     font-weight: 600
   }
@@ -1025,7 +1025,7 @@ export default {
     .el-input--mini .el-input__inner {
       margin-left: 0px;
       font-weight: 600;
-      color: #333;
+      color: #000000;
     }
   }
     /deep/ .el-input-group--append .el-input__inner, .el-input-group__prepend {
@@ -1048,7 +1048,7 @@ export default {
   }
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
     width: 150px;
   }
   /deep/ .el-checkbox__label {
@@ -1105,8 +1105,8 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 100%;
@@ -1178,8 +1178,8 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 32px;
@@ -1207,12 +1207,12 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .portfolioSelectLabel{
     font-weight: 600;
-    color: #333;
+    color: #000000;
     font-size: 14px;
   }
   .portfolioSelect {

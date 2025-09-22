@@ -624,7 +624,7 @@ export default {
     background-color: rgb(251, 192, 92);
   }
   /deep/ .el-input .el-input__inner {
-    color: #333;
+    color: #000000;
     background-color: #fbfbfb;
     font-weight: 600
   }
@@ -633,7 +633,7 @@ export default {
     .el-input--mini .el-input__inner {
       margin-left: 0px;
       font-weight: 600;
-      color: #333;
+      color: #000000;
     }
   }
     /deep/ .el-input-group--append .el-input__inner, .el-input-group__prepend {
@@ -656,7 +656,7 @@ export default {
   }
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
     width: 150px;
   }
   /deep/ .el-checkbox__label {
@@ -713,8 +713,8 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 100%;
@@ -786,8 +786,8 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 32px;
@@ -815,12 +815,12 @@ export default {
     font-size: 14px;
     line-height: 32px;
     margin: 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .portfolioSelectLabel{
     font-weight: 600;
-    color: #333;
+    color: #000000;
     font-size: 14px;
   }
   .portfolioSelect {
@@ -892,7 +892,7 @@ td.manage-td {
 th {
  font-size: 14px;
  padding: 5px;
- color: #333;
+ color: #000000;
 }
 .stripe {
  background-color: #f9f9f9;
@@ -923,12 +923,12 @@ th {
 .label-title {
   font-weight: bold;
   font-size: 16px;
-  color: #333;
+  color: #000000;
   cursor: pointer;
   margin: 0px;
 }
 /deep/ .el-select__tags-text {
-  color: #333;
+  color: #000000;
   font-weight: bold;
 }
 .el-button--small, .el-button--small.is-round {

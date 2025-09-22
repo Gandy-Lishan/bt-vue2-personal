@@ -614,7 +614,7 @@ export default {
   }
   &.top {
     /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
-      color: #333;
+      color: #000000;
     }
     .el-submenu__title i {
       color: #333 !important;

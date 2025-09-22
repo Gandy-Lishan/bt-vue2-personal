@@ -372,7 +372,7 @@ h2.title {
   padding: 0 20px;
   font-weight: 400;
   font-size: 14px;
-  color: #333;
+  color: #000000;
   p {
     margin: 0 0 3px 0;
   }

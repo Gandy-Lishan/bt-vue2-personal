@@ -185,7 +185,7 @@ name: 'Contact',
     justify-content: center;
     padding: 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #333;
+    color: #000000;
     line-height: 1.6;
     margin-top: 20px;
 }
@@ -271,7 +271,7 @@ name: 'Contact',
             content: '•';
             position: absolute;
             left: 0;
-            color: #333;
+            color: #000000;
         }
     }
 }

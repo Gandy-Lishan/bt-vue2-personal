@@ -348,7 +348,7 @@ export default {
     width: 100%;
     a {
       text-decoration: none;
-      color: #333;
+      color: #000000;
     }
 	}
 	.btns {

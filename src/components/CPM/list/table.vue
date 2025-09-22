@@ -471,7 +471,7 @@ export default {
 	font-weight: 600;
 }
 /deep/ .el-button--info {
-  color: #606266;
+  color: #000000;
 }
 .showDate {
   /deep/ .el-button--mini, .el-button--mini.is-round {

@@ -93,8 +93,8 @@
 
 .el-input--mini .el-input__inner{
   margin-left: 0;
-  color: #606266;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
   font-size: 14px;
 }
 
@@ -128,6 +128,8 @@
   margin-bottom: 18px;
 }
 .set-up-container .el-input-group__append, .el-input-group__prepend {
+  color: #000000;
+  font-weight: 600;
   padding: 0 10px;
   background-color: inherit
 }

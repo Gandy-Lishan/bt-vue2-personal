@@ -498,7 +498,7 @@ td, th {
 }
 
 .tg td {
- color: #333;
+ color: #000000;
  background-color: #fff;
 }
 
@@ -539,7 +539,7 @@ td, th {
   overflow: hidden;
   word-break: normal;
   border-color: #ccc;
-  color: #333;
+  color: #000000;
   background-color: #fff;
   border-top-width: 1px;
   border-bottom-width: 1px;
@@ -627,7 +627,7 @@ table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border t
   padding-top: 0.755em;
 }
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
-  color: #333;
+  color: #000000;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
   box-sizing: border-box;

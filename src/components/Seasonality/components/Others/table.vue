@@ -361,7 +361,7 @@ export default {
   -webkit-transition: all .2s ease-in-out;
   -o-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
-  color: #333;
+  color: #000000;
   font-weight: 500;
   font-family: "Open Sans",sans-serif;
 }
@@ -370,11 +370,11 @@ export default {
 }
 /deep/ th.el-descriptions-item__cell.el-descriptions-item__label.is-bordered-label{
   font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 /deep/ td.el-descriptions-item__cell.el-descriptions-item__content{
   font-weight: 500;
-  color: #333;
+  color: #000000;
 }
 .el-table /deep/ tr.highlighted{
   background-color: yellow;

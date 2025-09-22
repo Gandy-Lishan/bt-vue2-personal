@@ -24,14 +24,14 @@
 									<span v-if="criteria_option === 'CommonPattern'" style="margin-left: 5px;">
 											<el-tooltip effect="dark" placement="top">
 													<span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
-													<i class="iconfont icon-wenhao"></i>
+													<i class="fa fa-question-circle right" aria-hidden="true"></i>
 											</el-tooltip>
 										</span>
 									<span v-else>
 										<el-tooltip  effect="dark" placement="top" style="margin-left: 5px; word-wrap: break-word;display: inline">
 											<span slot="content" v-html="config['criteriaTitleTP']">
 											</span>
-											<i class="iconfont icon-wenhao"></i>
+											<i class="fa fa-question-circle right" aria-hidden="true"></i>
 										</el-tooltip>
 									</span>
 								</div>
@@ -80,7 +80,7 @@
 					<div class="score-box">
 							Score: 
 							<el-tooltip effect="dark" placement="top" style="display: inline">
-								<i class="iconfont icon-wenhao" style="margin-right: 5px;"></i>
+								<i class="fa fa-question-circle right" aria-hidden="true"></i>
 								<span slot="content" v-html="config['scoreTP']"></span>
 						</el-tooltip>
 						<el-input-number
@@ -101,7 +101,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
 								<span slot="content" v-html="config['periodTP']">
 								</span>
-								<i class="iconfont icon-wenhao"></i>
+								<i class="fa fa-question-circle right" aria-hidden="true"></i>
 							</el-tooltip>
 							<el-input-number
 								v-model="signals_in_market"
@@ -117,7 +117,7 @@
 								<el-tooltip effect="dark" placement="top">
 									<span slot="content" v-html="config['timeLimitTP']">
 									</span>
-									<i class="iconfont icon-wenhao"></i>
+									<i class="fa fa-question-circle right" aria-hidden="true"></i>
 								</el-tooltip>
 							</el-checkbox>
 						</div>
@@ -1429,6 +1429,7 @@ export default {
 	margin-right: 5px;
 	display: inline-block;
 	margin: 0 0 10px 0;
+	color: #000000;
 }
 .radioBox .el-form-item {
 	display: flex;

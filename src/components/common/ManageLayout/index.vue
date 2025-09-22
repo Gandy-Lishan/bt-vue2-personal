@@ -512,6 +512,8 @@
   
   /* 移除按钮 */
   .remove-button {
+    position: absolute;
+    right: 30px;
     background: transparent;
     border: none;
     padding: 2px;
@@ -524,7 +526,7 @@
   }
   
   .remove-button:hover {
-    color: #333;
+    color: #000000;
     background-color: #e0e0e0;
   }
   

@@ -24,7 +24,7 @@
               <span slot="content">
                 Enter a custom indicator name
               </span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -39,7 +39,7 @@
               <span slot="content">
                 Select the indicator calculation method
               </span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -68,7 +68,7 @@
               <span slot="content">
                 Timeframe for the composite indicator is the maximum of all indicators
               </span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -1978,13 +1978,13 @@ h4 {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
   font-weight: 500;
   font-size: 14px;
 }
 /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text {
-  color: #606266;
+  color: #000000;
 }
 </style>

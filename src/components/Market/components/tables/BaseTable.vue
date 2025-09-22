@@ -99,7 +99,7 @@
               <el-tooltip v-if="column.desc" effect="dark" placement="top">
                 <span slot="content" v-html="column.desc">
                 </span>
-                <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300; margin-left: 5px;"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </div>
           </template>
@@ -522,7 +522,7 @@
     align-items: center;
     
     .date-time {
-      color: #606266;
+      color: #000000;
       font-size: 14px;
     }
     

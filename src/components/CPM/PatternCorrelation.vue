@@ -146,7 +146,7 @@
         <el-tooltip effect="dark" placement="top" style="display: inline">
           <span slot="content" v-html="patternCorrelationTooltip">
           </span>
-          <i class="iconfont icon-wenhao"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
         </el-tooltip>
       </h3>
       <div style="height: 400px;">
@@ -663,7 +663,7 @@ export default {
   margin-top: 30px;
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
     width: 100%;
   }
   /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner {
@@ -671,6 +671,8 @@ export default {
   }
   /deep/ .el-input__inner {
     margin: 0px;
+    color: #000000;
+    font-weight: 600;
   }
   /deep/ .el-button--warning {
     width: 100%;
@@ -682,10 +684,11 @@ export default {
   }
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
   }
-  /deep/ .el-button--primary, /deep/ .el-input__inner, /deep/ .el-input-group__append {
+  /deep/ .el-input__inner, /deep/ .el-input-group__append {
     font-weight: 600;
+    color: #000000;
   }
   .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
     width: 100%;

@@ -477,7 +477,7 @@ h2.page-title {
   padding: 0px;
   font-weight: 400;
   font-size: 16px;
-  color: #333;
+  color: #000000;
   p {
     margin: 0 0 3px 0;
   }
