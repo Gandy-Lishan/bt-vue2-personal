@@ -821,12 +821,12 @@ export default {
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
         ],
         reltrend_score_condition: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.reltrend_score, true)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.reltrend_score, true)(rule, value, callback), trigger: 'change' }
         ],
         reltrend_score: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.reltrend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.reltrend_score_condition, 10)(rule, value, callback), trigger: 'change' }
         ],
         optix_condition: [
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'blur' },
@@ -1155,6 +1155,7 @@ export default {
       this.percentage = 0
     },
     displayData(data) {
+      console.log('lishan data', data)
       const {
       url, long_short_ratio, risk_control_filter_number, 
       risk_control_filter_condition, commission, signals, capital_allocate,
