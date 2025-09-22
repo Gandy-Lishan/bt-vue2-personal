@@ -686,7 +686,7 @@ import { formatStandardTime } from '@/utils'
         CIQ.Studies.removeStudy(stx, stx.layout.studies[studyInstanceName]);
     }
     //console.log('****************Clear existing studies from the chart Done')
-    const senti_color = ["#000000"];
+    const senti_color = document.querySelector("cq-context").classList.value.indexOf("ciq-night") != -1 ? ["#FFFFFF"] : ["#000000"];
     // const tech_color_1 = ["#5B9BD1", "#368DF0"]; // Not used in the provided code
     // const tech_color_2 = ["#000000", "#6b7280"]; // Not used in the provided code
 
