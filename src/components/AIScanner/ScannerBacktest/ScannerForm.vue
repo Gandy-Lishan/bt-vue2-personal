@@ -309,7 +309,6 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item
-          prop="risk_control_filter"
           >
           <template slot="label">
             <label>
@@ -330,7 +329,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item prop="risk_control_filter">
+          <el-form-item>
           <template slot="label">
             <label>
               14. RelTrend Score Range:
@@ -350,7 +349,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item prop="risk_control_filter">
+          <el-form-item>
           <template slot="label">
             <label>
               15. Optix Range:
