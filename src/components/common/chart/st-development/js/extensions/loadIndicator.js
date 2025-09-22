@@ -675,8 +675,8 @@ import { formatStandardTime } from '@/utils'
 }
 
 // 实现批处理的metadata, 并优化结构, 把addStudyToChart提取出
-  CIQ.getIndicatorMatedata = function(indicatorList, stx) {
-    if (!stx) return Promise.resolve(); // If no stx, nothing to do.
+  CIQ.getIndicatorMatedata = async function(indicatorList, stx) {
+    if (!stx) return; // If no stx, nothing to do.
 
     // Clear existing studies from the chart
     //console.log('*************Clear existing studies from the chart',stx.layout.studies,CIQ.store.state.chart.activatedMA)
@@ -695,7 +695,16 @@ import { formatStandardTime } from '@/utils'
     // --- Helper Function: Add a study to the chart and handle related logic ---
     // This function encapsulates the logic for adding a study,
     // updating extreme values, and attaching MAs.
-    const addStudyToChart = (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+    const addStudyToChart = async (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+        // TODO symbol ohlcv特殊处理，在addStudy之前先获取异步数据源
+        if(CIQ.findSymbolIndicator(studyType)) {
+            var start = config.timestampToTime(CIQ.initialDate.start)
+            var end = config.timestampToTime(CIQ.initialDate.end)
+            const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, parameters.ticker)
+            let _data = formatData(res.data)
+            await CIQ.store.dispatch('chart/set_ticker_ohlcv_pairdata', _data)
+        }
+        debugger
         const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
         // Update extreme values if provided
         if (extremeInfo && sd) {
@@ -740,7 +749,7 @@ import { formatStandardTime } from '@/utils'
         }
     };
     
-    return new Promise(async resolve => {
+
         // --- Phase 1: Categorize and Prepare Studies ---
         for (const indicatorName of indicatorList) {
             let indicatorObj = CIQ.findBuiltinTechIndicator(null, indicatorName) || CIQ.findSymbolIndicator(indicatorName, null);
@@ -992,11 +1001,9 @@ import { formatStandardTime } from '@/utils'
 
         // --- Phase 3: Add all prepared studies to the chart ---
         for (const study of studiesToLoad) {
-            addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
+            await addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
-        resolve();
-    });
 };
  }
  export {__st_js_loadIndicator_}

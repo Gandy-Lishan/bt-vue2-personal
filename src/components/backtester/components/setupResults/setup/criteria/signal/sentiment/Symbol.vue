@@ -71,6 +71,7 @@ export default {
     criteria: String,
     symUrl: String,
     symVal: String,
+    // symTicker: String,
     panelIndex: Number,
     isRiskControl: Boolean,
     relation: [String, Number],
@@ -291,7 +292,8 @@ export default {
           desObj.criteria = this.criteria
           desObj.description = {
             'commentDes': commentDes,
-            'rocCond': rocCond
+            'rocCond': rocCond,
+            // 'ticker': this.symTicker,
           }
           desObj.index = index
 
@@ -369,14 +371,16 @@ export default {
       if (this.relation != 1) {
         desObj.description = {
           'commentDes': this.description,
-          'rocCond': rocCond
+          'rocCond': rocCond,
+          // 'ticker': this.symTicker,
         }
         desObj.index = index + 1
       }
       if (this.relation == 1) {
         desObj.description = {
           'commentDes': commentDes + this.description,
-          'rocCond': rocCond
+          'rocCond': rocCond,
+          // 'ticker': this.symTicker,
         }
         desObj.index = 0
       }

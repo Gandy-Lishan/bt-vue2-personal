@@ -2,7 +2,6 @@
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="mini">
-      
       <div class="labelWithSelectBox indicatorTypeBox">
         <el-form-item prop="indicatorRadio">
             <template slot="label">
@@ -100,16 +99,32 @@
                 </el-tooltip>
               </label>
             </template>
-            <div class="selectBox">
-              <!-- <SearchAutocomplete
-                v-model="si.technicalIndicator"
-                @query="indicatorTechnicalSearch"
-                @select="item => handleTechnicalSelect(item)"
-                @clear="clearTechnicalSelect"
-                placeholder="Search for the technical indicator"
-                clearable
-                :disabled="!isBTChartReady"
-              /> -->
+            <div class="selectBox">   
+              <el-select
+                ref="symbolInput"
+                v-model="symbolTicker"
+                id="symbolName"
+                filterable
+                remote
+                reserve-keyword
+                automatic-dropdown
+                @change="getTicker"
+                placeholder="enter keywords"
+                :remote-method="remoteMethod"
+                @visible-change="remoteMethod"
+                :value-key="'key'"
+                :loading="loading"
+                style="margin-right: 5px"
+              >
+                <el-option
+                  
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
               <el-select
                 v-model="si.symbolIndicator"
                 placeholder="Select Symbol Open/High/Low/Close/Volume"
@@ -415,7 +430,7 @@ export default {
         userIndicator: '',
       },
       // symbol ohlcv related data
-      symbolTicker: '',
+      symbolTicker: this.$store.getters.getBacktestSymbol,
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -508,6 +523,14 @@ export default {
       ],
       createdIndicatorOptions: [],
       pairDataDate: [],
+
+      // 自定义动态渲染下拉栏
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
+      options: [],
+      loading: false,
     }
   },
   computed: {
@@ -541,6 +564,10 @@ export default {
         return this.symbolConditions.filter(item => item.value !== 5);
       }
     },
+    ...mapGetters({
+      symbolList: 'getStockList',
+      indexList: 'getIndexList',
+    }),
   },
   watch: {
     // Listen to freq on the indicator Vue is to make the indicators loaded by the form within the timeframe range
@@ -806,6 +833,65 @@ export default {
     }
   },
   methods: {
+    /** START 加载更多数据且保持滚动条位置 */
+    // 绑定滚动事件
+    attachScrollListener(strategy) {
+      let tab = strategy
+      if(!strategy){
+        // 首次加载设初值，不清空绑定的监听器
+        tab = 'Single'
+      }else{
+        this.detachScrollListener() // 防止切换tab时重复添加监听器，统一移除
+      }
+
+      let refs // 要监听的下拉框的 ref 名称
+      refs = ['symbolInput'];
+
+      refs.length != 0 && refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event));
+        }
+      });
+    },
+    // 解绑滚动事件
+    detachScrollListener() {
+      const refs = ['symbolInput']; // 要监听的下拉框的 ref 名称
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 监听滚动事件，触发加载更多
+    handleDropdownScroll(event) {
+      var self = this;
+      const dropdown = event.target;
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore()
+      }
+    },
+    loadMore() {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      this.options = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      this.loading = false
+    },
+    /** END 加载更多数据且保持滚动条位置 */
+
     /** disable enter while naming a custom symbol */
 		onEnter(event) {
       event.preventDefault();
@@ -1053,6 +1139,9 @@ export default {
       this.$emit('getIndicatorUrl', {
         url: item.label, index: this.panelIndex
       })
+      // this.$emit('getIndicatorTicker', {
+      //   ticker: this.symbolTicker, index: this.panelIndex
+      // })
 
       // remove a MA tat already exists in current criteria before loading
       let activatedMAList = this.$store.state.chart.activatedMA
@@ -1073,9 +1162,13 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.label, this.criteria, this.panelIndex, {ticker: 'AAPL'})
+       CIQ.setMALayout(item.label, this.criteria, this.panelIndex, {ticker: this.symbolTicker})
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
        CIQ.addIndicators({})
+    },
+    getTicker() {
+      CIQ.setMALayout(this.si.symbolIndicator, this.criteria, this.panelIndex, {ticker: this.symbolTicker})
+      CIQ.addIndicators({})
     },
     clearTechnicalSelect(value) {
       const item = CIQ.findBuiltinTechIndicator(value,null)
@@ -1659,6 +1752,11 @@ export default {
             obj.index = vm.panelIndex
             obj.url = this.si.symbolIndicator
             vm.$emit('getIndicatorUrl', obj)
+
+            // 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
+            this.symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
+              item=>item.url == this.si.symbolIndicator && item.criteria == this.criteria && item.index == this.panelIndex
+            )?.ticker
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
@@ -3293,7 +3391,74 @@ export default {
         }))
         this.previewDatesPage.total = res.data.total_rows
       }
-    }
+    },
+    remoteMethod: throttle(async function(query) {
+      let vm = this
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+
+        this.searchResults = symbolListTemp.concat(IndexListTemp)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
+      }
+      else if (typeof query != 'boolean' && query !== '') {
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let customStocksListTemp = vm.customStocksList.filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+       
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp)
+        let options = []
+        let wholeWord = []
+        // keyword全匹配
+        for (let item of list) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            wholeWord.push(item)
+            continue
+          }
+          options.push(item)
+        }
+        options.unshift(...wholeWord)
+        // 去重
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
+      } else {
+        this.options = []
+      }
+    }, 500),
   }
 }
 </script>

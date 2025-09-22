@@ -58,8 +58,9 @@
             @click="handleItemSelected(layout)"
           >
             <span>{{ layout.name }}</span>
+            <!-- v-if="hoveredLayoutId === layout.id" -->
             <button
-              v-if="hoveredLayoutId === layout.id"
+  
               class="remove-button"
               @click.stop="handleRemoveLayout(layout.id)"
             >
