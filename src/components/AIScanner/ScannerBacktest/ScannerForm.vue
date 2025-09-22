@@ -1188,7 +1188,7 @@ export default {
         prepareData.trend_score = 10
       }
       if(reltrend_range && typeof reltrend_range  === 'string') {
-        const [reltrend_score_condition, reltrend_score] = trend_range.split('-')
+        const [reltrend_score_condition, reltrend_score] = reltrend_range.split('-')
         prepareData.reltrend_score_condition = reltrend_score_condition || 0
         prepareData.reltrend_score = reltrend_score || 10
       }else {
@@ -1196,7 +1196,7 @@ export default {
         prepareData.reltrend_score = 10
       }
       if(optix_range && typeof optix_range  === 'string') {
-        const [optix_condition, optix] = trend_range.split('-')
+        const [optix_condition, optix] = optix_range.split('-')
         prepareData.optix_condition = optix_condition || 0
         prepareData.optix = optix || 100
       }else {

@@ -268,8 +268,8 @@ async function initiateList(pathname) {
 	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
 
 
-	const storedSentimentList = localStorage.getItem('refactoredSentimentList');
-	const storedConcatList = localStorage.getItem('refactoredConcatList');
+	const storedSentimentList = localStorage.getItem('refactoredSentimentList') || [];
+	const storedConcatList = localStorage.getItem('refactoredConcatList') || [];
 	if (
 		JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
 		JSON.stringify(refactoredConcatList) !== storedConcatList 
