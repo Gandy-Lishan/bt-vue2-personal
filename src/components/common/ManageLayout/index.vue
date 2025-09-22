@@ -512,6 +512,8 @@
   
   /* 移除按钮 */
   .remove-button {
+    position: absolute;
+    right: 30px;
     background: transparent;
     border: none;
     padding: 2px;
