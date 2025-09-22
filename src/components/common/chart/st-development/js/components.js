@@ -8434,7 +8434,7 @@ if (!CIQ.Studies) {
 						}
 					}
 					if (
-						
+						self.helper.sd.type == 'ma' &&
 						section == "inputs" && 
 						(name == "Period" || name == "period") && 
 						!self.helper.sd.parameters.criteria
