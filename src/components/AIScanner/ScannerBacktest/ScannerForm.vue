@@ -307,7 +307,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="10">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item
           >
           <template slot="label">
@@ -367,12 +367,12 @@
           </el-form-item>
           </div>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
         <el-form-item prop="daily_limit">
         <template slot="label">
         <label>
-          16. MAX Daily Symbol Nums
+          13. MAX Daily Symbol Nums
           <el-tooltip effect="dark" placement="top">
             <span slot="content"
               >Daily trading limit, indicating the maximum number of<br/> trades allowed per trading day.</span>
@@ -385,13 +385,11 @@
           </el-input>
         </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="20">
         <el-col :span="6">
           <el-form-item>
           <template slot="label">
             <label>
-            17. Capital Allocate
+            14. Capital Allocate
             <el-tooltip effect="dark" placement="top">
               <span slot="content">
                 Manual Input: This refers to entering a<br/> 
@@ -430,6 +428,46 @@
           <div class="processTips" v-show="percentage != 0"><i v-show="percentage != 0" class="el-icon-loading"></i><span v-html="processTips"></span></div>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <!-- <el-col :span="6">
+          <el-form-item>
+          <template slot="label">
+            <label>
+            17. Capital Allocate
+            <el-tooltip effect="dark" placement="top">
+              <span slot="content">
+                Manual Input: This refers to entering a<br/> 
+                trade using a percentage of the cash <br/>
+                remaining in the account.<br/>
+                Auto Allocation: This involves <br/>
+                calculating the proportion of capital to <br/>
+                be used for entering trades on a given day, <br/>
+                based on the information of selected stocks for that day, <br/>
+                using the Kelly Criterion (Kelly Formula).
+              </span>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
+            </el-tooltip>
+          </label>
+          </template>
+          <div class="_conditionBox">
+          <el-form-item label-width="0px">
+            <el-select v-model="data.capital_allocate">
+              <el-option
+                v-for="capitalAll in capitalAllocates"
+                :key="capitalAll.value"
+                :label="capitalAll.label"
+                :value="capitalAll.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+            <span class="sign">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <el-form-item label-width="0px" v-if="data.capital_allocate === 'manual_input'" prop="capital_allocate_num">
+            <el-input v-show="data.capital_allocate === 'manual_input'" v-model="data.capital_allocate_num" placeholder="Enter Percentage"><template v-slot:append v-if="data.capital_allocate === 'manual_input'">(%)</template></el-input>
+          </el-form-item>
+          </div>
+          </el-form-item>
+        </el-col> -->
       </el-row>
       <el-row :gutter="10" type="flex" class="row-bg" justify="end">
         <el-col :span="16"></el-col>
