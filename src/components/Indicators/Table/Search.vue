@@ -216,13 +216,16 @@ export default {
         }else if(groups === 'macroeconomic') {
           requireUrl = 'macro_indicator_list'
         }
-        if(!requireUrl) return
-        await this.fetchIndicatorsPageList(requireUrl)
-        const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
-        let _sourceList = _list.map(item => {
-            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
-        }).filter(item => item !== undefined).shift()
-        console.log('_sourceList', _sourceList)
+        // if(!requireUrl) return
+        let _sourceList = null
+        if(requireUrl) {
+          await this.fetchIndicatorsPageList(requireUrl)
+          const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+          _sourceList = _list.map(item => {
+              if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined).shift()
+          console.log('_sourceList', _sourceList)
+        }
         if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
           // 尝试看在不在 most_popular
           requireUrl = 'most_popular'
