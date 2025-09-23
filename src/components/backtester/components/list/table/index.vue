@@ -567,37 +567,30 @@
    >
      <!-- 提示 -->
      <div style="margin-bottom: 15px; color:#666;">
-						Your backtest will be reviewed before being published. Please confirm the name and author information below.
+		Click Share to submit your backtest for review. Once approved, it will be published and visible to others. Please confirm the details below.
      </div>
 
      <!-- 回测名称 -->
-     <el-form :model="shareForm" label-width="100px" label-position="top" size="small">
-       <el-form-item label="Backtest Name">
+     <el-form :model="shareForm" label-width="100px" label-position="top" size="small" class="shareForm">
+       <el-form-item label="Backtest Title">
          <el-input
            v-model="shareForm.backtestName"
            placeholder="Name your shared backtest"
          />
        </el-form-item>
-							<el-row :gutter="20">
-								<el-col :span="12">
-									<!-- First Name -->
-									<el-form-item label="First Name">
-											<el-input
-													v-model="shareForm.firstName"
-													placeholder="First Name (optional, shown as author)"
-											/>
-       </el-form-item>
-								</el-col>
-								<el-col :span="12">
-								<!-- Last Name -->
-								<el-form-item label="Last Name">
-										<el-input
-												v-model="shareForm.lastName"
-												placeholder="Last Name (optional, shown as author)"
-										/>
-								</el-form-item>
-								</el-col>
-							</el-row>
+		<el-form-item label-width="0">
+			<template slot="label">
+			<label>
+				Author Nickname
+				<el-tooltip effect="dark" placement="top">
+				<span slot="content">This will be shown as the author when your backtest is shared
+				</span>
+				<i class="fa fa-question-circle right" aria-hidden="true"></i>
+				</el-tooltip>
+			</label>
+			</template>
+			<el-input v-model="shareForm.nickName" placeholder="Author Nickname (optional, shown as author)"/>
+		</el-form-item>
      </el-form>
 
      <!-- 预览区域 -->
@@ -679,8 +672,7 @@ export default {
 			shareDialogVisible: false,
 			shareForm: {
 					backtestName: "",
-					firstName: "",
-					lastName: "",
+					nickName: "",
 			},
 			shareBacktestInfo: {}
 		}
@@ -712,9 +704,9 @@ export default {
 			return this.$refs['OPT'].optimizeState
 		},
 		previewShareBy() {
-				const { firstName, lastName } = this.shareForm;
-				if (firstName || lastName) {
-						return `${this.shareForm.backtestName} (Shared by ${firstName} ${lastName})`.trim();
+				const { nickName } = this.shareForm;
+				if (nickName) {
+						return `${this.shareForm.backtestName} (Shared by ${nickName})`.trim();
 				}
 				return this.shareForm.backtestName || '';
 		},
@@ -1166,5 +1158,10 @@ export default {
 }
 /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
 	color: #333341;
+}
+.shareForm {
+	/deep/ .el-form-item__label {
+		width: 100%;
+	}
 }
 </style>
