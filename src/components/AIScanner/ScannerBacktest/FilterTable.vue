@@ -278,6 +278,7 @@ export default {
 				item['StopLoss'] = this.displayData(item['StopLoss'])
 				item['ProfitTarget'] = this.displayData(item['ProfitTarget'])
 				item['ExpectedReturn'] = this.displayData(item['ExpectedReturn'])
+				item['Optix'] = this.displayData(item['Optix'])
 			})
 			return this.data.content?.slice(startIndex, endIndex);
 		},
@@ -452,7 +453,7 @@ export default {
 			console.log('this.data.content', this.data.content)
 			const data = this.data.content
 			const processedData = data.map(item => {
-				return {
+				const obj = {
 					'Date': item.Date,
 					'Symbol': item.Symbol,
 					'Close': item.Close,
@@ -464,6 +465,10 @@ export default {
 					'Best Time In Market(Bars)': item.TimeInMarket,
 					'Expected Return(%)': `${item.ExpectedReturn}%`,
 				}
+				if(item.TrendScore) obj['Trend'] = item.TrendScore
+				if(item.RelTrendScore) obj['RelTrend Score'] = item.RelTrendScore
+				if(item.Optix) obj['Optix'] = item.Optix
+				return obj
 			})
 			return processedData
 		},
