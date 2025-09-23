@@ -641,8 +641,8 @@ export default {
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'change' }
 			],
 			optix: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, 100)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, 100)(rule, value, callback), trigger: 'change' }
 			],
     }
   }
