@@ -240,7 +240,7 @@ if (!CIQ.Studies) {
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
-
+debugger
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
