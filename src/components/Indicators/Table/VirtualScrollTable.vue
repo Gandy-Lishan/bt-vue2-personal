@@ -2015,7 +2015,7 @@ export default {
     }
     this.filteredList = this.symbolList
     this.symbolList.map(item => {
-      const urlLower = item.url.toLowerCase()
+      const urlLower = item.url?.toLowerCase?.() || ''
       if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
     })
     console.log('filteredList', this.filteredList)
