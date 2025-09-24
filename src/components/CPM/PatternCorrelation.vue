@@ -270,6 +270,8 @@ export default {
       await this.fetchSPXDT();
       this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].Date
       this.setPeriod()
+      this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
+      this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
       // this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
       // this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
     },
@@ -583,10 +585,10 @@ export default {
         }
       },
     measureBarDistance(quotes, d1,d2) {
-    const standardStartDate = formatStandardTime(d1)
-    const standardEndDate = formatStandardTime(d2)
+    const standardStartDate = d1
+    const standardEndDate = d2
     debugger
-    const subQuotes = quotes.filter(item => new Date(item.Date).getTime()>=standardStartDate.getTime() && new Date(item.Date).getTime()<=standardEndDate.getTime())
+    const subQuotes = quotes.filter(item => new Date(item.Date).getTime()>=new Date(standardStartDate).getTime() && new Date(item.Date).getTime()<=new Date(standardEndDate).getTime())
     return subQuotes.length
     },
     changeComparisonNumberOfBars(val) {
@@ -626,7 +628,7 @@ export default {
       if (startDateIndex === -1) return;
       
       // 计算开始日期索引
-      const endDateIndex = startDateIndex + barDistance - 1;
+      const endDateIndex = startDateIndex + barDistance;
       
       // 如果开始索引小于0，返回 undefined
       if (endDateIndex >= quotes.length) return quotes[quotes.length - 1].Date;
