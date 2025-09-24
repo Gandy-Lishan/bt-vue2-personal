@@ -581,9 +581,9 @@
 		<el-form-item label-width="0">
 			<template slot="label">
 			<label>
-				Author Nickname
+				Author name
 				<el-tooltip effect="dark" placement="top">
-				<span slot="content">This will be shown as the author when your backtest is shared
+				<span slot="content">The name you prefer to be known by when your backtest is shared
 				</span>
 				<i class="fa fa-question-circle right" aria-hidden="true"></i>
 				</el-tooltip>
