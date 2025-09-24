@@ -179,6 +179,9 @@ export default {
     updateSettingROC() {
 			return this.$store.state.chart.studySettingROC
 		},
+    symbolTicker() {
+      return this.$store.state.chart.activatedMALayout.find(i=>i.criteria==this.criteria && i.index==this.panelIndex && i.url==this.symVal)?.ticker
+    }
   },
   watch: {
     beforeCalculateNewConditions: {
@@ -432,13 +435,13 @@ export default {
         const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
         let display
         if([12,13].includes(this.sym.newCondition)){
-          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
+          display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
         }else if(this.sym.newCondition == 14){
           display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Above ${this.sym.conditionPeriod}`
         }else if(this.sym.newCondition == 15){
           display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
-          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
+          display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: display,
