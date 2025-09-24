@@ -2474,7 +2474,7 @@ export async function fetchAISuplineData(vm, ticker, latest_date, frequency) {
 		vm.$notify.info({
 			title: 'Analysis in Progress',
 			message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
-			duration: 0
+			duration: 5000
 		});
 		
 		let retries = 0;
