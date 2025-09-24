@@ -9,7 +9,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 export const getLayouts = () => {
   const url = `/dev/st_data/user_chart_set/`
 
-  return new Promise(resolve => {
+  return new Promise((resolve,reject) => {
     // // 模拟网络延迟
     // setTimeout(() => {
     //   resolve([...mockLayouts]);
@@ -18,7 +18,9 @@ export const getLayouts = () => {
     axios
 			.get(url)
 			.then(res => {
-				resolve(JSON.parse(res.data.data.chart_set))
+				if(res.data.code == 404) {
+					resolve([])
+				} else resolve(JSON.parse(res.data.data.chart_set))
 			})
 			.catch(err => {
 				reject(err)
