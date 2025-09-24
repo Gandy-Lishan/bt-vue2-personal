@@ -233,33 +233,35 @@ import { formatStandardTime } from '@/utils'
                     CIQ.resetSupportLineWithChannel()
                 }; 
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-                if(comparisonSymbol.url){
-                    /** dual symbol */
-                    var start = config.timestampToTime(CIQ.initialDate.start)
-                    var end = config.timestampToTime(CIQ.initialDate.end)
-                    const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
-                    debugger
-                    let _data = formatData(res.data)
-                    stx.addSeries(comparisonSymbol.url, {
-                        highlightable: false,
-                        display:comparisonSymbol.name, 
-                        data:_data,
-                        isComparison: false, 
-                        color: "#368DF0",
-                        permanent: true,
-                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
-                        yAxis:{ 
-                            position:"left",
-                            textStyle:"#FFBE00"
-                        },
-                    },commonOperations);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
-                }else commonOperations();
-
+                await CIQ.addComparison(stx, comparisonSymbol, commonOperations)
                 favBtnContainerToggle()
          })
         })
  }
 
+ CIQ.addComparison = async function(stx, comparison, cb) {
+    const {url,name} = comparison
+    if(url){
+        /** dual symbol */
+        var start = config.timestampToTime(CIQ.initialDate.start)
+        var end = config.timestampToTime(CIQ.initialDate.end)
+        const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, url)
+        let _data = formatData(res.data)
+        stx.addSeries(url, {
+            highlightable: false,
+            display:name, 
+            data:_data,
+            isComparison: false, 
+            color: "#368DF0",
+            permanent: true,
+            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
+            yAxis:{ 
+                position:"left",
+                textStyle:"#FFBE00"
+            },
+        },cb);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
+    }else cb();
+ }
  const formatData = function(data) {
     if(data == null){
         data = []

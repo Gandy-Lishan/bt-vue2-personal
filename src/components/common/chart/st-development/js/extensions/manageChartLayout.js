@@ -20,7 +20,9 @@ let __st_js_manage_chart_layout_ = (_exports) => {
         customizedLayouts.xAixsGridLine = stx.layout.xAixsGridLine
         customizedLayouts.crosshair = stx.layout.crosshair
 
-        let obj = {id:uid,name,layout,layoutFreq,chartType,pref,themes,customizedLayouts}
+        let comparison = JSON.stringify(CIQ.store.getters.getComparisonSymbol) || ''
+
+        let obj = {id:uid,name,layout,layoutFreq,chartType,pref,themes,customizedLayouts,comparison}
         return obj
     }
     
@@ -37,19 +39,26 @@ let __st_js_manage_chart_layout_ = (_exports) => {
         localStorage.setItem(CIQ.stxx.chart.symbol, drawings);
     }
 
-    CIQ.restoreLayout = function(layout) {
+    CIQ.restoreLayout = async function(layout) {
         var importOptions = {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true
         };
         if (layout) {
+            CIQ.addCover()
             CIQ.store.commit('form/getFrequency', layout.layoutFreq)
             CIQ.store.dispatch('chart/set_chart_type', layout.chartType)
-            CIQ.isRestoreLayout = true
-            CIQ.stxx.importLayout(JSON.parse(layout.layout), importOptions); 
-            restorePreferences(layout.pref)
-            restoreThemes(CIQ.stxx, layout.themes)
-            restoreCustomizedLayouts(CIQ.stxx, layout.customizedLayouts)
+            CIQ.isRestoreLayout = true          
+            CIQ.stxx.importLayout(JSON.parse(layout.layout), {
+                ...importOptions, // This includes any other options you might have
+                cb: async () => {
+                    restorePreferences(layout.pref)
+                    restoreThemes(CIQ.stxx, layout.themes)
+                    restoreCustomizedLayouts(CIQ.stxx, layout.customizedLayouts)
+                    await restoreComparison(CIQ.stxx, layout.comparison, () => {});
+                    CIQ.hideCover()
+                }
+            });           
         }
     }
     
@@ -87,6 +96,15 @@ let __st_js_manage_chart_layout_ = (_exports) => {
 
 		stx.changeOccurred("layout");
 		stx.draw();
+    }
+
+    const restoreComparison = async function(stx, comparison,cb) {
+        // addSeire前移除当前序列,防止出现多个序列
+        for(var s in stx.chart.series){
+            var series=stx.chart.series[s];
+            stx.removeSeries(series);
+        }
+        await CIQ.addComparison(stx, JSON.parse(comparison), cb)
     }
 
     const restoreThemes = function(stxx, themes) {
