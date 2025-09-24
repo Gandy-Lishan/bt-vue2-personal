@@ -1222,7 +1222,7 @@ export const CommonMethodsMixin = {
 		},
 		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)
-			let {strategy, symbol2} = row
+			let {strategy, symbol2, symbol} = row
 			let frequency = ''
 			const commitIndicators = (criteria, list) => {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
@@ -1295,6 +1295,10 @@ export const CommonMethodsMixin = {
 					if(!item.url) item.url = 'ma'
 				});
 			}
+			// 此处需要把旧的Symbol OHLCV也加上ticker属性
+			data.activatedMALayout.forEach(item => {
+				if(CIQ.findSymbolIndicator(item.url) && !item.ticker) item.ticker = symbol
+			});
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 

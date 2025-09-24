@@ -216,7 +216,427 @@ if (!CIQ.Studies) {
 	};
 
 	// customized Studies
+	CIQ.Studies.TickerOHLCV = function (
+		name,
+		stx,
+		sd,
+		field,
+		ticker
+	) {
+		var ohlcv = new CIQ.Studies.StudyDescriptor(
+			name + " " + sd.name,
+			field,
+			sd.panel
+		);
+		
+		ohlcv.chart = sd.chart;
+		ohlcv.startFrom = sd.startFrom;
+		ohlcv.inputs = {};
+		if (field) ohlcv.inputs.Field = CIQ.findSymbolIndicator(field, null).field;
+	
+		// dual symbol new features
+		ohlcv.parameters = {
+			criteria: sd.parameters.criteria,
+			index: sd.parameters.index,
+			ticker: ticker,
+		}
+		CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
+	};
 	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
+		var condition = sd.inputs.condition;
+		var period = sd.inputs.period;
+
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		
+		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
+		if(CIQ.findSymbolIndicator(null, field)){
+			var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+			// remove a MA tat already exists in current criteria
+			var MALayout = activatedMALayoutList.find(
+				(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
+			)
+			CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,MALayout.url,MALayout.ticker)
+			field = "Result _OHLCV " + sd.name
+		}
+
+		var quotes = sd.chart.scrubbed;
+
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
+			if(CIQ.findSymbolIndicator(null, field)){
+				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			}
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		} 
+debugger
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+        	let display = `(${symbolLabel}) Symbol Close Rate Of Change(${period}-Bar)`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
+		}
+
+		// 下面为计算 ROC, ROR, MAR 的具体公式。
+		// 使用中公式
+		let resArr = []
+		switch(condition){
+			case 'ROC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexROC = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexROC) 
+
+				resArr = quotes.map((row, i) => {
+					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
+					if(field in row && row[field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(quotes[i - period][field] == 0) return 0
+							
+							const change = parseFloat((100 * (
+								row[field] / 
+								quotes[i - period][field]- 1
+							)).toFixed(4))
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'OPR':
+				// OPR
+				// 从当前indicator数据出现那天开始计算
+				let indexOPR = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexOPR) 
+				const minCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 0);
+				const maxCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 0);
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
+								(maxCloseArrOPR[i] - minCloseArrOPR[i])
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'RR':
+				// Range Rank
+				// 计算含当天值的排名，即数值保证在 0 - 100 之间
+				let indexRR = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexRR) 
+				const minCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				const maxCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
+							
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
+								(maxCloseArrRR[i] - minCloseArrRR[i])
+							).toFixed(4))
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'MA':
+				// MA
+				// 从当前indicator数据出现那天开始计算
+				let indexMA = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexMA) 
+				const maArr = quotes.map((row, i, arr) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period - 1){
+							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + getPropertyByString(b,field,subField), 0) / period
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period - 1){
+							return parseFloat((getPropertyByString(row,field,subField) / maArr[i]).toFixed(4))
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the MA Ratio value, please change a value')
+				} 
+				break;
+			case 'DD':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDD = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexDD) 
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrDD[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
+								maxCloseArrDD[i]
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'DU':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDU = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexDU) 
+				const minCloseArrDU = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(minCloseArrDU[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
+								minCloseArrDU[i]
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'NC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexNC = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNC) 
+				resArr = quotes.map((row, i) => {
+					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+						if(i>=period){
+							
+							const change = parseFloat((
+								getPropertyByString(row,field,subField) - 
+								getPropertyByString(quotes[i - period],field,subField)
+							).toFixed(4))
+							//console.log(row[field] , quotes[i - period][field],row,i)
+							return change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				break;
+			case 'ATH':
+				// 从当前indicator数据出现那天开始计算
+				let indexATH = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATH) 
+				let indicatorATH = 0
+				let maxSoFar = -Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) >= maxSoFar) {
+							maxSoFar = getPropertyByString(row,field,subField);
+							indicatorATH = 1;
+						} else {
+							indicatorATH = 0;
+						}
+						return indicatorATH;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'ATL':
+				// 从当前indicator数据出现那天开始计算
+				let indexATL = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexATL) 
+				let indicatorATL = 0
+				let minSoFar = Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) <= minSoFar) {
+							minSoFar = getPropertyByString(row,field,subField);
+							indicatorATL = 1;
+						} else {
+							indicatorATL = 0;
+						}
+						return indicatorATL;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'CNDA':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDA = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexCNDA)
+				let indicatorCNDA = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) > period) {
+							indicatorCNDA++
+						} else {
+							indicatorCNDA = 0;
+						}
+						return indicatorCNDA;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+				break;
+			case 'CNDB':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDB = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexCNDB)
+				let indicatorCNDB = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && getPropertyByString(row,field,subField) != null) {
+						if (getPropertyByString(row,field,subField) < period) {
+							indicatorCNDB++
+						} else {
+							indicatorCNDB = 0;
+						}
+						return indicatorCNDB;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+			break;
+			case 'NH':
+				// NH
+				// 从当前indicator数据出现那天开始计算
+				let indexNH = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNH) 
+				const maxCloseArrNH = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				resArr = maxCloseArrNH
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
+			case 'NL':
+				// NL
+				// 从当前indicator数据出现那天开始计算
+				let indexNL = quotes.findIndex(row=> 
+					field in row &&  getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNL) 
+				const maxCloseArrNL = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				resArr = maxCloseArrNL
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
+			default:
+			console.error('no such condition')
+		}
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote[sd.inputs.display] = resArr[i];
+		}
+
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
+	};
+	CIQ.Studies.calculateSTROCLike2 = function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -240,7 +660,6 @@ if (!CIQ.Studies) {
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
-debugger
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
@@ -639,8 +1058,8 @@ debugger
 		// 1. O(M) 复杂度, M 是 _data 的长度
 		const ohlcvDataMap = new Map();
 		for (const item of CIQ.store.getters.getTickerOhlcvPairdata) {
-			if (item.DT && item[field] !== undefined) {
-				ohlcvDataMap.set(item.DT.getTime(), item[field]);
+			if (item.DT && item[subField] !== undefined) {
+				ohlcvDataMap.set(item.DT.getTime(), item[subField]);
 			}
 		}
 		// 2. 遍历数据源，匹配并添加/更新属性

@@ -1391,7 +1391,6 @@ export default {
       CIQ.addIndicators({})
     },
     changeIndicatorChecked(val) {
-      debugger
       this.clearFormValidate()
       const arr = [
         'Sentiment Indicator',
