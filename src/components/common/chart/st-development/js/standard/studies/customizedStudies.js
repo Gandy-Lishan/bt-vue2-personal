@@ -252,13 +252,14 @@ if (!CIQ.Studies) {
 		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
 		
 		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
+		let symbolOhlcvLayout
 		if(CIQ.findSymbolIndicator(null, field)){
 			var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
 			// remove a MA tat already exists in current criteria
-			var MALayout = activatedMALayoutList.find(
+			symbolOhlcvLayout = activatedMALayoutList.find(
 				(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
 			)
-			CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,MALayout.url,MALayout.ticker)
+			CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
 			field = "Result _OHLCV " + sd.name
 		}
 
@@ -278,7 +279,7 @@ debugger
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-        	let display = `(${symbolLabel}) Symbol Close Rate Of Change(${period}-Bar)`
+        	let display = `(${symbolLabel})${symbolOhlcvLayout?symbolOhlcvLayout.ticker:''} Symbol Close Rate Of Change(${period}-Bar)`
 			const miShift = CIQ.store.getters.getMiFormShift
 			// 左侧ma
 			if(!sd.parameters.criteria.endsWith('2')) {
@@ -327,20 +328,20 @@ debugger
 				// OPR
 				// 从当前indicator数据出现那天开始计算
 				let indexOPR = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexOPR) 
-				const minCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 0);
-				const maxCloseArrOPR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 0);
+				const minCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "min", period, 0);
+				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrOPR[i]) / 
+								(row[field] - minCloseArrOPR[i]) / 
 								(maxCloseArrOPR[i] - minCloseArrOPR[i])
 							).toFixed(4))
 							
@@ -359,20 +360,20 @@ debugger
 				// Range Rank
 				// 计算含当天值的排名，即数值保证在 0 - 100 之间
 				let indexRR = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexRR) 
-				const minCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
-				const maxCloseArrRR = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				const minCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
 							
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrRR[i]) / 
+								(row[field] - minCloseArrRR[i]) / 
 								(maxCloseArrRR[i] - minCloseArrRR[i])
 							).toFixed(4))
 							return (change==Infinity || change==-Infinity) ? 0 : change
@@ -390,13 +391,13 @@ debugger
 				// MA
 				// 从当前indicator数据出现那天开始计算
 				let indexMA = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexMA) 
 				const maArr = quotes.map((row, i, arr) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period - 1){
-							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + getPropertyByString(b,field,subField), 0) / period
+							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + b[field], 0) / period
 						}
 						return NaN
 					}else{
@@ -404,9 +405,9 @@ debugger
 					}
 				});
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period - 1){
-							return parseFloat((getPropertyByString(row,field,subField) / maArr[i]).toFixed(4))
+							return parseFloat((row[field] / maArr[i]).toFixed(4))
 						}
 						return NaN
 					}else{
@@ -420,19 +421,19 @@ debugger
 			case 'DD':
 				// 公式：(Current close - Highest Close) / Highest Close
 				let indexDD = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexDD) 
-				const maxCloseArrDD = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(maxCloseArrDD[i] == 0) return 0
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - maxCloseArrDD[i]) / 
+								(row[field] - maxCloseArrDD[i]) / 
 								maxCloseArrDD[i]
 							).toFixed(4))
 							
@@ -450,19 +451,19 @@ debugger
 			case 'DU':
 				// 公式：(Current close - Highest Close) / Highest Close
 				let indexDU = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexDU) 
-				const minCloseArrDU = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period - 1){
 							// 如果分母为0，直接返回0
 							if(minCloseArrDU[i] == 0) return 0
 
 							/** 因为minClose,maxClose也保留了三位小数 */
 							const change = parseFloat((100 * 
-								(getPropertyByString(row,field,subField) - minCloseArrDU[i]) / 
+								(row[field] - minCloseArrDU[i]) / 
 								minCloseArrDU[i]
 							).toFixed(4))
 							
@@ -481,18 +482,17 @@ debugger
 				// ROC
 				// 从当前indicator数据出现那天开始计算
 				let indexNC = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexNC) 
 				resArr = quotes.map((row, i) => {
-					if(field in row &&  getPropertyByString(row,field,subField)!=null){
+					if(field in row && row[field]!=null){
 						if(i>=period){
 							
 							const change = parseFloat((
-								getPropertyByString(row,field,subField) - 
-								getPropertyByString(quotes[i - period],field,subField)
+								row[field] - 
+								quotes[i - period][field]
 							).toFixed(4))
-							//console.log(row[field] , quotes[i - period][field],row,i)
 							return change
 						}
 						return NaN
@@ -504,16 +504,16 @@ debugger
 			case 'ATH':
 				// 从当前indicator数据出现那天开始计算
 				let indexATH = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexATH) 
 				let indicatorATH = 0
 				let maxSoFar = -Infinity;
 
 				resArr = quotes.map((row, i) => {
-					if (field in row && getPropertyByString(row,field,subField) != null) {
-						if (getPropertyByString(row,field,subField) >= maxSoFar) {
-							maxSoFar = getPropertyByString(row,field,subField);
+					if (field in row && row[field] != null) {
+						if (row[field] >= maxSoFar) {
+							maxSoFar = row[field];
 							indicatorATH = 1;
 						} else {
 							indicatorATH = 0;
@@ -530,16 +530,16 @@ debugger
 			case 'ATL':
 				// 从当前indicator数据出现那天开始计算
 				let indexATL = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexATL) 
 				let indicatorATL = 0
 				let minSoFar = Infinity;
 
 				resArr = quotes.map((row, i) => {
-					if (field in row && getPropertyByString(row,field,subField) != null) {
-						if (getPropertyByString(row,field,subField) <= minSoFar) {
-							minSoFar = getPropertyByString(row,field,subField);
+					if (field in row && row[field] != null) {
+						if (row[field] <= minSoFar) {
+							minSoFar = row[field];
 							indicatorATL = 1;
 						} else {
 							indicatorATL = 0;
@@ -556,13 +556,13 @@ debugger
 			case 'CNDA':
 				// 从当前indicator数据出现那天开始计算
 				let indexCNDA = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexCNDA)
 				let indicatorCNDA = 0
 				resArr = quotes.map((row, i) => {
-					if (field in row && getPropertyByString(row,field,subField) != null) {
-						if (getPropertyByString(row,field,subField) > period) {
+					if (field in row && row[field] != null) {
+						if (row[field] > period) {
 							indicatorCNDA++
 						} else {
 							indicatorCNDA = 0;
@@ -579,13 +579,13 @@ debugger
 			case 'CNDB':
 				// 从当前indicator数据出现那天开始计算
 				let indexCNDB = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexCNDB)
 				let indicatorCNDB = 0
 				resArr = quotes.map((row, i) => {
-					if (field in row && getPropertyByString(row,field,subField) != null) {
-						if (getPropertyByString(row,field,subField) < period) {
+					if (field in row && row[field] != null) {
+						if (row[field] < period) {
 							indicatorCNDB++
 						} else {
 							indicatorCNDB = 0;
@@ -603,10 +603,10 @@ debugger
 				// NH
 				// 从当前indicator数据出现那天开始计算
 				let indexNH = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexNH) 
-				const maxCloseArrNH = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "max", period, 1);
+				const maxCloseArrNH = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
 				resArr = maxCloseArrNH
 				if(resArr.length>1 && resArr.every(element => !element)){
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
@@ -616,10 +616,10 @@ debugger
 				// NL
 				// 从当前indicator数据出现那天开始计算
 				let indexNL = quotes.findIndex(row=> 
-					field in row &&  getPropertyByString(row,field,subField)!=null
+					field in row && row[field]!=null
 				)
 				quotes = quotes.slice(indexNL) 
-				const maxCloseArrNL = getPeriodParam(quotes.map(row => getPropertyByString(row,field,subField)), "min", period, 1);
+				const maxCloseArrNL = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
 				resArr = maxCloseArrNL
 				if(resArr.length>1 && resArr.every(element => !element)){
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')

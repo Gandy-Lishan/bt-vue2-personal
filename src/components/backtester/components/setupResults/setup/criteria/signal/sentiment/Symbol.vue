@@ -437,9 +437,9 @@ export default {
         if([12,13].includes(this.sym.newCondition)){
           display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
         }else if(this.sym.newCondition == 14){
-          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Above ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with (${symbolLabel})${this.symbolTicker} ${symbolCond.label} Above ${this.sym.conditionPeriod}`
         }else if(this.sym.newCondition == 15){
-          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Below ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with (${symbolLabel})${this.symbolTicker} ${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
           display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
