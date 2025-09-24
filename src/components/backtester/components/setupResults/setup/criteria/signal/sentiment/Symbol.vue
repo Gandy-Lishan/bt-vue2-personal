@@ -359,13 +359,13 @@ export default {
         const _conditionPeriod = this.sym.conditionPeriod
         let _description1
         if([12,13].includes(this.sym.newCondition)){
-          _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
+          _description1 =`${this.symbolTicker} ${symVal} ${_newCondition} ${_condition} ${_value}`
         }else if(this.sym.newCondition == 14){
-          _description1 = `Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
         }else if(this.sym.newCondition == 15){
-          _description1 = `Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
         }else{
-          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} ${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         }
         this.description = _description1
       }
