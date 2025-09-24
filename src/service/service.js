@@ -2552,3 +2552,18 @@ export function sendContactTicketFront(payload) {
 
 	return axios.post(url, form, { headers });
 }
+
+export function getOptionScanner() {
+	const path = `/dev/option_scanner_app/option_scanner_data?type=call`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}

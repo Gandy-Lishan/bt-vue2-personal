@@ -309,6 +309,7 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item
+          prop="risk_control_filter"
           >
           <template slot="label">
             <label>
@@ -329,7 +330,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item>
+          <el-form-item prop="risk_control_filter">
           <template slot="label">
             <label>
               14. RelTrend Score Range:
@@ -349,7 +350,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item>
+          <el-form-item prop="risk_control_filter">
           <template slot="label">
             <label>
               15. Optix Range:
@@ -816,24 +817,24 @@ export default {
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
         ],
         trend_score: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, 10)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, 10)(rule, value, callback), trigger: 'change' }
         ],
         reltrend_score_condition: [
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.reltrend_score, true)(rule, value, callback), trigger: 'blur' },
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.reltrend_score, true)(rule, value, callback), trigger: 'change' }
         ],
         reltrend_score: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.reltrend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.reltrend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, 10)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, 10)(rule, value, callback), trigger: 'change' }
         ],
         optix_condition: [
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'blur' },
           { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'change' }
         ],
         optix: [
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'blur' },
-          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'change' }
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'blur' },
+          { validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'change' }
         ],
       }
     }
