@@ -702,9 +702,8 @@ import { formatStandardTime } from '@/utils'
             var end = config.timestampToTime(CIQ.initialDate.end)
             const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, parameters.ticker)
             let _data = formatData(res.data)
-            await CIQ.store.dispatch('chart/set_ticker_ohlcv_pairdata', _data)
+            await CIQ.store.dispatch('chart/set_ticker_ohlcv_pairdata', {ticker:parameters.ticker, data: _data})
         }
-        debugger
         const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
         // Update extreme values if provided
         if (extremeInfo && sd) {

@@ -135,7 +135,7 @@ const state = {
 	// drawing states
 	drawingObjList: [],
 
-	tickerOhlcvPairdata: null,	//用来暂存symbol ohlcv的ticker data
+	tickerOhlcvPairdata: {},	//用来暂存symbol ohlcv的ticker data
 }
 
 const mutations = {
@@ -370,8 +370,9 @@ const mutations = {
 	SET_JUMP_TO_BT_SYMBOL(state, index) {
 		state.JumpToBTSymbol = index
 	},
-	SET_TICKER_OHLCV_PAIRDATA(state, val) {
-		state.tickerOhlcvPairdata = val
+	SET_TICKER_OHLCV_PAIRDATA(state, { ticker, data }) {
+		if(!ticker) return
+		state.tickerOhlcvPairdata[ticker] = data
 	},
 }
 
@@ -1024,9 +1025,9 @@ get_indicator_page_btv1_list({ commit, state }) {
 			}
 		}
 },
-	set_ticker_ohlcv_pairdata({ commit }, val) {
+	set_ticker_ohlcv_pairdata({ commit }, { ticker, data }) {
 		return new Promise(resolve => {
-			commit('SET_TICKER_OHLCV_PAIRDATA', val)
+			commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data })
 			resolve()
 		})
 	},
