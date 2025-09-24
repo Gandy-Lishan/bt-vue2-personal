@@ -15,7 +15,7 @@
 			style="width: 100%; height: 100%"
 			border
 		>
-			<el-table-column type="expand" width="20px">
+			<el-table-column type="expand" width="20px" v-if="currTabPage !== 'OptionScanner'">
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<!-- <el-form-item label="Description">
@@ -210,7 +210,18 @@
 							'Date',
 							'Z-Score',
 							'Expected Return(%)',
-							'Close','Direction'
+							'Close','Direction',
+							'Last Close',
+							'Expire Date',
+							'DTE',
+							'Strike',
+							'Break Even',
+							'Prob. of Profit',
+							'Credit',
+							'Margin',
+							'Return %',
+							'CAGR %',
+							'Earnings Date'
 						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
@@ -400,7 +411,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
+			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
@@ -430,7 +441,7 @@ export default {
 				}
 			}
 			// 日期类型排序
-			if(['Date'].indexOf(colName) !== -1){
+			if(['Date', 'expirDate'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
