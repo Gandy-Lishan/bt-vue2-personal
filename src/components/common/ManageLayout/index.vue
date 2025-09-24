@@ -35,7 +35,7 @@
               <span>Rel Trend</span>
             </li>
         </ul>
-        <div class="manageChartLayout" v-if="$store.getters.getIsAdmin">
+        <div class="manageChartLayout">
           <cq-separator></cq-separator>
           <div class="menu-heading">
             Manage Chart Layout
@@ -173,9 +173,9 @@
         this.isDropdownVisible = !this.isDropdownVisible;
         // 如果菜单刚被打开，就获取数据
         if (this.isDropdownVisible) {
-          if(this.$store.getters.getIsAdmin) {
+          //if(this.$store.getters.getIsAdmin) {
             this.fetchLayouts();
-          }
+          //}
         } else {
           // 如果是关闭主菜单，确保新建面板也一起关闭
           this.isCreatePanelVisible = false;
