@@ -12,6 +12,7 @@
             <h4  @click="selectedTitle = 'Detail'" :class="{ 'selected': selectedTitle === 'Detail' }">Indicator Detail</h4>
             <h4  @click="selectedTitle = 'Research'" :class="{ 'selected': selectedTitle === 'Research' }">Research & Blog Posts</h4>
             <h4  @click="selectedTitle = 'Related'" :class="{ 'selected': selectedTitle === 'Related' }" v-show="isShowRelated">Related Charts</h4>
+            <h4  @click="selectedTitle = 'ConstituentConditions'" :class="{ 'selected': selectedTitle === 'ConstituentConditions' }" v-show="isShowConstituentConditions">Constituent Conditions</h4>
             <div class="btns">
               <el-popover
                 placement="bottom-start"
@@ -93,6 +94,7 @@
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
             <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
+            <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions>
           </div>
         </div>
   </div>
@@ -102,6 +104,7 @@
 import Research from "./Research";
 import Construction from "./Construction";
 import Related from "./Related";
+import ConstituentConditions from "./ConstituentConditions";
 import { getIndicatorsRowData } from '@/service/service'
 
 export default {
@@ -119,6 +122,7 @@ export default {
       title: '',
       blog_results: [],
       related: [],
+      constituentConditions: [],
       indicatorInfo: [],
       showReturns: false,
       percent_time_above: '',
@@ -168,6 +172,7 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
+          this.constituentConditions = originalData.constituent_conditions || null
           this.type  = originalData.type
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
@@ -247,12 +252,16 @@ export default {
     },
     isShowRelated() {
       return this.row && this.row.source_list && !['ndx_100_complete_list', 'sp_1500_complete_list'].includes(this.row.source_list) && !this.$route.path.includes('/sector_trend_score') && !this.$route.path.includes('/trend_score')
+    },
+    isShowConstituentConditions() {
+      return this.row && this.row.source_list && this.row.source_list === 'etf_breadth'
     }
   },
   components: {
     Research,
     Construction,
-    Related
+    Related,
+    ConstituentConditions
   },
   methods: {
     seeOnLargeChart() {
