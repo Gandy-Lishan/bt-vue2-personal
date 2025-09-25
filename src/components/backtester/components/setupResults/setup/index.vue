@@ -592,6 +592,10 @@ export default {
 			}
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if(signal) {
+					// if inbdicator is sentiment indciator
+					return signal?.url || ''
+				}
 				if (!signal) {
 					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
 				}
