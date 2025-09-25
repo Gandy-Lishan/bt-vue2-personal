@@ -1348,6 +1348,8 @@ export const CommonMethodsMixin = {
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
+					// 清除 userIndicator 残存的 Hash 值
+					_this.$store.commit('form/initialUsersOwnFileHash')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
 					const pollingRes = await _this.pollingRunAllBTRunResults(res.data)
 					console.log('pollingRes', pollingRes)

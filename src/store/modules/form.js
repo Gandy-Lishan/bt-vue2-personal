@@ -514,6 +514,17 @@ const mutations = {
 		let {index, val, criteriaCF} = obj
 		state[`usersOwn${criteriaCF}FileHash`][index] = val
 	},
+	initialUsersOwnFileHash(state) {
+		const keys = [
+		  'usersOwnEntryFileHash',
+		  'usersOwnExitFileHash',
+		  'usersOwnEntry2FileHash',
+		  'usersOwnExit2FileHash',
+		]
+		keys.forEach(key => {
+		  state[key] = Array(5).fill('')
+		})
+	},
 	STORE_BACKTESTRESULT: (state, val) => {
 		state.backtestResult = val
 	},
