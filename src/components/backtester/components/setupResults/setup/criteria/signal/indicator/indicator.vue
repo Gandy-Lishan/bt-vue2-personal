@@ -87,7 +87,7 @@
         </el-form-item>
       </div>
       <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Symbol OHLCV'">
-        <el-form-item prop="symbolIndicator">
+        <el-form-item>
             <template slot="label">
               <label>
                 Indicator
@@ -125,19 +125,21 @@
                 >
                 </el-option>
               </el-select>
-              <el-select
-                v-model="si.symbolIndicator"
-                placeholder="Select Symbol Open/High/Low/Close/Volume"
-                @change="handleSymbolSelect"
-              >
-                <el-option
-                  v-for="item in filteredSymbolConditions"
-                  :key="item.value"
-                  :label="item.obj.label"
-                  :value="item.obj"
+              <el-form-item prop="symbolIndicator" style="width: auto;">
+                <el-select
+                  v-model="si.symbolIndicator"
+                  placeholder="Select Symbol Open/High/Low/Close/Volume"
+                  @change="handleSymbolSelect"
                 >
-                </el-option>
-              </el-select>
+                  <el-option
+                    v-for="item in filteredSymbolConditions"
+                    :key="item.value"
+                    :label="item.obj.label"
+                    :value="item.obj"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </div>
         </el-form-item>
       </div>
