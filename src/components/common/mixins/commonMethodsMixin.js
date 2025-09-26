@@ -797,12 +797,14 @@ export const CommonMethodsMixin = {
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						fieldName &&
 					CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA'
-				// 判断 condition
+				// 判断 是否存在重复的new condition指标
 				const fc =
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
 						criteria &&
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.index ==
-						panelIndex
+						panelIndex &&
+					// symbol ohlcv指标使用index和criteria, 需要添加判断防止被误删
+					!CIQ.findSymbolIndicator(CIQ.stxx.layout.studies[studyInstanceName].type, null)
 				if ((f1 || f2) && fc) {
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
@@ -1295,10 +1297,24 @@ export const CommonMethodsMixin = {
 					if(!item.url) item.url = 'ma'
 				});
 			}
-			// 此处需要把旧的Symbol OHLCV也加上ticker属性
-			data.activatedMALayout.forEach(item => {
-				if(CIQ.findSymbolIndicator(item.url) && !item.ticker) item.ticker = symbol
-			});
+
+			/** 兼容旧版SymbolOHLCV的回测配置 */
+			// 把symbol ohlcv指标从activatedTechLayout迁移至activatedMALayout
+			const indexToMove = data.activatedTechLayout.findIndex(item => CIQ.findSymbolIndicator(item.url))
+			if (indexToMove !== -1) {
+				const [removedObject] = data.activatedTechLayout.splice(indexToMove, 1);
+				const newObject = { //预留给其他ma类型的tech, 目前就一个ma
+					url: removedObject.url,
+					ticker: symbol, 
+					criteria: removedObject.criteria,
+					index: removedObject.index
+				}
+				data.activatedMALayout.push(newObject);
+
+				// Symbol OHLCV Indicator这种类MA指标也从旧版savedTechSD移除
+				data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
+				console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			}
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 

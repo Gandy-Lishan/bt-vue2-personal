@@ -171,7 +171,6 @@
 								indicatorUrlArr[index] !== ''
 							"
 						></symbol-indi>
-						<!-- :symTicker="indicatorTickerArr[index]" -->
 						<cci
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -519,7 +518,6 @@ export default {
 			refs: {},
 			indicatorUrlArr: new Array(5).fill(''),
 			indicatorValArr: new Array(5).fill(''),
-			// indicatorTickerArr: new Array(5).fill(''),
 			freqArray: new Array(5).fill(''),
 			// riskValArr: new Array(5).fill(''),
 			delay_bars: 0,
@@ -774,8 +772,6 @@ export default {
 				this.indicatorValArr.push('')
 				let removedSenti = this.indicatorUrlArr.splice(absoluteIndex, 1)
 				this.indicatorUrlArr.push('')
-				// this.indicatorTickerArr.splice(absoluteIndex, 1)
-				// this.indicatorTickerArr.push('')
 				this.indicatorRadioArr.splice(absoluteIndex, 1)
 				this.techIndiObj.splice(absoluteIndex, 1)
 				this.techIndiObj.push('')
@@ -834,9 +830,6 @@ export default {
 		getIndicatorVal(obj) {
 			this.indicatorValArr.splice(obj.index, 1, obj.value)
 		},
-		// getIndicatorTicker(obj) {
-		// 	this.indicatorTickerArr.splice(obj.index, 1, obj.ticker)
-		// },
 		getFreqArray(obj) {
 			this.freqArray.splice(obj.index, 1, obj.value)
 		},
@@ -938,12 +931,10 @@ export default {
 				// 移除	indicatorSentiArr
 				const indiUrl = this.indicatorUrlArr[0]
 				const indiVal = this.indicatorValArr[0]
-				// const indiTicker = this.indicatorTickerArr[0]
 				const indiRadio = this.indicatorRadioArr[0]
 				const freqVal = this.freqArray[0]
 				this.indicatorUrlArr = [indiUrl, ...(new Array(4).fill(''))]
 				this.indicatorValArr = [indiVal, ...(new Array(4).fill(''))]
-				// this.indicatorTickerArr = [indiTicker, ...(new Array(4).fill(''))]
 				this.indicatorRadioArr = [indiRadio]
 				this.freqArray = [freqVal, ...(new Array(4).fill(''))]
 				// 移除	indicatorTechArr
@@ -1024,7 +1015,6 @@ export default {
 
 					this.indicatorUrlArr = new Array(5).fill('')
 					this.indicatorValArr = new Array(5).fill('')
-					// this.indicatorTickerArr = new Array(5).fill('')
 					this.indicatorRadioArr = ['sentiment']
 					this.techIndiObj = new Array(5).fill('')
 					const freqObj = {
@@ -1244,28 +1234,24 @@ export default {
 			for (let j = 0; j < length; j++) {
 				if (data[criteria].signals[j].analysis === 'Sentiment') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
-					// this.indicatorTickerArr[j] = ''
 					this.indicatorRadioArr.splice(j, 1, 'sentiment')
 					this.indicatorRadio = 'sentiment'
 					this.techIndiObj[j] = ''
 				}
 				else if (data[criteria].signals[j].analysis === 'User') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
-					// this.indicatorTickerArr[j] = ''
 					this.indicatorRadioArr.splice(j, 1, 'user')
 					this.indicatorRadio = 'user'
 					this.techIndiObj[j] = ''
 				}
 				else if (data[criteria].signals[j].analysis === 'Symbol') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
-					// this.indicatorTickerArr[j] = ''
 					this.indicatorRadioArr.splice(j, 1, 'symbol')
 					this.indicatorRadio = 'symbol'
 					this.techIndiObj[j] = ''
 				}
 				else if (data[criteria].signals[j].analysis === 'Technical') {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
-					// this.indicatorTickerArr[j] = ''
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class

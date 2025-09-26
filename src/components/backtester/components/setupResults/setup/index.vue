@@ -641,8 +641,9 @@ export default {
 			for (let i in CIQ.stxx.layout.studies) {
 				/** 跳过非参与回测的indicator */
                 if(CIQ.store.state.chart.indicators.extraIndicators.includes(CIQ.stxx.layout.studies[i].type)) continue
-				/** 跳过MA指标,MA只靠MALayout维护 */
-				if(CIQ.stxx.layout.studies[i].type == 'ma') continue
+				/** 跳过MA和SymbolHove指标,它们只靠MALayout维护 */
+                // if(stx.layout.studies[i].type == 'ma') continue
+                if(CIQ.store.getters.getMaLikeTech.includes(CIQ.stxx.layout.studies[i].type)) continue
 
 				let output = {}
 				if (!CIQ.findSentiIndicator(null, CIQ.stxx.layout.studies[i].type)) {

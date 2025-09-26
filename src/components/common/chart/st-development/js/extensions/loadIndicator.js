@@ -125,8 +125,9 @@ import { formatStandardTime } from '@/utils'
                 /** 跳过非参与回测的indicator */
                 //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
                 
-                /** 跳过MA指标,MA只靠MALayout维护 */
-                if(stx.layout.studies[i].type == 'ma') continue
+                /** 跳过MA和SymbolHove指标,它们只靠MALayout维护 */
+                // if(stx.layout.studies[i].type == 'ma') continue
+                if(CIQ.store.getters.getMaLikeTech.includes(stx.layout.studies[i].type)) continue
                 savedTechSD.push({
                     type: stx.layout.studies[i].type,
                     inputs: stx.layout.studies[i].inputs,
@@ -756,7 +757,6 @@ import { formatStandardTime } from '@/utils'
             if (indicatorObj) {
                 // It's a technical indicator (including MA-like)
                 const techSymbolName = indicatorObj.value ? indicatorObj.value : indicatorObj.label;
-
                 if (CIQ.store.getters.getMaLikeTech.includes(indicatorName)) {
                     // Handle MA-like technical indicators
                     for (const maLayoutItem of CIQ.store.state.chart.activatedMALayout) {
