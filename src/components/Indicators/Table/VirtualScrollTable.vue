@@ -425,31 +425,10 @@ export default {
               minWidth: '120px'
             },
             {
-              key: 'last_value',
-              label: 'Value',
-              value: 'last_value'
-            },
-            {
-              key: 'last_change',
-              label: 'Change',
-              value: 'last_change'
-            },
-            {
-              key: 'z_score',
-              label: 'Z-Score',
-              value: 'z_score'
-            },
-            {
               key: 'last_update',
               label: 'Date',
               value: 'last_update',
               minWidth: '90px'
-            },
-            {
-              key: 'sentiment',
-              label: 'Sentiment',
-              value: 'sentiment',
-              minWidth: '100px'
             }
           ]
         ],

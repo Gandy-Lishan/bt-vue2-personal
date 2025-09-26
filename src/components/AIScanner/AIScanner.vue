@@ -965,7 +965,7 @@ getMatchScore(target, keyword) {
 			{label:'Win Rate(%)',value:'WinRate',labelHtml: 'Win<br/>Rate(%)'},
 			{label:'Stop Loss(%)',value:'StopLoss',labelHtml: 'Stop<br/>Loss(%)'},
 			{label:'Profit Target(%)',value:'ProfitTarget',labelHtml: 'Profit<br/>Target(%)'},
-			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best Time In<br/>Market(Bars)'},
+			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best<br/>Time In<br/>Market<br/>(Bars)'},
 			//{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
 			{label:'Expected Return(%)',value:'ExpectedReturn',labelHtml: 'Expected<br/>Return(%)'},
 			{label:'Z-Score',value:'Z_Score',labelHtml: 'Z-Score'}, // 数据有误，先不显示	

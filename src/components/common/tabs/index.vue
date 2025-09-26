@@ -35,8 +35,18 @@
     <el-menu-item index="2">Results</el-menu-item> -->
     <el-menu-item v-for="item in menuItems" :key="item.index" :index="item.index">
       {{item.lable}}
-      <span v-if="item.lable === 'Analysts\' Backtests' && analystCountRedDot" class="red-dot"></span>
-      <span v-else-if="item.lable === 'Subscriber Shared Backtests' && sharedCountRedDot" class="red-dot"></span>
+      <span
+        v-if="item.lable === 'Analysts\' Backtests' && analystCountRedDot"
+        class="new-badge"
+      >
+        NEW
+      </span>
+      <span
+        v-else-if="item.lable === 'Subscriber Shared Backtests' && sharedCountRedDot"
+        class="new-badge"
+      >
+        NEW
+      </span>
     </el-menu-item>
     </el-menu>
     <!-- <keep-alive> -->
@@ -213,5 +223,17 @@ main .el-menu--horizontal>.el-menu-item.is-active {
   background-color: red;
   border-radius: 50%;
 }
-
+.new-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background-color: red;
+  border-radius: 8px;
+  line-height: 14px;
+  height: 14px;
+  vertical-align: middle;
+}
 </style>
