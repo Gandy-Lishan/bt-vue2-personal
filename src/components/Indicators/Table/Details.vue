@@ -254,7 +254,8 @@ export default {
       return this.row && this.row.source_list && !['ndx_100_complete_list', 'sp_1500_complete_list'].includes(this.row.source_list) && !this.$route.path.includes('/sector_trend_score') && !this.$route.path.includes('/trend_score')
     },
     isShowConstituentConditions() {
-      return this.row && this.row.source_list && this.row.source_list === 'etf_breadth'
+      console.log('lishan this.row', this.row)
+      return this.row && this.row.source_list && this.row.source_list === 'etf_breadth' && this.constituentConditions && Array.isArray(this.constituentConditions) && this.constituentConditions.length > 0
     }
   },
   components: {
