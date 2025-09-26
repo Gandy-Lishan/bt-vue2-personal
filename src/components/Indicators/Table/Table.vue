@@ -21,6 +21,7 @@
         :cssMonthLabel="cssMonthLabel"
         :showReport="showReport"
         :showRelated="showRelated"
+        :showConstituentConditions="showConstituentConditions"
         :subTypeOptions="subTypeOptions"
         :breadthIndicatorsOption="breadthIndicatorsOption"
         @loadMore="loadMore"
@@ -44,6 +45,7 @@ export default {
     selectedTitle: String,
     blog_results: Array,
     related: Array,
+    constituentConditions: Array,
     selectedTitle: String,
     isShowDetails: [Boolean, Object],
     type: String
@@ -101,8 +103,9 @@ export default {
       blog_results_length: 0,
       showReport: false,
       showRelated: false,
+      showConstituentConditions: false,
       subTypeOptions: [],
-      breadthIndicatorsOption: []
+      breadthIndicatorsOption: [],
     }
   },
   components: {
@@ -262,6 +265,32 @@ export default {
         })
         }
       }
+    },
+    constituentConditions: {
+      handler (arr) {
+        if(Array.isArray(arr)) {
+          this.showConstituentConditions = true
+          this.tableData = arr.map(obj => {
+            for (const key in obj) {
+              if (Object.hasOwnProperty.call(obj, key)) {
+                if(key === 'last_value' || key === 'last_change') {
+                  obj[key] = unifyNumber(obj[key], 2)
+                }else if(key === 'last_update') {
+                  const datatime = new Date(obj['last_update']);
+                  const Y = datatime.getUTCFullYear() + '-';
+                  const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
+                  const D = datatime.getUTCDate().toString().padStart(2, '0');
+                  obj['last_update'] = Y+M+D
+                }
+              }
+            }
+            return obj
+          })
+        }else {
+          this.showConstituentConditions = false
+          this.tableData = []
+        }
+      }
     }
   },
   async mounted() {
@@ -312,7 +341,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart || (isTrendScore && !indicator && condition !== 'related') || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || (isTrendScore && !indicator && (condition !== 'related' && condition !== 'constituent_conditions')) || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     if(this.$route.fullPath.includes('sector_trend_score') && this.$route.query.index && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll') {

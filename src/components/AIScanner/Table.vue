@@ -105,7 +105,9 @@
 					min-width="70"
 				>
 					<template slot-scope="scope">
+						<span v-if="currTabPage === 'OptionScanner'">{{ scope.row[l.value] }}</span>
 						<router-link
+						v-else
 							:to="{
 								path: '/scannerai/scannerai_chart',
 								query: {
@@ -128,7 +130,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
-					width="120"
+					:width="l.width || '60'"
 					:sortable="
 						[
 							'Trend'
@@ -221,7 +223,8 @@
 							'Margin',
 							'Return %',
 							'CAGR %',
-							'Earnings Date'
+							'Earnings Date',
+							'Trend Score',
 						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
@@ -411,7 +414,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr'].indexOf(colName) !== -1){
+			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr', 'Trend Score'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
