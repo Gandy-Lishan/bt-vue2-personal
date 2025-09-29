@@ -242,7 +242,7 @@ if (!CIQ.Studies) {
 		}
 		CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
 	};
-	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
+	CIQ.Studies.calculateSymbolROCLike = function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -253,29 +253,24 @@ if (!CIQ.Studies) {
 		
 		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
 		let symbolOhlcvLayout
-		if(CIQ.findSymbolIndicator(null, field)){
-			var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-			// remove a MA tat already exists in current criteria
-			symbolOhlcvLayout = activatedMALayoutList.find(
-				(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
-			)
-			CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
-			field = "Result _OHLCV " + sd.name
-		}
+		var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+		// remove a MA tat already exists in current criteria
+		symbolOhlcvLayout = activatedMALayoutList.find(
+			(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
+		)
+		CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+		field = "Result _OHLCV " + sd.name
 
 		var quotes = sd.chart.scrubbed;
 
 		/** 判断Study用来计算的数据源 */
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
-			if(CIQ.findSymbolIndicator(null, field)){
-				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-			}
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
-debugger
+
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
@@ -636,7 +631,7 @@ debugger
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
-	CIQ.Studies.calculateSTROCLike2 = function (stx, sd) {
+	CIQ.Studies.calculateSentiROCLike = function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -650,12 +645,12 @@ debugger
 		var subField = field
 		/** 判断Study用来计算的数据源 */
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
-			if(CIQ.findSymbolIndicator(null, field)){
-				field = comparisonSymbol?.url
-				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-			}
+			// var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// // 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
+			// if(CIQ.findSymbolIndicator(null, field)){
+			// 	field = comparisonSymbol?.url
+			// 	quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			// }
 		}else{
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
@@ -1903,7 +1898,11 @@ debugger
 				var yAxis = CIQ.stxx.panels[sd.panel].yAxis
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
-            calculateFN: CIQ.Studies.calculateSTROCLike,
+            calculateFN: function (stx, sd) {
+				if(CIQ.findSymbolIndicator(null, sd.inputs.Field)) {
+					CIQ.Studies.calculateSymbolROCLike(stx, sd)
+				}else CIQ.Studies.calculateSentiROCLike(stx, sd)	
+			}, 
             inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
 			outputs: { Result: "auto" },
         },

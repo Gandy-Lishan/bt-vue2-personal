@@ -560,11 +560,20 @@ export default {
       return this.getComparisonSymbol.url?true:false
     },
     filteredSymbolConditions() {
-      if (this.isComparisonSymbol) {
+      // First, define the specific conditions under which the "symbol ratio" (value: 5) should be shown.
+      const isPrimarySymbolMatched = 
+        !this.criteria.endsWith("2") && this.symbolTicker === this.$store.getters.getBacktestSymbol;
+
+      const isComparisonSymbolMatched = 
+        this.criteria.endsWith("2") && this.symbolTicker === this.getComparisonSymbol.url;
+
+      // The full list is only returned if it's a comparison AND one of the specific symbols is matched.
+      if (this.isComparisonSymbol && (isPrimarySymbolMatched || isComparisonSymbolMatched)) {
         return this.symbolConditions;
-      } else {
-        return this.symbolConditions.filter(item => item.value !== 5);
       }
+      
+      // In ALL other cases, return the filtered list. This handles the `else` case and the `if` fall-through case simultaneously.
+      return this.symbolConditions.filter(item => item.value !== 5);
     },
     ...mapGetters({
       symbolList: 'getStockList',
