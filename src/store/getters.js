@@ -48,6 +48,8 @@ const getters = {
 
 	getDrawingObjList: state => state.chart.drawingObjList,
 
+	getTickerOhlcvPairdata: state => state.chart.tickerOhlcvPairdata,
+
 	// states
 	getScannerAIFilterState: state => state.states.scannerai_filter,
 	getScannerAIFlagState: state => state.states.scannerai_flag,

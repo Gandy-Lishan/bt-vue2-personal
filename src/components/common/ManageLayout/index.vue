@@ -43,7 +43,6 @@
               <input type="search" v-model="searchQuery" placeholder="Search" />
             </div>
           </div>
-    
           <div class="save-btn-wrapper"><button class="create-new-button" @click="toggleCreatePanel">
             Save current chart layout
           </button></div>

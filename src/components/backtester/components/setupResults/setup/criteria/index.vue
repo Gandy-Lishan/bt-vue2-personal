@@ -132,6 +132,7 @@
 							@getFreqArray="getFreqArray"
 							@userDefinedDates="userDefinedDates"
 						></indicator>
+						<!-- @getIndicatorTicker="getIndicatorTicker" -->
 						<senti
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -1075,7 +1076,6 @@ export default {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
    }
 			description = description.filter(item => !item.commentDes.includes('User Defined Dates'))
-			debugger
 			let sameSignalArr = searchKeys(description)
 			if(this.relation == 3) sameSignalArr = []
 			if(sameSignalArr.length >= 1) {
@@ -1143,7 +1143,6 @@ export default {
 },
 		async saveData() {
 			// Save the selected indicator to vuex
-			debugger
 			let indiChecked
 			if (this.relation == 0) {
 				// Save risk description
@@ -1160,7 +1159,6 @@ export default {
 			}
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				const indi = this.$refs.indiChild[i].saveIndicator(i)
-				debugger
 				if(this.indicatorRadioArr[i] === 'user' && this.userDefinedDatesArr[i] === 'User Defined') {
 					const arr = this.getDatesCommentDes(i)
 					arr.forEach(item => {
@@ -1179,7 +1177,6 @@ export default {
 					// 	ma_type: 'S'
 					// }
 				}
-				debugger
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}
@@ -1255,7 +1252,6 @@ export default {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
-					
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}
@@ -1314,7 +1310,6 @@ export default {
 		},
 		async userUploadFileContent(data) {
 			let _this = this
-			debugger
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
 				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
@@ -1330,7 +1325,6 @@ export default {
 		},
 		async userFileSelect(data) {
 			let _this = this
-			debugger
 			console.log('emit 出发了几次')
 			if(data.val.criteria === this.criteriaNum) return
 			const indiRefs = _this.$refs.indiChild.length
