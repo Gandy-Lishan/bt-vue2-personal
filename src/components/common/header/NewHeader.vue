@@ -97,7 +97,19 @@
             <span @click.stop="handleSubmenuClick(item)">{{item.label}}</span>
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
-            <el-menu-item v-for="(subItem, subIndex) in item.subMenu" :index="subItem.keyPath" :key="subIndex">{{subItem.label}}</el-menu-item>
+          <template  v-for="(subItem, subIndex) in item.subMenu">
+            <el-menu-item v-if="!Array.isArray(subItem.subMenuItem)" :index="subItem.keyPath" :key="subIndex">
+              {{subItem.label}}
+            </el-menu-item>
+            <template v-if="Array.isArray(subItem.subMenuItem) && subItem.subMenuItem.length > 0">
+              <el-submenu :index="subItem.keyPath" :key="subIndex">
+                <template slot="title">
+                  <span @click.stop="handleSubmenuClick(subItem)">{{subItem.label}}</span>
+                </template>
+                <el-menu-item v-for="(subItem, subIndex) in subItem.subMenuItem" :index="subItem.keyPath" :key="subIndex">{{subItem.label}}</el-menu-item>
+              </el-submenu>
+            </template>
+          </template>
         </el-submenu>
         </template>
       </el-menu>
@@ -321,6 +333,125 @@ export default {
           keyPath: '13',
           path: '/market/predict'
         },
+        {
+          label: 'Tools',
+          keyPath: '15',
+          path: '/tools',
+          subMenu: [
+            {
+              label: 'Intraday charts',
+              keyPath: '15-1',
+              path: 'https://users.sentimentrader.com/users/intraday/'
+            },
+            {
+              label: 'Global Breadth Overview',
+              keyPath: '15-2',
+              path: 'https://users.sentimentrader.com/users/country_breadth_overview/'
+            },
+            {
+              label: 'Monthly Update Archives',
+              keyPath: '15-3',
+              path: 'https://users.sentimentrader.com/users/monthly_archived_reports/'
+            },
+            {
+              label: 'Market Sentiment Overview',
+              keyPath: '15-4',
+              path: 'https://users.sentimentrader.com/users/market_overview/'
+            },
+            {
+              label: 'Optix Heatmap',
+              keyPath: '15-5',
+              path: 'https://users.sentimentrader.com/users/heatmap_optix/ALL'
+            },
+            {
+              label: 'Optix Heatmap for stocks',
+              keyPath: '15-6',
+              path: 'https://users.sentimentrader.com/users/heatmap_symbol/XLB'
+            },
+            {
+              label: 'User Defined Optix Heatmap',
+              keyPath: '15-7',
+              path: 'https://users.sentimentrader.com/users/heatmap_user_select/'
+            },
+            {
+              label: 'Optix Geomap',
+              keyPath: '15-8',
+              path: 'https://users.sentimentrader.com/users/geo_sentiment'
+            },
+            {
+              label: 'Risk Levels',
+              keyPath: '15-9',
+              path: 'https://users.sentimentrader.com/users/charts/risk_levels'
+            },
+            {
+              label: 'Optix Phase Table',
+              keyPath: '15-10',
+              path: 'https://users.sentimentrader.com/users/phases/'
+            },
+            {
+              label: 'Ranks',
+              keyPath: '15-11',
+              path: 'https://users.sentimentrader.com/users/ranks/'
+            },
+            {
+              label: 'Index Seasonality',
+              keyPath: '15-12',
+              path: 'https://users.sentimentrader.com/users/index_seasonality/'
+            },
+            {
+              label: 'Seasonality Calendar',
+              keyPath: '15-13',
+              path: 'https://users.sentimentrader.com/users/seasonality_calendar/'
+            },
+            {
+              label: 'Spotlights',
+              keyPath: '15-14',
+              subMenuItem: [
+                {
+                  label: 'Risk On/Off Composite',
+                  keyPath: '15-14-1',
+                  path: 'https://users.sentimentrader.com/users/sentiment_spotlight/'
+                },
+                {
+                  label: 'Market Environment Composite',
+                  keyPath: '15-14-2',
+                  path: 'https://users.sentimentrader.com/users/market_health_spotlight/'
+                },
+                {
+                  label: 'Tactical Composite Trend Model',
+                  keyPath: '15-14-3',
+                  path: 'https://users.sentimentrader.com/users/content/tctm-and-component-updates/'
+                },
+                {
+                  label: 'Market Breadth',
+                  keyPath: '15-14-4',
+                  path: 'https://users.sentimentrader.com/users/breadth_overview/'
+                },
+                {
+                  label: 'Bonds',
+                  keyPath: '15-14-5',
+                  path: 'https://users.sentimentrader.com/users/sector_overview/bonds'
+                },
+                {
+                  label: ' Energy',
+                  keyPath: '15-14-6',
+                  path: 'https://users.sentimentrader.com/users/sector_overview/energy'
+                },
+                {
+                  label: 'Gold',
+                  keyPath: '15-14-7',
+                  path: 'https://users.sentimentrader.com/users/sector_overview/gold'
+                },
+                {
+                  label: 'Macro',
+                  keyPath: '15-14-8',
+                  path: 'https://users.sentimentrader.com/users/sector_overview/macro'
+                },
+                
+              ]
+            }
+          ]
+        },
       ],
       activeIndex: '1',
     }
@@ -521,6 +652,10 @@ export default {
 				})
         this.$router.push('/404')
         return
+      } else if(key.includes('15')) {
+        let path = this.navs.find(ele => ele.keyPath == '15')?.subMenu.find(item => item.keyPath == key)?.path || this.navs.find(ele => ele.keyPath == '15')?.subMenu.find(item => item.keyPath.includes('15-14'))?.subMenuItem.find(subItem => subItem.keyPath == key)?.path
+        window.open(path, '_blank')
+        return
       }
       this.activeIndex = key
       const keyPathEle = this.navs.map(ele => {
@@ -564,6 +699,7 @@ export default {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
       if(label === 'Reports') return accessAllPage || cannotAccessScanner || canOnlyAccessReport || canOnlyAccessReportStategyScanner
+      if(label === 'Tools') return true
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)
